@@ -274,8 +274,13 @@ var hp_corpusChooser = {
 			$(".boxlabel")
 			.unbind("click") // "folders"
 			.click(function(event) {
+				isLinux = window.navigator.userAgent.indexOf("Linux") != -1
 				if( ! $(this).parent().hasClass("disabled") ) {
-				    if( event.altKey == 1 ) {
+				    if(!isLinux && event.altKey == 1 ) {
+	                    $(".checkbox").each(function() {
+	                        hp_this.setStatus($(this), "unchecked");
+	                    });
+	                } else if( isLinux && event.ctrlKey == 1 ) {
 	                    $(".checkbox").each(function() {
 	                        hp_this.setStatus($(this), "unchecked");
 	                    });
