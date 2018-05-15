@@ -275,6 +275,8 @@ var hp_corpusChooser = {
 			.unbind("click") // "folders"
 			.click(function(event) {
 				isLinux = window.navigator.userAgent.indexOf("Linux") != -1
+				console.log("isLinux, event.ctrlKey", isLinux, event.ctrlKey)
+				
 				if( ! $(this).parent().hasClass("disabled") ) {
 				    if(!isLinux && event.altKey == 1 ) {
 	                    $(".checkbox").each(function() {
