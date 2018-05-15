@@ -1,6 +1,6 @@
 exports.config = {
   params: {
-    url: 'http://' + (process.env.KORP_HOST || "localhost") +':9000/'
+    url: 'http://' + (process.env.KORP_HOST || "localhost") +':9111/'
   },
   seleniumAddress: "http://" + (process.env.SELENIUM || "localhost") + ":4444/wd/hub",
   capabilities: {
