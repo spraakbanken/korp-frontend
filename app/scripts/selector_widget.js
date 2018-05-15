@@ -275,8 +275,7 @@ var hp_corpusChooser = {
 			.unbind("click") // "folders"
 			.click(function(event) {
 				isLinux = window.navigator.userAgent.indexOf("Linux") != -1
-				console.log("isLinux, event.ctrlKey", isLinux, event.ctrlKey)
-				
+
 				if( ! $(this).parent().hasClass("disabled") ) {
 				    if(!isLinux && event.altKey == 1 ) {
 	                    $(".checkbox").each(function() {
@@ -370,7 +369,12 @@ var hp_corpusChooser = {
  			$(".boxdiv").unbind("click"); // "Non-folder items"
 			$(".boxdiv").click(function(event) {
 				if($(this).is(".disabled")) return;
-			    if( event.altKey == 1 ) {
+				isLinux = window.navigator.userAgent.indexOf("Linux") != -1
+			    if(!isLinux && event.altKey == 1 ) {
+                    $(".checkbox").each(function() {
+                        hp_this.setStatus($(this), "unchecked");
+                    });
+                } else if( isLinux && event.ctrlKey == 1 ) {
                     $(".checkbox").each(function() {
                         hp_this.setStatus($(this), "unchecked");
                     });
