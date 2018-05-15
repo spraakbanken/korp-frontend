@@ -78,7 +78,6 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
         opts = {}
         if dataObj.attributes[_.last dataObj.defaultFilters].settings.type == "set"
             opts.split = true
-        console.log("dataObj", dataObj)
         structService.getStructValues(corpora, dataObj.selectedFilters, opts).then (data) ->
             currentData = {}
             for corpus in corpora
@@ -175,9 +174,12 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
 
     makeCqp = () ->
         exprs = []
+        console.log("dataObj", dataObj)
         andArray = for attrKey, attrValues of dataObj.filterValues
+            attrType = dataObj.attributes[attrKey].settings.type
+            op = if attrType is "set" then "contains" else "="
             for attrValue in attrValues.value
-                { type: "_." + attrKey, op: "=", val: attrValue }
+                { type: "_." + attrKey, op: op, val: attrValue }
 
         return [{ and_block: andArray }]
 

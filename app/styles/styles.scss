@@ -2797,7 +2797,7 @@ li.active a span .num-to-find {
     margin-top: 7px;
     margin-left: 4px;
     padding: 0px;
-    font-weight: bold;
+    // font-weight: bold;
 
     .selected {
         background: #f2f7ff;
@@ -2808,7 +2808,8 @@ li.active a span .num-to-find {
     }
 
     .attribute:not(.disabled):hover {
-        background-color: #e6e6e6;
+        background-color: #428bca;
+        color : white;
         cursor: pointer;
     }
     .attribute.disabled {

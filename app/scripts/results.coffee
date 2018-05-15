@@ -200,8 +200,10 @@ class view.KWICResults extends BaseResults
                 next = @selectPrev()
             when 40 # down
                 next = @selectDown()
-        @scrollToShowWord($(next)) if next
-        return false
+        
+        if next
+            @scrollToShowWord($(next))
+            return false
 
 
     getPageInterval: (page) ->
