@@ -1637,12 +1637,11 @@ label[for=lemgram_select]:before {
 
   #simple_text {
     position: relative;
-    margin-top : 2px;
     display: inline-block;
     vertical-align: middle;
     input {
-      padding: 5px 10px;
-      border-radius: 2px;
+      padding: 5px 10px 6px 10px;
+      border-radius: 3px;
       border-style: solid;
       border-color: lightgrey;
       border-width: 1px;

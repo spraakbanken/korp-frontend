@@ -11,6 +11,7 @@
         "bootstrap-sass": "3.2.0",
         "comma-separated-values": "3.6.4",
         "components-jqueryui": "1.12.1",
+        "compression-webpack-plugin": "^1.1.11",
         "extract-loader": "^1.0.2",
         "font-awesome": "4.3.0",
         "geokorp": "spraakbanken/geokorp#1.2.10",
