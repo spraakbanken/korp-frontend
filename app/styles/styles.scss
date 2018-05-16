@@ -311,11 +311,17 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 //   display : none;
 // }
 
-.extended .search_submit {
-  display: inline;
-  vertical-align: super;
-  .btn-group {
+.extended {
+  .search_submit {
     display: inline;
+    vertical-align: super;
+    .btn-group {
+      display: inline;
+    }
+  }
+
+  .within_select {
+    margin-left: 5px;
   }
 }
 .date_interval_arg_type {
@@ -501,10 +507,10 @@ $corpusbox-width : 480px;
   padding-top: 2px;
   padding-bottom: 1px;
   overflow-x: hidden;
-  & > img {
+  & > .ext {
     transition: all 200ms ease-in-out;
   }
-  &.extended > img {
+  &.extended > .ext {
     transform: rotate(90deg);
   }
 }
@@ -520,7 +526,7 @@ $corpusbox-width : 480px;
   margin-bottom: 2px;
   &.disabled {
     color: grey;
-    img {
+    .ext {
       display: none;
     }
   }
