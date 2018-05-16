@@ -68,7 +68,7 @@
         "start": "webpack-dev-server --config webpack.dev.js",
         "dev": "webpack-dev-server --hot --config webpack.dev.js",
         "testserver": "webpack-dev-server --config webpack.dev.js &",
-        "start:dist": "http-server -p 9000 dist/",
+        "start:dist": "http-server -p ${KORP_PORT:-9111} dist/",
         "build": "webpack --config webpack.prod.js"
     }
 }
