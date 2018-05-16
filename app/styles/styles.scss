@@ -384,6 +384,7 @@ time-interval {
 
 .ext {
   margin-right: 0px;
+  vertical-align: middle;
 }
 
 .scroll_checkboxes {
@@ -494,23 +495,28 @@ $corpusbox-width : 480px;
 }
 
 .tree {
-  margin-top: 1px;
-  margin-bottom: -3px;
+  // margin-top: 1px;
+  margin-bottom: 0px;
   margin-left: 2px;
-  padding-top: 3px;
+  padding-top: 2px;
   padding-bottom: 1px;
   overflow-x: hidden;
+  & > img {
+    transition: all 200ms ease-in-out;
+  }
+  &.extended > img {
+    transform: rotate(90deg);
+  }
 }
 
 .collapsed {
-  margin-bottom: 0px;
 }
 
 .boxdiv {
-  margin-top: 2px;
   background-color: #F6F6F6;
-  padding-top: 3px;
-  padding-bottom: 1px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-top: 2px;
   margin-bottom: 2px;
   &.disabled {
     color: grey;
@@ -521,13 +527,17 @@ $corpusbox-width : 480px;
 }
 
 .hplabel {
-  padding: 2px 6px 0px 6px;
+  padding: 0 6px;
+  & > span {
+    vertical-align: middle;
+  }
 }
 
 .boxlabel {
-  padding: 2px 6px 0px 6px;
+  padding: 1px 6px 1px 6px;
   > span {
     background: #FFFFFF;
+    vertical-align: middle;
   }
 }
 
@@ -545,6 +555,8 @@ $corpusbox-width : 480px;
   &.intermediate {
     background: url("../img/intermediate.png") no-repeat;
   }
+
+  margin-right: 2px;
 }
 
 .boxdiv.disabled .checkbox,
