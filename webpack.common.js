@@ -166,6 +166,10 @@ module.exports = {
         flatten: true
       },
       {
+        from: 'app/markup/msdtags.html',
+        to: 'markup'
+      },
+      {
         from: 'app/translations/locale-*.json',
         to: 'translations',
         flatten: true
