@@ -253,10 +253,10 @@ Sidebar =
 
         else if key == "msd"
             # msdTags = require '../markup/msdtags.html'
-            msdTags = '../markup/msdtags.html'
+            msdTags = 'markup/msdtags.html'
             return output.append """<span class='msd_sidebar'>#{str_value}</span>
                                         <a href='#{msdTags}' target='_blank'>
-                                            <span id='sidbar_info' class='ui-icon ui-icon-info'></span>
+                                            <span class='sidebar_info ui-icon ui-icon-info'></span>
                                         </a>
                                     </span>
                                 """
