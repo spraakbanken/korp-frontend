@@ -485,4 +485,4 @@ korpApp.directive "compareSearchCtrl", () ->
 
 korpApp.filter "loc", ($rootScope) ->
     (translationKey, lang) ->
-        return util.getLocaleStringUndefined(translationKey, lang) or "[undefined]"
+        return util.getLocaleString translationKey, lang
