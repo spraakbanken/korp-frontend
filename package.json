@@ -44,7 +44,7 @@
         "karma-jasmine": "^1.1.1",
         "karma-webpack": "^2.0.13",
         "ng-annotate-webpack-plugin": "^0.2.1-pre",
-        "node-sass": "^4.7.2",
+        "node-sass": "^4.9.0",
         "pegjs": "^0.10.0",
         "protractor": "^5.3.0",
         "pug-html-loader": "^1.1.5",
