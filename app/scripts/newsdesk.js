@@ -1,9 +1,18 @@
-# SB-newsdesk 1.0b
-# Requirements: JQuery, JQuery.ui.position, trust filter, loc filter, Font Awesome
+/*
+ * decaffeinate suggestions:
+ * DS101: Remove unnecessary use of Array.from
+ * DS102: Remove unnecessary code created because of implicit returns
+ * DS205: Consider reworking code to avoid use of IIFEs
+ * DS207: Consider shorter variations of null checks
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+// SB-newsdesk 1.0b
+// Requirements: JQuery, JQuery.ui.position, trust filter, loc filter, Font Awesome
 
-angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootElement, $http, $location) ->
-    template : '''
-    <div>
+angular.module('newsdesk', []).directive("newsDesk", ($window, $document, $rootElement, $http, $location) =>
+    ({
+        template : `\
+<div>
         <div ng-if="shouldUseThis" class="newsdesk-opener" ng-click="togglePopover($event)" ng-class="{'newsdesk-new-news': numNewNews != 0, 'newsdesk-no-new-news' : numNewNews == 0}">
             <i class="fa fa-bell newsdesk-bell"></i>
             <div class="newsdesk-arrow-box">
@@ -21,87 +30,110 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
                 </div>
             </div>
         </div>
-    </div>
-    '''
-    restrict : "EA"
-    replace : true
-    scope : { "header" : "=", "storage" : "=" }
-    link : (scope, elem, attr) ->
-        s = scope
-        s.shouldUseThis = settings.newsDeskUrl?
+</div>\
+`,
+        restrict : "EA",
+        replace : true,
+        scope : { "header" : "=", "storage" : "=" },
+        link(scope, elem, attr) {
+            const s = scope;
+            s.shouldUseThis = (settings.newsDeskUrl != null);
 
-        if not s.shouldUseThis
-            return
+            if (!s.shouldUseThis) {
+                return;
+            }
 
-        s.onPopoverClick = (event) ->
-            event.stopPropagation()
+            s.onPopoverClick = event => event.stopPropagation();
 
-        s.newsitems = []
-        s.initData = () ->
-            s.lastChecked = localStorage.getItem s.storage
-            if not s.lastChecked
-                d = new Date()
-                d.setFullYear(d.getFullYear() - 1)
-                s.lastChecked = d.toISOString()[0..9]
-            $.ajax({
-                type: "GET",
-                url: settings.newsDeskUrl,
-                async: false,
-                jsonpCallback: "newsdata",
-                contentType: "application/json",
-                dataType: "jsonp",
-                success: (json) ->
-                    currentDate = new Date().toISOString()[0..9]
-                    s.newsitems = (newsitem for newsitem in json when ((not newsitem.e?) or (newsitem.e >= currentDate)))
-                    n = 0
-                    for nItem in s.newsitems
-                        if nItem.d > s.lastChecked
-                            n += 1
+            s.newsitems = [];
+            s.initData = function() {
+                let d;
+                s.lastChecked = localStorage.getItem(s.storage);
+                if (!s.lastChecked) {
+                    d = new Date();
+                    d.setFullYear(d.getFullYear() - 1);
+                    s.lastChecked = d.toISOString().slice(0, 10);
+                }
+                return $.ajax({
+                    type: "GET",
+                    url: settings.newsDeskUrl,
+                    async: false,
+                    jsonpCallback: "newsdata",
+                    contentType: "application/json",
+                    dataType: "jsonp",
+                    success(json) {
+                        const currentDate = new (Date().toISOString().slice(0, 10));
+                        s.newsitems = ((() => {
+                            const result = [];
+                            for (let newsitem of Array.from(json)) {                                 if (((newsitem.e == null)) || (newsitem.e >= currentDate)) {
+                                    result.push(newsitem);
+                                }
+                            }
+                            return result;
+                        })());
+                        let n = 0;
+                        for (let nItem of Array.from(s.newsitems)) {
+                            if (nItem.d > s.lastChecked) {
+                                n += 1;
+                            }
+                        }
 
-                    safeApply s, (() -> s.numNewNews = n)
+                        return safeApply(s, (() => s.numNewNews = n));
+                    },
 
-                error: (e) ->
-                   console.log "error, couldn't fetch news", e.message
-            });
+                    error(e) {
+                       return console.log("error, couldn't fetch news", e.message);
+                   }
+                });
+            };
 
-        s.currentLang = $location.search().lang or "sv"
+            s.currentLang = $location.search().lang || "sv";
 
-        s.numNewNews = 0
-        s.initData()
+            s.numNewNews = 0;
+            s.initData();
 
-        s.togglePopover = (event) ->
-            if s.isPopoverVisible
-                s.popHide()
-            else
-                s.currentLang = $location.search().lang or "sv"
-                s.popShow()
-                s.numNewNews = 0
-            event.preventDefault()
-            event.stopPropagation()
+            s.togglePopover = function(event) {
+                if (s.isPopoverVisible) {
+                    s.popHide();
+                } else {
+                    s.currentLang = $location.search().lang || "sv";
+                    s.popShow();
+                    s.numNewNews = 0;
+                }
+                event.preventDefault();
+                return event.stopPropagation();
+            };
 
-        popover = $(".newsdesk-popover")
-        s.isPopoverVisible = false
+            const popover = $(".newsdesk-popover");
+            s.isPopoverVisible = false;
 
-        handleEscape = (event) ->
-            if event.which is 27
-                s.popHide()
-                return false
+            const handleEscape = function(event) {
+                if (event.which === 27) {
+                    s.popHide();
+                    return false;
+                }
+            };
 
-        s.popShow = () ->
-            s.isPopoverVisible = true
+            s.popShow = function() {
+                s.isPopoverVisible = true;
 
-            popover.show().focus().position
-                my : "right top"
-                at : "right-10 top+10"
-                of : window
-            $rootElement.on "keydown", handleEscape
-            $rootElement.on "click", s.popHide
+                popover.show().focus().position({
+                    my : "right top",
+                    at : "right-10 top+10",
+                    of : window
+                });
+                $rootElement.on("keydown", handleEscape);
+                $rootElement.on("click", s.popHide);
 
-            localStorage.setItem s.storage, s.newsitems[0].d
+                return localStorage.setItem(s.storage, s.newsitems[0].d);
+            };
 
-        s.popHide = () ->
-            s.isPopoverVisible = false
-            popover.hide()
-            $rootElement.off "keydown", handleEscape
-            $rootElement.off "click", s.popHide
-            return
+            return s.popHide = function() {
+                s.isPopoverVisible = false;
+                popover.hide();
+                $rootElement.off("keydown", handleEscape);
+                $rootElement.off("click", s.popHide);
+            };
+        }
+    })
+);

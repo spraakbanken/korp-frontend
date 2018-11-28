@@ -1,142 +1,194 @@
+/*
+ * decaffeinate suggestions:
+ * DS101: Remove unnecessary use of Array.from
+ * DS102: Remove unnecessary code created because of implicit returns
+ * DS202: Simplify dynamic range loops
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
 
-korpApp = angular.module("korpApp")
-korpApp.factory "kwicDownload", () ->
+const korpApp = angular.module("korpApp");
+korpApp.factory("kwicDownload", function() {
 
-    emptyRow = (length) ->
-        a = new Array(length)
-        for x in [0..a.length-1]
-            a[x] = ""
-        return a
+    const emptyRow = function(length) {
+        const a = new Array(length);
+        for (let x = 0, end = a.length-1, asc = 0 <= end; asc ? x <= end : x >= end; asc ? x++ : x--) {
+            a[x] = "";
+        }
+        return a;
+    };
 
-    createFile = (dataType, fileType, content) ->
-        date = moment().format("YYYYDDMM_HHmmss")
-        filename = "korp_" + dataType + "_" + date + "." + fileType
-        blobURL = window.URL.createObjectURL new Blob([content], {type: "text/" + fileType})
-        return [filename, blobURL]
+    const createFile = function(dataType, fileType, content) {
+        const date = moment().format("YYYYDDMM_HHmmss");
+        const filename = `korp_${dataType}_${date}.${fileType}`;
+        const blobURL = window.URL.createObjectURL(new Blob([content], {type: `text/${fileType}`}));
+        return [filename, blobURL];
+    };
 
-    padRows = (data, length) ->
-        return _.map data, (row) ->
-            newRow = emptyRow length
-            newRow[0] = row
-            newRow
-
-    createSearchInfo = (requestInfo, totalHits) ->
-        rows = []
-        fields = ["cqp", "context", "within", "sorting", "start", "end", "hits"]
-        for field in fields
-            if field == "cqp"
-                row = "## CQP query: " + requestInfo.cqp
-            if field == "context"
-                row = "## context: " + requestInfo.default_context
-            if field == "within"
-                row = "## within: " + requestInfo.default_within
-            if field == "sorting"
-                sorting = requestInfo.sort or "none"
-                row = "## sorting: " + sorting
-            if field == "start"
-                row = "## start: " + requestInfo.start
-            if field == "end"
-                cqpQuery = ""
-                row = "## end: " + requestInfo.end
-            if field == "hits"
-                row = "## Total hits: " + totalHits
-            rows.push row
-        return rows
-
-    transformDataToAnnotations = (data, searchInfo) ->
-        headers = _.filter(_.keys(data[1].tokens[0]),(val) -> val.indexOf("_") isnt 0 and val isnt "structs" and val isnt "$$hashKey" and val isnt "position")
-        columnCount = headers.length + 1
-        res = padRows searchInfo, columnCount
-        res.push ["match"].concat headers 
-        for row in data
-            if row.tokens
-                textAttributes = []
-                for attrName  of row.structs
-                    attrValue = row.structs[attrName]
-                    textAttributes.push (attrName + ": \"" + attrValue + "\"")
-                hitInfo = emptyRow columnCount
-                hitInfo[0] = "# " + corpus + "; text attributes: " + textAttributes.join(", ")
-                res.push hitInfo
-                
-                for token in row.tokens or []
-                    if (token.position >= row.match.start) and (token.position < row.match.end)
-                        match = "***"
-                    else
-                        match = ""
-                    newRow = [match]
-                    for field in headers
-                        newRow.push token[field]
-                    res.push newRow
-            else if row.newCorpus
-                corpus = row.newCorpus
-        
-        return res
-
-    transformDataToKWIC = (data, searchInfo) ->
-        structHeaders = []
-        res = []
-        for row in data
-            if row.tokens
-
-                leftContext = []
-                for token in row.tokens.slice 0, row.match.start
-                    leftContext.push token.word
-                match = []
-                for token in row.tokens.slice row.match.start, row.match.end
-                    match.push token.word
-                rightContext = []
-                for token in row.tokens.slice row.match.end, row.tokens.length
-                    rightContext.push token.word
-                
-                structs = []
-                for attrName  of row.structs
-                    if attrName not in structHeaders
-                        structHeaders.push attrName
-                for attrName in structHeaders
-                    if attrName of row.structs
-                        structs.push row.structs[attrName]
-                    else
-                        structs.push ""
-
-                newRow = [corpus, row.match.position, leftContext.join(" "), match.join(" "), rightContext.join(" ")].concat structs
-                res.push newRow
-            else if row.newCorpus
-                corpus = row.newCorpus
-
-        headers = ["corpus", "match_position", "left context", "match", "right_context"].concat structHeaders
-        res = [headers].concat res
-
-        res.push emptyRow headers.length
-        for row in padRows searchInfo, headers.length
-            res.push row
-
-        return res
-
-    transformData = (dataType, data, requestInfo, totalHits) ->
-        searchInfo = createSearchInfo requestInfo, totalHits
-        if dataType == "annotations"
-            return transformDataToAnnotations data, searchInfo
-        if dataType == "kwic"
-            return transformDataToKWIC data, searchInfo
-    
-    makeContent = (fileType, transformedData) ->
-        if fileType == "csv"
-            dataDelimiter = ","
-        if fileType == "tsv"
-            dataDelimiter = "	"
-        
-        csv = new CSV(transformedData, {
-            delimiter: dataDelimiter
+    const padRows = (data, length) =>
+        _.map(data, function(row) {
+            const newRow = emptyRow(length);
+            newRow[0] = row;
+            return newRow;
         })
+    ;
 
-        return csv.encode()
+    const createSearchInfo = function(requestInfo, totalHits) {
+        const rows = [];
+        const fields = ["cqp", "context", "within", "sorting", "start", "end", "hits"];
+        for (let field of Array.from(fields)) {
+            var row;
+            if (field === "cqp") {
+                row = `## CQP query: ${requestInfo.cqp}`;
+            }
+            if (field === "context") {
+                row = `## context: ${requestInfo.default_context}`;
+            }
+            if (field === "within") {
+                row = `## within: ${requestInfo.default_within}`;
+            }
+            if (field === "sorting") {
+                const sorting = requestInfo.sort || "none";
+                row = `## sorting: ${sorting}`;
+            }
+            if (field === "start") {
+                row = `## start: ${requestInfo.start}`;
+            }
+            if (field === "end") {
+                const cqpQuery = "";
+                row = `## end: ${requestInfo.end}`;
+            }
+            if (field === "hits") {
+                row = `## Total hits: ${totalHits}`;
+            }
+            rows.push(row);
+        }
+        return rows;
+    };
 
-    # dataType: either "kwic" or "annotations"
-    # fileType: either "csv" or "tsv"
-    # data: json from the backend
+    const transformDataToAnnotations = function(data, searchInfo) {
+        const headers = _.filter(_.keys(data[1].tokens[0]),val => (val.indexOf("_") !== 0) && (val !== "structs") && (val !== "$$hashKey") && (val !== "position"));
+        const columnCount = headers.length + 1;
+        const res = padRows(searchInfo, columnCount);
+        res.push(["match"].concat(headers)); 
+        for (let row of Array.from(data)) {
+            if (row.tokens) {
+                const textAttributes = [];
+                for (let attrName  in row.structs) {
+                    const attrValue = row.structs[attrName];
+                    textAttributes.push((attrName + ": \"" + attrValue + "\""));
+                }
+                const hitInfo = emptyRow(columnCount);
+                hitInfo[0] = `# ${corpus}; text attributes: ${textAttributes.join(", ")}`;
+                res.push(hitInfo);
+                
+                for (let token of Array.from(row.tokens || [])) {
+                    var match;
+                    if ((token.position >= row.match.start) && (token.position < row.match.end)) {
+                        match = "***";
+                    } else {
+                        match = "";
+                    }
+                    const newRow = [match];
+                    for (let field of Array.from(headers)) {
+                        newRow.push(token[field]);
+                    }
+                    res.push(newRow);
+                }
+            } else if (row.newCorpus) {
+                var corpus = row.newCorpus;
+            }
+        }
+        
+        return res;
+    };
+
+    const transformDataToKWIC = function(data, searchInfo) {
+        let row;
+        const structHeaders = [];
+        let res = [];
+        for (row of Array.from(data)) {
+            if (row.tokens) {
+
+                var attrName, token;
+                const leftContext = [];
+                for (token of Array.from(row.tokens.slice(0, row.match.start))) {
+                    leftContext.push(token.word);
+                }
+                const match = [];
+                for (token of Array.from(row.tokens.slice(row.match.start, row.match.end))) {
+                    match.push(token.word);
+                }
+                const rightContext = [];
+                for (token of Array.from(row.tokens.slice(row.match.end, row.tokens.length))) {
+                    rightContext.push(token.word);
+                }
+                
+                const structs = [];
+                for (attrName  in row.structs) {
+                    if (!Array.from(structHeaders).includes(attrName)) {
+                        structHeaders.push(attrName);
+                    }
+                }
+                for (attrName of Array.from(structHeaders)) {
+                    if (attrName in row.structs) {
+                        structs.push(row.structs[attrName]);
+                    } else {
+                        structs.push("");
+                    }
+                }
+
+                const newRow = [corpus, row.match.position, leftContext.join(" "), match.join(" "), rightContext.join(" ")].concat(structs);
+                res.push(newRow);
+            } else if (row.newCorpus) {
+                var corpus = row.newCorpus;
+            }
+        }
+
+        const headers = ["corpus", "match_position", "left context", "match", "right_context"].concat(structHeaders);
+        res = [headers].concat(res);
+
+        res.push(emptyRow(headers.length));
+        for (row of Array.from(padRows(searchInfo, headers.length))) {
+            res.push(row);
+        }
+
+        return res;
+    };
+
+    const transformData = function(dataType, data, requestInfo, totalHits) {
+        const searchInfo = createSearchInfo(requestInfo, totalHits);
+        if (dataType === "annotations") {
+            return transformDataToAnnotations(data, searchInfo);
+        }
+        if (dataType === "kwic") {
+            return transformDataToKWIC(data, searchInfo);
+        }
+    };
+    
+    const makeContent = function(fileType, transformedData) {
+        let dataDelimiter;
+        if (fileType === "csv") {
+            dataDelimiter = ",";
+        }
+        if (fileType === "tsv") {
+            dataDelimiter = "	";
+        }
+        
+        const csv = new CSV(transformedData, {
+            delimiter: dataDelimiter
+        });
+
+        return csv.encode();
+    };
+
+    // dataType: either "kwic" or "annotations"
+    // fileType: either "csv" or "tsv"
+    // data: json from the backend
     return {
-        makeDownload: (dataType, fileType, data, requestInfo, totalHits) ->
-            tmp = transformData dataType, data, requestInfo, totalHits
-            tmp2 = makeContent fileType, tmp
-            return createFile dataType, fileType, tmp2
-    }
+        makeDownload(dataType, fileType, data, requestInfo, totalHits) {
+            const tmp = transformData(dataType, data, requestInfo, totalHits);
+            const tmp2 = makeContent(fileType, tmp);
+            return createFile(dataType, fileType, tmp2);
+        }
+    };
+});

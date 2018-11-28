@@ -1,91 +1,122 @@
-korpApp = angular.module("korpApp")
+/*
+ * decaffeinate suggestions:
+ * DS101: Remove unnecessary use of Array.from
+ * DS102: Remove unnecessary code created because of implicit returns
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+const korpApp = angular.module("korpApp");
 
-korpApp.controller "VideoCtrl", ($scope, $uibModal) ->
+korpApp.controller("VideoCtrl", function($scope, $uibModal) {
 
-    $scope.videos = []
+    $scope.videos = [];
 
-    $scope.open = () ->
-        modalInstance = $uibModal.open
-            animation: false
-            templateUrl: require '../markup/sidebar_video.html'
-            controller: 'VideoInstanceCtrl'
-            size: 'modal-lg'
-            windowClass: 'video-modal-bootstrap'
-            resolve:
-                items: () ->
-                    return $scope.videos
-                startTime: () ->
-                    return $scope.startTime
-                endTime: () ->
-                    return $scope.endTime
-                fileName: () ->
-                    return $scope.fileName
-                sentence: () ->
-                    return $scope.sentence
+    $scope.open = function() {
+        let modalInstance;
+        return modalInstance = $uibModal.open({
+            animation: false,
+            templateUrl: require('../markup/sidebar_video.html'),
+            controller: 'VideoInstanceCtrl',
+            size: 'modal-lg',
+            windowClass: 'video-modal-bootstrap',
+            resolve: {
+                items() {
+                    return $scope.videos;
+                },
+                startTime() {
+                    return $scope.startTime;
+                },
+                endTime() {
+                    return $scope.endTime;
+                },
+                fileName() {
+                    return $scope.fileName;
+                },
+                sentence() {
+                    return $scope.sentence;
+                }
+            }
+        });
+    };
 
-    $scope.startTime = 0
+    return $scope.startTime = 0;
+});
 
-korpApp.controller "VideoInstanceCtrl", ($scope, $compile, $timeout, $uibModalInstance, items, startTime, endTime, fileName, sentence) ->
-    $scope.fileName = fileName
-    $scope.sentence = sentence
+korpApp.controller("VideoInstanceCtrl", function($scope, $compile, $timeout, $uibModalInstance, items, startTime, endTime, fileName, sentence) {
+    $scope.fileName = fileName;
+    $scope.sentence = sentence;
 
-    transformSeconds = (seconds) ->
-        d = moment.duration seconds, 'seconds'
-        hours = Math.floor d.asHours()
-        if hours != 0
-            sHours = String(hours) + ":"
-        else
-            sHours = ""
+    const transformSeconds = function(seconds) {
+        let sHours;
+        const d = moment.duration(seconds, 'seconds');
+        const hours = Math.floor(d.asHours());
+        if (hours !== 0) {
+            sHours = String(hours) + ":";
+        } else {
+            sHours = "";
+        }
 
-        mins = Math.floor(d.asMinutes()) - hours * 60
-        sMins = String mins + ":"
+        const mins = Math.floor(d.asMinutes()) - (hours * 60);
+        let sMins = String(mins + ":");
         
-        if sMins.length == 2 and sHours
-            sMins = "0" + sMins
-        secs = String(Math.floor(d.asSeconds()) - hours * 3600 - mins * 60)
-        if secs.length == 1
-            secs = "0" + secs
+        if ((sMins.length === 2) && sHours) {
+            sMins = `0${sMins}`;
+        }
+        let secs = String(Math.floor(d.asSeconds()) - (hours * 3600) - (mins * 60));
+        if (secs.length === 1) {
+            secs = `0${secs}`;
+        }
 
-        return sHours + sMins + secs
+        return sHours + sMins + secs;
+    };
 
-    if startTime
-        $scope.startTime = transformSeconds startTime
-    if endTime
-        $scope.endTime = transformSeconds endTime
+    if (startTime) {
+        $scope.startTime = transformSeconds(startTime);
+    }
+    if (endTime) {
+        $scope.endTime = transformSeconds(endTime);
+    }
 
-    $scope.init = () ->
-        videoElem = angular.element("#korp-video")
+    $scope.init = function() {
+        const videoElem = angular.element("#korp-video");
 
-        # workaround for firefox problem, not possible to create source-elem in template
-        for videoData in items
-            srcElem = angular.element '<source>'
-            srcElem.attr 'src', videoData.url
-            srcElem.attr 'type', videoData.type
+        // workaround for firefox problem, not possible to create source-elem in template
+        for (let videoData of Array.from(items)) {
+            const srcElem = angular.element('<source>');
+            srcElem.attr('src', videoData.url);
+            srcElem.attr('type', videoData.type);
             $compile(srcElem)($scope);
-            videoElem.append srcElem
+            videoElem.append(srcElem);
+        }
 
-        video = videoElem[0]
+        const video = videoElem[0];
 
-        video.addEventListener "durationchange", () ->
-            video.currentTime = startTime
-            video.play()
+        video.addEventListener("durationchange", function() {
+            video.currentTime = startTime;
+            return video.play();
+        });
 
-        video.addEventListener "timeupdate", () =>
-            if($scope.pauseAfterEndTime and endTime and video.currentTime >= endTime)
-                video.pause()
-                $timeout (() -> $scope.isPaused = true), 0
+        video.addEventListener("timeupdate", () => {
+            if($scope.pauseAfterEndTime && endTime && (video.currentTime >= endTime)) {
+                video.pause();
+                return $timeout((() => $scope.isPaused = true), 0);
+            }
+        });
 
-        $scope.goToStartTime = () ->
-            video.currentTime = startTime
-            $scope.isPaused = false
-            video.play()
+        $scope.goToStartTime = function() {
+            video.currentTime = startTime;
+            $scope.isPaused = false;
+            return video.play();
+        };
 
-        $scope.continuePlay = () ->
-            $scope.pauseAfterEndTime = false
-            $scope.isPaused = false
-            video.play()
+        return $scope.continuePlay = function() {
+            $scope.pauseAfterEndTime = false;
+            $scope.isPaused = false;
+            return video.play();
+        };
+    };
 
-    $scope.isPaused = false
-    $scope.pauseAfterEndTime = true
+    $scope.isPaused = false;
+    $scope.pauseAfterEndTime = true;
 
-    $scope.ok = () -> $uibModalInstance.close()
+    return $scope.ok = () => $uibModalInstance.close();
+});

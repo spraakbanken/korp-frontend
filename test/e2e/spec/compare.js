@@ -1,65 +1,73 @@
-describe "compare", () ->
-    waitFor = (elm) ->
-        browser.wait () ->
-            return elm.isPresent()
-        browser.wait () ->
-            return elm.isDisplayed()
+/*
+ * decaffeinate suggestions:
+ * DS102: Remove unnecessary code created because of implicit returns
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+describe("compare", function() {
+    const waitFor = function(elm) {
+        browser.wait(() => elm.isPresent());
+        return browser.wait(() => elm.isDisplayed());
+    };
             
-    selectLemgram = (word) ->
-        input = element.all(By.css "#simple_text input").first()
-        input.clear()
-        input.sendKeys word
+    const selectLemgram = function(word) {
+        const input = element.all(By.css("#simple_text input")).first();
+        input.clear();
+        input.sendKeys(word);
         
-        lemgramSuggestion = (element.all By.css 'ul.dropdown-menu > li').first()
-        waitFor lemgramSuggestion
-        lemgramSuggestion.click()
+        const lemgramSuggestion = (element.all(By.css('ul.dropdown-menu > li'))).first();
+        waitFor(lemgramSuggestion);
+        return lemgramSuggestion.click();
+    };
         
-    saveSearch = (name) ->
-        element(By.css ".search_submit .opener").click()
-        input = element By.css "#cmp_input"
-        input.sendKeys name
-        element(By.css ".popover.compare.bottom .btn").click()
+    const saveSearch = function(name) {
+        element(By.css(".search_submit .opener")).click();
+        const input = element(By.css("#cmp_input"));
+        input.sendKeys(name);
+        return element(By.css(".popover.compare.bottom .btn")).click();
+    };
 
-    getCompareTabHeading = () ->
-        return (element.all(By.css ".search_tabs .nav-tabs li")).last()
+    const getCompareTabHeading = () => (element.all(By.css(".search_tabs .nav-tabs li"))).last();
 
-    it "should be possible to save searches", () ->
-        browser.get(browser.params.url + "#?corpus=suc2").then () ->
+    it("should be possible to save searches", () =>
+        browser.get(browser.params.url + "#?corpus=suc2").then(function() {
         
-            selectLemgram "gå"
-            saveSearch "gå"
+            selectLemgram("gå");
+            saveSearch("gå");
             
-            compareTabHeading = getCompareTabHeading()
+            const compareTabHeading = getCompareTabHeading();
             
-            expect(compareTabHeading.getText()).toBe "Jämförelse 1"
+            expect(compareTabHeading.getText()).toBe("Jämförelse 1");
             
-            selectLemgram "springa"
-            saveSearch "springa"
+            selectLemgram("springa");
+            saveSearch("springa");
             
-            expect(compareTabHeading.getText()).toBe "Jämförelse 2"
+            return expect(compareTabHeading.getText()).toBe("Jämförelse 2");
+        })
+    );
     
-    it "should work for simple word comparison", () ->
-        browser.get(browser.params.url + "#?corpus=suc2").then () ->
+    return it("should work for simple word comparison", () =>
+        browser.get(browser.params.url + "#?corpus=suc2").then(function() {
         
-            selectLemgram "gå"
-            saveSearch "gå"
+            selectLemgram("gå");
+            saveSearch("gå");
             
-            selectLemgram "springa"
-            saveSearch "springa"
+            selectLemgram("springa");
+            saveSearch("springa");
             
-            getCompareTabHeading().click()
+            getCompareTabHeading().click();
             
-            (element.all(By.css ".search_compare button")).last().click()
+            (element.all(By.css(".search_compare button"))).last().click();
             
-            negativeMeters = element.all By.css ".compare_result .negative li"
-            positiveMeters = element.all By.css ".compare_result .positive li"
+            const negativeMeters = element.all(By.css(".compare_result .negative li"));
+            const positiveMeters = element.all(By.css(".compare_result .positive li"));
 
-            negativeMeters.first().getText().then (text) ->
-                expect(text.replace /\n/g, " ").toBe "går 879"
+            negativeMeters.first().getText().then(text => expect(text.replace(/\n/g, " ")).toBe("går 879"));
                 
-            positiveMeters.first().getText().then (text) ->
-                expect(text.replace /\n/g, " ").toBe "sprang 45"
+            return positiveMeters.first().getText().then(text => expect(text.replace(/\n/g, " ")).toBe("sprang 45"));
+        })
+    );
+});
 
-            # todo fails because if weird NaN error on start & end parameters
-            # negativeMeters.first().click()
+            // todo fails because if weird NaN error on start & end parameters
+            // negativeMeters.first().click()
         
