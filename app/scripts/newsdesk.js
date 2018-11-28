@@ -1,3 +1,9 @@
+/* eslint-disable
+    no-return-assign,
+    no-undef,
+*/
+// TODO: This file was created by bulk-decaffeinate.
+// Fix any style issues and re-enable lint.
 /*
  * decaffeinate suggestions:
  * DS101: Remove unnecessary use of Array.from
@@ -36,23 +42,23 @@ angular.module('newsdesk', []).directive("newsDesk", ($window, $document, $rootE
         replace : true,
         scope : { "header" : "=", "storage" : "=" },
         link(scope, elem, attr) {
-            const s = scope;
-            s.shouldUseThis = (settings.newsDeskUrl != null);
+            const s = scope
+            s.shouldUseThis = (settings.newsDeskUrl != null)
 
             if (!s.shouldUseThis) {
-                return;
+                return
             }
 
-            s.onPopoverClick = event => event.stopPropagation();
+            s.onPopoverClick = event => event.stopPropagation()
 
-            s.newsitems = [];
+            s.newsitems = []
             s.initData = function() {
-                let d;
-                s.lastChecked = localStorage.getItem(s.storage);
+                let d
+                s.lastChecked = localStorage.getItem(s.storage)
                 if (!s.lastChecked) {
-                    d = new Date();
-                    d.setFullYear(d.getFullYear() - 1);
-                    s.lastChecked = d.toISOString().slice(0, 10);
+                    d = new Date()
+                    d.setFullYear(d.getFullYear() - 1)
+                    s.lastChecked = d.toISOString().slice(0, 10)
                 }
                 return $.ajax({
                     type: "GET",
@@ -62,78 +68,79 @@ angular.module('newsdesk', []).directive("newsDesk", ($window, $document, $rootE
                     contentType: "application/json",
                     dataType: "jsonp",
                     success(json) {
-                        const currentDate = new (Date().toISOString().slice(0, 10));
+                        const currentDate = new (Date().toISOString().slice(0, 10))()
                         s.newsitems = ((() => {
-                            const result = [];
-                            for (let newsitem of Array.from(json)) {                                 if (((newsitem.e == null)) || (newsitem.e >= currentDate)) {
-                                    result.push(newsitem);
+                            const result = []
+                            for (let newsitem of Array.from(json)) {
+                                 if (((newsitem.e == null)) || (newsitem.e >= currentDate)) {
+                                    result.push(newsitem)
                                 }
                             }
-                            return result;
-                        })());
-                        let n = 0;
+                            return result
+                        })())
+                        let n = 0
                         for (let nItem of Array.from(s.newsitems)) {
                             if (nItem.d > s.lastChecked) {
-                                n += 1;
+                                n += 1
                             }
                         }
 
-                        return safeApply(s, (() => s.numNewNews = n));
+                        return safeApply(s, () => s.numNewNews = n)
                     },
 
                     error(e) {
-                       return console.log("error, couldn't fetch news", e.message);
+                       return console.log("error, couldn't fetch news", e.message)
                    }
-                });
-            };
+                })
+            }
 
-            s.currentLang = $location.search().lang || "sv";
+            s.currentLang = $location.search().lang || "sv"
 
-            s.numNewNews = 0;
-            s.initData();
+            s.numNewNews = 0
+            s.initData()
 
             s.togglePopover = function(event) {
                 if (s.isPopoverVisible) {
-                    s.popHide();
+                    s.popHide()
                 } else {
-                    s.currentLang = $location.search().lang || "sv";
-                    s.popShow();
-                    s.numNewNews = 0;
+                    s.currentLang = $location.search().lang || "sv"
+                    s.popShow()
+                    s.numNewNews = 0
                 }
-                event.preventDefault();
-                return event.stopPropagation();
-            };
+                event.preventDefault()
+                return event.stopPropagation()
+            }
 
-            const popover = $(".newsdesk-popover");
-            s.isPopoverVisible = false;
+            const popover = $(".newsdesk-popover")
+            s.isPopoverVisible = false
 
             const handleEscape = function(event) {
                 if (event.which === 27) {
-                    s.popHide();
-                    return false;
+                    s.popHide()
+                    return false
                 }
-            };
+            }
 
             s.popShow = function() {
-                s.isPopoverVisible = true;
+                s.isPopoverVisible = true
 
                 popover.show().focus().position({
                     my : "right top",
                     at : "right-10 top+10",
                     of : window
-                });
-                $rootElement.on("keydown", handleEscape);
-                $rootElement.on("click", s.popHide);
+                })
+                $rootElement.on("keydown", handleEscape)
+                $rootElement.on("click", s.popHide)
 
-                return localStorage.setItem(s.storage, s.newsitems[0].d);
-            };
+                return localStorage.setItem(s.storage, s.newsitems[0].d)
+            }
 
             return s.popHide = function() {
-                s.isPopoverVisible = false;
-                popover.hide();
-                $rootElement.off("keydown", handleEscape);
-                $rootElement.off("click", s.popHide);
-            };
+                s.isPopoverVisible = false
+                popover.hide()
+                $rootElement.off("keydown", handleEscape)
+                $rootElement.off("click", s.popHide)
+            }
         }
     })
-);
+)

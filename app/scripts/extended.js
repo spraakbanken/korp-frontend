@@ -1,3 +1,9 @@
+/* eslint-disable
+    no-return-assign,
+    no-undef,
+*/
+// TODO: This file was created by bulk-decaffeinate.
+// Fix any style issues and re-enable lint.
 /*
  * decaffeinate suggestions:
  * DS101: Remove unnecessary use of Array.from
@@ -5,7 +11,7 @@
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-const korpApp = angular.module("korpApp");
+const korpApp = angular.module("korpApp")
 korpApp.factory("extendedComponents", function() {
     const autocompleteTemplate = `\
 <div>
@@ -17,64 +23,64 @@ korpApp.factory("extendedComponents", function() {
            typeahead-input-formatter="typeaheadInputFormatter($model)"
            uib-typeahead="tuple[0] as tuple[1] for tuple in getRows($viewValue)"></input>
 </div>\
-`;
-    const selectTemplate = "<select ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset'></select>";
+`
+    const selectTemplate = "<select ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset'></select>"
     const localize = $scope =>
         function(str) {
             if (!$scope.translationKey) {
-                return str;
+                return str
             } else {
-                return util.getLocaleString( ($scope.translationKey || "") + str);
+                return util.getLocaleString( ($scope.translationKey || "") + str)
             }
         }
-    ;
+    
 
     const selectController = autocomplete => ["$scope", "structService", function($scope, structService) {
-        const attribute = $scope.$parent.tokenValue.value;
-        const selectedCorpora = settings.corpusListing.selected;
+        const attribute = $scope.$parent.tokenValue.value
+        const selectedCorpora = settings.corpusListing.selected
 
         // check which corpora support attributes
-        const corpora = [];
+        const corpora = []
         for (let corpusSettings of Array.from(selectedCorpora)) {
             if (attribute in corpusSettings.structAttributes || (attribute in corpusSettings.attributes)) {
-                corpora.push(corpusSettings.id);
+                corpora.push(corpusSettings.id)
             }
         }
 
-        $scope.loading = true;
-        const opts = {count: false, returnByCorpora: false};
+        $scope.loading = true
+        const opts = { count: false, returnByCorpora: false }
         if ($scope.type === "set") {
-            opts.split = true;
+            opts.split = true
         }
         structService.getStructValues(corpora, [attribute], opts).then(function(data) {
-            $scope.loading = false;
-            const localizer = localize($scope);
+            $scope.loading = false
+            const localizer = localize($scope)
             // console.log("getStructValues data", data)
 
             const dataset = _.map((_.uniq(data)), function(item) { 
                 if (item === "") {
-                    return [item, util.getLocaleString("empty")];
+                    return [item, util.getLocaleString("empty")]
                 }
-                return [item, localizer(item)];
-        });
-            $scope.dataset = _.sortBy(dataset, tuple => tuple[1]);
+                return [item, localizer(item)]
+        })
+            $scope.dataset = _.sortBy(dataset, tuple => tuple[1])
             if (!autocomplete) {
-                return $scope.input = $scope.input || $scope.dataset[0][0];
+                return $scope.input = $scope.input || $scope.dataset[0][0]
             }
         }
-        , () => c.log("struct_values error"));
+        , () => c.log("struct_values error"))
 
         $scope.getRows = function(input) {
             if (input) {
-                return _.filter($scope.dataset, tuple => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1);
+                return _.filter($scope.dataset, tuple => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
             } else {
-                return $scope.dataset;
+                return $scope.dataset
             }
-        };
+        }
 
-        return $scope.typeaheadInputFormatter = model => localize($scope)(model);
+        return $scope.typeaheadInputFormatter = model => localize($scope)(model)
     }
-    ] ;
+    ] 
 
     // Select-element. Use the following settings in the corpus:
     // - dataset: an object or an array of values
@@ -84,15 +90,15 @@ korpApp.factory("extendedComponents", function() {
         datasetSelect: {
             template: selectTemplate,
             controller: ["$scope", function($scope) {
-                let dataset;
-                const localizer = localize($scope);
+                let dataset
+                const localizer = localize($scope)
                 if (_.isArray($scope.dataset)) {
-                    dataset = _.map($scope.dataset, item => [item, localizer(item)]);
+                    dataset = _.map($scope.dataset, item => [item, localizer(item)])
                 } else {
-                    dataset = _.map($scope.dataset, (v, k) => [k, localizer(v)]);
+                    dataset = _.map($scope.dataset, (v, k) => [k, localizer(v)])
                 }
-                $scope.dataset = _.sortBy(dataset, tuple => tuple[1]);
-                return $scope.model = $scope.model || $scope.dataset[0][0];
+                $scope.dataset = _.sortBy(dataset, tuple => tuple[1])
+                return $scope.model = $scope.model || $scope.dataset[0][0]
             }
             ]
         },
@@ -136,24 +142,24 @@ korpApp.factory("extendedComponents", function() {
         ),
         defaultController: ["$scope", function($scope) {
             if (($scope.orObj.flags != null ? $scope.orObj.flags.c : undefined)) {
-                $scope.case = "insensitive";
+                $scope.case = "insensitive"
             } else {
-                $scope.case = "sensitive";
+                $scope.case = "sensitive"
             }
 
             $scope.makeSensitive = function() {
-                $scope.case = "sensitive";
-                return ($scope.orObj.flags != null ? delete $scope.orObj.flags["c"] : undefined);
-            };
+                $scope.case = "sensitive"
+                return ($scope.orObj.flags != null ? delete $scope.orObj.flags["c"] : undefined)
+            }
 
             return $scope.makeInsensitive = function() {
-                const flags = ($scope.orObj.flags || {});
-                flags["c"] = true;
-                $scope.orObj.flags = flags;
+                const flags = ($scope.orObj.flags || {})
+                flags["c"] = true
+                $scope.orObj.flags = flags
 
-                return $scope.case = "insensitive";
-            };
+                return $scope.case = "insensitive"
+            }
         }
         ]
-    };
-});
+    }
+})

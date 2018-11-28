@@ -1,10 +1,17 @@
+/* eslint-disable
+    no-return-assign,
+    no-undef,
+    no-unused-vars,
+*/
+// TODO: This file was created by bulk-decaffeinate.
+// Fix any style issues and re-enable lint.
 /*
  * decaffeinate suggestions:
  * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-const plusImg = require("../img/plus.png");
+const plusImg = require("../img/plus.png")
 
 korpApp.directive("globalFilters", globalFilterService =>
     ({
@@ -48,27 +55,27 @@ korpApp.directive("globalFilters", globalFilterService =>
 </div>`,
         link(scope, element, attribute) {
 
-            globalFilterService.registerScope(scope);
+            globalFilterService.registerScope(scope)
 
             scope.dataObj =
-                {showDirective: false};
+                { showDirective: false }
 
-            scope.update = dataObj => scope.dataObj = dataObj;
+            scope.update = dataObj => scope.dataObj = dataObj
 
-            scope.getFilterLabel = filterKey => scope.dataObj.attributes[filterKey].settings.label;
+            scope.getFilterLabel = filterKey => scope.dataObj.attributes[filterKey].settings.label
 
-            scope.getTranslationKey = filterKey => scope.dataObj.attributes[filterKey].settings.translationKey || "";
+            scope.getTranslationKey = filterKey => scope.dataObj.attributes[filterKey].settings.translationKey || ""
 
-            scope.removeFilter = filter => globalFilterService.removeFilter(filter);
+            scope.removeFilter = filter => globalFilterService.removeFilter(filter)
 
-            scope.getAvailableFilters = () => _.filter(scope.dataObj.optionalFilters, filter => !Array.from(scope.dataObj.selectedFilters).includes(filter));
+            scope.getAvailableFilters = () => _.filter(scope.dataObj.optionalFilters, filter => !Array.from(scope.dataObj.selectedFilters).includes(filter))
 
-            scope.isOptionalFilter = filterKey => (scope.dataObj.optionalFilters.indexOf(filterKey) > -1) && (scope.dataObj.defaultFilters.indexOf(filterKey) === -1);
+            scope.isOptionalFilter = filterKey => (scope.dataObj.optionalFilters.indexOf(filterKey) > -1) && (scope.dataObj.defaultFilters.indexOf(filterKey) === -1)
 
-            return scope.addNewFilter = value => globalFilterService.addNewFilter(value, true);
+            return scope.addNewFilter = value => globalFilterService.addNewFilter(value, true)
         }
     })
-);
+)
 
 korpApp.directive("globalFilter", globalFilterService =>
     ({
@@ -126,33 +133,33 @@ korpApp.directive("globalFilter", globalFilterService =>
             // if scope.possibleValues.length > 20
             //     # TODO enable autocomplete
 
-            scope.selected = _.clone(scope.attrValue);
+            scope.selected = _.clone(scope.attrValue)
             scope.dropdownToggle = function(open) {
                 if (!open) {
-                    scope.selected = [];
+                    scope.selected = []
                     return Array.from(scope.attrValue).map((value) =>
-                        scope.selected.push(value));
+                        scope.selected.push(value))
                 }
-            };
+            }
 
             scope.toggleSelected = function(value, event) {
                 if (Array.from(scope.attrValue).includes(value)) {
-                    __.remove(scope.attrValue, value);
+                    __.remove(scope.attrValue, value)
                 } else {
-                    scope.attrValue.push(value);
+                    scope.attrValue.push(value)
                 }
-                event.stopPropagation();
-                return globalFilterService.valueChange(scope.attr);
-            };
+                event.stopPropagation()
+                return globalFilterService.valueChange(scope.attr)
+            }
 
-            scope.isSelected = value => Array.from(scope.attrValue).includes(value);
+            scope.isSelected = value => Array.from(scope.attrValue).includes(value)
 
-            scope.isSelectedList = value => Array.from(scope.selected).includes(value);
+            scope.isSelectedList = value => Array.from(scope.selected).includes(value)
 
             return scope.removeFilter = function(event) {
-                event.stopPropagation();
-                return scope.$parent.removeFilter(scope.attr);
-            };
+                event.stopPropagation()
+                return scope.$parent.removeFilter(scope.attr)
+            }
         }
     })
-);
+)

@@ -1,3 +1,10 @@
+/* eslint-disable
+    no-return-assign,
+    no-undef,
+    no-unused-vars,
+*/
+// TODO: This file was created by bulk-decaffeinate.
+// Fix any style issues and re-enable lint.
 /*
  * decaffeinate suggestions:
  * DS101: Remove unnecessary use of Array.from
@@ -36,282 +43,282 @@ window.korpApp = angular.module('korpApp', [
                                             "sbMap",
                                             "tmh.dynamicLocale",
                                             "angular.filter"
-                                        ]);
+                                        ])
 
-korpApp.config(tmhDynamicLocaleProvider => tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js"));
+korpApp.config(tmhDynamicLocaleProvider => tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js"))
 
 korpApp.config($uibTooltipProvider =>
     $uibTooltipProvider.options({
-        appendToBody: true})
-);
+        appendToBody: true })
+)
 
 korpApp.config(['$locationProvider', $locationProvider => $locationProvider.hashPrefix('')
-]);
+])
 
 korpApp.config(['$compileProvider', $compileProvider => $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/)
-]);
+])
 
 korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout, $q) {
-    let corpus, loginNeededFor;
-    const s = $rootScope;
-    s._settings = settings;
-    window.lang = (s.lang = $location.search().lang || settings.defaultLanguage);
-    s.word_selected = null;
-    s.isLab = window.isLab;
+    let corpus, loginNeededFor
+    const s = $rootScope
+    s._settings = settings
+    window.lang = (s.lang = $location.search().lang || settings.defaultLanguage)
+    s.word_selected = null
+    s.isLab = window.isLab
 
-    s.sidebar_visible = false;
+    s.sidebar_visible = false
 
-    s.extendedCQP = null;
+    s.extendedCQP = null
 
-    s.globalFilterDef = $q.defer();
+    s.globalFilterDef = $q.defer()
 
     s.locationSearch = function() {
-        return $location.search(...arguments);
-    };
+        return $location.search(...arguments)
+    }
 
-    s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs;
+    s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
 
-    tmhDynamicLocale.set("en");
+    tmhDynamicLocale.set("en")
 
-    s._loc = $location;
+    s._loc = $location
 
     s.$watch("_loc.search()", function() {
-        c.log("loc.search() change", $location.search());
-        _.defer(() => typeof window.onHashChange === 'function' ? window.onHashChange() : undefined);
+        c.log("loc.search() change", $location.search())
+        _.defer(() => typeof window.onHashChange === 'function' ? window.onHashChange() : undefined)
 
-        return tmhDynamicLocale.set($location.search().lang || "sv");
-    });
+        return tmhDynamicLocale.set($location.search().lang || "sv")
+    })
 
 
 
-    $rootScope.kwicTabs = [];
-    $rootScope.compareTabs = [];
-    $rootScope.graphTabs = [];
-    $rootScope.mapTabs = [];
-    let isInit = true;
+    $rootScope.kwicTabs = []
+    $rootScope.compareTabs = []
+    $rootScope.graphTabs = []
+    $rootScope.mapTabs = []
+    let isInit = true
 
     if ($location.search().corpus) {
-        loginNeededFor = [];
+        loginNeededFor = []
         for (corpus of Array.from($location.search().corpus.split(","))) {
-            const corpusObj = settings.corpusListing.struct[corpus];
+            const corpusObj = settings.corpusListing.struct[corpus]
             if (corpusObj.limitedAccess) {
-                var needle;
+                var needle
                 if ((_.isEmpty(authenticationProxy.loginObj)) || ((needle = corpus.toUpperCase(), !Array.from(authenticationProxy.loginObj.credentials).includes(needle)))) {
-                    loginNeededFor.push(corpusObj);
+                    loginNeededFor.push(corpusObj)
                 }
             }
         }
-        s.loginNeededFor = loginNeededFor;
+        s.loginNeededFor = loginNeededFor
 
         if (!_.isEmpty(s.loginNeededFor)) {
-            s.savedState = $location.search();
-            $location.url($location.path());
+            s.savedState = $location.search()
+            $location.url($location.path())
             if (s.savedState.reading_mode) {
-                $location.search("reading_mode");
+                $location.search("reading_mode")
             }
-            $location.search("display", "login");
+            $location.search("display", "login")
         }
     }
 
     s.restorePreLoginState = function() {
         if (s.savedState) {
             for (let key in s.savedState) {
-                const val = s.savedState[key];
-                $location.search(key, val);
+                const val = s.savedState[key]
+                $location.search(key, val)
             }
 
-            const corpora = s.savedState.corpus.split(",");
-            settings.corpusListing.select(corpora);
-            corpusChooserInstance.corpusChooser("selectItems", corpora);
+            const corpora = s.savedState.corpus.split(",")
+            settings.corpusListing.select(corpora)
+            corpusChooserInstance.corpusChooser("selectItems", corpora)
 
-            s.savedState = null;
-            return s.loginNeededFor = null;
+            s.savedState = null
+            return s.loginNeededFor = null
         }
-    };
+    }
 
 
-    s.searchDisabled = false;
+    s.searchDisabled = false
     s.$on("corpuschooserchange", function(event, corpora) {
-        c.log("corpuschooserchange", corpora);
-        settings.corpusListing.select(corpora);
-        const nonprotected = _.map(settings.corpusListing.getNonProtected(), "id");
+        c.log("corpuschooserchange", corpora)
+        settings.corpusListing.select(corpora)
+        const nonprotected = _.map(settings.corpusListing.getNonProtected(), "id")
         if (corpora.length && (_.intersection(corpora, nonprotected).length !== nonprotected.length)) {
-            $location.search("corpus", corpora.join(","));
+            $location.search("corpus", corpora.join(","))
         } else {
-            $location.search("corpus", null);
+            $location.search("corpus", null)
         }
 
-        isInit = false;
+        isInit = false
 
-        return s.searchDisabled = settings.corpusListing.selected.length === 0;
-    });
+        return s.searchDisabled = settings.corpusListing.selected.length === 0
+    })
 
     return searches.infoDef.then(function() {
-        ({ corpus } = $location.search());
-        let currentCorpora = [];
+        ({ corpus } = $location.search())
+        let currentCorpora = []
         if (corpus) {
-            _.map(corpus.split(","), val => currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, val)));
+            _.map(corpus.split(","), val => currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, val)))
         } else {
             if (!(settings.preselectedCorpora != null ? settings.preselectedCorpora.length : undefined)) {
-                currentCorpora = _.map(settings.corpusListing.corpora, "id");
+                currentCorpora = _.map(settings.corpusListing.corpora, "id")
             } else {
                 for (let pre_item of Array.from(settings.preselectedCorpora)) {
-                    pre_item = pre_item.replace(/^__/g, '');
-                    currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, pre_item));
+                    pre_item = pre_item.replace(/^__/g, '')
+                    currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, pre_item))
                 }
             }
 
-            settings.preselectedCorpora = currentCorpora;
+            settings.preselectedCorpora = currentCorpora
         }
 
-        settings.corpusListing.select(currentCorpora);
-        return corpusChooserInstance.corpusChooser("selectItems", currentCorpora);
-    });
-});
+        settings.corpusListing.select(currentCorpora)
+        return corpusChooserInstance.corpusChooser("selectItems", currentCorpora)
+    })
+})
 
 
 korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
-    const s = $scope;
+    const s = $scope
 
     s.logoClick = function() {
-        window.location = $scope.getUrl(currentMode);
-        return window.location.reload();
-    };
+        window.location = $scope.getUrl(currentMode)
+        return window.location.reload()
+    }
 
 
-    s.citeClick = () => s.show_modal = 'about';
+    s.citeClick = () => s.show_modal = 'about'
 
-    s.showLogin = () => s.show_modal = 'login';
+    s.showLogin = () => s.show_modal = 'login'
 
     s.logout = function() {
-        let corpus;
-        authenticationProxy.loginObj = {};
-        $.jStorage.deleteKey("creds");
+        let corpus
+        authenticationProxy.loginObj = {}
+        $.jStorage.deleteKey("creds")
 
         // TODO figure out another way to do this
         for (let corpusObj of Array.from(settings.corpusListing.corpora)) {
-            corpus = corpusObj.id;
+            corpus = corpusObj.id
             if (corpusObj.limitedAccess) {
-                $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled");
+                $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled")
             }
         }
-        $("#corpusbox").corpusChooser("updateAllStates");
+        $("#corpusbox").corpusChooser("updateAllStates")
 
-        let newCorpora = [];
+        let newCorpora = []
         for (corpus of Array.from(settings.corpusListing.getSelectedCorpora())) {
             if (!settings.corpora[corpus].limitedAccess) {
-                newCorpora.push(corpus);
+                newCorpora.push(corpus)
             }
         }
 
         if (_.isEmpty(newCorpora)) {
-            newCorpora = settings.preselectedCorpora;
+            newCorpora = settings.preselectedCorpora
         }
-        settings.corpusListing.select(newCorpora);
-        s.loggedIn = false;
-        $("#corpusbox").corpusChooser("selectItems", newCorpora);
-    };
+        settings.corpusListing.select(newCorpora)
+        s.loggedIn = false
+        $("#corpusbox").corpusChooser("selectItems", newCorpora)
+    }
 
-    const N_VISIBLE = settings.visibleModes;
+    const N_VISIBLE = settings.visibleModes
 
-    s.modes = _.filter(settings.modeConfig);
+    s.modes = _.filter(settings.modeConfig)
     if (!isLab) {
-        s.modes = _.filter(settings.modeConfig, item => item.labOnly !== true);
+        s.modes = _.filter(settings.modeConfig, item => item.labOnly !== true)
     }
 
 
-    s.visible = s.modes.slice(0, N_VISIBLE);
-    s.menu = s.modes.slice(N_VISIBLE);
+    s.visible = s.modes.slice(0, N_VISIBLE)
+    s.menu = s.modes.slice(N_VISIBLE)
 
-    const i = $.inArray(currentMode, (_.map(s.menu, "mode")));
+    const i = $.inArray(currentMode, (_.map(s.menu, "mode")))
     if (i !== -1) {
-        s.visible.push(s.menu[i]);
-        s.menu.splice(i, 1);
+        s.visible.push(s.menu[i])
+        s.menu.splice(i, 1)
     }
 
     for (let mode of Array.from(s.modes)) {
-        mode.selected = false;
+        mode.selected = false
         if (mode.mode === currentMode) {
-            mode.selected = true;
+            mode.selected = true
         }
     }
 
     s.getUrl = function(modeId) {
-        const langParam = `#?lang=${s.$root.lang}`;
+        const langParam = `#?lang=${s.$root.lang}`
         if (modeId === "default") {
-            return location.pathname + langParam;
+            return location.pathname + langParam
         }
-        return location.pathname + `?mode=${modeId}` + langParam;
-    };
+        return location.pathname + `?mode=${modeId}` + langParam
+    }
 
-    s.show_modal = false;
+    s.show_modal = false
 
-    let modal = null;
+    let modal = null
     utils.setupHash(s, [{
         key: "display",
         scope_name: "show_modal",
         post_change(val) {
-            c.log("post change", val);
+            c.log("post change", val)
             if (val) {
-                return showModal(val);
+                return showModal(val)
             } else {
-                c.log("post change modal", modal);
+                c.log("post change modal", modal)
                 if (modal != null) {
-                    modal.close();
+                    modal.close()
                 }
-                return modal = null;
+                return modal = null
             }
         }
     }
-    ]);
+    ])
 
     const closeModals = function() {
-        s.login_err = false;
-        return s.show_modal = false;
-    };
+        s.login_err = false
+        return s.show_modal = false
+    }
 
     var showModal = function(key) {
-        const tmpl = {about: require('../markup/about.html'), login: 'login_modal'}[key];
+        const tmpl = { about: require('../markup/about.html'), login: 'login_modal' }[key]
         const params = {
             templateUrl : tmpl,
             scope : s,
             windowClass : key
-        };
-        if (key === 'login') {
-            params.size = 'sm';
         }
-        modal = $uibModal.open(params);
+        if (key === 'login') {
+            params.size = 'sm'
+        }
+        modal = $uibModal.open(params)
 
-        return modal.result.then((() => closeModals()), () => closeModals());
-    };
+        return modal.result.then(() => closeModals(), () => closeModals())
+    }
 
-    s.clickX = () => closeModals();
+    s.clickX = () => closeModals()
 
-    s.loggedIn = false;
-    const creds = $.jStorage.get("creds");
+    s.loggedIn = false
+    const creds = $.jStorage.get("creds")
     if (creds) {
-        util.setLogin();
-        s.loggedIn = true;
-        s.username = authenticationProxy.loginObj.name;
+        util.setLogin()
+        s.loggedIn = true
+        s.username = authenticationProxy.loginObj.name
     }
     return s.loginSubmit = function(usr, pass, saveLogin) {
-        s.login_err = false;
+        s.login_err = false
         return authenticationProxy.makeRequest(usr, pass, saveLogin).done(function(data) {
-            util.setLogin();
+            util.setLogin()
             return safeApply(s, function() {
-                s.show_modal = null;
-                s.restorePreLoginState();
-                s.loggedIn = true;
-                return s.username = usr;
-        });
+                s.show_modal = null
+                s.restorePreLoginState()
+                s.loggedIn = true
+                return s.username = usr
+        })
         }).fail(function() {
-            c.log("login fail");
-            return safeApply(s, () => s.login_err = true);
-        });
-    };
-});
+            c.log("login fail")
+            return safeApply(s, () => s.login_err = true)
+        })
+    }
+})
 
 
 korpApp.filter("trust", $sce =>
     input => $sce.trustAsHtml(input)
-);
+)
