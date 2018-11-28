@@ -184,13 +184,13 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
                         return
                     [name, countryCode, lat, lng] = hit.split ";"
 
-                    points.push (
+                    points.push {
                         abs: actual_hit.abs_freq
                         rel: actual_hit.rel_freq
                         name: name
                         countryCode: countryCode
                         lat : parseFloat lat
-                        lng : parseFloat lng)
+                        lng : parseFloat lng}
 
                 return (
                     label: label
