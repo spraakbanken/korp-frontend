@@ -1,22 +1,4 @@
 /** @format */
-/* eslint-disable
-    no-irregular-whitespace,
-    no-return-assign,
-    no-undef,
-    no-unused-vars,
-    no-useless-escape,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS201: Simplify complex destructure assignments
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("kwicWord", () => ({
@@ -25,7 +7,7 @@ korpApp.directive("kwicWord", () => ({
 {{::wd.word}} </span>\
 `,
     link(scope, element) {
-        return (scope.getClassObj = function(wd) {
+        scope.getClassObj = function(wd) {
             let struct
             const output = {
                 reading_match: wd._match,
@@ -34,23 +16,21 @@ korpApp.directive("kwicWord", () => ({
                 link_selected: wd._link_selected
             }
 
-            for (struct of Array.from(wd._open || [])) {
+            for (struct of wd._open || []) {
                 output[`open_${struct}`] = true
             }
-            for (struct of Array.from(wd._close || [])) {
+            for (struct of wd._close || []) {
                 output[`close_${struct}`] = true
             }
 
-            return (() => {
-                const result = []
-                for (let [x, y] of Array.from(_.toPairs(output))) {
-                    if (y) {
-                        result.push(x)
-                    }
+            const result = []
+            for (let [x, y] of _.toPairs(output)) {
+                if (y) {
+                    result.push(x)
                 }
-                return result
-            })().join(" ")
-        })
+            }
+            return result.join(" ")
+        }
     }
 }))
 
@@ -81,14 +61,14 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
                 index = s.maxTab
             }
 
-            return (s.activeTab = index)
+            s.activeTab = index
         }
 
         const initTab = parseInt($location.search()[attr.tabHash]) || 0
         $timeout(function() {
             s.fixedTabs = {}
             s.maxTab = -1
-            for (let tab of Array.from(contentScope.tabset.tabs)) {
+            for (let tab of contentScope.tabset.tabs) {
                 s.fixedTabs[tab.index] = tab
                 if (tab.index > s.maxTab) {
                     s.maxTab = tab.index
@@ -98,13 +78,13 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
             return watchHash()
         }, 0)
 
-        return (s.newDynamicTab = function() {
+        s.newDynamicTab = function() {
             console.log("newDynamicTab s.maxTab", s.maxTab)
             return $timeout(function() {
                 s.setSelected(s.maxTab + 1, true)
-                return (s.maxTab += 1)
+                s.maxTab += 1
             }, 0)
-        })
+        }
     }
 }))
 
@@ -117,7 +97,7 @@ korpApp.directive("escaper", () => ({
         } else {
             const doNotEscape = ["*=", "!*="]
             escape = function(val) {
-                if (!Array.from(doNotEscape).includes($scope.orObj.op)) {
+                if (!doNotEscape.includes($scope.orObj.op)) {
                     return regescape(val)
                 } else {
                     return val
@@ -125,7 +105,7 @@ korpApp.directive("escaper", () => ({
             }
 
             unescape = function(val) {
-                if (!Array.from(doNotEscape).includes($scope.orObj.op)) {
+                if (!doNotEscape.includes($scope.orObj.op)) {
                     return unregescape(val)
                 } else {
                     return val
@@ -160,7 +140,7 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
             if (!valueObj) {
                 return
             }
-            if (valueObj.value === (current != null ? current.value : undefined)) {
+            if (valueObj.value === (current && current.value)) {
                 return
             }
 
@@ -222,7 +202,7 @@ korpApp.directive("constr", ($window, searches) => ({
         }
 
         scope.instance = instance
-        return (scope.$parent.instance = instance)
+        scope.$parent.instance = instance
     }
 }))
 
@@ -323,7 +303,7 @@ korpApp.directive("searchSubmit", ($window, $document, $rootElement) => ({
             return s.$broadcast("popover_submit", s.name)
         }
 
-        return (s.onSendClick = () => s.$broadcast("btn_submit"))
+        s.onSendClick = () => s.$broadcast("btn_submit")
     }
 }))
 
@@ -343,7 +323,7 @@ korpApp.directive("meter", () => ({
     link(scope, elem, attr) {
         const zipped = _.zip(scope.meter.tokenLists, scope.stringify)
         scope.displayWd = _.map(zipped, function(...args) {
-            const [tokens, stringify] = Array.from(args[0])
+            const [tokens, stringify] = args[0]
             return _.map(tokens, function(token) {
                 if (token === "|" || token === "") {
                     return "&mdash;"
@@ -456,7 +436,7 @@ korpApp.directive("extendedList", ($location, $rootScope) => ({
 
             for (token of s.data) {
                 if (!("and_block" in token) || !token.and_block.length) {
-                    result.push((token.and_block = CQP.parse('[word = ""]')[0].and_block))
+                    token.and_block = CQP.parse('[word = ""]')[0].and_block
                 }
             }
         }
@@ -481,7 +461,7 @@ korpApp.directive("extendedList", ($location, $rootScope) => ({
             const token = { and_block: [[]] }
             s.data.push(token)
             s.addOr(token.and_block[0])
-            return (s.repeatError = false)
+            s.repeatError = false
         }
 
         s.removeToken = function(i) {
@@ -490,19 +470,19 @@ korpApp.directive("extendedList", ($location, $rootScope) => ({
             }
             s.data.splice(i, 1)
             let repeatError = true
-            for (let token of Array.from(s.data)) {
+            for (let token of s.data) {
                 if (!token.repeat || token.repeat[0] > 0) {
                     repeatError = false
                     break
                 }
             }
-            return (s.repeatError = repeatError)
+            s.repeatError = repeatError
         }
 
         s.toggleRepeat = function(token) {
             if (!token.repeat) {
                 token.repeat = [1, 1]
-                return (s.repeatError = false)
+                s.repeatError = false
             } else {
                 s.repeatError = false
                 return delete token.repeat
@@ -537,11 +517,11 @@ korpApp.directive("extendedList", ($location, $rootScope) => ({
             }
 
             if (token.repeat[0] > 0) {
-                return (s.repeatError = false)
+                s.repeatError = false
             }
         }
 
-        return (s.repeatBlur = function(repeat_idx, token_idx) {
+        s.repeatBlur = function(repeat_idx, token_idx) {
             let token = s.data[token_idx]
 
             if (token.repeat[repeat_idx] === null) {
@@ -549,15 +529,15 @@ korpApp.directive("extendedList", ($location, $rootScope) => ({
             }
 
             let repeatError = true
-            for (token of Array.from(s.data)) {
+            for (token of s.data) {
                 if (!token.repeat || token.repeat[0] > 0) {
                     repeatError = false
                     break
                 }
             }
 
-            return (s.repeatError = repeatError)
-        })
+            s.repeatError = repeatError
+        }
     }
 }))
 
@@ -664,7 +644,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
         <script type="text/ng-template" id="lemgramautocomplete.html">
             <a style="cursor:pointer">
                 <span ng-class="{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : (match.model.variant != 'dalin' && match.model.count == 0)}">
-                    <span ng-if="match.model.parts.namespace" class="label lemgram-namespace">{{match.model.parts.namespace | loc}}</span>
+                    <span ng-if="match.model.parts.namespace" class="label lemgram-namespace">{{match.model.parts.namespace | loc}}</span>
                     <span>{{match.model.parts.main}}</span>
                     <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
                     <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
@@ -709,7 +689,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
         }
 
         scope.lemgramify = function(lemgram) {
-            const lemgramRegExp = /([^_\.-]*--)?(.*)\.\.(\w+)\.(\d\d?)/
+            const lemgramRegExp = /([^_.-]*--)?(.*)\.\.(\w+)\.(\d\d?)/
             const match = lemgram.match(lemgramRegExp)
             if (!match) {
                 return false
@@ -766,13 +746,10 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
             if (scope.variant === "dalin") {
                 morphologies.push("dalinm")
             } else {
-                for (let corporaID of Array.from(corporaIDs)) {
-                    const morfs =
-                        (settings.corpora[corporaID].morphology != null
-                            ? settings.corpora[corporaID].morphology.split("|")
-                            : undefined) || []
-                    for (let morf of Array.from(morfs)) {
-                        if (!Array.from(morphologies).includes(morf)) {
+                for (let corporaID of corporaIDs) {
+                    const morfs = settings.corpora[corporaID].morphology || ""
+                    for (let morf of morfs.split("|")) {
+                        if (!morphologies.includes(morf)) {
                             morphologies.push(morf)
                         }
                     }
@@ -808,7 +785,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
                         item.count = -1
                     }
                     item.parts = scope.lemgramify(item.lemgram)
-                    return (item.variant = scope.variant)
+                    item.variant = scope.variant
                 })
                 data.sort((a, b) => b.count - a.count)
                 return deferred.resolve(data)
@@ -816,7 +793,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
             return deferred.promise
         }
 
-        return (scope.getSenses = function(input, morphologies, corporaIDs) {
+        scope.getSenses = function(input, morphologies, corporaIDs) {
             const deferred = $q.defer()
             const http = lexicons.getSenses(input, morphologies.join("|"), corporaIDs)
             http.then(function(data) {
@@ -825,7 +802,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
                     if (item.desc) {
                         item.desc = scope.sensify(item.desc)
                     }
-                    return (item.variant = scope.variant)
+                    item.variant = scope.variant
                 })
                 data.sort(function(a, b) {
                     if (a.parts.main === b.parts.main) {
@@ -837,13 +814,12 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
                 return deferred.resolve(data)
             })
             return deferred.promise
-        })
+        }
     }
 }))
 
 korpApp.directive("typeaheadClickOpen", function($parse, $timeout) {
-    let dir
-    return (dir = {
+    return {
         restrict: "A",
         require: "ngModel",
         link($scope, elem, attrs) {
@@ -859,7 +835,7 @@ korpApp.directive("typeaheadClickOpen", function($parse, $timeout) {
             }
             return elem.bind("keyup", triggerFunc)
         }
-    })
+    }
 })
 
 korpApp.directive("timeInterval", () => ({
@@ -891,21 +867,21 @@ korpApp.directive("timeInterval", () => ({
         s.open = function(event) {
             event.preventDefault()
             event.stopPropagation()
-            return (s.isOpen = true)
+            s.isOpen = true
         }
 
         const time_units = ["hour", "minute"]
-        return (w = s.$watchGroup(["dateModel", "timeModel"], function(...args) {
-            const [date, time] = Array.from(args[0])
+        w = s.$watchGroup(["dateModel", "timeModel"], function(...args) {
+            const [date, time] = args[0]
             if (date && time) {
                 const m = moment(moment(date).format("YYYY-MM-DD"))
-                for (let t of Array.from(time_units)) {
+                for (let t of time_units) {
                     const m_time = moment(time)
                     m.add(m_time[t](), t)
                 }
-                return (s.model = m)
+                s.model = m
             }
-        }))
+        })
     }
 }))
 
@@ -964,7 +940,7 @@ korpApp.directive("reduceSelect", $timeout => ({
             if (scope.items) {
                 let item
                 scope.keyItems = {}
-                for (item of Array.from(scope.items)) {
+                for (item of scope.items) {
                     scope.keyItems[item.value] = item
                 }
 
@@ -973,7 +949,7 @@ korpApp.directive("reduceSelect", $timeout => ({
                     _.filter(scope.keyItems, { group: "sentence_attr" }).length > 0
 
                 if (scope.selected && scope.selected.length > 0) {
-                    for (let select of Array.from(scope.selected)) {
+                    for (let select of scope.selected) {
                         item = scope.keyItems[select]
                         if (item) {
                             item.selected = true
@@ -983,7 +959,7 @@ korpApp.directive("reduceSelect", $timeout => ({
                     scope.keyItems["word"].selected = true
                 }
                 if (scope.insensitive) {
-                    for (let insensitive of Array.from(scope.insensitive)) {
+                    for (let insensitive of scope.insensitive) {
                         scope.keyItems[insensitive].insensitive = true
                     }
                 }
@@ -993,7 +969,7 @@ korpApp.directive("reduceSelect", $timeout => ({
 
         var updateSelected = function(scope) {
             scope.selected = _.map(_.filter(scope.keyItems, (item, key) => item.selected), "value")
-            return (scope.numberAttributes = scope.selected.length)
+            scope.numberAttributes = scope.selected.length
         }
 
         scope.toggleSelected = function(value, event) {
@@ -1032,12 +1008,12 @@ korpApp.directive("reduceSelect", $timeout => ({
             }
         }
 
-        return (scope.toggled = function(open) {
+        scope.toggled = function(open) {
             // if no element is selected when closing popop, select word
             if (!open && scope.numberAttributes === 0) {
                 return $timeout(() => scope.toggleSelected("word"), 0)
             }
-        })
+        }
     }
 }))
 
