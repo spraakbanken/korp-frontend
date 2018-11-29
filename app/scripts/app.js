@@ -1,6 +1,4 @@
 /* eslint-disable
-    no-return-assign,
-    no-undef,
     no-unused-vars,
 */
 // TODO: This file was created by bulk-decaffeinate.
@@ -132,7 +130,7 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
             corpusChooserInstance.corpusChooser("selectItems", corpora)
 
             s.savedState = null
-            return s.loginNeededFor = null
+            s.loginNeededFor = null
         }
     }
 
@@ -150,19 +148,20 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
 
         isInit = false
 
-        return s.searchDisabled = settings.corpusListing.selected.length === 0
+        s.searchDisabled = settings.corpusListing.selected.length === 0
     })
 
     return searches.infoDef.then(function() {
         ({ corpus } = $location.search())
         let currentCorpora = []
         if (corpus) {
-            _.map(corpus.split(","), val => currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, val)))
+            currentCorpora = _.flatten(_.map(corpus.split(","), val => 
+                getAllCorporaInFolders(settings.corporafolders, val)))
         } else {
             if (!(settings.preselectedCorpora != null ? settings.preselectedCorpora.length : undefined)) {
                 currentCorpora = _.map(settings.corpusListing.corpora, "id")
             } else {
-                for (let pre_item of Array.from(settings.preselectedCorpora)) {
+                for (let pre_item of settings.preselectedCorpora) {
                     pre_item = pre_item.replace(/^__/g, '')
                     currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, pre_item))
                 }
@@ -186,9 +185,9 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
     }
 
 
-    s.citeClick = () => s.show_modal = 'about'
+    s.citeClick = () => {s.show_modal = 'about'}
 
-    s.showLogin = () => s.show_modal = 'login'
+    s.showLogin = () => {s.show_modal = 'login'}
 
     s.logout = function() {
         let corpus
@@ -266,7 +265,7 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
                 if (modal != null) {
                     modal.close()
                 }
-                return modal = null
+                modal = null
             }
         }
     }
@@ -274,7 +273,7 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
 
     const closeModals = function() {
         s.login_err = false
-        return s.show_modal = false
+        s.show_modal = false
     }
 
     var showModal = function(key) {
@@ -301,7 +300,7 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
         s.loggedIn = true
         s.username = authenticationProxy.loginObj.name
     }
-    return s.loginSubmit = function(usr, pass, saveLogin) {
+    s.loginSubmit = function(usr, pass, saveLogin) {
         s.login_err = false
         return authenticationProxy.makeRequest(usr, pass, saveLogin).done(function(data) {
             util.setLogin()
@@ -309,11 +308,11 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
                 s.show_modal = null
                 s.restorePreLoginState()
                 s.loggedIn = true
-                return s.username = usr
+                s.username = usr
         })
         }).fail(function() {
             c.log("login fail")
-            return safeApply(s, () => s.login_err = true)
+            safeApply(s, () => {s.login_err = true})
         })
     }
 })
