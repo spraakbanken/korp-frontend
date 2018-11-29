@@ -1,3 +1,4 @@
+/** @format */
 /* eslint-disable
     no-return-assign,
     no-undef,
@@ -13,13 +14,12 @@
  */
 const plusImg = require("../img/plus.png")
 
-korpApp.directive("globalFilters", globalFilterService =>
-    ({
-        restrict: "E",
-        scope: {
-            lang: '='
-        },
-        template: `\
+korpApp.directive("globalFilters", globalFilterService => ({
+  restrict: "E",
+  scope: {
+    lang: "="
+  },
+  template: `\
 <div ng-if="dataObj.showDirective" class="global-filters-container">
       <span style="font-weight: bold;"> {{ 'global_filter' | loc:lang}}:</span>
       <div style="display: inline-block">
@@ -53,43 +53,46 @@ korpApp.directive("globalFilters", globalFilterService =>
            <span style="font-weight: bold" > {{'add_filter' | loc:lang}}</span>
        </div>
 </div>`,
-        link(scope, element, attribute) {
+  link(scope, element, attribute) {
+    globalFilterService.registerScope(scope)
 
-            globalFilterService.registerScope(scope)
+    scope.dataObj = { showDirective: false }
 
-            scope.dataObj =
-                { showDirective: false }
+    scope.update = dataObj => (scope.dataObj = dataObj)
 
-            scope.update = dataObj => scope.dataObj = dataObj
+    scope.getFilterLabel = filterKey => scope.dataObj.attributes[filterKey].settings.label
 
-            scope.getFilterLabel = filterKey => scope.dataObj.attributes[filterKey].settings.label
+    scope.getTranslationKey = filterKey =>
+      scope.dataObj.attributes[filterKey].settings.translationKey || ""
 
-            scope.getTranslationKey = filterKey => scope.dataObj.attributes[filterKey].settings.translationKey || ""
+    scope.removeFilter = filter => globalFilterService.removeFilter(filter)
 
-            scope.removeFilter = filter => globalFilterService.removeFilter(filter)
+    scope.getAvailableFilters = () =>
+      _.filter(
+        scope.dataObj.optionalFilters,
+        filter => !Array.from(scope.dataObj.selectedFilters).includes(filter)
+      )
 
-            scope.getAvailableFilters = () => _.filter(scope.dataObj.optionalFilters, filter => !Array.from(scope.dataObj.selectedFilters).includes(filter))
+    scope.isOptionalFilter = filterKey =>
+      scope.dataObj.optionalFilters.indexOf(filterKey) > -1 &&
+      scope.dataObj.defaultFilters.indexOf(filterKey) === -1
 
-            scope.isOptionalFilter = filterKey => (scope.dataObj.optionalFilters.indexOf(filterKey) > -1) && (scope.dataObj.defaultFilters.indexOf(filterKey) === -1)
+    return (scope.addNewFilter = value => globalFilterService.addNewFilter(value, true))
+  }
+}))
 
-            return scope.addNewFilter = value => globalFilterService.addNewFilter(value, true)
-        }
-    })
-)
-
-korpApp.directive("globalFilter", globalFilterService =>
-    ({
-        restrict: "E",
-        scope: {
-          attr: "=",
-          attrLabel: "=",
-          attrValue: "=",
-          possibleValues: "=",
-          lang: "=",
-          translationKey: "=",
-          closeable: "="
-      },
-        template: `\
+korpApp.directive("globalFilter", globalFilterService => ({
+  restrict: "E",
+  scope: {
+    attr: "=",
+    attrLabel: "=",
+    attrValue: "=",
+    possibleValues: "=",
+    lang: "=",
+    translationKey: "=",
+    closeable: "="
+  },
+  template: `\
 <span uib-dropdown auto-close="outsideClick" on-toggle="dropdownToggle(open)">
       <button uib-dropdown-toggle class="btn btn-sm btn-default global-filter-toggle">
         <span ng-if="attrValue.length == 0">
@@ -128,38 +131,35 @@ korpApp.directive("globalFilter", globalFilterService =>
       </div>
 </span>`,
 
-        link(scope, element, attribute) {
+  link(scope, element, attribute) {
+    // if scope.possibleValues.length > 20
+    //     # TODO enable autocomplete
 
-            // if scope.possibleValues.length > 20
-            //     # TODO enable autocomplete
+    scope.selected = _.clone(scope.attrValue)
+    scope.dropdownToggle = function(open) {
+      if (!open) {
+        scope.selected = []
+        return Array.from(scope.attrValue).map(value => scope.selected.push(value))
+      }
+    }
 
-            scope.selected = _.clone(scope.attrValue)
-            scope.dropdownToggle = function(open) {
-                if (!open) {
-                    scope.selected = []
-                    return Array.from(scope.attrValue).map((value) =>
-                        scope.selected.push(value))
-                }
-            }
+    scope.toggleSelected = function(value, event) {
+      if (Array.from(scope.attrValue).includes(value)) {
+        __.remove(scope.attrValue, value)
+      } else {
+        scope.attrValue.push(value)
+      }
+      event.stopPropagation()
+      return globalFilterService.valueChange(scope.attr)
+    }
 
-            scope.toggleSelected = function(value, event) {
-                if (Array.from(scope.attrValue).includes(value)) {
-                    __.remove(scope.attrValue, value)
-                } else {
-                    scope.attrValue.push(value)
-                }
-                event.stopPropagation()
-                return globalFilterService.valueChange(scope.attr)
-            }
+    scope.isSelected = value => Array.from(scope.attrValue).includes(value)
 
-            scope.isSelected = value => Array.from(scope.attrValue).includes(value)
+    scope.isSelectedList = value => Array.from(scope.selected).includes(value)
 
-            scope.isSelectedList = value => Array.from(scope.selected).includes(value)
-
-            return scope.removeFilter = function(event) {
-                event.stopPropagation()
-                return scope.$parent.removeFilter(scope.attr)
-            }
-        }
+    return (scope.removeFilter = function(event) {
+      event.stopPropagation()
+      return scope.$parent.removeFilter(scope.attr)
     })
-)
+  }
+}))
