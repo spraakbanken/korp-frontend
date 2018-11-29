@@ -1,26 +1,17 @@
 /** @format */
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const korpApp = angular.module("korpApp")
 korpApp.factory("extendedComponents", function() {
     const autocompleteTemplate = `\
-<div>
-    <input type="text"
-           size="37"
-           ng-model="input"
-           escaper
-           typeahead-min-length="0"
-           typeahead-input-formatter="typeaheadInputFormatter($model)"
-           uib-typeahead="tuple[0] as tuple[1] for tuple in getRows($viewValue)"></input>
-</div>\
-`
+    <div>
+        <input type="text"
+               size="37"
+               ng-model="input"
+               escaper
+               typeahead-min-length="0"
+               typeahead-input-formatter="typeaheadInputFormatter($model)"
+               uib-typeahead="tuple[0] as tuple[1] for tuple in getRows($viewValue)"></input>
+    </div>`
+
     const selectTemplate =
         "<select ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset'></select>"
     const localize = $scope =>
@@ -41,7 +32,7 @@ korpApp.factory("extendedComponents", function() {
 
             // check which corpora support attributes
             const corpora = []
-            for (let corpusSettings of Array.from(selectedCorpora)) {
+            for (let corpusSettings of selectedCorpora) {
                 if (
                     attribute in corpusSettings.structAttributes ||
                     attribute in corpusSettings.attributes
@@ -86,7 +77,7 @@ korpApp.factory("extendedComponents", function() {
                 }
             }
 
-            return ($scope.typeaheadInputFormatter = model => localize($scope)(model))
+            $scope.typeaheadInputFormatter = model => localize($scope)(model)
         }
     ]
 
@@ -108,7 +99,7 @@ korpApp.factory("extendedComponents", function() {
                         dataset = _.map($scope.dataset, (v, k) => [k, localizer(v)])
                     }
                     $scope.dataset = _.sortBy(dataset, tuple => tuple[1])
-                    return ($scope.model = $scope.model || $scope.dataset[0][0])
+                    $scope.model = $scope.model || $scope.dataset[0][0]
                 }
             ]
         },
@@ -136,21 +127,20 @@ korpApp.factory("extendedComponents", function() {
         },
 
         defaultTemplate: _.template(`\
-<input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
-<%= maybe_placeholder %>>
-<span class='val_mod' popper
-        ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
-            Aa
-</span>
-<ul class='mod_menu popper_menu dropdown-menu'>
-        <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:lang}}</a></li>
-        <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>
-</ul>\
-`),
+            <input ng-model='input' class='arg_value' escaper 
+                    ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
+            <%= maybe_placeholder %>>
+            <span ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'
+                  class='val_mod' popper> Aa </span>
+            <ul class='mod_menu popper_menu dropdown-menu'>
+                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:lang}}</a></li>
+                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>
+            </ul>
+        `),
         defaultController: [
             "$scope",
             function($scope) {
-                if ($scope.orObj.flags != null ? $scope.orObj.flags.c : undefined) {
+                if ($scope.orObj.flags && $scope.orObj.flags.c) {
                     $scope.case = "insensitive"
                 } else {
                     $scope.case = "sensitive"
@@ -158,16 +148,18 @@ korpApp.factory("extendedComponents", function() {
 
                 $scope.makeSensitive = function() {
                     $scope.case = "sensitive"
-                    return $scope.orObj.flags != null ? delete $scope.orObj.flags["c"] : undefined
+                    if ($scope.orObj.flags) {
+                        delete $scope.orObj.flags["c"]
+                    }
                 }
 
-                return ($scope.makeInsensitive = function() {
+                $scope.makeInsensitive = function() {
                     const flags = $scope.orObj.flags || {}
                     flags["c"] = true
                     $scope.orObj.flags = flags
 
-                    return ($scope.case = "insensitive")
-                })
+                    $scope.case = "insensitive"
+                }
             }
         ]
     }
