@@ -1,14 +1,8 @@
 /** @format */
-/* eslint-disable
-    no-return-assign,
-    no-undef,
-    no-unused-vars,
-*/
 // TODO: This file was created by bulk-decaffeinate.
 // Fix any style issues and re-enable lint.
 /*
  * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
@@ -70,14 +64,14 @@ korpApp.directive("globalFilters", globalFilterService => ({
     scope.getAvailableFilters = () =>
       _.filter(
         scope.dataObj.optionalFilters,
-        filter => !Array.from(scope.dataObj.selectedFilters).includes(filter)
+        filter => !scope.dataObj.selectedFilters.includes(filter)
       )
 
     scope.isOptionalFilter = filterKey =>
       scope.dataObj.optionalFilters.indexOf(filterKey) > -1 &&
       scope.dataObj.defaultFilters.indexOf(filterKey) === -1
 
-    return (scope.addNewFilter = value => globalFilterService.addNewFilter(value, true))
+    scope.addNewFilter = value => globalFilterService.addNewFilter(value, true)
   }
 }))
 
@@ -139,13 +133,13 @@ korpApp.directive("globalFilter", globalFilterService => ({
     scope.dropdownToggle = function(open) {
       if (!open) {
         scope.selected = []
-        return Array.from(scope.attrValue).map(value => scope.selected.push(value))
+        return scope.attrValue.map(value => scope.selected.push(value))
       }
     }
 
     scope.toggleSelected = function(value, event) {
-      if (Array.from(scope.attrValue).includes(value)) {
-        __.remove(scope.attrValue, value)
+      if (scope.attrValue.includes(value)) {
+        _.remove(scope.attrValue, value)
       } else {
         scope.attrValue.push(value)
       }
@@ -153,13 +147,13 @@ korpApp.directive("globalFilter", globalFilterService => ({
       return globalFilterService.valueChange(scope.attr)
     }
 
-    scope.isSelected = value => Array.from(scope.attrValue).includes(value)
+    scope.isSelected = value => scope.attrValue.includes(value)
 
-    scope.isSelectedList = value => Array.from(scope.selected).includes(value)
+    scope.isSelectedList = value => scope.selected.includes(value)
 
-    return (scope.removeFilter = function(event) {
+    scope.removeFilter = function(event) {
       event.stopPropagation()
       return scope.$parent.removeFilter(scope.attr)
-    })
+    }
   }
 }))
