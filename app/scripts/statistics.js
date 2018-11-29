@@ -97,10 +97,10 @@ const createStatisticsService = function() {
                 ignoreCase,
                 corpora: _.keys(data.corpora)
             }
-            return def.resolve([e.data, columns, searchParams])
+            def.resolve([e.data, columns, searchParams])
         }
 
-        return statsWorker.postMessage({
+        statsWorker.postMessage({
             data,
             reduceVals,
             groupStatistics: settings.groupStatistics
