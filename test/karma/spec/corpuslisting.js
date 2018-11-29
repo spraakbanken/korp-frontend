@@ -21,7 +21,7 @@ _.map(commonSettings, function(v, k) {
   return window[k] = v
 })
 
-require("../../../app/scripts/util.coffee")
+require("../../../app/scripts/util.js")
 require("defaultmode")
 
 describe("config file", function() {

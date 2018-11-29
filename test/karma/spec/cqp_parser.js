@@ -10,7 +10,7 @@
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 require("../../../app/scripts/cqp_parser/CQPParser.js")
-require("../../../app/scripts/cqp_parser/cqp.coffee")
+require("../../../app/scripts/cqp_parser/cqp.js")
 window.moment = require("moment")
 
 describe("parsing", function() {
