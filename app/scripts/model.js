@@ -1,14 +1,5 @@
+/** @format */
 /* eslint-disable
-    constructor-super,
-    no-constant-condition,
-    no-eval,
-    no-return-assign,
-    no-throw-literal,
-    no-undef,
-    no-unused-expressions,
-    no-unused-vars,
-    no-use-before-define,
-    no-useless-constructor,
 */
 // TODO: This file was created by bulk-decaffeinate.
 // Fix any style issues and re-enable lint.
@@ -29,13 +20,15 @@
 window.model = {}
 
 model.getAuthorizationHeader = function() {
-    if ((typeof authenticationProxy !== "undefined") && !$.isEmptyObject(authenticationProxy.loginObj)) {
-        return { "Authorization" : `Basic ${authenticationProxy.loginObj.auth}` }
+    if (
+        typeof authenticationProxy !== "undefined" &&
+        !$.isEmptyObject(authenticationProxy.loginObj)
+    ) {
+        return { Authorization: `Basic ${authenticationProxy.loginObj.auth}` }
     } else {
         return {}
     }
 }
-
 
 class BaseProxy {
     constructor() {
@@ -60,21 +53,27 @@ class BaseProxy {
         this.prev = ""
         this.progress = 0
         this.total_results = 0
-        return this.total = null
+        return (this.total = null)
     }
 
     abort() {
-        if (this.pendingRequests.length) { return _.invokeMap(this.pendingRequests, "abort") }
+        if (this.pendingRequests.length) {
+            return _.invokeMap(this.pendingRequests, "abort")
+        }
     }
 
     hasPending() {
-        return _.some(_.map(this.pendingRequests, req => (req.readyState !== 4) && (req.readyState !== 0)))
+        return _.some(
+            _.map(this.pendingRequests, req => req.readyState !== 4 && req.readyState !== 0)
+        )
     }
 
     parseJSON(data) {
         try {
             let json = data
-            if (json[0] !== "{") { json = `{${json}` }
+            if (json[0] !== "{") {
+                json = `{${json}`
+            }
             if (json.match(/,\s*$/)) {
                 json = json.replace(/,\s*$/, "") + "}"
             }
@@ -99,25 +98,31 @@ class BaseProxy {
             struct = this.parseJSON(newText)
         } catch (error) {}
         $.each(struct, (key, val) => {
-            if ((key !== "progress_corpora") && (key.split("_")[0] === "progress")) {
+            if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
                 const currentCorpus = val.corpus || val
-                const sum = _(currentCorpus.split("|")).map(corpus => Number(settings.corpora[corpus.toLowerCase()].info.Size)).reduce((a, b) => a + b
-                , 0)
+                const sum = _(currentCorpus.split("|"))
+                    .map(corpus => Number(settings.corpora[corpus.toLowerCase()].info.Size))
+                    .reduce((a, b) => a + b, 0)
                 this.progress += sum
-                return this.total_results += parseInt(val.hits)
+                return (this.total_results += parseInt(val.hits))
             }
         })
 
         const stats = (this.progress / this.total) * 100
-        if ((this.total == null) && (struct.progress_corpora != null ? struct.progress_corpora.length : undefined)) {
+        if (
+            this.total == null &&
+            (struct.progress_corpora != null ? struct.progress_corpora.length : undefined)
+        ) {
             const tmp = $.map(struct["progress_corpora"], function(corpus) {
-                if (!corpus.length) { return }
+                if (!corpus.length) {
+                    return
+                }
 
-                return _(corpus.split("|")).map(corpus => parseInt(settings.corpora[corpus.toLowerCase()].info.Size)).reduce((a, b) => a + b
-                , 0)
+                return _(corpus.split("|"))
+                    .map(corpus => parseInt(settings.corpora[corpus.toLowerCase()].info.Size))
+                    .reduce((a, b) => a + b, 0)
             })
-            this.total = _.reduce(tmp, (val1, val2) => val1 + val2
-            , 0)
+            this.total = _.reduce(tmp, (val1, val2) => val1 + val2, 0)
         }
         this.prev = e.target.responseText
         return {
@@ -127,7 +132,6 @@ class BaseProxy {
         }
     }
 }
-
 
 model.KWICProxy = class KWICProxy extends BaseProxy {
     constructor() {
@@ -145,9 +149,12 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         super.makeRequest()
         kwicCallback = kwicCallback || $.proxy(kwicResults.renderResult, kwicResults)
         self.progress = 0
-        var progressObj = { progress(data, e) {
+        var progressObj = {
+            progress(data, e) {
                 progressObj = self.calcProgress(e)
-                if (progressObj == null) { return }
+                if (progressObj == null) {
+                    return
+                }
 
                 progressCallback(progressObj)
                 if (progressObj["struct"].kwic) {
@@ -156,7 +163,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
                     return kwicCallback(progressObj["struct"])
                 }
             }
-    }
+        }
 
         if (!options.ajaxParams.within) {
             _.extend(options.ajaxParams, settings.corpusListing.getWithinParameters())
@@ -183,7 +190,9 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
 
             if (corpus.structAttributes != null) {
                 $.each(corpus.structAttributes, function(key, val) {
-                    if ($.inArray(key, data.show_struct) === -1) { return data.show_struct.push(key) }
+                    if ($.inArray(key, data.show_struct) === -1) {
+                        return data.show_struct.push(key)
+                    }
                 })
             }
         }
@@ -192,9 +201,9 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
             data.cqp = this.expandCQP(data.cqp)
         }
         this.prevCQP = data.cqp
-        data.show = (_.uniq(["sentence"].concat(data.show))).join(",")
+        data.show = _.uniq(["sentence"].concat(data.show)).join(",")
         c.log("data.show", data.show)
-        data.show_struct = (_.uniq(data.show_struct)).join(",")
+        data.show_struct = _.uniq(data.show_struct).join(",")
 
         if (locationSearch()["in_order"] === false) {
             data.in_order = false
@@ -209,12 +218,19 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
             beforeSend(req, settings) {
                 self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                return self.prevUrl = this.url + "?" + _.toPairs(data).map( pair => pair.join("=")).join("&")
+                return (self.prevUrl =
+                    this.url +
+                    "?" +
+                    _.toPairs(data)
+                        .map(pair => pair.join("="))
+                        .join("&"))
             },
 
             success(data, status, jqxhr) {
                 self.queryData = data.query_data
-                if ((data.incremental === false) || !this.foundKwic) { return kwicCallback(data) }
+                if (data.incremental === false || !this.foundKwic) {
+                    return kwicCallback(data)
+                }
             },
 
             progress: progressObj.progress
@@ -223,7 +239,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         return def
     }
 }
-
 
 model.LemgramProxy = class LemgramProxy extends BaseProxy {
     constructor() {
@@ -239,35 +254,36 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
             corpus: settings.corpusListing.stringifySelected(),
             incremental: true,
             type,
-            max : 1000
+            max: 1000
         }
         this.prevParams = params
-        const def =  $.ajax({
+        const def = $.ajax({
             url: settings.korpBackendURL + "/" + params.command,
             data: params,
 
             success(data) {
                 c.log("relations success", data)
-                return self.prevRequest = params
+                return (self.prevRequest = params)
             },
 
             progress(data, e) {
                 const progressObj = self.calcProgress(e)
-                if (progressObj == null) { return }
+                if (progressObj == null) {
+                    return
+                }
                 return callback(progressObj)
             },
 
             beforeSend(req, settings) {
                 self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                return self.prevUrl = this.url
+                return (self.prevUrl = this.url)
             }
         })
         this.pendingRequests.push(def)
         return def
     }
 }
-
 
 model.StatsProxy = class StatsProxy extends BaseProxy {
     constructor() {
@@ -277,7 +293,9 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
     }
 
     makeParameters(reduceVals, cqp, ignoreCase) {
-        const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
+        const structAttrs = settings.corpusListing.getStructAttrs(
+            settings.corpusListing.getReduceLang()
+        )
         const groupBy = []
         const groupByStruct = []
         for (let reduceVal of Array.from(reduceVals)) {
@@ -289,8 +307,8 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         }
         const parameters = {
             command: "count",
-            group_by: groupBy.join(','),
-            group_by_struct: groupByStruct.join(','),
+            group_by: groupBy.join(","),
+            group_by_struct: groupByStruct.join(","),
             cqp: this.expandCQP(cqp),
             corpus: settings.corpusListing.stringifySelected(true),
             incremental: true
@@ -308,59 +326,90 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const reduceval = locationSearch().stats_reduce || "word"
         const reduceVals = reduceval.split(",")
 
-        const ignoreCase = (locationSearch().stats_reduce_insensitive != null)
+        const ignoreCase = locationSearch().stats_reduce_insensitive != null
 
         const reduceValLabels = _.map(reduceVals, function(reduceVal) {
-            if (reduceVal === "word") { return "word" }
-            const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]
+            if (reduceVal === "word") {
+                return "word"
+            }
+            const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(
+                settings.corpusListing.getReduceLang()
+            )[reduceVal]
             if (maybeReduceAttr) {
                 return maybeReduceAttr.label
             } else {
-                return settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())[reduceVal].label
+                return settings.corpusListing.getStructAttrs(
+                    settings.corpusListing.getReduceLang()
+                )[reduceVal].label
             }
         })
 
         const data = this.makeParameters(reduceVals, cqp, ignoreCase)
 
-        const wordAttrs = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())
-        const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
-        data.split = _.filter(reduceVals, reduceVal => ((wordAttrs[reduceVal] != null ? wordAttrs[reduceVal].type : undefined) === "set") || ((structAttrs[reduceVal] != null ? structAttrs[reduceVal].type : undefined) === "set")).join(',')
+        const wordAttrs = settings.corpusListing.getCurrentAttributes(
+            settings.corpusListing.getReduceLang()
+        )
+        const structAttrs = settings.corpusListing.getStructAttrs(
+            settings.corpusListing.getReduceLang()
+        )
+        data.split = _.filter(
+            reduceVals,
+            reduceVal =>
+                (wordAttrs[reduceVal] != null ? wordAttrs[reduceVal].type : undefined) === "set" ||
+                (structAttrs[reduceVal] != null ? structAttrs[reduceVal].type : undefined) === "set"
+        ).join(",")
 
-        const rankedReduceVals = _.filter(reduceVals, reduceVal => __guard__(settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal], x => x.ranked))
-        data.top = _.map(rankedReduceVals, reduceVal => reduceVal + ":1").join(',')
+        const rankedReduceVals = _.filter(reduceVals, reduceVal =>
+            __guard__(
+                settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
+                    reduceVal
+                ],
+                x => x.ranked
+            )
+        )
+        data.top = _.map(rankedReduceVals, reduceVal => reduceVal + ":1").join(",")
 
         this.prevNonExpandedCQP = cqp
         this.prevParams = data
         const def = $.Deferred()
-        this.pendingRequests.push($.ajax({
-            url: settings.korpBackendURL + "/" + data.command,
-            data,
-            beforeSend(req, settings) {
-                self.prevRequest = settings
-                self.addAuthorizationHeader(req)
-                return self.prevUrl = this.url
-            },
+        this.pendingRequests.push(
+            $.ajax({
+                url: settings.korpBackendURL + "/" + data.command,
+                data,
+                beforeSend(req, settings) {
+                    self.prevRequest = settings
+                    self.addAuthorizationHeader(req)
+                    return (self.prevUrl = this.url)
+                },
 
-            error(jqXHR, textStatus, errorThrown) {
-                c.log(`gettings stats error, status: ${textStatus}`)
-                return def.reject(textStatus, errorThrown)
-            },
+                error(jqXHR, textStatus, errorThrown) {
+                    c.log(`gettings stats error, status: ${textStatus}`)
+                    return def.reject(textStatus, errorThrown)
+                },
 
-            progress(data, e) {
-                const progressObj = self.calcProgress(e)
-                if (progressObj == null) { return }
-                return (typeof callback === 'function' ? callback(progressObj) : undefined)
-            },
+                progress(data, e) {
+                    const progressObj = self.calcProgress(e)
+                    if (progressObj == null) {
+                        return
+                    }
+                    return typeof callback === "function" ? callback(progressObj) : undefined
+                },
 
-            success: data => {
-                if (data.ERROR != null) {
-                    c.log("gettings stats failed with error", data.ERROR)
-                    def.reject(data)
-                    return
+                success: data => {
+                    if (data.ERROR != null) {
+                        c.log("gettings stats failed with error", data.ERROR)
+                        def.reject(data)
+                        return
+                    }
+                    return statisticsService.processData(
+                        def,
+                        data,
+                        reduceVals,
+                        reduceValLabels,
+                        ignoreCase
+                    )
                 }
-                return statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
-            }
-        })
+            })
         )
 
         return def.promise()
@@ -376,8 +425,7 @@ model.NameProxy = class NameProxy extends BaseProxy {
         const self = this
         super.makeRequest()
 
-        const posTags = Array.from(settings.mapPosTag).map((posTag) =>
-            `pos='${posTag}'`)
+        const posTags = Array.from(settings.mapPosTag).map(posTag => `pos='${posTag}'`)
 
         const parameters = {
             group_by: "word",
@@ -389,39 +437,41 @@ model.NameProxy = class NameProxy extends BaseProxy {
         _.extend(parameters, settings.corpusListing.getWithinParameters())
 
         const def = $.Deferred()
-        this.pendingRequests.push($.ajax({
-            url: settings.korpBackendURL + "/count",
-            data: parameters,
+        this.pendingRequests.push(
+            $.ajax({
+                url: settings.korpBackendURL + "/count",
+                data: parameters,
 
-            beforeSend(req, settings) {
-                return self.addAuthorizationHeader(req)
-            },
+                beforeSend(req, settings) {
+                    return self.addAuthorizationHeader(req)
+                },
 
-            error(jqXHR, textStatus, errorThrown) {
-                return def.reject(textStatus, errorThrown)
-            },
+                error(jqXHR, textStatus, errorThrown) {
+                    return def.reject(textStatus, errorThrown)
+                },
 
-            progress(data, e) {
-                const progressObj = self.calcProgress(e)
-                if (progressObj == null) { return }
-                return (typeof callback === 'function' ? callback(progressObj) : undefined)
-            },
+                progress(data, e) {
+                    const progressObj = self.calcProgress(e)
+                    if (progressObj == null) {
+                        return
+                    }
+                    return typeof callback === "function" ? callback(progressObj) : undefined
+                },
 
-            success: data => {
-                if (data.ERROR != null) {
-                    c.log("gettings stats failed with error", data.ERROR)
-                    def.reject(data)
-                    return
+                success: data => {
+                    if (data.ERROR != null) {
+                        c.log("gettings stats failed with error", data.ERROR)
+                        def.reject(data)
+                        return
+                    }
+                    return def.resolve(data)
                 }
-                return def.resolve(data)
-            }
-        })
+            })
         )
 
         return def.promise()
     }
 }
-
 
 model.AuthenticationProxy = class AuthenticationProxy {
     constructor() {
@@ -443,50 +493,59 @@ model.AuthenticationProxy = class AuthenticationProxy {
             beforeSend(req) {
                 return req.setRequestHeader("Authorization", `Basic ${auth}`)
             }
-        }).done(function(data, status, xhr) {
-            if (!data.corpora) {
-                dfd.reject()
-                return
-            }
-            self.loginObj = {
-                name: usr,
-                credentials: data.corpora,
-                auth
-            }
-            if (saveLogin) {
-                $.jStorage.set("creds", self.loginObj)
-            }
-            return dfd.resolve(data)
-        }).fail(function(xhr, status, error) {
-            c.log("auth fail", arguments)
-            return dfd.reject()
         })
+            .done(function(data, status, xhr) {
+                if (!data.corpora) {
+                    dfd.reject()
+                    return
+                }
+                self.loginObj = {
+                    name: usr,
+                    credentials: data.corpora,
+                    auth
+                }
+                if (saveLogin) {
+                    $.jStorage.set("creds", self.loginObj)
+                }
+                return dfd.resolve(data)
+            })
+            .fail(function(xhr, status, error) {
+                c.log("auth fail", arguments)
+                return dfd.reject()
+            })
 
         return dfd
     }
 
     hasCred(corpusId) {
         let needle
-        if (!this.loginObj.credentials) { return false }
-        return (needle = corpusId.toUpperCase(), Array.from(this.loginObj.credentials).includes(needle))
+        if (!this.loginObj.credentials) {
+            return false
+        }
+        return (
+            (needle = corpusId.toUpperCase()),
+            Array.from(this.loginObj.credentials).includes(needle)
+        )
     }
 }
 
 model.TimeProxy = class TimeProxy extends BaseProxy {
     constructor() {
         {
-          // Hack: trick Babel/TypeScript into allowing this before super.
-          if (false) { super() }
-          let thisFn = (() => { return this }).toString()
-          let thisName = thisFn.match(/return (?:_assertThisInitialized\()*(\w+)\)*;/)[1]
-          eval(`${thisName} = this;`)
+            // Hack: trick Babel/TypeScript into allowing this before super.
+            if (false) {
+                super()
+            }
+            let thisFn = (() => {
+                return this
+            }).toString()
+            let thisName = thisFn.match(/return (?:_assertThisInitialized\()*(\w+)\)*;/)[1]
+            eval(`${thisName} = this;`)
         }
     }
 
-
     makeRequest() {
         const dfd = $.Deferred()
-
 
         const xhr = $.ajax({
             url: settings.korpBackendURL + "/timespan",
@@ -501,7 +560,7 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
             c.log("timespan done", data)
             if (data.ERROR) {
                 c.error("timespan error", data.ERROR)
-                dfd.reject(data.ERROR )
+                dfd.reject(data.ERROR)
                 return
             }
 
@@ -511,13 +570,13 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
             this.expandTimeStruct(data.combined)
             const combined = this.compilePlotArray(data.combined)
 
-            if ((_.keys(data).length < 2) || data.ERROR) {
+            if (_.keys(data).length < 2 || data.ERROR) {
                 dfd.reject()
                 return
             }
 
             return dfd.resolve([data.corpora, combined, rest])
-    })
+        })
 
         xhr.fail(function() {
             c.log("timeProxy.makeRequest failed", arguments)
@@ -530,9 +589,11 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
     compilePlotArray(dataStruct) {
         let output = []
         $.each(dataStruct, function(key, val) {
-            if (!key || !val) { return }
+            if (!key || !val) {
+                return
+            }
             return output.push([parseInt(key), val])
-    })
+        })
 
         output = output.sort((a, b) => a[0] - b[0])
         return output
@@ -540,7 +601,9 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
 
     expandTimeStruct(struct) {
         const years = _.map(_.toPairs(_.omit(struct, "")), item => Number(item[0]))
-        if (!years.length) { return }
+        if (!years.length) {
+            return
+        }
         const minYear = _.min(years)
         const maxYear = _.max(years)
 
@@ -551,21 +614,23 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
 
         return (() => {
             const result = []
-            for (let y = minYear, end = maxYear, asc = minYear <= end; asc ? y <= end : y >= end; asc ? y++ : y--) {
+            for (
+                let y = minYear, end = maxYear, asc = minYear <= end;
+                asc ? y <= end : y >= end;
+                asc ? y++ : y--
+            ) {
                 const thisVal = struct[y]
                 if (typeof thisVal === "undefined") {
-                    result.push(struct[y] = prevVal)
+                    result.push((struct[y] = prevVal))
                 } else {
                     var prevVal
-                    result.push(prevVal = thisVal)
+                    result.push((prevVal = thisVal))
                 }
             }
             return result
         })()
     }
 }
-
-
 
 model.GraphProxy = class GraphProxy extends BaseProxy {
     constructor() {
@@ -591,10 +656,10 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
         super.makeRequest()
         const self = this
         const params = {
-            command : "count_time",
-            cqp : this.expandCQP(cqp),
-            corpus : corpora,
-            granularity : this.granularity,
+            command: "count_time",
+            cqp: this.expandCQP(cqp),
+            corpus: corpora,
+            granularity: this.granularity,
             incremental: true
         }
 
@@ -612,18 +677,20 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
 
         $.ajax({
             url: settings.korpBackendURL + "/" + params.command,
-            dataType : "json",
-            data : params,
+            dataType: "json",
+            data: params,
 
             beforeSend: (req, settings) => {
                 this.prevRequest = settings
                 this.addAuthorizationHeader(req)
-                return self.prevUrl = this.url
+                return (self.prevUrl = this.url)
             },
 
             progress: (data, e) => {
                 const progressObj = this.calcProgress(e)
-                if (progressObj == null) { return }
+                if (progressObj == null) {
+                    return
+                }
                 return def.notify(progressObj)
             },
 
@@ -640,14 +707,14 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
 }
 
 function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
+    return typeof value !== "undefined" && value !== null ? transform(value) : undefined
 }
 function __range__(left, right, inclusive) {
-  let range = []
-  let ascending = left < right
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i)
-  }
-  return range
+    let range = []
+    let ascending = left < right
+    let end = !inclusive ? right : ascending ? right + 1 : right - 1
+    for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
+        range.push(i)
+    }
+    return range
 }
