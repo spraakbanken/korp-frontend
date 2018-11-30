@@ -1,5 +1,4 @@
 /** @format */
-let locationSearch = window.locationSearch
 
 const korpFailImg = require("../img/korp_fail.svg")
 

@@ -1,19 +1,8 @@
 /** @format */
-/* eslint-disable
-*/
 // TODO: This file was created by bulk-decaffeinate.
 // Fix any style issues and re-enable lint.
 /*
  * decaffeinate suggestions:
- * DS001: Remove Babel/TypeScript constructor workaround
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS103: Rewrite code to no longer use __guard__
- * DS104: Avoid inline assignments
- * DS202: Simplify dynamic range loops
- * DS204: Change includes calls to have a more natural evaluation order
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 "use strict"
@@ -34,7 +23,7 @@ class BaseProxy {
     constructor() {
         this.prev = ""
         this.progress = 0
-        this.total
+        this.total = null
         this.total_results = 0
         this.pendingRequests = []
     }
@@ -53,7 +42,7 @@ class BaseProxy {
         this.prev = ""
         this.progress = 0
         this.total_results = 0
-        return (this.total = null)
+        this.total = null
     }
 
     abort() {
@@ -87,7 +76,7 @@ class BaseProxy {
     addAuthorizationHeader(req) {
         const pairs = _.toPairs(model.getAuthorizationHeader())
         if (pairs.length) {
-            return req.setRequestHeader(...Array.from(pairs[0] || []))
+            return req.setRequestHeader(...(pairs[0] || []))
         }
     }
 
@@ -104,15 +93,12 @@ class BaseProxy {
                     .map(corpus => Number(settings.corpora[corpus.toLowerCase()].info.Size))
                     .reduce((a, b) => a + b, 0)
                 this.progress += sum
-                return (this.total_results += parseInt(val.hits))
+                this.total_results += parseInt(val.hits)
             }
         })
 
         const stats = (this.progress / this.total) * 100
-        if (
-            this.total == null &&
-            (struct.progress_corpora != null ? struct.progress_corpora.length : undefined)
-        ) {
+        if (this.total == null && (struct.progress_corpora && struct.progress_corpora.length)) {
             const tmp = $.map(struct["progress_corpora"], function(corpus) {
                 if (!corpus.length) {
                     return
@@ -177,14 +163,13 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         }
 
         $.extend(data, kwicResults.getPageInterval(page), options.ajaxParams)
-        for (let corpus of Array.from(settings.corpusListing.selected)) {
-            var key, val
-            for (key in corpus.within) {
-                val = corpus.within[key]
+        for (let corpus of settings.corpusListing.selected) {
+            for (let key in corpus.within) {
+                // val = corpus.within[key]
                 data.show.push(_.last(key.split(" ")))
             }
-            for (key in corpus.attributes) {
-                val = corpus.attributes[key]
+            for (let key in corpus.attributes) {
+                // val = corpus.attributes[key]
                 data.show.push(key)
             }
 
@@ -218,12 +203,12 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
             beforeSend(req, settings) {
                 self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                return (self.prevUrl =
+                self.prevUrl =
                     this.url +
                     "?" +
                     _.toPairs(data)
                         .map(pair => pair.join("="))
-                        .join("&"))
+                        .join("&")
             },
 
             success(data, status, jqxhr) {
@@ -241,10 +226,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
 }
 
 model.LemgramProxy = class LemgramProxy extends BaseProxy {
-    constructor() {
-        super()
-    }
-
     makeRequest(word, type, callback) {
         super.makeRequest()
         const self = this
@@ -263,7 +244,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
 
             success(data) {
                 c.log("relations success", data)
-                return (self.prevRequest = params)
+                self.prevRequest = params
             },
 
             progress(data, e) {
@@ -277,7 +258,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
             beforeSend(req, settings) {
                 self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                return (self.prevUrl = this.url)
+                self.prevUrl = this.url
             }
         })
         this.pendingRequests.push(def)
@@ -298,7 +279,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         )
         const groupBy = []
         const groupByStruct = []
-        for (let reduceVal of Array.from(reduceVals)) {
+        for (let reduceVal of reduceVals) {
             if (structAttrs[reduceVal]) {
                 groupByStruct.push(reduceVal)
             } else {
@@ -352,21 +333,18 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const structAttrs = settings.corpusListing.getStructAttrs(
             settings.corpusListing.getReduceLang()
         )
-        data.split = _.filter(
-            reduceVals,
-            reduceVal =>
-                (wordAttrs[reduceVal] != null ? wordAttrs[reduceVal].type : undefined) === "set" ||
-                (structAttrs[reduceVal] != null ? structAttrs[reduceVal].type : undefined) === "set"
-        ).join(",")
-
-        const rankedReduceVals = _.filter(reduceVals, reduceVal =>
-            __guard__(
-                settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
-                    reduceVal
-                ],
-                x => x.ranked
+        data.split = _.filter(reduceVals, reduceVal => {
+            return (
+                (wordAttrs[reduceVal] && wordAttrs[reduceVal].type == "set") ||
+                (structAttrs[reduceVal] && structAttrs[reduceVal].type == "set")
             )
-        )
+        }).join(",")
+
+        const rankedReduceVals = _.filter(reduceVals, reduceVal => {
+            if (wordAttrs[reduceVal]) {
+                return wordAttrs[reduceVal].ranked
+            }
+        })
         data.top = _.map(rankedReduceVals, reduceVal => reduceVal + ":1").join(",")
 
         this.prevNonExpandedCQP = cqp
@@ -379,7 +357,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                 beforeSend(req, settings) {
                     self.prevRequest = settings
                     self.addAuthorizationHeader(req)
-                    return (self.prevUrl = this.url)
+                    self.prevUrl = this.url
                 },
 
                 error(jqXHR, textStatus, errorThrown) {
@@ -392,7 +370,9 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                     if (progressObj == null) {
                         return
                     }
-                    return typeof callback === "function" ? callback(progressObj) : undefined
+                    if (typeof callback === "function") {
+                        callback(progressObj)
+                    }
                 },
 
                 success: data => {
@@ -401,7 +381,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                         def.reject(data)
                         return
                     }
-                    return statisticsService.processData(
+                    statisticsService.processData(
                         def,
                         data,
                         reduceVals,
@@ -417,15 +397,11 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
 }
 
 model.NameProxy = class NameProxy extends BaseProxy {
-    constructor() {
-        super()
-    }
-
     makeRequest(cqp, callback) {
         const self = this
         super.makeRequest()
 
-        const posTags = Array.from(settings.mapPosTag).map(posTag => `pos='${posTag}'`)
+        const posTags = settings.mapPosTag.map(posTag => `pos='${posTag}'`)
 
         const parameters = {
             group_by: "word",
@@ -455,7 +431,9 @@ model.NameProxy = class NameProxy extends BaseProxy {
                     if (progressObj == null) {
                         return
                     }
-                    return typeof callback === "function" ? callback(progressObj) : undefined
+                    if (typeof callback === "function") {
+                        callback(progressObj)
+                    }
                 },
 
                 success: data => {
@@ -484,7 +462,7 @@ model.AuthenticationProxy = class AuthenticationProxy {
         if (window.btoa) {
             auth = window.btoa(usr + ":" + pass)
         } else {
-            throw "window.btoa is undefined"
+            throw Error("window.btoa is undefined")
         }
         const dfd = $.Deferred()
         $.ajax({
@@ -518,32 +496,14 @@ model.AuthenticationProxy = class AuthenticationProxy {
     }
 
     hasCred(corpusId) {
-        let needle
         if (!this.loginObj.credentials) {
             return false
         }
-        return (
-            (needle = corpusId.toUpperCase()),
-            Array.from(this.loginObj.credentials).includes(needle)
-        )
+        return this.loginObj.credentials.includes(corpusId.toUpperCase())
     }
 }
 
 model.TimeProxy = class TimeProxy extends BaseProxy {
-    constructor() {
-        {
-            // Hack: trick Babel/TypeScript into allowing this before super.
-            if (false) {
-                super()
-            }
-            let thisFn = (() => {
-                return this
-            }).toString()
-            let thisName = thisFn.match(/return (?:_assertThisInitialized\()*(\w+)\)*;/)[1]
-            eval(`${thisName} = this;`)
-        }
-    }
-
     makeRequest() {
         const dfd = $.Deferred()
 
@@ -612,23 +572,15 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
             return
         }
 
-        return (() => {
-            const result = []
-            for (
-                let y = minYear, end = maxYear, asc = minYear <= end;
-                asc ? y <= end : y >= end;
-                asc ? y++ : y--
-            ) {
-                const thisVal = struct[y]
-                if (typeof thisVal === "undefined") {
-                    result.push((struct[y] = prevVal))
-                } else {
-                    var prevVal
-                    result.push((prevVal = thisVal))
-                }
+        let prevVal = null
+        for (let y of _.range(minYear, maxYear + 1)) {
+            let thisVal = struct[y]
+            if (typeof thisVal == "undefined") {
+                struct[y] = prevVal
+            } else {
+                prevVal = thisVal
             }
-            return result
-        })()
+        }
     }
 }
 
@@ -639,17 +591,14 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
     }
 
     expandSubCqps(subArray) {
-        const padding = _.map(__range__(0, subArray.length.toString().length, false), () => "0")
-        const array = (() => {
-            const result = []
-            for (let i = 0; i < subArray.length; i++) {
-                const cqp = subArray[i]
-                const p = padding.slice(i.toString().length).join("")
-                result.push([`subcqp${p}${i}`, cqp])
-            }
-            return result
-        })()
-        return _.fromPairs(array)
+        const padding = _.fill(new Array(subArray.length.toString().length), "0")
+        const result = []
+        for (let i = 0; i < subArray.length; i++) {
+            const cqp = subArray[i]
+            const p = padding.slice(i.toString().length).join("")
+            result.push([`subcqp${p}${i}`, cqp])
+        }
+        return _.fromPairs(result)
     }
 
     makeRequest(cqp, subcqps, corpora, from, to) {
@@ -683,7 +632,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
             beforeSend: (req, settings) => {
                 this.prevRequest = settings
                 this.addAuthorizationHeader(req)
-                return (self.prevUrl = this.url)
+                self.prevUrl = this.url
             },
 
             progress: (data, e) => {
@@ -691,30 +640,17 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
                 if (progressObj == null) {
                     return
                 }
-                return def.notify(progressObj)
+                def.notify(progressObj)
             },
 
             error(jqXHR, textStatus, errorThrown) {
-                return def.reject(textStatus)
+                def.reject(textStatus)
             },
             success(data) {
-                return def.resolve(data)
+                def.resolve(data)
             }
         })
 
         return def.promise()
     }
-}
-
-function __guard__(value, transform) {
-    return typeof value !== "undefined" && value !== null ? transform(value) : undefined
-}
-function __range__(left, right, inclusive) {
-    let range = []
-    let ascending = left < right
-    let end = !inclusive ? right : ascending ? right + 1 : right - 1
-    for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-        range.push(i)
-    }
-    return range
 }
