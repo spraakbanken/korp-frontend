@@ -1,21 +1,5 @@
 /** @format */
-/* eslint-disable
-    handle-callback-err,
-    no-return-assign,
-    no-undef,
-    no-unused-vars,
-    no-use-before-define,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS201: Simplify complex destructure assignments
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+let locationSearch = window.locationSearch
 
 const korpFailImg = require("../img/korp_fail.svg")
 
@@ -58,18 +42,18 @@ const deferred_domReady = $.Deferred(function(dfd) {
     return dfd
 }).promise()
 
-const loc_dfd = initLocales()
+const loc_dfd = window.initLocales()
 $(document).keyup(function(event) {
     if (event.keyCode === 27) {
-        if (typeof kwicResults !== "undefined" && kwicResults !== null) {
+        if (kwicResults) {
             kwicResults.abort()
         }
-        if (typeof lemgramResults !== "undefined" && lemgramResults !== null) {
+        if (lemgramResults) {
             lemgramResults.abort()
         }
-        return typeof statsResults !== "undefined" && statsResults !== null
-            ? statsResults.abort()
-            : undefined
+        if (statsResults) {
+            statsResults.abort()
+        }
     }
 })
 
@@ -118,11 +102,11 @@ $.when(loc_dfd, deferred_domReady).then(
             c.log("select", $(this).find(":selected"))
             const target = $(this).find(":selected")
             if (_.includes(target.val(), "http://")) {
-                return (location.href = target.val())
+                location.href = target.val()
             } else if (target.is(".clear")) {
                 c.log("empty searches")
                 $.jStorage.set("searches", [])
-                return view.updateSearchHistory()
+                view.updateSearchHistory()
             }
         })
 
@@ -145,7 +129,7 @@ $.when(loc_dfd, deferred_domReady).then(
                 util.localize()
             }
 
-            return (prevFragment = _.extend({}, locationSearch()))
+            prevFragment = _.extend({}, locationSearch())
         }
 
         $(window).scroll(() => $("#sidebar").sidebar("updatePlacement"))
@@ -158,7 +142,7 @@ $.when(loc_dfd, deferred_domReady).then(
                         .radioList("getSelected")
                         .data("mode")
                 )
-                return locationSearch({
+                locationSearch({
                     lang: $(this)
                         .radioList("getSelected")
                         .data("mode")
@@ -169,9 +153,9 @@ $.when(loc_dfd, deferred_domReady).then(
         })
         $("#sidebar").sidebar()
 
-        setTimeout(() => onHashChange(null, true), 0)
-        return $("body").animate({ opacity: 1 }, function() {
-            return $(this).css("opacity", "")
+        setTimeout(() => window.onHashChange(null, true), 0)
+        $("body").animate({ opacity: 1 }, function() {
+            $(this).css("opacity", "")
         })
     },
     function() {
@@ -190,7 +174,7 @@ window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
     let outCorpora = []
 
     // Go down the alley to the last subfolder
-    while (Array.from(folderOrCorpus).includes(".")) {
+    while (folderOrCorpus.includes(".")) {
         const posOfPeriod = _.indexOf(folderOrCorpus, ".")
         const leftPart = folderOrCorpus.substr(0, posOfPeriod)
         const rightPart = folderOrCorpus.substr(posOfPeriod + 1)
@@ -206,9 +190,9 @@ window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
         // Continue to go through any subfolders
         $.each(lastLevel[folderOrCorpus], function(key, val) {
             if (!["title", "contents", "description"].includes(key)) {
-                return (outCorpora = outCorpora.concat(
+                outCorpora = outCorpora.concat(
                     getAllCorporaInFolders(lastLevel[folderOrCorpus], key)
-                ))
+                )
             }
         })
 
@@ -223,7 +207,6 @@ window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
 
 window.initTimeGraph = function(def) {
     let timestruct = null
-    const all_timestruct = null
     let restdata = null
     let restyear = null
     let hasRest = false
@@ -244,11 +227,12 @@ window.initTimeGraph = function(def) {
 
     window.timeDeferred = timeProxy
         .makeRequest()
-        .fail(error => $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>"))
+        .fail(error => {
+            console.error(error)
+            $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>")
+        })
         .done(function(...args) {
-            let dataByCorpus, rest
-            let all_timestruct
-            ;[dataByCorpus, all_timestruct, rest] = Array.from(args[0])
+            let [dataByCorpus, all_timestruct, rest] = args[0]
             for (let corpus in dataByCorpus) {
                 let struct = dataByCorpus[corpus]
                 if (corpus !== "time") {
@@ -275,6 +259,17 @@ window.initTimeGraph = function(def) {
             })
 
             onTimeGraphChange = function(evt, data) {
+                let max = _.reduce(
+                    all_timestruct,
+                    function(accu, item) {
+                        if (item[1] > accu) {
+                            return item[1]
+                        }
+                        return accu
+                    },
+                    0
+                )
+
                 // the 46 here is the presumed value of
                 // the height of the graph
                 const one_px = max / 46
@@ -294,7 +289,7 @@ window.initTimeGraph = function(def) {
                     .map(_.toPairs)
                     .flatten(true)
                     .reduce(function(memo, ...rest1) {
-                        const [a, b] = Array.from(rest1[0])
+                        const [a, b] = rest1[0]
                         if (typeof memo[a] === "undefined") {
                             memo[a] = b
                         } else {
@@ -302,17 +297,6 @@ window.initTimeGraph = function(def) {
                         }
                         return memo
                     }, {})
-
-                var max = _.reduce(
-                    all_timestruct,
-                    function(accu, item) {
-                        if (item[1] > accu) {
-                            return item[1]
-                        }
-                        return accu
-                    },
-                    0
-                )
 
                 timestruct = timeProxy.compilePlotArray(output)
                 const endyear = all_timestruct.slice(-1)[0][0]
@@ -334,7 +318,7 @@ window.initTimeGraph = function(def) {
                     })
                 }
 
-                const plot = $.plot($("#time_graph"), plots, {
+                $.plot($("#time_graph"), plots, {
                     bars: {
                         show: true,
                         fill: 1,
@@ -395,7 +379,6 @@ window.initTimeGraph = function(def) {
                             loc: "corpselector_of_total",
                             num: util.prettyNumbers(total)
                         })
-                        const time = item.datapoint[0]
                         $(".corpusInfoSpace").css({
                             top: $(this)
                                 .parent()
@@ -418,7 +401,7 @@ window.initTimeGraph = function(def) {
     const opendfd = $.Deferred()
     $("#corpusbox").one("corpuschooseropen", () => opendfd.resolve())
 
-    return $.when(timeDeferred, opendfd).then(function() {
+    return $.when(window.timeDeferred, opendfd).then(function() {
         $("#corpusbox").bind("corpuschooserchange", onTimeGraphChange)
         return onTimeGraphChange()
     })
