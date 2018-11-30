@@ -1,20 +1,4 @@
 /** @format */
-/* eslint-disable
-    no-return-assign,
-    no-undef,
-    no-unused-vars,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS103: Rewrite code to no longer use __guard__
- * DS201: Simplify complex destructure assignments
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("mapCtrl", () => ({
@@ -40,7 +24,7 @@ korpApp.directive("mapCtrl", () => ({
                 }
                 return $timeout(function() {
                     s.aborted = true
-                    return (s.loading = false)
+                    s.loading = false
                 }, 0)
             }
         })
@@ -61,10 +45,10 @@ korpApp.directive("mapCtrl", () => ({
                 const currentCqp = searches.getCqpExpr()
                 const searchCorpora = settings.corpusListing.stringifySelected(true)
                 if (
-                    currentCqp !== (s.lastSearch != null ? s.lastSearch.cqp : undefined) ||
-                    searchCorpora !== (s.lastSearch != null ? s.lastSearch.corpora : undefined)
+                    s.lastSearch &&
+                    (s.lastSearch.cqp == currentCqp || s.lastSearch.corpora == searchCorpora)
                 ) {
-                    return (s.hasResult = false)
+                    s.hasResult = false
                 }
             }
         })
@@ -80,11 +64,12 @@ korpApp.directive("mapCtrl", () => ({
 
         s.center = settings.mapCenter
 
-        s.hoverTemplate = `<div class="hover-info" ng-repeat="(name, values) in names">
-       <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
-       <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>
-       <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
-</div>`
+        s.hoverTemplate = `
+            <div class="hover-info" ng-repeat="(name, values) in names">
+               <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
+               <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>
+               <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
+            </div>`
         s.markers = {}
         s.mapSettings = { baseLayer: "Stamen Watercolor" }
         s.numResults = 0
@@ -99,22 +84,22 @@ korpApp.directive("mapCtrl", () => ({
                 s.lastSearch = { cqp, corpora }
                 s.loading = true
                 updateMapData()
-                return (s.hasResult = true)
+                s.hasResult = true
             }
         })
 
-        s.countCorpora = () =>
-            __guard__(
-                s.proxy != null ? s.proxy.prevParams : undefined,
-                x => x.corpus.split(",").length
-            )
+        s.countCorpora = () => {
+            if (s.proxy && s.proxy.prevParams) {
+                return s.proxy.prevParams.corpus.split(",").length
+            }
+        }
 
         const fixData = function(data) {
             const fixedData = {}
             const abs = data.total.absolute
             const rel = data.total.relative
             const names = _.keys(abs)
-            for (let name of Array.from(names)) {
+            for (let name of names) {
                 fixedData[name] = {
                     rel_occurrences:
                         Math.round((data.total.relative[name] + 0.00001) * 1000) / 1000,
@@ -129,28 +114,28 @@ korpApp.directive("mapCtrl", () => ({
                 if (data.count !== 0) {
                     const fixedData = fixData(data)
                     const palette = new Rickshaw.Color.Palette("colorwheel")
-                    return markers(fixedData).then(function(markers) {
+                    markers(fixedData).then(function(markers) {
                         s.markers = { all: { markers: markers, color: palette.color() } }
                         s.selectedGroups = ["all"]
                         s.numResults = _.keys(markers).length
-                        return (s.loading = false)
+                        s.loading = false
                     })
                 } else {
                     s.selectedGroups = []
                     s.markers = {}
                     s.numResults = 0
-                    return (s.loading = false)
+                    s.loading = false
                 }
             })
 
         const createCqp2Fun = function() {
-            const posTags = Array.from(settings.mapPosTag).map(posTag => `pos='${posTag}'`)
+            const posTags = settings.mapPosTag.map(posTag => `pos='${posTag}'`)
             const nameMatching = `(${posTags.join(" | ")})`
             return name => `[word='${name}' & ${nameMatching}]`
         }
         const getCqp2 = createCqp2Fun()
 
-        return (s.newKWICSearch = function(marker) {
+        s.newKWICSearch = function(marker) {
             const { point } = marker
             const cl = settings.corpusListing.subsetFactory(s.lastSearch.corpora.split(","))
             const opts = {
@@ -166,8 +151,8 @@ korpApp.directive("mapCtrl", () => ({
                     default_within: "sentence"
                 }
             }
-            return $rootScope.kwicTabs.push({ queryParams: opts })
-        })
+            $rootScope.kwicTabs.push({ queryParams: opts })
+        }
     }
 }))
 
@@ -189,22 +174,22 @@ korpApp.directive("newMapCtrl", ($timeout, searches) => ({
 
         s.promise.then(
             (...args) => {
-                const [result] = Array.from(args[0])
+                const [result] = args[0]
                 const xhr = args[1]
                 s.loading = false
                 s.numResults = 20
                 s.markerGroups = getMarkerGroups(result)
-                return (s.selectedGroups = _.keys(s.markerGroups))
+                s.selectedGroups = _.keys(s.markerGroups)
             },
             () => {
                 s.loading = false
-                return (s.error = true)
+                s.error = true
             }
         )
 
         s.toggleMarkerGroup = function(groupName) {
             s.markerGroups[groupName].selected = !s.markerGroups[groupName].selected
-            if (Array.from(s.selectedGroups).includes(groupName)) {
+            if (s.selectedGroups.includes(groupName)) {
                 return s.selectedGroups.splice(s.selectedGroups.indexOf(groupName), 1)
             } else {
                 return s.selectedGroups.push(groupName)
@@ -238,29 +223,27 @@ korpApp.directive("newMapCtrl", ($timeout, searches) => ({
         var getMarkers = function(label, cqp, corpora, within, res, idx) {
             const markers = {}
 
-            for (let point of Array.from(res.points)) {
-                ;(function(point) {
-                    const id = point.name.replace(/-/g, "") + idx
-                    return (markers[id] = {
-                        lat: point.lat,
-                        lng: point.lng,
-                        queryData: {
-                            searchCqp: cqp,
-                            subCqp: res.cqp,
-                            label,
-                            corpora,
-                            within
-                        },
-                        label: res.label,
-                        point
-                    })
-                })(point)
+            for (let point of res.points) {
+                const id = point.name.replace(/-/g, "") + idx
+                markers[id] = {
+                    lat: point.lat,
+                    lng: point.lng,
+                    queryData: {
+                        searchCqp: cqp,
+                        subCqp: res.cqp,
+                        label,
+                        corpora,
+                        within
+                    },
+                    label: res.label,
+                    point
+                }
             }
 
             return markers
         }
 
-        return (s.newKWICSearch = function(marker) {
+        s.newKWICSearch = function(marker) {
             const { queryData } = marker
             const { point } = marker
             const cl = settings.corpusListing.subsetFactory(queryData.corpora)
@@ -284,7 +267,7 @@ korpApp.directive("newMapCtrl", ($timeout, searches) => ({
                 }
             }
             _.extend(opts.ajaxParams, queryData.within)
-            return $timeout(
+            $timeout(
                 () =>
                     $rootScope.kwicTabs.push({
                         readingMode: queryData.label === "paragraph__geocontext",
@@ -292,10 +275,6 @@ korpApp.directive("newMapCtrl", ($timeout, searches) => ({
                     }),
                 0
             )
-        })
+        }
     }
 }))
-
-function __guard__(value, transform) {
-    return typeof value !== "undefined" && value !== null ? transform(value) : undefined
-}
