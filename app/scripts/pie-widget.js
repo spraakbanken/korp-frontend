@@ -1,17 +1,4 @@
-/* eslint-disable
-    no-return-assign,
-    no-undef,
-    no-unused-vars,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+/** @format */
 const pie_widget = {
     options: {
         container_id: "",
@@ -25,7 +12,7 @@ const pie_widget = {
     shapes: [],
     canvas: null,
     _create() {
-        return this.shapes = this.initDiagram(this.options.data_items)
+        this.shapes = this.initDiagram(this.options.data_items)
     },
 
     resizeDiagram(newDiameter) {
@@ -33,19 +20,20 @@ const pie_widget = {
             $(this.container_id).width(newDiameter + 60)
             $(this.container_id).height(newDiameter + 60)
             this.options.diameter = newDiameter
-            return this.newData(this.options.data_items, false)
+            this.newData(this.options.data_items, false)
         }
     },
 
     newData(data_items) {
         this.canvas.remove()
         this.options.data_items = data_items
-        return this.shapes = this.initDiagram(data_items)
+        this.shapes = this.initDiagram(data_items)
     },
 
     _constructSVGPath(highlight, circleTrack, continueArc, offsetX, offsetY, radius, part) {
         let str = `M${offsetX + radius},${offsetY + radius}`
-        if (part === 1.0) { // Special case, make two arc halves
+        if (part === 1.0) {
+            // Special case, make two arc halves
             str += `\nm -${radius}, 0\n`
             str += `a ${radius},${radius} 0 1,0 ${radius * 2},0`
             str += `a ${radius},${radius} 0 1,0 -${radius * 2},0`
@@ -62,46 +50,48 @@ const pie_widget = {
                 lineToArcX = offsetX + radius
                 lineToArcY = offsetY
             }
-            if (highlight) { // make piece stand out
+            if (highlight) {
+                // make piece stand out
                 let newX, newY
                 const degree = Math.acos((lineToArcY - offsetY - radius) / radius)
-                if ((lineToArcX - offsetX - radius) < 0) {
-                    newX = (radius * 1.1) * Math.sin(degree)
-                    newY = (radius * 1.1) * Math.cos(degree)
+                if (lineToArcX - offsetX - radius < 0) {
+                    newX = radius * 1.1 * Math.sin(degree)
+                    newY = radius * 1.1 * Math.cos(degree)
                 } else {
                     newX = -(radius * 1.1) * Math.sin(degree)
-                    newY = (radius * 1.1) * Math.cos(degree)
+                    newY = radius * 1.1 * Math.cos(degree)
                 }
-                lineToArcX = (offsetX + radius) - newX
+                lineToArcX = offsetX + radius - newX
                 lineToArcY = offsetY + radius + newY
             }
-            str += (lineToArcX) + "," + (lineToArcY)
+            str += lineToArcX + "," + lineToArcY
             if (highlight) {
                 str += ` A${radius * 1.1},${radius * 1.1}`
             } else {
                 str += ` A${radius},${radius}`
             }
             str += " 0 "
-            if (part > 0.5) { // Makes the arc always go the long way instead of taking a shortcut
+            if (part > 0.5) {
+                // Makes the arc always go the long way instead of taking a shortcut
                 str += "1"
             } else {
                 str += "0"
             }
             str += ",1 "
-            let x2 = offsetX + radius + (Math.sin(radians) * radius)
-            let y2 = (offsetY + radius) - (Math.cos(radians) * radius)
+            let x2 = offsetX + radius + Math.sin(radians) * radius
+            let y2 = offsetY + radius - Math.cos(radians) * radius
             if (!highlight) {
                 circleTrack["lastArcX"] = x2
                 circleTrack["lastArcY"] = y2
             }
             if (highlight) {
                 const endDegree = Math.acos((y2 - offsetY - radius) / radius)
-                if (x2 < (offsetX + radius)) {
-                    x2 = (offsetX + radius) - ((radius * 1.1) * Math.sin(endDegree))
-                    y2 = offsetX + radius + ((radius * 1.1) * Math.cos(endDegree))
+                if (x2 < offsetX + radius) {
+                    x2 = offsetX + radius - radius * 1.1 * Math.sin(endDegree)
+                    y2 = offsetX + radius + radius * 1.1 * Math.cos(endDegree)
                 } else {
-                    x2 = offsetX + radius + ((radius * 1.1) * Math.sin(endDegree))
-                    y2 = offsetX + radius + ((radius * 1.1) * Math.cos(endDegree))
+                    x2 = offsetX + radius + radius * 1.1 * Math.sin(endDegree)
+                    y2 = offsetX + radius + radius * 1.1 * Math.cos(endDegree)
                 }
             }
             str += x2 + "," + y2
@@ -127,14 +117,18 @@ const pie_widget = {
             nowthis._highlight(this)
             // Fire callback "enteredArc":
             const callback = nowthis.options.enteredArc
-            if ($.isFunction(callback)) { return callback(nowthis.eventArc(this)) }
+            if ($.isFunction(callback)) {
+                callback(nowthis.eventArc(this))
+            }
         }
 
         const mouseExit = function(event) {
             nowthis._deHighlight(this)
             // Fire callback "exitedArc":
             const callback = nowthis.options.exitedArc
-            if ($.isFunction(callback)) { return callback(nowthis.eventArc(this)) }
+            if ($.isFunction(callback)) {
+                callback(nowthis.eventArc(this))
+            }
         }
 
         const r = Raphael(this.options.container_id)
@@ -145,14 +139,22 @@ const pie_widget = {
         pieTrack["lastArcY"] = 0
         const SVGArcObjects = []
         let first = true
-        for (let fvalue of Array.from(pieparts)) {
+        for (let fvalue of pieparts) {
             const partOfTotal = fvalue["share"]
             if (partOfTotal !== 0) {
                 const bufferPieTrack = []
                 bufferPieTrack["accumulatedArc"] = pieTrack["accumulatedArc"]
                 bufferPieTrack["lastArcX"] = pieTrack["lastArcX"]
                 bufferPieTrack["lastArcY"] = pieTrack["lastArcY"]
-                const origPath = nowthis._constructSVGPath(false, pieTrack, !first, 30, 30, radius, partOfTotal)
+                const origPath = nowthis._constructSVGPath(
+                    false,
+                    pieTrack,
+                    !first,
+                    30,
+                    30,
+                    radius,
+                    partOfTotal
+                )
                 const newPiece = r.path(origPath)
                 const newPieceDOMNode = newPiece.node
                 newPieceDOMNode["continue"] = !first
@@ -176,7 +178,9 @@ const pie_widget = {
                 newPiece.click(function(event) {
                     // Fire callback "clickedArc":
                     const callback = nowthis.options.clickedArc
-                    if ($.isFunction(callback)) { return callback(nowthis.eventArc(this)) }
+                    if ($.isFunction(callback)) {
+                        callback(nowthis.eventArc(this))
+                    }
                 })
 
                 newPiece.attr({ fill: fvalue["color"] })
@@ -184,7 +188,9 @@ const pie_widget = {
                 newPiece.attr({ opacity: 0.7 })
                 newPiece.attr({ "stroke-linejoin": "miter" })
                 SVGArcObjects.push(newPiece)
-                if (first) { first = false }
+                if (first) {
+                    first = false
+                }
             }
         }
 
@@ -213,10 +219,10 @@ const pie_widget = {
         }
 
         const sortedData = this.options.sort_desc ? this._sortDataDescending(indata) : indata
-        
+
         // Calculate the sum of the array
         let total = 0
-        for (fvalue of Array.from(sortedData)) {
+        for (fvalue of sortedData) {
             total += fvalue["value"]
         }
 
@@ -224,14 +230,14 @@ const pie_widget = {
         const piePieceDefinitions = []
         let acc = 0
         let colorCount = 0
-        for (fvalue of Array.from(sortedData)) {
+        for (fvalue of sortedData) {
             const relative = fvalue["value"] / total
             acc += fvalue["value"]
             const itemID = fvalue["shape_id"]
             const itemCaption = fvalue["caption"]
             piePieceDefinitions.push({
                 share: relative,
-                color: (defaultOptions["colors"][colorCount]),
+                color: defaultOptions["colors"][colorCount],
                 shape_id: itemID,
                 caption: itemCaption
             })
@@ -242,21 +248,27 @@ const pie_widget = {
 
     _highlight(item) {
         const n = item.node
-        const newpath = this._constructSVGPath(true, n["track"], n["continue"], n["offsetX"], n["offsetY"], n["radius"], n["part"])
+        const newpath = this._constructSVGPath(
+            true,
+            n["track"],
+            n["continue"],
+            n["offsetX"],
+            n["offsetY"],
+            n["radius"],
+            n["part"]
+        )
         return item.attr({ path: newpath })
     },
 
     _deHighlight(item) {
         const n = item.node
-        return item.animate(
-            { path: n["origpath"] }
-        , 400, "elastic")
+        return item.animate({ path: n["origpath"] }, 400, "elastic")
     },
 
     highlightArc(itemID) {
         for (let shape in this.shapes) {
             const n = this.shapes[shape].node
-            if ((n != null ? n.shape_id : undefined) === itemID) {
+            if ((n && n.shape_id) === itemID) {
                 // Highlight the arc
                 this._highlight(this.shapes[shape])
                 return true
@@ -267,7 +279,7 @@ const pie_widget = {
     deHighlightArc(itemID) {
         for (let shape in this.shapes) {
             const n = this.shapes[shape].node
-            if ((n != null ? n.shape_id : undefined) === itemID) {
+            if ((n && n.shape_id) === itemID) {
                 // Highlight the arc
                 this._deHighlight(this.shapes[shape])
                 return true
