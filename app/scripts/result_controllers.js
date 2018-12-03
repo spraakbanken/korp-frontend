@@ -1,31 +1,4 @@
 /** @format */
-/* eslint-disable
-    constructor-super,
-    no-constant-condition,
-    no-eval,
-    no-return-assign,
-    no-this-before-super,
-    no-undef,
-    no-unused-vars,
-    no-useless-escape,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS001: Remove Babel/TypeScript constructor workaround
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS103: Rewrite code to no longer use __guard__
- * DS104: Avoid inline assignments
- * DS201: Simplify complex destructure assignments
- * DS202: Simplify dynamic range loops
- * DS204: Change includes calls to have a more natural evaluation order
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const korpApp = angular.module("korpApp")
 
 korpApp.controller(
@@ -54,7 +27,7 @@ class KwicCtrl {
 
     initPage() {
         this.scope.pageObj = { pager: Number(this.location.search().page) + 1 || 1 }
-        return (this.scope.page = this.scope.pageObj.pager - 1)
+        this.scope.page = this.scope.pageObj.pager - 1
     }
     constructor(scope, timeout, utils, location, kwicDownload) {
         this.scope = scope
@@ -64,12 +37,12 @@ class KwicCtrl {
         this.kwicDownload = kwicDownload
         const s = this.scope
         const $scope = this.scope
-        c.log("kwicCtrl init", $scope.$parent)
+        c.log("kwicCtrl init", this.scope.$parent)
         const $location = this.location
 
         s.onexit = function() {
             c.log("onexit")
-            return (s.$root.sidebar_visible = false)
+            s.$root.sidebar_visible = false
         }
 
         const punctArray = [",", ".", ";", ":", "!", "?", "..."]
@@ -79,7 +52,7 @@ class KwicCtrl {
         s.pageChange = function($event, page) {
             c.log("pageChange", arguments)
             $event.stopPropagation()
-            return (s.page = page - 1)
+            s.page = page - 1
         }
 
         this.setupHash()
@@ -93,20 +66,18 @@ class KwicCtrl {
                 }
                 s.gotoPage = page
                 s.pageObj.pager = page
-                return (s.page = Number(page) - 1)
+                s.page = Number(page) - 1
             }
         }
 
         const readingChange = function() {
-            if (s.instance != null ? s.instance.getProxy().pendingRequests.length : undefined) {
+            if (s.instance && s.instance.getProxy().pendingRequests.length) {
                 window.pending = s.instance.getProxy().pendingRequests
 
-                return $.when(...Array.from(s.instance.getProxy().pendingRequests || [])).then(
-                    function() {
-                        c.log("readingchange makeRequest")
-                        return s.instance.makeRequest()
-                    }
-                )
+                return $.when(...(s.instance.getProxy().pendingRequests || [])).then(function() {
+                    c.log("readingchange makeRequest")
+                    return s.instance.makeRequest()
+                })
             }
         }
 
@@ -130,7 +101,7 @@ class KwicCtrl {
                 if (!init) {
                     readingChange()
                 }
-                return (init = false)
+                init = false
             })
         })
 
@@ -141,7 +112,7 @@ class KwicCtrl {
 
         s.hitspictureClick = function(pageNumber) {
             c.log("pageNumber", pageNumber)
-            return (s.page = Number(pageNumber))
+            s.page = Number(pageNumber)
         }
 
         const massageData = function(hitArray) {
@@ -161,9 +132,7 @@ class KwicCtrl {
 
                 const id = linkCorpusId || mainCorpusId
 
-                const [matchSentenceStart, matchSentenceEnd] = Array.from(
-                    findMatchSentence(hitContext)
-                )
+                const [matchSentenceStart, matchSentenceEnd] = findMatchSentence(hitContext)
 
                 if (!(hitContext.match instanceof Array)) {
                     matches = [{ start: hitContext.match.start, end: hitContext.match.end }]
@@ -171,31 +140,25 @@ class KwicCtrl {
                     matches = hitContext.match
                 }
 
-                for (
-                    let j = 0, end1 = hitContext.tokens.length, asc = end1 >= 0;
-                    asc ? j < end1 : j > end1;
-                    asc ? j++ : j--
-                ) {
+                for (let i in _.range(0, hitContext.tokens)) {
                     var structItem
-                    const wd = hitContext.tokens[j]
-                    wd.position = j
+                    const wd = hitContext.tokens[i]
+                    wd.position = i
                     wd._open = []
                     wd._close = []
-                    for (let { start, end } of Array.from(matches)) {
-                        if (start <= j && j < end) {
+                    for (let { start, end } of matches) {
+                        if (start <= i && i < end) {
                             _.extend(wd, { _match: true })
                         }
                     }
-                    if (matchSentenceStart < j && j < matchSentenceEnd) {
+                    if (matchSentenceStart < i && i < matchSentenceEnd) {
                         _.extend(wd, { _matchSentence: true })
                     }
-                    if (Array.from(punctArray).includes(wd.word)) {
+                    if (punctArray.includes(wd.word)) {
                         _.extend(wd, { _punct: true })
                     }
 
-                    for (structItem of Array.from(
-                        (wd.structs != null ? wd.structs.open : undefined) || []
-                    )) {
+                    if (wd.structs && (wd.structs.open || []).length) {
                         var key, val
                         const spaceIdx = structItem.indexOf(" ")
                         if (spaceIdx === -1) {
@@ -213,11 +176,11 @@ class KwicCtrl {
 
                     _.extend(wd, currentStruct)
 
-                    for (structItem of Array.from(
-                        (wd.structs != null ? wd.structs.close : undefined) || []
-                    )) {
-                        wd._close.push(structItem)
-                        delete currentStruct[structItem]
+                    if (wd.structs && (wd.structs.close || []).length) {
+                        for (structItem of wd.structs.close) {
+                            wd._close.push(structItem)
+                            delete currentStruct[structItem]
+                        }
                     }
                 }
 
@@ -240,7 +203,7 @@ class KwicCtrl {
 
                 output.push(hitContext)
                 if (hitContext.aligned) {
-                    const [corpus_aligned, tokens] = Array.from(_.toPairs(hitContext.aligned)[0])
+                    const [corpus_aligned, tokens] = _.toPairs(hitContext.aligned)[0]
                     output.push({
                         tokens,
                         isLinked: true,
@@ -261,24 +224,24 @@ class KwicCtrl {
             let decr = start
             let incr = end
             while (decr >= 0) {
-                var needle
+                decr--
                 if (
-                    ((needle = "sentence"),
-                    Array.from(
-                        __guard__(hitContext.tokens[decr--].structs, x => x.open) || []
-                    ).includes(needle))
+                    (
+                        (hitContext.tokens[decr].structs && hitContext.tokens[decr].structs.open) ||
+                        []
+                    ).includes("sentence")
                 ) {
                     span[0] = decr
                     break
                 }
             }
             while (incr < hitContext.tokens.length) {
-                var needle1
+                incr++
                 if (
-                    ((needle1 = "sentence"),
-                    Array.from(
-                        __guard__(hitContext.tokens[incr++].structs, x1 => x1.close) || []
-                    ).includes(needle1))
+                    (
+                        (hitContext.tokens[incr].structs && hitContext.tokens[incr].structs.open) ||
+                        []
+                    ).includes("sentence")
                 ) {
                     span[1] = incr
                     break
@@ -293,13 +256,13 @@ class KwicCtrl {
         s.setContextData = function(data) {
             s.kwic = []
             s.pagerHitsPerPage = s.hitsPerPage
-            return (s.contextKwic = massageData(data.kwic))
+            s.contextKwic = massageData(data.kwic)
         }
 
         s.setKwicData = function(data) {
             s.contextKwic = []
             s.pagerHitsPerPage = s.hitsPerPage
-            return (s.kwic = massageData(data.kwic))
+            s.kwic = massageData(data.kwic)
         }
 
         c.log("selectionManager")
@@ -348,18 +311,16 @@ class KwicCtrl {
                     return
                 }
                 const requestData = s.instance.getProxy().prevParams
-                const [fileName, blobName] = Array.from(
-                    this.kwicDownload.makeDownload(
-                        ...Array.from(value.split("/")),
-                        s.kwic,
-                        requestData,
-                        hitsDisplay
-                    )
+                const [fileName, blobName] = this.kwicDownload.makeDownload(
+                    ...value.split("/"),
+                    s.kwic,
+                    requestData,
+                    hitsDisplay
                 )
                 s.download.fileName = fileName
                 s.download.blobName = blobName
                 s.download.selected = ""
-                return this.timeout(() => angular.element("#kwicDownloadLink")[0].click(), 0)
+                this.timeout(() => angular.element("#kwicDownloadLink")[0].click(), 0)
             }
         }
     }
@@ -373,20 +334,7 @@ class ExampleCtrl extends KwicCtrl {
         this.$inject = ["$scope", "$timeout", "utils", "$location", "kwicDownload"]
     }
     constructor(scope, $timeout, utils, $location, kwicDownload) {
-        {
-            // Hack: trick Babel/TypeScript into allowing this before super.
-            if (false) {
-                super()
-            }
-            let thisFn = (() => {
-                return this
-            }).toString()
-            let thisName = thisFn.match(/return (?:_assertThisInitialized\()*(\w+)\)*;/)[1]
-            eval(`${thisName} = this;`)
-        }
-        this.scope = scope
-        this.kwicDownload = kwicDownload
-        super(this.scope, $timeout, utils, $location, this.kwicDownload)
+        super(scope, $timeout, utils, $location, kwicDownload)
         const s = this.scope
 
         s.$root.word_selected = false
@@ -413,10 +361,10 @@ class ExampleCtrl extends KwicCtrl {
             s.exampleReadingMode = !s.exampleReadingMode
             s.instance.centerScrollbar()
 
-            if (s.instance != null ? s.instance.getProxy().pendingRequests.length : undefined) {
+            if (s.instance && s.instance.getProxy().pendingRequests.length) {
                 window.pending = s.instance.getProxy().pendingRequests
 
-                return $.when(...Array.from(s.instance.getProxy().pendingRequests || [])).then(() =>
+                return $.when(...(s.instance.getProxy().pendingRequests || [])).then(() =>
                     s.instance.makeRequest()
                 )
             }
@@ -425,7 +373,7 @@ class ExampleCtrl extends KwicCtrl {
 
     initPage() {
         this.scope.pageObj = { pager: 0 }
-        return (this.scope.page = 0)
+        this.scope.page = 0
     }
     setupHash() {}
 }
@@ -458,8 +406,8 @@ korpApp.directive("statsResultCtrl", () => ({
 
         s.getGeoAttributes = function(corpora) {
             let attrs = {}
-            for (let corpus of Array.from(settings.corpusListing.subsetFactory(corpora).selected)) {
-                for (let attr of Array.from(corpus.private_struct_attributes)) {
+            for (let corpus of settings.corpusListing.subsetFactory(corpora).selected) {
+                for (let attr of corpus.private_struct_attributes) {
                     if (attr.indexOf("geo" !== -1)) {
                         if (attrs[attr]) {
                             attrs[attr].corpora.push(corpus.id)
@@ -478,7 +426,7 @@ korpApp.directive("statsResultCtrl", () => ({
                 attrs[0].selected = true
             }
 
-            return (s.mapAttributes = attrs)
+            s.mapAttributes = attrs
         }
 
         s.mapToggleSelected = function(index, event) {
@@ -489,18 +437,18 @@ korpApp.directive("statsResultCtrl", () => ({
             return event.stopPropagation()
         }
 
-        return (s.showMap = function() {
+        s.showMap = function() {
             const cqpExpr = CQP.expandOperators(searches.getCqpExpr())
 
             const cqpExprs = {}
-            for (let rowIx of Array.from(s.instance.getSelectedRows())) {
+            for (let rowIx of s.instance.getSelectedRows()) {
                 if (rowIx === 0) {
                     continue
                 }
                 var row = s.instance.getDataAt(rowIx)
                 const { searchParams } = s.instance
                 const cqp = statisticsFormatting.getCqp(row.statsValues, searchParams.ignoreCase)
-                const parts = Array.from(searchParams.reduceVals).map(
+                const parts = searchParams.reduceVals.map(
                     reduceVal => row.formattedValue[reduceVal]
                 )
                 cqpExprs[cqp] = parts.join(", ")
@@ -518,7 +466,7 @@ korpApp.directive("statsResultCtrl", () => ({
             return $rootScope.mapTabs.push(
                 backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute)
             )
-        })
+        }
     }
 }))
 
@@ -569,7 +517,7 @@ korpApp.directive("wordpicCtrl", () => ({
                         return _.map(categories, cols =>
                             _.map(cols, function(col) {
                                 if (col.table && col.table.length > max) {
-                                    return (max = col.table.length)
+                                    max = col.table.length
                                 }
                             })
                         )
@@ -617,7 +565,6 @@ korpApp.directive("wordpicCtrl", () => ({
         $scope.renderTable = obj => obj instanceof Array
 
         $scope.parseLemgram = function(row, allLemgrams) {
-            let needle
             const set = row[row.show_rel].split("|")
             const lemgram = set[0]
 
@@ -627,8 +574,7 @@ korpApp.directive("wordpicCtrl", () => ({
             infixIndex = ""
             let type = "-"
 
-            const hasHomograph = ((needle = lemgram.slice(0, -1)),
-            Array.from(allLemgrams).includes(needle))
+            const hasHomograph = allLemgrams.includes(lemgram.slice(0, -1))
             const prefix = row.depextra
 
             if (util.isLemgramId(lemgram)) {
@@ -679,13 +625,13 @@ korpApp.directive("wordpicCtrl", () => ({
 
         $scope.getResultHeader = (index, wordClass) => settings.wordPictureConf[wordClass][index]
 
-        return ($scope.fromLemgram = function(maybeLemgram) {
+        $scope.fromLemgram = function(maybeLemgram) {
             if (util.isLemgramId(maybeLemgram)) {
                 return util.splitLemgram(maybeLemgram).form
             } else {
                 return maybeLemgram
             }
-        })
+        }
     }
 }))
 
@@ -697,7 +643,7 @@ korpApp.directive("graphCtrl", () => ({
         s.mode = "line"
 
         s.isGraph = () => ["line", "bar"].includes(s.mode)
-        return (s.isTable = () => s.mode === "table")
+        s.isTable = () => s.mode === "table"
     }
 }))
 
@@ -711,7 +657,7 @@ korpApp.directive("compareCtrl", () => ({
 
         return s.promise.then(
             function(...args) {
-                const [tables, max, cmp1, cmp2, reduce] = Array.from(args[0])
+                const [tables, max, cmp1, cmp2, reduce] = args[0]
                 const xhr = args[1]
                 s.loading = false
 
@@ -721,12 +667,13 @@ korpApp.directive("compareCtrl", () => ({
                 let cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora))
                 const attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs())
 
-                s.stringify = _.map(
-                    reduce,
-                    item =>
-                        __guard__(attributes[_.trimStart(item, "_.")], x => x.stringify) ||
-                        angular.identity
-                )
+                s.stringify = _.map(reduce, item => {
+                    if (attributes[_.trimStart(item, "_.")]) {
+                        return attributes[_.trimStart(item, "_.")].stringify
+                    } else {
+                        return angular.identity
+                    }
+                })
 
                 s.max = max
 
@@ -735,7 +682,7 @@ korpApp.directive("compareCtrl", () => ({
 
                 const cmps = [cmp1, cmp2]
 
-                return (s.rowClick = function(row, cmp_index) {
+                s.rowClick = function(row, cmp_index) {
                     const cmp = cmps[cmp_index]
 
                     const splitTokens = _.map(row.elems, elem =>
@@ -746,7 +693,7 @@ korpApp.directive("compareCtrl", () => ({
                     const tokenLength = splitTokens[0][0].length
 
                     // transform result from grouping on attribute to grouping on token place
-                    var tokens = _.map(__range__(0, tokenLength - 1, true), function(tokenIdx) {
+                    var tokens = _.map(_.range(0, tokenLength), function(tokenIdx) {
                         tokens = _.map(reduce, (reduceAttr, attrIdx) =>
                             _.uniq(_.map(splitTokens, res => res[attrIdx][tokenIdx]))
                         )
@@ -754,12 +701,12 @@ korpApp.directive("compareCtrl", () => ({
                     })
 
                     const cqps = _.map(tokens, function(token) {
-                        const cqpAnd = _.map(__range__(0, token.length - 1, true), function(attrI) {
+                        const cqpAnd = _.map(_.range(0, token.length), function(attrI) {
                             let type, val
                             let attrKey = reduce[attrI]
                             const attrVal = token[attrI]
 
-                            if (Array.from(attrKey).includes("_.")) {
+                            if (attrKey.includes("_.")) {
                                 c.log("error, attribute key contains _.")
                             }
 
@@ -776,30 +723,15 @@ korpApp.directive("compareCtrl", () => ({
                             if (type === "set" && attrVal.length > 1) {
                                 let variants = []
                                 _.map(attrVal, function(val) {
-                                    let idx
                                     const parts = val.split(":")
                                     if (variants.length === 0) {
-                                        let asc, end
-                                        for (
-                                            idx = 0, end = parts.length - 2, asc = end >= 0;
-                                            asc ? idx <= end : idx >= end;
-                                            asc ? idx++ : idx--
-                                        ) {
+                                        for (let idx of _.range(0, parts.length - 1)) {
                                             variants.push([])
                                         }
                                     }
-                                    return (() => {
-                                        let asc1, end1
-                                        const result = []
-                                        for (
-                                            idx = 1, end1 = parts.length - 1, asc1 = end1 >= 1;
-                                            asc1 ? idx <= end1 : idx >= end1;
-                                            asc1 ? idx++ : idx--
-                                        ) {
-                                            result.push(variants[idx - 1].push(parts[idx]))
-                                        }
-                                        return result
-                                    })()
+                                    for (let idx of _.range(1, parts.length)) {
+                                        variants[idx - 1].push(parts[idx])
+                                    }
                                 })
 
                                 const key = attrVal[0].split(":")[0]
@@ -812,7 +744,7 @@ korpApp.directive("compareCtrl", () => ({
                             if (type === "set" && (val === "|" || val === "")) {
                                 return `ambiguity(${attrKey}) = 0`
                             } else {
-                                return `${attrKey} ${op} \"${val}\"`
+                                return `${attrKey} ${op} "${val}"`
                             }
                         })
 
@@ -836,25 +768,12 @@ korpApp.directive("compareCtrl", () => ({
                         }
                     }
                     return $rootScope.kwicTabs.push({ queryParams: opts })
-                })
+                }
             },
             function() {
                 s.loading = false
-                return (s.error = true)
+                s.error = true
             }
         )
     }
 }))
-
-function __guard__(value, transform) {
-    return typeof value !== "undefined" && value !== null ? transform(value) : undefined
-}
-function __range__(left, right, inclusive) {
-    let range = []
-    let ascending = left < right
-    let end = !inclusive ? right : ascending ? right + 1 : right - 1
-    for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-        range.push(i)
-    }
-    return range
-}

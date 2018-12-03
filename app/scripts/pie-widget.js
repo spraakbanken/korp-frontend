@@ -131,7 +131,7 @@ const pie_widget = {
             }
         }
 
-        const r = Raphael(this.options.container_id)
+        const r = window.Raphael(this.options.container_id)
         this.canvas = r
         const pieTrack = []
         pieTrack["accumulatedArc"] = 0

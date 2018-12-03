@@ -48,6 +48,7 @@
         "timeProxy": true,
         "CSV": true,
         "locationSearch": true,
-        "statisticsService": true
+        "statisticsService": true,
+        "statisticsFormatting": true
     }
 }
