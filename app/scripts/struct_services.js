@@ -1,3 +1,4 @@
+/** @format */
 /* eslint-disable
     no-return-assign,
     no-undef,
@@ -23,15 +24,10 @@ const korpApp = angular.module("korpApp")
 // diretives calls registerScope to register for updates
 // service calls scope.update() when changes occur
 korpApp.factory("globalFilterService", function($rootScope, $location, $q, structService) {
-
     const scopes = []
-    
+
     const callDirectives = () =>
-        listenerDef.promise.then(() =>
-            Array.from(scopes).map((scope) =>
-                scope.update(dataObj))
-        )
-    
+        listenerDef.promise.then(() => Array.from(scopes).map(scope => scope.update(dataObj)))
 
     // deferred for waiting for all directives to register
     var listenerDef = $q.defer()
@@ -51,7 +47,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
     const initFilters = function() {
         let filter
         const filterValues = dataObj.filterValues || {}
-        
+
         // delete any filter values that are not in the selected filters
         for (filter in filterValues) {
             const v = filterValues[filter]
@@ -69,35 +65,40 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
                 filterValues[filter] = newFilter
             }
         }
-        
-        return dataObj.filterValues = filterValues
+
+        return (dataObj.filterValues = filterValues)
     }
 
     // only send corpora that supports all selected filters (if filterSelection is "union")
     const getSupportedCorpora = function() {
-        const corporaPerFilter = _.map(dataObj.selectedFilters, filter => dataObj.attributes[filter].corpora)
+        const corporaPerFilter = _.map(
+            dataObj.selectedFilters,
+            filter => dataObj.attributes[filter].corpora
+        )
         return _.intersection(...Array.from(corporaPerFilter || []))
     }
 
     var mergeObjects = function(...values) {
         if (_.every(values, val => Array.isArray(val))) {
             return _.union(...Array.from(values || []))
-        } else if (_.every(values, val => (!(Array.isArray(val))) && (typeof val === "object"))) {
+        } else if (_.every(values, val => !Array.isArray(val) && typeof val === "object")) {
             const newObj = {}
-            const allKeys = _.union(...Array.from((_.map(values, val => _.keys(val))) || []))
+            const allKeys = _.union(...Array.from(_.map(values, val => _.keys(val)) || []))
             for (var k of Array.from(allKeys)) {
                 const allValsForKey = _.map(values, val => val[k])
-                const newValues = _.filter(allValsForKey, val => (!_.isEmpty(val)) || (Number.isInteger(val)))
+                const newValues = _.filter(
+                    allValsForKey,
+                    val => !_.isEmpty(val) || Number.isInteger(val)
+                )
                 newObj[k] = mergeObjects(...Array.from(newValues || []))
             }
             return newObj
         } else if (_.every(values, val => Number.isInteger(val))) {
-            return _.reduce(values, (a,b) => a + b, 0)
+            return _.reduce(values, (a, b) => a + b, 0)
         } else {
             return c.error("Cannot merge objects a and b")
         }
     }
-
 
     // get data for selected attributes from backend, merges values from different corpora
     // and flattens data structure?
@@ -108,26 +109,27 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         if (dataObj.attributes[_.last(dataObj.defaultFilters)].settings.type === "set") {
             opts.split = true
         }
-        return structService.getStructValues(corpora, dataObj.selectedFilters, opts).then(function(data) {
-            currentData = {}
-            for (let corpus of Array.from(corpora)) {
-                const object = data[corpus.toUpperCase()]
-                for (let k in object) {
-                    const v = object[k]
-                    if (!(k in currentData)) {
-                        currentData[k] = v
-                    } else {
-                        currentData[k] = mergeObjects(currentData[k], v)
+        return structService
+            .getStructValues(corpora, dataObj.selectedFilters, opts)
+            .then(function(data) {
+                currentData = {}
+                for (let corpus of Array.from(corpora)) {
+                    const object = data[corpus.toUpperCase()]
+                    for (let k in object) {
+                        const v = object[k]
+                        if (!(k in currentData)) {
+                            currentData[k] = v
+                        } else {
+                            currentData[k] = mergeObjects(currentData[k], v)
+                        }
                     }
                 }
-            }
-            return updateData()
-        })
+                return updateData()
+            })
     }
 
     // when user selects an attribute, update all possible filter values and counts
     var updateData = function() {
-
         let filter
         var collectAndSum = function(filters, elements, parentSelected) {
             const filter = filters[0]
@@ -143,8 +145,9 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
                 if (value === "") {
                     value = "-"
                 }
-                const selected = (Array.from(currentValues).includes(value)) || (_.isEmpty(currentValues))
-                
+                const selected =
+                    Array.from(currentValues).includes(value) || _.isEmpty(currentValues)
+
                 // filter of any parent values that do not support the child values
                 include = include || selected
 
@@ -152,7 +155,9 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
                     childCount = child
                     include = true
                 } else {
-                    [childCount, include] = Array.from(collectAndSum(_.tail(filters), child, parentSelected && selected))
+                    ;[childCount, include] = Array.from(
+                        collectAndSum(_.tail(filters), child, parentSelected && selected)
+                    )
                 }
 
                 if (include && parentSelected) {
@@ -183,7 +188,9 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
             const result = []
             for (filter of Array.from(dataObj.selectedFilters)) {
                 const possibleValuesTmp = {}
-                for (let [value, count] of Array.from(dataObj.filterValues[filter].possibleValues)) {
+                for (let [value, count] of Array.from(
+                    dataObj.filterValues[filter].possibleValues
+                )) {
                     if (!(value in possibleValuesTmp)) {
                         possibleValuesTmp[value] = 0
                     }
@@ -192,18 +199,20 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
                 dataObj.filterValues[filter].possibleValues = []
                 for (let k in possibleValuesTmp) {
                     const v = possibleValuesTmp[k]
-                    dataObj.filterValues[filter].possibleValues.push([k,v])
+                    dataObj.filterValues[filter].possibleValues.push([k, v])
                 }
 
-                result.push(dataObj.filterValues[filter].possibleValues.sort(function(a, b) {
-                    if (a[0] < b[0]) {
-                        return -1
-                    } else if (a[0] > b[0]) {
-                        return 1
-                    } else {
-                        return 0
-                    }
-                }))
+                result.push(
+                    dataObj.filterValues[filter].possibleValues.sort(function(a, b) {
+                        if (a[0] < b[0]) {
+                            return -1
+                        } else if (a[0] > b[0]) {
+                            return 1
+                        } else {
+                            return 0
+                        }
+                    })
+                )
             }
             return result
         })()
@@ -219,12 +228,19 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
 
     const setFromLocation = function(globalFilter) {
         let attrKey
-        if (!globalFilter) { return }
-        if (!dataObj.filterValues) { return }
+        if (!globalFilter) {
+            return
+        }
+        if (!dataObj.filterValues) {
+            return
+        }
         const parsedFilter = JSON.parse(atob(globalFilter))
         for (attrKey in parsedFilter) {
             const attrValues = parsedFilter[attrKey]
-            if (!(attrKey in dataObj.filterValues) && Array.from(dataObj.optionalFilters).includes(attrKey)) {
+            if (
+                !(attrKey in dataObj.filterValues) &&
+                Array.from(dataObj.optionalFilters).includes(attrKey)
+            ) {
                 addNewFilter(attrKey, false)
                 dataObj.filterValues[attrKey] = {}
             }
@@ -239,7 +255,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
             for (attrKey in dataObj.filterValues) {
                 const _ = dataObj.filterValues[attrKey]
                 if (!(attrKey in parsedFilter)) {
-                    result.push(dataObj.filterValues[attrKey].value = [])
+                    result.push((dataObj.filterValues[attrKey].value = []))
                 } else {
                     result.push(undefined)
                 }
@@ -256,8 +272,13 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
                 const attrValues = dataObj.filterValues[attrKey]
                 const attrType = dataObj.attributes[attrKey].settings.type
                 var op = attrType === "set" ? "contains" : "="
-                result.push(Array.from(attrValues.value).map((attrValue) => (
-                    { type: `_.${attrKey}`, op, val: attrValue })))
+                result.push(
+                    attrValues.value.map(attrValue => ({
+                        type: `_.${attrKey}`,
+                        op,
+                        val: attrValue
+                    }))
+                )
             }
             return result
         })()
@@ -275,10 +296,10 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         }
         if (!_.isEmpty(rep)) {
             $location.search("global_filter", btoa(JSON.stringify(rep)))
-            return $rootScope.globalFilter = makeCqp()
+            return ($rootScope.globalFilter = makeCqp())
         } else {
             $location.search("global_filter", null)
-            return $rootScope.globalFilter = null
+            return ($rootScope.globalFilter = null)
         }
     }
 
@@ -286,19 +307,25 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         if (settings.corpusListing.selected.length === 0) {
             dataObj.showDirective = false
         } else {
-            const [newDefaultFilters, defAttributes] = Array.from(settings.corpusListing.getDefaultFilters())
-            const [newOptionalFilters, possAttributes] = Array.from(settings.corpusListing.getCurrentFilters())
+            const [newDefaultFilters, defAttributes] = Array.from(
+                settings.corpusListing.getDefaultFilters()
+            )
+            const [newOptionalFilters, possAttributes] = Array.from(
+                settings.corpusListing.getCurrentFilters()
+            )
 
-            if ((_.isEmpty(newDefaultFilters)) && (_.isEmpty(newOptionalFilters))) {
+            if (_.isEmpty(newDefaultFilters) && _.isEmpty(newOptionalFilters)) {
                 dataObj.showDirective = false
-                $location.search("global_filter", null)            
+                $location.search("global_filter", null)
                 for (let filter of Array.from(dataObj.selectedFilters)) {
                     dataObj.filterValues[filter].value = []
                 }
-                
             } else {
                 dataObj.showDirective = true
-                if (!(_.isEqual(newDefaultFilters, dataObj.defaultFilters)) && (_.isEqual(newOptionalFilters, dataObj.optionalFilters))) {
+                if (
+                    !_.isEqual(newDefaultFilters, dataObj.defaultFilters) &&
+                    _.isEqual(newOptionalFilters, dataObj.optionalFilters)
+                ) {
                     dataObj.defaultFilters = newDefaultFilters
                     dataObj.optionalFilters = newOptionalFilters
                     dataObj.attributes = _.extend({}, defAttributes, possAttributes)
@@ -316,7 +343,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         }
         $rootScope.globalFilterDef.resolve()
     })
-    
+
     $rootScope.$watch(() => $location.search().global_filter, filter => setFromLocation(filter))
 
     return {
@@ -341,61 +368,61 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
     }
 })
 
-korpApp.factory("structService",  ($http, $q) =>
+korpApp.factory("structService", ($http, $q) => ({
+    getStructValues(corpora, attributes, { count, returnByCorpora, split }) {
+        const def = $q.defer()
 
-    ({
-        getStructValues(corpora, attributes, { count, returnByCorpora, split }) {
-
-            const def = $q.defer()
-
-            const structValue = attributes.join(">")
-            if (count == null) { count = true }
-            if (returnByCorpora == null) { returnByCorpora = true }
-
-            const params = {
-                corpus: corpora.join(","),
-                struct: structValue,
-                count
-            }
-
-            if (split) {
-                params.split = (_.last(attributes))
-            }
-
-            const conf = {
-                url: settings.korpBackendURL + "/struct_values",
-                params,
-                method: "GET",
-                headers: {}
-            }
-
-            _.extend(conf.headers, model.getAuthorizationHeader())
-
-            $http(conf).then(function({ data }) {
-                let result, values
-                if (data.ERROR) {
-                    def.reject()
-                    return
-                }
-            
-                if (returnByCorpora) {
-                    result = {}
-                    for (corpora in data.corpora) {
-                        values = data.corpora[corpora]
-                        result[corpora] = values[structValue]
-                    }
-                    return def.resolve(result)
-                } else {
-                    result = []
-                    for (corpora in data.corpora) {
-                        values = data.corpora[corpora]
-                        result = result.concat(values[structValue])
-                    }
-                    return def.resolve(result)
-                }
-            })
-
-            return def.promise
+        const structValue = attributes.join(">")
+        if (count == null) {
+            count = true
         }
-    })
-)
+        if (returnByCorpora == null) {
+            returnByCorpora = true
+        }
+
+        const params = {
+            corpus: corpora.join(","),
+            struct: structValue,
+            count
+        }
+
+        if (split) {
+            params.split = _.last(attributes)
+        }
+
+        const conf = {
+            url: settings.korpBackendURL + "/struct_values",
+            params,
+            method: "GET",
+            headers: {}
+        }
+
+        _.extend(conf.headers, model.getAuthorizationHeader())
+
+        $http(conf).then(function({ data }) {
+            let result, values
+            if (data.ERROR) {
+                def.reject()
+                return
+            }
+
+            if (returnByCorpora) {
+                result = {}
+                for (corpora in data.corpora) {
+                    values = data.corpora[corpora]
+                    result[corpora] = values[structValue]
+                }
+                return def.resolve(result)
+            } else {
+                result = []
+                for (corpora in data.corpora) {
+                    values = data.corpora[corpora]
+                    result = result.concat(values[structValue])
+                }
+                return def.resolve(result)
+            }
+        })
+
+        return def.promise
+    }
+}))
