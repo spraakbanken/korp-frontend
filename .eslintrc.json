@@ -49,6 +49,8 @@
         "CSV": true,
         "locationSearch": true,
         "statisticsService": true,
+        "Slick": true,
+        "Rickshaw": true,
         "statisticsFormatting": true
     }
 }

@@ -42,7 +42,7 @@ angular
             s.onPopoverClick = event => event.stopPropagation()
 
             s.newsitems = []
-            s.initData = function() {
+            function initData() {
                 let d
                 s.lastChecked = localStorage.getItem(s.storage)
                 if (!s.lastChecked) {
@@ -50,7 +50,7 @@ angular
                     d.setFullYear(d.getFullYear() - 1)
                     s.lastChecked = d.toISOString().slice(0, 10)
                 }
-                return $.ajax({
+                $.ajax({
                     type: "GET",
                     url: settings.newsDeskUrl,
                     async: false,
@@ -58,14 +58,12 @@ angular
                     contentType: "application/json",
                     dataType: "jsonp",
                     success(json) {
-                        const currentDate = new (Date()
-                            .toISOString()
-                            .slice(0, 10))()
+                        const currentDate = new Date().toISOString().slice(0, 10)
                         s.newsitems = _.filter(json, newsitem => {
                             return !newsitem.e || newsitem.e >= currentDate
                         })
                         let n = 0
-                        for (let nItem of Array.from(s.newsitems)) {
+                        for (let nItem of s.newsitems) {
                             if (nItem.d > s.lastChecked) {
                                 n += 1
                             }
@@ -83,7 +81,7 @@ angular
             s.currentLang = $location.search().lang || "sv"
 
             s.numNewNews = 0
-            s.initData()
+            initData()
 
             s.togglePopover = function(event) {
                 if (s.isPopoverVisible) {
