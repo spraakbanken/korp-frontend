@@ -1,15 +1,4 @@
 /** @format */
-/* eslint-disable
-    no-undef,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function() {
@@ -36,32 +25,31 @@ const createStatisticsService = function() {
         const columns = []
         const cl = settings.corpusListing.subsetFactory(corporaKeys)
         const attrObj = cl.getStructAttrs()
-        for (var [reduceVal, reduceValLabel] of Array.from(_.zip(reduceVals, reduceValLabels))) {
-            ;(reduceVal =>
-                columns.push({
-                    id: reduceVal,
-                    name: reduceValLabel,
-                    field: "hit_value",
-                    sortable: true,
-                    formatter(row, cell, value, columnDef, dataContext) {
-                        if (dataContext["rowId"] !== 0) {
-                            const formattedValue = statisticsFormatting.reduceStringify(
-                                reduceVal,
-                                dataContext[reduceVal],
-                                attrObj[reduceVal]
-                            )
-                            dataContext["formattedValue"][reduceVal] = formattedValue
-                            return `<span class="statistics-link" data-row=${
-                                dataContext["rowId"]
-                            }>${formattedValue}</span>`
-                        } else {
-                            return "&Sigma;"
-                        }
-                    },
-                    minWidth,
-                    cssClass: "parameter-column",
-                    headerCssClass: "localized-header"
-                }))(reduceVal)
+        for (let [reduceVal, reduceValLabel] of _.zip(reduceVals, reduceValLabels)) {
+            columns.push({
+                id: reduceVal,
+                name: reduceValLabel,
+                field: "hit_value",
+                sortable: true,
+                formatter(row, cell, value, columnDef, dataContext) {
+                    if (dataContext["rowId"] !== 0) {
+                        const formattedValue = statisticsFormatting.reduceStringify(
+                            reduceVal,
+                            dataContext[reduceVal],
+                            attrObj[reduceVal]
+                        )
+                        dataContext["formattedValue"][reduceVal] = formattedValue
+                        return `<span class="statistics-link" data-row=${
+                            dataContext["rowId"]
+                        }>${formattedValue}</span>`
+                    } else {
+                        return "&Sigma;"
+                    }
+                },
+                minWidth,
+                cssClass: "parameter-column",
+                headerCssClass: "localized-header"
+            })
         }
 
         columns.push({
