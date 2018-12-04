@@ -1,23 +1,4 @@
 /** @format */
-/* eslint-disable
-    no-return-assign,
-    no-undef,
-    no-unused-vars,
-    no-useless-constructor,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS103: Rewrite code to no longer use __guard__
- * DS201: Simplify complex destructure assignments
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-let CompareSearches
 const korpApp = angular.module("korpApp")
 korpApp.factory("utils", $location => ({
     valfilter(attrobj) {
@@ -29,88 +10,72 @@ korpApp.factory("utils", $location => ({
     },
 
     setupHash(scope, config) {
-        const onWatch = () =>
-            (() => {
-                const result = []
-                for (let obj of Array.from(config)) {
-                    let val = $location.search()[obj.key]
-                    if (!val) {
-                        if (obj.default != null) {
-                            val = obj.default
-                        } else {
-                            continue
-                        }
-                    }
-
-                    val = (obj.val_in || _.identity)(val)
-
-                    if ("scope_name" in obj) {
-                        result.push((scope[obj.scope_name] = val))
-                    } else if ("scope_func" in obj) {
-                        result.push(scope[obj.scope_func](val))
+        const onWatch = () => {
+            for (let obj of config) {
+                let val = $location.search()[obj.key]
+                if (!val) {
+                    if (obj.default != null) {
+                        val = obj.default
                     } else {
-                        result.push((scope[obj.key] = val))
+                        continue
                     }
                 }
-                return result
-            })()
 
+                val = (obj.val_in || _.identity)(val)
+
+                if ("scope_name" in obj) {
+                    scope[obj.scope_name] = val
+                } else if ("scope_func" in obj) {
+                    scope[obj.scope_func](val)
+                } else {
+                    scope[obj.key] = val
+                }
+            }
+        }
         onWatch()
         scope.$watch(() => $location.search(), () => onWatch())
 
-        return (() => {
-            const result = []
-            for (let obj of Array.from(config)) {
-                const watch = obj.expr || obj.scope_name || obj.key
-                result.push(
-                    scope.$watch(
-                        watch,
-                        ((obj, watch) =>
-                            function(val) {
-                                val = (obj.val_out || _.identity)(val)
-                                if (val === obj.default) {
-                                    val = null
-                                }
-                                $location.search(obj.key, val || null)
-                                if (obj.key === "page") {
-                                    c.log("post change", watch, val)
-                                }
-                                return typeof obj.post_change === "function"
-                                    ? obj.post_change(val)
-                                    : undefined
-                            })(obj, watch)
-                    )
-                )
-            }
-            return result
-        })()
+        for (let obj of config) {
+            const watch = obj.expr || obj.scope_name || obj.key
+            scope.$watch(
+                watch,
+                ((obj, watch) =>
+                    function(val) {
+                        val = (obj.val_out || _.identity)(val)
+                        if (val === obj.default) {
+                            val = null
+                        }
+                        $location.search(obj.key, val || null)
+                        if (obj.key === "page") {
+                            c.log("post change", watch, val)
+                        }
+                        if (typeof obj.post_change === "function") {
+                            obj.post_change(val)
+                        }
+                    })(obj, watch)
+            )
+        }
     }
 }))
 
 korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
     requestCompare(cmpObj1, cmpObj2, reduce) {
         reduce = _.map(reduce, item => item.replace(/^_\./, ""))
-
+        let cl = settings.corpusListing
         // remove all corpora which do not include all the "reduce"-attributes
-        const filterFun = item => settings.corpusListing.corpusHasAttrs(item, reduce)
+        const filterFun = item => cl.corpusHasAttrs(item, reduce)
         const corpora1 = _.filter(cmpObj1.corpora, filterFun)
         const corpora2 = _.filter(cmpObj2.corpora, filterFun)
 
-        const corpusListing = settings.corpusListing.subsetFactory(cmpObj1.corpora)
+        const corpusListing = cl.subsetFactory(cmpObj1.corpora)
 
-        const split = _.filter(
-            reduce,
-            r => __guard__(settings.corpusListing.getCurrentAttributes()[r], x => x.type) === "set"
-        ).join(",")
+        let attrs = cl.getCurrentAttributes()
+        const split = _.filter(reduce, r => (attrs[r] && attrs[r].type) === "set").join(",")
 
-        const rankedReduce = _.filter(reduce, item =>
-            __guard__(
-                settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
-                    item
-                ],
-                x => x.ranked
-            )
-        )
+        const rankedReduce = _.filter(reduce, item => {
+            let attr = cl.getCurrentAttributes(cl.getReduceLang())[item]
+            return attr && attr.ranked
+        })
         const top = _.map(rankedReduce, item => item + ":1").join(",")
 
         const def = $q.defer()
@@ -173,11 +138,11 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
                     const cqp = []
                     const elems = []
 
-                    _.map(value, function(val) {
+                    for (let val in value) {
                         abs += val.abs
                         loglike += val.loglike
-                        return elems.push(val.value)
-                    })
+                        elems.push(val.value)
+                    }
                     if (Math.abs(loglike) > currentMax) {
                         currentMax = Math.abs(loglike)
                     }
@@ -186,9 +151,8 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
                 return [res, currentMax]
             }
-
-            ;[tables.positive, max] = Array.from(groupAndSum(tables.positive, 0))
-            ;[tables.negative, max] = Array.from(groupAndSum(tables.negative, max))
+            ;[tables.positive, max] = groupAndSum(tables.positive, 0)
+            ;[tables.negative, max] = groupAndSum(tables.negative, max)
 
             return def.resolve([tables, max, cmpObj1, cmpObj2, reduce], xhr)
         })
@@ -233,7 +197,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             const createResult = function(subResult, cqp, label) {
                 const mergeSubResults = function(absolute, relative) {
                     const res_list = []
-                    for (let { value: value1, freq: abs_freq } of Array.from(absolute)) {
+                    for (let { value: value1, freq: abs_freq } of absolute) {
                         const remove_idxs = []
                         for (let idx = 0; idx < relative.length; idx++) {
                             const { value: value2, freq: rel_freq } = relative[idx]
@@ -257,7 +221,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
                     if (hit === "" || hit.startsWith(" ")) {
                         return
                     }
-                    const [name, countryCode, lat, lng] = Array.from(hit.split(";"))
+                    const [name, countryCode, lat, lng] = hit.split(";")
 
                     return points.push({
                         abs: actual_hit.abs_freq,
@@ -280,7 +244,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
                 result = [createResult(data.total, cqp, "Σ")]
             } else {
                 result = []
-                for (let subResult of Array.from(data.total.slice(1, data.total.length))) {
+                for (let subResult of data.total.slice(1, data.total.length)) {
                     result.push(createResult(subResult, subResult.cqp, cqpExprs[subResult.cqp]))
                 }
             }
@@ -302,8 +266,6 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
 korpApp.factory("nameEntitySearch", function($rootScope, $q) {
     class NameEntities {
-        constructor() {}
-
         request(cqp) {
             this.def = $q.defer()
             this.promise = this.def.promise
@@ -376,10 +338,10 @@ korpApp.factory("searches", function(utils, $location, $rootScope, $http, $q, na
                 }
             }).then(function(response) {
                 const { data } = response
-                for (let corpus of Array.from(settings.corpusListing.corpora)) {
+                for (let corpus of settings.corpusListing.corpora) {
                     corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
                     const privateStructAttrs = []
-                    for (let attr of Array.from(data["corpora"][corpus.id.toUpperCase()].attrs.s)) {
+                    for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
                         if (attr.indexOf("__") !== -1) {
                             privateStructAttrs.push(attr)
                         }
@@ -418,7 +380,7 @@ korpApp.factory("searches", function(utils, $location, $rootScope, $http, $q, na
         if (!searchExpr) {
             return
         }
-        let [type, ...value] = Array.from(searchExpr != null ? searchExpr.split("|") : undefined)
+        let [type, ...value] = (searchExpr && searchExpr.split("|")) || []
         value = value.join("|")
 
         newValues[1] = Number(newValues[1]) || 0
@@ -443,38 +405,40 @@ korpApp.factory("searches", function(utils, $location, $rootScope, $http, $q, na
             }
             view.updateSearchHistory(historyValue, $location.absUrl())
         }
-        return $q
-            .all([searches.infoDef, searches.langDef.promise, $rootScope.globalFilterDef.promise])
-            .then(function() {
-                let extendedSearch = false
-                if (type === "cqp") {
-                    extendedSearch = true
-                    if (!value) {
-                        value = $location.search().cqp
-                    }
+        $q.all([
+            searches.infoDef,
+            searches.langDef.promise,
+            $rootScope.globalFilterDef.promise
+        ]).then(function() {
+            let extendedSearch = false
+            if (type === "cqp") {
+                extendedSearch = true
+                if (!value) {
+                    value = $location.search().cqp
                 }
-                if (["cqp", "word", "lemgram"].includes(type)) {
-                    searches.activeSearch = {
-                        type,
-                        val: value,
-                        page: newValues[1],
-                        pageOnly
-                    }
-                } else if (type === "saldo") {
-                    extendedSearch.setOneToken("saldo", value)
+            }
+            if (["cqp", "word", "lemgram"].includes(type)) {
+                searches.activeSearch = {
+                    type,
+                    val: value,
+                    page: newValues[1],
+                    pageOnly
                 }
+            } else if (type === "saldo") {
+                extendedSearch.setOneToken("saldo", value)
+            }
 
-                if (type === "cqp") {
-                    if (extendedSearch && $rootScope.globalFilter) {
-                        value = CQP.stringify(
-                            CQP.mergeCqpExprs(CQP.parse(value || "[]"), $rootScope.globalFilter)
-                        )
-                    }
-                    searches.kwicSearch(value, pageOnly)
+            if (type === "cqp") {
+                if (extendedSearch && $rootScope.globalFilter) {
+                    value = CQP.stringify(
+                        CQP.mergeCqpExprs(CQP.parse(value || "[]"), $rootScope.globalFilter)
+                    )
                 }
+                searches.kwicSearch(value, pageOnly)
+            }
 
-                return (oldValues = [].concat(newValues))
-            })
+            oldValues = [].concat(newValues)
+        })
     })
 
     return searches
@@ -482,7 +446,7 @@ korpApp.factory("searches", function(utils, $location, $rootScope, $http, $q, na
 
 korpApp.service(
     "compareSearches",
-    (CompareSearches = class CompareSearches {
+    class CompareSearches {
         constructor() {
             if (currentMode !== "default") {
                 this.key = `saved_searches_${currentMode}`
@@ -507,7 +471,7 @@ korpApp.service(
             this.savedSearches.splice(0, 9e9, ...[].concat([]))
             return $.jStorage.set(this.key, this.savedSearches)
         }
-    })
+    }
 )
 
 korpApp.factory("lexicons", function($q, $http) {
@@ -516,7 +480,7 @@ korpApp.factory("lexicons", function($q, $http) {
     let cancelNext = false
     return {
         lemgramCancel() {
-            return (cancelNext = true)
+            cancelNext = true
         },
         getLemgrams(wf, resources, corporaIDs) {
             console.log("getLemgrams")
@@ -566,15 +530,14 @@ korpApp.factory("lexicons", function($q, $http) {
                             data: `lemgram=${lemgram}&count=lemgram&corpus=${corpora}`,
                             headers,
                             timeout: canceller.promise
-                        }).then(response => {
-                            ;({ data } = response)
+                        }).then(({ data }) => {
                             delete data.time
                             const allLemgrams = []
                             for (lemgram in data) {
                                 const count = data[lemgram]
                                 allLemgrams.push({ lemgram: lemgram, count: count })
                             }
-                            for (let klemgram of Array.from(karpLemgrams)) {
+                            for (let klemgram of karpLemgrams) {
                                 if (!data[klemgram]) {
                                     allLemgrams.push({ lemgram: klemgram, count: 0 })
                                 }
@@ -629,8 +592,7 @@ korpApp.factory("lexicons", function($q, $http) {
                             url: `${karpURL}/minientry`,
                             params: senseargs
                         })
-                            .then(function(response) {
-                                ;({ data } = response)
+                            .then(function({ data }) {
                                 if (data.hits.total === 0) {
                                     deferred.resolve([])
                                     return
@@ -638,11 +600,10 @@ korpApp.factory("lexicons", function($q, $http) {
                                 const senses = _.map(data.hits.hits, entry => ({
                                     sense: entry._source.Sense[0].senseid,
                                     desc:
-                                        entry._source.Sense[0].SenseRelations != null
-                                            ? entry._source.Sense[0].SenseRelations.primary
-                                            : undefined
+                                        entry._source.Sense[0].SenseRelations &&
+                                        entry._source.Sense[0].SenseRelations.primary
                                 }))
-                                return deferred.resolve(senses)
+                                deferred.resolve(senses)
                             })
                             .catch(response => deferred.resolve([]))
                     }
@@ -653,7 +614,7 @@ korpApp.factory("lexicons", function($q, $http) {
 
         relatedWordSearch(lemgram) {
             const def = $q.defer()
-            const req = $http({
+            $http({
                 url: `${karpURL}/minientry`,
                 method: "GET",
                 params: {
@@ -661,15 +622,13 @@ korpApp.factory("lexicons", function($q, $http) {
                     show: "sense",
                     resource: "saldo"
                 }
-            }).then(function(response) {
-                let { data } = response
+            }).then(function({ data }) {
                 if (data.hits.total === 0) {
                     def.resolve([])
                 } else {
-                    let http
                     const senses = _.map(data.hits.hits, entry => entry._source.Sense[0].senseid)
 
-                    return (http = $http({
+                    $http({
                         url: `${karpURL}/minientry`,
                         method: "GET",
                         params: {
@@ -677,8 +636,7 @@ korpApp.factory("lexicons", function($q, $http) {
                             show: "LU,sense",
                             resource: "swefn"
                         }
-                    }).then(function(response) {
-                        ;({ data } = response)
+                    }).then(function({ data }) {
                         if (data.hits.total === 0) {
                             def.resolve([])
                         } else {
@@ -689,7 +647,7 @@ korpApp.factory("lexicons", function($q, $http) {
 
                             return def.resolve(eNodes)
                         }
-                    }))
+                    })
                 }
             })
 
@@ -697,7 +655,3 @@ korpApp.factory("lexicons", function($q, $http) {
         }
     }
 })
-
-function __guard__(value, transform) {
-    return typeof value !== "undefined" && value !== null ? transform(value) : undefined
-}
