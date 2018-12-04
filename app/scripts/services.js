@@ -1,3 +1,4 @@
+/** @format */
 /* eslint-disable
     no-return-assign,
     no-undef,
@@ -18,269 +19,288 @@
  */
 let CompareSearches
 const korpApp = angular.module("korpApp")
-korpApp.factory("utils", $location =>
-    ({
-        valfilter(attrobj) {
-            if (attrobj.isStructAttr) { return `_.${attrobj.value}` } else { return attrobj.value }
-        },
+korpApp.factory("utils", $location => ({
+    valfilter(attrobj) {
+        if (attrobj.isStructAttr) {
+            return `_.${attrobj.value}`
+        } else {
+            return attrobj.value
+        }
+    },
 
-        setupHash(scope, config) {
-
-            const onWatch = () =>
-                (() => {
-                    const result = []
-                    for (let obj of Array.from(config)) {
-                        let val = $location.search()[obj.key]
-                        if (!val) {
-                            if (obj.default != null) { val = obj.default } else { continue }
-                        }
-
-
-                        val = (obj.val_in || _.identity)(val)
-
-                        if ("scope_name" in obj) {
-                            result.push(scope[obj.scope_name] = val)
-                        } else if ("scope_func" in obj) {
-                            result.push(scope[obj.scope_func](val))
-                        } else {
-                            result.push(scope[obj.key] = val)
-                        }
-                    }
-                    return result
-                })()
-            
-
-            onWatch()
-            scope.$watch( () => $location.search(), () => onWatch())
-
-            return (() => {
+    setupHash(scope, config) {
+        const onWatch = () =>
+            (() => {
                 const result = []
                 for (let obj of Array.from(config)) {
-                    const watch = obj.expr || obj.scope_name || obj.key
-                    result.push(scope.$watch(watch, ((obj, watch) =>
-                        function(val) {
-                            val = (obj.val_out || _.identity)(val)
-                            if (val === obj.default) { val = null }
-                            $location.search(obj.key, val || null)
-                            if (obj.key === "page") { c.log("post change", watch, val) }
-                            return (typeof obj.post_change === 'function' ? obj.post_change(val) : undefined)
+                    let val = $location.search()[obj.key]
+                    if (!val) {
+                        if (obj.default != null) {
+                            val = obj.default
+                        } else {
+                            continue
                         }
-                    )(obj, watch)
-                    ))
+                    }
+
+                    val = (obj.val_in || _.identity)(val)
+
+                    if ("scope_name" in obj) {
+                        result.push((scope[obj.scope_name] = val))
+                    } else if ("scope_func" in obj) {
+                        result.push(scope[obj.scope_func](val))
+                    } else {
+                        result.push((scope[obj.key] = val))
+                    }
                 }
                 return result
             })()
-        }
-    })
-)
 
+        onWatch()
+        scope.$watch(() => $location.search(), () => onWatch())
 
-korpApp.factory('backend', ($http, $q, utils, lexicons) =>
-    ({
-        requestCompare(cmpObj1, cmpObj2, reduce) {
-            reduce = _.map(reduce, item => item.replace(/^_\./, ""))
-
-            // remove all corpora which do not include all the "reduce"-attributes
-            const filterFun = item => settings.corpusListing.corpusHasAttrs(item, reduce)
-            const corpora1 = _.filter(cmpObj1.corpora, filterFun)
-            const corpora2 = _.filter(cmpObj2.corpora, filterFun)
-
-            const corpusListing = settings.corpusListing.subsetFactory(cmpObj1.corpora)
-
-            const split = _.filter(reduce, r => __guard__(settings.corpusListing.getCurrentAttributes()[r], x => x.type) === "set").join(',')
-
-            const rankedReduce = _.filter(reduce, item => __guard__(settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[item], x => x.ranked))
-            const top = _.map(rankedReduce, item => item + ":1").join(',')
-
-            const def = $q.defer()
-            const params = {
-                group_by : reduce.join(','),
-                set1_corpus : corpora1.join(",").toUpperCase(),
-                set1_cqp : cmpObj1.cqp,
-                set2_corpus : corpora2.join(",").toUpperCase(),
-                set2_cqp : cmpObj2.cqp,
-                max : 50,
-                split,
-                top
-            }
-
-            const conf = {
-                url : settings.korpBackendURL + "/loglike",
-                params,
-                method : "GET",
-                headers : {}
-            }
-
-
-            _.extend(conf.headers, model.getAuthorizationHeader())
-
-
-            const xhr = $http(conf)
-
-            xhr.then(function(response) {
-                let max
-                const { data } = response
-
-                if (data.ERROR) {
-                    def.reject()
-                    return
-                }
-
-                const loglikeValues = data.loglike
-
-                const objs = _.map(loglikeValues, (value, key) =>
-                    ({
-                        value: key,
-                        loglike: value
-                    })
-            )
-
-                const tables = _.groupBy(objs, function(obj) {
-                    if (obj.loglike > 0) {
-                        obj.abs = data.set2[obj.value]
-                        return "positive"
-                    } else {
-                        obj.abs = data.set1[obj.value]
-                        return "negative"
-                    }
-                })
-
-                const groupAndSum = function(table, currentMax) {
-                    const groups = _.groupBy(table, obj => obj.value.replace(/(:.+?)(\/|$| )/g, "$2"))
-
-                    const res = _.map(groups, function(value, key) {
-                        const tokenLists = _.map(key.split("/"), tokens => tokens.split(" "))
-
-                        let loglike = 0
-                        let abs = 0
-                        const cqp = []
-                        const elems = []
-
-                        _.map(value, function(val) {
-                            abs += val.abs
-                            loglike += val.loglike
-                            return elems.push(val.value)
-                        })
-                        if (Math.abs(loglike) > currentMax) {
-                            currentMax = Math.abs(loglike)
-                        }
-                        return { key, loglike, abs, elems, tokenLists }
-                })
-
-                    return [res, currentMax]
-                };
-
-                [tables.positive, max] = Array.from(groupAndSum(tables.positive, 0));
-                [tables.negative, max] = Array.from(groupAndSum(tables.negative, max))
-
-                return def.resolve([tables, max, cmpObj1, cmpObj2, reduce], xhr)
-            })
-
-            return def.promise
-        },
-
-        relatedWordSearch(lemgram) {
-            return lexicons.relatedWordSearch(lemgram)
-        },
-
-        requestMapData(cqp, cqpExprs, within, attribute) {
-            const cqpSubExprs = {}
-            _.map(_.keys(cqpExprs), (subCqp, idx) => cqpSubExprs[`subcqp${idx}`] = subCqp)
-
-            const def = $q.defer()
-            const params = {
-                group_by_struct: attribute.label,
-                cqp,
-                corpus: attribute.corpora.join(","),
-                incremental: true,
-                split: attribute.label
-            }
-            _.extend(params, settings.corpusListing.getWithinParameters())
-
-            _.extend(params, cqpSubExprs)
-
-            const conf = {
-                url : settings.korpBackendURL + "/count",
-                params,
-                method : "GET",
-                headers : {}
-            }
-
-            _.extend(conf.headers, model.getAuthorizationHeader())
-
-
-            const xhr = $http(conf)
-
-            xhr.then(function(response) {
-                let result
-                const { data } = response
-                const createResult = function(subResult, cqp, label) {
-                    const mergeSubResults = function(absolute, relative) {
-                        const res_list = []
-                        for (let { value: value1, freq: abs_freq } of Array.from(absolute)) {
-                            const remove_idxs = []
-                            for (let idx = 0; idx < relative.length; idx++) {
-                                const { value: value2, freq: rel_freq } = relative[idx]
-                                const val1 = _.values(value1)[0][0]
-                                const val2 = _.values(value2)[0][0]
-                                if (val1 === val2) {
-                                    res_list.push({ value: val1, abs_freq, rel_freq })
-                                    remove_idxs.push(idx)
+        return (() => {
+            const result = []
+            for (let obj of Array.from(config)) {
+                const watch = obj.expr || obj.scope_name || obj.key
+                result.push(
+                    scope.$watch(
+                        watch,
+                        ((obj, watch) =>
+                            function(val) {
+                                val = (obj.val_out || _.identity)(val)
+                                if (val === obj.default) {
+                                    val = null
                                 }
-                            }
-                            const removed_elems = _.pullAt(relative, remove_idxs)
-                        }
-                        return res_list
-                    }
+                                $location.search(obj.key, val || null)
+                                if (obj.key === "page") {
+                                    c.log("post change", watch, val)
+                                }
+                                return typeof obj.post_change === "function"
+                                    ? obj.post_change(val)
+                                    : undefined
+                            })(obj, watch)
+                    )
+                )
+            }
+            return result
+        })()
+    }
+}))
 
-                    const points = []
-                    _.map(mergeSubResults(subResult.absolute, subResult.relative), function(actual_hit) {
-                        const hit = actual_hit.value
-                        if ((hit === "") || (hit.startsWith(" "))) {
-                            return
-                        }
-                        const [name, countryCode, lat, lng] = Array.from(hit.split(";"))
+korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
+    requestCompare(cmpObj1, cmpObj2, reduce) {
+        reduce = _.map(reduce, item => item.replace(/^_\./, ""))
 
-                        return points.push({
-                            abs: actual_hit.abs_freq,
-                            rel: actual_hit.rel_freq,
-                            name,
-                            countryCode,
-                            lat : parseFloat(lat),
-                            lng : parseFloat(lng) })
-                })
+        // remove all corpora which do not include all the "reduce"-attributes
+        const filterFun = item => settings.corpusListing.corpusHasAttrs(item, reduce)
+        const corpora1 = _.filter(cmpObj1.corpora, filterFun)
+        const corpora2 = _.filter(cmpObj2.corpora, filterFun)
 
-                    return ({
-                        label,
-                        cqp,
-                        points
-                    })
-                }
+        const corpusListing = settings.corpusListing.subsetFactory(cmpObj1.corpora)
 
-                if (_.isEmpty(cqpExprs)) {
-                    result = [createResult(data.total, cqp, "Σ")]
+        const split = _.filter(
+            reduce,
+            r => __guard__(settings.corpusListing.getCurrentAttributes()[r], x => x.type) === "set"
+        ).join(",")
+
+        const rankedReduce = _.filter(reduce, item =>
+            __guard__(
+                settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
+                    item
+                ],
+                x => x.ranked
+            )
+        )
+        const top = _.map(rankedReduce, item => item + ":1").join(",")
+
+        const def = $q.defer()
+        const params = {
+            group_by: reduce.join(","),
+            set1_corpus: corpora1.join(",").toUpperCase(),
+            set1_cqp: cmpObj1.cqp,
+            set2_corpus: corpora2.join(",").toUpperCase(),
+            set2_cqp: cmpObj2.cqp,
+            max: 50,
+            split,
+            top
+        }
+
+        const conf = {
+            url: settings.korpBackendURL + "/loglike",
+            params,
+            method: "GET",
+            headers: {}
+        }
+
+        _.extend(conf.headers, model.getAuthorizationHeader())
+
+        const xhr = $http(conf)
+
+        xhr.then(function(response) {
+            let max
+            const { data } = response
+
+            if (data.ERROR) {
+                def.reject()
+                return
+            }
+
+            const loglikeValues = data.loglike
+
+            const objs = _.map(loglikeValues, (value, key) => ({
+                value: key,
+                loglike: value
+            }))
+
+            const tables = _.groupBy(objs, function(obj) {
+                if (obj.loglike > 0) {
+                    obj.abs = data.set2[obj.value]
+                    return "positive"
                 } else {
-                    result = []
-                    for (let subResult of Array.from(data.total.slice(1, data.total.length))) {
-                        result.push(createResult(subResult, subResult.cqp, cqpExprs[subResult.cqp]))
-                    }
+                    obj.abs = data.set1[obj.value]
+                    return "negative"
                 }
-
-                if (data.ERROR) {
-                    def.reject()
-                    return
-                }
-
-                return def.resolve([{ corpora: attribute.corpora, cqp, within, data: result, attribute }], xhr)
             })
 
-            return def.promise
+            const groupAndSum = function(table, currentMax) {
+                const groups = _.groupBy(table, obj => obj.value.replace(/(:.+?)(\/|$| )/g, "$2"))
+
+                const res = _.map(groups, function(value, key) {
+                    const tokenLists = _.map(key.split("/"), tokens => tokens.split(" "))
+
+                    let loglike = 0
+                    let abs = 0
+                    const cqp = []
+                    const elems = []
+
+                    _.map(value, function(val) {
+                        abs += val.abs
+                        loglike += val.loglike
+                        return elems.push(val.value)
+                    })
+                    if (Math.abs(loglike) > currentMax) {
+                        currentMax = Math.abs(loglike)
+                    }
+                    return { key, loglike, abs, elems, tokenLists }
+                })
+
+                return [res, currentMax]
+            }
+
+            ;[tables.positive, max] = Array.from(groupAndSum(tables.positive, 0))
+            ;[tables.negative, max] = Array.from(groupAndSum(tables.negative, max))
+
+            return def.resolve([tables, max, cmpObj1, cmpObj2, reduce], xhr)
+        })
+
+        return def.promise
+    },
+
+    relatedWordSearch(lemgram) {
+        return lexicons.relatedWordSearch(lemgram)
+    },
+
+    requestMapData(cqp, cqpExprs, within, attribute) {
+        const cqpSubExprs = {}
+        _.map(_.keys(cqpExprs), (subCqp, idx) => (cqpSubExprs[`subcqp${idx}`] = subCqp))
+
+        const def = $q.defer()
+        const params = {
+            group_by_struct: attribute.label,
+            cqp,
+            corpus: attribute.corpora.join(","),
+            incremental: true,
+            split: attribute.label
         }
-    })
-)
+        _.extend(params, settings.corpusListing.getWithinParameters())
 
-korpApp.factory('nameEntitySearch', function($rootScope, $q) {
+        _.extend(params, cqpSubExprs)
 
+        const conf = {
+            url: settings.korpBackendURL + "/count",
+            params,
+            method: "GET",
+            headers: {}
+        }
+
+        _.extend(conf.headers, model.getAuthorizationHeader())
+
+        const xhr = $http(conf)
+
+        xhr.then(function(response) {
+            let result
+            const { data } = response
+            const createResult = function(subResult, cqp, label) {
+                const mergeSubResults = function(absolute, relative) {
+                    const res_list = []
+                    for (let { value: value1, freq: abs_freq } of Array.from(absolute)) {
+                        const remove_idxs = []
+                        for (let idx = 0; idx < relative.length; idx++) {
+                            const { value: value2, freq: rel_freq } = relative[idx]
+                            const val1 = _.values(value1)[0][0]
+                            const val2 = _.values(value2)[0][0]
+                            if (val1 === val2) {
+                                res_list.push({ value: val1, abs_freq, rel_freq })
+                                remove_idxs.push(idx)
+                            }
+                        }
+                        const removed_elems = _.pullAt(relative, remove_idxs)
+                    }
+                    return res_list
+                }
+
+                const points = []
+                _.map(mergeSubResults(subResult.absolute, subResult.relative), function(
+                    actual_hit
+                ) {
+                    const hit = actual_hit.value
+                    if (hit === "" || hit.startsWith(" ")) {
+                        return
+                    }
+                    const [name, countryCode, lat, lng] = Array.from(hit.split(";"))
+
+                    return points.push({
+                        abs: actual_hit.abs_freq,
+                        rel: actual_hit.rel_freq,
+                        name,
+                        countryCode,
+                        lat: parseFloat(lat),
+                        lng: parseFloat(lng)
+                    })
+                })
+
+                return {
+                    label,
+                    cqp,
+                    points
+                }
+            }
+
+            if (_.isEmpty(cqpExprs)) {
+                result = [createResult(data.total, cqp, "Σ")]
+            } else {
+                result = []
+                for (let subResult of Array.from(data.total.slice(1, data.total.length))) {
+                    result.push(createResult(subResult, subResult.cqp, cqpExprs[subResult.cqp]))
+                }
+            }
+
+            if (data.ERROR) {
+                def.reject()
+                return
+            }
+
+            return def.resolve(
+                [{ corpora: attribute.corpora, cqp, within, data: result, attribute }],
+                xhr
+            )
+        })
+
+        return def.promise
+    }
+}))
+
+korpApp.factory("nameEntitySearch", function($rootScope, $q) {
     class NameEntities {
         constructor() {}
 
@@ -288,22 +308,25 @@ korpApp.factory('nameEntitySearch', function($rootScope, $q) {
             this.def = $q.defer()
             this.promise = this.def.promise
             this.proxy = new model.NameProxy()
-            $rootScope.$broadcast('map_data_available', cqp, settings.corpusListing.stringifySelected(true))
+            $rootScope.$broadcast(
+                "map_data_available",
+                cqp,
+                settings.corpusListing.stringifySelected(true)
+            )
             return this.proxy.makeRequest(cqp, this.progressCallback).then(data => {
                 return this.def.resolve(data)
             })
         }
 
         progressCallback(progress) {
-            return $rootScope.$broadcast('map_progress', progress)
+            return $rootScope.$broadcast("map_progress", progress)
         }
     }
 
     return new NameEntities()
 })
 
-korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q, nameEntitySearch) {
-
+korpApp.factory("searches", function(utils, $location, $rootScope, $http, $q, nameEntitySearch) {
     class Searches {
         constructor() {
             this.activeSearch = null
@@ -329,7 +352,9 @@ korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q, na
         }
 
         lemgramSearch(word, type) {
-            if (settings.wordpicture === false) { return }
+            if (settings.wordpicture === false) {
+                return
+            }
             return lemgramResults.makeRequest(word, type)
         }
 
@@ -342,10 +367,12 @@ korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q, na
         getInfoData() {
             const def = $q.defer()
             $http({
-                method : "GET",
-                url : settings.korpBackendURL + "/info",
+                method: "GET",
+                url: settings.korpBackendURL + "/info",
                 params: {
-                    corpus : _.map(settings.corpusListing.corpora, "id").map(a => a.toUpperCase()).join(",")
+                    corpus: _.map(settings.corpusListing.corpora, "id")
+                        .map(a => a.toUpperCase())
+                        .join(",")
                 }
             }).then(function(response) {
                 const { data } = response
@@ -367,16 +394,13 @@ korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q, na
         }
     }
 
-
-
-
     const searches = new Searches()
 
     searches.getCqpExpr = function() {
         const search = searches.activeSearch
         let cqpExpr = null
         if (search) {
-            if ((search.type === "word") || (search.type === "lemgram")) {
+            if (search.type === "word" || search.type === "lemgram") {
                 cqpExpr = $rootScope.simpleCQP
             } else {
                 cqpExpr = search.val
@@ -391,7 +415,9 @@ korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q, na
         c.log("searches service watch", $location.search().search)
 
         const searchExpr = $location.search().search
-        if (!searchExpr) { return }
+        if (!searchExpr) {
+            return
+        }
         let [type, ...value] = Array.from(searchExpr != null ? searchExpr.split("|") : undefined)
         value = value.join("|")
 
@@ -417,39 +443,45 @@ korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q, na
             }
             view.updateSearchHistory(historyValue, $location.absUrl())
         }
-        return $q.all([searches.infoDef, searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(function() {
-            let extendedSearch = false
-            if (type === "cqp") {
-                extendedSearch = true
-                if (!value) { value = $location.search().cqp }
-            }
-            if (["cqp", "word", "lemgram"].includes(type)) {
-                searches.activeSearch = {
-                    type,
-                    val : value,
-                    page: newValues[1],
-                    pageOnly
+        return $q
+            .all([searches.infoDef, searches.langDef.promise, $rootScope.globalFilterDef.promise])
+            .then(function() {
+                let extendedSearch = false
+                if (type === "cqp") {
+                    extendedSearch = true
+                    if (!value) {
+                        value = $location.search().cqp
+                    }
                 }
-            } else if (type === "saldo") {
-                extendedSearch.setOneToken("saldo", value)
-            }
-
-            if (type === "cqp") {
-                if (extendedSearch && $rootScope.globalFilter) {
-                    value = CQP.stringify((CQP.mergeCqpExprs((CQP.parse(value || "[]")), $rootScope.globalFilter)))
+                if (["cqp", "word", "lemgram"].includes(type)) {
+                    searches.activeSearch = {
+                        type,
+                        val: value,
+                        page: newValues[1],
+                        pageOnly
+                    }
+                } else if (type === "saldo") {
+                    extendedSearch.setOneToken("saldo", value)
                 }
-                searches.kwicSearch(value, pageOnly)
-            }
 
-            return oldValues = [].concat(newValues)
-        })
+                if (type === "cqp") {
+                    if (extendedSearch && $rootScope.globalFilter) {
+                        value = CQP.stringify(
+                            CQP.mergeCqpExprs(CQP.parse(value || "[]"), $rootScope.globalFilter)
+                        )
+                    }
+                    searches.kwicSearch(value, pageOnly)
+                }
+
+                return (oldValues = [].concat(newValues))
+            })
     })
 
     return searches
 })
 
-
-korpApp.service("compareSearches",
+korpApp.service(
+    "compareSearches",
     (CompareSearches = class CompareSearches {
         constructor() {
             if (currentMode !== "default") {
@@ -458,14 +490,14 @@ korpApp.service("compareSearches",
                 this.key = "saved_searches"
             }
             c.log("key", this.key)
-            this.savedSearches = ($.jStorage.get(this.key)) || []
+            this.savedSearches = $.jStorage.get(this.key) || []
         }
 
         saveSearch(name, cqp) {
             const searchObj = {
-                label : name || cqp,
+                label: name || cqp,
                 cqp,
-                corpora : settings.corpusListing.getSelectedCorpora()
+                corpora: settings.corpusListing.getSelectedCorpora()
             }
             this.savedSearches.push(searchObj)
             return $.jStorage.set(this.key, this.savedSearches)
@@ -478,14 +510,13 @@ korpApp.service("compareSearches",
     })
 )
 
-
 korpApp.factory("lexicons", function($q, $http) {
     const karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v4"
     let canceller = null
     let cancelNext = false
     return {
         lemgramCancel() {
-            return cancelNext = true
+            return (cancelNext = true)
         },
         getLemgrams(wf, resources, corporaIDs) {
             console.log("getLemgrams")
@@ -496,58 +527,63 @@ korpApp.factory("lexicons", function($q, $http) {
                 canceller.resolve()
                 cancelNext = false
             }
-        
+
             const args = {
-                "q" : wf,
-                "resource" : $.isArray(resources) ? resources.join(",") : resources,
-                "mode": "external"
+                q: wf,
+                resource: $.isArray(resources) ? resources.join(",") : resources,
+                mode: "external"
             }
 
             $http({
-                method : "GET",
-                url : `${karpURL}/autocomplete`,
-                params : args,
+                method: "GET",
+                url: `${karpURL}/autocomplete`,
+                params: args,
                 timeout: canceller.promise
-            }).then(function(response) {
-                let { data } = response
-                if (data === null) {
-                    return deferred.resolve([])
-                } else {
-                    // Pick the lemgrams. Would be nice if this was done by the backend instead.
-                    const karpLemgrams = _.map(data.hits.hits, entry => entry._source.FormRepresentations[0].lemgram)
+            })
+                .then(function(response) {
+                    let { data } = response
+                    if (data === null) {
+                        return deferred.resolve([])
+                    } else {
+                        // Pick the lemgrams. Would be nice if this was done by the backend instead.
+                        const karpLemgrams = _.map(
+                            data.hits.hits,
+                            entry => entry._source.FormRepresentations[0].lemgram
+                        )
 
-                    if (karpLemgrams.length === 0) {
-                        deferred.resolve([])
-                        return
-                    }
-
-                    let lemgram = karpLemgrams.join(",")
-                    const corpora = corporaIDs.join(",")
-                    const headers = model.getAuthorizationHeader()
-                    headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
-                    return $http({
-                        method: 'POST',
-                        url: settings.korpBackendURL + "/lemgram_count",
-                        data : `lemgram=${lemgram}&count=lemgram&corpus=${corpora}`,
-                        headers,
-                        timeout : canceller.promise
-                    }).then(response => {
-                        ({ data } = response)
-                        delete data.time
-                        const allLemgrams = []
-                        for (lemgram in data) {
-                            const count = data[lemgram]
-                            allLemgrams.push({ "lemgram" : lemgram, "count" : count })
+                        if (karpLemgrams.length === 0) {
+                            deferred.resolve([])
+                            return
                         }
-                        for (let klemgram of Array.from(karpLemgrams)) {
-                            if (!data[klemgram]) {
-                                allLemgrams.push({ "lemgram" : klemgram, "count" : 0 })
+
+                        let lemgram = karpLemgrams.join(",")
+                        const corpora = corporaIDs.join(",")
+                        const headers = model.getAuthorizationHeader()
+                        headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
+                        return $http({
+                            method: "POST",
+                            url: settings.korpBackendURL + "/lemgram_count",
+                            data: `lemgram=${lemgram}&count=lemgram&corpus=${corpora}`,
+                            headers,
+                            timeout: canceller.promise
+                        }).then(response => {
+                            ;({ data } = response)
+                            delete data.time
+                            const allLemgrams = []
+                            for (lemgram in data) {
+                                const count = data[lemgram]
+                                allLemgrams.push({ lemgram: lemgram, count: count })
                             }
-                        }
-                        return deferred.resolve(allLemgrams)
+                            for (let klemgram of Array.from(karpLemgrams)) {
+                                if (!data[klemgram]) {
+                                    allLemgrams.push({ lemgram: klemgram, count: 0 })
+                                }
+                            }
+                            return deferred.resolve(allLemgrams)
+                        })
+                    }
                 })
-                }
-            }).catch(response => deferred.resolve([]))
+                .catch(response => deferred.resolve([]))
             return deferred.promise
         },
 
@@ -555,101 +591,105 @@ korpApp.factory("lexicons", function($q, $http) {
             const deferred = $q.defer()
 
             const args = {
-                "q" : wf,
-                "resource" : "saldom",
-                "mode": "external"
+                q: wf,
+                resource: "saldom",
+                mode: "external"
             }
 
             $http({
-                method: 'GET',
+                method: "GET",
                 url: `${karpURL}/autocomplete`,
-                params : args
-            }).then(response => {
-                let { data } = response
-                if (data === null) {
-                    return deferred.resolve([])
-                } else {
-                    let karpLemgrams = _.map(data.hits.hits, entry => entry._source.FormRepresentations[0].lemgram)
-                    if (karpLemgrams.length === 0) {
-                        deferred.resolve([])
-                        return
-                    }
-
-                    karpLemgrams = karpLemgrams.slice(0, 100)
-
-                    const senseargs = {
-                        "q" : `extended||and|lemgram|equals|${karpLemgrams.join('|')}`,
-                        "resource" : "saldo",
-                        "show" : "sense,primary",
-                        "size" : 500
-                    }
-
-                    return $http({
-                        method: 'GET',
-                        url: `${karpURL}/minientry`,
-                        params : senseargs
-                    }).then(function(response) {
-                        ({ data } = response)
-                        if (data.hits.total === 0) {
+                params: args
+            })
+                .then(response => {
+                    let { data } = response
+                    if (data === null) {
+                        return deferred.resolve([])
+                    } else {
+                        let karpLemgrams = _.map(
+                            data.hits.hits,
+                            entry => entry._source.FormRepresentations[0].lemgram
+                        )
+                        if (karpLemgrams.length === 0) {
                             deferred.resolve([])
                             return
                         }
-                        const senses = _.map(data.hits.hits, entry =>
-                            ({
-                                "sense" : entry._source.Sense[0].senseid,
-                                "desc" : (entry._source.Sense[0].SenseRelations != null ? entry._source.Sense[0].SenseRelations.primary : undefined)
+
+                        karpLemgrams = karpLemgrams.slice(0, 100)
+
+                        const senseargs = {
+                            q: `extended||and|lemgram|equals|${karpLemgrams.join("|")}`,
+                            resource: "saldo",
+                            show: "sense,primary",
+                            size: 500
+                        }
+
+                        return $http({
+                            method: "GET",
+                            url: `${karpURL}/minientry`,
+                            params: senseargs
+                        })
+                            .then(function(response) {
+                                ;({ data } = response)
+                                if (data.hits.total === 0) {
+                                    deferred.resolve([])
+                                    return
+                                }
+                                const senses = _.map(data.hits.hits, entry => ({
+                                    sense: entry._source.Sense[0].senseid,
+                                    desc:
+                                        entry._source.Sense[0].SenseRelations != null
+                                            ? entry._source.Sense[0].SenseRelations.primary
+                                            : undefined
+                                }))
+                                return deferred.resolve(senses)
                             })
-                    )
-                        return deferred.resolve(senses)
-                    }).catch(response => deferred.resolve([]))
-                }
-            }).catch(response => deferred.resolve([]))
+                            .catch(response => deferred.resolve([]))
+                    }
+                })
+                .catch(response => deferred.resolve([]))
             return deferred.promise
         },
 
         relatedWordSearch(lemgram) {
             const def = $q.defer()
             const req = $http({
-                url : `${karpURL}/minientry`,
-                method : "GET",
-                params : {
-                    q : `extended||and|lemgram|equals|${lemgram}`,
-                    show : "sense",
-                    resource : "saldo"
+                url: `${karpURL}/minientry`,
+                method: "GET",
+                params: {
+                    q: `extended||and|lemgram|equals|${lemgram}`,
+                    show: "sense",
+                    resource: "saldo"
                 }
             }).then(function(response) {
                 let { data } = response
                 if (data.hits.total === 0) {
                     def.resolve([])
-                    
                 } else {
                     let http
                     const senses = _.map(data.hits.hits, entry => entry._source.Sense[0].senseid)
 
-                    return http = $http({
-                        url : `${karpURL}/minientry`,
-                        method : "GET",
-                        params : {
-                            q : `extended||and|LU|equals|${senses.join('|')}`,
-                            show : "LU,sense",
-                            resource : "swefn"
+                    return (http = $http({
+                        url: `${karpURL}/minientry`,
+                        method: "GET",
+                        params: {
+                            q: `extended||and|LU|equals|${senses.join("|")}`,
+                            show: "LU,sense",
+                            resource: "swefn"
                         }
                     }).then(function(response) {
-                        ({ data } = response)
+                        ;({ data } = response)
                         if (data.hits.total === 0) {
                             def.resolve([])
-                            
                         } else {
-                            const eNodes = _.map(data.hits.hits, entry =>
-                                ({
-                                    "label" : entry._source.Sense[0].senseid.replace("swefn--", ""),
-                                    "words" : entry._source.Sense[0].LU
-                                })
-                        )
+                            const eNodes = _.map(data.hits.hits, entry => ({
+                                label: entry._source.Sense[0].senseid.replace("swefn--", ""),
+                                words: entry._source.Sense[0].LU
+                            }))
 
                             return def.resolve(eNodes)
                         }
-                    })
+                    }))
                 }
             })
 
@@ -659,5 +699,5 @@ korpApp.factory("lexicons", function($q, $http) {
 })
 
 function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
+    return typeof value !== "undefined" && value !== null ? transform(value) : undefined
 }
