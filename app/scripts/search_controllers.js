@@ -1,171 +1,196 @@
-/* eslint-disable
-    no-return-assign,
-    no-undef,
-    no-unused-vars,
-    no-useless-escape,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS103: Rewrite code to no longer use __guard__
- * DS104: Avoid inline assignments
- * DS204: Change includes calls to have a more natural evaluation order
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+/** @format */
 const korpApp = angular.module("korpApp")
 
-window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches",  function($scope, $location, $filter, utils, searches) {
-    $scope.visibleTabs = [true, true, true, true]
-    $scope.extendedTmpl = require("../views/extended_tmpl.pug")
-    // for parallel mode
-    searches.langDef.resolve()
-    $scope.isCompareSelected = false
+window.SearchCtrl = [
+    "$scope",
+    "$location",
+    "$filter",
+    "utils",
+    "searches",
+    function($scope, $location, $filter, utils, searches) {
+        $scope.visibleTabs = [true, true, true, true]
+        $scope.extendedTmpl = require("../views/extended_tmpl.pug")
+        // for parallel mode
+        searches.langDef.resolve()
+        $scope.isCompareSelected = false
 
+        $scope.$watch(
+            () => $location.search().search_tab,
+            val => ($scope.isCompareSelected = val === 3)
+        )
 
-    $scope.$watch( () => $location.search().search_tab,
-        val => $scope.isCompareSelected = val === 3)
+        const setupWatchWordPic = function() {
+            $scope.$watch(
+                () => $location.search().word_pic,
+                val => ($scope.word_pic = Boolean(val))
+            )
 
-    const setupWatchWordPic = function() {
-        $scope.$watch(() => $location.search().word_pic, val => $scope.word_pic = Boolean(val))
+            $scope.$watch("word_pic", val => $location.search("word_pic", Boolean(val) || null))
+        }
 
-        return $scope.$watch("word_pic", val => $location.search("word_pic", Boolean(val) || null))
-    }
+        const setupWatchMap = function() {
+            $scope.$watch(
+                () => $location.search().show_map,
+                val => ($scope.show_map = Boolean(val))
+            )
 
-    const setupWatchMap = function() {
-        $scope.$watch(() => $location.search().show_map, val => $scope.show_map = Boolean(val))
+            $scope.$watch("show_map", val => $location.search("show_map", Boolean(val) || null))
+        }
 
-        return $scope.$watch("show_map", val => $location.search("show_map", Boolean(val) || null))
-    }
+        const setupWatchStats = function() {
+            $scope.showStatistics = true
 
-    const setupWatchStats = function() {
-        $scope.showStatistics = true
+            $scope.$watch(
+                () => $location.search().hide_stats,
+                val => ($scope.showStatistics = val == null)
+            )
 
-        $scope.$watch(() => $location.search().hide_stats, val => $scope.showStatistics = (val == null))
+            $scope.$watch("showStatistics", function(val) {
+                if ($scope.showStatistics) {
+                    $location.search("hide_stats", null)
+                } else {
+                    $location.search("hide_stats", true)
+                }
+            })
+        }
 
-        return $scope.$watch("showStatistics", function(val) {
-            if ($scope.showStatistics) {
-                return $location.search("hide_stats", null)
-            } else {
-                return $location.search("hide_stats", true)
+        setupWatchWordPic()
+        setupWatchMap()
+        setupWatchStats()
+
+        $scope.settings = settings
+        $scope.showStats = () => settings.statistics !== false
+
+        if (!$location.search().stats_reduce) {
+            $location.search("stats_reduce", "word")
+        }
+
+        if (settings.statisticsCaseInsensitiveDefault) {
+            $location.search("stats_reduce_insensitive", "word")
+        }
+
+        $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function(event, selected) {
+            c.log("SearchCtrl corpuschooserchange")
+            $scope.noCorporaSelected = !selected.length
+            const allAttrs = settings.corpusListing.getStatsAttributeGroups()
+            $scope.statCurrentAttrs = _.filter(allAttrs, item => !item.hideStatistics)
+            $scope.statSelectedAttrs = $location.search().stats_reduce.split(",")
+            const insensitiveAttrs = $location.search().stats_reduce_insensitive
+            if (insensitiveAttrs) {
+                $scope.statInsensitiveAttrs = insensitiveAttrs.split(",")
             }
         })
-    }
 
-    setupWatchWordPic()
-    setupWatchMap()
-    setupWatchStats()
+        $scope.$watch(
+            "statSelectedAttrs",
+            function(selected) {
+                if (selected && selected.length > 0) {
+                    return $location.search("stats_reduce", $scope.statSelectedAttrs.join(","))
+                }
+            },
+            true
+        )
 
-    $scope.settings = settings
-    $scope.showStats = () => settings.statistics !== false
+        $scope.$watch(
+            "statInsensitiveAttrs",
+            function(insensitive) {
+                if (insensitive && insensitive.length > 0) {
+                    return $location.search(
+                        "stats_reduce_insensitive",
+                        $scope.statInsensitiveAttrs.join(",")
+                    )
+                } else if (insensitive) {
+                    return $location.search("stats_reduce_insensitive", null)
+                }
+            },
+            true
+        )
 
-    if (!$location.search().stats_reduce) {
-        $location.search('stats_reduce', ("word"))
-    }
-
-    if (settings.statisticsCaseInsensitiveDefault) {
-        $location.search('stats_reduce_insensitive', 'word')
-    }
-
-    $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function(event, selected) {
-        c.log("SearchCtrl corpuschooserchange")
-        $scope.noCorporaSelected = !selected.length
-        const allAttrs = settings.corpusListing.getStatsAttributeGroups()
-        $scope.statCurrentAttrs = _.filter(allAttrs, item => !item.hideStatistics)
-        $scope.statSelectedAttrs = $location.search().stats_reduce.split(',')
-        const insensitiveAttrs = $location.search().stats_reduce_insensitive
-        if (insensitiveAttrs) {
-            return $scope.statInsensitiveAttrs = insensitiveAttrs.split(',')
-        }
-    })
-
-
-
-    $scope.$watch('statSelectedAttrs', function(selected) {
-        if (selected && (selected.length > 0)) {
-            return $location.search('stats_reduce', ($scope.statSelectedAttrs.join(',')))
-        }
-    }, true)
-
-    $scope.$watch('statInsensitiveAttrs', function(insensitive) {
-        if (insensitive && (insensitive.length > 0)) {
-            return $location.search('stats_reduce_insensitive', ($scope.statInsensitiveAttrs.join(',')))
-        } else if (insensitive) {
-            return $location.search('stats_reduce_insensitive', null)
-        }
-    }, true)
-
-    const setupHitsPerPage = function() {
-        $scope.getHppFormat = function(val) {
-            if (val === $scope.hitsPerPage) {
-                return $filter("loc")("hits_per_page", $scope.lang) + ": " + val
-            } else {
-                return val
+        const setupHitsPerPage = function() {
+            $scope.getHppFormat = function(val) {
+                if (val === $scope.hitsPerPage) {
+                    return $filter("loc")("hits_per_page", $scope.lang) + ": " + val
+                } else {
+                    return val
+                }
             }
+
+            $scope.hitsPerPageValues = settings.hitsPerPageValues
+            $scope.hitsPerPage = $location.search().hpp || settings.hitsPerPageDefault
+
+            $scope.$watch(
+                () => $location.search().hpp,
+                val => ($scope.hitsPerPage = val || settings.hitsPerPageDefault)
+            )
+
+            return $scope.$watch("hitsPerPage", function(val) {
+                if (val === settings.hitsPerPageDefault) {
+                    return $location.search("hpp", null)
+                } else {
+                    return $location.search("hpp", val)
+                }
+            })
         }
 
-        $scope.hitsPerPageValues = settings.hitsPerPageValues
-        $scope.hitsPerPage = $location.search().hpp || settings.hitsPerPageDefault
-
-        $scope.$watch(() => $location.search().hpp, val => $scope.hitsPerPage = val || settings.hitsPerPageDefault)
-
-        return $scope.$watch("hitsPerPage", function(val) {
-            if (val === settings.hitsPerPageDefault) {
-                return $location.search("hpp", null)
-            } else {
-                return $location.search("hpp", val)
+        const setupKwicSort = function() {
+            const kwicSortValueMap = {
+                "": "appearance_context",
+                keyword: "word_context",
+                left: "left_context",
+                right: "right_context",
+                random: "random_context"
             }
-        })
+            $scope.kwicSortValues = _.keys(kwicSortValueMap)
+
+            $scope.getSortFormat = function(val) {
+                const mappedVal = kwicSortValueMap[val]
+                if (val === $scope.kwicSort) {
+                    return (
+                        $filter("loc")("sort_default", $scope.lang) +
+                        ": " +
+                        $filter("loc")(mappedVal, $scope.lang)
+                    )
+                } else {
+                    return $filter("loc")(mappedVal, $scope.lang)
+                }
+            }
+
+            $scope.kwicSort = $location.search().sort || ""
+
+            $scope.$watch(() => $location.search().sort, val => ($scope.kwicSort = val || ""))
+
+            return $scope.$watch("kwicSort", function(val) {
+                if (val === "") {
+                    return $location.search("sort", null)
+                } else {
+                    return $location.search("sort", val)
+                }
+            })
+        }
+
+        setupHitsPerPage()
+        setupKwicSort()
     }
-
-    const setupKwicSort = function() {
-        const kwicSortValueMap = {
-            "": "appearance_context",
-            "keyword": "word_context",
-            "left": "left_context",
-            "right": "right_context",
-            "random": "random_context"
-        }
-        $scope.kwicSortValues = _.keys(kwicSortValueMap)
-
-        $scope.getSortFormat = function(val) {
-            const mappedVal = kwicSortValueMap[val]
-            if (val === $scope.kwicSort) {
-                return $filter("loc")("sort_default", $scope.lang) + ": " + $filter("loc")(mappedVal, $scope.lang)
-            } else {
-                return $filter("loc")(mappedVal, $scope.lang)
-            }
-        }
-
-        $scope.kwicSort = $location.search().sort || ""
-
-        $scope.$watch(() => $location.search().sort, val => $scope.kwicSort = val || "")
-
-        return $scope.$watch("kwicSort", function(val) {
-            if (val === "") {
-                return $location.search("sort", null)
-            } else {
-                return $location.search("sort", val)
-            }
-        })
-    }
-
-    setupHitsPerPage()
-    return setupKwicSort()
-
-}]
-
+]
 
 korpApp.controller("SearchCtrl", window.SearchCtrl)
 
-korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal, $timeout, lexicons) {
+korpApp.controller("SimpleCtrl", function(
+    $scope,
+    utils,
+    $location,
+    backend,
+    $rootScope,
+    searches,
+    compareSearches,
+    $uibModal,
+    $timeout,
+    lexicons
+) {
     const s = $scope
 
-    $scope.inOrder = ($location.search().in_order == null)
-    $scope.$watch(() => $location.search().in_order, val => $scope.inOrder = (val == null))
+    $scope.inOrder = $location.search().in_order == null
+    $scope.$watch(() => $location.search().in_order, val => ($scope.inOrder = val == null))
     $scope.$watch("inOrder", val => $location.search("in_order", !s.inOrder ? false : null))
 
     s.prefix = false
@@ -179,28 +204,28 @@ korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $ro
         c.log("simple search submit")
         lexicons.lemgramCancel()
         s.updateSearch()
-        return $location.search("within", null)
+        $location.search("within", null)
     })
-
-
 
     // triggers watch on searches.activeSearch
     s.updateSearch = function() {
         locationSearch("search", null)
-        return $timeout(function() {
+        $timeout(function() {
             if (s.textInField) {
                 util.searchHash("word", s.textInField)
                 s.model = null
-                return s.placeholder = null
+                s.placeholder = null
             } else if (s.model) {
-                return util.searchHash("lemgram", s.model)
+                util.searchHash("lemgram", s.model)
             }
         }, 0)
     }
 
     s.$watch("getCQP()", function(val) {
-        if (!val) { return }
-        return $rootScope.simpleCQP = CQP.expandOperators(val)
+        if (!val) {
+            return
+        }
+        $rootScope.simpleCQP = CQP.expandOperators(val)
     })
 
     s.getCQP = function() {
@@ -238,7 +263,7 @@ korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $ro
         }
 
         if ($rootScope.globalFilter) {
-            val = CQP.stringify((CQP.mergeCqpExprs((CQP.parse(val || "[]")), $rootScope.globalFilter)))
+            val = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(val || "[]"), $rootScope.globalFilter))
         }
 
         return val
@@ -272,42 +297,45 @@ korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $ro
     s.clickX = () => modalInstance.dismiss()
 
     s.showAllRelated = () =>
-        modalInstance = $uibModal.open({
+        (modalInstance = $uibModal.open({
             template: `\
-<div class="modal-header">
-    <h3 class="modal-title">{{'similar_header' | loc:lang}} (SWE-FN)</h3>
-    <span ng-click="clickX()" class="close-x">×</span>
-</div>
-<div class="modal-body">
-    <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="https://spraakbanken.gu.se/karp/#?mode=swefn&lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
-      <div class="list_wrapper">
-          <ul>
-            <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd, relatedObj.attribute)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
-          </ul>
-      </div>
-    </div>
-</div>\
-`,
-            scope : s,
-            size : 'lg',
-            windowClass : "related"
-        })
-    
+                <div class="modal-header">
+                    <h3 class="modal-title">{{'similar_header' | loc:lang}} (SWE-FN)</h3>
+                    <span ng-click="clickX()" class="close-x">×</span>
+                </div>
+                <div class="modal-body">
+                    <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="https://spraakbanken.gu.se/karp/#?mode=swefn&lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
+                      <div class="list_wrapper">
+                          <ul>
+                            <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd, relatedObj.attribute)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
+                          </ul>
+                      </div>
+                    </div>
+                </div>\
+                `,
+            scope: s,
+            size: "lg",
+            windowClass: "related"
+        }))
 
     s.searches = searches
     s.$watch("searches.activeSearch", function(search) {
-        if (!search) { return }
-        if ((search.type === "word") || (search.type === "lemgram")) {
+        if (!search) {
+            return
+        }
+        if (search.type === "word" || search.type === "lemgram") {
             if (search.type === "word") {
                 s.textInField = search.val
             } else {
                 s.placeholder = unregescape(search.val)
                 s.model = search.val
             }
-            return s.doSearch()
+            s.doSearch()
         } else {
             s.placeholder = null
-            return (typeof lemgramResults !== 'undefined' && lemgramResults !== null ? lemgramResults.resetView() : undefined)
+            if (lemgramResults) {
+                lemgramResults.resetView()
+            }
         }
     })
 
@@ -315,13 +343,13 @@ korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $ro
         const search = searches.activeSearch
         s.relatedObj = null
         const cqp = s.getCQP()
-        searches.kwicSearch(cqp, search != null ? search.pageOnly : undefined)
+        searches.kwicSearch(cqp, search && search.pageOnly)
 
-        if (!(search != null ? search.pageOnly : undefined)) {
+        if (!(search && search.pageOnly)) {
             if (search.type === "lemgram") {
                 let sense = true
                 let saldo = true
-                for (let corpus of Array.from(settings.corpusListing.selected)) {
+                for (let corpus of settings.corpusListing.selected) {
                     if ("sense" in corpus.attributes) {
                         saldo = false
                     }
@@ -333,31 +361,39 @@ korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $ro
                 if (sense || saldo) {
                     backend.relatedWordSearch(unregescape(search.val)).then(function(data) {
                         s.relatedObj = data
-                        return s.relatedObj.attribute = sense ? "sense" : "saldo"
+                        s.relatedObj.attribute = sense ? "sense" : "saldo"
                     })
                 }
             }
 
-            if (s.word_pic && ((search.type === "lemgram") || !Array.from(search.val).includes(" "))) {
+            if (s.word_pic && (search.type === "lemgram" || !search.val.includes(" "))) {
                 const value = search.type === "lemgram" ? unregescape(search.val) : search.val
                 return searches.lemgramSearch(value, search.type)
             } else {
-                return (typeof lemgramResults !== 'undefined' && lemgramResults !== null ? lemgramResults.resetView() : undefined)
+                if (lemgramResults) {
+                    lemgramResults.resetView()
+                }
             }
         }
     }
 
-    return utils.setupHash(s, [
-            { key : "prefix" },
-            { key : "suffix" },
-            { key : "isCaseInsensitive" }
-    ])
+    utils.setupHash(s, [{ key: "prefix" }, { key: "suffix" }, { key: "isCaseInsensitive" }])
 })
 
-
-korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) {
+korpApp.controller("ExtendedSearch", function(
+    $scope,
+    utils,
+    $location,
+    backend,
+    $rootScope,
+    searches,
+    compareSearches,
+    $timeout
+) {
     const s = $scope
-    s.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, $rootScope.extendedCQP))
+    s.$on("popover_submit", (event, name) =>
+        compareSearches.saveSearch(name, $rootScope.extendedCQP)
+    )
 
     s.searches = searches
     s.$on("btn_submit", function() {
@@ -365,66 +401,68 @@ korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend,
         $location.search("search", null)
         $location.search("page", null)
         $location.search("in_order", null)
-        return $timeout( function() {
-            let needle, within
+        $timeout(function() {
             $location.search("search", "cqp")
-            if ((needle = s.within, !Array.from(_.keys(settings.defaultWithin)).includes(needle))) { ({ within } = s) }
-            return $location.search("within", within)
-        }
-        , 0)
+            if (!_.keys(settings.defaultWithin).includes(s.within)) {
+                var { within } = s
+            }
+            $location.search("within", within)
+        }, 0)
     })
 
-
-    s.$on("extended_set", ($event, val) => s.cqp = val)
+    s.$on("extended_set", ($event, val) => (s.cqp = val))
 
     if ($location.search().cqp) {
         s.cqp = $location.search().cqp
     }
 
-    s.$watch("repeatError", repeatError => s.searchDisabled = repeatError)
+    s.$watch("repeatError", repeatError => (s.searchDisabled = repeatError))
 
     const updateExtendedCQP = function() {
         let val2 = CQP.expandOperators(s.cqp)
         if ($rootScope.globalFilter) {
-            val2 = CQP.stringify((CQP.mergeCqpExprs((CQP.parse(val2 || "[]")), $rootScope.globalFilter)))
+            val2 = CQP.stringify(
+                CQP.mergeCqpExprs(CQP.parse(val2 || "[]"), $rootScope.globalFilter)
+            )
         }
-        return $rootScope.extendedCQP = val2
+        $rootScope.extendedCQP = val2
     }
 
     $rootScope.$watch("globalFilter", function() {
         if ($rootScope.globalFilter) {
-            return updateExtendedCQP()
+            updateExtendedCQP()
         }
     })
 
     s.$watch("cqp", function(val) {
-        if (!val) { return }
+        if (!val) {
+            return
+        }
         try {
             updateExtendedCQP()
         } catch (e) {
             c.log("cqp parse error:", e)
         }
-        return $location.search("cqp", val)
+        $location.search("cqp", val)
     })
 
     s.withins = []
 
     s.getWithins = function() {
         const union = settings.corpusListing.getWithinKeys()
-        const output = _.map(union, item => ({ value : item }))
+        const output = _.map(union, item => ({ value: item }))
         return output
     }
 
     return s.$on("corpuschooserchange", function() {
         s.withins = s.getWithins()
-        return s.within = s.withins[0] != null ? s.withins[0].value : undefined
+        s.within = s.withins[0] && s.withins[0].value
     })
 })
 
-
 korpApp.controller("ExtendedToken", function($scope, utils, $location) {
     const s = $scope
-    const cqp = '[]'
+    const cqp = "[]"
     s.valfilter = utils.valfilter
 
     s.setDefault = function(or_obj) {
@@ -437,20 +475,21 @@ korpApp.controller("ExtendedToken", function($scope, utils, $location) {
             or_obj.op = _.values(opts)[0][1]
         }
 
-
-        return or_obj.val = ""
+        or_obj.val = ""
     }
 
     // returning new array each time kills angular, hence the memoizing
     s.getOpts = _.memoize(function(type) {
-        if (!(type in (s.typeMapping || {}))) { return }
-        let confObj = s.typeMapping != null ? s.typeMapping[type] : undefined
+        if (!(type in (s.typeMapping || {}))) {
+            return
+        }
+        let confObj = s.typeMapping && s.typeMapping[type]
         if (!confObj) {
             c.log("confObj missing", type, s.typeMapping)
             return
         }
 
-        confObj = _.extend({}, ((confObj != null ? confObj.opts : undefined) || settings.defaultOptions))
+        confObj = _.extend({}, (confObj && confObj.opts) || settings.defaultOptions)
 
         if (confObj.type === "set") {
             confObj.is = "contains"
@@ -459,20 +498,23 @@ korpApp.controller("ExtendedToken", function($scope, utils, $location) {
         return _.toPairs(confObj)
     })
 
-
     const onCorpusChange = function(event, selected) {
         // TODO: respect the setting 'wordAttributeSelector' and similar
-        if (!(selected != null ? selected.length : undefined)) { return }
-        const lang = __guard__(s.$parent.$parent != null ? s.$parent.$parent.l : undefined, x => x.lang)
+        if (!(selected && selected.length)) {
+            return
+        }
+        const lang = s.$parent.$parent && s.$parent.$parent.l && s.$parent.$parent.l.lang
         const allAttrs = settings.corpusListing.getAttributeGroups(lang)
         s.types = _.filter(allAttrs, item => !item.hideExtended)
-        return s.typeMapping = _.fromPairs(_.map(s.types, function(item) {
-            if (item.isStructAttr) {
-                return [`_.${item.value}`, item]
-            } else {
-                return [item.value, item]
-            }
-    }))
+        s.typeMapping = _.fromPairs(
+            _.map(s.types, function(item) {
+                if (item.isStructAttr) {
+                    return [`_.${item.value}`, item]
+                } else {
+                    return [item.value, item]
+                }
+            })
+        )
     }
 
     s.$on("corpuschooserchange", onCorpusChange)
@@ -481,98 +523,85 @@ korpApp.controller("ExtendedToken", function($scope, utils, $location) {
 
     s.removeOr = function(token, and_array, i) {
         if (and_array.length > 1) {
-            return and_array.splice(i, 1)
+            and_array.splice(i, 1)
         } else if (token.and_block.length > 1) {
-            return token.and_block.splice((_.indexOf(token.and_block, and_array)), 1)
+            token.and_block.splice(_.indexOf(token.and_block, and_array), 1)
         }
     }
-
 
     s.addAnd = token => token.and_block.push(s.addOr([]))
 
     const toggleBound = function(token, bnd) {
-        if (!(token.bound != null ? token.bound[bnd] : undefined)) {
+        if (!(token.bound && token.bound[bnd])) {
             const boundObj = {}
             boundObj[bnd] = true
-            return token.bound = _.extend((token.bound || {}), boundObj)
-        } else {
-            return (token.bound != null ? delete token.bound[bnd] : undefined)
+            token.bound = _.extend(token.bound || {}, boundObj)
+        } else if (token.bound) {
+            delete token.bound[bnd]
         }
     }
 
     s.toggleStart = token => toggleBound(token, "lbound")
-    return s.toggleEnd = token => toggleBound(token, "rbound")
+    s.toggleEnd = token => toggleBound(token, "rbound")
 })
 
+korpApp.directive("advancedSearch", () => ({
+    controller($scope, compareSearches, $location, $timeout, $rootScope) {
+        if ($location.search().search && $location.search().search.split("|")) {
+            var [type, ...expr] = $location.search().search.split("|")
+            expr = expr.join("|")
+        }
 
-korpApp.directive("advancedSearch", () =>
-    ({
-        controller($scope, compareSearches, $location, $timeout, $rootScope) {
-            let type
-            let expr = ""
-            if ($location.search().search) {
-                [type, ...expr] = Array.from(__guard__($location.search().search, x => x.split("|")))
-                expr = expr.join("|")
+        if (type === "cqp") {
+            $scope.cqp = expr || "[]"
+        } else {
+            $scope.cqp = "[]"
+        }
+
+        $scope.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, $scope.cqp))
+
+        $scope.$on("btn_submit", function() {
+            c.log("advanced submit", $scope.cqp)
+            $location.search("search", null)
+            $location.search("page", null)
+            $location.search("within", null)
+            $location.search("in_order", null)
+            $timeout(() => $location.search("search", `cqp|${$scope.cqp}`), 0)
+        })
+    }
+}))
+
+korpApp.filter("mapper", () => (item, f) => f(item))
+
+korpApp.directive("compareSearchCtrl", () => ({
+    controller($scope, utils, $location, backend, $rootScope, compareSearches) {
+        const s = $scope
+        s.valfilter = utils.valfilter
+
+        s.savedSearches = compareSearches.savedSearches
+        s.$watch("savedSearches.length", function() {
+            s.cmp1 = compareSearches.savedSearches[0]
+            s.cmp2 = compareSearches.savedSearches[1]
+            if (!s.cmp1 || !s.cmp2) {
+                return
             }
 
-            if (type === "cqp") {
-                $scope.cqp = expr || "[]"
-            } else {
-                $scope.cqp = "[]"
-            }
+            const listing = settings.corpusListing.subsetFactory(
+                _.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora))
+            )
+            const allAttrs = listing.getAttributeGroups()
+            s.currentAttrs = _.filter(allAttrs, item => !item.hideCompare)
+        })
 
-            $scope.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, $scope.cqp))
+        s.reduce = "word"
 
-            return $scope.$on("btn_submit", function() {
-                c.log("advanced submit", $scope.cqp)
-                $location.search("search", null)
-                $location.search("page", null)
-                $location.search("within", null)
-                $location.search("in_order", null)
-                return $timeout( () => $location.search("search", `cqp|${$scope.cqp}`)
-                , 0)
-            })
-        }
-    })
+        s.sendCompare = () =>
+            $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]))
+
+        s.deleteCompares = () => compareSearches.flush()
+    }
+}))
+
+korpApp.filter("loc", $rootScope => (translationKey, lang) =>
+    util.getLocaleString(translationKey, lang)
 )
-
-
-korpApp.filter("mapper", () =>
-    (item, f) => f(item)
-)
-
-
-korpApp.directive("compareSearchCtrl", () =>
-    ({
-        controller($scope, utils, $location, backend, $rootScope, compareSearches) {
-            const s = $scope
-            s.valfilter = utils.valfilter
-
-            s.savedSearches = compareSearches.savedSearches
-            s.$watch("savedSearches.length", function() {
-                s.cmp1 = compareSearches.savedSearches[0]
-                s.cmp2 = compareSearches.savedSearches[1]
-                if (!s.cmp1 || !s.cmp2) { return }
-
-                const listing = settings.corpusListing.subsetFactory(_.uniq(([].concat(s.cmp1.corpora, s.cmp2.corpora))))
-                const allAttrs = listing.getAttributeGroups()
-                return s.currentAttrs = _.filter(allAttrs, item => !item.hideCompare)
-            })
-
-            s.reduce = 'word'
-
-            s.sendCompare = () => $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]))
-
-            return s.deleteCompares = () => compareSearches.flush()
-        }
-    })
-)
-
-
-korpApp.filter("loc", $rootScope =>
-    (translationKey, lang) => util.getLocaleString(translationKey, lang)
-)
-
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
-}
