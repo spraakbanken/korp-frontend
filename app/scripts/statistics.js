@@ -1,3 +1,4 @@
+/** @format */
 /* eslint-disable
     no-undef,
 */
@@ -14,14 +15,20 @@ const pieChartImg = require("../img/stats2.png")
 const createStatisticsService = function() {
     const createColumns = function(corpora, reduceVals, reduceValLabels) {
         const loc = {
-            'sv' : "sv-SE",
-            'en' : "gb-EN"
+            sv: "sv-SE",
+            en: "gb-EN"
         }[$("body").scope().lang]
-        
+
         const valueFormatter = function(row, cell, value, columnDef, dataContext) {
             const valTup = dataContext[columnDef.id + "_value"]
-            return `<span><span class='relStat'>${Number(valTup[1].toFixed(1)).toLocaleString(loc)}</span> ` +
-                        "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span></span>"
+            return (
+                `<span><span class='relStat'>${Number(valTup[1].toFixed(1)).toLocaleString(
+                    loc
+                )}</span> ` +
+                "<span class='absStat'>(" +
+                valTup[0].toLocaleString(loc) +
+                ")</span></span>"
+            )
         }
 
         const corporaKeys = _.keys(corpora)
@@ -30,7 +37,7 @@ const createStatisticsService = function() {
         const cl = settings.corpusListing.subsetFactory(corporaKeys)
         const attrObj = cl.getStructAttrs()
         for (var [reduceVal, reduceValLabel] of Array.from(_.zip(reduceVals, reduceValLabels))) {
-            (reduceVal =>
+            ;(reduceVal =>
                 columns.push({
                     id: reduceVal,
                     name: reduceValLabel,
@@ -38,9 +45,15 @@ const createStatisticsService = function() {
                     sortable: true,
                     formatter(row, cell, value, columnDef, dataContext) {
                         if (dataContext["rowId"] !== 0) {
-                            const formattedValue = statisticsFormatting.reduceStringify(reduceVal, dataContext[reduceVal], attrObj[reduceVal])
+                            const formattedValue = statisticsFormatting.reduceStringify(
+                                reduceVal,
+                                dataContext[reduceVal],
+                                attrObj[reduceVal]
+                            )
                             dataContext["formattedValue"][reduceVal] = formattedValue
-                            return `<span class="statistics-link" data-row=${dataContext["rowId"]}>${formattedValue}</span>`
+                            return `<span class="statistics-link" data-row=${
+                                dataContext["rowId"]
+                            }>${formattedValue}</span>`
                         } else {
                             return "&Sigma;"
                         }
@@ -48,8 +61,7 @@ const createStatisticsService = function() {
                     minWidth,
                     cssClass: "parameter-column",
                     headerCssClass: "localized-header"
-                })
-            )(reduceVal)
+                }))(reduceVal)
         }
 
         columns.push({
@@ -58,7 +70,10 @@ const createStatisticsService = function() {
             field: "hit_value",
             sortable: false,
             formatter(row, cell, value, columnDef, dataContext) {
-                return $.format(`<img id="circlediagrambutton__%s" src="${pieChartImg}" class="arcDiagramPicture"/>`, dataContext.rowId)
+                return $.format(
+                    `<img id="circlediagrambutton__%s" src="${pieChartImg}" class="arcDiagramPicture"/>`,
+                    dataContext.rowId
+                )
             },
             maxWidth: 25,
             minWidth: 25
@@ -86,13 +101,13 @@ const createStatisticsService = function() {
         })
         return columns
     }
-    
+
     const processData = function(def, data, reduceVals, reduceValLabels, ignoreCase) {
         const columns = createColumns(data.corpora, reduceVals, reduceValLabels)
 
         const statsWorker = new Worker("worker.js")
         statsWorker.onmessage = function(e) {
-            const searchParams = { 
+            const searchParams = {
                 reduceVals,
                 ignoreCase,
                 corpora: _.keys(data.corpora)
