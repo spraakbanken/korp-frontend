@@ -1,19 +1,4 @@
 /** @format */
-/* eslint-disable
-    no-return-assign,
-    no-undef,
-    no-useless-escape,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const folderImg = require("../img/folder.png")
 const korpIconImg = require("../img/korp_icon.png")
 const jRejectBackgroundImg = require("../img/browsers/background_browser.gif")
@@ -46,7 +31,7 @@ window.CorpusListing = class CorpusListing {
     subsetFactory(idArray) {
         // returns a new CorpusListing instance from an id subset.
         idArray = _.invokeMap(idArray, "toLowerCase")
-        const cl = new CorpusListing(_.pick(this.struct, ...Array.from(idArray)))
+        const cl = new CorpusListing(_.pick(this.struct, ...idArray))
         cl.selected = cl.corpora
         return cl
     }
@@ -60,7 +45,7 @@ window.CorpusListing = class CorpusListing {
     }
 
     select(idArray) {
-        return (this.selected = _.values(_.pick.apply(this, [this.struct].concat(idArray))))
+        this.selected = _.values(_.pick.apply(this, [this.struct].concat(idArray)))
     }
 
     mapSelectedCorpora(f) {
@@ -73,8 +58,8 @@ window.CorpusListing = class CorpusListing {
             mappingArray,
             function(a, b) {
                 const keys_intersect = _.intersection(_.keys(a), _.keys(b))
-                const to_mergea = _.pick(a, ...Array.from(keys_intersect))
-                const to_mergeb = _.pick(b, ...Array.from(keys_intersect))
+                const to_mergea = _.pick(a, ...keys_intersect)
+                const to_mergeb = _.pick(b, ...keys_intersect)
                 return _.merge({}, to_mergea, to_mergeb)
             } || {}
         )
@@ -128,7 +113,7 @@ window.CorpusListing = class CorpusListing {
             const key = item[0]
             const val = item[1]
             return $.each(attrs, function(j, origStruct) {
-                if (origStruct[key] != null ? origStruct[key].dataset : undefined) {
+                if (origStruct[key] && origStruct[key].dataset) {
                     let ds = origStruct[key].dataset
                     if ($.isArray(ds)) {
                         ds = _.zipObject(ds, ds)
@@ -158,10 +143,10 @@ window.CorpusListing = class CorpusListing {
         let attrNames = []
         let attrs = {}
 
-        for (let corpus of Array.from(this.selected)) {
+        for (let corpus of this.selected) {
             if (filterType in corpus) {
-                for (let filter of Array.from(corpus[filterType])) {
-                    if (!Array.from(attrNames).includes(filter)) {
+                for (let filter of corpus[filterType]) {
+                    if (!attrNames.includes(filter)) {
                         attrNames.push(filter)
                     }
                     if (!(filter in attrs)) {
@@ -180,7 +165,7 @@ window.CorpusListing = class CorpusListing {
             const attrNames2 = []
             const attrs2 = {}
             const corpusCount = this.selected.length
-            for (let attr of Array.from(attrNames)) {
+            for (let attr of attrNames) {
                 if (attrs[attr].corpora.length === corpusCount) {
                     attrNames2.push(attr)
                     attrs2[attr] = attrs[attr]
@@ -198,7 +183,7 @@ window.CorpusListing = class CorpusListing {
         const intersection = this._mapping_intersection(attrs)
         $.each(union, function(key, value) {
             if (intersection[key] == null) {
-                return (value["disabled"] = true)
+                value["disabled"] = true
             } else {
                 return delete value["disabled"]
             }
@@ -209,7 +194,7 @@ window.CorpusListing = class CorpusListing {
 
     // returns true if coprus has all attrs, else false
     corpusHasAttrs(corpus, attrs) {
-        for (let attr of Array.from(attrs)) {
+        for (let attr of attrs) {
             if (
                 attr !== "word" &&
                 !(
@@ -241,25 +226,20 @@ window.CorpusListing = class CorpusListing {
 
     getWithinKeys() {
         const struct = _.map(this.selected, corpus => _.keys(corpus.within))
-        return _.union(...Array.from(struct || []))
+        return _.union(...(struct || []))
     }
 
     getContextQueryString(prefer, avoid) {
-        const output = (() => {
-            const result = []
-            for (let corpus of Array.from(this.selected)) {
-                const contexts = _.keys(corpus.context)
-                if (!Array.from(contexts).includes(prefer)) {
-                    if (contexts.length > 1 && Array.from(contexts).includes(avoid)) {
-                        contexts.splice(contexts.indexOf(avoid), 1)
-                    }
-                    result.push(corpus.id.toUpperCase() + ":" + contexts[0])
-                } else {
-                    result.push(undefined)
+        const output = []
+        for (let corpus of this.selected) {
+            const contexts = _.keys(corpus.context)
+            if (!contexts.includes(prefer)) {
+                if (contexts.length > 1 && contexts.includes(avoid)) {
+                    contexts.splice(contexts.indexOf(avoid), 1)
                 }
+                output.push(corpus.id.toUpperCase() + ":" + contexts[0])
             }
-            return result
-        })()
+        }
         return _(output)
             .compact()
             .join()
@@ -268,18 +248,13 @@ window.CorpusListing = class CorpusListing {
     getWithinParameters() {
         const defaultWithin = locationSearch().within || _.keys(settings.defaultWithin)[0]
 
-        const output = (() => {
-            const result = []
-            for (let corpus of Array.from(this.selected)) {
-                const withins = _.keys(corpus.within)
-                if (!Array.from(withins).includes(defaultWithin)) {
-                    result.push(corpus.id.toUpperCase() + ":" + withins[0])
-                } else {
-                    result.push(undefined)
-                }
+        const output = []
+        for (let corpus of this.selected) {
+            const withins = _.keys(corpus.within)
+            if (!withins.includes(defaultWithin)) {
+                output.push(corpus.id.toUpperCase() + ":" + withins[0])
             }
-            return result
-        })()
+        }
         const within = _(output)
             .compact()
             .join()
@@ -367,16 +342,13 @@ window.CorpusListing = class CorpusListing {
             allAttrs = this.getCurrentAttributesIntersection()
         }
 
-        const attrs = (() => {
-            const result = []
-            for (let key in allAttrs) {
-                const obj = allAttrs[key]
-                if (obj.displayType !== "hidden") {
-                    result.push(_.extend({ group: "word_attr", value: key }, obj))
-                }
+        const attrs = []
+        for (let key in allAttrs) {
+            const obj = allAttrs[key]
+            if (obj.displayType !== "hidden") {
+                attrs.push(_.extend({ group: "word_attr", value: key }, obj))
             }
-            return result
-        })()
+        }
         return attrs
     }
 
@@ -391,19 +363,16 @@ window.CorpusListing = class CorpusListing {
         const common_keys = _.compact(
             _.flatten(_.map(this.selected, corp => _.keys(corp.common_attributes)))
         )
-        const common = _.pick(settings.commonStructTypes, ...Array.from(common_keys))
+        const common = _.pick(settings.commonStructTypes, ...common_keys)
 
-        let sentAttrs = (() => {
-            const result = []
-            const object = _.extend({}, common, allAttrs)
-            for (let key in object) {
-                const obj = object[key]
-                if (obj.displayType !== "hidden") {
-                    result.push(_.extend({ group: "sentence_attr", value: key }, obj))
-                }
+        let sentAttrs = []
+        const object = _.extend({}, common, allAttrs)
+        for (let key in object) {
+            const obj = object[key]
+            if (obj.displayType !== "hidden") {
+                sentAttrs.push(_.extend({ group: "sentence_attr", value: key }, obj))
             }
-            return result
-        })()
+        }
 
         sentAttrs = _.sortBy(sentAttrs, item => util.getLocaleString(item.label))
 
@@ -440,14 +409,14 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
         this.selected = []
         $.each(idArray, (i, id) => {
             const corp = this.struct[id]
-            return (this.selected = this.selected.concat(this.getLinked(corp, true, false)))
+            this.selected = this.selected.concat(this.getLinked(corp, true, false))
         })
 
-        return (this.selected = _.uniq(this.selected))
+        this.selected = _.uniq(this.selected)
     }
 
     setActiveLangs(langlist) {
-        return (this.activeLangs = langlist)
+        this.activeLangs = langlist
     }
 
     getReduceLang() {
@@ -493,7 +462,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
             only_selected = true
         }
         const target = only_selected ? this.selected : this.struct
-        let output = _.filter(target, item => Array.from(corp.linkedTo || []).includes(item.id))
+        let output = _.filter(target, item => (corp.linkedTo || []).includes(item.id))
         if (andSelf) {
             output = [corp].concat(output)
         }
@@ -529,12 +498,12 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
         const main = _.filter(this.selected, corp => corp.lang === activeLangs[0])
 
         let output = []
-        for (var lang of Array.from(activeLangs.slice(1))) {
+        for (var lang of activeLangs.slice(1)) {
             const other = _.filter(this.selected, corp => corp.lang === lang)
 
-            for (var cps of Array.from(other)) {
+            for (var cps of other) {
                 const linked = _(main)
-                    .filter(mainCorpus => Array.from(mainCorpus.linkedTo).includes(cps.id))
+                    .filter(mainCorpus => mainCorpus.linkedTo.includes(cps.id))
                     .value()
 
                 output = output.concat(_.map(linked, item => [item, cps]))
@@ -635,7 +604,7 @@ window.locationSearch = function(obj, val) {
     })
 
     if (val === null) {
-        onHashChange()
+        window.onHashChange()
     }
     return ret
 }
@@ -644,11 +613,12 @@ window.initLocales = function() {
     const packages = ["locale", "corpora"]
     const prefix = "translations"
     const defs = []
-    window.loc_data = {}
+    let loc_data = {}
+    window.loc_data = loc_data
     const def = $.Deferred()
-    for (let lang of Array.from(settings.languages)) {
+    for (let lang of settings.languages) {
         loc_data[lang] = {}
-        for (let pkg of Array.from(packages)) {
+        for (let pkg of packages) {
             ;(function(lang, pkg) {
                 let file = pkg + "-" + lang + ".json"
                 file = prefix + "/" + file
@@ -680,7 +650,7 @@ window.safeApply = function(scope, fn) {
 }
 
 window.util.setLogin = function() {
-    for (let corp of Array.from(authenticationProxy.loginObj.credentials)) {
+    for (let corp of authenticationProxy.loginObj.credentials) {
         $(`#hpcorpus_${corp.toLowerCase()}`)
             .closest(".boxdiv.disabled")
             .removeClass("disabled")
@@ -731,7 +701,7 @@ util.getLocaleStringUndefined = function(key, lang) {
         lang = window.lang || settings.defaultLanguage || "sv"
     }
     try {
-        return loc_data[lang][key]
+        return window.loc_data[lang][key]
     } catch (e) {
         return undefined
     }
@@ -762,7 +732,7 @@ util.lemgramToString = function(lemgram, appendIndex) {
     )
 }
 
-util.saldoRegExp = /(.*?)\.\.(\d\d?)(\:\d+)?$/
+util.saldoRegExp = /(.*?)\.\.(\d\d?)(:\d+)?$/
 util.saldoToString = function(saldoId, appendIndex) {
     const match = saldoId.match(util.saldoRegExp)
     let infixIndex = ""
@@ -781,7 +751,7 @@ util.saldoToPlaceholderString = function(saldoId, appendIndex) {
     return $.format("%s%s", [match[1].replace(/_/g, " "), infixIndex])
 }
 
-util.lemgramRegexp = /\.\.\w+\.\d\d?(\:\d+)?$/
+util.lemgramRegexp = /\.\.\w+\.\d\d?(:\d+)?$/
 util.isLemgramId = lemgram => lemgram.search(util.lemgramRegexp) !== -1
 
 util.splitLemgram = function(lemgram) {
@@ -789,7 +759,7 @@ util.splitLemgram = function(lemgram) {
         throw new Error(`Input to util.splitLemgram is not a lemgram: ${lemgram}`)
     }
     const keys = ["morph", "form", "pos", "index", "startIndex"]
-    const splitArray = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(2)
+    const splitArray = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d\d?)(:\d+)?$/).slice(2)
     return _.zipObject(keys, splitArray)
 }
 
@@ -1010,10 +980,7 @@ util.loadCorpora = function() {
                     maybeInfo = `<br/><br/>${corpusObj.description}`
                 }
                 const numTokens = corpusObj.info.Size
-                const baseLang =
-                    settings.corpora[corpusID] != null
-                        ? settings.corpora[corpusID].linkedTo
-                        : undefined
+                const baseLang = settings.corpora[corpusID] && settings.corpora[corpusID].linkedTo
                 if (baseLang) {
                     lang = ` (${util.getLocaleString(settings.corpora[corpusID].lang)})`
                     baseLangTokenHTML = `${util.getLocaleString(
@@ -1043,21 +1010,21 @@ util.loadCorpora = function() {
                 }
 
                 let output = `\
-<b>
-    <img class="popup_icon" src="${korpIconImg}" />
-    ${corpusObj.title}
-</b>
-${maybeInfo}
-<br/><br/>${baseLangTokenHTML}
-${util.getLocaleString("corpselector_numberoftokens")}:
-<b>${util.prettyNumbers(numTokens)}</b>${lang}
-<br/>${baseLangSentenceHTML}
-${util.getLocaleString("corpselector_numberofsentences")}:
-<b>${sentenceString}</b>${lang}
-<br/>
-${util.getLocaleString("corpselector_lastupdate")}:
-<b>${lastUpdate}</b>
-<br/><br/>`
+                    <b>
+                        <img class="popup_icon" src="${korpIconImg}" />
+                        ${corpusObj.title}
+                    </b>
+                    ${maybeInfo}
+                    <br/><br/>${baseLangTokenHTML}
+                    ${util.getLocaleString("corpselector_numberoftokens")}:
+                    <b>${util.prettyNumbers(numTokens)}</b>${lang}
+                    <br/>${baseLangSentenceHTML}
+                    ${util.getLocaleString("corpselector_numberofsentences")}:
+                    <b>${sentenceString}</b>${lang}
+                    <br/>
+                    ${util.getLocaleString("corpselector_lastupdate")}:
+                    <b>${lastUpdate}</b>
+                    <br/><br/>`
 
                 const supportsContext = _.keys(corpusObj.context).length > 1
                 if (supportsContext) {
@@ -1104,9 +1071,10 @@ ${util.getLocaleString("corpselector_lastupdate")}:
                 } else {
                     glueString = util.getLocaleString("corpselector_corporawith_plur")
                 }
-                return `<b><img src="${folderImg}" style="margin-right:4px; vertical-align:middle; margin-top:-1px"/>${
-                    indata.title
-                }</b><br/><br/>${maybeInfo}<b>${
+                return `<b><img src="${folderImg}" style="margin-right:4px; \
+                        vertical-align:middle; margin-top:-1px"/>${
+                            indata.title
+                        }</b><br/><br/>${maybeInfo}<b>${
                     corporaID.length
                 }</b> ${glueString}:<br/><br/><b>${util.prettyNumbers(
                     totalTokens.toString()
@@ -1129,7 +1097,7 @@ ${util.getLocaleString("corpselector_lastupdate")}:
     settings.corpusListing.select(selected)
 }
 
-window.regescape = s => s.replace(/[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&")
+window.regescape = s => s.replace(/[.|?|+|*||'|"()^$]/g, "\\$&")
 
 window.unregescape = s => s.replace(/\\/g, "")
 
