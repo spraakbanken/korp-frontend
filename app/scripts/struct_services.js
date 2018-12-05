@@ -1,19 +1,4 @@
 /** @format */
-/* eslint-disable
-    no-return-assign,
-    no-undef,
-    no-unused-vars,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const korpApp = angular.module("korpApp")
 
 // Data service for the global filter in korp
@@ -27,7 +12,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
     const scopes = []
 
     const callDirectives = () =>
-        listenerDef.promise.then(() => Array.from(scopes).map(scope => scope.update(dataObj)))
+        listenerDef.promise.then(() => scopes.map(scope => scope.update(dataObj)))
 
     // deferred for waiting for all directives to register
     var listenerDef = $q.defer()
@@ -51,13 +36,13 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         // delete any filter values that are not in the selected filters
         for (filter in filterValues) {
             const v = filterValues[filter]
-            if (!Array.from(dataObj.selectedFilters).includes(filter)) {
+            if (!dataObj.selectedFilters.includes(filter)) {
                 delete filterValues[filter]
             }
         }
 
         // create object for every filter that is selected but not yet created
-        for (filter of Array.from(dataObj.selectedFilters)) {
+        for (filter of dataObj.selectedFilters) {
             if (!(filter in filterValues)) {
                 const newFilter = {}
                 newFilter.value = []
@@ -66,7 +51,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
             }
         }
 
-        return (dataObj.filterValues = filterValues)
+        dataObj.filterValues = filterValues
     }
 
     // only send corpora that supports all selected filters (if filterSelection is "union")
@@ -75,28 +60,28 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
             dataObj.selectedFilters,
             filter => dataObj.attributes[filter].corpora
         )
-        return _.intersection(...Array.from(corporaPerFilter || []))
+        return _.intersection(...(corporaPerFilter || []))
     }
 
     var mergeObjects = function(...values) {
         if (_.every(values, val => Array.isArray(val))) {
-            return _.union(...Array.from(values || []))
+            return _.union(...(values || []))
         } else if (_.every(values, val => !Array.isArray(val) && typeof val === "object")) {
             const newObj = {}
-            const allKeys = _.union(...Array.from(_.map(values, val => _.keys(val)) || []))
-            for (var k of Array.from(allKeys)) {
+            const allKeys = _.union(...(_.map(values, val => _.keys(val)) || []))
+            for (let k of allKeys) {
                 const allValsForKey = _.map(values, val => val[k])
                 const newValues = _.filter(
                     allValsForKey,
                     val => !_.isEmpty(val) || Number.isInteger(val)
                 )
-                newObj[k] = mergeObjects(...Array.from(newValues || []))
+                newObj[k] = mergeObjects(...(newValues || []))
             }
             return newObj
         } else if (_.every(values, val => Number.isInteger(val))) {
             return _.reduce(values, (a, b) => a + b, 0)
         } else {
-            return c.error("Cannot merge objects a and b")
+            c.error("Cannot merge objects a and b")
         }
     }
 
@@ -113,7 +98,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
             .getStructValues(corpora, dataObj.selectedFilters, opts)
             .then(function(data) {
                 currentData = {}
-                for (let corpus of Array.from(corpora)) {
+                for (let corpus of corpora) {
                     const object = data[corpus.toUpperCase()]
                     for (let k in object) {
                         const v = object[k]
@@ -145,8 +130,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
                 if (value === "") {
                     value = "-"
                 }
-                const selected =
-                    Array.from(currentValues).includes(value) || _.isEmpty(currentValues)
+                const selected = currentValues.includes(value) || _.isEmpty(currentValues)
 
                 // filter of any parent values that do not support the child values
                 include = include || selected
@@ -155,8 +139,10 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
                     childCount = child
                     include = true
                 } else {
-                    ;[childCount, include] = Array.from(
-                        collectAndSum(_.tail(filters), child, parentSelected && selected)
+                    ;[childCount, include] = collectAndSum(
+                        _.tail(filters),
+                        child,
+                        parentSelected && selected
                     )
                 }
 
@@ -176,7 +162,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         }
 
         // reset all filters
-        for (filter of Array.from(dataObj.selectedFilters)) {
+        for (filter of dataObj.selectedFilters) {
             dataObj.filterValues[filter].possibleValues = []
         }
 
@@ -184,38 +170,30 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         collectAndSum(dataObj.selectedFilters, currentData, true)
 
         // merge duplicate child values
-        return (() => {
-            const result = []
-            for (filter of Array.from(dataObj.selectedFilters)) {
-                const possibleValuesTmp = {}
-                for (let [value, count] of Array.from(
-                    dataObj.filterValues[filter].possibleValues
-                )) {
-                    if (!(value in possibleValuesTmp)) {
-                        possibleValuesTmp[value] = 0
-                    }
-                    possibleValuesTmp[value] += count
+        for (filter of dataObj.selectedFilters) {
+            const possibleValuesTmp = {}
+            for (let [value, count] of dataObj.filterValues[filter].possibleValues) {
+                if (!(value in possibleValuesTmp)) {
+                    possibleValuesTmp[value] = 0
                 }
-                dataObj.filterValues[filter].possibleValues = []
-                for (let k in possibleValuesTmp) {
-                    const v = possibleValuesTmp[k]
-                    dataObj.filterValues[filter].possibleValues.push([k, v])
-                }
-
-                result.push(
-                    dataObj.filterValues[filter].possibleValues.sort(function(a, b) {
-                        if (a[0] < b[0]) {
-                            return -1
-                        } else if (a[0] > b[0]) {
-                            return 1
-                        } else {
-                            return 0
-                        }
-                    })
-                )
+                possibleValuesTmp[value] += count
             }
-            return result
-        })()
+            dataObj.filterValues[filter].possibleValues = []
+            for (let k in possibleValuesTmp) {
+                const v = possibleValuesTmp[k]
+                dataObj.filterValues[filter].possibleValues.push([k, v])
+            }
+
+            dataObj.filterValues[filter].possibleValues.sort(function(a, b) {
+                if (a[0] < b[0]) {
+                    return -1
+                } else if (a[0] > b[0]) {
+                    return 1
+                } else {
+                    return 0
+                }
+            })
+        }
     }
 
     const addNewFilter = function(filter, update) {
@@ -237,51 +215,38 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         const parsedFilter = JSON.parse(atob(globalFilter))
         for (attrKey in parsedFilter) {
             const attrValues = parsedFilter[attrKey]
-            if (
-                !(attrKey in dataObj.filterValues) &&
-                Array.from(dataObj.optionalFilters).includes(attrKey)
-            ) {
+            if (!(attrKey in dataObj.filterValues) && dataObj.optionalFilters.includes(attrKey)) {
                 addNewFilter(attrKey, false)
                 dataObj.filterValues[attrKey] = {}
             }
 
-            if (Array.from(dataObj.selectedFilters).includes(attrKey)) {
+            if (dataObj.selectedFilters.includes(attrKey)) {
                 dataObj.filterValues[attrKey].value = attrValues
             }
         }
 
-        return (() => {
-            const result = []
-            for (attrKey in dataObj.filterValues) {
-                const _ = dataObj.filterValues[attrKey]
-                if (!(attrKey in parsedFilter)) {
-                    result.push((dataObj.filterValues[attrKey].value = []))
-                } else {
-                    result.push(undefined)
-                }
+        for (attrKey in dataObj.filterValues) {
+            if (!(attrKey in parsedFilter)) {
+                dataObj.filterValues[attrKey].value = []
             }
-            return result
-        })()
+        }
     }
 
     const makeCqp = function() {
         const exprs = []
-        const andArray = (() => {
-            const result = []
-            for (var attrKey in dataObj.filterValues) {
-                const attrValues = dataObj.filterValues[attrKey]
-                const attrType = dataObj.attributes[attrKey].settings.type
-                var op = attrType === "set" ? "contains" : "="
-                result.push(
-                    attrValues.value.map(attrValue => ({
-                        type: `_.${attrKey}`,
-                        op,
-                        val: attrValue
-                    }))
-                )
-            }
-            return result
-        })()
+        const andArray = []
+        for (var attrKey in dataObj.filterValues) {
+            const attrValues = dataObj.filterValues[attrKey]
+            const attrType = dataObj.attributes[attrKey].settings.type
+            var op = attrType === "set" ? "contains" : "="
+            andArray.push(
+                attrValues.value.map(attrValue => ({
+                    type: `_.${attrKey}`,
+                    op,
+                    val: attrValue
+                }))
+            )
+        }
 
         return [{ and_block: andArray }]
     }
@@ -296,10 +261,10 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         }
         if (!_.isEmpty(rep)) {
             $location.search("global_filter", btoa(JSON.stringify(rep)))
-            return ($rootScope.globalFilter = makeCqp())
+            $rootScope.globalFilter = makeCqp()
         } else {
             $location.search("global_filter", null)
-            return ($rootScope.globalFilter = null)
+            $rootScope.globalFilter = null
         }
     }
 
@@ -307,17 +272,13 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         if (settings.corpusListing.selected.length === 0) {
             dataObj.showDirective = false
         } else {
-            const [newDefaultFilters, defAttributes] = Array.from(
-                settings.corpusListing.getDefaultFilters()
-            )
-            const [newOptionalFilters, possAttributes] = Array.from(
-                settings.corpusListing.getCurrentFilters()
-            )
+            const [newDefaultFilters, defAttributes] = settings.corpusListing.getDefaultFilters()
+            const [newOptionalFilters, possAttributes] = settings.corpusListing.getCurrentFilters()
 
             if (_.isEmpty(newDefaultFilters) && _.isEmpty(newOptionalFilters)) {
                 dataObj.showDirective = false
                 $location.search("global_filter", null)
-                for (let filter of Array.from(dataObj.selectedFilters)) {
+                for (let filter of dataObj.selectedFilters) {
                     dataObj.filterValues[filter].value = []
                 }
             } else {
@@ -351,11 +312,11 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
             scopes.push(scope)
             // TODO this will not work with parallel mode since only one directive is used :(
             if (scopes.length === 2) {
-                return listenerDef.resolve()
+                listenerDef.resolve()
             }
         },
         removeFilter(filter) {
-            __.remove(dataObj.selectedFilters, filter)
+            _.remove(dataObj.selectedFilters, filter)
             initFilters()
             getData()
             return updateLocation()
@@ -412,14 +373,14 @@ korpApp.factory("structService", ($http, $q) => ({
                     values = data.corpora[corpora]
                     result[corpora] = values[structValue]
                 }
-                return def.resolve(result)
+                def.resolve(result)
             } else {
                 result = []
                 for (corpora in data.corpora) {
                     values = data.corpora[corpora]
                     result = result.concat(values[structValue])
                 }
-                return def.resolve(result)
+                def.resolve(result)
             }
         })
 
