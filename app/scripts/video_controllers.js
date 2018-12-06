@@ -1,15 +1,6 @@
 /** @format */
-/* eslint-disable
-    no-return-assign,
-    no-undef,
-    no-unused-vars,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
 /*
  * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 const korpApp = angular.module("korpApp")
@@ -45,7 +36,7 @@ korpApp.controller("VideoCtrl", function($scope, $uibModal) {
         }))
     }
 
-    return ($scope.startTime = 0)
+    $scope.startTime = 0
 })
 
 korpApp.controller("VideoInstanceCtrl", function(
@@ -97,7 +88,7 @@ korpApp.controller("VideoInstanceCtrl", function(
         const videoElem = angular.element("#korp-video")
 
         // workaround for firefox problem, not possible to create source-elem in template
-        for (let videoData of Array.from(items)) {
+        for (let videoData of items) {
             const srcElem = angular.element("<source>")
             srcElem.attr("src", videoData.url)
             srcElem.attr("type", videoData.type)
@@ -115,25 +106,25 @@ korpApp.controller("VideoInstanceCtrl", function(
         video.addEventListener("timeupdate", () => {
             if ($scope.pauseAfterEndTime && endTime && video.currentTime >= endTime) {
                 video.pause()
-                return $timeout(() => ($scope.isPaused = true), 0)
+                $timeout(() => ($scope.isPaused = true), 0)
             }
         })
 
         $scope.goToStartTime = function() {
             video.currentTime = startTime
             $scope.isPaused = false
-            return video.play()
+            video.play()
         }
 
-        return ($scope.continuePlay = function() {
+        $scope.continuePlay = function() {
             $scope.pauseAfterEndTime = false
             $scope.isPaused = false
-            return video.play()
-        })
+            video.play()
+        }
     }
 
     $scope.isPaused = false
     $scope.pauseAfterEndTime = true
 
-    return ($scope.ok = () => $uibModalInstance.close())
+    $scope.ok = () => $uibModalInstance.close()
 })
