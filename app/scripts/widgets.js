@@ -1,25 +1,4 @@
 /** @format */
-/* eslint-disable
-    no-self-assign,
-    no-template-curly-in-string,
-    no-undef,
-    no-unused-vars,
-    no-useless-call,
-    no-useless-escape,
-*/
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS103: Rewrite code to no longer use __guard__
- * DS201: Simplify complex destructure assignments
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-
 const Sidebar = {
     _init() {},
 
@@ -50,8 +29,11 @@ const Sidebar = {
 
         const customData = { pos: [], struct: [] }
         if (!$.isEmptyObject(corpusObj.customAttributes)) {
-            const [word, sentence] = Array.from(
-                this.renderCustomContent(wordData, sentenceData, corpusObj.customAttributes, tokens)
+            const [word, sentence] = this.renderCustomContent(
+                wordData,
+                sentenceData,
+                corpusObj.customAttributes,
+                tokens
             )
             customData.pos = word
             customData.struct = sentence
@@ -90,12 +72,12 @@ const Sidebar = {
         this.element.localize()
         this.applyEllipse()
         if (corpusObj.attributes.deprel) {
-            return this.renderGraph(tokens)
+            this.renderGraph(tokens)
         }
     },
 
     renderGraph(tokens) {
-        return $("<span class='link show_deptree'></button>")
+        $("<span class='link show_deptree'></button>")
             .localeKey("show_deptree")
             .click(function() {
                 const outerW = $(window).width() - 80
@@ -104,20 +86,17 @@ const Sidebar = {
                     .css("width", outerW - 40)
                     .on("load", function() {
                         const wnd = this.contentWindow
-                        tokens = tokens
-                        return wnd.draw_deptree.call(wnd, tokens, function(msg) {
-                            const [type, val] = Array.from(_.head(_.toPairs(msg)))
-                            return info
-                                .empty()
-                                .append(
-                                    $("<span>").localeKey(type),
-                                    $("<span>: </span>"),
-                                    $("<span>").localeKey(`${type}_${val}`)
-                                )
+                        wnd.draw_deptree(wnd, tokens, function(msg) {
+                            const [type, val] = _.head(_.toPairs(msg))
+                            info.empty().append(
+                                $("<span>").localeKey(type),
+                                $("<span>: </span>"),
+                                $("<span>").localeKey(`${type}_${val}`)
+                            )
                         })
                     })
 
-                return $("#deptree_popup")
+                $("#deptree_popup")
                     .empty()
                     .append(info, iframe)
                     .dialog({
@@ -148,26 +127,22 @@ const Sidebar = {
         }
 
         pairs = _.filter(pairs, function(...args) {
-            let val
-            let key
-            ;[key, val] = Array.from(args[0])
+            let [key, val] = args[0]
             return corpus_attrs[key]
         })
         pairs = _.filter(pairs, function(...args) {
-            let val
-            let key
-            ;[key, val] = Array.from(args[0])
+            let [key, val] = args[0]
             return !(corpus_attrs[key].displayType === "hidden" || corpus_attrs[key].hideSidebar)
         })
 
-        for (let custom of Array.from(customData)) {
+        for (let custom of customData) {
             pairs.push(custom)
         }
 
         pairs.sort(function(...args) {
             let ord1, ord2
-            const [a] = Array.from(args[0])
-            const [b] = Array.from(args[1])
+            const [a] = args[0]
+            const [b] = args[1]
             if (a in corpus_attrs) {
                 ord1 = corpus_attrs[a].order
             } else {
@@ -190,12 +165,12 @@ const Sidebar = {
         })
 
         let items = []
-        for (let [key, value] of Array.from(pairs)) {
+        for (let [key, value] of pairs) {
             if (key in customAttrs) {
                 items.push(value)
             } else {
                 items = items.concat(
-                    __guardMethod__(
+                    (
                         this.renderItem(
                             key,
                             value,
@@ -203,10 +178,8 @@ const Sidebar = {
                             wordData,
                             sentenceData,
                             tokens
-                        ),
-                        "get",
-                        o => o.get(0)
-                    )
+                        ) || $()
+                    ).get(0) || []
                 )
             }
         }
@@ -220,11 +193,9 @@ const Sidebar = {
         const posItems = []
         for (let key in corpus_attrs) {
             const attrs = corpus_attrs[key]
-            const output = __guardMethod__(
-                this.renderItem(key, "not_used", attrs, wordData, sentenceData, tokens),
-                "get",
-                o => o.get(0)
-            )
+            const output = (
+                this.renderItem(key, "not_used", attrs, wordData, sentenceData, tokens) || $()
+            ).get(0)
             if (attrs.customType === "struct") {
                 structItems.push([key, output])
             } else if (attrs.customType === "pos") {
@@ -251,16 +222,13 @@ const Sidebar = {
         output.data("attrs", attrs)
         if (value === "|" || value === "" || value === null) {
             output.append(
-                "<i rel='localize[empty]' style='color : grey'>${util.getLocaleString('empty')}</i>"
+                `<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>`
             )
             return output
         }
 
-        if (
-            attrs.type === "set" &&
-            (attrs.display != null ? attrs.display.expandList : undefined)
-        ) {
-            valueArray = _.filter((value != null ? value.split("|") : undefined) || [], Boolean)
+        if (attrs.type === "set" && attrs.display && attrs.display.expandList) {
+            valueArray = _.filter((value && value.split("|")) || [], Boolean)
             const attrSettings = attrs.display.expandList
             if (attrs.ranked) {
                 valueArray = _.map(valueArray, function(value) {
@@ -271,8 +239,8 @@ const Sidebar = {
                 lis = []
 
                 for (let outerIdx = 0; outerIdx < valueArray.length; outerIdx++) {
-                    var externalLink, prob
-                    ;[value, prob] = valueArray[outerIdx]
+                    var externalLink
+                    let [value, prob] = valueArray[outerIdx]
                     li = $("<li></li>")
                     const subValues = attrSettings.splitValue
                         ? attrSettings.splitValue(value)
@@ -316,7 +284,7 @@ const Sidebar = {
                 }
             } else {
                 lis = []
-                for (value of Array.from(valueArray)) {
+                for (value of valueArray) {
                     li = $("<li></li>")
                     li.append(value)
                     lis.push(li)
@@ -357,7 +325,7 @@ const Sidebar = {
                     showOne.click(function() {
                         showAll.css("display", "inline")
                         showOne.css("display", "none")
-                        return _.map(lis, function(li, i) {
+                        _.map(lis, function(li, i) {
                             if (i !== 0) {
                                 return li.css("display", "none")
                             }
@@ -376,7 +344,7 @@ const Sidebar = {
                     _.invokeMap(_.invokeMap(str, "charCodeAt", 0), "toString"),
                     (a, b) => a + b
                 )
-            valueArray = _.filter((value != null ? value.split("|") : undefined) || [], Boolean)
+            valueArray = _.filter((value && value.split("|")) || [], Boolean)
             if (key === "variants") {
                 // TODO: this doesn't sort quite as expected
                 valueArray.sort(function(a, b) {
@@ -392,44 +360,41 @@ const Sidebar = {
             }
 
             const itr = _.isArray(valueArray) ? valueArray : _.values(valueArray)
-            lis = (() => {
-                const result = []
-                for (let x of Array.from(itr)) {
-                    if (x.length) {
-                        val = (attrs.stringify || _.identity)(x)
+            const lis = []
+            for (let x of itr) {
+                if (x.length) {
+                    val = (attrs.stringify || _.identity)(x)
 
-                        inner = $(_.template(pattern)({ key: x, val }))
-                        if (attrs.translationKey != null) {
-                            const prefix = attrs.translationKey || ""
-                            inner.localeKey(prefix + val)
-                        }
-
-                        if (attrs.internalSearch) {
-                            inner.addClass("link").click(function() {
-                                cqpVal = $(this).data("key")
-                                return locationSearch({
-                                    page: null,
-                                    search: "cqp",
-                                    cqp: `[${key} contains \"${regescape(cqpVal)}\"]`
-                                })
-                            })
-                        }
-
-                        li = $("<li></li>")
-                            .data("key", x)
-                            .append(inner)
-                        if (attrs.externalSearch) {
-                            address = _.template(attrs.externalSearch)({ val: x })
-                            li.append(
-                                $(`<a href='${address}' class='external_link' target='_blank'></a>`)
-                            )
-                        }
-
-                        result.push(li)
+                    inner = $(_.template(pattern)({ key: x, val }))
+                    if (attrs.translationKey != null) {
+                        const prefix = attrs.translationKey || ""
+                        inner.localeKey(prefix + val)
                     }
+
+                    if (attrs.internalSearch) {
+                        inner.addClass("link").click(function() {
+                            cqpVal = $(this).data("key")
+                            return locationSearch({
+                                page: null,
+                                search: "cqp",
+                                cqp: `[${key} contains \"${regescape(cqpVal)}\"]`
+                            })
+                        })
+                    }
+
+                    li = $("<li></li>")
+                        .data("key", x)
+                        .append(inner)
+                    if (attrs.externalSearch) {
+                        address = _.template(attrs.externalSearch)({ val: x })
+                        li.append(
+                            $(`<a href='${address}' class='external_link' target='_blank'></a>`)
+                        )
+                    }
+
+                    lis.push(li)
                 }
-                return result
-            })()
+            }
             ul.append(lis)
             output.append(ul)
 
@@ -448,11 +413,11 @@ const Sidebar = {
             // msdTags = require '../markup/msdtags.html'
             const msdTags = "markup/msdtags.html"
             return output.append(`<span class='msd_sidebar'>${str_value}</span>
-    <a href='${msdTags}' target='_blank'>
-        <span class='sidebar_info ui-icon ui-icon-info'></span>
-    </a>
-</span>\
-`)
+                    <a href='${msdTags}' target='_blank'>
+                        <span class='sidebar_info ui-icon ui-icon-info'></span>
+                    </a>
+                </span>\
+            `)
         } else if (attrs.pattern) {
             return output.append(
                 _.template(attrs.pattern)({
@@ -464,7 +429,7 @@ const Sidebar = {
             )
         } else {
             if (attrs.translationKey) {
-                if (loc_data["en"][attrs.translationKey + value]) {
+                if (window.loc_data["en"][attrs.translationKey + value]) {
                     return output.append(
                         `<span rel='localize[${attrs.translationKey}${value}]'></span>`
                     )
@@ -483,33 +448,25 @@ const Sidebar = {
         const totalWidth = this.element.width()
 
         // ellipse for too long links of type=url
-        return this.element
+        this.element
             .find(".sidebar_url")
             .css("white-space", "nowrap")
             .each(function() {
-                return (() => {
-                    const result = []
-                    while ($(this).width() > totalWidth) {
-                        const oldtext = $(this).text()
-                        const a = _.trim(oldtext, "/")
-                            .replace("...", "")
-                            .split("/")
-                        const domain = a.slice(2, 3)
-                        let midsection = a.slice(3).join("/")
-                        midsection = `...${midsection.slice(2)}`
-                        $(this).text(["http:/"].concat(domain, midsection).join("/"))
-                        if (midsection === "...") {
-                            break
-                        } else {
-                            result.push(undefined)
-                        }
+                while ($(this).width() > totalWidth) {
+                    const oldtext = $(this).text()
+                    const a = _.trim(oldtext, "/")
+                        .replace("...", "")
+                        .split("/")
+                    const domain = a.slice(2, 3)
+                    let midsection = a.slice(3).join("/")
+                    midsection = `...${midsection.slice(2)}`
+                    $(this).text(["http:/"].concat(domain, midsection).join("/"))
+                    if (midsection === "...") {
+                        break
                     }
-                    return result
-                })()
+                }
             })
     },
-
-    // @element.css "display", oldDisplay
 
     updatePlacement() {
         const max = Math.round($("#columns").position().top)
@@ -567,11 +524,3 @@ $.widget("korp.radioList", {
         return this.element.find(".radioList_selected")
     }
 })
-
-function __guardMethod__(obj, methodName, transform) {
-    if (typeof obj !== "undefined" && obj !== null && typeof obj[methodName] === "function") {
-        return transform(obj, methodName)
-    } else {
-        return undefined
-    }
-}
