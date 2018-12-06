@@ -1,8 +1,4 @@
 /** @format */
-/*
- * decaffeinate suggestions:
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const korpApp = angular.module("korpApp")
 
 korpApp.controller("VideoCtrl", function($scope, $uibModal) {
