@@ -110,6 +110,12 @@ var statisticsFormattingModule = function() {
                     .outerHTML()
                 }).join(" ");
                 return output;
+            case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
+                var output =  _.map(values, function(token) {
+                    return $("<span>").text(token)
+                    .outerHTML()
+                }).join(" ");
+                return output;
             default: // structural attributes
                 var prefix = ""
                 if(structAttributes.translationKey)

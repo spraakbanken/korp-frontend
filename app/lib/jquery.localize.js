@@ -55,7 +55,7 @@
 		this.find("[rel^=localize]").each(function(i, elem) {
 			var elem = $(elem);
 			var key = elem.attr("rel").match(/localize\[(.*?)\]/)[1];
-			var value = valueForKey(key, data);
+			var value = valueForKey(key, data) || key;
 			var prefix = valueForKey($(this).data("locPrefix"), data) || "";
 			var suffix = valueForKey($(this).data("locSuffix"), data) || "";
 			if(prefix) prefix += ": "; 

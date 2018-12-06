@@ -83,15 +83,9 @@ Sidebar =
             else
                 ord2 = customAttrs[b].order
 
-            # first three cases to handle ord1 or ord2 being undefined
-            if ord1 == ord2
-                return 0
-            if not ord1
-                return -1
-            if not ord2
-                return 1
-            else
-                return ord1 - ord2
+            if _.isUndefined(ord1) then ord1 = 10000
+            if _.isUndefined(ord2) then ord2 = 10000
+            return ord1 - ord2
 
         items = []
         for [key, value] in pairs
@@ -252,10 +246,11 @@ Sidebar =
             return output.append "<a href='#{str_value}' class='exturl sidebar_url' target='_blank'>#{decodeURI(str_value)}</a>"
 
         else if key == "msd"
-            msdTags = require '../markup/msdtags.html'
+            # msdTags = require '../markup/msdtags.html'
+            msdTags = 'markup/msdtags.html'
             return output.append """<span class='msd_sidebar'>#{str_value}</span>
                                         <a href='#{msdTags}' target='_blank'>
-                                            <span id='sidbar_info' class='ui-icon ui-icon-info'></span>
+                                            <span class='sidebar_info ui-icon ui-icon-info'></span>
                                         </a>
                                     </span>
                                 """

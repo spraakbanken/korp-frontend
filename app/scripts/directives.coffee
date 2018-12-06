@@ -818,12 +818,20 @@ korpApp.directive 'reduceSelect', ($timeout) ->
             scope.numberAttributes = scope.selected.length
 
         scope.toggleSelected = (value, event) ->
+            isLinux = window.navigator.userAgent.indexOf("Linux") != -1
             item = scope.keyItems[value]
-            item.selected = not item.selected
-            if value == "word" and not item.selected
-                item.insensitive = false
-                scope.insensitive = []
+
+            if (!isLinux && event.altKey) || (isLinux && event.ctrlKey)
+                _.map (_.values scope.keyItems), (item) -> item.selected = false
+                item.selected = true
+            else
+                item.selected = not item.selected
+                if value == "word" and not item.selected
+                    item.insensitive = false
+                    scope.insensitive = []
+
             updateSelected scope
+
 
             if event
                 event.stopPropagation()
