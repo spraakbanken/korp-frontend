@@ -336,9 +336,9 @@ korpApp.directive("meter", () => ({
         scope.loglike = Math.abs(scope.meter.loglike)
 
         scope.tooltipHTML = `\
-${util.getLocaleString("statstable_absfreq")}: ${scope.meter.abs}
-<br>
-loglike: ${scope.loglike}\
+            ${util.getLocaleString("statstable_absfreq")}: ${scope.meter.abs}
+            <br>
+            loglike: ${scope.loglike}\
 `
 
         const w = 394

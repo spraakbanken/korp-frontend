@@ -224,7 +224,6 @@ class KwicCtrl {
             let decr = start
             let incr = end
             while (decr >= 0) {
-                decr--
                 if (
                     (
                         (hitContext.tokens[decr].structs && hitContext.tokens[decr].structs.open) ||
@@ -234,9 +233,9 @@ class KwicCtrl {
                     span[0] = decr
                     break
                 }
+                decr--
             }
             while (incr < hitContext.tokens.length) {
-                incr++
                 if (
                     (
                         (hitContext.tokens[incr].structs && hitContext.tokens[incr].structs.open) ||
@@ -246,6 +245,7 @@ class KwicCtrl {
                     span[1] = incr
                     break
                 }
+                incr++
             }
 
             return span
@@ -472,6 +472,7 @@ korpApp.directive("statsResultCtrl", () => ({
 
 korpApp.directive("wordpicCtrl", () => ({
     controller($scope, $rootScope, $location, utils, searches) {
+        console.log("wordpicCtrl", $scope)
         $scope.loading = false
         $scope.progress = 0
         $scope.word_pic = $location.search().word_pic != null
@@ -560,7 +561,10 @@ korpApp.directive("wordpicCtrl", () => ({
             }
         }
 
-        $scope.isLemgram = word => util.isLemgramId(word)
+        $scope.isLemgram = word => {
+            console.log("isLemgram", word)
+            util.isLemgramId(word)
+        }
 
         $scope.renderTable = obj => obj instanceof Array
 
@@ -658,6 +662,7 @@ korpApp.directive("compareCtrl", () => ({
         return s.promise.then(
             function(...args) {
                 const [tables, max, cmp1, cmp2, reduce] = args[0]
+                console.log("args", args)
                 const xhr = args[1]
                 s.loading = false
 
@@ -676,6 +681,7 @@ korpApp.directive("compareCtrl", () => ({
                 })
 
                 s.max = max
+                console.log("s.max", s.max)
 
                 s.cmp1 = cmp1
                 s.cmp2 = cmp2

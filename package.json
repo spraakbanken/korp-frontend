@@ -60,7 +60,7 @@
         "postinstall": "node_modules/protractor/bin/webdriver-manager update",
         "pretest": "yarn run testserver",
         "test": "yarn run test:karma && yarn run test:e2e || :",
-        "posttest": "pkill -f webpack-dev-server",
+        "IGNOREposttest": "pkill -f webpack-dev-server",
         "test:karma": "karma start test/karma/karma.conf.js",
         "test:e2e": "node_modules/protractor/bin/protractor test/e2e/conf_e2e.js",
         "start": "webpack-dev-server --config webpack.dev.js",

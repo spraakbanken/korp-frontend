@@ -130,7 +130,8 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             const groupAndSum = function(table, currentMax) {
                 const groups = _.groupBy(table, obj => obj.value.replace(/(:.+?)(\/|$| )/g, "$2"))
 
-                const res = _.map(groups, function(value, key) {
+                const res = _.map(_.toPairs(groups), function([key, value]) {
+                    console.log("key, value", key, value)
                     const tokenLists = _.map(key.split("/"), tokens => tokens.split(" "))
 
                     let loglike = 0
@@ -138,7 +139,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
                     const cqp = []
                     const elems = []
 
-                    for (let val in value) {
+                    for (let val of value) {
                         abs += val.abs
                         loglike += val.loglike
                         elems.push(val.value)

@@ -871,7 +871,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
 
         const tagsetTrans = _.invert(settings.wordpictureTagset)
 
-        const res = _.map(tables, function([[token, wordClass]]) {
+        const res = _.map(tables, function([token, wordClass]) {
             const getRelType = item => ({
                 rel: tagsetTrans[item.rel.toLowerCase()],
                 field_reverse: item.dep === token
