@@ -131,7 +131,6 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
                 const groups = _.groupBy(table, obj => obj.value.replace(/(:.+?)(\/|$| )/g, "$2"))
 
                 const res = _.map(_.toPairs(groups), function([key, value]) {
-                    console.log("key, value", key, value)
                     const tokenLists = _.map(key.split("/"), tokens => tokens.split(" "))
 
                     let loglike = 0
@@ -289,161 +288,172 @@ korpApp.factory("nameEntitySearch", function($rootScope, $q) {
     return new NameEntities()
 })
 
-korpApp.factory("searches", function(utils, $location, $rootScope, $http, $q, nameEntitySearch) {
-    class Searches {
-        constructor() {
-            this.activeSearch = null
-            const def = $q.defer()
-            const timedef = $q.defer()
-            this.infoDef = def.promise
-            this.timeDef = timedef.promise
+korpApp.factory("searches", [
+    "utils",
+    "$location",
+    "$rootScope",
+    "$http",
+    "$q",
+    "nameEntitySearch",
+    function(utils, $location, $rootScope, $http, $q, nameEntitySearch) {
+        class Searches {
+            constructor() {
+                this.activeSearch = null
+                const def = $q.defer()
+                const timedef = $q.defer()
+                this.infoDef = def.promise
+                this.timeDef = timedef.promise
 
-            // is resolved when parallel search controller is loaded
-            this.langDef = $q.defer()
-            this.getInfoData().then(function() {
-                def.resolve()
-                return initTimeGraph(timedef)
-            })
-        }
-
-        kwicSearch(cqp, isPaging) {
-            kwicResults.makeRequest(cqp, isPaging)
-            if (!isPaging) {
-                statsResults.makeRequest(cqp)
-                return this.nameEntitySearch(cqp)
+                // is resolved when parallel search controller is loaded
+                this.langDef = $q.defer()
+                this.getInfoData().then(function() {
+                    def.resolve()
+                    return initTimeGraph(timedef)
+                })
             }
-        }
 
-        lemgramSearch(word, type) {
-            if (settings.wordpicture === false) {
-                return
-            }
-            return lemgramResults.makeRequest(word, type)
-        }
-
-        nameEntitySearch(cqp) {
-            if ($location.search().show_map != null) {
-                return nameEntitySearch.request(cqp)
-            }
-        }
-
-        getInfoData() {
-            const def = $q.defer()
-            $http({
-                method: "GET",
-                url: settings.korpBackendURL + "/info",
-                params: {
-                    corpus: _.map(settings.corpusListing.corpora, "id")
-                        .map(a => a.toUpperCase())
-                        .join(",")
+            kwicSearch(cqp, isPaging) {
+                kwicResults.makeRequest(cqp, isPaging)
+                if (!isPaging) {
+                    statsResults.makeRequest(cqp)
+                    return this.nameEntitySearch(cqp)
                 }
-            }).then(function(response) {
-                const { data } = response
-                for (let corpus of settings.corpusListing.corpora) {
-                    corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
-                    const privateStructAttrs = []
-                    for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
-                        if (attr.indexOf("__") !== -1) {
-                            privateStructAttrs.push(attr)
+            }
+
+            lemgramSearch(word, type) {
+                if (settings.wordpicture === false) {
+                    return
+                }
+                return lemgramResults.makeRequest(word, type)
+            }
+
+            nameEntitySearch(cqp) {
+                if ($location.search().show_map != null) {
+                    return nameEntitySearch.request(cqp)
+                }
+            }
+
+            getInfoData() {
+                const def = $q.defer()
+                $http({
+                    method: "GET",
+                    url: settings.korpBackendURL + "/info",
+                    params: {
+                        corpus: _.map(settings.corpusListing.corpora, "id")
+                            .map(a => a.toUpperCase())
+                            .join(",")
+                    }
+                }).then(function(response) {
+                    const { data } = response
+                    for (let corpus of settings.corpusListing.corpora) {
+                        corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
+                        const privateStructAttrs = []
+                        for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
+                            if (attr.indexOf("__") !== -1) {
+                                privateStructAttrs.push(attr)
+                            }
+                        }
+                        corpus["private_struct_attributes"] = privateStructAttrs
+                    }
+                    util.loadCorpora()
+                    return def.resolve()
+                })
+
+                return def.promise
+            }
+        }
+
+        const searches = new Searches()
+
+        searches.getCqpExpr = function() {
+            const search = searches.activeSearch
+            let cqpExpr = null
+            if (search) {
+                if (search.type === "word" || search.type === "lemgram") {
+                    cqpExpr = $rootScope.simpleCQP
+                } else {
+                    cqpExpr = search.val
+                }
+            }
+            return cqpExpr
+        }
+
+        let oldValues = []
+        $rootScope.$watchGroup(
+            [() => $location.search().search, "_loc.search().page"],
+            newValues => {
+                let pageChanged, searchChanged
+                c.log("searches service watch", $location.search().search)
+
+                const searchExpr = $location.search().search
+                if (!searchExpr) {
+                    return
+                }
+                let [type, ...value] = (searchExpr && searchExpr.split("|")) || []
+                value = value.join("|")
+
+                newValues[1] = Number(newValues[1]) || 0
+                oldValues[1] = Number(oldValues[1]) || 0
+
+                if (_.isEqual(newValues, oldValues)) {
+                    pageChanged = false
+                    searchChanged = true
+                } else {
+                    pageChanged = newValues[1] !== oldValues[1]
+                    searchChanged = newValues[0] !== oldValues[0]
+                }
+
+                const pageOnly = pageChanged && !searchChanged
+
+                if (value) {
+                    let historyValue
+                    if (type === "lemgram") {
+                        historyValue = unregescape(value)
+                    } else {
+                        historyValue = value
+                    }
+                    view.updateSearchHistory(historyValue, $location.absUrl())
+                }
+                $q.all([
+                    searches.infoDef,
+                    searches.langDef.promise,
+                    $rootScope.globalFilterDef.promise
+                ]).then(function() {
+                    let extendedSearch = false
+                    if (type === "cqp") {
+                        extendedSearch = true
+                        if (!value) {
+                            value = $location.search().cqp
                         }
                     }
-                    corpus["private_struct_attributes"] = privateStructAttrs
-                }
-                util.loadCorpora()
-                return def.resolve()
-            })
+                    if (["cqp", "word", "lemgram"].includes(type)) {
+                        searches.activeSearch = {
+                            type,
+                            val: value,
+                            page: newValues[1],
+                            pageOnly
+                        }
+                    } else if (type === "saldo") {
+                        extendedSearch.setOneToken("saldo", value)
+                    }
 
-            return def.promise
-        }
+                    if (type === "cqp") {
+                        if (extendedSearch && $rootScope.globalFilter) {
+                            value = CQP.stringify(
+                                CQP.mergeCqpExprs(CQP.parse(value || "[]"), $rootScope.globalFilter)
+                            )
+                        }
+                        searches.kwicSearch(value, pageOnly)
+                    }
+
+                    oldValues = [].concat(newValues)
+                })
+            }
+        )
+
+        return searches
     }
-
-    const searches = new Searches()
-
-    searches.getCqpExpr = function() {
-        const search = searches.activeSearch
-        let cqpExpr = null
-        if (search) {
-            if (search.type === "word" || search.type === "lemgram") {
-                cqpExpr = $rootScope.simpleCQP
-            } else {
-                cqpExpr = search.val
-            }
-        }
-        return cqpExpr
-    }
-
-    let oldValues = []
-    $rootScope.$watchGroup([() => $location.search().search, "_loc.search().page"], newValues => {
-        let pageChanged, searchChanged
-        c.log("searches service watch", $location.search().search)
-
-        const searchExpr = $location.search().search
-        if (!searchExpr) {
-            return
-        }
-        let [type, ...value] = (searchExpr && searchExpr.split("|")) || []
-        value = value.join("|")
-
-        newValues[1] = Number(newValues[1]) || 0
-        oldValues[1] = Number(oldValues[1]) || 0
-
-        if (_.isEqual(newValues, oldValues)) {
-            pageChanged = false
-            searchChanged = true
-        } else {
-            pageChanged = newValues[1] !== oldValues[1]
-            searchChanged = newValues[0] !== oldValues[0]
-        }
-
-        const pageOnly = pageChanged && !searchChanged
-
-        if (value) {
-            let historyValue
-            if (type === "lemgram") {
-                historyValue = unregescape(value)
-            } else {
-                historyValue = value
-            }
-            view.updateSearchHistory(historyValue, $location.absUrl())
-        }
-        $q.all([
-            searches.infoDef,
-            searches.langDef.promise,
-            $rootScope.globalFilterDef.promise
-        ]).then(function() {
-            let extendedSearch = false
-            if (type === "cqp") {
-                extendedSearch = true
-                if (!value) {
-                    value = $location.search().cqp
-                }
-            }
-            if (["cqp", "word", "lemgram"].includes(type)) {
-                searches.activeSearch = {
-                    type,
-                    val: value,
-                    page: newValues[1],
-                    pageOnly
-                }
-            } else if (type === "saldo") {
-                extendedSearch.setOneToken("saldo", value)
-            }
-
-            if (type === "cqp") {
-                if (extendedSearch && $rootScope.globalFilter) {
-                    value = CQP.stringify(
-                        CQP.mergeCqpExprs(CQP.parse(value || "[]"), $rootScope.globalFilter)
-                    )
-                }
-                searches.kwicSearch(value, pageOnly)
-            }
-
-            oldValues = [].concat(newValues)
-        })
-    })
-
-    return searches
-})
+])
 
 korpApp.service(
     "compareSearches",
@@ -484,8 +494,6 @@ korpApp.factory("lexicons", function($q, $http) {
             cancelNext = true
         },
         getLemgrams(wf, resources, corporaIDs) {
-            console.log("getLemgrams")
-
             const deferred = $q.defer()
             canceller = $q.defer()
             if (cancelNext) {
