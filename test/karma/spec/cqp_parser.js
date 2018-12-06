@@ -1,14 +1,6 @@
 /* eslint-disable
     no-undef,
 */
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 require("../../../app/scripts/cqp_parser/CQPParser.js")
 require("../../../app/scripts/cqp_parser/cqp.js")
 window.moment = require("moment")
@@ -25,7 +17,7 @@ describe("parsing", function() {
     )
 
 
-    return it("can parse a sequence", () =>
+    it("can parse a sequence", () =>
         expect(JSON.stringify(CQP.parse("[word = 'foo'] [word = 'bar']")))
             .toEqual('[{"and_block":[[{"type":"word","op":"=","val":"foo","flags":null}]]},{"and_block":[[{"type":"word","op":"=","val":"bar","flags":null}]]}]')
     )
@@ -58,17 +50,17 @@ const expandExpressions = [
 
 describe("parsing", function() {
     it("can parse simple expr", () =>
-        Array.from(basicExpressions).map((expr) =>
+        basicExpressions.map((expr) =>
             expect(CQP.stringify(CQP.parse(expr))).toEqual(expr))
     )
 
     it("changes", () =>
-        Array.from(changingExpressions).map((expr) =>
+        changingExpressions.map((expr) =>
             expect(CQP.stringify(CQP.parse(expr.input))).toEqual(expr.expected))
     )
 
-    return it("expands", () =>
-        Array.from(expandExpressions).map((expr) =>
+    it("expands", () =>
+        expandExpressions.map((expr) =>
             expect(CQP.stringify(CQP.parse(expr.input), true)).toEqual(expr.expected))
     )
 })

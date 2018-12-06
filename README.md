@@ -39,14 +39,13 @@ imgPath = require("img/image.png")
 myTemplate = "<img src='#{imgPath}'>"
 ```
 
-Most dependencies are only specified in `app/webpack.coffee` and where needed
+Most dependencies are only specified in `app/index.js` and where needed
 added to the `window`-object.
 
 About the current loaders in in `webpack.config.js`:
 - `pug` and `html` files: all `src`-attributes in `<img>` tags and all `href`s in `<link>` tags will be
   loaded by webpack and replaced in the markup. Uses file loader so that requiring a `pug`
   or `html` file will give the path to the file back.
-- `coffee` files are added to the bundle. Source maps are available.
 - `js` files are added to the bundle
 - all images and fonts are added to the bundle using file loader and gives back a file path.
 - `css` and `scss` are added to the bundle. `url`s will be loaded and replaced by webpack.
