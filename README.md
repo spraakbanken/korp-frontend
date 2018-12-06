@@ -8,6 +8,10 @@ Documentation:
 - [Backend documentation](https://spraakbanken.gu.se/eng/research/infrastructure/korp/distribution/backend)
 - Sparv - The pipeline used to tag and otherwise process raw Swedish-language corpus data is documented [here](https://spraakbanken.gu.se/eng/research/infrastructure/korp/distribution/corpuspipeline)
 
+# Breaking changes
+- In order to benefit from superior tooling Korp migrated away from coffeescript and now uses plain javascript instead. This has been done semi-automatically using [decaffeinate](https://decaffeinate-project.org). You should replace any coffeescript code in your fork with the equivalent javascript. 
+
+
 # Getting started
 
 Install `yarn`: `https://yarnpkg.com`
