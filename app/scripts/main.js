@@ -56,16 +56,16 @@ $(document).keyup(function(event) {
     }
 })
 
-const toggleLogos = function() {
-    if ($(window).width() > 1050) {
-        return $(".logos").show()
-    } else {
-        return $(".logos").hide()
-    }
-}
-toggleLogos()
+// const toggleLogos = function() {
+//     if ($(window).width() > 1050) {
+//         return $(".logos").show()
+//     } else {
+//         return $(".logos").hide()
+//     }
+// }
+// toggleLogos()
 
-$(window).resize(event => toggleLogos())
+// $(window).resize(event => toggleLogos())
 
 $.when(loc_dfd, deferred_domReady).then(
     function(loc_data) {

@@ -141,12 +141,30 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" },
-          { loader: "sass-loader" }
-        ]
-      }
+          use: [
+                    "style-loader", // creates style nodes from JS strings
+                    {
+                      loader: "css-loader",
+                      options: {
+                        sourceMap: process.env.NODE_ENV !== "production"
+                      }
+                    },
+                    {
+                      loader: "postcss-loader",
+                      options: {
+                        plugins: () => [require("autoprefixer")],
+                        sourceMap: process.env.NODE_ENV !== "production"
+                      }
+                    },
+                    {
+                      loader: "sass-loader",
+                      options: {
+                        sourceMap: process.env.NODE_ENV !== "production",
+                        // sourceMapContents: false
+                      }
+                    }
+                  ]
+                },
     ]
   },
   plugins: [

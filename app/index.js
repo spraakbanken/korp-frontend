@@ -9,6 +9,7 @@ require("leaflet/dist/leaflet.css")
 require("leaflet.markercluster/dist/MarkerCluster.css")
 require("geokorp/dist/styles/geokorp.css")
 require("components-jqueryui/themes/smoothness/jquery-ui.min.css")
+require("./styles/bootstrap4-custom.scss")
 require("./styles/styles.scss")
 
 window._ = require("lodash")

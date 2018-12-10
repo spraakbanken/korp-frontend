@@ -1,5 +1,6 @@
 
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+// @import "bootstrap4-custom";
 @import "bootstrap-custom";
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome";
@@ -181,7 +182,6 @@ img {
 }
 
 #header_left {
-  float: left;
   > a {
     margin-right: 10px;
   }
@@ -395,7 +395,7 @@ time-interval {
 
 .scroll_checkboxes {
   width: 480px;
-  height: 33px;
+  height: 35px;
   overflow: hidden;
   margin-bottom: 2px;
   vertical-align: bottom;
@@ -623,7 +623,7 @@ table {
   }
   .plus-btn {
       position: relative;
-      top: 3px;
+      top: -1px;
   }
 }
 
@@ -1665,10 +1665,6 @@ label[for=lemgram_select]:before {
     }
   }
 
-  .simple_form {
-    float : left;
-  }
-
   .opts {
     margin-top : 1em;
     margin-bottom : 1em;
@@ -1754,6 +1750,9 @@ body.modal-open {
   }
 }
 
+.popover {
+  display : none;
+}
 .search_submit {
   display : inline;
   margin-right : 5px;
@@ -1923,10 +1922,6 @@ warning ~ * {
       margin-top: 10px;
   }
 
-}
-
-.nav-tabs li {
-  position : relative;
 }
 
 .tab_progress {
@@ -2297,10 +2292,14 @@ line.tick {
   padding-top : 0.2em;
 
   li {
+    position: relative;
     cursor: pointer;
     margin-right : 0.2em;
+
   }
   .badge {
+    margin-top : -1px;
+    margin-bottom : -1px;
     margin-left : 1em;
   }
 
@@ -2884,5 +2883,8 @@ global-filters {
     img {
         padding:5px;
         height: 68px;
+    }
+    .sb {
+      padding-bottom: 0;
     }
 }
