@@ -7,7 +7,8 @@ require("lodash");
 
 onmessage = function(e) {
     var data = e.data.data;
-    var total = data.total;
+    console.log("data", e.data)
+    var total = data.combined.sums;
     var reduceVals = e.data.reduceVals;
     var groupStatistics = e.data.groupStatistics;
 

@@ -337,7 +337,7 @@ korpApp.factory("searches", [
                 const def = $q.defer()
                 $http({
                     method: "GET",
-                    url: settings.korpBackendURL + "/info",
+                    url: settings.korpBackendURL + "/corpus_info",
                     params: {
                         corpus: _.map(settings.corpusListing.corpora, "id")
                             .map(a => a.toUpperCase())

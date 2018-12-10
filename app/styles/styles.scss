@@ -1617,6 +1617,9 @@ label[for=lemgram_select]:before {
   margin-top: -6px;
   cursor: pointer;
   height: 26px;
+
+  font-size : 1.5em;
+  color : #333;
 }
 
 #cog_menu {
@@ -1693,7 +1696,7 @@ label[for=lemgram_select]:before {
   font-size : 1.3em;
 }
 
-.modal-header h3, .modal-header h2 {
+h2, h3 {
   font-weight : normal;
 }
 
