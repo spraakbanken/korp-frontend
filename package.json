@@ -2,6 +2,7 @@
     "name": "Korp",
     "version": "7.0.0",
     "dependencies": {
+        "@types/lodash": "^4.14.118",
         "angular": "1.6.8",
         "angular-dynamic-locale": "0.1.32",
         "angular-filter": "0.5.17",
@@ -40,6 +41,7 @@
         "css-loader": "^0.28.9",
         "file-loader": "^1.1.11",
         "html-loader": "^0.5.5",
+        "ts-loader": "^5.3.1",
         "html-webpack-plugin": "^3.0.4",
         "http-server": "^0.11.1",
         "imports-loader": "^0.8.0",

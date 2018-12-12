@@ -1,22 +1,23 @@
-const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+/** @format */
+const path = require("path")
+const CleanWebpackPlugin = require("clean-webpack-plugin")
+const CopyWebpackPlugin = require("copy-webpack-plugin")
 
 function getKorpConfigDir() {
-    fs = require('fs')
-    let config = "app";
-    try {
-        json = fs.readFileSync("run_config.json", {encoding: 'utf-8'});
-        config = JSON.parse(json).configDir || "app";
-        console.log("Using \"" + config + "\" as config directory.");
-    } catch(err) {
-        console.error(err);
-        console.log("No run_config.json given, using \"app\" as config directory (default).");
-    }
-    return config;
+  fs = require("fs")
+  let config = "app"
+  try {
+    json = fs.readFileSync("run_config.json", { encoding: "utf-8" })
+    config = JSON.parse(json).configDir || "app"
+    console.log('Using "' + config + '" as config directory.')
+  } catch (err) {
+    console.error(err)
+    console.log('No run_config.json given, using "app" as config directory (default).')
+  }
+  return config
 }
 
-const korpConfigDir = getKorpConfigDir();
+const korpConfigDir = getKorpConfigDir()
 
 module.exports = {
   resolve: {
@@ -26,9 +27,9 @@ module.exports = {
       jquerybqq: path.resolve(__dirname, "app/lib/jquery.ba-bbq"),
       jreject: path.resolve(__dirname, "app/lib/jquery.reject"),
       jquerylocalize: path.resolve(__dirname, "app/lib/jquery.localize"),
-      configjs: path.resolve(korpConfigDir, 'config.js'),
-      commonjs: path.resolve(korpConfigDir, 'modes/common.js'),
-      defaultmode: path.resolve(korpConfigDir, 'modes/default_mode.js')
+      configjs: path.resolve(korpConfigDir, "config.js"),
+      commonjs: path.resolve(korpConfigDir, "modes/common.js"),
+      defaultmode: path.resolve(korpConfigDir, "modes/default_mode.js")
     }
   },
   module: {
@@ -44,12 +45,22 @@ module.exports = {
         }
       },
       {
+        test: /\.tsx?$/,
+        use: {
+          loader: "ts-loader",
+          options: {
+            configFile: path.resolve(__dirname, ".tsconfig.json")
+          }
+        },
+        exclude: /node_modules/
+      },
+      {
         test: require.resolve(path.resolve(__dirname, "app/lib/jquery.ba-bbq")),
-        use: 'imports-loader?this=>window'
+        use: "imports-loader?this=>window"
       },
       {
         test: require.resolve(path.resolve(__dirname, "app/scripts/cqp_parser/CQPParser.js")),
-        use: 'imports-loader?this=>window'
+        use: "imports-loader?this=>window"
       },
       {
         test: /\.pug$/i,
@@ -59,7 +70,7 @@ module.exports = {
         ],
         use: [
           { loader: "file-loader" },
-          { 
+          {
             loader: "extract-loader",
             options: { publicPath: "" }
           },
@@ -71,19 +82,19 @@ module.exports = {
         test: /index.pug$/,
         use: [
           { loader: "file-loader?name=index.html" },
-          { 
+          {
             loader: "extract-loader",
             options: { publicPath: "" }
           },
-          { 
+          {
             loader: "html-loader",
             options: {
-              attrs: ['img:src','link:href']
+              attrs: ["img:src", "link:href"]
             }
           },
           {
             loader: "pug-html-loader",
-            options: { 
+            options: {
               // TODO we should not pretty-print HTML, but removing this
               // option will result in that some elements get closer together
               // and need to be fixed with CSS
@@ -96,13 +107,12 @@ module.exports = {
         test: /\.html$/,
         use: [
           { loader: "file-loader" },
-          { 
+          {
             loader: "extract-loader",
             options: { publicPath: "" }
           },
           { loader: "html-loader" }
         ]
-        
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
@@ -134,91 +144,88 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" }
-        ]
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }]
       },
       {
         test: /\.scss$/,
-          use: [
-                    "style-loader", // creates style nodes from JS strings
-                    {
-                      loader: "css-loader",
-                      options: {
-                        sourceMap: process.env.NODE_ENV !== "production"
-                      }
-                    },
-                    {
-                      loader: "postcss-loader",
-                      options: {
-                        plugins: () => [require("autoprefixer")],
-                        sourceMap: process.env.NODE_ENV !== "production"
-                      }
-                    },
-                    {
-                      loader: "sass-loader",
-                      options: {
-                        sourceMap: process.env.NODE_ENV !== "production",
-                        // sourceMapContents: false
-                      }
-                    }
-                  ]
-                },
+        use: [
+          "style-loader", // creates style nodes from JS strings
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: process.env.NODE_ENV !== "production"
+            }
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: () => [require("autoprefixer")],
+              sourceMap: process.env.NODE_ENV !== "production"
+            }
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: process.env.NODE_ENV !== "production"
+              // sourceMapContents: false
+            }
+          }
+        ]
+      }
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(["dist"]),
     new CopyWebpackPlugin([
       {
-        from: korpConfigDir + '/modes/*mode.js',
-        to: 'modes',
+        from: korpConfigDir + "/modes/*mode.js",
+        to: "modes",
         flatten: true
       },
       {
-        from: korpConfigDir + '/modes/*html',
-        to: 'modes',
+        from: korpConfigDir + "/modes/*html",
+        to: "modes",
         flatten: true
       },
       {
-        from: 'app/translations/angular-locale_*.js',
-        to: 'translations',
+        from: "app/translations/angular-locale_*.js",
+        to: "translations",
         flatten: true
       },
       {
-        from: 'app/markup/msdtags.html',
-        to: 'markup'
+        from: "app/markup/msdtags.html",
+        to: "markup"
       },
       {
-        from: 'app/translations/locale-*.json',
-        to: 'translations',
+        from: "app/translations/locale-*.json",
+        to: "translations",
         flatten: true
       },
       {
-        from: korpConfigDir + '/translations/*',
-        to: 'translations',
+        from: korpConfigDir + "/translations/*",
+        to: "translations",
         flatten: true
       },
       {
-        from: 'app/lib/deptrees/',
-        to: 'lib/deptrees'
+        from: "app/lib/deptrees/",
+        to: "lib/deptrees"
       },
       {
-        from: 'node_modules/geokorp/dist/data/*.json',
+        from: "node_modules/geokorp/dist/data/*.json",
         // TODO hard-coded in geokorp project that these files should be here
         // we need to change geokorp so that these files are required
-        to: 'components/geokorp/dist/data',
+        to: "components/geokorp/dist/data",
         flatten: true
       }
     ])
   ],
   entry: {
-    bundle: './app/index.js',
-    worker: './app/scripts/statistics_worker.js'
+    bundle: "./app/index.js",
+    worker: "./app/scripts/statistics_worker.ts"
   },
   output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: "[name].js",
+    path: path.resolve(__dirname, "dist"),
     globalObject: "this"
   }
-};
+}
