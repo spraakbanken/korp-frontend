@@ -39,9 +39,9 @@ describe("stats table", function() {
         })
     )
 
-    it("should work to open arc diagram with the correct result", () =>
+    fit("should work to open arc diagram with the correct result", () =>
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&stats_reduce=lemma").then(function() {
-            browser.sleep(1000)
+            browser.sleep(500)
             const arcDiagramButtons = element.all((by.css('.slick-row .arcDiagramPicture')))
             expect(arcDiagramButtons.count()).toBe(3)
 
