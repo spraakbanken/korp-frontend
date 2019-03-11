@@ -69,10 +69,10 @@ use a `run_config.json` file in the root of the project with the following conte
 
 In this folder, use the same layout as in Korp and add the following files:
 
-- `app/config.js`
-- `app/modes/*mode.js`
-- `app/modes/common.js`
-- `app/translations/*.json`
+- `config.js`
+- `modes/*mode.js`
+- `modes/common.js`
+- `translations/*.json`
 
 ## webpack and configuration
 
