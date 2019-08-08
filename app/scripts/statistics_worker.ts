@@ -58,39 +58,40 @@ onmessage = function(e) {
         }
     }
 
-    // const groupRowsByAttribute = function(groupData: { [id: string]: RowsEntity[] }) {
-    //     const rowsByAttribute = {}
-    //     _.map(groupData, function(rows, rowId) {
-    //         const byAttribute = {}
-    //         _.map(rows[0].value, function(values, field) {
-    //             const newValues = simplifyValue(values, field)
-    //             byAttribute[field] = newValues
-    //         })
-    //         rowsByAttribute[rowId] = byAttribute
-    //     })
-    //     return rowsByAttribute
-    // }
+    const groupRowsByAttribute = function(groupData: { [id: string]: RowsEntity[] }) {
+        const rowsByAttribute = {}
+        _.map(groupData, function(rows, rowId) {
+            const byAttribute = {}
+            _.map(rows[0].value, function(values, field) {
+                const newValues = simplifyValue(values, field)
+                byAttribute[field] = newValues
+            })
+            rowsByAttribute[rowId] = byAttribute
+        })
+        return rowsByAttribute
+    }
 
-    // var simplifyHitString = function(item: RowsEntity): string {
-    //     var newFields: any[] = []
-    //     _.map(item.value, function(values, field) {
-    //         var newValues = simplifyValue(values, field)
-    //         newFields.push(newValues.join(" "))
-    //     })
-    //     return newFields.join("/")
-    // }
+    var simplifyHitString = function(item: RowsEntity): string {
+        var newFields: any[] = []
+        _.map(item.value, function(values, field) {
+            var newValues = simplifyValue(values, field)
+            newFields.push(newValues.join(" "))
+        })
+        return newFields.join("/")
+    }
 
-    // var totalAbsoluteGroups = _.groupBy(total.rows, (item) => simplifyHitString(item, "absolute"));
+    var totalAbsoluteGroups = _.groupBy(combined.rows, item => simplifyHitString(item))
+    console.log("totalAbsoluteGroups", totalAbsoluteGroups, _.keys(totalAbsoluteGroups).length)
     // var totalRelativeGroups = _.groupBy(total.rows, (item) => simplifyHitString(item, "relative"));
 
     // this is for presentation and just needs to be done on a part of the result
     // that has data for all rows
-    // var rowsByAttribute = groupRowsByAttribute(totalAbsoluteGroups);
+    var rowsByAttribute = groupRowsByAttribute(totalAbsoluteGroups)
 
-    // var rowIds = _.keys(totalAbsoluteGroups);
-    // var rowCount = rowIds.length + 1
-    // var dataset = new Array(rowCount);
-    const dataset = new Array(count + 1)
+    var rowIds = _.keys(totalAbsoluteGroups)
+    var rowCount = rowIds.length + 1
+    var dataset = new Array(rowCount)
+    // const dataset = new Array(count + 1)
 
     const totalRow = {
         id: "row_total",
@@ -104,9 +105,7 @@ onmessage = function(e) {
         const obj = data.corpora[id]
         totalRow[id + "_value"] = [obj.sums.absolute, obj.sums.relative]
 
-        // corporaFreqs[id] = {}
-        // corporaFreqs[id]["absolute"] = _.groupBy(obj.rows, (item) => simplifyHitString(item, "absolute"));
-        // corporaFreqs[id]["relative"] = _.groupBy(obj.rows, (item) => simplifyHitString(item, "relative"));
+        corporaFreqs[id] = _.groupBy(obj.rows, simplifyHitString)
     }
 
     dataset[0] = totalRow
@@ -121,73 +120,91 @@ onmessage = function(e) {
     //     return sum;
     // }
 
-
-    function valueToString(value : Value) : string {
+    function valueToString(value: Value): string {
         const sorted = _.orderBy(_.toPairs(value), ([head]) => head)
         return _.map(sorted, ([key, val]) => key + val.join(",")).join("-")
     }
 
-    let i = 1
-    for (const { absolute, relative, value } of combined.rows) {
+    let reduceMap = {}
+
+    // for (const { absolute, relative, value } of combined.rows) {
+    for (var i = 0; i < rowCount - 1; i++) {
+        let word = rowIds[i]
+        let totalAbs = _.sumBy(totalAbsoluteGroups[word], "absolute")
+        let totalRel = _.sumBy(totalAbsoluteGroups[word], "relative")
         const statsValues = []
-        for (const [reduceVal, terms] of _.toPairs(value)) {
-            if (!_.isArray(terms)) {
-                if (!statsValues[0]) {
-                    statsValues[0] = {}
+
+        for (var j = 0; j < totalAbsoluteGroups[word].length; j++) {
+            var variant = totalAbsoluteGroups[word][j]
+            _.map(variant.value, function(terms, reduceVal) {
+                if (!_.isArray(terms)) {
+                    if (!statsValues[0]) {
+                        statsValues[0] = {}
+                    }
+                    statsValues[0][reduceVal] = [terms]
+                    reduceMap[reduceVal] = [terms]
+                } else {
+                    reduceMap[reduceVal] = terms
+                    _.map(terms, function(term, idx) {
+                        if (!statsValues[idx]) {
+                            statsValues[idx] = {}
+                        }
+                        if (!statsValues[idx][reduceVal]) {
+                            statsValues[idx][reduceVal] = []
+                        }
+                        if (statsValues[idx][reduceVal].indexOf(term) == -1) {
+                            statsValues[idx][reduceVal].push(term)
+                        }
+                    })
                 }
-                statsValues[0][reduceVal] = [terms]
-            } else {
-                for (const [idx, term] of _.toPairs(terms)) {
-                    if (!statsValues[idx]) {
-                        statsValues[idx] = {}
-                    }
-                    if (!statsValues[idx][reduceVal]) {
-                        statsValues[idx][reduceVal] = []
-                    }
-                    if (statsValues[idx][reduceVal].indexOf(term) == -1) {
-                        statsValues[idx][reduceVal].push(term)
-                    }
-                }
-            }
+            })
         }
         // let corp_val = corpora.rows[i].value
 
         let row = {
-            rowId: i,
-            total_value: [absolute, relative],
+            rowId: i + 1,
+            total_value: [totalAbs, totalRel],
             formattedValue: {},
             statsValues
         }
-        for (const key of corporaKeys) {
 
-            let corp_abs = 0
-            let corp_rel = 0
+        _.map(corporaKeys, function(corpus) {
+            // var abs = valueGetter(corporaFreqs[corpus].absolute[word]);
+            // var rel = valueGetter(corporaFreqs[corpus].relative[word]);
+            let abs = _.sumBy(corporaFreqs[corpus][word], "absolute")
+            let rel = _.sumBy(corporaFreqs[corpus][word], "relative")
 
-            for (const corpRow of corpora[key].rows) {
-                if (valueToString(value) == valueToString(corpRow.value)) {
-                    corp_abs = corpRow.absolute
-                    corp_rel = corpRow.relative
-                    break
-                }
-            }
+            row[corpus + "_value"] = [abs, rel]
+        })
 
-            // console.log("corpora", corpora, key, corpora[key].rows.length, i)
-            // const corp_abs = corpora[key].rows[i - 1].absolute
-            // const corp_rel = corpora[key].rows[i - 1].relative
-            // let valGroups = _.groupBy(corpora[key].rows, ({value}) => simplifyValue(value).join(" "))
+        // for (const key of corporaKeys) {
+        //   let corp_abs = 0
+        //   let corp_rel = 0
 
-            // console.log("valGroups", valGroups, value)
-            // simplifyHitString(corpora[key].rows)
-            // valGroups[]
-            row[key + "_value"] = [corp_abs, corp_rel]
+        //   for (const corpRow of corpora[key].rows) {
+        //     if (valueToString(value) == valueToString(corpRow.value)) {
+        //       corp_abs = corpRow.absolute
+        //       corp_rel = corpRow.relative
+        //       break
+        //     }
+        //   }
+
+        // console.log("corpora", corpora, key, corpora[key].rows.length, i)
+        // const corp_abs = corpora[key].rows[i - 1].absolute
+        // const corp_rel = corpora[key].rows[i - 1].relative
+        // let valGroups = _.groupBy(corpora[key].rows, ({value}) => simplifyValue(value).join(" "))
+
+        // console.log("valGroups", valGroups, value)
+        // simplifyHitString(corpora[key].rows)
+        // valGroups[]
+        //   row[key + "_value"] = [corp_abs, corp_rel]
+        // }
+
+        for (let reduce of reduceVals) {
+            row[reduce] = reduceMap[reduce]
         }
-        for (const val of statsValues) {
-            // is statsValues.length ever > 1 ?
-            row = { ...row, ...val }
-        }
 
-        dataset[i] = row
-        i++
+        dataset[i + 1] = row
 
         // var word = rowIds[i];
         // var totalAbs = valueGetter(totalAbsoluteGroups[word]);
@@ -241,6 +258,7 @@ onmessage = function(e) {
     dataset.sort(function(a, b) {
         return b.total_value[0] - a.total_value[0]
     })
+    console.log("dataset", dataset)
 
     const ctx: Worker = self as any
     ctx.postMessage(dataset)

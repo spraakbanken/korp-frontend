@@ -2,6 +2,22 @@
     no-undef,
 */
 
+var fs = require('fs');
+
+// abstract writing screen shot to a file
+function writeScreenShot(data, filename) {
+    var stream = fs.createWriteStream(filename);
+    stream.write(new Buffer(data, 'base64'));
+    stream.end();
+}
+
+
+browser.manage().logs()
+  .get('browser').then(function(browserLog) {
+  console.log('log: ' + 
+    require('util').inspect(browserLog));
+});
+
 describe("stats table", function() {
 
     const waitFor = function(elm) {
@@ -9,12 +25,19 @@ describe("stats table", function() {
         browser.wait(() => elm.isDisplayed())
     }
 
-    it("should show the correct rows and columns", () =>
+    fit("should show the correct rows and columns", () =>
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2").then(function() {
+            console.log(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
+            browser.sleep(5000).then( () => {
 
-            const rows = element.all((by.css('.slick-row')))
-            browser.sleep(1000)
+                const rows = element.all((by.css('.slick-row')))
+                browser.executeScript('window.scrollTo(0,3000);').then( () =>
+                browser.takeScreenshot().then(function (png) {
+                     writeScreenShot(png, 'exception.png');
+                 })
+                )
             expect(rows.count()).toBe(10)
+            } )
             
             // expect a column for hit, total, suc2, suc3
             const columns = element.all((by.css('.slick-column-name')))
@@ -39,9 +62,9 @@ describe("stats table", function() {
         })
     )
 
-    fit("should work to open arc diagram with the correct result", () =>
+    it("should work to open arc diagram with the correct result", () =>
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&stats_reduce=lemma").then(function() {
-            browser.sleep(500)
+            browser.sleep(1000)
             const arcDiagramButtons = element.all((by.css('.slick-row .arcDiagramPicture')))
             expect(arcDiagramButtons.count()).toBe(3)
 
