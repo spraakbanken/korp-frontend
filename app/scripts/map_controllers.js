@@ -173,15 +173,14 @@ korpApp.directive("newMapCtrl", ($timeout, searches) => ({
         s.useClustering = false
 
         s.promise.then(
-            (...args) => {
-                const [result] = args[0]
-                const xhr = args[1]
+            result => {
                 s.loading = false
                 s.numResults = 20
                 s.markerGroups = getMarkerGroups(result)
                 s.selectedGroups = _.keys(s.markerGroups)
             },
-            () => {
+            err => {
+                console.error("Map data parsing failed:", err)
                 s.loading = false
                 s.error = true
             }

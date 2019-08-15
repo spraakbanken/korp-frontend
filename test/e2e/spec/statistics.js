@@ -25,7 +25,7 @@ describe("stats table", function() {
         browser.wait(() => elm.isDisplayed())
     }
 
-    fit("should show the correct rows and columns", () =>
+    it("should show the correct rows and columns", () =>
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2").then(function() {
             console.log(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
             browser.sleep(5000).then( () => {

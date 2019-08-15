@@ -2,6 +2,18 @@
 "use strict"
 window.model = {}
 
+model.normalizeStatsData = function(data) {
+    if (!_.isArray(data.combined)) {
+        data.combined = [data.combined]
+    }
+
+    for (let [corpusID, obj] of _.toPairs(data.corpora)) {
+        if (!_.isArray(obj)) {
+            data.corpora[corpusID] = [obj]
+        }
+    }
+}
+
 model.getAuthorizationHeader = function() {
     if (
         typeof authenticationProxy !== "undefined" &&
@@ -375,6 +387,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                         def.reject(data)
                         return
                     }
+                    model.normalizeStatsData(data)
                     statisticsService.processData(
                         def,
                         data,

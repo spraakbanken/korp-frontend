@@ -3,36 +3,8 @@
     This is optimized code for transforming the statistics data.
     Speed/memory gains mostly come from using [absolute, relative] rather than {absolute: x, relative: y}
 */
-
-// require("lodash");
-// let _ = window['lodash']
 import * as _ from "lodash"
-
-interface StatsData {
-    combined: InnerData
-    count: number
-    corpora: Corpora
-    time: number
-}
-interface InnerData {
-    rows?: RowsEntity[] | null
-    sums: Sums
-}
-interface RowsEntity {
-    value: Value
-    relative: number
-    absolute: number
-}
-interface Value {
-    word?: string[] | null
-}
-interface Sums {
-    relative: number
-    absolute: number
-}
-interface Corpora {
-    [key: string]: InnerData
-}
+import { StatsData, RowsEntity, Value } from "./interfaces/stats"
 
 onmessage = function(e) {
     const data: StatsData = e.data.data
@@ -80,7 +52,8 @@ onmessage = function(e) {
         return newFields.join("/")
     }
 
-    var totalAbsoluteGroups = _.groupBy(combined.rows, item => simplifyHitString(item))
+    // TODO: why first element of combined?
+    var totalAbsoluteGroups = _.groupBy(combined[0].rows, item => simplifyHitString(item))
     console.log("totalAbsoluteGroups", totalAbsoluteGroups, _.keys(totalAbsoluteGroups).length)
     // var totalRelativeGroups = _.groupBy(total.rows, (item) => simplifyHitString(item, "relative"));
 
@@ -95,7 +68,7 @@ onmessage = function(e) {
 
     const totalRow = {
         id: "row_total",
-        total_value: [combined.sums.absolute, combined.sums.relative],
+        total_value: [combined[0].sums.absolute, combined[0].sums.relative],
         rowId: 0
     }
 
@@ -103,22 +76,12 @@ onmessage = function(e) {
     const corporaFreqs = {}
     for (const id of corporaKeys) {
         const obj = data.corpora[id]
-        totalRow[id + "_value"] = [obj.sums.absolute, obj.sums.relative]
+        totalRow[id + "_value"] = [obj[0].sums.absolute, obj[0].sums.relative]
 
-        corporaFreqs[id] = _.groupBy(obj.rows, simplifyHitString)
+        corporaFreqs[id] = _.groupBy(obj[0].rows, simplifyHitString)
     }
 
     dataset[0] = totalRow
-
-    // function valueGetter(obj) {
-    //     var sum = 0;
-    //     if(obj) {
-    //       for(var i = 0; i < obj.length; i++) {
-    //           sum += obj[i].freq
-    //       }
-    //     }
-    //     return sum;
-    // }
 
     function valueToString(value: Value): string {
         const sorted = _.orderBy(_.toPairs(value), ([head]) => head)
@@ -127,7 +90,6 @@ onmessage = function(e) {
 
     let reduceMap = {}
 
-    // for (const { absolute, relative, value } of combined.rows) {
     for (var i = 0; i < rowCount - 1; i++) {
         let word = rowIds[i]
         let totalAbs = _.sumBy(totalAbsoluteGroups[word], "absolute")
@@ -177,89 +139,16 @@ onmessage = function(e) {
             row[corpus + "_value"] = [abs, rel]
         })
 
-        // for (const key of corporaKeys) {
-        //   let corp_abs = 0
-        //   let corp_rel = 0
-
-        //   for (const corpRow of corpora[key].rows) {
-        //     if (valueToString(value) == valueToString(corpRow.value)) {
-        //       corp_abs = corpRow.absolute
-        //       corp_rel = corpRow.relative
-        //       break
-        //     }
-        //   }
-
-        // console.log("corpora", corpora, key, corpora[key].rows.length, i)
-        // const corp_abs = corpora[key].rows[i - 1].absolute
-        // const corp_rel = corpora[key].rows[i - 1].relative
-        // let valGroups = _.groupBy(corpora[key].rows, ({value}) => simplifyValue(value).join(" "))
-
-        // console.log("valGroups", valGroups, value)
-        // simplifyHitString(corpora[key].rows)
-        // valGroups[]
-        //   row[key + "_value"] = [corp_abs, corp_rel]
-        // }
-
         for (let reduce of reduceVals) {
             row[reduce] = reduceMap[reduce]
         }
 
         dataset[i + 1] = row
-
-        // var word = rowIds[i];
-        // var totalAbs = valueGetter(totalAbsoluteGroups[word]);
-        // var totalRel = valueGetter(totalRelativeGroups[word]);
-        // let statsValues = []
-        // for(var j = 0; j < totalAbsoluteGroups[word].length; j++) {
-        //     var variant = totalAbsoluteGroups[word][j];
-        //     _.map(variant.value, function(terms, reduceVal) {
-        //         if(!_.isArray(terms)) {
-        //             if(!statsValues[0]) {
-        //                 statsValues[0] = {};
-        //             }
-        //             statsValues[0][reduceVal] = [terms];
-        //         } else {
-        //             _.map(terms, function(term, idx) {
-        //                 if(!statsValues[idx]) {
-        //                     statsValues[idx] = {}
-        //                 }
-        //                 if(!statsValues[idx][reduceVal]) {
-        //                     statsValues[idx][reduceVal] = [];
-        //                 }
-        //                 if(statsValues[idx][reduceVal].indexOf(term) == -1) {
-        //                     statsValues[idx][reduceVal].push(term);
-        //                 }
-        //             });
-        //         }
-        //     });
-        // }
-
-        // var row = {
-        //     rowId: i + 1,
-        //     total_value: [totalAbs, totalRel],
-        //     statsValues: statsValues,
-        //     formattedValue: {}
-        // }
-
-        // _.map(corporaKeys, function(corpus) {
-        //     var abs = valueGetter(corporaFreqs[corpus].absolute[word]);
-        //     var rel = valueGetter(corporaFreqs[corpus].relative[word]);
-
-        //     row[corpus + "_value"] = [abs, rel];
-        // });
-
-        // for(var j = 0; j < reduceVals.length; j++) {
-        //     row[reduceVals[j]] = rowsByAttribute[word][reduceVals[j]]
-        // }
-
-        // dataset[i+1] = row;
     }
 
     dataset.sort(function(a, b) {
         return b.total_value[0] - a.total_value[0]
     })
-    console.log("dataset", dataset)
-
     const ctx: Worker = self as any
     ctx.postMessage(dataset)
 }

@@ -1,4 +1,7 @@
 /** @format */
+
+import { parseMapData } from "./map_services.ts"
+
 const korpApp = angular.module("korpApp")
 korpApp.factory("utils", $location => ({
     valfilter(attrobj) {
@@ -189,80 +192,91 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         _.extend(conf.headers, model.getAuthorizationHeader())
 
-        const xhr = $http(conf)
+        return $http(conf).then(
+            function({ data }) {
+                console.log("map response", data)
+                model.normalizeStatsData(data)
+                let result = parseMapData(data, cqp, cqpExprs)
+                console.log("after parseMapData", result)
 
-        xhr.then(function(response) {
-            let result
-            const { data } = response
-            const createResult = function(subResult, cqp, label) {
-                const mergeSubResults = function(absolute, relative) {
-                    const res_list = []
-                    for (let { value: value1, freq: abs_freq } of absolute) {
-                        const remove_idxs = []
-                        for (let idx = 0; idx < relative.length; idx++) {
-                            const { value: value2, freq: rel_freq } = relative[idx]
-                            const val1 = _.values(value1)[0][0]
-                            const val2 = _.values(value2)[0][0]
-                            if (val1 === val2) {
-                                res_list.push({ value: val1, abs_freq, rel_freq })
-                                remove_idxs.push(idx)
-                            }
-                        }
-                        const removed_elems = _.pullAt(relative, remove_idxs)
-                    }
-                    return res_list
-                }
+                return { corpora: attribute.corpora, cqp, within, data: result, attribute }
 
-                const points = []
-                _.map(mergeSubResults(subResult.absolute, subResult.relative), function(
-                    actual_hit
-                ) {
-                    const hit = actual_hit.value
-                    if (hit === "" || hit.startsWith(" ")) {
-                        return
-                    }
-                    const [name, countryCode, lat, lng] = hit.split(";")
-
-                    return points.push({
-                        abs: actual_hit.abs_freq,
-                        rel: actual_hit.rel_freq,
-                        name,
-                        countryCode,
-                        lat: parseFloat(lat),
-                        lng: parseFloat(lng)
-                    })
-                })
-
-                return {
-                    label,
-                    cqp,
-                    points
-                }
+                // safeApply(s, () => $rootScope.mapTabs.push())
+            },
+            err => {
+                console.log("err", err)
             }
-
-            if (_.isEmpty(cqpExprs)) {
-                result = [createResult(data.total, cqp, "Σ")]
-            } else {
-                result = []
-                for (let subResult of data.total.slice(1, data.total.length)) {
-                    result.push(createResult(subResult, subResult.cqp, cqpExprs[subResult.cqp]))
-                }
-            }
-
-            if (data.ERROR) {
-                def.reject()
-                return
-            }
-
-            return def.resolve(
-                [{ corpora: attribute.corpora, cqp, within, data: result, attribute }],
-                xhr
-            )
-        })
-
-        return def.promise
+        )
     }
 }))
+
+//         const createResult = function(subResult, cqp, label) {
+//             const mergeSubResults = function(absolute, relative) {
+//                 const res_list = []
+//                 for (let { value: value1, freq: abs_freq } of absolute) {
+//                     const remove_idxs = []
+//                     for (let idx = 0; idx < relative.length; idx++) {
+//                         const { value: value2, freq: rel_freq } = relative[idx]
+//                         const val1 = _.values(value1)[0][0]
+//                         const val2 = _.values(value2)[0][0]
+//                         if (val1 === val2) {
+//                             res_list.push({ value: val1, abs_freq, rel_freq })
+//                             remove_idxs.push(idx)
+//                         }
+//                     }
+//                     const removed_elems = _.pullAt(relative, remove_idxs)
+//                 }
+//                 return res_list
+//             }
+
+//             const points = []
+//             _.map(mergeSubResults(subResult.absolute, subResult.relative), function(
+//                 actual_hit
+//             ) {
+//                 const hit = actual_hit.value
+//                 if (hit === "" || hit.startsWith(" ")) {
+//                     return
+//                 }
+//                 const [name, countryCode, lat, lng] = hit.split(";")
+
+//                 return points.push({
+//                     abs: actual_hit.abs_freq,
+//                     rel: actual_hit.rel_freq,
+//                     name,
+//                     countryCode,
+//                     lat: parseFloat(lat),
+//                     lng: parseFloat(lng)
+//                 })
+//             })
+
+//             return {
+//                 label,
+//                 cqp,
+//                 points
+//             }
+//         }
+//         let result
+//         if (_.isEmpty(cqpExprs)) {
+//             result = [createResult(data.total, cqp, "Σ")]
+//         } else {
+//             result = []
+//             for (let subResult of data.total.slice(1, data.total.length)) {
+//                 result.push(createResult(subResult, subResult.cqp, cqpExprs[subResult.cqp]))
+//             }
+//         }
+
+//         if (data.ERROR) {
+//             def.reject()
+//             return
+//         }
+
+//         return def.resolve(
+//             [{ corpora: attribute.corpora, cqp, within, data: result, attribute }],
+//             xhr
+//         )
+//     })
+
+//     return def.promise
 
 korpApp.factory("nameEntitySearch", function($rootScope, $q) {
     class NameEntities {

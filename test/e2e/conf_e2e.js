@@ -6,8 +6,8 @@ exports.config = {
   capabilities: {
     'browserName': 'chrome',
     'chromeOptions': {
-        // 'args': ['--disable-extensions', '--window-size=1500,3000', "--privileged", "--headless"],
-        'args': ['--disable-extensions', '--window-size=1500,900'],
+        'args': ['--disable-extensions', '--window-size=1500,3000', "--privileged", "--headless"],
+        // 'args': ['--disable-extensions', '--window-size=1500,900'],
         // prefs: {
         //     download: {
         //         prompt_for_download: false, 
@@ -23,7 +23,7 @@ exports.config = {
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 20000
-  }
-  // directConnect: true,
-  // restartBrowserBetweenTests: true
+  },
+  directConnect: true,
+  restartBrowserBetweenTests: true
 };
