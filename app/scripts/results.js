@@ -1110,11 +1110,11 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         let output = []
         for (var row of this.data) {
-            let outputRow = this.searchParams.reduceVals.map(row => {
+            let outputRow = this.searchParams.reduceVals.map(reduceVal => {
                 if (row.rowId === 0) {
                     return "Σ"
                 } else {
-                    return row[reduceVal]
+                    return row[reduceVal].join(",")
                 }
             })
             outputRow.push(fmt(row.total_value[selVal]))
