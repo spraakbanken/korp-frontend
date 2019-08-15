@@ -8,6 +8,10 @@ Documentation:
 - [Backend documentation](https://spraakbanken.gu.se/eng/research/infrastructure/korp/distribution/backend)
 - Sparv - The pipeline used to tag and otherwise process raw Swedish-language corpus data is documented [here](https://spraakbanken.gu.se/eng/research/infrastructure/korp/distribution/corpuspipeline)
 
+# Breaking changes
+- In order to benefit from superior tooling Korp migrated away from coffeescript and now uses plain javascript instead. This has been done semi-automatically using [decaffeinate](https://decaffeinate-project.org). You should replace any coffeescript code in your fork with the equivalent javascript. 
+
+
 # Getting started
 
 Install `yarn`: `https://yarnpkg.com`
@@ -39,14 +43,13 @@ imgPath = require("img/image.png")
 myTemplate = "<img src='#{imgPath}'>"
 ```
 
-Most dependencies are only specified in `app/webpack.coffee` and where needed
+Most dependencies are only specified in `app/index.js` and where needed
 added to the `window`-object.
 
 About the current loaders in in `webpack.config.js`:
 - `pug` and `html` files: all `src`-attributes in `<img>` tags and all `href`s in `<link>` tags will be
   loaded by webpack and replaced in the markup. Uses file loader so that requiring a `pug`
   or `html` file will give the path to the file back.
-- `coffee` files are added to the bundle. Source maps are available.
 - `js` files are added to the bundle
 - all images and fonts are added to the bundle using file loader and gives back a file path.
 - `css` and `scss` are added to the bundle. `url`s will be loaded and replaced by webpack.
@@ -66,10 +69,10 @@ use a `run_config.json` file in the root of the project with the following conte
 
 In this folder, use the same layout as in Korp and add the following files:
 
-- `app/config.js`
-- `app/modes/*mode.js`
-- `app/modes/common.js`
-- `app/translations/*.json`
+- `config.js`
+- `modes/*mode.js`
+- `modes/common.js`
+- `translations/*.json`
 
 ## webpack and configuration
 

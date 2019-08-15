@@ -152,12 +152,3 @@ $.fn.localeKey = function(key) {
 
 })(jQuery);
 
-
-window.Subclass = function(parent, childConstr, childProto){
-  var ctor = function(){};
-  ctor.prototype = parent.prototype;
-  childConstr.prototype = new ctor;
-  childConstr.prototype.constructor = childConstr;
-  _.extend(childConstr.prototype, childProto);
-  return childConstr;
-};

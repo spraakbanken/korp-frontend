@@ -1,0 +1,7 @@
+{
+    "semi" : false,
+    "printWidth" : 100,
+    "requirePragma" : true,
+    "tabWidth": 4,
+    "useTabs" : false
+}

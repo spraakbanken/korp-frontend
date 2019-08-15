@@ -6,7 +6,8 @@ exports.config = {
   capabilities: {
     'browserName': 'chrome',
     'chromeOptions': {
-        'args': ['--disable-extensions', '--window-size=1500,900', "--privileged", "--headless"],
+        'args': ['--disable-extensions', '--window-size=1500,3000', "--privileged", "--headless"],
+        // 'args': ['--disable-extensions', '--window-size=1500,900'],
         // prefs: {
         //     download: {
         //         prompt_for_download: false, 
@@ -21,7 +22,7 @@ exports.config = {
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
     showColors: true,
-    defaultTimeoutInterval: 10000
+    defaultTimeoutInterval: 20000
   },
   directConnect: true,
   restartBrowserBetweenTests: true

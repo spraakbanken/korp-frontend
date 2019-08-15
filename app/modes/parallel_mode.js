@@ -170,15 +170,10 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 
 });
 
-var c3 = view.KWICResults.prototype.constructor
-view.KWICResults = Subclass(view.KWICResults, function() {
-    c3.apply(this, arguments);
-    this.selected = []
-}, {
+view.KWICResults = class ParallelKwicResults extends view.KWICResults {
 
-    selectWord: function(word, scope, sentence) {
-        // c.log ("word, scope, sentence", word, scope, sentence)
-        c3.prototype.selectWord.apply(this, arguments)
+    selectWord(word, scope, sentence) {
+        super.selectWord(word, scope, sentence)
         this.clearLinks()
         var self = this
         var obj = scope.wd
@@ -245,32 +240,26 @@ view.KWICResults = Subclass(view.KWICResults, function() {
         }
         safeApply($("body").scope(), $.noop)
 
-    },
+    }
 
-    clearLinks: function() {
+    clearLinks() {
         _.each(this.selected, function(word) {
             delete word._link_selected
         })
         this.selected = []
     }
-});
+}
 
-var superType = model.StatsProxy.prototype.constructor
-model.StatsProxy = Subclass(model.StatsProxy, function() {
-    superType.apply(this, arguments);
-}, {
-    makeParameters: function(reduceVals, cqp, ignoreCase) {
-        params = superType.prototype.makeParameters.apply(this, arguments)
+model.StatsProxy = class ParallelStatsProxy extends model.StatsProxy {
+    makeParameters(reduceVals, cqp, ignoreCase) {
+        params = super.makeParameters(reduceVals, cqp, ignoreCase)
 
 
         params.within = settings.corpusListing.getAttributeQuery("within").replace(/\|.*?:/g, ":")
 
         return params
     }
-
-})
-
-// model.StatsProxy.prototype.makeRequest = function(){};
+}
 
 settings.primaryColor = "#FFF3D8";
 settings.primaryLight = "#FFF9EE";
