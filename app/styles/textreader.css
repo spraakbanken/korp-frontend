@@ -1,0 +1,7 @@
+.text-container {
+  white-space: pre-wrap;
+  width: 600px;
+  margin: 50px;
+  text-align: justify;
+  font-size: 1.1em;
+}

@@ -3,7 +3,7 @@ let widget = require("components-jqueryui/ui/widget")
 const Sidebar = {
     _init() {},
 
-    updateContent(sentenceData, wordData, corpus, tokens) {
+    updateContent(sentenceData, wordData, corpus, tokens, inReadingMode) {
         this.element.html('<div id="selected_sentence" /><div id="selected_word" />')
         // TODO: this is pretty broken
         const corpusObj = settings.corpora[corpus] || settings.corpusListing.get(corpus)
@@ -25,6 +25,23 @@ const Sidebar = {
                     )
                     .prependTo(corpusInfo)
             }
+        }
+
+        if (!inReadingMode && corpusObj.readingMode) {
+            $("<div class='openReadingMode'/>")
+                .html(`<span class="link" rel="localize[read_in_korp]"></span>`)
+                .click(function() {
+                    const aScope = angular
+                        .element(document.getElementById("results-wrapper"))
+                        .scope()
+                    safeApply(aScope.$root, () =>
+                        aScope.$root.textTabs.push({
+                            corpus: corpus,
+                            sentenceId: sentenceData.sentence_id
+                        })
+                    )
+                })
+                .prependTo(corpusInfo)
         }
 
         const customData = { pos: [], struct: [] }

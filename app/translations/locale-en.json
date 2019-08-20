@@ -105,7 +105,6 @@
     "map_rel_occurrences": "Relative occurrences",
     "map_num_results": "Locations",
 
-
     "word_is": "word is",
     "word_is_not": "word is not",
     "word_beginswith": "word begins with",
@@ -212,7 +211,6 @@
     "material_warn": "The selected corpora lack time data.",
     "graph_material": "No available time data",
     "graph_material_tooltip": "The selected corpora lack time data for the shadowed periods.",
-
 
     "word_insensitive": "word (case insensitive)",
     "sentence_attr": "Text attributes",
@@ -332,23 +330,25 @@
 
     "no_geo_info": "No location data available",
     "map_cluster": "Cluster",
-    
+
     "global_filter": "Filter",
     "add_filter": "Add filter",
     "add_filter_value": "Add",
-    
+
     "repeat_error": "Error: Not possible to repeat from 0 for all tokens.",
-    
+
     "choose_lemgram": "Choose lemgram",
     "login_needed_for_corpora": "Login needed for access to",
-    
+
     "stats_warn": "Statistics is disabled",
     "stats_not_in_order_warn": "Statistics is currently not supported when \"in order\" is disabled.",
-    
+
     "read_in_strix": "Read this text in Strix",
+    "read_in_korp": "Read this text in Korp",
     "add_token": "Add token",
-    
+
     "in_order_chk": "in order",
     "prefix_chk": "initial part",
-    "suffix_chk": "final part"
+    "suffix_chk": "final part",
+    "text_tab_header": "Text"
 }

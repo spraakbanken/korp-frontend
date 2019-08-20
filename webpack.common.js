@@ -29,7 +29,10 @@ module.exports = {
             jqueryhoverintent: path.resolve(__dirname, "app/lib/jquery.hoverIntent"),
             configjs: path.resolve(korpConfigDir, "config.js"),
             commonjs: path.resolve(korpConfigDir, "modes/common.js"),
-            defaultmode: path.resolve(korpConfigDir, "modes/default_mode.js")
+            defaultmode: path.resolve(korpConfigDir, "modes/default_mode.js"),
+            customcss: path.resolve(korpConfigDir, "styles/"),
+            customscripts: path.resolve(korpConfigDir, "scripts/"),
+            customviews: path.resolve(korpConfigDir, "views/")
         }
     },
     module: {
@@ -103,6 +106,7 @@ module.exports = {
             },
             {
                 test: /\.html$/,
+                exclude: [path.resolve(korpConfigDir, "./views/")],
                 use: [
                     { loader: "file-loader" },
                     {
@@ -110,6 +114,19 @@ module.exports = {
                         options: { publicPath: "" }
                     },
                     { loader: "html-loader" }
+                ]
+            },
+            {
+                test: /\.html$/,
+                include: [path.resolve(korpConfigDir, "./views/")],
+                use: [
+                    {
+                        loader: "html-loader",
+                        options: {
+                            minimize: true,
+                            conservativeCollapse: false
+                        }
+                    }
                 ]
             },
             {

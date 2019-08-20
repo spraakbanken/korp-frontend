@@ -86,6 +86,7 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
     $rootScope.compareTabs = []
     $rootScope.graphTabs = []
     $rootScope.mapTabs = []
+    $rootScope.textTabs = []
     let isInit = true
 
     if ($location.search().corpus) {

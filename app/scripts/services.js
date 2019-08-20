@@ -209,6 +209,44 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
                 console.log("err", err)
             }
         )
+    },
+
+    getDataForReadingMode(inputCorpus, sentenceId) {
+        const corpus = inputCorpus.toUpperCase()
+        const corpusSettings = settings.corpusListing.get(inputCorpus)
+
+        // TODO: is this good enough?
+        const show = _.keys(corpusSettings.attributes)
+        const showStruct = _.keys(corpusSettings.structAttributes)
+
+        const params = {
+            corpus: corpus,
+            cqp: '[_.sentence_id = "' + sentenceId + '"]',
+            context: corpus + ":1 text",
+            show: show.join(","),
+            show_struct: showStruct.join(","),
+            within: corpus + ":text",
+            start: 0,
+            end: 0
+        }
+
+        const conf = {
+            url: settings.korpBackendURL + "/query",
+            params,
+            method: "GET",
+            headers: {}
+        }
+
+        _.extend(conf.headers, model.getAuthorizationHeader())
+
+        return $http(conf).then(
+            function({ data }) {
+                return data
+            },
+            err => {
+                console.log("err", err)
+            }
+        )
     }
 }))
 

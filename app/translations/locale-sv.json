@@ -20,7 +20,6 @@
     "lang_SK": "slovakiska",
     "lang_ET": "estniska",
 
-
     "docs": "Användarhandledning",
     "swedish": "Svenska",
     "english": "English",
@@ -124,7 +123,6 @@
 
     "sent_start": "Meningsbörjan",
     "sent_end": "Meningsslut",
-
 
     "none_selected": "&lt;ej vald&gt;",
 
@@ -250,7 +248,6 @@
 
     "msd_long": "Morfosyntaktisk beskrivning",
 
-
     "corpselector_allselected": " korpusar valda (alla)",
     "corpselector_noneselected": "Ingen vald korpus",
     "corpselector_selectedone": " vald",
@@ -327,26 +324,28 @@
     "formatdescr_annot": "Annoterad text som ett Excel-kalkylblad (XLS), ett token per rad. Varje rad har ett token med attribut och potentiellt en markör för sökträffen. Varje träffad mening föregås av en rad med korpus-ID, träffens korpusposition och textattribut för meningen.",
     "formatdescr_nooj": "XML-importformat för NooJ",
     "formatdescr_ref": "Källhänvisningar som ett Excel-kalkylblad (XLS) med varje sökträffmening på sin egen rad, efterträdd av meningens textattribut på sina egna rader",
-    
+
     "no_geo_info": "Platsinformation ej tillgänglig",
     "map_cluster": "Sammanställ",
-    
+
     "global_filter": "Filter",
     "add_filter": "Lägg till filter",
     "add_filter_value": "Lägg till",
-    
+
     "repeat_error": "Fel: Det går inte att upprepa från 0 på alla token.",
-    
+
     "choose_lemgram": "Välj lemgram",
     "login_needed_for_corpora": "Inloggning behövs för åtkomst till",
-    
+
     "stats_warn": "Statistiken är avaktiverad",
     "stats_not_in_order_warn": "Statistiken stödjs för nuvarande inte när \"i följd\" är avaktiverad.",
-    
+
     "read_in_strix": "Läs texten i Strix",
+    "read_in_korp": "Läs i Korp",
     "add_token": "Lägg till token",
-    
+
     "in_order_chk": "i följd",
     "prefix_chk": "förled",
-    "suffix_chk": "efterled"
+    "suffix_chk": "efterled",
+    "text_tab_header": "Text"
 }
