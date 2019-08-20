@@ -86,7 +86,7 @@ const Sidebar = {
                     .css("width", outerW - 40)
                     .on("load", function() {
                         const wnd = this.contentWindow
-                        wnd.draw_deptree(wnd, tokens, function(msg) {
+                        wnd.draw_deptree.call(wnd, tokens, function(msg) {
                             const [type, val] = _.head(_.toPairs(msg))
                             info.empty().append(
                                 $("<span>").localeKey(type),
