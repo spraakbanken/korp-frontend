@@ -2,14 +2,14 @@ uib-tab(example-ctrl, ng-repeat='kwicTab in kwicTabs', select="instance.onentry(
   uib-tab-heading(ng-class="{not_loading: progress == 100, loading : !instance.hasData}")
     | KWIC
 
-    span(ng-click='$event.preventDefault();kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
+    span(ng-click='$event.preventDefault();kwicTabs.splice($index, 1)', tab-spinner)
   .results-kwic(ng-class="{reading_mode : exampleReadingMode, not_loading: !loading, loading : loading}", constr='ExampleResults' )
     include kwicresult
 uib-tab(ng-repeat='data in graphTabs', graph-ctrl)
   uib-tab-heading(ng-class="{not_loading: progress > 99}")
     | {{'graph' | loc:lang}}
     .tab_progress(style="width:{{progress || 0}}%", ng-show="loading")
-    span(ng-click='$event.preventDefault();graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
+    span(ng-click='$event.preventDefault();graphTabs.splice($index, 1)', tab-spinner)
   div.graph_tab(constr='GraphResults')
     .graph_header
       .controls()
@@ -46,7 +46,7 @@ uib-tab(ng-repeat='data in graphTabs', graph-ctrl)
 uib-tab(ng-repeat='promise in compareTabs', compare-ctrl)
   uib-tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc:lang}}
-    span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();compareTabs.splice($index, 1)')
+    span(tab-spinner, ng-click='$event.preventDefault();compareTabs.splice($index, 1)')
   .compare_result(ng-class='{loading : loading}')
     .error_msg(ng-if="error")
       div.korp_fail.inline_block
@@ -72,7 +72,7 @@ uib-tab(ng-repeat='promise in compareTabs', compare-ctrl)
 uib-tab(ng-repeat="promise in mapTabs", new-map-ctrl, select="onentry()")
   uib-tab-heading.map_tab(ng-class='{loading : loading}')
     | {{ 'map' | loc:lang}}
-    span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();mapTabs.splice($index, 1)')
+    span(tab-spinner, ng-click='$event.preventDefault();mapTabs.splice($index, 1)')
   .map_result(ng-class='{loading : loading}')
     .error_msg(ng-if="error")
       div.korp_fail.inline_block
