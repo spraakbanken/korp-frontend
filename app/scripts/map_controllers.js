@@ -275,5 +275,11 @@ korpApp.directive("newMapCtrl", ($timeout, searches) => ({
                 0
             )
         }
+        
+        s.closeTab = function(idx, e) {
+            e.preventDefault()
+            s.mapTabs.splice(idx, 1)
+            s.closeDynamicTab()
+        }
     }
 }))
