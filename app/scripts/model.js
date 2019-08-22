@@ -1,5 +1,6 @@
 /** @format */
 "use strict"
+import jStorage from "../lib/jstorage"
 window.model = {}
 
 model.normalizeStatsData = function(data) {
@@ -490,7 +491,7 @@ model.AuthenticationProxy = class AuthenticationProxy {
                     auth
                 }
                 if (saveLogin) {
-                    $.jStorage.set("creds", self.loginObj)
+                    jStorage.set("creds", self.loginObj)
                 }
                 return dfd.resolve(data)
             })
