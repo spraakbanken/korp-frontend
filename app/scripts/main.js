@@ -1,11 +1,16 @@
 /** @format */
-
 const korpFailImg = require("../img/korp_fail.svg")
+const deparam = require("jquery-deparam")
+
+// import $ from "jquery"
+// window.jQuery = $
+// window.$ = $
+import jStorage from "../lib/jstorage"
 
 window.authenticationProxy = new model.AuthenticationProxy()
 window.timeProxy = new model.TimeProxy()
 
-const creds = $.jStorage.get("creds")
+const creds = jStorage.get("creds")
 if (creds) {
     authenticationProxy.loginObj = creds
 }
@@ -30,7 +35,7 @@ $.ajaxPrefilter("json", function(options, orig, jqXHR) {
 
 const deferred_domReady = $.Deferred(function(dfd) {
     $(function() {
-        let { mode } = $.deparam.querystring()
+        let { mode } = deparam(window.location.search.slice(1))
         if (!mode) {
             mode = "default"
         }
@@ -94,7 +99,7 @@ $.when(loc_dfd, deferred_domReady).then(
             $("body").addClass("lab")
         }
 
-        $("body").addClass(`mode-${currentMode}`)
+        $("body").addClass(`mode-${window.currentMode}`)
         util.browserWarn()
 
         $("#search_history").change(function(event) {
@@ -104,7 +109,7 @@ $.when(loc_dfd, deferred_domReady).then(
                 location.href = target.val()
             } else if (target.is(".clear")) {
                 c.log("empty searches")
-                $.jStorage.set("searches", [])
+                jStorage.set("searches", [])
                 view.updateSearchHistory()
             }
         })

@@ -1,5 +1,7 @@
 /** @format */
 
+import jStorage from "../lib/jstorage"
+
 import { parseMapData } from "./map_services.ts"
 
 const korpApp = angular.module("korpApp")
@@ -479,7 +481,7 @@ korpApp.service(
                 this.key = "saved_searches"
             }
             c.log("key", this.key)
-            this.savedSearches = $.jStorage.get(this.key) || []
+            this.savedSearches = jStorage.get(this.key) || []
         }
 
         saveSearch(name, cqp) {
@@ -489,12 +491,12 @@ korpApp.service(
                 corpora: settings.corpusListing.getSelectedCorpora()
             }
             this.savedSearches.push(searchObj)
-            return $.jStorage.set(this.key, this.savedSearches)
+            return jStorage.set(this.key, this.savedSearches)
         }
 
         flush() {
             this.savedSearches.splice(0, 9e9, ...[].concat([]))
-            return $.jStorage.set(this.key, this.savedSearches)
+            return jStorage.set(this.key, this.savedSearches)
         }
     }
 )

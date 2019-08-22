@@ -1,5 +1,6 @@
 /** @format */
 window.view = {}
+import jStorage from "../lib/jstorage"
 
 //* *************
 // Search view objects
@@ -7,14 +8,15 @@ window.view = {}
 
 view.updateSearchHistory = function(value, href) {
     let needle
-    const filterParam = url =>
-        $.grep(
-            $.param.fragment(url).split("&"),
+    const filterParam = url => {
+        return $.grep(
+            url.split("#")[1].split("&"),
             item => item.split("=")[0] === "search" || item.split("=")[0] === "corpus"
         ).join("&")
+    }
 
     $("#search_history").empty()
-    const searches = $.jStorage.get("searches") || []
+    const searches = jStorage.get("searches") || []
     const searchLocations = $.map(searches, item => filterParam(item.location))
     if (value != null && !searchLocations.includes(filterParam(href))) {
         searches.splice(0, 0, {
@@ -22,7 +24,7 @@ view.updateSearchHistory = function(value, href) {
             location: href
         })
 
-        $.jStorage.set("searches", searches)
+        jStorage.set("searches", searches)
     }
     if (!searches.length) {
         return

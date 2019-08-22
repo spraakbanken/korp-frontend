@@ -1,4 +1,5 @@
 /** @format */
+
 var collapsedImg = require("../img/collapsed.png")
 var hp_this
 var hp_corpusChooser = {
@@ -471,9 +472,6 @@ var hp_corpusChooser = {
             out: function() {}
         }
 
-        $(".boxdiv").hoverIntent(hoverConfig)
-        $(".boxlabel").hoverIntent(hoverFolderConfig)
-
         $(".boxdiv").unbind("click") // "Non-folder items"
         $(".boxdiv").click(function(event) {
             if ($(this).is(".disabled")) return
@@ -612,4 +610,5 @@ var hp_corpusChooser = {
     }
 }
 
-$.widget("hp.corpusChooser", hp_corpusChooser) // create the widget
+let widget = require("components-jqueryui/ui/widget")
+widget("hp.corpusChooser", hp_corpusChooser) // create the widget

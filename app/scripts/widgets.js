@@ -1,10 +1,12 @@
 /** @format */
+let widget = require("components-jqueryui/ui/widget")
 const Sidebar = {
     _init() {},
 
     updateContent(sentenceData, wordData, corpus, tokens) {
         this.element.html('<div id="selected_sentence" /><div id="selected_word" />')
-        const corpusObj = settings.corpora[corpus]
+        // TODO: this is pretty broken
+        const corpusObj = settings.corpora[corpus] || settings.corpusListing.get(corpus)
 
         const corpusInfo = $("<div />").html(
             `<h4 rel='localize[corpus]'></h4> <p>${corpusObj.title}</p>`
@@ -16,9 +18,7 @@ const Sidebar = {
             if (sentenceID) {
                 // TODO fix this so that strix uses correct corpus ids
                 const strixCorpus = corpus === "wikipedia-sv" ? "wikipedia" : corpus
-                const strixLinkText = `${
-                    settings.strixUrl
-                }?sentenceID=${sentenceID}&documentCorpus=${strixCorpus}`
+                const strixLinkText = `${settings.strixUrl}?sentenceID=${sentenceID}&documentCorpus=${strixCorpus}`
                 $("<div class='strix-link'/>")
                     .html(
                         `<a target='_blank' href='${strixLinkText}' rel='localize[read_in_strix]'></a>`
@@ -478,9 +478,9 @@ const Sidebar = {
     }
 }
 
-$.widget("korp.sidebar", Sidebar)
+widget("korp.sidebar", Sidebar)
 
-$.widget("korp.radioList", {
+widget("korp.radioList", {
     options: {
         change: $.noop,
         separator: "|",

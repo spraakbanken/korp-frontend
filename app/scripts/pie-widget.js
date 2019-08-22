@@ -286,11 +286,11 @@ const pie_widget = {
             }
         }
     },
-
     eventArc(item) {
         // Return the clicked arc's ID
         return item.node["shape_id"]
     }
 }
 
-$.widget("hp.pie_widget", pie_widget) // create the widget
+let widget = require("components-jqueryui/ui/widget")
+widget("hp.pie_widget", pie_widget) // create the widget
