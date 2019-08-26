@@ -1,4 +1,8 @@
 
+let $ = require("jquery");
+window.jQuery = $;
+window.$ = $;
+
 require("slickgrid/slick.grid.css")
 require("./lib/jquery.reject.css")
 require("./styles/ui_mods.css")
@@ -13,12 +17,12 @@ require("./styles/bootstrap4-custom.scss")
 require("./styles/styles.scss")
 
 window._ = require("lodash")
-window.$ = require("jquery")
-require("jquery-ui/ui/widget")
-require("jquery-ui/ui/widgets/sortable.js")
-require("jquery-ui/ui/widgets/dialog.js")
 
-window.angular = require("angular")
+require("components-jqueryui/ui/widget.js")
+require("components-jqueryui/ui/widgets/sortable.js")
+require("components-jqueryui/ui/widgets/dialog.js")
+
+require("angular")
 require("angular-ui-bootstrap/src/typeahead")
 require("angular-ui-bootstrap/src/tooltip")
 require("angular-ui-bootstrap/src/modal")
@@ -33,20 +37,19 @@ require("angular-spinner")
 require("angular-ui-sortable/src/sortable")
 
 require("jreject")
-require("jquerybqq")
 require("jquerylocalize")
 require("./lib/jquery.format.js")
 
+let deparam = require("jquery-deparam")
+
 window.c = console
 window.isLab = window.location.pathname.split("/")[1] == "korplabb"
-window.currentMode = $.deparam.querystring().mode || "default"
+window.currentMode = deparam(window.location.search.slice(1)).mode || "default"
 
 // tmhDynamicLocale = require("angular-dynamic-locale/src/tmhDynamicLocale")
 require("angular-dynamic-locale/dist/tmhDynamicLocale.js")
 window.Raphael = require("raphael")
 
-require("jstorage")
-require("jquery-hoverintent")
 require("jquery-flot/jquery.flot.js")
 require("jquery-flot/jquery.flot.stack.js")
 
@@ -78,7 +81,7 @@ settings.markup = {
   msd: require("./markup/msd.html")
 }
 require("configjs")
-commonSettings = require("commonjs")
+let commonSettings = require("commonjs")
 // we need to put the exports on window so that the non-webpacked modes modes files
 // can use the exports
 _.map(commonSettings, function(v, k) {

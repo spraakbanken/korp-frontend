@@ -9,7 +9,7 @@ class BaseResults {
 
         this.$result.add(this.$tab).addClass("not_loading")
 
-        this.injector = $("body").injector()
+        this.injector = angular.injector(["ng"])
 
         const def = this.injector.get("$q").defer()
         this.firstResultDef = def

@@ -24,8 +24,6 @@ module.exports = {
     resolve: {
         alias: {
             jquery: "jquery/src/jquery",
-            jstorage: "jstorage/jstorage",
-            jquerybqq: path.resolve(__dirname, "app/lib/jquery.ba-bbq"),
             jreject: path.resolve(__dirname, "app/lib/jquery.reject"),
             jquerylocalize: path.resolve(__dirname, "app/lib/jquery.localize"),
             configjs: path.resolve(korpConfigDir, "config.js"),
@@ -54,10 +52,6 @@ module.exports = {
                     }
                 },
                 exclude: /node_modules/
-            },
-            {
-                test: require.resolve(path.resolve(__dirname, "app/lib/jquery.ba-bbq")),
-                use: "imports-loader?this=>window"
             },
             {
                 test: require.resolve(
@@ -179,6 +173,10 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(["dist"]),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new CopyWebpackPlugin([
             {

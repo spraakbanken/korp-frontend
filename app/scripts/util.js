@@ -580,8 +580,12 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
         return output.join(",")
     }
 
-    getTitle(corpus) {
-        return this.struct[corpus.split("|")[1]].title
+    get(corpusID) {
+        return this.struct[corpusID.split("|")[1]]
+    }
+
+    getTitle(corpusID) {
+        return this.struct[corpusID.split("|")[1]].title
     }
 }
 
@@ -589,7 +593,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
 window.search = (obj, val) => window.locationSearch(obj, val)
 
 window.locationSearch = function(obj, val) {
-    const s = $("body").scope()
+    const s = angular.element("body").scope()
 
     const ret = safeApply(s.$root, function() {
         if (!obj) {
@@ -835,7 +839,8 @@ util.setDownloadLinks = function(xhr_settings, result_data) {
 `)
 
         const download_params = {
-            query_params: JSON.stringify($.deparam.querystring(xhr_settings.url)),
+            // query_params: JSON.stringify($.deparam.querystring(xhr_settings.url)),
+            query_params: xhr_settings.url,
             format,
             korp_url: window.location.href,
             korp_server_url: settings.korpBackendURL,
