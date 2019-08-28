@@ -138,8 +138,8 @@ korpApp.directive("globalFilter", globalFilterService => ({
         }
 
         scope.toggleSelected = function(value, event) {
-            if (scope.attrValue.includes(value)) {
-                _.remove(scope.attrValue, value)
+            if (scope.isSelected(value)) {
+                _.pull(scope.attrValue, value)
             } else {
                 scope.attrValue.push(value)
             }
