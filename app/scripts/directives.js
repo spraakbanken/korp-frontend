@@ -85,6 +85,17 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
                 s.maxTab += 1
             }, 0)
         }
+
+        s.closeDynamicTab = function() {
+            $timeout (function() {
+                s.maxTab = -1
+                for (let tab of contentScope.tabset.tabs) {
+                    if (tab.index > s.maxTab) {
+                        s.maxTab = tab.index
+                    }
+                }
+            }, 0)
+        }
     }
 }))
 

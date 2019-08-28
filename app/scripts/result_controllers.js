@@ -369,6 +369,12 @@ class ExampleCtrl extends KwicCtrl {
                 )
             }
         }
+
+        s.closeTab = function(idx, e) {
+            e.preventDefault()
+            s.kwicTabs.splice(idx, 1)
+            s.closeDynamicTab()
+        }
     }
 
     initPage() {
@@ -648,6 +654,12 @@ korpApp.directive("graphCtrl", () => ({
 
         s.isGraph = () => ["line", "bar"].includes(s.mode)
         s.isTable = () => s.mode === "table"
+
+        s.closeTab = function(idx, e) {
+            e.preventDefault()
+            s.graphTabs.splice(idx, 1)
+            s.closeDynamicTab()
+        }
     }
 }))
 
@@ -658,6 +670,12 @@ korpApp.directive("compareCtrl", () => ({
         s.newDynamicTab()
 
         s.resultOrder = item => Math.abs(item.loglike)
+
+        s.closeTab = function(idx, e) {
+            e.preventDefault()
+            s.compareTabs.splice(idx, 1)
+            s.closeDynamicTab()
+        }
 
         return s.promise.then(
             function(...args) {
