@@ -88,7 +88,6 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
     // get data for selected attributes from backend, merges values from different corpora
     // and flattens data structure?
     const getData = function() {
-        console.log("## getData!!!")
         const corpora = getSupportedCorpora()
 
         const opts = {}
@@ -270,7 +269,6 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
     }
 
     $rootScope.$on("corpuschooserchange", function() {
-        console.log("## corpuschooserchange!!", new Date())
         if (settings.corpusListing.selected.length === 0) {
             dataObj.showDirective = false
         } else {
