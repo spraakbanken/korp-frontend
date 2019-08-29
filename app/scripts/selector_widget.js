@@ -472,6 +472,9 @@ var hp_corpusChooser = {
             out: function() {}
         }
 
+        $(".boxdiv").hoverIntent(hoverConfig)
+        $(".boxlabel").hoverIntent(hoverFolderConfig)
+
         $(".boxdiv").unbind("click") // "Non-folder items"
         $(".boxdiv").click(function(event) {
             if ($(this).is(".disabled")) return

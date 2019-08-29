@@ -22,7 +22,6 @@
         "jquery": "3.2.1",
         "jquery-deparam": "^0.5.3",
         "jquery-flot": "0.8.3",
-        "jquery-hoverintent": "1.9.0",
         "jstorage": "andris9/jStorage#0.4.12",
         "json3": "3.3.2",
         "lodash": "^4.17.15",
