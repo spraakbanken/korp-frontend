@@ -140,7 +140,7 @@ class KwicCtrl {
                     matches = hitContext.match
                 }
 
-                for (let i in _.range(0, hitContext.tokens)) {
+                for (let i in _.range(0, hitContext.tokens.length)) {
                     var structItem
                     const wd = hitContext.tokens[i]
                     wd.position = i
