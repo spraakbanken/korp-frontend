@@ -50,7 +50,6 @@ korpApp.factory("extendedComponents", function() {
                 function(data) {
                     $scope.loading = false
                     const localizer = localize($scope)
-                    // console.log("getStructValues data", data)
 
                     const dataset = _.map(_.uniq(data), function(item) {
                         if (item === "") {
