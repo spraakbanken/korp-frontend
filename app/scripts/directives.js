@@ -16,11 +16,8 @@ korpApp.directive("kwicWord", () => ({
                 link_selected: wd._link_selected
             }
 
-            for (struct of wd._open || []) {
-                output[`open_${struct}`] = true
-            }
-            for (struct of wd._close || []) {
-                output[`close_${struct}`] = true
+            if ("_open_sentence" in wd) {
+                output[`open_sentence`] = true
             }
 
             const result = []
@@ -87,7 +84,7 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
         }
 
         s.closeDynamicTab = function() {
-            $timeout (function() {
+            $timeout(function() {
                 s.maxTab = -1
                 for (let tab of contentScope.tabset.tabs) {
                     if (tab.index > s.maxTab) {
