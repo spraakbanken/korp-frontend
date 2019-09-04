@@ -4733,13 +4733,6 @@ jquery-flot@0.8.3:
   resolved "https://registry.yarnpkg.com/jquery-flot/-/jquery-flot-0.8.3.tgz#a273acf43f13190f6e78701869ee24bfef12c22a"
   integrity sha1-onOs9D8TGQ9ueHAYae4kv+8Swio=
 
-jquery-hoverintent@1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/jquery-hoverintent/-/jquery-hoverintent-1.9.0.tgz#4d92c1ae07b71b9f0d9721b9b412d672abd387c8"
-  integrity sha512-yaMi+vwi/pxFiE4P7+JHTpiWV/21q9PqVr71muYxMc+H0+UAuqUCD2DBr82xqCJ1jcrMTgpQMoTojeI9F9I0VA==
-  dependencies:
-    jquery ">=1.7.0"
-
 jquery-ui@>=1.8.0:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.12.1.tgz#bcb4045c8dd0539c134bc1488cdd3e768a7a9e51"
@@ -4750,7 +4743,7 @@ jquery@3.2.1:
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
   integrity sha1-XE2d5lKvbNCncBVKYxu6ErAVx4c=
 
-jquery@>=1.7.0, jquery@>=1.8.0:
+jquery@>=1.8.0:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==

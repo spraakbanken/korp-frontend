@@ -214,7 +214,10 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
                     this.url +
                     "?" +
                     _.toPairs(data)
-                        .map(pair => pair.join("="))
+                        .map(function([key, val]) {
+                            val = _.replace(val, "&", "%26")
+                            return key + "=" + val
+                        })
                         .join("&")
             },
 
