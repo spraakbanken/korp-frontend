@@ -94,6 +94,9 @@ const Sidebar = {
     },
 
     renderGraph(tokens) {
+        if (!tokens || tokens.length == 0) {
+            return
+        }
         $("<span class='link show_deptree'></button>")
             .localeKey("show_deptree")
             .click(function() {
