@@ -111,7 +111,7 @@ korpApp.directive("standard", () => ({
 
 
 function prepareData(data, settings) {
-    const newTokens = prepareDataRecurse(data.kwic[0].tokens, 0, settings.readingMode.nodes || [], [])
+    const newTokens = prepareDataRecurse(data.kwic[0].tokens, 0, settings.readingMode.groupElement, false)
     delete data.kwic[0].tokens
     data.kwic[0].tokens = newTokens
     return data.kwic[0]
@@ -119,9 +119,10 @@ function prepareData(data, settings) {
 
 
 /**
-if settings.nodes are defined, create a nested structure of tokens using those nodes
+if groupElement is set to anything, result will be a list of tokens for each
+sentence or whatever groupElement is set to
 */
-function prepareDataRecurse(tokens, start, nodes, openNode) {
+function prepareDataRecurse(tokens, start, groupElement, inGroup) {
     const open = {}
     const newTokens = []
 
@@ -129,8 +130,6 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
     let currentSentence = []
     for (let i = start; i < tokens.length; i++) {
         let token = tokens[i]
-        token.head = (token._head || '').replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t")
-        token.tail = (token._tail || '').replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t")
         // first check if we should do recursive call
         let done = false
         if ("structs" in token) {
@@ -139,9 +138,9 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
                 for (let fieldObj of token.structs.open) {
                     const keyName = _.keys(fieldObj)[0]
                     
-                    if (nodes.includes(keyName)) {
+                    if (!inGroup && keyName === groupElement) {
                         done = true
-                        const innerTokens = prepareDataRecurse(tokens, i, _.without(nodes, keyName), [keyName]) 
+                        const innerTokens = prepareDataRecurse(tokens, i, groupElement, true)
                         i = i + innerTokens.length - 1
                         token = {
                             tokens: innerTokens,
@@ -155,6 +154,8 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
             }
         }
 
+        token.head = (token._head || '').replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t")
+        token.tail = (token._tail || '').replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t")
         currentSentence.push(token)
         // if no call was made, do the other thing
         if (!done) {
@@ -181,11 +182,9 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
             if ("structs" in token && "close" in token.structs) {
                 token["close"] = []
                 for (let field of token.structs.close) {
-                    if (openNode.includes(field)) {
+                    if (field === groupElement) {
                         delete token.structs
-                        newTokens.push({attrs: token})
-                        // TODO: what if one tokens close two elements at 
-                        // the same time?? s.a. paragraph & sentence
+                        newTokens.push({attrs: token, currentSentence: actualCurrentSentence})
                         return newTokens
                     } else {
                         if (field === "sentence") {
