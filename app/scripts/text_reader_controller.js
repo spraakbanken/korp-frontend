@@ -34,8 +34,7 @@ korpApp.directive("textReaderCtrl", ($timeout, searches) => ({
     }
 }))
 
-// text attributes for all tokens
-// struct attributes for sentence should be merged with word attrs
+
 korpApp.directive('textReader', function($compile) {
     return {
         scope: false,
@@ -50,23 +49,23 @@ korpApp.directive('textReader', function($compile) {
                 if ($("#sidebar").data()["korpSidebar"]) {
                     $("#sidebar").sidebar(
                         "updateContent",
-                        {}, // structural attributes
-                        token,
+                        scope.data.document.structs,
+                        token.attrs,
                         scope.data.corpus,
-                        [], // this should be the current tokens in sentence, for dependency graph to work 
+                        token.currentSentence,
                         true
                     )
                     scope.$root.sidebar_visible = true
                 }
             }
             
-            scope.$on('on-entry', function(event, arg) {
+            scope.$on('on-entry', function() {
                 if(scope.data) {
                     scope.wordClick(scope.selectedToken)
                 }
             })
             
-            scope.$on('on-exit', function(event, arg) {
+            scope.$on('on-exit', function() {
                 scope.$root.sidebar_visible = false
             })
             
@@ -103,16 +102,14 @@ korpApp.directive("standard", () => ({
         elem[0].addEventListener('click', (e) => {
             if(e.target.dataset.idx) {
                 const idx = e.target.dataset.idx
-                const token = scope.data.document.tokens[idx].attrs
+                const token = scope.data.document.tokens[idx]
                 scope.wordClick(['wordClick'])(token)
             }
         })
     }
 }))
 
-/*
-this is supposed to be used by all corpora
-*/
+
 function prepareData(data, settings) {
     const newTokens = prepareDataRecurse(data.kwic[0].tokens, 0, settings.readingMode.nodes || [], [])
     delete data.kwic[0].tokens
@@ -128,6 +125,8 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
     const open = {}
     const newTokens = []
 
+    // TODO: sentence is hard-coded, not good?
+    let currentSentence = []
     for (let i = start; i < tokens.length; i++) {
         let token = tokens[i]
         token.head = (token._head || '').replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t")
@@ -156,6 +155,7 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
             }
         }
 
+        currentSentence.push(token)
         // if no call was made, do the other thing
         if (!done) {
             if ("structs" in token && "open" in token.structs) {
@@ -176,6 +176,8 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
                 }
             }
 
+            const actualCurrentSentence = currentSentence
+
             if ("structs" in token && "close" in token.structs) {
                 token["close"] = []
                 for (let field of token.structs.close) {
@@ -186,6 +188,9 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
                         // the same time?? s.a. paragraph & sentence
                         return newTokens
                     } else {
+                        if (field === "sentence") {
+                            currentSentence = []
+                        }
                         token["close"].push(field)
                         delete open[field]
                     }
@@ -193,7 +198,7 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
             }
 
             delete token.structs
-            token = {attrs: token}
+            token = {attrs: token, currentSentence: actualCurrentSentence}
         }
         newTokens.push(token)
     }
