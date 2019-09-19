@@ -77,13 +77,13 @@ korpApp.directive("textReader", function($compile) {
     }
 })
 
-korpApp.directive("standard", () => ({
+korpApp.directive("standardReadingMode", () => ({
     scope: {
         data: "<",
         wordClick: "&"
     },
     link(scope, elem, attr) {
-        function standardRecursion(document) {
+        function standardInnerElem(document) {
             const doc = []
             for (let idx = 0; idx < document.tokens.length; idx++) {
                 let token = document.tokens[idx]
@@ -92,17 +92,17 @@ korpApp.directive("standard", () => ({
                         `<span class="word" data-idx="${idx}">${token.attrs.head}${token.attrs.word}${token.attrs.tail}</span>`
                     )
                 } else {
-                    doc.push(`<div>${standardRecursion(token.tokens)}</div>`)
+                    doc.push(`<div>${standardInnerElem(token.tokens)}</div>`)
                 }
             }
             return `${doc.join("")}`
         }
 
-        function standard(data) {
-            return `<div class="text-container m-md-5">${standardRecursion(data.document)}</div>`
+        function standardOuterElem(data) {
+            return `<div class="text-container m-md-5">${standardInnerElem(data.document)}</div>`
         }
 
-        elem[0].innerHTML = standard(scope.data)
+        elem[0].innerHTML = standardOuterElem(scope.data)
 
         elem[0].addEventListener("click", e => {
             if (e.target.dataset.idx) {
@@ -115,12 +115,7 @@ korpApp.directive("standard", () => ({
 }))
 
 function prepareData(data, settings) {
-    const newTokens = prepareDataRecurse(
-        data.kwic[0].tokens,
-        0,
-        settings.readingMode.groupElement,
-        false
-    )
+    const newTokens = _prepareData(data.kwic[0].tokens, 0, settings.readingMode.groupElement, false)
     delete data.kwic[0].tokens
     data.kwic[0].tokens = newTokens
     return data.kwic[0]
@@ -130,7 +125,7 @@ function prepareData(data, settings) {
 if groupElement is set to anything, result will be a list of tokens for each
 sentence or whatever groupElement is set to
 */
-function prepareDataRecurse(tokens, start, groupElement, inGroup) {
+function _prepareData(tokens, start, groupElement, inGroup) {
     const open = {}
     const newTokens = []
 
@@ -148,7 +143,7 @@ function prepareDataRecurse(tokens, start, groupElement, inGroup) {
 
                     if (!inGroup && keyName === groupElement) {
                         done = true
-                        const innerTokens = prepareDataRecurse(tokens, i, groupElement, true)
+                        const innerTokens = _prepareData(tokens, i, groupElement, true)
                         i = i + innerTokens.length - 1
                         token = {
                             tokens: innerTokens,
