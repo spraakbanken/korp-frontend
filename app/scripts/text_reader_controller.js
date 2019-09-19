@@ -94,7 +94,7 @@ korpApp.directive("standard", () => ({
         }
 
         function standard(data) {
-            return `<div class="text-container">${standardRecursion(data.document)}</div>`
+            return `<div class="text-container m-md-5">${standardRecursion(data.document)}</div>`
         }
 
         elem[0].innerHTML = standard(scope.data)
