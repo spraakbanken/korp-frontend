@@ -213,13 +213,17 @@ const Sidebar = {
         const posItems = []
         for (let key in corpus_attrs) {
             const attrs = corpus_attrs[key]
-            const output = (
-                this.renderItem(key, "not_used", attrs, wordData, sentenceData, tokens) || $()
-            ).get(0)
-            if (attrs.customType === "struct") {
-                structItems.push([key, output])
-            } else if (attrs.customType === "pos") {
-                posItems.push([key, output])
+            try {
+                const output = (
+                    this.renderItem(key, "not_used", attrs, wordData, sentenceData, tokens) || $()
+                ).get(0)
+                if (attrs.customType === "struct") {
+                    structItems.push([key, output])
+                } else if (attrs.customType === "pos") {
+                    posItems.push([key, output])
+                }
+            } catch (e) {
+                c.log("failed to render custom attribute", e)
             }
         }
         return [posItems, structItems]
