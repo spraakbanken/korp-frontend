@@ -221,7 +221,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         const params = {
             corpus: corpus,
-            cqp: '[_.sentence_id = "' + sentenceId + '"]',
+            cqp: `[_.${settings.readingModeField} = "${sentenceId}" & lbound(sentence)]`,
             context: corpus + ":1 text",
             show: show.join(",") + ",sentence_id", // TODO: hard-code sentence id
             show_struct: showStruct.join(","),
