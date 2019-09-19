@@ -1,3 +1,4 @@
+/** @format */
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("textReaderCtrl", ($timeout, searches) => ({
@@ -19,32 +20,34 @@ korpApp.directive("textReaderCtrl", ($timeout, searches) => ({
         backend.getDataForReadingMode(corpus, sentenceId).then(function(data) {
             new Promise((resolve, reject) => {
                 resolve(prepareData(data, s.corpusObj))
-            }).then((document) => {
-                s.data = {corpus, sentenceId, document}
-                $timeout(() => s.loading = false, 0)
+            }).then(document => {
+                s.data = { corpus, sentenceId, document }
+                $timeout(() => (s.loading = false), 0)
             })
         })
 
-        s.onentry = function () {
-            s.$broadcast('on-entry')
+        s.onentry = function() {
+            s.$broadcast("on-entry")
         }
-        s.onexit = function () {
-            s.$broadcast('on-exit')
+        s.onexit = function() {
+            s.$broadcast("on-exit")
         }
     }
 }))
 
-
-korpApp.directive('textReader', function($compile) {
+korpApp.directive("textReader", function($compile) {
     return {
         scope: false,
         link: function(scope, element) {
-            var generatedTemplate = '<div ' + scope.corpusObj.readingMode.directive + ' data="data" word-click="wordClick"></div>'
+            var generatedTemplate =
+                "<div " +
+                scope.corpusObj.readingMode.directive +
+                ' data="data" word-click="wordClick"></div>'
             element.append($compile(generatedTemplate)(scope))
 
             scope.selectedToken = {}
 
-            scope.wordClick = (token) => {
+            scope.wordClick = token => {
                 scope.selectedToken = token
                 if ($("#sidebar").data()["korpSidebar"]) {
                     $("#sidebar").sidebar(
@@ -58,17 +61,17 @@ korpApp.directive('textReader', function($compile) {
                     scope.$root.sidebar_visible = true
                 }
             }
-            
-            scope.$on('on-entry', function() {
-                if(scope.data) {
+
+            scope.$on("on-entry", function() {
+                if (scope.data) {
                     scope.wordClick(scope.selectedToken)
                 }
             })
-            
-            scope.$on('on-exit', function() {
+
+            scope.$on("on-exit", function() {
                 scope.$root.sidebar_visible = false
             })
-            
+
             scope.wordClick({})
         }
     }
@@ -76,8 +79,8 @@ korpApp.directive('textReader', function($compile) {
 
 korpApp.directive("standard", () => ({
     scope: {
-        data: '<',
-        wordClick: '&'
+        data: "<",
+        wordClick: "&"
     },
     link(scope, elem, attr) {
         function standardRecursion(document) {
@@ -85,12 +88,14 @@ korpApp.directive("standard", () => ({
             for (let idx = 0; idx < document.tokens.length; idx++) {
                 let token = document.tokens[idx]
                 if (!token.tokens) {
-                    doc.push(`<span class="word" data-idx="${idx}">${token.attrs.head}${token.attrs.word}${token.attrs.tail}</span>`)
+                    doc.push(
+                        `<span class="word" data-idx="${idx}">${token.attrs.head}${token.attrs.word}${token.attrs.tail}</span>`
+                    )
                 } else {
                     doc.push(`<div>${standardRecursion(token.tokens)}</div>`)
                 }
             }
-            return `${doc.join('')}`
+            return `${doc.join("")}`
         }
 
         function standard(data) {
@@ -99,24 +104,27 @@ korpApp.directive("standard", () => ({
 
         elem[0].innerHTML = standard(scope.data)
 
-        elem[0].addEventListener('click', (e) => {
-            if(e.target.dataset.idx) {
+        elem[0].addEventListener("click", e => {
+            if (e.target.dataset.idx) {
                 const idx = e.target.dataset.idx
                 const token = scope.data.document.tokens[idx]
-                scope.wordClick(['wordClick'])(token)
+                scope.wordClick(["wordClick"])(token)
             }
         })
     }
 }))
 
-
 function prepareData(data, settings) {
-    const newTokens = prepareDataRecurse(data.kwic[0].tokens, 0, settings.readingMode.groupElement, false)
+    const newTokens = prepareDataRecurse(
+        data.kwic[0].tokens,
+        0,
+        settings.readingMode.groupElement,
+        false
+    )
     delete data.kwic[0].tokens
     data.kwic[0].tokens = newTokens
     return data.kwic[0]
 }
-
 
 /**
 if groupElement is set to anything, result will be a list of tokens for each
@@ -137,7 +145,7 @@ function prepareDataRecurse(tokens, start, groupElement, inGroup) {
                 token["open"] = []
                 for (let fieldObj of token.structs.open) {
                     const keyName = _.keys(fieldObj)[0]
-                    
+
                     if (!inGroup && keyName === groupElement) {
                         done = true
                         const innerTokens = prepareDataRecurse(tokens, i, groupElement, true)
@@ -154,8 +162,14 @@ function prepareDataRecurse(tokens, start, groupElement, inGroup) {
             }
         }
 
-        token.head = (token._head || '').replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t")
-        token.tail = (token._tail || '').replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t")
+        token.head = (token._head || "")
+            .replace(/\\s/g, " ")
+            .replace(/\\n/g, "\n")
+            .replace(/\\t/g, "\t")
+        token.tail = (token._tail || "")
+            .replace(/\\s/g, " ")
+            .replace(/\\n/g, "\n")
+            .replace(/\\t/g, "\t")
         currentSentence.push(token)
         // if no call was made, do the other thing
         if (!done) {
@@ -164,7 +178,7 @@ function prepareDataRecurse(tokens, start, groupElement, inGroup) {
                     const keyName = _.keys(fieldObj)[0]
                     open[keyName] = {}
                     for (let subField in fieldObj[keyName]) {
-                        open[keyName][keyName + '_' + subField] = fieldObj[keyName][subField]
+                        open[keyName][keyName + "_" + subField] = fieldObj[keyName][subField]
                     }
                 }
             }
@@ -184,7 +198,7 @@ function prepareDataRecurse(tokens, start, groupElement, inGroup) {
                 for (let field of token.structs.close) {
                     if (field === groupElement) {
                         delete token.structs
-                        newTokens.push({attrs: token, currentSentence: actualCurrentSentence})
+                        newTokens.push({ attrs: token, currentSentence: actualCurrentSentence })
                         return newTokens
                     } else {
                         if (field === "sentence") {
@@ -197,7 +211,7 @@ function prepareDataRecurse(tokens, start, groupElement, inGroup) {
             }
 
             delete token.structs
-            token = {attrs: token, currentSentence: actualCurrentSentence}
+            token = { attrs: token, currentSentence: actualCurrentSentence }
         }
         newTokens.push(token)
     }
