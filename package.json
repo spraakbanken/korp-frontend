@@ -50,7 +50,6 @@
         "karma-chrome-launcher": "^2.2.0",
         "karma-jasmine": "^1.1.1",
         "karma-webpack": "^2.0.13",
-        "ng-annotate-webpack-plugin": "^0.2.1-pre",
         "node-sass": "^4.12.0",
         "pegjs": "^0.10.0",
         "postcss-loader": "^3.0.0",
