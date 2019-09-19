@@ -25,6 +25,8 @@ window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.timepicker",
     "uib/template/timepicker/timepicker.html",
     "ui.bootstrap.buttons",
+    "ui.bootstrap.popover",
+    "uib/template/popover/popover.html",
     "angularSpinner",
     "ui.sortable",
     "newsdesk",

@@ -33,6 +33,7 @@ require("angular-ui-bootstrap/src/pagination")
 require("angular-ui-bootstrap/src/datepicker")
 require("angular-ui-bootstrap/src/timepicker")
 require("angular-ui-bootstrap/src/buttons")
+require("angular-ui-bootstrap/src/popover")
 
 require("angular-spinner")
 require("angular-ui-sortable/src/sortable")
