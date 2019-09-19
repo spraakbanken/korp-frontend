@@ -40,7 +40,7 @@ or
 
 ```
 imgPath = require("img/image.png")
-myTemplate = "<img src='#{imgPath}'>"
+myTemplate = `<img src='${imgPath}'>`
 ```
 
 Most dependencies are only specified in `app/index.js` and where needed
@@ -73,6 +73,17 @@ In this folder, use the same layout as in Korp and add the following files:
 - `modes/*mode.js`
 - `modes/common.js`
 - `translations/*.json`
+
+Opionally, also add your own Javascript, CSS or views in:
+
+- `styles/`
+- `scripts/`
+- `views/`
+
+Styles and scripts will be loaded by Webpack and added to the bundle.
+Files matching `views/*.html` can be loaded manually by requiring them using the name
+`customtemplates`. The result will be a string containing the (minified) HTML, for example, a
+template for an Angular directive: `template: require("customviews/my_view.html")`.
 
 ## webpack and configuration
 
