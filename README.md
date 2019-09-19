@@ -1,4 +1,4 @@
-This repo contains the frontend for [Korp](https://spraakbanken.gu.se/korp), a frontend for the IMS Open Corpus Workbench (CWB). The korp frontend is a great tool for searching and
+This repo contains the frontend for [Korp](https://spraakbanken.gu.se/korp), a frontend for the IMS Open Corpus Workbench (CWB). The Korp frontend is a great tool for searching and
 and visualising natural language corpus data. 
 
 Korp is developed by [Språkbanken](https://spraakbanken.gu.se) at the University of Gothenburg, Sweden. 
@@ -74,13 +74,14 @@ In this folder, use the same layout as in Korp and add the following files:
 - `modes/common.js`
 - `translations/*.json`
 
-Opionally, also add your own Javascript, CSS or views in:
+Optionally, also add your own Javascript, CSS or HTML-snippets in:
 
 - `styles/`
 - `scripts/`
 - `views/`
 
-Styles and scripts will be loaded by Webpack and added to the bundle.
+Styles and scripts will be automatically loaded by Webpack and added to the bundle 
+(this is done in `app/index.js`).
 Files matching `views/*.html` can be loaded manually by requiring them using the name
 `customtemplates`. The result will be a string containing the (minified) HTML, for example, a
 template for an Angular directive: `template: require("customviews/my_view.html")`.
@@ -89,11 +90,11 @@ template for an Angular directive: `template: require("customviews/my_view.html"
 
 We use `window.settings` to share needed configuration to `config.js` and `modes/common.js`.
 
-`config.js` and `modes/common.js` are included in webpacks dependecy graph. Therefore it works
+`config.js` and `modes/common.js` are included in Webpacks dependency graph. Therefore it works
 to use `require` for anything needed, but only things that are in the configured 
 location for settings (see `run_config.json`).
 
-`mode`-files are only loaded at runtime an any dependenies must be required in `modes/common.js` and
+`mode`-files are only loaded at runtime an any dependencies must be required in `modes/common.js` and
 then exported as a module as shown in the sample file `app/modes/common.js`.
 
 # Earlier versions
@@ -102,13 +103,3 @@ then exported as a module as shown in the sample file `app/modes/common.js`.
 
 It is unfortunately not possible to develop Korp using *npm* anymore (*npm* can not resolve all dependencies
 correctly). Use *yarn*.
-
-## bower
-
-Earlier versions of Korp used Bower for dependency management. This has been replaced width *yarn*, which is
-recommended by the Bower-team.
-
-## grunt
-
-Earlier versions of Korp used *grunt* to build Korp and local development. This has been replaced with
-*webpack*.
