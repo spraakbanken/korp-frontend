@@ -34,6 +34,8 @@ korpApp.directive("textReaderCtrl", ($timeout, searches) => ({
     }
 }))
 
+// text attributes for all tokens
+// struct attributes for sentence should be merged with word attrs
 korpApp.directive('textReader', function($compile) {
     return {
         scope: false,
@@ -124,7 +126,6 @@ if settings.nodes are defined, create a nested structure of tokens using those n
 */
 function prepareDataRecurse(tokens, start, nodes, openNode) {
     const open = {}
-    const newOpen = []
     const newTokens = []
 
     for (let i = start; i < tokens.length; i++) {
@@ -164,7 +165,6 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
                     for (let subField in fieldObj[keyName]) {
                         open[keyName][keyName + '_' + subField] = fieldObj[keyName][subField]
                     }
-                    newOpen.push(keyName)
                 }
             }
 
@@ -187,9 +187,7 @@ function prepareDataRecurse(tokens, start, nodes, openNode) {
                         return newTokens
                     } else {
                         token["close"].push(field)
-                        if (!field in newOpen) {
-                            delete open[field]
-                        }
+                        delete open[field]
                     }
                 }
             }
