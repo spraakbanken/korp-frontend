@@ -154,3 +154,5 @@ settings.mapCenter = {
   lng: 16.69921875,
   zoom: 4
 };
+
+settings.readingModeField = "sentence_id"
