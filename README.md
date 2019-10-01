@@ -1,22 +1,27 @@
-This repo contains the frontend for [Korp](https://spraakbanken.gu.se/korp), a frontend for the IMS Open Corpus Workbench (CWB). The korp frontend is a great tool for searching and
-and visualising natural language corpus data. 
+This repo contains the frontend for [Korp](https://spraakbanken.gu.se/korp), 
+a frontend for the IMS Open Corpus Workbench (CWB). The Korp frontend is a great
+tool for searching and and visualising natural language corpus data. 
 
-Korp is developed by [Språkbanken](https://spraakbanken.gu.se) at the University of Gothenburg, Sweden. 
+Korp is developed by [Språkbanken](https://spraakbanken.gu.se) at the 
+University of Gothenburg, Sweden. 
 
 Documentation:
-- [Frontend documentation](https://spraakbanken.gu.se/eng/research/infrastructure/korp/distribution/frontend)
+- [Frontend documentation](../blob/master/doc/frontend_devel.md)
 - [Backend documentation](https://spraakbanken.gu.se/eng/research/infrastructure/korp/distribution/backend)
 - Sparv - The pipeline used to tag and otherwise process raw Swedish-language corpus data is documented [here](https://spraakbanken.gu.se/eng/research/infrastructure/korp/distribution/corpuspipeline)
 
 # Breaking changes
-- In order to benefit from superior tooling Korp migrated away from coffeescript and now uses plain javascript instead. This has been done semi-automatically using [decaffeinate](https://decaffeinate-project.org). You should replace any coffeescript code in your fork with the equivalent javascript. 
+- In order to benefit from superior tooling Korp migrated away from Coffeescript
+ and now uses plain Javascript instead. This has been done semi-automatically
+ using [decaffeinate](https://decaffeinate-project.org). You should replace 
+ any Coffeescript code in your fork with the equivalent Javascript. 
 
 
 # Getting started
 
 Install `yarn`: `https://yarnpkg.com`
 
-# yarn
+## Using `yarn`
 
 - install all dependencies: `yarn`
 - run development server: `yarn start`
@@ -40,7 +45,7 @@ or
 
 ```
 imgPath = require("img/image.png")
-myTemplate = "<img src='#{imgPath}'>"
+myTemplate = `<img src='${imgPath}'>`
 ```
 
 Most dependencies are only specified in `app/index.js` and where needed
@@ -56,48 +61,20 @@ About the current loaders in in `webpack.config.js`:
 
 In addition to this, some specific files will simply be copied as is, for example Korp mode-files.
 
-# run_config.json
-
-To use your own versions of the configuration-files without creating them in this project, 
-use a `run_config.json` file in the root of the project with the following content:
-
-```
-{
-    "configDir": "../path/to/my/configuration/folder"
-}
-```
-
-In this folder, use the same layout as in Korp and add the following files:
-
-- `config.js`
-- `modes/*mode.js`
-- `modes/common.js`
-- `translations/*.json`
-
 ## webpack and configuration
 
 We use `window.settings` to share needed configuration to `config.js` and `modes/common.js`.
 
-`config.js` and `modes/common.js` are included in webpacks dependecy graph. Therefore it works
+`config.js` and `modes/common.js` are included in Webpacks dependency graph. Therefore it works
 to use `require` for anything needed, but only things that are in the configured 
-location for settings (see `run_config.json`).
+location for settings.
 
-`mode`-files are only loaded at runtime an any dependenies must be required in `modes/common.js` and
+`mode`-files are only loaded at runtime an any dependencies must be required in `modes/common.js` and
 then exported as a module as shown in the sample file `app/modes/common.js`.
 
 # Earlier versions
 
 ## npm
 
-It is unfortunately not possible to develop Korp using *npm* anymore (*npm* can not resolve all dependencies
-correctly). Use *yarn*.
-
-## bower
-
-Earlier versions of Korp used Bower for dependency management. This has been replaced width *yarn*, which is
-recommended by the Bower-team.
-
-## grunt
-
-Earlier versions of Korp used *grunt* to build Korp and local development. This has been replaced with
-*webpack*.
+It is unfortunately not possible to develop Korp using *npm* anymore (*npm* can 
+not resolve all dependencies correctly). Use *yarn*.

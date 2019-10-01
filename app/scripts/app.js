@@ -25,6 +25,8 @@ window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.timepicker",
     "uib/template/timepicker/timepicker.html",
     "ui.bootstrap.buttons",
+    "ui.bootstrap.popover",
+    "uib/template/popover/popover.html",
     "angularSpinner",
     "ui.sortable",
     "newsdesk",
@@ -86,6 +88,7 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
     $rootScope.compareTabs = []
     $rootScope.graphTabs = []
     $rootScope.mapTabs = []
+    $rootScope.textTabs = []
     let isInit = true
 
     if ($location.search().corpus) {
