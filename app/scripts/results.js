@@ -1,4 +1,5 @@
 /** @format */
+import statisticsFormatting from "../config/statistics_config.js"
 const korpFailImg = require("../img/korp_fail.svg")
 
 class BaseResults {

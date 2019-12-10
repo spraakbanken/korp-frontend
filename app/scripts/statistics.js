@@ -1,4 +1,5 @@
 /** @format */
+import statisticsFormatting from "../config/statistics_config.js"
 const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function() {
@@ -38,6 +39,7 @@ const createStatisticsService = function() {
                             dataContext[reduceVal],
                             attrObj[reduceVal]
                         )
+                        console.log("formattedValue", formattedValue)
                         dataContext["formattedValue"][reduceVal] = formattedValue
                         return `<span class="statistics-link" data-row=${
                             dataContext["rowId"]
