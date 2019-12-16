@@ -757,7 +757,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
                 for (let corporaID of corporaIDs) {
                     const morfs = settings.corpora[corporaID].morphology || ""
                     for (let morf of morfs.split("|")) {
-                        if (!morphologies.includes(morf)) {
+                        if (morf !== '' && !morphologies.includes(morf)) {
                             morphologies.push(morf)
                         }
                     }
