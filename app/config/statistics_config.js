@@ -12,10 +12,14 @@ let getCqp = function(hitValues, ignoreCase) {
         }
         tokens.push("[" + andExpr.join(" & ") + "]")
     }
-    return tokens.join(" ")
+    return "(" + tokens.join(" ") + ")"
 }
 
 let reduceCqp = function(type, tokens, ignoreCase) {
+    let attrs = settings.corpusListing.getCurrentAttributes()
+    if (attrs[type] && attrs[type].stats_cqp) {
+        return attrs[type].stats_cqp(tokens, ignoreCase)
+    }
     switch (type) {
         case "saldo":
         case "prefix":
@@ -54,12 +58,12 @@ let reduceCqp = function(type, tokens, ignoreCase) {
         case "deprel":
         case "msd":
             return $.format('%s="%s"', [type, tokens[0]])
+        case "text_blingbring":
+        case "text_swefn":
+            return $.format('_.%s contains "%s"', [type, tokens[0]])
         default:
-            if (type == "text_blingbring" || type == "text_swefn") {
-                return $.format('_.%s contains "%s"', [type, tokens[0]])
-            } else {
-                return $.format('_.%s="%s"', [type, tokens[0]])
-            }
+            // assume structural attribute
+            return $.format('_.%s="%s"', [type, tokens[0]])
     }
 }
 
@@ -87,12 +91,13 @@ let reduceStringify = function(type, values, structAttributes) {
         case "lex":
         case "lemma":
         case "sense":
-            if (type == "saldo" || type == "sense") stringify = util.saldoToString
-            else if (type == "lemma")
-                stringify = function(lemma) {
-                    return lemma.replace(/_/g, " ")
-                }
-            else stringify = util.lemgramToString
+            if (type == "saldo" || type == "sense") {
+                var stringify = util.saldoToString
+            } else if (type == "lemma") {
+                stringify = lemma => lemma.replace(/_/g, " ")
+            } else {
+                stringify = util.lemgramToString
+            }
 
             var html = _.map(values, function(token) {
                 if (token === "") return "–"

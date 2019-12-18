@@ -999,10 +999,19 @@ view.StatsResults = class StatsResults extends BaseResults {
                     break
                 }
             }
-            const cqp2 = statisticsFormatting.getCqp(
-                rowData.statsValues,
-                this.searchParams.ignoreCase
-            )
+            let cqp2 = null
+            // isPhraseLevelDisjunction: used for constructing cqp like: ([] | [])
+            if (rowData.isPhraseLevelDisjunction) {
+                let tokens = rowData.statsValues.map(vals =>
+                    statisticsFormatting.getCqp(vals, this.searchParams.ignoreCase)
+                )
+                cqp2 = tokens.join(" | ")
+            } else {
+                cqp2 = statisticsFormatting.getCqp(
+                    rowData.statsValues,
+                    this.searchParams.ignoreCase
+                )
+            }
             const { corpora } = this.searchParams
 
             const opts = {}
@@ -1173,17 +1182,17 @@ view.StatsResults = class StatsResults extends BaseResults {
         this.showPreloader()
         this.proxy
             .makeRequest(cqp, (...args) => this.onProgress(...(args || [])))
-            .done((...args) => {
-                const [data, columns, searchParams] = args[0]
-                safeApply(this.s, () => {
-                    return this.hidePreloader()
-                })
-                this.data = data
-                this.searchParams = searchParams
-                return this.renderResult(columns, data)
-            })
-            .fail(
-                function(textStatus, err) {
+            .then(
+                (...args) => {
+                    const [data, columns, searchParams] = args[0]
+                    safeApply(this.s, () => {
+                        return this.hidePreloader()
+                    })
+                    this.data = data
+                    this.searchParams = searchParams
+                    return this.renderResult(columns, data)
+                },
+                (textStatus, err) => {
                     c.log("fail", arguments)
                     c.log(
                         "stats fail",
@@ -1202,7 +1211,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                             return this.resultError(err)
                         }
                     })
-                }.bind(this)
+                }
             )
     }
 

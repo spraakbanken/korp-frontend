@@ -39,7 +39,6 @@ const createStatisticsService = function() {
                             dataContext[reduceVal],
                             attrObj[reduceVal]
                         )
-                        console.log("formattedValue", formattedValue)
                         dataContext["formattedValue"][reduceVal] = formattedValue
                         return `<span class="statistics-link" data-row=${
                             dataContext["rowId"]
