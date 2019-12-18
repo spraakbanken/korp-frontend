@@ -1011,15 +1011,10 @@ angular-ui-sortable@0.18.0:
   resolved "https://registry.yarnpkg.com/angular-ui-sortable/-/angular-ui-sortable-0.18.0.tgz#a4dfdce4baf36406ff9e750c44eb8628f7e74e77"
   integrity sha1-pN/c5LrzZAb/nnUMROuGKPfnTnc=
 
-angular@*:
-  version "1.7.8"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.8.tgz#b77ede272ce1b261e3be30c1451a0b346905a3c9"
-  integrity sha512-wtef/y4COxM7ZVhddd7JtAAhyYObq9YXKar9tsW7558BImeVYteJiTxCKeJOL45lJ/+7B4wrAC49j8gTFYEthg==
-
-angular@1.6.8:
-  version "1.6.8"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.8.tgz#5be378a58be91a5489e78b59c4518cd9fd273ffb"
-  integrity sha512-9WErZIOw1Cu1V5Yxdvxz/6YpND8ntdP71fdPpufPFJvZodZXqCjQBYrHqEoMZreO5i84O3D/Jw/vepoFt68Azw==
+angular@*, angular@1.7.9:
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.9.tgz#e52616e8701c17724c3c238cfe4f9446fd570bc4"
+  integrity sha512-5se7ZpcOtu0MBFlzGv5dsM1quQDoDeUTwZrWjGtTNA7O88cD8TEk5IEKCTDa3uECV9XnvKREVUr7du1ACiWGFQ==
 
 angular@1.6.x:
   version "1.6.10"
