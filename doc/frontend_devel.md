@@ -236,7 +236,7 @@ The config file contains the corpora declaration, wherein the available corpora 
     * `order`: Order of attribute in the sidebar. Attributes with a lower `order`-value will be placed over attributes with a higher `order`-value.
     * `stringify`: How to pretty-print the attribute in the context of the sidebar. Example: `function(str) { return util.lemgramToString(str, true); }`
     * `stats_stringify`: How to pretty-print the attribute in the context of the statistics table. The provided formatting function will be passed an array of labels. Example: `stats_stringify: function(values) {return values.join(" ")}`.
-    * `stats_cqp`: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: ```stats_cqp: function(values) {return `pos_tag="${tokens.join(" | ")}"`}```. This  
+    * `stats_cqp`: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: ```stats_cqp: function(values) {return `pos_tag="${tokens.join(" | ")}"`}```.  
     * `isStructAttr`: `boolean`. If `true` the attribute will be treated as a structural attribute in all sense except it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.
     * optional keys and values that can be utilized in the extendedTemplate / extendedController. See <#ref customizing-extended-search|customizing extended search>.
 
