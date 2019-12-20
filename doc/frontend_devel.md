@@ -1,6 +1,6 @@
 # Setting up the Korp Frontend
 
-This section describes how to get the Korp frontend up and running on your own machine and presents the available customization. In this step it is necessary to have a backend with at least one corpus installed. For testing purposes, Språkbankens Korp backend may be enough. It is also assumed that you have a web server available (such as Apache or Lighttpd).
+This section describes how to get the Korp frontend up and running on your own machine and presents the available customization. In this step it is necessary to have a backend with at least one corpus installed. For testing purposes, Språkbankens Korp backend may be enough. It is also assumed that you have a web server available (such as Apache or Nginx).
 
 Download the latest release from [Github](https://github.com/spraakbanken/korp-frontend/releases). The code is distributed under the [MIT license][MIT].
 
@@ -16,7 +16,7 @@ In this text Korp refers to the frontend only.
 
 ## Configuration
 
-In ideal cases, no changes needs to be done in Korp. instead
+In ideal cases, no changes needs to be done in Korp. Instead
 all configuration will reside in another directory. How to make the build
 system detect this directory and its contents will be described below.
 
@@ -234,7 +234,9 @@ The config file contains the corpora declaration, wherein the available corpora 
     * `internalSearch`: `boolean`. Should the value be displayed as a link to a new Korp search? Only works for sets. Searches for CQP-expression: `[<attrName> contains "<regescape(attrValue)>"]`
     * `externalSearch`: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>`
     * `order`: Order of attribute in the sidebar. Attributes with a lower `order`-value will be placed over attributes with a higher `order`-value.
-    * `stringify`: How to pretty-print attribute. Example: `function(str) { return util.lemgramToString(str, true); }`
+    * `stringify`: How to pretty-print the attribute in the context of the sidebar. Example: `function(str) { return util.lemgramToString(str, true); }`
+    * `stats_stringify`: How to pretty-print the attribute in the context of the statistics table. The provided formatting function will be passed an array of labels. Example: `stats_stringify: function(values) {return values.join(" ")}`.
+    * `stats_cqp`: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: ```stats_cqp: function(values) {return `pos_tag="${tokens.join(" | ")}"`}```. This  
     * `isStructAttr`: `boolean`. If `true` the attribute will be treated as a structural attribute in all sense except it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.
     * optional keys and values that can be utilized in the extendedTemplate / extendedController. See <#ref customizing-extended-search|customizing extended search>.
 
