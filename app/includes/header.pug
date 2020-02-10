@@ -2,16 +2,16 @@
   #top_bar
     ul#mode_switch
       li(ng-repeat="mode in visible", class="visible", ng-class="{selected: mode.selected}")
-        a(ng-href="{{getUrl(mode.mode)}}")
+        a(ng-href="{{getUrl(mode.mode)}}") 
           | {{mode.localekey | loc:lang}}
-      li.menu_more.visible(ng-if="menu.length")
+      li.menu_more.visible(ng-if="menu.length") 
         a.dropdown-toggle(popper, no-close-on-click="true", my="right+15% top+10", at="bottom right") {{'more' | loc:lang}}
           i.fa.fa-angle-double-down
         ul.dropdown-menu.popper_menu
            li(ng-repeat="mode in menu")
-             a(ng-href="{{getUrl(mode.mode)}}")
+             a(ng-href="{{getUrl(mode.mode)}}") 
                | {{mode.localekey | loc:lang}}
-
+        
     #cog.dropdown-toggle(popper, my="right+21px top+18px", at="bottom right", no-close-on-click="true")
       i.fa.fa-cog.align-middle
     ul#cog_menu.dropdown-menu.popper_menu
@@ -29,7 +29,7 @@
       div(news-desk="", header="'newsdesk-header'", storage="'korp_last_read_newsitem'")
     #log_out.link(ng-click="logout()", ng-if="loggedIn")
       span
-        | {{'log_out' | loc:lang}}
+        | {{'log_out' | loc:lang}}   
       span {{username}}
     #languages
       a(data-mode='sv', ng-click="lang = 'sv'") {{'swedish' | loc:lang}}
@@ -47,7 +47,7 @@
       .hp_topframe.buttonlink.ui-state-default.ui-corner-all
         div.pull-left
           span#hp_corpora_title1
-          span#hp_corpora_titleOf(rel='localize[corpselector_of]')  of
+          span#hp_corpora_titleOf(rel='localize[corpselector_of]')  of 
           span#hp_corpora_titleTotal
           span#hp_corpora_title2(rel='localize[corpselector_allselected]')
           span#hp_corpora_titleTokens(style='color: #888888;')
