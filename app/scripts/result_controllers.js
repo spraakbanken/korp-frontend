@@ -492,8 +492,7 @@ korpApp.directive("statsResultCtrl", () => ({
 }))
 
 korpApp.directive("wordpicCtrl", () => ({
-    controller($scope, $rootScope, $location, utils, searches) {
-        console.log("wordpicCtrl", $scope)
+    controller($scope, $rootScope, $location, searches) {
         $scope.loading = false
         $scope.progress = 0
         $scope.word_pic = $location.search().word_pic != null
@@ -592,13 +591,11 @@ korpApp.directive("wordpicCtrl", () => ({
             const set = row[row.show_rel].split("|")
             const lemgram = set[0]
 
-            const word = _.trim(lemgram)
             let infixIndex = ""
             let concept = lemgram
             infixIndex = ""
             let type = "-"
 
-            const hasHomograph = allLemgrams.includes(lemgram.slice(0, -1))
             const prefix = row.depextra
 
             if (util.isLemgramId(lemgram)) {
@@ -643,7 +640,6 @@ korpApp.directive("wordpicCtrl", () => ({
         }
 
         $scope.renderResultHeader = function(parentIndex, section, wordClass, index) {
-            const headers = settings.wordPictureConf[wordClass][parentIndex]
             return section[index] && section[index].table
         }
 
