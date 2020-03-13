@@ -583,7 +583,6 @@ korpApp.directive("wordpicCtrl", () => ({
         }
 
         $scope.isLemgram = word => {
-            console.log("isLemgram", word)
             util.isLemgramId(word)
         }
 
