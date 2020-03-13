@@ -1238,6 +1238,10 @@ view.StatsResults = class StatsResults extends BaseResults {
     }
 
     renderResult(columns, data) {
+        if (this.isActive()) {
+            this.s.$root.jsonUrl = this.proxy.prevUrl
+        }
+
         this.showGenerateExport()
 
         const refreshHeaders = () =>
