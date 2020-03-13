@@ -86,8 +86,8 @@ class BaseResults {
     onentry() {
         this.s.$root.jsonUrl = null
         this.firstResultDef.promise.then(() => {
-            console.log("@proxy?.prevUrl", this.proxy && this.proxy.prevUrl)
-            this.s.$root.jsonUrl = this.proxy && this.proxy.prevUrl
+            const prevUrl = this.proxy && this.proxy.prevUrl
+            this.s.$apply($scope => ($scope.$root.jsonUrl = prevUrl))
         })
     }
 
