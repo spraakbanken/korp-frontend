@@ -444,7 +444,6 @@ view.KWICResults = class KWICResults extends BaseResults {
         }
 
         opts.ajaxParams = {
-            command: "query",
             corpus: settings.corpusListing.stringifySelected(),
             cqp: cqp || this.proxy.prevCQP,
             query_data: this.proxy.queryData,
@@ -714,8 +713,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
         this.showPreloader()
-
-        const progress = opts.command === "query" ? $.proxy(this.onProgress, this) : $.noop
+        const progress = opts.command === "relations_sentences" ? $.noop : $.proxy(this.onProgress, this)
         const def = this.proxy.makeRequest(opts, null, progress, data => {
             this.renderResult(data, opts.cqp)
             this.renderCompleteResult(data)
@@ -1016,7 +1014,6 @@ view.StatsResults = class StatsResults extends BaseResults {
             opts.ajaxParams = {
                 start: 0,
                 end: 24,
-                command: "query",
                 corpus: corpora.join(","),
                 cqp: self.proxy.prevParams.cqp,
                 cqp2,
@@ -1564,7 +1561,6 @@ view.GraphResults = class GraphResults extends BaseResults {
                 opts.ajaxParams = {
                     start: 0,
                     end: 24,
-                    command: "query",
                     corpus: this.s.data.corpusListing.stringifySelected(),
                     cqp: this.s.data.cqp,
                     cqp2: timecqp,

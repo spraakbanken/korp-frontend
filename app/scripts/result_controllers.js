@@ -798,7 +798,6 @@ korpApp.directive("compareCtrl", () => ({
                         start: 0,
                         end: 24,
                         ajaxParams: {
-                            command: "query",
                             cqp: cmp.cqp,
                             cqp2: cqp,
                             corpus: cl.stringifySelected(),

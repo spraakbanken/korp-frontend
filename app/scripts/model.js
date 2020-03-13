@@ -163,7 +163,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         }
 
         const data = {
-            command: "query",
             default_context: settings.defaultOverviewContext,
             show: [],
             show_struct: []
@@ -203,9 +202,11 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
 
         this.prevRequest = data
         this.prevParams = data
+        const command = data.command || 'query'
+        delete data.command
         const def = $.ajax({
             method: "POST",
-            url: settings.korpBackendURL + "/" + data.command,
+            url: settings.korpBackendURL + "/" + command,
             data,
             beforeSend(req, settings) {
                 self.prevRequest = settings
@@ -240,7 +241,6 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
         super.makeRequest()
         const self = this
         const params = {
-            command: "relations",
             word,
             corpus: settings.corpusListing.stringifySelected(),
             incremental: true,
@@ -249,7 +249,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
         }
         this.prevParams = params
         const def = $.ajax({
-            url: settings.korpBackendURL + "/" + params.command,
+            url: settings.korpBackendURL + "/relations",
             data: params,
 
             success(data) {
@@ -297,7 +297,6 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
             }
         }
         const parameters = {
-            command: "count",
             group_by: groupBy.join(","),
             group_by_struct: groupByStruct.join(","),
             cqp: this.expandCQP(cqp),
@@ -362,7 +361,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const def = $.Deferred()
         this.pendingRequests.push(
             $.ajax({
-                url: settings.korpBackendURL + "/" + data.command,
+                url: settings.korpBackendURL + "/count",
                 data,
                 beforeSend(req, settings) {
                     self.prevRequest = settings
@@ -616,7 +615,6 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
         super.makeRequest()
         const self = this
         const params = {
-            command: "count_time",
             cqp: this.expandCQP(cqp),
             corpus: corpora,
             granularity: this.granularity,
@@ -636,7 +634,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
         const def = $.Deferred()
 
         $.ajax({
-            url: settings.korpBackendURL + "/" + params.command,
+            url: settings.korpBackendURL + "/count_time",
             dataType: "json",
             data: params,
 

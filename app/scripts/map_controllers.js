@@ -142,7 +142,6 @@ korpApp.directive("mapCtrl", () => ({
                 start: 0,
                 end: 24,
                 ajaxParams: {
-                    command: "query",
                     cqp: s.lastSearch.cqp,
                     cqp2: getCqp2(point.name),
                     corpus: s.lastSearch.corpora,
@@ -251,7 +250,6 @@ korpApp.directive("newMapCtrl", ($timeout, searches) => ({
                 start: 0,
                 end: 24,
                 ajaxParams: {
-                    command: "query",
                     cqp: queryData.searchCqp,
                     cqp2: `[_.${queryData.label} contains '${[
                         point.name,
