@@ -1850,6 +1850,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             const csv = new CSV(output, {
                 delimiter: dataDelimiter
             })
+
             const csvstr = csv.encode()
             const blob = new Blob([csvstr], { type: `text/${selType}` })
             const csvUrl = URL.createObjectURL(blob)
@@ -1857,8 +1858,11 @@ view.GraphResults = class GraphResults extends BaseResults {
             const a = document.createElement("a")
             a.href = csvUrl
             a.download = `export.${selType}`
+            a.style.display = 'none';
+            document.body.appendChild(a);
             a.click()
-            return window.URL.revokeObjectURL(csvUrl)
+            document.body.removeChild(element);
+            window.URL.revokeObjectURL(csvUrl)
         })
     }
 
