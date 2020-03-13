@@ -669,7 +669,6 @@ view.KWICResults = class KWICResults extends BaseResults {
 
 view.ExampleResults = class ExampleResults extends view.KWICResults {
     constructor(tabSelector, resultSelector, scope) {
-        c.log("ExampleResults constructor", tabSelector, resultSelector, scope)
         super(tabSelector, resultSelector, scope)
         this.proxy = new model.KWICProxy()
 
@@ -690,7 +689,6 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
 
     makeRequest() {
         let avoidContext, preferredContext
-        c.log("ExampleResults.makeRequest()", this.current_page)
         const items_per_page = parseInt(locationSearch().hpp || 25)
         const opts = this.s.$parent.kwicTab.queryParams
 
