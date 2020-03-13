@@ -37,11 +37,11 @@ uib-tab(ng-repeat='data in graphTabs', graph-ctrl)
     .time_table(style="margin-top:20px", ng-show="isTable()")
     .exportTimeStatsSection(ng-show="isTable()")
       select.timeKindOfData
-        option(value='relative', rel='localize[statstable_relfigures]') Relativa tal
-        option(value='absolute', rel='localize[statstable_absfigures]') Absoluta tal
+        option(value='relative') {{'statstable_relfigures' | loc:lang}}
+        option(value='absolute') {{'statstable_absfigures' | loc:lang}}
       select.timeKindOfFormat
-        option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
-        option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
+        option(value='TSV') {{'statstable_exp_tsv' | loc:lang}}
+        option(value='CSV') {{'statstable_exp_csv' | loc:lang}}
       a.export.btn.btn-default.btn-sm {{'statstable_export' | loc:lang}}
 uib-tab(ng-repeat='promise in compareTabs', compare-ctrl)
   uib-tab-heading.compare_tab(ng-class='{loading : loading}')
