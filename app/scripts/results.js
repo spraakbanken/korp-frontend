@@ -1823,7 +1823,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         return $(".exportTimeStatsSection .btn.export", this.$result).click(() => {
             const selVal = $(".timeKindOfData option:selected", this.$result).val()
             const selType = $(".timeKindOfFormat option:selected", this.$result).val()
-            const dataDelimiter = selType === "TSV" ? "%09" : ";"
+            const dataDelimiter = selType === "TSV" ? "\t" : ";"
 
             const header = [util.getLocaleString("stats_hit")]
 
