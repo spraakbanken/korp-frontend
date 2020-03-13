@@ -758,6 +758,12 @@ view.LemgramResults = class LemgramResults extends BaseResults {
     }
 
     makeRequest(word, type) {
+        // if a global filter is set, do not generate a word picture
+        if (this.s.$root.globalFilter) {
+            this.hasData = false
+            return
+        }
+
         if (this.proxy.hasPending()) {
             this.ignoreAbort = true
         } else {
