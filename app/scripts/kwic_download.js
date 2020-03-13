@@ -106,16 +106,24 @@ korpApp.factory("kwicDownload", function() {
         let res = []
         for (row of data) {
             if (row.tokens) {
+                if (row.isLinked) {
+                    // parallell mode does not have matches or structs for the linked sentences
+                    // current wordaround is to add all tokens to the left context
+                    res.push(["", "", row.tokens.map(token => token.word).join(" "), "", ""])
+                    continue
+                }
+                
                 var attrName, token
                 const leftContext = []
+                const match = []
+                const rightContext = []
+                
                 for (token of row.tokens.slice(0, row.match.start)) {
                     leftContext.push(token.word)
                 }
-                const match = []
                 for (token of row.tokens.slice(row.match.start, row.match.end)) {
                     match.push(token.word)
                 }
-                const rightContext = []
                 for (token of row.tokens.slice(row.match.end, row.tokens.length)) {
                     rightContext.push(token.word)
                 }
@@ -133,7 +141,6 @@ korpApp.factory("kwicDownload", function() {
                         structs.push("")
                     }
                 }
-
                 const newRow = [
                     corpus,
                     row.match.position,
