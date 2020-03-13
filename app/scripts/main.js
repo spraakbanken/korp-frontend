@@ -215,7 +215,7 @@ window.initTimeGraph = function(def) {
     let restyear = null
     let hasRest = false
 
-    let onTimeGraphChange = function() {}
+    let onTimeGraphChange;
 
     const getValByDate = function(date, struct) {
         let output = null
@@ -237,6 +237,11 @@ window.initTimeGraph = function(def) {
         })
         .done(function(...args) {
             let [dataByCorpus, all_timestruct, rest] = args[0]
+
+            if (all_timestruct.length == 0) {
+                return;
+            }
+
             for (let corpus in dataByCorpus) {
                 let struct = dataByCorpus[corpus]
                 if (corpus !== "time") {
@@ -406,7 +411,9 @@ window.initTimeGraph = function(def) {
     $("#corpusbox").one("corpuschooseropen", () => opendfd.resolve())
 
     return $.when(window.timeDeferred, opendfd).then(function() {
-        $("#corpusbox").bind("corpuschooserchange", onTimeGraphChange)
-        return onTimeGraphChange()
+        if (onTimeGraphChange) {
+            $("#corpusbox").bind("corpuschooserchange", onTimeGraphChange)
+            return onTimeGraphChange()
+        }
     })
 }
