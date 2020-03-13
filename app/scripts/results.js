@@ -1861,7 +1861,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             a.style.display = 'none';
             document.body.appendChild(a);
             a.click()
-            document.body.removeChild(element);
+            document.body.removeChild(a);
             window.URL.revokeObjectURL(csvUrl)
         })
     }
