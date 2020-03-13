@@ -330,6 +330,7 @@
 
     "no_geo_info": "No location data available",
     "map_cluster": "Cluster",
+    "no_row_selected_map": "Choose at least one row to show the map",
 
     "global_filter": "Filter",
     "add_filter": "Add filter",

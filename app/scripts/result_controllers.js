@@ -398,6 +398,7 @@ korpApp.directive("statsResultCtrl", () => ({
         const s = $scope
         s.loading = false
         s.progress = 0
+        s.noRowsError = false
 
         s.$watch(() => $location.search().hide_stats, val => (s.showStatistics = val == null))
 
@@ -450,10 +451,18 @@ korpApp.directive("statsResultCtrl", () => ({
         }
 
         s.showMap = function() {
+            const selectedRows = s.instance.getSelectedRows()
+
+            if(selectedRows.length == 0) {
+                s.noRowsError = true
+                return
+            }
+            s.noRowsError = false
+            
             const cqpExpr = CQP.expandOperators(searches.getCqpExpr())
 
             const cqpExprs = {}
-            for (let rowIx of s.instance.getSelectedRows()) {
+            for (let rowIx of selectedRows) {
                 if (rowIx === 0) {
                     continue
                 }

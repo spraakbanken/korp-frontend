@@ -1279,10 +1279,6 @@ a {
   label {
     margin-top: 5px;
   }
-  .err_msg {
-    font-size: .8em;
-    color: red;
-  }
   .password-reset {
     font-size: 0.7em;
     float: right;
@@ -2726,6 +2722,11 @@ li.active a span .num-to-find {
 
 .or_container .word {
     color: #222222;
+}
+
+.err_msg {
+  font-size: .8em;
+  color: red;
 }
 
 .map-settings-container {

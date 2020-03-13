@@ -83,6 +83,8 @@ html
                               | {{ 'no_geo_info' | loc:lang}}
                             div.btn-container()
                                 button.btn.btn-sm.btn-primary(ng-disabled="mapAttributes.length == 0", ng-click="showMap()") {{'show_map' | loc:lang}}
+                          span(ng-if="noRowsError" class="ml-3 err_msg")
+                            | {{'no_row_selected_map' | loc:lang}}
 
                         #showBarPlot
                       div(ng-if="!loading", style="margin-bottom: 5px;") {{'total_rows' | loc:lang}} {{totalNumberOfRows}}
