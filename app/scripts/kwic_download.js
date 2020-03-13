@@ -187,7 +187,7 @@ korpApp.factory("kwicDownload", function() {
             dataDelimiter = ","
         }
         if (fileType === "tsv") {
-            dataDelimiter = "   "
+            dataDelimiter = "\t"
         }
 
         const csv = new CSV(transformedData, {
