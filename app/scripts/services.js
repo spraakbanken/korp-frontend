@@ -473,19 +473,9 @@ korpApp.service(
 
 korpApp.factory("lexicons", function($q, $http) {
     const karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v4"
-    let canceller = null
-    let cancelNext = false
     return {
-        lemgramCancel() {
-            cancelNext = true
-        },
         getLemgrams(wf, resources, corporaIDs) {
             const deferred = $q.defer()
-            canceller = $q.defer()
-            if (cancelNext) {
-                canceller.resolve()
-                cancelNext = false
-            }
 
             const args = {
                 q: wf,
@@ -496,8 +486,7 @@ korpApp.factory("lexicons", function($q, $http) {
             $http({
                 method: "GET",
                 url: `${karpURL}/autocomplete`,
-                params: args,
-                timeout: canceller.promise
+                params: args
             })
                 .then(function(response) {
                     let { data } = response
@@ -523,8 +512,7 @@ korpApp.factory("lexicons", function($q, $http) {
                             method: "POST",
                             url: settings.korpBackendURL + "/lemgram_count",
                             data: `lemgram=${lemgram}&count=lemgram&corpus=${corpora}`,
-                            headers,
-                            timeout: canceller.promise
+                            headers
                         }).then(({ data }) => {
                             delete data.time
                             const allLemgrams = []

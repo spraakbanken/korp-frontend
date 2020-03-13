@@ -201,8 +201,6 @@ korpApp.controller("SimpleCtrl", function(
     }
 
     s.$on("btn_submit", function() {
-        c.log("simple search submit")
-        lexicons.lemgramCancel()
         s.updateSearch()
         $location.search("within", null)
     })
