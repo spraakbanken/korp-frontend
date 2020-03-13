@@ -1127,7 +1127,7 @@ table {
     position: fixed;
     top: 8px;
     overflow-y: auto;
-    max-height: 100%;
+    max-height: calc(100vh - 12px);
   }
   &:empty {
     padding: 0;
