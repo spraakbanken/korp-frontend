@@ -1243,7 +1243,6 @@ a {
 }
 
 #about_body {
-  position: relative;
   &:after {
     content: "";
     z-index: 0;
@@ -1272,7 +1271,6 @@ a {
 }
 
 #login_popup {
-  min-height: 190px;
   * {
     display: block;
   }
@@ -1718,11 +1716,6 @@ h2, h3 {
 }
 body.modal-open {
   overflow: hidden;
-}
-.modal-body {
-  max-height : 71vh;
-  min-height : 300px;
-
 }
 
 .related.modal {
