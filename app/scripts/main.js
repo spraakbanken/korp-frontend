@@ -115,6 +115,7 @@ $.when(loc_dfd, deferred_domReady).then(
         })
 
         let prevFragment = {}
+        // Note that this is _not_ window.onhashchange (lowercase only) and is not called by the browser
         window.onHashChange = function(event, isInit) {
             c.log("onHashChange")
             const hasChanged = key => prevFragment[key] !== locationSearch()[key]
