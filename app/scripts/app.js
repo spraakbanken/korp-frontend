@@ -93,7 +93,7 @@ korpApp.run(function($rootScope, $location, searches, tmhDynamicLocale, $q) {
         loginNeededFor = []
         for (let corpus of $location.search().corpus.split(",")) {
             const corpusObj = settings.corpusListing.struct[corpus]
-            if (corpusObj.limitedAccess) {
+            if (corpusObj && corpusObj.limitedAccess) {
                 if (
                     _.isEmpty(authenticationProxy.loginObj) ||
                     !authenticationProxy.loginObj.credentials.includes(corpus.toUpperCase())
