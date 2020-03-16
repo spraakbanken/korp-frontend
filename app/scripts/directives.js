@@ -144,6 +144,10 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
         let childWatch = null
 
         return scope.$watch("tokenValue", function(valueObj) {
+            if (scope.orObj.flags) {
+                delete scope.orObj.flags["c"]
+            }
+
             let controller, template
             if (!valueObj) {
                 return
