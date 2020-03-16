@@ -985,10 +985,9 @@ korpApp.directive("reduceSelect", $timeout => ({
         }
 
         scope.toggleSelected = function(value, event) {
-            const isLinux = window.navigator.userAgent.indexOf("Linux") !== -1
             const item = scope.keyItems[value]
-
-            if ((!isLinux && event.altKey) || (isLinux && event.ctrlKey)) {
+            const isLinux = window.navigator.userAgent.indexOf("Linux") !== -1
+            if (event && ((!isLinux && event.altKey) || (isLinux && event.ctrlKey))) {
                 _.map(_.values(scope.keyItems), item => (item.selected = false))
                 item.selected = true
             } else {
