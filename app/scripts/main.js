@@ -82,8 +82,8 @@ $.when(loc_dfd, deferred_domReady).then(
         util.browserWarn()
 
         $("#search_history").change(function(event) {
-            const target = $(this).find(":selected")
-            if (_.includes(target.val(), "http://")) {
+            const target = $(this).find(":selected") 
+            if (_.includes(["http://", 'https:/'], target.val().slice(0, 7))) {
                 location.href = target.val()
             } else if (target.is(".clear")) {
                 jStorage.set("searches", [])

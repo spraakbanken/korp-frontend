@@ -7,7 +7,6 @@ import jStorage from "../lib/jstorage"
 //* *************
 
 view.updateSearchHistory = function(value, href) {
-    let needle
     const filterParam = url => {
         return $.grep(
             url.split("#")[1].split("&"),
