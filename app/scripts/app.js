@@ -91,9 +91,41 @@ korpApp.run(function($rootScope, $location, searches, tmhDynamicLocale, $q) {
 
     if ($location.search().corpus) {
         loginNeededFor = []
+        const initialCorpora = []
+
+        function findInFolder(folder) {
+            // checks if folder is an actual folder of corpora and recursively 
+            // collects all corpora in this folder and subfolders
+            const corpusIds = []
+            if (folder && folder.contents) {
+                for (let corpusId of folder.contents) {
+                    corpusIds.push(corpusId)
+                }
+                for (let subFolderId of Object.keys(folder)) {
+                    for (let corpusId of findInFolder(folder[subFolderId])) {
+                        corpusIds.push(corpusId)
+                    }
+                }
+            }
+            return corpusIds
+        }
+
         for (let corpus of $location.search().corpus.split(",")) {
             const corpusObj = settings.corpusListing.struct[corpus]
-            if (corpusObj && corpusObj.limitedAccess) {
+            if (corpusObj) {
+                initialCorpora.push(corpusObj)
+            } else {
+                // corpus does not correspond to a corpus ID, check if it is a folder
+                for (let folderCorpus of findInFolder(settings.corporafolders[corpus])) {
+                    if (settings.corpusListing.struct[folderCorpus]) {
+                        initialCorpora.push(settings.corpusListing.struct[folderCorpus])
+                    }
+                }
+            }
+        }
+
+        for (let corpusObj of initialCorpora) {
+            if (corpusObj.limitedAccess) {
                 if (
                     _.isEmpty(authenticationProxy.loginObj) ||
                     !authenticationProxy.loginObj.credentials.includes(corpus.toUpperCase())
