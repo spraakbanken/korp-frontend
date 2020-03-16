@@ -53,7 +53,7 @@ korpApp.config([
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/)
 ])
 
-korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout, $q) {
+korpApp.run(function($rootScope, $location, searches, tmhDynamicLocale, $q) {
     let loginNeededFor
     const s = $rootScope
     s._settings = settings
@@ -78,7 +78,6 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
     s._loc = $location
 
     s.$watch("_loc.search()", function() {
-        c.log("loc.search() change", $location.search())
         _.defer(() => (window.onHashChange || _.noop)())
 
         return tmhDynamicLocale.set($location.search().lang || "sv")
@@ -89,7 +88,6 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
     $rootScope.graphTabs = []
     $rootScope.mapTabs = []
     $rootScope.textTabs = []
-    let isInit = true
 
     if ($location.search().corpus) {
         loginNeededFor = []
@@ -134,7 +132,6 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
 
     s.searchDisabled = false
     s.$on("corpuschooserchange", function(event, corpora) {
-        c.log("corpuschooserchange", corpora)
         settings.corpusListing.select(corpora)
         const nonprotected = _.map(settings.corpusListing.getNonProtected(), "id")
         if (
@@ -145,9 +142,6 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
         } else {
             $location.search("corpus", null)
         }
-
-        isInit = false
-
         s.searchDisabled = settings.corpusListing.selected.length === 0
     })
 
@@ -181,7 +175,7 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
     })
 })
 
-korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
+korpApp.controller("headerCtrl", function($scope, $uibModal, utils) {
     const s = $scope
 
     s.logoClick = function() {
@@ -267,11 +261,9 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
             key: "display",
             scope_name: "show_modal",
             post_change(val) {
-                c.log("post change", val)
                 if (val) {
                     showModal(val)
                 } else {
-                    c.log("post change modal", modal)
                     if (modal != null) {
                         modal.close()
                     }
@@ -314,7 +306,7 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
         s.login_err = false
         authenticationProxy
             .makeRequest(usr, pass, saveLogin)
-            .done(function(data) {
+            .done(function() {
                 util.setLogin()
                 safeApply(s, function() {
                     s.show_modal = null

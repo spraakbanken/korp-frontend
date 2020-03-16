@@ -20,14 +20,12 @@ if (location.hash.length && location.hash[1] !== "?") {
     location.hash = `#?${_.trimStart(location.hash, "#")}`
 }
 
-const t = $.now()
-
 $.ajaxSetup({
     dataType: "json",
     traditional: true
 })
 
-$.ajaxPrefilter("json", function(options, orig, jqXHR) {
+$.ajaxPrefilter("json", function(options) {
     if (options.crossDomain && !$.support.cors) {
         return "jsonp"
     }
@@ -61,27 +59,12 @@ $(document).keyup(function(event) {
     }
 })
 
-// const toggleLogos = function() {
-//     if ($(window).width() > 1050) {
-//         return $(".logos").show()
-//     } else {
-//         return $(".logos").hide()
-//     }
-// }
-// toggleLogos()
-
-// $(window).resize(event => toggleLogos())
-
 $.when(loc_dfd, deferred_domReady).then(
-    function(loc_data) {
-        let e
-        c.log("preloading done, t = ", $.now() - t)
-
+    function() {
         try {
             angular.bootstrap(document, ["korpApp"])
         } catch (error) {
-            e = error
-            c.error(e)
+            c.error(error)
         }
 
         try {
@@ -91,8 +74,7 @@ $.when(loc_dfd, deferred_domReady).then(
             }
             view.updateSearchHistory()
         } catch (error1) {
-            e = error1
-            c.error("ERROR setting corpora from location", e)
+            c.error("ERROR setting corpora from location", error1)
         }
 
         if (isLab) {
@@ -103,12 +85,10 @@ $.when(loc_dfd, deferred_domReady).then(
         util.browserWarn()
 
         $("#search_history").change(function(event) {
-            c.log("select", $(this).find(":selected"))
             const target = $(this).find(":selected")
             if (_.includes(target.val(), "http://")) {
                 location.href = target.val()
             } else if (target.is(".clear")) {
-                c.log("empty searches")
                 jStorage.set("searches", [])
                 view.updateSearchHistory()
             }
@@ -117,7 +97,6 @@ $.when(loc_dfd, deferred_domReady).then(
         let prevFragment = {}
         // Note that this is _not_ window.onhashchange (lowercase only) and is not called by the browser
         window.onHashChange = function(event, isInit) {
-            c.log("onHashChange")
             const hasChanged = key => prevFragment[key] !== locationSearch()[key]
             if (hasChanged("lang")) {
                 const newLang = locationSearch().lang || settings.defaultLanguage
@@ -127,8 +106,6 @@ $.when(loc_dfd, deferred_domReady).then(
 
                 $("#languages").radioList("select", newLang)
             }
-
-            const { display } = locationSearch()
 
             if (isInit) {
                 util.localize()
@@ -141,12 +118,6 @@ $.when(loc_dfd, deferred_domReady).then(
 
         $("#languages").radioList({
             change() {
-                c.log(
-                    "lang change",
-                    $(this)
-                        .radioList("getSelected")
-                        .data("mode")
-                )
                 locationSearch({
                     lang: $(this)
                         .radioList("getSelected")
