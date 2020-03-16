@@ -950,9 +950,8 @@ korpApp.directive("reduceSelect", $timeout => ({
     link(scope, element, attribute) {
         scope.$watchCollection("items", function() {
             if (scope.items) {
-                let item
                 scope.keyItems = {}
-                for (item of scope.items) {
+                for (let item of scope.items) {
                     scope.keyItems[item.value] = item
                 }
 
@@ -960,16 +959,21 @@ korpApp.directive("reduceSelect", $timeout => ({
                 scope.hasStructAttrs =
                     _.filter(scope.keyItems, { group: "sentence_attr" }).length > 0
 
+                let somethingSelected = false
                 if (scope.selected && scope.selected.length > 0) {
                     for (let select of scope.selected) {
-                        item = scope.keyItems[select]
+                        const item = scope.keyItems[select]
                         if (item) {
                             item.selected = true
+                            somethingSelected = true
                         }
                     }
-                } else {
+                }
+
+                if (!somethingSelected) {
                     scope.keyItems["word"].selected = true
                 }
+
                 if (scope.insensitive) {
                     for (let insensitive of scope.insensitive) {
                         scope.keyItems[insensitive].insensitive = true
