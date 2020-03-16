@@ -2,9 +2,6 @@
 const korpFailImg = require("../img/korp_fail.svg")
 const deparam = require("jquery-deparam")
 
-// import $ from "jquery"
-// window.jQuery = $
-// window.$ = $
 import jStorage from "../lib/jstorage"
 
 window.authenticationProxy = new model.AuthenticationProxy()
