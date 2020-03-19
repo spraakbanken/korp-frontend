@@ -232,7 +232,10 @@ korpApp.directive("searchSubmit", $rootElement => ({
             <h3 class="popover-title">{{'compare_save_header' | loc:lang}}</h3>
             <form class="popover-content" ng-submit="onSubmit()">
                 <div>
-                    <label for="cmp_input">{{'compare_name' | loc:lang}} :</label> <input id="cmp_input" ng-model="name">
+                    <label>
+                        {{'compare_name' | loc:lang}}:
+                        <input ng-model="name">
+                    </label>
                 </div>
                 <div class="btn_container">
                     <button class="btn btn-primary btn-sm">{{'compare_save' | loc:lang}}</button>
