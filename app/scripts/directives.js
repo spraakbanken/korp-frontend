@@ -6,7 +6,7 @@ korpApp.directive("kwicWord", () => ({
     template: `<span class="word" ng-class="getClassObj(wd)">
 {{::wd.word}} </span>\
 `,
-    link(scope, element) {
+    link(scope) {
         scope.getClassObj = function(wd) {
             let struct
             const output = {
@@ -97,7 +97,7 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
 }))
 
 korpApp.directive("escaper", () => ({
-    link($scope, elem, attr) {
+    link($scope) {
         let escape, unescape
         if ($scope.escape === false) {
             escape = val => val
@@ -203,7 +203,7 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
     }
 }))
 
-korpApp.directive("constr", ($window, searches) => ({
+korpApp.directive("constr", $window => ({
     scope: true,
 
     link(scope, elem, attr) {
@@ -218,7 +218,7 @@ korpApp.directive("constr", ($window, searches) => ({
     }
 }))
 
-korpApp.directive("searchSubmit", ($window, $document, $rootElement) => ({
+korpApp.directive("searchSubmit", $rootElement => ({
     template: `\
 <div class="search_submit">
         <div class="btn-group">
@@ -369,13 +369,13 @@ korpApp.directive("popper", $rootElement => ({
         const closePopup = () => popup.hide()
 
         if (attrs.noCloseOnClick == null) {
-            popup.on("click", function(event) {
+            popup.on("click", function() {
                 closePopup()
                 return false
             })
         }
 
-        elem.on("click", function(event) {
+        elem.on("click", function() {
             const other = $(".popper_menu:visible").not(popup)
             if (other.length) {
                 other.hide()
@@ -404,7 +404,7 @@ korpApp.directive("popper", $rootElement => ({
     }
 }))
 
-korpApp.directive("tabSpinner", $rootElement => ({
+korpApp.directive("tabSpinner", () => ({
     template: `\
 <i class="fa fa-times-circle close_icon"></i>
 <span class="tab_spinner"
@@ -412,14 +412,14 @@ korpApp.directive("tabSpinner", $rootElement => ({
 `
 }))
 
-korpApp.directive("extendedList", ($location, $rootScope) => ({
+korpApp.directive("extendedList", () => ({
     templateUrl: require("../views/extendedlist.html"),
     scope: {
         cqp: "=",
         lang: "=",
         repeatError: "="
     },
-    link($scope, elem, attr) {
+    link($scope) {
         const s = $scope
 
         const setCQP = function(val) {
@@ -568,7 +568,7 @@ korpApp.directive("tabPreloader", () => ({
 </div>\
 `,
 
-    link(scope, elem, attr) {}
+    link() {}
 }))
 
 korpApp.directive("clickCover", () => ({
@@ -595,13 +595,13 @@ korpApp.directive("clickCover", () => ({
 
 korpApp.directive("toBody", $compile => ({
     restrict: "A",
-    compile(elm, attrs) {
+    compile(elm) {
         elm.remove()
         elm.attr("to-body", null)
         const wrapper = $("<div>").append(elm)
         const cmp = $compile(wrapper.html())
 
-        return function(scope, iElement, iAttrs) {
+        return function(scope) {
             const newElem = cmp(scope)
             $("body").append(newElem)
             return scope.$on("$destroy", () => newElem.remove())
@@ -642,7 +642,7 @@ korpApp.directive("kwicPager", () => ({
 `
 }))
 
-korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
+korpApp.directive("autoc", ($q, lexicons) => ({
     replace: true,
     restrict: "E",
     scope: {
@@ -694,7 +694,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
         </div>
 </div>\
 `,
-    link(scope, elem, attr) {
+    link(scope) {
         scope.typeaheadClose = function() {
             if (scope.typeaheadCloseCallback) {
                 return scope.typeaheadCloseCallback({
@@ -736,7 +736,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
             }
         })
 
-        scope.selectedItem = function(item, model, label) {
+        scope.selectedItem = function(item, model) {
             if (scope.type === "lemgram") {
                 scope.placeholder = model.lemgram
                 scope.model = regescape(model.lemgram)
@@ -833,11 +833,11 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
     }
 }))
 
-korpApp.directive("typeaheadClickOpen", function($parse, $timeout) {
+korpApp.directive("typeaheadClickOpen", function($timeout) {
     return {
         restrict: "A",
         require: "ngModel",
-        link($scope, elem, attrs) {
+        link($scope, elem) {
             const triggerFunc = function(event) {
                 if (event.keyCode === 40 && !$scope.typeaheadIsOpen) {
                     const ctrl = elem.controller("ngModel")
@@ -876,8 +876,7 @@ korpApp.directive("timeInterval", () => ({
 </div>\
 `,
 
-    link(s, elem, attr) {
-        let w
+    link(s) {
         s.isOpen = false
         s.open = function(event) {
             event.preventDefault()
@@ -950,7 +949,7 @@ korpApp.directive("reduceSelect", $timeout => ({
       </div>
 </div>`,
 
-    link(scope, element, attribute) {
+    link(scope) {
         scope.$watchCollection("items", function() {
             if (scope.items) {
                 scope.keyItems = {}
