@@ -38,7 +38,10 @@ korpApp.factory("utils", $location => ({
             }
         }
         onWatch()
-        scope.$watch(() => $location.search(), () => onWatch())
+        scope.$watch(
+            () => $location.search(),
+            () => onWatch()
+        )
 
         for (let obj of config) {
             const watch = obj.expr || obj.scope_name || obj.key
@@ -51,9 +54,6 @@ korpApp.factory("utils", $location => ({
                             val = null
                         }
                         $location.search(obj.key, val || null)
-                        if (obj.key === "page") {
-                            c.log("post change", watch, val)
-                        }
                         if (typeof obj.post_change === "function") {
                             obj.post_change(val)
                         }
@@ -71,8 +71,6 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
         const filterFun = item => cl.corpusHasAttrs(item, reduce)
         const corpora1 = _.filter(cmpObj1.corpora, filterFun)
         const corpora2 = _.filter(cmpObj2.corpora, filterFun)
-
-        const corpusListing = cl.subsetFactory(cmpObj1.corpora)
 
         let attrs = cl.getCurrentAttributes()
         const split = _.filter(reduce, r => (attrs[r] && attrs[r].type) === "set").join(",")
@@ -196,14 +194,9 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         return $http(conf).then(
             function({ data }) {
-                console.log("map response", data)
                 model.normalizeStatsData(data)
                 let result = parseMapData(data, cqp, cqpExprs)
-                console.log("after parseMapData", result)
-
                 return { corpora: attribute.corpora, cqp, within, data: result, attribute }
-
-                // safeApply(s, () => $rootScope.mapTabs.push())
             },
             err => {
                 console.log("err", err)
@@ -275,13 +268,12 @@ korpApp.factory("nameEntitySearch", function($rootScope, $q) {
 })
 
 korpApp.factory("searches", [
-    "utils",
     "$location",
     "$rootScope",
     "$http",
     "$q",
     "nameEntitySearch",
-    function(utils, $location, $rootScope, $http, $q, nameEntitySearch) {
+    function($location, $rootScope, $http, $q, nameEntitySearch) {
         class Searches {
             constructor() {
                 this.activeSearch = null
@@ -369,8 +361,6 @@ korpApp.factory("searches", [
             [() => $location.search().search, "_loc.search().page"],
             newValues => {
                 let pageChanged, searchChanged
-                c.log("searches service watch", $location.search().search)
-
                 const searchExpr = $location.search().search
                 if (!searchExpr) {
                     return
@@ -450,7 +440,6 @@ korpApp.service(
             } else {
                 this.key = "saved_searches"
             }
-            c.log("key", this.key)
             this.savedSearches = jStorage.get(this.key) || []
         }
 
