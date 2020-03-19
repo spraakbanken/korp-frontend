@@ -967,8 +967,8 @@ view.LemgramResults = class LemgramResults extends BaseResults {
 
 view.StatsResults = class StatsResults extends BaseResults {
     constructor(resultSelector, tabSelector, scope) {
-        let self
         super(resultSelector, tabSelector, scope)
+        const self = this
         this.tabindex = 2
         this.gridData = null
 
