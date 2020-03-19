@@ -222,6 +222,7 @@ view.KWICResults = class KWICResults extends BaseResults {
                 safeApply(this.s, () => {
                     this.s.$parent.page++
                     this.s.$parent.pageObj.pager = this.s.$parent.page + 1
+                    this.s.$parent.pageChange(event, this.s.$parent.pageObj.pager)
                 })
                 return false
             case 70: // f
@@ -231,6 +232,7 @@ view.KWICResults = class KWICResults extends BaseResults {
                 safeApply(this.s, () => {
                     this.s.$parent.page--
                     this.s.$parent.pageObj.pager = this.s.$parent.page + 1
+                    this.s.$parent.pageChange(event, this.s.$parent.pageObj.pager)
                 })
                 return false
         }

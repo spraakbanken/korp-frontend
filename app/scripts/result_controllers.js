@@ -348,6 +348,7 @@ class ExampleCtrl extends KwicCtrl {
             if ($event != null) {
                 $event.stopPropagation()
             }
+            s.page = page - 1
             s.instance.current_page = page - 1
             return s.instance.makeRequest()
         }
