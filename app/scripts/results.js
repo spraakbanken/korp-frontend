@@ -47,7 +47,6 @@ class BaseResults {
             return false
         } else {
             return safeApply(this.s, () => {
-                c.log("firstResultDef.resolve")
                 this.firstResultDef.resolve()
                 this.hasData = true
             })
@@ -196,7 +195,6 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     onentry() {
         super.onentry()
-        c.log("onentry kwic")
         this.s.$root.sidebar_visible = true
 
         this.$result.find(".token_selected").click()
@@ -205,7 +203,6 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     onexit() {
         super.onexit()
-        c.log("onexit kwic")
         this.s.$root.sidebar_visible = false
     }
 
@@ -457,8 +454,6 @@ view.KWICResults = class KWICResults extends BaseResults {
     }
 
     makeRequest(cqp, isPaging) {
-        c.log("kwicResults.makeRequest", cqp, isPaging)
-
         const page = Number(locationSearch().page) || 0
         this.s.$parent.pageObj.pager = page + 1
 
@@ -713,7 +708,8 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
         this.showPreloader()
-        const progress = opts.command === "relations_sentences" ? $.noop : $.proxy(this.onProgress, this)
+        const progress =
+            opts.command === "relations_sentences" ? $.noop : $.proxy(this.onProgress, this)
         const def = this.proxy.makeRequest(opts, null, progress, data => {
             this.renderResult(data, opts.cqp)
             this.renderCompleteResult(data)
@@ -953,12 +949,10 @@ view.LemgramResults = class LemgramResults extends BaseResults {
     }
 
     onentry() {
-        c.log("word pic onentry")
         super.onentry()
     }
 
     onexit() {
-        c.log("word pic onexit")
         super.onexit()
         clearTimeout(self.timeout)
         safeApply(this.s, () => {
@@ -975,7 +969,6 @@ view.StatsResults = class StatsResults extends BaseResults {
     constructor(resultSelector, tabSelector, scope) {
         let self
         super(resultSelector, tabSelector, scope)
-        c.log("StatsResults constr", (self = this))
         this.tabindex = 2
         this.gridData = null
 
@@ -1166,8 +1159,6 @@ view.StatsResults = class StatsResults extends BaseResults {
         }
 
         this.s.hasResult = true
-
-        c.log("StatsResults makeRequest", cqp)
 
         if (currentMode === "parallel") {
             cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
@@ -1514,18 +1505,14 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         this.checkZoomLevel(from, to, true)
 
-        c.log("adding chart listener", this.$result)
-
         $(".chart", this.$result).on("click", event => {
             const target = $(".chart", this.$result)
             const val = $(".detail .x_label > span", target).data("val")
             let cqp = $(".detail .item.active > span", target).data("cqp")
-            c.log("chart click", cqp, target, this.s.data.subcqps, this.s.data.cqp)
 
             if (cqp) {
                 let timecqp
                 cqp = CQP.expandOperators(decodeURIComponent(cqp))
-                c.log("chart click cqp", cqp)
                 const m = moment(val * 1000)
 
                 const datefrom = moment(m)
@@ -1858,10 +1845,10 @@ view.GraphResults = class GraphResults extends BaseResults {
             const a = document.createElement("a")
             a.href = csvUrl
             a.download = `export.${selType}`
-            a.style.display = 'none';
-            document.body.appendChild(a);
+            a.style.display = "none"
+            document.body.appendChild(a)
             a.click()
-            document.body.removeChild(a);
+            document.body.removeChild(a)
             window.URL.revokeObjectURL(csvUrl)
         })
     }
@@ -1997,9 +1984,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         for (let seriesIndex = 0; seriesIndex < this.graph.series.length; seriesIndex++) {
             const seriesObj = this.graph.series[seriesIndex]
             const first = newSeries[seriesIndex].data[0].x
-            c.log("first", first, moment.unix(first).format())
             const last = _.last(newSeries[seriesIndex].data).x
-            c.log("last", moment.unix(last).format())
             let startSplice = false
             let from = 0
             let n_elems = seriesObj.data.length + newSeries[seriesIndex].data.length
@@ -2009,7 +1994,6 @@ view.GraphResults = class GraphResults extends BaseResults {
                 if (x >= first && !startSplice) {
                     startSplice = true
                     from = i
-                    c.log("from", from, moment.unix(seriesObj.data[from].x).format())
                     j = 0
                 }
                 if (startSplice) {
@@ -2028,10 +2012,8 @@ view.GraphResults = class GraphResults extends BaseResults {
 
     previewPanStop() {
         const visibleData = this.graph.stackData()
-        c.log("visibleData", visibleData)
 
         const count = _.countBy(visibleData[0], coor => coor.zoom)
-        c.log("count", count)
 
         const grouped = _.groupBy(visibleData[0], "zoom")
 
@@ -2048,7 +2030,6 @@ view.GraphResults = class GraphResults extends BaseResults {
     }
 
     makeRequest(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
-        c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal)
         this.s.loading = true
         this.showPreloader()
         const currentZoom = this.zoom
@@ -2064,8 +2045,6 @@ view.GraphResults = class GraphResults extends BaseResults {
             })
             .done(data => {
                 let series
-                c.log("graph data", data)
-                c.log("graph cqp", cqp)
 
                 const done = () => {
                     this.hidePreloader()
