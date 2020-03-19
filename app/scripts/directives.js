@@ -53,7 +53,6 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
             ])
 
         s.setSelected = function(index, ignoreCheck) {
-            console.log("tab setSelected", index)
             if (!ignoreCheck && !(index in s.fixedTabs)) {
                 index = s.maxTab
             }
@@ -76,7 +75,6 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
         }, 0)
 
         s.newDynamicTab = function() {
-            console.log("newDynamicTab s.maxTab", s.maxTab)
             return $timeout(function() {
                 s.setSelected(s.maxTab + 1, true)
                 s.maxTab += 1
@@ -209,7 +207,6 @@ korpApp.directive("constr", $window => ({
     link(scope, elem, attr) {
         const instance = new $window.view[attr.constr](elem, elem, scope)
         if (attr.constrName) {
-            c.log("attr.constrName", attr.constrName)
             $window[attr.constrName] = instance
         }
 

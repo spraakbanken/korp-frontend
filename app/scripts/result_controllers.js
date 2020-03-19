@@ -2,24 +2,18 @@
 import statisticsFormatting from "../config/statistics_config.js"
 const korpApp = angular.module("korpApp")
 
-korpApp.controller(
-    "resultContainerCtrl",
-    ($scope, searches, $location) => ($scope.searches = searches)
-)
+korpApp.controller("resultContainerCtrl", ($scope, searches) => ($scope.searches = searches))
 
 class KwicCtrl {
     static initClass() {
         this.$inject = ["$scope", "$timeout", "utils", "$location", "kwicDownload"]
     }
     setupHash() {
-        c.log("setupHash", this.scope.$id)
         return this.utils.setupHash(this.scope, [
             {
                 key: "page",
                 post_change: () => {
-                    c.log("post_change page hash", this.scope.page)
                     this.scope.pageObj.pager = (this.scope.page || 0) + 1
-                    return c.log("@scope.pageObj.pager", this.scope.pageObj.pager)
                 },
                 val_in: Number
             }
@@ -37,12 +31,9 @@ class KwicCtrl {
         this.location = location
         this.kwicDownload = kwicDownload
         const s = this.scope
-        const $scope = this.scope
-        c.log("kwicCtrl init", this.scope.$parent)
         const $location = this.location
 
         s.onexit = function() {
-            c.log("onexit")
             s.$root.sidebar_visible = false
         }
 
@@ -51,7 +42,6 @@ class KwicCtrl {
         this.initPage()
 
         s.pageChange = function($event, page) {
-            c.log("pageChange", arguments)
             $event.stopPropagation()
             s.page = page - 1
         }
@@ -76,7 +66,6 @@ class KwicCtrl {
                 window.pending = s.instance.getProxy().pendingRequests
 
                 return $.when(...(s.instance.getProxy().pendingRequests || [])).then(function() {
-                    c.log("readingchange makeRequest")
                     return s.instance.makeRequest()
                 })
             }
@@ -86,8 +75,7 @@ class KwicCtrl {
             return this.utils.setupHash(s, [
                 {
                     key: "reading_mode",
-                    post_change: isReading => {
-                        c.log("change reading mode", isReading)
+                    post_change: () => {
                         return readingChange()
                     }
                 }
@@ -96,7 +84,6 @@ class KwicCtrl {
 
         // used by example kwic
         s.setupReadingWatch = _.once(function() {
-            c.log("setupReadingWatch")
             let init = true
             return s.$watch("reading_mode", function() {
                 if (!init) {
@@ -112,7 +99,6 @@ class KwicCtrl {
         }
 
         s.hitspictureClick = function(pageNumber) {
-            c.log("pageNumber", pageNumber)
             s.page = Number(pageNumber)
         }
 
@@ -271,7 +257,6 @@ class KwicCtrl {
             s.kwic = massageData(data.kwic)
         }
 
-        c.log("selectionManager")
         s.selectionManager = new util.SelectionManager()
 
         s.selectLeft = function(sentence) {
@@ -298,7 +283,10 @@ class KwicCtrl {
             return sentence.tokens.slice(from, len)
         }
 
-        s.$watch(() => $location.search().hpp, hpp => (s.hitsPerPage = hpp || 25))
+        s.$watch(
+            () => $location.search().hpp,
+            hpp => (s.hitsPerPage = hpp || 25)
+        )
 
         s.download = {
             options: [
@@ -394,15 +382,21 @@ ExampleCtrl.initClass()
 korpApp.directive("exampleCtrl", () => ({ controller: ExampleCtrl }))
 
 korpApp.directive("statsResultCtrl", () => ({
-    controller($scope, utils, $location, backend, searches, $rootScope) {
+    controller($scope, $location, backend, searches, $rootScope) {
         const s = $scope
         s.loading = false
         s.progress = 0
         s.noRowsError = false
 
-        s.$watch(() => $location.search().hide_stats, val => (s.showStatistics = val == null))
+        s.$watch(
+            () => $location.search().hide_stats,
+            val => (s.showStatistics = val == null)
+        )
 
-        s.$watch(() => $location.search().in_order, val => (s.inOrder = val == null))
+        s.$watch(
+            () => $location.search().in_order,
+            val => (s.inOrder = val == null)
+        )
 
         s.shouldSearch = () => s.showStatistics && s.inOrder
 
@@ -453,12 +447,12 @@ korpApp.directive("statsResultCtrl", () => ({
         s.showMap = function() {
             const selectedRows = s.instance.getSelectedRows()
 
-            if(selectedRows.length == 0) {
+            if (selectedRows.length == 0) {
                 s.noRowsError = true
                 return
             }
             s.noRowsError = false
-            
+
             const cqpExpr = CQP.expandOperators(searches.getCqpExpr())
 
             const cqpExprs = {}
@@ -496,7 +490,10 @@ korpApp.directive("wordpicCtrl", () => ({
         $scope.loading = false
         $scope.progress = 0
         $scope.word_pic = $location.search().word_pic != null
-        $scope.$watch(() => $location.search().word_pic, val => ($scope.word_pic = Boolean(val)))
+        $scope.$watch(
+            () => $location.search().word_pic,
+            val => ($scope.word_pic = Boolean(val))
+        )
 
         $scope.activate = function() {
             $location.search("word_pic", true)
@@ -587,7 +584,7 @@ korpApp.directive("wordpicCtrl", () => ({
 
         $scope.renderTable = obj => obj instanceof Array
 
-        $scope.parseLemgram = function(row, allLemgrams) {
+        $scope.parseLemgram = function(row) {
             const set = row[row.show_rel].split("|")
             const lemgram = set[0]
 
@@ -690,8 +687,6 @@ korpApp.directive("compareCtrl", () => ({
         return s.promise.then(
             function(...args) {
                 const [tables, max, cmp1, cmp2, reduce] = args[0]
-                console.log("args", args)
-                const xhr = args[1]
                 s.loading = false
 
                 s.tables = tables
@@ -709,7 +704,6 @@ korpApp.directive("compareCtrl", () => ({
                 })
 
                 s.max = max
-                console.log("s.max", s.max)
 
                 s.cmp1 = cmp1
                 s.cmp2 = cmp2

@@ -562,7 +562,6 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
                 .map(a => a.toUpperCase())
                 .join(",")
         }
-        c.log("struct", struct)
 
         const output = []
         // $.each(struct, function(i, item) {
@@ -1091,9 +1090,6 @@ util.loadCorpora = function() {
             }
         })
         .bind("corpuschooserchange", function(evt, corpora) {
-            c.log("corpuschooserchange", corpora)
-
-            // c.log("corpus changed", corpora);
             safeApply($("body").scope(), function(scope) {
                 scope.$broadcast("corpuschooserchange", corpora)
             })
