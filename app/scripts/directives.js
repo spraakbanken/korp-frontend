@@ -576,17 +576,20 @@ korpApp.directive("clickCover", () => ({
         const cover = $("<div class='click-cover'>").on("click", () => false)
 
         const pos = elem.css("position") || "static"
-        return scope.$watch(() => scope.$eval(attr.clickCover), function(val) {
-            if (val) {
-                elem.prepend(cover)
-                elem.css("pointer-events", "none")
-                return elem.css("position", "relative").addClass("covered")
-            } else {
-                cover.remove()
-                elem.css("pointer-events", "")
-                return elem.css("position", pos).removeClass("covered")
+        return scope.$watch(
+            () => scope.$eval(attr.clickCover),
+            function(val) {
+                if (val) {
+                    elem.prepend(cover)
+                    elem.css("pointer-events", "none")
+                    return elem.css("position", "relative").addClass("covered")
+                } else {
+                    cover.remove()
+                    elem.css("pointer-events", "")
+                    return elem.css("position", pos).removeClass("covered")
+                }
             }
-        })
+        )
     }
 }))
 
@@ -761,7 +764,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
                 for (let corporaID of corporaIDs) {
                     const morfs = settings.corpora[corporaID].morphology || ""
                     for (let morf of morfs.split("|")) {
-                        if (morf !== '' && !morphologies.includes(morf)) {
+                        if (morf !== "" && !morphologies.includes(morf)) {
                             morphologies.push(morf)
                         }
                     }
@@ -984,7 +987,10 @@ korpApp.directive("reduceSelect", $timeout => ({
         })
 
         var updateSelected = function(scope) {
-            scope.selected = _.map(_.filter(scope.keyItems, (item, key) => item.selected), "value")
+            scope.selected = _.map(
+                _.filter(scope.keyItems, (item, key) => item.selected),
+                "value"
+            )
             scope.numberAttributes = scope.selected.length
         }
 
