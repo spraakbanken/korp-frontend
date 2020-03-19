@@ -49,6 +49,9 @@ class KwicCtrl {
         this.setupHash()
         s.onPageInput = function($event, page, numPages) {
             if ($event.keyCode === 13) {
+                if (isNaN(page)) {
+                    return
+                }
                 if (page > numPages) {
                     page = numPages
                 }
@@ -56,8 +59,8 @@ class KwicCtrl {
                     page = "1"
                 }
                 s.gotoPage = page
-                s.pageObj.pager = page
-                s.page = Number(page) - 1
+                s.pageObj.pager = Number(page)
+                s.pageChange($event, s.pageObj.pager)
             }
         }
 
