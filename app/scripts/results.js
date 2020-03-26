@@ -1100,7 +1100,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         const selType = $("#kindOfFormat option:selected").val()
         let dataDelimiter = ";"
         if (selType === "tsv") {
-            dataDelimiter = "   "
+            dataDelimiter = "\t"
         }
         const cl = settings.corpusListing.subsetFactory(this.searchParams.corpora)
 
