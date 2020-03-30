@@ -293,8 +293,10 @@ korpApp.factory("searches", [
             kwicSearch(cqp, isPaging) {
                 kwicResults.makeRequest(cqp, isPaging)
                 if (!isPaging) {
-                    statsResults.makeRequest(cqp)
-                    return this.nameEntitySearch(cqp)
+                    if (window.statsResults) {
+                        statsResults.makeRequest(cqp)
+                    }
+                    this.nameEntitySearch(cqp)
                 }
             }
 
