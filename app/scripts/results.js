@@ -1267,7 +1267,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         const grid = new Slick.Grid($("#myGrid"), data, columns, {
             enableCellNavigation: false,
             enableColumnReorder: false,
-            forceFitColumns: true
+            forceFitColumns: false
         })
 
         grid.setSelectionModel(new Slick.RowSelectionModel({ selectActiveRow: false }))

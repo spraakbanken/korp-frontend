@@ -7711,10 +7711,10 @@ slash@^1.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
   integrity sha1-xB8vbDn8FtHNF61LXYlhFK5HDVU=
 
-slickgrid@2.3.17:
-  version "2.3.17"
-  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-2.3.17.tgz#b325a2e5ee7a53467fe03f6e39c02bad5eb7a289"
-  integrity sha1-syWi5e56U0Z/4D9uOcArrV63ook=
+slickgrid@2.4.21:
+  version "2.4.21"
+  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-2.4.21.tgz#4ece48ee0b05f46ba291e8a1517899628cadd23f"
+  integrity sha512-3zBWPCbg3ZKtMikL5ZmcRgvsyNaKw72oPQ3kAy76E0b82uI9V00ukcKPSmXCliG1OT6ylXIZS4U2vZfSFhW3vw==
   dependencies:
     jquery ">=1.8.0"
     jquery-ui ">=1.8.0"
