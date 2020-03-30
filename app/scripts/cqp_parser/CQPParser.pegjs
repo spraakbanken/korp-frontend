@@ -83,7 +83,7 @@ and
 
 
 or
-  = lhs:("_."? [A-Za-z_]+) " "? infix_op:infix_op " "? rhs:value_expr flags:(" %"[lcd]+)? {
+  = lhs:("_."? [A-Za-z_0-9]+) " "? infix_op:infix_op " "? rhs:value_expr flags:(" %"[lcd]+)? {
     var prefix = ""
     if(lhs[0])
       prefix = lhs[0]
