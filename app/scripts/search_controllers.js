@@ -5,9 +5,8 @@ window.SearchCtrl = [
     "$scope",
     "$location",
     "$filter",
-    "utils",
     "searches",
-    function($scope, $location, $filter, utils, searches) {
+    function($scope, $location, $filter, searches) {
         $scope.visibleTabs = [true, true, true, true]
         $scope.extendedTmpl = require("../views/extended_tmpl.pug")
         // for parallel mode
@@ -70,7 +69,6 @@ window.SearchCtrl = [
         }
 
         $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function(event, selected) {
-            c.log("SearchCtrl corpuschooserchange")
             $scope.noCorporaSelected = !selected.length
             const allAttrs = settings.corpusListing.getStatsAttributeGroups()
             $scope.statCurrentAttrs = _.filter(allAttrs, item => !item.hideStatistics)
@@ -157,7 +155,10 @@ window.SearchCtrl = [
 
             $scope.kwicSort = $location.search().sort || ""
 
-            $scope.$watch(() => $location.search().sort, val => ($scope.kwicSort = val || ""))
+            $scope.$watch(
+                () => $location.search().sort,
+                val => ($scope.kwicSort = val || "")
+            )
 
             return $scope.$watch("kwicSort", function(val) {
                 if (val === "") {
@@ -184,14 +185,16 @@ korpApp.controller("SimpleCtrl", function(
     searches,
     compareSearches,
     $uibModal,
-    $timeout,
-    lexicons
+    $timeout
 ) {
     const s = $scope
 
     $scope.inOrder = $location.search().in_order == null
-    $scope.$watch(() => $location.search().in_order, val => ($scope.inOrder = val == null))
-    $scope.$watch("inOrder", val => $location.search("in_order", !s.inOrder ? false : null))
+    $scope.$watch(
+        () => $location.search().in_order,
+        val => ($scope.inOrder = val == null)
+    )
+    $scope.$watch("inOrder", () => $location.search("in_order", !s.inOrder ? false : null))
 
     s.prefix = false
     s.suffix = false
@@ -279,7 +282,6 @@ korpApp.controller("SimpleCtrl", function(
         if (modalInstance != null) {
             modalInstance.close()
         }
-        c.log("modalInstance", modalInstance)
         $scope.$root.searchtabs()[1].tab.select()
         if (attribute === "saldo") {
             cqp = `[saldo contains \"${regescape(wd)}\"]`
@@ -380,9 +382,7 @@ korpApp.controller("SimpleCtrl", function(
 
 korpApp.controller("ExtendedSearch", function(
     $scope,
-    utils,
     $location,
-    backend,
     $rootScope,
     searches,
     compareSearches,
@@ -395,7 +395,6 @@ korpApp.controller("ExtendedSearch", function(
 
     s.searches = searches
     s.$on("btn_submit", function() {
-        c.log("extended submit")
         $location.search("search", null)
         $location.search("page", null)
         $location.search("in_order", null)
@@ -458,9 +457,8 @@ korpApp.controller("ExtendedSearch", function(
     })
 })
 
-korpApp.controller("ExtendedToken", function($scope, utils, $location) {
+korpApp.controller("ExtendedToken", function($scope, utils) {
     const s = $scope
-    const cqp = "[]"
     s.valfilter = utils.valfilter
 
     s.setDefault = function(or_obj) {
@@ -544,7 +542,7 @@ korpApp.controller("ExtendedToken", function($scope, utils, $location) {
 })
 
 korpApp.directive("advancedSearch", () => ({
-    controller($scope, compareSearches, $location, $timeout, $rootScope) {
+    controller($scope, compareSearches, $location, $timeout) {
         if ($location.search().search && $location.search().search.split("|")) {
             var [type, ...expr] = $location.search().search.split("|")
             expr = expr.join("|")
@@ -559,7 +557,6 @@ korpApp.directive("advancedSearch", () => ({
         $scope.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, $scope.cqp))
 
         $scope.$on("btn_submit", function() {
-            c.log("advanced submit", $scope.cqp)
             $location.search("search", null)
             $location.search("page", null)
             $location.search("within", null)
@@ -572,7 +569,7 @@ korpApp.directive("advancedSearch", () => ({
 korpApp.filter("mapper", () => (item, f) => f(item))
 
 korpApp.directive("compareSearchCtrl", () => ({
-    controller($scope, utils, $location, backend, $rootScope, compareSearches) {
+    controller($scope, utils, backend, $rootScope, compareSearches) {
         const s = $scope
         s.valfilter = utils.valfilter
 
@@ -600,6 +597,4 @@ korpApp.directive("compareSearchCtrl", () => ({
     }
 }))
 
-korpApp.filter("loc", $rootScope => (translationKey, lang) =>
-    util.getLocaleString(translationKey, lang)
-)
+korpApp.filter("loc", () => (translationKey, lang) => util.getLocaleString(translationKey, lang))
