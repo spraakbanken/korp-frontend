@@ -105,7 +105,7 @@ class BaseProxy {
         })
 
         const stats = (this.progress / this.total) * 100
-        if (this.total == null && (struct.progress_corpora && struct.progress_corpora.length)) {
+        if (this.total == null && struct.progress_corpora && struct.progress_corpora.length) {
             const tmp = $.map(struct["progress_corpora"], function(corpus) {
                 if (!corpus.length) {
                     return
@@ -136,7 +136,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
     }
 
     makeRequest(options, page, progressCallback, kwicCallback) {
-        c.log("kwicproxy.makeRequest", options, page, kwicResults.getPageInterval(Number(page)))
         const self = this
         this.foundKwic = false
         super.makeRequest()
@@ -151,7 +150,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
 
                 progressCallback(progressObj)
                 if (progressObj["struct"].kwic) {
-                    c.log("found kwic!")
                     this.foundKwic = true
                     return kwicCallback(progressObj["struct"])
                 }
@@ -193,7 +191,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         }
         this.prevCQP = data.cqp
         data.show = _.uniq(["sentence"].concat(data.show)).join(",")
-        c.log("data.show", data.show)
         data.show_struct = _.uniq(data.show_struct).join(",")
 
         if (locationSearch()["in_order"] === false) {
@@ -202,7 +199,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
 
         this.prevRequest = data
         this.prevParams = data
-        const command = data.command || 'query'
+        const command = data.command || "query"
         delete data.command
         const def = $.ajax({
             method: "POST",
@@ -252,8 +249,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
             url: settings.korpBackendURL + "/relations",
             data: params,
 
-            success(data) {
-                c.log("relations success", data)
+            success() {
                 self.prevRequest = params
             },
 
@@ -526,8 +522,7 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
             }
         })
 
-        xhr.done((data, status, xhr) => {
-            c.log("timespan done", data)
+        xhr.done(data => {
             if (data.ERROR) {
                 c.error("timespan error", data.ERROR)
                 dfd.reject(data.ERROR)
