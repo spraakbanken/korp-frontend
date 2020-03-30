@@ -140,7 +140,7 @@ class KwicCtrl {
                         }
                     }
 
-                    if (matchSentenceStart < i && i < matchSentenceEnd) {
+                    if (matchSentenceStart <= i && i <= matchSentenceEnd) {
                         _.extend(wd, { _matchSentence: true })
                     }
                     if (punctArray.includes(wd.word)) {
@@ -219,24 +219,21 @@ class KwicCtrl {
             let decr = start
             let incr = end
             while (decr >= 0) {
-                if (
-                    (
-                        (hitContext.tokens[decr].structs && hitContext.tokens[decr].structs.open) ||
-                        []
-                    ).includes("sentence")
-                ) {
+                const token = hitContext.tokens[decr]
+                const sentenceOpen = _.filter(
+                    (token.structs && token.structs.open) || [],
+                    attr => attr.sentence
+                )
+                if (sentenceOpen.length > 0) {
                     span[0] = decr
                     break
                 }
                 decr--
             }
             while (incr < hitContext.tokens.length) {
-                if (
-                    (
-                        (hitContext.tokens[incr].structs && hitContext.tokens[incr].structs.open) ||
-                        []
-                    ).includes("sentence")
-                ) {
+                const token = hitContext.tokens[incr]
+                const closed = (token.structs && token.structs.close) || []
+                if (closed.includes("sentence")) {
                     span[1] = incr
                     break
                 }
