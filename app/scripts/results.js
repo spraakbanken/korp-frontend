@@ -159,24 +159,23 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     selectWord(word, scope) {
         const obj = scope.wd
-        if (obj.dephead == null) {
-            scope.selectionManager.select(word, null)
-            safeApply(this.s.$root, s => (s.$root.word_selected = word))
-            return
-        }
+        let aux = null
+        if (obj.dephead != null) {
+            const i = Number(obj.dephead)
 
-        const i = Number(obj.dephead)
-
-        const paragraph = word.closest(".sentence").find(".word")
-        let sent_start = 0
-        const querySentStart = ".open_sentence"
-        if (word.is(querySentStart)) {
-            sent_start = paragraph.index(word)
-        } else {
-            const l = paragraph.filter((__, item) => $(item).is(word) || $(item).is(querySentStart))
-            sent_start = paragraph.index(l.eq(l.index(word) - 1))
+            const paragraph = word.closest(".sentence").find(".word")
+            let sent_start = 0
+            const querySentStart = ".open_sentence"
+            if (word.is(querySentStart)) {
+                sent_start = paragraph.index(word)
+            } else {
+                const l = paragraph.filter(
+                    (__, item) => $(item).is(word) || $(item).is(querySentStart)
+                )
+                sent_start = paragraph.index(l.eq(l.index(word) - 1))
+            }
+            aux = $(paragraph.get(sent_start + i - 1))
         }
-        const aux = $(paragraph.get(sent_start + i - 1))
         scope.selectionManager.select(word, aux)
         safeApply(this.s.$root, s => (s.$root.word_selected = word))
     }
