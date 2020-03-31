@@ -347,14 +347,14 @@ korpApp.controller("SimpleCtrl", function(
 
         if (!(search && search.pageOnly)) {
             if (search.type === "lemgram") {
-                let sense = true
-                let saldo = true
+                let sense = false
+                let saldo = false
                 for (let corpus of settings.corpusListing.selected) {
                     if ("sense" in corpus.attributes) {
-                        saldo = false
+                        sense = true
                     }
                     if ("saldo" in corpus.attributes) {
-                        sense = false
+                        saldo = true
                     }
                 }
 
