@@ -198,6 +198,18 @@ class KwicCtrl {
 
                 output.push(hitContext)
                 if (hitContext.aligned) {
+                    // just check for sentence opened, no other structs
+                    const alignedTokens = Object.values(hitContext.aligned)[0]
+                    for (let wd of alignedTokens) {
+                        if (wd.structs && wd.structs.open) {
+                            for (let structItem of wd.structs.open) {
+                                if (_.keys(structItem)[0] == "sentence") {
+                                    wd._open_sentence = true
+                                }
+                            }
+                        }
+                    }
+
                     const [corpus_aligned, tokens] = _.toPairs(hitContext.aligned)[0]
                     output.push({
                         tokens,
