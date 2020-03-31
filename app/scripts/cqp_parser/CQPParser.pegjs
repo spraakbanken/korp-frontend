@@ -96,15 +96,10 @@ or
   / date
 
 value_expr
-    = ["] rhs:('\\"' / [^"])* ["] {
+    = ["] rhs:('""' / [^"])* ["] {
         return rhs.join("");
     }
     / ['] rhs:("\\'" / [^'])* ['] {
-        rhs = _.map(rhs, function(char) {
-            if(char == '"')
-                return '\\"'
-            return char
-        });
         return rhs.join("");
     }
 

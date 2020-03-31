@@ -1098,9 +1098,9 @@ util.loadCorpora = function() {
     settings.corpusListing.select(selected)
 }
 
-window.regescape = s => s.replace(/[.|?|+|*||'|"()^$]/g, "\\$&")
+window.regescape = s => s.replace(/[.|?|+|*||'|()^$]/g, "\\$&").replace(/"/g, '""')
 
-window.unregescape = s => s.replace(/\\/g, "")
+window.unregescape = s => s.replace(/\\/g, "").replace(/""/g, '"')
 
 util.formatDecimalString = function(x, mode, statsmode, stringOnly) {
     if (_.includes(x, ".")) {
