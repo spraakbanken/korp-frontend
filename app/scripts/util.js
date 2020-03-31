@@ -661,7 +661,7 @@ window.util.setLogin = function() {
     if (window.corpusChooserInstance) {
         window.corpusChooserInstance.corpusChooser("updateAllStates")
     }
-    return $(".err_msg", self).hide()
+    $(".err_msg", self).hide()
 }
 
 util.SelectionManager = function() {
@@ -680,7 +680,7 @@ util.SelectionManager.prototype.select = function(word, aux) {
     this.selected = word
     this.aux = aux || $()
     this.aux.addClass("word_selected aux_selected")
-    return word.addClass("word_selected token_selected")
+    word.addClass("word_selected token_selected")
 }
 
 util.SelectionManager.prototype.deselect = function() {

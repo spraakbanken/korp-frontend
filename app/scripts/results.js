@@ -178,7 +178,7 @@ view.KWICResults = class KWICResults extends BaseResults {
         }
         const aux = $(paragraph.get(sent_start + i - 1))
         scope.selectionManager.select(word, aux)
-        return safeApply(this.s.$root, s => (s.$root.word_selected = word))
+        safeApply(this.s.$root, s => (s.$root.word_selected = word))
     }
 
     resetView() {
