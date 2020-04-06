@@ -683,7 +683,6 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
     }
 
     makeRequest() {
-        let avoidContext, preferredContext
         const items_per_page = parseInt(locationSearch().hpp || 25)
         const opts = this.s.$parent.kwicTab.queryParams
 
@@ -697,6 +696,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         const prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "source")
         _.extend(opts.ajaxParams, prev)
 
+        let avoidContext, preferredContext
         if (this.isReadingMode()) {
             preferredContext = settings.defaultReadingContext
             avoidContext = settings.defaultOverviewContext
@@ -705,7 +705,11 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
             avoidContext = settings.defaultReadingContext
         }
 
-        const context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
+        const context = settings.corpusListing.getContextQueryStringFromCorpusId(
+            (prev.corpus || "").split(","),
+            preferredContext,
+            avoidContext
+        )
         _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
         this.showPreloader()

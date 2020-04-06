@@ -229,9 +229,18 @@ window.CorpusListing = class CorpusListing {
         return _.union(...(struct || []))
     }
 
+    getContextQueryStringFromCorpusId(corpus_ids, prefer, avoid) {
+        const corpora = _.map(corpus_ids, corpus_id => settings.corpora[corpus_id.toLowerCase()])
+        return this.getContextQueryStringFromCorpora(_.compact(corpora), prefer, avoid)
+    }
+
     getContextQueryString(prefer, avoid) {
+        return this.getContextQueryStringFromCorpora(this.selected, prefer, avoid)
+    }
+
+    getContextQueryStringFromCorpora(corpora, prefer, avoid) {
         const output = []
-        for (let corpus of this.selected) {
+        for (let corpus of corpora) {
             const contexts = _.keys(corpus.context)
             if (!contexts.includes(prefer)) {
                 if (contexts.length > 1 && contexts.includes(avoid)) {
