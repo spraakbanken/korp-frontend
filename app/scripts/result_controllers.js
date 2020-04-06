@@ -66,8 +66,6 @@ class KwicCtrl {
 
         const readingChange = function() {
             if (s.instance && s.instance.getProxy().pendingRequests.length) {
-                window.pending = s.instance.getProxy().pendingRequests
-
                 return $.when(...(s.instance.getProxy().pendingRequests || [])).then(function() {
                     return s.instance.makeRequest()
                 })
@@ -369,8 +367,6 @@ class ExampleCtrl extends KwicCtrl {
             s.instance.centerScrollbar()
 
             if (s.instance && s.instance.getProxy().pendingRequests.length) {
-                window.pending = s.instance.getProxy().pendingRequests
-
                 return $.when(...(s.instance.getProxy().pendingRequests || [])).then(() =>
                     s.instance.makeRequest()
                 )
