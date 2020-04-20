@@ -1472,6 +1472,10 @@ view.StatsResults = class StatsResults extends BaseResults {
     }
 
     onentry() {
+        // workaround for bug in slickgrid
+        // slickgrid should add this automatically, but doesn't
+        $("#myGrid").css("position", "relative")
+
         super.onentry()
         $(window).trigger("resize")
     }
