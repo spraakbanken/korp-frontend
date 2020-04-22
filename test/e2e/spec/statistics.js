@@ -4,14 +4,6 @@
 
 var fs = require('fs');
 
-// abstract writing screen shot to a file
-function writeScreenShot(data, filename) {
-    var stream = fs.createWriteStream(filename);
-    stream.write(new Buffer(data, 'base64'));
-    stream.end();
-}
-
-
 browser.manage().logs()
   .get('browser').then(function(browserLog) {
   console.log('log: ' + 
@@ -27,17 +19,9 @@ describe("stats table", function() {
 
     it("should show the correct rows and columns", () =>
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2").then(function() {
-            console.log(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
             browser.sleep(5000).then( () => {
-
-                const rows = element.all((by.css('.slick-row')))
-                browser.executeScript('window.scrollTo(0,3000);').then( () =>
-                browser.takeScreenshot().then(function (png) {
-                     writeScreenShot(png, 'exception.png');
-                 })
-                )
-            expect(rows.count()).toBe(10)
-            } )
+                expect(rows.count()).toBe(10)
+            })
             
             // expect a column for hit, total, suc2, suc3
             const columns = element.all((by.css('.slick-column-name')))

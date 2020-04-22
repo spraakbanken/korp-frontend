@@ -33,7 +33,7 @@ describe("page", function() {
     })
 
     it("should page to the correct page", function() {
-        element(by.css(".results-kwic .pagination li:nth-last-child(2)")).click()
+        element.all(by.css(".results-kwic .pagination li:nth-last-child(2)")).first().click()
         expect(EC.textToBePresentInElement(elm, "9"))
     })
 
