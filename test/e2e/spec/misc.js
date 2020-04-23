@@ -62,7 +62,7 @@ describe("json button", function() {
         browser.get(browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${wd}&page=7`).then(function() {
             elm = element(by.css("#json-link"))
             waitFor(elm)
-            expect(elm.getAttribute("href")).toContain("?command=query")
+            expect(elm.getAttribute("href")).toContain("query?")
         })
     })
     
@@ -76,7 +76,7 @@ describe("json button", function() {
             
             elm = element(by.css("#json-link"))
             waitFor(elm)
-            expect(elm.getAttribute("href")).toContain("?command=count")
+            expect(elm.getAttribute("href")).toContain("count?")
         })
     })
 })

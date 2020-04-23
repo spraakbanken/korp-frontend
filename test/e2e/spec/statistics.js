@@ -1,9 +1,6 @@
 /* eslint-disable
     no-undef,
 */
-
-var fs = require('fs');
-
 browser.manage().logs()
   .get('browser').then(function(browserLog) {
   console.log('log: ' + 
@@ -19,7 +16,8 @@ describe("stats table", function() {
 
     it("should show the correct rows and columns", () =>
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2").then(function() {
-            browser.sleep(5000).then( () => {
+            browser.sleep(5000).then(() => {
+                const rows = element.all((by.css('.slick-row')))
                 expect(rows.count()).toBe(10)
             })
             
