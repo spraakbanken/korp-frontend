@@ -16,11 +16,11 @@
               uib-tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
               uib-tooltip-placement='{{$last? "left":"top"}}'
               append-to-body="false")
-kwic-pager
+kwic-pager(total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
 
 span.reading_btn.show_reading.link(ng-hide="loading", ng-click="toggleReading()") {{'show_reading' | loc:lang}}
 span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()") {{'show_kwic' | loc:lang}}
-.table_scrollarea(ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}")
+.table_scrollarea(ng-class="{paging : paging}")
   table.results_table.kwic(ng-if="kwic.length > 0" cellspacing='0')
     tr.sentence(ng-repeat='sentence in kwic'
       ng-class='{corpus_info : sentence.newCorpus, \
@@ -51,7 +51,7 @@ span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()"
         | {{sentence.newCorpus}}
         span.corpus_title_warn(rel='localize[no_context_support]', ng-if='::sentence.noContext')
       span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')
-kwic-pager
+kwic-pager(total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
 #download-links-container
   select#download-links(ng-if="_settings.enableBackendKwicDownload")
   select#frontendDownloadLinks(ng-if="_settings.enableFrontendKwicDownload",

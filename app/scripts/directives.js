@@ -615,33 +615,6 @@ korpApp.directive("warning", () => ({
     template: "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>"
 }))
 
-korpApp.directive("kwicPager", () => ({
-    replace: true,
-    restrict: "E",
-    scope: false,
-    template: `\
-<div class="pager-wrapper" ng-show="gotFirstKwic && hits > 0" >
-      <ul uib-pagination
-         total-items="hits"
-         ng-if="gotFirstKwic"
-         ng-model="pageObj.pager"
-         ng-click="pageChange($event, pageObj.pager)"
-         max-size="15"
-         items-per-page="pagerHitsPerPage"
-         previous-text="‹" next-text="›" first-text="«" last-text="»"
-         boundary-links="true"
-         rotate="false"
-         num-pages="$parent.numPages"> </ul>
-      <div class="page_input"><span>{{'goto_page' | loc:lang}} </span>
-        <input ng-model="gotoPage" ng-keyup="onPageInput($event, gotoPage, numPages)"
-            ng-click="$event.stopPropagation()" />
-        {{'of' | loc:lang}} {{numPages}}
-      </div>
-
-</div>\
-`
-}))
-
 korpApp.directive("autoc", ($q, lexicons) => ({
     replace: true,
     restrict: "E",

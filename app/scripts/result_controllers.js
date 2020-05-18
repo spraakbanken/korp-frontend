@@ -12,17 +12,13 @@ class KwicCtrl {
         return this.utils.setupHash(this.scope, [
             {
                 key: "page",
-                post_change: () => {
-                    this.scope.pageObj.pager = (this.scope.page || 0) + 1
-                },
                 val_in: Number
             }
         ])
     }
 
     initPage() {
-        this.scope.pageObj = { pager: Number(this.location.search().page) + 1 || 1 }
-        this.scope.page = this.scope.pageObj.pager - 1
+        this.scope.page = Number(this.location.search().page) || 0
     }
     constructor(scope, timeout, utils, location, kwicDownload) {
         this.scope = scope
@@ -41,28 +37,11 @@ class KwicCtrl {
 
         this.initPage()
 
-        s.pageChange = function($event, page) {
-            $event.stopPropagation()
-            s.page = page - 1
+        s.pageChange = function(page) {
+            s.page = page
         }
 
         this.setupHash()
-        s.onPageInput = function($event, page, numPages) {
-            if ($event.keyCode === 13) {
-                if (isNaN(page)) {
-                    return
-                }
-                if (page > numPages) {
-                    page = numPages
-                }
-                if (page <= 0) {
-                    page = "1"
-                }
-                s.gotoPage = page
-                s.pageObj.pager = Number(page)
-                s.pageChange($event, s.pageObj.pager)
-            }
-        }
 
         const readingChange = function() {
             if (s.instance && s.instance.getProxy().pendingRequests.length) {
@@ -346,18 +325,12 @@ class ExampleCtrl extends KwicCtrl {
         s.newDynamicTab()
 
         s.hitspictureClick = function(pageNumber) {
-            s.page = Number(pageNumber)
-            s.pageObj.pager = Number(pageNumber + 1)
-            return s.pageChange(null, pageNumber + 1)
+            s.pageChange(Number(pageNumber))
         }
 
-        s.pageChange = function($event, page) {
-            if ($event != null) {
-                $event.stopPropagation()
-            }
-            s.page = page - 1
-            s.instance.current_page = page - 1
-            return s.instance.makeRequest()
+        s.pageChange = function(page) {
+            s.page = page
+            s.instance.makeRequest()
         }
 
         s.exampleReadingMode = s.kwicTab.readingMode
@@ -381,7 +354,6 @@ class ExampleCtrl extends KwicCtrl {
     }
 
     initPage() {
-        this.scope.pageObj = { pager: 0 }
         this.scope.page = 0
     }
     setupHash() {}

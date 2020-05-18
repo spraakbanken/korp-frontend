@@ -370,9 +370,6 @@ korpApp.factory("searches", [
                 let [type, ...value] = (searchExpr && searchExpr.split("|")) || []
                 value = value.join("|")
 
-                newValues[1] = Number(newValues[1]) || 0
-                oldValues[1] = Number(oldValues[1]) || 0
-
                 if (_.isEqual(newValues, oldValues)) {
                     pageChanged = false
                     searchChanged = true

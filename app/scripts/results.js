@@ -105,7 +105,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
         this.proxy = new model.KWICProxy()
         window.kwicProxy = this.proxy
-        this.current_page = locationSearch().page || 0
+
         this.tabindex = 0
 
         this.s = scope
@@ -219,19 +219,15 @@ view.KWICResults = class KWICResults extends BaseResults {
         switch (event.which) {
             case 78: // n
                 safeApply(this.s, () => {
-                    this.s.$parent.page++
-                    this.s.$parent.pageObj.pager = this.s.$parent.page + 1
-                    this.s.$parent.pageChange(event, this.s.$parent.pageObj.pager)
+                    this.s.$parent.pageChange(this.s.$parent.page + 1)
                 })
                 return false
             case 70: // f
-                if (this.current_page === 0) {
+                if (this.s.$parent.page === 0) {
                     return
                 }
                 safeApply(this.s, () => {
-                    this.s.$parent.page--
-                    this.s.$parent.pageObj.pager = this.s.$parent.page + 1
-                    this.s.$parent.pageChange(event, this.s.$parent.pageObj.pager)
+                    this.s.$parent.pageChange(this.s.$parent.page - 1)
                 })
                 return false
         }
@@ -271,7 +267,6 @@ view.KWICResults = class KWICResults extends BaseResults {
     }
 
     renderCompleteResult(data) {
-        this.current_page = locationSearch().page || 0
         safeApply(this.s, () => {
             this.hidePreloader()
             this.s.hits = data.hits
@@ -309,16 +304,6 @@ view.KWICResults = class KWICResults extends BaseResults {
             } else {
                 $scope.setKwicData(data)
             }
-
-            if (this.s.$parent.pageObj.pager === 1) {
-                this.s.$parent.page = 0
-            }
-
-            setTimeout(() => {
-                safeApply(this.s, () => {
-                    this.s.gotFirstKwic = true
-                })
-            }, 0)
         })
 
         if (currentMode === "parallel" && !isReading) {
@@ -456,7 +441,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     makeRequest(cqp, isPaging) {
         const page = Number(locationSearch().page) || 0
-        this.s.$parent.pageObj.pager = page + 1
+        this.s.$parent.page = page
 
         this.showPreloader()
         this.s.aborted = false
@@ -666,8 +651,6 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
     constructor(tabSelector, resultSelector, scope) {
         super(tabSelector, resultSelector, scope)
         this.proxy = new model.KWICProxy()
-
-        this.current_page = 0
         if (this.s.$parent.kwicTab.queryParams) {
             this.makeRequest().then(() => {
                 this.onentry()
@@ -690,7 +673,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         // example tab cannot handle incremental = true
         opts.ajaxParams.incremental = false
 
-        opts.ajaxParams.start = this.current_page * items_per_page
+        opts.ajaxParams.start = this.s.$parent.page * items_per_page
         opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1
 
         const prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "source")
@@ -733,12 +716,6 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
     renderResult(data) {
         super.renderResult(data)
         this.s.setupReadingWatch()
-    }
-
-    renderCompleteResult(data) {
-        const curr = this.current_page
-        super.renderCompleteResult(data)
-        this.current_page = curr
     }
 }
 

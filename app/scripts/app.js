@@ -1,6 +1,7 @@
 /** @format */
 
 import jStorage from "../lib/jstorage"
+import { kwicPagerName, kwicPager } from "./components/pager"
 
 window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.typeahead",
@@ -34,6 +35,8 @@ window.korpApp = angular.module("korpApp", [
     "tmh.dynamicLocale",
     "angular.filter"
 ])
+
+korpApp.component(kwicPagerName, kwicPager)
 
 korpApp.config(tmhDynamicLocaleProvider =>
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
@@ -94,7 +97,7 @@ korpApp.run(function($rootScope, $location, searches, tmhDynamicLocale, $q) {
         const initialCorpora = []
 
         function findInFolder(folder) {
-            // checks if folder is an actual folder of corpora and recursively 
+            // checks if folder is an actual folder of corpora and recursively
             // collects all corpora in this folder and subfolders
             const corpusIds = []
             if (folder && folder.contents) {
@@ -322,7 +325,10 @@ korpApp.controller("headerCtrl", function($scope, $uibModal, utils) {
         }
         modal = $uibModal.open(params)
 
-        modal.result.then(() => closeModals(), () => closeModals())
+        modal.result.then(
+            () => closeModals(),
+            () => closeModals()
+        )
     }
 
     s.clickX = () => closeModals()
