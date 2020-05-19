@@ -50,19 +50,11 @@ window.SearchCtrl = [
         $scope.settings = settings
         $scope.showStats = () => settings.statistics !== false
 
-        if (!$location.search().stats_reduce) {
-            $location.search("stats_reduce", "word")
-        }
-
-        if (settings.statisticsCaseInsensitiveDefault) {
-            $location.search("stats_reduce_insensitive", "word")
-        }
-
         $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function(event, selected) {
             $scope.noCorporaSelected = !selected.length
             const allAttrs = settings.corpusListing.getStatsAttributeGroups()
             $scope.statCurrentAttrs = _.filter(allAttrs, item => !item.hideStatistics)
-            $scope.statSelectedAttrs = $location.search().stats_reduce.split(",")
+            $scope.statSelectedAttrs = ($location.search().stats_reduce || "word").split(",")
             const insensitiveAttrs = $location.search().stats_reduce_insensitive
             if (insensitiveAttrs) {
                 $scope.statInsensitiveAttrs = insensitiveAttrs.split(",")
@@ -73,7 +65,11 @@ window.SearchCtrl = [
             "statSelectedAttrs",
             function(selected) {
                 if (selected && selected.length > 0) {
-                    return $location.search("stats_reduce", $scope.statSelectedAttrs.join(","))
+                    if (selected.length != 1 || !selected.includes("word")) {
+                        $location.search("stats_reduce", $scope.statSelectedAttrs.join(","))
+                    } else {
+                        $location.search("stats_reduce", null)
+                    }
                 }
             },
             true
@@ -83,12 +79,12 @@ window.SearchCtrl = [
             "statInsensitiveAttrs",
             function(insensitive) {
                 if (insensitive && insensitive.length > 0) {
-                    return $location.search(
+                    $location.search(
                         "stats_reduce_insensitive",
                         $scope.statInsensitiveAttrs.join(",")
                     )
                 } else if (insensitive) {
-                    return $location.search("stats_reduce_insensitive", null)
+                    $location.search("stats_reduce_insensitive", null)
                 }
             },
             true
