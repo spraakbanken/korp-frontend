@@ -82,8 +82,8 @@ $.when(loc_dfd, deferred_domReady).then(
         util.browserWarn()
 
         $("#search_history").change(function(event) {
-            const target = $(this).find(":selected") 
-            if (_.includes(["http://", 'https:/'], target.val().slice(0, 7))) {
+            const target = $(this).find(":selected")
+            if (_.includes(["http://", "https:/"], target.val().slice(0, 7))) {
                 location.href = target.val()
             } else if (target.is(".clear")) {
                 jStorage.set("searches", [])
@@ -184,7 +184,7 @@ window.initTimeGraph = function(def) {
     let restyear = null
     let hasRest = false
 
-    let onTimeGraphChange;
+    let onTimeGraphChange
 
     const getValByDate = function(date, struct) {
         let output = null
@@ -208,7 +208,7 @@ window.initTimeGraph = function(def) {
             let [dataByCorpus, all_timestruct, rest] = args[0]
 
             if (all_timestruct.length == 0) {
-                return;
+                return
             }
 
             for (let corpus in dataByCorpus) {
