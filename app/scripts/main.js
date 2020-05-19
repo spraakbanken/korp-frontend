@@ -115,10 +115,11 @@ $.when(loc_dfd, deferred_domReady).then(
 
         $("#languages").radioList({
             change() {
+                const currentLang = $(this)
+                    .radioList("getSelected")
+                    .data("mode")
                 locationSearch({
-                    lang: $(this)
-                        .radioList("getSelected")
-                        .data("mode")
+                    lang: currentLang !== settings.defaultLanguage ? currentLang : null
                 })
             },
             // TODO: this does nothing?
