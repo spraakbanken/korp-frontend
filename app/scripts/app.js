@@ -71,7 +71,9 @@ korpApp.run(function($rootScope, $location, searches, tmhDynamicLocale, $q) {
     s.globalFilterDef = $q.defer()
 
     s.locationSearch = function() {
-        return $location.search(...arguments)
+        const search = $location.search(...arguments)
+        $location.replace()
+        return search
     }
 
     s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
