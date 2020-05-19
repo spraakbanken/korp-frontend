@@ -283,7 +283,7 @@ korpApp.controller("headerCtrl", function($scope, $uibModal, utils) {
     }
 
     s.getUrl = function(modeId) {
-        const langParam = `#?lang=${s.$root.lang}`
+        const langParam = settings.defaultLanguage === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
         if (modeId === "default") {
             return location.pathname + langParam
         }
