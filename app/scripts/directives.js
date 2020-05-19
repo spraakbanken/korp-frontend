@@ -413,7 +413,7 @@ korpApp.directive("tabSpinner", () => ({
 }))
 
 korpApp.directive("extendedList", () => ({
-    templateUrl: require("../views/extendedlist.html"),
+    template: require("../views/extendedlist.html"),
     scope: {
         cqp: "=",
         lang: "=",
