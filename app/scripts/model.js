@@ -402,61 +402,6 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
     }
 }
 
-model.NameProxy = class NameProxy extends BaseProxy {
-    makeRequest(cqp, callback) {
-        const self = this
-        super.makeRequest()
-
-        const posTags = settings.mapPosTag.map(posTag => `pos='${posTag}'`)
-
-        const parameters = {
-            group_by: "word",
-            cqp: this.expandCQP(cqp),
-            cqp2: `[${posTags.join(" | ")}]`,
-            corpus: settings.corpusListing.stringifySelected(true),
-            incremental: true
-        }
-        _.extend(parameters, settings.corpusListing.getWithinParameters())
-
-        const def = $.Deferred()
-        this.pendingRequests.push(
-            $.ajax({
-                url: settings.korpBackendURL + "/count",
-                data: parameters,
-
-                beforeSend(req, settings) {
-                    return self.addAuthorizationHeader(req)
-                },
-
-                error(jqXHR, textStatus, errorThrown) {
-                    return def.reject(textStatus, errorThrown)
-                },
-
-                progress(data, e) {
-                    const progressObj = self.calcProgress(e)
-                    if (progressObj == null) {
-                        return
-                    }
-                    if (typeof callback === "function") {
-                        callback(progressObj)
-                    }
-                },
-
-                success: data => {
-                    if (data.ERROR != null) {
-                        c.log("gettings stats failed with error", data.ERROR)
-                        def.reject(data)
-                        return
-                    }
-                    return def.resolve(data)
-                }
-            })
-        )
-
-        return def.promise()
-    }
-}
-
 model.AuthenticationProxy = class AuthenticationProxy {
     constructor() {
         this.loginObj = {}

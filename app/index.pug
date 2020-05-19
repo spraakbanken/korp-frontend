@@ -112,12 +112,6 @@ html
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   div()
                     include includes/word_picture
-                uib-tab(ng-if="_settings.enableMap != false" map-ctrl, index=1)
-                  uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading}")
-                    | {{'map' | loc:lang }}
-                    tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
-                  div()
-                    include includes/mapresult
 
                 include includes/dynamic_result_tabs
 

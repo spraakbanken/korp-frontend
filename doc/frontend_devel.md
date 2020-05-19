@@ -389,19 +389,11 @@ The values are the actual relations returned by the backend. The relation used i
 
 ## Map
 
-Korp has two versions of the map.
-
-1. An old version where the resolution from name to location are done client-side. When map is enabled all names will be fetched for the current search result context (names occuring in matching sentences for example). To fetch the names, pos-tags are used. Which pos-tag values that should match are configurable. Then the names are looked up in `components/geokorp/dist/data/places.json` and if they occur in the file we place them on the map. `places.json` should be replaced or extended since it contains mostly Swedish places. The problem with this approach is that we get lots of errors, proper names are often mistaken for location names for example. This feature will be removed.
-
-2. A newer version that uses annotations to get locations. The user selects rows from the statistics table and points derived from different rows will have different colors. The selected corpora must have structural attributes with location data in them. The format is `Fukuoka;JP;33.6;130.41667` - the location name, the country, latitude and longitude separated by `;`.
+Korp's map uses annotations to get locations. The user selects rows from the statistics table and points derived from different rows will have different colors. The selected corpora must have structural attributes with location data in them. The format is `Fukuoka;JP;33.6;130.41667` - the location name, the country, latitude and longitude separated by `;`.
 
     Also the name of the attribute must contain `"__"` and `"geo"` to show up in the list of supported attributes.
 
-The map is unstable and will change in upcoming releases, for example the old version of the map will be removed.
-
-__settings.enableMap__ - `boolean`. The old version of the map should be enabled.  
-__settings.mapPosTag__ - For the old version of the map. Which pos-tag values should be used to find names. Example: `["PM", "NNP", "NNPS"]`  
-__settings.newMapEnabled__ - `boolean`. The new version of the map should be enabled.  
+__settings.newMapEnabled__ - `boolean`. The map should be enabled. The weird name is because another map existed before, but has been remove. The name will change in upcoming releases.
 __settings.mapCenter__ - Where the center of the map should be located when user opens map. Example:  
 
     settings.mapCenter = {
@@ -536,10 +528,6 @@ __corporafolders__ - Create a directory-structure in corpus chooser. Example:
 
 __preselectedCorpora__ - An array of corpus (internal) names or folder names. Given corpora and corpora in folders will be selected on load. To select only a subfolder write `folder.subfolder`.
  
-__enableMap__ - See **Map**.
-
-__mapPosTag__ - See **Map**.
-
 __newMapEnabled__ - See **Map**.
 
 __mapCenter__ - See **Map**.

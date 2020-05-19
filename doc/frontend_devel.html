@@ -1,6 +1,6 @@
 <h1>Setting up the Korp Frontend</h1>
 
-<p>This section describes how to get the Korp frontend up and running on your own machine and presents the available customization. In this step it is necessary to have a backend with at least one corpus installed. For testing purposes, Språkbankens Korp backend may be enough. It is also assumed that you have a web server available (such as Apache or Lighttpd).</p>
+<p>This section describes how to get the Korp frontend up and running on your own machine and presents the available customization. In this step it is necessary to have a backend with at least one corpus installed. For testing purposes, Språkbankens Korp backend may be enough. It is also assumed that you have a web server available (such as Apache or Nginx).</p>
 
 <p>Download the latest release from <a href="https://github.com/spraakbanken/korp-frontend/releases">Github</a>. The code is distributed under the <a href="https://opensource.org/licenses/MIT">MIT license</a>.</p>
 
@@ -16,7 +16,7 @@ git clone https://github.com/spraakbanken/korp-frontend.git
 
 <h2>Configuration</h2>
 
-<p>In ideal cases, no changes needs to be done in Korp. instead
+<p>In ideal cases, no changes needs to be done in Korp. Instead
 all configuration will reside in another directory. How to make the build
 system detect this directory and its contents will be described below.</p>
 
@@ -250,7 +250,9 @@ the configuration directory, corresponding to that ID. So if you click the modeS
 <li><code>internalSearch</code>: <code>boolean</code>. Should the value be displayed as a link to a new Korp search? Only works for sets. Searches for CQP-expression: <code>[&lt;attrName&gt; contains "&lt;regescape(attrValue)&gt;"]</code></li>
 <li><code>externalSearch</code>: Link with placeholder for replacing value. Example <code>https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|&lt;%= val %&gt;</code></li>
 <li><code>order</code>: Order of attribute in the sidebar. Attributes with a lower <code>order</code>-value will be placed over attributes with a higher <code>order</code>-value.</li>
-<li><code>stringify</code>: How to pretty-print attribute. Example: <code>function(str) { return util.lemgramToString(str, true); }</code></li>
+<li><code>stringify</code>: How to pretty-print the attribute in the context of the sidebar. Example: <code>function(str) { return util.lemgramToString(str, true); }</code></li>
+<li><code>stats_stringify</code>: How to pretty-print the attribute in the context of the statistics table. The provided formatting function will be passed an array of labels. Example: <code>stats_stringify: function(values) {return values.join(" ")}</code>.</li>
+<li><code>stats_cqp</code>: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: <code>stats_cqp: function(values) {return `pos_tag="${tokens.join(" | ")}"`}</code>.  </li>
 <li><code>isStructAttr</code>: <code>boolean</code>. If <code>true</code> the attribute will be treated as a structural attribute in all sense except it will be included in the <code>show</code> query parameter instead of <code>show_struct</code> for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.</li>
 <li>optional keys and values that can be utilized in the extendedTemplate / extendedController. See &lt;#ref customizing-extended-search|customizing extended search>.</li>
 </ul></li>
@@ -411,20 +413,12 @@ settings.corpora["saltnld-nl"] = {
 
 <h2>Map</h2>
 
-<p>Korp has two versions of the map.</p>
+<p>Korp's map uses annotations to get locations. The user selects rows from the statistics table and points derived from different rows will have different colors. The selected corpora must have structural attributes with location data in them. The format is <code>Fukuoka;JP;33.6;130.41667</code> - the location name, the country, latitude and longitude separated by <code>;</code>.</p>
 
-<ol>
-<li><p>An old version where the resolution from name to location are done client-side. When map is enabled all names will be fetched for the current search result context (names occuring in matching sentences for example). To fetch the names, pos-tags are used. Which pos-tag values that should match are configurable. Then the names are looked up in <code>components/geokorp/dist/data/places.json</code> and if they occur in the file we place them on the map. <code>places.json</code> should be replaced or extended since it contains mostly Swedish places. The problem with this approach is that we get lots of errors, proper names are often mistaken for location names for example. This feature will be removed.</p></li>
-<li><p>A newer version that uses annotations to get locations. The user selects rows from the statistics table and points derived from different rows will have different colors. The selected corpora must have structural attributes with location data in them. The format is <code>Fukuoka;JP;33.6;130.41667</code> - the location name, the country, latitude and longitude separated by <code>;</code>.</p>
+<pre><code>Also the name of the attribute must contain `"__"` and `"geo"` to show up in the list of supported attributes.
+</code></pre>
 
-<p>Also the name of the attribute must contain <code>"__"</code> and <code>"geo"</code> to show up in the list of supported attributes.</p></li>
-</ol>
-
-<p>The map is unstable and will change in upcoming releases, for example the old version of the map will be removed.</p>
-
-<p><strong>settings.enableMap</strong> - <code>boolean</code>. The old version of the map should be enabled. <br />
-<strong>settings.mapPosTag</strong> - For the old version of the map. Which pos-tag values should be used to find names. Example: <code>["PM", "NNP", "NNPS"]</code> <br />
-<strong>settings.newMapEnabled</strong> - <code>boolean</code>. The new version of the map should be enabled. <br />
+<p><strong>settings.newMapEnabled</strong> - <code>boolean</code>. The map should be enabled. The weird name is because another map existed before, but has been remove. The name will change in upcoming releases.
 <strong>settings.mapCenter</strong> - Where the center of the map should be located when user opens map. Example:  </p>
 
 <pre><code>settings.mapCenter = {
@@ -564,10 +558,6 @@ settings.corporafolders.foldername.subfolder = {
 </code></pre>
 
 <p><strong>preselectedCorpora</strong> - An array of corpus (internal) names or folder names. Given corpora and corpora in folders will be selected on load. To select only a subfolder write <code>folder.subfolder</code>.</p>
-
-<p><strong>enableMap</strong> - See <strong>Map</strong>.</p>
-
-<p><strong>mapPosTag</strong> - See <strong>Map</strong>.</p>
 
 <p><strong>newMapEnabled</strong> - See <strong>Map</strong>.</p>
 

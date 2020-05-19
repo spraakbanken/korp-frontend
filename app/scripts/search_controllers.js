@@ -27,15 +27,6 @@ window.SearchCtrl = [
             $scope.$watch("word_pic", val => $location.search("word_pic", Boolean(val) || null))
         }
 
-        const setupWatchMap = function() {
-            $scope.$watch(
-                () => $location.search().show_map,
-                val => ($scope.show_map = Boolean(val))
-            )
-
-            $scope.$watch("show_map", val => $location.search("show_map", Boolean(val) || null))
-        }
-
         const setupWatchStats = function() {
             $scope.showStatistics = true
 
@@ -54,7 +45,6 @@ window.SearchCtrl = [
         }
 
         setupWatchWordPic()
-        setupWatchMap()
         setupWatchStats()
 
         $scope.settings = settings

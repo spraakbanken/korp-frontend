@@ -243,37 +243,12 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
     }
 }))
 
-korpApp.factory("nameEntitySearch", function($rootScope, $q) {
-    class NameEntities {
-        request(cqp) {
-            this.def = $q.defer()
-            this.promise = this.def.promise
-            this.proxy = new model.NameProxy()
-            $rootScope.$broadcast(
-                "map_data_available",
-                cqp,
-                settings.corpusListing.stringifySelected(true)
-            )
-            return this.proxy.makeRequest(cqp, this.progressCallback).then(data => {
-                return this.def.resolve(data)
-            })
-        }
-
-        progressCallback(progress) {
-            return $rootScope.$broadcast("map_progress", progress)
-        }
-    }
-
-    return new NameEntities()
-})
-
 korpApp.factory("searches", [
     "$location",
     "$rootScope",
     "$http",
     "$q",
-    "nameEntitySearch",
-    function($location, $rootScope, $http, $q, nameEntitySearch) {
+    function($location, $rootScope, $http, $q) {
         class Searches {
             constructor() {
                 this.activeSearch = null
@@ -296,7 +271,6 @@ korpApp.factory("searches", [
                     if (window.statsResults) {
                         statsResults.makeRequest(cqp)
                     }
-                    this.nameEntitySearch(cqp)
                 }
             }
 
@@ -305,12 +279,6 @@ korpApp.factory("searches", [
                     return
                 }
                 return lemgramResults.makeRequest(word, type)
-            }
-
-            nameEntitySearch(cqp) {
-                if ($location.search().show_map != null) {
-                    return nameEntitySearch.request(cqp)
-                }
             }
 
             getInfoData() {
