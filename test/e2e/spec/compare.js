@@ -19,8 +19,8 @@ describe("compare", function() {
     }
         
     const saveSearch = function(name) {
-        element(by.css(".search_submit .opener")).click()
-        const input = element(by.css("#cmp_input"))
+        element.all(by.css(".search_submit .opener")).first().click()
+        const input = element.all(by.css("#cmp_input")).first()
         input.sendKeys(name)
         element(by.css(".popover.compare.bottom .btn")).click()
     }

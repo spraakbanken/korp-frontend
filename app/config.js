@@ -2,8 +2,6 @@
 var isLab = window.isLab || false;
 
 settings.autocomplete = true;
-settings.enableMap = !isLab;
-settings.mapPosTag = ["PM", "NNP", "NNPS"]
 settings.newMapEnabled = isLab;
 settings.hitsPerPageDefault = 25
 settings.hitsPerPageValues = [25,50,75,100,500,1000]

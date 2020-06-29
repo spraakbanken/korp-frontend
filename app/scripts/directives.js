@@ -6,7 +6,7 @@ korpApp.directive("kwicWord", () => ({
     template: `<span class="word" ng-class="getClassObj(wd)">
 {{::wd.word}} </span>\
 `,
-    link(scope, element) {
+    link(scope) {
         scope.getClassObj = function(wd) {
             let struct
             const output = {
@@ -53,7 +53,6 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
             ])
 
         s.setSelected = function(index, ignoreCheck) {
-            console.log("tab setSelected", index)
             if (!ignoreCheck && !(index in s.fixedTabs)) {
                 index = s.maxTab
             }
@@ -76,7 +75,6 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
         }, 0)
 
         s.newDynamicTab = function() {
-            console.log("newDynamicTab s.maxTab", s.maxTab)
             return $timeout(function() {
                 s.setSelected(s.maxTab + 1, true)
                 s.maxTab += 1
@@ -97,7 +95,7 @@ korpApp.directive("tabHash", (utils, $location, $timeout) => ({
 }))
 
 korpApp.directive("escaper", () => ({
-    link($scope, elem, attr) {
+    link($scope) {
         let escape, unescape
         if ($scope.escape === false) {
             escape = val => val
@@ -144,6 +142,10 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
         let childWatch = null
 
         return scope.$watch("tokenValue", function(valueObj) {
+            if (scope.orObj.flags) {
+                delete scope.orObj.flags["c"]
+            }
+
             let controller, template
             if (!valueObj) {
                 return
@@ -199,13 +201,12 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
     }
 }))
 
-korpApp.directive("constr", ($window, searches) => ({
+korpApp.directive("constr", $window => ({
     scope: true,
 
     link(scope, elem, attr) {
         const instance = new $window.view[attr.constr](elem, elem, scope)
         if (attr.constrName) {
-            c.log("attr.constrName", attr.constrName)
             $window[attr.constrName] = instance
         }
 
@@ -214,7 +215,7 @@ korpApp.directive("constr", ($window, searches) => ({
     }
 }))
 
-korpApp.directive("searchSubmit", ($window, $document, $rootElement) => ({
+korpApp.directive("searchSubmit", $rootElement => ({
     template: `\
 <div class="search_submit">
         <div class="btn-group">
@@ -228,7 +229,10 @@ korpApp.directive("searchSubmit", ($window, $document, $rootElement) => ({
             <h3 class="popover-title">{{'compare_save_header' | loc:lang}}</h3>
             <form class="popover-content" ng-submit="onSubmit()">
                 <div>
-                    <label for="cmp_input">{{'compare_name' | loc:lang}} :</label> <input id="cmp_input" ng-model="name">
+                    <label>
+                        {{'compare_name' | loc:lang}}:
+                        <input id="cmp_input" ng-model="name">
+                    </label>
                 </div>
                 <div class="btn_container">
                     <button class="btn btn-primary btn-sm">{{'compare_save' | loc:lang}}</button>
@@ -365,13 +369,13 @@ korpApp.directive("popper", $rootElement => ({
         const closePopup = () => popup.hide()
 
         if (attrs.noCloseOnClick == null) {
-            popup.on("click", function(event) {
+            popup.on("click", function() {
                 closePopup()
                 return false
             })
         }
 
-        elem.on("click", function(event) {
+        elem.on("click", function() {
             const other = $(".popper_menu:visible").not(popup)
             if (other.length) {
                 other.hide()
@@ -400,7 +404,7 @@ korpApp.directive("popper", $rootElement => ({
     }
 }))
 
-korpApp.directive("tabSpinner", $rootElement => ({
+korpApp.directive("tabSpinner", () => ({
     template: `\
 <i class="fa fa-times-circle close_icon"></i>
 <span class="tab_spinner"
@@ -408,14 +412,14 @@ korpApp.directive("tabSpinner", $rootElement => ({
 `
 }))
 
-korpApp.directive("extendedList", ($location, $rootScope) => ({
+korpApp.directive("extendedList", () => ({
     templateUrl: require("../views/extendedlist.html"),
     scope: {
         cqp: "=",
         lang: "=",
         repeatError: "="
     },
-    link($scope, elem, attr) {
+    link($scope) {
         const s = $scope
 
         const setCQP = function(val) {
@@ -564,7 +568,7 @@ korpApp.directive("tabPreloader", () => ({
 </div>\
 `,
 
-    link(scope, elem, attr) {}
+    link() {}
 }))
 
 korpApp.directive("clickCover", () => ({
@@ -572,29 +576,32 @@ korpApp.directive("clickCover", () => ({
         const cover = $("<div class='click-cover'>").on("click", () => false)
 
         const pos = elem.css("position") || "static"
-        return scope.$watch(() => scope.$eval(attr.clickCover), function(val) {
-            if (val) {
-                elem.prepend(cover)
-                elem.css("pointer-events", "none")
-                return elem.css("position", "relative").addClass("covered")
-            } else {
-                cover.remove()
-                elem.css("pointer-events", "")
-                return elem.css("position", pos).removeClass("covered")
+        return scope.$watch(
+            () => scope.$eval(attr.clickCover),
+            function(val) {
+                if (val) {
+                    elem.prepend(cover)
+                    elem.css("pointer-events", "none")
+                    return elem.css("position", "relative").addClass("covered")
+                } else {
+                    cover.remove()
+                    elem.css("pointer-events", "")
+                    return elem.css("position", pos).removeClass("covered")
+                }
             }
-        })
+        )
     }
 }))
 
 korpApp.directive("toBody", $compile => ({
     restrict: "A",
-    compile(elm, attrs) {
+    compile(elm) {
         elm.remove()
         elm.attr("to-body", null)
         const wrapper = $("<div>").append(elm)
         const cmp = $compile(wrapper.html())
 
-        return function(scope, iElement, iAttrs) {
+        return function(scope) {
             const newElem = cmp(scope)
             $("body").append(newElem)
             return scope.$on("$destroy", () => newElem.remove())
@@ -608,34 +615,7 @@ korpApp.directive("warning", () => ({
     template: "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>"
 }))
 
-korpApp.directive("kwicPager", () => ({
-    replace: true,
-    restrict: "E",
-    scope: false,
-    template: `\
-<div class="pager-wrapper" ng-show="gotFirstKwic && hits > 0" >
-      <ul uib-pagination
-         total-items="hits"
-         ng-if="gotFirstKwic"
-         ng-model="pageObj.pager"
-         ng-click="pageChange($event, pageObj.pager)"
-         max-size="15"
-         items-per-page="pagerHitsPerPage"
-         previous-text="‹" next-text="›" first-text="«" last-text="»"
-         boundary-links="true"
-         rotate="false"
-         num-pages="$parent.numPages"> </ul>
-      <div class="page_input"><span>{{'goto_page' | loc:lang}} </span>
-        <input ng-model="gotoPage" ng-keyup="onPageInput($event, gotoPage, numPages)"
-            ng-click="$event.stopPropagation()" />
-        {{'of' | loc:lang}} {{numPages}}
-      </div>
-
-</div>\
-`
-}))
-
-korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
+korpApp.directive("autoc", ($q, lexicons) => ({
     replace: true,
     restrict: "E",
     scope: {
@@ -687,7 +667,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
         </div>
 </div>\
 `,
-    link(scope, elem, attr) {
+    link(scope) {
         scope.typeaheadClose = function() {
             if (scope.typeaheadCloseCallback) {
                 return scope.typeaheadCloseCallback({
@@ -729,7 +709,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
             }
         })
 
-        scope.selectedItem = function(item, model, label) {
+        scope.selectedItem = function(item, model) {
             if (scope.type === "lemgram") {
                 scope.placeholder = model.lemgram
                 scope.model = regescape(model.lemgram)
@@ -757,7 +737,7 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
                 for (let corporaID of corporaIDs) {
                     const morfs = settings.corpora[corporaID].morphology || ""
                     for (let morf of morfs.split("|")) {
-                        if (!morphologies.includes(morf)) {
+                        if (morf !== "" && !morphologies.includes(morf)) {
                             morphologies.push(morf)
                         }
                     }
@@ -826,11 +806,11 @@ korpApp.directive("autoc", ($q, $http, $timeout, lexicons) => ({
     }
 }))
 
-korpApp.directive("typeaheadClickOpen", function($parse, $timeout) {
+korpApp.directive("typeaheadClickOpen", function($timeout) {
     return {
         restrict: "A",
         require: "ngModel",
-        link($scope, elem, attrs) {
+        link($scope, elem) {
             const triggerFunc = function(event) {
                 if (event.keyCode === 40 && !$scope.typeaheadIsOpen) {
                     const ctrl = elem.controller("ngModel")
@@ -869,8 +849,7 @@ korpApp.directive("timeInterval", () => ({
 </div>\
 `,
 
-    link(s, elem, attr) {
-        let w
+    link(s) {
         s.isOpen = false
         s.open = function(event) {
             event.preventDefault()
@@ -943,12 +922,11 @@ korpApp.directive("reduceSelect", $timeout => ({
       </div>
 </div>`,
 
-    link(scope, element, attribute) {
+    link(scope) {
         scope.$watchCollection("items", function() {
             if (scope.items) {
-                let item
                 scope.keyItems = {}
-                for (item of scope.items) {
+                for (let item of scope.items) {
                     scope.keyItems[item.value] = item
                 }
 
@@ -956,16 +934,21 @@ korpApp.directive("reduceSelect", $timeout => ({
                 scope.hasStructAttrs =
                     _.filter(scope.keyItems, { group: "sentence_attr" }).length > 0
 
+                let somethingSelected = false
                 if (scope.selected && scope.selected.length > 0) {
                     for (let select of scope.selected) {
-                        item = scope.keyItems[select]
+                        const item = scope.keyItems[select]
                         if (item) {
                             item.selected = true
+                            somethingSelected = true
                         }
                     }
-                } else {
+                }
+
+                if (!somethingSelected) {
                     scope.keyItems["word"].selected = true
                 }
+
                 if (scope.insensitive) {
                     for (let insensitive of scope.insensitive) {
                         scope.keyItems[insensitive].insensitive = true
@@ -976,15 +959,17 @@ korpApp.directive("reduceSelect", $timeout => ({
         })
 
         var updateSelected = function(scope) {
-            scope.selected = _.map(_.filter(scope.keyItems, (item, key) => item.selected), "value")
+            scope.selected = _.map(
+                _.filter(scope.keyItems, (item, key) => item.selected),
+                "value"
+            )
             scope.numberAttributes = scope.selected.length
         }
 
         scope.toggleSelected = function(value, event) {
-            const isLinux = window.navigator.userAgent.indexOf("Linux") !== -1
             const item = scope.keyItems[value]
-
-            if ((!isLinux && event.altKey) || (isLinux && event.ctrlKey)) {
+            const isLinux = window.navigator.userAgent.indexOf("Linux") !== -1
+            if (event && ((!isLinux && event.altKey) || (isLinux && event.ctrlKey))) {
                 _.map(_.values(scope.keyItems), item => (item.selected = false))
                 item.selected = true
             } else {

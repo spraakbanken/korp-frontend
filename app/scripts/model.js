@@ -105,7 +105,7 @@ class BaseProxy {
         })
 
         const stats = (this.progress / this.total) * 100
-        if (this.total == null && (struct.progress_corpora && struct.progress_corpora.length)) {
+        if (this.total == null && struct.progress_corpora && struct.progress_corpora.length) {
             const tmp = $.map(struct["progress_corpora"], function(corpus) {
                 if (!corpus.length) {
                     return
@@ -136,7 +136,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
     }
 
     makeRequest(options, page, progressCallback, kwicCallback) {
-        c.log("kwicproxy.makeRequest", options, page, kwicResults.getPageInterval(Number(page)))
         const self = this
         this.foundKwic = false
         super.makeRequest()
@@ -151,7 +150,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
 
                 progressCallback(progressObj)
                 if (progressObj["struct"].kwic) {
-                    c.log("found kwic!")
                     this.foundKwic = true
                     return kwicCallback(progressObj["struct"])
                 }
@@ -163,7 +161,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         }
 
         const data = {
-            command: "query",
             default_context: settings.defaultOverviewContext,
             show: [],
             show_struct: []
@@ -194,7 +191,6 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         }
         this.prevCQP = data.cqp
         data.show = _.uniq(["sentence"].concat(data.show)).join(",")
-        c.log("data.show", data.show)
         data.show_struct = _.uniq(data.show_struct).join(",")
 
         if (locationSearch()["in_order"] === false) {
@@ -203,9 +199,11 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
 
         this.prevRequest = data
         this.prevParams = data
+        const command = data.command || "query"
+        delete data.command
         const def = $.ajax({
             method: "POST",
-            url: settings.korpBackendURL + "/" + data.command,
+            url: settings.korpBackendURL + "/" + command,
             data,
             beforeSend(req, settings) {
                 self.prevRequest = settings
@@ -215,7 +213,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
                     "?" +
                     _.toPairs(data)
                         .map(function([key, val]) {
-                            val = _.replace(val, "&", "%26")
+                            val = encodeURIComponent(val)
                             return key + "=" + val
                         })
                         .join("&")
@@ -240,7 +238,6 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
         super.makeRequest()
         const self = this
         const params = {
-            command: "relations",
             word,
             corpus: settings.corpusListing.stringifySelected(),
             incremental: true,
@@ -249,11 +246,10 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
         }
         this.prevParams = params
         const def = $.ajax({
-            url: settings.korpBackendURL + "/" + params.command,
+            url: settings.korpBackendURL + "/relations",
             data: params,
 
-            success(data) {
-                c.log("relations success", data)
+            success() {
                 self.prevRequest = params
             },
 
@@ -297,7 +293,6 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
             }
         }
         const parameters = {
-            command: "count",
             group_by: groupBy.join(","),
             group_by_struct: groupByStruct.join(","),
             cqp: this.expandCQP(cqp),
@@ -362,7 +357,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const def = $.Deferred()
         this.pendingRequests.push(
             $.ajax({
-                url: settings.korpBackendURL + "/" + data.command,
+                url: settings.korpBackendURL + "/count",
                 data,
                 beforeSend(req, settings) {
                     self.prevRequest = settings
@@ -399,61 +394,6 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                         reduceValLabels,
                         ignoreCase
                     )
-                }
-            })
-        )
-
-        return def.promise()
-    }
-}
-
-model.NameProxy = class NameProxy extends BaseProxy {
-    makeRequest(cqp, callback) {
-        const self = this
-        super.makeRequest()
-
-        const posTags = settings.mapPosTag.map(posTag => `pos='${posTag}'`)
-
-        const parameters = {
-            group_by: "word",
-            cqp: this.expandCQP(cqp),
-            cqp2: `[${posTags.join(" | ")}]`,
-            corpus: settings.corpusListing.stringifySelected(true),
-            incremental: true
-        }
-        _.extend(parameters, settings.corpusListing.getWithinParameters())
-
-        const def = $.Deferred()
-        this.pendingRequests.push(
-            $.ajax({
-                url: settings.korpBackendURL + "/count",
-                data: parameters,
-
-                beforeSend(req, settings) {
-                    return self.addAuthorizationHeader(req)
-                },
-
-                error(jqXHR, textStatus, errorThrown) {
-                    return def.reject(textStatus, errorThrown)
-                },
-
-                progress(data, e) {
-                    const progressObj = self.calcProgress(e)
-                    if (progressObj == null) {
-                        return
-                    }
-                    if (typeof callback === "function") {
-                        callback(progressObj)
-                    }
-                },
-
-                success: data => {
-                    if (data.ERROR != null) {
-                        c.log("gettings stats failed with error", data.ERROR)
-                        def.reject(data)
-                        return
-                    }
-                    return def.resolve(data)
                 }
             })
         )
@@ -527,8 +467,7 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
             }
         })
 
-        xhr.done((data, status, xhr) => {
-            c.log("timespan done", data)
+        xhr.done(data => {
             if (data.ERROR) {
                 c.error("timespan error", data.ERROR)
                 dfd.reject(data.ERROR)
@@ -616,7 +555,6 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
         super.makeRequest()
         const self = this
         const params = {
-            command: "count_time",
             cqp: this.expandCQP(cqp),
             corpus: corpora,
             granularity: this.granularity,
@@ -636,7 +574,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
         const def = $.Deferred()
 
         $.ajax({
-            url: settings.korpBackendURL + "/" + params.command,
+            url: settings.korpBackendURL + "/count_time",
             dataType: "json",
             data: params,
 

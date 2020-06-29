@@ -22,27 +22,30 @@ describe("page", function() {
     beforeEach(function() {
         browser.ignoreSynchronization = true
         browser.get(browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${cycleSearch()}&page=7`).then(function() {
-            elm = element(by.css(".results-kwic .pager-wrapper:nth-child(2) .active a"))
+            elm = element.all(by.css(".results-kwic kwic-pager .pager-wrapper .active a")).first()
             waitFor(elm)
         })
     })
 
-    it("should should bring up the correct page", function() {
+    it("should bring up the correct page", function() {
         expect(elm.getText()).toBe("8")
         expect(browser.executeScript("return locationSearch().page")).toBe(7)
     })
 
     it("should page to the correct page", function() {
-        element(by.css(".results-kwic .pagination li:nth-last-child(2)")).click()
-        expect(EC.textToBePresentInElement(elm, "9"))
+        element.all(by.css(".results-kwic kwic-pager .pagination li:nth-last-child(2)")).first().click()
+        expect(EC.textToBePresentInElement(elm, 9))
     })
 
     it("should go back to 0 when searching anew", function() {
         const input = element.all(by.model('textInField')).first()
         input.clear()
         input.sendKeys("gå")
-        input.sendKeys(protractor.Key.ENTER)  
-        expect(browser.executeScript("return locationSearch().page")).toBe(0)
+        input.sendKeys(protractor.Key.ENTER)
+        browser.executeScript("return locationSearch().page").then((page) => {
+            const isZero = page == 0 || page == null || page == undefined
+            expect(isZero).toBe(true)
+        })
     })
 
     it("should should use the correct start/end values", function() {
@@ -62,7 +65,7 @@ describe("json button", function() {
         browser.get(browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${wd}&page=7`).then(function() {
             elm = element(by.css("#json-link"))
             waitFor(elm)
-            expect(elm.getAttribute("href")).toContain("?command=query")
+            expect(elm.getAttribute("href")).toContain("query?")
         })
     })
     
@@ -76,7 +79,7 @@ describe("json button", function() {
             
             elm = element(by.css("#json-link"))
             waitFor(elm)
-            expect(elm.getAttribute("href")).toContain("?command=count")
+            expect(elm.getAttribute("href")).toContain("count?")
         })
     })
 })

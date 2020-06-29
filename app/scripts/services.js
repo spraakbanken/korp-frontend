@@ -38,7 +38,10 @@ korpApp.factory("utils", $location => ({
             }
         }
         onWatch()
-        scope.$watch(() => $location.search(), () => onWatch())
+        scope.$watch(
+            () => $location.search(),
+            () => onWatch()
+        )
 
         for (let obj of config) {
             const watch = obj.expr || obj.scope_name || obj.key
@@ -51,9 +54,6 @@ korpApp.factory("utils", $location => ({
                             val = null
                         }
                         $location.search(obj.key, val || null)
-                        if (obj.key === "page") {
-                            c.log("post change", watch, val)
-                        }
                         if (typeof obj.post_change === "function") {
                             obj.post_change(val)
                         }
@@ -71,8 +71,6 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
         const filterFun = item => cl.corpusHasAttrs(item, reduce)
         const corpora1 = _.filter(cmpObj1.corpora, filterFun)
         const corpora2 = _.filter(cmpObj2.corpora, filterFun)
-
-        const corpusListing = cl.subsetFactory(cmpObj1.corpora)
 
         let attrs = cl.getCurrentAttributes()
         const split = _.filter(reduce, r => (attrs[r] && attrs[r].type) === "set").join(",")
@@ -196,14 +194,9 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         return $http(conf).then(
             function({ data }) {
-                console.log("map response", data)
                 model.normalizeStatsData(data)
                 let result = parseMapData(data, cqp, cqpExprs)
-                console.log("after parseMapData", result)
-
                 return { corpora: attribute.corpora, cqp, within, data: result, attribute }
-
-                // safeApply(s, () => $rootScope.mapTabs.push())
             },
             err => {
                 console.log("err", err)
@@ -250,38 +243,12 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
     }
 }))
 
-korpApp.factory("nameEntitySearch", function($rootScope, $q) {
-    class NameEntities {
-        request(cqp) {
-            this.def = $q.defer()
-            this.promise = this.def.promise
-            this.proxy = new model.NameProxy()
-            $rootScope.$broadcast(
-                "map_data_available",
-                cqp,
-                settings.corpusListing.stringifySelected(true)
-            )
-            return this.proxy.makeRequest(cqp, this.progressCallback).then(data => {
-                return this.def.resolve(data)
-            })
-        }
-
-        progressCallback(progress) {
-            return $rootScope.$broadcast("map_progress", progress)
-        }
-    }
-
-    return new NameEntities()
-})
-
 korpApp.factory("searches", [
-    "utils",
     "$location",
     "$rootScope",
     "$http",
     "$q",
-    "nameEntitySearch",
-    function(utils, $location, $rootScope, $http, $q, nameEntitySearch) {
+    function($location, $rootScope, $http, $q) {
         class Searches {
             constructor() {
                 this.activeSearch = null
@@ -301,8 +268,9 @@ korpApp.factory("searches", [
             kwicSearch(cqp, isPaging) {
                 kwicResults.makeRequest(cqp, isPaging)
                 if (!isPaging) {
-                    statsResults.makeRequest(cqp)
-                    return this.nameEntitySearch(cqp)
+                    if (window.statsResults) {
+                        statsResults.makeRequest(cqp)
+                    }
                 }
             }
 
@@ -311,12 +279,6 @@ korpApp.factory("searches", [
                     return
                 }
                 return lemgramResults.makeRequest(word, type)
-            }
-
-            nameEntitySearch(cqp) {
-                if ($location.search().show_map != null) {
-                    return nameEntitySearch.request(cqp)
-                }
             }
 
             getInfoData() {
@@ -369,17 +331,12 @@ korpApp.factory("searches", [
             [() => $location.search().search, "_loc.search().page"],
             newValues => {
                 let pageChanged, searchChanged
-                c.log("searches service watch", $location.search().search)
-
                 const searchExpr = $location.search().search
                 if (!searchExpr) {
                     return
                 }
                 let [type, ...value] = (searchExpr && searchExpr.split("|")) || []
                 value = value.join("|")
-
-                newValues[1] = Number(newValues[1]) || 0
-                oldValues[1] = Number(oldValues[1]) || 0
 
                 if (_.isEqual(newValues, oldValues)) {
                     pageChanged = false
@@ -450,7 +407,6 @@ korpApp.service(
             } else {
                 this.key = "saved_searches"
             }
-            c.log("key", this.key)
             this.savedSearches = jStorage.get(this.key) || []
         }
 
@@ -473,19 +429,9 @@ korpApp.service(
 
 korpApp.factory("lexicons", function($q, $http) {
     const karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v4"
-    let canceller = null
-    let cancelNext = false
     return {
-        lemgramCancel() {
-            cancelNext = true
-        },
         getLemgrams(wf, resources, corporaIDs) {
             const deferred = $q.defer()
-            canceller = $q.defer()
-            if (cancelNext) {
-                canceller.resolve()
-                cancelNext = false
-            }
 
             const args = {
                 q: wf,
@@ -496,8 +442,7 @@ korpApp.factory("lexicons", function($q, $http) {
             $http({
                 method: "GET",
                 url: `${karpURL}/autocomplete`,
-                params: args,
-                timeout: canceller.promise
+                params: args
             })
                 .then(function(response) {
                     let { data } = response
@@ -523,8 +468,7 @@ korpApp.factory("lexicons", function($q, $http) {
                             method: "POST",
                             url: settings.korpBackendURL + "/lemgram_count",
                             data: `lemgram=${lemgram}&count=lemgram&corpus=${corpora}`,
-                            headers,
-                            timeout: canceller.promise
+                            headers
                         }).then(({ data }) => {
                             delete data.time
                             const allLemgrams = []

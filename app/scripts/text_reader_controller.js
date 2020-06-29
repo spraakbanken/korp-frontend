@@ -1,14 +1,14 @@
 /** @format */
 const korpApp = angular.module("korpApp")
 
-korpApp.directive("textReaderCtrl", ($timeout, searches) => ({
-    controller($scope, $rootScope, backend) {
+korpApp.directive("textReaderCtrl", ($timeout) => ({
+    controller($scope, backend) {
         const s = $scope
 
         s.loading = true
         s.newDynamicTab()
 
-        s.closeTab = function(idx, e) {
+        s.closeTab = function (idx, e) {
             e.preventDefault()
             s.textTabs.splice(idx, 1)
             s.closeDynamicTab()
@@ -17,28 +17,28 @@ korpApp.directive("textReaderCtrl", ($timeout, searches) => ({
         const corpus = s.inData.corpus
         s.corpusObj = settings.corpora[corpus]
         const sentenceId = s.inData.sentenceId
-        backend.getDataForReadingMode(corpus, sentenceId).then(function(data) {
+        backend.getDataForReadingMode(corpus, sentenceId).then(function (data) {
             new Promise((resolve, reject) => {
-                resolve(prepareData(data, s.corpusObj))
-            }).then(document => {
+                resolve(prepareData(data.kwic[0], s.corpusObj))
+            }).then((document) => {
                 s.data = { corpus, sentenceId, document }
                 $timeout(() => (s.loading = false), 0)
             })
         })
 
-        s.onentry = function() {
+        s.onentry = function () {
             s.$broadcast("on-entry")
         }
-        s.onexit = function() {
+        s.onexit = function () {
             s.$broadcast("on-exit")
         }
-    }
+    },
 }))
 
-korpApp.directive("textReader", function($compile) {
+korpApp.directive("textReader", function ($compile) {
     return {
         scope: false,
-        link: function(scope, element) {
+        link: function (scope, element) {
             var generatedTemplate =
                 "<div " +
                 scope.corpusObj.readingMode.directive +
@@ -47,7 +47,7 @@ korpApp.directive("textReader", function($compile) {
 
             scope.selectedToken = {}
 
-            scope.wordClick = token => {
+            scope.wordClick = (token) => {
                 scope.selectedToken = token
                 if ($("#sidebar").data()["korpSidebar"]) {
                     $("#sidebar").sidebar(
@@ -62,25 +62,25 @@ korpApp.directive("textReader", function($compile) {
                 }
             }
 
-            scope.$on("on-entry", function() {
+            scope.$on("on-entry", function () {
                 if (scope.data) {
                     scope.wordClick(scope.selectedToken)
                 }
             })
 
-            scope.$on("on-exit", function() {
+            scope.$on("on-exit", function () {
                 scope.$root.sidebar_visible = false
             })
 
             scope.wordClick({})
-        }
+        },
     }
 })
 
 korpApp.directive("standardReadingMode", () => ({
     scope: {
         data: "<",
-        wordClick: "&"
+        wordClick: "&",
     },
     link(scope, elem, attr) {
         function standardInnerElem(document) {
@@ -104,21 +104,21 @@ korpApp.directive("standardReadingMode", () => ({
 
         elem[0].innerHTML = standardOuterElem(scope.data)
 
-        elem[0].addEventListener("click", e => {
+        elem[0].addEventListener("click", (e) => {
             if (e.target.dataset.idx) {
                 const idx = e.target.dataset.idx
                 const token = scope.data.document.tokens[idx]
                 scope.wordClick(["wordClick"])(token)
             }
         })
-    }
+    },
 }))
 
-function prepareData(data, settings) {
-    const newTokens = _prepareData(data.kwic[0].tokens, 0, settings.readingMode.groupElement, false)
-    delete data.kwic[0].tokens
-    data.kwic[0].tokens = newTokens
-    return data.kwic[0]
+function prepareData(kwic, settings) {
+    const newTokens = _prepareData(kwic.tokens, 0, settings.readingMode.groupElement, false)
+    delete kwic.tokens
+    kwic.tokens = newTokens
+    return kwic
 }
 
 /**
@@ -147,7 +147,7 @@ function _prepareData(tokens, start, groupElement, inGroup) {
                         i = i + innerTokens.length - 1
                         token = {
                             tokens: innerTokens,
-                            attrs: {}
+                            attrs: {},
                         }
                         for (let subField in fieldObj[keyName]) {
                             token.attrs[subField] = fieldObj[keyName][subField]

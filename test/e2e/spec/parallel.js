@@ -27,7 +27,7 @@ describe("parallel mode", function() {
     it("should perform a statistics search", () =>
         browser.get(browser.params.url + "?mode=parallel#?stats_reduce=word&corpus=saltnld-sv&parallel_corpora=swe&cqp_swe=%5Bword%20%3D%20%22katt%22%5D&search=cqp%7C%5Bword%20%3D%20%22katt%22%5D&result_tab=2").then(function() {
             browser.sleep(1000)
-            const hits = element(by.css("#myGrid > div.slick-viewport > div > div.ui-widget-content.slick-row.odd > div.slick-cell.l3.r3 > span > span.relStat"))
+            const hits = element(by.css("#myGrid > div.slick-pane.slick-pane-top.slick-pane-left > div.slick-viewport.slick-viewport-top.slick-viewport-left > div > div.ui-widget-content.slick-row.odd > div.slick-cell.l3.r3 > span > span.relStat"))
             expect(hits.getText()).toBe("39,6")
         })
     )

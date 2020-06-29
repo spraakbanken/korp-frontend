@@ -8,7 +8,7 @@ describe("lemgram autocomplete", () =>
             const input = element.all(by.css("#simple_text input")).first()
             input.sendKeys("gå")
             
-            const autocompleteMenu = element(by.css('ul.dropdown-menu'))
+            const autocompleteMenu = element.all(by.css('ul.dropdown-menu')).first()
             expect(autocompleteMenu.isDisplayed()).toBe(true)
         })
     )
@@ -28,7 +28,7 @@ describe("lemgram suggestions", () =>
             expect(input.getText()).toBe("")
             expect(input.getAttribute("placeholder")).toBe("gå (verb)")
             
-            const submitBtn = element(by.id("sendBtn"))
+            const submitBtn = element.all(by.id("sendBtn")).first()
             submitBtn.click()
             
             waitFor(element(by.css("table.kwic")))

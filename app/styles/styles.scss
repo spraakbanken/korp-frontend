@@ -806,11 +806,6 @@ table {
     margin: 0 0;
   }
 }
-.waiting-first {
-  transition : opacity 200ms;
-  opacity : 0.5;
-
-}
 
 .table_scrollarea {
   overflow: auto;
@@ -1127,7 +1122,7 @@ table {
     position: fixed;
     top: 8px;
     overflow-y: auto;
-    max-height: 100%;
+    max-height: calc(100vh - 12px);
   }
   &:empty {
     padding: 0;
@@ -1243,7 +1238,6 @@ a {
 }
 
 #about_body {
-  position: relative;
   &:after {
     content: "";
     z-index: 0;
@@ -1272,16 +1266,11 @@ a {
 }
 
 #login_popup {
-  min-height: 190px;
   * {
     display: block;
   }
   label {
     margin-top: 5px;
-  }
-  .err_msg {
-    font-size: .8em;
-    color: red;
   }
   .password-reset {
     font-size: 0.7em;
@@ -1722,11 +1711,6 @@ h2, h3 {
 }
 body.modal-open {
   overflow: hidden;
-}
-.modal-body {
-  max-height : 71vh;
-  min-height : 300px;
-
 }
 
 .related.modal {
@@ -2726,6 +2710,11 @@ li.active a span .num-to-find {
 
 .or_container .word {
     color: #222222;
+}
+
+.err_msg {
+  font-size: .8em;
+  color: red;
 }
 
 .map-settings-container {

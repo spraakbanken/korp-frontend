@@ -1,162 +1,7 @@
 /** @format */
 const korpApp = angular.module("korpApp")
 
-korpApp.directive("mapCtrl", () => ({
-    controller(
-        $scope,
-        $rootScope,
-        $location,
-        $timeout,
-        searches,
-        nameEntitySearch,
-        markers,
-        nameMapper
-    ) {
-        const s = $scope
-        s.loading = false
-        s.hasResult = false
-        s.aborted = false
-
-        $(document).keyup(function(event) {
-            if (event.keyCode === 27 && s.showMap && s.loading) {
-                if (s.proxy != null) {
-                    s.proxy.abort()
-                }
-                return $timeout(function() {
-                    s.aborted = true
-                    s.loading = false
-                }, 0)
-            }
-        })
-
-        s.$watch(
-            () => $location.search().result_tab,
-            val => $timeout(() => (s.tabVisible = val === 1), 0)
-        )
-
-        s.showMap = $location.search().show_map != null
-        s.$watch(() => $location.search().show_map, function(val) {
-            if (val === s.showMap) {
-                return
-            }
-
-            s.showMap = Boolean(val)
-            if (s.showMap) {
-                const currentCqp = searches.getCqpExpr()
-                const searchCorpora = settings.corpusListing.stringifySelected(true)
-                if (
-                    s.lastSearch &&
-                    (s.lastSearch.cqp == currentCqp || s.lastSearch.corpora == searchCorpora)
-                ) {
-                    s.hasResult = false
-                }
-            }
-        })
-
-        s.activate = function() {
-            $location.search("show_map", true)
-            s.showMap = true
-            const cqpExpr = searches.getCqpExpr()
-            if (cqpExpr) {
-                return nameEntitySearch.request(cqpExpr)
-            }
-        }
-
-        s.center = settings.mapCenter
-
-        s.hoverTemplate = `
-            <div class="hover-info" ng-repeat="(name, values) in names">
-               <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
-               <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>
-               <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
-            </div>`
-        s.markers = {}
-        s.mapSettings = { baseLayer: "Stamen Watercolor" }
-        s.numResults = 0
-        s.showTime = true
-
-        s.$on("map_progress", (event, progress) => (s.progress = Math.round(progress["stats"])))
-
-        s.$on("map_data_available", function(event, cqp, corpora) {
-            s.aborted = false
-            if (s.showMap) {
-                s.proxy = nameEntitySearch.proxy
-                s.lastSearch = { cqp, corpora }
-                s.loading = true
-                updateMapData()
-                s.hasResult = true
-            }
-        })
-
-        s.countCorpora = () => {
-            if (s.proxy && s.proxy.prevParams) {
-                return s.proxy.prevParams.corpus.split(",").length
-            }
-        }
-
-        const fixData = function(data) {
-            const fixedData = {}
-            const abs = data.total.absolute
-            const rel = data.total.relative
-            const names = _.keys(abs)
-            for (let name of names) {
-                fixedData[name] = {
-                    rel_occurrences:
-                        Math.round((data.total.relative[name] + 0.00001) * 1000) / 1000,
-                    abs_occurrences: data.total.absolute[name]
-                }
-            }
-            return fixedData
-        }
-
-        var updateMapData = () =>
-            nameEntitySearch.promise.then(function(data) {
-                if (data.count !== 0) {
-                    const fixedData = fixData(data)
-                    const palette = new Rickshaw.Color.Palette("colorwheel")
-                    markers(fixedData).then(function(markers) {
-                        s.markers = { all: { markers: markers, color: palette.color() } }
-                        s.selectedGroups = ["all"]
-                        s.numResults = _.keys(markers).length
-                        s.loading = false
-                    })
-                } else {
-                    s.selectedGroups = []
-                    s.markers = {}
-                    s.numResults = 0
-                    s.loading = false
-                }
-            })
-
-        const createCqp2Fun = function() {
-            const posTags = settings.mapPosTag.map(posTag => `pos='${posTag}'`)
-            const nameMatching = `(${posTags.join(" | ")})`
-            return name => `[word='${name}' & ${nameMatching}]`
-        }
-        const getCqp2 = createCqp2Fun()
-
-        s.newKWICSearch = function(marker) {
-            const { point } = marker
-            const cl = settings.corpusListing.subsetFactory(s.lastSearch.corpora.split(","))
-            const opts = {
-                start: 0,
-                end: 24,
-                ajaxParams: {
-                    command: "query",
-                    cqp: s.lastSearch.cqp,
-                    cqp2: getCqp2(point.name),
-                    corpus: s.lastSearch.corpora,
-                    show_struct: _.keys(cl.getStructAttrs()),
-                    expand_prequeries: true,
-                    default_within: "sentence"
-                }
-            }
-            $rootScope.kwicTabs.push({ queryParams: opts })
-        }
-    }
-}))
-
-korpApp.directive("newMapCtrl", ($timeout, searches) => ({
+korpApp.directive("mapCtrl", ($timeout, searches) => ({
     controller($scope, $rootScope) {
         const s = $scope
 
@@ -251,7 +96,6 @@ korpApp.directive("newMapCtrl", ($timeout, searches) => ({
                 start: 0,
                 end: 24,
                 ajaxParams: {
-                    command: "query",
                     cqp: queryData.searchCqp,
                     cqp2: `[_.${queryData.label} contains '${[
                         point.name,
@@ -275,7 +119,7 @@ korpApp.directive("newMapCtrl", ($timeout, searches) => ({
                 0
             )
         }
-        
+
         s.closeTab = function(idx, e) {
             e.preventDefault()
             s.mapTabs.splice(idx, 1)

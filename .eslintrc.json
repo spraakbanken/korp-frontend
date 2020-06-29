@@ -51,7 +51,6 @@
         "statisticsService": true,
         "Slick": true,
         "Rickshaw": true,
-        "initTimeGraph": true,
-        "statisticsFormatting": true
+        "initTimeGraph": true
     }
 }

@@ -1,6 +1,7 @@
 /** @format */
 
 import jStorage from "../lib/jstorage"
+import { kwicPagerName, kwicPager } from "./components/pager"
 
 window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.typeahead",
@@ -32,28 +33,30 @@ window.korpApp = angular.module("korpApp", [
     "newsdesk",
     "sbMap",
     "tmh.dynamicLocale",
-    "angular.filter"
+    "angular.filter",
 ])
 
-korpApp.config(tmhDynamicLocaleProvider =>
+korpApp.component(kwicPagerName, kwicPager)
+
+korpApp.config((tmhDynamicLocaleProvider) =>
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
 )
 
-korpApp.config($uibTooltipProvider =>
+korpApp.config(($uibTooltipProvider) =>
     $uibTooltipProvider.options({
-        appendToBody: true
+        appendToBody: true,
     })
 )
 
-korpApp.config(["$locationProvider", $locationProvider => $locationProvider.hashPrefix("")])
+korpApp.config(["$locationProvider", ($locationProvider) => $locationProvider.hashPrefix("")])
 
 korpApp.config([
     "$compileProvider",
-    $compileProvider =>
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/)
+    ($compileProvider) =>
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
-korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout, $q) {
+korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
     let loginNeededFor
     const s = $rootScope
     s._settings = settings
@@ -67,8 +70,10 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
 
     s.globalFilterDef = $q.defer()
 
-    s.locationSearch = function() {
-        return $location.search(...arguments)
+    s.locationSearch = function () {
+        const search = $location.search(...arguments)
+        $location.replace()
+        return search
     }
 
     s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
@@ -77,8 +82,7 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
 
     s._loc = $location
 
-    s.$watch("_loc.search()", function() {
-        c.log("loc.search() change", $location.search())
+    s.$watch("_loc.search()", function () {
         _.defer(() => (window.onHashChange || _.noop)())
 
         return tmhDynamicLocale.set($location.search().lang || "sv")
@@ -89,16 +93,47 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
     $rootScope.graphTabs = []
     $rootScope.mapTabs = []
     $rootScope.textTabs = []
-    let isInit = true
 
     if ($location.search().corpus) {
         loginNeededFor = []
+        const initialCorpora = []
+
+        function findInFolder(folder) {
+            // checks if folder is an actual folder of corpora and recursively
+            // collects all corpora in this folder and subfolders
+            const corpusIds = []
+            if (folder && folder.contents) {
+                for (let corpusId of folder.contents) {
+                    corpusIds.push(corpusId)
+                }
+                for (let subFolderId of Object.keys(folder)) {
+                    for (let corpusId of findInFolder(folder[subFolderId])) {
+                        corpusIds.push(corpusId)
+                    }
+                }
+            }
+            return corpusIds
+        }
+
         for (let corpus of $location.search().corpus.split(",")) {
             const corpusObj = settings.corpusListing.struct[corpus]
+            if (corpusObj) {
+                initialCorpora.push(corpusObj)
+            } else {
+                // corpus does not correspond to a corpus ID, check if it is a folder
+                for (let folderCorpus of findInFolder(settings.corporafolders[corpus])) {
+                    if (settings.corpusListing.struct[folderCorpus]) {
+                        initialCorpora.push(settings.corpusListing.struct[folderCorpus])
+                    }
+                }
+            }
+        }
+
+        for (let corpusObj of initialCorpora) {
             if (corpusObj.limitedAccess) {
                 if (
                     _.isEmpty(authenticationProxy.loginObj) ||
-                    !authenticationProxy.loginObj.credentials.includes(corpus.toUpperCase())
+                    !authenticationProxy.loginObj.credentials.includes(corpusObj.id.toUpperCase())
                 ) {
                     loginNeededFor.push(corpusObj)
                 }
@@ -116,7 +151,7 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
         }
     }
 
-    s.restorePreLoginState = function() {
+    s.restorePreLoginState = function () {
         if (s.savedState) {
             for (let key in s.savedState) {
                 const val = s.savedState[key]
@@ -133,8 +168,7 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
     }
 
     s.searchDisabled = false
-    s.$on("corpuschooserchange", function(event, corpora) {
-        c.log("corpuschooserchange", corpora)
+    s.$on("corpuschooserchange", function (event, corpora) {
         settings.corpusListing.select(corpora)
         const nonprotected = _.map(settings.corpusListing.getNonProtected(), "id")
         if (
@@ -145,18 +179,15 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
         } else {
             $location.search("corpus", null)
         }
-
-        isInit = false
-
         s.searchDisabled = settings.corpusListing.selected.length === 0
     })
 
-    searches.infoDef.then(function() {
+    searches.infoDef.then(function () {
         let { corpus } = $location.search()
         let currentCorpora = []
         if (corpus) {
             currentCorpora = _.flatten(
-                _.map(corpus.split(","), val =>
+                _.map(corpus.split(","), (val) =>
                     getAllCorporaInFolders(settings.corporafolders, val)
                 )
             )
@@ -181,10 +212,10 @@ korpApp.run(function($rootScope, $location, utils, searches, tmhDynamicLocale, $
     })
 })
 
-korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
+korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     const s = $scope
 
-    s.logoClick = function() {
+    s.logoClick = function () {
         window.location = $scope.getUrl(currentMode)
         window.location.reload()
     }
@@ -197,7 +228,7 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
         s.show_modal = "login"
     }
 
-    s.logout = function() {
+    s.logout = function () {
         let corpus
         authenticationProxy.loginObj = {}
         jStorage.deleteKey("creds")
@@ -206,9 +237,7 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
         for (let corpusObj of settings.corpusListing.corpora) {
             corpus = corpusObj.id
             if (corpusObj.limitedAccess) {
-                $(`#hpcorpus_${corpus}`)
-                    .closest(".boxdiv")
-                    .addClass("disabled")
+                $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled")
             }
         }
         $("#corpusbox").corpusChooser("updateAllStates")
@@ -232,7 +261,7 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
 
     s.modes = _.filter(settings.modeConfig)
     if (!isLab) {
-        s.modes = _.filter(settings.modeConfig, item => item.labOnly !== true)
+        s.modes = _.filter(settings.modeConfig, (item) => item.labOnly !== true)
     }
 
     s.visible = s.modes.slice(0, N_VISIBLE)
@@ -251,8 +280,8 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
         }
     }
 
-    s.getUrl = function(modeId) {
-        const langParam = `#?lang=${s.$root.lang}`
+    s.getUrl = function (modeId) {
+        const langParam = settings.defaultLanguage === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
         if (modeId === "default") {
             return location.pathname + langParam
         }
@@ -267,38 +296,39 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
             key: "display",
             scope_name: "show_modal",
             post_change(val) {
-                c.log("post change", val)
                 if (val) {
                     showModal(val)
                 } else {
-                    c.log("post change modal", modal)
                     if (modal != null) {
                         modal.close()
                     }
                     modal = null
                 }
-            }
-        }
+            },
+        },
     ])
 
-    const closeModals = function() {
+    const closeModals = function () {
         s.login_err = false
         s.show_modal = false
     }
 
-    var showModal = function(key) {
+    var showModal = function (key) {
         const tmpl = { about: require("../markup/about.html"), login: "login_modal" }[key]
         const params = {
             templateUrl: tmpl,
             scope: s,
-            windowClass: key
+            windowClass: key,
         }
         if (key === "login") {
             params.size = "sm"
         }
         modal = $uibModal.open(params)
 
-        modal.result.then(() => closeModals(), () => closeModals())
+        modal.result.then(
+            () => closeModals(),
+            () => closeModals()
+        )
     }
 
     s.clickX = () => closeModals()
@@ -310,20 +340,20 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
         s.loggedIn = true
         s.username = authenticationProxy.loginObj.name
     }
-    s.loginSubmit = function(usr, pass, saveLogin) {
+    s.loginSubmit = function (usr, pass, saveLogin) {
         s.login_err = false
         authenticationProxy
             .makeRequest(usr, pass, saveLogin)
-            .done(function(data) {
+            .done(function () {
                 util.setLogin()
-                safeApply(s, function() {
+                safeApply(s, function () {
                     s.show_modal = null
                     s.restorePreLoginState()
                     s.loggedIn = true
                     s.username = usr
                 })
             })
-            .fail(function() {
+            .fail(function () {
                 c.log("login fail")
                 safeApply(s, () => {
                     s.login_err = true
@@ -332,4 +362,4 @@ korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
     }
 })
 
-korpApp.filter("trust", $sce => input => $sce.trustAsHtml(input))
+korpApp.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))

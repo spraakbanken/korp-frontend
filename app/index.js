@@ -94,7 +94,6 @@ _.map(commonSettings, function(v, k) {
   window[k] = v
 })
 
-require("./config/statistics_config.js")
 require("./scripts/statistics.js")
 require("./scripts/cqp_parser/CQPParser.js")
 require("./scripts/cqp_parser/cqp.js")

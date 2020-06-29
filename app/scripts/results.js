@@ -1,4 +1,5 @@
 /** @format */
+import statisticsFormatting from "../config/statistics_config.js"
 const korpFailImg = require("../img/korp_fail.svg")
 
 class BaseResults {
@@ -46,7 +47,6 @@ class BaseResults {
             return false
         } else {
             return safeApply(this.s, () => {
-                c.log("firstResultDef.resolve")
                 this.firstResultDef.resolve()
                 this.hasData = true
             })
@@ -85,8 +85,8 @@ class BaseResults {
     onentry() {
         this.s.$root.jsonUrl = null
         this.firstResultDef.promise.then(() => {
-            console.log("@proxy?.prevUrl", this.proxy && this.proxy.prevUrl)
-            this.s.$root.jsonUrl = this.proxy && this.proxy.prevUrl
+            const prevUrl = this.proxy && this.proxy.prevUrl
+            this.s.$apply($scope => ($scope.$root.jsonUrl = prevUrl))
         })
     }
 
@@ -105,7 +105,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
         this.proxy = new model.KWICProxy()
         window.kwicProxy = this.proxy
-        this.current_page = locationSearch().page || 0
+
         this.tabindex = 0
 
         this.s = scope
@@ -159,26 +159,25 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     selectWord(word, scope) {
         const obj = scope.wd
-        if (obj.dephead == null) {
-            scope.selectionManager.select(word, null)
-            safeApply(this.s.$root, s => (s.$root.word_selected = word))
-            return
-        }
+        let aux = null
+        if (obj.dephead != null) {
+            const i = Number(obj.dephead)
 
-        const i = Number(obj.dephead)
-
-        const paragraph = word.closest(".sentence").find(".word")
-        let sent_start = 0
-        const querySentStart = ".open_sentence"
-        if (word.is(querySentStart)) {
-            sent_start = paragraph.index(word)
-        } else {
-            const l = paragraph.filter((__, item) => $(item).is(word) || $(item).is(querySentStart))
-            sent_start = paragraph.index(l.eq(l.index(word) - 1))
+            const paragraph = word.closest(".sentence").find(".word")
+            let sent_start = 0
+            const querySentStart = ".open_sentence"
+            if (word.is(querySentStart)) {
+                sent_start = paragraph.index(word)
+            } else {
+                const l = paragraph.filter(
+                    (__, item) => $(item).is(word) || $(item).is(querySentStart)
+                )
+                sent_start = paragraph.index(l.eq(l.index(word) - 1))
+            }
+            aux = $(paragraph.get(sent_start + i - 1))
         }
-        const aux = $(paragraph.get(sent_start + i - 1))
         scope.selectionManager.select(word, aux)
-        return safeApply(this.s.$root, s => (s.$root.word_selected = word))
+        safeApply(this.s.$root, s => (s.$root.word_selected = word))
     }
 
     resetView() {
@@ -195,7 +194,6 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     onentry() {
         super.onentry()
-        c.log("onentry kwic")
         this.s.$root.sidebar_visible = true
 
         this.$result.find(".token_selected").click()
@@ -204,7 +202,6 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     onexit() {
         super.onexit()
-        c.log("onexit kwic")
         this.s.$root.sidebar_visible = false
     }
 
@@ -222,17 +219,15 @@ view.KWICResults = class KWICResults extends BaseResults {
         switch (event.which) {
             case 78: // n
                 safeApply(this.s, () => {
-                    this.s.$parent.page++
-                    this.s.$parent.pageObj.pager = this.s.$parent.page + 1
+                    this.s.$parent.pageChange(this.s.$parent.page + 1)
                 })
                 return false
             case 70: // f
-                if (this.current_page === 0) {
+                if (this.s.$parent.page === 0) {
                     return
                 }
                 safeApply(this.s, () => {
-                    this.s.$parent.page--
-                    this.s.$parent.pageObj.pager = this.s.$parent.page + 1
+                    this.s.$parent.pageChange(this.s.$parent.page - 1)
                 })
                 return false
         }
@@ -272,7 +267,6 @@ view.KWICResults = class KWICResults extends BaseResults {
     }
 
     renderCompleteResult(data) {
-        this.current_page = locationSearch().page || 0
         safeApply(this.s, () => {
             this.hidePreloader()
             this.s.hits = data.hits
@@ -310,16 +304,6 @@ view.KWICResults = class KWICResults extends BaseResults {
             } else {
                 $scope.setKwicData(data)
             }
-
-            if (this.s.$parent.pageObj.pager === 1) {
-                this.s.$parent.page = 0
-            }
-
-            setTimeout(() => {
-                safeApply(this.s, () => {
-                    this.s.gotFirstKwic = true
-                })
-            }, 0)
         })
 
         if (currentMode === "parallel" && !isReading) {
@@ -443,7 +427,6 @@ view.KWICResults = class KWICResults extends BaseResults {
         }
 
         opts.ajaxParams = {
-            command: "query",
             corpus: settings.corpusListing.stringifySelected(),
             cqp: cqp || this.proxy.prevCQP,
             query_data: this.proxy.queryData,
@@ -457,10 +440,8 @@ view.KWICResults = class KWICResults extends BaseResults {
     }
 
     makeRequest(cqp, isPaging) {
-        c.log("kwicResults.makeRequest", cqp, isPaging)
-
         const page = Number(locationSearch().page) || 0
-        this.s.$parent.pageObj.pager = page + 1
+        this.s.$parent.page = page
 
         this.showPreloader()
         this.s.aborted = false
@@ -668,11 +649,8 @@ view.KWICResults = class KWICResults extends BaseResults {
 
 view.ExampleResults = class ExampleResults extends view.KWICResults {
     constructor(tabSelector, resultSelector, scope) {
-        c.log("ExampleResults constructor", tabSelector, resultSelector, scope)
         super(tabSelector, resultSelector, scope)
         this.proxy = new model.KWICProxy()
-
-        this.current_page = 0
         if (this.s.$parent.kwicTab.queryParams) {
             this.makeRequest().then(() => {
                 this.onentry()
@@ -688,8 +666,6 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
     }
 
     makeRequest() {
-        let avoidContext, preferredContext
-        c.log("ExampleResults.makeRequest()", this.current_page)
         const items_per_page = parseInt(locationSearch().hpp || 25)
         const opts = this.s.$parent.kwicTab.queryParams
 
@@ -697,12 +673,13 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         // example tab cannot handle incremental = true
         opts.ajaxParams.incremental = false
 
-        opts.ajaxParams.start = this.current_page * items_per_page
+        opts.ajaxParams.start = this.s.$parent.page * items_per_page
         opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1
 
         const prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "source")
         _.extend(opts.ajaxParams, prev)
 
+        let avoidContext, preferredContext
         if (this.isReadingMode()) {
             preferredContext = settings.defaultReadingContext
             avoidContext = settings.defaultOverviewContext
@@ -711,12 +688,16 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
             avoidContext = settings.defaultReadingContext
         }
 
-        const context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
+        const context = settings.corpusListing.getContextQueryStringFromCorpusId(
+            (prev.corpus || "").split(","),
+            preferredContext,
+            avoidContext
+        )
         _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
         this.showPreloader()
-
-        const progress = opts.command === "query" ? $.proxy(this.onProgress, this) : $.noop
+        const progress =
+            opts.command === "relations_sentences" ? $.noop : $.proxy(this.onProgress, this)
         const def = this.proxy.makeRequest(opts, null, progress, data => {
             this.renderResult(data, opts.cqp)
             this.renderCompleteResult(data)
@@ -735,12 +716,6 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
     renderResult(data) {
         super.renderResult(data)
         this.s.setupReadingWatch()
-    }
-
-    renderCompleteResult(data) {
-        const curr = this.current_page
-        super.renderCompleteResult(data)
-        this.current_page = curr
     }
 }
 
@@ -761,6 +736,12 @@ view.LemgramResults = class LemgramResults extends BaseResults {
     }
 
     makeRequest(word, type) {
+        // if a global filter is set, do not generate a word picture
+        if (this.s.$root.globalFilter) {
+            this.hasData = false
+            return
+        }
+
         if (this.proxy.hasPending()) {
             this.ignoreAbort = true
         } else {
@@ -950,12 +931,10 @@ view.LemgramResults = class LemgramResults extends BaseResults {
     }
 
     onentry() {
-        c.log("word pic onentry")
         super.onentry()
     }
 
     onexit() {
-        c.log("word pic onexit")
         super.onexit()
         clearTimeout(self.timeout)
         safeApply(this.s, () => {
@@ -970,9 +949,8 @@ view.LemgramResults = class LemgramResults extends BaseResults {
 
 view.StatsResults = class StatsResults extends BaseResults {
     constructor(resultSelector, tabSelector, scope) {
-        let self
         super(resultSelector, tabSelector, scope)
-        c.log("StatsResults constr", (self = this))
+        const self = this
         this.tabindex = 2
         this.gridData = null
 
@@ -998,17 +976,25 @@ view.StatsResults = class StatsResults extends BaseResults {
                     break
                 }
             }
-            const cqp2 = statisticsFormatting.getCqp(
-                rowData.statsValues,
-                this.searchParams.ignoreCase
-            )
+            let cqp2 = null
+            // isPhraseLevelDisjunction: used for constructing cqp like: ([] | [])
+            if (rowData.isPhraseLevelDisjunction) {
+                let tokens = rowData.statsValues.map(vals =>
+                    statisticsFormatting.getCqp(vals, this.searchParams.ignoreCase)
+                )
+                cqp2 = tokens.join(" | ")
+            } else {
+                cqp2 = statisticsFormatting.getCqp(
+                    rowData.statsValues,
+                    this.searchParams.ignoreCase
+                )
+            }
             const { corpora } = this.searchParams
 
             const opts = {}
             opts.ajaxParams = {
                 start: 0,
                 end: 24,
-                command: "query",
                 corpus: corpora.join(","),
                 cqp: self.proxy.prevParams.cqp,
                 cqp2,
@@ -1094,7 +1080,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         const selType = $("#kindOfFormat option:selected").val()
         let dataDelimiter = ";"
         if (selType === "tsv") {
-            dataDelimiter = "   "
+            dataDelimiter = "\t"
         }
         const cl = settings.corpusListing.subsetFactory(this.searchParams.corpora)
 
@@ -1156,8 +1142,6 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         this.s.hasResult = true
 
-        c.log("StatsResults makeRequest", cqp)
-
         if (currentMode === "parallel") {
             cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
         }
@@ -1172,17 +1156,17 @@ view.StatsResults = class StatsResults extends BaseResults {
         this.showPreloader()
         this.proxy
             .makeRequest(cqp, (...args) => this.onProgress(...(args || [])))
-            .done((...args) => {
-                const [data, columns, searchParams] = args[0]
-                safeApply(this.s, () => {
-                    return this.hidePreloader()
-                })
-                this.data = data
-                this.searchParams = searchParams
-                return this.renderResult(columns, data)
-            })
-            .fail(
-                function(textStatus, err) {
+            .then(
+                (...args) => {
+                    const [data, columns, searchParams] = args[0]
+                    safeApply(this.s, () => {
+                        return this.hidePreloader()
+                    })
+                    this.data = data
+                    this.searchParams = searchParams
+                    return this.renderResult(columns, data)
+                },
+                (textStatus, err) => {
                     c.log("fail", arguments)
                     c.log(
                         "stats fail",
@@ -1201,7 +1185,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                             return this.resultError(err)
                         }
                     })
-                }.bind(this)
+                }
             )
     }
 
@@ -1228,6 +1212,10 @@ view.StatsResults = class StatsResults extends BaseResults {
     }
 
     renderResult(columns, data) {
+        if (this.isActive()) {
+            this.s.$root.jsonUrl = this.proxy.prevUrl
+        }
+
         this.showGenerateExport()
 
         const refreshHeaders = () =>
@@ -1259,7 +1247,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         const grid = new Slick.Grid($("#myGrid"), data, columns, {
             enableCellNavigation: false,
             enableColumnReorder: false,
-            forceFitColumns: true
+            forceFitColumns: false
         })
 
         grid.setSelectionModel(new Slick.RowSelectionModel({ selectActiveRow: false }))
@@ -1461,6 +1449,10 @@ view.StatsResults = class StatsResults extends BaseResults {
     }
 
     onentry() {
+        // workaround for bug in slickgrid
+        // slickgrid should add this automatically, but doesn't
+        $("#myGrid").css("position", "relative")
+
         super.onentry()
         $(window).trigger("resize")
     }
@@ -1499,18 +1491,14 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         this.checkZoomLevel(from, to, true)
 
-        c.log("adding chart listener", this.$result)
-
         $(".chart", this.$result).on("click", event => {
             const target = $(".chart", this.$result)
             const val = $(".detail .x_label > span", target).data("val")
             let cqp = $(".detail .item.active > span", target).data("cqp")
-            c.log("chart click", cqp, target, this.s.data.subcqps, this.s.data.cqp)
 
             if (cqp) {
                 let timecqp
                 cqp = CQP.expandOperators(decodeURIComponent(cqp))
-                c.log("chart click cqp", cqp)
                 const m = moment(val * 1000)
 
                 const datefrom = moment(m)
@@ -1552,7 +1540,6 @@ view.GraphResults = class GraphResults extends BaseResults {
                 opts.ajaxParams = {
                     start: 0,
                     end: 24,
-                    command: "query",
                     corpus: this.s.data.corpusListing.stringifySelected(),
                     cqp: this.s.data.cqp,
                     cqp2: timecqp,
@@ -1809,7 +1796,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         return $(".exportTimeStatsSection .btn.export", this.$result).click(() => {
             const selVal = $(".timeKindOfData option:selected", this.$result).val()
             const selType = $(".timeKindOfFormat option:selected", this.$result).val()
-            const dataDelimiter = selType === "TSV" ? "%09" : ";"
+            const dataDelimiter = selType === "TSV" ? "\t" : ";"
 
             const header = [util.getLocaleString("stats_hit")]
 
@@ -1836,6 +1823,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             const csv = new CSV(output, {
                 delimiter: dataDelimiter
             })
+
             const csvstr = csv.encode()
             const blob = new Blob([csvstr], { type: `text/${selType}` })
             const csvUrl = URL.createObjectURL(blob)
@@ -1843,8 +1831,11 @@ view.GraphResults = class GraphResults extends BaseResults {
             const a = document.createElement("a")
             a.href = csvUrl
             a.download = `export.${selType}`
+            a.style.display = "none"
+            document.body.appendChild(a)
             a.click()
-            return window.URL.revokeObjectURL(csvUrl)
+            document.body.removeChild(a)
+            window.URL.revokeObjectURL(csvUrl)
         })
     }
 
@@ -1979,9 +1970,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         for (let seriesIndex = 0; seriesIndex < this.graph.series.length; seriesIndex++) {
             const seriesObj = this.graph.series[seriesIndex]
             const first = newSeries[seriesIndex].data[0].x
-            c.log("first", first, moment.unix(first).format())
             const last = _.last(newSeries[seriesIndex].data).x
-            c.log("last", moment.unix(last).format())
             let startSplice = false
             let from = 0
             let n_elems = seriesObj.data.length + newSeries[seriesIndex].data.length
@@ -1991,7 +1980,6 @@ view.GraphResults = class GraphResults extends BaseResults {
                 if (x >= first && !startSplice) {
                     startSplice = true
                     from = i
-                    c.log("from", from, moment.unix(seriesObj.data[from].x).format())
                     j = 0
                 }
                 if (startSplice) {
@@ -2010,10 +1998,8 @@ view.GraphResults = class GraphResults extends BaseResults {
 
     previewPanStop() {
         const visibleData = this.graph.stackData()
-        c.log("visibleData", visibleData)
 
         const count = _.countBy(visibleData[0], coor => coor.zoom)
-        c.log("count", count)
 
         const grouped = _.groupBy(visibleData[0], "zoom")
 
@@ -2030,7 +2016,6 @@ view.GraphResults = class GraphResults extends BaseResults {
     }
 
     makeRequest(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
-        c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal)
         this.s.loading = true
         this.showPreloader()
         const currentZoom = this.zoom
@@ -2046,8 +2031,6 @@ view.GraphResults = class GraphResults extends BaseResults {
             })
             .done(data => {
                 let series
-                c.log("graph data", data)
-                c.log("graph cqp", cqp)
 
                 const done = () => {
                     this.hidePreloader()

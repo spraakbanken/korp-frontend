@@ -1,33 +1,24 @@
 /** @format */
+import statisticsFormatting from "../config/statistics_config.js"
 const korpApp = angular.module("korpApp")
 
-korpApp.controller(
-    "resultContainerCtrl",
-    ($scope, searches, $location) => ($scope.searches = searches)
-)
+korpApp.controller("resultContainerCtrl", ($scope, searches) => ($scope.searches = searches))
 
 class KwicCtrl {
     static initClass() {
         this.$inject = ["$scope", "$timeout", "utils", "$location", "kwicDownload"]
     }
     setupHash() {
-        c.log("setupHash", this.scope.$id)
         return this.utils.setupHash(this.scope, [
             {
                 key: "page",
-                post_change: () => {
-                    c.log("post_change page hash", this.scope.page)
-                    this.scope.pageObj.pager = (this.scope.page || 0) + 1
-                    return c.log("@scope.pageObj.pager", this.scope.pageObj.pager)
-                },
                 val_in: Number
             }
         ])
     }
 
     initPage() {
-        this.scope.pageObj = { pager: Number(this.location.search().page) + 1 || 1 }
-        this.scope.page = this.scope.pageObj.pager - 1
+        this.scope.page = Number(this.location.search().page) || 0
     }
     constructor(scope, timeout, utils, location, kwicDownload) {
         this.scope = scope
@@ -36,12 +27,9 @@ class KwicCtrl {
         this.location = location
         this.kwicDownload = kwicDownload
         const s = this.scope
-        const $scope = this.scope
-        c.log("kwicCtrl init", this.scope.$parent)
         const $location = this.location
 
         s.onexit = function() {
-            c.log("onexit")
             s.$root.sidebar_visible = false
         }
 
@@ -49,33 +37,15 @@ class KwicCtrl {
 
         this.initPage()
 
-        s.pageChange = function($event, page) {
-            c.log("pageChange", arguments)
-            $event.stopPropagation()
-            s.page = page - 1
+        s.pageChange = function(page) {
+            s.page = page
         }
 
         this.setupHash()
-        s.onPageInput = function($event, page, numPages) {
-            if ($event.keyCode === 13) {
-                if (page > numPages) {
-                    page = numPages
-                }
-                if (page <= 0) {
-                    page = "1"
-                }
-                s.gotoPage = page
-                s.pageObj.pager = page
-                s.page = Number(page) - 1
-            }
-        }
 
         const readingChange = function() {
             if (s.instance && s.instance.getProxy().pendingRequests.length) {
-                window.pending = s.instance.getProxy().pendingRequests
-
                 return $.when(...(s.instance.getProxy().pendingRequests || [])).then(function() {
-                    c.log("readingchange makeRequest")
                     return s.instance.makeRequest()
                 })
             }
@@ -85,8 +55,7 @@ class KwicCtrl {
             return this.utils.setupHash(s, [
                 {
                     key: "reading_mode",
-                    post_change: isReading => {
-                        c.log("change reading mode", isReading)
+                    post_change: () => {
                         return readingChange()
                     }
                 }
@@ -95,7 +64,6 @@ class KwicCtrl {
 
         // used by example kwic
         s.setupReadingWatch = _.once(function() {
-            c.log("setupReadingWatch")
             let init = true
             return s.$watch("reading_mode", function() {
                 if (!init) {
@@ -111,7 +79,6 @@ class KwicCtrl {
         }
 
         s.hitspictureClick = function(pageNumber) {
-            c.log("pageNumber", pageNumber)
             s.page = Number(pageNumber)
         }
 
@@ -150,7 +117,7 @@ class KwicCtrl {
                         }
                     }
 
-                    if (matchSentenceStart < i && i < matchSentenceEnd) {
+                    if (matchSentenceStart <= i && i <= matchSentenceEnd) {
                         _.extend(wd, { _matchSentence: true })
                     }
                     if (punctArray.includes(wd.word)) {
@@ -208,6 +175,18 @@ class KwicCtrl {
 
                 output.push(hitContext)
                 if (hitContext.aligned) {
+                    // just check for sentence opened, no other structs
+                    const alignedTokens = Object.values(hitContext.aligned)[0]
+                    for (let wd of alignedTokens) {
+                        if (wd.structs && wd.structs.open) {
+                            for (let structItem of wd.structs.open) {
+                                if (_.keys(structItem)[0] == "sentence") {
+                                    wd._open_sentence = true
+                                }
+                            }
+                        }
+                    }
+
                     const [corpus_aligned, tokens] = _.toPairs(hitContext.aligned)[0]
                     output.push({
                         tokens,
@@ -229,24 +208,21 @@ class KwicCtrl {
             let decr = start
             let incr = end
             while (decr >= 0) {
-                if (
-                    (
-                        (hitContext.tokens[decr].structs && hitContext.tokens[decr].structs.open) ||
-                        []
-                    ).includes("sentence")
-                ) {
+                const token = hitContext.tokens[decr]
+                const sentenceOpen = _.filter(
+                    (token.structs && token.structs.open) || [],
+                    attr => attr.sentence
+                )
+                if (sentenceOpen.length > 0) {
                     span[0] = decr
                     break
                 }
                 decr--
             }
             while (incr < hitContext.tokens.length) {
-                if (
-                    (
-                        (hitContext.tokens[incr].structs && hitContext.tokens[incr].structs.open) ||
-                        []
-                    ).includes("sentence")
-                ) {
+                const token = hitContext.tokens[incr]
+                const closed = (token.structs && token.structs.close) || []
+                if (closed.includes("sentence")) {
                     span[1] = incr
                     break
                 }
@@ -270,7 +246,6 @@ class KwicCtrl {
             s.kwic = massageData(data.kwic)
         }
 
-        c.log("selectionManager")
         s.selectionManager = new util.SelectionManager()
 
         s.selectLeft = function(sentence) {
@@ -297,7 +272,10 @@ class KwicCtrl {
             return sentence.tokens.slice(from, len)
         }
 
-        s.$watch(() => $location.search().hpp, hpp => (s.hitsPerPage = hpp || 25))
+        s.$watch(
+            () => $location.search().hpp,
+            hpp => (s.hitsPerPage = hpp || 25)
+        )
 
         s.download = {
             options: [
@@ -347,17 +325,12 @@ class ExampleCtrl extends KwicCtrl {
         s.newDynamicTab()
 
         s.hitspictureClick = function(pageNumber) {
-            s.page = Number(pageNumber)
-            s.pageObj.pager = Number(pageNumber + 1)
-            return s.pageChange(null, pageNumber + 1)
+            s.pageChange(Number(pageNumber))
         }
 
-        s.pageChange = function($event, page) {
-            if ($event != null) {
-                $event.stopPropagation()
-            }
-            s.instance.current_page = page - 1
-            return s.instance.makeRequest()
+        s.pageChange = function(page) {
+            s.page = page
+            s.instance.makeRequest()
         }
 
         s.exampleReadingMode = s.kwicTab.readingMode
@@ -367,8 +340,6 @@ class ExampleCtrl extends KwicCtrl {
             s.instance.centerScrollbar()
 
             if (s.instance && s.instance.getProxy().pendingRequests.length) {
-                window.pending = s.instance.getProxy().pendingRequests
-
                 return $.when(...(s.instance.getProxy().pendingRequests || [])).then(() =>
                     s.instance.makeRequest()
                 )
@@ -383,7 +354,6 @@ class ExampleCtrl extends KwicCtrl {
     }
 
     initPage() {
-        this.scope.pageObj = { pager: 0 }
         this.scope.page = 0
     }
     setupHash() {}
@@ -393,14 +363,21 @@ ExampleCtrl.initClass()
 korpApp.directive("exampleCtrl", () => ({ controller: ExampleCtrl }))
 
 korpApp.directive("statsResultCtrl", () => ({
-    controller($scope, utils, $location, backend, searches, $rootScope) {
+    controller($scope, $location, backend, searches, $rootScope) {
         const s = $scope
         s.loading = false
         s.progress = 0
+        s.noRowsError = false
 
-        s.$watch(() => $location.search().hide_stats, val => (s.showStatistics = val == null))
+        s.$watch(
+            () => $location.search().hide_stats,
+            val => (s.showStatistics = val == null)
+        )
 
-        s.$watch(() => $location.search().in_order, val => (s.inOrder = val == null))
+        s.$watch(
+            () => $location.search().in_order,
+            val => (s.inOrder = val == null)
+        )
 
         s.shouldSearch = () => s.showStatistics && s.inOrder
 
@@ -449,10 +426,18 @@ korpApp.directive("statsResultCtrl", () => ({
         }
 
         s.showMap = function() {
+            const selectedRows = s.instance.getSelectedRows()
+
+            if (selectedRows.length == 0) {
+                s.noRowsError = true
+                return
+            }
+            s.noRowsError = false
+
             const cqpExpr = CQP.expandOperators(searches.getCqpExpr())
 
             const cqpExprs = {}
-            for (let rowIx of s.instance.getSelectedRows()) {
+            for (let rowIx of selectedRows) {
                 if (rowIx === 0) {
                     continue
                 }
@@ -482,12 +467,14 @@ korpApp.directive("statsResultCtrl", () => ({
 }))
 
 korpApp.directive("wordpicCtrl", () => ({
-    controller($scope, $rootScope, $location, utils, searches) {
-        console.log("wordpicCtrl", $scope)
+    controller($scope, $rootScope, $location, searches) {
         $scope.loading = false
         $scope.progress = 0
         $scope.word_pic = $location.search().word_pic != null
-        $scope.$watch(() => $location.search().word_pic, val => ($scope.word_pic = Boolean(val)))
+        $scope.$watch(
+            () => $location.search().word_pic,
+            val => ($scope.word_pic = Boolean(val))
+        )
 
         $scope.activate = function() {
             $location.search("word_pic", true)
@@ -573,23 +560,20 @@ korpApp.directive("wordpicCtrl", () => ({
         }
 
         $scope.isLemgram = word => {
-            console.log("isLemgram", word)
             util.isLemgramId(word)
         }
 
         $scope.renderTable = obj => obj instanceof Array
 
-        $scope.parseLemgram = function(row, allLemgrams) {
+        $scope.parseLemgram = function(row) {
             const set = row[row.show_rel].split("|")
             const lemgram = set[0]
 
-            const word = _.trim(lemgram)
             let infixIndex = ""
             let concept = lemgram
             infixIndex = ""
             let type = "-"
 
-            const hasHomograph = allLemgrams.includes(lemgram.slice(0, -1))
             const prefix = row.depextra
 
             if (util.isLemgramId(lemgram)) {
@@ -634,7 +618,6 @@ korpApp.directive("wordpicCtrl", () => ({
         }
 
         $scope.renderResultHeader = function(parentIndex, section, wordClass, index) {
-            const headers = settings.wordPictureConf[wordClass][parentIndex]
             return section[index] && section[index].table
         }
 
@@ -685,8 +668,6 @@ korpApp.directive("compareCtrl", () => ({
         return s.promise.then(
             function(...args) {
                 const [tables, max, cmp1, cmp2, reduce] = args[0]
-                console.log("args", args)
-                const xhr = args[1]
                 s.loading = false
 
                 s.tables = tables
@@ -704,7 +685,6 @@ korpApp.directive("compareCtrl", () => ({
                 })
 
                 s.max = max
-                console.log("s.max", s.max)
 
                 s.cmp1 = cmp1
                 s.cmp2 = cmp2
@@ -788,7 +768,6 @@ korpApp.directive("compareCtrl", () => ({
                         start: 0,
                         end: 24,
                         ajaxParams: {
-                            command: "query",
                             cqp: cmp.cqp,
                             cqp2: cqp,
                             corpus: cl.stringifySelected(),

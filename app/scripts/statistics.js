@@ -1,4 +1,5 @@
 /** @format */
+import statisticsFormatting from "../config/statistics_config.js"
 const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function() {
