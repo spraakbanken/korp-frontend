@@ -173,8 +173,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
         const nonprotected = _.map(settings.corpusListing.getNonProtected(), "id")
         if (
             corpora.length &&
-            _.intersection(corpora, nonprotected).length !== nonprotected.length &&
-            !_.isEmpty(_.xor(corpora, settings.expandedPreselectedCorpora))
+            _.intersection(corpora, nonprotected).length !== nonprotected.length
         ) {
             $location.search("corpus", corpora.join(","))
         } else {
@@ -206,7 +205,6 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
             }
 
             settings.preselectedCorpora = currentCorpora
-            settings.expandedPreselectedCorpora = currentCorpora
         }
 
         settings.corpusListing.select(currentCorpora)
