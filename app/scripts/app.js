@@ -133,7 +133,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
             if (corpusObj.limitedAccess) {
                 if (
                     _.isEmpty(authenticationProxy.loginObj) ||
-                    !authenticationProxy.loginObj.credentials.includes(corpus.toUpperCase())
+                    !authenticationProxy.loginObj.credentials.includes(corpusObj.id.toUpperCase())
                 ) {
                     loginNeededFor.push(corpusObj)
                 }
