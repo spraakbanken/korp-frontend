@@ -19,7 +19,7 @@
         "jquery-flot": "0.8.3",
         "json3": "3.3.2",
         "jstorage": "andris9/jStorage#0.4.12",
-        "lodash": "^4.17.15",
+        "lodash": "^4.17.19",
         "moment": "2.20.1",
         "raphael": "2.2.7",
         "rickshaw": "1.6.4",
