@@ -72,7 +72,7 @@
     "scripts": {
         "pretest": "yarn run testserver",
         "test": "yarn run test:karma && yarn run test:e2e || :",
-        "posttest": "pkill -f webpack-dev-server",
+        "posttest": "pkill -f node_modules/.bin/webpack-dev-server",
         "protractor": "wait-on http://localhost:9111 && protractor test/e2e/conf_e2e.js",
         "test:karma": "karma start test/karma/karma.conf.js",
         "pretest:e2e": "node_modules/protractor/bin/webdriver-manager update --standalone chrome --gecko false",
