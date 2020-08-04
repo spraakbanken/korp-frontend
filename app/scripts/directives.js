@@ -231,7 +231,7 @@ korpApp.directive("searchSubmit", $rootElement => ({
                 <div>
                     <label>
                         {{'compare_name' | loc:lang}}:
-                        <input id="cmp_input" ng-model="name">
+                        <input class="cmp_input" ng-model="name">
                     </label>
                 </div>
                 <div class="btn_container">
