@@ -29,7 +29,7 @@
       div(news-desk="", header="'newsdesk-header'", storage="'korp_last_read_newsitem'")
     #log_out.link(ng-click="logout()", ng-if="loggedIn")
       span
-        | {{'log_out' | loc:lang}}
+        | {{'log_out' | loc:lang}}&nbsp;
       span {{username}}
     #languages
       a(data-mode='sv', ng-click="lang = 'sv'") {{'swedish' | loc:lang}}
