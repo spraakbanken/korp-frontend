@@ -5,9 +5,9 @@ name: Korp with SB config
 
 on:
   push:
-    branches: [ dev, actions ]
+    branches: [ dev, master ]
   pull_request:
-    branches: [ dev ]
+    branches: [ dev, master ]
 
 jobs:
   build:
@@ -24,6 +24,7 @@ jobs:
       with:
         repository: spraakbanken/korp-frontend-sb
         token: ${{ secrets.ACCESS_TOKEN }}
+        ref: ${{GITHUB_REF}}
         path: korp-frontend-sb
     - name: Main repo
       uses: actions/checkout@v2
