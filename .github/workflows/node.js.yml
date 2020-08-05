@@ -19,13 +19,21 @@ jobs:
         node-version: [13.2]
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Main repo
+      uses: actions/checkout@v2
+      with:
+        path: korp-frontend
+    - name: Config repo
+      uses: actions/checkout@v2
+      with:
+        repository: spraakbanken/korp-frontend-sb
+        token: ${{ secrets.ACCESS_TOKEN }}
+        path: korp-frontend-sb
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
     - run: |
         yarn --frozen-lockfile
-        yarn add spraakbanken/korp-frontend-sb#master
-        echo '{"configDir": "node_modules/korp-frontend-sb/app"}' > run_config.json
+        echo '{"configDir": "../korp-frontend-sb/app"}' > run_config.json
     - run: yarn test
