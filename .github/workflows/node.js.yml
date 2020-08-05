@@ -24,5 +24,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn --frozen-lockfile
+    - run: |
+        yarn --frozen-lockfile
+        yarn add spraakbanken/korp-frontend-sb#master
+        echo '{"configDir": "node_modules/korp-frontend-sb/app"}' > run_config.json
     - run: yarn test
