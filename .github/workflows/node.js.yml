@@ -19,21 +19,22 @@ jobs:
         node-version: [13.2]
 
     steps:
-    - name: Main repo
-      uses: actions/checkout@v2
-      with:
-        path: korp-frontend
     - name: Config repo
       uses: actions/checkout@v2
       with:
         repository: spraakbanken/korp-frontend-sb
         token: ${{ secrets.ACCESS_TOKEN }}
         path: korp-frontend-sb
+    - name: Main repo
+      uses: actions/checkout@v2
+      with:
+        path: korp-frontend
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
     - run: |
+        cd korp-frontend
         yarn --frozen-lockfile
         echo '{"configDir": "../korp-frontend-sb/app"}' > run_config.json
-    - run: yarn test
+        yarn test
