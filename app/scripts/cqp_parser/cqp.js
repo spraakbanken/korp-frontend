@@ -123,25 +123,19 @@ const stringifyCqp = function(cqp_obj, expanded_format) {
         }
 
         let or_out = Array.from(outer_and_array).map((x) =>
-            x.length > 1
-                ? `(${x.join(' | ')})`
-            :                x.join(' | '))
+            x.length > 1 ? `(${x.join(' | ')})` : x.join(' | '))
 
         if (token.bound) {
             or_out = _.compact(or_out)
-            for (let bound of Array.from(_.keys((token.bound)))) {
+            for (let bound of _.keys((token.bound))) {
                 or_out.push(`${bound}(sentence)`)
             }
         }
-
-
 
         let out_token = `[${or_out.join(' & ')}]`
         if (token.repeat) {
             out_token += `{${token.repeat.join(',')}}`
         }
-
-
 
         output.push(out_token)
     }

@@ -424,7 +424,8 @@ korpApp.controller("ExtendedSearch", function(
         try {
             updateExtendedCQP()
         } catch (e) {
-            c.log("cqp parse error:", e)
+            c.log("Failed to parse CQP", val)
+            c.log("Error", e)
         }
         $location.search("cqp", val)
     })

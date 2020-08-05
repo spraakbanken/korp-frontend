@@ -858,7 +858,7 @@ korpApp.directive("timeInterval", () => ({
         }
 
         const time_units = ["hour", "minute"]
-        w = s.$watchGroup(["dateModel", "timeModel"], function(...args) {
+        s.$watchGroup(["dateModel", "timeModel"], function(...args) {
             const [date, time] = args[0]
             if (date && time) {
                 const m = moment(moment(date).format("YYYY-MM-DD"))
