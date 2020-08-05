@@ -24,7 +24,7 @@ jobs:
       with:
         repository: spraakbanken/korp-frontend-sb
         token: ${{ secrets.ACCESS_TOKEN }}
-        ref: ${{GITHUB_REF}}
+        ref: $GITHUB_REF
         path: korp-frontend-sb
     - name: Main repo
       uses: actions/checkout@v2
