@@ -261,7 +261,7 @@
         peg$c71 = function(op, val) {
 
           val = _.filter(val, _.isArray).map(function(item) {
-            return Number(item.join(""))
+            return item.join("")
           })
           return makeObj("date_interval", op, val)
         },
