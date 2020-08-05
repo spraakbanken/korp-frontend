@@ -34,7 +34,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: |
-        cd korp-frontend
+        cd korp-frontend-sb
+        yarn --frozen-lockfile
+        cd ../korp-frontend
         yarn --frozen-lockfile
         echo '{"configDir": "../korp-frontend-sb/app"}' > run_config.json
         yarn test
