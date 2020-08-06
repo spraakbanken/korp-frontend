@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/{owner}/{repo}/workflows/{workflow_name}/badge.svg)](https://github.com/{owner}/{repo}/actions)
+
 This repo contains the frontend for [Korp](https://spraakbanken.gu.se/korp), 
 a frontend for the IMS Open Corpus Workbench (CWB). The Korp frontend is a great
 tool for searching and and visualising natural language corpus data. 
