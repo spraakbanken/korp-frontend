@@ -1,7 +1,7 @@
 /** @format */
 const webpack = require("webpack")
 const path = require("path")
-const CleanWebpackPlugin = require("clean-webpack-plugin")
+const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 
 function getKorpConfigDir() {
@@ -190,54 +190,56 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(["dist"]),
+        new CleanWebpackPlugin(),
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery"
         }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-        new CopyWebpackPlugin([
-            {
-                from: korpConfigDir + "/modes/*mode.js",
-                to: "modes",
-                flatten: true
-            },
-            {
-                from: korpConfigDir + "/modes/*html",
-                to: "modes",
-                flatten: true
-            },
-            {
-                from: "app/translations/angular-locale_*.js",
-                to: "translations",
-                flatten: true
-            },
-            {
-                from: "app/markup/msdtags.html",
-                to: "markup"
-            },
-            {
-                from: "app/translations/locale-*.json",
-                to: "translations",
-                flatten: true
-            },
-            {
-                from: korpConfigDir + "/translations/*",
-                to: "translations",
-                flatten: true
-            },
-            {
-                from: "app/lib/deptrees/",
-                to: "lib/deptrees"
-            },
-            {
-                from: "node_modules/geokorp/dist/data/*.json",
-                // TODO hard-coded in geokorp project that these files should be here
-                // we need to change geokorp so that these files are required
-                to: "components/geokorp/dist/data",
-                flatten: true
-            }
-        ])
+        new CopyWebpackPlugin({patterns: [
+                    {
+                        from: korpConfigDir + "/modes/*mode.js",
+                        to: "modes",
+                        flatten: true
+                    },
+                    {
+                        from: korpConfigDir + "/modes/*html",
+                        to: "modes",
+                        flatten: true
+                    },
+                    {
+                        from: "app/translations/angular-locale_*.js",
+                        to: "translations",
+                        flatten: true
+                    },
+                    {
+                        from: "app/markup/msdtags.html",
+                        to: "markup"
+                    },
+                    {
+                        from: "app/translations/locale-*.json",
+                        to: "translations",
+                        flatten: true
+                    },
+                    {
+                        from: korpConfigDir + "/translations/*",
+                        to: "translations",
+                        flatten: true
+                    },
+                    {
+                        from: "app/lib/deptrees/",
+                        to: "lib/deptrees"
+                    },
+                    /* TODO: probably remove this? cannot find any json files there.
+                    {
+                        from: "node_modules/geokorp/dist/data/*.json",
+                        // TODO hard-coded in geokorp project that these files should be here
+                        // we need to change geokorp so that these files are required
+                        to: "components/geokorp/dist/data",
+                        flatten: true
+                    }
+                    */
+                ]})
     ],
     entry: {
         bundle: "./app/index.js",
