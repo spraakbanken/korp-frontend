@@ -119,6 +119,7 @@
     "matches_not": "not regexp",
 
     "repeat": "Repeat",
+    "from": "from",
     "to": "to",
     "times": "times",
 

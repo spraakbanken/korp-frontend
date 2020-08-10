@@ -118,6 +118,7 @@
     "matches_not": "inte regexp",
 
     "repeat": "Upprepa",
+    "from": "från",
     "to": "till",
     "times": "gånger",
 
