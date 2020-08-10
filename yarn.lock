@@ -4950,17 +4950,12 @@ jquery-ui-dist@>=1.12.x:
   resolved "https://registry.yarnpkg.com/jquery-ui-dist/-/jquery-ui-dist-1.12.1.tgz#5c0815d3cc6f90ff5faaf5b268a6e23b4ca904fa"
   integrity sha1-XAgV08xvkP9fqvWyaKbiO0ypBPo=
 
-jquery-ui@>=1.8.0:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.12.1.tgz#bcb4045c8dd0539c134bc1488cdd3e768a7a9e51"
-  integrity sha1-vLQEXI3QU5wTS8FIjN0+dop6nlE=
-
 jquery@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
   integrity sha1-XE2d5lKvbNCncBVKYxu6ErAVx4c=
 
-jquery@>=1.8.0, jquery@>=3.1.x:
+jquery@>=3.1.x:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.0.tgz#9980b97d9e4194611c36530e7dc46a58d7340fc9"
   integrity sha512-Xb7SVYMvygPxbFMpTFQiHh1J7HClEaThguL15N/Gg37Lri/qKyhRGZYzHRyLH8Stq3Aow0LsHO2O2ci86fCrNQ==
@@ -7866,13 +7861,9 @@ slash@^3.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
-slickgrid@2.4.21:
-  version "2.4.21"
-  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-2.4.21.tgz#4ece48ee0b05f46ba291e8a1517899628cadd23f"
-  integrity sha512-3zBWPCbg3ZKtMikL5ZmcRgvsyNaKw72oPQ3kAy76E0b82uI9V00ukcKPSmXCliG1OT6ylXIZS4U2vZfSFhW3vw==
-  dependencies:
-    jquery ">=1.8.0"
-    jquery-ui ">=1.8.0"
+slickgrid@spraakbanken/SlickGrid#master:
+  version "2.4.27"
+  resolved "https://codeload.github.com/spraakbanken/SlickGrid/tar.gz/d1961d5e3250fb0958c496fd13bccda83e87ab70"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"

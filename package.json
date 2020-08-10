@@ -22,7 +22,7 @@
         "moment": "2.20.1",
         "raphael": "2.2.7",
         "rickshaw": "1.6.4",
-        "slickgrid": "2.4.21",
+        "slickgrid": "spraakbanken/SlickGrid#master",
         "tailwindcss": "^1.6.2"
     },
     "devDependencies": {
