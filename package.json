@@ -23,7 +23,8 @@
         "moment": "2.20.1",
         "raphael": "2.2.7",
         "rickshaw": "1.6.4",
-        "slickgrid": "2.4.21"
+        "slickgrid": "2.4.21",
+        "tailwindcss": "^1.6.2"
     },
     "devDependencies": {
         "@babel/core": "^7.2.0",
@@ -62,6 +63,7 @@
         "tslint-config-prettier": "^1.17.0",
         "typescript": "^3.3.3333",
         "webpack": "~4.44.1",
+        "webpack-bundle-analyzer": "^3.8.0",
         "webpack-cli": "^3.3.12",
         "webpack-dev-server": "^3.11.0",
         "webpack-merge": "^5.1.1"
@@ -79,7 +81,7 @@
         "dev": "webpack-dev-server --config webpack.dev.js",
         "testserver": "webpack-dev-server --config webpack.dev.js &",
         "start:dist": "http-server -p ${KORP_PORT:-9111} dist/",
-        "build": "webpack --config webpack.prod.js",
+        "build": "NODE_ENV=production webpack --config webpack.prod.js",
         "lint": "tslint --project tslint.json"
     }
 }
