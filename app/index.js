@@ -82,7 +82,6 @@ require("angular-filter/index.js")
 
 
 require("./lib/jquery.tooltip.pack.js")
-window.Rickshaw = require("rickshaw")
 
 window.settings = {}
 settings.markup = {

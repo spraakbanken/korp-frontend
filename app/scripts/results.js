@@ -2015,231 +2015,240 @@ view.GraphResults = class GraphResults extends BaseResults {
         }
     }
 
-    makeRequest(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
+    renderGraph(data, cqp, labelMapping, currentZoom, showTotal) {
+        let series
+
+        const done = () => {
+            this.hidePreloader()
+            safeApply(this.s, () => {
+                this.s.loading = false
+            })
+
+            return $(window).trigger("resize")
+        }
+
+        if (data.ERROR) {
+            this.resultError(data)
+            return
+        }
+
+        if (this.graph) {
+            series = this.makeSeries(data, cqp, labelMapping, currentZoom)
+            this.spliceData(series)
+            this.drawIntervals(this.graph)
+            this.graph.render()
+            done()
+            return
+        }
+
+        const nontime = this.getNonTime()
+
+        if (nontime) {
+            $(".non_time", this.$result)
+                .empty()
+                .text(nontime.toFixed(2) + "%")
+                .parent()
+                .localize()
+        } else {
+            $(".non_time_div", this.$result).hide()
+        }
+
+        series = this.makeSeries(data, cqp, labelMapping, currentZoom)
+
+        const graph = new Rickshaw.Graph({
+            element: $(".chart", this.$result)
+                .empty()
+                .get(0),
+            renderer: "line",
+            interpolation: "linear",
+            series,
+            padding: {
+                top: 0.1,
+                right: 0.01
+            }
+        })
+        let width = $(".tab-pane").width()
+        graph.setSize({ width })
+        graph.render()
+        window._graph = this.graph = graph
+
+        this.drawIntervals(graph)
+
+        $(window).on(
+            "resize",
+            _.throttle(() => {
+                if (this.$result.is(":visible")) {
+                    width = $(".tab-pane").width()
+                    graph.setSize()
+                    this.preview.configure({ width })
+                    this.preview.render()
+                    return graph.render()
+                }
+            }, 200)
+        )
+
+        $(".form_switch", this.$result).click(event => {
+            const val = this.s.mode
+            for (let cls of this.$result.attr("class").split(" ")) {
+                if (cls.match(/^form-/)) {
+                    this.$result.removeClass(cls)
+                }
+            }
+            this.$result.addClass(`form-${val}`)
+            $(".chart,.legend", this.$result.parent()).show()
+            $(".time_table", this.$result.parent()).hide()
+            if (val === "bar") {
+                this.setBarMode()
+            } else if (val === "table") {
+                this.renderTable(series)
+                this.setTableMode(series)
+            }
+
+            if (val !== "table") {
+                graph.setRenderer(val)
+                graph.render()
+                $(".exportTimeStatsSection", this.$result).hide()
+            }
+        })
+
+        const legend = new Rickshaw.Graph.Legend({
+            element: $(".legend", this.$result).get(0),
+            graph
+        })
+
+        const shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+            graph,
+            legend
+        })
+
+        if (!showTotal && $(".legend .line", this.$result).length > 1) {
+            $(".legend .line:last .action", this.$result).click()
+        }
+
+        const hoverDetail = new Rickshaw.Graph.HoverDetail({
+            graph,
+            xFormatter: x => {
+                const m = moment.unix(String(x))
+
+                return `<span data-val='${x}'>${m.format("YYYY-MM-DD HH:mm:ss")}</span>`
+            },
+
+            yFormatter(y) {
+                const val = util.formatDecimalString(y.toFixed(2), false, true, true)
+
+                return (
+                    `<br><span rel='localize[rel_hits_short]'>${util.getLocaleString(
+                        "rel_hits_short"
+                    )}</span> ` + val
+                )
+            },
+            formatter(series, x, y, formattedX, formattedY, d) {
+                let abs_y
+                const i = _.sortedIndexOf(_.map(series.data, "x"), x)
+                try {
+                    abs_y = series.abs_data[i].y
+                } catch (e) {
+                    c.log("i", i, x)
+                }
+
+                const rel = series.name + ":&nbsp;" + formattedY
+                return `<span data-cqp="${encodeURIComponent(series.cqp)}">
+                            ${rel}
+                            <br>
+                            ${util.getLocaleString("abs_hits_short")}: ${abs_y}
+                        </span>`
+            }
+        })
+
+        // [first, last] = settings.corpusListing.getTimeInterval()
+        // [firstVal, lastVal] = settings.corpusListing.getMomentInterval()
+
+        // TODO: fix decade again
+        // timeunit = if last - first > 100 then "decade" else @zoom
+
+        const toDate = sec => moment(sec * 1000).toDate()
+
+        const time = new Rickshaw.Fixtures.Time()
+        const old_ceil = time.ceil
+        time.ceil = (time, unit) => {
+            if (unit.name === "decade") {
+                const out = Math.ceil(time / unit.seconds) * unit.seconds
+                const mom = moment(out * 1000)
+                if (mom.date() === 31) {
+                    mom.add("day", 1)
+                }
+                return mom.unix()
+            } else {
+                return old_ceil(time, unit)
+            }
+        }
+
+        const xAxis = new Rickshaw.Graph.Axis.Time({
+            graph
+        })
+        // timeUnit: time.unit("month") # TODO: bring back decade
+        // timeFixture: new Rickshaw.Fixtures.Time()
+
+        this.preview = new Rickshaw.Graph.RangeSlider.Preview({
+            graph,
+            element: $(".preview", this.$result).get(0)
+        })
+
+        $("body").on("mouseup", ".preview .middle_handle", () => {
+            return this.previewPanStop()
+        })
+
+        $("body").on("mouseup", ".preview .left_handle, .preview .right_handle", () => {
+            if (!this.s.loading) {
+                return this.previewPanStop()
+            }
+        })
+
+        window._xaxis = xAxis
+
+        const old_render = xAxis.render
+        xAxis.render = _.throttle(
+            () => {
+                old_render.call(xAxis)
+                this.drawIntervals(graph)
+                return this.checkZoomLevel()
+            },
+
+            20
+        )
+
+        xAxis.render()
+
+        const yAxis = new Rickshaw.Graph.Axis.Y({
+            graph
+        })
+
+        yAxis.render()
+
+        done()
+    }
+
+    async makeRequest(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
         this.s.loading = true
+        if(!window.Rickshaw) {
+            var rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
+        }
         this.showPreloader()
         const currentZoom = this.zoom
-        return this.proxy
+        let reqPromise = this.proxy
             .makeRequest(cqp, subcqps, corpora.stringifySelected(), from, to)
             .progress(data => {
                 return this.onProgress(data)
             })
-            .fail(data => {
-                c.log("graph crash")
-                this.resultError(data)
-                this.s.loading = false
-            })
-            .done(data => {
-                let series
-
-                const done = () => {
-                    this.hidePreloader()
-                    safeApply(this.s, () => {
-                        this.s.loading = false
-                    })
-
-                    return $(window).trigger("resize")
-                }
-
-                if (data.ERROR) {
-                    this.resultError(data)
-                    return
-                }
-
-                if (this.graph) {
-                    series = this.makeSeries(data, cqp, labelMapping, currentZoom)
-                    this.spliceData(series)
-                    this.drawIntervals(this.graph)
-                    this.graph.render()
-                    done()
-                    return
-                }
-
-                const nontime = this.getNonTime()
-
-                if (nontime) {
-                    $(".non_time", this.$result)
-                        .empty()
-                        .text(nontime.toFixed(2) + "%")
-                        .parent()
-                        .localize()
-                } else {
-                    $(".non_time_div", this.$result).hide()
-                }
-
-                series = this.makeSeries(data, cqp, labelMapping, currentZoom)
-
-                const graph = new Rickshaw.Graph({
-                    element: $(".chart", this.$result)
-                        .empty()
-                        .get(0),
-                    renderer: "line",
-                    interpolation: "linear",
-                    series,
-                    padding: {
-                        top: 0.1,
-                        right: 0.01
-                    }
-                })
-                let width = $(".tab-pane").width()
-                graph.setSize({ width })
-                graph.render()
-                window._graph = this.graph = graph
-
-                this.drawIntervals(graph)
-
-                $(window).on(
-                    "resize",
-                    _.throttle(() => {
-                        if (this.$result.is(":visible")) {
-                            width = $(".tab-pane").width()
-                            graph.setSize()
-                            this.preview.configure({ width })
-                            this.preview.render()
-                            return graph.render()
-                        }
-                    }, 200)
-                )
-
-                $(".form_switch", this.$result).click(event => {
-                    const val = this.s.mode
-                    for (let cls of this.$result.attr("class").split(" ")) {
-                        if (cls.match(/^form-/)) {
-                            this.$result.removeClass(cls)
-                        }
-                    }
-                    this.$result.addClass(`form-${val}`)
-                    $(".chart,.legend", this.$result.parent()).show()
-                    $(".time_table", this.$result.parent()).hide()
-                    if (val === "bar") {
-                        this.setBarMode()
-                    } else if (val === "table") {
-                        this.renderTable(series)
-                        this.setTableMode(series)
-                    }
-
-                    if (val !== "table") {
-                        graph.setRenderer(val)
-                        graph.render()
-                        $(".exportTimeStatsSection", this.$result).hide()
-                    }
-                })
-
-                const legend = new Rickshaw.Graph.Legend({
-                    element: $(".legend", this.$result).get(0),
-                    graph
-                })
-
-                const shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
-                    graph,
-                    legend
-                })
-
-                if (!showTotal && $(".legend .line", this.$result).length > 1) {
-                    $(".legend .line:last .action", this.$result).click()
-                }
-
-                const hoverDetail = new Rickshaw.Graph.HoverDetail({
-                    graph,
-                    xFormatter: x => {
-                        const m = moment.unix(String(x))
-
-                        return `<span data-val='${x}'>${m.format("YYYY-MM-DD HH:mm:ss")}</span>`
-                    },
-
-                    yFormatter(y) {
-                        const val = util.formatDecimalString(y.toFixed(2), false, true, true)
-
-                        return (
-                            `<br><span rel='localize[rel_hits_short]'>${util.getLocaleString(
-                                "rel_hits_short"
-                            )}</span> ` + val
-                        )
-                    },
-                    formatter(series, x, y, formattedX, formattedY, d) {
-                        let abs_y
-                        const i = _.sortedIndexOf(_.map(series.data, "x"), x)
-                        try {
-                            abs_y = series.abs_data[i].y
-                        } catch (e) {
-                            c.log("i", i, x)
-                        }
-
-                        const rel = series.name + ":&nbsp;" + formattedY
-                        return `<span data-cqp="${encodeURIComponent(series.cqp)}">
-                                    ${rel}
-                                    <br>
-                                    ${util.getLocaleString("abs_hits_short")}: ${abs_y}
-                                </span>`
-                    }
-                })
-
-                // [first, last] = settings.corpusListing.getTimeInterval()
-                // [firstVal, lastVal] = settings.corpusListing.getMomentInterval()
-
-                // TODO: fix decade again
-                // timeunit = if last - first > 100 then "decade" else @zoom
-
-                const toDate = sec => moment(sec * 1000).toDate()
-
-                const time = new Rickshaw.Fixtures.Time()
-                const old_ceil = time.ceil
-                time.ceil = (time, unit) => {
-                    if (unit.name === "decade") {
-                        const out = Math.ceil(time / unit.seconds) * unit.seconds
-                        const mom = moment(out * 1000)
-                        if (mom.date() === 31) {
-                            mom.add("day", 1)
-                        }
-                        return mom.unix()
-                    } else {
-                        return old_ceil(time, unit)
-                    }
-                }
-
-                const xAxis = new Rickshaw.Graph.Axis.Time({
-                    graph
-                })
-                // timeUnit: time.unit("month") # TODO: bring back decade
-                // timeFixture: new Rickshaw.Fixtures.Time()
-
-                this.preview = new Rickshaw.Graph.RangeSlider.Preview({
-                    graph,
-                    element: $(".preview", this.$result).get(0)
-                })
-
-                $("body").on("mouseup", ".preview .middle_handle", () => {
-                    return this.previewPanStop()
-                })
-
-                $("body").on("mouseup", ".preview .left_handle, .preview .right_handle", () => {
-                    if (!this.s.loading) {
-                        return this.previewPanStop()
-                    }
-                })
-
-                window._xaxis = xAxis
-
-                const old_render = xAxis.render
-                xAxis.render = _.throttle(
-                    () => {
-                        old_render.call(xAxis)
-                        this.drawIntervals(graph)
-                        return this.checkZoomLevel()
-                    },
-
-                    20
-                )
-
-                xAxis.render()
-
-                const yAxis = new Rickshaw.Graph.Axis.Y({
-                    graph
-                })
-
-                yAxis.render()
-
-                done()
-            })
+        
+        try {
+            let [rickshawModule, graphData] = await Promise.all([rickshawPromise || Rickshaw, reqPromise])
+        } catch(e) {
+            c.error("graph crash", e)
+            this.resultError(data)
+            this.s.loading = false
+        }
+        window.Rickshaw = rickshawModule
+        this.renderGraph(graphData, cqp, labelMapping, currentZoom, showTotal)
     }
 }
