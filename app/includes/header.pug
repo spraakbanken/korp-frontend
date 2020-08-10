@@ -38,7 +38,7 @@
       a(ng-click="showLogin()", ng-show="!loggedIn") {{'log_in' | loc:lang}}
 
     .clearfix
-  #header_left.row.align-items-end.ml-2
+  #header_left.flex.items-end.ml-2
     a(ng-click="logoClick()")
       img(src='img/korplogo.png')
     #labs_logo
@@ -73,9 +73,9 @@
     .corpusInfoSpace.ui-corner-all
       div
         p(style='padding: 10px; margin: 0px;')
-    span.logos.d-none.d-xl-block
-      a(href="https://spraakbanken.gu.se" target="_blank")
+    span.logos
+      a.hidden.lg_inline(href="https://spraakbanken.gu.se" target="_blank")
         img(src="img/sbx1r.svg" style='position: relative; top: 19px;')
-      a(href="https://sweclarin.se" target="_blank")
+      a.hidden.xl_inline(href="https://sweclarin.se" target="_blank")
         img(src="img/sweclarin_logo.png" style='position: relative; top: 1px;')
-  select#search_history.d-lg-block.d-none
+  select#search_history.hidden.md_block

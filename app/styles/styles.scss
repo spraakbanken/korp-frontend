@@ -40,6 +40,27 @@ body {
   background-color: white;
 }
 
+img, svg {
+  display : inline;
+}
+svg {
+  vertical-align: baseline;
+}
+
+h4 {
+  font-weight : bold;
+  margin: 1.3rem 0;
+}
+
+h3 {
+  margin: 1rem 0;
+  font-size: 1.1em;
+}
+
+input, select {
+  border: 1px solid #bbb;
+}
+
 ul, ol {
   list-style: none;
   padding-left : 0;
@@ -1589,11 +1610,13 @@ label[for=lemgram_select]:before {
 
 #labs_logo {
   display: none;
+  svg {
+    top: 5px;
+  }
 }
 
 .lab #labs_logo {
   display: inline-block;
-  vertical-align: bottom;
 }
 
 #korplink {
