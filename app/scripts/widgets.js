@@ -13,20 +13,6 @@ const Sidebar = {
         )
         corpusInfo.prependTo("#selected_sentence")
 
-        if (corpusObj["inStrix"]) {
-            const sentenceID = sentenceData["sentence_id"]
-            if (sentenceID) {
-                // TODO fix this so that strix uses correct corpus ids
-                const strixCorpus = corpus === "wikipedia-sv" ? "wikipedia" : corpus
-                const strixLinkText = `${settings.strixUrl}?sentenceID=${sentenceID}&documentCorpus=${strixCorpus}`
-                $("<div class='strix-link'/>")
-                    .html(
-                        `<a target='_blank' href='${strixLinkText}' rel='localize[read_in_strix]'></a>`
-                    )
-                    .prependTo(corpusInfo)
-            }
-        }
-
         if (!inReadingMode && corpusObj.readingMode) {
             $("<div class='openReadingMode'/>")
                 .html(`<span class="link" rel="localize[read_in_korp]"></span>`)
