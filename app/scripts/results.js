@@ -1910,7 +1910,8 @@ view.GraphResults = class GraphResults extends BaseResults {
             time_table_columns,
             {
                 enableCellNavigation: false,
-                enableColumnReorder: false
+                enableColumnReorder: false,
+                forceFitColumns: false
             }
         )
         $(".time_table", this.$result).width("100%")
