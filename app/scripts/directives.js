@@ -882,8 +882,8 @@ korpApp.directive("reduceSelect", $timeout => ({
     },
     replace: true,
     template: `\
-<div uib-dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">
-      <div uib-dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">
+    <div uib-dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">
+      <div uib-dropdown-toggle class="reduce-dropdown-button inline_block bg-white border border-gray-500">
         <div class="reduce-dropdown-button-text">
           <span>{{ "reduce_text" | loc:lang }}:</span>
           <span>
@@ -920,7 +920,7 @@ korpApp.directive("reduceSelect", $timeout => ({
           </li>
         </ul>
       </div>
-</div>`,
+    </div>`,
 
     link(scope) {
         scope.$watchCollection("items", function() {
