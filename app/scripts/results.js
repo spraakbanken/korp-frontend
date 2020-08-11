@@ -2242,7 +2242,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             })
         
         try {
-            let [rickshawModule, graphData] = await Promise.all([rickshawPromise || Rickshaw, reqPromise])
+            var [rickshawModule, graphData] = await Promise.all([rickshawPromise || Rickshaw, reqPromise])
         } catch(e) {
             c.error("graph crash", e)
             this.resultError(data)
