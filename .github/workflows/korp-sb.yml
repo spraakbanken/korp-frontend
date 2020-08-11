@@ -41,4 +41,4 @@ jobs:
         cd ../korp-frontend
         yarn --frozen-lockfile
         echo '{"configDir": "../korp-frontend-sb/app"}' > run_config.json
-        yarn test
+        yarn actions-test
