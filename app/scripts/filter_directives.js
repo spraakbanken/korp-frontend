@@ -1,11 +1,4 @@
 /** @format */
-// TODO: This file was created by bulk-decaffeinate.
-// Fix any style issues and re-enable lint.
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const plusImg = require("../img/plus.png")
 
 korpApp.filter("replaceEmpty", function() {
@@ -154,7 +147,7 @@ korpApp.directive("globalFilter", globalFilterService => ({
                 scope.attrValue.push(value)
             }
             event.stopPropagation()
-            return globalFilterService.valueChange(scope.attr)
+            globalFilterService.valueChange(scope.attr)
         }
 
         scope.isSelected = value => scope.attrValue.includes(value)
@@ -163,7 +156,7 @@ korpApp.directive("globalFilter", globalFilterService => ({
 
         scope.removeFilter = function(event) {
             event.stopPropagation()
-            return scope.$parent.removeFilter(scope.attr)
+            scope.$parent.removeFilter(scope.attr)
         }
     }
 }))

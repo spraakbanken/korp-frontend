@@ -109,7 +109,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
                         }
                     }
                 }
-                return updateData()
+                updateData()
             })
     }
 
@@ -314,12 +314,12 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
             _.remove(dataObj.selectedFilters, filter)
             initFilters()
             getData()
-            return updateLocation()
+            updateLocation()
         },
         addNewFilter,
         valueChange(filter) {
             updateLocation()
-            return updateData()
+            updateData()
         }
     }
 })
