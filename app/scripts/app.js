@@ -215,7 +215,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     const s = $scope
 
     s.logoClick = function () {
-        window.location = $scope.getUrl(currentMode)
+        window.location.href = $scope.getUrl(currentMode)
         window.location.reload()
     }
 
