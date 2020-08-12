@@ -8,6 +8,16 @@
  */
 const plusImg = require("../img/plus.png")
 
+korpApp.filter("replaceEmpty", function() {
+    return function(input) {
+        if (input === "") {
+            return "–"
+        } else {
+            return input
+        }
+    }
+})
+
 korpApp.directive("globalFilters", globalFilterService => ({
     restrict: "E",
     scope: {
@@ -95,7 +105,7 @@ korpApp.directive("globalFilter", globalFilterService => ({
         </span>
         <span ng-if="attrValue.length != 0">
           <span style="text-transform: capitalize">{{attrLabel | loc:lang}}:</span>
-          <span ng-repeat="selected in attrValue" class="selected-attr-value">{{translationKey + selected | loc:lang }} </span>
+          <span ng-repeat="selected in attrValue" class="selected-attr-value">{{translationKey + selected | loc:lang | replaceEmpty }} </span>
         </span>
         <i ng-if="closeable" class="close_btn fa fa-times-circle-o fa-1" ng-click="removeFilter($event)" />
       </button>
@@ -105,20 +115,20 @@ korpApp.directive("globalFilter", globalFilterService => ({
               ng-click="toggleSelected(value[0], $event)"
               ng-if="isSelectedList(value[0])">
             <span ng-if="isSelected(value[0])">✔</span>
-            <span>{{translationKey + value[0] | loc:lang }}</span>
+            <span>{{translationKey + value[0] | loc:lang | replaceEmpty }}</span>
             <span style="font-size: x-small;">{{value[1]}}</span>
           </li>
           <li ng-repeat="value in possibleValues" class="attribute"
               ng-click="toggleSelected(value[0], $event)"
               ng-if="!isSelectedList(value[0]) && value[1] > 0">
             <span ng-if="isSelected(value[0])">✔</span>
-            <span>{{translationKey + value[0] | loc:lang }}</span>
+            <span>{{translationKey + value[0] | loc:lang | replaceEmpty }}</span>
             <span style="font-size: x-small;">{{value[1]}}</span>
           </li>
           <li ng-repeat="value in possibleValues" class="attribute disabled"
               ng-if="!isSelectedList(value[0]) && value[1] == 0"
               >
-            <span>{{translationKey + value[0] | loc:lang }}</span>
+            <span>{{translationKey + value[0] | loc:lang | replaceEmpty }}</span>
             <span style="font-size: x-small;">{{value[1]}}</span>
           </li>
         </ul>

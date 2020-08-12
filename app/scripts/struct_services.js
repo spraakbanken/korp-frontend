@@ -127,9 +127,6 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
             for (let value in elements) {
                 var childCount
                 const child = elements[value]
-                if (value === "") {
-                    value = "-"
-                }
                 const selected = currentValues.includes(value) || _.isEmpty(currentValues)
 
                 // filter of any parent values that do not support the child values
@@ -300,7 +297,10 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
         $rootScope.globalFilterDef.resolve()
     })
 
-    $rootScope.$watch(() => $location.search().global_filter, filter => setFromLocation(filter))
+    $rootScope.$watch(
+        () => $location.search().global_filter,
+        filter => setFromLocation(filter)
+    )
 
     return {
         registerScope(scope) {
