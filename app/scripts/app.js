@@ -228,13 +228,12 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     }
 
     s.logout = function () {
-        let corpus
         authenticationProxy.loginObj = {}
         jStorage.deleteKey("creds")
 
         // TODO figure out another way to do this
         for (let corpusObj of settings.corpusListing.corpora) {
-            corpus = corpusObj.id
+            const corpus = corpusObj.id
             if (corpusObj.limitedAccess) {
                 $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled")
             }
@@ -242,7 +241,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         $("#corpusbox").corpusChooser("updateAllStates")
 
         let newCorpora = []
-        for (corpus of settings.corpusListing.getSelectedCorpora()) {
+        for (let corpus of settings.corpusListing.getSelectedCorpora()) {
             if (!settings.corpora[corpus].limitedAccess) {
                 newCorpora.push(corpus)
             }
