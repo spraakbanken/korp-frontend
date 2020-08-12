@@ -296,7 +296,7 @@ class KwicCtrl {
                 const requestData = s.instance.getProxy().prevParams
                 const [fileName, blobName] = this.kwicDownload.makeDownload(
                     ...value.split("/"),
-                    s.kwic,
+                    s.kwic.length > 0 ? s.kwic : s.contextKwic,
                     requestData,
                     hitsDisplay
                 )
