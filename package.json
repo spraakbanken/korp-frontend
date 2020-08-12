@@ -71,8 +71,8 @@
         "node": ">=0.10.0"
     },
     "scripts": {
-        "test": "yarn run test:karma && yarn run test:e2e && exit 125 || :",
-        "actions-test": "yarn run test:karma && yarn run test:e2e || :",
+        "test": "yarn run test:karma && yarn run test:e2e",
+        "actions-test": "yarn run test:karma && yarn run test:e2e",
         "posttest": "kill $(lsof -t -i:9112)",
         "protractor": "wait-on http://localhost:9112 && protractor test/e2e/conf_e2e.js",
         "test:karma": "karma start test/karma/karma.conf.js",
