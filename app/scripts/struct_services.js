@@ -240,7 +240,7 @@ korpApp.factory("globalFilterService", function($rootScope, $location, $q, struc
                 attrValues.value.map(attrValue => ({
                     type: `_.${attrKey}`,
                     op,
-                    val: attrValue
+                    val: regescape(attrValue)
                 }))
             )
         }
