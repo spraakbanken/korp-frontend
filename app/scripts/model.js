@@ -29,6 +29,7 @@ model.getAuthorizationHeader = function() {
 class BaseProxy {
     constructor() {
         this.prev = ""
+        this.chunkCache = ""
         this.progress = 0
         this.total = null
         this.total_results = 0
@@ -47,6 +48,7 @@ class BaseProxy {
     makeRequest() {
         this.abort()
         this.prev = ""
+        this.chunkCache = ""
         this.progress = 0
         this.total_results = 0
         this.total = null
@@ -90,9 +92,18 @@ class BaseProxy {
     calcProgress(e) {
         const newText = e.target.responseText.slice(this.prev.length)
         let struct = {}
+
         try {
-            struct = this.parseJSON(newText)
-        } catch (error) {}
+            // try to parse a chunk from the progress object
+            // combined with previous chunks that were not parseable
+            struct = this.parseJSON(this.chunkCache + newText)
+            // if parse succceeds, we don't care about the content of previous progress events anymore
+            this.chunkCache = ""
+        } catch (error) {
+            // if we fail to parse a chunk, combine it with previous failed chunks
+            this.chunkCache += newText
+        }
+
         $.each(struct, (key, val) => {
             if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
                 const currentCorpus = val.corpus || val
@@ -105,6 +116,7 @@ class BaseProxy {
         })
 
         const stats = (this.progress / this.total) * 100
+
         if (this.total == null && struct.progress_corpora && struct.progress_corpora.length) {
             const tmp = $.map(struct["progress_corpora"], function(corpus) {
                 if (!corpus.length) {
@@ -117,6 +129,7 @@ class BaseProxy {
             })
             this.total = _.reduce(tmp, (val1, val2) => val1 + val2, 0)
         }
+
         this.prev = e.target.responseText
         return {
             struct,
