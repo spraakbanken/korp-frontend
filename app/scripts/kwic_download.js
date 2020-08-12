@@ -119,14 +119,22 @@ korpApp.factory("kwicDownload", function () {
                 const match = []
                 const rightContext = []
 
-                for (token of row.tokens.slice(0, row.match.start)) {
-                    leftContext.push(token.word)
-                }
-                for (token of row.tokens.slice(row.match.start, row.match.end)) {
-                    match.push(token.word)
-                }
-                for (token of row.tokens.slice(row.match.end, row.tokens.length)) {
-                    rightContext.push(token.word)
+                if (row.match instanceof Array) {
+                    // the user has searched "not-in-order" and we cannot have a left, match and right context for the download
+                    // put all data in leftContext
+                    for (token of row.tokens) {
+                        leftContext.push(token.word)
+                    }
+                } else {
+                    for (token of row.tokens.slice(0, row.match.start)) {
+                        leftContext.push(token.word)
+                    }
+                    for (token of row.tokens.slice(row.match.start, row.match.end)) {
+                        match.push(token.word)
+                    }
+                    for (token of row.tokens.slice(row.match.end, row.tokens.length)) {
+                        rightContext.push(token.word)
+                    }
                 }
 
                 const structs = []
@@ -144,7 +152,9 @@ korpApp.factory("kwicDownload", function () {
                 }
                 const newRow = [
                     corpus,
-                    row.match.position,
+                    row.match instanceof Array
+                        ? row.match.map((match) => match.position).join(", ")
+                        : row.match.position,
                     leftContext.join(" "),
                     match.join(" "),
                     rightContext.join(" "),
