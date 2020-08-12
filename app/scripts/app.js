@@ -57,7 +57,6 @@ korpApp.config([
 ])
 
 korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
-    let loginNeededFor
     const s = $rootScope
     s._settings = settings
     window.lang = s.lang = $location.search().lang || settings.defaultLanguage
@@ -95,7 +94,6 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
     $rootScope.textTabs = []
 
     if ($location.search().corpus) {
-        loginNeededFor = []
         const initialCorpora = []
 
         function findInFolder(folder) {
@@ -129,6 +127,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
             }
         }
 
+        const loginNeededFor = []
         for (let corpusObj of initialCorpora) {
             if (corpusObj.limitedAccess) {
                 if (
