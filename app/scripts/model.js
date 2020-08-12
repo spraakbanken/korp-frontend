@@ -58,6 +58,11 @@ class BaseProxy {
         if (this.pendingRequests.length) {
             return _.invokeMap(this.pendingRequests, "abort")
         }
+        this.cleanup()
+    }
+
+    cleanup() {
+        this.prev = ""
     }
 
     hasPending() {
@@ -234,6 +239,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
 
             success(data, status, jqxhr) {
                 self.queryData = data.query_data
+                self.cleanup()
                 if (data.incremental === false || !this.foundKwic) {
                     return kwicCallback(data)
                 }
@@ -264,6 +270,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
 
             success() {
                 self.prevRequest = params
+                self.cleanup()
             },
 
             progress(data, e) {
@@ -394,6 +401,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                 },
 
                 success: data => {
+                    self.cleanup()
                     if (data.ERROR != null) {
                         c.log("gettings stats failed with error", data.ERROR)
                         def.reject(data)
@@ -610,6 +618,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
             },
             success(data) {
                 def.resolve(data)
+                self.cleanup()
             }
         })
 
