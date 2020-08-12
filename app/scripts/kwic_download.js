@@ -79,11 +79,12 @@ korpApp.factory("kwicDownload", function () {
                 res.push(hitInfo)
 
                 for (let token of row.tokens || []) {
-                    var match
-                    if (token.position >= row.match.start && token.position < row.match.end) {
-                        match = "***"
-                    } else {
-                        match = ""
+                    let match = ""
+                    for (matchObj of [row.match].flat()) {
+                        if (token.position >= matchObj.start && token.position < matchObj.end) {
+                            match = "***"
+                            break
+                        }
                     }
                     const newRow = [match]
                     for (let field of headers) {
