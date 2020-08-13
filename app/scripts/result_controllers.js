@@ -303,7 +303,11 @@ class KwicCtrl {
                 s.download.fileName = fileName
                 s.download.blobName = blobName
                 s.download.selected = ""
-                this.timeout(() => angular.element("#kwicDownloadLink")[0].click(), 0)
+                this.timeout(
+                    () =>
+                        s.instance.$result[0].getElementsByClassName("kwicDownloadLink")[0].click(),
+                    0
+                )
             },
         }
     }

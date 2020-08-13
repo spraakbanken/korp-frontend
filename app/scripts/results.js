@@ -113,7 +113,10 @@ view.KWICResults = class KWICResults extends BaseResults {
         this.selectionManager = scope.selectionManager
         this.setupReadingHash()
         this.$result.click((event) => {
-            if (["kwicDownloadLink", "frontendDownloadLinks"].includes(event.target.id)) {
+            if (
+                event.target.id === "frontendDownloadLinks" ||
+                event.target.classList.contains("kwicDownloadLink")
+            ) {
                 return
             }
             if (!this.selectionManager.hasSelected()) {
