@@ -86,7 +86,7 @@ class BaseResults {
         this.s.$root.jsonUrl = null
         this.firstResultDef.promise.then(() => {
             const prevUrl = this.proxy && this.proxy.prevUrl
-            this.s.$apply($scope => ($scope.$root.jsonUrl = prevUrl))
+            this.s.$apply(($scope) => ($scope.$root.jsonUrl = prevUrl))
         })
     }
 
@@ -112,7 +112,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
         this.selectionManager = scope.selectionManager
         this.setupReadingHash()
-        this.$result.click(event => {
+        this.$result.click((event) => {
             if (["kwicDownloadLink", "frontendDownloadLinks"].includes(event.target.id)) {
                 return
             }
@@ -120,14 +120,14 @@ view.KWICResults = class KWICResults extends BaseResults {
                 return
             }
             this.selectionManager.deselect()
-            safeApply(this.s.$root, s => {
+            safeApply(this.s.$root, (s) => {
                 s.$root.word_selected = null
             })
         })
 
         $(document).keydown($.proxy(this.onKeydown, this))
 
-        this.$result.on("click", ".word", event => this.onWordClick(event))
+        this.$result.on("click", ".word", (event) => this.onWordClick(event))
     }
 
     setupReadingHash() {
@@ -177,7 +177,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             aux = $(paragraph.get(sent_start + i - 1))
         }
         scope.selectionManager.select(word, aux)
-        safeApply(this.s.$root, s => (s.$root.word_selected = word))
+        safeApply(this.s.$root, (s) => (s.$root.word_selected = word))
     }
 
     resetView() {
@@ -295,7 +295,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             this.s.$root.jsonUrl = this.proxy.prevUrl
         }
 
-        this.s.$apply($scope => {
+        this.s.$apply(($scope) => {
             const useContextData = locationSearch()["in_order"] != null
             if (isReading || useContextData) {
                 $scope.setContextData(data)
@@ -318,9 +318,7 @@ view.KWICResults = class KWICResults extends BaseResults {
                     firstWord = mainrow.find(".match .word:first")
                 }
                 const offset = firstWord.position().left + scrollLeft - 25
-                $(linked)
-                    .find(".lnk")
-                    .css("padding-left", Math.round(offset))
+                $(linked).find(".lnk").css("padding-left", Math.round(offset))
             }
         }
 
@@ -329,11 +327,7 @@ view.KWICResults = class KWICResults extends BaseResults {
         this.$result.localize()
         this.centerScrollbar()
         if (!this.selectionManager.hasSelected() && !isReading) {
-            this.$result
-                .find(".match")
-                .children()
-                .first()
-                .click()
+            this.$result.find(".match").children().first().click()
         }
     }
 
@@ -344,21 +338,21 @@ view.KWICResults = class KWICResults extends BaseResults {
     }
 
     renderHitsPicture(data) {
-        let items = _.map(data.corpus_order, obj => ({
+        let items = _.map(data.corpus_order, (obj) => ({
             rid: obj,
             rtitle: settings.corpusListing.getTitle(obj.toLowerCase()),
             relative: data.corpus_hits[obj] / data.hits,
-            abs: data.corpus_hits[obj]
+            abs: data.corpus_hits[obj],
         }))
-        items = _.filter(items, item => item.abs > 0)
+        items = _.filter(items, (item) => item.abs > 0)
         // calculate which is the first page of hits for each item
         let index = 0
-        _.each(items, obj => {
+        _.each(items, (obj) => {
             obj.page = Math.floor(index / data.kwic.length)
             index += obj.abs
         })
 
-        this.s.$apply($scope => ($scope.hitsPictureData = items))
+        this.s.$apply(($scope) => ($scope.hitsPictureData = items))
     }
 
     scrollToShowWord(word) {
@@ -373,9 +367,7 @@ view.KWICResults = class KWICResults extends BaseResults {
         } else if (wordTop < window.scrollY) {
             newY -= offset
         }
-        $("html, body")
-            .stop(true, true)
-            .animate({ scrollTop: newY })
+        $("html, body").stop(true, true).animate({ scrollTop: newY })
         const wordLeft = word.offset().left
         const area = this.$result.find(".table_scrollarea")
         let newX = Number(area.scrollLeft())
@@ -390,7 +382,7 @@ view.KWICResults = class KWICResults extends BaseResults {
     buildQueryOptions(cqp, isPaging) {
         let avoidContext, preferredContext
         const opts = {}
-        const getSortParams = function() {
+        const getSortParams = function () {
             const { sort } = locationSearch()
             if (!sort) {
                 return {}
@@ -406,7 +398,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
                 return {
                     sort,
-                    random_seed: rnd
+                    random_seed: rnd,
                 }
             }
             return { sort }
@@ -432,7 +424,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             query_data: this.proxy.queryData,
             context,
             default_context: preferredContext,
-            incremental: true
+            incremental: true,
         }
 
         _.extend(opts.ajaxParams, getSortParams())
@@ -455,10 +447,10 @@ view.KWICResults = class KWICResults extends BaseResults {
         const params = this.buildQueryOptions(cqp, isPaging)
         const progressCallback = $.proxy(this.onProgress, this)
 
-        const req = this.getProxy().makeRequest(params, page, progressCallback, data => {
+        const req = this.getProxy().makeRequest(params, page, progressCallback, (data) => {
             return this.renderResult(data)
         })
-        req.done(data => {
+        req.done((data) => {
             this.hidePreloader()
             return this.renderCompleteResult(data)
         })
@@ -498,12 +490,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     getCurrentRow() {
         const tr = this.$result.find(".token_selected").closest("tr")
-        if (
-            this.$result
-                .find(".token_selected")
-                .parent()
-                .is("td")
-        ) {
+        if (this.$result.find(".token_selected").parent().is("td")) {
             return tr.find("td > .word")
         } else {
             return tr.find("div > .word")
@@ -520,10 +507,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             }
             $(next).click()
         } else {
-            next = this.$result
-                .find(".token_selected")
-                .next()
-                .click()
+            next = this.$result.find(".token_selected").next().click()
         }
         return next
     }
@@ -538,10 +522,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             prev = this.getCurrentRow().get(i - 1)
             $(prev).click()
         } else {
-            prev = this.$result
-                .find(".token_selected")
-                .prev()
-                .click()
+            prev = this.$result.find(".token_selected").prev().click()
         }
         return prev
     }
@@ -552,10 +533,7 @@ view.KWICResults = class KWICResults extends BaseResults {
         if (!this.isReadingMode()) {
             prevMatch = this.getWordAt(
                 current.offset().left + current.width() / 2,
-                current
-                    .closest("tr")
-                    .prevAll(".not_corpus_info")
-                    .first()
+                current.closest("tr").prevAll(".not_corpus_info").first()
             )
             prevMatch.click()
         } else {
@@ -571,10 +549,7 @@ view.KWICResults = class KWICResults extends BaseResults {
                         .get()
                         .reverse()
                 )
-            const def = current
-                .parent()
-                .prev()
-                .find(".word:last")
+            const def = current.parent().prev().find(".word:last")
             prevMatch = this.getFirstAtCoor(
                 current.offset().left + current.width() / 2,
                 $(searchwords),
@@ -591,24 +566,20 @@ view.KWICResults = class KWICResults extends BaseResults {
         if (!this.isReadingMode()) {
             nextMatch = this.getWordAt(
                 current.offset().left + current.width() / 2,
-                current
-                    .closest("tr")
-                    .nextAll(".not_corpus_info")
-                    .first()
+                current.closest("tr").nextAll(".not_corpus_info").first()
             )
             nextMatch.click()
         } else {
-            const searchwords = current.nextAll(".word").add(
-                current
-                    .closest(".not_corpus_info")
-                    .nextAll(".not_corpus_info")
-                    .first()
-                    .find(".word")
-            )
-            const def = current
-                .parent()
-                .next()
-                .find(".word:first")
+            const searchwords = current
+                .nextAll(".word")
+                .add(
+                    current
+                        .closest(".not_corpus_info")
+                        .nextAll(".not_corpus_info")
+                        .first()
+                        .find(".word")
+                )
+            const def = current.parent().next().find(".word:first")
             nextMatch = this.getFirstAtCoor(
                 current.offset().left + current.width() / 2,
                 searchwords,
@@ -620,7 +591,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     getFirstAtCoor(xCoor, wds, default_word) {
         let output = null
-        wds.each(function(i, item) {
+        wds.each(function (i, item) {
             const thisLeft = $(this).offset().left
             const thisRight = $(this).offset().left + $(this).width()
             if (xCoor > thisLeft && xCoor < thisRight) {
@@ -634,7 +605,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     getWordAt(xCoor, $row) {
         let output = $()
-        $row.find(".word").each(function() {
+        $row.find(".word").each(function () {
             output = $(this)
             const thisLeft = $(this).offset().left
             const thisRight = $(this).offset().left + $(this).width()
@@ -698,7 +669,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         this.showPreloader()
         const progress =
             opts.command === "relations_sentences" ? $.noop : $.proxy(this.onProgress, this)
-        const def = this.proxy.makeRequest(opts, null, progress, data => {
+        const def = this.proxy.makeRequest(opts, null, progress, (data) => {
             this.renderResult(data, opts.cqp)
             this.renderCompleteResult(data)
             return safeApply(this.s, () => {
@@ -706,7 +677,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
             })
         })
 
-        return def.fail(function() {
+        return def.fail(function () {
             return safeApply(this.s, () => {
                 return this.hidePreloader()
             })
@@ -754,7 +725,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             this.onProgress(...(args || []))
         })
 
-        def.done(data => {
+        def.done((data) => {
             safeApply(this.s, () => {
                 return this.renderResult(data, word)
             })
@@ -790,7 +761,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
     }
 
     renderWordTables(word, data) {
-        const wordlist = $.map(data, function(item) {
+        const wordlist = $.map(data, function (item) {
             const output = []
             if (item.head.split("_")[0] === word) {
                 output.push([item.head, item.headpos.toLowerCase()])
@@ -800,12 +771,12 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             }
             return output
         })
-        let unique_words = _.uniqBy(wordlist, function(...args) {
+        let unique_words = _.uniqBy(wordlist, function (...args) {
             let [word, pos] = args[0]
             return word + pos
         })
         const tagsetTrans = _.invert(settings.wordpictureTagset)
-        unique_words = _.filter(unique_words, function(...args) {
+        unique_words = _.filter(unique_words, function (...args) {
             const [currentWd, pos] = args[0]
             return settings.wordPictureConf[tagsetTrans[pos]] != null
         })
@@ -830,26 +801,26 @@ view.LemgramResults = class LemgramResults extends BaseResults {
     }
 
     drawTables(tables, data) {
-        const inArray = function(rel, orderList) {
+        const inArray = function (rel, orderList) {
             const i = _.findIndex(
                 orderList,
-                item =>
+                (item) =>
                     (item.field_reverse || false) === (rel.field_reverse || false) &&
                     item.rel === rel.rel
             )
             const type = rel.field_reverse ? "head" : "dep"
             return {
                 i,
-                type
+                type,
             }
         }
 
         const tagsetTrans = _.invert(settings.wordpictureTagset)
 
-        const res = _.map(tables, function([token, wordClass]) {
-            const getRelType = item => ({
+        const res = _.map(tables, function ([token, wordClass]) {
+            const getRelType = (item) => ({
                 rel: tagsetTrans[item.rel.toLowerCase()],
-                field_reverse: item.dep === token
+                field_reverse: item.dep === token,
             })
 
             const wordClassShort = wordClass.toLowerCase()
@@ -879,8 +850,8 @@ view.LemgramResults = class LemgramResults extends BaseResults {
                 })
             })
 
-            $.each(orderArrays, function(i, unsortedList) {
-                $.each(unsortedList, function(_, list) {
+            $.each(orderArrays, function (i, unsortedList) {
+                $.each(unsortedList, function (_, list) {
                     if (list) {
                         list.sort((first, second) => second.mi - first.mi)
                     }
@@ -899,12 +870,12 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             })
 
             orderArrays = _.map(orderArrays, (section, i) =>
-                _.map(section, function(table, j) {
+                _.map(section, function (table, j) {
                     if (table && table[0]) {
                         const { rel } = table[0]
                         const { show_rel } = table[0]
                         const all_lemgrams = _.uniq(
-                            _.map(_.map(table, show_rel), function(item) {
+                            _.map(_.map(table, show_rel), function (item) {
                                 if (util.isLemgramId(item)) {
                                     return item.slice(0, -1)
                                 } else {
@@ -923,7 +894,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
                 token: token,
                 wordClass: wordClass,
                 wordClassShort: wordClassShort,
-                data: orderArrays
+                data: orderArrays,
             }
         })
 
@@ -959,14 +930,12 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         this.proxy = new model.StatsProxy()
         window.statsProxy = this.proxy
-        this.$result.on("click", ".arcDiagramPicture", event => {
-            const parts = $(event.currentTarget)
-                .attr("id")
-                .split("__")
+        this.$result.on("click", ".arcDiagramPicture", (event) => {
+            const parts = $(event.currentTarget).attr("id").split("__")
             return this.showPieChart(parseInt(parts[1]))
         })
 
-        this.$result.on("click", ".slick-cell .statistics-link", e => {
+        this.$result.on("click", ".slick-cell .statistics-link", (e) => {
             let rowData
             const rowIx = $(e.currentTarget).data("row")
             // TODO don't loop
@@ -979,7 +948,7 @@ view.StatsResults = class StatsResults extends BaseResults {
             let cqp2 = null
             // isPhraseLevelDisjunction: used for constructing cqp like: ([] | [])
             if (rowData.isPhraseLevelDisjunction) {
-                let tokens = rowData.statsValues.map(vals =>
+                let tokens = rowData.statsValues.map((vals) =>
                     statisticsFormatting.getCqp(vals, this.searchParams.ignoreCase)
                 )
                 cqp2 = tokens.join(" | ")
@@ -998,7 +967,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                 corpus: corpora.join(","),
                 cqp: self.proxy.prevParams.cqp,
                 cqp2,
-                expand_prequeries: false
+                expand_prequeries: false,
             }
 
             return safeApply(scope.$root, () => scope.$root.kwicTabs.push({ queryParams: opts }))
@@ -1048,7 +1017,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                 cqp = statisticsFormatting.getCqp(row.statsValues, this.searchParams.ignoreCase)
                 subExprs.push(cqp)
                 const parts = this.searchParams.reduceVals.map(
-                    reduceVal => row.formattedValue[reduceVal]
+                    (reduceVal) => row.formattedValue[reduceVal]
                 )
                 labelMapping[cqp] = parts.join(", ")
             }
@@ -1068,7 +1037,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                     subcqps: subExprs,
                     labelMapping,
                     showTotal,
-                    corpusListing: settings.corpusListing.subsetFactory(activeCorpora)
+                    corpusListing: settings.corpusListing.subsetFactory(activeCorpora),
                 })
             })
         })
@@ -1092,11 +1061,11 @@ view.StatsResults = class StatsResults extends BaseResults {
         header.push(util.getLocaleString("stats_total"))
         header = header.concat(_.map(cl.corpora, "title"))
 
-        const fmt = what => what.toString()
+        const fmt = (what) => what.toString()
 
         let output = []
         for (var row of this.data) {
-            let outputRow = this.searchParams.reduceVals.map(reduceVal => {
+            let outputRow = this.searchParams.reduceVals.map((reduceVal) => {
                 if (row.rowId === 0) {
                     return "Σ"
                 } else {
@@ -1117,7 +1086,7 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         const csv = new CSV(output, {
             header,
-            delimiter: dataDelimiter
+            delimiter: dataDelimiter,
         })
 
         const csvstr = csv.encode()
@@ -1127,7 +1096,7 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         $("#exportButton", this.$result).attr({
             download: `export.${selType}`,
-            href: csvUrl
+            href: csvUrl,
         })
     }
 
@@ -1171,7 +1140,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                     c.log(
                         "stats fail",
                         this.s.$parent.loading,
-                        _.map(this.proxy.pendingRequests, item => item.readyState)
+                        _.map(this.proxy.pendingRequests, (item) => item.readyState)
                     )
                     if (this.ignoreAbort) {
                         c.log("stats ignoreabort")
@@ -1221,7 +1190,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         const refreshHeaders = () =>
             $(".localized-header .slick-column-name")
                 .not("[rel^=localize]")
-                .each(function() {
+                .each(function () {
                     return $(this).localeKey($(this).text())
                 })
 
@@ -1239,7 +1208,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         }
 
         const checkboxSelector = new Slick.CheckboxSelectColumn({
-            cssClass: "slick-cell-checkboxsel"
+            cssClass: "slick-cell-checkboxsel",
         })
 
         columns = [checkboxSelector.getColumnDefinition()].concat(columns)
@@ -1247,7 +1216,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         const grid = new Slick.Grid($("#myGrid"), data, columns, {
             enableCellNavigation: false,
             enableColumnReorder: false,
-            forceFitColumns: false
+            forceFitColumns: false,
         })
 
         grid.setSelectionModel(new Slick.RowSelectionModel({ selectActiveRow: false }))
@@ -1263,7 +1232,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                 this.sortColumn = sortColumns.columnId
                 this.sortAsc = sortColumns.sortAsc
                 const { sortCol } = args
-                data.sort(function(a, b) {
+                data.sort(function (a, b) {
                     let x, y
                     if (a.id === "row_total") {
                         return -1
@@ -1338,7 +1307,7 @@ view.StatsResults = class StatsResults extends BaseResults {
     resizeGrid() {
         let width
         let height = 0
-        $(".slick-row").each(function() {
+        $(".slick-row").each(function () {
             height += $(this).outerHeight(true)
         })
         $("#myGrid:visible.slick-viewport").height(height)
@@ -1350,7 +1319,7 @@ view.StatsResults = class StatsResults extends BaseResults {
             width = 0
         }
 
-        $(".slick-header-column").each(function() {
+        $(".slick-header-column").each(function () {
             width += $(this).outerWidth(true)
         })
         if (width > $(window).width() - 40) {
@@ -1385,7 +1354,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                                 settings.corpora[corpus.toLowerCase()]["title"] +
                                 ": " +
                                 util.formatDecimalString(freq.toString()),
-                            shape_id: rowId
+                            shape_id: rowId,
                         })
                     }
                     break
@@ -1413,7 +1382,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                 height: 500,
                 close() {
                     return $("#pieDiv").remove()
-                }
+                },
             })
             .css("opacity", 0)
             .parent()
@@ -1421,13 +1390,11 @@ view.StatsResults = class StatsResults extends BaseResults {
             .localeKey("statstable_hitsheader_lemgram")
 
         $("#dialog").fadeTo(400, 1)
-        $("#dialog")
-            .find("a")
-            .blur() // Prevents the focus of the first link in the "dialog"
+        $("#dialog").find("a").blur() // Prevents the focus of the first link in the "dialog"
 
         const stats2Instance = $("#chartFrame").pie_widget({
             container_id: "chartFrame",
-            data_items: getDataItems(rowId, "relative")
+            data_items: getDataItems(rowId, "relative"),
         })
         statsSwitchInstance = $("#statistics_switch").radioList({
             change: () => {
@@ -1444,7 +1411,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                 }
                 return $("#hitsDescription").localeKey(loc)
             },
-            selected: "relative"
+            selected: "relative",
         })
     }
 
@@ -1463,7 +1430,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         $("#exportStatsSection").show()
         $("#exportButton").attr({
             download: null,
-            href: null
+            href: null,
         })
         this.s.no_hits = false
         this.s.aborted = false
@@ -1481,7 +1448,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             day: "d",
             hour: "h",
             minute: "n",
-            second: "s"
+            second: "s",
         }
 
         this.zoom = "year"
@@ -1491,7 +1458,7 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         this.checkZoomLevel(from, to, true)
 
-        $(".chart", this.$result).on("click", event => {
+        $(".chart", this.$result).on("click", (event) => {
             const target = $(".chart", this.$result)
             const val = $(".detail .x_label > span", target).data("val")
             let cqp = $(".detail .item.active > span", target).data("cqp")
@@ -1501,12 +1468,8 @@ view.GraphResults = class GraphResults extends BaseResults {
                 cqp = CQP.expandOperators(decodeURIComponent(cqp))
                 const m = moment(val * 1000)
 
-                const datefrom = moment(m)
-                    .startOf(this.zoom)
-                    .format("YYYYMMDD")
-                const dateto = moment(m)
-                    .endOf(this.zoom)
-                    .format("YYYYMMDD")
+                const datefrom = moment(m).startOf(this.zoom).format("YYYYMMDD")
+                const dateto = moment(m).endOf(this.zoom).format("YYYYMMDD")
                 if (this.validZoomLevels.indexOf(this.zoom) < 3) {
                     // year, month, day
                     timecqp = `[(int(_.text_datefrom) >= ${datefrom} & int(_.text_dateto) <= ${dateto}) |
@@ -1514,12 +1477,8 @@ view.GraphResults = class GraphResults extends BaseResults {
                                ]`
                 } else {
                     // hour, minute, second
-                    const timefrom = moment(m)
-                        .startOf(this.zoom)
-                        .format("HHmmss")
-                    const timeto = moment(m)
-                        .endOf(this.zoom)
-                        .format("HHmmss")
+                    const timefrom = moment(m).startOf(this.zoom).format("HHmmss")
+                    const timeto = moment(m).endOf(this.zoom).format("HHmmss")
                     timecqp = `[(int(_.text_datefrom) = ${datefrom} &
                                  int(_.text_timefrom) >= ${timefrom} &
                                  int(_.text_dateto) <= ${dateto} &
@@ -1543,7 +1502,7 @@ view.GraphResults = class GraphResults extends BaseResults {
                     corpus: this.s.data.corpusListing.stringifySelected(),
                     cqp: this.s.data.cqp,
                     cqp2: timecqp,
-                    expand_prequeries: false
+                    expand_prequeries: false,
                 }
 
                 safeApply(this.s.$root, () => {
@@ -1565,7 +1524,7 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         $(".preloader", this.$result).css({
             left,
-            width
+            width,
         })
     }
 
@@ -1596,7 +1555,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         const oldZoom = this.zoom
 
         const idealNumHits = 1000
-        let newZoom = _.minBy(this.validZoomLevels, function(zoom) {
+        let newZoom = _.minBy(this.validZoomLevels, function (zoom) {
             const nPoints = to.diff(from, zoom)
             return Math.abs(idealNumHits - nPoints)
         })
@@ -1625,8 +1584,8 @@ view.GraphResults = class GraphResults extends BaseResults {
 
     fillMissingDate(data) {
         const dateArray = _.map(data, "x")
-        const min = _.minBy(dateArray, mom => mom.toDate())
-        const max = _.maxBy(dateArray, mom => mom.toDate())
+        const min = _.minBy(dateArray, (mom) => mom.toDate())
+        const max = _.maxBy(dateArray, (mom) => mom.toDate())
 
         min.startOf(this.zoom)
         max.endOf(this.zoom)
@@ -1634,7 +1593,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         const n_diff = moment(max).diff(min, this.zoom)
 
         const momentMapping = _.fromPairs(
-            _.map(data, item => {
+            _.map(data, (item) => {
                 const mom = moment(item.x)
                 mom.startOf(this.zoom)
                 return [mom.unix(), item.y]
@@ -1687,7 +1646,7 @@ view.GraphResults = class GraphResults extends BaseResults {
     hideNthTick(graphDiv) {
         return $(".x_tick:visible", graphDiv)
             .hide()
-            .filter(n => (n % 2 || n % 3 || n % 5) === 0)
+            .filter((n) => (n % 2 || n % 3 || n % 5) === 0)
             .show()
     }
 
@@ -1714,7 +1673,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             (a, b) => (a || 0) + (b || 0),
             0
         )
-        const sizelist = _.map(settings.corpusListing.selected, item => Number(item.info.Size))
+        const sizelist = _.map(settings.corpusListing.selected, (item) => Number(item.info.Size))
         const totalsize = _.reduce(sizelist, (a, b) => a + b)
         return (non_time / totalsize) * 100
     }
@@ -1765,7 +1724,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             $("<div>", { class: "empty_area" })
                 .css({
                     left: from - unitWidth / 2,
-                    width: to - from + unitWidth
+                    width: to - from + unitWidth,
                 })
                 .appendTo(graph.element)
         }
@@ -1774,7 +1733,9 @@ view.GraphResults = class GraphResults extends BaseResults {
     setBarMode() {
         if ($(".legend .line", this.$result).length > 1) {
             $(".legend li:last:not(.disabled) .action", this.$result).click()
-            if (_.every(_.map($(".legend .line", this.$result), item => $(item).is(".disabled")))) {
+            if (
+                _.every(_.map($(".legend .line", this.$result), (item) => $(item).is(".disabled")))
+            ) {
                 $(".legend li:first .action", this.$result).click()
             }
         }
@@ -1821,7 +1782,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             }
 
             const csv = new CSV(output, {
-                delimiter: dataDelimiter
+                delimiter: dataDelimiter,
             })
 
             const csvstr = csv.encode()
@@ -1846,7 +1807,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             hour: "YYYY-MM-DD hh",
             day: "YYYY-MM-DD",
             month: "YYYY-MM",
-            year: "YYYY"
+            year: "YYYY",
         }
         return stampFormats[zoom]
     }
@@ -1865,9 +1826,9 @@ view.GraphResults = class GraphResults extends BaseResults {
                     formatter(row, cell, value, columnDef, dataContext) {
                         const loc = {
                             sv: "sv-SE",
-                            en: "gb-EN"
+                            en: "gb-EN",
                         }[$("body").scope().lang]
-                        const fmt = function(valTup) {
+                        const fmt = function (valTup) {
                             if (typeof valTup[0] === "undefined") {
                                 return ""
                             }
@@ -1883,7 +1844,7 @@ view.GraphResults = class GraphResults extends BaseResults {
                             )
                         }
                         return fmt(value)
-                    }
+                    },
                 }
                 const i = _.sortedIndexOf(_.map(row.abs_data, "x"), item.x)
                 new_time_row[timestamp] = [item.y, row.abs_data[i].y]
@@ -1897,8 +1858,8 @@ view.GraphResults = class GraphResults extends BaseResults {
                 field: "label",
                 formatter(row, cell, value, columnDef, dataContext) {
                     return value
-                }
-            }
+                },
+            },
         ]
         for (let key of _.keys(time_table_columns_intermediate).sort()) {
             time_table_columns.push(time_table_columns_intermediate[key])
@@ -1911,7 +1872,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             {
                 enableCellNavigation: false,
                 enableColumnReorder: false,
-                forceFitColumns: false
+                forceFitColumns: false,
             }
         )
         $(".time_table", this.$result).width("100%")
@@ -1932,7 +1893,11 @@ view.GraphResults = class GraphResults extends BaseResults {
                     color,
                     name: item.cqp ? this.s.data.labelMapping[item.cqp] : "&Sigma;",
                     cqp: item.cqp || cqp,
-                    abs_data: this.getSeriesData(item.absolute, showSelectedCorporasStartDate, zoom)
+                    abs_data: this.getSeriesData(
+                        item.absolute,
+                        showSelectedCorporasStartDate,
+                        zoom
+                    ),
                 })
             }
         } else {
@@ -1950,8 +1915,8 @@ view.GraphResults = class GraphResults extends BaseResults {
                         data.combined.absolute,
                         showSelectedCorporasStartDate,
                         zoom
-                    )
-                }
+                    ),
+                },
             ]
         }
         Rickshaw.Series.zeroFill(series)
@@ -1960,8 +1925,8 @@ view.GraphResults = class GraphResults extends BaseResults {
         series[0].emptyIntervals = emptyIntervals
 
         for (let s of series) {
-            s.data = _.filter(s.data, item => item.y !== null)
-            s.abs_data = _.filter(s.abs_data, item => item.y !== null)
+            s.data = _.filter(s.data, (item) => item.y !== null)
+            s.abs_data = _.filter(s.abs_data, (item) => item.y !== null)
         }
 
         return series
@@ -2000,7 +1965,7 @@ view.GraphResults = class GraphResults extends BaseResults {
     previewPanStop() {
         const visibleData = this.graph.stackData()
 
-        const count = _.countBy(visibleData[0], coor => coor.zoom)
+        const count = _.countBy(visibleData[0], (coor) => coor.zoom)
 
         const grouped = _.groupBy(visibleData[0], "zoom")
 
@@ -2057,16 +2022,14 @@ view.GraphResults = class GraphResults extends BaseResults {
         series = this.makeSeries(data, cqp, labelMapping, currentZoom)
 
         const graph = new Rickshaw.Graph({
-            element: $(".chart", this.$result)
-                .empty()
-                .get(0),
+            element: $(".chart", this.$result).empty().get(0),
             renderer: "line",
             interpolation: "linear",
             series,
             padding: {
                 top: 0.1,
-                right: 0.01
-            }
+                right: 0.01,
+            },
         })
         let width = $(".tab-pane").width()
         graph.setSize({ width })
@@ -2088,7 +2051,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             }, 200)
         )
 
-        $(".form_switch", this.$result).click(event => {
+        $(".form_switch", this.$result).click((event) => {
             const val = this.s.mode
             for (let cls of this.$result.attr("class").split(" ")) {
                 if (cls.match(/^form-/)) {
@@ -2114,12 +2077,12 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         const legend = new Rickshaw.Graph.Legend({
             element: $(".legend", this.$result).get(0),
-            graph
+            graph,
         })
 
         const shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
             graph,
-            legend
+            legend,
         })
 
         if (!showTotal && $(".legend .line", this.$result).length > 1) {
@@ -2128,7 +2091,7 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         const hoverDetail = new Rickshaw.Graph.HoverDetail({
             graph,
-            xFormatter: x => {
+            xFormatter: (x) => {
                 const m = moment.unix(String(x))
 
                 return `<span data-val='${x}'>${m.format("YYYY-MM-DD HH:mm:ss")}</span>`
@@ -2158,7 +2121,7 @@ view.GraphResults = class GraphResults extends BaseResults {
                             <br>
                             ${util.getLocaleString("abs_hits_short")}: ${abs_y}
                         </span>`
-            }
+            },
         })
 
         // [first, last] = settings.corpusListing.getTimeInterval()
@@ -2167,7 +2130,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         // TODO: fix decade again
         // timeunit = if last - first > 100 then "decade" else @zoom
 
-        const toDate = sec => moment(sec * 1000).toDate()
+        const toDate = (sec) => moment(sec * 1000).toDate()
 
         const time = new Rickshaw.Fixtures.Time()
         const old_ceil = time.ceil
@@ -2185,14 +2148,14 @@ view.GraphResults = class GraphResults extends BaseResults {
         }
 
         const xAxis = new Rickshaw.Graph.Axis.Time({
-            graph
+            graph,
         })
         // timeUnit: time.unit("month") # TODO: bring back decade
         // timeFixture: new Rickshaw.Fixtures.Time()
 
         this.preview = new Rickshaw.Graph.RangeSlider.Preview({
             graph,
-            element: $(".preview", this.$result).get(0)
+            element: $(".preview", this.$result).get(0),
         })
 
         $("body").on("mouseup", ".preview .middle_handle", () => {
@@ -2221,7 +2184,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         xAxis.render()
 
         const yAxis = new Rickshaw.Graph.Axis.Y({
-            graph
+            graph,
         })
 
         yAxis.render()
@@ -2231,20 +2194,23 @@ view.GraphResults = class GraphResults extends BaseResults {
 
     async makeRequest(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
         this.s.loading = true
-        if(!window.Rickshaw) {
+        if (!window.Rickshaw) {
             var rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
         }
         this.showPreloader()
         const currentZoom = this.zoom
         let reqPromise = this.proxy
             .makeRequest(cqp, subcqps, corpora.stringifySelected(), from, to)
-            .progress(data => {
+            .progress((data) => {
                 return this.onProgress(data)
             })
-        
+
         try {
-            var [rickshawModule, graphData] = await Promise.all([rickshawPromise || Rickshaw, reqPromise])
-        } catch(e) {
+            var [rickshawModule, graphData] = await Promise.all([
+                rickshawPromise || Rickshaw,
+                reqPromise,
+            ])
+        } catch (e) {
             c.error("graph crash", e)
             this.resultError(data)
             this.s.loading = false
