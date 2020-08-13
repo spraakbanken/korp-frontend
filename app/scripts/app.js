@@ -2,6 +2,9 @@
 
 import jStorage from "../lib/jstorage"
 import { kwicPagerName, kwicPager } from "./components/pager"
+import { setDefaultConfigValues } from "./settings.js"
+
+setDefaultConfigValues()
 
 window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.typeahead",
