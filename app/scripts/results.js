@@ -256,8 +256,7 @@ view.KWICResults = class KWICResults extends BaseResults {
     }
 
     getPageInterval(page) {
-        const hpp = locationSearch().hpp || 25
-        // TODO settings.hitsPerPageDefault will never be used
+        const hpp = locationSearch().hpp
         const items_per_page = Number(hpp) || settings.hitsPerPageDefault
         page = Number(page)
         const output = {}
@@ -637,7 +636,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
     }
 
     makeRequest() {
-        const items_per_page = parseInt(locationSearch().hpp || 25)
+        const items_per_page = parseInt(locationSearch().hpp || settings.hitsPerPageDefault)
         const opts = this.s.$parent.kwicTab.queryParams
 
         this.resetView()

@@ -274,7 +274,7 @@ class KwicCtrl {
 
         s.$watch(
             () => $location.search().hpp,
-            (hpp) => (s.hitsPerPage = hpp || 25)
+            (hpp) => (s.hitsPerPage = hpp || settings.hitsPerPageDefault)
         )
 
         s.download = {
