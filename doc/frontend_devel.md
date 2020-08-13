@@ -532,6 +532,10 @@ __newMapEnabled__ - See **Map**.
 
 __mapCenter__ - See **Map**.
 
+__hitsPerPageValues__ - An array of possible number of hits per page for example: `[25,50,75,100]`
+
+__hitsPerPageDefault__ - The number of hits per page that Korp should select by default. If emitted, fallback value is the first element in `hitsPerPageValues`
+
 # Developing the Korp Frontend
 
 Here is where we present details on how to install development dependencies for the Korp frontend and how to build and distribute the frontend code.
