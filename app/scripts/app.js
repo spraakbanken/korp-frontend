@@ -61,6 +61,7 @@ korpApp.config([
 
 korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
     const s = $rootScope
+    s._settings = settings
     window.lang = s.lang = $location.search().lang || settings.defaultLanguage
     s.word_selected = null
     s.isLab = window.isLab
