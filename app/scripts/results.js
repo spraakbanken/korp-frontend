@@ -321,7 +321,9 @@ view.KWICResults = class KWICResults extends BaseResults {
             }
         }
 
-        util.setDownloadLinks(this.proxy.prevRequest, data)
+        if (settings.enableBackendKwicDownload) {
+            util.setDownloadLinks(this.proxy.prevRequest, data)
+        }
 
         this.$result.localize()
         this.centerScrollbar()
