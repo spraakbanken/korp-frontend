@@ -17,17 +17,26 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
         s.numResults = 0
         s.useClustering = false
 
-        s.promise.then(
-            (result) => {
-                s.loading = false
-                s.numResults = 20
-                s.markerGroups = getMarkerGroups(result)
-                s.selectedGroups = _.keys(s.markerGroups)
+        if (!window.Rickshaw) {
+            var rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
+        }
+
+        Promise.all([rickshawPromise || Rickshaw, s.promise]).then(
+            ([rickshawModule, result]) => {
+                window.Rickshaw = rickshawModule
+                s.$apply(($scope) => {
+                    $scope.loading = false
+                    $scope.numResults = 20
+                    $scope.markerGroups = getMarkerGroups(result)
+                    $scope.selectedGroups = _.keys($scope.markerGroups)
+                })
             },
             (err) => {
                 console.error("Map data parsing failed:", err)
-                s.loading = false
-                s.error = true
+                this.s.$apply(($scope) => {
+                    $scope.loading = false
+                    $scope.error = true
+                })
             }
         )
 
