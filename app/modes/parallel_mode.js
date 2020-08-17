@@ -32,7 +32,7 @@ korpApp.controller("SearchCtrl", function($rootScope, $scope, $controller, $loca
 
 function parseLocationLangs() {
     try {
-        var langs = _(location.hash.split("?")[1].split("&")).invoke("split", "=").object().value()["parallel_corpora"].split(",")
+        var langs = _.filter(location.hash.split("?")[1].split("&"), (elem) => elem.slice(0, 16) === "parallel_corpora")[0].split('=')[1].split(',')
     } catch(e) {
         return ["swe"]
     }
