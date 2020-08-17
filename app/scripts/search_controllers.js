@@ -530,16 +530,26 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
 
 korpApp.directive("advancedSearch", () => ({
     controller($scope, compareSearches, $location, $timeout) {
-        if ($location.search().search && $location.search().search.split("|")) {
-            var [type, ...expr] = $location.search().search.split("|")
-            expr = expr.join("|")
+        function updateAdvancedCQP() {
+            if ($location.search().search && $location.search().search.split("|")) {
+                var [type, ...expr] = $location.search().search.split("|")
+                expr = expr.join("|")
+            }
+
+            if (type === "cqp") {
+                $scope.cqp = expr || "[]"
+            } else {
+                $scope.cqp = "[]"
+            }
         }
 
-        if (type === "cqp") {
-            $scope.cqp = expr || "[]"
-        } else {
-            $scope.cqp = "[]"
-        }
+        // init value
+        updateAdvancedCQP()
+
+        // update value
+        $scope.$on("updateAdvancedCQP", () => {
+            updateAdvancedCQP()
+        })
 
         $scope.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, $scope.cqp))
 

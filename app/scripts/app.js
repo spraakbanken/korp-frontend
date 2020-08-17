@@ -59,7 +59,7 @@ korpApp.config([
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
-korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
+korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $timeout) {
     const s = $rootScope
     s._settings = settings
     window.lang = s.lang = $location.search().lang || settings.defaultLanguage
@@ -146,9 +146,18 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
         if (!_.isEmpty(s.loginNeededFor)) {
             s.savedState = $location.search()
             $location.url($location.path())
+
+            // some state need special treatment
             if (s.savedState.reading_mode) {
                 $location.search("reading_mode")
             }
+            if (s.savedState.search_tab) {
+                $location.search("search_tab", s.savedState.search_tab)
+            }
+            if (s.savedState.cqp) {
+                $location.search("cqp", s.savedState.cqp)
+            }
+
             $location.search("display", "login")
         }
     }
@@ -157,8 +166,13 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
         if (s.savedState) {
             for (let key in s.savedState) {
                 const val = s.savedState[key]
-                $location.search(key, val)
+                if (key !== "search_tab") {
+                    $location.search(key, val)
+                }
             }
+
+            // some state need special treatment
+            s.$broadcast("updateAdvancedCQP")
 
             const corpora = s.savedState.corpus.split(",")
             settings.corpusListing.select(corpora)
