@@ -218,8 +218,11 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     const s = $scope
 
     s.logoClick = function () {
-        window.location.href = $scope.getUrl(currentMode)
-        window.location.reload()
+        const [baseUrl, modeParam, langParam] = $scope.getUrlParts(currentMode)
+        window.location = baseUrl + modeParam + langParam
+        if (langParam.length > 0) {
+            window.location.reload()
+        }
     }
 
     s.citeClick = () => {
@@ -282,11 +285,13 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     }
 
     s.getUrl = function (modeId) {
+        return s.getUrlParts(modeId).join("")
+    }
+
+    s.getUrlParts = function (modeId) {
         const langParam = settings.defaultLanguage === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
-        if (modeId === "default") {
-            return location.pathname + langParam
-        }
-        return location.pathname + `?mode=${modeId}` + langParam
+        const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
+        return [location.pathname, modeParam, langParam]
     }
 
     s.show_modal = false
