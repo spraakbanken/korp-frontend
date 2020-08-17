@@ -1,10 +1,10 @@
 /** @format */
 const korpApp = angular.module("korpApp")
 
-korpApp.controller("VideoCtrl", function($scope, $uibModal) {
+korpApp.controller("VideoCtrl", function ($scope, $uibModal) {
     $scope.videos = []
 
-    $scope.open = function() {
+    $scope.open = function () {
         let modalInstance
         modalInstance = $uibModal.open({
             animation: false,
@@ -27,15 +27,15 @@ korpApp.controller("VideoCtrl", function($scope, $uibModal) {
                 },
                 sentence() {
                     return $scope.sentence
-                }
-            }
+                },
+            },
         })
     }
 
     $scope.startTime = 0
 })
 
-korpApp.controller("VideoInstanceCtrl", function(
+korpApp.controller("VideoInstanceCtrl", function (
     $scope,
     $compile,
     $timeout,
@@ -49,7 +49,7 @@ korpApp.controller("VideoInstanceCtrl", function(
     $scope.fileName = fileName
     $scope.sentence = sentence
 
-    const transformSeconds = function(seconds) {
+    const transformSeconds = function (seconds) {
         let sHours
         const d = moment.duration(seconds, "seconds")
         const hours = Math.floor(d.asHours())
@@ -80,7 +80,7 @@ korpApp.controller("VideoInstanceCtrl", function(
         $scope.endTime = transformSeconds(endTime)
     }
 
-    $scope.init = function() {
+    $scope.init = function () {
         const videoElem = angular.element("#korp-video")
 
         // workaround for firefox problem, not possible to create source-elem in template
@@ -94,7 +94,7 @@ korpApp.controller("VideoInstanceCtrl", function(
 
         const video = videoElem[0]
 
-        video.addEventListener("durationchange", function() {
+        video.addEventListener("durationchange", function () {
             video.currentTime = startTime
             video.play()
         })
@@ -106,13 +106,13 @@ korpApp.controller("VideoInstanceCtrl", function(
             }
         })
 
-        $scope.goToStartTime = function() {
+        $scope.goToStartTime = function () {
             video.currentTime = startTime
             $scope.isPaused = false
             video.play()
         }
 
-        $scope.continuePlay = function() {
+        $scope.continuePlay = function () {
             $scope.pauseAfterEndTime = false
             $scope.isPaused = false
             video.play()

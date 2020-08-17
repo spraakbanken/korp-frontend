@@ -16,14 +16,14 @@ const Sidebar = {
         if (!inReadingMode && corpusObj.readingMode) {
             $("<div class='openReadingMode'/>")
                 .html(`<span class="link" rel="localize[read_in_korp]"></span>`)
-                .click(function() {
+                .click(function () {
                     const aScope = angular
                         .element(document.getElementById("results-wrapper"))
                         .scope()
                     safeApply(aScope.$root, () =>
                         aScope.$root.textTabs.push({
                             corpus: corpus,
-                            sentenceId: sentenceData.sentence_id
+                            sentenceId: sentenceData.sentence_id,
                         })
                     )
                 })
@@ -85,14 +85,14 @@ const Sidebar = {
         }
         $("<span class='link show_deptree'></button>")
             .localeKey("show_deptree")
-            .click(function() {
+            .click(function () {
                 const outerW = $(window).width() - 80
                 const info = $("<span class='info' />")
                 const iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>')
                     .css("width", outerW - 40)
-                    .on("load", function() {
+                    .on("load", function () {
                         const wnd = this.contentWindow
-                        wnd.draw_deptree.call(wnd, tokens, function(msg) {
+                        wnd.draw_deptree.call(wnd, tokens, function (msg) {
                             const [type, val] = _.head(_.toPairs(msg))
                             info.empty().append(
                                 $("<span>").localeKey(type),
@@ -107,7 +107,7 @@ const Sidebar = {
                     .append(info, iframe)
                     .dialog({
                         height: 300,
-                        width: outerW
+                        width: outerW,
                     })
                     .parent()
                     .find(".ui-dialog-title")
@@ -132,11 +132,11 @@ const Sidebar = {
             pairs = _.toPairs(wordData)
         }
 
-        pairs = _.filter(pairs, function(...args) {
+        pairs = _.filter(pairs, function (...args) {
             let [key, val] = args[0]
             return corpus_attrs[key]
         })
-        pairs = _.filter(pairs, function(...args) {
+        pairs = _.filter(pairs, function (...args) {
             let [key, val] = args[0]
             return !(corpus_attrs[key].displayType === "hidden" || corpus_attrs[key].hideSidebar)
         })
@@ -145,7 +145,7 @@ const Sidebar = {
             pairs.push(custom)
         }
 
-        pairs.sort(function(...args) {
+        pairs.sort(function (...args) {
             let ord1, ord2
             const [a] = args[0]
             const [b] = args[1]
@@ -241,7 +241,7 @@ const Sidebar = {
             valueArray = _.filter((value && value.split("|")) || [], Boolean)
             const attrSettings = attrs.display.expandList
             if (attrs.ranked) {
-                valueArray = _.map(valueArray, function(value) {
+                valueArray = _.map(valueArray, function (value) {
                     val = value.split(":")
                     return [val[0], val[val.length - 1]]
                 })
@@ -266,7 +266,7 @@ const Sidebar = {
                             (attrSettings.linkAllValues || outerIdx === 0)
                         ) {
                             inner.data("key", subValue)
-                            inner.addClass("link").click(function() {
+                            inner.addClass("link").click(function () {
                                 const searchKey = attrSettings.searchKey || key
                                 cqpVal = $(this).data("key")
                                 const cqpExpr = attrSettings.internalSearch
@@ -308,15 +308,16 @@ const Sidebar = {
                 ul.append(lis)
 
                 if (lis.length !== 1 && !attrSettings.showAll) {
-                    _.map(lis, function(li, idx) {
+                    _.map(lis, function (li, idx) {
                         if (idx !== 0) {
                             return li.css("display", "none")
                         }
                     })
 
                     const showAll = $(
-                        `<span class='link' rel='localize[complemgram_show_all]'></span><span> (${lis.length -
-                            1})</span>`
+                        `<span class='link' rel='localize[complemgram_show_all]'></span><span> (${
+                            lis.length - 1
+                        })</span>`
                     )
                     ul.append(showAll)
 
@@ -326,16 +327,16 @@ const Sidebar = {
                     showOne.css("display", "none")
                     ul.append(showOne)
 
-                    showAll.click(function() {
+                    showAll.click(function () {
                         showAll.css("display", "none")
                         showOne.css("display", "inline")
-                        return _.map(lis, li => li.css("display", "list-item"))
+                        return _.map(lis, (li) => li.css("display", "list-item"))
                     })
 
-                    showOne.click(function() {
+                    showOne.click(function () {
                         showAll.css("display", "inline")
                         showOne.css("display", "none")
-                        _.map(lis, function(li, i) {
+                        _.map(lis, function (li, i) {
                             if (i !== 0) {
                                 return li.css("display", "none")
                             }
@@ -349,7 +350,7 @@ const Sidebar = {
         } else if (attrs.type === "set") {
             pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>'
             ul = $("<ul>")
-            const getStringVal = str =>
+            const getStringVal = (str) =>
                 _.reduce(
                     _.invokeMap(_.invokeMap(str, "charCodeAt", 0), "toString"),
                     (a, b) => a + b
@@ -357,7 +358,7 @@ const Sidebar = {
             valueArray = _.filter((value && value.split("|")) || [], Boolean)
             if (key === "variants") {
                 // TODO: this doesn't sort quite as expected
-                valueArray.sort(function(a, b) {
+                valueArray.sort(function (a, b) {
                     const splita = util.splitLemgram(a)
                     const splitb = util.splitLemgram(b)
                     const strvala =
@@ -382,19 +383,17 @@ const Sidebar = {
                     }
 
                     if (attrs.internalSearch) {
-                        inner.addClass("link").click(function() {
+                        inner.addClass("link").click(function () {
                             cqpVal = $(this).data("key")
                             return locationSearch({
                                 page: null,
                                 search: "cqp",
-                                cqp: `[${key} contains \"${regescape(cqpVal)}\"]`
+                                cqp: `[${key} contains \"${regescape(cqpVal)}\"]`,
                             })
                         })
                     }
 
-                    li = $("<li></li>")
-                        .data("key", x)
-                        .append(inner)
+                    li = $("<li></li>").data("key", x).append(inner)
                     if (attrs.externalSearch) {
                         address = _.template(attrs.externalSearch)({ val: x })
                         li.append(
@@ -434,7 +433,7 @@ const Sidebar = {
                     key,
                     val: str_value,
                     pos_attrs: wordData,
-                    struct_attrs: sentenceData
+                    struct_attrs: sentenceData,
                 })
             )
         } else {
@@ -461,12 +460,10 @@ const Sidebar = {
         this.element
             .find(".sidebar_url")
             .css("white-space", "nowrap")
-            .each(function() {
+            .each(function () {
                 while ($(this).width() > totalWidth) {
                     const oldtext = $(this).text()
-                    const a = _.trim(oldtext, "/")
-                        .replace("...", "")
-                        .split("/")
+                    const a = _.trim(oldtext, "/").replace("...", "").split("/")
                     const domain = a.slice(2, 3)
                     let midsection = a.slice(3).join("/")
                     midsection = `...${midsection.slice(2)}`
@@ -485,7 +482,7 @@ const Sidebar = {
         } else if ($("#left-column").height() > $("#sidebar").height()) {
             return this.element.addClass("fixed")
         }
-    }
+    },
 }
 
 widget("korp.sidebar", Sidebar)
@@ -494,18 +491,18 @@ widget("korp.radioList", {
     options: {
         change: $.noop,
         separator: "|",
-        selected: "default"
+        selected: "default",
     },
 
     _create() {
         this._super()
         const self = this
-        $.each(this.element, function() {
+        $.each(this.element, function () {
             // $.proxy(self.options.change, self.element)();
             return $(this)
                 .children()
                 .wrap("<li />")
-                .click(function() {
+                .click(function () {
                     if (!$(this).is(".radioList_selected")) {
                         self.select($(this).data("mode"))
                         return self._trigger("change", $(this).data("mode"))
@@ -522,7 +519,7 @@ widget("korp.radioList", {
 
     select(mode) {
         this.options.selected = mode
-        const target = this.element.find("a").filter(function() {
+        const target = this.element.find("a").filter(function () {
             return $(this).data("mode") === mode
         })
         this.element.find(".radioList_selected").removeClass("radioList_selected")
@@ -532,5 +529,5 @@ widget("korp.radioList", {
 
     getSelected() {
         return this.element.find(".radioList_selected")
-    }
+    },
 })

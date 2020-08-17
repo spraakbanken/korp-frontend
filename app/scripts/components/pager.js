@@ -25,18 +25,18 @@ export const kwicPager = {
         totalHits: "<",
         currentPage: "<",
         pageChange: "&",
-        hitsPerPage: "<"
+        hitsPerPage: "<",
     },
     controller: function KwicPagerCtrl() {
         const ctrl = this
 
-        ctrl.$onChanges = function() {
+        ctrl.$onChanges = function () {
             ctrl.numPages = Math.ceil(ctrl.totalHits / ctrl.hitsPerPage)
             const parsedPage = parseInt(ctrl.currentPage)
             ctrl.page = parsedPage ? parsedPage + 1 : 1 // pager starts on 1
         }
 
-        ctrl.onPageInput = function($event) {
+        ctrl.onPageInput = function ($event) {
             if ($event.keyCode === 13) {
                 let page = ctrl.gotoPage
                 if (isNaN(page)) {
@@ -53,8 +53,8 @@ export const kwicPager = {
             }
         }
 
-        ctrl.localPageChange = function() {
+        ctrl.localPageChange = function () {
             ctrl.pageChange({ page: Number(ctrl.page - 1) }) // pager starts counting at 1
         }
-    }
+    },
 }

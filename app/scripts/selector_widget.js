@@ -4,10 +4,10 @@ var collapsedImg = require("../img/collapsed.png")
 var hp_this
 var hp_corpusChooser = {
     options: {
-        template: ""
+        template: "",
     },
 
-    _create: function() {
+    _create: function () {
         this.totalTokenCount = 0
         this._transform()
         var self = this
@@ -16,7 +16,7 @@ var hp_corpusChooser = {
 
         // Make the popup disappear when the user clicks outside it
         $(window).unbind("click.corpusselector")
-        $(window).bind("click.corpusselector", function(e) {
+        $(window).bind("click.corpusselector", function (e) {
             if ($(".popupchecks").is(":visible") && e.target != self) {
                 $(".popupchecks").fadeOut("fast")
                 $(".corpusInfoSpace").fadeOut("fast")
@@ -25,24 +25,24 @@ var hp_corpusChooser = {
         })
 
         $(".buttonlink, ul#icons li").hover(
-            function() {
+            function () {
                 $(this).addClass("ui-state-hover")
             },
-            function() {
+            function () {
                 $(this).removeClass("ui-state-hover")
             }
         )
     },
-    isSelected: function(id) {
+    isSelected: function (id) {
         // Test if a given id is selected
         var cb = $("#" + id)
         return cb.hasClass("checked")
     },
-    selectedItems: function() {
+    selectedItems: function () {
         // Return all ids that are selected
         var IDArray = []
         var allboxes = $(".boxdiv label .checked")
-        allboxes.each(function() {
+        allboxes.each(function () {
             var idstring = $(this).attr("id")
             if (idstring != "") {
                 IDArray.push(idstring.slice(9))
@@ -50,25 +50,25 @@ var hp_corpusChooser = {
         })
         return IDArray
     },
-    selectItems: function(item_ids) {
-        item_ids = $.map(item_ids, function(item) {
+    selectItems: function (item_ids) {
+        item_ids = $.map(item_ids, function (item) {
             return "hpcorpus_" + item
         })
         // Check items from outside
         var allboxes = $(".checkbox")
-        allboxes.each(function() {
+        allboxes.each(function () {
             /* First clear all items */
             hp_this.setStatus($(this), "unchecked")
         })
         var realboxes = $(".boxdiv")
-        realboxes.each(function() {
+        realboxes.each(function () {
             var chk = $(".checkbox", this)
             if ($.inArray(chk.attr("id"), item_ids) != -1 && !$(this).is(".disabled")) {
                 /* Change status of item */
                 hp_this.setStatus(chk, "checked")
                 hp_this.updateState(chk) // <-?
                 var ancestors = chk.parents(".tree")
-                ancestors.each(function() {
+                ancestors.each(function () {
                     hp_this.updateState($(this))
                 })
             }
@@ -77,24 +77,19 @@ var hp_corpusChooser = {
         // Fire callback "change":
         hp_this.triggerChange()
     },
-    updateAllStates: function() {
+    updateAllStates: function () {
         var self = this
-        $(".tree").each(function() {
+        $(".tree").each(function () {
             self.updateState($(this))
         })
     },
-    updateState: function(element) {
+    updateState: function (element) {
         // element is a div!
         var descendants = element.find(".checkbox")
         var numbOfChecked = 0
         var numbOfUnchecked = 0
-        descendants.each(function() {
-            if (
-                !$(this)
-                    .parent()
-                    .parent()
-                    .hasClass("tree")
-            ) {
+        descendants.each(function () {
+            if (!$(this).parent().parent().hasClass("tree")) {
                 if ($(this).hasClass("checked")) {
                     numbOfChecked++
                 } else if ($(this).hasClass("unchecked")) {
@@ -118,7 +113,7 @@ var hp_corpusChooser = {
             element.removeClass("disabled")
         }
     },
-    setStatus: function(obj, stat) {
+    setStatus: function (obj, stat) {
         /* Change status of item */
         obj.removeClass("intermediate unchecked checked")
         if (stat == "checked") {
@@ -129,7 +124,7 @@ var hp_corpusChooser = {
             obj.addClass("unchecked")
         }
     },
-    countSelected: function() {
+    countSelected: function () {
         /* Update header */
         var header_text = ""
         var header_text_2 = ""
@@ -146,10 +141,7 @@ var hp_corpusChooser = {
             header_text = num_checked_checkboxes
             header_text_2 = "corpselector_allselected"
         } else if (num_checked_checkboxes == 1) {
-            var currentCorpusName = checked_checkboxes
-                .parent()
-                .parent()
-                .attr("data")
+            var currentCorpusName = checked_checkboxes.parent().parent().attr("data")
             if (currentCorpusName.length > 37) {
                 // Ellipsis
                 currentCorpusName = _.trim(currentCorpusName.substr(0, 37)) + "..."
@@ -166,10 +158,8 @@ var hp_corpusChooser = {
         // Number of tokens
         var selectedNumberOfTokens = 0
         var selectedNumberOfSentences = 0
-        checked_checkboxes.each(function(key, corpItem) {
-            var corpusID = $(this)
-                .attr("id")
-                .slice(9)
+        checked_checkboxes.each(function (key, corpItem) {
+            var corpusID = $(this).attr("id").slice(9)
             selectedNumberOfTokens += parseInt(settings.corpora[corpusID]["info"]["Size"])
             var numSen = parseInt(settings.corpora[corpusID]["info"]["Sentences"])
             if (!isNaN(numSen)) selectedNumberOfSentences += numSen
@@ -196,15 +186,15 @@ var hp_corpusChooser = {
             .html(util.prettyNumbers(selectedNumberOfSentences.toString()) + " ")
             .append($("<span>").localeKey("corpselector_sentences_long"))
     },
-    triggerChange: function() {
+    triggerChange: function () {
         this._trigger("change", null, [this.selectedItems()])
     },
 
-    redraw: function() {
+    redraw: function () {
         this._transform()
     },
 
-    _transform: function() {
+    _transform: function () {
         var el = this.element
         hp_this = this
         var body
@@ -221,14 +211,14 @@ var hp_corpusChooser = {
         var pos = $(".scroll_checkboxes").offset().left + 434
         $(".corpusInfoSpace")
             .css({ left: pos.toString() + "px" })
-            .click(function(event) {
+            .click(function (event) {
                 var target = event.target
                 if (!$(target).is("a")) return false
             })
 
         hp_this.countSelected()
         // Update the number of children for all folders:
-        $(".tree").each(function() {
+        $(".tree").each(function () {
             var noItems = $(this).find(".hplabel .checkbox").length
             $(this)
                 .children("label")
@@ -239,12 +229,8 @@ var hp_corpusChooser = {
         var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height()
 
         $(".scroll_checkboxes").unbind("mousedown")
-        $(".scroll_checkboxes").mousedown(function(e) {
-            if (
-                $(this)
-                    .siblings(".popupchecks")
-                    .css("display") == "block"
-            ) {
+        $(".scroll_checkboxes").mousedown(function (e) {
+            if ($(this).siblings(".popupchecks").css("display") == "block") {
                 $(".popupchecks").fadeOut("fast")
                 $(".corpusInfoSpace").fadeOut("fast")
                 $(".hp_topframe").removeClass("ui-corner-top")
@@ -254,7 +240,7 @@ var hp_corpusChooser = {
                     .css({
                         position: "absolute",
                         top: $("#corpusbox").offset().top + $("#corpusbox").height() - 2,
-                        left: $("#corpusbox").offset().left
+                        left: $("#corpusbox").offset().left,
                     })
                 hp_this._trigger("open")
                 $(".hp_topframe").addClass("ui-corner-top")
@@ -264,21 +250,21 @@ var hp_corpusChooser = {
 
         $(".scroll_checkboxes")
             .unbind("click")
-            .click(function(e) {
+            .click(function (e) {
                 e.stopPropagation()
             })
 
         // Prevent clicking through the box
         $(".popupchecks")
             .unbind("click")
-            .click(function(e) {
+            .click(function (e) {
                 e.stopPropagation()
             })
 
         /* SELECT ALL BUTTON */
         $(".selectall")
             .unbind("click")
-            .click(function() {
+            .click(function () {
                 hp_this.setStatus(
                     $(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"),
                     "checked"
@@ -292,7 +278,7 @@ var hp_corpusChooser = {
         /* SELECT NONE BUTTON */
         $(".selectnone")
             .unbind("click")
-            .click(function() {
+            .click(function () {
                 hp_this.setStatus(
                     $(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"),
                     "unchecked"
@@ -305,47 +291,29 @@ var hp_corpusChooser = {
 
         $(".ext")
             .unbind("click")
-            .click(function() {
+            .click(function () {
                 $(".corpusInfoSpace").fadeOut("fast")
-                if (
-                    $(this)
-                        .parent()
-                        .hasClass("collapsed")
-                ) {
-                    $(this)
-                        .parent()
-                        .removeClass("collapsed")
-                        .addClass("extended")
-                    $(this)
-                        .siblings("div")
-                        .fadeToggle("fast")
+                if ($(this).parent().hasClass("collapsed")) {
+                    $(this).parent().removeClass("collapsed").addClass("extended")
+                    $(this).siblings("div").fadeToggle("fast")
                 } else {
-                    $(this)
-                        .parent()
-                        .removeClass("extended")
-                        .addClass("collapsed")
-                    $(this)
-                        .siblings("div")
-                        .fadeToggle("fast")
+                    $(this).parent().removeClass("extended").addClass("collapsed")
+                    $(this).siblings("div").fadeToggle("fast")
                 }
             })
 
         $(".boxlabel")
             .unbind("click") // "folders"
-            .click(function(event) {
+            .click(function (event) {
                 let isLinux = window.navigator.userAgent.indexOf("Linux") != -1
 
-                if (
-                    !$(this)
-                        .parent()
-                        .hasClass("disabled")
-                ) {
+                if (!$(this).parent().hasClass("disabled")) {
                     if (!isLinux && event.altKey == 1) {
-                        $(".checkbox").each(function() {
+                        $(".checkbox").each(function () {
                             hp_this.setStatus($(this), "unchecked")
                         })
                     } else if (isLinux && event.ctrlKey == 1) {
-                        $(".checkbox").each(function() {
+                        $(".checkbox").each(function () {
                             hp_this.setStatus($(this), "unchecked")
                         })
                     }
@@ -355,33 +323,19 @@ var hp_corpusChooser = {
                     var checkedAllUnlocked =
                         childMan.hasClass("intermediate") &&
                         childMan.parent().siblings("div:not(.disabled)").length ===
-                            childMan
-                                .parent()
-                                .siblings()
-                                .find(".checked").length
+                            childMan.parent().siblings().find(".checked").length
                     if (childMan.hasClass("checked") || checkedAllUnlocked) {
                         // Checked, uncheck it if not the root of a tree
-                        if (
-                            !$(this)
-                                .parent()
-                                .hasClass("tree")
-                        ) {
+                        if (!$(this).parent().hasClass("tree")) {
                             hp_this.setStatus(childMan, "unchecked")
                         } else {
-                            var descendants = childMan
-                                .parent()
-                                .siblings("div")
-                                .find(".checkbox")
+                            var descendants = childMan.parent().siblings("div").find(".checkbox")
                             hp_this.setStatus(descendants, "unchecked")
                         }
                     } else {
                         // Unchecked, check it unless it's intermediate and all unchecked ones are locked
                         hp_this.setStatus(childMan, "checked")
-                        if (
-                            $(this)
-                                .parent()
-                                .hasClass("tree")
-                        ) {
+                        if ($(this).parent().hasClass("tree")) {
                             // If tree, check all descendants
                             descendants = childMan
                                 .parent()
@@ -391,7 +345,7 @@ var hp_corpusChooser = {
                         }
                     }
                     var ancestors = childMan.parents(".tree")
-                    ancestors.each(function() {
+                    ancestors.each(function () {
                         hp_this.updateState($(this))
                     })
                     hp_this.countSelected()
@@ -401,105 +355,82 @@ var hp_corpusChooser = {
             })
 
         var hoverConfig = {
-            over: function() {
+            over: function () {
                 // Fire callback "infoPopup":
                 var callback = hp_this.options.infoPopup
                 var returnValue = ""
                 var inValue = ""
-                var idstring = $(this)
-                    .find("span")
-                    .attr("id")
+                var idstring = $(this).find("span").attr("id")
                 if (idstring != "") {
                     inValue = idstring.slice(9)
                 }
                 if ($.isFunction(callback)) returnValue = callback(inValue)
                 $(".corpusInfoSpace").css({ top: $(this).offset().top })
-                $(".corpusInfoSpace")
-                    .find("p")
-                    .html(returnValue)
+                $(".corpusInfoSpace").find("p").html(returnValue)
                 $(".corpusInfoSpace").fadeIn("fast")
                 // $(".corpusInfoSpace").css({"display": "block"});
             },
             interval: 200, // number = milliseconds delay before onMouseOut
-            out: function() {
+            out: function () {
                 /* $(".corpusInfoSpace").fadeOut('fast');
                     //$(".corpusInfoSpace").css({"display": "none"}); */
-            }
+            },
         }
 
         var hoverFolderConfig = {
-            over: function() {
+            over: function () {
                 var callback = hp_this.options.infoPopupFolder
                 var returnValue = ""
                 var indata = []
-                var boxes = $(this)
-                    .parent()
-                    .find(".boxdiv")
+                var boxes = $(this).parent().find(".boxdiv")
                 var corpusID = []
-                boxes.each(function(index) {
-                    corpusID.push(
-                        $(this)
-                            .find("span")
-                            .attr("id")
-                            .slice(9)
-                    )
+                boxes.each(function (index) {
+                    corpusID.push($(this).find("span").attr("id").slice(9))
                 })
                 indata["corporaID"] = corpusID
-                var desc = $(this)
-                    .parent()
-                    .attr("data")
-                    .split("___")[1]
+                var desc = $(this).parent().attr("data").split("___")[1]
                 if (!desc) {
                     desc = ""
                 }
                 indata["description"] = unescape(desc)
-                indata["title"] = $(this)
-                    .parent()
-                    .attr("data")
-                    .split("___")[0]
+                indata["title"] = $(this).parent().attr("data").split("___")[0]
                 if ($.isFunction(callback)) returnValue = callback(indata)
                 $(".corpusInfoSpace").css({
-                    top: $(this)
-                        .parent()
-                        .offset().top
+                    top: $(this).parent().offset().top,
                 })
-                $(".corpusInfoSpace")
-                    .find("p")
-                    .html(returnValue)
+                $(".corpusInfoSpace").find("p").html(returnValue)
                 $(".corpusInfoSpace").fadeIn("fast")
             },
             interval: 200,
-            out: function() {}
+            out: function () {},
         }
 
         $(".boxdiv").hoverIntent(hoverConfig)
         $(".boxlabel").hoverIntent(hoverFolderConfig)
 
         $(".boxdiv").unbind("click") // "Non-folder items"
-        $(".boxdiv").click(function(event) {
+        $(".boxdiv").click(function (event) {
             if ($(this).is(".disabled")) return
             let isLinux = window.navigator.userAgent.indexOf("Linux") != -1
             if (!isLinux && event.altKey == 1) {
-                $(".checkbox").each(function() {
+                $(".checkbox").each(function () {
                     hp_this.setStatus($(this), "unchecked")
                 })
             } else if (isLinux && event.ctrlKey == 1) {
-                $(".checkbox").each(function() {
+                $(".checkbox").each(function () {
                     hp_this.setStatus($(this), "unchecked")
                 })
             }
 
             hp_this.updateState($(this))
-            var childMan = $(this)
-                .children("label")
-                .children(".checkbox")
+            var childMan = $(this).children("label").children(".checkbox")
             if (childMan.hasClass("checked")) {
                 hp_this.setStatus(childMan, "unchecked")
             } else {
                 hp_this.setStatus(childMan, "checked")
             }
             var ancestors = childMan.parents(".tree")
-            ancestors.each(function() {
+            ancestors.each(function () {
                 hp_this.updateState($(this))
             })
             hp_this.countSelected()
@@ -513,7 +444,7 @@ var hp_corpusChooser = {
             var outStr = ""
             var ul = $(einHTML).children()
             var hasDirectCorporaChildren = false
-            ul = ul.each(function(index) {
+            ul = ul.each(function (index) {
                 var theHTML = $(this).html()
                 if (theHTML != null) {
                     var leftattrib = 0
@@ -533,12 +464,8 @@ var hp_corpusChooser = {
                             leftattrib = 30
                             cssattrib += "margin-left:" + leftattrib + "px; display:none"
                         }
-                        var foldertitle = $(this)
-                            .children("ul")
-                            .attr("title")
-                        var folderdescription = $(this)
-                            .children("ul")
-                            .attr("description")
+                        var foldertitle = $(this).children("ul").attr("title")
+                        var folderdescription = $(this).children("ul").attr("description")
                         if (folderdescription == "undefined") folderdescription = ""
                         outStr +=
                             '<div data="' +
@@ -610,7 +537,7 @@ var hp_corpusChooser = {
 
             return outStr
         }
-    }
+    },
 }
 
 let widget = require("components-jqueryui/ui/widget")

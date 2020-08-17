@@ -39,7 +39,7 @@ angular
                 return
             }
 
-            s.onPopoverClick = event => event.stopPropagation()
+            s.onPopoverClick = (event) => event.stopPropagation()
 
             s.newsitems = []
             function initData() {
@@ -59,7 +59,7 @@ angular
                     dataType: "jsonp",
                     success(json) {
                         const currentDate = new Date().toISOString().slice(0, 10)
-                        s.newsitems = _.filter(json, newsitem => {
+                        s.newsitems = _.filter(json, (newsitem) => {
                             return !newsitem.e || newsitem.e >= currentDate
                         })
                         let n = 0
@@ -74,7 +74,7 @@ angular
 
                     error(e) {
                         console.log("error, couldn't fetch news", e.message)
-                    }
+                    },
                 })
             }
 
@@ -83,7 +83,7 @@ angular
             s.numNewNews = 0
             initData()
 
-            s.togglePopover = function(event) {
+            s.togglePopover = function (event) {
                 if (s.isPopoverVisible) {
                     s.popHide()
                 } else {
@@ -98,35 +98,32 @@ angular
             const popover = $(".newsdesk-popover")
             s.isPopoverVisible = false
 
-            const handleEscape = function(event) {
+            const handleEscape = function (event) {
                 if (event.which === 27) {
                     s.popHide()
                     return false
                 }
             }
 
-            s.popShow = function() {
+            s.popShow = function () {
                 s.isPopoverVisible = true
 
-                popover
-                    .show()
-                    .focus()
-                    .position({
-                        my: "right top",
-                        at: "right-10 top+10",
-                        of: window
-                    })
+                popover.show().focus().position({
+                    my: "right top",
+                    at: "right-10 top+10",
+                    of: window,
+                })
                 $rootElement.on("keydown", handleEscape)
                 $rootElement.on("click", s.popHide)
 
                 localStorage.setItem(s.storage, s.newsitems[0].d)
             }
 
-            s.popHide = function() {
+            s.popHide = function () {
                 s.isPopoverVisible = false
                 popover.hide()
                 $rootElement.off("keydown", handleEscape)
                 $rootElement.off("click", s.popHide)
             }
-        }
+        },
     }))

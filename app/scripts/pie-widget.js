@@ -6,7 +6,7 @@ const pie_widget = {
         diameter: 300,
         sort_desc: true,
         offset_x: 0,
-        offset_y: 0
+        offset_y: 0,
     },
 
     shapes: [],
@@ -109,10 +109,10 @@ const pie_widget = {
 
     _makeSVGPie(pieparts, radius) {
         const nowthis = this
-        const mouseEnter = function(event) {
+        const mouseEnter = function (event) {
             this.attr({
                 opacity: 0.7,
-                cursor: "move"
+                cursor: "move",
             })
             nowthis._highlight(this)
             // Fire callback "enteredArc":
@@ -122,7 +122,7 @@ const pie_widget = {
             }
         }
 
-        const mouseExit = function(event) {
+        const mouseExit = function (event) {
             nowthis._deHighlight(this)
             // Fire callback "exitedArc":
             const callback = nowthis.options.exitedArc
@@ -170,12 +170,12 @@ const pie_widget = {
                     delay: 80,
                     bodyHandler() {
                         return this.caption || ""
-                    }
+                    },
                 })
 
                 newPiece.mouseover(mouseEnter)
                 newPiece.mouseout(mouseExit)
-                newPiece.click(function(event) {
+                newPiece.click(function (event) {
                     // Fire callback "clickedArc":
                     const callback = nowthis.options.clickedArc
                     if ($.isFunction(callback)) {
@@ -214,8 +214,8 @@ const pie_widget = {
                 "90-#DDECC5-#EDFCD5:50-#EDFCD5",
                 "90-#EFE3C8-#FFF3D8:50-#FFF3D8",
                 "90-#BADED8-#CAEEE8:50-#CAEEE8",
-                "90-#EFCDC8-#FFDDD8:50-#FFDDD8"
-            ]
+                "90-#EFCDC8-#FFDDD8:50-#FFDDD8",
+            ],
         }
 
         const sortedData = this.options.sort_desc ? this._sortDataDescending(indata) : indata
@@ -239,7 +239,7 @@ const pie_widget = {
                 share: relative,
                 color: defaultOptions["colors"][colorCount],
                 shape_id: itemID,
-                caption: itemCaption
+                caption: itemCaption,
             })
             colorCount = (colorCount + 1) % defaultOptions["colors"].length
         }
@@ -289,7 +289,7 @@ const pie_widget = {
     eventArc(item) {
         // Return the clicked arc's ID
         return item.node["shape_id"]
-    }
+    },
 }
 
 let widget = require("components-jqueryui/ui/widget")

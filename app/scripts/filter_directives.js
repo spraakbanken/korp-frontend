@@ -1,8 +1,8 @@
 /** @format */
 const plusImg = require("../img/plus.png")
 
-korpApp.filter("replaceEmpty", function() {
-    return function(input) {
+korpApp.filter("replaceEmpty", function () {
+    return function (input) {
         if (input === "") {
             return "–"
         } else {
@@ -11,10 +11,10 @@ korpApp.filter("replaceEmpty", function() {
     }
 })
 
-korpApp.directive("globalFilters", globalFilterService => ({
+korpApp.directive("globalFilters", (globalFilterService) => ({
     restrict: "E",
     scope: {
-        lang: "="
+        lang: "=",
     },
     template: `\
 <div ng-if="dataObj.showDirective" class="global-filters-container">
@@ -55,30 +55,30 @@ korpApp.directive("globalFilters", globalFilterService => ({
 
         scope.dataObj = { showDirective: false }
 
-        scope.update = dataObj => (scope.dataObj = dataObj)
+        scope.update = (dataObj) => (scope.dataObj = dataObj)
 
-        scope.getFilterLabel = filterKey => scope.dataObj.attributes[filterKey].settings.label
+        scope.getFilterLabel = (filterKey) => scope.dataObj.attributes[filterKey].settings.label
 
-        scope.getTranslationKey = filterKey =>
+        scope.getTranslationKey = (filterKey) =>
             scope.dataObj.attributes[filterKey].settings.translationKey || ""
 
-        scope.removeFilter = filter => globalFilterService.removeFilter(filter)
+        scope.removeFilter = (filter) => globalFilterService.removeFilter(filter)
 
         scope.getAvailableFilters = () =>
             _.filter(
                 scope.dataObj.optionalFilters,
-                filter => !scope.dataObj.selectedFilters.includes(filter)
+                (filter) => !scope.dataObj.selectedFilters.includes(filter)
             )
 
-        scope.isOptionalFilter = filterKey =>
+        scope.isOptionalFilter = (filterKey) =>
             scope.dataObj.optionalFilters.indexOf(filterKey) > -1 &&
             scope.dataObj.defaultFilters.indexOf(filterKey) === -1
 
-        scope.addNewFilter = value => globalFilterService.addNewFilter(value, true)
-    }
+        scope.addNewFilter = (value) => globalFilterService.addNewFilter(value, true)
+    },
 }))
 
-korpApp.directive("globalFilter", globalFilterService => ({
+korpApp.directive("globalFilter", (globalFilterService) => ({
     restrict: "E",
     scope: {
         attr: "=",
@@ -87,7 +87,7 @@ korpApp.directive("globalFilter", globalFilterService => ({
         possibleValues: "=",
         lang: "=",
         translationKey: "=",
-        closeable: "="
+        closeable: "=",
     },
     template: `\
 <span uib-dropdown auto-close="outsideClick" on-toggle="dropdownToggle(open)">
@@ -133,14 +133,14 @@ korpApp.directive("globalFilter", globalFilterService => ({
         //     # TODO enable autocomplete
 
         scope.selected = _.clone(scope.attrValue)
-        scope.dropdownToggle = function(open) {
+        scope.dropdownToggle = function (open) {
             if (!open) {
                 scope.selected = []
-                return scope.attrValue.map(value => scope.selected.push(value))
+                return scope.attrValue.map((value) => scope.selected.push(value))
             }
         }
 
-        scope.toggleSelected = function(value, event) {
+        scope.toggleSelected = function (value, event) {
             if (scope.isSelected(value)) {
                 _.pull(scope.attrValue, value)
             } else {
@@ -150,13 +150,13 @@ korpApp.directive("globalFilter", globalFilterService => ({
             globalFilterService.valueChange(scope.attr)
         }
 
-        scope.isSelected = value => scope.attrValue.includes(value)
+        scope.isSelected = (value) => scope.attrValue.includes(value)
 
-        scope.isSelectedList = value => scope.selected.includes(value)
+        scope.isSelectedList = (value) => scope.selected.includes(value)
 
-        scope.removeFilter = function(event) {
+        scope.removeFilter = function (event) {
             event.stopPropagation()
             scope.$parent.removeFilter(scope.attr)
         }
-    }
+    },
 }))
