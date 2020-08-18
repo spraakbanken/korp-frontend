@@ -13,7 +13,8 @@ korpApp.factory("extendedComponents", function () {
     </div>`
 
     const selectTemplate =
-        "<select ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset'></select>"
+        "<select ng-show='!inputOnly' ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset'></select>" +
+        "<input ng-show='inputOnly' type='text' ng-model='input'/>"
     const localize = ($scope) =>
         function (str) {
             if (!$scope.translationKey) {
@@ -40,6 +41,13 @@ korpApp.factory("extendedComponents", function () {
                     corpora.push(corpusSettings.id)
                 }
             }
+
+            $scope.$watch("orObj.op", (newVal, oldVal) => {
+                $scope.inputOnly = $scope.orObj.op !== "=" && $scope.orObj.op !== "!="
+                if (newVal !== oldVal) {
+                    $scope.input = ""
+                }
+            })
 
             $scope.loading = true
             const opts = { count: false, returnByCorpora: false }
