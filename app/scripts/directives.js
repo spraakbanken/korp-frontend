@@ -625,7 +625,8 @@ korpApp.directive("autoc", ($q, lexicons) => ({
         variant: "@",
         disableLemgramAutocomplete: "=",
         textInField: "=",
-        typeaheadCloseCallback: "&",
+        errorMessage: "@",
+        errorOnEmpty: "=",
     },
     template: `\
 <div>
@@ -665,14 +666,15 @@ korpApp.directive("autoc", ($q, lexicons) => ({
                 <input autofocus type="text" ng-model="textInField">
             </div>
         </div>
+        <span ng-if='isError' style='color: red; position: relative; top: 3px; margin-left: 6px'>{{errorMessage | loc:lang}}</span>
 </div>\
 `,
     link(scope) {
+        scope.isError = false
+
         scope.typeaheadClose = function () {
-            if (scope.typeaheadCloseCallback) {
-                return scope.typeaheadCloseCallback({
-                    valueSelected: scope.model != null && _.isEmpty(scope.textInField),
-                })
+            if (scope.errorOnEmpty) {
+                scope.isError = !(scope.model != null && _.isEmpty(scope.textInField))
             }
         }
 
