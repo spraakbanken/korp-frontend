@@ -14,7 +14,7 @@ import toPairs from "lodash/toPairs"
 
 import { StatsData, RowsEntity, Value } from "./interfaces/stats"
 
-onmessage = function(e) {
+onmessage = function (e) {
     const data: StatsData = e.data.data
     console.log("data", e.data)
 
@@ -22,10 +22,10 @@ onmessage = function(e) {
     const reduceVals: string[] = e.data.reduceVals
     const groupStatistics: string[] = e.data.groupStatistics
 
-    const simplifyValue = function(values: string[], field: string): string[] {
+    const simplifyValue = function (values: string[], field: string): string[] {
         if (groupStatistics.indexOf(field) != -1) {
             const newValues: string[] = []
-            map(values, function(value) {
+            map(values, function (value) {
                 newValues.push(value.replace(/(:.+?)($| )/g, "$2"))
             })
             return newValues
@@ -38,11 +38,11 @@ onmessage = function(e) {
         }
     }
 
-    const groupRowsByAttribute = function(groupData: { [id: string]: RowsEntity[] }) {
+    const groupRowsByAttribute = function (groupData: { [id: string]: RowsEntity[] }) {
         const rowsByAttribute = {}
-        map(groupData, function(rows, rowId) {
+        map(groupData, function (rows, rowId) {
             const byAttribute = {}
-            map(rows[0].value, function(values, field) {
+            map(rows[0].value, function (values, field) {
                 const newValues = simplifyValue(values, field)
                 byAttribute[field] = newValues
             })
@@ -51,9 +51,9 @@ onmessage = function(e) {
         return rowsByAttribute
     }
 
-    var simplifyHitString = function(item: RowsEntity): string {
+    var simplifyHitString = function (item: RowsEntity): string {
         var newFields: any[] = []
-        map(item.value, function(values, field) {
+        map(item.value, function (values, field) {
             var newValues = simplifyValue(values, field)
             newFields.push(newValues.join(" "))
         })
@@ -61,7 +61,7 @@ onmessage = function(e) {
     }
 
     // TODO: why first element of combined?
-    var totalAbsoluteGroups = groupBy(combined[0].rows, item => simplifyHitString(item))
+    var totalAbsoluteGroups = groupBy(combined[0].rows, (item) => simplifyHitString(item))
     // var totalRelativeGroups = groupBy(total.rows, (item) => simplifyHitString(item, "relative"));
 
     // this is for presentation and just needs to be done on a part of the result
@@ -76,7 +76,7 @@ onmessage = function(e) {
     const totalRow = {
         id: "row_total",
         total_value: [combined[0].sums.absolute, combined[0].sums.relative],
-        rowId: 0
+        rowId: 0,
     }
 
     const corporaKeys = keys(data.corpora)
@@ -105,7 +105,7 @@ onmessage = function(e) {
 
         for (var j = 0; j < totalAbsoluteGroups[word].length; j++) {
             var variant = totalAbsoluteGroups[word][j]
-            map(variant.value, function(terms, reduceVal) {
+            map(variant.value, function (terms, reduceVal) {
                 if (!isArray(terms)) {
                     if (!statsValues[0]) {
                         statsValues[0] = {}
@@ -114,7 +114,7 @@ onmessage = function(e) {
                     reduceMap[reduceVal] = [terms]
                 } else {
                     reduceMap[reduceVal] = terms
-                    map(terms, function(term, idx) {
+                    map(terms, function (term, idx) {
                         if (!statsValues[idx]) {
                             statsValues[idx] = {}
                         }
@@ -134,10 +134,10 @@ onmessage = function(e) {
             rowId: i + 1,
             total_value: [totalAbs, totalRel],
             formattedValue: {},
-            statsValues
+            statsValues,
         }
 
-        map(corporaKeys, function(corpus) {
+        map(corporaKeys, function (corpus) {
             let abs = sumBy(corporaFreqs[corpus][word], "absolute")
             let rel = sumBy(corporaFreqs[corpus][word], "relative")
 
@@ -151,7 +151,7 @@ onmessage = function(e) {
         dataset[i + 1] = row
     }
 
-    dataset.sort(function(a, b) {
+    dataset.sort(function (a, b) {
         return b.total_value[0] - a.total_value[0]
     })
     const ctx: Worker = self as any

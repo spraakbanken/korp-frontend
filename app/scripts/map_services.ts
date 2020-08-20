@@ -74,7 +74,7 @@ function getPointsFromObj(obj: InnerData): Point[] {
             lat: parseFloat(lat),
             lng: parseFloat(lng),
             abs: row.absolute,
-            rel: row.relative
+            rel: row.relative,
         })
     }
     return points
@@ -96,7 +96,7 @@ export function parseMapData(data: StatsData, cqp, cqpExprs): MapResult[] {
         result.push({
             label: label,
             cqp: res.cqp || cqp,
-            points: getPointsFromObj(res)
+            points: getPointsFromObj(res),
         })
     }
     // }
