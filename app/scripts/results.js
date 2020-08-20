@@ -979,7 +979,7 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         $(window).resize(
             _.debounce(() => {
-                return this.resizeGrid()
+                return this.resizeGrid(true)
             }, 100)
         )
 
@@ -1272,7 +1272,7 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         grid.onColumnsResized.subscribe((e, args) => {
             this.doSort = false // if sort event triggered, sorting will not occur
-            this.resizeGrid()
+            this.resizeGrid(false)
             return e.stopImmediatePropagation()
         })
 
@@ -1308,7 +1308,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         }
     }
 
-    resizeGrid() {
+    resizeGrid(resizeColumns) {
         let width
         let height = 0
         $(".slick-row").each(function () {
@@ -1333,6 +1333,9 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         if (this.grid != null) {
             this.grid.resizeCanvas()
+            if (resizeColumns) {
+                this.grid.autosizeColumns()
+            }
         }
         return this.grid != null ? this.grid.invalidate() : undefined
     }
