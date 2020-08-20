@@ -101,7 +101,7 @@ korpApp.directive("escaper", () => ({
             escape = (val) => val
             unescape = (val) => val
         } else {
-            const doNotEscape = ["*=", "!*="]
+            const doNotEscape = ["*=", "!*=", "regexp_contains", "not_regexp_contains"]
             escape = function (val) {
                 if (!doNotEscape.includes($scope.orObj.op)) {
                     return regescape(val)

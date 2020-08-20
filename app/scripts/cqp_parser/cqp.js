@@ -102,6 +102,11 @@ const stringifyCqp = function (cqp_obj, expanded_format) {
                         not_rank_contains: [val + ":.*", "not contains"],
                         highest_rank: [`\\|${val}:.*`, "="],
                         not_highest_rank: [`\\|${val}:.*`, "!="],
+                        regexp_contains: [val, "contains"],
+                        not_regexp_contains: [val, "not contains"],
+                        starts_with_contains: [`${val}.*`, "contains"],
+                        incontains_contains: [`.*${val}.*`, "contains"],
+                        ends_with_contains: [`.*${val}`, "contains"],
                     }[op] || [val, op]
                 }
 

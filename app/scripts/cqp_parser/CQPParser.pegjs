@@ -129,6 +129,11 @@ infix_op
   / "not_highest_rank"
   / "rank_contains"
   / "not_rank_contains"
+  / "regexp_contains"
+  / "not_regexp_contains"
+  / "starts_with_contains"
+  / "ends_with_contains"
+  / "incontains_contains"
 
 date_op
   = " <= "
