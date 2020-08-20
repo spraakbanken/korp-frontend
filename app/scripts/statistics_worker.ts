@@ -1,22 +1,19 @@
 /** @format */
-/*
-    This is optimized code for transforming the statistics data.
-    Speed/memory gains mostly come from using [absolute, relative] rather than {absolute: x, relative: y}
-*/
-// import * as _ from "lodash"
 import map from "lodash/map"
-import orderBy from "lodash/orderBy"
 import groupBy from "lodash/groupBy"
 import sumBy from "lodash/sumBy"
 import isArray from "lodash/isArray"
 import keys from "lodash/keys"
-import toPairs from "lodash/toPairs"
 
 import { StatsData, RowsEntity, Value } from "./interfaces/stats"
 
+/*
+    This is optimized code for transforming the statistics data.
+    Speed/memory gains mostly come from using [absolute, relative] rather than {absolute: x, relative: y}
+*/
+
 onmessage = function (e) {
     const data: StatsData = e.data.data
-    console.log("data", e.data)
 
     const { combined, corpora, count } = data
     const reduceVals: string[] = e.data.reduceVals
@@ -38,20 +35,7 @@ onmessage = function (e) {
         }
     }
 
-    const groupRowsByAttribute = function (groupData: { [id: string]: RowsEntity[] }) {
-        const rowsByAttribute = {}
-        map(groupData, function (rows, rowId) {
-            const byAttribute = {}
-            map(rows[0].value, function (values, field) {
-                const newValues = simplifyValue(values, field)
-                byAttribute[field] = newValues
-            })
-            rowsByAttribute[rowId] = byAttribute
-        })
-        return rowsByAttribute
-    }
-
-    var simplifyHitString = function (item: RowsEntity): string {
+    const simplifyHitString = function (item: RowsEntity): string {
         var newFields: any[] = []
         map(item.value, function (values, field) {
             var newValues = simplifyValue(values, field)
@@ -61,17 +45,7 @@ onmessage = function (e) {
     }
 
     // TODO: why first element of combined?
-    var totalAbsoluteGroups = groupBy(combined[0].rows, (item) => simplifyHitString(item))
-    // var totalRelativeGroups = groupBy(total.rows, (item) => simplifyHitString(item, "relative"));
-
-    // this is for presentation and just needs to be done on a part of the result
-    // that has data for all rows
-    var rowsByAttribute = groupRowsByAttribute(totalAbsoluteGroups)
-
-    var rowIds = keys(totalAbsoluteGroups)
-    var rowCount = rowIds.length + 1
-    var dataset = new Array(rowCount)
-    // const dataset = new Array(count + 1)
+    const totalAbsoluteGroups = groupBy(combined[0].rows, (item) => simplifyHitString(item))
 
     const totalRow = {
         id: "row_total",
@@ -88,16 +62,15 @@ onmessage = function (e) {
         corporaFreqs[id] = groupBy(obj[0].rows, simplifyHitString)
     }
 
+    const rowIds = keys(totalAbsoluteGroups)
+    const rowCount = rowIds.length + 1
+    const dataset = new Array(rowCount)
+
     dataset[0] = totalRow
 
-    function valueToString(value: Value): string {
-        const sorted = orderBy(toPairs(value), ([head]) => head)
-        return map(sorted, ([key, val]) => key + val.join(",")).join("-")
-    }
+    const reduceMap = {}
 
-    let reduceMap = {}
-
-    for (var i = 0; i < rowCount - 1; i++) {
+    for (let i = 0; i < rowCount - 1; i++) {
         let word = rowIds[i]
         let totalAbs = sumBy(totalAbsoluteGroups[word], "absolute")
         let totalRel = sumBy(totalAbsoluteGroups[word], "relative")
@@ -128,7 +101,6 @@ onmessage = function (e) {
                 }
             })
         }
-        // let corp_val = corpora.rows[i].value
 
         let row = {
             rowId: i + 1,
