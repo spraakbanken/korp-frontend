@@ -318,45 +318,76 @@ settings.corpora[&quot;testcorpus&quot;] = {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">is</td>
-<td align="left">[key = &quot;val&quot;]</td>
-<td align="left">[key = &quot;val&quot;]</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">is not</td>
-<td align="left">[key != &quot;val&quot;]</td>
-<td align="left">[key != &quot;val&quot;]</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
 <td align="left">starts with</td>
-<td align="left">[key ^= &quot;val&quot;]</td>
-<td align="left">[key = &quot;val.*&quot;]</td>
+<td align="left"><code>[key ^= &quot;val&quot;]</code></td>
+<td align="left"><code>[key = &quot;val.*&quot;]</code></td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left">contains</td>
-<td align="left">[key _= &quot;val&quot;]</td>
-<td align="left">[key = &quot;.*val.*&quot;]</td>
+<td align="left"><code>[key _= &quot;val&quot;]</code></td>
+<td align="left"><code>[key = &quot;.*val.*&quot;]</code></td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="left">ends with</td>
-<td align="left">[key &amp;= &quot;val&quot;]</td>
-<td align="left">[key = &quot;val.*&quot;]</td>
+<td align="left"><code>[key &amp;= &quot;val&quot;]</code></td>
+<td align="left"><code>[key = &quot;.*val&quot;]</code></td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left">matches</td>
-<td align="left">[key *= &quot;val&quot;]</td>
-<td align="left">[key = &quot;val&quot;]</td>
+<td align="left"><code>[key *= &quot;val&quot;]</code></td>
+<td align="left"><code>[key = &quot;val&quot;]</code></td>
 <td align="left">Used with <code>escaper</code>-directive, regexp</td>
 </tr>
 <tr class="odd">
 <td align="left">matches not</td>
-<td align="left">[key !*= &quot;val&quot;]</td>
-<td align="left">[key != &quot;val&quot;]</td>
+<td align="left"><code>[key !*= &quot;val&quot;]</code></td>
+<td align="left"><code>[key != &quot;val&quot;]</code></td>
+<td align="left">special characters will not be escaped.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TODO: move these explanations to a better place</strong> Then we have the five last operators again, but using <code>contains</code> instead of <code>=</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Internal representation</th>
+<th align="left">CQP</th>
+<th align="left">Note</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">starts with</td>
+<td align="left"><code>[key starts_with_contains &quot;val&quot;]</code></td>
+<td align="left"><code>[key contains &quot;val.*&quot;]</code></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">contains</td>
+<td align="left"><code>[key incontains_contains &quot;val&quot;]</code></td>
+<td align="left"><code>[key contains &quot;.*val.*&quot;]</code></td>
+<td align="left">Strange name due to CQPParser getting confused by <code>contains_contains</code></td>
+</tr>
+<tr class="odd">
+<td align="left">ends with</td>
+<td align="left"><code>[key ends_with_contains &quot;val&quot;]</code></td>
+<td align="left"><code>[key contains &quot;.*val&quot;]</code></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">matches</td>
+<td align="left"><code>[key regexp_contains &quot;val&quot;]</code></td>
+<td align="left"><code>[key contains &quot;val&quot;]</code></td>
+<td align="left">Used with <code>escaper</code>-directive, regexp</td>
+</tr>
+<tr class="odd">
+<td align="left">matches not</td>
+<td align="left"><code>[key not_regexp_contains &quot;val&quot;]</code></td>
+<td align="left"><code>[key not contains &quot;val&quot;]</code></td>
 <td align="left">special characters will not be escaped.</td>
 </tr>
 </tbody>
