@@ -310,17 +310,33 @@ view.KWICResults = class KWICResults extends BaseResults {
 
         if (currentMode === "parallel" && !isReading) {
             const scrollLeft = $(".table_scrollarea", this.$result).scrollLeft() || 0
-            for (let linked of $(".table_scrollarea > .kwic .linked_sentence").get()) {
-                const mainrow = $(linked).prev()
-                if (!mainrow.length) {
-                    continue
+            let changed = true
+            const prevValues = []
+
+            // loop until the placement of linked sentences have settled
+            while (changed) {
+                changed = false
+                let i = 0
+                for (let linked of $(".table_scrollarea > .kwic .linked_sentence").get()) {
+                    const mainrow = $(linked).prev()
+                    if (!mainrow.length) {
+                        continue
+                    }
+                    let firstWord = mainrow.find(".left .word:first")
+                    if (!firstWord.length) {
+                        firstWord = mainrow.find(".match .word:first")
+                    }
+                    const offset = Math.round(firstWord.position().left + scrollLeft - 25)
+                    $(linked).find(".lnk").css("padding-left", offset)
+
+                    const threshold = 25
+                    if (offset - (prevValues[i] || 0) > threshold) {
+                        changed = true
+                    }
+
+                    prevValues[i] = offset
+                    i++
                 }
-                let firstWord = mainrow.find(".left .word:first")
-                if (!firstWord.length) {
-                    firstWord = mainrow.find(".match .word:first")
-                }
-                const offset = firstWord.position().left + scrollLeft - 25
-                $(linked).find(".lnk").css("padding-left", Math.round(offset))
             }
         }
 
