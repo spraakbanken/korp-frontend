@@ -214,11 +214,11 @@ img {
 
 #search_history {
   margin-right: 8px;
-  margin-top: 45px;
+  // margin-top: 45px;
   max-width: 150px;
-  position: absolute;
-  right: 0;
-  bottom : 3px;
+  // position: absolute;
+  // right: 0;
+  // bottom : 3px;
   > option:first-child {
     color: grey;
   }
@@ -422,7 +422,6 @@ time-interval {
   width: 480px;
   height: 35px;
   overflow: hidden;
-  margin-bottom: 2px;
   vertical-align: bottom;
 }
 
@@ -2890,14 +2889,14 @@ global-filters {
     color: #777777;
 }
 
-.logos {
-    position: absolute;
-    right: 160px;
-    img {
-        padding:5px;
-        height: 68px;
-    }
-    .sb {
-      padding-bottom: 0;
-    }
-}
+// .logos {
+//     position: absolute;
+//     right: 160px;
+//     img {
+//         padding:5px;
+//         height: 68px;
+//     }
+//     .sb {
+//       padding-bottom: 0;
+//     }
+// }
