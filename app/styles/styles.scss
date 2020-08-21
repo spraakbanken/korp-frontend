@@ -947,16 +947,11 @@ table {
 }
 
 .corpus_title {
-  font-weight: bold;
-  vertical-align: text-top;
-  text-align: center;
-  padding: 0 4px;
-  font-weight: normal;
   font-variant: small-caps;
   color: #666;
   font-size: 12px;
-  display : block;
-  margin : 0 -150px;
+  display : inline;
+  margin-right: -150px;
   padding: 3px 0;
 
 }
