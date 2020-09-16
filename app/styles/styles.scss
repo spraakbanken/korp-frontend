@@ -63,6 +63,8 @@ h3 {
 
 input, select {
   border: 1px solid #bbb;
+  background-color: white;
+  cursor: pointer;
 }
 
 ul, ol {
@@ -74,9 +76,6 @@ a {
   cursor: pointer;
   text-decoration: none;
   color: navy;
-  &:link {
-    color: navy;
-  }
   &:visited {
     color: purple;
   }
@@ -1630,20 +1629,10 @@ label[for=lemgram_select]:before {
   }
 }
 
-#cog {
-  float: right;
-  margin-top: -6px;
-  cursor: pointer;
-  height: 26px;
-
-  font-size : 1.5em;
-  color : #333;
-}
-
-#cog_menu {
-  position: absolute;
-  font-size: inherit;
-  text-align: right;
+.cog_menu {
+  .arrow {
+    display: none;
+  }
 }
 
 .ui-menu {

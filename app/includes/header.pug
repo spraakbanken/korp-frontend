@@ -12,19 +12,23 @@
              a(ng-href="{{getUrl(mode.mode)}}")
                | {{mode.localekey | loc:lang}}
 
-    #cog.dropdown-toggle(popper, my="right+21px top+18px", at="bottom right", no-close-on-click="true")
-      i.fa.fa-cog.align-middle
-    ul#cog_menu.dropdown-menu.popper_menu
-      li
-        a#about(ng-click="citeClick()") {{'about' | loc:lang}}
-      li
-        a(href='https://spraakbanken.gu.se/verktyg/korp/användarhandledning', target='_blank') {{'docs' | loc:lang}}
-      li#korplink
-        a(href='/korp') {{'korp' | loc:lang}}
-      li#korplablink
-        a(href='/korplabb') {{'korp_lab' | loc:lang}}
-      li
-        a(href='https://spraakbanken.gu.se/sparv', target='_blank') {{'import_chain' | loc:lang}}
+    button.float-right(popover-class="cog_menu" popover-placement="bottom-right" uib-popover-template="'myPopoverTemplate.html'" type="button" popover-trigger="outsideClick")
+      i.fa.fa-cog.align-middle.text-gray-800(style="font-size: 1.3rem")
+
+    script(type="text/ng-template" id="myPopoverTemplate.html")
+      ul.my-0.py-1.text-right
+        li.bg-white.hover_bg-gray-200.p-1.transition.duration-200
+          a.transiton.duration-200.hover_text-blue-600#about(ng-click="citeClick()") {{'about' | loc:lang}}
+        li.bg-white.hover_bg-gray-200.p-1.transition.duration-500
+          a.transiton.duration-200.hover_text-blue-600(href='https://spraakbanken.gu.se/verktyg/korp/användarhandledning', target='_blank') {{'docs' | loc:lang}}
+        li.bg-white.hover_bg-gray-200.p-1.transition.duration-200#korplink
+          a.transiton.duration-200.hover_text-blue-600(href='/korp') {{'korp' | loc:lang}}
+        li.bg-white.hover_bg-gray-200.p-1.transition.duration-200#korplablink
+          a.transiton.duration-200.hover_text-blue-600(href='/korplabb') {{'korp_lab' | loc:lang}}
+        li.bg-white.hover_bg-gray-200.p-1.transition.duration-200
+          a.transiton.duration-200.hover_text-blue-600(href='https://spraakbanken.gu.se/sparv', target='_blank') {{'import_chain' | loc:lang}}
+    
+
     #news_area
       div(news-desk="", header="'newsdesk-header'", storage="'korp_last_read_newsitem'")
     #log_out.link(ng-click="logout()", ng-if="loggedIn")

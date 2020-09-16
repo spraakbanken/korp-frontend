@@ -15,9 +15,7 @@ require("geokorp/dist/styles/geokorp.css")
 require("components-jqueryui/themes/smoothness/jquery-ui.min.css")
 require("./styles/_bootstrap-custom.scss")
 
-// TODO: Tailwind is ready to use and should replace the bootstrap 4 grid system. 
 require("./styles/tailwind.scss")
-// require("./styles/bootstrap4-custom.scss")
 
 require("./styles/styles.scss")
 require("./styles/textreader.css")

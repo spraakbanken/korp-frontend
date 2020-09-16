@@ -31,6 +31,7 @@ window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.buttons",
     "ui.bootstrap.popover",
     "uib/template/popover/popover.html",
+    "uib/template/popover/popover-template.html",
     "angularSpinner",
     "ui.sortable",
     "newsdesk",
