@@ -1,14 +1,10 @@
+/** @format */
 /* eslint-disable
     no-undef,
 */
 
-const waitFor = function(elm) {
-    browser.wait(() => elm.isPresent())
-    browser.wait(() => elm.isDisplayed())
-}
-
 let i = 0
-const cycleSearch = function() {
+const cycleSearch = function () {
     i++
     const list = ["gå", "ha", "ta", "ska"]
     return list[i] || list[(i = 0)]
@@ -16,79 +12,88 @@ const cycleSearch = function() {
 
 const EC = protractor.ExpectedConditions
 
-describe("page", function() {
+var waitFor = async function (elm) {
+    await browser.wait(() => elm.isPresent())
+    await browser.wait(() => elm.isDisplayed())
+}
+
+describe("page", function () {
     let elm = null
-    
-    beforeEach(function() {
-        browser.ignoreSynchronization = true
-        browser.get(browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${cycleSearch()}&page=7`).then(function() {
-            elm = element.all(by.css(".results-kwic kwic-pager .pager-wrapper .active a")).first()
-            waitFor(elm)
-        })
+
+    beforeEach(async function () {
+        // browser.ignoreSynchronization = true
+        await browser.get(
+            browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${cycleSearch()}&page=7`
+        )
+        elm = element.all(by.css(".results-kwic kwic-pager .pager-wrapper .active a")).first()
+        await waitFor(elm)
     })
 
-    it("should bring up the correct page", function() {
-        expect(elm.getText()).toBe("8")
-        expect(browser.executeScript("return locationSearch().page")).toBe(7)
+    it("should bring up the correct page", async function () {
+        // await browser.sleep(2000)
+        await expect(elm.getText()).toBe("8")
+        await expect(browser.executeScript("return locationSearch().page")).toBe(7)
     })
 
-    it("should page to the correct page", function() {
-        element.all(by.css(".results-kwic kwic-pager .pagination li:nth-last-child(2)")).first().click()
-        expect(EC.textToBePresentInElement(elm, 9))
+    it("should page to the correct page", async function () {
+        await element
+            .all(by.css(".results-kwic kwic-pager .pagination li:nth-last-child(2)"))
+            .first()
+            .click()
+        await expect(elm.getText()).toContain("9")
+        // await expect(EC.textToBePresentInElement(elm, 9))
     })
 
-    it("should go back to 0 when searching anew", function() {
-        const input = element.all(by.model('textInField')).first()
-        input.clear()
-        input.sendKeys("gå")
-        input.sendKeys(protractor.Key.ENTER)
-        browser.executeScript("return locationSearch().page").then((page) => {
-            const isZero = page == 0 || page == null || page == undefined
-            expect(isZero).toBe(true)
-        })
+    it("should go back to 0 when searching anew", async function () {
+        const input = element.all(by.model("textInField")).first()
+        await input.clear()
+        await input.sendKeys("gå")
+        await input.sendKeys(protractor.Key.ESCAPE)
+        await input.sendKeys(protractor.Key.ENTER)
+        const page = await browser.executeScript("return locationSearch().page")
+        const isZero = page == 0 || page == null || page == undefined
+        await expect(isZero).toBe(true)
     })
 
-    it("should should use the correct start/end values", function() {
-        expect(browser.executeScript("return kwicResults.proxy.prevParams.start")).toBe(175)
-        expect(browser.executeScript("return kwicResults.proxy.prevParams.end")).toBe(199)
+    it("should should use the correct start/end values", async function () {
+        await expect(browser.executeScript("return kwicResults.proxy.prevParams.start")).toBe(175)
+        await expect(browser.executeScript("return kwicResults.proxy.prevParams.end")).toBe(199)
     })
 })
 
-
-describe("json button", function() {
+describe("json button", function () {
     let elm = null
 
-    beforeEach(() => { browser.ignoreSynchronization = true })
-
-    it("should display the correct url", function() {
+    beforeEach(async () => {
+        // browser.ignoreSynchronization = true
         const wd = cycleSearch()
-        browser.get(browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${wd}&page=7`).then(function() {
-            elm = element(by.css("#json-link"))
-            waitFor(elm)
-            expect(elm.getAttribute("href")).toContain("query?")
-        })
+        await browser.get(
+            browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${wd}&page=7`
+        )
     })
-    
-    it("should switch url when changing tab", function() {
-        const wd = cycleSearch()
-        browser.get(browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${wd}&page=7`).then(function() {
 
-            const elem = element(by.css(".result_tabs > ul > li:nth-child(2)"))
-            waitFor(elem)
-            elem.click()
-            
-            elm = element(by.css("#json-link"))
-            waitFor(elm)
-            expect(elm.getAttribute("href")).toContain("count?")
-        })
+    it("should display the correct url", async function () {
+        const elm = element(by.css("#json-link"))
+        await waitFor(elm)
+        await expect(elm.getAttribute("href")).toContain("query?")
+    })
+
+    it("should switch url when changing tab", async function () {
+        const elem = element(by.css(".result_tabs > ul > li:nth-child(2)"))
+        // waitFor(elem)
+        await elem.click()
+
+        elm = element(by.css("#json-link"))
+        await waitFor(elm)
+        await expect(elm.getAttribute("href")).toContain("count?")
     })
 })
-
 
 describe("kwic download menu", () =>
     // would love to test that download is really performed but it's hard to test side effects...
-    it("should show the csv download option", () =>
-        browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2").then(() => expect(element(by.cssContainingText('option', 'CSV')).isPresent()).toBe(true))
-    )
-)
-        
+    it("should show the csv download option", async () => {
+        await browser.get(
+            browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2"
+        )
+        await expect(element(by.cssContainingText("option", "CSV")).isPresent()).toBe(true)
+    }))

@@ -16,5 +16,6 @@ exports.config = {
     defaultTimeoutInterval: 20000
   },
   directConnect: true,
-  restartBrowserBetweenTests: true
+  restartBrowserBetweenTests: true,
+  SELENIUM_PROMISE_MANAGER: false
 };
