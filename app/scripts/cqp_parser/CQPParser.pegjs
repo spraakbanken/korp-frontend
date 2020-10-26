@@ -134,6 +134,9 @@ infix_op
   / "starts_with_contains"
   / "ends_with_contains"
   / "incontains_contains"
+  / "not_starts_with_contains"
+  / "not_ends_with_contains"
+  / "not_incontains_contains"
 
 date_op
   = " <= "
