@@ -1,26 +1,35 @@
 /** @format */
 export const kwicPagerName = "kwicPager"
 
+let html = String.raw
 export const kwicPager = {
-    template: `
-        <div class="pager-wrapper" ng-show="$ctrl.totalHits > 0" >
-          <ul uib-pagination
-             total-items="$ctrl.totalHits"
-             ng-model="$ctrl.page"
-             ng-click="$ctrl.localPageChange()"
-             max-size="15"
-             items-per-page="$ctrl.hitsPerPage"
-             previous-text="‹" next-text="›" first-text="«" last-text="»"
-             boundary-links="true"
-             rotate="false"></ul>
-          <div class="page_input"><span>{{'goto_page' | loc:lang}} </span>
-            <input ng-model="$ctrl.gotoPage" 
-                   ng-keyup="$ctrl.onPageInput($event)"
-                   ng-click="$event.stopPropagation()" />
-            {{'of' | loc:lang}} {{$ctrl.numPages}}
-          </div>
+    template: html`
+        <div class="pager-wrapper" ng-show="$ctrl.totalHits > 0">
+            <ul
+                uib-pagination
+                total-items="$ctrl.totalHits"
+                ng-model="$ctrl.page"
+                ng-click="$ctrl.localPageChange()"
+                max-size="15"
+                items-per-page="$ctrl.hitsPerPage"
+                previous-text="‹"
+                next-text="›"
+                first-text="«"
+                last-text="»"
+                boundary-links="true"
+                rotate="false"
+            ></ul>
+            <div class="page_input">
+                <span>{{'goto_page' | loc:lang}} </span>
+                <input
+                    ng-model="$ctrl.gotoPage"
+                    ng-keyup="$ctrl.onPageInput($event)"
+                    ng-click="$event.stopPropagation()"
+                />
+                {{'of' | loc:lang}} {{$ctrl.numPages}}
+            </div>
         </div>
-        `,
+    `,
     bindings: {
         totalHits: "<",
         currentPage: "<",
