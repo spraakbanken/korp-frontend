@@ -371,9 +371,9 @@ korpApp.controller("SimpleCtrl", function (
     }
 
     utils.setupHash(s, [
-        { key: "prefix" },
-        { key: "mid_comp" },
-        { key: "suffix" },
+        { key: "prefix", default: false },
+        { key: "mid_comp", default: false },
+        { key: "suffix", default: false },
         { key: "isCaseInsensitive" },
     ])
 })

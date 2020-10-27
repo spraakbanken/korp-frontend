@@ -18,10 +18,13 @@ korpApp.factory("utils", ($location) => ({
         const onWatch = () => {
             for (let obj of config) {
                 let val = $location.search()[obj.key]
-                if (!val) {
-                    if (obj.default != null) {
+                if (val == null) {
+                    if ("default" in obj) {
                         val = obj.default
                     } else {
+                        if (typeof obj.post_change === "function") {
+                            obj.post_change(val)
+                        }
                         continue
                     }
                 }
