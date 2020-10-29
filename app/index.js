@@ -96,6 +96,8 @@ _.map(commonSettings, function(v, k) {
   window[k] = v
 })
 
+require("./scripts/components/sidebar.js")
+
 require("./scripts/statistics.js")
 require("./scripts/cqp_parser/CQPParser.js")
 require("./scripts/cqp_parser/cqp.js")

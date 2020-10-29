@@ -1,4 +1,5 @@
 /** @format */
+import * as state from "./state"
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("textReaderCtrl", ($timeout) => ({
@@ -48,18 +49,26 @@ korpApp.directive("textReader", function ($compile) {
             scope.selectedToken = {}
 
             scope.wordClick = (token) => {
+                state.broadcast(
+                    "selectword",
+                    scope.data.document.structs,
+                    token.attrs,
+                    scope.data.corpus,
+                    token.currentSentence,
+                    true
+                )
                 scope.selectedToken = token
-                if ($("#sidebar").data()["korpSidebar"]) {
-                    $("#sidebar").sidebar(
-                        "updateContent",
-                        scope.data.document.structs,
-                        token.attrs,
-                        scope.data.corpus,
-                        token.currentSentence,
-                        true
-                    )
-                    scope.$root.sidebar_visible = true
-                }
+                // if ($("#sidebar").data()["korpSidebar"]) {
+                //     $("#sidebar").sidebar(
+                //         "updateContent",
+                //         scope.data.document.structs,
+                //         token.attrs,
+                //         scope.data.corpus,
+                //         token.currentSentence,
+                //         true
+                //     )
+                scope.$root.sidebar_visible = true
+                // }
             }
 
             scope.$on("on-entry", function () {

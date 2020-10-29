@@ -111,8 +111,6 @@ $.when(loc_dfd, deferred_domReady).then(
             prevFragment = _.extend({}, locationSearch())
         }
 
-        $(window).scroll(() => $("#sidebar").sidebar("updatePlacement"))
-
         $("#languages").radioList({
             change() {
                 const currentLang = $(this).radioList("getSelected").data("mode")
@@ -123,7 +121,6 @@ $.when(loc_dfd, deferred_domReady).then(
             // TODO: this does nothing?
             selected: settings.defaultLanguage,
         })
-        $("#sidebar").sidebar()
 
         setTimeout(() => window.onHashChange(null, true), 0)
         $("body").animate({ opacity: 1 }, function () {

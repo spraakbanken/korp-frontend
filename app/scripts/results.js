@@ -1,5 +1,6 @@
 /** @format */
 import statisticsFormatting from "../config/statistics_config.js"
+import * as state from "./state"
 const korpFailImg = require("../img/korp_fail.svg")
 
 class BaseResults {
@@ -147,17 +148,19 @@ view.KWICResults = class KWICResults extends BaseResults {
         event.stopPropagation()
         const word = $(event.target)
 
-        if ($("#sidebar").data()["korpSidebar"]) {
-            $("#sidebar").sidebar(
-                "updateContent",
-                sent.structs,
-                obj,
-                sent.corpus.toLowerCase(),
-                sent.tokens
-            )
-        }
+        state.broadcast("selectword", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens)
+        // if ($("#sidebar").data()["korpSidebar"]) {
+        // s.$broadcast("wordSelected", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens)
+        // $("#sidebar").sidebar(
+        //     "updateContent",
+        //     sent.structs,
+        //     obj,
+        //     sent.corpus.toLowerCase(),
+        //     sent.tokens
+        // )
+        // }
 
-        return this.selectWord(word, scope, sent)
+        this.selectWord(word, scope, sent)
     }
 
     selectWord(word, scope) {
