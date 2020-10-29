@@ -40,10 +40,9 @@ describe("stats table", function () {
         )
         const rows = element.all(by.css(".slick-row"))
 
-        browser.sleep(1000)
-
         // total row
-        let text = await rows.get(0).getText()
+        let totalRow = await rows.get(0)
+        let text = await totalRow.getText()
         await expect(text.replace(/\n/g, " ")).toBe(
             "Σ 2 145,1 (5 005) 2 144,7 (2 502) 2 145,6 (2 503)"
         )
