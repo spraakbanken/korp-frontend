@@ -2,7 +2,11 @@
 import statisticsFormatting from "../config/statistics_config.js"
 const korpApp = angular.module("korpApp")
 
-korpApp.controller("resultContainerCtrl", ($scope, searches) => ($scope.searches = searches))
+korpApp.controller("resultContainerCtrl", ($scope, searches) => {
+    $scope.searches = searches
+    $scope.onSidebarShow = () => ($scope.sidebar_visible = true)
+    $scope.onSidebarHide = () => ($scope.sidebar_visible = false)
+})
 
 class KwicCtrl {
     static initClass() {
@@ -30,7 +34,7 @@ class KwicCtrl {
         const $location = this.location
 
         s.onexit = function () {
-            s.$root.sidebar_visible = false
+            // s.$root.sidebar_visible = false
         }
 
         const punctArray = [",", ".", ";", ":", "!", "?", "..."]

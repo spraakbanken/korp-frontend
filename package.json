@@ -27,7 +27,8 @@
         "raw-loader": "^4.0.2",
         "rickshaw": "1.6.4",
         "slickgrid": "spraakbanken/SlickGrid#master",
-        "tailwindcss": "^1.6.2"
+        "tailwindcss": "^1.9.6",
+        "xstate": "^4.13.0"
     },
     "devDependencies": {
         "@babel/core": "^7.2.0",

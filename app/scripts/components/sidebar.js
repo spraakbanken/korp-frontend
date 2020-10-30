@@ -1,7 +1,7 @@
 /** @format */
-import * as state from "../state"
 import "./sidebar.scss"
 export const sidebarName = "sidebar"
+import statemachine from "../statemachine"
 
 let html = String.raw
 export const sidebarComponent = {
@@ -31,17 +31,21 @@ export const sidebarComponent = {
             </div>
         </div>
     `,
+    bindings: {
+        onShow: "&",
+        onHide: "&",
+    },
     controller($element, utils, $rootScope, $compile, $controller) {
         let $ctrl = this
 
-        state.listen("selectword", function (
-            sentenceData,
-            wordData,
-            corpus,
-            tokens,
-            inReadingMode
-        ) {
-            $ctrl.updateContent(sentenceData, wordData, corpus, tokens, inReadingMode)
+        statemachine.listen("select_word", function (data) {
+            console.log("controller -> data", data)
+            if (data == null) {
+                $ctrl.onHide()
+            } else {
+                $ctrl.onShow()
+                $ctrl.updateContent(data)
+            }
         })
 
         Object.assign($ctrl, {
@@ -51,7 +55,7 @@ export const sidebarComponent = {
                     sentenceId: $ctrl.sentenceData.sentence_id,
                 })
             },
-            updateContent(sentenceData, wordData, corpus, tokens, inReadingMode) {
+            updateContent({ sentenceData, wordData, corpus, tokens, inReadingMode }) {
                 $("#selected_sentence").add("#selected_word").empty()
                 // TODO: this is pretty broken
                 const corpusObj = settings.corpora[corpus] || settings.corpusListing.get(corpus)

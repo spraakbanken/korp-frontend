@@ -1,5 +1,5 @@
 /** @format */
-import * as state from "./state"
+import statemachine from "./statemachine"
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("textReaderCtrl", ($timeout) => ({
@@ -49,25 +49,15 @@ korpApp.directive("textReader", function ($compile) {
             scope.selectedToken = {}
 
             scope.wordClick = (token) => {
-                state.broadcast(
-                    "selectword",
-                    scope.data.document.structs,
-                    token.attrs,
-                    scope.data.corpus,
-                    token.currentSentence,
-                    true
-                )
+                statemachine.send("select_word", {
+                    sentenceData: scope.data.document.structs,
+                    wordData: token.attrs,
+                    corpus: scope.data.corpus,
+                    tokens: token.currentSentence,
+                    inReadingMode: true,
+                })
                 scope.selectedToken = token
-                // if ($("#sidebar").data()["korpSidebar"]) {
-                //     $("#sidebar").sidebar(
-                //         "updateContent",
-                //         scope.data.document.structs,
-                //         token.attrs,
-                //         scope.data.corpus,
-                //         token.currentSentence,
-                //         true
-                //     )
-                scope.$root.sidebar_visible = true
+                // scope.$root.sidebar_visible = true
                 // }
             }
 
@@ -78,7 +68,7 @@ korpApp.directive("textReader", function ($compile) {
             })
 
             scope.$on("on-exit", function () {
-                scope.$root.sidebar_visible = false
+                // scope.$root.sidebar_visible = false
             })
 
             scope.wordClick({})

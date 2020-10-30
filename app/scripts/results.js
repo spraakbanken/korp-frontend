@@ -1,6 +1,6 @@
 /** @format */
 import statisticsFormatting from "../config/statistics_config.js"
-import * as state from "./state"
+import statemachine from "./statemachine"
 const korpFailImg = require("../img/korp_fail.svg")
 
 class BaseResults {
@@ -124,9 +124,9 @@ view.KWICResults = class KWICResults extends BaseResults {
                 return
             }
             this.selectionManager.deselect()
-            safeApply(this.s.$root, (s) => {
-                s.$root.word_selected = null
-            })
+            // safeApply(this.s.$root, (s) => {
+            //     s.$root.word_selected = null
+            // })
         })
 
         $(document).keydown($.proxy(this.onKeydown, this))
@@ -140,7 +140,6 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     onWordClick(event) {
         if (this.isActive()) {
-            this.s.$root.sidebar_visible = true
         }
         const scope = $(event.currentTarget).scope()
         const obj = scope.wd
@@ -148,7 +147,13 @@ view.KWICResults = class KWICResults extends BaseResults {
         event.stopPropagation()
         const word = $(event.target)
 
-        state.broadcast("selectword", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens)
+        statemachine.send("SELECT_WORD", {
+            sentenceData: sent.structs,
+            wordData: obj,
+            corpus: sent.corpus.toLowerCase(),
+            tokens: sent.tokens,
+            inReadingMode: false,
+        })
         // if ($("#sidebar").data()["korpSidebar"]) {
         // s.$broadcast("wordSelected", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens)
         // $("#sidebar").sidebar(
@@ -183,7 +188,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             aux = $(paragraph.get(sent_start + i - 1))
         }
         scope.selectionManager.select(word, aux)
-        safeApply(this.s.$root, (s) => (s.$root.word_selected = word))
+        // safeApply(this.s.$root, (s) => (s.$root.word_selected = word))
     }
 
     resetView() {
@@ -200,7 +205,6 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     onentry() {
         super.onentry()
-        this.s.$root.sidebar_visible = true
 
         this.$result.find(".token_selected").click()
         _.defer(() => this.centerScrollbar())
@@ -208,7 +212,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     onexit() {
         super.onexit()
-        this.s.$root.sidebar_visible = false
+        statemachine.send("DESELECT_WORD")
     }
 
     onKeydown(event) {
@@ -305,7 +309,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             if (isReading || useContextData) {
                 $scope.setContextData(data)
                 this.selectionManager.deselect()
-                this.s.$root.word_selected = null
+                // this.s.$root.word_selected = null
             } else {
                 $scope.setKwicData(data)
             }
@@ -349,7 +353,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
         this.$result.localize()
         this.centerScrollbar()
-        if (!this.selectionManager.hasSelected() && !isReading) {
+        if (this.isActive() && !this.selectionManager.hasSelected() && !isReading) {
             this.$result.find(".match").children().first().click()
         }
     }
@@ -931,9 +935,6 @@ view.LemgramResults = class LemgramResults extends BaseResults {
     onexit() {
         super.onexit()
         clearTimeout(self.timeout)
-        safeApply(this.s, () => {
-            this.s.$root.sidebar_visible = false
-        })
     }
 
     showNoResults() {
@@ -1169,12 +1170,12 @@ view.StatsResults = class StatsResults extends BaseResults {
                         c.log("stats ignoreabort")
                         return
                     }
-                    return safeApply(this.s, () => {
+                    safeApply(this.s, () => {
                         this.hidePreloader()
                         if (textStatus === "abort") {
                             this.s.aborted = true
                         } else {
-                            return this.resultError(err)
+                            this.resultError(err)
                         }
                     })
                 }
@@ -1195,12 +1196,12 @@ view.StatsResults = class StatsResults extends BaseResults {
 
     showGenerateExport() {
         $("#exportButton").hide()
-        return $("#generateExportButton").show()
+        $("#generateExportButton").show()
     }
 
     hideGenerateExport() {
         $("#exportButton").show()
-        return $("#generateExportButton").hide()
+        $("#generateExportButton").hide()
     }
 
     renderResult(columns, data) {

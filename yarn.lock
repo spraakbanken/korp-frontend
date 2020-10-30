@@ -2181,12 +2181,7 @@ caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
   resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30001045.tgz#87daa82cf21f0c4ba5d9ed75ba5dff6ff29fcf02"
   integrity sha512-bwCb2ssU32vcxjG1P2VBOi1YV9W7G3RCG9m2++cX6Kql1oR+5w7vUBFL2SO47svJRUw+ai/d7yNT5VqoA2g3Sw==
 
-caniuse-lite@^1.0.30001043:
-  version "1.0.30001151"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001151.tgz"
-  integrity sha512-Zh3sHqskX6mHNrqUerh+fkf0N72cMxrmflzje/JyVImfpknscMnkeJrlFGJcqTmaa0iszdYptGpWMJCRQDkBVw==
-
-caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001111:
+caniuse-lite@^1.0.30001043, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001111:
   version "1.0.30001151"
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001151.tgz"
   integrity sha512-Zh3sHqskX6mHNrqUerh+fkf0N72cMxrmflzje/JyVImfpknscMnkeJrlFGJcqTmaa0iszdYptGpWMJCRQDkBVw==
@@ -4687,6 +4682,11 @@ html-minifier@^3.5.8:
     relateurl "0.2.x"
     uglify-js "3.4.x"
 
+html-tags@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/html-tags/-/html-tags-3.1.0.tgz#7b5e6f7e665e9fb41f30007ed9e0d41e97fb2140"
+  integrity sha512-1qYz89hW3lFDEazhjW0yVAV87lw8lVkrJocr72XmBkMKsoSVJCQx3W8BXsC7hO2qAt8BoVjYjtAcZ9perqGnNg==
+
 html-webpack-plugin@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-4.3.0.tgz#53bf8f6d696c4637d5b656d3d9863d89ce8174fd"
@@ -5820,6 +5820,11 @@ lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.5, lodash@~4.17.
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
+lodash@^4.17.20:
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+
 log4js@^6.2.1:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/log4js/-/log4js-6.3.0.tgz#10dfafbb434351a3e30277a00b9879446f715bcb"
@@ -6490,6 +6495,11 @@ object-copy@^0.1.0:
     copy-descriptor "^0.1.0"
     define-property "^0.2.5"
     kind-of "^3.0.3"
+
+object-hash@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-2.0.3.tgz#d12db044e03cd2ca3d77c0570d87225b02e1e6ea"
+  integrity sha512-JPKn0GMu+Fa3zt3Bmr66JhokJU5BaNBIh4ZeTlaCBzrBsOeXzwcKKAK1tbLiPKgvwmPXsDvvLHoWh5Bm7ofIYg==
 
 object-inspect@^1.7.0:
   version "1.7.0"
@@ -9034,10 +9044,10 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
-tailwindcss@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.6.2.tgz#352da9e1b0d9154c95ce12483daa1c2fa1f1eea8"
-  integrity sha512-Cpa0kElG8Sg5sJSvTYi2frmIQZq0w37RLNNrYyy/W6HIWKspqSdTfb9tIN6X1gm4KV5a+TE/n7EKmn5Q9C7EUQ==
+tailwindcss@^1.9.6:
+  version "1.9.6"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.9.6.tgz#0c5089911d24e1e98e592a31bfdb3d8f34ecf1a0"
+  integrity sha512-nY8WYM/RLPqGsPEGEV2z63riyQPcHYZUJpAwdyBzVpxQHOHqHE+F/fvbCeXhdF1+TA5l72vSkZrtYCB9hRcwkQ==
   dependencies:
     "@fullhuman/postcss-purgecss" "^2.1.2"
     autoprefixer "^9.4.5"
@@ -9047,14 +9057,17 @@ tailwindcss@^1.6.2:
     color "^3.1.2"
     detective "^5.2.0"
     fs-extra "^8.0.0"
-    lodash "^4.17.15"
+    html-tags "^3.1.0"
+    lodash "^4.17.20"
     node-emoji "^1.8.1"
     normalize.css "^8.0.1"
+    object-hash "^2.0.3"
     postcss "^7.0.11"
     postcss-functions "^3.0.0"
     postcss-js "^2.0.0"
     postcss-nested "^4.1.1"
     postcss-selector-parser "^6.0.0"
+    postcss-value-parser "^4.1.0"
     pretty-hrtime "^1.0.3"
     reduce-css-calc "^2.1.6"
     resolve "^1.14.2"
@@ -9976,6 +9989,11 @@ xmlhttprequest-ssl@~1.5.4:
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.5.5.tgz#c2876b06168aadc40e57d97e81191ac8f4398b3e"
   integrity sha1-wodrBhaKrcQOV9l+gRkayPQ5iz4=
+
+xstate@^4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.13.0.tgz#0be22ceb8bae2bc6a025fab330fe44204d76771c"
+  integrity sha512-UnUJJzP2KTPqnmxIoD/ymXtpy/hehZnUlO6EXqWC/72XkPb15p9Oz/X4WhS3QE+by7NP+6b5bCi/GTGFzm5D+A==
 
 xtend@^4.0.0, xtend@^4.0.2, xtend@~4.0.1:
   version "4.0.2"

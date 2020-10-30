@@ -174,8 +174,8 @@ module.exports = {
                     {
                         loader: "postcss-loader",
                         options: {
-                            plugins: () => [require("tailwindcss"), require("autoprefixer")],
-                            sourceMap: process.env.NODE_ENV !== "production",
+                            // plugins: () => [require("tailwindcss"), require("autoprefixer")],
+                            // sourceMap: process.env.NODE_ENV !== "production",
                         },
                     },
                     {
