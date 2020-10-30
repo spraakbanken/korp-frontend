@@ -39,13 +39,14 @@ export const sidebarComponent = {
         let $ctrl = this
 
         statemachine.listen("select_word", function (data) {
-            console.log("controller -> data", data)
-            if (data == null) {
-                $ctrl.onHide()
-            } else {
-                $ctrl.onShow()
-                $ctrl.updateContent(data)
-            }
+            safeApply($rootScope, () => {
+                if (data == null) {
+                    $ctrl.onHide()
+                } else {
+                    $ctrl.onShow()
+                    $ctrl.updateContent(data)
+                }
+            })
         })
 
         Object.assign($ctrl, {

@@ -124,9 +124,7 @@ view.KWICResults = class KWICResults extends BaseResults {
                 return
             }
             this.selectionManager.deselect()
-            // safeApply(this.s.$root, (s) => {
-            //     s.$root.word_selected = null
-            // })
+            statemachine.send("DESELECT_WORD")
         })
 
         $(document).keydown($.proxy(this.onKeydown, this))
@@ -188,7 +186,6 @@ view.KWICResults = class KWICResults extends BaseResults {
             aux = $(paragraph.get(sent_start + i - 1))
         }
         scope.selectionManager.select(word, aux)
-        // safeApply(this.s.$root, (s) => (s.$root.word_selected = word))
     }
 
     resetView() {
@@ -309,7 +306,6 @@ view.KWICResults = class KWICResults extends BaseResults {
             if (isReading || useContextData) {
                 $scope.setContextData(data)
                 this.selectionManager.deselect()
-                // this.s.$root.word_selected = null
             } else {
                 $scope.setKwicData(data)
             }

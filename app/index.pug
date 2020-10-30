@@ -17,7 +17,7 @@ html
         include includes/searchtabs
 
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length || mapTabs.length', ng-controller='resultContainerCtrl')
-          #columns.flex(ng-class='{sidebar_visible : word_selected && sidebar_visible}')
+          #columns.flex(ng-class='{sidebar_visible : sidebar_visible}')
             #left-column.overflow-auto.flex-grow
               uib-tabset.tabbable.result_tabs(tab-hash='result_tab', active="activeTab")
                 uib-tab(disabled="!instance.hasData",
