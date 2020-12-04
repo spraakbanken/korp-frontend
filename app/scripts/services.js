@@ -3,8 +3,12 @@
 import jStorage from "../lib/jstorage"
 
 import { parseMapData } from "./map_services.ts"
+import statemachine from "./statemachine"
 
 const korpApp = angular.module("korpApp")
+korpApp.factory("statemachine", ($location) => ({
+    send: statemachine.send,
+}))
 korpApp.factory("utils", ($location) => ({
     valfilter(attrobj) {
         if (attrobj.isStructAttr) {

@@ -1,4 +1,5 @@
 /** @format */
+import statemachine from "./statemachine"
 const korpApp = angular.module("korpApp")
 
 window.SearchCtrl = [
@@ -180,6 +181,12 @@ korpApp.controller("SimpleCtrl", function (
         () => $location.search().in_order,
         (val) => ($scope.inOrder = val == null)
     )
+
+    statemachine.listen("lemgram_search", (event) => {
+        console.log("lemgram_search", event)
+        s.textInField = ""
+    })
+
     $scope.$watch("inOrder", () => $location.search("in_order", !s.inOrder ? false : null))
 
     s.prefix = false

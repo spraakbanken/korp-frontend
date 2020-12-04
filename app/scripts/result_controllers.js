@@ -328,8 +328,6 @@ class ExampleCtrl extends KwicCtrl {
         super(scope, $timeout, utils, $location, kwicDownload)
         const s = this.scope
 
-        s.$root.word_selected = false
-
         s.newDynamicTab()
 
         s.hitspictureClick = function (pageNumber) {
