@@ -106,7 +106,7 @@ const stringifyCqp = function (cqp_obj, expanded_format) {
                         not_regexp_contains: [val, "not contains"],
                         starts_with_contains: [`${val}.*`, "contains"],
                         not_starts_with_contains: [`${val}.*`, "not contains"],
-                        incontains_contains: [`.*${val}.*`, "contains"],
+                        incontains_contains: [`.*?${val}.*`, "contains"],
                         not_incontains_contains: [`.*${val}.*`, "not contains"],
                         ends_with_contains: [`.*${val}`, "contains"],
                         not_ends_with_contains: [`.*${val}`, "not contains"],

@@ -27,7 +27,7 @@
 <li><code>scripts/</code></li>
 <li><code>views/</code></li>
 </ul>
-<p>Styles and scripts will be automatically loaded. Files matching <code>views/*.html</code> can be loaded manually by requiring them using the name <code>customtemplates</code>. The result will be a string containing the (minified) HTML, for example, a template for an Angular directive: <code>template: require(&quot;customviews/my_view.html&quot;)</code>. If you are not writing any custom scripts (i.e. files in <code>scripts/</code>), this can be completely ignored.</p>
+<p>Styles and scripts will be automatically loaded. Files matching <code>views/*.html</code> can be loaded manually by requiring them using the name <code>customtemplates</code>. The result will be a string containing the (minified) HTML, for example, a template for an Angular directive: <code>template: require("customviews/my_view.html")</code>. If you are not writing any custom scripts (i.e. files in <code>scripts/</code>), this can be completely ignored.</p>
 <h3 id="content-of-config.js">Content of <code>config.js</code></h3>
 <p>The main configuration file of Korp is <code>config.js</code>. In this file we have configuration for where the backend is located, what features should be turned on or off etc. Corpora configuration is done in the modes files. There is more information about that later in this document.</p>
 <p>All configuration parameters are added to a global <code>settings</code>-object. For example:</p>
@@ -62,7 +62,7 @@ module.exports = {
 <p><a href="https://github.com/angular/bower-angular-i18n">Angular i18n</a></p>
 <p>Put the file in <code>app/translations/</code>.</p>
 <h2 id="modes">Modes</h2>
-<p>Each Korp installation has a series of <em>Modes</em> in the top left corner, which are useful for presenting different faces of Korp that might have different layouts or functionality. In the Swedish version the parallel corpora have their own mode because their KWIC results don't mix particularly well with the 'normal' results.</p>
+<p>Each Korp installation has a series of <em>Modes</em> in the top left corner, which are useful for presenting different faces of Korp that might have different layouts or functionality. In the Swedish version the parallel corpora have their own mode because their KWIC results don’t mix particularly well with the ‘normal’ results.</p>
 <h4 id="adding-modes">Adding modes</h4>
 <p>Relevant setting fields are <code>settings.visibleModes</code> and <code>settings.modeConfig</code>. The former controls how many modes are visible in the header (the rest are hidden away in a menu). The latter looks like this:</p>
 <pre><code>[
@@ -79,7 +79,7 @@ module.exports = {
     mode: &quot;faroe&quot;
   }
 ]</code></pre>
-<p>The <code>localeKey</code> key corresponds to a key from the localization files. The <code>mode</code> key is the mode identifier and is used to load a script file from the <code>modes</code> folder, in the configuration directory, corresponding to that ID. So if you click the modeSelectors 'parallel' entry, the page refreshes and the <code>modes/parallel_mode.js</code> will be loaded.</p>
+<p>The <code>localeKey</code> key corresponds to a key from the localization files. The <code>mode</code> key is the mode identifier and is used to load a script file from the <code>modes</code> folder, in the configuration directory, corresponding to that ID. So if you click the modeSelectors ‘parallel’ entry, the page refreshes and the <code>modes/parallel_mode.js</code> will be loaded.</p>
 <p>The mode called <code>default</code> will always be loaded first. If there is no need for more than one mode, leave <code>settings.modeConfig</code> empty.</p>
 <h2 id="corpora">Corpora</h2>
 <p>The config file contains the corpora declaration, wherein the available corpora are declared together with information about which metadata fields are searchable in them. Adding a test corpus is as simple as:</p>
@@ -102,16 +102,16 @@ module.exports = {
         }
     }</code></pre>
 <ul>
-<li><code>id</code>: Short form title, should correspond to the key name of the definition.</li>
-<li><code>title</code>: Long form title, for display in the corpus chooser.</li>
-<li><code>description</code>: For display in the corpus chooser.</li>
-<li><code>within</code>: What are the structural elements of the corpus? See <code>defaultWithin</code> in <a href="#summary-settings">settings summary</a> for format and more information.</li>
-<li><code>attributes</code>: each key here refers to a word attribute in Corpus Workbench. Their values are JSON structures with a few attributes of their own; they are concerned with generating the necessary interface widgets in Extended Search, display in sidebar and statistics. They are:
+<li><p><code>id</code>: Short form title, should correspond to the key name of the definition.</p></li>
+<li><p><code>title</code>: Long form title, for display in the corpus chooser.</p></li>
+<li><p><code>description</code>: For display in the corpus chooser.</p></li>
+<li><p><code>within</code>: What are the structural elements of the corpus? See <code>defaultWithin</code> in <a href="#summary-settings">settings summary</a> for format and more information.</p></li>
+<li><p><code>attributes</code>: each key here refers to a word attribute in Corpus Workbench. Their values are JSON structures with a few attributes of their own; they are concerned with generating the necessary interface widgets in Extended Search, display in sidebar and statistics. They are:</p>
 <ul>
 <li><code>label</code>: a translation key for the attributes name</li>
 <li><code>limitedAccess</code>: <code>boolean</code>, it will not be possible to select this corpus unless a user is logged in and has the correct credentials.</li>
 <li><code>displayType</code>: set to <code>'hidden'</code> to fetch attribute, but never show it in the frontend. See <code>hideSidebar</code>, <code>hideStatistics</code>, <code>hideExtended</code> and <code>hideCompare</code> for more control.</li>
-<li><code>translationKey</code>: you can declare a prefix for the translation keys of the dataset here. This is so the corpora translation file doesn't get too messy: a simple kind of namespacing.</li>
+<li><code>translationKey</code>: you can declare a prefix for the translation keys of the dataset here. This is so the corpora translation file doesn’t get too messy: a simple kind of namespacing.</li>
 <li><code>extendedTemplate</code>: Angular template used in conjunction with the <code>extendedController</code> to generate an interface widget for this attribute. See &lt;#ref customizing-extended-search|customizing extended search&gt;.</li>
 <li><code>extendedController</code>: Angular controller that is applied to the template. See &lt;#ref customizing-extended-search|customizing extended search&gt;.</li>
 <li><code>opts</code>: this represents the auxiliary select box where you can modify the input value. See <code>defaultOptions</code> in <a href="#summary-settings">settings summary</a> for format and more information.</li>
@@ -121,10 +121,10 @@ module.exports = {
 <li><code>hideCompare</code>: Default: <code>false</code>. Should it be possible to compare searches using this attribute?</li>
 <li><code>type</code>: Possible values:
 <ul>
-<li>&quot;set&quot; - The attribute is formatted as &quot;|value1|value2|&quot;. Include contains and not contains in <code>opts</code>. In the sidebar, the value will be split before formatted. When using compile / <code>groupby</code> on a &quot;set&quot; attribute in a statistics request, it will be added to <code>split</code>.</li>
-<li>&quot;url&quot; - The value will be rendered as a link to the URL and possibly truncated if too long.</li>
+<li>“set” - The attribute is formatted as “|value1|value2|”. Include contains and not contains in <code>opts</code>. In the sidebar, the value will be split before formatted. When using compile / <code>groupby</code> on a “set” attribute in a statistics request, it will be added to <code>split</code>.</li>
+<li>“url” - The value will be rendered as a link to the URL and possibly truncated if too long.</li>
 </ul></li>
-<li><code>pattern</code>: HTML snippet with placeholders for replacing values. Available is <code>key</code> (attribute name) and <code>value</code>. Also works for sets. Example: <code>'&lt;p style=&quot;margin-left: 5px;&quot;&gt;&lt;%=val.toLowerCase()%&gt;&lt;/p&gt;'</code></li>
+<li><code>pattern</code>: HTML snippet with placeholders for replacing values. Available is <code>key</code> (attribute name) and <code>value</code>. Also works for sets. Example: <code>'&lt;p style="margin-left: 5px;"&gt;&lt;%=val.toLowerCase()%&gt;&lt;/p&gt;'</code></li>
 <li><code>display</code>: How to display attribute in sidebar. Currently only supported for sets and <code>expandList</code> (see below). In the future more ways to display might be added here.
 <ul>
 <li><code>expandList</code>: Render set as a list where the first element is visible and a button to show or hide the rest of the elements.
@@ -134,26 +134,31 @@ module.exports = {
 <li><code>joinValues</code>: Interleave this string with all values on the row.</li>
 <li><code>stringify</code>: Optional override of outer <code>stringify</code>.</li>
 <li><code>linkAllValues</code>: Should the <code>internalSearch</code> be enabled for all values or only the first one in the set?</li>
-<li><code>internalSearch</code>: Alternative function to transform the attribute key and value to a CQP-expression. Example: <code>function(key,value) { '[' + key + '=&quot;' + val + '&quot;]' }</code></li>
+<li><code>internalSearch</code>: Alternative function to transform the attribute key and value to a CQP-expression. Example: <code>function(key,value) { '[' + key + '="' + val + '"]' }</code></li>
 </ul></li>
 </ul></li>
-<li><code>internalSearch</code>: <code>boolean</code>. Should the value be displayed as a link to a new Korp search? Only works for sets. Searches for CQP-expression: <code>[&lt;attrName&gt; contains &quot;&lt;regescape(attrValue)&gt;&quot;]</code></li>
+<li><code>sidebarComponent</code>: If the <code>display</code> key above doesn’t do enough, you can write a custom interactive component using <code>sidebarComponent.template</code> (an Angularjs template string) and <code>sidebarComponent.controller</code> (an Angularjs controller function). Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn’t simple text or a link. <code>$scope.model</code> holds the value, so assigning to this variable will change the current CQP expression. See the <code>complemgram</code> and <code>compwf</code> implementation at the <a href="https://github.com/spraakbanken/korp-frontend-sb/blob/dev/app/modes/common.js">Korp SB Config</a>.</li>
+<li><code>internalSearch</code>: <code>boolean</code>. Should the value be displayed as a link to a new Korp search? Only works for sets. Searches for CQP-expression: <code>[&lt;attrName&gt; contains "&lt;regescape(attrValue)&gt;"]</code></li>
 <li><code>externalSearch</code>: Link with placeholder for replacing value. Example <code>https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|&lt;%= val %&gt;</code></li>
 <li><code>order</code>: Order of attribute in the sidebar. Attributes with a lower <code>order</code>-value will be placed over attributes with a higher <code>order</code>-value.</li>
 <li><code>stringify</code>: How to pretty-print the attribute in the context of the sidebar. Example: <code>function(str) { return util.lemgramToString(str, true); }</code></li>
-<li><code>stats_stringify</code>: How to pretty-print the attribute in the context of the statistics table. The provided formatting function will be passed an array of labels. Example: <code>stats_stringify: function(values) {return values.join(&quot; &quot;)}</code>.</li>
-<li><code>stats_cqp</code>: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: <code>stats_cqp: function(values) {return `pos_tag=&quot;${tokens.join(&quot; | &quot;)}&quot;`}</code>.<br />
+<li><code>stats_stringify</code>: How to pretty-print the attribute in the context of the statistics table. The provided formatting function will be passed an array of labels. Example: <code>stats_stringify: function(values) {return values.join(" ")}</code>.</li>
+<li><code>stats_cqp</code>: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: <code>stats_cqp: function(values) {return `pos_tag="${tokens.join(" | ")}"`}</code>.<br />
 </li>
 <li><code>isStructAttr</code>: <code>boolean</code>. If <code>true</code> the attribute will be treated as a structural attribute in all sense except it will be included in the <code>show</code> query parameter instead of <code>show_struct</code> for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.</li>
 <li>optional keys and values that can be utilized in the extendedTemplate / extendedController. See &lt;#ref customizing-extended-search|customizing extended search&gt;.</li>
 </ul></li>
 <li><p><code>structAttributes</code>: refers to higher level metadata attributes. Examples include author, publishing year, URL etc. Structural attributes support the same settings as the word attributes.</p></li>
-<li><code>customAttributes</code>: creates fields in the sidebar that have no corresponding attribute in the backend. Useful for combining two different attributes. All settings concerning sidebar format for normal attributes apply in addition to:
+<li><p><code>customAttributes</code>: creates fields in the sidebar that have no corresponding attribute in the backend. Useful for combining two different attributes. All settings concerning sidebar format for normal attributes apply in addition to:</p>
 <ul>
-<li><code>customType</code>: <code>&quot;struct&quot;</code> / <code>&quot;pos&quot;</code> - decides if the attribute should be grouped under word attributes or text attributes.</li>
-<li><code>pattern</code>: Same as pattern for normal attributes, but <code>struct_attrs</code> and <code>pos_attrs</code> also available. Example: <code>'&lt;p style=&quot;margin-left: 5px;&quot;&gt;&lt;%=struct_attrs.text_title - struct_attrs.text_description%&gt;&lt;/p&gt;'</code></li>
+<li><code>customType</code>: <code>"struct"</code> / <code>"pos"</code> - decides if the attribute should be grouped under word attributes or text attributes.</li>
+<li><code>pattern</code>: Same as pattern for normal attributes, but <code>struct_attrs</code> and <code>pos_attrs</code> also available. Example: <code>'&lt;p style="margin-left: 5px;"&gt;&lt;%=struct_attrs.text_title - struct_attrs.text_description%&gt;&lt;/p&gt;'</code></li>
 </ul></li>
-<li><p><code>readingMode</code>: If set, enables reading mode/text view for the corpora. A link will appear in the sidebar and if clicked a new tab containg the text will be opened. This depends on your corpus having a structural attribute identifying the line in the KWIC (such as <code>sentence_id</code> , this may be configured with <code>settings.readingModeField</code>) and also a <code>_head</code> and <code>_tail</code> attribute, containing the whitespace before and after a token. The value can be set to: <code>readingMode: {     directive: &quot;standard-reading-mode&quot; }</code> for basic support. If something else is needed you can write your own directive in <code>scripts/</code> and use that one instead. Contact Språkbanken for an example on how to write a directive.</p></li>
+<li><p><code>readingMode</code>: If set, enables reading mode/text view for the corpora. A link will appear in the sidebar and if clicked a new tab containg the text will be opened. This depends on your corpus having a structural attribute identifying the line in the KWIC (such as <code>sentence_id</code> , this may be configured with <code>settings.readingModeField</code>) and also a <code>_head</code> and <code>_tail</code> attribute, containing the whitespace before and after a token. The value can be set to:</p>
+<pre><code>readingMode: {
+      directive: &quot;standard-reading-mode&quot;
+  }</code></pre>
+<p>for basic support. If something else is needed you can write your own directive in <code>scripts/</code> and use that one instead. Contact Språkbanken for an example on how to write a directive.</p></li>
 </ul>
 <h2 id="customizing-extended-search">Customizing extended search</h2>
 <p>It is possible to customize the standard input field of extended search into anything. Any key can be added to an attribute to be provided to the <code>extendedController</code> / <code>extendedTemplate</code>. Simple example:</p>
@@ -179,17 +184,17 @@ settings.corpora[&quot;testcorpus&quot;] = {
 };</code></pre>
 <p>However, <code>extendedController</code> is not mandatory and only shown in this example for documentation purposes.</p>
 <h3 id="template-requisites">Template requisites</h3>
-<p>In order for your template to work, it must set its value in <code>scope.model</code>, for example by using <code>ng-model=&quot;model&quot;</code> for input-fields.</p>
+<p>In order for your template to work, it must set its value in <code>scope.model</code>, for example by using <code>ng-model="model"</code> for input-fields.</p>
 <h3 id="autoc">autoc</h3>
 <p>A directive that autocompletes word forms to lemgrams or senses using Karp. Used in the following way:</p>
 <pre><code>&lt;autoc placeholder=&quot;placeholder&quot; type=&quot;lemgram&quot; model=&quot;model&quot;
  disable-lemgram-autocomplete=&quot;disableLemgramAutocomplete&quot;
   text-in-field=&quot;textInField&quot;&gt;</code></pre>
-<p>Where <code>type</code> may be either <code>lemgram</code> or <code>sense</code>. <code>model</code> will be the selected lemgram / sense. <code>textInField</code> will be actual user input (user did not select anything). Placeholder will contain the pretty-printed lemgram / sense. It is also possible to make the element fall back to a &quot;normal&quot; text field by setting <code>disableLemgramAutocomplete</code> to <code>false</code>.</p>
+<p>Where <code>type</code> may be either <code>lemgram</code> or <code>sense</code>. <code>model</code> will be the selected lemgram / sense. <code>textInField</code> will be actual user input (user did not select anything). Placeholder will contain the pretty-printed lemgram / sense. It is also possible to make the element fall back to a “normal” text field by setting <code>disableLemgramAutocomplete</code> to <code>false</code>.</p>
 <h3 id="escaper">escaper</h3>
-<p><code>escaper</code> is a directive that takes the user's input and escapes any regexp characters before saving it to <code>scope.model</code>. When the model changes it automatically de-escapes any regexp characters before showing the value to the user. Input must be saved to <code>scope.input</code> for it to work. Example: <code>&lt;input ng-model=&quot;input&quot; escaper&gt;</code></p>
+<p><code>escaper</code> is a directive that takes the user’s input and escapes any regexp characters before saving it to <code>scope.model</code>. When the model changes it automatically de-escapes any regexp characters before showing the value to the user. Input must be saved to <code>scope.input</code> for it to work. Example: <code>&lt;input ng-model="input" escaper&gt;</code></p>
 <h2 id="parallel-corpora">Parallel Corpora</h2>
-<p>Parallel corpora need to have its own mode. Use <code>modes/parallel_mode.js</code>, but replace the corpus definitions. Change the line <code>var start_lang = &quot;swe&quot;;</code> to whatever language that should be the default search language.</p>
+<p>Parallel corpora need to have its own mode. Use <code>modes/parallel_mode.js</code>, but replace the corpus definitions. Change the line <code>var start_lang = "swe";</code> to whatever language that should be the default search language.</p>
 <p>The corpora declaration for parallel corpora is different in some important ways. Example:</p>
 <pre><code>settings.corpora[&quot;saltnld-sv&quot;] = {
     id: &quot;saltnld-sv&quot;,
@@ -216,11 +221,11 @@ settings.corpora[&quot;testcorpus&quot;] = {
     structAttributes: {},
     hide: true
 };</code></pre>
-<p>The corpus configuration for parallel corpora needs to make explicit the links between the declared corpora. This is done using the <code>linkedTo</code> property. A corpus may declare any amount of links to other corpora. Also notice the <code>lang</code> property, used for building the correct language select menu. The <code>within</code> attribute should use the <code>&quot;link&quot;: &quot;meningspar&quot;</code> value. Also note the <code>hide</code> attribute which prevents both subcorpora from being listed in the corpus chooser widget.</p>
+<p>The corpus configuration for parallel corpora needs to make explicit the links between the declared corpora. This is done using the <code>linkedTo</code> property. A corpus may declare any amount of links to other corpora. Also notice the <code>lang</code> property, used for building the correct language select menu. The <code>within</code> attribute should use the <code>"link": "meningspar"</code> value. Also note the <code>hide</code> attribute which prevents both subcorpora from being listed in the corpus chooser widget.</p>
 <h2 id="rendering-attribute-values-in-the-statistics-view">Rendering attribute values in the statistics-view</h2>
-<p>The appearance of the leftmost columns of hits in the stats table can be controlled by editing <code>app/config/statistics_config.js</code>. These change according to the 'compile based on' select menu and might need a different stringification method depending on the chosen attribute. Make sure the function returns valid html. A known issue is that annotations containing spaces when searching for more than one token works less than perfect.</p>
+<p>The appearance of the leftmost columns of hits in the stats table can be controlled by editing <code>app/config/statistics_config.js</code>. These change according to the ‘compile based on’ select menu and might need a different stringification method depending on the chosen attribute. Make sure the function returns valid html. A known issue is that annotations containing spaces when searching for more than one token works less than perfect.</p>
 <h2 id="autocompletion-menu">Autocompletion menu</h2>
-<p>Korp features an autocompletion list for searches in the Simple Search as well as in Extended for those corpus attributes configured to use <code>autoc</code>-directive (see &lt;#ref autoc|autoc-section&gt;). This is implemented using an Angular.js directive <code>autoc</code> that calls Karp's autocompletion function. Using Karp, Korp can autocomplete senses and lemgrams. To disable autocompletion in simple search use <code>settings.autocomplete = false</code>.</p>
+<p>Korp features an autocompletion list for searches in the Simple Search as well as in Extended for those corpus attributes configured to use <code>autoc</code>-directive (see &lt;#ref autoc|autoc-section&gt;). This is implemented using an Angular.js directive <code>autoc</code> that calls Karp’s autocompletion function. Using Karp, Korp can autocomplete senses and lemgrams. To disable autocompletion in simple search use <code>settings.autocomplete = false</code>.</p>
 <h2 id="word-picture">Word picture</h2>
 <p>The word picture-config object looks like this:</p>
 <pre><code>setting.wordPictureConf = {
@@ -233,7 +238,7 @@ settings.corpora[&quot;testcorpus&quot;] = {
     {rel: &quot;object&quot;, css_class: &quot;color_purple&quot;},
     {rel: &quot;adverbial&quot;, css_class: &quot;color_purple&quot;, field_reverse: false}
 ]</code></pre>
-<p>The <code>&quot;_&quot;</code> refers to the placement of the hit in the table order. The value for <code>rel</code> refers to a key in <code>settings.wordpictureTagset</code> looking like this:</p>
+<p>The <code>"_"</code> refers to the placement of the hit in the table order. The value for <code>rel</code> refers to a key in <code>settings.wordpictureTagset</code> looking like this:</p>
 <pre><code>settings.wordpictureTagset = {
     // the actual value for the pos-tag must be given in this object
     pos_tag: &quot;vb&quot;,  
@@ -245,7 +250,7 @@ settings.corpora[&quot;testcorpus&quot;] = {
 <p>The values are the actual relations returned by the backend. The relation used is determined by <code>field_reverse</code>. If <code>field_reverse</code> is <code>false</code> (default), <code>dep</code> is used, else <code>head</code>. If you find yourself with a table full of the search word just flip the <code>field_reverse</code> switch.</p>
 <p><code>css_class</code> simply gives a class to the column, useful for applying background color. The last supported attribute is <code>alt_label</code>, used for when another value than the relation name should be used for the table header.</p>
 <h2 id="map">Map</h2>
-<p>Korp's map uses annotations to get locations. The user selects rows from the statistics table and points derived from different rows will have different colors. The selected corpora must have structural attributes with location data in them. The format is <code>Fukuoka;JP;33.6;130.41667</code> - the location name, the country, latitude and longitude separated by <code>;</code>.</p>
+<p>Korp’s map uses annotations to get locations. The user selects rows from the statistics table and points derived from different rows will have different colors. The selected corpora must have structural attributes with location data in them. The format is <code>Fukuoka;JP;33.6;130.41667</code> - the location name, the country, latitude and longitude separated by <code>;</code>.</p>
 <pre><code>Also the name of the attribute must contain `&quot;__&quot;` and `&quot;geo&quot;` to show up in the list of supported attributes.</code></pre>
 <p><strong>settings.newMapEnabled</strong> - <code>boolean</code>. The map should be enabled. The weird name is because another map existed before, but has been remove. The name will change in upcoming releases. <strong>settings.mapCenter</strong> - Where the center of the map should be located when user opens map. Example:</p>
 <pre><code>settings.mapCenter = {
@@ -271,22 +276,22 @@ settings.corpora[&quot;testcorpus&quot;] = {
 <h2 id="summary-of-settings"><a name="summary-settings">Summary of settings</a></h2>
 <p>Settings are required unless specified to be optional.</p>
 <p><strong>autocomplete</strong> - Boolean. Enable autocomplete (see <strong>autoc</strong>-directive) for simple search.</p>
-<p><strong>languages</strong> - Array of supported interface language codes s.a. <code>[&quot;en&quot;, &quot;sv&quot;]</code></p>
-<p><strong>defaultLanguage</strong> - The default interface language. Example: <code>&quot;sv&quot;</code></p>
+<p><strong>languages</strong> - Array of supported interface language codes s.a. <code>["en", "sv"]</code></p>
+<p><strong>defaultLanguage</strong> - The default interface language. Example: <code>"sv"</code></p>
 <p><strong>downloadFormats</strong> - Available formats of KWIC-download. See supplied <code>config.js</code>.</p>
 <p><strong>downloadFormatParams</strong> - Settings for KWIC-download. See supplied <code>config.js</code>.</p>
-<p><strong>wordAttributeSelector</strong> - <code>&quot;union&quot;</code> / <code>&quot;intersection&quot;</code>. Controls attribute list in extended search. Use all selected corpora <em>word</em> attributes or only the attributes common to selected corpora.</p>
+<p><strong>wordAttributeSelector</strong> - <code>"union"</code> / <code>"intersection"</code>. Controls attribute list in extended search. Use all selected corpora <em>word</em> attributes or only the attributes common to selected corpora.</p>
 <p><strong>structAttributeSelector</strong> - Same as <strong>wordAttributeSelector</strong>, but for structural attributes.</p>
-<p><strong>reduceWordAttributeSelector</strong> - Same as <strong>wordAttributeSelector</strong>, but for the &quot;compile based on&quot;-configuration in statistics. Warning: if set to <code>&quot;union&quot;</code>, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.</p>
+<p><strong>reduceWordAttributeSelector</strong> - Same as <strong>wordAttributeSelector</strong>, but for the “compile based on”-configuration in statistics. Warning: if set to <code>"union"</code>, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.</p>
 <p><strong>reduceStructAttribute_selector</strong> - Same as <strong>reduceWordAttributeSelector</strong>, but for structural attributes.</p>
 <p><strong>newsDeskUrl</strong> - See <strong>News widget</strong>. Optional.</p>
 <p><strong>wordpictureTagset</strong> - See <strong>Word picture</strong></p>
 <p><strong>wordPictureConf</strong> - See <strong>Word picture</strong></p>
 <p><strong>visibleModes</strong> - See <strong>Adding modes</strong></p>
 <p><strong>modeConfig</strong> - See <strong>Adding modes</strong></p>
-<p><strong>primaryColor</strong> - Background color in corpus chooser, CSS color. Example: <code>&quot;rgb(221, 233, 255)&quot;</code></p>
-<p><strong>primaryLight</strong> - Background color of settings area, CSS color. Example: <code>&quot;rgb(221, 233, 255)&quot;</code></p>
-<p><strong>defaultOverviewContext</strong> - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: <code>&quot;1 sentence&quot;</code>. For corpora that do not support this context an additional parameter will be sent to the backend based on the <code>context</code>-setting in the corpus.</p>
+<p><strong>primaryColor</strong> - Background color in corpus chooser, CSS color. Example: <code>"rgb(221, 233, 255)"</code></p>
+<p><strong>primaryLight</strong> - Background color of settings area, CSS color. Example: <code>"rgb(221, 233, 255)"</code></p>
+<p><strong>defaultOverviewContext</strong> - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: <code>"1 sentence"</code>. For corpora that do not support this context an additional parameter will be sent to the backend based on the <code>context</code>-setting in the corpus.</p>
 <p><strong>defaultReadingContext</strong> - Same as <strong>defaultOverviewContext</strong>, but for the context-view. Use a context larger than the <strong>defaultOverviewContext</strong>.</p>
 <p><strong>defaultWithin</strong> - An object containing the structural elements of a corpus. Default within is used unless a corpus overrides the setting using <code>within</code>. Example:</p>
 <pre><code>settings.defaultWithin = {
@@ -294,9 +299,9 @@ settings.corpora[&quot;testcorpus&quot;] = {
     &quot;paragraph&quot;: &quot;paragraph&quot;
 };</code></pre>
 <p>In simple search, we will search within the default context and supply extra information for the corpora that do not support the default context.</p>
-<p>In extended search, the default <code>within</code> will be used unless the user specifies something else. In that case the user's choice will be used for all corpora that support it and for corpora that do not support it, a supported <code>within</code> will be used.</p>
+<p>In extended search, the default <code>within</code> will be used unless the user specifies something else. In that case the user’s choice will be used for all corpora that support it and for corpora that do not support it, a supported <code>within</code> will be used.</p>
 <p><strong>cqpPrio</strong> - An array of attributes to order and-clauses in CQP-expressions by. Order the array by how specific an attribute is in increasing order. <code>word</code> will probably be the most specific attribute and should be placed last, while POS-tags will be near the beginning. A well ordered list will speed up queries significantly.</p>
-<p><strong>defaultOptions</strong> - Object containing the default operators for extended search. May be overridden for each attribute by setting <code>opts</code> on the attribute-configuration. The object keys are translation keys and values are the frontend's internal representation of CQP. Example:</p>
+<p><strong>defaultOptions</strong> - Object containing the default operators for extended search. May be overridden for each attribute by setting <code>opts</code> on the attribute-configuration. The object keys are translation keys and values are the frontend’s internal representation of CQP. Example:</p>
 <pre><code>settings.defaultOptions = {
     &quot;is&quot;: &quot;=&quot;,
     &quot;is_not&quot;: &quot;!=&quot;,
@@ -310,42 +315,42 @@ settings.corpora[&quot;testcorpus&quot;] = {
 <table>
 <thead>
 <tr class="header">
-<th align="left"></th>
-<th align="left">Internal representation</th>
-<th align="left">CQP</th>
-<th align="left">Note</th>
+<th></th>
+<th>Internal representation</th>
+<th>CQP</th>
+<th>Note</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">starts with</td>
-<td align="left"><code>[key ^= &quot;val&quot;]</code></td>
-<td align="left"><code>[key = &quot;val.*&quot;]</code></td>
-<td align="left"></td>
+<td>starts with</td>
+<td><code>[key ^= "val"]</code></td>
+<td><code>[key = "val.*"]</code></td>
+<td></td>
 </tr>
 <tr class="even">
-<td align="left">contains</td>
-<td align="left"><code>[key _= &quot;val&quot;]</code></td>
-<td align="left"><code>[key = &quot;.*val.*&quot;]</code></td>
-<td align="left"></td>
+<td>contains</td>
+<td><code>[key _= "val"]</code></td>
+<td><code>[key = ".*val.*"]</code></td>
+<td></td>
 </tr>
 <tr class="odd">
-<td align="left">ends with</td>
-<td align="left"><code>[key &amp;= &quot;val&quot;]</code></td>
-<td align="left"><code>[key = &quot;.*val&quot;]</code></td>
-<td align="left"></td>
+<td>ends with</td>
+<td><code>[key &amp;= "val"]</code></td>
+<td><code>[key = ".*val"]</code></td>
+<td></td>
 </tr>
 <tr class="even">
-<td align="left">matches</td>
-<td align="left"><code>[key *= &quot;val&quot;]</code></td>
-<td align="left"><code>[key = &quot;val&quot;]</code></td>
-<td align="left">Used with <code>escaper</code>-directive, regexp</td>
+<td>matches</td>
+<td><code>[key *= "val"]</code></td>
+<td><code>[key = "val"]</code></td>
+<td>Used with <code>escaper</code>-directive, regexp</td>
 </tr>
 <tr class="odd">
-<td align="left">matches not</td>
-<td align="left"><code>[key !*= &quot;val&quot;]</code></td>
-<td align="left"><code>[key != &quot;val&quot;]</code></td>
-<td align="left">special characters will not be escaped.</td>
+<td>matches not</td>
+<td><code>[key !*= "val"]</code></td>
+<td><code>[key != "val"]</code></td>
+<td>special characters will not be escaped.</td>
 </tr>
 </tbody>
 </table>
@@ -353,49 +358,49 @@ settings.corpora[&quot;testcorpus&quot;] = {
 <table>
 <thead>
 <tr class="header">
-<th align="left"></th>
-<th align="left">Internal representation</th>
-<th align="left">CQP</th>
-<th align="left">Note</th>
+<th></th>
+<th>Internal representation</th>
+<th>CQP</th>
+<th>Note</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">starts with</td>
-<td align="left"><code>[key starts_with_contains &quot;val&quot;]</code></td>
-<td align="left"><code>[key contains &quot;val.*&quot;]</code></td>
-<td align="left"></td>
+<td>starts with</td>
+<td><code>[key starts_with_contains "val"]</code></td>
+<td><code>[key contains "val.*"]</code></td>
+<td></td>
 </tr>
 <tr class="even">
-<td align="left">contains</td>
-<td align="left"><code>[key incontains_contains &quot;val&quot;]</code></td>
-<td align="left"><code>[key contains &quot;.*val.*&quot;]</code></td>
-<td align="left">Strange name due to CQPParser getting confused by <code>contains_contains</code></td>
+<td>contains</td>
+<td><code>[key incontains_contains "val"]</code></td>
+<td><code>[key contains ".*val.*"]</code></td>
+<td>Strange name due to CQPParser getting confused by <code>contains_contains</code></td>
 </tr>
 <tr class="odd">
-<td align="left">ends with</td>
-<td align="left"><code>[key ends_with_contains &quot;val&quot;]</code></td>
-<td align="left"><code>[key contains &quot;.*val&quot;]</code></td>
-<td align="left"></td>
+<td>ends with</td>
+<td><code>[key ends_with_contains "val"]</code></td>
+<td><code>[key contains ".*val"]</code></td>
+<td></td>
 </tr>
 <tr class="even">
-<td align="left">matches</td>
-<td align="left"><code>[key regexp_contains &quot;val&quot;]</code></td>
-<td align="left"><code>[key contains &quot;val&quot;]</code></td>
-<td align="left">Used with <code>escaper</code>-directive, regexp</td>
+<td>matches</td>
+<td><code>[key regexp_contains "val"]</code></td>
+<td><code>[key contains "val"]</code></td>
+<td>Used with <code>escaper</code>-directive, regexp</td>
 </tr>
 <tr class="odd">
-<td align="left">matches not</td>
-<td align="left"><code>[key not_regexp_contains &quot;val&quot;]</code></td>
-<td align="left"><code>[key not contains &quot;val&quot;]</code></td>
-<td align="left">special characters will not be escaped.</td>
+<td>matches not</td>
+<td><code>[key not_regexp_contains "val"]</code></td>
+<td><code>[key not contains "val"]</code></td>
+<td>special characters will not be escaped.</td>
 </tr>
 </tbody>
 </table>
 <p><strong>cgiScript</strong> - URL to Korp CGI-script</p>
 <p><strong>downloadCgiScript</strong> - URL to Korp download CGI-script</p>
 <p><strong>wordpicture</strong> - Boolean. Enable word picture.</p>
-<p><strong>statisticsCaseInsensitiveDefault</strong> - Boolean. Selects case-insensitive for &quot;compile based on&quot; by default.</p>
+<p><strong>statisticsCaseInsensitiveDefault</strong> - Boolean. Selects case-insensitive for “compile based on” by default.</p>
 <p><strong>inputCaseInsensitiveDefault</strong> - Boolean. Selects case-insensitive for simple search by default.</p>
 <p><strong>corpora</strong> - See <strong>Corpora</strong></p>
 <p><strong>corpusListing</strong> - After specifying all corpora in a modes-file use: <code>settings.corpusListing = new CorpusListing(settings.corpora);</code> to enable the configuration. For parallel corpora use: <code>settings.corpusListing = new ParallelCorpusListing(settings.corpora, parseLocationLangs());</code></p>
@@ -430,7 +435,7 @@ settings.corporafolders.foldername.subfolder = {
 <h2 id="localization-1">Localization</h2>
 <p>Korp does runtime DOM manipulation when the user changes language. Using an Angular filter to specify which translation key looks like this:</p>
 <pre><code>&lt;div&gt;{{&#39;my_key&#39; | loc}}&lt;/div&gt;</code></pre>
-<p>[Deprecation warning] Before the Angular approach we used the <code>rel</code> attribute, like so (but you shouldn't any more): <code>&lt;span rel=&quot;localize[translation_key]&quot;&gt;...&lt;/span&gt;</code></p>
+<p>[Deprecation warning] Before the Angular approach we used the <code>rel</code> attribute, like so (but you shouldn’t any more): <code>&lt;span rel="localize[translation_key]"&gt;...&lt;/span&gt;</code></p>
 <h2 id="map-1">Map</h2>
 <p>Modify the map with configuration, <code>scripts/map_controllers.coffee</code> or the Geokorp-component located in <code>components/geokorp</code>. Geokorp wraps <a href="http://leafletjs.com/">Leaflet</a> and adds further functionality such as integration with Angular, marker clustering, marker styling and information when selecting a marker.</p>
 <h2 id="building-a-distribution">Building a distribution</h2>
