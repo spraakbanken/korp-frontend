@@ -333,7 +333,7 @@ korpApp.controller("SimpleCtrl", function (
             s.doSearch()
         } else {
             s.placeholder = null
-            if (lemgramResults) {
+            if ("lemgramResults" in window) {
                 lemgramResults.resetView()
             }
         }
@@ -361,6 +361,10 @@ korpApp.controller("SimpleCtrl", function (
                 if (sense || saldo) {
                     backend.relatedWordSearch(unregescape(search.val)).then(function (data) {
                         s.relatedObj = data
+                        if (data.length > 2 && data[0].label == "Excreting") {
+                            let [first, second, ...rest] = data
+                            s.relatedObj.data = [second, first, ...rest]
+                        }
                         s.relatedObj.attribute = sense ? "sense" : "saldo"
                     })
                 }
@@ -370,7 +374,7 @@ korpApp.controller("SimpleCtrl", function (
                 const value = search.type === "lemgram" ? unregescape(search.val) : search.val
                 return searches.lemgramSearch(value, search.type)
             } else {
-                if (lemgramResults) {
+                if ("lemgramResults" in window) {
                     lemgramResults.resetView()
                 }
             }
@@ -475,19 +479,7 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
     }
 
     s.addAnd = (token) => {
-        let prevAnd = token.and_block[token.and_block.length - 1]
-        if (prevAnd) {
-            let prevOr = prevAnd[prevAnd.length - 1]
-            token.and_block.push([
-                {
-                    type: prevOr.type,
-                    op: prevOr.op,
-                    val: "",
-                },
-            ])
-        } else {
-            token.and_block.push(s.addOr([]))
-        }
+        token.and_block.push(s.addOr([]))
     }
 
     const toggleBound = function (token, bnd) {

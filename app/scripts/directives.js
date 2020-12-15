@@ -461,18 +461,18 @@ korpApp.directive("extendedList", () => ({
         s.$watch("data", () => (s.cqp = CQP.stringify(s.data) || ""), true)
 
         s.addOr = function (and_array) {
+            let last = _.last(and_array) || {}
             and_array.push({
-                type: "word",
-                op: "=",
+                type: last.type || "word",
+                op: last.op == "contains" ? "contains" : "=",
                 val: "",
             })
             return and_array
         }
 
         s.addToken = function () {
-            const token = { and_block: [[]] }
+            const token = { and_block: [s.addOr([])] }
             s.data.push(token)
-            s.addOr(token.and_block[0])
             s.repeatError = false
         }
 

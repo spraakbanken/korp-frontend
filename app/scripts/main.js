@@ -47,7 +47,7 @@ $(document).keyup(function (event) {
         if (kwicResults) {
             kwicResults.abort()
         }
-        if (lemgramResults) {
+        if ("lemgramResults" in window) {
             lemgramResults.abort()
         }
         if (statsResults) {

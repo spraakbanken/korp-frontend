@@ -101,7 +101,9 @@ window.CorpusListing = class CorpusListing {
             }
 
             // if a position attribute is declared as structural, include here
-            const pos_attrs = _.pickBy(corpus.attributes, (val, key) => val.isStructAttr)
+            const pos_attrs = _.pickBy(corpus.attributes, (val, key) => {
+                return val.isStructAttr
+            })
             return _.extend({}, pos_attrs, corpus.structAttributes)
         })
         const rest = this._invalidateAttrs(attrs)
