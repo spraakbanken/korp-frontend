@@ -2,8 +2,8 @@
 
   global-filters(lang="lang")
   
-  .row.justify-content-between
-    form.simple_form.col-sm
+  .sm_flex.justify-between
+    form.simple_form
       autoc#simple_text(placeholder="placeholder", type='lemgram', model='model', disable-lemgram-autocomplete='! settings.autocomplete', text-in-field="textInField")
       search-submit
       .opts
@@ -14,13 +14,15 @@
           |  {{'and_include' | loc:lang}} 
         input#prefixChk(type='checkbox', ng-model="prefix") 
         label(for='prefixChk')  {{'prefix_chk' | loc:lang}}
+        input#midChk(type='checkbox', ng-model="mid_comp") 
+        label(for='midChk')  {{'compound_middle' | loc:lang}} 
         input#suffixChk(type='checkbox', ng-model="suffix") 
         label(for='suffixChk')  {{'suffix_chk' | loc:lang}} 
         span  {{'and' | loc:lang}} 
         input#caseChk(type='checkbox', ng-model="isCaseInsensitive") 
         label(for='caseChk')  {{'case_insensitive' | loc:lang}}  
 
-    #similar_wrapper(ng-show="relatedObj").col-auto
+    #similar_wrapper(ng-show="relatedObj")
       button.btn.btn-sm.btn-default(ng-click="showAllRelated()" ng-if="relatedObj.length != 0")
         span.btn_header
           | {{ 'similar_header' | loc:lang }} (SWE-FN)

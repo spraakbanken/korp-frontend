@@ -2,14 +2,14 @@
 import statisticsFormatting from "../config/statistics_config.js"
 const pieChartImg = require("../img/stats2.png")
 
-const createStatisticsService = function() {
-    const createColumns = function(corpora, reduceVals, reduceValLabels) {
+const createStatisticsService = function () {
+    const createColumns = function (corpora, reduceVals, reduceValLabels) {
         const loc = {
             sv: "sv-SE",
-            en: "gb-EN"
+            en: "gb-EN",
         }[$("body").scope().lang]
 
-        const valueFormatter = function(row, cell, value, columnDef, dataContext) {
+        const valueFormatter = function (row, cell, value, columnDef, dataContext) {
             const valTup = dataContext[columnDef.id + "_value"]
             return (
                 `<span><span class='relStat'>${Number(valTup[1].toFixed(1)).toLocaleString(
@@ -40,16 +40,14 @@ const createStatisticsService = function() {
                             attrObj[reduceVal]
                         )
                         dataContext["formattedValue"][reduceVal] = formattedValue
-                        return `<span class="statistics-link" data-row=${
-                            dataContext["rowId"]
-                        }>${formattedValue}</span>`
+                        return `<span class="statistics-link" data-row=${dataContext["rowId"]}>${formattedValue}</span>`
                     } else {
                         return "&Sigma;"
                     }
                 },
                 minWidth,
                 cssClass: "parameter-column",
-                headerCssClass: "localized-header"
+                headerCssClass: "localized-header",
             })
         }
 
@@ -65,7 +63,7 @@ const createStatisticsService = function() {
                 )
             },
             maxWidth: 25,
-            minWidth: 25
+            minWidth: 25,
         })
 
         columns.push({
@@ -75,7 +73,7 @@ const createStatisticsService = function() {
             sortable: true,
             formatter: valueFormatter,
             minWidth,
-            headerCssClass: "localized-header"
+            headerCssClass: "localized-header",
         })
 
         $.each(corporaKeys.sort(), (i, corpus) => {
@@ -85,21 +83,21 @@ const createStatisticsService = function() {
                 field: corpus + "_value",
                 sortable: true,
                 formatter: valueFormatter,
-                minWidth
+                minWidth,
             })
         })
         return columns
     }
 
-    const processData = function(def, data, reduceVals, reduceValLabels, ignoreCase) {
+    const processData = function (def, data, reduceVals, reduceValLabels, ignoreCase) {
         const columns = createColumns(data.corpora, reduceVals, reduceValLabels)
 
         const statsWorker = new Worker("worker.js")
-        statsWorker.onmessage = function(e) {
+        statsWorker.onmessage = function (e) {
             const searchParams = {
                 reduceVals,
                 ignoreCase,
-                corpora: _.keys(data.corpora)
+                corpora: _.keys(data.corpora),
             }
             def.resolve([e.data, columns, searchParams])
         }
@@ -107,7 +105,7 @@ const createStatisticsService = function() {
         statsWorker.postMessage({
             data,
             reduceVals,
-            groupStatistics: settings.groupStatistics
+            groupStatistics: settings.groupStatistics,
         })
     }
 

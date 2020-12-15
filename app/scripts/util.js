@@ -13,7 +13,7 @@ window.CorpusListing = class CorpusListing {
     constructor(corpora) {
         this.struct = corpora
         this.corpora = _.values(corpora)
-        this.selected = _.filter(this.corpora, corp => !corp.limitedAccess)
+        this.selected = _.filter(this.corpora, (corp) => !corp.limitedAccess)
     }
 
     get(key) {
@@ -56,7 +56,7 @@ window.CorpusListing = class CorpusListing {
     _mapping_intersection(mappingArray) {
         return _.reduce(
             mappingArray,
-            function(a, b) {
+            function (a, b) {
                 const keys_intersect = _.intersection(_.keys(a), _.keys(b))
                 const to_mergea = _.pick(a, ...keys_intersect)
                 const to_mergeb = _.pick(b, ...keys_intersect)
@@ -71,18 +71,18 @@ window.CorpusListing = class CorpusListing {
 
     getCurrentAttributes(lang) {
         // lang not used here, only in parallel mode
-        const attrs = this.mapSelectedCorpora(corpus => corpus.attributes)
+        const attrs = this.mapSelectedCorpora((corpus) => corpus.attributes)
         return this._invalidateAttrs(attrs)
     }
 
     getCurrentAttributesIntersection() {
-        const attrs = this.mapSelectedCorpora(corpus => corpus.attributes)
+        const attrs = this.mapSelectedCorpora((corpus) => corpus.attributes)
 
         return this._mapping_intersection(attrs)
     }
 
     getStructAttrsIntersection() {
-        const attrs = this.mapSelectedCorpora(function(corpus) {
+        const attrs = this.mapSelectedCorpora(function (corpus) {
             for (let key in corpus.structAttributes) {
                 const value = corpus.structAttributes[key]
                 value["isStructAttr"] = true
@@ -94,25 +94,27 @@ window.CorpusListing = class CorpusListing {
     }
 
     getStructAttrs() {
-        const attrs = this.mapSelectedCorpora(function(corpus) {
+        const attrs = this.mapSelectedCorpora(function (corpus) {
             for (let key in corpus.structAttributes) {
                 const value = corpus.structAttributes[key]
                 value["isStructAttr"] = true
             }
 
             // if a position attribute is declared as structural, include here
-            const pos_attrs = _.pickBy(corpus.attributes, (val, key) => val.isStructAttr)
+            const pos_attrs = _.pickBy(corpus.attributes, (val, key) => {
+                return val.isStructAttr
+            })
             return _.extend({}, pos_attrs, corpus.structAttributes)
         })
         const rest = this._invalidateAttrs(attrs)
 
         // TODO this code merges datasets from attributes with the same name and
         // should be moved to the code for extended controller "datasetSelect"
-        const withDataset = _.filter(_.toPairs(rest), item => item[1].dataset)
-        $.each(withDataset, function(i, item) {
+        const withDataset = _.filter(_.toPairs(rest), (item) => item[1].dataset)
+        $.each(withDataset, function (i, item) {
             const key = item[0]
             const val = item[1]
-            return $.each(attrs, function(j, origStruct) {
+            return $.each(attrs, function (j, origStruct) {
                 if (origStruct[key] && origStruct[key].dataset) {
                     let ds = origStruct[key].dataset
                     if ($.isArray(ds)) {
@@ -152,7 +154,7 @@ window.CorpusListing = class CorpusListing {
                     if (!(filter in attrs)) {
                         attrs[filter] = {
                             settings: corpus.structAttributes[filter],
-                            corpora: [corpus.id]
+                            corpora: [corpus.id],
                         }
                     } else {
                         attrs[filter].corpora.push(corpus.id)
@@ -181,7 +183,7 @@ window.CorpusListing = class CorpusListing {
     _invalidateAttrs(attrs) {
         const union = this._mapping_union(attrs)
         const intersection = this._mapping_intersection(attrs)
-        $.each(union, function(key, value) {
+        $.each(union, function (key, value) {
             if (intersection[key] == null) {
                 value["disabled"] = true
             } else {
@@ -214,23 +216,23 @@ window.CorpusListing = class CorpusListing {
 
     stringifySelected() {
         return _.map(this.selected, "id")
-            .map(a => a.toUpperCase())
+            .map((a) => a.toUpperCase())
             .join(",")
     }
 
     stringifyAll() {
         return _.map(this.corpora, "id")
-            .map(a => a.toUpperCase())
+            .map((a) => a.toUpperCase())
             .join(",")
     }
 
     getWithinKeys() {
-        const struct = _.map(this.selected, corpus => _.keys(corpus.within))
+        const struct = _.map(this.selected, (corpus) => _.keys(corpus.within))
         return _.union(...(struct || []))
     }
 
     getContextQueryStringFromCorpusId(corpus_ids, prefer, avoid) {
-        const corpora = _.map(corpus_ids, corpus_id => settings.corpora[corpus_id.toLowerCase()])
+        const corpora = _.map(corpus_ids, (corpus_id) => settings.corpora[corpus_id.toLowerCase()])
         return this.getContextQueryStringFromCorpora(_.compact(corpora), prefer, avoid)
     }
 
@@ -249,9 +251,7 @@ window.CorpusListing = class CorpusListing {
                 output.push(corpus.id.toUpperCase() + ":" + contexts[0])
             }
         }
-        return _(output)
-            .compact()
-            .join()
+        return _(output).compact().join()
     }
 
     getWithinParameters() {
@@ -264,16 +264,14 @@ window.CorpusListing = class CorpusListing {
                 output.push(corpus.id.toUpperCase() + ":" + withins[0])
             }
         }
-        const within = _(output)
-            .compact()
-            .join()
+        const within = _(output).compact().join()
         return { default_within: defaultWithin, within }
     }
 
     getTimeInterval() {
         const all = _(this.selected)
             .map("time")
-            .filter(item => item != null)
+            .filter((item) => item != null)
             .map(_.keys)
             .flatten()
             .map(Number)
@@ -285,14 +283,14 @@ window.CorpusListing = class CorpusListing {
 
     getMomentInterval() {
         let from, to
-        const toUnix = item => item.unix()
+        const toUnix = (item) => item.unix()
 
-        const infoGetter = prop => {
+        const infoGetter = (prop) => {
             return _(this.selected)
                 .map("info")
                 .map(prop)
                 .compact()
-                .map(item => moment(item))
+                .map((item) => moment(item))
                 .value()
         }
 
@@ -314,7 +312,7 @@ window.CorpusListing = class CorpusListing {
     }
 
     getNonProtected() {
-        return _.filter(this.corpora, item => !item.limitedAccess)
+        return _.filter(this.corpora, (item) => !item.limitedAccess)
     }
 
     getTitle(corpus) {
@@ -329,13 +327,13 @@ window.CorpusListing = class CorpusListing {
         const word = {
             group: "word",
             value: "word",
-            label: "word"
+            label: "word",
         }
         if (withCaseInsentive) {
             const wordInsensitive = {
                 group: "word",
                 value: "word_insensitive",
-                label: "word_insensitive"
+                label: "word_insensitive",
             }
             return [word, wordInsensitive]
         } else {
@@ -370,7 +368,7 @@ window.CorpusListing = class CorpusListing {
         }
 
         const common_keys = _.compact(
-            _.flatten(_.map(this.selected, corp => _.keys(corp.common_attributes)))
+            _.flatten(_.map(this.selected, (corp) => _.keys(corp.common_attributes)))
         )
         const common = _.pick(settings.commonStructTypes, ...common_keys)
 
@@ -383,7 +381,7 @@ window.CorpusListing = class CorpusListing {
             }
         }
 
-        sentAttrs = _.sortBy(sentAttrs, item => util.getLocaleString(item.label))
+        sentAttrs = _.sortBy(sentAttrs, (item) => util.getLocaleString(item.label))
 
         return sentAttrs
     }
@@ -433,13 +431,13 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     }
 
     getCurrentAttributes(lang) {
-        const corpora = _.filter(this.selected, item => item.lang === lang)
+        const corpora = _.filter(this.selected, (item) => item.lang === lang)
         const struct = _.reduce(corpora, (a, b) => $.extend({}, a.attributes, b.attributes), {})
         return struct
     }
 
     getStructAttrs(lang) {
-        const corpora = _.filter(this.selected, item => item.lang === lang)
+        const corpora = _.filter(this.selected, (item) => item.lang === lang)
         const struct = _.reduce(
             corpora,
             (a, b) => $.extend({}, a.structAttributes, b.structAttributes),
@@ -451,8 +449,8 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     }
 
     getStructAttrsIntersection(lang) {
-        const corpora = _.filter(this.selected, item => item.lang === lang)
-        const attrs = _.map(corpora, function(corpus) {
+        const corpora = _.filter(this.selected, (item) => item.lang === lang)
+        const attrs = _.map(corpora, function (corpus) {
             for (let key in corpus.structAttributes) {
                 const value = corpus.structAttributes[key]
                 value["isStructAttr"] = true
@@ -471,7 +469,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
             only_selected = true
         }
         const target = only_selected ? this.selected : this.struct
-        let output = _.filter(target, item => (corp.linkedTo || []).includes(item.id))
+        let output = _.filter(target, (item) => (corp.linkedTo || []).includes(item.id))
         if (andSelf) {
             output = [corp].concat(output)
         }
@@ -485,9 +483,9 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
         if (flatten == null) {
             flatten = true
         }
-        const corps = _.filter(this.selected, item => item["lang"] === lang)
+        const corps = _.filter(this.selected, (item) => item["lang"] === lang)
         const output = _(corps)
-            .map(item => {
+            .map((item) => {
                 return this.getLinked(item, andSelf)
             })
             .value()
@@ -504,18 +502,18 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
             return this.getEnabledByLang(activeLangs[0], true, false)
         }
         // get the languages that are enabled given a list of active languages
-        const main = _.filter(this.selected, corp => corp.lang === activeLangs[0])
+        const main = _.filter(this.selected, (corp) => corp.lang === activeLangs[0])
 
         let output = []
         for (var lang of activeLangs.slice(1)) {
-            const other = _.filter(this.selected, corp => corp.lang === lang)
+            const other = _.filter(this.selected, (corp) => corp.lang === lang)
 
             for (var cps of other) {
                 const linked = _(main)
-                    .filter(mainCorpus => mainCorpus.linkedTo.includes(cps.id))
+                    .filter((mainCorpus) => mainCorpus.linkedTo.includes(cps.id))
                     .value()
 
-                output = output.concat(_.map(linked, item => [item, cps]))
+                output = output.concat(_.map(linked, (item) => [item, cps]))
             }
         }
 
@@ -527,13 +525,13 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
 
         const struct = this.getLinksFromLangs(this.activeLangs)
         const output = []
-        $.each(struct, function(i, corps) {
+        $.each(struct, function (i, corps) {
             const mainId = corps[0].id.toUpperCase()
             const mainIsPivot = !!corps[0].pivot
 
             const other = corps.slice(1)
 
-            const pair = _.map(other, function(corp) {
+            const pair = _.map(other, function (corp) {
                 let a
                 if (mainIsPivot) {
                     a = _.keys(corp[attr])[0]
@@ -561,14 +559,14 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     stringifySelected(onlyMain) {
         let struct = this.getLinksFromLangs(this.activeLangs)
         if (onlyMain) {
-            struct = _.map(struct, pair => {
-                return _.filter(pair, item => {
+            struct = _.map(struct, (pair) => {
+                return _.filter(pair, (item) => {
                     return item.lang === this.activeLangs[0]
                 })
             })
 
             return _.map(_.flatten(struct), "id")
-                .map(a => a.toUpperCase())
+                .map((a) => a.toUpperCase())
                 .join(",")
         }
 
@@ -580,7 +578,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
 
             const pair = _.map(
                 item.slice(1),
-                corp => main.id.toUpperCase() + "|" + corp.id.toUpperCase()
+                (corp) => main.id.toUpperCase() + "|" + corp.id.toUpperCase()
             )
 
             output.push(pair)
@@ -600,10 +598,10 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
 // TODO never use this, remove when sure it is not used
 window.search = (obj, val) => window.locationSearch(obj, val)
 
-window.locationSearch = function(obj, val) {
+window.locationSearch = function (obj, val) {
     const s = angular.element("body").scope()
 
-    const ret = safeApply(s.$root, function() {
+    const ret = safeApply(s.$root, function () {
         if (!obj) {
             return s.$root.locationSearch()
         }
@@ -621,7 +619,7 @@ window.locationSearch = function(obj, val) {
     return ret
 }
 
-window.initLocales = function() {
+window.initLocales = function () {
     const packages = ["locale", "corpora"]
     const prefix = "translations"
     const defs = []
@@ -631,7 +629,7 @@ window.initLocales = function() {
     for (let lang of settings.languages) {
         loc_data[lang] = {}
         for (let pkg of packages) {
-            ;(function(lang, pkg) {
+            ;(function (lang, pkg) {
                 let file = pkg + "-" + lang + ".json"
                 file = prefix + "/" + file
                 return defs.push(
@@ -641,7 +639,7 @@ window.initLocales = function() {
                         cache: false,
                         success(data) {
                             return _.extend(loc_data[lang], data)
-                        }
+                        },
                     })
                 )
             })(lang, pkg)
@@ -653,7 +651,7 @@ window.initLocales = function() {
     return def
 }
 
-window.safeApply = function(scope, fn) {
+window.safeApply = function (scope, fn) {
     if (scope.$$phase || scope.$root.$$phase) {
         return fn(scope)
     } else {
@@ -661,11 +659,9 @@ window.safeApply = function(scope, fn) {
     }
 }
 
-window.util.setLogin = function() {
+window.util.setLogin = function () {
     for (let corp of authenticationProxy.loginObj.credentials) {
-        $(`#hpcorpus_${corp.toLowerCase()}`)
-            .closest(".boxdiv.disabled")
-            .removeClass("disabled")
+        $(`#hpcorpus_${corp.toLowerCase()}`).closest(".boxdiv.disabled").removeClass("disabled")
     }
     if (window.corpusChooserInstance) {
         window.corpusChooserInstance.corpusChooser("updateAllStates")
@@ -673,12 +669,12 @@ window.util.setLogin = function() {
     $(".err_msg", self).hide()
 }
 
-util.SelectionManager = function() {
+util.SelectionManager = function () {
     this.selected = $()
     this.aux = $()
 }
 
-util.SelectionManager.prototype.select = function(word, aux) {
+util.SelectionManager.prototype.select = function (word, aux) {
     if (word == null || !word.length) {
         return
     }
@@ -692,7 +688,7 @@ util.SelectionManager.prototype.select = function(word, aux) {
     word.addClass("word_selected token_selected")
 }
 
-util.SelectionManager.prototype.deselect = function() {
+util.SelectionManager.prototype.deselect = function () {
     if (!this.selected.length) {
         return
     }
@@ -702,13 +698,13 @@ util.SelectionManager.prototype.deselect = function() {
     this.aux = $()
 }
 
-util.SelectionManager.prototype.hasSelected = function() {
+util.SelectionManager.prototype.hasSelected = function () {
     return this.selected.length > 0
 }
 
 util.getLocaleString = (key, lang) => util.getLocaleStringUndefined(key, lang) || key
 
-util.getLocaleStringUndefined = function(key, lang) {
+util.getLocaleStringUndefined = function (key, lang) {
     if (!lang) {
         lang = window.lang || settings.defaultLanguage || "sv"
     }
@@ -719,12 +715,12 @@ util.getLocaleStringUndefined = function(key, lang) {
     }
 }
 
-util.localize = function(root) {
+util.localize = function (root) {
     root = root || "body"
     $(root).localize()
 }
 
-util.lemgramToString = function(lemgram, appendIndex) {
+util.lemgramToString = function (lemgram, appendIndex) {
     lemgram = _.trim(lemgram)
     let infixIndex = ""
     let concept = lemgram
@@ -745,7 +741,7 @@ util.lemgramToString = function(lemgram, appendIndex) {
 }
 
 util.saldoRegExp = /(.*?)\.\.(\d\d?)(:\d+)?$/
-util.saldoToString = function(saldoId, appendIndex) {
+util.saldoToString = function (saldoId, appendIndex) {
     const match = saldoId.match(util.saldoRegExp)
     let infixIndex = ""
     if (appendIndex != null && match[2] !== "1") {
@@ -754,7 +750,7 @@ util.saldoToString = function(saldoId, appendIndex) {
     return $.format("%s%s", [match[1].replace(/_/g, " "), infixIndex])
 }
 
-util.saldoToPlaceholderString = function(saldoId, appendIndex) {
+util.saldoToPlaceholderString = function (saldoId, appendIndex) {
     const match = saldoId.match(util.saldoRegExp)
     let infixIndex = ""
     if (appendIndex != null && match[2] !== "1") {
@@ -764,9 +760,9 @@ util.saldoToPlaceholderString = function(saldoId, appendIndex) {
 }
 
 util.lemgramRegexp = /\.\.\w+\.\d\d?(:\d+)?$/
-util.isLemgramId = lemgram => lemgram.search(util.lemgramRegexp) !== -1
+util.isLemgramId = (lemgram) => lemgram.search(util.lemgramRegexp) !== -1
 
-util.splitLemgram = function(lemgram) {
+util.splitLemgram = function (lemgram) {
     if (!util.isLemgramId(lemgram)) {
         throw new Error(`Input to util.splitLemgram is not a lemgram: ${lemgram}`)
     }
@@ -779,7 +775,7 @@ util.splitLemgram = function(lemgram) {
 // settings.downloadFormats (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
-util.setDownloadLinks = function(xhr_settings, result_data) {
+util.setDownloadLinks = function (xhr_settings, result_data) {
     // If some of the required parameters are null, return without
     // adding the download links.
     if (
@@ -804,7 +800,7 @@ util.setDownloadLinks = function(xhr_settings, result_data) {
     // Get the number (index) of the corpus of the query result hit
     // number hit_num in the corpus order information of the query
     // result.
-    const get_corpus_num = hit_num =>
+    const get_corpus_num = (hit_num) =>
         result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus)
 
     c.log("setDownloadLinks data:", result_data)
@@ -854,7 +850,7 @@ util.setDownloadLinks = function(xhr_settings, result_data) {
             korp_server_url: settings.korpBackendURL,
             corpus_config: JSON.stringify(result_corpora_settings),
             corpus_config_info_keys: ["metadata", "licence", "homepage", "compiler"].join(","),
-            urn_resolver: settings.urnResolver
+            urn_resolver: settings.urnResolver,
         }
         if ("downloadFormatParams" in settings) {
             if ("*" in settings.downloadFormatParams) {
@@ -871,7 +867,7 @@ util.setDownloadLinks = function(xhr_settings, result_data) {
     $("#download-links")
         .localize()
         .click(false)
-        .change(function(event) {
+        .change(function (event) {
             const params = $(":selected", this).data("params")
             if (!params) {
                 return
@@ -882,15 +878,15 @@ util.setDownloadLinks = function(xhr_settings, result_data) {
         })
 }
 
-util.searchHash = function(type, value) {
+util.searchHash = function (type, value) {
     locationSearch({
         search: type + "|" + value,
-        page: 0
+        page: 0,
     })
 }
 
 let added_corpora_ids = []
-util.loadCorporaFolderRecursive = function(first_level, folder) {
+util.loadCorporaFolderRecursive = function (first_level, folder) {
     let outHTML
     if (first_level) {
         outHTML = "<ul>"
@@ -900,7 +896,7 @@ util.loadCorporaFolderRecursive = function(first_level, folder) {
     if (folder) {
         // This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
         // Folders
-        $.each(folder, function(fol, folVal) {
+        $.each(folder, function (fol, folVal) {
             if (fol !== "contents" && fol !== "title" && fol !== "description") {
                 outHTML += `<li>${util.loadCorporaFolderRecursive(false, folVal)}</li>`
             }
@@ -908,7 +904,7 @@ util.loadCorporaFolderRecursive = function(first_level, folder) {
 
         // Corpora
         if (folder["contents"] && folder["contents"].length > 0) {
-            $.each(folder.contents, function(key, value) {
+            $.each(folder.contents, function (key, value) {
                 outHTML += `<li id="${value}">${settings.corpora[value]["title"]}</li>`
                 added_corpora_ids.push(value)
             })
@@ -937,7 +933,7 @@ util.loadCorporaFolderRecursive = function(first_level, folder) {
 }
 
 // Helper function to turn "8455999" into "8 455 999"
-util.prettyNumbers = function(numstring) {
+util.prettyNumbers = function (numstring) {
     const regex = /(\d+)(\d{3})/
     let outStrNum = numstring.toString()
     while (regex.test(outStrNum)) {
@@ -952,7 +948,7 @@ util.prettyNumbers = function(numstring) {
     return outStrNum
 }
 
-util.suffixedNumbers = function(num) {
+util.suffixedNumbers = function (num) {
     let out = ""
     if (num < 1000) {
         // 232
@@ -979,7 +975,7 @@ util.suffixedNumbers = function(num) {
 }
 
 // Goes through the settings.corporafolders and recursively adds the settings.corpora hierarchically to the corpus chooser widget
-util.loadCorpora = function() {
+util.loadCorpora = function () {
     added_corpora_ids = []
     const outStr = util.loadCorporaFolderRecursive(true, settings.corporafolders)
     window.corpusChooserInstance = $("#corpusbox")
@@ -1041,15 +1037,10 @@ util.loadCorpora = function() {
 
                 const supportsContext = _.keys(corpusObj.context).length > 1
                 if (supportsContext) {
-                    output +=
-                        $("<div>")
-                            .localeKey("corpselector_supports")
-                            .html() + "<br>"
+                    output += $("<div>").localeKey("corpselector_supports").html() + "<br>"
                 }
                 if (corpusObj.limitedAccess) {
-                    output += $("<div>")
-                        .localeKey("corpselector_limited")
-                        .html()
+                    output += $("<div>").localeKey("corpselector_limited").html()
                 }
                 return output
             },
@@ -1060,7 +1051,7 @@ util.loadCorpora = function() {
                 let totalTokens = 0
                 let totalSentences = 0
                 let missingSentenceData = false
-                $(corporaID).each(function(key, oneID) {
+                $(corporaID).each(function (key, oneID) {
                     totalTokens += parseInt(settings.corpora[oneID]["info"]["Size"])
                     const oneCorpusSentences = settings.corpora[oneID]["info"]["Sentences"]
                     if (oneCorpusSentences) {
@@ -1096,10 +1087,10 @@ util.loadCorpora = function() {
                 )}<br/><b>${totalSentencesString}</b> ${util.getLocaleString(
                     "corpselector_sentences"
                 )}`
-            }
+            },
         })
-        .bind("corpuschooserchange", function(evt, corpora) {
-            safeApply($("body").scope(), function(scope) {
+        .bind("corpuschooserchange", function (evt, corpora) {
+            safeApply($("body").scope(), function (scope) {
                 scope.$broadcast("corpuschooserchange", corpora)
             })
         })
@@ -1107,11 +1098,11 @@ util.loadCorpora = function() {
     settings.corpusListing.select(selected)
 }
 
-window.regescape = s => s.replace(/[.|?|+|*||'|()^$]/g, "\\$&").replace(/"/g, '""')
+window.regescape = (s) => s.replace(/[.|?|+|*||'|()^$]/g, "\\$&").replace(/"/g, '""')
 
-window.unregescape = s => s.replace(/\\/g, "").replace(/""/g, '"')
+window.unregescape = (s) => s.replace(/\\/g, "").replace(/""/g, '"')
 
-util.formatDecimalString = function(x, mode, statsmode, stringOnly) {
+util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
     if (_.includes(x, ".")) {
         const parts = x.split(".")
         const decimalSeparator = util.getLocaleString("util_decimalseparator")
@@ -1138,46 +1129,44 @@ util.formatDecimalString = function(x, mode, statsmode, stringOnly) {
     }
 }
 
-util.browserWarn = function() {
+util.browserWarn = function () {
     $.reject({
         reject: {
             msie5: true,
             msie6: true,
             msie7: true,
             msie8: true,
-            msie9: true
+            msie9: true,
         },
 
-        imagePath: _.split(jRejectBackgroundImg, "/")
-            .slice(0, -1)
-            .join("/"),
+        imagePath: _.split(jRejectBackgroundImg, "/").slice(0, -1).join("/"),
         display: ["firefox", "chrome", "safari", "opera"],
         browserInfo: {
             // Settings for which browsers to display
             firefox: {
                 text: "Firefox", // Text below the icon
-                url: "http://www.mozilla.com/firefox/"
+                url: "http://www.mozilla.com/firefox/",
             }, // URL For icon/text link
 
             safari: {
                 text: "Safari",
-                url: "http://www.apple.com/safari/download/"
+                url: "http://www.apple.com/safari/download/",
             },
 
             opera: {
                 text: "Opera",
-                url: "http://www.opera.com/download/"
+                url: "http://www.opera.com/download/",
             },
 
             chrome: {
                 text: "Chrome",
-                url: "http://www.google.com/chrome/"
+                url: "http://www.google.com/chrome/",
             },
 
             msie: {
                 text: "Internet Explorer",
-                url: "http://www.microsoft.com/windows/Internet-explorer/"
-            }
+                url: "http://www.microsoft.com/windows/Internet-explorer/",
+            },
         },
 
         header: "Du använder en omodern webbläsare", // Header of pop-up window
@@ -1196,13 +1185,13 @@ util.browserWarn = function() {
         // Cookie settings are only used if closeCookie is true
         cookieSettings: {
             path: "/", // Path for the cookie to be saved on (should be root domain in most cases)
-            expires: 100000
-        }
+            expires: 100000,
+        },
     }) // Expiration Date (in seconds), 0 (default) means it ends with the current session
 }
 
 window.__ = {}
-window.__.remove = function(arr, elem) {
+window.__.remove = function (arr, elem) {
     const index = arr.indexOf(elem)
     if (index !== -1) {
         return arr.splice(arr.indexOf(elem), 1)

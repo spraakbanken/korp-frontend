@@ -13,7 +13,10 @@ require("leaflet/dist/leaflet.css")
 require("leaflet.markercluster/dist/MarkerCluster.css")
 require("geokorp/dist/styles/geokorp.css")
 require("components-jqueryui/themes/smoothness/jquery-ui.min.css")
-require("./styles/bootstrap4-custom.scss")
+require("./styles/_bootstrap-custom.scss")
+
+require("./styles/tailwind.scss")
+
 require("./styles/styles.scss")
 require("./styles/textreader.css")
 
@@ -68,16 +71,15 @@ window.moment = require("moment")
 window.CSV = require("comma-separated-values/csv")
 
 require("./lib/leaflet-settings.js")
-require("leaflet")
-require("leaflet.markercluster")
-require("leaflet-providers")
+// require("leaflet")
+// require("leaflet.markercluster")
+// require("leaflet-providers")
 require("geokorp/dist/scripts/geokorp")
 require("geokorp/dist/scripts/geokorp-templates")
 require("angular-filter/index.js")
 
 
 require("./lib/jquery.tooltip.pack.js")
-window.Rickshaw = require("rickshaw")
 
 window.settings = {}
 settings.markup = {
@@ -93,6 +95,8 @@ _.map(commonSettings, function(v, k) {
   }
   window[k] = v
 })
+
+require("./scripts/components/sidebar.js")
 
 require("./scripts/statistics.js")
 require("./scripts/cqp_parser/CQPParser.js")

@@ -3,7 +3,7 @@
 import jStorage from "../lib/jstorage"
 window.model = {}
 
-model.normalizeStatsData = function(data) {
+model.normalizeStatsData = function (data) {
     if (!_.isArray(data.combined)) {
         data.combined = [data.combined]
     }
@@ -15,7 +15,7 @@ model.normalizeStatsData = function(data) {
     }
 }
 
-model.getAuthorizationHeader = function() {
+model.getAuthorizationHeader = function () {
     if (
         typeof authenticationProxy !== "undefined" &&
         !$.isEmptyObject(authenticationProxy.loginObj)
@@ -29,6 +29,7 @@ model.getAuthorizationHeader = function() {
 class BaseProxy {
     constructor() {
         this.prev = ""
+        this.chunkCache = ""
         this.progress = 0
         this.total = null
         this.total_results = 0
@@ -47,6 +48,7 @@ class BaseProxy {
     makeRequest() {
         this.abort()
         this.prev = ""
+        this.chunkCache = ""
         this.progress = 0
         this.total_results = 0
         this.total = null
@@ -56,11 +58,16 @@ class BaseProxy {
         if (this.pendingRequests.length) {
             return _.invokeMap(this.pendingRequests, "abort")
         }
+        this.cleanup()
+    }
+
+    cleanup() {
+        this.prev = ""
     }
 
     hasPending() {
         return _.some(
-            _.map(this.pendingRequests, req => req.readyState !== 4 && req.readyState !== 0)
+            _.map(this.pendingRequests, (req) => req.readyState !== 4 && req.readyState !== 0)
         )
     }
 
@@ -90,14 +97,23 @@ class BaseProxy {
     calcProgress(e) {
         const newText = e.target.responseText.slice(this.prev.length)
         let struct = {}
+
         try {
-            struct = this.parseJSON(newText)
-        } catch (error) {}
+            // try to parse a chunk from the progress object
+            // combined with previous chunks that were not parseable
+            struct = this.parseJSON(this.chunkCache + newText)
+            // if parse succceeds, we don't care about the content of previous progress events anymore
+            this.chunkCache = ""
+        } catch (error) {
+            // if we fail to parse a chunk, combine it with previous failed chunks
+            this.chunkCache += newText
+        }
+
         $.each(struct, (key, val) => {
             if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
                 const currentCorpus = val.corpus || val
                 const sum = _(currentCorpus.split("|"))
-                    .map(corpus => Number(settings.corpora[corpus.toLowerCase()].info.Size))
+                    .map((corpus) => Number(settings.corpora[corpus.toLowerCase()].info.Size))
                     .reduce((a, b) => a + b, 0)
                 this.progress += sum
                 this.total_results += parseInt(val.hits)
@@ -105,23 +121,25 @@ class BaseProxy {
         })
 
         const stats = (this.progress / this.total) * 100
+
         if (this.total == null && struct.progress_corpora && struct.progress_corpora.length) {
-            const tmp = $.map(struct["progress_corpora"], function(corpus) {
+            const tmp = $.map(struct["progress_corpora"], function (corpus) {
                 if (!corpus.length) {
                     return
                 }
 
                 return _(corpus.split("|"))
-                    .map(corpus => parseInt(settings.corpora[corpus.toLowerCase()].info.Size))
+                    .map((corpus) => parseInt(settings.corpora[corpus.toLowerCase()].info.Size))
                     .reduce((a, b) => a + b, 0)
             })
             this.total = _.reduce(tmp, (val1, val2) => val1 + val2, 0)
         }
+
         this.prev = e.target.responseText
         return {
             struct,
             stats,
-            total_results: this.total_results
+            total_results: this.total_results,
         }
     }
 }
@@ -153,7 +171,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
                     this.foundKwic = true
                     return kwicCallback(progressObj["struct"])
                 }
-            }
+            },
         }
 
         if (!options.ajaxParams.within) {
@@ -163,7 +181,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         const data = {
             default_context: settings.defaultOverviewContext,
             show: [],
-            show_struct: []
+            show_struct: [],
         }
 
         $.extend(data, kwicResults.getPageInterval(page), options.ajaxParams)
@@ -178,7 +196,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
             }
 
             if (corpus.structAttributes != null) {
-                $.each(corpus.structAttributes, function(key, val) {
+                $.each(corpus.structAttributes, function (key, val) {
                     if ($.inArray(key, data.show_struct) === -1) {
                         return data.show_struct.push(key)
                     }
@@ -212,7 +230,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
                     this.url +
                     "?" +
                     _.toPairs(data)
-                        .map(function([key, val]) {
+                        .map(function ([key, val]) {
                             val = encodeURIComponent(val)
                             return key + "=" + val
                         })
@@ -221,12 +239,13 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
 
             success(data, status, jqxhr) {
                 self.queryData = data.query_data
+                self.cleanup()
                 if (data.incremental === false || !this.foundKwic) {
                     return kwicCallback(data)
                 }
             },
 
-            progress: progressObj.progress
+            progress: progressObj.progress,
         })
         this.pendingRequests.push(def)
         return def
@@ -242,7 +261,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
             corpus: settings.corpusListing.stringifySelected(),
             incremental: true,
             type,
-            max: 1000
+            max: 1000,
         }
         this.prevParams = params
         const def = $.ajax({
@@ -251,6 +270,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
 
             success() {
                 self.prevRequest = params
+                self.cleanup()
             },
 
             progress(data, e) {
@@ -265,7 +285,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
                 self.prevRequest = settings
                 self.addAuthorizationHeader(req)
                 self.prevUrl = this.url
-            }
+            },
         })
         this.pendingRequests.push(def)
         return def
@@ -297,7 +317,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
             group_by_struct: groupByStruct.join(","),
             cqp: this.expandCQP(cqp),
             corpus: settings.corpusListing.stringifySelected(true),
-            incremental: true
+            incremental: true,
         }
         _.extend(parameters, settings.corpusListing.getWithinParameters())
         if (ignoreCase) {
@@ -314,7 +334,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
 
         const ignoreCase = locationSearch().stats_reduce_insensitive != null
 
-        const reduceValLabels = _.map(reduceVals, function(reduceVal) {
+        const reduceValLabels = _.map(reduceVals, function (reduceVal) {
             if (reduceVal === "word") {
                 return "word"
             }
@@ -338,19 +358,19 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const structAttrs = settings.corpusListing.getStructAttrs(
             settings.corpusListing.getReduceLang()
         )
-        data.split = _.filter(reduceVals, reduceVal => {
+        data.split = _.filter(reduceVals, (reduceVal) => {
             return (
                 (wordAttrs[reduceVal] && wordAttrs[reduceVal].type == "set") ||
                 (structAttrs[reduceVal] && structAttrs[reduceVal].type == "set")
             )
         }).join(",")
 
-        const rankedReduceVals = _.filter(reduceVals, reduceVal => {
+        const rankedReduceVals = _.filter(reduceVals, (reduceVal) => {
             if (wordAttrs[reduceVal]) {
                 return wordAttrs[reduceVal].ranked
             }
         })
-        data.top = _.map(rankedReduceVals, reduceVal => reduceVal + ":1").join(",")
+        data.top = _.map(rankedReduceVals, (reduceVal) => reduceVal + ":1").join(",")
 
         this.prevNonExpandedCQP = cqp
         this.prevParams = data
@@ -380,7 +400,8 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                     }
                 },
 
-                success: data => {
+                success: (data) => {
+                    self.cleanup()
                     if (data.ERROR != null) {
                         c.log("gettings stats failed with error", data.ERROR)
                         def.reject(data)
@@ -394,7 +415,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                         reduceValLabels,
                         ignoreCase
                     )
-                }
+                },
             })
         )
 
@@ -421,9 +442,9 @@ model.AuthenticationProxy = class AuthenticationProxy {
             type: "GET",
             beforeSend(req) {
                 return req.setRequestHeader("Authorization", `Basic ${auth}`)
-            }
+            },
         })
-            .done(function(data, status, xhr) {
+            .done(function (data, status, xhr) {
                 if (!data.corpora) {
                     dfd.reject()
                     return
@@ -431,14 +452,14 @@ model.AuthenticationProxy = class AuthenticationProxy {
                 self.loginObj = {
                     name: usr,
                     credentials: data.corpora,
-                    auth
+                    auth,
                 }
                 if (saveLogin) {
                     jStorage.set("creds", self.loginObj)
                 }
                 return dfd.resolve(data)
             })
-            .fail(function(xhr, status, error) {
+            .fail(function (xhr, status, error) {
                 c.log("auth fail", arguments)
                 return dfd.reject()
             })
@@ -463,11 +484,11 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
             type: "GET",
             data: {
                 granularity: "y",
-                corpus: settings.corpusListing.stringifyAll()
-            }
+                corpus: settings.corpusListing.stringifyAll(),
+            },
         })
 
-        xhr.done(data => {
+        xhr.done((data) => {
             if (data.ERROR) {
                 c.error("timespan error", data.ERROR)
                 dfd.reject(data.ERROR)
@@ -488,7 +509,7 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
             return dfd.resolve([data.corpora, combined, rest])
         })
 
-        xhr.fail(function() {
+        xhr.fail(function () {
             c.log("timeProxy.makeRequest failed", arguments)
             return dfd.reject()
         })
@@ -498,7 +519,7 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
 
     compilePlotArray(dataStruct) {
         let output = []
-        $.each(dataStruct, function(key, val) {
+        $.each(dataStruct, function (key, val) {
             if (!key || !val) {
                 return
             }
@@ -510,7 +531,7 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
     }
 
     expandTimeStruct(struct) {
-        const years = _.map(_.toPairs(_.omit(struct, "")), item => Number(item[0]))
+        const years = _.map(_.toPairs(_.omit(struct, "")), (item) => Number(item[0]))
         if (!years.length) {
             return
         }
@@ -558,7 +579,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
             cqp: this.expandCQP(cqp),
             corpus: corpora,
             granularity: this.granularity,
-            incremental: true
+            incremental: true,
         }
 
         if (from) {
@@ -597,7 +618,8 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
             },
             success(data) {
                 def.resolve(data)
-            }
+                self.cleanup()
+            },
         })
 
         return def.promise()

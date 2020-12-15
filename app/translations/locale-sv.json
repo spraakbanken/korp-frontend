@@ -118,6 +118,7 @@
     "matches_not": "inte regexp",
 
     "repeat": "Upprepa",
+    "from": "från",
     "to": "till",
     "times": "gånger",
 
@@ -335,7 +336,7 @@
 
     "repeat_error": "Fel: Det går inte att upprepa från 0 på alla token.",
 
-    "choose_lemgram": "Välj lemgram",
+    "choose_value": "Välj ett värde",
     "login_needed_for_corpora": "Inloggning behövs för åtkomst till",
 
     "stats_warn": "Statistiken är avaktiverad",

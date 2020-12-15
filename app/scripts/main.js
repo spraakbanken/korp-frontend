@@ -19,17 +19,17 @@ if (location.hash.length && location.hash[1] !== "?") {
 
 $.ajaxSetup({
     dataType: "json",
-    traditional: true
+    traditional: true,
 })
 
-$.ajaxPrefilter("json", function(options) {
+$.ajaxPrefilter("json", function (options) {
     if (options.crossDomain && !$.support.cors) {
         return "jsonp"
     }
 })
 
-const deferred_domReady = $.Deferred(function(dfd) {
-    $(function() {
+const deferred_domReady = $.Deferred(function (dfd) {
+    $(function () {
         let { mode } = deparam(window.location.search.slice(1))
         if (!mode) {
             mode = "default"
@@ -42,12 +42,12 @@ const deferred_domReady = $.Deferred(function(dfd) {
 }).promise()
 
 const loc_dfd = window.initLocales()
-$(document).keyup(function(event) {
+$(document).keyup(function (event) {
     if (event.keyCode === 27) {
         if (kwicResults) {
             kwicResults.abort()
         }
-        if (lemgramResults) {
+        if ("lemgramResults" in window) {
             lemgramResults.abort()
         }
         if (statsResults) {
@@ -57,7 +57,7 @@ $(document).keyup(function(event) {
 })
 
 $.when(loc_dfd, deferred_domReady).then(
-    function() {
+    function () {
         try {
             angular.bootstrap(document, ["korpApp"])
         } catch (error) {
@@ -81,7 +81,7 @@ $.when(loc_dfd, deferred_domReady).then(
         $("body").addClass(`mode-${window.currentMode}`)
         util.browserWarn()
 
-        $("#search_history").change(function(event) {
+        $("#search_history").change(function (event) {
             const target = $(this).find(":selected")
             if (_.includes(["http://", "https:/"], target.val().slice(0, 7))) {
                 location.href = target.val()
@@ -93,8 +93,8 @@ $.when(loc_dfd, deferred_domReady).then(
 
         let prevFragment = {}
         // Note that this is _not_ window.onhashchange (lowercase only) and is not called by the browser
-        window.onHashChange = function(event, isInit) {
-            const hasChanged = key => prevFragment[key] !== locationSearch()[key]
+        window.onHashChange = function (event, isInit) {
+            const hasChanged = (key) => prevFragment[key] !== locationSearch()[key]
             if (hasChanged("lang")) {
                 const newLang = locationSearch().lang || settings.defaultLanguage
                 $("body").scope().lang = newLang
@@ -111,40 +111,35 @@ $.when(loc_dfd, deferred_domReady).then(
             prevFragment = _.extend({}, locationSearch())
         }
 
-        $(window).scroll(() => $("#sidebar").sidebar("updatePlacement"))
-
         $("#languages").radioList({
             change() {
-                const currentLang = $(this)
-                    .radioList("getSelected")
-                    .data("mode")
+                const currentLang = $(this).radioList("getSelected").data("mode")
                 locationSearch({
-                    lang: currentLang !== settings.defaultLanguage ? currentLang : null
+                    lang: currentLang !== settings.defaultLanguage ? currentLang : null,
                 })
             },
             // TODO: this does nothing?
-            selected: settings.defaultLanguage
+            selected: settings.defaultLanguage,
         })
-        $("#sidebar").sidebar()
 
         setTimeout(() => window.onHashChange(null, true), 0)
-        $("body").animate({ opacity: 1 }, function() {
+        $("body").animate({ opacity: 1 }, function () {
             $(this).css("opacity", "")
         })
     },
-    function() {
+    function () {
         c.log("failed to load some resource at startup.", arguments)
         return $("body")
             .css({
                 opacity: 1,
-                padding: 20
+                padding: 20,
             })
             .html('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">')
             .append("<p>The server failed to respond, please try again later.</p>")
     }
 )
 
-window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
+window.getAllCorporaInFolders = function (lastLevel, folderOrCorpus) {
     let outCorpora = []
 
     // Go down the alley to the last subfolder
@@ -162,7 +157,7 @@ window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
     if (lastLevel[folderOrCorpus]) {
         // Folder
         // Continue to go through any subfolders
-        $.each(lastLevel[folderOrCorpus], function(key, val) {
+        $.each(lastLevel[folderOrCorpus], function (key, val) {
             if (!["title", "contents", "description"].includes(key)) {
                 outCorpora = outCorpora.concat(
                     getAllCorporaInFolders(lastLevel[folderOrCorpus], key)
@@ -179,7 +174,7 @@ window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
     return outCorpora
 }
 
-window.initTimeGraph = function(def) {
+window.initTimeGraph = function (def) {
     let timestruct = null
     let restdata = null
     let restyear = null
@@ -187,9 +182,9 @@ window.initTimeGraph = function(def) {
 
     let onTimeGraphChange
 
-    const getValByDate = function(date, struct) {
+    const getValByDate = function (date, struct) {
         let output = null
-        $.each(struct, function(i, item) {
+        $.each(struct, function (i, item) {
             if (date === item[0]) {
                 output = item[1]
                 return false
@@ -201,11 +196,11 @@ window.initTimeGraph = function(def) {
 
     window.timeDeferred = timeProxy
         .makeRequest()
-        .fail(error => {
+        .fail((error) => {
             console.error(error)
             $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>")
         })
-        .done(function(...args) {
+        .done(function (...args) {
             let [dataByCorpus, all_timestruct, rest] = args[0]
 
             if (all_timestruct.length == 0) {
@@ -229,7 +224,7 @@ window.initTimeGraph = function(def) {
                 }
             }
 
-            safeApply($("body").scope(), function(scope) {
+            safeApply($("body").scope(), function (scope) {
                 scope.$broadcast(
                     "corpuschooserchange",
                     corpusChooserInstance.corpusChooser("selectedItems")
@@ -237,10 +232,10 @@ window.initTimeGraph = function(def) {
                 return def.resolve()
             })
 
-            onTimeGraphChange = function(evt, data) {
+            onTimeGraphChange = function (evt, data) {
                 let max = _.reduce(
                     all_timestruct,
-                    function(accu, item) {
+                    function (accu, item) {
                         if (item[1] > accu) {
                             return item[1]
                         }
@@ -253,8 +248,8 @@ window.initTimeGraph = function(def) {
                 // the height of the graph
                 const one_px = max / 46
 
-                const normalize = array =>
-                    _.map(array, function(item) {
+                const normalize = (array) =>
+                    _.map(array, function (item) {
                         const out = [].concat(item)
                         if (out[1] < one_px && out[1] > 0) {
                             out[1] = one_px
@@ -267,7 +262,7 @@ window.initTimeGraph = function(def) {
                     .filter(Boolean)
                     .map(_.toPairs)
                     .flatten(true)
-                    .reduce(function(memo, ...rest1) {
+                    .reduce(function (memo, ...rest1) {
                         const [a, b] = rest1[0]
                         if (typeof memo[a] === "undefined") {
                             memo[a] = b
@@ -282,18 +277,18 @@ window.initTimeGraph = function(def) {
                 const yeardiff = endyear - all_timestruct[0][0]
                 restyear = endyear + yeardiff / 25
                 restdata = _(settings.corpusListing.selected)
-                    .filter(item => item.time)
+                    .filter((item) => item.time)
                     .reduce((accu, corp) => accu + parseInt(corp.non_time || "0"), 0)
 
                 hasRest = yeardiff > 0
 
                 const plots = [
                     { data: normalize([].concat(all_timestruct, [[restyear, rest]])) },
-                    { data: normalize(timestruct) }
+                    { data: normalize(timestruct) },
                 ]
                 if (restdata) {
                     plots.push({
-                        data: normalize([[restyear, restdata]])
+                        data: normalize([[restyear, restdata]]),
                     })
                 }
 
@@ -301,27 +296,27 @@ window.initTimeGraph = function(def) {
                     bars: {
                         show: true,
                         fill: 1,
-                        align: "center"
+                        align: "center",
                     },
 
                     grid: {
                         hoverable: true,
-                        borderColor: "white"
+                        borderColor: "white",
                     },
 
                     yaxis: {
-                        show: false
+                        show: false,
                     },
 
                     xaxis: {
                         show: true,
-                        tickDecimals: 0
+                        tickDecimals: 0,
                     },
 
                     hoverable: true,
-                    colors: ["lightgrey", "navy", "#cd5c5c"]
+                    colors: ["lightgrey", "navy", "#cd5c5c"],
                 })
-                return $.each($("#time_graph .tickLabel"), function() {
+                return $.each($("#time_graph .tickLabel"), function () {
                     if (parseInt($(this).text()) > new Date().getFullYear()) {
                         return $(this).hide()
                     }
@@ -330,7 +325,7 @@ window.initTimeGraph = function(def) {
 
             return $("#time_graph,#rest_time_graph").bind(
                 "plothover",
-                _.throttle(function(event, pos, item) {
+                _.throttle(function (event, pos, item) {
                     if (item) {
                         let total, val
                         const date = item.datapoint[0]
@@ -352,16 +347,14 @@ window.initTimeGraph = function(def) {
                         )
                         const firstrow = pTmpl({
                             loc: "corpselector_time_chosen",
-                            num: util.prettyNumbers(val || 0)
+                            num: util.prettyNumbers(val || 0),
                         })
                         const secondrow = pTmpl({
                             loc: "corpselector_of_total",
-                            num: util.prettyNumbers(total)
+                            num: util.prettyNumbers(total),
                         })
                         $(".corpusInfoSpace").css({
-                            top: $(this)
-                                .parent()
-                                .offset().top
+                            top: $(this).parent().offset().top,
                         })
                         return $(".corpusInfoSpace")
                             .find("p")
@@ -380,7 +373,7 @@ window.initTimeGraph = function(def) {
     const opendfd = $.Deferred()
     $("#corpusbox").one("corpuschooseropen", () => opendfd.resolve())
 
-    return $.when(window.timeDeferred, opendfd).then(function() {
+    return $.when(window.timeDeferred, opendfd).then(function () {
         if (onTimeGraphChange) {
             $("#corpusbox").bind("corpuschooserchange", onTimeGraphChange)
             return onTimeGraphChange()

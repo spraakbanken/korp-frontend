@@ -17,8 +17,8 @@ html
         include includes/searchtabs
 
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length || mapTabs.length', ng-controller='resultContainerCtrl')
-          #columns
-            #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}')
+          #columns.flex(ng-class='{sidebar_visible : sidebar_visible}')
+            #left-column.overflow-auto.flex-grow
               uib-tabset.tabbable.result_tabs(tab-hash='result_tab', active="activeTab")
                 uib-tab(disabled="!instance.hasData",
                     select="instance.onentry()",
@@ -117,8 +117,7 @@ html
 
               a#json-link(ng-href='{{jsonUrl}}', ng-show="jsonUrl", target="_blank")
                 img(src='img/json.png')
-            #sidebar.ui-corner-all.kwic_sidebar(ng-class='{visible : word_selected && sidebar_visible}')
-            div(style='clear: both; float: none;')
+            sidebar.sidebar.flex-shrink-0.ml-2(on-show="onSidebarShow()", on-hide="onSidebarHide()")
 
             div(id='video-modal', ng-controller='VideoCtrl')
 

@@ -1,6 +1,6 @@
 exports.config = {
   params: {
-    url: 'http://' + (process.env.KORP_HOST || "localhost") + ':'+ (process.env.KORP_PORT || 9111) +'/'
+    url: 'http://' + (process.env.KORP_HOST || "localhost") + ':'+ (process.env.KORP_PORT || 9112) +'/'
   },
   capabilities: {
     'browserName': 'chrome',
@@ -16,5 +16,6 @@ exports.config = {
     defaultTimeoutInterval: 20000
   },
   directConnect: true,
-  restartBrowserBetweenTests: true
+  restartBrowserBetweenTests: true,
+  SELENIUM_PROMISE_MANAGER: false
 };

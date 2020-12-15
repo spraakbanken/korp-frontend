@@ -1,11 +1,11 @@
 /** @format */
 const korpApp = angular.module("korpApp")
-korpApp.factory("kwicDownload", function() {
-    const emptyRow = function(length) {
+korpApp.factory("kwicDownload", function () {
+    const emptyRow = function (length) {
         return _.fill(new Array(length), "")
     }
 
-    const createFile = function(dataType, fileType, content) {
+    const createFile = function (dataType, fileType, content) {
         const date = moment().format("YYYYDDMM_HHmmss")
         const filename = `korp_${dataType}_${date}.${fileType}`
         const blobURL = window.URL.createObjectURL(
@@ -15,13 +15,13 @@ korpApp.factory("kwicDownload", function() {
     }
 
     const padRows = (data, length) =>
-        _.map(data, function(row) {
+        _.map(data, function (row) {
             const newRow = emptyRow(length)
             newRow[0] = row
             return newRow
         })
 
-    const createSearchInfo = function(requestInfo, totalHits) {
+    const createSearchInfo = function (requestInfo, totalHits) {
         const rows = []
         const fields = ["cqp", "context", "within", "sorting", "start", "end", "hits"]
         for (let field of fields) {
@@ -54,10 +54,10 @@ korpApp.factory("kwicDownload", function() {
         return rows
     }
 
-    const transformDataToAnnotations = function(data, searchInfo) {
+    const transformDataToAnnotations = function (data, searchInfo) {
         const headers = _.filter(
             _.keys(data[1].tokens[0]),
-            val =>
+            (val) =>
                 val.indexOf("_") !== 0 &&
                 val !== "structs" &&
                 val !== "$$hashKey" &&
@@ -79,11 +79,12 @@ korpApp.factory("kwicDownload", function() {
                 res.push(hitInfo)
 
                 for (let token of row.tokens || []) {
-                    var match
-                    if (token.position >= row.match.start && token.position < row.match.end) {
-                        match = "***"
-                    } else {
-                        match = ""
+                    let match = ""
+                    for (matchObj of [row.match].flat()) {
+                        if (token.position >= matchObj.start && token.position < matchObj.end) {
+                            match = "***"
+                            break
+                        }
                     }
                     const newRow = [match]
                     for (let field of headers) {
@@ -99,7 +100,7 @@ korpApp.factory("kwicDownload", function() {
         return res
     }
 
-    const transformDataToKWIC = function(data, searchInfo) {
+    const transformDataToKWIC = function (data, searchInfo) {
         let row
         let corpus
         const structHeaders = []
@@ -109,23 +110,31 @@ korpApp.factory("kwicDownload", function() {
                 if (row.isLinked) {
                     // parallell mode does not have matches or structs for the linked sentences
                     // current wordaround is to add all tokens to the left context
-                    res.push(["", "", row.tokens.map(token => token.word).join(" "), "", ""])
+                    res.push(["", "", row.tokens.map((token) => token.word).join(" "), "", ""])
                     continue
                 }
-                
+
                 var attrName, token
                 const leftContext = []
                 const match = []
                 const rightContext = []
-                
-                for (token of row.tokens.slice(0, row.match.start)) {
-                    leftContext.push(token.word)
-                }
-                for (token of row.tokens.slice(row.match.start, row.match.end)) {
-                    match.push(token.word)
-                }
-                for (token of row.tokens.slice(row.match.end, row.tokens.length)) {
-                    rightContext.push(token.word)
+
+                if (row.match instanceof Array) {
+                    // the user has searched "not-in-order" and we cannot have a left, match and right context for the download
+                    // put all data in leftContext
+                    for (token of row.tokens) {
+                        leftContext.push(token.word)
+                    }
+                } else {
+                    for (token of row.tokens.slice(0, row.match.start)) {
+                        leftContext.push(token.word)
+                    }
+                    for (token of row.tokens.slice(row.match.start, row.match.end)) {
+                        match.push(token.word)
+                    }
+                    for (token of row.tokens.slice(row.match.end, row.tokens.length)) {
+                        rightContext.push(token.word)
+                    }
                 }
 
                 const structs = []
@@ -143,10 +152,12 @@ korpApp.factory("kwicDownload", function() {
                 }
                 const newRow = [
                     corpus,
-                    row.match.position,
+                    row.match instanceof Array
+                        ? row.match.map((match) => match.position).join(", ")
+                        : row.match.position,
                     leftContext.join(" "),
                     match.join(" "),
-                    rightContext.join(" ")
+                    rightContext.join(" "),
                 ].concat(structs)
                 res.push(newRow)
             } else if (row.newCorpus) {
@@ -159,7 +170,7 @@ korpApp.factory("kwicDownload", function() {
             "match_position",
             "left context",
             "match",
-            "right_context"
+            "right_context",
         ].concat(structHeaders)
         res = [headers].concat(res)
 
@@ -171,7 +182,7 @@ korpApp.factory("kwicDownload", function() {
         return res
     }
 
-    const transformData = function(dataType, data, requestInfo, totalHits) {
+    const transformData = function (dataType, data, requestInfo, totalHits) {
         const searchInfo = createSearchInfo(requestInfo, totalHits)
         if (dataType === "annotations") {
             return transformDataToAnnotations(data, searchInfo)
@@ -181,7 +192,7 @@ korpApp.factory("kwicDownload", function() {
         }
     }
 
-    const makeContent = function(fileType, transformedData) {
+    const makeContent = function (fileType, transformedData) {
         let dataDelimiter
         if (fileType === "csv") {
             dataDelimiter = ","
@@ -191,7 +202,7 @@ korpApp.factory("kwicDownload", function() {
         }
 
         const csv = new CSV(transformedData, {
-            delimiter: dataDelimiter
+            delimiter: dataDelimiter,
         })
 
         return csv.encode()
@@ -205,6 +216,6 @@ korpApp.factory("kwicDownload", function() {
             const tmp = transformData(dataType, data, requestInfo, totalHits)
             const tmp2 = makeContent(fileType, tmp)
             return createFile(dataType, fileType, tmp2)
-        }
+        },
     }
 })

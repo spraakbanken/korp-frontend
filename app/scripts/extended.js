@@ -1,6 +1,6 @@
 /** @format */
 const korpApp = angular.module("korpApp")
-korpApp.factory("extendedComponents", function() {
+korpApp.factory("extendedComponents", function () {
     const autocompleteTemplate = `\
     <div>
         <input type="text"
@@ -13,9 +13,10 @@ korpApp.factory("extendedComponents", function() {
     </div>`
 
     const selectTemplate =
-        "<select ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset'></select>"
-    const localize = $scope =>
-        function(str) {
+        "<select ng-show='!inputOnly' ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset'></select>" +
+        "<input ng-show='inputOnly' type='text' ng-model='input'/>"
+    const localize = ($scope) =>
+        function (str) {
             if (!$scope.translationKey) {
                 return str
             } else {
@@ -23,10 +24,10 @@ korpApp.factory("extendedComponents", function() {
             }
         }
 
-    const selectController = autocomplete => [
+    const selectController = (autocomplete) => [
         "$scope",
         "structService",
-        function($scope, structService) {
+        function ($scope, structService) {
             const attribute = $scope.$parent.tokenValue.value
             const selectedCorpora = settings.corpusListing.selected
 
@@ -41,23 +42,30 @@ korpApp.factory("extendedComponents", function() {
                 }
             }
 
+            $scope.$watch("orObj.op", (newVal, oldVal) => {
+                $scope.inputOnly = $scope.orObj.op !== "=" && $scope.orObj.op !== "!="
+                if (newVal !== oldVal) {
+                    $scope.input = ""
+                }
+            })
+
             $scope.loading = true
             const opts = { count: false, returnByCorpora: false }
             if ($scope.type === "set") {
                 opts.split = true
             }
             structService.getStructValues(corpora, [attribute], opts).then(
-                function(data) {
+                function (data) {
                     $scope.loading = false
                     const localizer = localize($scope)
 
-                    const dataset = _.map(_.uniq(data), function(item) {
+                    const dataset = _.map(_.uniq(data), function (item) {
                         if (item === "") {
                             return [item, util.getLocaleString("empty")]
                         }
                         return [item, localizer(item)]
                     })
-                    $scope.dataset = _.sortBy(dataset, tuple => tuple[1])
+                    $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
                     if (!autocomplete) {
                         $scope.input = $scope.input || $scope.dataset[0][0]
                     }
@@ -65,19 +73,19 @@ korpApp.factory("extendedComponents", function() {
                 () => c.log("struct_values error")
             )
 
-            $scope.getRows = function(input) {
+            $scope.getRows = function (input) {
                 if (input) {
                     return _.filter(
                         $scope.dataset,
-                        tuple => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1
+                        (tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1
                     )
                 } else {
                     return $scope.dataset
                 }
             }
 
-            $scope.typeaheadInputFormatter = model => localize($scope)(model)
-        }
+            $scope.typeaheadInputFormatter = (model) => localize($scope)(model)
+        },
     ]
 
     // Select-element. Use the following settings in the corpus:
@@ -89,18 +97,18 @@ korpApp.factory("extendedComponents", function() {
             template: selectTemplate,
             controller: [
                 "$scope",
-                function($scope) {
+                function ($scope) {
                     let dataset
                     const localizer = localize($scope)
                     if (_.isArray($scope.dataset)) {
-                        dataset = _.map($scope.dataset, item => [item, localizer(item)])
+                        dataset = _.map($scope.dataset, (item) => [item, localizer(item)])
                     } else {
                         dataset = _.map($scope.dataset, (v, k) => [k, localizer(v)])
                     }
-                    $scope.dataset = _.sortBy(dataset, tuple => tuple[1])
+                    $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
                     $scope.model = $scope.model || $scope.dataset[0][0]
-                }
-            ]
+                },
+            ],
         },
 
         // Select-element. Gets values from "struct_values"-command. Use the following settings in the corpus:
@@ -108,7 +116,7 @@ korpApp.factory("extendedComponents", function() {
         // - escape: boolean, will be used by the escaper-directive
         structServiceSelect: {
             template: selectTemplate,
-            controller: selectController(false)
+            controller: selectController(false),
         },
 
         // Autocomplete. Gets values from "struct_values"-command. Use the following settings in the corpus:
@@ -116,13 +124,13 @@ korpApp.factory("extendedComponents", function() {
         // - escape: boolean, will be used by the escaper-directive
         structServiceAutocomplete: {
             template: autocompleteTemplate,
-            controller: selectController(true)
+            controller: selectController(true),
         },
 
         // puts the first values from a dataset paramater into model
         singleValue: {
             template: '<input type="hidden">',
-            controller: ["$scope", $scope => ($scope.model = _.values($scope.dataset)[0])]
+            controller: ["$scope", ($scope) => ($scope.model = _.values($scope.dataset)[0])],
         },
 
         defaultTemplate: _.template(`\
@@ -138,28 +146,28 @@ korpApp.factory("extendedComponents", function() {
         `),
         defaultController: [
             "$scope",
-            function($scope) {
+            function ($scope) {
                 if ($scope.orObj.flags && $scope.orObj.flags.c) {
                     $scope.case = "insensitive"
                 } else {
                     $scope.case = "sensitive"
                 }
 
-                $scope.makeSensitive = function() {
+                $scope.makeSensitive = function () {
                     $scope.case = "sensitive"
                     if ($scope.orObj.flags) {
                         delete $scope.orObj.flags["c"]
                     }
                 }
 
-                $scope.makeInsensitive = function() {
+                $scope.makeInsensitive = function () {
                     const flags = $scope.orObj.flags || {}
                     flags["c"] = true
                     $scope.orObj.flags = flags
 
                     $scope.case = "insensitive"
                 }
-            }
-        ]
+            },
+        ],
     }
 })

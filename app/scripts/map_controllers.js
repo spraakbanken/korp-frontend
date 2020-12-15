@@ -17,21 +17,30 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
         s.numResults = 0
         s.useClustering = false
 
-        s.promise.then(
-            result => {
-                s.loading = false
-                s.numResults = 20
-                s.markerGroups = getMarkerGroups(result)
-                s.selectedGroups = _.keys(s.markerGroups)
+        if (!window.Rickshaw) {
+            var rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
+        }
+
+        Promise.all([rickshawPromise || Rickshaw, s.promise]).then(
+            ([rickshawModule, result]) => {
+                window.Rickshaw = rickshawModule
+                s.$apply(($scope) => {
+                    $scope.loading = false
+                    $scope.numResults = 20
+                    $scope.markerGroups = getMarkerGroups(result)
+                    $scope.selectedGroups = _.keys($scope.markerGroups)
+                })
             },
-            err => {
+            (err) => {
                 console.error("Map data parsing failed:", err)
-                s.loading = false
-                s.error = true
+                this.s.$apply(($scope) => {
+                    $scope.loading = false
+                    $scope.error = true
+                })
             }
         )
 
-        s.toggleMarkerGroup = function(groupName) {
+        s.toggleMarkerGroup = function (groupName) {
             s.markerGroups[groupName].selected = !s.markerGroups[groupName].selected
             if (s.selectedGroups.includes(groupName)) {
                 return s.selectedGroups.splice(s.selectedGroups.indexOf(groupName), 1)
@@ -40,7 +49,7 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
             }
         }
 
-        var getMarkerGroups = function(result) {
+        var getMarkerGroups = function (result) {
             const palette = new Rickshaw.Color.Palette({ scheme: "colorwheel" }) // spectrum2000
             const groups = {}
             _.map(
@@ -57,14 +66,14 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
                             result.within,
                             res,
                             idx
-                        )
+                        ),
                     })
             )
             s.restColor = "#9b9fa5"
             return groups
         }
 
-        var getMarkers = function(label, cqp, corpora, within, res, idx) {
+        var getMarkers = function (label, cqp, corpora, within, res, idx) {
             const markers = {}
 
             for (let point of res.points) {
@@ -77,17 +86,17 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
                         subCqp: res.cqp,
                         label,
                         corpora,
-                        within
+                        within,
                     },
                     label: res.label,
-                    point
+                    point,
                 }
             }
 
             return markers
         }
 
-        s.newKWICSearch = function(marker) {
+        s.newKWICSearch = function (marker) {
             const { queryData } = marker
             const { point } = marker
             const cl = settings.corpusListing.subsetFactory(queryData.corpora)
@@ -101,29 +110,29 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
                         point.name,
                         point.countryCode,
                         point.lat,
-                        point.lng
+                        point.lng,
                     ].join(";")}']{${numberOfTokens}}`,
                     cqp3: queryData.subCqp,
                     corpus: cl.stringifySelected(),
                     show_struct: _.keys(cl.getStructAttrs()),
-                    expand_prequeries: false
-                }
+                    expand_prequeries: false,
+                },
             }
             _.extend(opts.ajaxParams, queryData.within)
             $timeout(
                 () =>
                     $rootScope.kwicTabs.push({
                         readingMode: queryData.label === "paragraph__geocontext",
-                        queryParams: opts
+                        queryParams: opts,
                     }),
                 0
             )
         }
 
-        s.closeTab = function(idx, e) {
+        s.closeTab = function (idx, e) {
             e.preventDefault()
             s.mapTabs.splice(idx, 1)
             s.closeDynamicTab()
         }
-    }
+    },
 }))

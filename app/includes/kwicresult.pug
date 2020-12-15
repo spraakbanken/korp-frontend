@@ -3,7 +3,7 @@
     | {{'search_aborted' | loc:lang}}
   .controls_n
     span {{'num_results' | loc:lang}}: 
-    span.num-result(ng-bind-html="hits_display | trust")
+    span.num-result(ng-show="!loading && hits_display" ng-bind-html="hits_display | trust")
   .hits_picture(ng-if='hitsPictureData.length > 1')
     table.hits_picture_table
       tbody
@@ -16,7 +16,7 @@
               uib-tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
               uib-tooltip-placement='{{$last? "left":"top"}}'
               append-to-body="false")
-kwic-pager(total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
+kwic-pager(ng-if="hits" total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
 
 span.reading_btn.show_reading.link(ng-hide="loading", ng-click="toggleReading()") {{'show_reading' | loc:lang}}
 span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()") {{'show_kwic' | loc:lang}}
@@ -29,9 +29,11 @@ span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()"
         even : $even, \
         odd : $odd}')
       td.empty_td
-      td.corpus_title(colspan='0')
-        | {{sentence.newCorpus}}
-        span.corpus_title_warn(rel='localize[no_context_support]', ng-if='::sentence.noContext')
+      td.corpus_title.text-gray-600.uppercase.text-sm(colspan='3')
+        div.flex.justify-center.items-baseline.w-0
+          | {{sentence.newCorpus}}
+          span.corpus_title_warn(rel='localize[no_context_support]', ng-if='::sentence.noContext')
+      td.empty_td
       td.lnk(colspan='3', ng-if='::sentence.isLinked')
         span(kwic-word='kwic-word', ng-repeat='wd in sentence.tokens')
       td.left(ng-if='::!sentence.newCorpus')
@@ -51,11 +53,11 @@ span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()"
         | {{sentence.newCorpus}}
         span.corpus_title_warn(rel='localize[no_context_support]', ng-if='::sentence.noContext')
       span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')
-kwic-pager(total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
+kwic-pager(ng-if="hits" total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
 #download-links-container
   select#download-links(ng-if="_settings.enableBackendKwicDownload")
   select#frontendDownloadLinks(ng-if="_settings.enableFrontendKwicDownload",
                         ng-change="download.init(download.selected, hits_display)", 
                         ng-model="download.selected",
                         ng-options="item.value as item.label | loc:lang for item in download.options")
-  a#kwicDownloadLink(ng-if="_settings.enableFrontendKwicDownload", href="{{download.blobName}}", download="{{download.fileName}}", target="_self", style="display: none;")
+  a.kwicDownloadLink(ng-if="_settings.enableFrontendKwicDownload", href="{{download.blobName}}", download="{{download.fileName}}", target="_self", style="display: none;")

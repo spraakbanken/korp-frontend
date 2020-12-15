@@ -1,7 +1,7 @@
 /** @format */
 const webpack = require("webpack")
 const path = require("path")
-const CleanWebpackPlugin = require("clean-webpack-plugin")
+const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 
 function getKorpConfigDir() {
@@ -32,8 +32,8 @@ module.exports = {
             defaultmode: path.resolve(korpConfigDir, "modes/default_mode.js"),
             customcss: path.resolve(korpConfigDir, "styles/"),
             customscripts: path.resolve(korpConfigDir, "scripts/"),
-            customviews: path.resolve(korpConfigDir, "views/")
-        }
+            customviews: path.resolve(korpConfigDir, "views/"),
+        },
     },
     module: {
         rules: [
@@ -43,41 +43,41 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["@babel/preset-env"]
-                    }
-                }
+                        presets: ["@babel/preset-env"],
+                    },
+                },
             },
             {
                 test: /\.tsx?$/,
                 use: {
                     loader: "ts-loader",
                     options: {
-                        configFile: path.resolve(__dirname, "tsconfig.json")
-                    }
+                        configFile: path.resolve(__dirname, "tsconfig.json"),
+                    },
                 },
-                exclude: /node_modules/
+                exclude: /node_modules/,
             },
             {
                 test: require.resolve(
                     path.resolve(__dirname, "app/scripts/cqp_parser/CQPParser.js")
                 ),
-                use: "imports-loader?this=>window"
+                use: "imports-loader?this=>window",
             },
             {
                 test: /\.pug$/i,
                 exclude: [
                     // does not work
-                    path.resolve(__dirname, "app/index.pug")
+                    path.resolve(__dirname, "app/index.pug"),
                 ],
                 use: [
                     { loader: "file-loader" },
                     {
                         loader: "extract-loader",
-                        options: { publicPath: "" }
+                        options: { publicPath: "" },
                     },
                     { loader: "html-loader" },
-                    { loader: "pug-html-loader" }
-                ]
+                    { loader: "pug-html-loader" },
+                ],
             },
             {
                 test: /index.pug$/,
@@ -85,13 +85,13 @@ module.exports = {
                     { loader: "file-loader?name=index.html" },
                     {
                         loader: "extract-loader",
-                        options: { publicPath: "" }
+                        options: { publicPath: "" },
                     },
                     {
                         loader: "html-loader",
                         options: {
-                            attrs: ["img:src", "link:href"]
-                        }
+                            attrs: ["img:src", "link:href"],
+                        },
                     },
                     {
                         loader: "pug-html-loader",
@@ -99,10 +99,10 @@ module.exports = {
                             // TODO we should not pretty-print HTML, but removing this
                             // option will result in that some elements get closer together
                             // and need to be fixed with CSS
-                            pretty: true
-                        }
-                    }
-                ]
+                            pretty: true,
+                        },
+                    },
+                ],
             },
             {
                 test: /\.html$/,
@@ -111,10 +111,10 @@ module.exports = {
                     { loader: "file-loader" },
                     {
                         loader: "extract-loader",
-                        options: { publicPath: "" }
+                        options: { publicPath: "" },
                     },
-                    { loader: "html-loader" }
-                ]
+                    { loader: "html-loader" },
+                ],
             },
             {
                 test: /\.html$/,
@@ -124,42 +124,42 @@ module.exports = {
                         loader: "html-loader",
                         options: {
                             minimize: true,
-                            conservativeCollapse: false
-                        }
-                    }
-                ]
+                            conservativeCollapse: false,
+                        },
+                    },
+                ],
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
-                loader: "file-loader?name=[name].[ext]"
+                loader: "file-loader?name=[name].[contenthash].[ext]",
             },
             {
                 test: /\.ico$/i,
-                loader: "file-loader?name=[name].[ext]"
+                loader: "file-loader?name=[name].[ext]",
             },
             {
                 test: /\.otf$/i,
-                loader: "file-loader"
+                loader: "file-loader",
             },
             {
                 test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-                loader: "file-loader?mimetype=application/font-woff"
+                loader: "file-loader?mimetype=application/font-woff",
             },
             {
                 test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-                loader: "file-loader?mimetype=application/font-woff"
+                loader: "file-loader?mimetype=application/font-woff",
             },
             {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: "file-loader?mimetype=application/octet-stream"
+                loader: "file-loader?mimetype=application/octet-stream",
             },
             {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: "file-loader"
+                loader: "file-loader",
             },
             {
                 test: /\.css$/,
-                use: [{ loader: "style-loader" }, { loader: "css-loader" }]
+                use: [{ loader: "style-loader" }, { loader: "css-loader" }],
             },
             {
                 test: /\.scss$/,
@@ -168,84 +168,88 @@ module.exports = {
                     {
                         loader: "css-loader",
                         options: {
-                            sourceMap: process.env.NODE_ENV !== "production"
-                        }
+                            sourceMap: process.env.NODE_ENV !== "production",
+                        },
                     },
                     {
                         loader: "postcss-loader",
                         options: {
-                            plugins: () => [require("autoprefixer")],
-                            sourceMap: process.env.NODE_ENV !== "production"
-                        }
+                            // plugins: () => [require("tailwindcss"), require("autoprefixer")],
+                            // sourceMap: process.env.NODE_ENV !== "production",
+                        },
                     },
                     {
                         loader: "sass-loader",
                         options: {
-                            sourceMap: process.env.NODE_ENV !== "production"
+                            sourceMap: process.env.NODE_ENV !== "production",
                             // sourceMapContents: false
-                        }
-                    }
-                ]
-            }
-        ]
+                        },
+                    },
+                ],
+            },
+        ],
     },
     plugins: [
-        new CleanWebpackPlugin(["dist"]),
+        new CleanWebpackPlugin(),
         new webpack.ProvidePlugin({
             $: "jquery",
-            jQuery: "jquery"
+            jQuery: "jquery",
         }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-        new CopyWebpackPlugin([
-            {
-                from: korpConfigDir + "/modes/*mode.js",
-                to: "modes",
-                flatten: true
-            },
-            {
-                from: korpConfigDir + "/modes/*html",
-                to: "modes",
-                flatten: true
-            },
-            {
-                from: "app/translations/angular-locale_*.js",
-                to: "translations",
-                flatten: true
-            },
-            {
-                from: "app/markup/msdtags.html",
-                to: "markup"
-            },
-            {
-                from: "app/translations/locale-*.json",
-                to: "translations",
-                flatten: true
-            },
-            {
-                from: korpConfigDir + "/translations/*",
-                to: "translations",
-                flatten: true
-            },
-            {
-                from: "app/lib/deptrees/",
-                to: "lib/deptrees"
-            },
-            {
-                from: "node_modules/geokorp/dist/data/*.json",
-                // TODO hard-coded in geokorp project that these files should be here
-                // we need to change geokorp so that these files are required
-                to: "components/geokorp/dist/data",
-                flatten: true
-            }
-        ])
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: korpConfigDir + "/modes/*mode.js",
+                    to: "modes",
+                    flatten: true,
+                },
+                {
+                    from: korpConfigDir + "/modes/*html",
+                    to: "modes",
+                    flatten: true,
+                },
+                {
+                    from: "app/translations/angular-locale_*.js",
+                    to: "translations",
+                    flatten: true,
+                },
+                {
+                    from: "app/markup/msdtags.html",
+                    to: "markup",
+                },
+                {
+                    from: "app/translations/locale-*.json",
+                    to: "translations",
+                    flatten: true,
+                },
+                {
+                    from: korpConfigDir + "/translations/*",
+                    to: "translations",
+                    flatten: true,
+                },
+                {
+                    from: "app/lib/deptrees/",
+                    to: "lib/deptrees",
+                },
+                /* TODO: probably remove this? cannot find any json files there.
+                    {
+                        from: "node_modules/geokorp/dist/data/*.json",
+                        // TODO hard-coded in geokorp project that these files should be here
+                        // we need to change geokorp so that these files are required
+                        to: "components/geokorp/dist/data",
+                        flatten: true
+                    }
+                    */
+            ],
+        }),
     ],
     entry: {
         bundle: "./app/index.js",
-        worker: "./app/scripts/statistics_worker.ts"
+        worker: "./app/scripts/statistics_worker.ts",
     },
     output: {
         filename: "[name].js",
         path: path.resolve(__dirname, "dist"),
-        globalObject: "this"
-    }
+        globalObject: "this",
+    },
 }

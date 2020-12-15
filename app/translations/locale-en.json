@@ -119,6 +119,7 @@
     "matches_not": "not regexp",
 
     "repeat": "Repeat",
+    "from": "from",
     "to": "to",
     "times": "times",
 
@@ -338,7 +339,7 @@
 
     "repeat_error": "Error: Not possible to repeat from 0 for all tokens.",
 
-    "choose_lemgram": "Choose lemgram",
+    "choose_value": "Choose a value",
     "login_needed_for_corpora": "Login needed for access to",
 
     "stats_warn": "Statistics is disabled",

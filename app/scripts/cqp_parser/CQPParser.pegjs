@@ -110,7 +110,7 @@ date
 {
 
   val = _.filter(val, _.isArray).map(function(item) {
-    return Number(item.join(""))
+    return item.join("")
   })
   return makeObj("date_interval", op, val)
 }
@@ -129,6 +129,14 @@ infix_op
   / "not_highest_rank"
   / "rank_contains"
   / "not_rank_contains"
+  / "regexp_contains"
+  / "not_regexp_contains"
+  / "starts_with_contains"
+  / "ends_with_contains"
+  / "incontains_contains"
+  / "not_starts_with_contains"
+  / "not_ends_with_contains"
+  / "not_incontains_contains"
 
 date_op
   = " <= "

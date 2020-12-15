@@ -3,9 +3,13 @@
 import jStorage from "../lib/jstorage"
 
 import { parseMapData } from "./map_services.ts"
+import statemachine from "./statemachine"
 
 const korpApp = angular.module("korpApp")
-korpApp.factory("utils", $location => ({
+korpApp.factory("statemachine", ($location) => ({
+    send: statemachine.send,
+}))
+korpApp.factory("utils", ($location) => ({
     valfilter(attrobj) {
         if (attrobj.isStructAttr) {
             return `_.${attrobj.value}`
@@ -18,10 +22,13 @@ korpApp.factory("utils", $location => ({
         const onWatch = () => {
             for (let obj of config) {
                 let val = $location.search()[obj.key]
-                if (!val) {
-                    if (obj.default != null) {
+                if (val == null) {
+                    if ("default" in obj) {
                         val = obj.default
                     } else {
+                        if (typeof obj.post_change === "function") {
+                            obj.post_change(val)
+                        }
                         continue
                     }
                 }
@@ -48,7 +55,7 @@ korpApp.factory("utils", $location => ({
             scope.$watch(
                 watch,
                 ((obj, watch) =>
-                    function(val) {
+                    function (val) {
                         val = (obj.val_out || _.identity)(val)
                         if (val === obj.default) {
                             val = null
@@ -60,26 +67,26 @@ korpApp.factory("utils", $location => ({
                     })(obj, watch)
             )
         }
-    }
+    },
 }))
 
 korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
     requestCompare(cmpObj1, cmpObj2, reduce) {
-        reduce = _.map(reduce, item => item.replace(/^_\./, ""))
+        reduce = _.map(reduce, (item) => item.replace(/^_\./, ""))
         let cl = settings.corpusListing
         // remove all corpora which do not include all the "reduce"-attributes
-        const filterFun = item => cl.corpusHasAttrs(item, reduce)
+        const filterFun = (item) => cl.corpusHasAttrs(item, reduce)
         const corpora1 = _.filter(cmpObj1.corpora, filterFun)
         const corpora2 = _.filter(cmpObj2.corpora, filterFun)
 
         let attrs = cl.getCurrentAttributes()
-        const split = _.filter(reduce, r => (attrs[r] && attrs[r].type) === "set").join(",")
+        const split = _.filter(reduce, (r) => (attrs[r] && attrs[r].type) === "set").join(",")
 
-        const rankedReduce = _.filter(reduce, item => {
+        const rankedReduce = _.filter(reduce, (item) => {
             let attr = cl.getCurrentAttributes(cl.getReduceLang())[item]
             return attr && attr.ranked
         })
-        const top = _.map(rankedReduce, item => item + ":1").join(",")
+        const top = _.map(rankedReduce, (item) => item + ":1").join(",")
 
         const def = $q.defer()
         const params = {
@@ -90,21 +97,21 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             set2_cqp: cmpObj2.cqp,
             max: 50,
             split,
-            top
+            top,
         }
 
         const conf = {
             url: settings.korpBackendURL + "/loglike",
             params,
             method: "GET",
-            headers: {}
+            headers: {},
         }
 
         _.extend(conf.headers, model.getAuthorizationHeader())
 
         const xhr = $http(conf)
 
-        xhr.then(function(response) {
+        xhr.then(function (response) {
             let max
             const { data } = response
 
@@ -117,10 +124,10 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
             const objs = _.map(loglikeValues, (value, key) => ({
                 value: key,
-                loglike: value
+                loglike: value,
             }))
 
-            const tables = _.groupBy(objs, function(obj) {
+            const tables = _.groupBy(objs, function (obj) {
                 if (obj.loglike > 0) {
                     obj.abs = data.set2[obj.value]
                     return "positive"
@@ -130,11 +137,11 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
                 }
             })
 
-            const groupAndSum = function(table, currentMax) {
-                const groups = _.groupBy(table, obj => obj.value.replace(/(:.+?)(\/|$| )/g, "$2"))
+            const groupAndSum = function (table, currentMax) {
+                const groups = _.groupBy(table, (obj) => obj.value.replace(/(:.+?)(\/|$| )/g, "$2"))
 
-                const res = _.map(_.toPairs(groups), function([key, value]) {
-                    const tokenLists = _.map(key.split("/"), tokens => tokens.split(" "))
+                const res = _.map(_.toPairs(groups), function ([key, value]) {
+                    const tokenLists = _.map(key.split("/"), (tokens) => tokens.split(" "))
 
                     let loglike = 0
                     let abs = 0
@@ -177,7 +184,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             cqp,
             corpus: attribute.corpora.join(","),
             incremental: true,
-            split: attribute.label
+            split: attribute.label,
         }
         _.extend(params, settings.corpusListing.getWithinParameters())
 
@@ -187,18 +194,18 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             url: settings.korpBackendURL + "/count",
             params,
             method: "GET",
-            headers: {}
+            headers: {},
         }
 
         _.extend(conf.headers, model.getAuthorizationHeader())
 
         return $http(conf).then(
-            function({ data }) {
+            function ({ data }) {
                 model.normalizeStatsData(data)
                 let result = parseMapData(data, cqp, cqpExprs)
                 return { corpora: attribute.corpora, cqp, within, data: result, attribute }
             },
-            err => {
+            (err) => {
                 console.log("err", err)
             }
         )
@@ -220,27 +227,27 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             show_struct: showStruct.join(","),
             within: corpus + ":text",
             start: 0,
-            end: 0
+            end: 0,
         }
 
         const conf = {
             url: settings.korpBackendURL + "/query",
             params,
             method: "GET",
-            headers: {}
+            headers: {},
         }
 
         _.extend(conf.headers, model.getAuthorizationHeader())
 
         return $http(conf).then(
-            function({ data }) {
+            function ({ data }) {
                 return data
             },
-            err => {
+            (err) => {
                 console.log("err", err)
             }
         )
-    }
+    },
 }))
 
 korpApp.factory("searches", [
@@ -248,7 +255,7 @@ korpApp.factory("searches", [
     "$rootScope",
     "$http",
     "$q",
-    function($location, $rootScope, $http, $q) {
+    function ($location, $rootScope, $http, $q) {
         class Searches {
             constructor() {
                 this.activeSearch = null
@@ -259,7 +266,7 @@ korpApp.factory("searches", [
 
                 // is resolved when parallel search controller is loaded
                 this.langDef = $q.defer()
-                this.getInfoData().then(function() {
+                this.getInfoData().then(function () {
                     def.resolve()
                     return initTimeGraph(timedef)
                 })
@@ -288,10 +295,10 @@ korpApp.factory("searches", [
                     url: settings.korpBackendURL + "/corpus_info",
                     params: {
                         corpus: _.map(settings.corpusListing.corpora, "id")
-                            .map(a => a.toUpperCase())
-                            .join(",")
-                    }
-                }).then(function(response) {
+                            .map((a) => a.toUpperCase())
+                            .join(","),
+                    },
+                }).then(function (response) {
                     const { data } = response
                     for (let corpus of settings.corpusListing.corpora) {
                         corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
@@ -313,7 +320,7 @@ korpApp.factory("searches", [
 
         const searches = new Searches()
 
-        searches.getCqpExpr = function() {
+        searches.getCqpExpr = function () {
             const search = searches.activeSearch
             let cqpExpr = null
             if (search) {
@@ -329,7 +336,7 @@ korpApp.factory("searches", [
         let oldValues = []
         $rootScope.$watchGroup(
             [() => $location.search().search, "_loc.search().page"],
-            newValues => {
+            (newValues) => {
                 let pageChanged, searchChanged
                 const searchExpr = $location.search().search
                 if (!searchExpr) {
@@ -360,8 +367,8 @@ korpApp.factory("searches", [
                 $q.all([
                     searches.infoDef,
                     searches.langDef.promise,
-                    $rootScope.globalFilterDef.promise
-                ]).then(function() {
+                    $rootScope.globalFilterDef.promise,
+                ]).then(function () {
                     let extendedSearch = false
                     if (type === "cqp") {
                         extendedSearch = true
@@ -374,7 +381,7 @@ korpApp.factory("searches", [
                             type,
                             val: value,
                             page: newValues[1],
-                            pageOnly
+                            pageOnly,
                         }
                     } else if (type === "saldo") {
                         extendedSearch.setOneToken("saldo", value)
@@ -395,7 +402,7 @@ korpApp.factory("searches", [
         )
 
         return searches
-    }
+    },
 ])
 
 korpApp.service(
@@ -414,7 +421,7 @@ korpApp.service(
             const searchObj = {
                 label: name || cqp,
                 cqp,
-                corpora: settings.corpusListing.getSelectedCorpora()
+                corpora: settings.corpusListing.getSelectedCorpora(),
             }
             this.savedSearches.push(searchObj)
             return jStorage.set(this.key, this.savedSearches)
@@ -427,7 +434,7 @@ korpApp.service(
     }
 )
 
-korpApp.factory("lexicons", function($q, $http) {
+korpApp.factory("lexicons", function ($q, $http) {
     const karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v4"
     return {
         getLemgrams(wf, resources, corporaIDs) {
@@ -436,15 +443,15 @@ korpApp.factory("lexicons", function($q, $http) {
             const args = {
                 q: wf,
                 resource: $.isArray(resources) ? resources.join(",") : resources,
-                mode: "external"
+                mode: "external",
             }
 
             $http({
                 method: "GET",
                 url: `${karpURL}/autocomplete`,
-                params: args
+                params: args,
             })
-                .then(function(response) {
+                .then(function (response) {
                     let { data } = response
                     if (data === null) {
                         return deferred.resolve([])
@@ -452,7 +459,7 @@ korpApp.factory("lexicons", function($q, $http) {
                         // Pick the lemgrams. Would be nice if this was done by the backend instead.
                         const karpLemgrams = _.map(
                             data.hits.hits,
-                            entry => entry._source.FormRepresentations[0].lemgram
+                            (entry) => entry._source.FormRepresentations[0].lemgram
                         )
 
                         if (karpLemgrams.length === 0) {
@@ -468,7 +475,7 @@ korpApp.factory("lexicons", function($q, $http) {
                             method: "POST",
                             url: settings.korpBackendURL + "/lemgram_count",
                             data: `lemgram=${lemgram}&count=lemgram&corpus=${corpora}`,
-                            headers
+                            headers,
                         }).then(({ data }) => {
                             delete data.time
                             const allLemgrams = []
@@ -485,7 +492,7 @@ korpApp.factory("lexicons", function($q, $http) {
                         })
                     }
                 })
-                .catch(response => deferred.resolve([]))
+                .catch((response) => deferred.resolve([]))
             return deferred.promise
         },
 
@@ -495,22 +502,22 @@ korpApp.factory("lexicons", function($q, $http) {
             const args = {
                 q: wf,
                 resource: "saldom",
-                mode: "external"
+                mode: "external",
             }
 
             $http({
                 method: "GET",
                 url: `${karpURL}/autocomplete`,
-                params: args
+                params: args,
             })
-                .then(response => {
+                .then((response) => {
                     let { data } = response
                     if (data === null) {
                         return deferred.resolve([])
                     } else {
                         let karpLemgrams = _.map(
                             data.hits.hits,
-                            entry => entry._source.FormRepresentations[0].lemgram
+                            (entry) => entry._source.FormRepresentations[0].lemgram
                         )
                         if (karpLemgrams.length === 0) {
                             deferred.resolve([])
@@ -523,31 +530,31 @@ korpApp.factory("lexicons", function($q, $http) {
                             q: `extended||and|lemgram|equals|${karpLemgrams.join("|")}`,
                             resource: "saldo",
                             show: "sense,primary",
-                            size: 500
+                            size: 500,
                         }
 
                         return $http({
                             method: "GET",
                             url: `${karpURL}/minientry`,
-                            params: senseargs
+                            params: senseargs,
                         })
-                            .then(function({ data }) {
+                            .then(function ({ data }) {
                                 if (data.hits.total === 0) {
                                     deferred.resolve([])
                                     return
                                 }
-                                const senses = _.map(data.hits.hits, entry => ({
+                                const senses = _.map(data.hits.hits, (entry) => ({
                                     sense: entry._source.Sense[0].senseid,
                                     desc:
                                         entry._source.Sense[0].SenseRelations &&
-                                        entry._source.Sense[0].SenseRelations.primary
+                                        entry._source.Sense[0].SenseRelations.primary,
                                 }))
                                 deferred.resolve(senses)
                             })
-                            .catch(response => deferred.resolve([]))
+                            .catch((response) => deferred.resolve([]))
                     }
                 })
-                .catch(response => deferred.resolve([]))
+                .catch((response) => deferred.resolve([]))
             return deferred.promise
         },
 
@@ -559,13 +566,13 @@ korpApp.factory("lexicons", function($q, $http) {
                 params: {
                     q: `extended||and|lemgram|equals|${lemgram}`,
                     show: "sense",
-                    resource: "saldo"
-                }
-            }).then(function({ data }) {
+                    resource: "saldo",
+                },
+            }).then(function ({ data }) {
                 if (data.hits.total === 0) {
                     def.resolve([])
                 } else {
-                    const senses = _.map(data.hits.hits, entry => entry._source.Sense[0].senseid)
+                    const senses = _.map(data.hits.hits, (entry) => entry._source.Sense[0].senseid)
 
                     $http({
                         url: `${karpURL}/minientry`,
@@ -573,15 +580,15 @@ korpApp.factory("lexicons", function($q, $http) {
                         params: {
                             q: `extended||and|LU|equals|${senses.join("|")}`,
                             show: "LU,sense",
-                            resource: "swefn"
-                        }
-                    }).then(function({ data }) {
+                            resource: "swefn",
+                        },
+                    }).then(function ({ data }) {
                         if (data.hits.total === 0) {
                             def.resolve([])
                         } else {
-                            const eNodes = _.map(data.hits.hits, entry => ({
+                            const eNodes = _.map(data.hits.hits, (entry) => ({
                                 label: entry._source.Sense[0].senseid.replace("swefn--", ""),
-                                words: entry._source.Sense[0].LU
+                                words: entry._source.Sense[0].LU,
                             }))
 
                             return def.resolve(eNodes)
@@ -591,6 +598,6 @@ korpApp.factory("lexicons", function($q, $http) {
             })
 
             return def.promise
-        }
+        },
     }
 })

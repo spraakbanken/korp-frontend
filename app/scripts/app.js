@@ -2,6 +2,10 @@
 
 import jStorage from "../lib/jstorage"
 import { kwicPagerName, kwicPager } from "./components/pager"
+import { sidebarName, sidebarComponent } from "./components/sidebar"
+import { setDefaultConfigValues } from "./settings.js"
+
+setDefaultConfigValues()
 
 window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.typeahead",
@@ -28,6 +32,7 @@ window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.buttons",
     "ui.bootstrap.popover",
     "uib/template/popover/popover.html",
+    "uib/template/popover/popover-template.html",
     "angularSpinner",
     "ui.sortable",
     "newsdesk",
@@ -36,7 +41,7 @@ window.korpApp = angular.module("korpApp", [
     "angular.filter",
 ])
 
-korpApp.component(kwicPagerName, kwicPager)
+korpApp.component(kwicPagerName, kwicPager).component(sidebarName, sidebarComponent)
 
 korpApp.config((tmhDynamicLocaleProvider) =>
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
@@ -56,15 +61,14 @@ korpApp.config([
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
-korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
-    let loginNeededFor
+korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $timeout) {
     const s = $rootScope
     s._settings = settings
     window.lang = s.lang = $location.search().lang || settings.defaultLanguage
     s.word_selected = null
     s.isLab = window.isLab
 
-    s.sidebar_visible = false
+    // s.sidebar_visible = false
 
     s.extendedCQP = null
 
@@ -95,7 +99,6 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
     $rootScope.textTabs = []
 
     if ($location.search().corpus) {
-        loginNeededFor = []
         const initialCorpora = []
 
         function findInFolder(folder) {
@@ -129,6 +132,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
             }
         }
 
+        const loginNeededFor = []
         for (let corpusObj of initialCorpora) {
             if (corpusObj.limitedAccess) {
                 if (
@@ -144,9 +148,18 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
         if (!_.isEmpty(s.loginNeededFor)) {
             s.savedState = $location.search()
             $location.url($location.path())
+
+            // some state need special treatment
             if (s.savedState.reading_mode) {
                 $location.search("reading_mode")
             }
+            if (s.savedState.search_tab) {
+                $location.search("search_tab", s.savedState.search_tab)
+            }
+            if (s.savedState.cqp) {
+                $location.search("cqp", s.savedState.cqp)
+            }
+
             $location.search("display", "login")
         }
     }
@@ -155,8 +168,13 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
         if (s.savedState) {
             for (let key in s.savedState) {
                 const val = s.savedState[key]
-                $location.search(key, val)
+                if (key !== "search_tab") {
+                    $location.search(key, val)
+                }
             }
+
+            // some state need special treatment
+            s.$broadcast("updateAdvancedCQP")
 
             const corpora = s.savedState.corpus.split(",")
             settings.corpusListing.select(corpora)
@@ -216,8 +234,11 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     const s = $scope
 
     s.logoClick = function () {
-        window.location = $scope.getUrl(currentMode)
-        window.location.reload()
+        const [baseUrl, modeParam, langParam] = $scope.getUrlParts(currentMode)
+        window.location = baseUrl + modeParam + langParam
+        if (langParam.length > 0) {
+            window.location.reload()
+        }
     }
 
     s.citeClick = () => {
@@ -229,13 +250,12 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     }
 
     s.logout = function () {
-        let corpus
         authenticationProxy.loginObj = {}
         jStorage.deleteKey("creds")
 
         // TODO figure out another way to do this
         for (let corpusObj of settings.corpusListing.corpora) {
-            corpus = corpusObj.id
+            const corpus = corpusObj.id
             if (corpusObj.limitedAccess) {
                 $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled")
             }
@@ -243,7 +263,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         $("#corpusbox").corpusChooser("updateAllStates")
 
         let newCorpora = []
-        for (corpus of settings.corpusListing.getSelectedCorpora()) {
+        for (let corpus of settings.corpusListing.getSelectedCorpora()) {
             if (!settings.corpora[corpus].limitedAccess) {
                 newCorpora.push(corpus)
             }
@@ -281,11 +301,13 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     }
 
     s.getUrl = function (modeId) {
+        return s.getUrlParts(modeId).join("")
+    }
+
+    s.getUrlParts = function (modeId) {
         const langParam = settings.defaultLanguage === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
-        if (modeId === "default") {
-            return location.pathname + langParam
-        }
-        return location.pathname + `?mode=${modeId}` + langParam
+        const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
+        return [location.pathname, modeParam, langParam]
     }
 
     s.show_modal = false

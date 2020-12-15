@@ -488,15 +488,23 @@ __defaultOptions__ - Object containing the default operators for extended search
 
 Explanation of internal format:
 
-             Internal representation     CQP                   Note
-----         -------                     ---                   ----
-is           [key = "val"]               [key = "val"]
-is not       [key != "val"]              [key != "val"]
-starts with  [key ^= "val"]              [key = "val.*"]
-contains     [key _= "val"]              [key = ".&ast;val.*"]
-ends with    [key &= "val"]              [key = "val.*"]
-matches      [key *= "val"]              [key = "val"]         Used with `escaper`-directive, regexp
-matches not  [key !*= "val"]             [key != "val"]        special characters will not be escaped.
+             Internal representation       CQP                     Note
+----         -------                       ---                     ----
+starts with  `[key ^= "val"]`              `[key = "val.*"]`
+contains     `[key _= "val"]`              `[key = ".*val.*"]`
+ends with    `[key &= "val"]`              `[key = ".*val"]`
+matches      `[key *= "val"]`              `[key = "val"]`         Used with `escaper`-directive, regexp
+matches not  `[key !*= "val"]`             `[key != "val"]`        special characters will not be escaped.
+
+**TODO: move these explanations to a better place** Then we have the five last operators again, but using `contains` instead of `=`:
+
+             Internal representation            CQP                         Note
+----         -------                            ---                         ----
+starts with  `[key starts_with_contains "val"]` `[key contains "val.*"]`
+contains     `[key incontains_contains "val"]`  `[key contains ".*val.*"]`  Strange name due to CQPParser getting confused by `contains_contains`
+ends with    `[key ends_with_contains "val"]`   `[key contains ".*val"]`
+matches      `[key regexp_contains "val"]`      `[key contains "val"]`      Used with `escaper`-directive, regexp
+matches not  `[key not_regexp_contains "val"]`  `[key not contains "val"]`  special characters will not be escaped.
 
 __cgiScript__ - URL to Korp CGI-script
 
@@ -531,6 +539,10 @@ __preselectedCorpora__ - An array of corpus (internal) names or folder names. Gi
 __newMapEnabled__ - See **Map**.
 
 __mapCenter__ - See **Map**.
+
+__hitsPerPageValues__ - An array of possible number of hits per page for example: `[25,50,75,100]`
+
+__hitsPerPageDefault__ - The number of hits per page that Korp should select by default. If emitted, fallback value is the first element in `hitsPerPageValues`
 
 # Developing the Korp Frontend
 
