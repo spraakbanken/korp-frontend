@@ -545,8 +545,13 @@ korpApp.component("extendedOrBlock", {
 
         ctrl.$onChanges = function () {
             ctrl.currentTypeObj = ctrl.getType(ctrl.or.type, ctrl.or.val)
-            ctrl.currentType = ctrl.currentTypeObj.value
-            ctrl.or.type = ctrl.currentTypeObj.cqp_prop || ctrl.currentTypeObj.value
+            if (ctrl.currentTypeObj.isStructAttr) {
+                var val = "_." + ctrl.currentTypeObj.value
+            } else {
+                val = ctrl.currentTypeObj.value
+            }
+            ctrl.currentType = val
+            ctrl.or.type = ctrl.currentTypeObj.cqp_prop || val
             // ctrl.setDefault()
         }
 
@@ -583,7 +588,12 @@ korpApp.component("extendedOrBlock", {
         ctrl.setDefault = function () {
             // assign the first value from the opts
 
-            ctrl.or.type = ctrl.currentTypeObj.cqp_prop || ctrl.currentTypeObj.value
+            if (ctrl.currentTypeObj.isStructAttr) {
+                var val = "_." + ctrl.currentTypeObj.value
+            } else {
+                val = ctrl.currentTypeObj.value
+            }
+            ctrl.or.type = ctrl.currentTypeObj.cqp_prop || val
 
             const opts = ctrl.getOpts(ctrl.currentTypeObj)
 
