@@ -69,7 +69,7 @@ export const sidebarComponent = {
                     $ctrl.corpusObj = corpusObj
                     $ctrl.sentenceData = sentenceData
                     $ctrl.inReadingMode = inReadingMode
-
+                    $ctrl.tokens = tokens
                     const customData = { pos: [], struct: [] }
                     if (!$.isEmptyObject(corpusObj.customAttributes)) {
                         const [word, sentence] = this.renderCustomContent(
