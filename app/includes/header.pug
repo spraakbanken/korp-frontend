@@ -41,7 +41,7 @@
     #login
       a(ng-click="showLogin()", ng-show="!loggedIn") {{'log_in' | loc:lang}}
 
-    .clearfix
+    .clear-both
   #header_left.flex.items-end.ml-2.pb-1
     a.flex-shrink-0(ng-click="logoClick()")
       img(src='img/korplogo.png')
@@ -57,7 +57,7 @@
           span#hp_corpora_titleTokens(style='color: #888888;')
         div(style='float: right; width: 16px;')
           span.ui-icon.ui-icon-triangle-2-n-s(style='text-align: right; left: auto;')
-        .clearfix
+        .clear-both
     .popupchecks.ui-corner-bottom.flex-shrink-0
       .header
         #time
