@@ -108,6 +108,7 @@ for(const file of requireContext.keys()) {
 }
 
 require("./scripts/components/sidebar.js")
+require("./scripts/components/corpuschooser.js")
 
 require("./scripts/statistics.js")
 require("./scripts/cqp_parser/CQPParser.js")
