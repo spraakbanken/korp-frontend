@@ -54,16 +54,16 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
           //- reduce-select(reduce-items="currentAttrs", reduce-selected="selectedAttrs", reduce-lang="lang", style='width: 150px')
 
           button.btn.btn-sm.btn-default.search(ng-click='sendCompare()') {{'compare_vb' | loc:lang}}
-  #search_options.ui-widget-content.ui-corner-bottom(click-cover="isCompareSelected", ng-style="{'background-color': settings.primaryLight}")
+  #search_options.flex.items-baseline.bg-blue-100.border.border-blue-200.shadow-inner(click-cover="isCompareSelected")
     div
-      span(style='font-size: .9em;') KWIC: 
+      span.inline-block.mr-2(style='font-size: .9em;') KWIC: 
       select(ng-model='hitsPerPage' ng-options='getHppFormat(val) for val in hitsPerPageValues track by val')
       select(ng-model='kwicSort' ng-options='getSortFormat(val) for val in kwicSortValues track by val')
 
-    div(ng-show="showStats()")
+    div.flex.items-center(ng-show="showStats()")
       span(rel='localize[statistics]') 
       | : 
-      reduce-select(reduce-items="statCurrentAttrs", reduce-selected="statSelectedAttrs", 
+      reduce-select.ml-2.relative.-top-px(reduce-items="statCurrentAttrs", reduce-selected="statSelectedAttrs", 
         reduce-insensitive="statInsensitiveAttrs" reduce-lang="lang", style='width: 200px')
     div(ng-show="settings.statistics !== false")
       input#show_stats(type="checkbox", ng-model="showStatistics", ng-disabled="inOrder")

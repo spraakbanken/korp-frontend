@@ -30,7 +30,7 @@
                         <i class="fa fa-arrow-down"></i>
                         <span style="margin-left: 1px;position: relative;top: -1px;">{{"and" | loc:lang}}</span>
                     </button>
-                    <button popper class="btn btn-xs btn-default token-cog-btn"><i class="fa fa-cog"></i></button>
+                    <button popper class="btn btn-xs btn-default token-cog-btn flex items-center"><i class="fa fa-bars mr-1"></i><span>{{'options' | loc:lang}}</span></button>
                     <ul class="popper_menu dropdown-menu">
                         <li>
                             <a ng-click="toggleRepeat(token)" rel="localize[repeat]">{{'repeat' | loc:lang}}</a>
@@ -64,9 +64,10 @@
             
             </div>
         </div>
-        <span class="image_button insert_token" ng-click="addToken()">
-            <img class="plus-btn" src="../img/plus.png"> 
-            <span>{{"add_token" | loc:lang}}</span>
-        </span>
+        <button class="btn btn-sm image_button insert_token border-gray-300 transition duration-200 hover_bg-gray-200" ng-click="addToken()">
+            <!-- <img class="plus-btn" src="../img/plus.png">  -->
+            <i class="fa fa-lg fa-plus-circle text-blue-600 mr-1"></i>
+            <span class="">{{"add_token" | loc:lang}}</span>
+        </button>
     </div>
 </div>

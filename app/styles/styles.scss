@@ -30,11 +30,11 @@ $color_yellow: #FFF3D8;
 
 html {
   background-color: white;
+  font-size: 14px;
 }
 
 body {
   font-family: 'Source Sans Pro',Helvetica, Arial, Verdana, sans-serif;
-  font-size: 13px;
   margin: 0;
   overflow-x: hidden;
   background-color: white;
@@ -81,7 +81,8 @@ ul, ol {
 a {
   cursor: pointer;
   text-decoration: none;
-  color: navy;
+  // color: navy;
+  @apply text-indigo-700;
   &:visited {
     color: purple;
   }
@@ -131,7 +132,8 @@ img {
 /* mouse over link */
 
 .link {
-  color: navy !important;
+  // color: navy !important;
+  @apply text-indigo-700;
   cursor: pointer;
   &:hover {
     color: indianred !important;
@@ -222,12 +224,7 @@ img {
 }
 
 #search_history {
-  margin-right: 8px;
-  // margin-top: 45px;
   max-width: 150px;
-  // position: absolute;
-  // right: 0;
-  // bottom : 3px;
   > option:first-child {
     color: grey;
   }
@@ -239,7 +236,6 @@ img {
 #top_bar {
   width: 100%;
   background-image: linear-gradient(to top, #fcfafc 0%, #d9d9d9 100%);
-  padding : 6px 5px 5px 8px;
 }
 
 /*match placeholder/watermark padding to border+padding for input element*/
@@ -263,10 +259,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   margin-bottom: 8px;
   select {
     margin-right: 5px;
+    background-color: rgba(255,255,255,0.5);
+    padding-left: 2px;
   }
   > div {
-    display: inline-block;
-    vertical-align: middle;
     margin-right: 10px;
   }
 }
@@ -291,13 +287,9 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 }
 
 #header {
-  width: 100%;
-  margin: 0;
-  position: relative;
 }
 
 #content {
-  padding: 0 8px 8px 8px;
 }
 
 .lang_selected {
@@ -308,7 +300,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   margin-top : -1px;
 }
 #languages, #login {
-  float: right;
   margin-right: 8px;
 }
 
@@ -429,7 +420,6 @@ time-interval {
 
 .scroll_checkboxes {
   width: 480px;
-  height: 35px;
   overflow: hidden;
   vertical-align: bottom;
 }
@@ -468,7 +458,6 @@ $corpusbox-width : 480px;
     color: #222222;
     text-decoration: none;
     position: relative;
-    text-size: .6em;
     &:link, &:visited {
       color: #222222;
     }
@@ -757,7 +746,6 @@ table {
     font-size: .8em;
   }
   .token-cog-btn {
-    width: 20px;
     height: 20px;
     float: right;
     i {
@@ -1239,7 +1227,6 @@ a {
 }
 
 #log_out {
-  float: right;
   margin-right: 8px;
   margin-left: 3px;
 }
@@ -1283,7 +1270,6 @@ label[for=lemgram_select]:before {
 #mode_switch {
   margin : 0;
   margin-right: 10px;
-  float: left;
   padding-left: 0;
   a:visited {
     color : navy;
@@ -1868,6 +1854,36 @@ warning ~ * {
   transition: width 400ms ease;
 }
 
+.pagination {
+    height: auto;
+    margin : 0;
+    margin-bottom : 8px;
+    display: inline-block;
+    vertical-align: initial;
+
+    li {
+      &.active {
+        a {
+          font-weight : bold;
+          @apply text-white bg-indigo-400 border-indigo-500 shadow-inner;
+        }
+
+      }
+      a, span {
+        border-width : 1px;
+        line-height: 18px;
+        @apply text-gray-800;
+        padding : 0 8px;
+        float: none;
+        display: inline-block;
+  
+      }
+    }
+
+}
+
+
+
 .results-kwic {
   .controls_n {
     margin-right: 5px;
@@ -1888,31 +1904,7 @@ warning ~ * {
   .result_controls, .pager-wrapper {
     margin-bottom: 8px;
   }
-  .pagination {
-    height: auto;
-    margin : 0;
-    margin-bottom : 8px;
-    display: inline-block;
-    vertical-align: initial;
-
-    li.active {
-      font-weight : bold;
-    }
-    a, span {
-      border-width : 1px;
-      line-height: 18px;
-      padding : 0 8px;
-      color : #555;
-      float: initial;
-      display: inline-block;
-
-    }
-
-    .active a {
-      color : white;
-    }
-  }
-
+  
   .page_input {
     display: inline-block;
     vertical-align: middle;
@@ -2208,36 +2200,11 @@ line.tick {
 .ui-state-hover {
   background : #e6e6e6 url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
 }
-.nav.nav-tabs {
-  background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
-  border: 1px solid #AAAAAA;
-  border-radius: 2px 2px 0 0;
-  color: #222222;
-
-  padding-top : 0.2em;
-
-  li {
-    position: relative;
-    cursor: pointer;
-    margin-right : 0.2em;
-
-  }
-  .badge {
-    margin-top : -1px;
-    margin-bottom : -1px;
-    margin-left : 1em;
-  }
-
-
-
-}
-
 
 .tabbable {
-  border : 1px solid #AAAAAA;
+  @apply border border-gray-300;
   border-radius: 2px 2px 2px 2px;
   color : #222222;
-  padding : 3px;
   .tab-content {
     padding : 1em;
   }
@@ -2246,26 +2213,44 @@ line.tick {
     padding-left: 5px;
   }
   .nav.nav-tabs {
-    margin : 0;
-    padding-left : 0;
+
+    @apply bg-gradient-to-r from-gray-200 to-white border-b border-gray-200;
+      border-radius: 2px 2px 0 0;
+      padding-top : 0.2em;
+      margin : 0;
+      padding-left : 0;
     li {
-      background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;
-      border: 1px solid #D3D3D3;
-      color: #555555;
+      // background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;
+      // border: 1px solid #D3D3D3;
+      @apply bg-gradient-to-t from-gray-300 to-gray-200 border-t border-r border-l border-gray-300;
+
+      position: relative;
+      cursor: pointer;
+      margin-right : 0.5em;
       font-weight: normal;
-      margin-bottom : -1px;
+      margin-bottom : 0px;
       &:first-child {
         margin-left : 0.5em;
       }
       a {
-          padding-bottom: 0.3em !important;
-          padding-top: 0.3em !important;
-          padding: 0.2em 1em;
-          color : #555555;
+          border:none;
+          // padding-bottom: 0.4em !important;
+          // padding-top: 0.4em !important;
+          padding: 0.4em 1em 0.5em 1em;
           margin-bottom: -1px;
+          @apply text-gray-800 text-sm;
       }
       &.active {
         border-bottom-color : transparent;
+        a {
+          @apply text-indigo-500 font-bold;
+
+        }
+      }
+      .badge {
+        margin-top : -1px;
+        margin-bottom : -1px;
+        margin-left : 1em;
       }
     }
   }
@@ -2440,7 +2425,6 @@ line.tick {
 /* ----------- Newsdesk ----------- */
 
 #news_area {
-    float:right;
     margin-right:4px;
 }
 .newsdesk-new-news {
@@ -2551,6 +2535,7 @@ li.active a span .num-to-find {
     width: 100%;
     height: 22px;
     overflow: hidden;
+    background-color: rgba(255,255,255,0.5);
     .caret {
       right: 7px;
       position: absolute;
@@ -2563,7 +2548,7 @@ li.active a span .num-to-find {
   }
   .reduce-dropdown-button-text {
     width: 1000px;
-    padding: 2px 5px;
+    padding: 0px 5px;
   }
   .reduce-dropdown-menu {
     width: 100%;

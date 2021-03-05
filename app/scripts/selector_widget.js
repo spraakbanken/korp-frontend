@@ -23,15 +23,6 @@ var hp_corpusChooser = {
                 $(".hp_topframe").removeClass("ui-corner-top")
             }
         })
-
-        $(".buttonlink, ul#icons li").hover(
-            function () {
-                $(this).addClass("ui-state-hover")
-            },
-            function () {
-                $(this).removeClass("ui-state-hover")
-            }
-        )
     },
     isSelected: function (id) {
         // Test if a given id is selected

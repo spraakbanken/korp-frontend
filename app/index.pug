@@ -13,7 +13,7 @@ html
       h2 You need JavaScript to run Korp.
     #main
       include includes/header
-      #content
+      #content.px-3.pb-3
         include includes/searchtabs
 
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length || mapTabs.length', ng-controller='resultContainerCtrl')

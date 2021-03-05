@@ -6,10 +6,12 @@ import statemachine from "../statemachine"
 let html = String.raw
 export const sidebarComponent = {
     template: html`
-        <div class="sticky top-10 border border-gray-500 p-2 rounded-sm" ng-show="$ctrl.corpusObj">
+        <div class="sticky top-10 border border-gray-300 p-2 rounded-sm" ng-show="$ctrl.corpusObj">
             <div>
-                <h4>{{'corpus' | loc:$root.lang}}</h4>
-                <div>{{$ctrl.corpusObj.title}}</div>
+                <h4 class="font-normal uppercase text-gray-800 mt-4 mb-1 text-sm tracking-tight">
+                    {{'corpus' | loc:$root.lang}}
+                </h4>
+                <div class="text-lg">{{$ctrl.corpusObj.title}}</div>
             </div>
             <div
                 class="openReadingMode"
@@ -107,8 +109,16 @@ export const sidebarComponent = {
                         )
                     }
 
-                    $("#selected_word").append($("<h4>").localeKey("word_attr"))
-                    $("#selected_sentence").append($("<h4>").localeKey("sentence_attr"))
+                    $("#selected_word").append(
+                        $(
+                            '<h4 class="font-normal uppercase text-gray-800 mt-8 mb-1 text-sm" tracking-tight>'
+                        ).localeKey("word_attr")
+                    )
+                    $("#selected_sentence").append(
+                        $(
+                            '<h4 class="font-normal uppercase text-gray-800 mt-8 mb-1 text-sm" tracking-tight>'
+                        ).localeKey("sentence_attr")
+                    )
                     $("#selected_word").append(posData)
                     $("#selected_sentence").append(structData)
 
