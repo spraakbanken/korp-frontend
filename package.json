@@ -91,7 +91,7 @@
         "test:karma": "karma start test/karma/karma.conf.js",
         "pretest:e2e": "yarn run testserver && node_modules/protractor/bin/webdriver-manager update --standalone chrome --gecko false && wait-on --delay 500 --interval 500 http://localhost:9112",
         "test:e2e": "node_modules/protractor/bin/protractor --browser chrome test/e2e/conf_e2e.js",
-        "start": "webpack-dev-server --config webpack.dev.js",
+        "start": "NODE_ENV=production webpack-dev-server --config webpack.prod.js",
         "dev": "webpack-dev-server --config webpack.dev.js",
         "testserver": "webpack-dev-server --config webpack.dev.js --port 9112 &",
         "start:dist": "http-server -p ${KORP_PORT:-9111} dist/",
