@@ -18,7 +18,7 @@ $fa-font-path: "~font-awesome/fonts";
 * {
     box-sizing: border-box;
 }
-input[type="checkbox"] {
+:not(.flex) > input[type="checkbox"] {
   position: relative;
   top: 2px;
 }
