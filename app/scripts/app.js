@@ -199,7 +199,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
 
             const corpora = s.savedState.corpus.split(",")
             settings.corpusListing.select(corpora)
-            corpusChooserInstance.corpusChooser("selectItems", corpora)
+            // corpusChooserInstance.corpusChooser("selectItems", corpora)
 
             s.savedState = null
             s.loginNeededFor = null
@@ -239,7 +239,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
         }
 
         settings.corpusListing.select(currentCorpora)
-        corpusChooserInstance.corpusChooser("selectItems", currentCorpora)
+        // corpusChooserInstance.corpusChooser("selectItems", currentCorpora)
     })
 })
 
@@ -401,3 +401,4 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
 })
 
 korpApp.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))
+korpApp.filter("prettyNumber", () => (input) => new Intl.NumberFormat(lang).format(input))

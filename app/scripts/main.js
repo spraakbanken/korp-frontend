@@ -221,10 +221,10 @@ window.initTimeGraph = function (def) {
             }
 
             safeApply($("body").scope(), function (scope) {
-                scope.$broadcast(
-                    "corpuschooserchange",
-                    corpusChooserInstance.corpusChooser("selectedItems")
-                )
+                // scope.$broadcast(
+                //     "corpuschooserchange",
+                //     corpusChooserInstance.corpusChooser("selectedItems")
+                // )
                 return def.resolve()
             })
 

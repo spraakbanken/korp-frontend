@@ -99,13 +99,17 @@ const service = interpret(machine)
 service.start()
 
 window.document.addEventListener("keypress", (event) => {
-    // TODO: esc not firing, for some reason.
+    // TODO: esc not firing, for some reason. switch to keydown instead
     // console.log("event.which", event.which)
     service.send(event)
 })
 
 service.onTransition((state) => {
-    // console.log("onTransition", state.value, state.context)
+    console.log(
+        "🚀 ~ state",
+        state.event.type,
+        state.configuration.map(({ id }) => id)
+    )
     currentContext = state.context
 })
 

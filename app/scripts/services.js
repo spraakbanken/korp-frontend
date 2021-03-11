@@ -286,8 +286,7 @@ korpApp.factory("searches", [
             }
 
             getInfoData() {
-                const def = $q.defer()
-                $http({
+                return $http({
                     method: "GET",
                     url: settings.korpBackendURL + "/corpus_info",
                     params: {
@@ -307,11 +306,9 @@ korpApp.factory("searches", [
                         }
                         corpus["private_struct_attributes"] = privateStructAttrs
                     }
-                    util.loadCorpora()
-                    return def.resolve()
+                    // util.loadCorpora()
+                    statemachine.send("INFO_RESPONSE")
                 })
-
-                return def.promise
             }
         }
 
