@@ -955,3 +955,17 @@ angular.module("template/timepicker/timepicker.html", []).run(($templateCache) =
 `
     )
 )
+
+korpApp.directive("indeterminate", () => ({
+    restrict: "A",
+    link: (scope, element, attrs) => {
+        scope.$watch(
+            () => scope.$eval(attrs.indeterminate),
+            (val) => {
+                element.prop("indeterminate", Boolean(val))
+            }
+        )
+        // if (scope.$eval(attrs.indeterminate)) element.prop("indeterminate", true)
+        // else element.prop("indeterminate", false)
+    },
+}))

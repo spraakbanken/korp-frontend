@@ -207,11 +207,6 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     }
 
     s.searchDisabled = false
-    s.$on("corpuschooserchange", function (event, corpora) {
-        settings.corpusListing.select(corpora)
-        $location.search("corpus", corpora.join(","))
-        s.searchDisabled = settings.corpusListing.selected.length === 0
-    })
 
     searches.infoDef.then(function () {
         let { corpus } = $location.search()
@@ -287,7 +282,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         }
         settings.corpusListing.select(newCorpora)
         s.loggedIn = false
-        $("#corpusbox").corpusChooser("selectItems", newCorpora)
+        // $("#corpusbox").corpusChooser("selectItems", newCorpora)
     }
 
     const N_VISIBLE = settings.visibleModes

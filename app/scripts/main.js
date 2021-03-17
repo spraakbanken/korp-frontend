@@ -6,6 +6,7 @@ import jStorage from "../lib/jstorage"
 
 window.authenticationProxy = new model.AuthenticationProxy()
 window.timeProxy = new model.TimeProxy()
+import statemachine from "./statemachine"
 
 const creds = jStorage.get("creds")
 if (creds) {
@@ -63,7 +64,7 @@ $.when(loc_dfd, deferred_domReady).then(
         try {
             const corpus = locationSearch()["corpus"]
             if (corpus) {
-                settings.corpusListing.select(corpus.split(","))
+                statemachine.send({ type: "CORPORA_INIT", corpora: corpus.split(",") })
             }
             view.updateSearchHistory()
         } catch (error1) {

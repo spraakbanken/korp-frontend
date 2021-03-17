@@ -15,6 +15,13 @@ function broadcast(eventName, ...payload) {
     }
 }
 
+function search() {
+    console.log("🚀 ~ file: statemachine.js ~ line 27 ~ arguments", arguments)
+    let $injector = angular.element(document.body).injector()
+    let $location = $injector.get("$location")
+    $location.search.apply($location, arguments)
+}
+
 const sidebarStates = {
     initial: "hidden",
     states: {
@@ -38,8 +45,14 @@ const sidebarStates = {
 let machine = Machine(
     {
         id: "main",
-        context: {},
+        context: {
+            selectedCorpora: null,
+        },
         initial: "sidebar",
+        on: {
+            CORPUSCHOOSER_CHANGE: { actions: "update_corpora" },
+            CORPORA_INIT: { actions: ["update_corpora", "invalidate_corpuschooser"] },
+        },
         type: "parallel",
         states: {
             simple_search: {
@@ -90,6 +103,13 @@ let machine = Machine(
             deselect_word: (context, event) => broadcast("select_word", null),
             lemgram_search: (context, event) => broadcast("lemgram_search", event),
             cqp_search: (context, event) => broadcast("cqp_search", event),
+            update_corpora: (context, event) => {
+                context.corpora = settings.corpusListing.select(event.corpora)
+                search("corpus", event.corpora.join(","))
+            },
+            invalidate_corpuschooser: (context, event) => {
+                broadcast("invalidate_corpuschooser", event)
+            },
         },
     }
 )

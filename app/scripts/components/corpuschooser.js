@@ -21,6 +21,18 @@ function* getParents(folder) {
         yield* getParents(folder.parent)
     }
 }
+let correctState = (folder) => {
+    let childSelected = Array.from(getChildren(folder, false)).map((child) => child.selected)
+    let childIndeterminate = Array.from(getChildren(folder, false)).map(
+        (child) => child.isIndeterminate
+    )
+
+    folder.isIndeterminate =
+        (childSelected.some(Boolean) && !childSelected.every(Boolean)) ||
+        childIndeterminate.some(Boolean)
+
+    folder.selected = childSelected.every(Boolean)
+}
 
 export const chooserNodeName = "chooserNode"
 export const corpusChooserNodeComponent = {
@@ -49,11 +61,18 @@ export const corpusChooserNodeComponent = {
                 </span>
                 <input
                     class="static mr-2"
+                    ng-if="!$ctrl.folder.isLeaf || ($ctrl.folder.isLeaf && !$ctrl.folder.corpus.limitedAccess)"
                     type="checkbox"
                     id="{{$ctrl.folder.id}}"
                     ng-checked="$ctrl.folder.selected"
                     ng-click="$ctrl.toggleSelected($event, $ctrl.folder)"
+                    indeterminate="$ctrl.folder.isIndeterminate"
                 />
+                <i
+                    ng-if="$ctrl.folder.isLeaf && $ctrl.folder.corpus.limitedAccess"
+                    class="fa fa-lock mr-2"
+                >
+                </i>
                 <label class="mr-1" for="{{$ctrl.folder.id}}">
                     {{$ctrl.folder.label}}
                 </label>
@@ -85,33 +104,12 @@ export const corpusChooserNodeComponent = {
         function controller($scope, $element, $timeout) {
             let $ctrl = this
 
-            $ctrl.$onChanges = () => {
-                if ($ctrl.folder.id != "root") {
-                    $scope.$watch("$ctrl.folder.isIndeterminate", (val) => {
-                        $("input", $element).first().prop("indeterminate", val)
-                    })
-                }
-            }
-
-            let correctState = (folder) => {
-                let childSelected = Array.from(getChildren(folder, false)).map(
-                    (child) => child.selected
-                )
-
-                folder.isIndeterminate =
-                    childSelected.some(Boolean) && !childSelected.every(Boolean)
-
-                folder.selected = childSelected.every(Boolean)
-            }
-
             $ctrl.toggleSelected = ($event, folder) => {
-                let selected = []
-
+                let root = _.last(Array.from(getParents(folder)))
                 const isLinux = window.navigator.userAgent.indexOf("Linux") !== -1
                 let newSelected = !folder.selected
 
                 if ((!isLinux && $event.altKey) || (isLinux && $event.ctrlKey)) {
-                    let root = _.last(Array.from(getParents(folder)))
                     for (let child of getChildren(root)) {
                         child.selected = false
                         child.isIndeterminate = false
@@ -119,25 +117,32 @@ export const corpusChooserNodeComponent = {
                     newSelected = true
                     folder.selected = true
                 }
+                // don't ask me
                 $timeout(() => (folder.selected = newSelected), 0)
                 folder.selected = newSelected
+                folder.isIndeterminate = false
+
                 for (let child of getChildren(folder)) {
                     child.selected = newSelected
-                    if (child.isLeaf && child.selected) {
-                        selected.push(child.id)
-                    }
+                    child.isIndeterminate = false
                 }
 
                 for (let parent of getParents(folder)) {
                     correctState(parent)
                 }
+
+                let selected = []
+                for (let child of getChildren(root)) {
+                    if (child.isLeaf && child.selected) {
+                        selected.push(child.id)
+                    }
+                }
                 // because the darned checkbox is going to flip my current
                 // value, i should leave it as the opposite of what I want.
-
                 folder.selected = !folder.selected
 
                 statemachine.send({
-                    type: "CORPUS_CHANGE",
+                    type: "CORPUSCHOOSER_CHANGE",
                     corpora: selected,
                 })
             }
@@ -201,6 +206,19 @@ export const corpusChooserComponent = {
     controller: [
         function controller() {
             let $ctrl = this
+
+            statemachine.listen("invalidate_corpuschooser", function ({ corpora }) {
+                // this is called when the context and selected nodes in tree differ
+                for (let child of getChildren($ctrl.tree)) {
+                    child.selected = child.isLeaf && corpora.includes(child.id)
+                    if (child.selected) {
+                        for (let parent of getParents(child)) {
+                            correctState(parent)
+                        }
+                    }
+                }
+            })
+
             let makeTree = (id, branch, parent) => {
                 let branches = Object.entries(_.omit(branch, "contents", "description", "title"))
 
