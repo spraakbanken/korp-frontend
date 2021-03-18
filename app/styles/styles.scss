@@ -217,7 +217,20 @@ img {
   }
 }
 
+button, input, select {
+  &:focus {
+    outline: none !important;
+    @apply ring border-blue-300;
+  }
+}
+
 #header_left {
+  .version {
+    right: 92px;
+    line-height: 1;
+    font-size: 1.1rem;
+    color: lightslategray;
+  }
   > a {
     margin-right: 10px;
   }
