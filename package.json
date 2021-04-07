@@ -3,6 +3,7 @@
     "version": "9.0.0",
     "dependencies": {
         "angular": "~1.7.0",
+        "angular-animate": "1.7.0",
         "angular-dynamic-locale": "~0.1.37",
         "angular-filter": "0.5.17",
         "angular-spinner": "1.0.1",

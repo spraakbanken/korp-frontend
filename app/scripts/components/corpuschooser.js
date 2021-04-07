@@ -8,10 +8,12 @@ let html = String.raw
 
 function* getChildren(folder, deep = true) {
     let children = [...(folder.children || []), ...(folder.leafs || [])]
-    yield* children
-    if (deep) {
-        for (let gen of children.map(getChildren)) {
-            yield* gen
+    while (children.length > 0) {
+        // breadth-first traversal
+        let child = children.shift()
+        yield child
+        if (deep) {
+            children = [...children, ...(child.children || []), ...(child.leafs || [])]
         }
     }
 }
@@ -42,7 +44,7 @@ export const corpusChooserNodeComponent = {
             <span
                 ng-if="$ctrl.folder.id != 'root'"
                 class="cursor-pointer hover_bg-indigo-200 pr-2 flex items-center"
-                uib-popover-template="'myPopoverTemplate.html'"
+                uib-popover-template="'chooserpopover.html'"
                 popover-popup-delay="500"
                 popover-placement="right"
                 popover-trigger="'mouseenter'"
@@ -163,65 +165,103 @@ export const corpusChooserNodeComponent = {
 export const chooserName = "corpuschooser"
 export const corpusChooserComponent = {
     template: html` <div>
-        <script type="text/ng-template" id="myPopoverTemplate.html">
-            <div class="p-4">
-                <h3 class="">{{$ctrl.folder.label}}</h3>
-                <div class="text-base" ng-html="$ctrl.folder.description | trust"></div>
-                <ul class="">
-                    <li>
-                        <strong>{{$ctrl.getTokens() | prettyNumber}}</strong>
-                        {{'corpselector_tokens' | loc:lang}}
-                    </li>
-                    <li>
-                        <strong>{{$ctrl.getSentences() | prettyNumber}}</strong>
-                        {{'corpselector_sentences' | loc:lang}}
-                    </li>
-                </ul>
-            </div>
-        </script>
-        <div class="flex-shrink-0 ml-8 " id="corpusbox">
-            <div
-                class="group flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 shadow-inset rounded h-12"
-            >
-                <div>
-                    <span id="hp_corpora_title1"></span>
-                    <span id="hp_corpora_titleOf" rel="localize[corpselector_of]"> of </span>
-                    <span id="hp_corpora_titleTotal"></span>
-                    <span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span>
-                    <span id="hp_corpora_titleTokens" style="color: #888888;"></span>
+            <script type="text/ng-template" id="chooserpopover.html">
+                <div class="p-4">
+                    <h3 class="">{{$ctrl.folder.label}}</h3>
+                    <div class="text-base" ng-html="$ctrl.folder.description | trust"></div>
+                    <ul class="">
+                        <li>
+                            <strong>{{$ctrl.getTokens() | prettyNumber}}</strong>
+                            {{'corpselector_tokens' | loc:lang}}
+                        </li>
+                        <li>
+                            <strong>{{$ctrl.getSentences() | prettyNumber}}</strong>
+                            {{'corpselector_sentences' | loc:lang}}
+                        </li>
+                    </ul>
                 </div>
-                <div class="transition-colors duration-500 group-hover_text-indigo-500">
-                    <i class="fa fa-caret-up relative top-2"></i><br /><i
-                        class="fa fa-caret-down relative bottom-2"
-                    ></i>
+            </script>
+            <div class="relative chooserwidth  ml-8">
+                <div class="flex-shrink-0 " id="corpusbox" ng-click="$ctrl.isOpen = !$ctrl.isOpen">
+                    <div
+                        class="group flex justify-between items-center border border-gray-300 transition-all duration-500 hover_bg-blue-50 shadow-inset rounded h-12 p-4 pl-6"
+                        ng-class="{'rounded-b-none': $ctrl.isOpen}"
+                    >
+                        <div>
+                            <span>{{$ctrl.getSelected().length}} </span>
+                            <span rel="localize[corpselector_of]">
+                                of
+                            </span>
+                            <span>{{$ctrl.numLeafNodes}}</span>
+                            <span>{{'corpselector_selectedmultiple' | loc:lang}}</span>
+                            <span
+                                rel="localize[corpselector_allselected]"
+                                ng-show="$ctrl.isAllSelected()"
+                            ></span>
+
+                            <span class="text-gray-500">
+                                <span
+                                    ng-bind-html="$ctrl.suffixedNumbers($ctrl.countTokens(true)) | trust"
+                                ></span>
+
+                                <span rel="localize[corpselector_of]">
+                                    of
+                                </span>
+                                <span
+                                    ng-bind-html="$ctrl.suffixedNumbers($ctrl.countTokens(false)) | trust"
+                                ></span>
+
+                                {{'corpselector_tokens' | loc:lang}}
+                            </span>
+                        </div>
+                        <div class="transition-colors duration-500 group-hover_text-indigo-500">
+                            <i class="fa fa-caret-up relative top-2"></i><br /><i
+                                class="fa fa-caret-down relative bottom-2"
+                            ></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="absolute ng-fade transition duration-200 bg-white rounded-b shadow-lg border border-gray-300 border-t-0 z-10 p-4 overflow-y-auto chooserheight w-full"
+                    ng-show="$ctrl.isOpen"
+                >
+                    <div class="flex">
+                        <div id="time" class="flex">
+                            <div id="time_graph"></div>
+                            <div id="rest_time_graph"></div>
+                        </div>
+                        <div class="space-y-2">
+                            <button
+                                class="btn btn-default btn-sm w-full selectall"
+                                ng-click="$ctrl.selectAll()"
+                            >
+                                <span class="fa fa-check"></span>
+                                <span rel="localize[corpselector_buttonselectall]"></span>
+                                <span data-loc="corpselector_buttonselectall"></span>
+                            </button>
+                            <button
+                                class="btn btn-default btn-sm w-full selectnone"
+                                ng-click="$ctrl.deselectAll()"
+                            >
+                                <span class="fa fa-times"></span>
+                                <span rel="localize[corpselector_buttonselectnone]"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <chooser-node folder="$ctrl.tree"></chooser-node>
                 </div>
             </div>
         </div>
 
-        <div class="flex-shrink-0">
-            <div class="header">
-                <div id="time">
-                    <div id="time_graph"></div>
-                    <div id="rest_time_graph"></div>
-                </div>
-                <div class="buttons">
-                    <button class="btn btn-default btn-sm selectall" ng-click="$ctrl.selectAll()">
-                        <span class="fa fa-check"></span>
-                        <span rel="localize[corpselector_buttonselectall]"></span>
-                        <span data-loc="corpselector_buttonselectall"></span>
-                    </button>
-                    <button
-                        class="btn btn-default btn-sm selectnone"
-                        ng-click="$ctrl.deselectAll()"
-                    >
-                        <span class="fa fa-times"></span>
-                        <span rel="localize[corpselector_buttonselectnone]"></span>
-                    </button>
-                </div>
-            </div>
-            <chooser-node folder="$ctrl.tree"></chooser-node>
-        </div>
-    </div>`,
+        <style>
+            .chooserwidth {
+                width: 480px;
+            }
+            .chooserheight {
+                height: 60vh;
+            }
+        </style>`,
     bindings: {},
     controller: [
         function controller() {
@@ -244,28 +284,30 @@ export const corpusChooserComponent = {
             let preselected = settings.preselectedCorpora.map((id) => id.replace(/^__/, ""))
             let preselectedMap = Object.fromEntries(_.zipWith(preselected, (id) => [id, true]))
 
-            let makeTree = (id, branch, parent) => {
+            let makeTree = (folderID, branch, parent, forceSelected) => {
                 let branches = Object.entries(_.omit(branch, "contents", "description", "title"))
-
+                let isBranchSelected = forceSelected || !!preselectedMap[folderID]
                 let self = {}
                 return Object.assign(self, {
-                    id,
+                    id: folderID,
                     label: branch.title,
                     parent: parent,
                     description: branch.description,
-                    isOpen: id == "root",
+                    isOpen: folderID == "root",
                     isLeaf: false,
-                    children: branches.map(([key, val]) => makeTree(key, val, self)),
+                    children: branches.map(([key, val]) =>
+                        makeTree(key, val, self, isBranchSelected)
+                    ),
                     leafs:
                         branch.contents?.map((id) => ({
                             id,
-                            selected: !!preselectedMap[id],
+                            selected: isBranchSelected || !!preselectedMap[id],
                             isLeaf: true,
                             parent: self,
                             label: settings.corpora[id].title,
                             corpus: settings.corpora[id],
                         })) || [],
-                    selected: true,
+                    selected: isBranchSelected,
                 })
             }
 
@@ -298,7 +340,23 @@ export const corpusChooserComponent = {
 
             let nodes = Array.from(getChildren(root))
 
-            let getSelected = () => nodes.filter((node) => node.selected).map((node) => node.id)
+            $ctrl.getSelected = () =>
+                nodes.filter((node) => node.selected && node.isLeaf).map((node) => node.id)
+
+            $ctrl.numLeafNodes = nodes.filter((node) => node.isLeaf).length
+
+            $ctrl.isAllSelected = () => {
+                nodes.filter((node) => node.isLeaf).length == $ctrl.getSelected().length
+            }
+
+            $ctrl.countTokens = (selectedOnly) =>
+                _.sumBy(
+                    nodes.filter(
+                        (node) =>
+                            (selectedOnly ? node.selected : true) && node.isLeaf && node.corpus.info
+                    ),
+                    (node) => Number(node.corpus.info.Size)
+                )
 
             $ctrl.selectAll = () => {
                 for (let node of nodes) {
@@ -306,7 +364,7 @@ export const corpusChooserComponent = {
                 }
                 statemachine.send({
                     type: "CORPUSCHOOSER_CHANGE",
-                    corpora: getSelected(),
+                    corpora: $ctrl.getSelected(),
                 })
             }
             $ctrl.deselectAll = () => {
@@ -319,7 +377,40 @@ export const corpusChooserComponent = {
                 })
             }
 
+            $ctrl.suffixedNumbers = function (num) {
+                let out = ""
+                if (num < 1000) {
+                    // 232
+                    out = num.toString()
+                } else if (num >= 1000 && num < 1e6) {
+                    // 232,21K
+                    out = (num / 1000).toFixed(2).toString() + "K"
+                } else if (num >= 1e6 && num < 1e9) {
+                    // 232,21M
+                    out = (num / 1e6).toFixed(2).toString() + "M"
+                } else if (num >= 1e9 && num < 1e12) {
+                    // 232,21G
+                    out = (num / 1e9).toFixed(2).toString() + "G"
+                } else if (num >= 1e12) {
+                    // 232,21T
+                    out = (num / 1e12).toFixed(2).toString() + "T"
+                }
+                return out.replace(
+                    ".",
+                    `<span rel="localize[util_decimalseparator]">${util.getLocaleString(
+                        "util_decimalseparator"
+                    )}</span>`
+                )
+            }
             decorateCounts(root)
+
+            // make sure indeterminate states are applied. because getChildren is
+            // breadth first, reversing it should get us the deepest nodes first.
+            for (let folder of Array.from(getChildren(root))
+                .filter((node) => !node.isLeaf)
+                .reverse()) {
+                correctState(folder)
+            }
             $ctrl.tree = root
         },
     ],

@@ -1374,12 +1374,6 @@ label[for=lemgram_select]:before {
 }
 
 
-#time {
-  margin-top: 10px;
-  display: inline-block;
-  vertical-align: middle;
-}
-
 #time_inputs {
   input {
     border: none;
@@ -1389,16 +1383,12 @@ label[for=lemgram_select]:before {
 }
 
 #time_graph {
-  display: inline-block;
-  vertical-align: middle;
   width: 335px;
   height: 70px;
   margin-bottom : 1em;
 }
 
 #rest_time_graph {
-  display: inline-block;
-  vertical-align: middle;
   height: 70px;
   width: 5px;
   position: relative;
@@ -1606,6 +1596,9 @@ h2, h3 {
   }
 }
 
+.ng-fade.ng-hide {
+    opacity: 0;
+}
 .modal.fade.in {
   top : 90px;
   margin-top : 0;

@@ -27,6 +27,7 @@ require("components-jqueryui/ui/widgets/sortable.js")
 require("components-jqueryui/ui/widgets/dialog.js")
 
 require("angular")
+require("angular-animate")
 require("angular-ui-bootstrap/src/typeahead")
 require("angular-ui-bootstrap/src/tooltip")
 require("angular-ui-bootstrap/src/modal")

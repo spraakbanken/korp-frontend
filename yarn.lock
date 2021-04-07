@@ -1286,6 +1286,11 @@ amdefine@>=0.0.4:
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
+angular-animate@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.7.0.tgz#c04293068ee0986dc00ba154626d74bf51f25576"
+  integrity sha512-508uYJLhcX85cKqOlp3stzv1WEnlEtKPGC2J1ljn8sxhwUhENWte2lGI8DJev26Lsk5dHpinBSJC/J0f7jj53w==
+
 angular-dynamic-locale@~0.1.37:
   version "0.1.37"
   resolved "https://registry.yarnpkg.com/angular-dynamic-locale/-/angular-dynamic-locale-0.1.37.tgz#7e89fbd2ec45bdd6abc89f36cda8893838e49354"

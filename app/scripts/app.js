@@ -17,6 +17,7 @@ import { setDefaultConfigValues } from "./settings.js"
 setDefaultConfigValues()
 
 window.korpApp = angular.module("korpApp", [
+    "ngAnimate",
     "ui.bootstrap.typeahead",
     "uib/template/typeahead/typeahead-popup.html",
     "uib/template/typeahead/typeahead-match.html",
