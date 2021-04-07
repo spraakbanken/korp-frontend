@@ -6,7 +6,7 @@ function listen(eventName, fn) {
     listenerMap[eventName] = listenerMap[eventName] ? [...listenerMap[eventName], fn] : [fn]
 }
 function broadcast(eventName, ...payload) {
-    if (!eventName in listenerMap) {
+    if (!(eventName in listenerMap)) {
         console.error("No listener for event name", eventName)
         return
     }
@@ -45,9 +45,7 @@ const sidebarStates = {
 let machine = Machine(
     {
         id: "main",
-        context: {
-            selectedCorpora: null,
-        },
+        context: {},
         initial: "sidebar",
         on: {
             CORPUSCHOOSER_CHANGE: { actions: "update_corpora" },
@@ -104,8 +102,11 @@ let machine = Machine(
             lemgram_search: (context, event) => broadcast("lemgram_search", event),
             cqp_search: (context, event) => broadcast("cqp_search", event),
             update_corpora: (context, event) => {
-                context.corpora = settings.corpusListing.select(event.corpora)
-                search("corpus", event.corpora.join(","))
+                if (event.corpora) {
+                    settings.corpusListing.select(event.corpora)
+                    search("corpus", event.corpora.join(","))
+                    broadcast("corpuschange", event)
+                }
             },
             invalidate_corpuschooser: (context, event) => {
                 broadcast("invalidate_corpuschooser", event)

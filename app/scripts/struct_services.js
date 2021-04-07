@@ -1,4 +1,7 @@
 /** @format */
+
+import statemachine from "./statemachine"
+
 const korpApp = angular.module("korpApp")
 
 // Data service for the global filter in korp
@@ -265,7 +268,7 @@ korpApp.factory("globalFilterService", function ($rootScope, $location, $q, stru
         }
     }
 
-    $rootScope.$on("corpuschooserchange", function () {
+    statemachine.listen("corpuschange", function () {
         if (settings.corpusListing.selected.length === 0) {
             dataObj.showDirective = false
         } else {

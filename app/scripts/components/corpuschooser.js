@@ -209,15 +209,20 @@ export const corpusChooserComponent = {
 
             statemachine.listen("invalidate_corpuschooser", function ({ corpora }) {
                 // this is called when the context and selected nodes in tree differ
-                for (let child of getChildren($ctrl.tree)) {
-                    child.selected = child.isLeaf && corpora.includes(child.id)
-                    if (child.selected) {
-                        for (let parent of getParents(child)) {
-                            correctState(parent)
+                if (corpora) {
+                    for (let child of getChildren($ctrl.tree)) {
+                        child.selected = child.isLeaf && corpora.includes(child.id)
+                        if (child.selected) {
+                            for (let parent of getParents(child)) {
+                                correctState(parent)
+                            }
                         }
                     }
                 }
             })
+
+            let preselected = settings.preselectedCorpora.map((id) => id.replace(/^__/, ""))
+            let preselectedMap = Object.fromEntries(_.zipWith(preselected, (id) => [id, true]))
 
             let makeTree = (id, branch, parent) => {
                 let branches = Object.entries(_.omit(branch, "contents", "description", "title"))
@@ -234,7 +239,7 @@ export const corpusChooserComponent = {
                     leafs:
                         branch.contents?.map((id) => ({
                             id,
-                            selected: true,
+                            selected: !!preselectedMap[id],
                             isLeaf: true,
                             parent: self,
                             label: settings.corpora[id].title,
@@ -255,7 +260,7 @@ export const corpusChooserComponent = {
                 if (!idsFromFolders[id]) {
                     root.leafs.push({
                         id,
-                        selected: true,
+                        selected: !!preselectedMap[id],
                         parent: root,
                         isLeaf: true,
                         label: corpus.title,

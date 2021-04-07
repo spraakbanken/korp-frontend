@@ -493,7 +493,7 @@ korpApp.controller("ExtendedSearch", function (
     })
 })
 
-korpApp.controller("ExtendedToken", function ($scope, utils) {
+korpApp.controller("ExtendedToken", function ($scope, $rootScope, utils) {
     const s = $scope
 
     s.valfilter = utils.valfilter
@@ -551,7 +551,7 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
         )
     }
 
-    s.$on("corpuschooserchange", onCorpusChange)
+    $rootScope.$on("corpuschooserchange", onCorpusChange)
 
     onCorpusChange(null, settings.corpusListing.selected)
 

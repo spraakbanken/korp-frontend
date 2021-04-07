@@ -65,6 +65,8 @@ $.when(loc_dfd, deferred_domReady).then(
             const corpus = locationSearch()["corpus"]
             if (corpus) {
                 statemachine.send({ type: "CORPORA_INIT", corpora: corpus.split(",") })
+            } else {
+                statemachine.send({ type: "CORPORA_INIT" })
             }
             view.updateSearchHistory()
         } catch (error1) {
