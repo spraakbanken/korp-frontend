@@ -146,6 +146,17 @@ export const corpusChooserNodeComponent = {
                     corpora: selected,
                 })
             }
+            function getLeafs() {
+                return [$ctrl.folder, ...Array.from(getChildren($ctrl.folder))].filter(
+                    (node) => node.isLeaf
+                )
+            }
+            $ctrl.getSentences = () => {
+                return _.sumBy(getLeafs(), (node) => Number(node.corpus.info.Sentences))
+            }
+            $ctrl.getTokens = () => {
+                return _.sumBy(getLeafs(), (node) => Number(node.corpus.info.Size))
+            }
         },
     ],
 }
@@ -156,13 +167,19 @@ export const corpusChooserComponent = {
             <div class="p-4">
                 <h3 class="">{{$ctrl.folder.label}}</h3>
                 <div class="text-base" ng-html="$ctrl.folder.description | trust"></div>
-                <div ng-if="$ctrl.folder.isLeaf" class="">
-                    {{'corpselector_sentences' | loc:lang}}:
-                    {{$ctrl.folder.corpus.info.Sentences | prettyNumber}}
-                </div>
+                <ul class="">
+                    <li>
+                        <strong>{{$ctrl.getTokens() | prettyNumber}}</strong>
+                        {{'corpselector_tokens' | loc:lang}}
+                    </li>
+                    <li>
+                        <strong>{{$ctrl.getSentences() | prettyNumber}}</strong>
+                        {{'corpselector_sentences' | loc:lang}}
+                    </li>
+                </ul>
             </div>
         </script>
-        <div class="flex-shrink-0 ml-8 hidden" id="corpusbox">
+        <div class="flex-shrink-0 ml-8 " id="corpusbox">
             <div
                 class="group flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 shadow-inset rounded h-12"
             >
@@ -188,12 +205,15 @@ export const corpusChooserComponent = {
                     <div id="rest_time_graph"></div>
                 </div>
                 <div class="buttons">
-                    <button class="btn btn-default btn-sm selectall">
+                    <button class="btn btn-default btn-sm selectall" ng-click="$ctrl.selectAll()">
                         <span class="fa fa-check"></span>
                         <span rel="localize[corpselector_buttonselectall]"></span>
                         <span data-loc="corpselector_buttonselectall"></span>
                     </button>
-                    <button class="btn btn-default btn-sm selectnone">
+                    <button
+                        class="btn btn-default btn-sm selectnone"
+                        ng-click="$ctrl.deselectAll()"
+                    >
                         <span class="fa fa-times"></span>
                         <span rel="localize[corpselector_buttonselectnone]"></span>
                     </button>
@@ -271,10 +291,32 @@ export const corpusChooserComponent = {
 
             function decorateCounts(tree) {
                 for (let child of getChildren(tree)) {
-                    child.numChildren = Array.from(getChildren(child)).filter(
-                        (item) => item.isLeaf
-                    ).length
+                    let subchildren = Array.from(getChildren(child))
+                    child.numChildren = subchildren.filter((item) => item.isLeaf).length
                 }
+            }
+
+            let nodes = Array.from(getChildren(root))
+
+            let getSelected = () => nodes.filter((node) => node.selected).map((node) => node.id)
+
+            $ctrl.selectAll = () => {
+                for (let node of nodes) {
+                    node.selected = true
+                }
+                statemachine.send({
+                    type: "CORPUSCHOOSER_CHANGE",
+                    corpora: getSelected(),
+                })
+            }
+            $ctrl.deselectAll = () => {
+                for (let node of nodes) {
+                    node.selected = false
+                }
+                statemachine.send({
+                    type: "CORPUSCHOOSER_CHANGE",
+                    corpora: [],
+                })
             }
 
             decorateCounts(root)

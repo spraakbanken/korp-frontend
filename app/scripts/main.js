@@ -291,6 +291,7 @@ window.initTimeGraph = function (def) {
                     })
                 }
 
+                console.log("🚀 ~ file: main.js ~ line 299 ~ $(#time_graph)", $("#time_graph"))
                 $.plot($("#time_graph"), plots, {
                     bars: {
                         show: true,
