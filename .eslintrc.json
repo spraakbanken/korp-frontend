@@ -50,7 +50,6 @@
         "locationSearch": true,
         "statisticsService": true,
         "Slick": true,
-        "Rickshaw": true,
-        "initTimeGraph": true
+        "Rickshaw": true
     }
 }

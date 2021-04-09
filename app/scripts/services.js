@@ -256,17 +256,12 @@ korpApp.factory("searches", [
         class Searches {
             constructor() {
                 this.activeSearch = null
-                const def = $q.defer()
                 const timedef = $q.defer()
-                this.infoDef = def.promise
                 this.timeDef = timedef.promise
 
                 // is resolved when parallel search controller is loaded
                 this.langDef = $q.defer()
-                this.getInfoData().then(function () {
-                    def.resolve()
-                    return initTimeGraph(timedef)
-                })
+                this.infoDef = this.getInfoData()
             }
 
             kwicSearch(cqp, isPaging) {

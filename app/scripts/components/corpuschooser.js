@@ -1,9 +1,7 @@
 /** @format */
 
-import { map } from "lodash"
 import statemachine from "../statemachine"
 
-import "./corpuschooser.scss"
 let html = String.raw
 
 function* getChildren(folder, deep = true) {
@@ -38,19 +36,18 @@ let correctState = (folder) => {
 
 export const chooserNodeName = "chooserNode"
 export const corpusChooserNodeComponent = {
-    // template: String.raw`<ul><li ng-repeat=""></li></ul>`,
     template: html`
         <div class="">
             <span
                 ng-if="$ctrl.folder.id != 'root'"
-                class="cursor-pointer hover_bg-indigo-200 pr-2 flex items-center"
+                class="cursor-pointer hover_bg-indigo-200 pr-2 flex items-center w-full"
                 uib-popover-template="'chooserpopover.html'"
                 popover-popup-delay="500"
                 popover-placement="right"
                 popover-trigger="'mouseenter'"
             >
                 <span
-                    class="py-1 pl-2 pr-4 -my-2 w-5"
+                    class="py-1 pl-2 pr-4 -my-2 w-5 flex"
                     ng-click="$ctrl.folder.isOpen = !$ctrl.folder.isOpen"
                 >
                     <span
@@ -75,12 +72,12 @@ export const corpusChooserNodeComponent = {
                     class="fa fa-lock mr-2"
                 >
                 </i>
-                <label class="mr-1" for="{{$ctrl.folder.id}}">
+                <label class="mr-1 flex-grow" for="{{$ctrl.folder.id}}">
                     {{$ctrl.folder.label}}
+                    <span ng-if="$ctrl.folder.numChildren" class="text-gray-500">
+                        ({{$ctrl.folder.numChildren}})
+                    </span>
                 </label>
-                <span ng-if="$ctrl.folder.numChildren" class="text-gray-500">
-                    ({{$ctrl.folder.numChildren}})
-                </span>
             </span>
             <ul
                 class="m-0"
@@ -90,8 +87,8 @@ export const corpusChooserNodeComponent = {
                 <li ng-repeat="subfolder in $ctrl.folder.children">
                     <chooser-node folder="subfolder"></chooser-node>
                 </li>
-                <li class="flex items-center" ng-repeat="leaf in $ctrl.folder.leafs">
-                    <chooser-node folder="leaf"></chooser-node>
+                <li class="w-full flex items-center" ng-repeat="leaf in $ctrl.folder.leafs">
+                    <chooser-node class="w-full" folder="leaf"></chooser-node>
                 </li>
             </ul>
         </div>
@@ -166,10 +163,18 @@ export const chooserName = "corpuschooser"
 export const corpusChooserComponent = {
     template: html` <div>
             <script type="text/ng-template" id="chooserpopover.html">
-                <div class="p-4">
-                    <h3 class="">{{$ctrl.folder.label}}</h3>
-                    <div class="text-base" ng-html="$ctrl.folder.description | trust"></div>
-                    <ul class="">
+                <div class="px-4">
+                    <h3 class="mb-6">
+                        <i class="fa fa-file-text-o text-blue-700" ng-if="$ctrl.folder.isLeaf"></i>
+                        <i class="fa fa-folder-open-o text-blue-700" ng-if="!$ctrl.folder.isLeaf"></i>
+                        {{$ctrl.folder.label}}
+                    </h3>
+                    <div class="text-base my-3" ng-if="$ctrl.folder.description" ng-bind-html="$ctrl.folder.description | trust"></div>
+                    <ul class="border-l-4 border-blue-500 pl-3 leading-none space-y-1">
+                        <li ng-if="!$ctrl.folder.isLeaf">
+                            <strong>{{$ctrl.folder.numChildren}}</strong>
+                            {{$ctrl.folder.numChildren.length == 1 ? 'corpselector_corporawith_sing' : 'corpselector_corporawith_plur' | loc:lang}}
+                        </li>
                         <li>
                             <strong>{{$ctrl.getTokens() | prettyNumber}}</strong>
                             {{'corpselector_tokens' | loc:lang}}
@@ -181,8 +186,17 @@ export const corpusChooserComponent = {
                     </ul>
                 </div>
             </script>
-            <div class="relative chooserwidth  ml-8">
-                <div class="flex-shrink-0 " id="corpusbox" ng-click="$ctrl.isOpen = !$ctrl.isOpen">
+            <div
+                class="cover absolute inset-0 bg-transparent"
+                ng-click="$ctrl.isOpen = false"
+                ng-if="$ctrl.isOpen"
+            ></div>
+            <div class="relative chooserwidth ml-8 z-20">
+                <div
+                    class="flex-shrink-0 "
+                    id="corpusbox"
+                    ng-click="$ctrl.isOpen = !$ctrl.isOpen; $ctrl.onFirstOpen()"
+                >
                     <div
                         class="group flex justify-between items-center border border-gray-300 transition-all duration-500 hover_bg-blue-50 shadow-inset rounded h-12 p-4 pl-6"
                         ng-class="{'rounded-b-none': $ctrl.isOpen}"
@@ -226,8 +240,31 @@ export const corpusChooserComponent = {
                     class="absolute ng-fade transition duration-200 bg-white rounded-b shadow-lg border border-gray-300 border-t-0 z-10 p-4 overflow-y-auto chooserheight w-full"
                     ng-show="$ctrl.isOpen"
                 >
+                    <script type="text/ng-template" id="timepopover.html">
+                        <div class="p-4">
+                            <h4 ng-if="$ctrl.timeHover.isRestData" class="mt-0">
+                            {{"corpselector_rest_time" | loc:lang}}
+                            </h4>
+
+                            <h4 ng-if="!$ctrl.timeHover.isRestData" class="mt-0">
+                            {{"corpselector_time" | loc:lang}} {{$ctrl.timeHover.year}}
+                            </h4>
+
+                            {{'corpselector_time_chosen' | loc:lang}}: {{$ctrl.timeHover.val | prettyNumber}} {{'corpselector_tokens' | loc:lang}}
+                            <br>
+                            {{'corpselector_of_total' | loc:lang}}: {{$ctrl.timeHover.total | prettyNumber}} {{'corpselector_tokens' | loc:lang}}
+                        </div>
+                    </script>
                     <div class="flex">
-                        <div id="time" class="flex">
+                        <div
+                            id="time"
+                            class="flex"
+                            uib-popover-template="'timepopover.html'"
+                            popover-class="timepopover"
+                            popover-popup-delay="200"
+                            popover-placement="right"
+                            popover-trigger="'mouseenter'"
+                        >
                             <div id="time_graph"></div>
                             <div id="rest_time_graph"></div>
                         </div>
@@ -259,12 +296,18 @@ export const corpusChooserComponent = {
                 width: 480px;
             }
             .chooserheight {
-                height: 60vh;
+                height: 70vh;
+            }
+
+            .timepopover {
+                margin-left: 0 !important;
             }
         </style>`,
     bindings: {},
     controller: [
-        function controller() {
+        "$scope",
+        "searches",
+        function controller($scope, searches) {
             let $ctrl = this
 
             statemachine.listen("invalidate_corpuschooser", function ({ corpora }) {
@@ -281,12 +324,13 @@ export const corpusChooserComponent = {
                 }
             })
 
-            let preselected = settings.preselectedCorpora.map((id) => id.replace(/^__/, ""))
+            let preselected = (settings.preselectedCorpora || []).map((id) => id.replace(/^__/, ""))
             let preselectedMap = Object.fromEntries(_.zipWith(preselected, (id) => [id, true]))
+            let getPreselected = (id) => (settings.preselectedCorpora ? preselectedMap[id] : true)
 
             let makeTree = (folderID, branch, parent, forceSelected) => {
                 let branches = Object.entries(_.omit(branch, "contents", "description", "title"))
-                let isBranchSelected = forceSelected || !!preselectedMap[folderID]
+                let isBranchSelected = forceSelected || getPreselected(folderID)
                 let self = {}
                 return Object.assign(self, {
                     id: folderID,
@@ -301,7 +345,7 @@ export const corpusChooserComponent = {
                     leafs:
                         branch.contents?.map((id) => ({
                             id,
-                            selected: isBranchSelected || !!preselectedMap[id],
+                            selected: isBranchSelected || getPreselected(id),
                             isLeaf: true,
                             parent: self,
                             label: settings.corpora[id].title,
@@ -322,7 +366,7 @@ export const corpusChooserComponent = {
                 if (!idsFromFolders[id]) {
                     root.leafs.push({
                         id,
-                        selected: !!preselectedMap[id],
+                        selected: getPreselected(id),
                         parent: root,
                         isLeaf: true,
                         label: corpus.title,
@@ -412,6 +456,183 @@ export const corpusChooserComponent = {
                 correctState(folder)
             }
             $ctrl.tree = root
+
+            const opendfd = $.Deferred()
+            $ctrl.onFirstOpen = _.once(function () {
+                opendfd.resolve()
+            })
+
+            searches.infoDef.then(() => {
+                initTimeGraph(opendfd, (year, val, total, isRestData) => {
+                    safeApply($scope, () => ($ctrl.timeHover = { year, val, total, isRestData }))
+                })
+            })
         },
     ],
+}
+
+var initTimeGraph = function (opendfd, hoverCallback) {
+    let timestruct = null
+    let restdata = null
+    let restyear = null
+
+    let onTimeGraphChange
+
+    const getValByDate = function (date, struct) {
+        let output = null
+        $.each(struct, function (i, item) {
+            if (date === item[0]) {
+                output = item[1]
+                return false
+            }
+        })
+
+        return output
+    }
+
+    window.timeDeferred = timeProxy
+        .makeRequest()
+        .fail((error) => {
+            console.error(error)
+            $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>")
+        })
+        .done(function (...args) {
+            let [dataByCorpus, all_timestruct, rest] = args[0]
+
+            if (all_timestruct.length == 0) {
+                return
+            }
+
+            for (let corpus in dataByCorpus) {
+                let struct = dataByCorpus[corpus]
+                if (corpus !== "time") {
+                    const cor = settings.corpora[corpus.toLowerCase()]
+                    timeProxy.expandTimeStruct(struct)
+                    cor.non_time = struct[""]
+                    struct = _.omit(struct, "")
+                    cor.time = struct
+                    if (_.keys(struct).length > 1) {
+                        if (cor.common_attributes == null) {
+                            cor.common_attributes = {}
+                        }
+                        cor.common_attributes.date_interval = true
+                    }
+                }
+            }
+
+            onTimeGraphChange = function () {
+                let max = _.reduce(
+                    all_timestruct,
+                    function (accu, item) {
+                        if (item[1] > accu) {
+                            return item[1]
+                        }
+                        return accu
+                    },
+                    0
+                )
+
+                // the 46 here is the presumed value of
+                // the height of the graph
+                const one_px = max / 46
+
+                const normalize = (array) =>
+                    _.map(array, function (item) {
+                        const out = [].concat(item)
+                        if (out[1] < one_px && out[1] > 0) {
+                            out[1] = one_px
+                        }
+                        return out
+                    })
+
+                const output = _(settings.corpusListing.selected)
+                    .map("time")
+                    .filter(Boolean)
+                    .map(_.toPairs)
+                    .flatten(true)
+                    .reduce(function (memo, ...rest1) {
+                        const [a, b] = rest1[0]
+                        if (typeof memo[a] === "undefined") {
+                            memo[a] = b
+                        } else {
+                            memo[a] += b
+                        }
+                        return memo
+                    }, {})
+
+                timestruct = timeProxy.compilePlotArray(output)
+                const endyear = all_timestruct.slice(-1)[0][0]
+                const yeardiff = endyear - all_timestruct[0][0]
+                restyear = endyear + yeardiff / 25
+                restdata = _(settings.corpusListing.selected)
+                    .filter((item) => item.time)
+                    .reduce((accu, corp) => accu + parseInt(corp.non_time || "0"), 0)
+
+                const plots = [
+                    {
+                        data: normalize([].concat(all_timestruct, [[restyear, rest]])),
+                    },
+                    { data: normalize(timestruct) },
+                ]
+                if (restdata) {
+                    plots.push({
+                        data: normalize([[restyear, restdata]]),
+                    })
+                }
+
+                let plot = $.plot($("#time_graph"), plots, {
+                    bars: {
+                        show: true,
+                        fill: 1,
+                        align: "center",
+                    },
+
+                    grid: {
+                        hoverable: true,
+                        borderColor: "white",
+                    },
+
+                    yaxis: {
+                        show: false,
+                    },
+
+                    xaxis: {
+                        show: true,
+                        tickDecimals: 0,
+                    },
+
+                    hoverable: true,
+                    colors: ["lightgrey", "navy", "#cd5c5c"],
+                })
+                $.each($("#time_graph .tickLabel"), function () {
+                    if (parseInt($(this).text()) > new Date().getFullYear()) {
+                        $(this).hide()
+                    }
+                })
+                $("#time_graph,#rest_time_graph").bind(
+                    "plothover",
+                    _.throttle(function (event, pos, item) {
+                        let total, val
+                        let date = Math.round(pos.x)
+                        if (date > new Date().getFullYear()) {
+                            hoverCallback(date, restdata, rest, true)
+                        } else {
+                            val = getValByDate(date, timestruct)
+                            total = getValByDate(date, all_timestruct)
+                            hoverCallback(date, val, total, false)
+                        }
+                    }, 50)
+                )
+            }
+        })
+
+    $.when(window.timeDeferred, opendfd).then(function () {
+        if (onTimeGraphChange) {
+            $("#corpusbox").bind("corpuschooserchange", onTimeGraphChange)
+            statemachine.listen("corpuschange", (event) => {
+                onTimeGraphChange()
+            })
+            onTimeGraphChange()
+        }
+    })
 }

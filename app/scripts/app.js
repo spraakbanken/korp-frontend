@@ -1,11 +1,13 @@
 /** @format */
 
+import statemachine from "../statemachine"
 import jStorage from "../lib/jstorage"
 import { kwicPagerName, kwicPager } from "./components/pager"
 import { sidebarName, sidebarComponent } from "./components/sidebar"
 import * as autoc from "./components/autoc"
 import * as readingmode from "./components/readingmode"
 import * as extendedAddBox from "./components/extended/extended_add_box"
+import { miniPlotName, miniPlotComponent } from "./components/miniplot"
 import {
     chooserNodeName,
     corpusChooserNodeComponent,
@@ -54,6 +56,7 @@ window.korpApp = angular.module("korpApp", [
 korpApp
     .component(kwicPagerName, kwicPager)
     .component(sidebarName, sidebarComponent)
+    .component(miniPlotName, miniPlotComponent)
     .component(chooserNodeName, corpusChooserNodeComponent)
     .component(chooserName, corpusChooserComponent)
     .component(readingmode.componentName, readingmode.component)

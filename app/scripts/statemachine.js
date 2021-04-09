@@ -45,7 +45,9 @@ const sidebarStates = {
 let machine = Machine(
     {
         id: "main",
-        context: {},
+        context: {
+            loginObj: {},
+        },
         initial: "sidebar",
         on: {
             CORPUSCHOOSER_CHANGE: { actions: "update_corpora" },
