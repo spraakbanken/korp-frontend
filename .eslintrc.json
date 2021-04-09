@@ -29,7 +29,6 @@
         "c": true,
         "_": true,
         "$": true,
-        "corpusChooserInstance": true,
         "currentMode": true,
         "isLab": true,
         "getAllCorporaInFolders": true,

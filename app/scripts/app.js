@@ -1,6 +1,6 @@
 /** @format */
 
-import statemachine from "../statemachine"
+import statemachine from "./statemachine"
 import jStorage from "../lib/jstorage"
 import { kwicPagerName, kwicPager } from "./components/pager"
 import { sidebarName, sidebarComponent } from "./components/sidebar"
