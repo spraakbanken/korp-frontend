@@ -44,7 +44,6 @@ require("angular-ui-sortable/src/sortable")
 
 require("jreject")
 require("jquerylocalize")
-require("jqueryhoverintent")
 require("./lib/jquery.format.js")
 
 let deparam = require("jquery-deparam")
@@ -122,7 +121,6 @@ require("./scripts/results.js")
 require("./scripts/model.js")
 require("./scripts/widgets.js")
 require("./scripts/main.js")
-require("./scripts/selector_widget.js")
 require("./scripts/app.js")
 require("./scripts/search_controllers.js")
 
