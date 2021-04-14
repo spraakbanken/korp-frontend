@@ -272,7 +272,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
                 $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled")
             }
         }
-        $("#corpusbox").corpusChooser("updateAllStates")
+        // $("#corpusbox").corpusChooser("updateAllStates")
 
         let newCorpora = []
         for (let corpus of settings.corpusListing.getSelectedCorpora()) {
@@ -381,7 +381,8 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         s.login_err = false
         authenticationProxy
             .makeRequest(usr, pass, saveLogin)
-            .done(function () {
+            .done(function (loginData) {
+                console.log("🚀 ~ file: app.js ~ line 384 ~ loginData", loginData)
                 util.setLogin()
                 safeApply(s, function () {
                     s.show_modal = null
@@ -389,6 +390,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
                     s.loggedIn = true
                     s.username = usr
                 })
+                statemachine.send({ type: "LOGIN", credentials: loginData.corpora })
             })
             .fail(function () {
                 c.log("login fail")

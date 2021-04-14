@@ -60,18 +60,14 @@ export const corpusChooserNodeComponent = {
                 </span>
                 <input
                     class="static mr-2"
-                    ng-if="!$ctrl.folder.isLeaf || ($ctrl.folder.isLeaf && !$ctrl.folder.corpus.limitedAccess)"
+                    ng-if="!$ctrl.isLocked()"
                     type="checkbox"
                     id="{{$ctrl.folder.id}}"
                     ng-checked="$ctrl.folder.selected"
                     ng-click="$ctrl.toggleSelected($event, $ctrl.folder)"
                     indeterminate="$ctrl.folder.isIndeterminate"
                 />
-                <i
-                    ng-if="$ctrl.folder.isLeaf && $ctrl.folder.corpus.limitedAccess"
-                    class="fa fa-lock mr-2"
-                >
-                </i>
+                <i ng-if="$ctrl.isLocked()" class="fa fa-lock mr-2 ml-px"> </i>
                 <label class="mr-1 flex-grow" for="{{$ctrl.folder.id}}">
                     {{$ctrl.folder.label}}
                     <span ng-if="$ctrl.folder.numChildren" class="text-gray-500">
@@ -102,6 +98,18 @@ export const corpusChooserNodeComponent = {
         "$timeout",
         function controller($scope, $element, $timeout) {
             let $ctrl = this
+
+            $ctrl.isLocked = () => {
+                if (
+                    $ctrl.folder.isLeaf &&
+                    $ctrl.folder.corpus.limitedAccess &&
+                    !$ctrl.folder.accessGranted
+                ) {
+                    return true
+                } else if (!$ctrl.folder.isLeaf && $ctrl.folder.isAllChildrenLocked) {
+                    return true
+                }
+            }
 
             $ctrl.toggleSelected = ($event, folder) => {
                 let root = _.last(Array.from(getParents(folder)))
@@ -184,6 +192,8 @@ export const corpusChooserComponent = {
                             {{'corpselector_sentences' | loc:lang}}
                         </li>
                     </ul>
+                    <div ng-if="$ctrl.folder.corpus.context" class="">{{'corpselector_supports' | loc:lang}}</div>
+                    <div ng-if="$ctrl.folder.corpus.limitedAccess" class="">{{'corpselector_limited' | loc:lang}}</div>
                 </div>
             </script>
             <div
@@ -279,15 +289,23 @@ export const corpusChooserComponent = {
         function controller($scope, searches) {
             let $ctrl = this
 
-            statemachine.listen("invalidate_corpuschooser", function ({ corpora }) {
+            statemachine.listen("invalidate_corpuschooser", function ({ corpora, credentials }) {
                 // this is called when the context and selected nodes in tree differ
+                let nodes = Array.from(getChildren($ctrl.tree))
                 if (corpora) {
-                    for (let child of getChildren($ctrl.tree)) {
+                    for (let child of nodes) {
                         child.selected = child.isLeaf && corpora.includes(child.id)
                         if (child.selected) {
                             for (let parent of getParents(child)) {
                                 correctState(parent)
                             }
+                        }
+                    }
+                }
+                if (credentials) {
+                    for (let child of nodes.reverse()) {
+                        if (child.isLeaf && child.corpus.limitedAccess) {
+                            child.accessGranted = credentials.includes(child.id.toUpperCase())
                         }
                     }
                 }
@@ -373,7 +391,19 @@ export const corpusChooserComponent = {
 
             $ctrl.selectAll = () => {
                 for (let node of nodes) {
-                    node.selected = true
+                    if (
+                        node.isLeaf &&
+                        node.corpus.limitedAccess &&
+                        statemachine.context.credentials?.includes(node.corpus.id.toUpperCase())
+                    ) {
+                        node.selected = true
+                        node.isIndeterminate = false
+                    } else if (node.isLeaf && node.corpus.limitedAccess) {
+                        node.selected = false
+                    } else {
+                        node.selected = true
+                        node.isIndeterminate = false
+                    }
                 }
                 statemachine.send({
                     type: "CORPUSCHOOSER_CHANGE",
@@ -423,6 +453,10 @@ export const corpusChooserComponent = {
                 .filter((node) => !node.isLeaf)
                 .reverse()) {
                 correctState(folder)
+
+                folder.isAllChildrenLocked = Array.from(getChildren(folder))
+                    .filter((child) => child.isLeaf)
+                    .every((child) => child.corpus.limitedAccess && !child.accessGranted)
             }
             $ctrl.tree = root
 

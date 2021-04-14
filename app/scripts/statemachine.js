@@ -52,6 +52,7 @@ let machine = Machine(
         on: {
             CORPUSCHOOSER_CHANGE: { actions: "update_corpora" },
             CORPORA_INIT: { actions: ["update_corpora", "invalidate_corpuschooser"] },
+            LOGIN: { actions: ["set_login", "invalidate_corpuschooser"] },
         },
         type: "parallel",
         states: {
@@ -113,6 +114,11 @@ let machine = Machine(
             invalidate_corpuschooser: (context, event) => {
                 broadcast("invalidate_corpuschooser", event)
             },
+            set_login: assign({
+                loginObj: (context, { credentials }) => {
+                    return { credentials }
+                },
+            }),
         },
     }
 )
