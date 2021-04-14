@@ -8,7 +8,7 @@ korpApp.controller("VideoCtrl", function ($scope, $uibModal) {
         let modalInstance
         modalInstance = $uibModal.open({
             animation: false,
-            templateUrl: require("../markup/sidebar_video.html"),
+            template: require("../markup/sidebar_video.html"),
             controller: "VideoInstanceCtrl",
             size: "modal-lg",
             windowClass: "video-modal-bootstrap",

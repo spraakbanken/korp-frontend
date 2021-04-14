@@ -106,19 +106,6 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                exclude: [path.resolve(korpConfigDir, "./views/")],
-                use: [
-                    { loader: "file-loader" },
-                    {
-                        loader: "extract-loader",
-                        options: { publicPath: "" },
-                    },
-                    { loader: "html-loader" },
-                ],
-            },
-            {
-                test: /\.html$/,
-                include: [path.resolve(korpConfigDir, "./views/")],
                 use: [
                     {
                         loader: "html-loader",
