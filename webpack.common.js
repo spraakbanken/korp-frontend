@@ -205,7 +205,7 @@ module.exports = {
                 {
                     from: korpConfigDir + "/modes/*html",
                     to: "modes/[name].[ext]",
-                    noErrorOnMissing: true
+                    noErrorOnMissing: true,
                 },
                 {
                     from: "app/translations/angular-locale_*.js",
@@ -217,11 +217,11 @@ module.exports = {
                 },
                 {
                     from: "app/translations/locale-*.json",
-                    to: "translations/[name][ext]",
+                    to: "translations/[name].[ext]",
                 },
                 {
                     from: korpConfigDir + "/translations/*",
-                    to: "translations/[name][ext]",
+                    to: "translations/[name].[ext]",
                 },
                 {
                     from: "app/lib/deptrees/",
