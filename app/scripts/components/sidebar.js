@@ -286,10 +286,6 @@ export const sidebarComponent = {
                         })
                         $controller(controller, locals)
                         return output.append($compile(template)(scope))
-                    } else if (attrs.renderItem) {
-                        return output.append(
-                            attrs.renderItem(key, value, attrs, wordData, sentenceData, tokens)
-                        )
                     }
 
                     output.data("attrs", attrs)
