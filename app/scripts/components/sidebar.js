@@ -531,8 +531,6 @@ export const sidebarComponent = {
                 },
 
                 applyEllipse() {
-                    // oldDisplay = @element.css("display")
-                    // @element.css "display", "block"
                     const totalWidth = $element.width()
 
                     // ellipse for too long links of type=url
