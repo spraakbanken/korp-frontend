@@ -214,6 +214,10 @@ module.exports = {
                     from: "app/lib/deptrees/",
                     to: "lib/deptrees",
                 },
+                {
+                    from: "app/scripts/service_worker.js",
+                    to: "",
+                },
             ],
         }),
     ],

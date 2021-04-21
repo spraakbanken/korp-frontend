@@ -10,6 +10,14 @@ window.timeProxy = new model.TimeProxy()
 const creds = jStorage.get("creds")
 if (creds) {
     authenticationProxy.loginObj = creds
+
+    // TMP PLACE only works if user is already logged in when loading Korp
+    navigator.serviceWorker
+        .register(`/service_worker.js?token=${authenticationProxy.loginObj.auth}`)
+        .then((registration) => {
+            // if you don't unregister here, Component may get stuck when you reload page,
+            registration.unregister()
+        })
 }
 
 // rewriting old url format to the angular one
