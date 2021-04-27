@@ -470,6 +470,64 @@ korpApp.controller("ExtendedSearch", function (
 korpApp.controller("ExtendedToken", function ($scope, utils) {
     const s = $scope
 
+    s.valfilter = utils.valfilter
+
+    s.setDefault = function (or_obj) {
+        // assign the first value from the opts
+        const opts = s.getOpts(or_obj.type)
+
+        if (!opts) {
+            or_obj.op = "is"
+        } else {
+            or_obj.op = _.values(opts)[0][1]
+        }
+
+        or_obj.val = ""
+    }
+
+    // returning new array each time kills angular, hence the memoizing
+    s.getOpts = _.memoize(function (type) {
+        if (!(type in (s.typeMapping || {}))) {
+            return
+        }
+        let confObj = s.typeMapping && s.typeMapping[type]
+        if (!confObj) {
+            c.log("confObj missing", type, s.typeMapping)
+            return
+        }
+
+        confObj = _.extend({}, (confObj && confObj.opts) || settings.defaultOptions)
+
+        if (confObj.type === "set") {
+            confObj.is = "contains"
+        }
+
+        return _.toPairs(confObj)
+    })
+
+    const onCorpusChange = function (event, selected) {
+        // TODO: respect the setting 'wordAttributeSelector' and similar
+        if (!(selected && selected.length)) {
+            return
+        }
+        const lang = s.$parent.$parent && s.$parent.$parent.l && s.$parent.$parent.l.lang
+        const allAttrs = settings.corpusListing.getAttributeGroups(lang)
+        s.types = _.filter(allAttrs, (item) => !item.hideExtended)
+        s.typeMapping = _.fromPairs(
+            _.map(s.types, function (item) {
+                if (item.isStructAttr) {
+                    return [`_.${item.value}`, item]
+                } else {
+                    return [item.value, item]
+                }
+            })
+        )
+    }
+
+    s.$on("corpuschooserchange", onCorpusChange)
+
+    onCorpusChange(null, settings.corpusListing.selected)
+
     s.removeOr = function (token, and_array, i) {
         if (and_array.length > 1) {
             and_array.splice(i, 1)
@@ -494,150 +552,6 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
 
     s.toggleStart = (token) => toggleBound(token, "lbound")
     s.toggleEnd = (token) => toggleBound(token, "rbound")
-})
-
-// does nothing semantic, but useful for syntax highlighting.
-let html = String.raw
-korpApp.component("extendedOrBlock", {
-    bindings: {
-        or: "<",
-        onRemove: "&",
-    },
-    template: html`
-        <div class="left_col" ng-click="$ctrl.delete($index)">
-            <img class="image_button remove_arg" src="${require("../img/minus.png")}" />
-        </div>
-        <div class="right_col inline_block" style="margin-left: 5px;">
-            <div class="arg_selects {{$ctrl.or.type}}">
-                <select
-                    class="arg_type"
-                    ng-options="obj | mapper:$ctrl.valfilter as obj.label | loc:lang group by obj.group | loc:lang for obj in $ctrl.types"
-                    ng-model="$ctrl.currentType"
-                    ng-change="$ctrl.onTypeChange()"
-                ></select>
-
-                <select
-                    class="arg_opts"
-                    ng-options="pair[1] as pair[0] | loc:lang for pair in $ctrl.getOpts($ctrl.currentTypeObj)"
-                    ng-model="$ctrl.or.op"
-                ></select>
-            </div>
-            <div
-                token-value="$ctrl.currentTypeObj"
-                model="$ctrl.or.val"
-                or-obj="$ctrl.or"
-                class="arg_val_container"
-                lang="lang"
-            ></div>
-        </div>
-    `,
-    controller($rootScope, utils) {
-        let ctrl = this
-        ctrl.valfilter = utils.valfilter
-        ctrl.types = []
-
-        ctrl.currentType = ""
-        ctrl.currentVal = ""
-
-        ctrl.delete = function () {
-            ctrl.onRemove()
-        }
-
-        ctrl.$onChanges = function () {
-            ctrl.currentTypeObj = ctrl.getType(ctrl.or.type, ctrl.or.val)
-            if (ctrl.currentTypeObj.isStructAttr) {
-                var val = "_." + ctrl.currentTypeObj.value
-            } else {
-                val = ctrl.currentTypeObj.value
-            }
-            ctrl.currentType = val
-            ctrl.or.type = ctrl.currentTypeObj.cqp_prop || val
-            // ctrl.setDefault()
-        }
-
-        const onCorpusChange = function (event, selected) {
-            // TODO: respect the setting 'wordAttributeSelector' and similar
-            if (!(selected && selected.length)) {
-                return
-            }
-            // const lang = s.$parent.$parent && s.$parent.$parent.l && s.$parent.$parent.l.lang
-            const lang = $rootScope.lang
-
-            const allAttrs = settings.corpusListing.getAttributeGroups(lang)
-            ctrl.types = _.filter(allAttrs, (item) => !item.hideExtended)
-            // s.currentType = s.getType()
-            ctrl.typeMapping = _.fromPairs(
-                _.map(ctrl.types, function (item) {
-                    if (item.isStructAttr) {
-                        return [`_.${item.value}`, item]
-                    } else {
-                        return [item.value, item]
-                    }
-                })
-            )
-        }
-        $rootScope.$on("corpuschooserchange", onCorpusChange)
-
-        onCorpusChange(null, settings.corpusListing.selected)
-
-        ctrl.onTypeChange = function () {
-            ctrl.currentTypeObj = ctrl.typeMapping[ctrl.currentType]
-            ctrl.setDefault()
-        }
-
-        ctrl.setDefault = function () {
-            // assign the first value from the opts
-
-            if (ctrl.currentTypeObj.isStructAttr) {
-                var val = "_." + ctrl.currentTypeObj.value
-            } else {
-                val = ctrl.currentTypeObj.value
-            }
-            ctrl.or.type = ctrl.currentTypeObj.cqp_prop || val
-
-            const opts = ctrl.getOpts(ctrl.currentTypeObj)
-
-            if (!opts) {
-                ctrl.or.op = "="
-            } else {
-                ctrl.or.op = _.values(opts)[0][1]
-            }
-
-            ctrl.or.val = ""
-        }
-
-        // returning new array each time kills angular, hence the memoizing
-        ctrl.getOpts = _.memoize(function (confObj) {
-            // if (!(type in (s.typeMapping || {}))) {
-            //     return
-            // }
-            // let confObj = s.typeMapping && s.typeMapping[type]
-            // let confObj = ctrl.getType(cqp_prop, cqp_val)
-            if (!confObj) {
-                c.log("confObj missing", ctrl.types)
-                return
-            }
-
-            confObj = _.extend({}, (confObj && confObj.opts) || settings.defaultOptions)
-
-            if (confObj.type === "set") {
-                confObj.is = "contains"
-            }
-
-            return _.toPairs(confObj)
-        })
-
-        ctrl.getType = (cqp_prop, cqp_val) => {
-            // return ctrl.typeMapping[cqp_prop]
-            cqp_prop = cqp_prop.replace(/^_\./, "")
-            let matchingTypes = ctrl.types.filter((type) => type.cqp_prop || type.value == cqp_prop)
-            if (matchingTypes.length > 1) {
-                return matchingTypes.find((type) => cqp_val.match(type.value_pattern))
-            } else {
-                return matchingTypes[0]
-            }
-        }
-    },
 })
 
 korpApp.directive("advancedSearch", () => ({
