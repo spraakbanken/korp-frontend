@@ -54,7 +54,9 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
             locationSearch("cqp_" + langobj.lang , langobj.cqp);
         })
         $rootScope.extendedCQP = output;
-        s.$broadcast("corpuschooserchange");
+
+        // hacky fix to make attributes update when switching languages
+        s.$broadcast("corpuschooserchange", [""]);
         $rootScope.$broadcast("reduceattrupdate");
         searches.langDef.resolve();
         return output;
