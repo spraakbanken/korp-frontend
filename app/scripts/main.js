@@ -30,11 +30,7 @@ $.ajaxPrefilter("json", function (options) {
 
 const deferred_domReady = $.Deferred(function (dfd) {
     $(function () {
-        let { mode } = deparam(window.location.search.slice(1))
-        if (!mode) {
-            mode = "default"
-        }
-        return $.getScript(`modes/${mode}_mode.js`)
+        return $.getScript(`modes/${currentMode}_mode.js`)
             .done(() => dfd.resolve())
             .fail((jqxhr, settings, exception) => c.error("Mode file parsing error: ", exception))
     })
