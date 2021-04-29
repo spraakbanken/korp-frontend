@@ -1351,11 +1351,6 @@ label[for=lemgram_select]:before {
   transition: left 400ms ease;
 }
 
-#showLineDiagram {
-  position: relative;
-  top: 3px;
-}
-
 .right_col {
   padding-right: 2px;
 }
@@ -1518,14 +1513,6 @@ label[for=lemgram_select]:before {
   font-style: italic;
   color: indianred;
   opacity: 0.7;
-}
-
-#showLineDiagram {
-  display: none;
-}
-
-.lab #showLineDiagram {
-  display: inline;
 }
 
 #labs_logo {
