@@ -706,7 +706,7 @@ korpApp.directive("autoc", ($q, lexicons) => ({
                 return
             }
             if (scope.type === "lemgram") {
-                return util.lemgramToString(placeholder).replace(/<.*?>/g, "")
+                return util.lemgramToPlainString(placeholder)
             } else {
                 return util.saldoToPlaceholderString(placeholder, true)
             }

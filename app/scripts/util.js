@@ -551,6 +551,28 @@ util.lemgramToString = function (lemgram, appendIndex) {
     )
 }
 
+const numberToSuperscript = {
+    "1": "",
+    "2": "²",
+    "3": "³",
+    "4": "⁴",
+    "5": "⁵",
+    "6": "⁶",
+    "7": "⁷",
+    "8": "⁸",
+    "9": "⁹",
+    "0": "⁰",
+}
+
+// use this function to get a pretty printed lemgram with no HTML
+util.lemgramToPlainString = function (lemgram) {
+    const { form, pos, index } = util.splitLemgram(_.trim(lemgram))
+    const infixIndex = _.map(index, (indexPart) => numberToSuperscript[indexPart]).join("")
+    const concept = form.replace(/_/g, " ")
+    const type = pos.slice(0, 2)
+    return `${concept}${infixIndex} (${util.getLocaleString(type)})`
+}
+
 util.saldoRegExp = /(.*?)\.\.(\d\d?)(:\d+)?$/
 util.saldoToString = function (saldoId, appendIndex) {
     const match = saldoId.match(util.saldoRegExp)
