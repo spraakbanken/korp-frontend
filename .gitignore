@@ -7,3 +7,4 @@ release_bin
 release
 run_config.json
 *~
+.python-version

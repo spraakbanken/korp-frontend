@@ -3,6 +3,7 @@
 import jStorage from "../lib/jstorage"
 import { kwicPagerName, kwicPager } from "./components/pager"
 import { sidebarName, sidebarComponent } from "./components/sidebar"
+import * as readingmode from "./components/readingmode"
 import { setDefaultConfigValues } from "./settings.js"
 
 setDefaultConfigValues()
@@ -42,6 +43,12 @@ window.korpApp = angular.module("korpApp", [
 ])
 
 korpApp.component(kwicPagerName, kwicPager).component(sidebarName, sidebarComponent)
+korpApp.component(readingmode.componentName, readingmode.component)
+
+// load all custom components (imported in index.js)
+for(const componentName in window.customComponents) {
+    korpApp.component(componentName, window.customComponents[componentName])
+}
 
 korpApp.config((tmhDynamicLocaleProvider) =>
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
