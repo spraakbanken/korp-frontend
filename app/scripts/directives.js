@@ -141,8 +141,9 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
         let prevScope = null
         let childWatch = null
 
-        return scope.$watch("tokenValue", function (valueObj) {
-            if (scope.orObj.flags) {
+        return scope.$watch("tokenValue", function (valueObj, prevValueObj) {
+            // if the selected attribute has changed, remove case insensitive flag
+            if (valueObj.value != prevValueObj.value && scope.orObj.flags) {
                 delete scope.orObj.flags["c"]
             }
 
@@ -413,7 +414,7 @@ korpApp.directive("tabSpinner", () => ({
 }))
 
 korpApp.directive("extendedList", () => ({
-    templateUrl: require("../views/extendedlist.html"),
+    template: require("../views/extendedlist.html"),
     scope: {
         cqp: "=",
         lang: "=",
@@ -705,7 +706,7 @@ korpApp.directive("autoc", ($q, lexicons) => ({
                 return
             }
             if (scope.type === "lemgram") {
-                return util.lemgramToString(placeholder).replace(/<.*?>/g, "")
+                return util.lemgramToPlainString(placeholder)
             } else {
                 return util.saldoToPlaceholderString(placeholder, true)
             }

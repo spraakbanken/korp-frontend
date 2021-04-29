@@ -5,7 +5,12 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
     meta(name='description', content='Med Korp kan den språkligt nyfikna göra avancerade sökningar i stora mängder av skriven text.')
 
-    link(rel='shortcut icon', type='image/ico', href='img/korp_icon.ico')
+    link(rel='icon', href='img/raven_simple.svg')
+    link(rel='mask-icon', href='img/raven_simple.svg' color='#333333')
+    link(rel="apple-touch-icon" href="img/apple-touch-icon.png")
+
+
+    //- link(rel='shortcut icon', type='image/ico', href='img/korp_icon.ico')
     title Korp
 
   body(style="opacity: 0;")
@@ -13,7 +18,7 @@ html
       h2 You need JavaScript to run Korp.
     #main
       include includes/header
-      #content
+      #content.px-3.pb-3
         include includes/searchtabs
 
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length || mapTabs.length', ng-controller='resultContainerCtrl')
@@ -119,33 +124,6 @@ html
                 img(src='img/json.png')
             sidebar.sidebar.flex-shrink-0.ml-2(on-show="onSidebarShow()", on-hide="onSidebarHide()")
 
-            div(id='video-modal', ng-controller='VideoCtrl')
-
     #deptree_popup
-
-    script#login_modal(type="text/ng-template").
-      <div class="modal-header login-modal-header">
-        <span class="login-header">{{'log_in' | loc:lang}}</span>
-        <span ng-click="clickX()" class="close-x">×</span>
-      </div>
-      <div id="login_popup" class="modal-body">
-        <div ng-if="loginNeededFor.length" style="font-size: 0.75em">
-          <span style="display: inline">{{'login_needed_for_corpora' | loc:lang}}</span>
-          <span style="display: inline; margin-right: 2px;" ng-repeat="corpus in loginNeededFor">{{corpus.title}}</span>
-        </div>
-        <form ng-submit="loginSubmit(login_usr, login_pass, saveLogin)">
-          <label for="usrname">{{'username' | loc:lang}}</label>
-          <input id="usrname" ng-model="login_usr" type="text">
-          <label for="pass">{{'password' | loc:lang}}</label>
-          <input id="pass" ng-model="login_pass" type="password">
-          <a class="password-reset" href="https://ws.spraakbanken.gu.se/user/password" target="_blank">{{'forgot_password' | loc:lang}}</a>
-          <div style="clear:both"/>
-          <input class="save-login" id="saveLogin" type="checkbox" ng-model="saveLogin">
-          <label class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
-          <p ng-show="login_err" class="err_msg">{{'login_fail_msg' | loc:lang}}</p>
-          <input class="btn btn-sm btn-primary" type="submit" value="{{'send' | loc:lang}}">
-          <div style="clear:both"/>
-        </form>
-      </div>
   
     script(src="bundle.js")

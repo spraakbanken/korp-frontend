@@ -37,6 +37,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Run tests
       run: |
+        sudo apt-get update
+        sudo apt-get --only-upgrade install google-chrome-stable
+        google-chrome --version
+
         cd korp-frontend-sb
         yarn --frozen-lockfile
         cd ../korp-frontend

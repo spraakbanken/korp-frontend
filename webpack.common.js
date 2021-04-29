@@ -106,19 +106,6 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                exclude: [path.resolve(korpConfigDir, "./views/")],
-                use: [
-                    { loader: "file-loader" },
-                    {
-                        loader: "extract-loader",
-                        options: { publicPath: "" },
-                    },
-                    { loader: "html-loader" },
-                ],
-            },
-            {
-                test: /\.html$/,
-                include: [path.resolve(korpConfigDir, "./views/")],
                 use: [
                     {
                         loader: "html-loader",
@@ -200,18 +187,16 @@ module.exports = {
             patterns: [
                 {
                     from: korpConfigDir + "/modes/*mode.js",
-                    to: "modes",
-                    flatten: true,
+                    to: "modes/[name].[ext]",
                 },
                 {
                     from: korpConfigDir + "/modes/*html",
-                    to: "modes",
-                    flatten: true,
+                    to: "modes/[name].[ext]",
+                    noErrorOnMissing: true,
                 },
                 {
                     from: "app/translations/angular-locale_*.js",
-                    to: "translations",
-                    flatten: true,
+                    to: "translations/[name].[ext]",
                 },
                 {
                     from: "app/markup/msdtags.html",
@@ -219,27 +204,16 @@ module.exports = {
                 },
                 {
                     from: "app/translations/locale-*.json",
-                    to: "translations",
-                    flatten: true,
+                    to: "translations/[name].[ext]",
                 },
                 {
                     from: korpConfigDir + "/translations/*",
-                    to: "translations",
-                    flatten: true,
+                    to: "translations/[name].[ext]",
                 },
                 {
                     from: "app/lib/deptrees/",
                     to: "lib/deptrees",
                 },
-                /* TODO: probably remove this? cannot find any json files there.
-                    {
-                        from: "node_modules/geokorp/dist/data/*.json",
-                        // TODO hard-coded in geokorp project that these files should be here
-                        // we need to change geokorp so that these files are required
-                        to: "components/geokorp/dist/data",
-                        flatten: true
-                    }
-                    */
             ],
         }),
     ],

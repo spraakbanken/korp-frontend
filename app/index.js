@@ -71,9 +71,9 @@ window.moment = require("moment")
 window.CSV = require("comma-separated-values/csv")
 
 require("./lib/leaflet-settings.js")
-// require("leaflet")
-// require("leaflet.markercluster")
-// require("leaflet-providers")
+require("leaflet")
+require("leaflet.markercluster")
+require("leaflet-providers")
 require("geokorp/dist/scripts/geokorp")
 require("geokorp/dist/scripts/geokorp-templates")
 require("angular-filter/index.js")
@@ -111,6 +111,7 @@ require("./scripts/main.js")
 require("./scripts/selector_widget.js")
 require("./scripts/app.js")
 require("./scripts/search_controllers.js")
+
 require("./scripts/kwic_download.js")
 require("./scripts/result_controllers.js")
 require("./scripts/map_controllers.js")
@@ -122,6 +123,17 @@ require("./scripts/struct_services.js")
 require("./scripts/directives.js")
 require("./scripts/filter_directives.js")
 require("./scripts/newsdesk.js")
+
+// only if the current mode is parallel, we load the special code required
+for(let mode of settings.modeConfig) {
+  if(currentMode === mode.mode && mode.parallel) {
+    require("./scripts/parallel/corpus_listing.js")
+    require("./scripts/parallel/search_ctrl.js")
+    require("./scripts/parallel/parallel_search.js")
+    require("./scripts/parallel/kwic_results.js")
+    require("./scripts/parallel/stats_proxy.js")
+  }
+}
 
 function requireAll(r) { r.keys().forEach(r) } 
 requireAll(require.context('customcss', true, /\.css$/))

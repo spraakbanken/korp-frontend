@@ -163,7 +163,8 @@ Relevant setting fields are `settings.visibleModes` and `settings.modeConfig`. T
       },
       {
         localekey: "parallel_texts", 
-        mode: "parallel"
+        mode: "parallel",
+        parallel: true
       },
       {
         localekey: "faroese_texts", 
@@ -176,6 +177,8 @@ The `localeKey` key corresponds to a key from the localization files. The `mode`
 the configuration directory, corresponding to that ID. So if you click the modeSelectors 'parallel' entry, the page refreshes and the `modes/parallel_mode.js` will be loaded.
 
 The mode called `default` will always be loaded first. If there is no need for more than one mode, leave `settings.modeConfig` empty.
+
+If `parallel: true` Korp's user interface with be adapted for parallel corpora.
 
 ## Corpora
 The config file contains the corpora declaration, wherein the available corpora are declared together with information about which metadata fields are searchable in them. Adding a test corpus is as simple as:
@@ -544,6 +547,8 @@ __mapCenter__ - See **Map**.
 __hitsPerPageValues__ - An array of possible number of hits per page for example: `[25,50,75,100]`
 
 __hitsPerPageDefault__ - The number of hits per page that Korp should select by default. If emitted, fallback value is the first element in `hitsPerPageValues`
+
+__startLang__ - The default in the language dropdown for parallel Korp, for example: `"swe"`
 
 # Developing the Korp Frontend
 

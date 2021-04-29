@@ -431,7 +431,7 @@ korpApp.directive("statsResultCtrl", () => ({
             return event.stopPropagation()
         }
 
-        s.showMap = async function () {
+        s.showMap = function () {
             const selectedRows = s.instance.getSelectedRows()
 
             if (selectedRows.length == 0) {
@@ -465,21 +465,9 @@ korpApp.directive("statsResultCtrl", () => ({
             const within = settings.corpusListing
                 .subsetFactory(selectedAttribute.corpora)
                 .getWithinParameters()
-
-            let mapPromise = backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute)
-            await Promise.all([
-                mapPromise,
-                import(/* webpackChunkName: "leaflet" */ "leaflet").then(() => {
-                    return Promise.all([
-                        import(
-                            /* webpackChunkName: "leaflet.markercluster" */ "leaflet.markercluster"
-                        ),
-                        import(/* webpackChunkName: "leaflet-providers" */ "leaflet-providers"),
-                    ])
-                }),
-            ])
-
-            safeApply(s, () => $rootScope.mapTabs.push(mapPromise))
+            return $rootScope.mapTabs.push(
+                backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute)
+            )
         }
     },
 }))

@@ -14,7 +14,21 @@
             
                     <div class="or_container">
                         <div class="or or_arg" ng-repeat="or in and">
-                            <extended-or-block or="or" on-remove="removeOr(token, and, $index)" ></extended-or-block>
+                            <div class="left_col">
+                                <img class="image_button remove_arg" src="../img/minus.png" ng-click="removeOr(token, and, $index)">
+                            </div>
+                            <div class="right_col inline_block" style="margin-left: 5px;">
+                                <div class="arg_selects {{or.type}}">
+                                    <select class="arg_type" 
+                                        ng-options="obj | mapper:valfilter as obj.label | loc:lang group by obj.group | loc:lang for obj in types" 
+                                        ng-model="or.type" ng-change="setDefault(or)"></select>
+                                    
+                                    <select class="arg_opts"
+                                        ng-options="pair[1] as pair[0] | loc:lang for pair in getOpts(or.type)" 
+                                        ng-model="or.op" ></select>
+                                </div>
+                                <div token-value="typeMapping[or.type]" model="or.val" or-obj="or" class="arg_val_container" lang="lang"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="arg_footer">
@@ -30,7 +44,7 @@
                         <i class="fa fa-arrow-down"></i>
                         <span style="margin-left: 1px;position: relative;top: -1px;">{{"and" | loc:lang}}</span>
                     </button>
-                    <button popper class="btn btn-xs btn-default token-cog-btn"><i class="fa fa-cog"></i></button>
+                    <button popper class="btn btn-xs btn-default token-cog-btn flex items-center"><i class="fa fa-bars mr-1"></i><span>{{'options' | loc:lang}}</span></button>
                     <ul class="popper_menu dropdown-menu">
                         <li>
                             <a ng-click="toggleRepeat(token)" rel="localize[repeat]">{{'repeat' | loc:lang}}</a>
@@ -64,9 +78,10 @@
             
             </div>
         </div>
-        <span class="image_button insert_token" ng-click="addToken()">
-            <img class="plus-btn" src="../img/plus.png"> 
-            <span>{{"add_token" | loc:lang}}</span>
-        </span>
+        <button class="btn btn-sm image_button insert_token border-gray-300 transition duration-200 hover_bg-gray-200" ng-click="addToken()">
+            <!-- <img class="plus-btn" src="../img/plus.png">  -->
+            <i class="fa fa-lg fa-plus-circle text-blue-600 mr-1"></i>
+            <span class="">{{"add_token" | loc:lang}}</span>
+        </button>
     </div>
 </div>

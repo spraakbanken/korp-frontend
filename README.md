@@ -11,6 +11,7 @@ Documentation:
 - [Frontend documentation](../master/doc/frontend_devel.md)
 - [Backend documentation](https://github.com/spraakbanken/korp-backend/)
 - Sparv - The pipeline used to tag and otherwise process raw Swedish-language corpus data is documented [here](https://github.com/spraakbanken/sparv-pipeline)
+- [Our Korp configuration directory](https://github.com/spraakbanken/korp-frontend-sb/) (supplement to documentation)
 
 # Breaking changes
 - In order to benefit from superior tooling Korp migrated away from Coffeescript

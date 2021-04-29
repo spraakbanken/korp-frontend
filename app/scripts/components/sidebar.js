@@ -6,10 +6,12 @@ import statemachine from "../statemachine"
 let html = String.raw
 export const sidebarComponent = {
     template: html`
-        <div class="sticky top-10 border border-gray-500 p-2 rounded-sm" ng-show="$ctrl.corpusObj">
+        <div class="sticky top-10 border border-gray-300 p-2 rounded-sm" ng-show="$ctrl.corpusObj">
             <div>
-                <h4>{{'corpus' | loc:$root.lang}}</h4>
-                <div>{{$ctrl.corpusObj.title}}</div>
+                <h4 class="font-normal uppercase text-gray-800 mt-4 mb-1 text-sm tracking-tight">
+                    {{'corpus' | loc:$root.lang}}
+                </h4>
+                <div class="text-lg">{{$ctrl.corpusObj.title}}</div>
             </div>
             <div
                 class="openReadingMode"
@@ -69,7 +71,7 @@ export const sidebarComponent = {
                     $ctrl.corpusObj = corpusObj
                     $ctrl.sentenceData = sentenceData
                     $ctrl.inReadingMode = inReadingMode
-
+                    $ctrl.tokens = tokens
                     const customData = { pos: [], struct: [] }
                     if (!$.isEmptyObject(corpusObj.customAttributes)) {
                         const [word, sentence] = this.renderCustomContent(
@@ -107,8 +109,16 @@ export const sidebarComponent = {
                         )
                     }
 
-                    $("#selected_word").append($("<h4>").localeKey("word_attr"))
-                    $("#selected_sentence").append($("<h4>").localeKey("sentence_attr"))
+                    $("#selected_word").append(
+                        $(
+                            '<h4 class="font-normal uppercase text-gray-800 mt-8 mb-1 text-sm" tracking-tight>'
+                        ).localeKey("word_attr")
+                    )
+                    $("#selected_sentence").append(
+                        $(
+                            '<h4 class="font-normal uppercase text-gray-800 mt-8 mb-1 text-sm" tracking-tight>'
+                        ).localeKey("sentence_attr")
+                    )
                     $("#selected_word").append(posData)
                     $("#selected_sentence").append(structData)
 
@@ -276,10 +286,6 @@ export const sidebarComponent = {
                         })
                         $controller(controller, locals)
                         return output.append($compile(template)(scope))
-                    } else if (attrs.renderItem) {
-                        return output.append(
-                            attrs.renderItem(key, value, attrs, wordData, sentenceData, tokens)
-                        )
                     }
 
                     output.data("attrs", attrs)
@@ -521,8 +527,6 @@ export const sidebarComponent = {
                 },
 
                 applyEllipse() {
-                    // oldDisplay = @element.css("display")
-                    // @element.css "display", "block"
                     const totalWidth = $element.width()
 
                     // ellipse for too long links of type=url
