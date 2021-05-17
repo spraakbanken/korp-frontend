@@ -1,3 +1,7 @@
 {
-  "plugins": ['syntax-dynamic-import', "@babel/transform-runtime", ["angularjs-annotate"]]
+  "plugins": ['syntax-dynamic-import', "@babel/transform-runtime", ["angularjs-annotate"]],
+  "ignore": [
+    "app/modes/*.js",
+    "app/config.js"
+  ]
 }
