@@ -169,5 +169,68 @@ korpApp.factory("extendedComponents", function () {
                 }
             },
         ],
+        autocExtended: (options) => ({
+            template: `
+            <autoc 
+                input="input"
+                is-raw-input="isRawInput"
+                type='${options.type || 'lemgram'}'
+                on-change="onChange(output, isRawOutput)"
+                error-on-empty="${options.errorOnEmpty}"
+                error-message="choose_value">
+            </autoc>`,
+            controller: [
+                "$scope",
+                function ($scope) {
+                    if($scope.model) {
+                        $scope.input = unregescape($scope.model)
+                        $scope.isRawInput = false
+                    }
+
+                    $scope.onChange = (output, isRawOutput) => {
+                        if (!isRawOutput) {
+                            $scope.model = regescape(output)
+                        }
+                    }
+                },
+            ],
+        }),
+        complemgramExtended: {
+            template: `<autoc
+            input='input'
+            isRawInput='isRawInput'
+            on-change='onChange(output, isRawOutput)'
+            type='lemgram'
+            variant='affix'
+            error-on-empty='true'
+            error-message='choose_value'/>
+            `,
+            controller: [
+                "$scope", function($scope) {
+                    if($scope.model) {
+                        $scope.currentVal = $scope.model.replace(/[\\+\.\*:]*$/, "").replace(/^\\\+/, "")
+                        $scope.input = $scope.currentVal
+                        $scope.isRawInput = false
+                    }
+                    let setModel = () => {
+                        if(["starts_with_contains", "not_starts_with_contains"].includes($scope.orObj.op)) {
+                            $scope.model = $scope.currentVal + "\\+"
+                        } else if(["ends_with_contains", "not_ends_with_contains"].includes($scope.orObj.op)) {
+                            $scope.model = "\\+" + $scope.currentVal + ":.*"
+                        } else if(["incontains_contains", "not_incontains_contains"].includes($scope.orObj.op)) {
+                            $scope.model = "\\+" + $scope.currentVal + "\\+"
+                        }
+                    }
+                    $scope.$watch("orObj.op", () => {
+                        setModel()
+                    })
+                    $scope.onChange = (output, isRawOutput) => {
+                        if(!isRawOutput) {
+                            $scope.currentVal = output
+                            setModel(output)
+                        }
+                    }
+            }],
+        }
     }
 })

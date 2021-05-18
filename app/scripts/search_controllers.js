@@ -183,8 +183,9 @@ korpApp.controller("SimpleCtrl", function (
     )
 
     statemachine.listen("lemgram_search", (event) => {
-        console.log("lemgram_search", event)
-        s.textInField = ""
+        s.input = event.value
+        s.isRawInput = false
+        s.onChange(event.value, false)
     })
 
     $scope.$watch("inOrder", () => $location.search("in_order", !s.inOrder ? false : null))
@@ -206,12 +207,10 @@ korpApp.controller("SimpleCtrl", function (
     s.updateSearch = function () {
         locationSearch("search", null)
         $timeout(function () {
-            if (s.textInField) {
-                util.searchHash("word", s.textInField)
-                s.model = null
-                s.placeholder = null
-            } else if (s.model) {
-                util.searchHash("lemgram", s.model)
+            if (s.currentText) {
+                util.searchHash("word", s.currentText)
+            } else if (s.lemgram) {
+                util.searchHash("lemgram", s.lemgram)
             }
         }, 0)
     }
@@ -225,7 +224,7 @@ korpApp.controller("SimpleCtrl", function (
 
     s.getCQP = function () {
         let suffix, val
-        const currentText = (s.textInField || "").trim()
+        const currentText = (s.currentText || "").trim()
 
         if (currentText) {
             suffix = s.isCaseInsensitive ? " %c" : ""
@@ -248,8 +247,8 @@ korpApp.controller("SimpleCtrl", function (
                 return `[${res.join(" | ")}]`
             })
             val = tokenArray.join(" ")
-        } else if (s.placeholder || util.isLemgramId(currentText)) {
-            const lemgram = s.model ? s.model : currentText
+        } else if (s.lemgram) {
+            const lemgram = s.lemgram
             val = `[lex contains \"${lemgram}\"`
             if (s.prefix) {
                 val += ` | complemgram contains \"${lemgram}\\+.*\"`
@@ -325,19 +324,32 @@ korpApp.controller("SimpleCtrl", function (
         }
         if (search.type === "word" || search.type === "lemgram") {
             if (search.type === "word") {
-                s.textInField = search.val
+                s.input = search.val
+                s.isRawInput = true
+                s.currentText = search.val
             } else {
-                s.placeholder = unregescape(search.val)
-                s.model = search.val
+                s.input = unregescape(search.val)
+                s.isRawInput = false
+                s.lemgram = search.val
             }
             s.doSearch()
         } else {
-            s.placeholder = null
+            s.input = ""
             if ("lemgramResults" in window) {
                 lemgramResults.resetView()
             }
         }
     })
+
+    s.onChange = (output, isRawOutput) => {
+        if (isRawOutput) {
+            s.currentText = output
+            s.lemgram = null
+        } else {
+            s.lemgram = regescape(output)
+            s.currentText = null
+        }
+    }
 
     s.doSearch = function () {
         const search = searches.activeSearch
