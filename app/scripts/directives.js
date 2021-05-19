@@ -1,4 +1,6 @@
 /** @format */
+import extendedComponents from './extended.js'
+
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("kwicWord", () => ({
@@ -126,7 +128,7 @@ korpApp.directive("escaper", () => ({
     },
 }))
 
-korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => ({
+korpApp.directive("tokenValue", ($compile, $controller) => ({
     scope: {
         tokenValue: "=",
         model: "=model",
@@ -185,7 +187,7 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
                 if (valueObj.extendedController) {
                     controller = valueObj.extendedController
                 } else {
-                    controller = extendedComponents.defaultController
+                    controller = extendedComponents.default.controller
                 }
                 if (valueObj.extendedTemplate) {
                     template = valueObj.extendedTemplate
@@ -197,7 +199,7 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
                         tmplObj = { maybe_placeholder: "" }
                     }
 
-                    template = extendedComponents.defaultTemplate(tmplObj)
+                    template = extendedComponents.default.template(tmplObj)
                 }
             }
 
