@@ -231,6 +231,40 @@ korpApp.factory("extendedComponents", function () {
                         }
                     }
             }],
+        },
+        msd: {
+            template: `
+                <input ng-model="input" class="arg_value" escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'>
+                <span ng-click="onIconClick()" class="fa fa-info-circle"></span>
+            `,
+            controller: ["$scope", "$uibModal", function($scope, $uibModal) {
+                let modal = null
+                const msdHTML = settings.markup.msd
+                const template = `
+                    <div>
+                        <div class="modal-header">
+                            <h3 class="modal-title">{{'msd_long' | loc:lang}}</h3>
+                            <span ng-click="clickX()" class="close-x">×</span>
+                        </div>
+                        <div class="modal-body msd-modal" ng-click="msdClick($event)">${msdHTML}</div>
+                    </div>`
+
+                $scope.onIconClick = () => {
+                    modal = $uibModal.open({
+                        template: template,
+                        scope: $scope
+                    })
+                }
+
+                $scope.clickX = () => modal.close()
+
+                $scope.msdClick = (event) => {
+                    const val = $(event.target).parent().data("value")
+                    if(!val) return
+                    $scope.input = val
+                    modal.close()
+                }
+            }]
         }
     }
 })
