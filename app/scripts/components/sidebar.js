@@ -1,6 +1,7 @@
 /** @format */
 import "./sidebar.scss"
 export const sidebarName = "sidebar"
+import sidebarComponents from 'custom/sidebar.js'
 import statemachine from "../statemachine"
 
 let html = String.raw
@@ -273,7 +274,8 @@ export const sidebarComponent = {
                         output = $("<p></p>")
                     }
                     if (attrs.sidebarComponent) {
-                        let { template, controller } = attrs.sidebarComponent
+                        const def = sidebarComponents[attrs.sidebarComponent.name || attrs.sidebarComponent]
+                        let { template, controller } = _.isFunction(def) ? def(attrs.sidebarComponent.options) : def
                         let scope = $rootScope.$new()
                         let locals = { $scope: scope }
                         Object.assign(scope, {
