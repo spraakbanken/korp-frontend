@@ -264,27 +264,27 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     s.logout = function () {
         authenticationProxy.loginObj = {}
         jStorage.deleteKey("creds")
-
+        statemachine.send({ type: "LOGOUT" })
         // TODO figure out another way to do this
-        for (let corpusObj of settings.corpusListing.corpora) {
-            const corpus = corpusObj.id
-            if (corpusObj.limitedAccess) {
-                $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled")
-            }
-        }
+        // for (let corpusObj of settings.corpusListing.corpora) {
+        //     const corpus = corpusObj.id
+        //     if (corpusObj.limitedAccess) {
+        //         $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled")
+        //     }
+        // }
         // $("#corpusbox").corpusChooser("updateAllStates")
 
-        let newCorpora = []
-        for (let corpus of settings.corpusListing.getSelectedCorpora()) {
-            if (!settings.corpora[corpus].limitedAccess) {
-                newCorpora.push(corpus)
-            }
-        }
+        // let newCorpora = []
+        // for (let corpus of settings.corpusListing.getSelectedCorpora()) {
+        //     if (!settings.corpora[corpus].limitedAccess) {
+        //         newCorpora.push(corpus)
+        //     }
+        // }
 
-        if (_.isEmpty(newCorpora)) {
-            newCorpora = settings.preselectedCorpora
-        }
-        settings.corpusListing.select(newCorpora)
+        // if (_.isEmpty(newCorpora)) {
+        //     newCorpora = settings.preselectedCorpora
+        // }
+        // settings.corpusListing.select(newCorpora)
         s.loggedIn = false
         // $("#corpusbox").corpusChooser("selectItems", newCorpora)
     }

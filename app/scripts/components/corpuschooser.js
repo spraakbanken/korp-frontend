@@ -22,16 +22,19 @@ function* getParents(folder) {
     }
 }
 let correctState = (folder) => {
-    let childSelected = Array.from(getChildren(folder, false)).map((child) => child.selected)
-    let childIndeterminate = Array.from(getChildren(folder, false)).map(
-        (child) => child.isIndeterminate
-    )
+    let immediateChildren = Array.from(getChildren(folder, false))
+    let childSelected = immediateChildren.map((child) => child.selected)
+    let childIndeterminate = immediateChildren.map((child) => child.isIndeterminate)
 
     folder.isIndeterminate =
         (childSelected.some(Boolean) && !childSelected.every(Boolean)) ||
         childIndeterminate.some(Boolean)
 
     folder.selected = childSelected.every(Boolean)
+    let isLockedLeaf = (node) => node.isLeaf && node.corpus.limitedAccess && !node.accessGranted
+    folder.isAllChildrenLocked = immediateChildren.every(
+        (child) => child.isAllChildrenLocked || isLockedLeaf(child)
+    )
 }
 
 export const chooserNodeName = "chooserNode"
@@ -292,21 +295,30 @@ export const corpusChooserComponent = {
             statemachine.listen("invalidate_corpuschooser", function ({ corpora, credentials }) {
                 // this is called when the context and selected nodes in tree differ
                 let nodes = Array.from(getChildren($ctrl.tree))
-                if (corpora) {
-                    for (let child of nodes) {
-                        child.selected = child.isLeaf && corpora.includes(child.id)
-                        if (child.selected) {
-                            for (let parent of getParents(child)) {
-                                correctState(parent)
-                            }
+                let leafs = nodes.filter((node) => node.isLeaf)
+                let modified = []
+                for (let child of leafs) {
+                    let prevSelected = child.selected
+                    let prevAccess = child.accessGranted
+                    if (corpora) {
+                        child.selected = corpora.includes(child.id)
+
+                        if (child.selected != prevSelected) {
+                            modified.push(child)
+                        }
+                    } else if (credentials && child.corpus.limitedAccess) {
+                        child.accessGranted = credentials.includes(child.id.toUpperCase())
+                        if (!child.accessGranted) {
+                            child.selected = false
+                        }
+                        if (child.accessGranted != prevAccess) {
+                            modified.push(child)
                         }
                     }
                 }
-                if (credentials) {
-                    for (let child of nodes.reverse()) {
-                        if (child.isLeaf && child.corpus.limitedAccess) {
-                            child.accessGranted = credentials.includes(child.id.toUpperCase())
-                        }
+                for (let leaf of modified) {
+                    for (let parent of getParents(leaf)) {
+                        correctState(parent)
                     }
                 }
             })
@@ -391,15 +403,15 @@ export const corpusChooserComponent = {
 
             $ctrl.selectAll = () => {
                 for (let node of nodes) {
-                    if (
-                        node.isLeaf &&
-                        node.corpus.limitedAccess &&
-                        statemachine.context.credentials?.includes(node.corpus.id.toUpperCase())
-                    ) {
+                    if (node.isLeaf && node.corpus.limitedAccess && node.accessGranted) {
                         node.selected = true
                         node.isIndeterminate = false
-                    } else if (node.isLeaf && node.corpus.limitedAccess) {
+                    } else if (
+                        (node.isLeaf && node.corpus.limitedAccess) ||
+                        node.isAllChildrenLocked
+                    ) {
                         node.selected = false
+                        node.isIndeterminate = false
                     } else {
                         node.selected = true
                         node.isIndeterminate = false

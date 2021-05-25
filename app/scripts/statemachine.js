@@ -53,6 +53,7 @@ let machine = Machine(
             CORPUSCHOOSER_CHANGE: { actions: "update_corpora" },
             CORPORA_INIT: { actions: ["update_corpora", "invalidate_corpuschooser"] },
             LOGIN: { actions: ["set_login", "invalidate_corpuschooser"] },
+            LOGOUT: { actions: ["unset_login", "invalidate_corpuschooser"] },
         },
         type: "parallel",
         states: {
@@ -118,6 +119,9 @@ let machine = Machine(
                 loginObj: (context, { credentials }) => {
                     return { credentials }
                 },
+            }),
+            unset_login: assign({
+                loginObj: {},
             }),
         },
     }
