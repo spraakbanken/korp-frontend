@@ -37,6 +37,7 @@ export const sidebarComponent = {
     bindings: {
         onShow: "&",
         onHide: "&",
+        lang: "<",
     },
     controller: [
         "$element",
@@ -49,6 +50,7 @@ export const sidebarComponent = {
 
             statemachine.listen("select_word", function (data) {
                 safeApply($rootScope, () => {
+                    $ctrl.data = data
                     if (data == null) {
                         $ctrl.onHide()
                     } else {
@@ -57,6 +59,14 @@ export const sidebarComponent = {
                     }
                 })
             })
+
+            $ctrl.$onChanges = (changesObj) => {
+                if (changesObj['lang']) {
+                    if ($ctrl.data) {
+                        $ctrl.updateContent($ctrl.data)
+                    }
+                }
+            }
 
             Object.assign($ctrl, {
                 openReadingMode() {
@@ -450,12 +460,12 @@ export const sidebarComponent = {
                         for (let x of itr) {
                             if (x.length) {
                                 val = (attrs.stringify || _.identity)(x)
+                                
+                                if (attrs.translation != null) {
+                                    val = util.translateAttribute($ctrl.lang, attrs.translation, val)
+                                }
 
                                 inner = $(_.template(pattern)({ key: x, val }))
-                                if (attrs.translationKey != null) {
-                                    const prefix = attrs.translationKey || ""
-                                    inner.localeKey(prefix + val)
-                                }
 
                                 if (attrs.internalSearch) {
                                     inner.addClass("link").click(function () {
@@ -491,7 +501,7 @@ export const sidebarComponent = {
                     if (attrs.stringify) {
                         str_value = attrs.stringify(value)
                     } else  if (attrs.translation) {
-                        str_value = attrs.translation[value]
+                        str_value = util.translateAttribute($ctrl.lang, attrs.translation, value)
                     }
 
                     if (attrs.type === "url") {

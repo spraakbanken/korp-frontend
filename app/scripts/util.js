@@ -962,6 +962,10 @@ util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
     }
 }
 
+util.translateAttribute = (lang, translations, value) => {
+    return translations && (translations[lang] && translations[lang][value] || translations[value]) || value
+}
+
 util.browserWarn = function () {
     $.reject({
         reject: {
