@@ -121,16 +121,14 @@ let reduceStringify = function(type, values, structAttributes) {
             }).join(" ")
             return output
         default:
-            // structural attributes
-            var prefix = ""
-            if (structAttributes.translationKey) prefix = structAttributes.translationKey
+            // structural attributes            
             var mapped = _.map(values, function(value) {
                 if (structAttributes["set"] && value === "") {
                     return "–"
                 } else if (value === "") {
                     return "-"
-                } else if (loc_data["en"][prefix + value]) {
-                    return util.getLocaleString(prefix + value)
+                } else if (structAttributes.translation) {
+                    return structAttributes.translation[value]
                 } else {
                     return value
                 }

@@ -682,13 +682,19 @@ korpApp.directive("compareCtrl", () => ({
                 let cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora))
                 const attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs())
 
-                s.stringify = _.map(reduce, (item) => {
-                    if (attributes[_.trimStart(item, "_.")]) {
-                        return attributes[_.trimStart(item, "_.")].stringify
-                    } else {
-                        return angular.identity
+                
+                let stringify = angular.identity
+                // currently we only support one attribute to reduce/group by, so simplify by only checking first item
+                const reduceAttrName = _.trimStart(reduce[0], "_.")
+                if (attributes[reduceAttrName]) {
+                    if (attributes[reduceAttrName].stringify) {
+                        stringify = attributes[reduceAttrName].stringify
+                    } else if(attributes[reduceAttrName].translation) {
+                        stringify = (value) => attributes[reduceAttrName].translation[value]
                     }
-                })
+                }
+                s.stringify = [stringify]
+
 
                 s.max = max
 

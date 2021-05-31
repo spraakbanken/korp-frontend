@@ -487,7 +487,12 @@ export const sidebarComponent = {
                         return output
                     }
 
-                    const str_value = (attrs.stringify || _.identity)(value)
+                    let str_value = value
+                    if (attrs.stringify) {
+                        str_value = attrs.stringify(value)
+                    } else  if (attrs.translation) {
+                        str_value = attrs.translation[value]
+                    }
 
                     if (attrs.type === "url") {
                         return output.append(
