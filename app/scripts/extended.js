@@ -8,7 +8,7 @@ const autocompleteTemplate = `\
             ng-model="input"
             escaper
             typeahead-min-length="0"
-            typeahead-input-formatter="typeaheadInputFormatter($model)"
+            typeahead-input-formatter="typeaheadInputFormatter($model)"            
             uib-typeahead="tuple[0] as tuple[1] for tuple in getRows($viewValue)"></input>
 </div>`
 
@@ -17,11 +17,7 @@ const selectTemplate =
     "<input ng-show='inputOnly' type='text' ng-model='input'/>"
 const localize = ($scope) =>
     function (str) {
-        if (!$scope.translationKey) {
-            return str
-        } else {
-            return util.getLocaleString(($scope.translationKey || "") + str)
-        }
+        return util.translateAttribute(null, $scope.translation, str)
     }
 
 const selectController = (autocomplete) => [
@@ -43,9 +39,11 @@ const selectController = (autocomplete) => [
         }
 
         $scope.$watch("orObj.op", (newVal, oldVal) => {
-            $scope.inputOnly = $scope.orObj.op !== "=" && $scope.orObj.op !== "!="
+            $scope.inputOnly = !["=", "!=", "contains", "not contains"].includes($scope.orObj.op)
             if (newVal !== oldVal) {
-                $scope.input = ""
+                if (!autocomplete) {
+                    $scope.input = "" || $scope.dataset[0][0]
+                }
             }
         })
 
@@ -90,7 +88,6 @@ const selectController = (autocomplete) => [
 
 // Select-element. Use the following settings in the corpus:
 // - dataset: an object or an array of values
-// - translationKey: a key that will be prepended to the value for lookup in translation files
 // - escape: boolean, will be used by the escaper-directive
 export default _.merge({
     datasetSelect: {
@@ -112,7 +109,6 @@ export default _.merge({
     },
 
     // Select-element. Gets values from "struct_values"-command. Use the following settings in the corpus:
-    // - translationKey: a key that will be prepended to the value for lookup in translation files
     // - escape: boolean, will be used by the escaper-directive
     structServiceSelect: {
         template: selectTemplate,
@@ -120,7 +116,6 @@ export default _.merge({
     },
 
     // Autocomplete. Gets values from "struct_values"-command. Use the following settings in the corpus:
-    // - translationKey: a key that will be prepended to the value for lookup in translation files
     // - escape: boolean, will be used by the escaper-directive
     structServiceAutocomplete: {
         template: autocompleteTemplate,
