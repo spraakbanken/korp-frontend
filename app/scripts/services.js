@@ -79,7 +79,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
         const corpora1 = _.filter(cmpObj1.corpora, filterFun)
         const corpora2 = _.filter(cmpObj2.corpora, filterFun)
 
-        let attrs = cl.getCurrentAttributes()
+        let attrs = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs())
         const split = _.filter(reduce, (r) => (attrs[r] && attrs[r].type) === "set").join(",")
 
         const rankedReduce = _.filter(reduce, (item) => {
