@@ -690,7 +690,7 @@ korpApp.directive("compareCtrl", () => ({
                     if (attributes[reduceAttrName].stringify) {
                         stringify = attributes[reduceAttrName].stringify
                     } else if(attributes[reduceAttrName].translation) {
-                        stringify = (value) => attributes[reduceAttrName].translation[value]
+                        stringify = (value) => util.translateAttribute($rootScope.lang, attributes[reduceAttrName].translation, value)
                     }
                 }
                 s.stringify = [stringify]

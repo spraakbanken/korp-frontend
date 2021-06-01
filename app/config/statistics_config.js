@@ -128,7 +128,7 @@ let reduceStringify = function(type, values, structAttributes) {
                 } else if (value === "") {
                     return "-"
                 } else if (structAttributes.translation) {
-                    return structAttributes.translation[value]
+                    return util.translateAttribute(null, structAttributes.translation, value)
                 } else {
                     return value
                 }

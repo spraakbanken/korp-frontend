@@ -963,7 +963,15 @@ util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
 }
 
 util.translateAttribute = (lang, translations, value) => {
-    return translations && (translations[lang] && translations[lang][value] || translations[value]) || value
+    if (!lang) {
+        lang = window.lang || settings.defaultLanguage || "sv"
+    }
+
+    if(translations && translations[value]) {
+        return _.isObject(translations[value]) ? translations[value][lang] : translations[value]
+    } else {
+        return value
+    }
 }
 
 util.browserWarn = function () {
