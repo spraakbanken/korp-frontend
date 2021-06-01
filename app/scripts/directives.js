@@ -145,7 +145,7 @@ korpApp.directive("tokenValue", ($compile, $controller) => ({
 
         return scope.$watch("tokenValue", function (valueObj, prevValueObj) {
             // if the selected attribute has changed, remove case insensitive flag
-            if (valueObj.value != prevValueObj.value && scope.orObj.flags) {
+            if (prevValueObj && valueObj && valueObj.value != prevValueObj.value && scope.orObj.flags) {
                 delete scope.orObj.flags["c"]
             }
 
