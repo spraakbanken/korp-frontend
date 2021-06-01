@@ -514,11 +514,11 @@ export const sidebarComponent = {
                         // msdTags = require '../markup/msdtags.html'
                         const msdTags = "markup/msdtags.html"
                         return output.append(`<span class='msd_sidebar'>${str_value}</span>
-                    <a href='${msdTags}' target='_blank'>
-                        <span class='sidebar_info ui-icon ui-icon-info'></span>
-                    </a>
-                </span>\
-            `)
+                                <a href='${msdTags}' target='_blank'>
+                                    <span class='sidebar_info ui-icon ui-icon-info'></span>
+                                </a>
+                            </span>\
+                        `)
                     } else if (attrs.pattern) {
                         return output.append(
                             _.template(attrs.pattern)({
@@ -529,17 +529,7 @@ export const sidebarComponent = {
                             })
                         )
                     } else {
-                        if (attrs.translationKey) {
-                            if (window.loc_data["en"][attrs.translationKey + value]) {
-                                return output.append(
-                                    `<span rel='localize[${attrs.translationKey}${value}]'></span>`
-                                )
-                            } else {
-                                return output.append(`<span>${value}</span>`)
-                            }
-                        } else {
-                            return output.append(`<span>${str_value || ""}</span>`)
-                        }
+                        return output.append(`<span>${str_value || ""}</span>`)
                     }
                 },
 
