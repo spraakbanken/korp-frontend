@@ -106,9 +106,7 @@ let reduceStringify = function(type, values, structAttributes) {
 
         case "deprel":
             var output = _.map(values, function(token) {
-                return $("<span>")
-                    .localeKey("deprel_" + token)
-                    .outerHTML()
+                return util.translateAttribute(null, attrs["deprel"].translation, token)
             }).join(" ")
             return output
         case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
