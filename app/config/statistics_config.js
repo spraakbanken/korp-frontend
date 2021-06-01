@@ -80,9 +80,7 @@ let reduceStringify = function(type, values, structAttributes) {
             return values.join(" ")
         case "pos":
             var output = _.map(values, function(token) {
-                return $("<span>")
-                    .localeKey("pos_" + token)
-                    .outerHTML()
+                return util.translateAttribute(null, attrs["pos"].translation, token)
             }).join(" ")
             return output
         case "saldo":
