@@ -231,6 +231,7 @@ export const sidebarComponent = {
                             items = items.concat(
                                 (
                                     this.renderItem(
+                                        type,
                                         key,
                                         value,
                                         corpus_attrs[key],
@@ -255,6 +256,7 @@ export const sidebarComponent = {
                         try {
                             const output = (
                                 this.renderItem(
+                                    null,
                                     key,
                                     "not_used",
                                     attrs,
@@ -275,8 +277,8 @@ export const sidebarComponent = {
                     return [posItems, structItems]
                 },
 
-                renderItem(key, value, attrs, wordData, sentenceData, tokens) {
-                    let lis, output, pattern, ul, valueArray
+                renderItem(type, key, value, attrs, wordData, sentenceData, tokens) {
+                    let output, pattern, ul
                     let val, inner, cqpVal, li, address
                     if (attrs.label) {
                         output = $(`<p><span rel='localize[${attrs.label}]'></span>: </p>`)
@@ -289,6 +291,7 @@ export const sidebarComponent = {
                         let scope = $rootScope.$new()
                         let locals = { $scope: scope }
                         Object.assign(scope, {
+                            type,
                             key,
                             value,
                             attrs,
@@ -310,125 +313,7 @@ export const sidebarComponent = {
                         return output
                     }
 
-                    if (attrs.type === "set" && attrs.display && attrs.display.expandList) {
-                        valueArray = _.filter((value && value.split("|")) || [], Boolean)
-                        const attrSettings = attrs.display.expandList
-                        if (attrs.ranked) {
-                            valueArray = _.map(valueArray, function (value) {
-                                val = value.split(":")
-                                return [val[0], val[val.length - 1]]
-                            })
-
-                            lis = []
-
-                            for (let outerIdx = 0; outerIdx < valueArray.length; outerIdx++) {
-                                var externalLink
-                                let [value, prob] = valueArray[outerIdx]
-                                li = $("<li></li>")
-                                const subValues = attrSettings.splitValue
-                                    ? attrSettings.splitValue(value)
-                                    : [value]
-                                for (let idx = 0; idx < subValues.length; idx++) {
-                                    const subValue = subValues[idx]
-                                    val = (attrs.stringify || attrSettings.stringify || _.identity)(
-                                        subValue
-                                    )
-                                    inner = $(`<span>${val}</span>`)
-                                    inner.attr("title", prob)
-
-                                    if (
-                                        attrs.internalSearch &&
-                                        (attrSettings.linkAllValues || outerIdx === 0)
-                                    ) {
-                                        inner.data("key", subValue)
-                                        inner.addClass("link").click(function () {
-                                            const searchKey = attrSettings.searchKey || key
-                                            cqpVal = $(this).data("key")
-                                            const cqpExpr = attrSettings.internalSearch
-                                                ? attrSettings.internalSearch(searchKey, cqpVal)
-                                                : `[${searchKey} contains '${regescape(cqpVal)}']`
-                                            return locationSearch({
-                                                search: "cqp",
-                                                cqp: cqpExpr,
-                                                page: null,
-                                            })
-                                        })
-                                    }
-                                    if (attrs.externalSearch) {
-                                        address = _.template(attrs.externalSearch)({
-                                            val: subValue,
-                                        })
-                                        externalLink = $(
-                                            `<a href='${address}' class='external_link' target='_blank' style='margin-top: -6px'></a>`
-                                        )
-                                    }
-
-                                    li.append(inner)
-                                    if (attrSettings.joinValues && idx !== subValues.length - 1) {
-                                        li.append(attrSettings.joinValues)
-                                    }
-                                }
-                                if (externalLink) {
-                                    li.append(externalLink)
-                                }
-                                lis.push(li)
-                            }
-                        } else {
-                            lis = []
-                            for (value of valueArray) {
-                                li = $("<li></li>")
-                                li.append(value)
-                                lis.push(li)
-                            }
-                        }
-
-                        if (lis.length === 0) {
-                            ul = $('<i rel="localize[empty]" style="color : grey"></i>')
-                        } else {
-                            ul = $("<ul style='list-style:initial'>")
-                            ul.append(lis)
-
-                            if (lis.length !== 1 && !attrSettings.showAll) {
-                                _.map(lis, function (li, idx) {
-                                    if (idx !== 0) {
-                                        return li.css("display", "none")
-                                    }
-                                })
-
-                                const showAll = $(
-                                    `<span class='link' rel='localize[complemgram_show_all]'></span><span> (${
-                                        lis.length - 1
-                                    })</span>`
-                                )
-                                ul.append(showAll)
-
-                                const showOne = $(
-                                    "<span class='link' rel='localize[complemgram_show_one]'></span>"
-                                )
-                                showOne.css("display", "none")
-                                ul.append(showOne)
-
-                                showAll.click(function () {
-                                    showAll.css("display", "none")
-                                    showOne.css("display", "inline")
-                                    return _.map(lis, (li) => li.css("display", "list-item"))
-                                })
-
-                                showOne.click(function () {
-                                    showAll.css("display", "inline")
-                                    showOne.css("display", "none")
-                                    _.map(lis, function (li, i) {
-                                        if (i !== 0) {
-                                            return li.css("display", "none")
-                                        }
-                                    })
-                                })
-                            }
-                        }
-
-                        output.append(ul)
-                        return output
-                    } else if (attrs.type === "set") {
+                    if (attrs.type === "set") {
                         pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>'
                         ul = $("<ul>")
                         const getStringVal = (str) =>
@@ -436,7 +321,7 @@ export const sidebarComponent = {
                                 _.invokeMap(_.invokeMap(str, "charCodeAt", 0), "toString"),
                                 (a, b) => a + b
                             )
-                        valueArray = _.filter((value && value.split("|")) || [], Boolean)
+                        let valueArray = _.filter((value && value.split("|")) || [], Boolean)
                         if (key === "variants") {
                             // TODO: this doesn't sort quite as expected
                             valueArray.sort(function (a, b) {
