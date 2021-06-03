@@ -280,7 +280,7 @@ export const sidebarComponent = {
 
                 renderItem(type, key, value, attrs, wordData, sentenceData, tokens) {
                     let output, pattern, ul
-                    let val, inner, cqpVal, li, address
+                    let val, inner, li, address
                     if (attrs.label) {
                         output = $(`<p><span rel='localize[${attrs.label}]'></span>: </p>`)
                     } else {
@@ -355,12 +355,9 @@ export const sidebarComponent = {
 
                                 if (attrs.internalSearch) {
                                     inner.addClass("link").click(function () {
-                                        cqpVal = $(this).data("key")
-                                        return locationSearch({
-                                            page: null,
-                                            search: "cqp",
-                                            cqp: `[${key} contains \"${regescape(cqpVal)}\"]`,
-                                        })
+                                        const cqpVal = $(this).data("key")
+                                        const cqp = `[${key} contains "${regescape(cqpVal)}"]`
+                                        statemachine.send("SEARCH_CQP", { cqp })
                                     })
                                 }
 

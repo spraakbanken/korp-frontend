@@ -432,6 +432,9 @@ korpApp.controller("ExtendedSearch", function (
         $scope.$root.searchtabs()[1].tab.select()
         s.cqp = event.cqp
         triggerSearch()
+        // sometimes $scope.$apply is needed and sometimes it throws errors
+        // depending on source of the event I guess. $timeout solves it.
+        $timeout(() =>$scope.$apply())
     })
 
     s.searches = searches
