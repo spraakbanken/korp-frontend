@@ -468,6 +468,9 @@ korpApp.directive("extendedList", () => ({
         setCQP(s.cqp)
 
         s.$watch("data", () => (s.cqp = CQP.stringify(s.data) || ""), true)
+        s.$watch("cqp", () => {
+            setCQP(s.cqp)
+        })
 
         s.addOr = function (and_array) {
             let last = _.last(and_array) || {}

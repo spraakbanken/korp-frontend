@@ -414,8 +414,8 @@ korpApp.controller("ExtendedSearch", function (
         compareSearches.saveSearch(name, $rootScope.extendedCQP)
     )
 
-    s.searches = searches
-    s.$on("btn_submit", function () {
+    // TODO this is *too* weird
+    function triggerSearch() {
         $location.search("search", null)
         $location.search("page", null)
         $location.search("in_order", null)
@@ -426,6 +426,17 @@ korpApp.controller("ExtendedSearch", function (
             }
             $location.search("within", within)
         }, 0)
+    }
+
+    statemachine.listen("cqp_search", (event) => {
+        $scope.$root.searchtabs()[1].tab.select()
+        s.cqp = event.cqp
+        triggerSearch()
+    })
+
+    s.searches = searches
+    s.$on("btn_submit", function () {
+        triggerSearch()
     })
 
     s.$on("extended_set", ($event, val) => (s.cqp = val))
