@@ -31,6 +31,7 @@ module.exports = {
             commonjs: path.resolve(korpConfigDir, "modes/common.js"),
             defaultmode: path.resolve(korpConfigDir, "modes/default_mode.js"),
             custom: path.resolve(korpConfigDir, "custom/"),
+            '@': path.resolve(__dirname, "app/scripts"),
         },
     },
     module: {

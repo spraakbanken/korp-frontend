@@ -2,8 +2,11 @@ import { stringifyFunctions } from "custom/stringify_functions.js"
 
 // TODO document and name properly
 
-function stringify(attrName, value) {
-    return stringifyFunctions[attrName] ? stringifyFunctions[attrName](value) : value
+export function stringify(attrName, value) {
+    // TODO ideally we should just fetch the attribute
+    let attrs = _.extend({}, settings.corpusListing.getCurrentAttributes(), settings.corpusListing.getStructAttrs())
+    const key = attrs[attrName].stringify
+    return stringifyFunctions[key] ? stringifyFunctions[key](value) : value
 }
 
 export function stringifyFunc(attrName) {

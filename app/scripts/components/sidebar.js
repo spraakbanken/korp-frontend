@@ -3,6 +3,7 @@ import "./sidebar.scss"
 export const sidebarName = "sidebar"
 import sidebarComponents from 'custom/sidebar.js'
 import statemachine from "../statemachine"
+import { stringify } from "@/stringify.js"
 
 let html = String.raw
 export const sidebarComponent = {
@@ -344,7 +345,7 @@ export const sidebarComponent = {
                         const lis = []
                         for (let x of itr) {
                             if (x.length) {
-                                val = (attrs.stringify || _.identity)(x)
+                                val = stringify(key, x)
                                 
                                 if (attrs.translation != null) {
                                     val = util.translateAttribute($ctrl.lang, attrs.translation, val)
@@ -384,7 +385,7 @@ export const sidebarComponent = {
 
                     let str_value = value
                     if (attrs.stringify) {
-                        str_value = attrs.stringify(value)
+                        str_value = stringify(key, value)
                     } else  if (attrs.translation) {
                         str_value = util.translateAttribute($ctrl.lang, attrs.translation, value)
                     }
