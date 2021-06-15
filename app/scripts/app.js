@@ -188,15 +188,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     s.searchDisabled = false
     s.$on("corpuschooserchange", function (event, corpora) {
         settings.corpusListing.select(corpora)
-        const nonprotected = _.map(settings.corpusListing.getNonProtected(), "id")
-        if (
-            corpora.length &&
-            _.intersection(corpora, nonprotected).length !== nonprotected.length
-        ) {
-            $location.search("corpus", corpora.join(","))
-        } else {
-            $location.search("corpus", null)
-        }
+        $location.search("corpus", corpora.join(","))
         s.searchDisabled = settings.corpusListing.selected.length === 0
     })
 
