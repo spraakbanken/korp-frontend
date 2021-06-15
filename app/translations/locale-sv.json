@@ -126,6 +126,11 @@
 
     "sent_start": "Meningsbörjan",
     "sent_end": "Meningsslut",
+    "before_token": "Före första tokenet",
+    "after_token": "Efter sista tokenet",
+    "add_tag_box": "Lägg till sak",
+    "starts": "börjar",
+    "ends": "slutar",
 
     "none_selected": "&lt;ej vald&gt;",
 

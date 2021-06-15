@@ -432,34 +432,7 @@ korpApp.directive("extendedList", () => ({
         const s = $scope
 
         const setCQP = function (val) {
-            let token
-            try {
-                s.data = CQP.parse(val)
-            } catch (error) {
-                let output = []
-                for (token of val.split("[")) {
-                    if (!token) {
-                        continue
-                    }
-                    token = `[${token}`
-                    let tokenObj
-                    try {
-                        tokenObj = CQP.parse(token)
-                    } catch (parseError) {
-                        tokenObj = [{ cqp: token }]
-                    }
-                    output = output.concat(tokenObj)
-                }
-
-                s.data = output
-                c.log("error parsing cqp", s.data)
-            }
-
-            for (token of s.data) {
-                if (!("and_block" in token) || !token.and_block.length) {
-                    token.and_block = CQP.parse('[word = ""]')[0].and_block
-                }
-            }
+            s.data = CQP.parse(val)
         }
 
         if (s.cqp == null) {
@@ -467,7 +440,9 @@ korpApp.directive("extendedList", () => ({
         }
         setCQP(s.cqp)
 
-        s.$watch("data", () => (s.cqp = CQP.stringify(s.data) || ""), true)
+        s.$watch("data", () => {
+            s.cqp = CQP.stringify(s.data) || ""
+        }, true)
         s.$watch("cqp", () => {
             setCQP(s.cqp)
         })
@@ -486,10 +461,34 @@ korpApp.directive("extendedList", () => ({
             const token = { and_block: [s.addOr([])] }
             s.data.push(token)
             s.repeatError = false
+            s.showCloseButton = true
+        }
+
+        function getTokenBoxes() {
+            return s.data.filter((box) => box.and_block);
+        }
+
+        s.showCloseButton = getTokenBoxes().length > 1
+
+        s.scrollToStart = false
+        s.addStructToken = function(start = true, idx = -1, within) {
+            within = within ? within : Object.keys(settings.corpusListing.getCommonWithins())[0]
+            // TODO this is duplicated since s.tagTypes are not available in this scope
+            const token = { struct: within, start: true }
+            if (idx != -1) {
+                s.data.splice(idx, 0, token);
+            } else if (start) {
+                s.scrollToStart = true
+                s.data.unshift(token)
+            } else {
+                s.data.push(token)
+            }
         }
 
         s.removeToken = function (i) {
-            if (!(s.data.length > 1)) {
+            const tokenBoxes = getTokenBoxes()
+            s.showCloseButton = tokenBoxes.length > 2
+            if (!(tokenBoxes.length > 1)) {
                 return
             }
             s.data.splice(i, 1)
@@ -503,14 +502,26 @@ korpApp.directive("extendedList", () => ({
             s.repeatError = repeatError
         }
 
+        s.removeTag = function (i) {
+            s.data.splice(i, 1)
+        }
+
         s.toggleRepeat = function (token) {
             if (!token.repeat) {
                 token.repeat = [1, 1]
                 s.repeatError = false
             } else {
                 s.repeatError = false
-                return delete token.repeat
+                delete token.repeat
             }
+        }
+
+        
+        s.toggleStart = (idx) => {
+            s.addStructToken(false, idx, "sentence")
+        }
+        s.toggleEnd = (idx) => {
+            s.addStructToken(false, idx + 1, "sentence")
         }
 
         s.repeatChange = function (repeat_idx, token_idx) {

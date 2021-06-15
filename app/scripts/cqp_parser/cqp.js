@@ -86,6 +86,11 @@ const stringifyCqp = function (cqp_obj, expanded_format) {
             continue
         }
 
+        if (token.struct) {
+            output.push(`<${token.start ? '' : '/'}${token.struct}>`)
+            continue
+        }
+
         const outer_and_array = []
         for (let and_array of token.and_block) {
             const or_array = []

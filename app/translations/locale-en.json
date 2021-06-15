@@ -127,6 +127,11 @@
 
     "sent_start": "Sentence start",
     "sent_end": "Sentence end",
+    "before_token": "Before first token",
+    "after_token": "After last token",
+    "add_tag_box": "Add tag",
+    "starts": "starts",
+    "ends": "ends",
 
     "none_selected": "&lt;none selected&gt;",
 

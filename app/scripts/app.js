@@ -5,6 +5,7 @@ import { kwicPagerName, kwicPager } from "./components/pager"
 import { sidebarName, sidebarComponent } from "./components/sidebar"
 import * as autoc from "./components/autoc"
 import * as readingmode from "./components/readingmode"
+import * as extendedAddBox from "./components/extended/extended_add_box"
 import { setDefaultConfigValues } from "./settings.js"
 
 setDefaultConfigValues()
@@ -46,6 +47,7 @@ window.korpApp = angular.module("korpApp", [
 korpApp.component(kwicPagerName, kwicPager).component(sidebarName, sidebarComponent)
 korpApp.component(readingmode.componentName, readingmode.component)
 korpApp.component(autoc.componentName, autoc.component)
+korpApp.component(extendedAddBox.componentName, extendedAddBox.component)
 
 // load all custom components (imported in index.js)
 for(const componentName in window.customComponents) {

@@ -647,25 +647,8 @@ table {
   padding: 0px 5px;
 }
 
-.insert_token {
-  position: relative;
-  top: 54px;
-  margin-left: 10px;
-  // font-weight: bold;
-  color: #555;
-  &:hover {
-    color: #333;
-  }
-  .plus-btn {
-      position: relative;
-      top: -1px;
-  }
-}
-
 .query_token {
   background-color: #e1e1e1;
-  display: inline-block;
-  vertical-align: top;
   padding: 5px;
   border: 1px solid #999;
   margin-left: 0;
@@ -680,7 +663,8 @@ table {
     transition: opacity 200ms ease;
     font-size : 15px;
   }
-  &:only-of-type .close_btn {
+
+  .close_btn.show {
     opacity: 0;
     cursor: default;
     transition: opacity 200ms ease;
@@ -767,24 +751,6 @@ table {
       left: -2px;
       font-size: 14px;
     }
-  }
-
-  .close_token {
-    border-radius: 20px;
-    color: black;
-    background-color: rgb(242, 247, 255);
-    border: thin lightgrey solid;
-    padding-left: 5px;
-    padding-right: 2px;
-    cursor: default;
-    i {
-      cursor : pointer;
-    }
-  }
-
-  .lower_footer {
-    text-align: right;
-    margin-top: 2px;
   }
 
   #opt_menu {
@@ -1359,7 +1325,6 @@ label[for=lemgram_select]:before {
 }
 
 .query_arg {
-  border-radius: 2px;
   padding: 5px;
   background-color: #f7fceb;
   border: solid 1px #999;
@@ -1373,6 +1338,10 @@ label[for=lemgram_select]:before {
     cursor: pointer;
     margin-left : 5px;
   }
+}
+
+.tag-box {
+  background-color: #dbeafe;
 }
 
 .query_arg:only-of-type .or_arg:only-child .remove_arg {
@@ -1560,6 +1529,14 @@ label[for=lemgram_select]:before {
   vertical-align: top;
   font-family: Garamond,Cochin,Serif;
   font-size: 1.3em;
+}
+
+.arg_selects.word {
+  color: #222222;
+}
+
+.arg_selects.word:hover {
+  color: #222222;
 }
 
 .error_msg ~ * {
@@ -2629,10 +2606,6 @@ li.active a span .num-to-find {
     .time-div {
         padding-top: 15px;
     }
-}
-
-.or_container .word {
-    color: #222222;
 }
 
 .err_msg {

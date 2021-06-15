@@ -268,6 +268,26 @@ window.CorpusListing = class CorpusListing {
         return { default_within: defaultWithin, within }
     }
 
+    getCommonWithins() {
+        // only return withins that are available in every selected corpus
+        const allWithins = this.selected.map((corp) => corp.within)
+        const withins = allWithins.reduce((acc, curr) => {
+            for (const key in acc) {
+                if (!curr[key]) {
+                    delete acc[key];
+                }
+            }
+            return acc
+        }, _.pickBy(allWithins[0], (val, within) => {
+            // ignore withins that start with numbers, such as "5 sentence"
+            return !within.match(/^[0-9]/)
+        }))
+        if (_.isEmpty(withins)) {
+            return { sentence: { label: { sv: "mening", en: "sentence" }}}
+        }
+        return withins
+    }
+
     getTimeInterval() {
         const all = _(this.selected)
             .map("time")

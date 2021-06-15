@@ -57,7 +57,7 @@ export const component = {
         'lexicons',
         function ($q, lexicons) {
             const ctrl = this
-            
+
             ctrl.isError = false
 
             ctrl.$onChanges = () => {

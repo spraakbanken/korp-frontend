@@ -539,6 +539,7 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
         const lang = s.$parent.$parent && s.$parent.$parent.l && s.$parent.$parent.l.lang
         const allAttrs = settings.corpusListing.getAttributeGroups(lang)
         s.types = _.filter(allAttrs, (item) => !item.hideExtended)
+        s.tagTypes = settings.corpusListing.getCommonWithins()
         s.typeMapping = _.fromPairs(
             _.map(s.types, function (item) {
                 if (item.isStructAttr) {
@@ -565,19 +566,6 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
     s.addAnd = (token) => {
         token.and_block.push(s.addOr([]))
     }
-
-    const toggleBound = function (token, bnd) {
-        if (!(token.bound && token.bound[bnd])) {
-            const boundObj = {}
-            boundObj[bnd] = true
-            token.bound = _.extend(token.bound || {}, boundObj)
-        } else if (token.bound) {
-            delete token.bound[bnd]
-        }
-    }
-
-    s.toggleStart = (token) => toggleBound(token, "lbound")
-    s.toggleEnd = (token) => toggleBound(token, "rbound")
 })
 
 korpApp.directive("advancedSearch", () => ({

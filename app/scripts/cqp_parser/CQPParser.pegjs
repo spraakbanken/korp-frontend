@@ -46,7 +46,10 @@ token
     if(repeat)
       output.repeat = repeat
     return output
- }
+  }
+  / "<" end:"/"? tag:[A-Za-z_0-9]+ ">" {
+    return { struct: tag.join(""), start: end ? false : true }
+  }
 
 repeat
    = "{" from:[0-9]+ "," to:[0-9]* "}"
