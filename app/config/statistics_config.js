@@ -80,9 +80,7 @@ let reduceStringify = function(type, values, structAttributes) {
             return values.join(" ")
         case "pos":
             var output = _.map(values, function(token) {
-                return $("<span>")
-                    .localeKey("pos_" + token)
-                    .outerHTML()
+                return util.translateAttribute(null, attrs["pos"].translation, token)
             }).join(" ")
             return output
         case "saldo":
@@ -108,9 +106,7 @@ let reduceStringify = function(type, values, structAttributes) {
 
         case "deprel":
             var output = _.map(values, function(token) {
-                return $("<span>")
-                    .localeKey("deprel_" + token)
-                    .outerHTML()
+                return util.translateAttribute(null, attrs["deprel"].translation, token)
             }).join(" ")
             return output
         case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
@@ -121,16 +117,14 @@ let reduceStringify = function(type, values, structAttributes) {
             }).join(" ")
             return output
         default:
-            // structural attributes
-            var prefix = ""
-            if (structAttributes.translationKey) prefix = structAttributes.translationKey
+            // structural attributes            
             var mapped = _.map(values, function(value) {
                 if (structAttributes["set"] && value === "") {
                     return "–"
                 } else if (value === "") {
                     return "-"
-                } else if (loc_data["en"][prefix + value]) {
-                    return util.getLocaleString(prefix + value)
+                } else if (structAttributes.translation) {
+                    return util.translateAttribute(null, structAttributes.translation, value)
                 } else {
                     return value
                 }

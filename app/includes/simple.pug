@@ -4,7 +4,7 @@
   
   .sm_flex.justify-between
     form.simple_form
-      autoc#simple_text(placeholder="placeholder", type='lemgram', model='model', disable-lemgram-autocomplete='! settings.autocomplete', text-in-field="textInField")
+      autoc#simple_text(input="input", is-raw-input="isRawInput", type='lemgram', disable-lemgram-autocomplete='!settings.autocomplete', on-change="onChange(output, isRawOutput)")
       search-submit
       .opts
         input#inOrderChk(type='checkbox', ng-model="inOrder") 

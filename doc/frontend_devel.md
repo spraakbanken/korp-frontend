@@ -224,16 +224,7 @@ The config file contains the corpora declaration, wherein the available corpora 
                   In the sidebar, the value will be split before formatted. When using compile / `groupby` on a "set" attribute in a statistics request, it will be added to `split`.
         - "url" - The value will be rendered as a link to the URL and possibly truncated if too long.
     * `pattern`: HTML snippet with placeholders for replacing values. Available is `key` (attribute name) and `value`. Also works for sets. Example: `'<p style="margin-left: 5px;"><%=val.toLowerCase()%></p>'`
-    * `display`: How to display attribute in sidebar. Currently only supported for sets and `expandList` (see below). In the future more ways to display might be added here. 
-        * `expandList`: Render set as a list where the first element is visible and a button to show or hide the rest of the elements.
-            * `splitValue`: Function to split up values if there are sets within the set. Example: `function(value) { return value.split(','); }`
-            * `searchKey`: If `display.expandList.internalSearch` is set to `true`, links will be rendered to search for the value in Korp, using this key in the CQP-expression. 
-                           Omit to use same key as attribute name.
-            * `joinValues`: Interleave this string with all values on the row.
-            * `stringify`: Optional override of outer `stringify`.
-            * `linkAllValues`: Should the `internalSearch` be enabled for all values or only the first one in the set?
-            * `internalSearch`: Alternative function to transform the attribute key and value to a CQP-expression. 
-                              Example: `function(key,value) { '[' + key + '="' + val + '"]' }`
+    * `display`: *DEPRACATED* Use `sidebarComponent`. 
     * `sidebarComponent`: If the `display` key above doesn't do enough, you can write a custom interactive component using `sidebarComponent.template` (an Angularjs template string) and `sidebarComponent.controller` (an Angularjs controller function). Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link. `$scope.model` holds the value, so assigning to this variable will change the current CQP expression. See the `complemgram` and `compwf` implementation at the [Korp SB Config](https://github.com/spraakbanken/korp-frontend-sb/blob/dev/app/modes/common.js). 
     * `internalSearch`: `boolean`. Should the value be displayed as a link to a new Korp search? Only works for sets. Searches for CQP-expression: `[<attrName> contains "<regescape(attrValue)>"]`
     * `externalSearch`: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>`

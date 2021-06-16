@@ -58,6 +58,21 @@ let machine = Machine(
                     },
                 },
             },
+            extended_search: {
+                initial: "blank",
+                states: {
+                    blank: {},
+                    cqp_selected: {
+                        entry: "log",
+                    }
+                },
+                on: {
+                    SEARCH_CQP: {
+                        target: "extended_search.cqp_selected",
+                        actions: ["cqp_search"],
+                    },
+                }
+            },
             sidebar: {
                 ...sidebarStates,
             },
@@ -74,6 +89,7 @@ let machine = Machine(
             select_word: (context, event) => broadcast("select_word", event),
             deselect_word: (context, event) => broadcast("select_word", null),
             lemgram_search: (context, event) => broadcast("lemgram_search", event),
+            cqp_search: (context, event) => broadcast("cqp_search", event),
         },
     }
 )

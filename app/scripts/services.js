@@ -3,12 +3,9 @@
 import jStorage from "../lib/jstorage"
 
 import { parseMapData } from "./map_services.ts"
-import statemachine from "./statemachine"
 
 const korpApp = angular.module("korpApp")
-korpApp.factory("statemachine", ($location) => ({
-    send: statemachine.send,
-}))
+
 korpApp.factory("utils", ($location) => ({
     valfilter(attrobj) {
         if (attrobj.isStructAttr) {
@@ -79,7 +76,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
         const corpora1 = _.filter(cmpObj1.corpora, filterFun)
         const corpora2 = _.filter(cmpObj2.corpora, filterFun)
 
-        let attrs = cl.getCurrentAttributes()
+        let attrs = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs())
         const split = _.filter(reduce, (r) => (attrs[r] && attrs[r].type) === "set").join(",")
 
         const rankedReduce = _.filter(reduce, (item) => {

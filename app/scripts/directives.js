@@ -1,4 +1,6 @@
 /** @format */
+import extendedComponents from './extended.js'
+
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("kwicWord", () => ({
@@ -126,7 +128,7 @@ korpApp.directive("escaper", () => ({
     },
 }))
 
-korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => ({
+korpApp.directive("tokenValue", ($compile, $controller) => ({
     scope: {
         tokenValue: "=",
         model: "=model",
@@ -143,7 +145,7 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
 
         return scope.$watch("tokenValue", function (valueObj, prevValueObj) {
             // if the selected attribute has changed, remove case insensitive flag
-            if (valueObj.value != prevValueObj.value && scope.orObj.flags) {
+            if (prevValueObj && valueObj && valueObj.value != prevValueObj.value && scope.orObj.flags) {
                 delete scope.orObj.flags["c"]
             }
 
@@ -174,12 +176,18 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
             const locals = { $scope: childScope }
             prevScope = childScope
             if (valueObj.extendedComponent) {
-                ;({ template, controller } = extendedComponents[valueObj.extendedComponent])
+                const def = extendedComponents[valueObj.extendedComponent.name || valueObj.extendedComponent]
+                if (_.isFunction(def)) {
+                    ;({ template, controller } = def(valueObj.extendedComponent.options))
+                } else {
+                    ;({ template, controller } = def)
+                }
+                
             } else {
                 if (valueObj.extendedController) {
                     controller = valueObj.extendedController
                 } else {
-                    controller = extendedComponents.defaultController
+                    controller = extendedComponents.default.controller
                 }
                 if (valueObj.extendedTemplate) {
                     template = valueObj.extendedTemplate
@@ -191,7 +199,7 @@ korpApp.directive("tokenValue", ($compile, $controller, extendedComponents) => (
                         tmplObj = { maybe_placeholder: "" }
                     }
 
-                    template = extendedComponents.defaultTemplate(tmplObj)
+                    template = extendedComponents.default.template(tmplObj)
                 }
             }
 
@@ -460,6 +468,9 @@ korpApp.directive("extendedList", () => ({
         setCQP(s.cqp)
 
         s.$watch("data", () => (s.cqp = CQP.stringify(s.data) || ""), true)
+        s.$watch("cqp", () => {
+            setCQP(s.cqp)
+        })
 
         s.addOr = function (and_array) {
             let last = _.last(and_array) || {}
@@ -616,218 +627,22 @@ korpApp.directive("warning", () => ({
     template: "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>",
 }))
 
-korpApp.directive("autoc", ($q, lexicons) => ({
-    replace: true,
-    restrict: "E",
-    scope: {
-        placeholder: "=",
-        model: "=",
-        type: "@",
-        variant: "@",
-        disableLemgramAutocomplete: "=",
-        textInField: "=",
-        errorMessage: "@",
-        errorOnEmpty: "=",
-    },
-    template: `\
-<div>
-        <script type="text/ng-template" id="lemgramautocomplete.html">
-            <a style="cursor:pointer">
-                <span ng-class="{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : (match.model.variant != 'dalin' && match.model.count == 0)}">
-                    <span ng-if="match.model.parts.namespace" class="label lemgram-namespace">{{match.model.parts.namespace | loc}}</span>
-                    <span>{{match.model.parts.main}}</span>
-                    <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
-                    <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
-                    <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.main}}</span>
-                    <sup ng-if="match.model.desc && match.model.desc.index != 1" style="color:gray">{{match.model.desc.index}}</sup>
-                    <span class="num-to-find" ng-if="match.model.count && match.model.count > 0">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}
-                    </span>
-                </span>
-            </a>
-        </script>
-        <div ng-show="!disableLemgramAutocomplete">
-            <div style="float:left"><input
-                autofocus
-                type="text"
-                ng-model="textInField"
-                uib-typeahead="row for row in getRows($viewValue)"
-                typeahead-wait-ms="500"
-                typeahead-template-url="lemgramautocomplete.html"
-                typeahead-loading="isLoading"
-                typeahead-on-select="selectedItem($item, $model, $label)"
-                placeholder="{{placeholderToString(placeholder)}}"
-                typeahead-click-open
-                typeahead-is-open="typeaheadIsOpen"
-                ng-blur="typeaheadClose()"></div>
-            <div style="margin-left:-20px;margin-top:6px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
-        </div>
-        <div ng-show="disableLemgramAutocomplete">
-            <div style="float:left">
-                <input autofocus type="text" ng-model="textInField">
-            </div>
-        </div>
-        <span ng-if='isError' style='color: red; position: relative; top: 3px; margin-left: 6px'>{{errorMessage | loc:lang}}</span>
-</div>\
-`,
-    link(scope) {
-        scope.isError = false
-
-        scope.typeaheadClose = function () {
-            if (scope.errorOnEmpty) {
-                scope.isError = !(scope.model != null && _.isEmpty(scope.textInField))
-            }
-        }
-
-        scope.lemgramify = function (lemgram) {
-            const lemgramRegExp = /([^_.-]*--)?(.*)\.\.(\w+)\.(\d\d?)/
-            const match = lemgram.match(lemgramRegExp)
-            if (!match) {
-                return false
-            }
-            return {
-                main: match[2].replace(/_/g, " "),
-                pos: util.getLocaleString(match[3].slice(0, 2)),
-                index: match[4],
-                namespace: match[1] ? match[1].slice(0, -2) : "",
-            }
-        }
-
-        scope.sensify = function (sense) {
-            const senseParts = sense.split("..")
-            return {
-                main: senseParts[0].replace(/_/g, " "),
-                index: senseParts[1],
-            }
-        }
-
-        scope.placeholderToString = _.memoize(function (placeholder) {
-            if (!placeholder) {
-                return
-            }
-            if (scope.type === "lemgram") {
-                return util.lemgramToPlainString(placeholder)
-            } else {
-                return util.saldoToPlaceholderString(placeholder, true)
-            }
-        })
-
-        scope.selectedItem = function (item, model) {
-            if (scope.type === "lemgram") {
-                scope.placeholder = model.lemgram
-                scope.model = regescape(model.lemgram)
-            } else {
-                scope.placeholder = model.sense
-                scope.model = regescape(model.sense)
-            }
-            scope.textInField = ""
-            return scope.typeaheadClose()
-        }
-
-        if (scope.model) {
-            if (scope.type === "sense") {
-                scope.selectedItem(null, { sense: unregescape(scope.model) })
-            } else {
-                scope.selectedItem(null, { lemgram: unregescape(scope.model) })
-            }
-        }
-
-        scope.getMorphologies = function (corporaIDs) {
-            const morphologies = []
-            if (scope.variant === "dalin") {
-                morphologies.push("dalinm")
-            } else {
-                for (let corporaID of corporaIDs) {
-                    const morfs = settings.corpora[corporaID].morphology || ""
-                    for (let morf of morfs.split("|")) {
-                        if (morf !== "" && !morphologies.includes(morf)) {
-                            morphologies.push(morf)
-                        }
-                    }
-                }
-                if (morphologies.length === 0) {
-                    morphologies.push("saldom")
+korpApp.directive("typeaheadClickOpen", ($timeout) => ({
+    restrict: "A",
+    require: ["ngModel"],
+    link($scope, elem, attrs, ctrls) {
+        const triggerFunc = function (event) {
+            if (event.keyCode === 40 && !$scope.typeaheadIsOpen) {
+                const prev = ctrls[0].$modelValue || ""
+                if (prev) {
+                    ctrls[0].$setViewValue("")
+                    $timeout(() => ctrls[0].$setViewValue(`${prev}`))
                 }
             }
-            return morphologies
         }
-
-        scope.getRows = function (input) {
-            const corporaIDs = _.map(settings.corpusListing.selected, "id")
-            const morphologies = scope.getMorphologies(corporaIDs)
-            if (scope.type === "lemgram") {
-                return scope.getLemgrams(input, morphologies, corporaIDs)
-            } else if (scope.type === "sense") {
-                return scope.getSenses(input, morphologies, corporaIDs)
-            }
-        }
-
-        scope.getLemgrams = function (input, morphologies, corporaIDs) {
-            const deferred = $q.defer()
-            const http = lexicons.getLemgrams(
-                input,
-                morphologies,
-                corporaIDs,
-                scope.variant === "affix"
-            )
-            http.then(function (data) {
-                data.forEach(function (item) {
-                    if (scope.variant === "affix") {
-                        item.count = -1
-                    }
-                    item.parts = scope.lemgramify(item.lemgram)
-                    item.variant = scope.variant
-                })
-                data.sort((a, b) => b.count - a.count)
-                return deferred.resolve(data)
-            })
-            return deferred.promise
-        }
-
-        scope.getSenses = function (input, morphologies, corporaIDs) {
-            const deferred = $q.defer()
-            const http = lexicons.getSenses(input, morphologies.join("|"), corporaIDs)
-            http.then(function (data) {
-                data.forEach(function (item) {
-                    item.parts = scope.sensify(item.sense)
-                    if (item.desc) {
-                        item.desc = scope.sensify(item.desc)
-                    }
-                    item.variant = scope.variant
-                })
-                data.sort(function (a, b) {
-                    if (a.parts.main === b.parts.main) {
-                        return b.parts.index < a.parts.index
-                    } else {
-                        return a.sense.length - b.sense.length
-                    }
-                })
-                return deferred.resolve(data)
-            })
-            return deferred.promise
-        }
-    },
-}))
-
-korpApp.directive("typeaheadClickOpen", function ($timeout) {
-    return {
-        restrict: "A",
-        require: "ngModel",
-        link($scope, elem) {
-            const triggerFunc = function (event) {
-                if (event.keyCode === 40 && !$scope.typeaheadIsOpen) {
-                    const ctrl = elem.controller("ngModel")
-                    const prev = ctrl.$modelValue || ""
-                    if (prev) {
-                        ctrl.$setViewValue("")
-                        return $timeout(() => ctrl.$setViewValue(`${prev}`))
-                    }
-                }
-            }
-            return elem.bind("keyup", triggerFunc)
-        },
+        elem.bind("keyup", triggerFunc)
     }
-})
+}))
 
 korpApp.directive("timeInterval", () => ({
     scope: {

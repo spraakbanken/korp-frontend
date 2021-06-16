@@ -30,9 +30,8 @@ module.exports = {
             configjs: path.resolve(korpConfigDir, "config.js"),
             commonjs: path.resolve(korpConfigDir, "modes/common.js"),
             defaultmode: path.resolve(korpConfigDir, "modes/default_mode.js"),
-            customcss: path.resolve(korpConfigDir, "styles/"),
-            customscripts: path.resolve(korpConfigDir, "scripts/"),
-            customviews: path.resolve(korpConfigDir, "views/"),
+            custom: path.resolve(korpConfigDir, "custom/"),
+            '@': path.resolve(__dirname, "app/scripts"),
         },
     },
     module: {

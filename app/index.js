@@ -96,6 +96,17 @@ _.map(commonSettings, function(v, k) {
   window[k] = v
 })
 
+// store all custom components in this object, for initalization in app.js
+window.customComponents = {}
+// load all scripts from settings project and add components to app
+const requireContext = require.context('custom', true, /\.js$/)
+for(const file of requireContext.keys()) {
+    const module = requireContext(file)
+    if (module.componentName && module.component) {
+        window.customComponents[module.componentName] = module.component
+    }
+}
+
 require("./scripts/components/sidebar.js")
 
 require("./scripts/statistics.js")
@@ -134,9 +145,5 @@ for(let mode of settings.modeConfig) {
     require("./scripts/parallel/stats_proxy.js")
   }
 }
-
-function requireAll(r) { r.keys().forEach(r) } 
-requireAll(require.context('customcss', true, /\.css$/))
-requireAll(require.context('customscripts', true, /\.js$/))
 
 require("./index.pug")
