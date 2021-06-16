@@ -306,7 +306,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const groupBy = []
         const groupByStruct = []
         for (let reduceVal of reduceVals) {
-            if (structAttrs[reduceVal]) {
+            if (structAttrs[reduceVal] && (structAttrs[reduceVal].groupBy || "group_by_struct") == "group_by_struct") {
                 groupByStruct.push(reduceVal)
             } else {
                 groupBy.push(reduceVal)

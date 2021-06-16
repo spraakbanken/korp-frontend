@@ -242,6 +242,7 @@ The config file contains the corpora declaration, wherein the available corpora 
     * `stats_stringify`: How to pretty-print the attribute in the context of the statistics table. The provided formatting function will be passed an array of labels. Example: `stats_stringify: function(values) {return values.join(" ")}`.
     * `stats_cqp`: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: ```stats_cqp: function(values) {return `pos_tag="${tokens.join(" | ")}"`}```.  
     * `isStructAttr`: `boolean`. If `true` the attribute will be treated as a structural attribute in all sense except it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.
+    * `groupBy`; `string`. Should be either `group_by` or `group_by_struct`. Should only be needed for attributes with `isStructAttr: true`. Those attributes are by default sent as `group_by_struct` in the statistics, but can be overriden here.
     * optional keys and values that can be utilized in the extendedTemplate / extendedController. See <#ref customizing-extended-search|customizing extended search>.
 
 * `structAttributes`: refers to higher level metadata attributes. Examples include author, publishing year, URL etc. Structural attributes support the same settings as the word attributes.
