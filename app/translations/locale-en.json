@@ -129,7 +129,7 @@
     "sent_end": "Sentence end",
     "before_token": "Before first token",
     "after_token": "After last token",
-    "add_tag_box": "Add tag",
+    "add_tag_box": "Add boundary",
     "starts": "starts",
     "ends": "ends",
 
