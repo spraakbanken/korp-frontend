@@ -158,7 +158,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
 
         if (!_.isEmpty(s.loginNeededFor)) {
             s.savedState = $location.search()
-            $location.url($location.path())
+            $location.url($location.path() + "?")
 
             // some state need special treatment
             if (s.savedState.reading_mode) {
