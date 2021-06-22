@@ -1,6 +1,11 @@
-import { stringifyFunctions } from "custom/stringify_functions.js"
 
-// TODO document and name properly
+let stringifyFunctions = {}
+
+try {
+    stringifyFunctions = require("custom/stringify.js").default
+} catch (error) {
+    console.log("No module for stringify functions available")
+}
 
 export function stringify(attrName, value) {
     // TODO ideally we should just fetch the attribute

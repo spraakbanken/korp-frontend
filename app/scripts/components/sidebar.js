@@ -1,9 +1,16 @@
 /** @format */
 import "./sidebar.scss"
 export const sidebarName = "sidebar"
-import sidebarComponents from 'custom/sidebar.js'
 import statemachine from "../statemachine"
 import { stringify } from "@/stringify.js"
+
+let sidebarComponents = {}
+
+try {
+    sidebarComponents = require("custom/sidebar.js").default
+} catch (error) {
+    console.log("No module for sidebar components available")
+}
 
 let html = String.raw
 export const sidebarComponent = {

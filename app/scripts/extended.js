@@ -1,5 +1,12 @@
 /** @format */
-import customExtendedTemplates from 'custom/extended.js'
+
+let customExtendedTemplates = {}
+
+try {
+    customExtendedTemplates = require("custom/extended.js").default
+} catch (error) {
+    console.log("No module for extended components available")
+}
 
 const autocompleteTemplate = `\
 <div>
