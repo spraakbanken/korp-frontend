@@ -42,22 +42,91 @@ are all described in the documentation.
 - `translations/*.json`
 
 (In short, a mode is a collection of corpora that may have different 
-  functionality and are described later).
+  functionality and is described later).
 
-For more advanced use cases there is also the possibility to add scripts,
- styling and HTML-templates/snippets.
- 
- - `styles/`
- - `scripts/`
- - `views/`
- 
- Styles and scripts will be automatically loaded. 
- Files matching `views/*.html` can be loaded manually by requiring them 
- using the name `customtemplates`. The result will be a string containing 
- the (minified) HTML, for example, a template for an Angular 
- directive: `template: require("customviews/my_view.html")`. If you are not
- writing any custom scripts (i.e. files in `scripts/`), this can be
-  completely ignored.
+For more advanced use cases there is also the possibility to add own code, styling etc.
+in `custom`.
+
+#### Components
+
+Files in `custom` exporting `componentName` and `component` will be added to the Angular app as components.
+
+```
+export const componentName = "ivipReadingMode"
+export const component = { ... }
+```
+
+These can then be used in other custom components / extended / sidebar or as reading mode-components.
+
+#### Customizing extended search
+
+In `custom/extended.js`, we can define custom (non-Angular) components to be used in extened search. It is expected to
+have the following format:
+
+```
+export default {
+    complemgramExtended: {
+        template: `<input type="text" ng-model="input" />
+        `,
+        controller: [
+            "$scope", function($scope) {
+                $scope.$watch("input; () => ...)
+                ...
+        }],
+    },
+    attr: {
+        template: `
+            <select ...>
+        `,
+        controller: ["$scope", "$uibModal", function($scope, $uibModal) {
+            if($scope.show) $uibModal.open
+        }
+    },
+    ...
+}
+```
+
+Template is an Angular.js template string and controller is an Angular.js controller function.
+
+Make sure to set `$scope.input` as the final result to be used in the CQP-query.
+
+`complemgramExtended` can then be used as key for `extendedComponent` in the configuration files.
+
+##### Customizing sidebar
+
+In `custom/sidebar.js`, we can define custom (non-Angular) components to be used in the sidebar. It is expected to
+have the following format:
+
+```
+export default {
+    image: {
+        template: `<img ng-src="myImg" />
+        `,
+        controller: [
+            "$scope", function($scope) {
+                $scope.myImg = $scope.sentenceData["text_mediafilepath"]
+                ...
+        }],
+    },
+    ...
+}
+```
+
+Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link.
+
+#### Stringify functions
+
+Add all custom pretty-printing to `custom/stringify.js`. Example file:
+
+```
+export const {
+    sense: (sense) => util.saldoToString(sense, true),
+    lemgram: (str) => util.lemgramToString(str, true),
+    complemgram: (str) => str.split('+').map((lemgram) => util.lemgramToString(lemgram, true)).join('+')
+}
+```
+
+Will be used in sidebar, statistics, extended, etc.
 
 ### Content of `config.js`
 
@@ -212,8 +281,7 @@ The config file contains the corpora declaration, wherein the available corpora 
     * `limitedAccess`: `boolean`, it will not be possible to select this corpus unless a user is logged in and has the correct credentials.
     * `displayType`: set to `'hidden'` to fetch attribute, but never show it in the frontend. See `hideSidebar`, `hideStatistics`, `hideExtended` and `hideCompare` for more control.
     * `translationKey`: you can declare a prefix for the translation keys of the dataset here. This is so the corpora translation file doesn't get too messy: a simple kind of namespacing.
-    * `extendedTemplate`: Angular template used in conjunction with the `extendedController` to generate an interface widget for this attribute. See <#ref customizing-extended-search|customizing extended search>.
-    * `extendedController`: Angular controller that is applied to the template. See <#ref customizing-extended-search|customizing extended search>.
+    * `extendedComponent`: See <#ref customizing-extended-search|customizing extended search>.
     * `opts`: this represents the auxiliary select box where you can modify the input value. See `defaultOptions` in [settings summary](#summary-settings) for format and more information.
     * `hideSidebar`: Default `false`. Hide attribute in sidebar.
     * `hideStatistics`: Default: `false`. Should it be possible to compile statistics based on this attribute?
@@ -225,16 +293,15 @@ The config file contains the corpora declaration, wherein the available corpora 
         - "url" - The value will be rendered as a link to the URL and possibly truncated if too long.
     * `pattern`: HTML snippet with placeholders for replacing values. Available is `key` (attribute name) and `value`. Also works for sets. Example: `'<p style="margin-left: 5px;"><%=val.toLowerCase()%></p>'`
     * `display`: *DEPRACATED* Use `sidebarComponent`. 
-    * `sidebarComponent`: If the `display` key above doesn't do enough, you can write a custom interactive component using `sidebarComponent.template` (an Angularjs template string) and `sidebarComponent.controller` (an Angularjs controller function). Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link. `$scope.model` holds the value, so assigning to this variable will change the current CQP expression. See the `complemgram` and `compwf` implementation at the [Korp SB Config](https://github.com/spraakbanken/korp-frontend-sb/blob/dev/app/modes/common.js). 
+    * `sidebarComponent`: See <# ref customizing-sidebar|customizing sidebar>
     * `internalSearch`: `boolean`. Should the value be displayed as a link to a new Korp search? Only works for sets. Searches for CQP-expression: `[<attrName> contains "<regescape(attrValue)>"]`
     * `externalSearch`: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>`
     * `order`: Order of attribute in the sidebar. Attributes with a lower `order`-value will be placed over attributes with a higher `order`-value.
-    * `stringify`: How to pretty-print the attribute in the context of the sidebar. Example: `function(str) { return util.lemgramToString(str, true); }`
+    * `stringify`: *DEPRACATED*, use <# ref stringify-functions | stringify>
     * `stats_stringify`: How to pretty-print the attribute in the context of the statistics table. The provided formatting function will be passed an array of labels. Example: `stats_stringify: function(values) {return values.join(" ")}`.
     * `stats_cqp`: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: ```stats_cqp: function(values) {return `pos_tag="${tokens.join(" | ")}"`}```.  
     * `isStructAttr`: `boolean`. If `true` the attribute will be treated as a structural attribute in all sense except it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.
     * `groupBy`; `string`. Should be either `group_by` or `group_by_struct`. Should only be needed for attributes with `isStructAttr: true`. Those attributes are by default sent as `group_by_struct` in the statistics, but can be overriden here.
-    * optional keys and values that can be utilized in the extendedTemplate / extendedController. See <#ref customizing-extended-search|customizing extended search>.
 
 * `structAttributes`: refers to higher level metadata attributes. Examples include author, publishing year, URL etc. Structural attributes support the same settings as the word attributes.
 
@@ -256,34 +323,6 @@ The config file contains the corpora declaration, wherein the available corpora 
   for basic support. If something else is needed you can write your own directive
   in `scripts/` and use that one instead. Contact Språkbanken for an example on
   how to write a directive.
-
-## Customizing extended search
-
-It is possible to customize the standard input field of extended search into anything. Any key can be added to an attribute to be provided to the `extendedController` / `extendedTemplate`. Simple example:
-
-
-    var myReusableTemplate = '<div><input ng-if="inputType == \'text\'" type="text"><input ng-if="inputType == \'number\'" type="number"></div>';
-
-    var myController = function($scope, $location) {
-        // $scope.inputType is available here also
-        // dependency injection of Angular services such as $location are possible
-    };
-
-    settings.corpora["testcorpus"] = {
-        id: "testcorpus",
-        title: "The Korp Test Corpus",
-        description: "A test corpus for testing Korp.",
-        attributes: {
-            myAttr: {
-                label: "myAttr",
-                extendedTemplate: myReusableTemplate,
-                extendedController: myController,
-                inputType: "text"
-            }
-        }
-    };
-
-However, `extendedController` is not mandatory and only shown in this example for documentation purposes.
 
 ### Template requisites
 
