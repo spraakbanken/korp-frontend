@@ -2156,13 +2156,21 @@ view.GraphResults = class GraphResults extends BaseResults {
         const toDate = (sec) => moment(sec * 1000).toDate()
 
         const time = new Rickshaw.Fixtures.Time()
+        // Fix time.ceil for decades: Rickshaw.Fixtures.Time.ceil
+        // returns one decade too small values for 1900 and before.
+        // (The root cause may be Rickshaw's approximate handling of
+        // leap years: 1900 was not a leap year.)
         const old_ceil = time.ceil
         time.ceil = (time, unit) => {
             if (unit.name === "decade") {
                 const out = Math.ceil(time / unit.seconds) * unit.seconds
                 const mom = moment(out * 1000)
-                if (mom.date() === 31) {
-                    mom.add("day", 1)
+                const monthDay = mom.date()
+                // If the day of the month is not 1, it is within the
+                // previous month (December), so add enough days to
+                // move the date to the expected month (January).
+                if (monthDay !== 1) {
+                    mom.add(32 - monthDay, "day")
                 }
                 return mom.unix()
             } else {
@@ -2172,9 +2180,10 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         const xAxis = new Rickshaw.Graph.Axis.Time({
             graph,
+            // Use the fixed .ceil for decades
+            timeFixture: time,
+            // timeUnit: time.unit("month") # TODO: bring back decade
         })
-        // timeUnit: time.unit("month") # TODO: bring back decade
-        // timeFixture: new Rickshaw.Fixtures.Time()
 
         this.preview = new Rickshaw.Graph.RangeSlider.Preview({
             graph,
