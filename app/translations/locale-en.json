@@ -127,8 +127,9 @@
 
     "sent_start": "Sentence start",
     "sent_end": "Sentence end",
-    "before_token": "Before first token",
-    "after_token": "After last token",
+    "before_token": "first",
+    "after_token": "last",
+    "boundary_unit": "Boundary unit:",
     "add_tag_box": "Add boundary",
     "starts": "starts",
     "ends": "ends",

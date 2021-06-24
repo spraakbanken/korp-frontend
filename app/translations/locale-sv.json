@@ -126,8 +126,9 @@
 
     "sent_start": "Meningsbörjan",
     "sent_end": "Meningsslut",
-    "before_token": "Före första tokenet",
-    "after_token": "Efter sista tokenet",
+    "before_token": "först",
+    "after_token": "sist",
+    "boundary_unit": "Gränsenhet:",
     "add_tag_box": "Lägg till gräns",
     "starts": "börjar",
     "ends": "slutar",

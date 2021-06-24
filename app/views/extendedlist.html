@@ -74,6 +74,7 @@
                 <div class="args">
                     <div class="query_arg tag-box">                
                         <div class="or or_arg">
+                            <div>{{ 'boundary_unit' | loc:lang }}</div>
                             <select class="arg_type" ng-options="tag as ('tag_' + label | loc:lang) for (tag, label) in tagTypes" ng-model="token.struct"></select>
                         </div>
                         <div>
