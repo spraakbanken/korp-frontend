@@ -640,12 +640,14 @@ korpApp.directive("warning", () => ({
     template: "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>",
 }))
 
+// This directive is only used by the autoc-component (autoc.js)
+// It is therefore made to work with magic variables such as $scope.$ctrl.typeaheadIsOpen
 korpApp.directive("typeaheadClickOpen", ($timeout) => ({
     restrict: "A",
     require: ["ngModel"],
     link($scope, elem, attrs, ctrls) {
         const triggerFunc = function (event) {
-            if (event.keyCode === 40 && !$scope.typeaheadIsOpen) {
+            if (event.keyCode === 40 && !$scope.$ctrl.typeaheadIsOpen) {
                 const prev = ctrls[0].$modelValue || ""
                 if (prev) {
                     ctrls[0].$setViewValue("")
