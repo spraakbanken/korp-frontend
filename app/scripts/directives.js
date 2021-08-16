@@ -432,7 +432,9 @@ korpApp.directive("extendedList", () => ({
         const s = $scope
 
         const setCQP = function (val) {
-            s.data = CQP.parse(val)
+            if (s.data == undefined || val != CQP.stringify(s.data)) {
+                s.data = CQP.parse(val)
+            }
         }
 
         if (s.cqp == null) {
