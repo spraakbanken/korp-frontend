@@ -124,7 +124,7 @@ korpApp.directive("escaper", () => ({
         $scope.input = unescape($scope.model)
         $scope.$watch("input", () => ($scope.model = escape($scope.input)))
 
-        return $scope.$watch("orObj.op", () => ($scope.model = escape($scope.input)))
+        $scope.$watch("orObj.op", () => ($scope.model = escape($scope.input)))
     },
 }))
 
