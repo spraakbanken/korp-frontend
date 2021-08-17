@@ -4,16 +4,18 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
     var s = $scope;
     s.negates = [];
 
-    if($location.search().parallel_corpora)
+    if($location.search().parallel_corpora) {
         s.langs = _.map($location.search().parallel_corpora.split(","), function(lang) {
-            var obj = {lang: lang};
-            if(locationSearch()["cqp_" + lang])
+            var obj = { lang: lang,cqp: "[]" };
+            if(locationSearch()["cqp_" + lang]) {
                 obj.cqp = locationSearch()["cqp_" + lang];
+            }
             return obj;
         })
+    } else {
+        s.langs = [{lang: settings.startLang, cqp: "[]"}];
+    }
 
-    else
-        s.langs = [{lang: settings.startLang}];
     s.negChange = function() {
         $location.search("search", null)
     }
@@ -52,7 +54,9 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
         }).join("");
 
         _.each(s.langs, function(langobj, i) {
-            locationSearch("cqp_" + langobj.lang , langobj.cqp);
+            if (!_.isEmpty(langobj.lang)) {
+                locationSearch("cqp_" + langobj.lang , langobj.cqp);
+            }
         })
         $rootScope.extendedCQP = output;
 
@@ -114,10 +118,11 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
     };
 
     s.addLangRow = function() {
-        s.langs.push({lang: s.getEnabledLangs()[0]})
+        s.langs.push({lang: s.getEnabledLangs()[0], cqp: "[]"})
     }
     s.removeLangRow = function(i) {
-        s.langs.pop();
+        const lang = s.langs.pop();
+        locationSearch("cqp_" + lang.lang , null);
     }
 
 });
