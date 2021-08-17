@@ -10,4 +10,7 @@ export function setDefaultConfigValues() {
     if (!settings.hitsPerPageDefault) {
         settings.hitsPerPageDefault = settings.hitsPerPageValues[0]
     }
+    if (!settings.groupStatistics) {
+        settings.groupStatistics = []
+    }
 }
