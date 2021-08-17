@@ -15,6 +15,9 @@ korpApp.controller("SearchCtrl", function($rootScope, $scope, $controller, $loca
             $scope.statInsensitiveAttrs = insensitiveAttrs.split(',')
     })
 
+    $scope.$on("corpuschooserchange", function (event, selected) {
+        $scope.noCorporaSelected = !selected.length
+    })
 
     $scope.settings = settings
     $scope.showStatistics = true
