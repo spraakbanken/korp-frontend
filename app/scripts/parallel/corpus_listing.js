@@ -32,12 +32,20 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     }
 
     getCurrentAttributes(lang) {
+        if(_.isEmpty(lang)) {
+            lang = settings.corpusListing.getReduceLang()
+        }
+
         const corpora = _.filter(this.selected, (item) => item.lang === lang)
         const struct = _.reduce(corpora, (a, b) => $.extend({}, a.attributes, b.attributes), {})
         return struct
     }
 
     getStructAttrs(lang) {
+        if(_.isEmpty(lang)) {
+            lang = settings.corpusListing.getReduceLang()
+        }
+
         const corpora = _.filter(this.selected, (item) => item.lang === lang)
         const struct = _.reduce(
             corpora,
