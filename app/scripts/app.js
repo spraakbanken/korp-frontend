@@ -299,6 +299,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     for (let mode of s.modes) {
         mode.selected = false
         if (mode.mode === currentMode) {
+            window.settings.mode = mode
             mode.selected = true
         }
     }

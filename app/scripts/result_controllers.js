@@ -282,13 +282,15 @@ class KwicCtrl {
             (hpp) => (s.hitsPerPage = hpp || settings.hitsPerPageDefault)
         )
 
+        const isParallelMode = window.settings.mode.parallel
+
         s.download = {
             options: [
                 { value: "", label: "download_kwic" },
                 { value: "kwic/csv", label: "download_kwic_csv" },
                 { value: "kwic/tsv", label: "download_kwic_tsv" },
-                { value: "annotations/csv", label: "download_annotations_csv" },
-                { value: "annotations/tsv", label: "download_annotations_tsv" },
+                { value: "annotations/csv", label: "download_annotations_csv", disabled: isParallelMode },
+                { value: "annotations/tsv", label: "download_annotations_tsv", disabled: isParallelMode },
             ],
             selected: "",
             init: (value, hitsDisplay) => {
