@@ -62,14 +62,21 @@ let reduceCqp = function(type, tokens, ignoreCase) {
         case "text_swefn":
             return $.format('_.%s contains "%s"', [type, tokens[0]])
         default:
-            // assume structural attribute
-            return $.format('_.%s="%s"', [type, tokens[0]])
+            if (attrs[type]) {
+                // word attributes
+                const op = attrs[type]["type"] === "set" ? " contains " : "="
+                return $.format('%s%s"%s"', [type, op, regescape(tokens[0])])
+            } else {
+                // structural attributes
+                return $.format('_.%s="%s"', [type, tokens[0]])
+            }
     }
 }
 
 // Get the html (no linking) representation of the result for the statistics table
 let reduceStringify = function(type, values, structAttributes) {
     let attrs = settings.corpusListing.getCurrentAttributes()
+
     if (attrs[type] && attrs[type].stats_stringify) {
         return attrs[type].stats_stringify(values)
     }
@@ -117,19 +124,24 @@ let reduceStringify = function(type, values, structAttributes) {
             }).join(" ")
             return output
         default:
-            // structural attributes            
-            var mapped = _.map(values, function(value) {
-                if (structAttributes["set"] && value === "") {
-                    return "–"
-                } else if (value === "") {
-                    return "-"
-                } else if (structAttributes.translation) {
-                    return util.translateAttribute(null, structAttributes.translation, value)
-                } else {
-                    return value
-                }
-            })
-            return mapped.join(" ")
+            if (attrs[type]) {
+                // word attributes
+                return values.join(" ")
+            } else {
+                // structural attributes
+                var mapped = _.map(values, function(value) {
+                    if (structAttributes["set"] && value === "") {
+                        return "–"
+                    } else if (value === "") {
+                        return "-"
+                    } else if (structAttributes.translation) {
+                        return util.translateAttribute(null, structAttributes.translation, value)
+                    } else {
+                        return value
+                    }
+                })
+                return mapped.join(" ")
+            }
     }
 }
 
