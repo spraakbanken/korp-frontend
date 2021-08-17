@@ -337,6 +337,7 @@
     "no_geo_info": "Platsinformation ej tillgänglig",
     "map_cluster": "Sammanställ",
     "no_row_selected_map": "Välj minst en rad för att visa kartan",
+    "select_attribute": "Välj attribut",
 
     "global_filter": "Filter",
     "add_filter": "Lägg till filter",
