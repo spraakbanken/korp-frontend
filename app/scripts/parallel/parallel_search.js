@@ -1,3 +1,5 @@
+/** @format */
+
 korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $timeout, searches) {
     var s = $scope;
     s.negates = [];
@@ -17,7 +19,6 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
     }
 
     var onLangChange = function() {
-        c.log("ParallelSearch language change");
         var currentLangList = _.map(s.langs, "lang");
         settings.corpusListing.setActiveLangs(currentLangList);
         $location.search("parallel_corpora", currentLangList.join(","))
@@ -61,18 +62,16 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
         searches.langDef.resolve();
         return output;
     }
+
     s.$watch("langs", function() {
         onLangChange()
-
     }, true);
 
 
     s.onSubmit = function() {
         $location.search("search", null)
         $timeout( function() {
-            // $location.search("search", "cqp|" + onLangChange())
             util.searchHash("cqp", onLangChange())
-            c.log ("onLangChange", onLangChange())
         }, 300) // <--
         // TODO: this is a little hacky.
         // if changed, look at ng-model-option debounce value as well
@@ -81,15 +80,11 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 
     s.keydown = function($event) {
         if($event.keyCode == 13) { // enter
-            // _.defer()
             var current = $(".arg_value:focus")
-            c.log( "current", current)
             if(current.length) {
-
                 $timeout(function() {
                     s.onSubmit()
                 }, 0)
-
             }
         }
     }
