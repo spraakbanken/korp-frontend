@@ -18,8 +18,11 @@ let getCqp = function(hitValues, ignoreCase) {
 let reduceCqp = function(type, tokens, ignoreCase) {
     let attrs = settings.corpusListing.getCurrentAttributes()
     if (attrs[type] && attrs[type].stats_cqp) {
+        // A stats_cqp function should call regescape for the value as
+        // appropriate
         return attrs[type].stats_cqp(tokens, ignoreCase)
     }
+    tokens = _.map(tokens, val => regescape(val))
     switch (type) {
         case "saldo":
         case "prefix":
@@ -51,7 +54,7 @@ let reduceCqp = function(type, tokens, ignoreCase) {
             }
             return type + " contains '" + res + "'"
         case "word":
-            let s = 'word="' + regescape(tokens[0]) + '"'
+            let s = 'word="' + tokens[0] + '"'
             if (ignoreCase) s = s + " %c"
             return s
         case "pos":
@@ -65,7 +68,7 @@ let reduceCqp = function(type, tokens, ignoreCase) {
             if (attrs[type]) {
                 // word attributes
                 const op = attrs[type]["type"] === "set" ? " contains " : "="
-                return $.format('%s%s"%s"', [type, op, regescape(tokens[0])])
+                return $.format('%s%s"%s"', [type, op, tokens[0]])
             } else {
                 // structural attributes
                 return $.format('_.%s="%s"', [type, tokens[0]])
