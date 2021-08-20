@@ -34,7 +34,7 @@ let reduceCqp = function(type, tokens, ignoreCase) {
 
                 var variants = []
                 _.map(tokens, function(val) {
-                    parts = val.split(":")
+                    const parts = val.split(":")
                     if (variants.length == 0) {
                         for (var idx = 0; idx < parts.length - 1; idx++) variants.push([])
                     }
