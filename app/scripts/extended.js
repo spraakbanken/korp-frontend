@@ -29,20 +29,53 @@ const localize = ($scope) =>
 
 const selectController = (autocomplete) => [
     "$scope",
+    "$rootScope",
     "structService",
-    function ($scope, structService) {
-        const attribute = $scope.$parent.tokenValue.value
-        const selectedCorpora = settings.corpusListing.selected
-
-        // check which corpora support attributes
-        const corpora = []
-        for (let corpusSettings of selectedCorpora) {
-            if (
-                attribute in corpusSettings.structAttributes ||
-                attribute in corpusSettings.attributes
-            ) {
-                corpora.push(corpusSettings.id)
+    function ($scope, $rootScope, structService) {
+        $rootScope.$on("corpuschooserchange", function (event, selected) {
+            if (selected.length > 0) {
+                reloadValues()
             }
+        })
+
+        function reloadValues() {
+            const attribute = $scope.$parent.tokenValue.value
+            const selectedCorpora = settings.corpusListing.selected
+
+            // check which corpora support attributes
+            const corpora = []
+            for (let corpusSettings of selectedCorpora) {
+                if (
+                    attribute in corpusSettings.structAttributes ||
+                    attribute in corpusSettings.attributes
+                ) {
+                    corpora.push(corpusSettings.id)
+                }
+            }
+
+            $scope.loading = true
+            const opts = { count: false, returnByCorpora: false }
+            if ($scope.type === "set") {
+                opts.split = true
+            }
+            structService.getStructValues(corpora, [attribute], opts).then(
+                function (data) {
+                    $scope.loading = false
+                    const localizer = localize($scope)
+
+                    const dataset = _.map(_.uniq(data), function (item) {
+                        if (item === "") {
+                            return [item, util.getLocaleString("empty")]
+                        }
+                        return [item, localizer(item)]
+                    })
+                    $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                    if (!autocomplete) {
+                        $scope.input = _.includes(data, $scope.input) ? $scope.input : $scope.dataset[0][0]
+                    }
+                },
+                () => c.log("struct_values error")
+            )
         }
 
         $scope.$watch("orObj.op", (newVal, oldVal) => {
@@ -53,30 +86,6 @@ const selectController = (autocomplete) => [
                 }
             }
         })
-
-        $scope.loading = true
-        const opts = { count: false, returnByCorpora: false }
-        if ($scope.type === "set") {
-            opts.split = true
-        }
-        structService.getStructValues(corpora, [attribute], opts).then(
-            function (data) {
-                $scope.loading = false
-                const localizer = localize($scope)
-
-                const dataset = _.map(_.uniq(data), function (item) {
-                    if (item === "") {
-                        return [item, util.getLocaleString("empty")]
-                    }
-                    return [item, localizer(item)]
-                })
-                $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
-                if (!autocomplete) {
-                    $scope.input = $scope.input || $scope.dataset[0][0]
-                }
-            },
-            () => c.log("struct_values error")
-        )
 
         $scope.getRows = function (input) {
             if (input) {
