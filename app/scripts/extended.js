@@ -100,17 +100,27 @@ export default _.merge({
     datasetSelect: {
         template: selectTemplate,
         controller: [
-            "$scope",
-            function ($scope) {
+            "$scope", "$rootScope",
+            function ($scope, $rootScope) {
                 let dataset
-                const localizer = localize($scope)
-                if (_.isArray($scope.dataset)) {
-                    dataset = _.map($scope.dataset, (item) => [item, localizer(item)])
-                } else {
-                    dataset = _.map($scope.dataset, (v, k) => [k, localizer(v)])
+                const original = $scope.dataset
+
+                $rootScope.$watch('lang', (newVal, oldVal) => {
+                    if (newVal != oldVal) {
+                        initialize()
+                    }
+                })
+                function initialize() {
+                    const localizer = localize($scope)
+                    if (_.isArray(original)) {
+                        dataset = _.map(original, (item) => [item, localizer(item)])
+                    } else {
+                        dataset = _.map(original, (v, k) => [k, localizer(v)])
+                    }
+                    $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                    $scope.model = $scope.model || $scope.dataset[0][0]
                 }
-                $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
-                $scope.model = $scope.model || $scope.dataset[0][0]
+                initialize()
             },
         ],
     },
