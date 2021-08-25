@@ -153,8 +153,15 @@ korpApp.directive("tokenValue", ($compile, $controller) => ({
             if (!valueObj) {
                 return
             }
+
             if (valueObj.value === (current && current.value)) {
-                return
+                // We need to compare datasets in case we switch between two attributes that
+                // have the same name, but different datasets
+                // This could potentially be fixed in the future by having different ID:s for these
+                // attributes in the configuration.
+                if (_.isEqual(valueObj.dataset, current.dataset)) {
+                    return
+                }
             }
 
             if (prevScope != null) {
