@@ -102,11 +102,15 @@
     "search_aborted": "Sökningen avbröts",
 
     "is": "är",
+    "equal": "lika med",
+    "not_equal": "inte lika med",
     "is_not": "är inte",
     "starts_with": "börjar med",
     "contains": "innehåller",
     "contains_not": "innehåller inte",
     "ends_with": "slutar med",
+    "subsumed_by": "subsumerad av",
+    "not_subsumed_by": "inte subsumerad av",
 
     "word_is": "ordet är",
     "word_is_not": "ordet är inte",

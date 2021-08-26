@@ -77,9 +77,13 @@
     "download": "Download as",
 
     "is": "is",
+    "equal": "equal",
+    "not_equal": "not equal",
     "is_not": "is not",
     "starts_with": "begins with",
     "ends_with": "ends with",
+    "subsumed_by": "subsumed by",
+    "not_subsumed_by": "not subsumed by",
 
     "any_word_placeholder": "<any word>",
     "case_insensitive": "case-insensitive",
