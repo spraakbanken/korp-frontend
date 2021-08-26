@@ -1,4 +1,13 @@
 /** @format */
+
+let customFunctions = {}
+
+try {
+    customFunctions = require("custom/statistics.js").default
+} catch (error) {
+    console.log("No module for statistics functions available")
+}
+
 let getCqp = function(hitValues, ignoreCase) {
     var tokens = []
     for (var i = 0; i < hitValues.length; i++) {
@@ -18,9 +27,8 @@ let getCqp = function(hitValues, ignoreCase) {
 let reduceCqp = function(type, tokens, ignoreCase) {
     let attrs = settings.corpusListing.getCurrentAttributes()
     if (attrs[type] && attrs[type].stats_cqp) {
-        // A stats_cqp function should call regescape for the value as
-        // appropriate
-        return attrs[type].stats_cqp(tokens, ignoreCase)
+        // A stats_cqp function should call regescape for the value as appropriate
+        return customFunctions[attrs[type].stats_cqp](tokens, ignoreCase)
     }
     tokens = _.map(tokens, val => regescape(val))
     switch (type) {
@@ -81,7 +89,7 @@ let reduceStringify = function(type, values, structAttributes) {
     let attrs = settings.corpusListing.getCurrentAttributes()
 
     if (attrs[type] && attrs[type].stats_stringify) {
-        return attrs[type].stats_stringify(values)
+        return customFunctions[attrs[type].stats_stringify](values)
     }
 
     switch (type) {
