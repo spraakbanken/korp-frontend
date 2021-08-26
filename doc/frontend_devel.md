@@ -49,14 +49,17 @@ in `custom`.
 
 #### Components
 
-Files in `custom` exporting `componentName` and `component` will be added to the Angular app as components.
+Define your own components as a map in `custom/components.js`. `component` will be added as a component with name `componentName` to the Angular app.
 
 ```
-export const componentName = "ivipReadingMode"
-export const component = { ... }
+import component from 'custom/myComponentFile'
+
+export default {
+	componentName: component
+}
 ```
 
-These can then be used in other custom components / extended / sidebar or as reading mode-components.
+These can then be used in other custom components / extended / sidebar or as reading mode-components. `component` can also be defined in `components.js`.
 
 #### Customizing extended search
 
@@ -113,6 +116,30 @@ export default {
 ```
 
 Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link.
+
+#### Custom statistics functions
+
+Define your own rules for rendering values and generating CQP-expressions for certain attributes.
+
+When configuring an attribute that needs special handling, use the `stats_cqp` and `stats_stringify` keywords:
+
+```
+const myAttribute = {
+    label: "category",
+    order: 80,
+    stats_stringify: "customStringify",
+    stats_cqp: "customCQP",
+}
+```
+
+Then create `custom/statistics.js` and define the functions there:
+
+```
+export default {
+    customStringify: (values) => values.join(' == '),
+    customCQP: (tokens) => "(" + tokens.map(item => `_.cat="${item}"`).join(" | ") + ")",
+}
+```
 
 #### Stringify functions
 
@@ -298,8 +325,8 @@ The config file contains the corpora declaration, wherein the available corpora 
     * `externalSearch`: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>`
     * `order`: Order of attribute in the sidebar. Attributes with a lower `order`-value will be placed over attributes with a higher `order`-value.
     * `stringify`: *DEPRACATED*, use <# ref stringify-functions | stringify>
-    * `stats_stringify`: How to pretty-print the attribute in the context of the statistics table. The provided formatting function will be passed an array of labels. Example: `stats_stringify: function(values) {return values.join(" ")}`.
-    * `stats_cqp`: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: ```stats_cqp: function(values) {return `pos_tag="${tokens.join(" | ")}"`}```.  
+    * `stats_stringify`: See [Custom statistics functions](#custom-statistics-functions).
+    * `stats_cqp`: See [Custom statistics functions](#custom-statistics-functions).  
     * `isStructAttr`: `boolean`. If `true` the attribute will be treated as a structural attribute in all sense except it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.
     * `groupBy`; `string`. Should be either `group_by` or `group_by_struct`. Should only be needed for attributes with `isStructAttr: true`. Those attributes are by default sent as `group_by_struct` in the statistics, but can be overriden here.
 
