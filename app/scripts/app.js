@@ -49,9 +49,16 @@ korpApp.component(readingmode.componentName, readingmode.component)
 korpApp.component(autoc.componentName, autoc.component)
 korpApp.component(extendedAddBox.componentName, extendedAddBox.component)
 
-// load all custom components (imported in index.js)
-for(const componentName in window.customComponents) {
-    korpApp.component(componentName, window.customComponents[componentName])
+// load all custom components
+let customComponents = {}
+
+try {
+    customComponents = require("custom/components.js").default
+} catch (error) {
+    console.log("No module for components available")
+}
+for(const componentName in customComponents) {
+    korpApp.component(componentName, customComponents[componentName])
 }
 
 korpApp.config((tmhDynamicLocaleProvider) =>
