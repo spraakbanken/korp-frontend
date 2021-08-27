@@ -1,4 +1,5 @@
 /** @format */
+import statemachine from "./statemachine"
 
 let stringifyFunctions = {}
 
@@ -8,10 +9,7 @@ try {
     console.log("No module for stringify functions available")
 }
 
-export function stringify(attrName, value) {
-    // TODO ideally we should just fetch the attribute
-    let attrs = _.extend({}, settings.corpusListing.getCurrentAttributes(), settings.corpusListing.getStructAttrs())
-    const key = attrs[attrName].stringify
+export function stringify(key, value) {
     return stringifyFunctions[key] ? stringifyFunctions[key](value) : value
 }
 

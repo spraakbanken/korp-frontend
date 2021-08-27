@@ -315,7 +315,8 @@ export const sidebarComponent = {
                         const lis = []
                         for (let x of itr) {
                             if (x.length) {
-                                val = stringify(key, x)
+                                const stringifyKey = attrs.stringify
+                                val = stringify(stringifyKey, x)
 
                                 if (attrs.translation != null) {
                                     val = util.translateAttribute($ctrl.lang, attrs.translation, val)
@@ -348,7 +349,7 @@ export const sidebarComponent = {
 
                     let str_value = value
                     if (attrs.stringify) {
-                        str_value = stringify(key, value)
+                        str_value = stringify(attrs.stringify, value)
                     } else if (attrs.translation) {
                         str_value = util.translateAttribute($ctrl.lang, attrs.translation, value)
                     }
