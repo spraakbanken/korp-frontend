@@ -57,7 +57,7 @@ try {
 } catch (error) {
     console.log("No module for components available")
 }
-for(const componentName in customComponents) {
+for (const componentName in customComponents) {
     korpApp.component(componentName, customComponents[componentName])
 }
 
@@ -75,8 +75,7 @@ korpApp.config(["$locationProvider", ($locationProvider) => $locationProvider.ha
 
 korpApp.config([
     "$compileProvider",
-    ($compileProvider) =>
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/),
+    ($compileProvider) => $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
 korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $timeout) {
@@ -215,9 +214,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
         let currentCorpora = []
         if (corpus) {
             currentCorpora = _.flatten(
-                _.map(corpus.split(","), (val) =>
-                    getAllCorporaInFolders(settings.corporafolders, val)
-                )
+                _.map(corpus.split(","), (val) => getAllCorporaInFolders(settings.corporafolders, val))
             )
         } else {
             if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {

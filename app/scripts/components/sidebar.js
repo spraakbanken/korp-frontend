@@ -22,10 +22,7 @@ export const sidebarComponent = {
                 </h4>
                 <div class="text-lg">{{$ctrl.corpusObj.title}}</div>
             </div>
-            <div
-                class="openReadingMode"
-                ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj.readingMode"
-            >
+            <div class="openReadingMode" ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj.readingMode">
                 <span ng-click="$ctrl.openReadingMode()" class="link">
                     {{'read_in_korp' | loc:$root.lang}}
                 </span>
@@ -33,11 +30,7 @@ export const sidebarComponent = {
             <div id="selected_sentence" />
             <div id="selected_word" />
 
-            <div
-                ng-show="$ctrl.corpusObj.attributes.deprel"
-                ng-click="$ctrl.renderGraph()"
-                class="link show_deptree"
-            >
+            <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.renderGraph()" class="link show_deptree">
                 {{'show_deptree' | loc:$root.lang}}
             </div>
         </div>
@@ -69,7 +62,7 @@ export const sidebarComponent = {
             })
 
             $ctrl.$onChanges = (changesObj) => {
-                if (changesObj['lang']) {
+                if (changesObj["lang"]) {
                     if ($ctrl.data) {
                         $ctrl.updateContent($ctrl.data)
                     }
@@ -174,15 +167,7 @@ export const sidebarComponent = {
                         .localeKey("dep_tree")
                 },
 
-                renderCorpusContent(
-                    type,
-                    wordData,
-                    sentenceData,
-                    corpus_attrs,
-                    tokens,
-                    customAttrs,
-                    customData
-                ) {
+                renderCorpusContent(type, wordData, sentenceData, corpus_attrs, tokens, customAttrs, customData) {
                     let pairs
                     if (type === "struct") {
                         pairs = _.toPairs(sentenceData)
@@ -196,10 +181,7 @@ export const sidebarComponent = {
                     })
                     pairs = _.filter(pairs, function (...args) {
                         let [key, val] = args[0]
-                        return !(
-                            corpus_attrs[key].displayType === "hidden" ||
-                            corpus_attrs[key].hideSidebar
-                        )
+                        return !(corpus_attrs[key].displayType === "hidden" || corpus_attrs[key].hideSidebar)
                     })
 
                     for (let custom of customData) {
@@ -263,15 +245,7 @@ export const sidebarComponent = {
                         const attrs = corpus_attrs[key]
                         try {
                             const output = (
-                                this.renderItem(
-                                    null,
-                                    key,
-                                    "not_used",
-                                    attrs,
-                                    wordData,
-                                    sentenceData,
-                                    tokens
-                                ) || $()
+                                this.renderItem(null, key, "not_used", attrs, wordData, sentenceData, tokens) || $()
                             ).get(0)
                             if (attrs.customType === "struct") {
                                 structItems.push([key, output])
@@ -314,9 +288,7 @@ export const sidebarComponent = {
                     output.data("attrs", attrs)
                     if (value === "|" || value === "" || value === null) {
                         output.append(
-                            `<i rel='localize[empty]' style='color : grey'>${util.getLocaleString(
-                                "empty"
-                            )}</i>`
+                            `<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>`
                         )
                         return output
                     }
@@ -325,24 +297,15 @@ export const sidebarComponent = {
                         pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>'
                         ul = $("<ul>")
                         const getStringVal = (str) =>
-                            _.reduce(
-                                _.invokeMap(_.invokeMap(str, "charCodeAt", 0), "toString"),
-                                (a, b) => a + b
-                            )
+                            _.reduce(_.invokeMap(_.invokeMap(str, "charCodeAt", 0), "toString"), (a, b) => a + b)
                         let valueArray = _.filter((value && value.split("|")) || [], Boolean)
                         if (key === "variants") {
                             // TODO: this doesn't sort quite as expected
                             valueArray.sort(function (a, b) {
                                 const splita = util.splitLemgram(a)
                                 const splitb = util.splitLemgram(b)
-                                const strvala =
-                                    getStringVal(splita.form) +
-                                    splita.index +
-                                    getStringVal(splita.pos)
-                                const strvalb =
-                                    getStringVal(splitb.form) +
-                                    splitb.index +
-                                    getStringVal(splitb.pos)
+                                const strvala = getStringVal(splita.form) + splita.index + getStringVal(splita.pos)
+                                const strvalb = getStringVal(splitb.form) + splitb.index + getStringVal(splitb.pos)
 
                                 return parseInt(strvala) - parseInt(strvalb)
                             })
@@ -353,7 +316,7 @@ export const sidebarComponent = {
                         for (let x of itr) {
                             if (x.length) {
                                 val = stringify(key, x)
-                                
+
                                 if (attrs.translation != null) {
                                     val = util.translateAttribute($ctrl.lang, attrs.translation, val)
                                 }
@@ -371,11 +334,7 @@ export const sidebarComponent = {
                                 li = $("<li></li>").data("key", x).append(inner)
                                 if (attrs.externalSearch) {
                                     address = _.template(attrs.externalSearch)({ val: x })
-                                    li.append(
-                                        $(
-                                            `<a href='${address}' class='external_link' target='_blank'></a>`
-                                        )
-                                    )
+                                    li.append($(`<a href='${address}' class='external_link' target='_blank'></a>`))
                                 }
 
                                 lis.push(li)
@@ -390,7 +349,7 @@ export const sidebarComponent = {
                     let str_value = value
                     if (attrs.stringify) {
                         str_value = stringify(key, value)
-                    } else  if (attrs.translation) {
+                    } else if (attrs.translation) {
                         str_value = util.translateAttribute($ctrl.lang, attrs.translation, value)
                     }
 

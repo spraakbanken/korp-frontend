@@ -64,14 +64,14 @@ let machine = Machine(
                     blank: {},
                     cqp_selected: {
                         entry: "log",
-                    }
+                    },
                 },
                 on: {
                     SEARCH_CQP: {
                         target: "extended_search.cqp_selected",
                         actions: ["cqp_search"],
                     },
-                }
+                },
             },
             sidebar: {
                 ...sidebarStates,

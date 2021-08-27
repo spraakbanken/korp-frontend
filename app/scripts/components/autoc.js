@@ -1,3 +1,5 @@
+/** @format */
+
 export const componentName = "autoc"
 export const component = {
     template: `
@@ -43,8 +45,8 @@ export const component = {
     </div>    
     `,
     bindings: {
-        input: '<',
-        isRawInput: '<',
+        input: "<",
+        isRawInput: "<",
         type: "@",
         variant: "@",
         disableLemgramAutocomplete: "<",
@@ -53,8 +55,8 @@ export const component = {
         onChange: "&",
     },
     controller: [
-        '$q',
-        'lexicons',
+        "$q",
+        "lexicons",
         function ($q, lexicons) {
             const ctrl = this
 
@@ -73,7 +75,7 @@ export const component = {
                     ctrl.isError = !(ctrl.placeholder != null && _.isEmpty(ctrl.textInField))
                 }
             }
-    
+
             ctrl.lemgramify = function (lemgram) {
                 const lemgramRegExp = /([^_.-]*--)?(.*)\.\.(\w+)\.(\d\d?)/
                 const match = lemgram.match(lemgramRegExp)
@@ -87,7 +89,7 @@ export const component = {
                     namespace: match[1] ? match[1].slice(0, -2) : "",
                 }
             }
-    
+
             ctrl.sensify = function (sense) {
                 const senseParts = sense.split("..")
                 return {
@@ -95,7 +97,7 @@ export const component = {
                     index: senseParts[1],
                 }
             }
-    
+
             ctrl.placeholderToString = _.memoize(function (placeholder) {
                 if (!placeholder) {
                     return
@@ -107,8 +109,8 @@ export const component = {
                 }
             })
 
-            ctrl.textInput = () => ctrl.onChange({output: ctrl.textInField, isRawOutput: true})
-    
+            ctrl.textInput = () => ctrl.onChange({ output: ctrl.textInField, isRawOutput: true })
+
             ctrl.selectedItem = function (item, selected) {
                 if (ctrl.type === "lemgram") {
                     ctrl.placeholder = selected.lemgram
@@ -116,10 +118,10 @@ export const component = {
                     ctrl.placeholder = selected.sense
                 }
                 ctrl.textInField = ""
-                ctrl.onChange({output: ctrl.placeholder, isRawOutput: false})
+                ctrl.onChange({ output: ctrl.placeholder, isRawOutput: false })
                 ctrl.typeaheadClose()
             }
-    
+
             ctrl.getMorphologies = function (corporaIDs) {
                 const morphologies = []
                 if (ctrl.variant === "dalin") {
@@ -149,15 +151,10 @@ export const component = {
                     return ctrl.getSenses(input, morphologies, corporaIDs)
                 }
             }
-    
+
             ctrl.getLemgrams = function (input, morphologies, corporaIDs) {
                 const deferred = $q.defer()
-                const http = lexicons.getLemgrams(
-                    input,
-                    morphologies,
-                    corporaIDs,
-                    ctrl.variant === "affix"
-                )
+                const http = lexicons.getLemgrams(input, morphologies, corporaIDs, ctrl.variant === "affix")
                 http.then(function (data) {
                     data.forEach(function (item) {
                         if (ctrl.variant === "affix") {
@@ -171,7 +168,7 @@ export const component = {
                 })
                 return deferred.promise
             }
-    
+
             ctrl.getSenses = function (input, morphologies, corporaIDs) {
                 const deferred = $q.defer()
                 const http = lexicons.getSenses(input, morphologies.join("|"), corporaIDs)
@@ -195,5 +192,5 @@ export const component = {
                 return deferred.promise
             }
         },
-    ]
+    ],
 }

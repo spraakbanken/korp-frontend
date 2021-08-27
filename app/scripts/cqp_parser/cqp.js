@@ -1,16 +1,6 @@
 /** @format */
 
-const prio = settings.cqpPrio || [
-    "deprel",
-    "pos",
-    "msd",
-    "suffix",
-    "prefix",
-    "grundform",
-    "lemgram",
-    "saldo",
-    "word",
-]
+const prio = settings.cqpPrio || ["deprel", "pos", "msd", "suffix", "prefix", "grundform", "lemgram", "saldo", "word"]
 
 const parseDateInterval = function (op, val, expanded_format) {
     let out
@@ -40,28 +30,23 @@ const parseDateInterval = function (op, val, expanded_format) {
 
     if (days_diff === 0) {
         // same day
-        out = `${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")} & ${op(
-            "text_dateto",
-            "="
-        )} & ${op("text_timeto", "<=")}`
+        out = `${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")} & ${op("text_dateto", "=")} & ${op(
+            "text_timeto",
+            "<="
+        )}`
     } else if (days_diff === -1) {
         // one day apart
         out = `((${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")}) | ${op(
             "text_datefrom",
             "=",
             "text_dateto"
-        )}) & (${op("text_dateto", "=", "text_datefrom")} | (${op("text_dateto", "=")} & ${op(
-            "text_timeto",
-            "<="
-        )}))`
+        )}) & (${op("text_dateto", "=", "text_datefrom")} | (${op("text_dateto", "=")} & ${op("text_timeto", "<=")}))`
     } else {
-        out = `((${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")}) | (${op(
+        out = `((${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")}) | (${op("text_datefrom", ">")} & ${op(
             "text_datefrom",
-            ">"
-        )} & ${op("text_datefrom", "<=", "text_dateto")})) & (${op("text_dateto", "<")} | (${op(
-            "text_dateto",
-            "="
-        )} & ${op("text_timeto", "<=")}))`
+            "<=",
+            "text_dateto"
+        )})) & (${op("text_dateto", "<")} | (${op("text_dateto", "=")} & ${op("text_timeto", "<=")}))`
     }
 
     out = out.replace(/\s+/g, " ")
@@ -87,7 +72,7 @@ const stringifyCqp = function (cqp_obj, expanded_format) {
         }
 
         if (token.struct) {
-            output.push(`<${token.start ? '' : '/'}${token.struct}>`)
+            output.push(`<${token.start ? "" : "/"}${token.struct}>`)
             continue
         }
 
@@ -140,9 +125,7 @@ const stringifyCqp = function (cqp_obj, expanded_format) {
             }
         }
 
-        let or_out = outer_and_array.map((x) =>
-            x.length > 1 ? `(${x.join(" | ")})` : x.join(" | ")
-        )
+        let or_out = outer_and_array.map((x) => (x.length > 1 ? `(${x.join(" | ")})` : x.join(" | ")))
 
         if (token.bound) {
             or_out = _.compact(or_out)

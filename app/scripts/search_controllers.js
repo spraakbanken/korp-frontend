@@ -80,10 +80,7 @@ window.SearchCtrl = [
             "statInsensitiveAttrs",
             function (insensitive) {
                 if (insensitive && insensitive.length > 0) {
-                    $location.search(
-                        "stats_reduce_insensitive",
-                        $scope.statInsensitiveAttrs.join(",")
-                    )
+                    $location.search("stats_reduce_insensitive", $scope.statInsensitiveAttrs.join(","))
                 } else if (insensitive) {
                     $location.search("stats_reduce_insensitive", null)
                 }
@@ -130,11 +127,7 @@ window.SearchCtrl = [
             $scope.getSortFormat = function (val) {
                 const mappedVal = kwicSortValueMap[val]
                 if (val === $scope.kwicSort) {
-                    return (
-                        $filter("loc")("sort_default", $scope.lang) +
-                        ": " +
-                        $filter("loc")(mappedVal, $scope.lang)
-                    )
+                    return $filter("loc")("sort_default", $scope.lang) + ": " + $filter("loc")(mappedVal, $scope.lang)
                 } else {
                     return $filter("loc")(mappedVal, $scope.lang)
                 }
@@ -401,18 +394,9 @@ korpApp.controller("SimpleCtrl", function (
     ])
 })
 
-korpApp.controller("ExtendedSearch", function (
-    $scope,
-    $location,
-    $rootScope,
-    searches,
-    compareSearches,
-    $timeout
-) {
+korpApp.controller("ExtendedSearch", function ($scope, $location, $rootScope, searches, compareSearches, $timeout) {
     const s = $scope
-    s.$on("popover_submit", (event, name) =>
-        compareSearches.saveSearch(name, $rootScope.extendedCQP)
-    )
+    s.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, $rootScope.extendedCQP))
 
     // TODO this is *too* weird
     function triggerSearch() {
@@ -434,7 +418,7 @@ korpApp.controller("ExtendedSearch", function (
         triggerSearch()
         // sometimes $scope.$apply is needed and sometimes it throws errors
         // depending on source of the event I guess. $timeout solves it.
-        $timeout(() =>$scope.$apply())
+        $timeout(() => $scope.$apply())
     })
 
     s.searches = searches
@@ -453,9 +437,7 @@ korpApp.controller("ExtendedSearch", function (
     const updateExtendedCQP = function () {
         let val2 = CQP.expandOperators(s.cqp)
         if ($rootScope.globalFilter) {
-            val2 = CQP.stringify(
-                CQP.mergeCqpExprs(CQP.parse(val2 || "[]"), $rootScope.globalFilter)
-            )
+            val2 = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(val2 || "[]"), $rootScope.globalFilter))
         }
         $rootScope.extendedCQP = val2
     }
@@ -618,17 +600,14 @@ korpApp.directive("compareSearchCtrl", () => ({
                 return
             }
 
-            const listing = settings.corpusListing.subsetFactory(
-                _.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora))
-            )
+            const listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)))
             const allAttrs = listing.getAttributeGroups()
             s.currentAttrs = _.filter(allAttrs, (item) => !item.hideCompare)
         })
 
         s.reduce = "word"
 
-        s.sendCompare = () =>
-            $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]))
+        s.sendCompare = () => $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]))
 
         s.deleteCompares = () => compareSearches.flush()
     },

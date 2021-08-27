@@ -8,9 +8,7 @@ korpApp.factory("kwicDownload", function () {
     const createFile = function (dataType, fileType, content) {
         const date = moment().format("YYYYDDMM_HHmmss")
         const filename = `korp_${dataType}_${date}.${fileType}`
-        const blobURL = window.URL.createObjectURL(
-            new Blob([content], { type: `text/${fileType}` })
-        )
+        const blobURL = window.URL.createObjectURL(new Blob([content], { type: `text/${fileType}` }))
         return [filename, blobURL]
     }
 
@@ -57,11 +55,7 @@ korpApp.factory("kwicDownload", function () {
     const transformDataToAnnotations = function (data, searchInfo) {
         const headers = _.filter(
             _.keys(data[1].tokens[0]),
-            (val) =>
-                val.indexOf("_") !== 0 &&
-                val !== "structs" &&
-                val !== "$$hashKey" &&
-                val !== "position"
+            (val) => val.indexOf("_") !== 0 && val !== "structs" && val !== "$$hashKey" && val !== "position"
         )
         const columnCount = headers.length + 1
         let corpus
@@ -165,13 +159,7 @@ korpApp.factory("kwicDownload", function () {
             }
         }
 
-        const headers = [
-            "corpus",
-            "match_position",
-            "left context",
-            "match",
-            "right_context",
-        ].concat(structHeaders)
+        const headers = ["corpus", "match_position", "left context", "match", "right_context"].concat(structHeaders)
         res = [headers].concat(res)
 
         res.push(emptyRow(headers.length))

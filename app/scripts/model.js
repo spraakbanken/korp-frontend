@@ -16,10 +16,7 @@ model.normalizeStatsData = function (data) {
 }
 
 model.getAuthorizationHeader = function () {
-    if (
-        typeof authenticationProxy !== "undefined" &&
-        !$.isEmptyObject(authenticationProxy.loginObj)
-    ) {
+    if (typeof authenticationProxy !== "undefined" && !$.isEmptyObject(authenticationProxy.loginObj)) {
         return { Authorization: `Basic ${authenticationProxy.loginObj.auth}` }
     } else {
         return {}
@@ -66,9 +63,7 @@ class BaseProxy {
     }
 
     hasPending() {
-        return _.some(
-            _.map(this.pendingRequests, (req) => req.readyState !== 4 && req.readyState !== 0)
-        )
+        return _.some(_.map(this.pendingRequests, (req) => req.readyState !== 4 && req.readyState !== 0))
     }
 
     parseJSON(data) {
@@ -300,9 +295,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
     }
 
     makeParameters(reduceVals, cqp, ignoreCase) {
-        const structAttrs = settings.corpusListing.getStructAttrs(
-            settings.corpusListing.getReduceLang()
-        )
+        const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
         const groupBy = []
         const groupByStruct = []
         for (let reduceVal of reduceVals) {
@@ -338,26 +331,20 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
             if (reduceVal === "word") {
                 return "word"
             }
-            const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(
-                settings.corpusListing.getReduceLang()
-            )[reduceVal]
+            const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
+                reduceVal
+            ]
             if (maybeReduceAttr) {
                 return maybeReduceAttr.label
             } else {
-                return settings.corpusListing.getStructAttrs(
-                    settings.corpusListing.getReduceLang()
-                )[reduceVal].label
+                return settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())[reduceVal].label
             }
         })
 
         const data = this.makeParameters(reduceVals, cqp, ignoreCase)
 
-        const wordAttrs = settings.corpusListing.getCurrentAttributes(
-            settings.corpusListing.getReduceLang()
-        )
-        const structAttrs = settings.corpusListing.getStructAttrs(
-            settings.corpusListing.getReduceLang()
-        )
+        const wordAttrs = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())
+        const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
         data.split = _.filter(reduceVals, (reduceVal) => {
             return (
                 (wordAttrs[reduceVal] && wordAttrs[reduceVal].type == "set") ||
@@ -408,13 +395,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                         return
                     }
                     model.normalizeStatsData(data)
-                    statisticsService.processData(
-                        def,
-                        data,
-                        reduceVals,
-                        reduceValLabels,
-                        ignoreCase
-                    )
+                    statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
                 },
             })
         )

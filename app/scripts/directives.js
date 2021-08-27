@@ -1,5 +1,5 @@
 /** @format */
-import extendedComponents from './extended.js'
+import extendedComponents from "./extended.js"
 
 const korpApp = angular.module("korpApp")
 
@@ -189,7 +189,6 @@ korpApp.directive("tokenValue", ($compile, $controller) => ({
                 } else {
                     ;({ template, controller } = def)
                 }
-                
             } else {
                 controller = extendedComponents.default.controller
                 if (valueObj.extendedTemplate) {
@@ -445,9 +444,13 @@ korpApp.directive("extendedList", () => ({
         }
         setCQP(s.cqp)
 
-        s.$watch("data", () => {
-            s.cqp = CQP.stringify(s.data) || ""
-        }, true)
+        s.$watch(
+            "data",
+            () => {
+                s.cqp = CQP.stringify(s.data) || ""
+            },
+            true
+        )
         s.$watch("cqp", () => {
             setCQP(s.cqp)
         })
@@ -470,18 +473,18 @@ korpApp.directive("extendedList", () => ({
         }
 
         function getTokenBoxes() {
-            return s.data.filter((box) => box.and_block);
+            return s.data.filter((box) => box.and_block)
         }
 
         s.showCloseButton = getTokenBoxes().length > 1
 
         s.scrollToStart = false
-        s.addStructToken = function(start = true, idx = -1, within) {
+        s.addStructToken = function (start = true, idx = -1, within) {
             within = within ? within : Object.keys(settings.corpusListing.getCommonWithins())[0]
             // TODO this is duplicated since s.tagTypes are not available in this scope
             const token = { struct: within, start: true }
             if (idx != -1) {
-                s.data.splice(idx, 0, token);
+                s.data.splice(idx, 0, token)
             } else if (start) {
                 s.scrollToStart = true
                 s.data.unshift(token)
@@ -521,7 +524,6 @@ korpApp.directive("extendedList", () => ({
             }
         }
 
-        
         s.toggleStart = (idx) => {
             s.addStructToken(false, idx, "sentence")
         }
@@ -659,7 +661,7 @@ korpApp.directive("typeaheadClickOpen", ($timeout) => ({
             }
         }
         elem.bind("keyup", triggerFunc)
-    }
+    },
 }))
 
 korpApp.directive("timeInterval", () => ({
@@ -767,8 +769,7 @@ korpApp.directive("reduceSelect", ($timeout) => ({
                 }
 
                 scope.hasWordAttrs = _.filter(scope.keyItems, { group: "word_attr" }).length > 0
-                scope.hasStructAttrs =
-                    _.filter(scope.keyItems, { group: "sentence_attr" }).length > 0
+                scope.hasStructAttrs = _.filter(scope.keyItems, { group: "sentence_attr" }).length > 0
 
                 let somethingSelected = false
                 if (scope.selected && scope.selected.length > 0) {

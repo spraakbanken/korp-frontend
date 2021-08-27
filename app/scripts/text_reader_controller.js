@@ -131,14 +131,8 @@ function _prepareData(tokens, start, groupElement, inGroup) {
             }
         }
 
-        token.head = (token._head || "")
-            .replace(/\\s/g, " ")
-            .replace(/\\n/g, "\n")
-            .replace(/\\t/g, "\t")
-        token.tail = (token._tail || "")
-            .replace(/\\s/g, " ")
-            .replace(/\\n/g, "\n")
-            .replace(/\\t/g, "\t")
+        token.head = (token._head || "").replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t")
+        token.tail = (token._tail || "").replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t")
         currentSentence.push(token)
         // if no call was made, do the other thing
         if (!done) {

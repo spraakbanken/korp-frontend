@@ -155,9 +155,7 @@ window.getAllCorporaInFolders = function (lastLevel, folderOrCorpus) {
         // Continue to go through any subfolders
         $.each(lastLevel[folderOrCorpus], function (key, val) {
             if (!["title", "contents", "description"].includes(key)) {
-                outCorpora = outCorpora.concat(
-                    getAllCorporaInFolders(lastLevel[folderOrCorpus], key)
-                )
+                outCorpora = outCorpora.concat(getAllCorporaInFolders(lastLevel[folderOrCorpus], key))
             }
         })
 
@@ -221,10 +219,7 @@ window.initTimeGraph = function (def) {
             }
 
             safeApply($("body").scope(), function (scope) {
-                scope.$broadcast(
-                    "corpuschooserchange",
-                    corpusChooserInstance.corpusChooser("selectedItems")
-                )
+                scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"))
                 return def.resolve()
             })
 
@@ -331,9 +326,7 @@ window.initTimeGraph = function (def) {
                             val = restdata
                             total = rest
                         } else {
-                            header.text(
-                                util.getLocaleString("corpselector_time") + " " + item.datapoint[0]
-                            )
+                            header.text(util.getLocaleString("corpselector_time") + " " + item.datapoint[0])
                             val = getValByDate(date, timestruct)
                             total = getValByDate(date, all_timestruct)
                         }

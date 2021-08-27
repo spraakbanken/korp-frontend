@@ -11,8 +11,7 @@ const korpApp = angular.module("korpApp")
 korpApp.factory("globalFilterService", function ($rootScope, $location, $q, structService) {
     const scopes = []
 
-    const callDirectives = () =>
-        listenerDef.promise.then(() => scopes.map((scope) => scope.update(dataObj)))
+    const callDirectives = () => listenerDef.promise.then(() => scopes.map((scope) => scope.update(dataObj)))
 
     // deferred for waiting for all directives to register
     var listenerDef = $q.defer()
@@ -56,10 +55,7 @@ korpApp.factory("globalFilterService", function ($rootScope, $location, $q, stru
 
     // only send corpora that supports all selected filters (if filterSelection is "union")
     const getSupportedCorpora = function () {
-        const corporaPerFilter = _.map(
-            dataObj.selectedFilters,
-            (filter) => dataObj.attributes[filter].corpora
-        )
+        const corporaPerFilter = _.map(dataObj.selectedFilters, (filter) => dataObj.attributes[filter].corpora)
         return _.intersection(...(corporaPerFilter || []))
     }
 
@@ -71,10 +67,7 @@ korpApp.factory("globalFilterService", function ($rootScope, $location, $q, stru
             const allKeys = _.union(...(_.map(values, (val) => _.keys(val)) || []))
             for (let k of allKeys) {
                 const allValsForKey = _.map(values, (val) => val[k])
-                const newValues = _.filter(
-                    allValsForKey,
-                    (val) => !_.isEmpty(val) || Number.isInteger(val)
-                )
+                const newValues = _.filter(allValsForKey, (val) => !_.isEmpty(val) || Number.isInteger(val))
                 newObj[k] = mergeObjects(...(newValues || []))
             }
             return newObj
@@ -94,23 +87,21 @@ korpApp.factory("globalFilterService", function ($rootScope, $location, $q, stru
         if (dataObj.attributes[_.last(dataObj.defaultFilters)].settings.type === "set") {
             opts.split = true
         }
-        return structService
-            .getStructValues(corpora, dataObj.selectedFilters, opts)
-            .then(function (data) {
-                currentData = {}
-                for (let corpus of corpora) {
-                    const object = data[corpus.toUpperCase()]
-                    for (let k in object) {
-                        const v = object[k]
-                        if (!(k in currentData)) {
-                            currentData[k] = v
-                        } else {
-                            currentData[k] = mergeObjects(currentData[k], v)
-                        }
+        return structService.getStructValues(corpora, dataObj.selectedFilters, opts).then(function (data) {
+            currentData = {}
+            for (let corpus of corpora) {
+                const object = data[corpus.toUpperCase()]
+                for (let k in object) {
+                    const v = object[k]
+                    if (!(k in currentData)) {
+                        currentData[k] = v
+                    } else {
+                        currentData[k] = mergeObjects(currentData[k], v)
                     }
                 }
-                updateData()
-            })
+            }
+            updateData()
+        })
     }
 
     // when user selects an attribute, update all possible filter values and counts
@@ -136,11 +127,7 @@ korpApp.factory("globalFilterService", function ($rootScope, $location, $q, stru
                     childCount = child
                     include = true
                 } else {
-                    ;[childCount, include] = collectAndSum(
-                        _.tail(filters),
-                        child,
-                        parentSelected && selected
-                    )
+                    ;[childCount, include] = collectAndSum(_.tail(filters), child, parentSelected && selected)
                 }
 
                 if (include && parentSelected) {

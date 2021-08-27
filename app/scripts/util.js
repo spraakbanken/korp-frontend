@@ -199,14 +199,7 @@ window.CorpusListing = class CorpusListing {
         for (let attr of attrs) {
             if (
                 attr !== "word" &&
-                !(
-                    attr in
-                    $.extend(
-                        {},
-                        this.struct[corpus].attributes,
-                        this.struct[corpus].structAttributes
-                    )
-                )
+                !(attr in $.extend({}, this.struct[corpus].attributes, this.struct[corpus].structAttributes))
             ) {
                 return false
             }
@@ -271,19 +264,22 @@ window.CorpusListing = class CorpusListing {
     getCommonWithins() {
         // only return withins that are available in every selected corpus
         const allWithins = this.selected.map((corp) => corp.within)
-        const withins = allWithins.reduce((acc, curr) => {
-            for (const key in acc) {
-                if (!curr[key]) {
-                    delete acc[key];
+        const withins = allWithins.reduce(
+            (acc, curr) => {
+                for (const key in acc) {
+                    if (!curr[key]) {
+                        delete acc[key]
+                    }
                 }
-            }
-            return acc
-        }, _.pickBy(allWithins[0], (val, within) => {
-            // ignore withins that start with numbers, such as "5 sentence"
-            return !within.match(/^[0-9]/)
-        }))
+                return acc
+            },
+            _.pickBy(allWithins[0], (val, within) => {
+                // ignore withins that start with numbers, such as "5 sentence"
+                return !within.match(/^[0-9]/)
+            })
+        )
         if (_.isEmpty(withins)) {
-            return { sentence: { label: { sv: "mening", en: "sentence" }}}
+            return { sentence: { label: { sv: "mening", en: "sentence" } } }
         }
         return withins
     }
@@ -387,9 +383,7 @@ window.CorpusListing = class CorpusListing {
             allAttrs = this.getStructAttrsIntersection(lang)
         }
 
-        const common_keys = _.compact(
-            _.flatten(_.map(this.selected, (corp) => _.keys(corp.common_attributes)))
-        )
+        const common_keys = _.compact(_.flatten(_.map(this.selected, (corp) => _.keys(corp.common_attributes))))
         const common = _.pick(settings.commonStructTypes, ...common_keys)
 
         let sentAttrs = []
@@ -565,10 +559,12 @@ util.lemgramToString = function (lemgram, appendIndex) {
         concept = match.form.replace(/_/g, " ")
         type = match.pos.slice(0, 2)
     }
-    return $.format(
-        "%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>",
-        [concept, infixIndex, type, util.getLocaleString(type)]
-    )
+    return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", [
+        concept,
+        infixIndex,
+        type,
+        util.getLocaleString(type),
+    ])
 }
 
 const numberToSuperscript = {
@@ -632,12 +628,7 @@ util.setDownloadLinks = function (xhr_settings, result_data) {
     // If some of the required parameters are null, return without
     // adding the download links.
     if (
-        !(
-            xhr_settings != null &&
-            result_data != null &&
-            result_data.corpus_order != null &&
-            result_data.kwic != null
-        )
+        !(xhr_settings != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)
     ) {
         c.log("failed to do setDownloadLinks")
         return
@@ -653,8 +644,7 @@ util.setDownloadLinks = function (xhr_settings, result_data) {
     // Get the number (index) of the corpus of the query result hit
     // number hit_num in the corpus order information of the query
     // result.
-    const get_corpus_num = (hit_num) =>
-        result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus)
+    const get_corpus_num = (hit_num) => result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus)
 
     c.log("setDownloadLinks data:", result_data)
     $("#download-links").empty()
@@ -821,9 +811,7 @@ util.suffixedNumbers = function (num) {
     }
     return out.replace(
         ".",
-        `<span rel="localize[util_decimalseparator]">${util.getLocaleString(
-            "util_decimalseparator"
-        )}</span>`
+        `<span rel="localize[util_decimalseparator]">${util.getLocaleString("util_decimalseparator")}</span>`
     )
 }
 
@@ -929,17 +917,13 @@ util.loadCorpora = function () {
                     glueString = util.getLocaleString("corpselector_corporawith_plur")
                 }
                 return `<b><img src="${folderImg}" style="margin-right:4px; \
-                        vertical-align:middle; margin-top:-1px"/>${
-                            indata.title
-                        }</b><br/><br/>${maybeInfo}<b>${
+                        vertical-align:middle; margin-top:-1px"/>${indata.title}</b><br/><br/>${maybeInfo}<b>${
                     corporaID.length
                 }</b> ${glueString}:<br/><br/><b>${util.prettyNumbers(
                     totalTokens.toString()
                 )}</b> ${util.getLocaleString(
                     "corpselector_tokens"
-                )}<br/><b>${totalSentencesString}</b> ${util.getLocaleString(
-                    "corpselector_sentences"
-                )}`
+                )}<br/><b>${totalSentencesString}</b> ${util.getLocaleString("corpselector_sentences")}`
             },
         })
         .bind("corpuschooserchange", function (evt, corpora) {
@@ -987,7 +971,7 @@ util.translateAttribute = (lang, translations, value) => {
         lang = window.lang || settings.defaultLanguage || "sv"
     }
 
-    if(translations && translations[value]) {
+    if (translations && translations[value]) {
         return _.isObject(translations[value]) ? translations[value][lang] : translations[value]
     } else {
         return value

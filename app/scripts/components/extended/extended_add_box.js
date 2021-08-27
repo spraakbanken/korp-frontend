@@ -1,9 +1,8 @@
 /** @format */
 export const componentName = "addBox"
 
-let html = String.raw
 export const component = {
-    template: html`
+    template: `
     <div class="mt-10 mr-14 inline-block" ng-mouseleave="$ctrl.reset()">
         <button ng-class="{'fade-out': $ctrl.showStuffSelectButtons}" class="btn btn-sm image_button insert_token border-gray-300 transition duration-200 hover_bg-gray-200" ng-click="$ctrl.addTokenLocal()">
             <i class="fa fa-lg fa-plus-circle text-blue-600 mr-1"></i>
@@ -48,14 +47,14 @@ export const component = {
 
         ctrl.showStuffSelectButtons = false
 
-        ctrl.addTokenLocal = function() {
+        ctrl.addTokenLocal = function () {
             ctrl.addToken()
         }
-        
-        ctrl.showSelectButtons = function() {
+
+        ctrl.showSelectButtons = function () {
             ctrl.showStuffSelectButtons = true
         }
-        
+
         ctrl.addStructTokenLocal = function (start = true) {
             ctrl.reset()
             ctrl.addStructToken({ start })

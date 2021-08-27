@@ -45,10 +45,7 @@ const selectController = (autocomplete) => [
             // check which corpora support attributes
             const corpora = []
             for (let corpusSettings of selectedCorpora) {
-                if (
-                    attribute in corpusSettings.structAttributes ||
-                    attribute in corpusSettings.attributes
-                ) {
+                if (attribute in corpusSettings.structAttributes || attribute in corpusSettings.attributes) {
                     corpora.push(corpusSettings.id)
                 }
             }
@@ -89,10 +86,7 @@ const selectController = (autocomplete) => [
 
         $scope.getRows = function (input) {
             if (input) {
-                return _.filter(
-                    $scope.dataset,
-                    (tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1
-                )
+                return _.filter($scope.dataset, (tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
             } else {
                 return $scope.dataset
             }
@@ -105,56 +99,58 @@ const selectController = (autocomplete) => [
 // Select-element. Use the following settings in the corpus:
 // - dataset: an object or an array of values
 // - escape: boolean, will be used by the escaper-directive
-export default _.merge({
-    datasetSelect: {
-        template: selectTemplate,
-        controller: [
-            "$scope", "$rootScope",
-            function ($scope, $rootScope) {
-                let dataset
-                const original = $scope.dataset
+export default _.merge(
+    {
+        datasetSelect: {
+            template: selectTemplate,
+            controller: [
+                "$scope",
+                "$rootScope",
+                function ($scope, $rootScope) {
+                    let dataset
+                    const original = $scope.dataset
 
-                $rootScope.$watch('lang', (newVal, oldVal) => {
-                    if (newVal != oldVal) {
-                        initialize()
+                    $rootScope.$watch("lang", (newVal, oldVal) => {
+                        if (newVal != oldVal) {
+                            initialize()
+                        }
+                    })
+                    function initialize() {
+                        const localizer = localize($scope)
+                        if (_.isArray(original)) {
+                            dataset = _.map(original, (item) => [item, localizer(item)])
+                        } else {
+                            dataset = _.map(original, (v, k) => [k, localizer(v)])
+                        }
+                        $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                        $scope.model = $scope.model || $scope.dataset[0][0]
                     }
-                })
-                function initialize() {
-                    const localizer = localize($scope)
-                    if (_.isArray(original)) {
-                        dataset = _.map(original, (item) => [item, localizer(item)])
-                    } else {
-                        dataset = _.map(original, (v, k) => [k, localizer(v)])
-                    }
-                    $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
-                    $scope.model = $scope.model || $scope.dataset[0][0]
-                }
-                initialize()
-            },
-        ],
-    },
+                    initialize()
+                },
+            ],
+        },
 
-    // Select-element. Gets values from "struct_values"-command. Use the following settings in the corpus:
-    // - escape: boolean, will be used by the escaper-directive
-    structServiceSelect: {
-        template: selectTemplate,
-        controller: selectController(false),
-    },
+        // Select-element. Gets values from "struct_values"-command. Use the following settings in the corpus:
+        // - escape: boolean, will be used by the escaper-directive
+        structServiceSelect: {
+            template: selectTemplate,
+            controller: selectController(false),
+        },
 
-    // Autocomplete. Gets values from "struct_values"-command. Use the following settings in the corpus:
-    // - escape: boolean, will be used by the escaper-directive
-    structServiceAutocomplete: {
-        template: autocompleteTemplate,
-        controller: selectController(true),
-    },
+        // Autocomplete. Gets values from "struct_values"-command. Use the following settings in the corpus:
+        // - escape: boolean, will be used by the escaper-directive
+        structServiceAutocomplete: {
+            template: autocompleteTemplate,
+            controller: selectController(true),
+        },
 
-    // puts the first values from a dataset paramater into model
-    singleValue: {
-        template: '<input type="hidden">',
-        controller: ["$scope", ($scope) => ($scope.model = _.values($scope.dataset)[0])],
-    },
-    default: {
-        template: _.template(`\
+        // puts the first values from a dataset paramater into model
+        singleValue: {
+            template: '<input type="hidden">',
+            controller: ["$scope", ($scope) => ($scope.model = _.values($scope.dataset)[0])],
+        },
+        default: {
+            template: _.template(`\
             <input ng-model='input' class='arg_value' escaper 
                     ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
             <%= maybe_placeholder %>>
@@ -165,56 +161,58 @@ export default _.merge({
                     <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>
             </ul>
         `),
-        controller: [
-            "$scope",
-            function ($scope) {
-                if ($scope.orObj.flags && $scope.orObj.flags.c) {
-                    $scope.case = "insensitive"
-                } else {
-                    $scope.case = "sensitive"
-                }
-
-                $scope.makeSensitive = function () {
-                    $scope.case = "sensitive"
-                    if ($scope.orObj.flags) {
-                        delete $scope.orObj.flags["c"]
+            controller: [
+                "$scope",
+                function ($scope) {
+                    if ($scope.orObj.flags && $scope.orObj.flags.c) {
+                        $scope.case = "insensitive"
+                    } else {
+                        $scope.case = "sensitive"
                     }
-                }
 
-                $scope.makeInsensitive = function () {
-                    const flags = $scope.orObj.flags || {}
-                    flags["c"] = true
-                    $scope.orObj.flags = flags
+                    $scope.makeSensitive = function () {
+                        $scope.case = "sensitive"
+                        if ($scope.orObj.flags) {
+                            delete $scope.orObj.flags["c"]
+                        }
+                    }
 
-                    $scope.case = "insensitive"
-                }
-            },
-        ],
-    },
-    autocExtended: (options) => ({
-        template: `
+                    $scope.makeInsensitive = function () {
+                        const flags = $scope.orObj.flags || {}
+                        flags["c"] = true
+                        $scope.orObj.flags = flags
+
+                        $scope.case = "insensitive"
+                    }
+                },
+            ],
+        },
+        autocExtended: (options) => ({
+            template: `
         <autoc 
             input="input"
             is-raw-input="isRawInput"
-            type='${options.type || 'lemgram'}'
+            type='${options.type || "lemgram"}'
             on-change="onChange(output, isRawOutput)"
             error-on-empty="${options.errorOnEmpty}"
             error-message="choose_value">
         </autoc>`,
-        controller: [
-            "$scope",
-            function ($scope) {
-                if($scope.model) {
-                    $scope.input = unregescape($scope.model)
-                    $scope.isRawInput = false
-                }
-
-                $scope.onChange = (output, isRawOutput) => {
-                    if (!isRawOutput) {
-                        $scope.model = regescape(output)
+            controller: [
+                "$scope",
+                function ($scope) {
+                    if ($scope.model) {
+                        $scope.input = unregescape($scope.model)
+                        $scope.isRawInput = false
                     }
-                }
-            },
-        ],
-    })
-}, customExtendedTemplates)
+
+                    $scope.onChange = (output, isRawOutput) => {
+                        if (!isRawOutput) {
+                            $scope.model = regescape(output)
+                        }
+                    }
+                },
+            ],
+        }),
+    },
+    customExtendedTemplates
+)

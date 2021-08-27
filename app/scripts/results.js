@@ -114,10 +114,7 @@ view.KWICResults = class KWICResults extends BaseResults {
         this.selectionManager = scope.selectionManager
         this.setupReadingHash()
         this.$result.click((event) => {
-            if (
-                event.target.id === "frontendDownloadLinks" ||
-                event.target.classList.contains("kwicDownloadLink")
-            ) {
+            if (event.target.id === "frontendDownloadLinks" || event.target.classList.contains("kwicDownloadLink")) {
                 return
             }
             if (!this.selectionManager.hasSelected()) {
@@ -178,9 +175,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             if (word.is(querySentStart)) {
                 sent_start = paragraph.index(word)
             } else {
-                const l = paragraph.filter(
-                    (__, item) => $(item).is(word) || $(item).is(querySentStart)
-                )
+                const l = paragraph.filter((__, item) => $(item).is(word) || $(item).is(querySentStart))
                 sent_start = paragraph.index(l.eq(l.index(word) - 1))
             }
             aux = $(paragraph.get(sent_start + i - 1))
@@ -215,11 +210,7 @@ view.KWICResults = class KWICResults extends BaseResults {
     onKeydown(event) {
         let next
         const isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey
-        if (
-            isSpecialKeyDown ||
-            $("input, textarea, select").is(":focus") ||
-            !this.$result.is(":visible")
-        ) {
+        if (isSpecialKeyDown || $("input, textarea, select").is(":focus") || !this.$result.is(":visible")) {
             return
         }
 
@@ -573,11 +564,7 @@ view.KWICResults = class KWICResults extends BaseResults {
                         .reverse()
                 )
             const def = current.parent().prev().find(".word:last")
-            prevMatch = this.getFirstAtCoor(
-                current.offset().left + current.width() / 2,
-                $(searchwords),
-                def
-            ).click()
+            prevMatch = this.getFirstAtCoor(current.offset().left + current.width() / 2, $(searchwords), def).click()
         }
 
         return prevMatch
@@ -595,19 +582,9 @@ view.KWICResults = class KWICResults extends BaseResults {
         } else {
             const searchwords = current
                 .nextAll(".word")
-                .add(
-                    current
-                        .closest(".not_corpus_info")
-                        .nextAll(".not_corpus_info")
-                        .first()
-                        .find(".word")
-                )
+                .add(current.closest(".not_corpus_info").nextAll(".not_corpus_info").first().find(".word"))
             const def = current.parent().next().find(".word:first")
-            nextMatch = this.getFirstAtCoor(
-                current.offset().left + current.width() / 2,
-                searchwords,
-                def
-            ).click()
+            nextMatch = this.getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def).click()
         }
         return nextMatch
     }
@@ -690,8 +667,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
         this.showPreloader()
-        const progress =
-            opts.command === "relations_sentences" ? $.noop : $.proxy(this.onProgress, this)
+        const progress = opts.command === "relations_sentences" ? $.noop : $.proxy(this.onProgress, this)
         const def = this.proxy.makeRequest(opts, null, progress, (data) => {
             this.renderResult(data, opts.cqp)
             this.renderCompleteResult(data)
@@ -827,9 +803,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
         const inArray = function (rel, orderList) {
             const i = _.findIndex(
                 orderList,
-                (item) =>
-                    (item.field_reverse || false) === (rel.field_reverse || false) &&
-                    item.rel === rel.rel
+                (item) => (item.field_reverse || false) === (rel.field_reverse || false) && item.rel === rel.rel
             )
             const type = rel.field_reverse ? "head" : "dep"
             return {
@@ -973,10 +947,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                 )
                 cqp2 = tokens.join(" | ")
             } else {
-                cqp2 = statisticsFormatting.getCqp(
-                    rowData.statsValues,
-                    this.searchParams.ignoreCase
-                )
+                cqp2 = statisticsFormatting.getCqp(rowData.statsValues, this.searchParams.ignoreCase)
             }
             const { corpora } = this.searchParams
 
@@ -1036,9 +1007,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                 var row = this.getDataAt(rowIx)
                 cqp = statisticsFormatting.getCqp(row.statsValues, this.searchParams.ignoreCase)
                 subExprs.push(cqp)
-                const parts = this.searchParams.reduceVals.map(
-                    (reduceVal) => row.formattedValue[reduceVal]
-                )
+                const parts = this.searchParams.reduceVals.map((reduceVal) => row.formattedValue[reduceVal])
                 labelMapping[cqp] = parts.join(", ")
             }
 
@@ -1423,10 +1392,7 @@ view.StatsResults = class StatsResults extends BaseResults {
             change: () => {
                 let loc
                 const typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode")
-                stats2Instance.pie_widget(
-                    "newData",
-                    getDataItems(this.pieChartCurrentRowId, typestring)
-                )
+                stats2Instance.pie_widget("newData", getDataItems(this.pieChartCurrentRowId, typestring))
                 if (typestring === "absolute") {
                     loc = "statstable_absfigures_hits"
                 } else {
@@ -1691,11 +1657,7 @@ view.GraphResults = class GraphResults extends BaseResults {
 
     getNonTime() {
         // TODO: move settings.corpusListing.selected to the subview
-        const non_time = _.reduce(
-            _.map(settings.corpusListing.selected, "non_time"),
-            (a, b) => (a || 0) + (b || 0),
-            0
-        )
+        const non_time = _.reduce(_.map(settings.corpusListing.selected, "non_time"), (a, b) => (a || 0) + (b || 0), 0)
         const sizelist = _.map(settings.corpusListing.selected, (item) => Number(item.info.Size))
         const totalsize = _.reduce(sizelist, (a, b) => a + b)
         return (non_time / totalsize) * 100
@@ -1756,9 +1718,7 @@ view.GraphResults = class GraphResults extends BaseResults {
     setBarMode() {
         if ($(".legend .line", this.$result).length > 1) {
             $(".legend li:last:not(.disabled) .action", this.$result).click()
-            if (
-                _.every(_.map($(".legend .line", this.$result), (item) => $(item).is(".disabled")))
-            ) {
+            if (_.every(_.map($(".legend .line", this.$result), (item) => $(item).is(".disabled")))) {
                 $(".legend li:first .action", this.$result).click()
             }
         }
@@ -1888,16 +1848,11 @@ view.GraphResults = class GraphResults extends BaseResults {
             time_table_columns.push(time_table_columns_intermediate[key])
         }
 
-        const time_grid = new Slick.Grid(
-            $(".time_table", this.$result),
-            time_table_data,
-            time_table_columns,
-            {
-                enableCellNavigation: false,
-                enableColumnReorder: false,
-                forceFitColumns: false,
-            }
-        )
+        const time_grid = new Slick.Grid($(".time_table", this.$result), time_table_data, time_table_columns, {
+            enableCellNavigation: false,
+            enableColumnReorder: false,
+            forceFitColumns: false,
+        })
         $(".time_table", this.$result).width("100%")
         this.time_grid = time_grid
     }
@@ -1916,29 +1871,17 @@ view.GraphResults = class GraphResults extends BaseResults {
                     color,
                     name: item.cqp ? this.s.data.labelMapping[item.cqp] : "&Sigma;",
                     cqp: item.cqp || cqp,
-                    abs_data: this.getSeriesData(
-                        item.absolute,
-                        showSelectedCorporasStartDate,
-                        zoom
-                    ),
+                    abs_data: this.getSeriesData(item.absolute, showSelectedCorporasStartDate, zoom),
                 })
             }
         } else {
             series = [
                 {
-                    data: this.getSeriesData(
-                        data.combined.relative,
-                        showSelectedCorporasStartDate,
-                        zoom
-                    ),
+                    data: this.getSeriesData(data.combined.relative, showSelectedCorporasStartDate, zoom),
                     color: "steelblue",
                     name: "&Sigma;",
                     cqp,
-                    abs_data: this.getSeriesData(
-                        data.combined.absolute,
-                        showSelectedCorporasStartDate,
-                        zoom
-                    ),
+                    abs_data: this.getSeriesData(data.combined.absolute, showSelectedCorporasStartDate, zoom),
                 },
             ]
         }
@@ -2124,9 +2067,7 @@ view.GraphResults = class GraphResults extends BaseResults {
                 const val = util.formatDecimalString(y.toFixed(2), false, true, true)
 
                 return (
-                    `<br><span rel='localize[rel_hits_short]'>${util.getLocaleString(
-                        "rel_hits_short"
-                    )}</span> ` + val
+                    `<br><span rel='localize[rel_hits_short]'>${util.getLocaleString("rel_hits_short")}</span> ` + val
                 )
             },
             formatter(series, x, y, formattedX, formattedY, d) {
@@ -2238,10 +2179,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             })
 
         try {
-            var [rickshawModule, graphData] = await Promise.all([
-                rickshawPromise || Rickshaw,
-                reqPromise,
-            ])
+            var [rickshawModule, graphData] = await Promise.all([rickshawPromise || Rickshaw, reqPromise])
         } catch (e) {
             c.error("graph crash", e)
             this.resultError(data)

@@ -138,10 +138,7 @@ class KwicCtrl {
                         }
 
                         currentStruct[structKey] = {}
-                        const attrs = _.toPairs(structItem[structKey]).map(([key, val]) => [
-                            structKey + "_" + key,
-                            val,
-                        ])
+                        const attrs = _.toPairs(structItem[structKey]).map(([key, val]) => [structKey + "_" + key, val])
                         for (let [key, val] of _.concat([[structKey, ""]], attrs)) {
                             if (key in settings.corpora[id].attributes) {
                                 currentStruct[structKey][key] = val
@@ -149,11 +146,7 @@ class KwicCtrl {
                         }
                     }
 
-                    const attrs = _.reduce(
-                        _.values(currentStruct),
-                        (val, ack) => _.merge(val, ack),
-                        {}
-                    )
+                    const attrs = _.reduce(_.values(currentStruct), (val, ack) => _.merge(val, ack), {})
                     _.extend(wd, attrs)
 
                     for (let structItem of wd.structs.close || []) {
@@ -214,10 +207,7 @@ class KwicCtrl {
             let incr = end
             while (decr >= 0) {
                 const token = hitContext.tokens[decr]
-                const sentenceOpen = _.filter(
-                    (token.structs && token.structs.open) || [],
-                    (attr) => attr.sentence
-                )
+                const sentenceOpen = _.filter((token.structs && token.structs.open) || [], (attr) => attr.sentence)
                 if (sentenceOpen.length > 0) {
                     span[0] = decr
                     break
@@ -310,11 +300,7 @@ class KwicCtrl {
                 s.download.fileName = fileName
                 s.download.blobName = blobName
                 s.download.selected = ""
-                this.timeout(
-                    () =>
-                        s.instance.$result[0].getElementsByClassName("kwicDownloadLink")[0].click(),
-                    0
-                )
+                this.timeout(() => s.instance.$result[0].getElementsByClassName("kwicDownloadLink")[0].click(), 0)
             },
         }
     }
@@ -349,9 +335,7 @@ class ExampleCtrl extends KwicCtrl {
             s.instance.centerScrollbar()
 
             if (s.instance && s.instance.getProxy().pendingRequests.length) {
-                return $.when(...(s.instance.getProxy().pendingRequests || [])).then(() =>
-                    s.instance.makeRequest()
-                )
+                return $.when(...(s.instance.getProxy().pendingRequests || [])).then(() => s.instance.makeRequest())
             }
         }
 
@@ -453,9 +437,7 @@ korpApp.directive("statsResultCtrl", () => ({
                 var row = s.instance.getDataAt(rowIx)
                 const { searchParams } = s.instance
                 const cqp = statisticsFormatting.getCqp(row.statsValues, searchParams.ignoreCase)
-                const parts = searchParams.reduceVals.map(
-                    (reduceVal) => row.formattedValue[reduceVal]
-                )
+                const parts = searchParams.reduceVals.map((reduceVal) => row.formattedValue[reduceVal])
                 cqpExprs[cqp] = parts.join(", ")
             }
 
@@ -465,12 +447,8 @@ korpApp.directive("statsResultCtrl", () => ({
             }
             const selectedAttribute = selectedAttributes[0]
 
-            const within = settings.corpusListing
-                .subsetFactory(selectedAttribute.corpora)
-                .getWithinParameters()
-            return $rootScope.mapTabs.push(
-                backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute)
-            )
+            const within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
+            return $rootScope.mapTabs.push(backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute))
         }
     },
 }))
@@ -685,19 +663,18 @@ korpApp.directive("compareCtrl", () => ({
                 let cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora))
                 const attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs())
 
-                
                 let stringify = angular.identity
                 // currently we only support one attribute to reduce/group by, so simplify by only checking first item
                 const reduceAttrName = _.trimStart(reduce[0], "_.")
                 if (attributes[reduceAttrName]) {
                     if (attributes[reduceAttrName].stringify) {
                         stringify = stringifyFunc(reduceAttrName)
-                    } else if(attributes[reduceAttrName].translation) {
-                        stringify = (value) => util.translateAttribute($rootScope.lang, attributes[reduceAttrName].translation, value)
+                    } else if (attributes[reduceAttrName].translation) {
+                        stringify = (value) =>
+                            util.translateAttribute($rootScope.lang, attributes[reduceAttrName].translation, value)
                     }
                 }
                 s.stringify = [stringify]
-
 
                 s.max = max
 

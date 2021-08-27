@@ -106,12 +106,9 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
                 end: 24,
                 ajaxParams: {
                     cqp: queryData.searchCqp,
-                    cqp2: `[_.${queryData.label} contains '${[
-                        point.name,
-                        point.countryCode,
-                        point.lat,
-                        point.lng,
-                    ].join(";")}']{${numberOfTokens}}`,
+                    cqp2: `[_.${queryData.label} contains '${[point.name, point.countryCode, point.lat, point.lng].join(
+                        ";"
+                    )}']{${numberOfTokens}}`,
                     cqp3: queryData.subCqp,
                     corpus: cl.stringifySelected(),
                     show_struct: _.keys(cl.getStructAttrs()),

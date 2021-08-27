@@ -62,10 +62,7 @@ korpApp.directive("globalFilters", (globalFilterService) => ({
         scope.removeFilter = (filter) => globalFilterService.removeFilter(filter)
 
         scope.getAvailableFilters = () =>
-            _.filter(
-                scope.dataObj.optionalFilters,
-                (filter) => !scope.dataObj.selectedFilters.includes(filter)
-            )
+            _.filter(scope.dataObj.optionalFilters, (filter) => !scope.dataObj.selectedFilters.includes(filter))
 
         scope.isOptionalFilter = (filterKey) =>
             scope.dataObj.optionalFilters.indexOf(filterKey) > -1 &&
@@ -84,7 +81,7 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
         possibleValues: "=",
         lang: "=",
         closeable: "=",
-        translation: "<"
+        translation: "<",
     },
     template: `\
 <span uib-dropdown auto-close="outsideClick" on-toggle="dropdownToggle(open)">

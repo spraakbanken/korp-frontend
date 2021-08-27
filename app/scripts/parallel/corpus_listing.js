@@ -1,11 +1,12 @@
-window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing {
+/** @format */
 
+window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing {
     constructor(corpora) {
         super(corpora)
 
-        const hash = window.location.hash.substr(2);
+        const hash = window.location.hash.substr(2)
         for (let item of hash.split("&")) {
-            var parts = item.split("=");
+            var parts = item.split("=")
             if (parts[0] == "parallel_corpora") {
                 this.setActiveLangs(parts[1].split(","))
                 break
@@ -32,7 +33,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     }
 
     getCurrentAttributes(lang) {
-        if(_.isEmpty(lang)) {
+        if (_.isEmpty(lang)) {
             lang = settings.corpusListing.getReduceLang()
         }
 
@@ -42,16 +43,12 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     }
 
     getStructAttrs(lang) {
-        if(_.isEmpty(lang)) {
+        if (_.isEmpty(lang)) {
             lang = settings.corpusListing.getReduceLang()
         }
 
         const corpora = _.filter(this.selected, (item) => item.lang === lang)
-        const struct = _.reduce(
-            corpora,
-            (a, b) => $.extend({}, a.structAttributes, b.structAttributes),
-            {}
-        )
+        const struct = _.reduce(corpora, (a, b) => $.extend({}, a.structAttributes, b.structAttributes), {})
         $.each(struct, (key, val) => (val["isStructAttr"] = true))
 
         return struct
@@ -185,10 +182,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
             const item = struct[i]
             var main = item[0]
 
-            const pair = _.map(
-                item.slice(1),
-                (corp) => main.id.toUpperCase() + "|" + corp.id.toUpperCase()
-            )
+            const pair = _.map(item.slice(1), (corp) => main.id.toUpperCase() + "|" + corp.id.toUpperCase())
 
             output.push(pair)
         }
