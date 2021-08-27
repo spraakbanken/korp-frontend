@@ -191,11 +191,7 @@ korpApp.directive("tokenValue", ($compile, $controller) => ({
                 }
                 
             } else {
-                if (valueObj.extendedController) {
-                    controller = valueObj.extendedController
-                } else {
-                    controller = extendedComponents.default.controller
-                }
+                controller = extendedComponents.default.controller
                 if (valueObj.extendedTemplate) {
                     template = valueObj.extendedTemplate
                 } else {
