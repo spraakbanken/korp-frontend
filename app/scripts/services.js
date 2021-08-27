@@ -344,7 +344,7 @@ korpApp.factory("searches", [
                 pageChanged = false
                 searchChanged = true
             } else {
-                pageChanged = newValues[1] !== oldValues[1]
+                pageChanged = newValues[1] !== (oldValues[1] || 0)
                 searchChanged = newValues[0] !== oldValues[0]
             }
 
