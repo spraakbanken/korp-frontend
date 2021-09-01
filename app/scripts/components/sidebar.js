@@ -372,15 +372,6 @@ export const sidebarComponent = {
                                 str_value
                             )}</a>`
                         )
-                    } else if (key === "msd") {
-                        // msdTags = require '../markup/msdtags.html'
-                        const msdTags = "markup/msdtags.html"
-                        return output.append(`<span class='msd_sidebar'>${str_value}</span>
-                                <a href='${msdTags}' target='_blank'>
-                                    <span class='sidebar_info ui-icon ui-icon-info'></span>
-                                </a>
-                            </span>\
-                        `)
                     } else if (attrs.pattern) {
                         output.append(
                             _.template(attrs.pattern)({
