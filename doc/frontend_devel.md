@@ -329,6 +329,7 @@ The config file contains the corpora declaration, wherein the available corpora 
     * `stats_cqp`: See [Custom statistics functions](#custom-statistics-functions).  
     * `isStructAttr`: `boolean`. If `true` the attribute will be treated as a structural attribute in all sense except it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.
     * `groupBy`; `string`. Should be either `group_by` or `group_by_struct`. Should only be needed for attributes with `isStructAttr: true`. Those attributes are by default sent as `group_by_struct` in the statistics, but can be overriden here.
+    * `sidebarInfoUrl`: `string` (URL). If defined and non-empty, add an info symbol ⓘ for the attribute in the sidebar, linking to the given URL. This can be used to link to an explanation page for morphosyntactic tags, for example.
 
 * `structAttributes`: refers to higher level metadata attributes. Examples include author, publishing year, URL etc. Structural attributes support the same settings as the word attributes.
 
