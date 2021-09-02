@@ -285,6 +285,16 @@ export const sidebarComponent = {
                         return output.append($compile(template)(scope))
                     }
 
+                    // If attrs.sidebarInfoUrl, add an info symbol
+                    // linking to the value of the property (URL)
+                    let info_link = ""
+                    if (attrs.sidebarInfoUrl) {
+                        info_link =
+                            `<a href='${attrs.sidebarInfoUrl}' target='_blank'>
+                                 <span class='sidebar_info ui-icon ui-icon-info'></span>
+                             </a>`
+                    }
+
                     output.data("attrs", attrs)
                     if (value === "|" || value === "" || value === null) {
                         output.append(
@@ -294,6 +304,8 @@ export const sidebarComponent = {
                     }
 
                     if (attrs.type === "set") {
+                        // For sets, info link after attribute label
+                        output.append(info_link)
                         pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>'
                         ul = $("<ul>")
                         const getStringVal = (str) =>
@@ -355,22 +367,13 @@ export const sidebarComponent = {
                     }
 
                     if (attrs.type === "url") {
-                        return output.append(
+                        output.append(
                             `<a href='${str_value}' class='exturl sidebar_url' target='_blank'>${decodeURI(
                                 str_value
                             )}</a>`
                         )
-                    } else if (key === "msd") {
-                        // msdTags = require '../markup/msdtags.html'
-                        const msdTags = "markup/msdtags.html"
-                        return output.append(`<span class='msd_sidebar'>${str_value}</span>
-                                <a href='${msdTags}' target='_blank'>
-                                    <span class='sidebar_info ui-icon ui-icon-info'></span>
-                                </a>
-                            </span>\
-                        `)
                     } else if (attrs.pattern) {
-                        return output.append(
+                        output.append(
                             _.template(attrs.pattern)({
                                 key,
                                 val: str_value,
@@ -379,8 +382,11 @@ export const sidebarComponent = {
                             })
                         )
                     } else {
-                        return output.append(`<span>${str_value || ""}</span>`)
+                        output.append(`<span>${str_value || ""}</span>`)
                     }
+
+                    // For non-sets, info link after the value
+                    return output.append(info_link)
                 },
 
                 applyEllipse() {
