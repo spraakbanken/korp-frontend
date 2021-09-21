@@ -23,16 +23,15 @@ const korpConfigDir = getKorpConfigDir()
 module.exports = {
     resolve: {
         alias: {
-            jquery: "jquery/src/jquery",
+            jquery: path.resolve(__dirname, "node_modules/jquery/src/jquery"),
             jreject: path.resolve(__dirname, "app/lib/jquery.reject"),
             jquerylocalize: path.resolve(__dirname, "app/lib/jquery.localize"),
             jqueryhoverintent: path.resolve(__dirname, "app/lib/jquery.hoverIntent"),
             configjs: path.resolve(korpConfigDir, "config.js"),
             commonjs: path.resolve(korpConfigDir, "modes/common.js"),
             defaultmode: path.resolve(korpConfigDir, "modes/default_mode.js"),
-            customcss: path.resolve(korpConfigDir, "styles/"),
-            customscripts: path.resolve(korpConfigDir, "scripts/"),
-            customviews: path.resolve(korpConfigDir, "views/"),
+            custom: path.resolve(korpConfigDir, "custom/"),
+            '@': path.resolve(__dirname, "app/scripts"),
         },
     },
     module: {

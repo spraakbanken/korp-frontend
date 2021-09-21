@@ -42,22 +42,161 @@ are all described in the documentation.
 - `translations/*.json`
 
 (In short, a mode is a collection of corpora that may have different 
-  functionality and are described later).
+  functionality and is described later).
 
-For more advanced use cases there is also the possibility to add scripts,
- styling and HTML-templates/snippets.
- 
- - `styles/`
- - `scripts/`
- - `views/`
- 
- Styles and scripts will be automatically loaded. 
- Files matching `views/*.html` can be loaded manually by requiring them 
- using the name `customtemplates`. The result will be a string containing 
- the (minified) HTML, for example, a template for an Angular 
- directive: `template: require("customviews/my_view.html")`. If you are not
- writing any custom scripts (i.e. files in `scripts/`), this can be
-  completely ignored.
+For more advanced use cases there is also the possibility to add own code, styling etc.
+in `custom`.
+
+### Språkbankens configuration
+
+Språkbankens configuration repository is https://github.com/spraakbanken/korp-frontend-sb.
+It can be used as a supplement to this documentation.
+
+#### Components
+
+Define your own components as a map in `custom/components.js`. `component` will be added as a component with name `componentName` to the Angular app.
+
+```
+import component from 'custom/myComponentFile'
+
+export default {
+	componentName: component
+}
+```
+
+These can then be used in other custom components / extended / sidebar or as reading mode-components. `component` can also be defined in `components.js`.
+
+#### Customizing extended search
+
+In `custom/extended.js`, we can define custom (non-Angular) components to be used in extended search:
+
+```
+export default {
+    complemgramExtended: {
+        template: `<input type="text" ng-model="model" />
+        `,
+        controller: [
+            "$scope", function($scope) {
+                $scope.$watch("input; () => ...)
+                ...
+        }],
+    },
+    attr: {
+        template: `
+            <select ...>
+        `,
+        controller: ["$scope", "$uibModal", function($scope, $uibModal) {
+            if($scope.show) $uibModal.open
+        }
+    },
+    ...
+}
+```
+
+Template is an Angular.js template string and controller is an Angular.js controller function.
+
+Make sure to set `$scope.model` as the final result to be used in the CQP-query.
+
+`complemgramExtended` can then be used as key for `extendedComponent` in the configuration files.
+
+```
+attributes: {
+    complemgram: {
+        label: "Compounds",
+        extendedComponent: "complemgramExtended",
+    }
+}
+```
+
+##### escaper
+
+`escaper` is a directive that takes the user's input and escapes any regexp characters before saving it to `scope.model`. 
+When the model changes it automatically de-escapes any regexp characters before showing the value to the user. 
+Input must be saved to `scope.input` for it to work. Example: `<input ng-model="input" escaper>`
+
+
+##### Customizing sidebar
+
+In `custom/sidebar.js`, we can define custom (non-Angular) components to be used in the sidebar:
+
+```
+export default {
+    imageSidebar: {
+        template: `<img ng-src="myImg" />
+        `,
+        controller: [
+            "$scope", function($scope) {
+                $scope.myImg = $scope.sentenceData["text_mediafilepath"]
+                ...
+        }],
+    },
+    ...
+}
+```
+
+Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link.
+
+Use `imageSidebar` as key for `sidebarComponent` in the configuration files.
+
+#### Rendering attribute values in the statistics-view
+
+Define your own rules for rendering values and generating CQP-expressions for certain attributes.
+
+When configuring an attribute that needs special handling, use the `stats_cqp` and `stats_stringify` keywords:
+
+```
+const myAttribute = {
+    label: "category",
+    order: 80,
+    stats_stringify: "customStringify",
+    stats_cqp: "customCQP",
+}
+```
+
+Then create `custom/statistics.js` and define the functions there:
+
+```
+export default {
+    customStringify: (values) => values.join(' == '),
+    customCQP: (tokens) => "(" + tokens.map(item => `_.cat="${item}"`).join(" | ") + ")",
+}
+```
+
+Rendering values and generating CQP can also be controlled by editing `app/config/statistics_config.js`, but 
+of course it is best to avoid editing the actual code if it is possible.
+
+#### Stringify functions
+
+Add all custom pretty-printing to `custom/stringify.js`. Example file:
+
+```
+export const {
+    sense: (sense) => util.saldoToString(sense, true),
+    lemgram: (str) => util.lemgramToString(str, true),
+    complemgram: (str) => str.split('+').map((lemgram) => util.lemgramToString(lemgram, true)).join('+')
+}
+```
+
+Note that no changes in the attribute-configuration is needed here. Korp will pick up the functions automatically
+based on the name of the attribute. Will be used in sidebar, statistics, extended, etc.
+
+### Reading mode
+
+Enable the standard reading mode by using this setting on a corpus:
+
+  ```
+  readingMode: {
+        component: "standardReadingMode"
+    }
+  ```
+
+When clicking on a row in the KWIC a link will be added to the sidebar. Clicking this link opens a new tab where the entire text is shown.
+
+Prerequisites are:
+- A structural attribute identifying the currently selected row in the KWIC. This may be configured with `settings.readingModeField`, default is `sentence_id`.
+- `_head` and `_tail` attribute on each token. These attributes contain the whitespace before and after a token.
+
+It is possible to write a custom reading component. See <https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js> for an example.
 
 ### Content of `config.js`
 
@@ -73,13 +212,12 @@ settings.defaultLanguage = "en"
 ```
 
 Available settings will be described in feature sections and there is also a 
-[summary of all settings](#summary-settings). A good start could be to just
-copy `config.js` from this repository to your configuration directory.
+[summary of all settings](#summary-settings).
 
 ### Content of `modes/common.js`
 
 After `config.js`, but before any mode configuration, `modes/common.js` is 
-loaded. This may include definitions which are used in several modes s.a. a set 
+loaded. This may include definitions which are used in several modes such as a set 
 of attributes. This helps to keep `config.js` clean. This file must export any 
 variables that can be used in a mode.
 
@@ -99,25 +237,22 @@ Now very `veryCommonAttributes` will be available in all mode-files.
 
 ### Localization
 
-In `app/translations` there are several files containing translations for 
-different parts of the application.
+Add `corpora_<lang>.json` files to `app/translations` where lang is replaced with a 
+language you want to support. This file is mostly used to translate the names of modes
+and the names of attributes. However, it is also possible to put translations
+to be used in custom components for extended search and sidebar here.
 
-Files prefixed with `locale` and controls translations are hard-coded into the 
-application and thus it should not be necessary to change these if only 
-customization is done. The files prefixed with  `corpora` however are
-translations of corpora attributes and values and must be replaced with data
-suitable for the specific set of corpora the Korp installation serves. The 
-files are JSON structures that for each language ties a __translation key__ 
-to a particular __string__ in that language. You should start with empty corpora
-translation files and then add the translations as you add corpora. 
+Translation of values of attributes, that will be shown in the sidebar and statistics,
+for example, is done in the corpus configuration.
 
-The translations folder also contains Python script - `check_locale_files.py` - 
-that makes sure that each set of translation files has each translation key 
-present in all different languages.
+Files prefixed with `locale` in the codebase controls translations are hard-coded into the 
+application and thus it should not be necessary to change these.
 
 #### Adding Languages
 
-To add a new language in the frontend, for example Lithuanian, add a `corpora-lt.json` and `locale-lt.json`. `locale-lt.json` may be copied from an existing locale-file and then translated. Then add the language in `config.js`:
+To add a new language in the frontend, for example Lithuanian, add a `corpora-lt.json` 
+and `locale-lt.json`. `locale-lt.json` may be copied from an existing locale-file and
+then translated. Then add the language in `config.js`:
 
     `settings.languages = ["sv", "en", "lt"];`
 
@@ -154,7 +289,8 @@ own mode because their KWIC results don't mix particularly well with the
 
 #### Adding modes
 
-Relevant setting fields are `settings.visibleModes` and `settings.modeConfig`. The former controls how many modes are visible in the header (the rest are hidden away in a menu). The latter looks like this:
+Relevant setting fields are `settings.visibleModes` and `settings.modeConfig`. 
+The former controls how many modes are visible in the header (the rest are hidden away in a menu). The latter looks like this:
 
     [
       {
@@ -181,7 +317,10 @@ The mode called `default` will always be loaded first. If there is no need for m
 If `parallel: true` Korp's user interface with be adapted for parallel corpora.
 
 ## Corpora
-The config file contains the corpora declaration, wherein the available corpora are declared together with information about which metadata fields are searchable in them. Adding a test corpus is as simple as:
+
+The config file contains the corpora declaration, wherein the available corpora are declared 
+together with information about which metadata fields are searchable in them. Adding a test 
+corpus is as simple as:
 
 
         settings.corpora = {};
@@ -208,115 +347,60 @@ The config file contains the corpora declaration, wherein the available corpora 
 * `description`: For display in the corpus chooser.
 * `within`: What are the structural elements of the corpus? See `defaultWithin` in [settings summary](#summary-settings) for format and more information.
 * `attributes`: each key here refers to a word attribute in Corpus Workbench. Their values are JSON structures with a few attributes of their own; they are concerned with generating the necessary interface widgets in Extended Search, display in sidebar and statistics. They are:
-    * `label`: a translation key for the attributes name
-    * `limitedAccess`: `boolean`, it will not be possible to select this corpus unless a user is logged in and has the correct credentials.
+    * `display`: **REMOVED** Use `sidebarComponent`
     * `displayType`: set to `'hidden'` to fetch attribute, but never show it in the frontend. See `hideSidebar`, `hideStatistics`, `hideExtended` and `hideCompare` for more control.
-    * `translationKey`: you can declare a prefix for the translation keys of the dataset here. This is so the corpora translation file doesn't get too messy: a simple kind of namespacing.
-    * `extendedTemplate`: Angular template used in conjunction with the `extendedController` to generate an interface widget for this attribute. See <#ref customizing-extended-search|customizing extended search>.
-    * `extendedController`: Angular controller that is applied to the template. See <#ref customizing-extended-search|customizing extended search>.
-    * `opts`: this represents the auxiliary select box where you can modify the input value. See `defaultOptions` in [settings summary](#summary-settings) for format and more information.
+    * `extendedComponent`: See <#ref customizing-extended-search|customizing extended search>.
+    * `externalSearch`: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>`
+    * `groupBy`; `string`. Should be either `group_by` or `group_by_struct`. Should only be needed for attributes with `isStructAttr: true`. Those attributes are by default sent as `group_by_struct` in the statistics, but can be overridden here.
     * `hideSidebar`: Default `false`. Hide attribute in sidebar.
     * `hideStatistics`: Default: `false`. Should it be possible to compile statistics based on this attribute?
     * `hideExtended`: Default: `false`. Should it be possible to search using this attribute in extended?
     * `hideCompare`: Default: `false`. Should it be possible to compare searches using this attribute?
+    * `internalSearch`: `boolean`. Should the value be displayed as a link to a new Korp search? Only works for sets. Searches for CQP-expression: `[<attrName> contains "<regescape(attrValue)>"]`
+    * `isStructAttr`: `boolean`. If `true` the attribute will be treated as a structural attribute in all sense except it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.
+    * `label`: a translation key for the attributes name
+    * `limitedAccess`: `boolean`, it will not be possible to select this corpus unless a user is logged in and has the correct credentials.
+    * `opts`: this represents the auxiliary select box where you can modify the input value. See `defaultOptions` in [settings summary](#summary-settings) for format and more information.
+    * `order`: Order of attribute in the sidebar. Attributes with a lower `order`-value will be placed over attributes with a higher `order`-value.
+    * `pattern`: HTML snippet with placeholders for replacing values. Available is `key` (attribute name) and `value`. Also works for sets. Example: `'<p style="margin-left: 5px;"><%=val.toLowerCase()%></p>'`
+    * `sidebarComponent`: See <# ref customizing-sidebar|customizing sidebar>
+    * `sidebarInfoUrl`: `string` (URL). If defined and non-empty, add an info symbol ⓘ for the attribute in the sidebar, linking to the given URL. This can be used to link to an explanation page for morphosyntactic tags, for example.
+    * `stats_cqp`: See [Custom statistics functions](#custom-statistics-functions).  
+    * `stats_stringify`: See [Custom statistics functions](#custom-statistics-functions).
+    * `stringify`: *DEPRECATED*, use <# ref stringify-functions | stringify>
+    * `translation`: An object containing translations of possible values of the attribute, in this format:
+        ```
+        {
+            "ROOT": {
+                "en": "Root",
+                "sv": "Rot"
+            },
+            "++": {
+                "en": "Coordinating conjunction",
+                "sv": "Samordnande konjunktion"
+            },
+            "+A": {
+                "en": "Conjunctional adverbial",
+                "sv": "Konjuktionellt adverb"
+            },
+            ...
+        }
+        ```
+        This replaces value-translation in the translation-files, and also the old attribute `translationKey`.
+    * `translationKey`: **REMOVED** use the new `translation`-setting
     * `type`: Possible values:
         - "set" - The attribute is formatted as "|value1|value2|". Include contains and not contains in `opts`.
                   In the sidebar, the value will be split before formatted. When using compile / `groupby` on a "set" attribute in a statistics request, it will be added to `split`.
-        - "url" - The value will be rendered as a link to the URL and possibly truncated if too long.
-    * `pattern`: HTML snippet with placeholders for replacing values. Available is `key` (attribute name) and `value`. Also works for sets. Example: `'<p style="margin-left: 5px;"><%=val.toLowerCase()%></p>'`
-    * `display`: How to display attribute in sidebar. Currently only supported for sets and `expandList` (see below). In the future more ways to display might be added here. 
-        * `expandList`: Render set as a list where the first element is visible and a button to show or hide the rest of the elements.
-            * `splitValue`: Function to split up values if there are sets within the set. Example: `function(value) { return value.split(','); }`
-            * `searchKey`: If `display.expandList.internalSearch` is set to `true`, links will be rendered to search for the value in Korp, using this key in the CQP-expression. 
-                           Omit to use same key as attribute name.
-            * `joinValues`: Interleave this string with all values on the row.
-            * `stringify`: Optional override of outer `stringify`.
-            * `linkAllValues`: Should the `internalSearch` be enabled for all values or only the first one in the set?
-            * `internalSearch`: Alternative function to transform the attribute key and value to a CQP-expression. 
-                              Example: `function(key,value) { '[' + key + '="' + val + '"]' }`
-    * `sidebarComponent`: If the `display` key above doesn't do enough, you can write a custom interactive component using `sidebarComponent.template` (an Angularjs template string) and `sidebarComponent.controller` (an Angularjs controller function). Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link. `$scope.model` holds the value, so assigning to this variable will change the current CQP expression. See the `complemgram` and `compwf` implementation at the [Korp SB Config](https://github.com/spraakbanken/korp-frontend-sb/blob/dev/app/modes/common.js). 
-    * `internalSearch`: `boolean`. Should the value be displayed as a link to a new Korp search? Only works for sets. Searches for CQP-expression: `[<attrName> contains "<regescape(attrValue)>"]`
-    * `externalSearch`: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>`
-    * `order`: Order of attribute in the sidebar. Attributes with a lower `order`-value will be placed over attributes with a higher `order`-value.
-    * `stringify`: How to pretty-print the attribute in the context of the sidebar. Example: `function(str) { return util.lemgramToString(str, true); }`
-    * `stats_stringify`: How to pretty-print the attribute in the context of the statistics table. The provided formatting function will be passed an array of labels. Example: `stats_stringify: function(values) {return values.join(" ")}`.
-    * `stats_cqp`: How to create a cqp query when clicking a value in the statistics table. The provided formatting function will be passed an array of labels. Example: ```stats_cqp: function(values) {return `pos_tag="${tokens.join(" | ")}"`}```.  
-    * `isStructAttr`: `boolean`. If `true` the attribute will be treated as a structural attribute in all sense except it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.
-    * optional keys and values that can be utilized in the extendedTemplate / extendedController. See <#ref customizing-extended-search|customizing extended search>.
-
+        - "url" - The value will be rendered as a link to the URL and possibly truncated if too long. 
 * `structAttributes`: refers to higher level metadata attributes. Examples include author, publishing year, URL etc. Structural attributes support the same settings as the word attributes.
-
 * `customAttributes`: creates fields in the sidebar that have no corresponding attribute in the backend. Useful for combining two different attributes. All settings concerning sidebar format for normal attributes apply in addition to:
     * `customType`: `"struct"` / `"pos"` - decides if the attribute should be grouped under word attributes or text attributes.
     * `pattern`: Same as pattern for normal attributes, but `struct_attrs` and `pos_attrs` also available. Example: `'<p style="margin-left: 5px;"><%=struct_attrs.text_title - struct_attrs.text_description%></p>'`
-* `readingMode`: If set, enables reading mode/text view for the 
-   corpora. A link will appear in the sidebar and if clicked a new tab
-   containg the text will be opened. This depends on your corpus having a
-   structural attribute identifying the line in the KWIC (such as `sentence_id`
-  , this may be configured with `settings.readingModeField`)
-  and also a `_head` and `_tail` attribute, containing
-  the whitespace before and after a token. The value can be set to:
-  ```
-  readingMode: {
-        directive: "standard-reading-mode"
-    }
-  ```
-  for basic support. If something else is needed you can write your own directive
-  in `scripts/` and use that one instead. Contact Språkbanken for an example on
-  how to write a directive.
-
-## Customizing extended search
-
-It is possible to customize the standard input field of extended search into anything. Any key can be added to an attribute to be provided to the `extendedController` / `extendedTemplate`. Simple example:
-
-
-    var myReusableTemplate = '<div><input ng-if="inputType == \'text\'" type="text"><input ng-if="inputType == \'number\'" type="number"></div>';
-
-    var myController = function($scope, $location) {
-        // $scope.inputType is available here also
-        // dependency injection of Angular services such as $location are possible
-    };
-
-    settings.corpora["testcorpus"] = {
-        id: "testcorpus",
-        title: "The Korp Test Corpus",
-        description: "A test corpus for testing Korp.",
-        attributes: {
-            myAttr: {
-                label: "myAttr",
-                extendedTemplate: myReusableTemplate,
-                extendedController: myController,
-                inputType: "text"
-            }
-        }
-    };
-
-However, `extendedController` is not mandatory and only shown in this example for documentation purposes.
-
-### Template requisites
-
-In order for your template to work, it must set its value in `scope.model`, for example by using `ng-model="model"` for input-fields.
-
-### autoc
-
-A directive that autocompletes word forms to lemgrams or senses using Karp. Used in the following way:
-
-    <autoc placeholder="placeholder" type="lemgram" model="model"
-     disable-lemgram-autocomplete="disableLemgramAutocomplete"
-      text-in-field="textInField">
-
-Where `type` may be either `lemgram` or `sense`. `model` will be the selected lemgram / sense. `textInField` will be actual user input
-(user did not select anything). Placeholder will contain the pretty-printed lemgram / sense. It is also possible to make the element fall back to a "normal"
-text field by setting `disableLemgramAutocomplete` to `false`.
-
-### escaper
-
-`escaper` is a directive that takes the user's input and escapes any regexp characters before saving it to `scope.model`. 
-When the model changes it automatically de-escapes any regexp characters before showing the value to the user. Input must be saved to `scope.input` for it to work. Example: `<input ng-model="input" escaper>`
+* `readingMode`: See [Reading mode](#reading-mode).
 
 ## Parallel Corpora
 
-Parallel corpora need to have its own mode. Use `modes/parallel_mode.js`, but replace the corpus definitions. Change the line `var start_lang = "swe";` to whatever language that should be the default search language.
+Parallel corpora need to have its own mode. `startLang` settings must be used. Set it to whatever language that should be the default search language.
 
 The corpora declaration for parallel corpora is different in some important ways. Example:
 
@@ -350,14 +434,18 @@ settings.corpora["saltnld-nl"] = {
 };
 ~~~~~~~
 
-The corpus configuration for parallel corpora needs to make explicit the links between the declared corpora. This is done using the `linkedTo` property. A corpus may declare any amount of links to other corpora. Also notice the `lang` property, used for building the correct language select menu. The `within` attribute should use the `"link": "meningspar"` value. Also note the `hide` attribute which prevents both subcorpora from being listed in the corpus chooser widget.
-
-## Rendering attribute values in the statistics-view
-The appearance of the leftmost columns of hits in the stats table can be controlled by editing `app/config/statistics_config.js`. These change according to the 'compile based on' select menu and might need a different stringification method depending on the chosen attribute. Make sure the function returns valid html. A known issue is that annotations containing spaces when searching for more than one token works less than perfect.
+The corpus configuration for parallel corpora needs to make explicit the links between the declared corpora. 
+This is done using the `linkedTo` property. A corpus may declare any amount of links to other corpora. Also 
+notice the `lang` property, used for building the correct language select menu. The `within` attribute should 
+use the `"link": "meningspar"` (sentence par in Swedish) value. Also note the `hide` attribute which prevents
+both subcorpora from being listed in the corpus chooser widget.
 
 ## Autocompletion menu
 
-Korp features an autocompletion list for searches in the Simple Search as well as in Extended for those corpus attributes configured to use `autoc`-directive (see <#ref autoc|autoc-section>). This is implemented using an Angular.js directive `autoc` that calls Karp's autocompletion function. Using Karp, Korp can autocomplete senses and lemgrams. To disable autocompletion  in simple search use `settings.autocomplete = false`.
+Korp features an autocompletion list for searches in the Simple Search as well as in Extended for those corpus 
+attributes configured to use `autoc`-directive (see <#ref autoc|autoc-section>). This is implemented using an 
+ngular.js directive `autoc` that calls Karp's autocompletion function. Using Karp, Korp can autocomplete senses 
+and lemgrams. To disable autocompletion use `settings.autocomplete = false`.
 
 ## Word picture
 
@@ -397,19 +485,20 @@ Korp's map uses annotations to get locations. The user selects rows from the sta
 
     Also the name of the attribute must contain `"__"` and `"geo"` to show up in the list of supported attributes.
 
-__settings.newMapEnabled__ - `boolean`. The map should be enabled. The weird name is because another map existed before, but has been remove. The name will change in upcoming releases.
-__settings.mapCenter__ - Where the center of the map should be located when user opens map. Example:  
-
+- `settings.newMapEnabled` - `boolean`. The map should be enabled. The weird name is because another map existed before, but has been removed. The name will change in upcoming releases.
+- `settings.mapCenter` - Where the center of the map should be located when user opens map. Example:  
+   ```
     settings.mapCenter = {
       lat: 62.99515845212052,
       lng: 16.69921875,
       zoom: 4
     };
+    ```
 
 
 ## News widget
 
-By setting a `newsDeskUrl` on settings, the news widget is enabled. The widget simply fetches a json-file from the given URL. Short example of such a file, including only one news item with its title and body in two languages and a date:
+By setting `newsDeskUrl`, the news widget is enabled. The widget simply fetches a JSON-file from the given URL. Short example of such a file, including only one news item with its title and body in two languages and a date:
 
     [
         {
@@ -435,9 +524,9 @@ __languages__ - Array of supported interface language codes s.a. `["en", "sv"]`
 
 __defaultLanguage__ - The default interface language. Example: `"sv"`
 
-__downloadFormats__ - Available formats of KWIC-download. See supplied `config.js`.
+__downloadFormats__ - Available formats of KWIC-download.
 
-__downloadFormatParams__ - Settings for KWIC-download. See supplied `config.js`.
+__downloadFormatParams__ - Settings for KWIC-download.
 
 __wordAttributeSelector__ - `"union"` / `"intersection"`. Controls attribute list in extended search. Use all selected corpora *word* attributes or only the attributes common to selected corpora.
 
@@ -500,7 +589,7 @@ ends with    `[key &= "val"]`              `[key = ".*val"]`
 matches      `[key *= "val"]`              `[key = "val"]`         Used with `escaper`-directive, regexp
 matches not  `[key !*= "val"]`             `[key != "val"]`        special characters will not be escaped.
 
-**TODO: move these explanations to a better place** Then we have the five last operators again, but using `contains` instead of `=`:
+Then we have the five last operators again, but for `contains` instead of `=`:
 
              Internal representation            CQP                         Note
 ----         -------                            ---                         ----
@@ -520,10 +609,10 @@ __statisticsCaseInsensitiveDefault__ - Boolean. Selects case-insensitive for "co
 
 __inputCaseInsensitiveDefault__ - Boolean. Selects case-insensitive for simple search by default.
 
-__corpora__ - See **Corpora**
+__corpora__ - See [Corpora](#corpora)
 
 __corpusListing__ - After specifying all corpora in a modes-file use:
-`settings.corpusListing = new CorpusListing(settings.corpora);` to enable the configuration. For parallel corpora use: `settings.corpusListing = new ParallelCorpusListing(settings.corpora, parseLocationLangs());`
+`settings.corpusListing = new CorpusListing(settings.corpora);` to enable the configuration. For parallel corpora use: `settings.corpusListing = new ParallelCorpusListing(settings.corpora);`
 
 __corporafolders__ - Create a directory-structure in corpus chooser. Example:
 
@@ -540,9 +629,9 @@ __corporafolders__ - Create a directory-structure in corpus chooser. Example:
 
 __preselectedCorpora__ - An array of corpus (internal) names or folder names. Given corpora and corpora in folders will be selected on load. To select only a subfolder write `folder.subfolder`.
  
-__newMapEnabled__ - See **Map**.
+__newMapEnabled__ - See [Map](#map).
 
-__mapCenter__ - See **Map**.
+__mapCenter__ - See [Map](#map).
 
 __hitsPerPageValues__ - An array of possible number of hits per page for example: `[25,50,75,100]`
 
@@ -564,9 +653,20 @@ The Korp frontend uses a plethora of technologies and has a corresponding amount
 
 * Install Yarn
 * Fetch the latest Korp source release.
-* `cd` to the Korp folder you just checked out and run `yarn` in order to fetch the local dependencies. This includes libs for compiling transpiling javascript, building, running a dev server, as well as the required client side javascript libs utilized directly by Korp.
+* `cd` to the Korp folder you just checked out and run `yarn` in order to fetch the local dependencies. This includes libs for compiling transpiling JavaScript, building, running a dev server, as well as the required client side JavaScript libs utilized directly by Korp.
 
-You are now ready to start the dev server, do so by running `yarn dev`. In you browser, open `http://localhost:9111` to launch Korp. Now, as you edit the Korp code, javascript and Sass files are automatically compiled/transpiled as required, additionally causing the browser window to be reloaded to reflect the new changes.
+You are now ready to start the dev server, do so by running `yarn dev`. In you browser, open `http://localhost:9111` to launch Korp. Now, as you edit the Korp code, JavaScript and Sass files are automatically compiled/transpiled as required, additionally causing the browser window to be reloaded to reflect the new changes.
+
+In practice, settings must be made, either for your own instance of the Korp backend or using Språkbankens. To test Språkbankens setup, fetch our [settings
+repository][github-frontend] from Github and add `run_config.json` to the codebase-directory with this content: 
+
+```
+{
+    "configDir": "../korp-frontend-sb/app"
+}
+```
+
+Adapt the path to where the repository is stored.
 
 ## Localization
 
@@ -579,7 +679,7 @@ Korp does runtime DOM manipulation when the user changes language. Using an Angu
 
 ## Map
 
-Modify the map with configuration, `scripts/map_controllers.coffee` or the Geokorp-component located in `components/geokorp`. Geokorp wraps [Leaflet][leaflet] and adds further functionality such as integration with Angular, marker clustering, marker styling and information when selecting a marker. 
+Modify the map with configuration, `scripts/map_controllers.coffee` or the [Geokorp-component](https://github.com/spraakbanken/korp-geo). Geokorp wraps [Leaflet][leaflet] and adds further functionality such as integration with Angular, marker clustering, marker styling and information when selecting a marker. 
 
 ## Building a distribution
 
@@ -589,3 +689,4 @@ Building a distribution is as simple as running the command `yarn build`. A `dis
 [angular-i18n]: https://github.com/angular/bower-angular-i18n
 [leaflet]: http://leafletjs.com/
 [github-frontend]: https://github.com/spraakbanken/korp-frontend/
+[frontend-settings]: https://github.com/spraakbanken/korp-frontend-sb/

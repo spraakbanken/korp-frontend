@@ -80,10 +80,7 @@ window.SearchCtrl = [
             "statInsensitiveAttrs",
             function (insensitive) {
                 if (insensitive && insensitive.length > 0) {
-                    $location.search(
-                        "stats_reduce_insensitive",
-                        $scope.statInsensitiveAttrs.join(",")
-                    )
+                    $location.search("stats_reduce_insensitive", $scope.statInsensitiveAttrs.join(","))
                 } else if (insensitive) {
                     $location.search("stats_reduce_insensitive", null)
                 }
@@ -130,11 +127,7 @@ window.SearchCtrl = [
             $scope.getSortFormat = function (val) {
                 const mappedVal = kwicSortValueMap[val]
                 if (val === $scope.kwicSort) {
-                    return (
-                        $filter("loc")("sort_default", $scope.lang) +
-                        ": " +
-                        $filter("loc")(mappedVal, $scope.lang)
-                    )
+                    return $filter("loc")("sort_default", $scope.lang) + ": " + $filter("loc")(mappedVal, $scope.lang)
                 } else {
                     return $filter("loc")(mappedVal, $scope.lang)
                 }
@@ -183,8 +176,9 @@ korpApp.controller("SimpleCtrl", function (
     )
 
     statemachine.listen("lemgram_search", (event) => {
-        console.log("lemgram_search", event)
-        s.textInField = ""
+        s.input = event.value
+        s.isRawInput = false
+        s.onChange(event.value, false)
     })
 
     $scope.$watch("inOrder", () => $location.search("in_order", !s.inOrder ? false : null))
@@ -206,12 +200,10 @@ korpApp.controller("SimpleCtrl", function (
     s.updateSearch = function () {
         locationSearch("search", null)
         $timeout(function () {
-            if (s.textInField) {
-                util.searchHash("word", s.textInField)
-                s.model = null
-                s.placeholder = null
-            } else if (s.model) {
-                util.searchHash("lemgram", s.model)
+            if (s.currentText) {
+                util.searchHash("word", s.currentText)
+            } else if (s.lemgram) {
+                util.searchHash("lemgram", s.lemgram)
             }
         }, 0)
     }
@@ -225,7 +217,7 @@ korpApp.controller("SimpleCtrl", function (
 
     s.getCQP = function () {
         let suffix, val
-        const currentText = (s.textInField || "").trim()
+        const currentText = (s.currentText || "").trim()
 
         if (currentText) {
             suffix = s.isCaseInsensitive ? " %c" : ""
@@ -248,8 +240,8 @@ korpApp.controller("SimpleCtrl", function (
                 return `[${res.join(" | ")}]`
             })
             val = tokenArray.join(" ")
-        } else if (s.placeholder || util.isLemgramId(currentText)) {
-            const lemgram = s.model ? s.model : currentText
+        } else if (s.lemgram) {
+            const lemgram = s.lemgram
             val = `[lex contains \"${lemgram}\"`
             if (s.prefix) {
                 val += ` | complemgram contains \"${lemgram}\\+.*\"`
@@ -325,19 +317,32 @@ korpApp.controller("SimpleCtrl", function (
         }
         if (search.type === "word" || search.type === "lemgram") {
             if (search.type === "word") {
-                s.textInField = search.val
+                s.input = search.val
+                s.isRawInput = true
+                s.currentText = search.val
             } else {
-                s.placeholder = unregescape(search.val)
-                s.model = search.val
+                s.input = unregescape(search.val)
+                s.isRawInput = false
+                s.lemgram = search.val
             }
             s.doSearch()
         } else {
-            s.placeholder = null
+            s.input = ""
             if ("lemgramResults" in window) {
                 lemgramResults.resetView()
             }
         }
     })
+
+    s.onChange = (output, isRawOutput) => {
+        if (isRawOutput) {
+            s.currentText = output
+            s.lemgram = null
+        } else {
+            s.lemgram = regescape(output)
+            s.currentText = null
+        }
+    }
 
     s.doSearch = function () {
         const search = searches.activeSearch
@@ -389,21 +394,12 @@ korpApp.controller("SimpleCtrl", function (
     ])
 })
 
-korpApp.controller("ExtendedSearch", function (
-    $scope,
-    $location,
-    $rootScope,
-    searches,
-    compareSearches,
-    $timeout
-) {
+korpApp.controller("ExtendedSearch", function ($scope, $location, $rootScope, searches, compareSearches, $timeout) {
     const s = $scope
-    s.$on("popover_submit", (event, name) =>
-        compareSearches.saveSearch(name, $rootScope.extendedCQP)
-    )
+    s.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, $rootScope.extendedCQP))
 
-    s.searches = searches
-    s.$on("btn_submit", function () {
+    // TODO this is *too* weird
+    function triggerSearch() {
         $location.search("search", null)
         $location.search("page", null)
         $location.search("in_order", null)
@@ -414,6 +410,20 @@ korpApp.controller("ExtendedSearch", function (
             }
             $location.search("within", within)
         }, 0)
+    }
+
+    statemachine.listen("cqp_search", (event) => {
+        $scope.$root.searchtabs()[1].tab.select()
+        s.cqp = event.cqp
+        triggerSearch()
+        // sometimes $scope.$apply is needed and sometimes it throws errors
+        // depending on source of the event I guess. $timeout solves it.
+        $timeout(() => $scope.$apply())
+    })
+
+    s.searches = searches
+    s.$on("btn_submit", function () {
+        triggerSearch()
     })
 
     s.$on("extended_set", ($event, val) => (s.cqp = val))
@@ -427,9 +437,7 @@ korpApp.controller("ExtendedSearch", function (
     const updateExtendedCQP = function () {
         let val2 = CQP.expandOperators(s.cqp)
         if ($rootScope.globalFilter) {
-            val2 = CQP.stringify(
-                CQP.mergeCqpExprs(CQP.parse(val2 || "[]"), $rootScope.globalFilter)
-            )
+            val2 = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(val2 || "[]"), $rootScope.globalFilter))
         }
         $rootScope.extendedCQP = val2
     }
@@ -513,6 +521,7 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
         const lang = s.$parent.$parent && s.$parent.$parent.l && s.$parent.$parent.l.lang
         const allAttrs = settings.corpusListing.getAttributeGroups(lang)
         s.types = _.filter(allAttrs, (item) => !item.hideExtended)
+        s.tagTypes = settings.corpusListing.getCommonWithins()
         s.typeMapping = _.fromPairs(
             _.map(s.types, function (item) {
                 if (item.isStructAttr) {
@@ -539,19 +548,6 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
     s.addAnd = (token) => {
         token.and_block.push(s.addOr([]))
     }
-
-    const toggleBound = function (token, bnd) {
-        if (!(token.bound && token.bound[bnd])) {
-            const boundObj = {}
-            boundObj[bnd] = true
-            token.bound = _.extend(token.bound || {}, boundObj)
-        } else if (token.bound) {
-            delete token.bound[bnd]
-        }
-    }
-
-    s.toggleStart = (token) => toggleBound(token, "lbound")
-    s.toggleEnd = (token) => toggleBound(token, "rbound")
 })
 
 korpApp.directive("advancedSearch", () => ({
@@ -604,17 +600,14 @@ korpApp.directive("compareSearchCtrl", () => ({
                 return
             }
 
-            const listing = settings.corpusListing.subsetFactory(
-                _.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora))
-            )
+            const listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)))
             const allAttrs = listing.getAttributeGroups()
             s.currentAttrs = _.filter(allAttrs, (item) => !item.hideCompare)
         })
 
         s.reduce = "word"
 
-        s.sendCompare = () =>
-            $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]))
+        s.sendCompare = () => $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]))
 
         s.deleteCompares = () => compareSearches.flush()
     },

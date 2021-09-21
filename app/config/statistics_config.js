@@ -1,4 +1,13 @@
 /** @format */
+
+let customFunctions = {}
+
+try {
+    customFunctions = require("custom/statistics.js").default
+} catch (error) {
+    console.log("No module for statistics functions available")
+}
+
 let getCqp = function(hitValues, ignoreCase) {
     var tokens = []
     for (var i = 0; i < hitValues.length; i++) {
@@ -18,8 +27,10 @@ let getCqp = function(hitValues, ignoreCase) {
 let reduceCqp = function(type, tokens, ignoreCase) {
     let attrs = settings.corpusListing.getCurrentAttributes()
     if (attrs[type] && attrs[type].stats_cqp) {
-        return attrs[type].stats_cqp(tokens, ignoreCase)
+        // A stats_cqp function should call regescape for the value as appropriate
+        return customFunctions[attrs[type].stats_cqp](tokens, ignoreCase)
     }
+    tokens = _.map(tokens, val => regescape(val))
     switch (type) {
         case "saldo":
         case "prefix":
@@ -34,7 +45,7 @@ let reduceCqp = function(type, tokens, ignoreCase) {
 
                 var variants = []
                 _.map(tokens, function(val) {
-                    parts = val.split(":")
+                    const parts = val.split(":")
                     if (variants.length == 0) {
                         for (var idx = 0; idx < parts.length - 1; idx++) variants.push([])
                     }
@@ -51,7 +62,7 @@ let reduceCqp = function(type, tokens, ignoreCase) {
             }
             return type + " contains '" + res + "'"
         case "word":
-            let s = 'word="' + regescape(tokens[0]) + '"'
+            let s = 'word="' + tokens[0] + '"'
             if (ignoreCase) s = s + " %c"
             return s
         case "pos":
@@ -62,16 +73,23 @@ let reduceCqp = function(type, tokens, ignoreCase) {
         case "text_swefn":
             return $.format('_.%s contains "%s"', [type, tokens[0]])
         default:
-            // assume structural attribute
-            return $.format('_.%s="%s"', [type, tokens[0]])
+            if (attrs[type]) {
+                // word attributes
+                const op = attrs[type]["type"] === "set" ? " contains " : "="
+                return $.format('%s%s"%s"', [type, op, tokens[0]])
+            } else {
+                // structural attributes
+                return $.format('_.%s="%s"', [type, tokens[0]])
+            }
     }
 }
 
 // Get the html (no linking) representation of the result for the statistics table
 let reduceStringify = function(type, values, structAttributes) {
     let attrs = settings.corpusListing.getCurrentAttributes()
+
     if (attrs[type] && attrs[type].stats_stringify) {
-        return attrs[type].stats_stringify(values)
+        return customFunctions[attrs[type].stats_stringify](values)
     }
 
     switch (type) {
@@ -80,9 +98,7 @@ let reduceStringify = function(type, values, structAttributes) {
             return values.join(" ")
         case "pos":
             var output = _.map(values, function(token) {
-                return $("<span>")
-                    .localeKey("pos_" + token)
-                    .outerHTML()
+                return util.translateAttribute(null, attrs["pos"].translation, token)
             }).join(" ")
             return output
         case "saldo":
@@ -108,9 +124,7 @@ let reduceStringify = function(type, values, structAttributes) {
 
         case "deprel":
             var output = _.map(values, function(token) {
-                return $("<span>")
-                    .localeKey("deprel_" + token)
-                    .outerHTML()
+                return util.translateAttribute(null, attrs["deprel"].translation, token)
             }).join(" ")
             return output
         case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
@@ -121,21 +135,24 @@ let reduceStringify = function(type, values, structAttributes) {
             }).join(" ")
             return output
         default:
-            // structural attributes
-            var prefix = ""
-            if (structAttributes.translationKey) prefix = structAttributes.translationKey
-            var mapped = _.map(values, function(value) {
-                if (structAttributes["set"] && value === "") {
-                    return "–"
-                } else if (value === "") {
-                    return "-"
-                } else if (loc_data["en"][prefix + value]) {
-                    return util.getLocaleString(prefix + value)
-                } else {
-                    return value
-                }
-            })
-            return mapped.join(" ")
+            if (attrs[type]) {
+                // word attributes
+                return values.join(" ")
+            } else {
+                // structural attributes
+                var mapped = _.map(values, function(value) {
+                    if (structAttributes["set"] && value === "") {
+                        return "–"
+                    } else if (value === "") {
+                        return "-"
+                    } else if (structAttributes.translation) {
+                        return util.translateAttribute(null, structAttributes.translation, value)
+                    } else {
+                        return value
+                    }
+                })
+                return mapped.join(" ")
+            }
     }
 }
 

@@ -20,13 +20,13 @@ export const kwicPager = {
                 rotate="false"
             ></ul>
             <div class="page_input">
-                <span>{{'goto_page' | loc:lang}} </span>
+                <span>{{'goto_page' | loc:$root.lang}} </span>
                 <input
                     ng-model="$ctrl.gotoPage"
                     ng-keyup="$ctrl.onPageInput($event)"
                     ng-click="$event.stopPropagation()"
                 />
-                {{'of' | loc:lang}} {{$ctrl.numPages}}
+                {{'of' | loc:$root.lang}} {{$ctrl.numPages}}
             </div>
         </div>
     `,

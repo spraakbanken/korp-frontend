@@ -12,9 +12,7 @@ const createStatisticsService = function () {
         const valueFormatter = function (row, cell, value, columnDef, dataContext) {
             const valTup = dataContext[columnDef.id + "_value"]
             return (
-                `<span><span class='relStat'>${Number(valTup[1].toFixed(1)).toLocaleString(
-                    loc
-                )}</span> ` +
+                `<span><span class='relStat'>${Number(valTup[1].toFixed(1)).toLocaleString(loc)}</span> ` +
                 "<span class='absStat'>(" +
                 valTup[0].toLocaleString(loc) +
                 ")</span></span>"

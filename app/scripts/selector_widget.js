@@ -256,10 +256,7 @@ var hp_corpusChooser = {
         $(".selectall")
             .unbind("click")
             .click(function () {
-                hp_this.setStatus(
-                    $(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"),
-                    "checked"
-                )
+                hp_this.setStatus($(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"), "checked")
                 hp_this.countSelected()
                 // Fire callback "change":
                 hp_this.triggerChange()
@@ -270,10 +267,7 @@ var hp_corpusChooser = {
         $(".selectnone")
             .unbind("click")
             .click(function () {
-                hp_this.setStatus(
-                    $(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"),
-                    "unchecked"
-                )
+                hp_this.setStatus($(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"), "unchecked")
                 hp_this.countSelected()
                 // Fire callback "change":
                 hp_this.triggerChange()
@@ -328,10 +322,7 @@ var hp_corpusChooser = {
                         hp_this.setStatus(childMan, "checked")
                         if ($(this).parent().hasClass("tree")) {
                             // If tree, check all descendants
-                            descendants = childMan
-                                .parent()
-                                .siblings("div:not(.disabled)")
-                                .find(".checkbox")
+                            descendants = childMan.parent().siblings("div:not(.disabled)").find(".checkbox")
                             hp_this.setStatus(descendants, "checked")
                         }
                     }
@@ -443,9 +434,7 @@ var hp_corpusChooser = {
                     if (item_id == null) item_id = ""
 
                     if (item_id != "") {
-                        hp_this.totalTokenCount += parseInt(
-                            settings.corpora[item_id]["info"]["Size"]
-                        )
+                        hp_this.totalTokenCount += parseInt(settings.corpora[item_id]["info"]["Size"])
                         item_id = "hpcorpus_" + item_id
                     }
 
@@ -522,8 +511,7 @@ var hp_corpusChooser = {
                 }
             })
             if (!hasDirectCorporaChildren) {
-                outStr +=
-                    '<div class="extra_fill" style="height:2px; display:none; visible:false"></div>'
+                outStr += '<div class="extra_fill" style="height:2px; display:none; visible:false"></div>'
             }
 
             return outStr

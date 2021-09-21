@@ -146,15 +146,7 @@ const pie_widget = {
                 bufferPieTrack["accumulatedArc"] = pieTrack["accumulatedArc"]
                 bufferPieTrack["lastArcX"] = pieTrack["lastArcX"]
                 bufferPieTrack["lastArcY"] = pieTrack["lastArcY"]
-                const origPath = nowthis._constructSVGPath(
-                    false,
-                    pieTrack,
-                    !first,
-                    30,
-                    30,
-                    radius,
-                    partOfTotal
-                )
+                const origPath = nowthis._constructSVGPath(false, pieTrack, !first, 30, 30, radius, partOfTotal)
                 const newPiece = r.path(origPath)
                 const newPieceDOMNode = newPiece.node
                 newPieceDOMNode["continue"] = !first

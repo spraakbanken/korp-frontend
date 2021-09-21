@@ -2,6 +2,15 @@
 import "./sidebar.scss"
 export const sidebarName = "sidebar"
 import statemachine from "../statemachine"
+import { stringify } from "@/stringify.js"
+
+let sidebarComponents = {}
+
+try {
+    sidebarComponents = require("custom/sidebar.js").default
+} catch (error) {
+    console.log("No module for sidebar components available")
+}
 
 let html = String.raw
 export const sidebarComponent = {
@@ -13,10 +22,7 @@ export const sidebarComponent = {
                 </h4>
                 <div class="text-lg">{{$ctrl.corpusObj.title}}</div>
             </div>
-            <div
-                class="openReadingMode"
-                ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj.readingMode"
-            >
+            <div class="openReadingMode" ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj.readingMode">
                 <span ng-click="$ctrl.openReadingMode()" class="link">
                     {{'read_in_korp' | loc:$root.lang}}
                 </span>
@@ -24,11 +30,7 @@ export const sidebarComponent = {
             <div id="selected_sentence" />
             <div id="selected_word" />
 
-            <div
-                ng-show="$ctrl.corpusObj.attributes.deprel"
-                ng-click="$ctrl.renderGraph()"
-                class="link show_deptree"
-            >
+            <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.renderGraph()" class="link show_deptree">
                 {{'show_deptree' | loc:$root.lang}}
             </div>
         </div>
@@ -36,6 +38,7 @@ export const sidebarComponent = {
     bindings: {
         onShow: "&",
         onHide: "&",
+        lang: "<",
     },
     controller: [
         "$element",
@@ -48,6 +51,7 @@ export const sidebarComponent = {
 
             statemachine.listen("select_word", function (data) {
                 safeApply($rootScope, () => {
+                    $ctrl.data = data
                     if (data == null) {
                         $ctrl.onHide()
                     } else {
@@ -56,6 +60,14 @@ export const sidebarComponent = {
                     }
                 })
             })
+
+            $ctrl.$onChanges = (changesObj) => {
+                if (changesObj["lang"]) {
+                    if ($ctrl.data) {
+                        $ctrl.updateContent($ctrl.data)
+                    }
+                }
+            }
 
             Object.assign($ctrl, {
                 openReadingMode() {
@@ -155,15 +167,7 @@ export const sidebarComponent = {
                         .localeKey("dep_tree")
                 },
 
-                renderCorpusContent(
-                    type,
-                    wordData,
-                    sentenceData,
-                    corpus_attrs,
-                    tokens,
-                    customAttrs,
-                    customData
-                ) {
+                renderCorpusContent(type, wordData, sentenceData, corpus_attrs, tokens, customAttrs, customData) {
                     let pairs
                     if (type === "struct") {
                         pairs = _.toPairs(sentenceData)
@@ -177,10 +181,7 @@ export const sidebarComponent = {
                     })
                     pairs = _.filter(pairs, function (...args) {
                         let [key, val] = args[0]
-                        return !(
-                            corpus_attrs[key].displayType === "hidden" ||
-                            corpus_attrs[key].hideSidebar
-                        )
+                        return !(corpus_attrs[key].displayType === "hidden" || corpus_attrs[key].hideSidebar)
                     })
 
                     for (let custom of customData) {
@@ -220,6 +221,7 @@ export const sidebarComponent = {
                             items = items.concat(
                                 (
                                     this.renderItem(
+                                        type,
                                         key,
                                         value,
                                         corpus_attrs[key],
@@ -243,14 +245,7 @@ export const sidebarComponent = {
                         const attrs = corpus_attrs[key]
                         try {
                             const output = (
-                                this.renderItem(
-                                    key,
-                                    "not_used",
-                                    attrs,
-                                    wordData,
-                                    sentenceData,
-                                    tokens
-                                ) || $()
+                                this.renderItem(null, key, "not_used", attrs, wordData, sentenceData, tokens) || $()
                             ).get(0)
                             if (attrs.customType === "struct") {
                                 structItems.push([key, output])
@@ -264,19 +259,21 @@ export const sidebarComponent = {
                     return [posItems, structItems]
                 },
 
-                renderItem(key, value, attrs, wordData, sentenceData, tokens) {
-                    let lis, output, pattern, ul, valueArray
-                    let val, inner, cqpVal, li, address
+                renderItem(type, key, value, attrs, wordData, sentenceData, tokens) {
+                    let output, pattern, ul
+                    let val, inner, li, address
                     if (attrs.label) {
                         output = $(`<p><span rel='localize[${attrs.label}]'></span>: </p>`)
                     } else {
                         output = $("<p></p>")
                     }
                     if (attrs.sidebarComponent) {
-                        let { template, controller } = attrs.sidebarComponent
+                        const def = sidebarComponents[attrs.sidebarComponent.name || attrs.sidebarComponent]
+                        let { template, controller } = _.isFunction(def) ? def(attrs.sidebarComponent.options) : def
                         let scope = $rootScope.$new()
                         let locals = { $scope: scope }
                         Object.assign(scope, {
+                            type,
                             key,
                             value,
                             attrs,
@@ -288,156 +285,39 @@ export const sidebarComponent = {
                         return output.append($compile(template)(scope))
                     }
 
+                    // If attrs.sidebarInfoUrl, add an info symbol
+                    // linking to the value of the property (URL)
+                    let info_link = ""
+                    if (attrs.sidebarInfoUrl) {
+                        info_link =
+                            `<a href='${attrs.sidebarInfoUrl}' target='_blank'>
+                                 <span class='sidebar_info ui-icon ui-icon-info'></span>
+                             </a>`
+                    }
+
                     output.data("attrs", attrs)
                     if (value === "|" || value === "" || value === null) {
                         output.append(
-                            `<i rel='localize[empty]' style='color : grey'>${util.getLocaleString(
-                                "empty"
-                            )}</i>`
+                            `<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>`
                         )
                         return output
                     }
 
-                    if (attrs.type === "set" && attrs.display && attrs.display.expandList) {
-                        valueArray = _.filter((value && value.split("|")) || [], Boolean)
-                        const attrSettings = attrs.display.expandList
-                        if (attrs.ranked) {
-                            valueArray = _.map(valueArray, function (value) {
-                                val = value.split(":")
-                                return [val[0], val[val.length - 1]]
-                            })
-
-                            lis = []
-
-                            for (let outerIdx = 0; outerIdx < valueArray.length; outerIdx++) {
-                                var externalLink
-                                let [value, prob] = valueArray[outerIdx]
-                                li = $("<li></li>")
-                                const subValues = attrSettings.splitValue
-                                    ? attrSettings.splitValue(value)
-                                    : [value]
-                                for (let idx = 0; idx < subValues.length; idx++) {
-                                    const subValue = subValues[idx]
-                                    val = (attrs.stringify || attrSettings.stringify || _.identity)(
-                                        subValue
-                                    )
-                                    inner = $(`<span>${val}</span>`)
-                                    inner.attr("title", prob)
-
-                                    if (
-                                        attrs.internalSearch &&
-                                        (attrSettings.linkAllValues || outerIdx === 0)
-                                    ) {
-                                        inner.data("key", subValue)
-                                        inner.addClass("link").click(function () {
-                                            const searchKey = attrSettings.searchKey || key
-                                            cqpVal = $(this).data("key")
-                                            const cqpExpr = attrSettings.internalSearch
-                                                ? attrSettings.internalSearch(searchKey, cqpVal)
-                                                : `[${searchKey} contains '${regescape(cqpVal)}']`
-                                            return locationSearch({
-                                                search: "cqp",
-                                                cqp: cqpExpr,
-                                                page: null,
-                                            })
-                                        })
-                                    }
-                                    if (attrs.externalSearch) {
-                                        address = _.template(attrs.externalSearch)({
-                                            val: subValue,
-                                        })
-                                        externalLink = $(
-                                            `<a href='${address}' class='external_link' target='_blank' style='margin-top: -6px'></a>`
-                                        )
-                                    }
-
-                                    li.append(inner)
-                                    if (attrSettings.joinValues && idx !== subValues.length - 1) {
-                                        li.append(attrSettings.joinValues)
-                                    }
-                                }
-                                if (externalLink) {
-                                    li.append(externalLink)
-                                }
-                                lis.push(li)
-                            }
-                        } else {
-                            lis = []
-                            for (value of valueArray) {
-                                li = $("<li></li>")
-                                li.append(value)
-                                lis.push(li)
-                            }
-                        }
-
-                        if (lis.length === 0) {
-                            ul = $('<i rel="localize[empty]" style="color : grey"></i>')
-                        } else {
-                            ul = $("<ul style='list-style:initial'>")
-                            ul.append(lis)
-
-                            if (lis.length !== 1 && !attrSettings.showAll) {
-                                _.map(lis, function (li, idx) {
-                                    if (idx !== 0) {
-                                        return li.css("display", "none")
-                                    }
-                                })
-
-                                const showAll = $(
-                                    `<span class='link' rel='localize[complemgram_show_all]'></span><span> (${
-                                        lis.length - 1
-                                    })</span>`
-                                )
-                                ul.append(showAll)
-
-                                const showOne = $(
-                                    "<span class='link' rel='localize[complemgram_show_one]'></span>"
-                                )
-                                showOne.css("display", "none")
-                                ul.append(showOne)
-
-                                showAll.click(function () {
-                                    showAll.css("display", "none")
-                                    showOne.css("display", "inline")
-                                    return _.map(lis, (li) => li.css("display", "list-item"))
-                                })
-
-                                showOne.click(function () {
-                                    showAll.css("display", "inline")
-                                    showOne.css("display", "none")
-                                    _.map(lis, function (li, i) {
-                                        if (i !== 0) {
-                                            return li.css("display", "none")
-                                        }
-                                    })
-                                })
-                            }
-                        }
-
-                        output.append(ul)
-                        return output
-                    } else if (attrs.type === "set") {
+                    if (attrs.type === "set") {
+                        // For sets, info link after attribute label
+                        output.append(info_link)
                         pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>'
                         ul = $("<ul>")
                         const getStringVal = (str) =>
-                            _.reduce(
-                                _.invokeMap(_.invokeMap(str, "charCodeAt", 0), "toString"),
-                                (a, b) => a + b
-                            )
-                        valueArray = _.filter((value && value.split("|")) || [], Boolean)
+                            _.reduce(_.invokeMap(_.invokeMap(str, "charCodeAt", 0), "toString"), (a, b) => a + b)
+                        let valueArray = _.filter((value && value.split("|")) || [], Boolean)
                         if (key === "variants") {
                             // TODO: this doesn't sort quite as expected
                             valueArray.sort(function (a, b) {
                                 const splita = util.splitLemgram(a)
                                 const splitb = util.splitLemgram(b)
-                                const strvala =
-                                    getStringVal(splita.form) +
-                                    splita.index +
-                                    getStringVal(splita.pos)
-                                const strvalb =
-                                    getStringVal(splitb.form) +
-                                    splitb.index +
-                                    getStringVal(splitb.pos)
+                                const strvala = getStringVal(splita.form) + splita.index + getStringVal(splita.pos)
+                                const strvalb = getStringVal(splitb.form) + splitb.index + getStringVal(splitb.pos)
 
                                 return parseInt(strvala) - parseInt(strvalb)
                             })
@@ -447,33 +327,27 @@ export const sidebarComponent = {
                         const lis = []
                         for (let x of itr) {
                             if (x.length) {
-                                val = (attrs.stringify || _.identity)(x)
+                                const stringifyKey = attrs.stringify
+                                val = stringify(stringifyKey, x)
+
+                                if (attrs.translation != null) {
+                                    val = util.translateAttribute($ctrl.lang, attrs.translation, val)
+                                }
 
                                 inner = $(_.template(pattern)({ key: x, val }))
-                                if (attrs.translationKey != null) {
-                                    const prefix = attrs.translationKey || ""
-                                    inner.localeKey(prefix + val)
-                                }
 
                                 if (attrs.internalSearch) {
                                     inner.addClass("link").click(function () {
-                                        cqpVal = $(this).data("key")
-                                        return locationSearch({
-                                            page: null,
-                                            search: "cqp",
-                                            cqp: `[${key} contains \"${regescape(cqpVal)}\"]`,
-                                        })
+                                        const cqpVal = $(this).data("key")
+                                        const cqp = `[${key} contains "${regescape(cqpVal)}"]`
+                                        statemachine.send("SEARCH_CQP", { cqp })
                                     })
                                 }
 
                                 li = $("<li></li>").data("key", x).append(inner)
                                 if (attrs.externalSearch) {
                                     address = _.template(attrs.externalSearch)({ val: x })
-                                    li.append(
-                                        $(
-                                            `<a href='${address}' class='external_link' target='_blank'></a>`
-                                        )
-                                    )
+                                    li.append($(`<a href='${address}' class='external_link' target='_blank'></a>`))
                                 }
 
                                 lis.push(li)
@@ -485,25 +359,21 @@ export const sidebarComponent = {
                         return output
                     }
 
-                    const str_value = (attrs.stringify || _.identity)(value)
+                    let str_value = value
+                    if (attrs.stringify) {
+                        str_value = stringify(attrs.stringify, value)
+                    } else if (attrs.translation) {
+                        str_value = util.translateAttribute($ctrl.lang, attrs.translation, value)
+                    }
 
                     if (attrs.type === "url") {
-                        return output.append(
+                        output.append(
                             `<a href='${str_value}' class='exturl sidebar_url' target='_blank'>${decodeURI(
                                 str_value
                             )}</a>`
                         )
-                    } else if (key === "msd") {
-                        // msdTags = require '../markup/msdtags.html'
-                        const msdTags = "markup/msdtags.html"
-                        return output.append(`<span class='msd_sidebar'>${str_value}</span>
-                    <a href='${msdTags}' target='_blank'>
-                        <span class='sidebar_info ui-icon ui-icon-info'></span>
-                    </a>
-                </span>\
-            `)
                     } else if (attrs.pattern) {
-                        return output.append(
+                        output.append(
                             _.template(attrs.pattern)({
                                 key,
                                 val: str_value,
@@ -512,18 +382,11 @@ export const sidebarComponent = {
                             })
                         )
                     } else {
-                        if (attrs.translationKey) {
-                            if (window.loc_data["en"][attrs.translationKey + value]) {
-                                return output.append(
-                                    `<span rel='localize[${attrs.translationKey}${value}]'></span>`
-                                )
-                            } else {
-                                return output.append(`<span>${value}</span>`)
-                            }
-                        } else {
-                            return output.append(`<span>${str_value || ""}</span>`)
-                        }
+                        output.append(`<span>${str_value || ""}</span>`)
                     }
+
+                    // For non-sets, info link after the value
+                    return output.append(info_link)
                 },
 
                 applyEllipse() {

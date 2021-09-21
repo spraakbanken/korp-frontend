@@ -102,11 +102,15 @@
     "search_aborted": "Sökningen avbröts",
 
     "is": "är",
+    "equal": "lika med",
+    "not_equal": "inte lika med",
     "is_not": "är inte",
     "starts_with": "börjar med",
     "contains": "innehåller",
     "contains_not": "innehåller inte",
     "ends_with": "slutar med",
+    "subsumed_by": "subsumerad av",
+    "not_subsumed_by": "inte subsumerad av",
 
     "word_is": "ordet är",
     "word_is_not": "ordet är inte",
@@ -126,6 +130,12 @@
 
     "sent_start": "Meningsbörjan",
     "sent_end": "Meningsslut",
+    "before_token": "först",
+    "after_token": "sist",
+    "boundary_unit": "Gränsenhet:",
+    "add_tag_box": "Lägg till gräns",
+    "starts": "börjar",
+    "ends": "slutar",
 
     "none_selected": "&lt;ej vald&gt;",
 
@@ -331,6 +341,7 @@
     "no_geo_info": "Platsinformation ej tillgänglig",
     "map_cluster": "Sammanställ",
     "no_row_selected_map": "Välj minst en rad för att visa kartan",
+    "select_attribute": "Välj attribut",
 
     "global_filter": "Filter",
     "add_filter": "Lägg till filter",

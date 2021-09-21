@@ -77,9 +77,13 @@
     "download": "Download as",
 
     "is": "is",
+    "equal": "equal",
+    "not_equal": "not equal",
     "is_not": "is not",
     "starts_with": "begins with",
     "ends_with": "ends with",
+    "subsumed_by": "subsumed by",
+    "not_subsumed_by": "not subsumed by",
 
     "any_word_placeholder": "<any word>",
     "case_insensitive": "case-insensitive",
@@ -127,6 +131,12 @@
 
     "sent_start": "Sentence start",
     "sent_end": "Sentence end",
+    "before_token": "first",
+    "after_token": "last",
+    "boundary_unit": "Boundary unit:",
+    "add_tag_box": "Add boundary",
+    "starts": "starts",
+    "ends": "ends",
 
     "none_selected": "&lt;none selected&gt;",
 
@@ -334,6 +344,7 @@
     "no_geo_info": "No location data available",
     "map_cluster": "Cluster",
     "no_row_selected_map": "Choose at least one row to show the map",
+    "select_attribute": "Select attribute",
 
     "global_filter": "Filter",
     "add_filter": "Add filter",

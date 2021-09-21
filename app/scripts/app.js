@@ -3,6 +3,9 @@
 import jStorage from "../lib/jstorage"
 import { kwicPagerName, kwicPager } from "./components/pager"
 import { sidebarName, sidebarComponent } from "./components/sidebar"
+import * as autoc from "./components/autoc"
+import * as readingmode from "./components/readingmode"
+import * as extendedAddBox from "./components/extended/extended_add_box"
 import { setDefaultConfigValues } from "./settings.js"
 
 setDefaultConfigValues()
@@ -42,6 +45,21 @@ window.korpApp = angular.module("korpApp", [
 ])
 
 korpApp.component(kwicPagerName, kwicPager).component(sidebarName, sidebarComponent)
+korpApp.component(readingmode.componentName, readingmode.component)
+korpApp.component(autoc.componentName, autoc.component)
+korpApp.component(extendedAddBox.componentName, extendedAddBox.component)
+
+// load all custom components
+let customComponents = {}
+
+try {
+    customComponents = require("custom/components.js").default
+} catch (error) {
+    console.log("No module for components available")
+}
+for (const componentName in customComponents) {
+    korpApp.component(componentName, customComponents[componentName])
+}
 
 korpApp.config((tmhDynamicLocaleProvider) =>
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
@@ -57,8 +75,7 @@ korpApp.config(["$locationProvider", ($locationProvider) => $locationProvider.ha
 
 korpApp.config([
     "$compileProvider",
-    ($compileProvider) =>
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/),
+    ($compileProvider) => $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
 korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $timeout) {
@@ -147,7 +164,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
 
         if (!_.isEmpty(s.loginNeededFor)) {
             s.savedState = $location.search()
-            $location.url($location.path())
+            $location.url($location.path() + "?")
 
             // some state need special treatment
             if (s.savedState.reading_mode) {
@@ -188,15 +205,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     s.searchDisabled = false
     s.$on("corpuschooserchange", function (event, corpora) {
         settings.corpusListing.select(corpora)
-        const nonprotected = _.map(settings.corpusListing.getNonProtected(), "id")
-        if (
-            corpora.length &&
-            _.intersection(corpora, nonprotected).length !== nonprotected.length
-        ) {
-            $location.search("corpus", corpora.join(","))
-        } else {
-            $location.search("corpus", null)
-        }
+        $location.search("corpus", corpora.join(","))
         s.searchDisabled = settings.corpusListing.selected.length === 0
     })
 
@@ -205,9 +214,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
         let currentCorpora = []
         if (corpus) {
             currentCorpora = _.flatten(
-                _.map(corpus.split(","), (val) =>
-                    getAllCorporaInFolders(settings.corporafolders, val)
-                )
+                _.map(corpus.split(","), (val) => getAllCorporaInFolders(settings.corporafolders, val))
             )
         } else {
             if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
@@ -296,6 +303,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     for (let mode of s.modes) {
         mode.selected = false
         if (mode.mode === currentMode) {
+            window.settings.mode = mode
             mode.selected = true
         }
     }

@@ -79,7 +79,7 @@ html
                             | {{'show_map' | loc:lang}}
                             span.caret()
                           div(uib-dropdown-menu)
-                            h3.map-settings-title() Välj attribut
+                            h3.map-settings-title() {{'select_attribute' | loc:lang}}
                             ul(ng-if="mapAttributes.length != 0")
                               li(ng-repeat="attr in mapAttributes", ng-class="attr.selected ? 'selected':''", ng-click="mapToggleSelected($index, $event)")
                                 span(class="checked") ✔
@@ -122,7 +122,7 @@ html
 
               a#json-link(ng-href='{{jsonUrl}}', ng-show="jsonUrl", target="_blank")
                 img(src='img/json.png')
-            sidebar.sidebar.flex-shrink-0.ml-2(on-show="onSidebarShow()", on-hide="onSidebarHide()")
+            sidebar.sidebar.flex-shrink-0.ml-2(on-show="onSidebarShow()", on-hide="onSidebarHide()", lang="$root.lang")
 
     #deptree_popup
   

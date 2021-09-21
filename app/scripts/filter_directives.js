@@ -25,8 +25,8 @@ korpApp.directive("globalFilters", (globalFilterService) => ({
                              attr-value="dataObj.filterValues[filterKey].value",
                              attr-label="getFilterLabel(filterKey)",
                              possible-values="dataObj.filterValues[filterKey].possibleValues"
-                             translation-key="getTranslationKey(filterKey)"
-                             closeable="isOptionalFilter(filterKey)"/>
+                             closeable="isOptionalFilter(filterKey)"
+                             translation="dataObj.attributes[filterKey].settings.translation"/>
               <span ng-if="getAvailableFilters().length !== 0 || !$last">{{"and" | loc:lang}}</span>
            </span>
 
@@ -59,16 +59,10 @@ korpApp.directive("globalFilters", (globalFilterService) => ({
 
         scope.getFilterLabel = (filterKey) => scope.dataObj.attributes[filterKey].settings.label
 
-        scope.getTranslationKey = (filterKey) =>
-            scope.dataObj.attributes[filterKey].settings.translationKey || ""
-
         scope.removeFilter = (filter) => globalFilterService.removeFilter(filter)
 
         scope.getAvailableFilters = () =>
-            _.filter(
-                scope.dataObj.optionalFilters,
-                (filter) => !scope.dataObj.selectedFilters.includes(filter)
-            )
+            _.filter(scope.dataObj.optionalFilters, (filter) => !scope.dataObj.selectedFilters.includes(filter))
 
         scope.isOptionalFilter = (filterKey) =>
             scope.dataObj.optionalFilters.indexOf(filterKey) > -1 &&
@@ -86,8 +80,8 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
         attrValue: "=",
         possibleValues: "=",
         lang: "=",
-        translationKey: "=",
         closeable: "=",
+        translation: "<",
     },
     template: `\
 <span uib-dropdown auto-close="outsideClick" on-toggle="dropdownToggle(open)">
@@ -98,7 +92,7 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
         </span>
         <span ng-if="attrValue.length != 0">
           <span style="text-transform: capitalize">{{attrLabel | loc:lang}}:</span>
-          <span ng-repeat="selected in attrValue" class="selected-attr-value">{{translationKey + selected | loc:lang | replaceEmpty }} </span>
+          <span ng-repeat="selected in attrValue" class="selected-attr-value">{{translateAttribute(selected) | replaceEmpty }} </span>
         </span>
         <i ng-if="closeable" class="close_btn fa fa-times-circle-o fa-1" ng-click="removeFilter($event)" />
       </button>
@@ -108,20 +102,20 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
               ng-click="toggleSelected(value[0], $event)"
               ng-if="isSelectedList(value[0])">
             <span ng-if="isSelected(value[0])">✔</span>
-            <span>{{translationKey + value[0] | loc:lang | replaceEmpty }}</span>
+            <span>{{translateAttribute(value[0]) | replaceEmpty }}</span>
             <span style="font-size: x-small;">{{value[1]}}</span>
           </li>
           <li ng-repeat="value in possibleValues" class="attribute"
               ng-click="toggleSelected(value[0], $event)"
               ng-if="!isSelectedList(value[0]) && value[1] > 0">
             <span ng-if="isSelected(value[0])">✔</span>
-            <span>{{translationKey + value[0] | loc:lang | replaceEmpty }}</span>
+            <span>{{translateAttribute(value[0]) | replaceEmpty }}</span>
             <span style="font-size: x-small;">{{value[1]}}</span>
           </li>
           <li ng-repeat="value in possibleValues" class="attribute disabled"
               ng-if="!isSelectedList(value[0]) && value[1] == 0"
               >
-            <span>{{translationKey + value[0] | loc:lang | replaceEmpty }}</span>
+            <span>{{translateAttribute(value[0]) | replaceEmpty }}</span>
             <span style="font-size: x-small;">{{value[1]}}</span>
           </li>
         </ul>
@@ -157,6 +151,10 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
         scope.removeFilter = function (event) {
             event.stopPropagation()
             scope.$parent.removeFilter(scope.attr)
+        }
+
+        scope.translateAttribute = (value) => {
+            return util.translateAttribute(scope.lang, scope.translation, value)
         }
     },
 }))

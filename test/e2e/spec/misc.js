@@ -45,7 +45,7 @@ describe("page", function () {
     })
 
     it("should go back to 0 when searching anew", async function () {
-        const input = element.all(by.model("textInField")).first()
+        const input = element.all(by.model("$ctrl.textInField")).first()
         await input.clear()
         await input.sendKeys("gå")
         await input.sendKeys(protractor.Key.ESCAPE)

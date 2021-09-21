@@ -121,6 +121,7 @@ require("./scripts/services.js")
 require("./scripts/extended.js")
 require("./scripts/struct_services.js")
 require("./scripts/directives.js")
+require("./scripts/directives/scroll.js")
 require("./scripts/filter_directives.js")
 require("./scripts/newsdesk.js")
 
@@ -134,9 +135,5 @@ for(let mode of settings.modeConfig) {
     require("./scripts/parallel/stats_proxy.js")
   }
 }
-
-function requireAll(r) { r.keys().forEach(r) } 
-requireAll(require.context('customcss', true, /\.css$/))
-requireAll(require.context('customscripts', true, /\.js$/))
 
 require("./index.pug")
