@@ -485,7 +485,7 @@ Korp's map uses annotations to get locations. The user selects rows from the sta
 
     Also the name of the attribute must contain `"__"` and `"geo"` to show up in the list of supported attributes.
 
-- `settings.newMapEnabled` - `boolean`. The map should be enabled. The weird name is because another map existed before, but has been removed. The name will change in upcoming releases.
+- `settings.mapEnabled` - `boolean`. The map should be enabled.
 - `settings.mapCenter` - Where the center of the map should be located when user opens map. Example:  
    ```
     settings.mapCenter = {
@@ -629,7 +629,9 @@ __corporafolders__ - Create a directory-structure in corpus chooser. Example:
 
 __preselectedCorpora__ - An array of corpus (internal) names or folder names. Given corpora and corpora in folders will be selected on load. To select only a subfolder write `folder.subfolder`.
  
-__newMapEnabled__ - See [Map](#map).
+__mapEnabled__ - See [Map](#map).
+
+__newMapEnabled__ - Renamed to `mapEnabled`.
 
 __mapCenter__ - See [Map](#map).
 
