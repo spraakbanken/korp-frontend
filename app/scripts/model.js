@@ -462,7 +462,7 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
 
         const xhr = $.ajax({
             url: settings.korpBackendURL + "/timespan",
-            type: "GET",
+            type: "POST",
             data: {
                 granularity: "y",
                 corpus: settings.corpusListing.stringifyAll(),
