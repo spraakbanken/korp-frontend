@@ -272,7 +272,7 @@ class KwicCtrl {
             (hpp) => (s.hitsPerPage = hpp || settings.hitsPerPageDefault)
         )
 
-        const isParallelMode = window.settings.mode.parallel
+        const isParallelMode = window.settings.mode ? window.settings.mode.parallel : false
 
         s.download = {
             options: [
