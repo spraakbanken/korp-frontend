@@ -105,7 +105,11 @@ view.KWICResults = class KWICResults extends BaseResults {
         super(tabSelector, resultSelector, scope)
 
         this.proxy = new model.KWICProxy()
-        window.kwicProxy = this.proxy
+
+        // there can be only one global kwicproxy
+        if (!window.kwicProxy) {
+            window.kwicProxy = this.proxy
+        }
 
         this.tabindex = 0
 
@@ -647,7 +651,8 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         opts.ajaxParams.start = this.s.$parent.page * items_per_page
         opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1
 
-        const prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "source")
+        // use window.kwicProxy to fetch previous searches, since this.proxy is local to the newly created tab
+        const prev = _.pick(window.kwicProxy.prevParams, "cqp", "command", "corpus", "source")
         _.extend(opts.ajaxParams, prev)
 
         let avoidContext, preferredContext
