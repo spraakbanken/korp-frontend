@@ -30,7 +30,7 @@ span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()"
         odd : $odd}')
       td.empty_td
       td.corpus_title.text-gray-600.uppercase.text-sm(colspan='3')
-        div.flex.justify-center.items-baseline.w-0
+        div
           | {{sentence.newCorpus}}
           span.corpus_title_warn(rel='localize[no_context_support]', ng-if='::sentence.noContext')
       td.empty_td
