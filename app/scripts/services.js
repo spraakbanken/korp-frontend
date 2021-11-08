@@ -287,29 +287,27 @@ korpApp.factory("searches", [
 
             getInfoData() {
                 const def = $q.defer()
-                $http({
-                    method: "GET",
-                    url: settings.korpBackendURL + "/corpus_info",
-                    params: {
+                $http
+                    .post(settings.korpBackendURL + "/corpus_info", {
                         corpus: _.map(settings.corpusListing.corpora, "id")
                             .map((a) => a.toUpperCase())
                             .join(","),
-                    },
-                }).then(function (response) {
-                    const { data } = response
-                    for (let corpus of settings.corpusListing.corpora) {
-                        corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
-                        const privateStructAttrs = []
-                        for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
-                            if (attr.indexOf("__") !== -1) {
-                                privateStructAttrs.push(attr)
+                    })
+                    .then(function (response) {
+                        const { data } = response
+                        for (let corpus of settings.corpusListing.corpora) {
+                            corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
+                            const privateStructAttrs = []
+                            for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
+                                if (attr.indexOf("__") !== -1) {
+                                    privateStructAttrs.push(attr)
+                                }
                             }
+                            corpus["private_struct_attributes"] = privateStructAttrs
                         }
-                        corpus["private_struct_attributes"] = privateStructAttrs
-                    }
-                    util.loadCorpora()
-                    return def.resolve()
-                })
+                        util.loadCorpora()
+                        return def.resolve()
+                    })
 
                 return def.promise
             }
