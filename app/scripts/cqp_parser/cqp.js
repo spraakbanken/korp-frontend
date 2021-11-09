@@ -196,7 +196,12 @@ window.CQP = {
     mergeCqpExprs(cqpObj1, cqpObj2) {
         for (let i = 0; i < cqpObj2.length; i++) {
             const token = cqpObj2[i]
-            cqpObj1[i].and_block = cqpObj1[i].and_block.concat(token.and_block)
+            for (let j = 0; j < cqpObj1.length; j++) {
+                if (cqpObj1[j].and_block) {
+                    cqpObj1[j].and_block = cqpObj1[j].and_block.concat(token.and_block)
+                    break
+                }
+            }
         }
         return cqpObj1
     },
