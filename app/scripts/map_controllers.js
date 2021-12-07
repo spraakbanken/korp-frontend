@@ -76,8 +76,13 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
         var getMarkers = function (label, cqp, corpora, within, res, idx) {
             const markers = {}
 
-            for (let point of res.points) {
-                const id = point.name.replace(/-/g, "") + idx
+            for (let [pointIdx, point] of res.points.entries()) {
+                // Include point index in the key, so that multiple
+                // places with the same name but different coordinates
+                // each get their own markers
+                const id = [point.name.replace(/-/g, ""),
+                            pointIdx.toString(),
+                            idx].join(":")
                 markers[id] = {
                     lat: point.lat,
                     lng: point.lng,
