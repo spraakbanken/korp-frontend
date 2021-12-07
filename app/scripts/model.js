@@ -51,6 +51,18 @@ class BaseProxy {
         this.total = null
     }
 
+    // Return a URL with baseUrl base and data encoded as URL parameters
+    makeUrlWithParams(baseUrl, data) {
+        return (baseUrl +
+                "?" +
+                _.toPairs(data)
+                .map(function ([key, val]) {
+                    val = encodeURIComponent(val)
+                    return key + "=" + val
+                })
+                .join("&"))
+    }
+
     abort() {
         if (this.pendingRequests.length) {
             return _.invokeMap(this.pendingRequests, "abort")
@@ -221,15 +233,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
             beforeSend(req, settings) {
                 self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                self.prevUrl =
-                    this.url +
-                    "?" +
-                    _.toPairs(data)
-                        .map(function ([key, val]) {
-                            val = encodeURIComponent(val)
-                            return key + "=" + val
-                        })
-                        .join("&")
+                self.prevUrl = self.makeUrlWithParams(this.url, data)
             },
 
             success(data, status, jqxhr) {
@@ -262,6 +266,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
         const def = $.ajax({
             url: settings.korpBackendURL + "/relations",
             data: params,
+            method: "POST",
 
             success() {
                 self.prevRequest = params
@@ -279,7 +284,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
             beforeSend(req, settings) {
                 self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                self.prevUrl = this.url
+                self.prevUrl = self.makeUrlWithParams(this.url, params)
             },
         })
         this.pendingRequests.push(def)
@@ -365,11 +370,12 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         this.pendingRequests.push(
             $.ajax({
                 url: settings.korpBackendURL + "/count",
+                method: "POST",
                 data,
                 beforeSend(req, settings) {
                     self.prevRequest = settings
                     self.addAuthorizationHeader(req)
-                    self.prevUrl = this.url
+                    self.prevUrl = self.makeUrlWithParams(this.url, data)
                 },
 
                 error(jqXHR, textStatus, errorThrown) {
@@ -579,11 +585,12 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
             url: settings.korpBackendURL + "/count_time",
             dataType: "json",
             data: params,
+            method: "POST",
 
             beforeSend: (req, settings) => {
                 this.prevRequest = settings
                 this.addAuthorizationHeader(req)
-                self.prevUrl = this.url
+                self.prevUrl = self.makeUrlWithParams(this.url, params)
             },
 
             progress: (data, e) => {
