@@ -99,8 +99,8 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         const conf = {
             url: settings.korpBackendURL + "/loglike",
-            params,
-            method: "GET",
+            data: params,
+            method: "POST",
             headers: {},
         }
 
@@ -189,8 +189,8 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         const conf = {
             url: settings.korpBackendURL + "/count",
-            params,
-            method: "GET",
+            data: params,
+            method: "POST",
             headers: {},
         }
 
@@ -229,8 +229,8 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         const conf = {
             url: settings.korpBackendURL + "/query",
-            params,
-            method: "GET",
+            data: params,
+            method: "POST",
             headers: {},
         }
 
