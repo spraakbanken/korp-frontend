@@ -75,6 +75,9 @@ const selectController = (autocomplete) => [
             )
         }
 
+        // Load values initially
+        reloadValues()
+
         $scope.$watch("orObj.op", (newVal, oldVal) => {
             $scope.inputOnly = !["=", "!=", "contains", "not contains"].includes($scope.orObj.op)
             if (newVal !== oldVal) {

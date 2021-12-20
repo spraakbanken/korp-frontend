@@ -136,7 +136,7 @@ const stringifyCqp = function (cqp_obj, expanded_format) {
 
         let out_token = `[${or_out.join(" & ")}]`
         if (token.repeat) {
-            out_token += `{${token.repeat.join(",")}}`
+            out_token += `{${token.repeat.length > 1 ? token.repeat.join(",") : token.repeat + ","}}`
         }
 
         output.push(out_token)

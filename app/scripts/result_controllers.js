@@ -383,7 +383,7 @@ korpApp.directive("statsResultCtrl", () => ({
 
         s.onGraphShow = (data) => $rootScope.graphTabs.push(data)
 
-        s.newMapEnabled = settings.newMapEnabled
+        s.mapEnabled = settings.mapEnabled
 
         s.getGeoAttributes = function (corpora) {
             let attrs = {}
