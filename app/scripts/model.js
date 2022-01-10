@@ -226,8 +226,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         this.prevParams = data
         const command = data.command || "query"
         delete data.command
-        const def = $.ajax({
-            method: "POST",
+        const def = $.ajax(util.httpConfAddMethod({
             url: settings.korpBackendURL + "/" + command,
             data,
             beforeSend(req, settings) {
@@ -245,7 +244,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
             },
 
             progress: progressObj.progress,
-        })
+        }))
         this.pendingRequests.push(def)
         return def
     }
@@ -263,10 +262,9 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
             max: 1000,
         }
         this.prevParams = params
-        const def = $.ajax({
+        const def = $.ajax(util.httpConfAddMethod({
             url: settings.korpBackendURL + "/relations",
             data: params,
-            method: "POST",
 
             success() {
                 self.prevRequest = params
@@ -286,7 +284,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
                 self.addAuthorizationHeader(req)
                 self.prevUrl = self.makeUrlWithParams(this.url, params)
             },
-        })
+        }))
         this.pendingRequests.push(def)
         return def
     }
@@ -368,9 +366,8 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         this.prevParams = data
         const def = $.Deferred()
         this.pendingRequests.push(
-            $.ajax({
+            $.ajax(util.httpConfAddMethod({
                 url: settings.korpBackendURL + "/count",
-                method: "POST",
                 data,
                 beforeSend(req, settings) {
                     self.prevRequest = settings
@@ -403,7 +400,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                     model.normalizeStatsData(data)
                     statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
                 },
-            })
+            }))
         )
 
         return def.promise()
@@ -466,14 +463,13 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
     makeRequest() {
         const dfd = $.Deferred()
 
-        const xhr = $.ajax({
+        const xhr = $.ajax(util.httpConfAddMethod({
             url: settings.korpBackendURL + "/timespan",
-            type: "POST",
             data: {
                 granularity: "y",
                 corpus: settings.corpusListing.stringifyAll(),
             },
-        })
+        }))
 
         xhr.done((data) => {
             if (data.ERROR) {
@@ -581,11 +577,10 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
         this.prevParams = params
         const def = $.Deferred()
 
-        $.ajax({
+        $.ajax(util.httpConfAddMethod({
             url: settings.korpBackendURL + "/count_time",
             dataType: "json",
             data: params,
-            method: "POST",
 
             beforeSend: (req, settings) => {
                 this.prevRequest = settings
@@ -608,7 +603,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
                 def.resolve(data)
                 self.cleanup()
             },
-        })
+        }))
 
         return def.promise()
     }

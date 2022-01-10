@@ -336,12 +336,11 @@ korpApp.factory("structService", ($http, $q) => ({
                 params.split = _.last(attributes)
             }
 
-            const conf = {
+            const conf = util.httpConfAddMethod({
                 url: settings.korpBackendURL + "/struct_values",
-                data: params,
-                method: "POST",
+                params,
                 headers: {},
-            }
+            })
 
             _.extend(conf.headers, model.getAuthorizationHeader())
 
