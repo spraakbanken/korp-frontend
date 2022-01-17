@@ -1073,3 +1073,25 @@ util.httpConfAddMethod = function (conf) {
     }
     return conf
 }
+
+// For POST with the Angular $http service, handling data must be done a
+// bit differenly to assure that the data is sent and "Form Data" and not JSON
+util.httpConfAddMethodAngular = function (conf) {
+    const fixedConf = util.httpConfAddMethod(conf)
+
+    if (fixedConf.method == "POST") {
+        const formDataParams = new FormData()
+        for (var key in fixedConf.data) {
+            formDataParams.append(key, fixedConf.data[key])
+        }
+        fixedConf.data = formDataParams
+
+        if (!fixedConf.headers) {
+            fixedConf.headers = {}
+        }
+        // will be set correct automatically by Angular
+        fixedConf.headers["Content-Type"] = undefined
+    }
+
+    return fixedConf
+}

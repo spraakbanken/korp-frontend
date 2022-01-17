@@ -97,7 +97,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             top,
         }
 
-        const conf = util.httpConfAddMethod({
+        const conf = util.httpConfAddMethodAngular({
             url: settings.korpBackendURL + "/loglike",
             params,
             headers: {},
