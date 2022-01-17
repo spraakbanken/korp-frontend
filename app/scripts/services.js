@@ -292,22 +292,21 @@ korpApp.factory("searches", [
                             .join(","),
                     },
                 })
-                $http(conf)
-                    .then(function (response) {
-                        const { data } = response
-                        for (let corpus of settings.corpusListing.corpora) {
-                            corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
-                            const privateStructAttrs = []
-                            for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
-                                if (attr.indexOf("__") !== -1) {
-                                    privateStructAttrs.push(attr)
-                                }
+                $http(conf).then(function (response) {
+                    const { data } = response
+                    for (let corpus of settings.corpusListing.corpora) {
+                        corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
+                        const privateStructAttrs = []
+                        for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
+                            if (attr.indexOf("__") !== -1) {
+                                privateStructAttrs.push(attr)
                             }
-                            corpus["private_struct_attributes"] = privateStructAttrs
                         }
-                        util.loadCorpora()
-                        return def.resolve()
-                    })
+                        corpus["private_struct_attributes"] = privateStructAttrs
+                    }
+                    util.loadCorpora()
+                    return def.resolve()
+                })
 
                 return def.promise
             }
@@ -456,15 +455,17 @@ korpApp.factory("lexicons", function ($q, $http) {
                         let lemgram = karpLemgrams.join(",")
                         const corpora = corporaIDs.join(",")
                         const headers = model.getAuthorizationHeader()
-                        return $http(util.httpConfAddMethod({
-                            url: settings.korpBackendURL + "/lemgram_count",
-                            params: {
-                                lemgram: lemgram,
-                                count: "lemgram",
-                                corpus: corpora,
-                            },
-                            headers,
-                        })).then(({ data }) => {
+                        return $http(
+                            util.httpConfAddMethod({
+                                url: settings.korpBackendURL + "/lemgram_count",
+                                params: {
+                                    lemgram: lemgram,
+                                    count: "lemgram",
+                                    corpus: corpora,
+                                },
+                                headers,
+                            })
+                        ).then(({ data }) => {
                             delete data.time
                             const allLemgrams = []
                             for (lemgram in data) {

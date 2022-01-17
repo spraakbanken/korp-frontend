@@ -1047,7 +1047,6 @@ window.__.remove = function (arr, elem) {
     }
 }
 
-
 // Add HTTP method to the HTTP configuration object conf for
 // jQuery.ajax or AngularJS $http call: if the result URL would be
 // longer than settings.backendURLMaxLength, use POST, otherwise GET.
@@ -1055,7 +1054,6 @@ window.__.remove = function (arr, elem) {
 // property "params" of conf (moved to "data" for POST), and for a
 // jQuery.ajax configuration, they should be in "data".
 util.httpConfAddMethod = function (conf) {
-
     // Return the length of baseUrl with params added
     const calcUrlLength = function (baseUrl, params) {
         return baseUrl.length + new URLSearchParams(params).toString().length + 1
@@ -1063,7 +1061,7 @@ util.httpConfAddMethod = function (conf) {
 
     // The property to use for GET: AngularJS $http uses params for
     // GET and data for POST, whereas jQuery.ajax uses data for both
-    const getDataProp = (conf.params != undefined ? "params" : "data")
+    const getDataProp = conf.params != undefined ? "params" : "data"
     const data = conf.data || conf.params
     if (calcUrlLength(conf.url, data) > settings.backendURLMaxLength) {
         conf.method = "POST"
