@@ -1046,3 +1046,52 @@ window.__.remove = function (arr, elem) {
         return arr.splice(arr.indexOf(elem), 1)
     }
 }
+
+// Add HTTP method to the HTTP configuration object conf for
+// jQuery.ajax or AngularJS $http call: if the result URL would be
+// longer than settings.backendURLMaxLength, use POST, otherwise GET.
+// For a $http configuration, the request parameters should be in
+// property "params" of conf (moved to "data" for POST), and for a
+// jQuery.ajax configuration, they should be in "data".
+util.httpConfAddMethod = function (conf) {
+    // Return the length of baseUrl with params added
+    const calcUrlLength = function (baseUrl, params) {
+        return baseUrl.length + new URLSearchParams(params).toString().length + 1
+    }
+
+    // The property to use for GET: AngularJS $http uses params for
+    // GET and data for POST, whereas jQuery.ajax uses data for both
+    const getDataProp = conf.params != undefined ? "params" : "data"
+    const data = conf.data || conf.params
+    if (calcUrlLength(conf.url, data) > settings.backendURLMaxLength) {
+        conf.method = "POST"
+        conf.data = data
+        delete conf.params
+    } else {
+        conf.method = "GET"
+        conf[getDataProp] = data
+    }
+    return conf
+}
+
+// For POST with the Angular $http service, handling data must be done a
+// bit differenly to assure that the data is sent and "Form Data" and not JSON
+util.httpConfAddMethodAngular = function (conf) {
+    const fixedConf = util.httpConfAddMethod(conf)
+
+    if (fixedConf.method == "POST") {
+        const formDataParams = new FormData()
+        for (var key in fixedConf.data) {
+            formDataParams.append(key, fixedConf.data[key])
+        }
+        fixedConf.data = formDataParams
+
+        if (!fixedConf.headers) {
+            fixedConf.headers = {}
+        }
+        // will be set correct automatically by Angular
+        fixedConf.headers["Content-Type"] = undefined
+    }
+
+    return fixedConf
+}

@@ -603,6 +603,8 @@ __cgiScript__ - URL to Korp CGI-script
 
 __downloadCgiScript__ - URL to Korp download CGI-script
 
+__backendURLMaxLength__ - Integer. The maximum length of URL (in bytes) to be passed to the backend. If the URL would be longer, use HTTP POST method instead of GET. The default is 8100, tailored for Apache’s default maximum HTTP request line length of 8190 bytes.
+
 __wordpicture__ - Boolean. Enable word picture.
 
 __statisticsCaseInsensitiveDefault__ - Boolean. Selects case-insensitive for "compile based on" by default.

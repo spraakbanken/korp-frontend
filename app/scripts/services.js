@@ -97,12 +97,11 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             top,
         }
 
-        const conf = {
+        const conf = util.httpConfAddMethodAngular({
             url: settings.korpBackendURL + "/loglike",
-            data: params,
-            method: "POST",
+            params,
             headers: {},
-        }
+        })
 
         _.extend(conf.headers, model.getAuthorizationHeader())
 
@@ -187,12 +186,11 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         _.extend(params, cqpSubExprs)
 
-        const conf = {
+        const conf = util.httpConfAddMethod({
             url: settings.korpBackendURL + "/count",
-            data: params,
-            method: "POST",
+            params,
             headers: {},
-        }
+        })
 
         _.extend(conf.headers, model.getAuthorizationHeader())
 
@@ -227,12 +225,11 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             end: 0,
         }
 
-        const conf = {
+        const conf = util.httpConfAddMethod({
             url: settings.korpBackendURL + "/query",
-            data: params,
-            method: "POST",
+            params,
             headers: {},
-        }
+        })
 
         _.extend(conf.headers, model.getAuthorizationHeader())
 
@@ -287,27 +284,29 @@ korpApp.factory("searches", [
 
             getInfoData() {
                 const def = $q.defer()
-                $http
-                    .post(settings.korpBackendURL + "/corpus_info", {
+                const conf = util.httpConfAddMethod({
+                    url: settings.korpBackendURL + "/corpus_info",
+                    params: {
                         corpus: _.map(settings.corpusListing.corpora, "id")
                             .map((a) => a.toUpperCase())
                             .join(","),
-                    })
-                    .then(function (response) {
-                        const { data } = response
-                        for (let corpus of settings.corpusListing.corpora) {
-                            corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
-                            const privateStructAttrs = []
-                            for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
-                                if (attr.indexOf("__") !== -1) {
-                                    privateStructAttrs.push(attr)
-                                }
+                    },
+                })
+                $http(conf).then(function (response) {
+                    const { data } = response
+                    for (let corpus of settings.corpusListing.corpora) {
+                        corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
+                        const privateStructAttrs = []
+                        for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
+                            if (attr.indexOf("__") !== -1) {
+                                privateStructAttrs.push(attr)
                             }
-                            corpus["private_struct_attributes"] = privateStructAttrs
                         }
-                        util.loadCorpora()
-                        return def.resolve()
-                    })
+                        corpus["private_struct_attributes"] = privateStructAttrs
+                    }
+                    util.loadCorpora()
+                    return def.resolve()
+                })
 
                 return def.promise
             }
@@ -456,13 +455,17 @@ korpApp.factory("lexicons", function ($q, $http) {
                         let lemgram = karpLemgrams.join(",")
                         const corpora = corporaIDs.join(",")
                         const headers = model.getAuthorizationHeader()
-                        headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
-                        return $http({
-                            method: "POST",
-                            url: settings.korpBackendURL + "/lemgram_count",
-                            data: `lemgram=${lemgram}&count=lemgram&corpus=${corpora}`,
-                            headers,
-                        }).then(({ data }) => {
+                        return $http(
+                            util.httpConfAddMethod({
+                                url: settings.korpBackendURL + "/lemgram_count",
+                                params: {
+                                    lemgram: lemgram,
+                                    count: "lemgram",
+                                    corpus: corpora,
+                                },
+                                headers,
+                            })
+                        ).then(({ data }) => {
                             delete data.time
                             const allLemgrams = []
                             for (lemgram in data) {
