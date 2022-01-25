@@ -115,125 +115,22 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     $rootScope.mapTabs = []
     $rootScope.textTabs = []
 
-    if ($location.search().corpus) {
-        const initialCorpora = []
-
-        function findInFolder(folder) {
-            // checks if folder is an actual folder of corpora and recursively
-            // collects all corpora in this folder and subfolders
-            const corpusIds = []
-            if (folder && folder.contents) {
-                for (let corpusId of folder.contents) {
-                    corpusIds.push(corpusId)
-                }
-                for (let subFolderId of Object.keys(folder)) {
-                    for (let corpusId of findInFolder(folder[subFolderId])) {
-                        corpusIds.push(corpusId)
-                    }
-                }
-            }
-            return corpusIds
-        }
-
-        for (let corpus of $location.search().corpus.split(",")) {
-            const corpusObj = settings.corpusListing.struct[corpus]
-            if (corpusObj) {
-                initialCorpora.push(corpusObj)
-            } else {
-                // corpus does not correspond to a corpus ID, check if it is a folder
-                for (let folderCorpus of findInFolder(settings.corporafolders[corpus])) {
-                    if (settings.corpusListing.struct[folderCorpus]) {
-                        initialCorpora.push(settings.corpusListing.struct[folderCorpus])
-                    }
-                }
-            }
-        }
-
-        const loginNeededFor = []
-        for (let corpusObj of initialCorpora) {
-            if (corpusObj.limitedAccess) {
-                if (
-                    _.isEmpty(authenticationProxy.loginObj) ||
-                    !authenticationProxy.loginObj.credentials.includes(corpusObj.id.toUpperCase())
-                ) {
-                    loginNeededFor.push(corpusObj)
-                }
-            }
-        }
-        s.loginNeededFor = loginNeededFor
-
-        if (!_.isEmpty(s.loginNeededFor)) {
-            s.savedState = $location.search()
-            $location.url($location.path() + "?")
-
-            // some state need special treatment
-            if (s.savedState.reading_mode) {
-                $location.search("reading_mode")
-            }
-            if (s.savedState.search_tab) {
-                $location.search("search_tab", s.savedState.search_tab)
-            }
-            if (s.savedState.cqp) {
-                $location.search("cqp", s.savedState.cqp)
-            }
-
-            $location.search("display", "login")
-        }
-    }
-
-    s.restorePreLoginState = function () {
-        if (s.savedState) {
-            for (let key in s.savedState) {
-                const val = s.savedState[key]
-                if (key !== "search_tab") {
-                    $location.search(key, val)
-                }
-            }
-
-            // some state need special treatment
-            s.$broadcast("updateAdvancedCQP")
-
-            const corpora = s.savedState.corpus.split(",")
-            settings.corpusListing.select(corpora)
-            corpusChooserInstance.corpusChooser("selectItems", corpora)
-
-            s.savedState = null
-            s.loginNeededFor = null
-        }
-    }
-
-    s.searchDisabled = false
-    s.$on("corpuschooserchange", function (event, corpora) {
-        settings.corpusListing.select(corpora)
-        $location.search("corpus", corpora.join(","))
-        s.searchDisabled = settings.corpusListing.selected.length === 0
-    })
-
     searches.infoDef.then(function () {
         let { corpus } = $location.search()
-        let currentCorpora = []
+        let currentCorpora
         if (corpus) {
-            currentCorpora = _.flatten(
-                _.map(corpus.split(","), (val) => getAllCorporaInFolders(settings.corporafolders, val))
-            )
+            currentCorpora = corpus.split(",")
         } else {
             if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
+                // if no preselctedCorpora is given, selected all of them
                 currentCorpora = _.map(settings.corpusListing.corpora, "id")
+                settings.preselectedCorpora = currentCorpora
             } else {
-                for (let pre_item of settings.preselectedCorpora) {
-                    pre_item = pre_item.replace(/^__/g, "")
-                    currentCorpora = [].concat(
-                        currentCorpora,
-                        getAllCorporaInFolders(settings.corporafolders, pre_item)
-                    )
-                }
+                currentCorpora = settings.preselectedCorpora
             }
-
-            settings.preselectedCorpora = currentCorpora
         }
-
         settings.corpusListing.select(currentCorpora)
-        corpusChooserInstance.corpusChooser("selectItems", currentCorpora)
+        $rootScope.$broadcast("corpuschooserchange", currentCorpora)
     })
 })
 
@@ -260,15 +157,6 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         authenticationProxy.loginObj = {}
         jStorage.deleteKey("creds")
 
-        // TODO figure out another way to do this
-        for (let corpusObj of settings.corpusListing.corpora) {
-            const corpus = corpusObj.id
-            if (corpusObj.limitedAccess) {
-                $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled")
-            }
-        }
-        $("#corpusbox").corpusChooser("updateAllStates")
-
         let newCorpora = []
         for (let corpus of settings.corpusListing.getSelectedCorpora()) {
             if (!settings.corpora[corpus].limitedAccess) {
@@ -281,7 +169,6 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         }
         settings.corpusListing.select(newCorpora)
         s.loggedIn = false
-        $("#corpusbox").corpusChooser("selectItems", newCorpora)
     }
 
     const N_VISIBLE = settings.visibleModes
@@ -381,7 +268,6 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
                 util.setLogin()
                 safeApply(s, function () {
                     s.show_modal = null
-                    s.restorePreLoginState()
                     s.loggedIn = true
                     s.username = usr
                 })
