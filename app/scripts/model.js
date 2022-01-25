@@ -51,8 +51,19 @@ class BaseProxy {
         this.total = null
     }
 
-    // Return a URL with baseUrl base and data encoded as URL parameters
+    // Return a URL with baseUrl base and data encoded as URL parameters.
+    // If baseUrl already contains URL parameters, return it as is.
+    //
+    // Note that this function is now largely redundant: when called
+    // for GET URLs already containing URL parameters, it does
+    // nothing, whereas the GET URL returned by it for a POST URL
+    // typically results in an "URI too long" error, if
+    // settings.backendURLMaxLength is configured appropriately for
+    // the Web server on which the backend runs.
     makeUrlWithParams(baseUrl, data) {
+        if (baseUrl.indexOf("?") != -1) {
+            return baseUrl
+        }
         return (baseUrl +
                 "?" +
                 _.toPairs(data)
