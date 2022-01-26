@@ -736,30 +736,6 @@ util.prettyNumbers = function (numstring) {
     return outStrNum
 }
 
-util.suffixedNumbers = function (num) {
-    let out = ""
-    if (num < 1000) {
-        // 232
-        out = num.toString()
-    } else if (num >= 1000 && num < 1e6) {
-        // 232,21K
-        out = (num / 1000).toFixed(2).toString() + "K"
-    } else if (num >= 1e6 && num < 1e9) {
-        // 232,21M
-        out = (num / 1e6).toFixed(2).toString() + "M"
-    } else if (num >= 1e9 && num < 1e12) {
-        // 232,21G
-        out = (num / 1e9).toFixed(2).toString() + "G"
-    } else if (num >= 1e12) {
-        // 232,21T
-        out = (num / 1e12).toFixed(2).toString() + "T"
-    }
-    return out.replace(
-        ".",
-        `<span rel="localize[util_decimalseparator]">${util.getLocaleString("util_decimalseparator")}</span>`
-    )
-}
-
 window.regescape = (s) => s.replace(/[.|?|+|*||'|()^$]/g, "\\$&").replace(/"/g, '""')
 
 window.unregescape = (s) => s.replace(/\\/g, "").replace(/""/g, '"')

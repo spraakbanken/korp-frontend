@@ -6,6 +6,7 @@ import { sidebarName, sidebarComponent } from "./components/sidebar"
 import * as autoc from "./components/autoc"
 import * as readingmode from "./components/readingmode"
 import * as extendedAddBox from "./components/extended/extended_add_box"
+import { corpusChooserComponent } from "./components/corpus_chooser"
 import { setDefaultConfigValues } from "./settings.js"
 import util2 from "./util2.js"
 
@@ -49,6 +50,7 @@ korpApp.component(kwicPagerName, kwicPager).component(sidebarName, sidebarCompon
 korpApp.component(readingmode.componentName, readingmode.component)
 korpApp.component(autoc.componentName, autoc.component)
 korpApp.component(extendedAddBox.componentName, extendedAddBox.component)
+korpApp.component("corpusChooser", corpusChooserComponent)
 
 // load all custom components
 let customComponents = {}
