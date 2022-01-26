@@ -13,9 +13,14 @@ export function setDefaultConfigValues() {
     if (!settings.groupStatistics) {
         settings.groupStatistics = []
     }
-    if (! settings.backendURLMaxLength) {
+    if (!settings.backendURLMaxLength) {
         // The default maximum URI length for Apache is 8190 but keep
         // some safety margin
         settings.backendURLMaxLength = 8100
     }
+
+    // TODO this cannot be done here because this is before the configuration is loaded
+    // if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
+    //     settings.preselectedCorpora = _.map(settings.corpusListing.corpora, "id")
+    // }
 }

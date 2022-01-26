@@ -7,6 +7,7 @@ import * as autoc from "./components/autoc"
 import * as readingmode from "./components/readingmode"
 import * as extendedAddBox from "./components/extended/extended_add_box"
 import { setDefaultConfigValues } from "./settings.js"
+import util2 from "./util2.js"
 
 setDefaultConfigValues()
 
@@ -117,16 +118,18 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
 
     searches.infoDef.then(function () {
         let { corpus } = $location.search()
-        let currentCorpora
+        let currentCorpora = []
         if (corpus) {
-            currentCorpora = corpus.split(",")
+            currentCorpora = _.flatten(
+                _.map(corpus.split(","), (val) => util2.getAllCorporaInFolders(settings.corporafolders, val))
+            )
         } else {
-            if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
-                // if no preselctedCorpora is given, selected all of them
-                currentCorpora = _.map(settings.corpusListing.corpora, "id")
-                settings.preselectedCorpora = currentCorpora
-            } else {
-                currentCorpora = settings.preselectedCorpora
+            for (let preItem of settings.preselectedCorpora) {
+                preItem = preItem.replace(/^__/g, "")
+                currentCorpora = [].concat(
+                    currentCorpora,
+                    util2.getAllCorporaInFolders(settings.corporafolders, preItem)
+                )
             }
         }
         settings.corpusListing.select(currentCorpora)
