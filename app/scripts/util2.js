@@ -16,12 +16,11 @@ function getAllCorporaInFolders(lastLevel, folderOrCorpus) {
     if (lastLevel[folderOrCorpus]) {
         // Folder
         // Continue to go through any subfolders
-        // TODO refactor, do not use $/jQuery
-        $.each(lastLevel[folderOrCorpus], function (key, val) {
+        for(const key in lastLevel[folderOrCorpus]) {
             if (!["title", "contents", "description"].includes(key)) {
                 outCorpora = outCorpora.concat(getAllCorporaInFolders(lastLevel[folderOrCorpus], key))
             }
-        })
+        }
 
         // And add the corpora in this folder level
         outCorpora = outCorpora.concat(lastLevel[folderOrCorpus]["contents"])
