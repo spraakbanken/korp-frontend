@@ -495,7 +495,6 @@ $corpusbox-width : 480px;
   background-color: #FEFEFE;
   overflow-y: auto;
   overflow-x: hidden;
-  display: none;
   padding: 10px;
   position: absolute;
   .buttons {
@@ -2781,3 +2780,7 @@ global-filters {
 //       padding-bottom: 0;
 //     }
 // }
+
+.cc-level-indent {
+  margin-left: 30px;
+}

@@ -7,6 +7,8 @@ import * as autoc from "./components/autoc"
 import * as readingmode from "./components/readingmode"
 import * as extendedAddBox from "./components/extended/extended_add_box"
 import { corpusChooserComponent } from "./components/corpus_chooser"
+import { smallTimeGraphComponent } from "./components/small_time_graph"
+import { ccTreeComponent } from "./components/cc_tree"
 import { setDefaultConfigValues } from "./settings.js"
 import util2 from "./util2.js"
 
@@ -51,6 +53,8 @@ korpApp.component(readingmode.componentName, readingmode.component)
 korpApp.component(autoc.componentName, autoc.component)
 korpApp.component(extendedAddBox.componentName, extendedAddBox.component)
 korpApp.component("corpusChooser", corpusChooserComponent)
+korpApp.component("smallTimeGraph", smallTimeGraphComponent)
+korpApp.component("ccTree", ccTreeComponent)
 
 // load all custom components
 let customComponents = {}
