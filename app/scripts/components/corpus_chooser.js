@@ -1,5 +1,6 @@
 /** @format */
 import statemachine from "../statemachine"
+import { initCorpusStructure } from "./cc_helper"
 
 export const corpusChooserComponent = {
     template: `
@@ -44,7 +45,7 @@ export const corpusChooserComponent = {
                 </div>
             </div>
             <!-- this is the beginning of the recursive component -->
-            <cc-tree folders="$ctrl.topFolders" corpora-ids="$ctrl.topCorpora" />
+            <cc-tree root="$ctrl.root" />
 
             <p style="font-size: 85%;">
                 {{ $ctrl.numberOfSentencesStr() }} {{'corpselector_sentences_long' | loc:$root.lang}}
@@ -73,7 +74,7 @@ export const corpusChooserComponent = {
             $ctrl.initialized = false
             $ctrl.showChooser = false
 
-            $rootScope.$on("corpuschooserchange", () => {
+            $rootScope.$on("corpuschooserchange", (e, corpora) => {
                 // change of corpora from outside the chooser
                 // happens on initialzation when corpora is either decided by
                 // settings.preselectedCorpora / URL query param
@@ -94,9 +95,7 @@ export const corpusChooserComponent = {
                 }
 
                 // this does not change so should only be done once
-
-                $ctrl.topFolders = _.map(settings.corporafolders, (value) => value)
-                $ctrl.topCorpora = getTopLevelCorpora()
+                $ctrl.root = initCorpusStructure(corpora)
             })
 
             $ctrl.openChooser = () => {
@@ -133,28 +132,4 @@ export const corpusChooserComponent = {
             }
         },
     ],
-}
-
-function getTopLevelCorpora() {
-    function getCorporaInFolders(folder) {
-        let result = folder.contents
-        _.map(folder, (value, key) => {
-            if (!["title", "description", "contents"].includes(key)) {
-                // is a folder
-                const corpora = getCorporaInFolders(value)
-                result = result.concat(corpora)
-            }
-        })
-
-        // TODO this is an unexpected side effect, refactor
-        folder.numberOfChildren = result.length
-
-        return result
-    }
-
-    const folderCorpora = _.flatten(_.map(settings.corporafolders, (value) => getCorporaInFolders(value)))
-    return _.map(
-        _.filter(settings.corpora, (corpus) => !folderCorpora.includes(corpus.id)),
-        (corpus) => corpus.id
-    )
 }
