@@ -4,8 +4,11 @@ import { initCorpusStructure } from "./util"
 
 export const corpusChooserComponent = {
     template: `
+    <div class="absolute inset-0 bg-transparent"
+        ng-click="$ctrl.showChooser = false"
+        ng-if="$ctrl.showChooser"></div>
     <div id="corpusbox" class="scroll_checkboxes flex-shrink-0 ml-8">
-        <div ng-click="$ctrl.openChooser()" class="hp_topframe buttonlink group flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 shadow-inset rounded h-12 ui-corner-top">
+        <div ng-click="$ctrl.showChooser = !$ctrl.showChooser" class="hp_topframe buttonlink group flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 shadow-inset rounded h-12 ui-corner-top">
             <div ng-if="$ctrl.initialized">
 
                 <span ng-if-start="$ctrl.selectCount > 1">{{ $ctrl.selectCount }}</span>
@@ -97,14 +100,6 @@ export const corpusChooserComponent = {
                 // this does not change so should only be done once
                 $ctrl.root = initCorpusStructure(corpora)
             })
-
-            $ctrl.openChooser = () => {
-                $ctrl.showChooser = true
-            }
-
-            $ctrl.closeChooser = () => {
-                $ctrl.showChooser = false
-            }
 
             $ctrl.suffixedNumbers = (num, lang) => {
                 let out = ""
