@@ -48,7 +48,7 @@ export const corpusChooserComponent = {
                 </div>
             </div>
             <!-- this is the beginning of the recursive component -->
-            <cc-tree root="$ctrl.root" on-select="$ctrl.onSelect()"/>
+            <cc-tree root="$ctrl.root" on-select="$ctrl.onSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" />
 
             <p style="font-size: 85%;">
                 {{ $ctrl.numberOfSentencesStr() }} {{'corpselector_sentences_long' | loc:$root.lang}}
@@ -138,6 +138,14 @@ export const corpusChooserComponent = {
             $ctrl.selectNone = function () {
                 treeUtil.selectNone($ctrl.root)
                 select([])
+            }
+
+            $ctrl.selectOnly = function (corporaIds) {
+                treeUtil.selectNone($ctrl.root)
+                for (const corpusId of corporaIds) {
+                    settings.corpora[corpusId].selected = true
+                }
+                select(corporaIds)
             }
 
             function select(corpora) {

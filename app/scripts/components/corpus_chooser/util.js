@@ -114,3 +114,18 @@ export const selectAll = (rootNode) => {
 export const selectNone = (rootNode) => {
     selectAllOrNone(rootNode, false)
 }
+
+export const getAllCorpora = (folder) => {
+    function inner(node) {
+        const corporaIdsInFolders = []
+        for (const folder of node.subFolders) {
+            corporaIdsInFolders.push(inner(folder))
+        }
+        const corporaIds = _.flatten(corporaIdsInFolders)
+        for (const corpus of node.contents) {
+            corporaIds.push(corpus.id)
+        }
+        return corporaIds
+    }
+    return inner(folder)
+}
