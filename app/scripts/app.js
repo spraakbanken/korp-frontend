@@ -291,3 +291,4 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
 })
 
 korpApp.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))
+korpApp.filter("prettyNumber", () => (input) => new Intl.NumberFormat(lang).format(input))
