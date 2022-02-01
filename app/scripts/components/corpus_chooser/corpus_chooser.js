@@ -1,6 +1,6 @@
 /** @format */
-import statemachine from "../statemachine"
-import { initCorpusStructure } from "./cc_helper"
+import statemachine from "@/statemachine"
+import { initCorpusStructure } from "./util"
 
 export const corpusChooserComponent = {
     template: `
@@ -32,7 +32,7 @@ export const corpusChooserComponent = {
         </div>
         <div class="popupchecks ui-corner-bottom flex-shrink-0" ng-if="$ctrl.showChooser" style="position: absolute; top: 128.781px; left: 369.5px;">
             <div class="header">
-                <small-time-graph />
+                <cc-time-graph />
                 <div class="buttons">
                     <button class="btn btn-default btn-sm selectall">
                         <span class="fa fa-check"></span>

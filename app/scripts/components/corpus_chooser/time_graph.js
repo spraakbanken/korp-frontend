@@ -1,6 +1,6 @@
 /** @format */
 
-export const smallTimeGraphComponent = {
+export const ccTimeGraphComponent = {
     template: `
     <div id="time">
         <div id="time_graph" style="padding: 0px; position: relative;">

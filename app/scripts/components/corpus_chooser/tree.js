@@ -1,7 +1,7 @@
 /** @format */
-import { getFolderSelectStatus } from "./cc_helper"
+import { getFolderSelectStatus } from "./util"
 
-var collapsedImg = require("../../img/collapsed.png")
+var collapsedImg = require("../../../img/collapsed.png")
 
 export const ccTreeComponent = {
     template: `
