@@ -8,7 +8,7 @@ export const corpusChooserComponent = {
         ng-click="$ctrl.showChooser = false"
         ng-if="$ctrl.showChooser"></div>
     <div id="corpusbox" class="scroll_checkboxes flex-shrink-0 ml-8">
-        <div ng-click="$ctrl.showChooser = !$ctrl.showChooser" class="hp_topframe buttonlink group flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 shadow-inset rounded h-12 ui-corner-top">
+        <div ng-click="$ctrl.showChooser = !$ctrl.showChooser" class="hp_topframe group flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
             <div ng-if="$ctrl.initialized">
 
                 <span ng-if-start="$ctrl.selectCount > 1">{{ $ctrl.selectCount }}</span>
@@ -33,7 +33,7 @@ export const corpusChooserComponent = {
                 <i class="fa fa-caret-down relative bottom-2"></i>
             </div>
         </div>
-        <div class="popupchecks ui-corner-bottom flex-shrink-0" ng-if="$ctrl.showChooser" style="position: absolute; top: 128.781px; left: 369.5px;">
+        <div ng-if="$ctrl.showChooser" class="popupchecks flex-shrink-0">
             <div class="header">
                 <cc-time-graph />
                 <div class="buttons">
@@ -58,12 +58,8 @@ export const corpusChooserComponent = {
     `,
     bindings: {},
     controller: [
-        "$element",
-        "utils",
         "$rootScope",
-        "$compile",
-        "$controller",
-        function ($element, utils, $rootScope, $compile, $controller) {
+        function ($rootScope) {
             let $ctrl = this
 
             statemachine.listen("login", function (data) {
@@ -77,6 +73,7 @@ export const corpusChooserComponent = {
             $ctrl.initialized = false
             $ctrl.showChooser = false
 
+            // should be ON INFO-call done from statemachine
             $rootScope.$on("corpuschooserchange", (e, corpora) => {
                 // change of corpora from outside the chooser
                 // happens on initialzation when corpora is either decided by
@@ -97,7 +94,6 @@ export const corpusChooserComponent = {
                     $ctrl.totalNumberOfTokens += parseInt(corpus["info"]["Size"])
                 }
 
-                // this does not change so should only be done once
                 $ctrl.root = initCorpusStructure(corpora)
             })
 
