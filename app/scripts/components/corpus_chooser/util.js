@@ -70,3 +70,23 @@ export const initCorpusStructure = (initalCorpusSelection) => {
         subFolders: Object.values(settings.corporafolders),
     }
 }
+
+/*
+ * Traverse entire tree to find list of all selected corpora
+ */
+export const findAllSelected = (rootNode) => {
+    function inner(node) {
+        const selectedInFolders = []
+        for (const folder of node.subFolders) {
+            if (folder.selected != "none") {
+                selectedInFolders.push(inner(folder))
+            }
+        }
+        const selected = _.flatten(selectedInFolders)
+        for (const corpus of node.contents) {
+            if (corpus.selected) selected.push(corpus.id)
+        }
+        return selected
+    }
+    return inner(rootNode)
+}

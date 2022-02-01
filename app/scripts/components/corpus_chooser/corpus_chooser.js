@@ -1,6 +1,6 @@
 /** @format */
 import statemachine from "@/statemachine"
-import { initCorpusStructure } from "./util"
+import { initCorpusStructure, findAllSelected } from "./util"
 
 export const corpusChooserComponent = {
     template: `
@@ -48,7 +48,7 @@ export const corpusChooserComponent = {
                 </div>
             </div>
             <!-- this is the beginning of the recursive component -->
-            <cc-tree root="$ctrl.root" />
+            <cc-tree root="$ctrl.root" on-select="$ctrl.onSelect()"/>
 
             <p style="font-size: 85%;">
                 {{ $ctrl.numberOfSentencesStr() }} {{'corpselector_sentences_long' | loc:$root.lang}}
@@ -78,6 +78,9 @@ export const corpusChooserComponent = {
                 // change of corpora from outside the chooser
                 // happens on initialzation when corpora is either decided by
                 // settings.preselectedCorpora / URL query param
+                if ($ctrl.initialized) {
+                    return
+                }
 
                 $ctrl.initialized = true
                 $ctrl.selectCount = settings.corpusListing.selected.length
@@ -120,6 +123,12 @@ export const corpusChooserComponent = {
 
             $ctrl.numberOfSentencesStr = () => {
                 return "161 233 118"
+            }
+
+            $ctrl.onSelect = function () {
+                const currentCorpora = findAllSelected($ctrl.root)
+                settings.corpusListing.select(currentCorpora)
+                $rootScope.$broadcast("corpuschooserchange", currentCorpora)
             }
         },
     ],

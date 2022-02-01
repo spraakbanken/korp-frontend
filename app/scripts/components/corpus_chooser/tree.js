@@ -29,9 +29,6 @@ export const ccTreeComponent = {
         root: "<",
         indent: "<",
         onSelect: "&",
-        // this is probably not needed, can be handled internally
-        // but collapsing and uncollapsing could be practial to do from outside
-        onCollapse: "&",
     },
     controller: [
         function () {
