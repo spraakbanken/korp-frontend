@@ -284,6 +284,12 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     renderResult(data) {
         const resultError = super.renderResult(data)
+        // If an error occurred or the result is otherwise empty,
+        // deselect word and hide the sidebar
+        if (! this.hasData || ! data.kwic || ! data.kwic.length) {
+            this.selectionManager.deselect()
+            statemachine.send("DESELECT_WORD")
+        }
         if (resultError === false) {
             return
         }
