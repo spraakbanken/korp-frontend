@@ -90,3 +90,27 @@ export const findAllSelected = (rootNode) => {
     }
     return inner(rootNode)
 }
+
+/*
+ * Traverse entire tree and set selected <status>
+ */
+function selectAllOrNone(rootNode, status) {
+    function inner(node) {
+        for (const folder of node.subFolders) {
+            folder.selected = status ? "all" : "none"
+            inner(folder)
+        }
+        for (const corpus of node.contents) {
+            corpus.selected = status
+        }
+    }
+    inner(rootNode)
+}
+
+export const selectAll = (rootNode) => {
+    selectAllOrNone(rootNode, true)
+}
+
+export const selectNone = (rootNode) => {
+    selectAllOrNone(rootNode, false)
+}

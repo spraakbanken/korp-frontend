@@ -1,6 +1,6 @@
 /** @format */
 import statemachine from "@/statemachine"
-import { initCorpusStructure, findAllSelected } from "./util"
+import * as treeUtil from "./util"
 
 export const corpusChooserComponent = {
     template: `
@@ -37,11 +37,11 @@ export const corpusChooserComponent = {
             <div class="header">
                 <cc-time-graph />
                 <div class="buttons">
-                    <button class="btn btn-default btn-sm selectall">
+                    <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm selectall">
                         <span class="fa fa-check"></span>
                         <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>
                     </button>
-                    <button class="btn btn-default btn-sm selectnone">
+                    <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm selectnone">
                         <span class="fa fa-times"></span>
                         <span>{{ 'corpselector_buttonselectnone' | loc:$root.lang }}</span>
                     </button>
@@ -97,7 +97,7 @@ export const corpusChooserComponent = {
                     $ctrl.totalNumberOfTokens += parseInt(corpus["info"]["Size"])
                 }
 
-                $ctrl.root = initCorpusStructure(corpora)
+                $ctrl.root = treeUtil.initCorpusStructure(corpora)
             })
 
             $ctrl.suffixedNumbers = (num, lang) => {
@@ -126,9 +126,23 @@ export const corpusChooserComponent = {
             }
 
             $ctrl.onSelect = function () {
-                const currentCorpora = findAllSelected($ctrl.root)
-                settings.corpusListing.select(currentCorpora)
-                $rootScope.$broadcast("corpuschooserchange", currentCorpora)
+                const currentCorpora = treeUtil.findAllSelected($ctrl.root)
+                select(currentCorpora)
+            }
+
+            $ctrl.selectAll = function () {
+                treeUtil.selectAll($ctrl.root)
+                select(_.map(Object.values(settings.corpora), (corpus) => corpus.id))
+            }
+
+            $ctrl.selectNone = function () {
+                treeUtil.selectNone($ctrl.root)
+                select([])
+            }
+
+            function select(corpora) {
+                settings.corpusListing.select(corpora)
+                $rootScope.$broadcast("corpuschooserchange", corpora)
             }
         },
     ],
