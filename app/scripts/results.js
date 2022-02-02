@@ -284,6 +284,12 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     renderResult(data) {
         const resultError = super.renderResult(data)
+        // If an error occurred or the result is otherwise empty,
+        // deselect word and hide the sidebar
+        if (! this.hasData || ! data.kwic || ! data.kwic.length) {
+            this.selectionManager.deselect()
+            statemachine.send("DESELECT_WORD")
+        }
         if (resultError === false) {
             return
         }
@@ -300,10 +306,13 @@ view.KWICResults = class KWICResults extends BaseResults {
             const useContextData = locationSearch()["in_order"] != null
             if (isReading || useContextData) {
                 $scope.setContextData(data)
-                this.selectionManager.deselect()
             } else {
                 $scope.setKwicData(data)
             }
+            // Deselect the possibly selected word, so that a word
+            // will be selected in the new result and the sidebar
+            // content will be updated
+            this.selectionManager.deselect()
         })
 
         if (currentMode === "parallel" && !isReading) {
