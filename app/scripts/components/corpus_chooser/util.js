@@ -34,6 +34,10 @@ export const initCorpusStructure = (initalCorpusSelection) => {
     // first set the select status of all corpora
     for (const corpus of Object.values(settings.corpora)) {
         corpus.selected = initalCorpusSelection.includes(corpus.id)
+
+        const tokens = parseInt(corpus["info"]["Size"])
+        corpus.tokens = tokens
+        corpus.sentences = parseInt(corpus["info"]["Sentences"])
     }
 
     /* recursive function to set the structure and compute
@@ -43,6 +47,9 @@ export const initCorpusStructure = (initalCorpusSelection) => {
      */
     function initFolders(folders) {
         let totalCorporaIds = []
+        let totalTokens = 0
+        let totalSentences = 0
+
         for (const folder of folders) {
             totalCorporaIds = totalCorporaIds.concat(folder.contents)
             folder.contents = _.map(folder.contents, (corpusId) => settings.corpora[corpusId])
@@ -53,21 +60,32 @@ export const initCorpusStructure = (initalCorpusSelection) => {
                 }
             })
             folder.numberOfChildren = folder.contents.length
+            folder.tokens = _.reduce(folder.contents, (tokens, corpus) => tokens + corpus.tokens, 0)
+            folder.sentences = _.reduce(folder.contents, (sentences, corpus) => sentences + corpus.sentences, 0)
             folder.subFolders = subFolders
             if (subFolders.length > 0) {
-                const corporaIds = initFolders(subFolders)
+                const [corporaIds, tokenCount, sentenceCount] = initFolders(subFolders)
                 totalCorporaIds = totalCorporaIds.concat(corporaIds)
+                folder.tokens += tokenCount
+                folder.sentences += sentenceCount
                 folder.numberOfChildren += corporaIds.length
             }
             folder.selected = getFolderSelectStatus(folder)
+
+            totalTokens += folder.tokens
+            totalSentences += folder.sentences
         }
-        return totalCorporaIds
+        return [totalCorporaIds, totalTokens, totalSentences]
     }
 
-    const totalCorporaIds = initFolders(Object.values(settings.corporafolders))
+    const [totalCorporaIds, totalTokens, totalSentences] = initFolders(Object.values(settings.corporafolders))
+    const topLevelCorpora = _.filter(settings.corpora, (corpus) => !totalCorporaIds.includes(corpus.id))
+    const topLevelFolders = Object.values(settings.corporafolders)
+
     return {
-        contents: _.filter(settings.corpora, (corpus) => !totalCorporaIds.includes(corpus.id)),
-        subFolders: Object.values(settings.corporafolders),
+        contents: topLevelCorpora,
+        subFolders: topLevelFolders,
+        tokens: _.reduce(topLevelCorpora, (tokens, corpus) => tokens + corpus.tokens, 0) + totalTokens,
     }
 }
 

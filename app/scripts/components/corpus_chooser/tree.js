@@ -30,7 +30,7 @@ export const ccTreeComponent = {
                 class="boxdiv"
                 style="margin-left:16px; background-color: rgb(221, 233, 255)"
                 >
-                <label class="hplabel" ng-click="$ctrl.toggleCorpusSelection($event, corpus)" class="cursor-pointer">
+                <label class="hplabel cursor-pointer" ng-click="$ctrl.toggleCorpusSelection($event, corpus)" class="cursor-pointer">
                     <span class="checkbox" ng-class="{ checked: corpus.selected, unchecked: !corpus.selected }"></span>
                     <span>{{corpus.title}}</span>
                 </label>

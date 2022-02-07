@@ -51,7 +51,7 @@ export const corpusChooserComponent = {
             <cc-tree root="$ctrl.root" on-select="$ctrl.onSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" />
 
             <p style="font-size: 85%;">
-                {{ $ctrl.numberOfSentencesStr() }} {{'corpselector_sentences_long' | loc:$root.lang}}
+                {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' | loc:$root.lang}}
             </p>
           </div>
     </div>
@@ -113,18 +113,19 @@ export const corpusChooserComponent = {
                 $ctrl.corpora = settings.corpusListing.selected
                 $ctrl.totalCount = settings.corpusListing.corpora.length
 
-                $ctrl.selectedNumberOfTokens = 0
-                for (const corpus of settings.corpusListing.selected) {
-                    $ctrl.selectedNumberOfTokens += parseInt(corpus["info"]["Size"])
-                }
-
-                $ctrl.totalNumberOfTokens = 0
-                for (const corpus of settings.corpusListing.corpora) {
-                    $ctrl.totalNumberOfTokens += parseInt(corpus["info"]["Size"])
-                }
-
                 $ctrl.root = treeUtil.initCorpusStructure(corpora)
+                $ctrl.totalNumberOfTokens = $ctrl.root.tokens
+                $ctrl.updateSelectedCount()
             })
+
+            $ctrl.updateSelectedCount = () => {
+                $ctrl.selectedNumberOfTokens = 0
+                $ctrl.selectedNumberOfSentences = 0
+                for (const corpus of settings.corpusListing.selected) {
+                    $ctrl.selectedNumberOfTokens += corpus.tokens
+                    $ctrl.selectedNumberOfSentences += corpus.sentences
+                }
+            }
 
             $ctrl.suffixedNumbers = (num, lang) => {
                 let out = ""
@@ -145,10 +146,6 @@ export const corpusChooserComponent = {
                     out = (num / 1e12).toFixed(2).toString() + "T"
                 }
                 return out.replace(".", util.getLocaleString("util_decimalseparator", lang))
-            }
-
-            $ctrl.numberOfSentencesStr = () => {
-                return "161 233 118"
             }
 
             $ctrl.onSelect = function () {
@@ -176,6 +173,7 @@ export const corpusChooserComponent = {
 
             function select(corpora) {
                 settings.corpusListing.select(corpora)
+                $ctrl.updateSelectedCount()
                 $rootScope.$broadcast("corpuschooserchange", corpora)
             }
         },

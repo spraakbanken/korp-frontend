@@ -24,9 +24,10 @@ export const ccInfoBox = {
                 $ctrl.context = true // TODO
                 $ctrl.numberOfChildren = $ctrl.object.numberOfChildren
                 $ctrl.isFolder = $ctrl.object.numberOfChildren > 0
-                $ctrl.isCorpus = $ctrl.object.numberOfChildren == 0
-                $ctrl.tokens = 1012341512
-                $ctrl.sentences = 12341
+                $ctrl.isCorpus = !($ctrl.object.numberOfChildren > 0)
+
+                $ctrl.tokens = $ctrl.object.tokens
+                $ctrl.sentences = $ctrl.object.sentences
             }
         },
     ],
