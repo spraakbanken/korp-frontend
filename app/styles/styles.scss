@@ -502,24 +502,8 @@ $corpusbox-width : 480px;
   }
 }
 
-.corpusInfoSpace {
-  display: none;
-  border: 1px solid #CCCCCC;
+.corpus-info-space {
   z-index: 10000;
-  min-width: 30px;
-  min-height: 30px;
-  max-width: 33%;
-  position: absolute;
-  left: 615px;
-  background-color: white;
-  padding-right: 4px;
-  .popup_icon {
-    margin-right : 4px;
-    width : 24px;
-    height : 24px;
-    vertical-align : middle;
-    margin-top : -1px
-  }
 }
 
 .tree {

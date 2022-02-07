@@ -9,6 +9,7 @@ import * as extendedAddBox from "./components/extended/extended_add_box"
 import { corpusChooserComponent } from "./components/corpus_chooser/corpus_chooser"
 import { ccTimeGraphComponent } from "./components/corpus_chooser/time_graph"
 import { ccTreeComponent } from "./components/corpus_chooser/tree"
+import { ccInfoBox } from "./components/corpus_chooser/info_box"
 import { setDefaultConfigValues } from "./settings.js"
 import util2 from "./util2.js"
 
@@ -55,6 +56,7 @@ korpApp.component(extendedAddBox.componentName, extendedAddBox.component)
 korpApp.component("corpusChooser", corpusChooserComponent)
 korpApp.component("ccTimeGraph", ccTimeGraphComponent)
 korpApp.component("ccTree", ccTreeComponent)
+korpApp.component("ccInfoBox", ccInfoBox)
 
 // load all custom components
 let customComponents = {}

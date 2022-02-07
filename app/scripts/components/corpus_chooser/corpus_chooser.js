@@ -55,6 +55,32 @@ export const corpusChooserComponent = {
             </p>
           </div>
     </div>
+    <script type="text/ng-template" id="chooserpopover.html">
+        <div class="px-4">
+            <h3 class="mb-6">
+                <i class="fa fa-file-text-o text-blue-700" ng-if="$ctrl.isCorpus"></i>
+                <i class="fa fa-folder-open-o text-blue-700" ng-if="$ctrl.isFolder"></i>
+                {{ $ctrl.title }}
+            </h3>
+            <div class="text-base my-3" ng-bind-html="$ctrl.description | trust"></div>
+            <ul class="border-l-4 border-blue-500 pl-3 leading-none space-y-1">
+                <li ng-if="$ctrl.isFolder">
+                    <strong>{{$ctrl.numberOfChildren}}</strong>
+                    {{$ctrl.numberOfChildren == 1 ? 'corpselector_corporawith_sing' : 'corpselector_corporawith_plur' | loc:lang}}
+                </li>
+                <li>
+                    <strong>{{$ctrl.tokens | prettyNumber}}</strong>
+                    {{'corpselector_tokens' | loc:lang}}
+                </li>
+                <li>
+                    <strong>{{$ctrl.sentences | prettyNumber}}</strong>
+                    {{'corpselector_sentences' | loc:lang}}
+                </li>
+            </ul>
+            <div ng-if="$ctrl.context" class="">{{'corpselector_supports' | loc:lang}}</div>
+            <div ng-if="$ctrl.limitedAccess" class="">{{'corpselector_limited' | loc:lang}}</div>
+        </div>
+    </script>
     `,
     bindings: {},
     controller: [

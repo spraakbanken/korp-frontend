@@ -6,22 +6,36 @@ var collapsedImg = require("../../../img/collapsed.png")
 export const ccTreeComponent = {
     template: `
     <div ng-class="{ 'cc-level-indent' : $ctrl.indent }">
-        <div ng-repeat="folder in $ctrl.root.subFolders" class="tree" ng-class="{ collapsed: !folder.extended, extended: folder.extended }">
-            <img ng-click="$ctrl.toggleFolderVisibility(folder)" src="${collapsedImg}" alt="extend" class="ext cursor-pointer">
-            <label class="boxlabel cursor-pointer" ng-click="$ctrl.toggleFolderSelection($event, folder)">
-                <span class="checkbox" ng-class="{ checked: folder.selected == 'all', unchecked: folder.selected == 'none', intermediate: folder.selected == 'some' }"></span>
-                <span>{{ folder.title }}</span>
-                <span class="numberOfChildren">({{folder.numberOfChildren}})</span>
-            </label>
-
-            <cc-tree ng-if="folder.extended" root="folder" indent="true" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)"/>
+        <div ng-repeat="folder in $ctrl.root.subFolders">
+            <cc-info-box object="folder">
+                <div 
+                    class="tree"
+                    ng-class="{ collapsed: !folder.extended, extended: folder.extended }"
+                    >
+                    <img ng-click="$ctrl.toggleFolderVisibility(folder)" src="${collapsedImg}" alt="extend" class="ext cursor-pointer">
+                    <label 
+                        class="boxlabel cursor-pointer"
+                        ng-click="$ctrl.toggleFolderSelection($event, folder)">
+                        <span class="checkbox" ng-class="{ checked: folder.selected == 'all', unchecked: folder.selected == 'none', intermediate: folder.selected == 'some' }"></span>
+                        <span>{{ folder.title }}</span>
+                        <span class="numberOfChildren">({{folder.numberOfChildren}})</span>
+                    </label>
+                </div>
+            </cc-info-box>
+            <cc-tree ng-if="folder.extended" root="folder" indent="true" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" />
         </div>
-        <div ng-repeat="corpus in $ctrl.root.contents" class="boxdiv" style="margin-left:16px; background-color: rgb(221, 233, 255)">
-            <label class="hplabel" ng-click="$ctrl.toggleCorpusSelection($event, corpus)" class="cursor-pointer">
-                <span class="checkbox" ng-class="{ checked: corpus.selected, unchecked: !corpus.selected }"></span>
-                <span>{{corpus.title}}</span>
-            </label>
-        </div>
+        
+        <cc-info-box object="corpus" ng-repeat="corpus in $ctrl.root.contents">
+            <div
+                class="boxdiv"
+                style="margin-left:16px; background-color: rgb(221, 233, 255)"
+                >
+                <label class="hplabel" ng-click="$ctrl.toggleCorpusSelection($event, corpus)" class="cursor-pointer">
+                    <span class="checkbox" ng-class="{ checked: corpus.selected, unchecked: !corpus.selected }"></span>
+                    <span>{{corpus.title}}</span>
+                </label>
+            </div>
+        </cc-info-box>
     </div>
     `,
     bindings: {
