@@ -1,6 +1,4 @@
 /** @format */
-const folderImg = require("../img/folder.png")
-const korpIconImg = require("../img/korp_icon.png")
 const jRejectBackgroundImg = require("../img/browsers/background_browser.gif")
 require("../img/browsers/browser_chrome.gif")
 require("../img/browsers/browser_firefox.gif")
