@@ -10,8 +10,8 @@ import { corpusChooserComponent } from "./components/corpus_chooser/corpus_choos
 import { ccTimeGraphComponent } from "./components/corpus_chooser/time_graph"
 import { ccTreeComponent } from "./components/corpus_chooser/tree"
 import { ccInfoBox } from "./components/corpus_chooser/info_box"
-import { setDefaultConfigValues } from "./settings.js"
-import util2 from "./util2.js"
+import { setDefaultConfigValues } from "./settings"
+import * as treeUtil from "./components/corpus_chooser/util"
 
 setDefaultConfigValues()
 
@@ -129,14 +129,14 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
         let currentCorpora = []
         if (corpus) {
             currentCorpora = _.flatten(
-                _.map(corpus.split(","), (val) => util2.getAllCorporaInFolders(settings.corporafolders, val))
+                _.map(corpus.split(","), (val) => treeUtil.getAllCorporaInFolders(settings.corporafolders, val))
             )
         } else {
             for (let preItem of settings.preselectedCorpora) {
                 preItem = preItem.replace(/^__/g, "")
                 currentCorpora = [].concat(
                     currentCorpora,
-                    util2.getAllCorporaInFolders(settings.corporafolders, preItem)
+                    treeUtil.getAllCorporaInFolders(settings.corporafolders, preItem)
                 )
             }
         }
