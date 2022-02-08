@@ -20,14 +20,19 @@ export const ccInfoBox = {
             $ctrl.$onInit = function () {
                 $ctrl.title = $ctrl.object.title
                 $ctrl.description = $ctrl.object.description
-                $ctrl.limitedAccess = true // TODO
-                $ctrl.context = true // TODO
+
                 $ctrl.numberOfChildren = $ctrl.object.numberOfChildren
                 $ctrl.isFolder = $ctrl.object.numberOfChildren > 0
                 $ctrl.isCorpus = !($ctrl.object.numberOfChildren > 0)
 
+                if ($ctrl.isCorpus) {
+                    $ctrl.limitedAccess = $ctrl.object.limitedAccess
+                    $ctrl.context = _.keys($ctrl.object.context).length > 1
+                }
+
                 $ctrl.tokens = $ctrl.object.tokens
                 $ctrl.sentences = $ctrl.object.sentences
+                $ctrl.showSentences = $ctrl.object.sentences > 0
             }
         },
     ],

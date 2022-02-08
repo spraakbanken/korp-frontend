@@ -1,6 +1,4 @@
 /** @format */
-
-import jStorage from "../lib/jstorage"
 import { kwicPagerName, kwicPager } from "./components/pager"
 import { sidebarName, sidebarComponent } from "./components/sidebar"
 import * as autoc from "./components/autoc"
@@ -10,6 +8,8 @@ import { corpusChooserComponent } from "./components/corpus_chooser/corpus_choos
 import { ccTimeGraphComponent } from "./components/corpus_chooser/time_graph"
 import { ccTreeComponent } from "./components/corpus_chooser/tree"
 import { ccInfoBox } from "./components/corpus_chooser/info_box"
+import { loginBoxComponent } from "./components/auth/login_box"
+import { loginStatusComponent } from "./components/auth/login_status"
 import { setDefaultConfigValues } from "./settings"
 import * as treeUtil from "./components/corpus_chooser/util"
 
@@ -57,6 +57,8 @@ korpApp.component("corpusChooser", corpusChooserComponent)
 korpApp.component("ccTimeGraph", ccTimeGraphComponent)
 korpApp.component("ccTree", ccTreeComponent)
 korpApp.component("ccInfoBox", ccInfoBox)
+korpApp.component("loginStatus", loginStatusComponent)
+korpApp.component("loginBox", loginBoxComponent)
 
 // load all custom components
 let customComponents = {}
@@ -160,27 +162,45 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         s.show_modal = "about"
     }
 
-    s.showLogin = () => {
-        s.show_modal = "login"
+    s.show_modal = false
+
+    let modal = null
+    utils.setupHash(s, [
+        {
+            key: "display",
+            scope_name: "show_modal",
+            post_change(val) {
+                if (val) {
+                    showAbout()
+                } else {
+                    if (modal != null) {
+                        modal.close()
+                    }
+                    modal = null
+                }
+            },
+        },
+    ])
+
+    const closeModals = function () {
+        s.show_modal = false
     }
 
-    s.logout = function () {
-        authenticationProxy.loginObj = {}
-        jStorage.deleteKey("creds")
-
-        let newCorpora = []
-        for (let corpus of settings.corpusListing.getSelectedCorpora()) {
-            if (!settings.corpora[corpus].limitedAccess) {
-                newCorpora.push(corpus)
-            }
+    var showAbout = function () {
+        const params = {
+            template: require("../markup/about.html"),
+            scope: s,
+            windowClass: "about",
         }
+        modal = $uibModal.open(params)
 
-        if (_.isEmpty(newCorpora)) {
-            newCorpora = settings.preselectedCorpora
-        }
-        settings.corpusListing.select(newCorpora)
-        s.loggedIn = false
+        modal.result.then(
+            () => closeModals(),
+            () => closeModals()
+        )
     }
+
+    s.clickX = () => closeModals()
 
     const N_VISIBLE = settings.visibleModes
 
@@ -214,81 +234,6 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         const langParam = settings.defaultLanguage === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
         const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
         return [location.pathname, modeParam, langParam]
-    }
-
-    s.show_modal = false
-
-    let modal = null
-    utils.setupHash(s, [
-        {
-            key: "display",
-            scope_name: "show_modal",
-            post_change(val) {
-                if (val) {
-                    showModal(val)
-                } else {
-                    if (modal != null) {
-                        modal.close()
-                    }
-                    modal = null
-                }
-            },
-        },
-    ])
-
-    const closeModals = function () {
-        s.login_err = false
-        s.show_modal = false
-    }
-
-    var showModal = function (key) {
-        const tmpl = {
-            about: require("../markup/about.html"),
-            login: require("../markup/login.html"),
-        }[key]
-        const params = {
-            template: tmpl,
-            scope: s,
-            windowClass: key,
-        }
-        if (key === "login") {
-            params.size = "sm"
-        }
-        modal = $uibModal.open(params)
-
-        modal.result.then(
-            () => closeModals(),
-            () => closeModals()
-        )
-    }
-
-    s.clickX = () => closeModals()
-
-    s.loggedIn = false
-    const creds = jStorage.get("creds")
-    if (creds) {
-        util.setLogin()
-        s.loggedIn = true
-        s.username = authenticationProxy.loginObj.name
-    }
-    s.loginSubmit = function (usr, pass, saveLogin) {
-        s.login_err = false
-        authenticationProxy
-            .makeRequest(usr, pass, saveLogin)
-            .done(function () {
-                util.setLogin()
-                safeApply(s, function () {
-                    s.show_modal = null
-                    s.loggedIn = true
-                    s.username = usr
-                })
-            })
-            .fail(function () {
-                c.log("login fail")
-                safeApply(s, () => {
-                    s.login_err = true
-                })
-            })
     }
 })
 

@@ -27,12 +27,7 @@
     
 
     .flex.items-center
-      #log_out.link(ng-click="logout()", ng-if="loggedIn")
-        span
-          | {{'log_out' | loc:lang}}&nbsp;
-        span {{username}}
-      #login
-        a(ng-click="showLogin()", ng-show="!loggedIn") {{'log_in' | loc:lang}}
+      login-status
 
       #languages
         a(data-mode='sv', ng-click="lang = 'sv'") {{'swedish' | loc:lang}}

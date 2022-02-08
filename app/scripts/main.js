@@ -1,4 +1,6 @@
 /** @format */
+import statemachine from "@/statemachine"
+
 const korpFailImg = require("../img/korp_fail.svg")
 const deparam = require("jquery-deparam")
 
@@ -10,6 +12,9 @@ window.timeProxy = new model.TimeProxy()
 const creds = jStorage.get("creds")
 if (creds) {
     authenticationProxy.loginObj = creds
+    statemachine.send("USER_FOUND", creds)
+} else {
+    statemachine.send("USER_NOT_FOUND")
 }
 
 // rewriting old url format to the angular one

@@ -16,7 +16,7 @@ model.normalizeStatsData = function (data) {
 }
 
 model.getAuthorizationHeader = function () {
-    if (typeof authenticationProxy !== "undefined" && !$.isEmptyObject(authenticationProxy.loginObj)) {
+    if (!$.isEmptyObject(authenticationProxy.loginObj)) {
         return { Authorization: `Basic ${authenticationProxy.loginObj.auth}` }
     } else {
         return {}
@@ -64,14 +64,16 @@ class BaseProxy {
         if (baseUrl.indexOf("?") != -1) {
             return baseUrl
         }
-        return (baseUrl +
-                "?" +
-                _.toPairs(data)
+        return (
+            baseUrl +
+            "?" +
+            _.toPairs(data)
                 .map(function ([key, val]) {
                     val = encodeURIComponent(val)
                     return key + "=" + val
                 })
-                .join("&"))
+                .join("&")
+        )
     }
 
     abort() {
@@ -237,25 +239,27 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         this.prevParams = data
         const command = data.command || "query"
         delete data.command
-        const def = $.ajax(util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/" + command,
-            data,
-            beforeSend(req, settings) {
-                self.prevRequest = settings
-                self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, data)
-            },
+        const def = $.ajax(
+            util.httpConfAddMethod({
+                url: settings.korpBackendURL + "/" + command,
+                data,
+                beforeSend(req, settings) {
+                    self.prevRequest = settings
+                    self.addAuthorizationHeader(req)
+                    self.prevUrl = self.makeUrlWithParams(this.url, data)
+                },
 
-            success(data, status, jqxhr) {
-                self.queryData = data.query_data
-                self.cleanup()
-                if (data.incremental === false || !this.foundKwic) {
-                    return kwicCallback(data)
-                }
-            },
+                success(data, status, jqxhr) {
+                    self.queryData = data.query_data
+                    self.cleanup()
+                    if (data.incremental === false || !this.foundKwic) {
+                        return kwicCallback(data)
+                    }
+                },
 
-            progress: progressObj.progress,
-        }))
+                progress: progressObj.progress,
+            })
+        )
         this.pendingRequests.push(def)
         return def
     }
@@ -273,29 +277,31 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
             max: 1000,
         }
         this.prevParams = params
-        const def = $.ajax(util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/relations",
-            data: params,
+        const def = $.ajax(
+            util.httpConfAddMethod({
+                url: settings.korpBackendURL + "/relations",
+                data: params,
 
-            success() {
-                self.prevRequest = params
-                self.cleanup()
-            },
+                success() {
+                    self.prevRequest = params
+                    self.cleanup()
+                },
 
-            progress(data, e) {
-                const progressObj = self.calcProgress(e)
-                if (progressObj == null) {
-                    return
-                }
-                return callback(progressObj)
-            },
+                progress(data, e) {
+                    const progressObj = self.calcProgress(e)
+                    if (progressObj == null) {
+                        return
+                    }
+                    return callback(progressObj)
+                },
 
-            beforeSend(req, settings) {
-                self.prevRequest = settings
-                self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, params)
-            },
-        }))
+                beforeSend(req, settings) {
+                    self.prevRequest = settings
+                    self.addAuthorizationHeader(req)
+                    self.prevUrl = self.makeUrlWithParams(this.url, params)
+                },
+            })
+        )
         this.pendingRequests.push(def)
         return def
     }
@@ -377,41 +383,43 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         this.prevParams = data
         const def = $.Deferred()
         this.pendingRequests.push(
-            $.ajax(util.httpConfAddMethod({
-                url: settings.korpBackendURL + "/count",
-                data,
-                beforeSend(req, settings) {
-                    self.prevRequest = settings
-                    self.addAuthorizationHeader(req)
-                    self.prevUrl = self.makeUrlWithParams(this.url, data)
-                },
+            $.ajax(
+                util.httpConfAddMethod({
+                    url: settings.korpBackendURL + "/count",
+                    data,
+                    beforeSend(req, settings) {
+                        self.prevRequest = settings
+                        self.addAuthorizationHeader(req)
+                        self.prevUrl = self.makeUrlWithParams(this.url, data)
+                    },
 
-                error(jqXHR, textStatus, errorThrown) {
-                    c.log(`gettings stats error, status: ${textStatus}`)
-                    return def.reject(textStatus, errorThrown)
-                },
+                    error(jqXHR, textStatus, errorThrown) {
+                        c.log(`gettings stats error, status: ${textStatus}`)
+                        return def.reject(textStatus, errorThrown)
+                    },
 
-                progress(data, e) {
-                    const progressObj = self.calcProgress(e)
-                    if (progressObj == null) {
-                        return
-                    }
-                    if (typeof callback === "function") {
-                        callback(progressObj)
-                    }
-                },
+                    progress(data, e) {
+                        const progressObj = self.calcProgress(e)
+                        if (progressObj == null) {
+                            return
+                        }
+                        if (typeof callback === "function") {
+                            callback(progressObj)
+                        }
+                    },
 
-                success: (data) => {
-                    self.cleanup()
-                    if (data.ERROR != null) {
-                        c.log("gettings stats failed with error", data.ERROR)
-                        def.reject(data)
-                        return
-                    }
-                    model.normalizeStatsData(data)
-                    statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
-                },
-            }))
+                    success: (data) => {
+                        self.cleanup()
+                        if (data.ERROR != null) {
+                            c.log("gettings stats failed with error", data.ERROR)
+                            def.reject(data)
+                            return
+                        }
+                        model.normalizeStatsData(data)
+                        statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
+                    },
+                })
+            )
         )
 
         return def.promise()
@@ -474,13 +482,15 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
     makeRequest() {
         const dfd = $.Deferred()
 
-        const xhr = $.ajax(util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/timespan",
-            data: {
-                granularity: "y",
-                corpus: settings.corpusListing.stringifyAll(),
-            },
-        }))
+        const xhr = $.ajax(
+            util.httpConfAddMethod({
+                url: settings.korpBackendURL + "/timespan",
+                data: {
+                    granularity: "y",
+                    corpus: settings.corpusListing.stringifyAll(),
+                },
+            })
+        )
 
         xhr.done((data) => {
             if (data.ERROR) {
@@ -588,33 +598,35 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
         this.prevParams = params
         const def = $.Deferred()
 
-        $.ajax(util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/count_time",
-            dataType: "json",
-            data: params,
+        $.ajax(
+            util.httpConfAddMethod({
+                url: settings.korpBackendURL + "/count_time",
+                dataType: "json",
+                data: params,
 
-            beforeSend: (req, settings) => {
-                this.prevRequest = settings
-                this.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, params)
-            },
+                beforeSend: (req, settings) => {
+                    this.prevRequest = settings
+                    this.addAuthorizationHeader(req)
+                    self.prevUrl = self.makeUrlWithParams(this.url, params)
+                },
 
-            progress: (data, e) => {
-                const progressObj = this.calcProgress(e)
-                if (progressObj == null) {
-                    return
-                }
-                def.notify(progressObj)
-            },
+                progress: (data, e) => {
+                    const progressObj = this.calcProgress(e)
+                    if (progressObj == null) {
+                        return
+                    }
+                    def.notify(progressObj)
+                },
 
-            error(jqXHR, textStatus, errorThrown) {
-                def.reject(textStatus)
-            },
-            success(data) {
-                def.resolve(data)
-                self.cleanup()
-            },
-        }))
+                error(jqXHR, textStatus, errorThrown) {
+                    def.reject(textStatus)
+                },
+                success(data) {
+                    def.resolve(data)
+                    self.cleanup()
+                },
+            })
+        )
 
         return def.promise()
     }

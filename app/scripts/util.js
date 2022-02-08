@@ -482,8 +482,6 @@ window.safeApply = function (scope, fn) {
     }
 }
 
-window.util.setLogin = function () {}
-
 util.SelectionManager = function () {
     this.selected = $()
     this.aux = $()

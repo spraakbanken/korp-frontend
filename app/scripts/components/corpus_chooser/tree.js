@@ -10,7 +10,7 @@ export const ccTreeComponent = {
             <cc-info-box object="folder">
                 <div 
                     class="tree"
-                    ng-class="{ collapsed: !folder.extended, extended: folder.extended }"
+                    ng-class="{ collapsed: !folder.extended, extended: folder.extended, disabled: folder.limitedAccess }"
                     >
                     <img ng-click="$ctrl.toggleFolderVisibility(folder)" src="${collapsedImg}" alt="extend" class="ext cursor-pointer">
                     <label 
@@ -28,6 +28,7 @@ export const ccTreeComponent = {
         <cc-info-box object="corpus" ng-repeat="corpus in $ctrl.root.contents">
             <div
                 class="boxdiv"
+                ng-class="{ disabled: !corpus.userHasAccess }"
                 style="margin-left:16px; background-color: rgb(221, 233, 255)"
                 >
                 <label class="hplabel cursor-pointer" ng-click="$ctrl.toggleCorpusSelection($event, corpus)" class="cursor-pointer">
@@ -56,21 +57,14 @@ export const ccTreeComponent = {
             }
 
             $ctrl.toggleFolderSelection = (e, folder) => {
+                const corporaIds = treeUtil.getAllCorpora(folder)
                 if (selectOnly(e)) {
-                    const corporaIds = treeUtil.getAllCorpora(folder)
                     $ctrl.selectOnly(corporaIds)
                 } else {
-                    function recurse(folder, selectStatus) {
-                        folder.selected = selectStatus
-                        _.map(folder.contents, (corpus) => {
-                            corpus.selected = selectStatus == "all"
-                        })
-                        _.map(folder.subFolders, (folder) => {
-                            recurse(folder, selectStatus)
-                        })
+                    const selectStatus = !["all", "some"].includes(folder.selected)
+                    for (const corpusId of corporaIds) {
+                        settings.corpora[corpusId].selected = selectStatus
                     }
-
-                    recurse(folder, folder.selected == "all" ? "none" : "all")
                     $ctrl.onLocalSelect()
                 }
             }
@@ -91,13 +85,11 @@ export const ccTreeComponent = {
 
             // TODO why this weird duplication??
             $ctrl.onLocalSelect = function () {
-                $ctrl.root.selected = treeUtil.getFolderSelectStatus($ctrl.root)
                 $ctrl.onSelect()
             }
 
             // TODO why this weird duplication??
             $ctrl.onChildSelect = function () {
-                $ctrl.root.selected = treeUtil.getFolderSelectStatus($ctrl.root)
                 $ctrl.onSelect()
             }
 

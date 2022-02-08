@@ -11,7 +11,7 @@ export const corpusChooserComponent = {
         <div ng-click="$ctrl.showChooser = !$ctrl.showChooser" class="hp_topframe group flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
             <div ng-if="$ctrl.initialized">
 
-                <span ng-if-start="$ctrl.selectCount > 1">{{ $ctrl.selectCount }}</span>
+                <span ng-if-start="$ctrl.selectCount != 1">{{ $ctrl.selectCount }}</span>
                 <span>{{ 'corpselector_of' | loc:$root.lang }}</span>
                 <span>{{ $ctrl.totalCount }}</span>
                 <span ng-if-end>{{'corpselector_selectedmultiple' | loc:$root.lang }}</span>
@@ -72,7 +72,7 @@ export const corpusChooserComponent = {
                     <strong>{{$ctrl.tokens | prettyNumber}}</strong>
                     {{'corpselector_tokens' | loc:lang}}
                 </li>
-                <li>
+                <li ng-if="$ctrl.showSentences">
                     <strong>{{$ctrl.sentences | prettyNumber}}</strong>
                     {{'corpselector_sentences' | loc:lang}}
                 </li>
@@ -88,12 +88,31 @@ export const corpusChooserComponent = {
         function ($rootScope) {
             let $ctrl = this
 
-            statemachine.listen("login", function (data) {
-                // Do something here
+            $ctrl.credentials = authenticationProxy.loginObj.credentials || []
+
+            statemachine.listen("login", function () {
+                $ctrl.credentials = authenticationProxy.loginObj.credentials
+                // recalculate folder status and repaint it all
+                $ctrl.updateLimitedAccess()
             })
 
-            statemachine.listen("logout", function (data) {
-                // Do something here
+            statemachine.listen("logout", function () {
+                $ctrl.credentials = []
+                let newCorpora = []
+                for (let corpus of settings.corpusListing.getSelectedCorpora()) {
+                    if (!settings.corpora[corpus].limitedAccess) {
+                        newCorpora.push(corpus)
+                    } else {
+                        settings.corpora[corpus].selected = false
+                    }
+                }
+
+                if (_.isEmpty(newCorpora)) {
+                    newCorpora = settings.preselectedCorpora
+                }
+                settings.corpusListing.select(newCorpora)
+                $ctrl.updateSelectedCount()
+                $ctrl.updateLimitedAccess()
             })
 
             $ctrl.initialized = false
@@ -109,16 +128,17 @@ export const corpusChooserComponent = {
                 }
 
                 $ctrl.initialized = true
-                $ctrl.selectCount = settings.corpusListing.selected.length
-                $ctrl.corpora = settings.corpusListing.selected
                 $ctrl.totalCount = settings.corpusListing.corpora.length
 
                 $ctrl.root = treeUtil.initCorpusStructure(corpora)
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
                 $ctrl.updateSelectedCount()
+                $ctrl.updateLimitedAccess()
             })
 
             $ctrl.updateSelectedCount = () => {
+                $ctrl.corpora = settings.corpusListing.selected
+                $ctrl.selectCount = settings.corpusListing.selected.length
                 $ctrl.selectedNumberOfTokens = 0
                 $ctrl.selectedNumberOfSentences = 0
                 for (const corpus of settings.corpusListing.selected) {
@@ -149,32 +169,32 @@ export const corpusChooserComponent = {
             }
 
             $ctrl.onSelect = function () {
-                const currentCorpora = treeUtil.findAllSelected($ctrl.root)
+                const currentCorpora = treeUtil.getAllSelected($ctrl.root)
                 select(currentCorpora)
             }
 
             $ctrl.selectAll = function () {
-                treeUtil.selectAll($ctrl.root)
                 select(_.map(Object.values(settings.corpora), (corpus) => corpus.id))
             }
 
             $ctrl.selectNone = function () {
-                treeUtil.selectNone($ctrl.root)
                 select([])
             }
 
             $ctrl.selectOnly = function (corporaIds) {
-                treeUtil.selectNone($ctrl.root)
-                for (const corpusId of corporaIds) {
-                    settings.corpora[corpusId].selected = true
-                }
                 select(corporaIds)
             }
 
-            function select(corpora) {
-                settings.corpusListing.select(corpora)
+            $ctrl.updateLimitedAccess = function () {
+                treeUtil.updateLimitedAccess($ctrl.root, $ctrl.credentials)
+            }
+
+            function select(corporaIds) {
+                const selection = treeUtil.filterCorporaOnCredentials(corporaIds, $ctrl.credentials)
+                treeUtil.recalcFolderStatus($ctrl.root)
+                settings.corpusListing.select(selection)
                 $ctrl.updateSelectedCount()
-                $rootScope.$broadcast("corpuschooserchange", corpora)
+                $rootScope.$broadcast("corpuschooserchange", selection)
             }
         },
     ],

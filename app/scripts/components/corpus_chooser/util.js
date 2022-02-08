@@ -1,34 +1,4 @@
 /** @format */
-export const getFolderSelectStatus = (folder) => {
-    let selected = "none"
-    let nothingFound = false
-    for (const subFolder of folder.subFolders) {
-        if (subFolder.selected == "some") {
-            selected = "some"
-            nothingFound = true
-            break
-        } else if (subFolder.selected == "none") {
-            nothingFound = true
-        } else {
-            selected = "some"
-        }
-    }
-
-    for (const corpus of folder.contents) {
-        if (corpus.selected) {
-            selected = "some"
-        } else {
-            nothingFound = true
-        }
-    }
-
-    // if all folders or corpora were selected, upgrade to "all"
-    if (!nothingFound) {
-        selected = selected == "some" ? "all" : selected
-    }
-
-    return selected
-}
 
 export const initCorpusStructure = (initalCorpusSelection) => {
     // first set the select status of all corpora
@@ -38,6 +8,7 @@ export const initCorpusStructure = (initalCorpusSelection) => {
         const tokens = parseInt(corpus["info"]["Size"])
         corpus.tokens = tokens
         corpus.sentences = parseInt(corpus["info"]["Sentences"])
+        if (isNaN(corpus.sentences)) corpus.sentences = 0
     }
 
     /* recursive function to set the structure and compute
@@ -53,6 +24,7 @@ export const initCorpusStructure = (initalCorpusSelection) => {
         for (const folder of folders) {
             totalCorporaIds = totalCorporaIds.concat(folder.contents)
             folder.contents = _.map(folder.contents, (corpusId) => settings.corpora[corpusId])
+
             const subFolders = []
             _.map(folder, (value, key) => {
                 if (!["title", "description", "contents"].includes(key)) {
@@ -92,58 +64,27 @@ export const initCorpusStructure = (initalCorpusSelection) => {
 /*
  * Traverse entire tree to find list of all selected corpora
  */
-export const findAllSelected = (rootNode) => {
-    function inner(node) {
-        const selectedInFolders = []
-        for (const folder of node.subFolders) {
-            if (folder.selected != "none") {
-                selectedInFolders.push(inner(folder))
-            }
-        }
-        const selected = _.flatten(selectedInFolders)
-        for (const corpus of node.contents) {
-            if (corpus.selected) selected.push(corpus.id)
-        }
-        return selected
-    }
-    return inner(rootNode)
-}
-
-/*
- * Traverse entire tree and set selected <status>
- */
-function selectAllOrNone(rootNode, status) {
-    function inner(node) {
-        for (const folder of node.subFolders) {
-            folder.selected = status ? "all" : "none"
-            inner(folder)
-        }
-        for (const corpus of node.contents) {
-            corpus.selected = status
-        }
-    }
-    inner(rootNode)
-}
-
-export const selectAll = (rootNode) => {
-    selectAllOrNone(rootNode, true)
-}
-
-export const selectNone = (rootNode) => {
-    selectAllOrNone(rootNode, false)
+export const getAllSelected = (folder) => {
+    return getCorpora(folder, (corpus) => corpus.selected)
 }
 
 export const getAllCorpora = (folder) => {
+    return getCorpora(folder)
+}
+
+function getCorpora(folder, corpusConstraint = () => true) {
     function inner(node) {
-        const corporaIdsInFolders = []
-        for (const folder of node.subFolders) {
-            corporaIdsInFolders.push(inner(folder))
+        const corporaFolders = []
+        for (const subFolder of node.subFolders) {
+            corporaFolders.push(inner(subFolder))
         }
-        const corporaIds = _.flatten(corporaIdsInFolders)
+        const corpora = _.flatten(corporaFolders)
         for (const corpus of node.contents) {
-            corporaIds.push(corpus.id)
+            if (corpusConstraint(corpus)) {
+                corpora.push(corpus.id)
+            }
         }
-        return corporaIds
+        return corpora
     }
     return inner(folder)
 }
@@ -179,4 +120,93 @@ export const getAllCorporaInFolders = (lastLevel, folderOrCorpus) => {
         outCorpora.push(folderOrCorpus)
     }
     return outCorpora
+}
+
+/**
+ * Traverses the tree and sets userHasAccess on every corpus.
+ * figures out if a folder is limited, which it is
+ * if the user does not have access to any corpora in it.
+ *
+ * userHasAccess differs from limitedAccess, since we might
+ * want to show that a corpus is restricted AND unlock it for a user
+ */
+export const updateLimitedAccess = (rootNode, credentials = []) => {
+    function inner(node) {
+        let limitedAccess = true
+        for (const folder of node.subFolders) {
+            // every folder and corpora should be limited for parent folder to be limited
+            const folderLimitedAccess = inner(folder)
+            if (!folderLimitedAccess) {
+                limitedAccess = false
+            }
+        }
+        for (const corpus of node.contents) {
+            corpus.userHasAccess = !corpus.limitedAccess || credentials.includes(corpus.id.toUpperCase())
+            if (corpus.userHasAccess) {
+                limitedAccess = false
+            }
+        }
+        node.limitedAccess = limitedAccess
+        return limitedAccess
+    }
+    return inner(rootNode)
+}
+
+/**
+ * Set selected to true for every corpora in corporaIds and false to the others
+ * Respect credentials
+ */
+export const filterCorporaOnCredentials = (corporaIds, credentials) => {
+    const selection = []
+    for (const corpus of Object.values(settings.corpora)) {
+        const corpusId = corpus.id
+        if (corporaIds.includes(corpusId)) {
+            corpus.selected = !corpus.limitedAccess || credentials.includes(corpusId)
+            selection.push(corpusId)
+        } else {
+            corpus.selected = false
+        }
+    }
+    return selection
+}
+
+export const recalcFolderStatus = (folder) => {
+    function inner(node) {
+        for (const subFolder of node.subFolders) {
+            inner(subFolder)
+        }
+        node.selected = getFolderSelectStatus(node)
+    }
+    inner(folder)
+}
+
+function getFolderSelectStatus(folder) {
+    let selected = "none"
+    let nothingFound = false
+    for (const subFolder of folder.subFolders) {
+        if (subFolder.selected == "some") {
+            selected = "some"
+            nothingFound = true
+            break
+        } else if (subFolder.selected == "none") {
+            nothingFound = true
+        } else {
+            selected = "some"
+        }
+    }
+
+    for (const corpus of folder.contents) {
+        if (corpus.selected) {
+            selected = "some"
+        } else {
+            nothingFound = true
+        }
+    }
+
+    // if all folders or corpora were selected, upgrade to "all"
+    if (!nothingFound) {
+        selected = selected == "some" ? "all" : selected
+    }
+
+    return selected
 }
