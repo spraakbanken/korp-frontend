@@ -28,10 +28,11 @@ export const ccTreeComponent = {
         <cc-info-box object="corpus" ng-repeat="corpus in $ctrl.root.contents">
             <div
                 class="boxdiv"
-                ng-class="{ disabled: !corpus.userHasAccess }"
+                ng-class="{ 'disabled cursor-default': !corpus.userHasAccess }"
                 style="margin-left:16px; background-color: rgb(221, 233, 255)"
+                ng-click="$ctrl.toggleCorpusSelection($event, corpus)"
                 >
-                <label class="hplabel cursor-pointer" ng-click="$ctrl.toggleCorpusSelection($event, corpus)" class="cursor-pointer">
+                <label class="px-2" 'cursor-pointer': corpus.userHasAccess }>
                     <span class="checkbox" ng-class="{ checked: corpus.selected, unchecked: !corpus.selected }"></span>
                     <span>{{corpus.title}}</span>
                 </label>
