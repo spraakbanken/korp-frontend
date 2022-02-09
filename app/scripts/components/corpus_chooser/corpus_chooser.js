@@ -85,7 +85,8 @@ export const corpusChooserComponent = {
     bindings: {},
     controller: [
         "$rootScope",
-        function ($rootScope) {
+        "$location",
+        function ($rootScope, $location) {
             let $ctrl = this
 
             $ctrl.credentials = authenticationProxy.loginObj.credentials || []
@@ -195,6 +196,7 @@ export const corpusChooserComponent = {
                 settings.corpusListing.select(selection)
                 $ctrl.updateSelectedCount()
                 $rootScope.$broadcast("corpuschooserchange", selection)
+                $location.search("corpus", selection.join(","))
             }
         },
     ],
