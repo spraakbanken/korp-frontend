@@ -58,6 +58,11 @@ export const ccTreeComponent = {
             }
 
             $ctrl.toggleFolderSelection = (e, folder) => {
+                if (folder.limitedAccess) {
+                    folder.extended = !folder.extended
+                    return
+                }
+
                 const corporaIds = treeUtil.getAllCorpora(folder)
                 if (selectOnly(e)) {
                     $ctrl.selectOnly(corporaIds)
@@ -71,6 +76,10 @@ export const ccTreeComponent = {
             }
 
             $ctrl.toggleCorpusSelection = (e, corpus) => {
+                if (corpus.limitedAccess) {
+                    return
+                }
+
                 if (selectOnly(e)) {
                     $ctrl.selectOnly([corpus.id])
                 } else {
