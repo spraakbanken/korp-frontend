@@ -18,9 +18,4 @@ export function setDefaultConfigValues() {
         // some safety margin
         settings.backendURLMaxLength = 8100
     }
-
-    // TODO this cannot be done here because this is before the configuration is loaded
-    // if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
-    //     settings.preselectedCorpora = _.map(settings.corpusListing.corpora, "id")
-    // }
 }

@@ -127,6 +127,11 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     $rootScope.textTabs = []
 
     searches.infoDef.then(function () {
+        // if no preselectedCorpora is defined, use all of them
+        if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
+            settings.preselectedCorpora = _.map(settings.corpusListing.corpora, "id")
+        }
+
         let { corpus } = $location.search()
         let currentCorpora = []
         if (corpus) {
