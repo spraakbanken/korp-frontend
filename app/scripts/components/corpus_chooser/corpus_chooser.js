@@ -131,7 +131,7 @@ export const corpusChooserComponent = {
                 $ctrl.initialized = true
                 $ctrl.totalCount = settings.corpusListing.corpora.length
 
-                $ctrl.root = treeUtil.initCorpusStructure(corpora)
+                $ctrl.root = treeUtil.initCorpusStructure(settings.corpora, corpora)
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
                 $ctrl.updateSelectedCount()
                 $ctrl.updateLimitedAccess()
@@ -191,7 +191,7 @@ export const corpusChooserComponent = {
             }
 
             function select(corporaIds) {
-                const selection = treeUtil.filterCorporaOnCredentials(corporaIds, $ctrl.credentials)
+                const selection = treeUtil.filterCorporaOnCredentials(settings.corpora, corporaIds, $ctrl.credentials)
                 treeUtil.recalcFolderStatus($ctrl.root)
                 settings.corpusListing.select(selection)
                 $ctrl.updateSelectedCount()

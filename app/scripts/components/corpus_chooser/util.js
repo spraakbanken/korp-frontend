@@ -1,8 +1,8 @@
 /** @format */
 
-export const initCorpusStructure = (initalCorpusSelection) => {
+export const initCorpusStructure = (collection, initalCorpusSelection) => {
     // first set the select status of all corpora
-    for (const corpus of Object.values(settings.corpora)) {
+    for (const corpus of Object.values(collection)) {
         corpus.selected = initalCorpusSelection.includes(corpus.id)
 
         const tokens = parseInt(corpus["info"]["Size"])
@@ -23,7 +23,7 @@ export const initCorpusStructure = (initalCorpusSelection) => {
 
         for (const folder of folders) {
             totalCorporaIds = totalCorporaIds.concat(folder.contents)
-            folder.contents = _.map(folder.contents, (corpusId) => settings.corpora[corpusId])
+            folder.contents = _.map(folder.contents, (corpusId) => collection[corpusId])
 
             const subFolders = []
             _.map(folder, (value, key) => {
@@ -51,7 +51,7 @@ export const initCorpusStructure = (initalCorpusSelection) => {
     }
 
     const [totalCorporaIds, totalTokens, totalSentences] = initFolders(Object.values(settings.corporafolders))
-    const topLevelCorpora = _.filter(settings.corpora, (corpus) => !totalCorporaIds.includes(corpus.id))
+    const topLevelCorpora = _.filter(collection, (corpus) => !totalCorporaIds.includes(corpus.id))
     const topLevelFolders = Object.values(settings.corporafolders)
 
     return {
@@ -156,9 +156,9 @@ export const updateLimitedAccess = (rootNode, credentials = []) => {
  * Set selected to true for every corpora in corporaIds and false to the others
  * Respect credentials
  */
-export const filterCorporaOnCredentials = (corporaIds, credentials) => {
+export const filterCorporaOnCredentials = (collection, corporaIds, credentials) => {
     const selection = []
-    for (const corpus of Object.values(settings.corpora)) {
+    for (const corpus of Object.values(collection)) {
         const corpusId = corpus.id
         corpus.selected = false
         if (corporaIds.includes(corpusId) && (!corpus.limitedAccess || credentials.includes(corpusId))) {
