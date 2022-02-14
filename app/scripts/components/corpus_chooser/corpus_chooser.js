@@ -68,17 +68,23 @@ export const corpusChooserComponent = {
                     <strong>{{$ctrl.numberOfChildren}}</strong>
                     {{$ctrl.numberOfChildren == 1 ? 'corpselector_corporawith_sing' : 'corpselector_corporawith_plur' | loc:lang}}
                 </li>
-                <li>
-                    <strong>{{$ctrl.tokens | prettyNumber}}</strong>
-                    {{'corpselector_tokens' | loc:lang}}
+                <li ng-repeat-start="stats in $ctrl.langStats">
+                    <strong>{{ stats.tokens | prettyNumber }}</strong>
+                    {{ 'corpselector_tokens' | loc:lang }}
+                    <span ng-if="$ctrl.langStats.length > 1">({{ stats.lang | loc:lang }})</span>
                 </li>
-                <li ng-if="$ctrl.showSentences">
-                    <strong>{{$ctrl.sentences | prettyNumber}}</strong>
-                    {{'corpselector_sentences' | loc:lang}}
+                <li ng-repeat-end ng-if="stats.sentences > 0">
+                    <strong>{{ stats.sentences | prettyNumber }}</strong>
+                    {{ 'corpselector_sentences' | loc:lang }}
+                    <span ng-if="$ctrl.langStats.length > 1">({{ stats.lang | loc:lang }})</span>
                 </li>
             </ul>
-            <div ng-if="$ctrl.context" class="">{{'corpselector_supports' | loc:lang}}</div>
-            <div ng-if="$ctrl.limitedAccess" class="">{{'corpselector_limited' | loc:lang}}</div>
+            <div ng-if="$ctrl.context">{{'corpselector_supports' | loc:lang}}</div>
+            <div ng-if="$ctrl.limitedAccess">{{'corpselector_limited' | loc:lang}}</div>
+            <div class="text-sm mt-3" ng-if="$ctrl.isCorpus">
+                <span class="mr-1">{{'corpselector_lastupdate' | loc:lang}}:</span>
+                <span class="font-bold">{{ $ctrl.lastUpdated }}</span>
+            </div>
         </div>
     </script>
     `,
@@ -112,7 +118,7 @@ export const corpusChooserComponent = {
                     newCorpora = settings.preselectedCorpora
                 }
                 settings.corpusListing.select(newCorpora)
-                $ctrl.updateSelectedCount()
+                $ctrl.updateSelectedCount(newCorpora)
                 $ctrl.updateLimitedAccess()
             })
 
@@ -120,7 +126,7 @@ export const corpusChooserComponent = {
             $ctrl.showChooser = false
 
             // should be ON INFO-call done from statemachine
-            $rootScope.$on("corpuschooserchange", (e, corpora) => {
+            $rootScope.$on("corpuschooserchange", (e, corpusIds) => {
                 // change of corpora from outside the chooser
                 // happens on initialzation when corpora is either decided by
                 // settings.preselectedCorpora / URL query param
@@ -129,20 +135,30 @@ export const corpusChooserComponent = {
                 }
 
                 $ctrl.initialized = true
-                $ctrl.totalCount = settings.corpusListing.corpora.length
 
-                $ctrl.root = treeUtil.initCorpusStructure(settings.corpora, corpora)
+                // remove the corpora with hide=true (linked corpora)
+                const ccCorpora = Object.keys(settings.corpora).reduce((prev, current) => {
+                    if (!settings.corpora[current].hide) {
+                        prev[current] = settings.corpora[current]
+                    }
+                    return prev
+                }, {})
+
+                $ctrl.root = treeUtil.initCorpusStructure(ccCorpora, corpusIds)
+
+                $ctrl.totalCount = Object.values(ccCorpora).length
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
-                $ctrl.updateSelectedCount()
                 $ctrl.updateLimitedAccess()
+                select(corpusIds)
             })
 
-            $ctrl.updateSelectedCount = () => {
-                $ctrl.corpora = settings.corpusListing.selected
-                $ctrl.selectCount = settings.corpusListing.selected.length
+            $ctrl.updateSelectedCount = (selection) => {
+                $ctrl.corpora = selection
+                $ctrl.selectCount = selection.length
                 $ctrl.selectedNumberOfTokens = 0
                 $ctrl.selectedNumberOfSentences = 0
-                for (const corpus of settings.corpusListing.selected) {
+                for (const corpusId of selection) {
+                    const corpus = settings.corpora[corpusId]
                     $ctrl.selectedNumberOfTokens += corpus.tokens
                     $ctrl.selectedNumberOfSentences += corpus.sentences
                 }
@@ -194,7 +210,7 @@ export const corpusChooserComponent = {
                 const selection = treeUtil.filterCorporaOnCredentials(settings.corpora, corporaIds, $ctrl.credentials)
                 treeUtil.recalcFolderStatus($ctrl.root)
                 settings.corpusListing.select(selection)
-                $ctrl.updateSelectedCount()
+                $ctrl.updateSelectedCount(selection)
                 $rootScope.$broadcast("corpuschooserchange", selection)
                 $location.search("corpus", selection.join(","))
             }

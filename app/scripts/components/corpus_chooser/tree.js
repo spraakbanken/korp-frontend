@@ -76,7 +76,7 @@ export const ccTreeComponent = {
             }
 
             $ctrl.toggleCorpusSelection = (e, corpus) => {
-                if (corpus.limitedAccess) {
+                if (!corpus.userHasAccess) {
                     return
                 }
 

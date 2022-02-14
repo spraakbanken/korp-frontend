@@ -129,7 +129,10 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     searches.infoDef.then(function () {
         // if no preselectedCorpora is defined, use all of them
         if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
-            settings.preselectedCorpora = _.map(settings.corpusListing.corpora, "id")
+            settings.preselectedCorpora = _.map(
+                _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
+                "id"
+            )
         }
 
         let { corpus } = $location.search()
@@ -147,7 +150,6 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                 )
             }
         }
-        settings.corpusListing.select(currentCorpora)
         $rootScope.$broadcast("corpuschooserchange", currentCorpora)
     })
 })
