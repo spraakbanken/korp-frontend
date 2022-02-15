@@ -16,7 +16,7 @@ export const corpusChooserComponent = {
                 <span>{{ $ctrl.totalCount }}</span>
                 <span ng-if-end>{{'corpselector_selectedmultiple' | loc:$root.lang }}</span>
                 
-                <span ng-if-start="$ctrl.selectCount == 1">{{ $ctrl.firstCorpus.title }}</span>
+                <span ng-if-start="$ctrl.selectCount == 1">{{ $ctrl.firstCorpus }}</span>
                 <span ng-if-end>{{ 'corpselector_selectedone' | loc:$root.lang }}</span>
                 
                 <span style="color: #888888;">
@@ -213,7 +213,9 @@ export const corpusChooserComponent = {
                 $location.search("corpus", selection.join(","))
 
                 // used when there is only one corpus selected to show name
-                $ctrl.firstCorpus = settings.corpora[selection[0]]
+                // TODO this needs to be refactored to support titles in different languages
+                const firstCorpus = settings.corpora[selection[0]].title
+                $ctrl.firstCorpus = firstCorpus.length > 39 ? firstCorpus.slice(0, 36) + "…" : firstCorpus
             }
         },
     ],
