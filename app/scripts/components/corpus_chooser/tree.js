@@ -71,7 +71,7 @@ export const ccTreeComponent = {
                     for (const corpusId of corporaIds) {
                         settings.corpora[corpusId].selected = selectStatus
                     }
-                    $ctrl.onLocalSelect()
+                    $ctrl.onChildSelect()
                 }
             }
 
@@ -84,7 +84,7 @@ export const ccTreeComponent = {
                     $ctrl.selectOnly([corpus.id])
                 } else {
                     corpus.selected = !corpus.selected
-                    $ctrl.onLocalSelect()
+                    $ctrl.onChildSelect()
                 }
             }
 
@@ -93,12 +93,6 @@ export const ccTreeComponent = {
                 return (!isLinux && e.altKey) || (isLinux && e.ctrlKey)
             }
 
-            // TODO why this weird duplication??
-            $ctrl.onLocalSelect = function () {
-                $ctrl.onSelect()
-            }
-
-            // TODO why this weird duplication??
             $ctrl.onChildSelect = function () {
                 $ctrl.onSelect()
             }
