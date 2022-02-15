@@ -24,8 +24,7 @@ export const corpusChooserComponent = {
                 </span>
             </div>
             <div ng-if="!$ctrl.initialized">
-                <!-- TODO make this look nicer -->
-                ...
+                <i class="fa fa-spinner fa-pulse"></i>
             </div>
             <div class="transition-colors duration-500 group-hover_text-indigo-500">
                 <i class="fa fa-caret-up relative top-2"></i>
