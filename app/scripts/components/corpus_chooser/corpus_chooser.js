@@ -152,7 +152,6 @@ export const corpusChooserComponent = {
             })
 
             $ctrl.updateSelectedCount = (selection) => {
-                $ctrl.corpora = selection
                 $ctrl.selectCount = selection.length
                 $ctrl.selectedNumberOfTokens = 0
                 $ctrl.selectedNumberOfSentences = 0

@@ -128,19 +128,13 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     $rootScope.textTabs = []
 
     searches.infoDef.then(function () {
+        let currentCorpora = []
+
         // if no preselectedCorpora is defined, use all of them
         if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
             settings.preselectedCorpora = _.map(
                 _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
                 "id"
-            )
-        }
-
-        let { corpus } = $location.search()
-        let currentCorpora = []
-        if (corpus) {
-            currentCorpora = _.flatten(
-                _.map(corpus.split(","), (val) => treeUtil.getAllCorporaInFolders(settings.corporafolders, val))
             )
         } else {
             for (let preItem of settings.preselectedCorpora) {
@@ -150,6 +144,16 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                     treeUtil.getAllCorporaInFolders(settings.corporafolders, preItem)
                 )
             }
+            // folders expanded, save
+            settings.preselectedCorpora = currentCorpora
+        }
+
+        let { corpus } = $location.search()
+
+        if (corpus) {
+            currentCorpora = _.flatten(
+                _.map(corpus.split(","), (val) => treeUtil.getAllCorporaInFolders(settings.corporafolders, val))
+            )
         }
 
         const loginNeededFor = []
