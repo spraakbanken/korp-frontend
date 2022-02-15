@@ -58,6 +58,7 @@ export const initCorpusStructure = (collection, initalCorpusSelection) => {
         contents: topLevelCorpora,
         subFolders: topLevelFolders,
         tokens: _.reduce(topLevelCorpora, (tokens, corpus) => tokens + corpus.tokens, 0) + totalTokens,
+        isRoot: true,
     }
 }
 
