@@ -12,6 +12,7 @@ import { loginBoxComponent } from "./components/auth/login_box"
 import { loginStatusComponent } from "./components/auth/login_status"
 import { setDefaultConfigValues } from "./settings"
 import * as treeUtil from "./components/corpus_chooser/util"
+import statemachine from "@/statemachine"
 
 setDefaultConfigValues()
 
@@ -150,7 +151,55 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                 )
             }
         }
-        $rootScope.$broadcast("corpuschooserchange", currentCorpora)
+
+        const loginNeededFor = []
+        for (let corpusId of currentCorpora) {
+            const corpusObj = settings.corpora[corpusId]
+            if (corpusObj.limitedAccess) {
+                if (
+                    _.isEmpty(authenticationProxy.loginObj) ||
+                    !authenticationProxy.loginObj.credentials.includes(corpusObj.id.toUpperCase())
+                ) {
+                    loginNeededFor.push(corpusObj)
+                }
+            }
+        }
+
+        if (loginNeededFor.length != 0) {
+            s.savedState = $location.search()
+            $location.url($location.path() + "?")
+
+            // some state need special treatment
+            if (s.savedState.reading_mode) {
+                $location.search("reading_mode")
+            }
+            if (s.savedState.search_tab) {
+                $location.search("search_tab", s.savedState.search_tab)
+            }
+            if (s.savedState.cqp) {
+                $location.search("cqp", s.savedState.cqp)
+            }
+
+            statemachine.send("LOGIN_NEEDED", { loginNeededFor })
+        } else {
+            $rootScope.$broadcast("corpuschooserchange", currentCorpora)
+        }
+    })
+
+    statemachine.listen("login", function () {
+        if (s.savedState) {
+            for (let key in s.savedState) {
+                const val = s.savedState[key]
+                if (key !== "search_tab") {
+                    $location.search(key, val)
+                }
+            }
+            // some state need special treatment
+            s.$broadcast("updateAdvancedCQP")
+            const corpora = s.savedState.corpus.split(",")
+            s.savedState = null
+            $rootScope.$broadcast("corpuschooserchange", corpora)
+        }
     })
 })
 

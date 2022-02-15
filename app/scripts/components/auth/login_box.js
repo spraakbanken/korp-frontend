@@ -28,7 +28,7 @@ export const loginBoxComponent = {
     </div>
     `,
     bindings: {
-        loginNeededFor: "<", // TODO send this when the user loads the page unlogged in
+        loginNeededFor: "<",
         closeClick: "&",
     },
     controller: [

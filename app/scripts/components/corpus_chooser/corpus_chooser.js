@@ -95,8 +95,6 @@ export const corpusChooserComponent = {
         function ($rootScope, $location) {
             let $ctrl = this
 
-            $ctrl.credentials = authenticationProxy.loginObj.credentials || []
-
             statemachine.listen("login", function () {
                 $ctrl.credentials = authenticationProxy.loginObj.credentials
                 // recalculate folder status and repaint it all
@@ -127,6 +125,8 @@ export const corpusChooserComponent = {
 
             // should be ON INFO-call done from statemachine
             $rootScope.$on("corpuschooserchange", (e, corpusIds) => {
+                $ctrl.credentials = authenticationProxy.loginObj.credentials || []
+
                 // change of corpora from outside the chooser
                 // happens on initialzation when corpora is either decided by
                 // settings.preselectedCorpora / URL query param

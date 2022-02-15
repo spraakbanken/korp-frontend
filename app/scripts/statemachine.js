@@ -56,11 +56,17 @@ let machine = Machine(
                     logged_out: {
                         on: {
                             LOGIN: { target: "logged_in", actions: "logged_in" },
+                            LOGIN_NEEDED: { target: "login_needed", actions: "login_needed" },
                         },
                     },
                     logged_in: {
                         on: {
                             LOGOUT: { target: "logged_out", actions: "logged_out" },
+                        },
+                    },
+                    login_needed: {
+                        on: {
+                            LOGIN: { target: "logged_in", actions: "logged_in" },
                         },
                     },
                 },
@@ -121,6 +127,7 @@ let machine = Machine(
                 jStorage.deleteKey("creds")
                 broadcast("logout")
             },
+            login_needed: (context, event) => broadcast("login_needed", event),
         },
     }
 )
