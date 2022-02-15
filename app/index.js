@@ -108,7 +108,6 @@ require("./scripts/results.js")
 require("./scripts/model.js")
 require("./scripts/widgets.js")
 require("./scripts/main.js")
-require("./scripts/selector_widget.js")
 require("./scripts/app.js")
 require("./scripts/search_controllers.js")
 

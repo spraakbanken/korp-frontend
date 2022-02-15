@@ -1286,10 +1286,9 @@ view.StatsResults = class StatsResults extends BaseResults {
         $(".slick-row:first input", this.$result).click()
         $(window).trigger("resize")
 
-        $.when(window.timeDeferred).then(() => {
-            safeApply(this.s, () => {
-                this.updateGraphBtnState()
-            })
+        safeApply(this.s, () => {
+            // TODO this must wait until after timedata is fetched
+            this.updateGraphBtnState()
         })
 
         this.s.getGeoAttributes(this.searchParams.corpora)

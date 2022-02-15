@@ -439,19 +439,7 @@ time-interval {
 
 
 
-.buttonlink {
-  padding: .4em 1em .4em 20px;
-  color: #222222;
-  text-decoration: none;
-  position: relative;
-  white-space : nowrap;
-  &:link, &:visited {
-    color: #222222;
-  }
-  &:hover {
-    color: #444444;
-  }
-}
+
 
 
 .numberOfChildren {
@@ -495,7 +483,6 @@ $corpusbox-width : 480px;
   background-color: #FEFEFE;
   overflow-y: auto;
   overflow-x: hidden;
-  display: none;
   padding: 10px;
   position: absolute;
   .buttons {
@@ -515,24 +502,8 @@ $corpusbox-width : 480px;
   }
 }
 
-.corpusInfoSpace {
-  display: none;
-  border: 1px solid #CCCCCC;
+.corpus-info-space {
   z-index: 10000;
-  min-width: 30px;
-  min-height: 30px;
-  max-width: 33%;
-  position: absolute;
-  left: 615px;
-  background-color: white;
-  padding-right: 4px;
-  .popup_icon {
-    margin-right : 4px;
-    width : 24px;
-    height : 24px;
-    vertical-align : middle;
-    margin-top : -1px
-  }
 }
 
 .tree {
@@ -550,9 +521,6 @@ $corpusbox-width : 480px;
   }
 }
 
-.collapsed {
-}
-
 .boxdiv {
   background-color: #F6F6F6;
   padding-top: 2px;
@@ -564,13 +532,6 @@ $corpusbox-width : 480px;
     .ext {
       display: none;
     }
-  }
-}
-
-.hplabel {
-  padding: 0 6px;
-  & > span {
-    vertical-align: middle;
   }
 }
 
@@ -2781,3 +2742,7 @@ global-filters {
 //       padding-bottom: 0;
 //     }
 // }
+
+.cc-level-indent {
+  margin-left: 30px;
+}

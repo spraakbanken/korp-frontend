@@ -1,12 +1,14 @@
 /** @format */
 import { Machine, interpret, assign } from "xstate"
 
+import jStorage from "../lib/jstorage"
+
 const listenerMap = {}
 function listen(eventName, fn) {
     listenerMap[eventName] = listenerMap[eventName] ? [...listenerMap[eventName], fn] : [fn]
 }
 function broadcast(eventName, ...payload) {
-    if (!eventName in listenerMap) {
+    if (!listenerMap[eventName]) {
         console.error("No listener for event name", eventName)
         return
     }
@@ -42,6 +44,33 @@ let machine = Machine(
         initial: "sidebar",
         type: "parallel",
         states: {
+            login: {
+                initial: "blank",
+                states: {
+                    blank: {
+                        on: {
+                            USER_FOUND: { target: "logged_in" },
+                            USER_NOT_FOUND: { target: "logged_out" },
+                        },
+                    },
+                    logged_out: {
+                        on: {
+                            LOGIN: { target: "logged_in", actions: "logged_in" },
+                            LOGIN_NEEDED: { target: "login_needed", actions: "login_needed" },
+                        },
+                    },
+                    logged_in: {
+                        on: {
+                            LOGOUT: { target: "logged_out", actions: "logged_out" },
+                        },
+                    },
+                    login_needed: {
+                        on: {
+                            LOGIN: { target: "logged_in", actions: "logged_in" },
+                        },
+                    },
+                },
+            },
             simple_search: {
                 initial: "blank",
                 states: {
@@ -90,6 +119,15 @@ let machine = Machine(
             deselect_word: (context, event) => broadcast("select_word", null),
             lemgram_search: (context, event) => broadcast("lemgram_search", event),
             cqp_search: (context, event) => broadcast("cqp_search", event),
+            logged_in: (context, event) => {
+                broadcast("login", event)
+            },
+            logged_out: () => {
+                authenticationProxy.loginObj = {}
+                jStorage.deleteKey("creds")
+                broadcast("logout")
+            },
+            login_needed: (context, event) => broadcast("login_needed", event),
         },
     }
 )

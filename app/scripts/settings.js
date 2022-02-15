@@ -13,7 +13,7 @@ export function setDefaultConfigValues() {
     if (!settings.groupStatistics) {
         settings.groupStatistics = []
     }
-    if (! settings.backendURLMaxLength) {
+    if (!settings.backendURLMaxLength) {
         // The default maximum URI length for Apache is 8190 but keep
         // some safety margin
         settings.backendURLMaxLength = 8100

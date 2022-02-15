@@ -1,6 +1,4 @@
 /** @format */
-const folderImg = require("../img/folder.png")
-const korpIconImg = require("../img/korp_icon.png")
 const jRejectBackgroundImg = require("../img/browsers/background_browser.gif")
 require("../img/browsers/browser_chrome.gif")
 require("../img/browsers/browser_firefox.gif")
@@ -41,7 +39,7 @@ window.CorpusListing = class CorpusListing {
 
     // Returns an array of all the selected corpora's IDs in uppercase
     getSelectedCorpora() {
-        return corpusChooserInstance.corpusChooser("selectedItems")
+        return _.map(this.selected, "id")
     }
 
     select(idArray) {
@@ -484,16 +482,6 @@ window.safeApply = function (scope, fn) {
     }
 }
 
-window.util.setLogin = function () {
-    for (let corp of authenticationProxy.loginObj.credentials) {
-        $(`#hpcorpus_${corp.toLowerCase()}`).closest(".boxdiv.disabled").removeClass("disabled")
-    }
-    if (window.corpusChooserInstance) {
-        window.corpusChooserInstance.corpusChooser("updateAllStates")
-    }
-    $(".err_msg", self).hide()
-}
-
 util.SelectionManager = function () {
     this.selected = $()
     this.aux = $()
@@ -728,53 +716,6 @@ util.searchHash = function (type, value) {
     })
 }
 
-let added_corpora_ids = []
-util.loadCorporaFolderRecursive = function (first_level, folder) {
-    let outHTML
-    if (first_level) {
-        outHTML = "<ul>"
-    } else {
-        outHTML = `<ul title="${folder.title}" description="${escape(folder.description)}">`
-    }
-    if (folder) {
-        // This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
-        // Folders
-        $.each(folder, function (fol, folVal) {
-            if (fol !== "contents" && fol !== "title" && fol !== "description") {
-                outHTML += `<li>${util.loadCorporaFolderRecursive(false, folVal)}</li>`
-            }
-        })
-
-        // Corpora
-        if (folder["contents"] && folder["contents"].length > 0) {
-            $.each(folder.contents, function (key, value) {
-                outHTML += `<li id="${value}">${settings.corpora[value]["title"]}</li>`
-                added_corpora_ids.push(value)
-            })
-        }
-    }
-
-    if (first_level) {
-        // Add all corpora which have not been added to a corpus
-        for (let val in settings.corpora) {
-            let cont = false
-            for (let usedid in added_corpora_ids) {
-                if (added_corpora_ids[usedid] === val || settings.corpora[val].hide) {
-                    cont = true
-                }
-            }
-            if (cont) {
-                continue
-            }
-
-            // Add it anyway:
-            outHTML += `<li id='${val}'>${settings.corpora[val].title}</li>`
-        }
-    }
-    outHTML += "</ul>"
-    return outHTML
-}
-
 // Helper function to turn "8455999" into "8 455 999"
 util.prettyNumbers = function (numstring) {
     const regex = /(\d+)(\d{3})/
@@ -789,150 +730,6 @@ util.prettyNumbers = function (numstring) {
     }
 
     return outStrNum
-}
-
-util.suffixedNumbers = function (num) {
-    let out = ""
-    if (num < 1000) {
-        // 232
-        out = num.toString()
-    } else if (num >= 1000 && num < 1e6) {
-        // 232,21K
-        out = (num / 1000).toFixed(2).toString() + "K"
-    } else if (num >= 1e6 && num < 1e9) {
-        // 232,21M
-        out = (num / 1e6).toFixed(2).toString() + "M"
-    } else if (num >= 1e9 && num < 1e12) {
-        // 232,21G
-        out = (num / 1e9).toFixed(2).toString() + "G"
-    } else if (num >= 1e12) {
-        // 232,21T
-        out = (num / 1e12).toFixed(2).toString() + "T"
-    }
-    return out.replace(
-        ".",
-        `<span rel="localize[util_decimalseparator]">${util.getLocaleString("util_decimalseparator")}</span>`
-    )
-}
-
-// Goes through the settings.corporafolders and recursively adds the settings.corpora hierarchically to the corpus chooser widget
-util.loadCorpora = function () {
-    added_corpora_ids = []
-    const outStr = util.loadCorporaFolderRecursive(true, settings.corporafolders)
-    window.corpusChooserInstance = $("#corpusbox")
-        .corpusChooser({
-            template: outStr,
-            infoPopup(corpusID) {
-                let baseLangSentenceHTML, baseLangTokenHTML, lang
-                const corpusObj = settings.corpora[corpusID]
-                let maybeInfo = ""
-                if (corpusObj.description) {
-                    maybeInfo = `<br/><br/>${corpusObj.description}`
-                }
-                const numTokens = corpusObj.info.Size
-                const baseLang = settings.corpora[corpusID] && settings.corpora[corpusID].linkedTo
-                if (baseLang) {
-                    lang = ` (${util.getLocaleString(settings.corpora[corpusID].lang)})`
-                    baseLangTokenHTML = `${util.getLocaleString(
-                        "corpselector_numberoftokens"
-                    )}: <b>${util.prettyNumbers(settings.corpora[baseLang].info.Size)}
-</b> (${util.getLocaleString(settings.corpora[baseLang].lang)})<br/>\
-`
-                    baseLangSentenceHTML = `${util.getLocaleString(
-                        "corpselector_numberofsentences"
-                    )}: <b>${util.prettyNumbers(settings.corpora[baseLang].info.Sentences)}
-</b> (${util.getLocaleString(settings.corpora[baseLang].lang)})<br/>\
-`
-                } else {
-                    lang = ""
-                    baseLangTokenHTML = ""
-                    baseLangSentenceHTML = ""
-                }
-
-                const numSentences = corpusObj["info"]["Sentences"]
-                let lastUpdate = corpusObj["info"]["Updated"]
-                if (!lastUpdate) {
-                    lastUpdate = "?"
-                }
-                let sentenceString = "-"
-                if (numSentences) {
-                    sentenceString = util.prettyNumbers(numSentences.toString())
-                }
-
-                let output = `\
-                    <b>
-                        <img class="popup_icon" src="${korpIconImg}" />
-                        ${corpusObj.title}
-                    </b>
-                    ${maybeInfo}
-                    <br/><br/>${baseLangTokenHTML}
-                    ${util.getLocaleString("corpselector_numberoftokens")}:
-                    <b>${util.prettyNumbers(numTokens)}</b>${lang}
-                    <br/>${baseLangSentenceHTML}
-                    ${util.getLocaleString("corpselector_numberofsentences")}:
-                    <b>${sentenceString}</b>${lang}
-                    <br/>
-                    ${util.getLocaleString("corpselector_lastupdate")}:
-                    <b>${lastUpdate}</b>
-                    <br/><br/>`
-
-                const supportsContext = _.keys(corpusObj.context).length > 1
-                if (supportsContext) {
-                    output += $("<div>").localeKey("corpselector_supports").html() + "<br>"
-                }
-                if (corpusObj.limitedAccess) {
-                    output += $("<div>").localeKey("corpselector_limited").html()
-                }
-                return output
-            },
-
-            infoPopupFolder(indata) {
-                const { corporaID } = indata
-                const desc = indata.description
-                let totalTokens = 0
-                let totalSentences = 0
-                let missingSentenceData = false
-                $(corporaID).each(function (key, oneID) {
-                    totalTokens += parseInt(settings.corpora[oneID]["info"]["Size"])
-                    const oneCorpusSentences = settings.corpora[oneID]["info"]["Sentences"]
-                    if (oneCorpusSentences) {
-                        totalSentences += parseInt(oneCorpusSentences)
-                    } else {
-                        missingSentenceData = true
-                    }
-                })
-
-                let totalSentencesString = util.prettyNumbers(totalSentences.toString())
-                if (missingSentenceData) {
-                    totalSentencesString += "+"
-                }
-                let maybeInfo = ""
-                if (desc && desc !== "") {
-                    maybeInfo = desc + "<br/><br/>"
-                }
-                let glueString = ""
-                if (corporaID.length === 1) {
-                    glueString = util.getLocaleString("corpselector_corporawith_sing")
-                } else {
-                    glueString = util.getLocaleString("corpselector_corporawith_plur")
-                }
-                return `<b><img src="${folderImg}" style="margin-right:4px; \
-                        vertical-align:middle; margin-top:-1px"/>${indata.title}</b><br/><br/>${maybeInfo}<b>${
-                    corporaID.length
-                }</b> ${glueString}:<br/><br/><b>${util.prettyNumbers(
-                    totalTokens.toString()
-                )}</b> ${util.getLocaleString(
-                    "corpselector_tokens"
-                )}<br/><b>${totalSentencesString}</b> ${util.getLocaleString("corpselector_sentences")}`
-            },
-        })
-        .bind("corpuschooserchange", function (evt, corpora) {
-            safeApply($("body").scope(), function (scope) {
-                scope.$broadcast("corpuschooserchange", corpora)
-            })
-        })
-    const selected = corpusChooserInstance.corpusChooser("selectedItems")
-    settings.corpusListing.select(selected)
 }
 
 window.regescape = (s) => s.replace(/[.|?|+|*||'|()^$]/g, "\\$&").replace(/"/g, '""')
