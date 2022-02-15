@@ -7,6 +7,7 @@ export const ccInfoBox = {
         popover-placement="right"
         popover-trigger="'mouseenter'"
         popover-class="corpus-info-space"
+        popover-popup-delay="300"
     ></ng-transclude>
     `,
     transclude: true,
