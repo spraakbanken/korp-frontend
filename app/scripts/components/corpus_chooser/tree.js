@@ -6,37 +6,41 @@ var collapsedImg = require("../../../img/collapsed.png")
 export const ccTreeComponent = {
     template: `
     <div ng-class="{ 'cc-level-indent' : $ctrl.indent }">
-        <cc-info-box object="$ctrl.node" ng-if="!$ctrl.node.isRoot">
-            <div 
-                ng-if="$ctrl.node.contents"
-                class="tree"
-                ng-class="{ collapsed: !$ctrl.node.extended, extended: $ctrl.node.extended, disabled: $ctrl.node.limitedAccess }"
-                >
-                <img ng-click="$ctrl.toggleFolderVisibility($ctrl.node)" src="${collapsedImg}" alt="extend" class="ext cursor-pointer">
-                <label 
-                    class="boxlabel cursor-pointer"
-                    ng-click="$ctrl.toggleFolderSelection($event, $ctrl.node)">
-                    <span class="checkbox" ng-class="{ checked: $ctrl.node.selected == 'all', unchecked: $ctrl.node.selected == 'none', intermediate: $ctrl.node.selected == 'some' }"></span>
-                    <span>{{ $ctrl.node.title }}</span>
-                    <span class="numberOfChildren">({{$ctrl.node.numberOfChildren}})</span>
-                </label>
-            </div>
-            <div
-                ng-if="!$ctrl.node.contents"
-                class="boxdiv"
-                ng-class="{ 'disabled cursor-default': !$ctrl.node.userHasAccess }"
-                style="margin-left:16px; background-color: rgb(221, 233, 255)"
-                ng-click="$ctrl.toggleCorpusSelection($event, $ctrl.node)"
-                >
-                <label class="px-2" 'cursor-pointer': $ctrl.node.userHasAccess }>
-                    <span class="checkbox" ng-class="{ checked: $ctrl.node.selected, unchecked: !$ctrl.node.selected }"></span>
-                    <span>{{$ctrl.node.title}}</span>
-                </label>
-            </div>
-        </cc-info-box>
+        <div
+            ng-if="!$ctrl.node.isRoot && $ctrl.node.contents"
+            class="tree"
+            ng-class="{ collapsed: !$ctrl.node.extended, extended: $ctrl.node.extended, disabled: $ctrl.node.limitedAccess }"
+            >
+            <img ng-click="$ctrl.toggleFolderVisibility($ctrl.node)" src="${collapsedImg}" alt="extend" class="ext cursor-pointer">
+            <label 
+                class="boxlabel cursor-pointer"
+                ng-click="$ctrl.toggleFolderSelection($event, $ctrl.node)">
+                <span class="checkbox" ng-class="{ checked: $ctrl.node.selected == 'all', unchecked: $ctrl.node.selected == 'none', intermediate: $ctrl.node.selected == 'some' }"></span>
+                <span>{{ $ctrl.node.title }}</span>
+                <span class="numberOfChildren">({{$ctrl.node.numberOfChildren}})</span>
+            </label>
+            <i 
+                ng-click="$ctrl.showInfo($event, $ctrl.node)" 
+                class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white"></i>
+        </div>
+        <div
+            ng-if="!$ctrl.node.contents"
+            class="boxdiv"
+            ng-class="{ 'disabled cursor-default': !$ctrl.node.userHasAccess }"
+            style="margin-left:16px; background-color: rgb(221, 233, 255)"
+            ng-click="$ctrl.toggleCorpusSelection($event, $ctrl.node)"
+            >
+            <label class="px-2" 'cursor-pointer': $ctrl.node.userHasAccess }>
+                <span class="checkbox" ng-class="{ checked: $ctrl.node.selected, unchecked: !$ctrl.node.selected }"></span>
+                <span>{{$ctrl.node.title}}</span>
+            </label>
+            <i 
+                ng-click="$ctrl.showInfo($event, $ctrl.node)" 
+                class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white"></i>
+        </div>
 
         <div ng-if="$ctrl.node.extended || $ctrl.node.isRoot" ng-repeat="node in $ctrl.children">
-            <cc-tree node="node" indent="!$ctrl.node.isRoot" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" />
+            <cc-tree node="node" indent="!$ctrl.node.isRoot" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfoLocal(node)" />
         </div>
     </div>
     `,
@@ -45,6 +49,7 @@ export const ccTreeComponent = {
         indent: "<",
         onSelect: "&",
         onSelectOnly: "&",
+        onShowInfo: "&",
     },
     controller: [
         function () {
@@ -100,6 +105,16 @@ export const ccTreeComponent = {
 
             $ctrl.selectOnly = function (corporaIds) {
                 $ctrl.onSelectOnly({ corporaIds })
+            }
+
+            $ctrl.showInfo = (e, node) => {
+                e.stopPropagation()
+                $ctrl.onShowInfo({ node })
+            }
+
+            // this one is needed for passing the node back to the corpus chooser component
+            $ctrl.onShowInfoLocal = (node) => {
+                $ctrl.onShowInfo({ node })
             }
         },
     ],

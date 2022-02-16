@@ -19,7 +19,7 @@ export const corpusChooserComponent = {
                 <span ng-if-start="$ctrl.selectCount == 1">{{ $ctrl.firstCorpus }}</span>
                 <span ng-if-end>{{ 'corpselector_selectedone' | loc:$root.lang }}</span>
                 
-                <span style="color: #888888;">
+                <span class="text-gray-600">
                     — {{ $ctrl.suffixedNumbers($ctrl.selectedNumberOfTokens, $root.lang) }} {{ 'corpselector_of' | loc:$root.lang }} {{ $ctrl.suffixedNumbers($ctrl.totalNumberOfTokens, $root.lang) }} {{ 'corpselector_tokens' | loc:$root.lang }}
                 </span>
             </div>
@@ -32,60 +32,31 @@ export const corpusChooserComponent = {
                 <i class="fa fa-caret-down relative bottom-2"></i>
             </div>
         </div>
-        <div ng-if="$ctrl.showChooser" class="popupchecks flex-shrink-0 p-4">
-            <div class="flex">
-                <cc-time-graph />
-                <div class="p-2">
-                    <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
-                        <span class="fa fa-check"></span>
-                        <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>
-                    </button>
-                    <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-full">
-                        <span class="fa fa-times"></span>
-                        <span>{{ 'corpselector_buttonselectnone' | loc:$root.lang }}</span>
-                    </button>
+        <div ng-if="$ctrl.showChooser"  class="corpus-chooser flex bg-gray-100">
+            <div class="popupchecks flex-shrink-0 p-4">
+                <div class="flex">
+                    <cc-time-graph />
+                    <div class="p-2">
+                        <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
+                            <span class="fa fa-check"></span>
+                            <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>
+                        </button>
+                        <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-full">
+                            <span class="fa fa-times"></span>
+                            <span>{{ 'corpselector_buttonselectnone' | loc:$root.lang }}</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <!-- this is the beginning of the recursive component -->
-            <cc-tree node="$ctrl.root" on-select="$ctrl.onSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" />
+                <!-- this is the beginning of the recursive component -->
+                <cc-tree node="$ctrl.root" on-select="$ctrl.onSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfo(node)" />
 
-            <p style="font-size: 85%;">
-                {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' | loc:$root.lang}}
-            </p>
-          </div>
-    </div>
-    <script type="text/ng-template" id="chooserpopover.html">
-        <div class="px-4">
-            <h3 class="mb-6">
-                <i class="fa fa-file-text-o text-blue-700" ng-if="$ctrl.isCorpus"></i>
-                <i class="fa fa-folder-open-o text-blue-700" ng-if="$ctrl.isFolder"></i>
-                {{ $ctrl.title }}
-            </h3>
-            <div class="text-base my-3" ng-bind-html="$ctrl.description | trust"></div>
-            <ul class="border-l-4 border-blue-500 pl-3 leading-none space-y-1">
-                <li ng-if="$ctrl.isFolder">
-                    <strong>{{$ctrl.numberOfChildren}}</strong>
-                    {{$ctrl.numberOfChildren == 1 ? 'corpselector_corporawith_sing' : 'corpselector_corporawith_plur' | loc:lang}}
-                </li>
-                <li ng-repeat-start="stats in $ctrl.langStats">
-                    <strong>{{ stats.tokens | prettyNumber }}</strong>
-                    {{ 'corpselector_tokens' | loc:lang }}
-                    <span ng-if="$ctrl.langStats.length > 1">({{ stats.lang | loc:lang }})</span>
-                </li>
-                <li ng-repeat-end ng-if="stats.sentences > 0">
-                    <strong>{{ stats.sentences | prettyNumber }}</strong>
-                    {{ 'corpselector_sentences' | loc:lang }}
-                    <span ng-if="$ctrl.langStats.length > 1">({{ stats.lang | loc:lang }})</span>
-                </li>
-            </ul>
-            <div ng-if="$ctrl.context">{{'corpselector_supports' | loc:lang}}</div>
-            <div ng-if="$ctrl.limitedAccess">{{'corpselector_limited' | loc:lang}}</div>
-            <div class="text-sm mt-3" ng-if="$ctrl.isCorpus">
-                <span class="mr-1">{{'corpselector_lastupdate' | loc:lang}}:</span>
-                <span class="font-bold">{{ $ctrl.lastUpdated }}</span>
+                <p class="text-sm">
+                    {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' | loc:$root.lang}}
+                </p>
             </div>
+            <cc-info-box ng-if="$ctrl.showInfoBox" style="width: 480px" object="$ctrl.infoNode"/>
         </div>
-    </script>
+    </div>
     `,
     bindings: {},
     controller: [
@@ -218,6 +189,11 @@ export const corpusChooserComponent = {
                     const firstCorpus = settings.corpora[selection[0]].title
                     $ctrl.firstCorpus = firstCorpus.length > 39 ? firstCorpus.slice(0, 36) + "…" : firstCorpus
                 }
+            }
+
+            $ctrl.onShowInfo = (node) => {
+                $ctrl.showInfoBox = node.id != $ctrl.infoNode?.id
+                $ctrl.infoNode = $ctrl.showInfoBox ? node : null
             }
         },
     ],

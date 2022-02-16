@@ -27,7 +27,9 @@ export const initCorpusStructure = (collection, initalCorpusSelection) => {
 
             const subFolders = []
             _.map(folder, (value, key) => {
-                if (!["title", "description", "contents"].includes(key)) {
+                if (!["title", "description", "contents", "id"].includes(key)) {
+                    // this is needed for folder identity checks in chooser
+                    value.id = key
                     subFolders.push(value)
                 }
             })
@@ -48,6 +50,11 @@ export const initCorpusStructure = (collection, initalCorpusSelection) => {
             totalSentences += folder.sentences
         }
         return [totalCorporaIds, totalTokens, totalSentences]
+    }
+
+    // this is needed for folder identity checks in chooser
+    for (const folderId of Object.keys(settings.corporafolders)) {
+        settings.corporafolders[folderId].id = folderId
     }
 
     const [totalCorporaIds, totalTokens, totalSentences] = initFolders(Object.values(settings.corporafolders))
