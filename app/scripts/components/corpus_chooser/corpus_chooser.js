@@ -214,8 +214,10 @@ export const corpusChooserComponent = {
 
                 // used when there is only one corpus selected to show name
                 // TODO this needs to be refactored to support titles in different languages
-                const firstCorpus = settings.corpora[selection[0]].title
-                $ctrl.firstCorpus = firstCorpus.length > 39 ? firstCorpus.slice(0, 36) + "…" : firstCorpus
+                if (selection.length == 1) {
+                    const firstCorpus = settings.corpora[selection[0]].title
+                    $ctrl.firstCorpus = firstCorpus.length > 39 ? firstCorpus.slice(0, 36) + "…" : firstCorpus
+                }
             }
         },
     ],
