@@ -8,7 +8,7 @@ export const corpusChooserComponent = {
         ng-click="$ctrl.showChooser = false"
         ng-if="$ctrl.showChooser"></div>
     <div id="corpusbox" class="scroll_checkboxes flex-shrink-0 ml-8">
-        <div ng-click="$ctrl.showChooser = !$ctrl.showChooser" class="hp_topframe group flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
+        <div ng-click="$ctrl.showChooser = !$ctrl.showChooser" class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
             <div ng-if="$ctrl.initialized">
 
                 <span ng-if-start="$ctrl.selectCount != 1">{{ $ctrl.selectCount }}</span>
@@ -26,16 +26,16 @@ export const corpusChooserComponent = {
             <div ng-if="!$ctrl.initialized">
                 <i class="fa fa-spinner fa-pulse"></i>
             </div>
-            <div class="transition-colors duration-500 group-hover_text-indigo-500">
+            <div class="transition-colors duration-500">
                 <i class="fa fa-caret-up relative top-2"></i>
                 <br>
                 <i class="fa fa-caret-down relative bottom-2"></i>
             </div>
         </div>
-        <div ng-if="$ctrl.showChooser" class="popupchecks flex-shrink-0">
-            <div class="header">
+        <div ng-if="$ctrl.showChooser" class="popupchecks flex-shrink-0 p-5">
+            <div>
                 <cc-time-graph />
-                <div class="buttons">
+                <div>
                     <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm selectall">
                         <span class="fa fa-check"></span>
                         <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>

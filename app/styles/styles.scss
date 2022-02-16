@@ -431,17 +431,6 @@ time-interval {
   vertical-align: middle;
 }
 
-.scroll_checkboxes {
-  width: 480px;
-  overflow: hidden;
-  vertical-align: bottom;
-}
-
-
-
-
-
-
 .numberOfChildren {
   color: #888888;
 }
@@ -449,57 +438,29 @@ time-interval {
 .webkit .hp_topframe > div {
   margin-top: 1px;
 }
-$corpusbox-width : 480px;
 
 #corpusbox {
   cursor: pointer;
   .hp_topframe {
-    width: $corpusbox-width;
+    width: 480px;
     padding: .5em 1em .5em 20px;
     color: #222222;
-    text-decoration: none;
     position: relative;
     &:link, &:visited {
       color: #222222;
-    }
-    &:hover {
-      color: #444444;
-    }
-    span.ui-icon {
-      margin: 0 5px 0 0;
-      position: absolute;
-      left: .2em;
-      top: 50%;
-      margin-top: -8px;
     }
   }
 
 }
 .popupchecks {
   z-index: 9999;
-  max-height: 600px;
-  width: $corpusbox-width;
+  max-height: 80vh;
+  width: 480px;
   border: solid thin #CCCCCC;
   background-color: #FEFEFE;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 10px;
   position: absolute;
-  .buttons {
-    margin: 10px 0;
-    display: inline-block;
-    vertical-align: top;
-    font-size: .8em;
-    button {
-      display: block;
-      margin-bottom: 5px;
-      width : 100%;
-      text-align : left;
-      .fa {
-        margin-right : 3px;
-      }
-    }
-  }
 }
 
 .corpus-info-space {
@@ -1347,36 +1308,12 @@ label[for=lemgram_select]:before {
   vertical-align: middle;
 }
 
-#time_inputs {
-  input {
-    border: none;
-    font-weight: bold;
-    width: 30px;
-  }
-}
-
 #time_graph {
   display: inline-block;
   vertical-align: middle;
   width: 335px;
   height: 70px;
   margin-bottom : 1em;
-}
-
-#rest_time_graph {
-  display: inline-block;
-  vertical-align: middle;
-  height: 70px;
-  width: 5px;
-  position: relative;
-  bottom: 20px;
-}
-
-#time_slider {
-  display: inline-block;
-  vertical-align: middle;
-  width: 250px;
-  margin-right: 10px;
 }
 
 .exportTimeStatsSection {
@@ -2085,10 +2022,6 @@ line.tick {
 
 .msd-modal {
     overflow-y: scroll;
-}
-
-.popupchecks .header {
-  white-space : nowrap;
 }
 
 .ui-button-text-only .ui-button-text {
