@@ -25,8 +25,7 @@ export const ccTimeGraphComponent = {
         popover-popup-delay="200"
         popover-placement="right"
         popover-trigger="'mouseenter'">
-        <div id="time_graph"></div>
-        <div id="rest_time_graph"></div>
+        <div id="time_graph"></div>        
     </div>
     <style>
         .timepopover {
@@ -203,7 +202,7 @@ function onTimeGraphChange(hoverCallback, all_timestruct, rest) {
             $(this).hide()
         }
     })
-    $("#time_graph,#rest_time_graph").bind(
+    $("#time_graph").bind(
         "plothover",
         _.throttle(function (event, pos, item) {
             let total, val

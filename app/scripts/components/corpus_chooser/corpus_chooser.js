@@ -32,15 +32,15 @@ export const corpusChooserComponent = {
                 <i class="fa fa-caret-down relative bottom-2"></i>
             </div>
         </div>
-        <div ng-if="$ctrl.showChooser" class="popupchecks flex-shrink-0 p-5">
-            <div>
+        <div ng-if="$ctrl.showChooser" class="popupchecks flex-shrink-0 p-4">
+            <div class="flex">
                 <cc-time-graph />
-                <div>
-                    <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm selectall">
+                <div class="p-2">
+                    <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
                         <span class="fa fa-check"></span>
                         <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>
                     </button>
-                    <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm selectnone">
+                    <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-full">
                         <span class="fa fa-times"></span>
                         <span>{{ 'corpselector_buttonselectnone' | loc:$root.lang }}</span>
                     </button>
