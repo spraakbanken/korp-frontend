@@ -6,42 +6,37 @@ var collapsedImg = require("../../../img/collapsed.png")
 export const ccTreeComponent = {
     template: `
     <div ng-class="{ 'cc-level-indent' : $ctrl.indent }">
-        <div
-            ng-if="!$ctrl.node.isRoot && $ctrl.node.contents"
+        <div ng-repeat="folder in $ctrl.sortedFolders"
             class="tree"
-            ng-class="{ collapsed: !$ctrl.node.extended, extended: $ctrl.node.extended, disabled: $ctrl.node.limitedAccess }"
+            ng-class="{ collapsed: !folder.extended, extended: folder.extended, disabled: folder.limitedAccess }"
             >
-            <img ng-click="$ctrl.toggleFolderVisibility($ctrl.node)" src="${collapsedImg}" alt="extend" class="ext cursor-pointer">
+            <img ng-click="$ctrl.toggleFolderVisibility(folder)" src="${collapsedImg}" alt="extend" class="ext cursor-pointer">
             <label 
                 class="boxlabel cursor-pointer"
-                ng-click="$ctrl.toggleFolderSelection($event, $ctrl.node)">
-                <span class="checkbox" ng-class="{ checked: $ctrl.node.selected == 'all', unchecked: $ctrl.node.selected == 'none', intermediate: $ctrl.node.selected == 'some' }"></span>
-                <span>{{ $ctrl.node.title }}</span>
-                <span class="numberOfChildren">({{$ctrl.node.numberOfChildren}})</span>
+                ng-click="$ctrl.toggleFolderSelection($event, folder)">
+                <span class="checkbox" ng-class="{ checked: folder.selected == 'all', unchecked: folder.selected == 'none', intermediate: folder.selected == 'some' }"></span>
+                <span>{{ folder.title }}</span>
+                <span class="numberOfChildren">({{folder.numberOfChildren}})</span>
             </label>
             <i 
-                ng-click="$ctrl.showInfo($event, $ctrl.node)" 
+                ng-click="$ctrl.showInfo($event, folder)" 
                 class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
+            <cc-tree ng-if="folder.extended" node="folder" indent="true" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfoLocal(node)" />
         </div>
-        <div
-            ng-if="!$ctrl.node.contents"
+        <div ng-repeat="corpus in $ctrl.sortedCorpora"
             class="boxdiv"
-            ng-class="{ 'disabled cursor-default': !$ctrl.node.userHasAccess }"
+            ng-class="{ 'disabled cursor-default': !corpus.userHasAccess }"
             style="margin-left:16px; background-color: rgb(221, 233, 255)"
-            ng-click="$ctrl.toggleCorpusSelection($event, $ctrl.node)"
+            ng-click="$ctrl.toggleCorpusSelection($event, corpus)"
             >
-            <label class="px-2" 'cursor-pointer': $ctrl.node.userHasAccess }>
-                <span class="checkbox" ng-class="{ checked: $ctrl.node.selected, unchecked: !$ctrl.node.selected }"></span>
-                <span>{{$ctrl.node.title}}</span>
+            <label class="px-2" 'cursor-pointer': corpus.userHasAccess }>
+                <span class="checkbox" ng-class="{ checked: corpus.selected, unchecked: !corpus.selected }"></span>
+                <span>{{corpus.title}}</span>
             </label>
-            <i ng-if="$ctrl.node.limitedAccess && $ctrl.node.userHasAccess" class="fa fa-unlock"></i>
+            <i ng-if="corpus.limitedAccess && corpus.userHasAccess" class="fa fa-unlock"></i>
             <i 
-                ng-click="$ctrl.showInfo($event, $ctrl.node)" 
+                ng-click="$ctrl.showInfo($event, corpus)" 
                 class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
-        </div>
-
-        <div ng-if="$ctrl.node.extended || $ctrl.node.isRoot" ng-repeat="node in $ctrl.children">
-            <cc-tree node="node" indent="!$ctrl.node.isRoot" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfoLocal(node)" />
         </div>
     </div>
     `,
@@ -53,11 +48,20 @@ export const ccTreeComponent = {
         onShowInfo: "&",
     },
     controller: [
-        function () {
+        "$rootScope",
+        function ($rootScope) {
             let $ctrl = this
 
-            $ctrl.$onInit = function () {
-                $ctrl.children = $ctrl.node ? _.concat($ctrl.node.subFolders || [], $ctrl.node.contents || []) : []
+            $ctrl.$onInit = () => {
+                const lang = $rootScope.lang
+                const comparator = new Intl.Collator(lang).compare
+                function sort(nodes) {
+                    return nodes.slice().sort((a, b) => {
+                        return comparator(...[a, b].map((x) => util.translateAttribute(lang, x, "title")))
+                    })
+                }
+                $ctrl.sortedCorpora = sort($ctrl.node.contents)
+                $ctrl.sortedFolders = sort($ctrl.node.subFolders)
             }
 
             $ctrl.toggleFolderVisibility = (folder) => {
