@@ -63,6 +63,9 @@ export const ccInfoBox = {
                         }
                     }
                     $ctrl.lastUpdated = $ctrl.object.info.Updated
+                } else {
+                    $ctrl.limitedAccess = false
+                    $ctrl.context = false
                 }
 
                 $ctrl.langStats.push({

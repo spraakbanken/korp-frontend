@@ -21,7 +21,7 @@ export const ccTreeComponent = {
             </label>
             <i 
                 ng-click="$ctrl.showInfo($event, $ctrl.node)" 
-                class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white"></i>
+                class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
         </div>
         <div
             ng-if="!$ctrl.node.contents"
@@ -36,7 +36,7 @@ export const ccTreeComponent = {
             </label>
             <i 
                 ng-click="$ctrl.showInfo($event, $ctrl.node)" 
-                class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white"></i>
+                class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
         </div>
 
         <div ng-if="$ctrl.node.extended || $ctrl.node.isRoot" ng-repeat="node in $ctrl.children">

@@ -33,7 +33,7 @@ export const corpusChooserComponent = {
             </div>
         </div>
         <div ng-if="$ctrl.showChooser"  class="corpus-chooser flex bg-gray-100">
-            <div class="popupchecks flex-shrink-0 p-4">
+            <div class="popupchecks flex-shrink-0 p-4 h-full">
                 <div class="flex">
                     <cc-time-graph />
                     <div class="p-2">
@@ -50,7 +50,7 @@ export const corpusChooserComponent = {
                 <!-- this is the beginning of the recursive component -->
                 <cc-tree node="$ctrl.root" on-select="$ctrl.onSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfo(node)" />
 
-                <p class="text-sm">
+                <p class="text-sm pb-4">
                     {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' | loc:$root.lang}}
                 </p>
             </div>
