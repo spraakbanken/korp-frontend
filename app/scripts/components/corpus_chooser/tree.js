@@ -34,6 +34,7 @@ export const ccTreeComponent = {
                 <span class="checkbox" ng-class="{ checked: $ctrl.node.selected, unchecked: !$ctrl.node.selected }"></span>
                 <span>{{$ctrl.node.title}}</span>
             </label>
+            <i ng-if="$ctrl.node.limitedAccess && $ctrl.node.userHasAccess" class="fa fa-unlock"></i>
             <i 
                 ng-click="$ctrl.showInfo($event, $ctrl.node)" 
                 class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
