@@ -171,31 +171,6 @@ export const sidebarComponent = {
                         pairs.push(custom)
                     }
 
-                    pairs.sort(function (...args) {
-                        let ord1, ord2
-                        const [a] = args[0]
-                        const [b] = args[1]
-                        if (a in corpus_attrs) {
-                            ord1 = corpus_attrs[a].order
-                        } else {
-                            ord1 = customAttrs[a].order
-                        }
-
-                        if (b in corpus_attrs) {
-                            ord2 = corpus_attrs[b].order
-                        } else {
-                            ord2 = customAttrs[b].order
-                        }
-
-                        if (_.isUndefined(ord1)) {
-                            ord1 = 10000
-                        }
-                        if (_.isUndefined(ord2)) {
-                            ord2 = 10000
-                        }
-                        return ord1 - ord2
-                    })
-
                     let items = []
                     for (let [key, value] of pairs) {
                         if (key in customAttrs) {
