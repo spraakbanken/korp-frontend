@@ -48,6 +48,7 @@
         "locationSearch": true,
         "statisticsService": true,
         "Slick": true,
-        "Rickshaw": true
+        "Rickshaw": true,
+        "currentModeParallel": true,
     }
 }

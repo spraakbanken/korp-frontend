@@ -33,15 +33,6 @@ $.ajaxPrefilter("json", function (options) {
     }
 })
 
-const deferred_domReady = $.Deferred(function (dfd) {
-    $(function () {
-        return $.getScript(`modes/${currentMode}_mode.js`)
-            .done(() => dfd.resolve())
-            .fail((jqxhr, settings, exception) => c.error("Mode file parsing error: ", exception))
-    })
-    return dfd
-}).promise()
-
 const loc_dfd = window.initLocales()
 $(document).keyup(function (event) {
     if (event.keyCode === 27) {
@@ -57,81 +48,88 @@ $(document).keyup(function (event) {
     }
 })
 
-$.when(loc_dfd, deferred_domReady).then(
-    function () {
-        try {
-            angular.bootstrap(document, ["korpApp"])
-        } catch (error) {
-            c.error(error)
-        }
+const corpusSettingsPromise = new Promise((resolve, reject) => {
+    fetch(`${settings.korpConfigurationBackendURL}/info/${window.currentMode}`)
+        .then((response) => response.json())
+        .then((data) => resolve(data))
+})
 
-        try {
-            view.updateSearchHistory()
-        } catch (error1) {
-            c.error("ERROR setting corpora from location", error1)
-        }
+Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => {
+    _.assign(window.settings, modeSettings)
+    const corpora = settings.corpora
 
-        if (isLab) {
-            $("body").addClass("lab")
-        }
-
-        $("body").addClass(`mode-${window.currentMode}`)
-        util.browserWarn()
-
-        $("#search_history").change(function (event) {
-            const target = $(this).find(":selected")
-            if (_.includes(["http://", "https:/"], target.val().slice(0, 7))) {
-                location.href = target.val()
-            } else if (target.is(".clear")) {
-                jStorage.set("searches", [])
-                view.updateSearchHistory()
-            }
-        })
-
-        let prevFragment = {}
-        // Note that this is _not_ window.onhashchange (lowercase only) and is not called by the browser
-        window.onHashChange = function (event, isInit) {
-            const hasChanged = (key) => prevFragment[key] !== locationSearch()[key]
-            if (hasChanged("lang")) {
-                const newLang = locationSearch().lang || settings.defaultLanguage
-                $("body").scope().lang = newLang
-                window.lang = newLang
-                util.localize()
-
-                $("#languages").radioList("select", newLang)
-            }
-
-            if (isInit) {
-                util.localize()
-            }
-
-            prevFragment = _.extend({}, locationSearch())
-        }
-
-        $("#languages").radioList({
-            change() {
-                const currentLang = $(this).radioList("getSelected").data("mode")
-                locationSearch({
-                    lang: currentLang !== settings.defaultLanguage ? currentLang : null,
-                })
-            },
-            // TODO: this does nothing?
-            selected: settings.defaultLanguage,
-        })
-
-        setTimeout(() => window.onHashChange(null, true), 0)
-        $("body").animate({ opacity: 1 }, function () {
-            $(this).css("opacity", "")
-        })
-    },
-    function () {
-        c.log("failed to load some resource at startup.", arguments)
-        return $("body")
-            .css({
-                opacity: 1,
-                padding: 20,
-            })
-            .html('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">')
-            .append("<p>The server failed to respond, please try again later.</p>")
+    if (!window.currentModeParallel) {
+        settings.corpusListing = new CorpusListing(corpora)
+    } else {
+        settings.corpusListing = new ParallelCorpusListing(corpora)
     }
-)
+
+    try {
+        angular.bootstrap(document, ["korpApp"])
+    } catch (error) {
+        c.error(error)
+    }
+
+    try {
+        const corpus = locationSearch()["corpus"]
+        if (corpus) {
+            settings.corpusListing.select(corpus.split(","))
+        }
+        view.updateSearchHistory()
+    } catch (error1) {
+        c.error("ERROR setting corpora from location", error1)
+    }
+
+    if (isLab) {
+        $("body").addClass("lab")
+    }
+
+    $("body").addClass(`mode-${window.currentMode}`)
+    util.browserWarn()
+
+    $("#search_history").change(function (event) {
+        const target = $(this).find(":selected")
+        if (_.includes(["http://", "https:/"], target.val().slice(0, 7))) {
+            location.href = target.val()
+        } else if (target.is(".clear")) {
+            jStorage.set("searches", [])
+            view.updateSearchHistory()
+        }
+    })
+
+    let prevFragment = {}
+    // Note that this is _not_ window.onhashchange (lowercase only) and is not called by the browser
+    window.onHashChange = function (event, isInit) {
+        const hasChanged = (key) => prevFragment[key] !== locationSearch()[key]
+        if (hasChanged("lang")) {
+            const newLang = locationSearch().lang || settings.defaultLanguage
+            $("body").scope().lang = newLang
+            window.lang = newLang
+            util.localize()
+
+            $("#languages").radioList("select", newLang)
+        }
+
+        if (isInit) {
+            util.localize()
+        }
+
+        prevFragment = _.extend({}, locationSearch())
+    }
+
+    $("#languages").radioList({
+        change() {
+            const currentLang = $(this).radioList("getSelected").data("mode")
+            locationSearch({
+                lang: currentLang !== settings.defaultLanguage ? currentLang : null,
+            })
+        },
+        // TODO: this does nothing?
+        selected: settings.defaultLanguage,
+    })
+
+    setTimeout(() => window.onHashChange(null, true), 0)
+    $("body").animate({ opacity: 1 }, function () {
+        $(this).css("opacity", "")
+    })
+})

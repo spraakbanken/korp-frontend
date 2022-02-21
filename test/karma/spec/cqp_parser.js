@@ -1,6 +1,11 @@
 /* eslint-disable
     no-undef,
 */
+
+window.settings = {}
+window.c = console
+window._ = require("lodash")
+
 require("../../../app/scripts/cqp_parser/CQPParser.js")
 require("../../../app/scripts/cqp_parser/cqp.js")
 window.moment = require("moment")

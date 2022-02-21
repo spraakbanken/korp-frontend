@@ -86,15 +86,16 @@ settings.markup = {
   msd: require("./markup/msd.html")
 }
 require("configjs")
-let commonSettings = require("commonjs")
-// we need to put the exports on window so that the non-webpacked modes modes files
-// can use the exports
-_.map(commonSettings, function(v, k) {
-  if (k in window) {
-    console.error("warning, overwriting setting" + k)
-  }
-  window[k] = v
-})
+
+let isParallel = false
+for (let mode of settings.modeConfig) {
+    if (currentMode === mode.mode && mode.parallel) {
+        isParallel = true
+        break
+    }
+}
+
+window.currentModeParallel = isParallel
 
 require("./scripts/components/sidebar.js")
 
@@ -125,14 +126,19 @@ require("./scripts/filter_directives.js")
 require("./scripts/newsdesk.js")
 
 // only if the current mode is parallel, we load the special code required
-for(let mode of settings.modeConfig) {
-  if(currentMode === mode.mode && mode.parallel) {
+if (window.currentModeParallel) {
     require("./scripts/parallel/corpus_listing.js")
     require("./scripts/parallel/search_ctrl.js")
     require("./scripts/parallel/parallel_search.js")
     require("./scripts/parallel/kwic_results.js")
     require("./scripts/parallel/stats_proxy.js")
-  }
 }
 
 require("./index.pug")
+
+try {
+    // modes-files are optional and have customizing code
+    require(`modes/${currentMode}_mode.js`)
+} catch (error) {
+    console.log("No module for extended components available")
+}
