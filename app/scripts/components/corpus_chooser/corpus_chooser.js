@@ -54,7 +54,7 @@ export const corpusChooserComponent = {
                     {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' | loc:$root.lang}}
                 </p>
             </div>
-            <cc-info-box ng-if="$ctrl.showInfoBox" style="width: 480px" object="$ctrl.infoNode"/>
+            <cc-info-box ng-if="$ctrl.showInfoBox" class="sticky top-0" style="width: 480px" object="$ctrl.infoNode"/>
         </div>
     </div>
     `,
