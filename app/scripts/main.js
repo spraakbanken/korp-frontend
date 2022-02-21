@@ -49,7 +49,8 @@ $(document).keyup(function (event) {
 })
 
 const corpusSettingsPromise = new Promise((resolve, reject) => {
-    fetch(`${settings.korpConfigurationBackendURL}/info/${window.currentMode}`).then((response) =>
+    const queryParams = window.isLab ? "?include_lab" : ""
+    fetch(`${settings.korpConfigurationBackendURL}/info/${window.currentMode}${queryParams}`).then((response) =>
         resolve(response.json())
     )
 })

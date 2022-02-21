@@ -92,10 +92,12 @@
         "pretest:e2e": "yarn run testserver && node_modules/protractor/bin/webdriver-manager update --standalone chrome --gecko false && wait-on --delay 500 --interval 500 http://localhost:9112",
         "test:e2e": "node_modules/protractor/bin/protractor --browser chrome test/e2e/conf_e2e.js || true",
         "start": "webpack-dev-server --config webpack.dev.js",
+        "start:labb": "NODE_ENV=staging webpack-dev-server --config webpack.dev.js",
         "dev": "webpack-dev-server --config webpack.dev.js",
         "testserver": "webpack-dev-server --config webpack.dev.js --port 9112 &",
         "start:dist": "http-server -p ${KORP_PORT:-9111} dist/",
         "build": "NODE_ENV=production webpack --config webpack.prod.js",
+        "build:labb": "NODE_ENV=staging webpack --config webpack.prod.js",
         "lint": "tslint --project tslint.json"
     }
 }

@@ -210,6 +210,9 @@ module.exports = {
                 },
             ],
         }),
+        new webpack.DefinePlugin({
+            __IS_LAB__: process.env.NODE_ENV == "staging",
+        }),
     ],
     entry: {
         bundle: "./app/index.js",
