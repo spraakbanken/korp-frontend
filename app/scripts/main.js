@@ -72,6 +72,7 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
                     attrs[attr.name] = attr
                 }
                 corpus[attrType] = attrs
+                corpus[attrType + "Order"] = attrList
             }
         }
         delete modeSettings["attributes"]

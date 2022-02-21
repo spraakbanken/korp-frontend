@@ -152,20 +152,23 @@ export const sidebarComponent = {
 
                 renderCorpusContent(type, wordData, sentenceData, corpus_attrs, tokens, customAttrs, customData) {
                     let pairs
+                    let sortingArr
                     if (type === "struct") {
                         pairs = _.toPairs(sentenceData)
+                        sortingArr = $ctrl.corpusObj["structAttributesOrder"]
                     } else if (type === "pos") {
                         pairs = _.toPairs(wordData)
+                        sortingArr = $ctrl.corpusObj["attributesOrder"]
                     }
 
                     pairs = _.filter(pairs, function (...args) {
-                        let [key, val] = args[0]
-                        return corpus_attrs[key]
+                        return (
+                            corpus_attrs[key] &&
+                            !(corpus_attrs[key].displayType === "hidden" || corpus_attrs[key].hideSidebar)
+                        )
                     })
-                    pairs = _.filter(pairs, function (...args) {
-                        let [key, val] = args[0]
-                        return !(corpus_attrs[key].displayType === "hidden" || corpus_attrs[key].hideSidebar)
-                    })
+
+                    pairs.sort((a, b) => sortingArr.indexOf(a[0]) - sortingArr.indexOf(b[0]))
 
                     for (let custom of customData) {
                         pairs.push(custom)
