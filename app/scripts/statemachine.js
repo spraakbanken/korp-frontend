@@ -1,5 +1,5 @@
 /** @format */
-import { Machine, interpret, assign } from "xstate"
+import { interpret, createMachine } from "xstate"
 
 import jStorage from "../lib/jstorage"
 
@@ -37,7 +37,7 @@ const sidebarStates = {
     },
 }
 
-let machine = Machine(
+let machine = createMachine(
     {
         id: "main",
         context: {},
