@@ -27,7 +27,7 @@ const createStatisticsService = function () {
         for (let [reduceVal, reduceValLabel] of _.zip(reduceVals, reduceValLabels)) {
             columns.push({
                 id: reduceVal,
-                name: reduceValLabel,
+                translation: reduceValLabel,
                 field: "hit_value",
                 sortable: true,
                 formatter(row, cell, value, columnDef, dataContext) {
@@ -45,7 +45,6 @@ const createStatisticsService = function () {
                 },
                 minWidth,
                 cssClass: "parameter-column",
-                headerCssClass: "localized-header",
             })
         }
 

@@ -41,7 +41,7 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
       <button uib-dropdown-toggle class="btn btn-sm btn-default mr-1 align-baseline">
         <span ng-if="attrValue.length == 0">
           <span>{{ "add_filter_value" | loc:lang }}</span>
-          <span>{{filterLabel | loc:lang}}</span>
+          <span>{{filterLabel | locObj:lang}}</span>
         </span>
         <span ng-if="attrValue.length != 0">
           <span style="text-transform: capitalize">{{filterLabel | loc:lang}}:</span>

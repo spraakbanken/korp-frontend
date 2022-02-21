@@ -225,7 +225,6 @@
     "graph_material": "No available time data",
     "graph_material_tooltip": "The selected corpora lack time data for the shadowed periods.",
 
-    "word_insensitive": "word (case insensitive)",
     "sentence_attr": "Text attributes",
     "word_attr": "Word attributes",
     "attr": "attributes",

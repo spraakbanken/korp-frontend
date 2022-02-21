@@ -18,8 +18,8 @@
                                 </div>
                                 <div class="right_col inline_block ml-2">
                                     <div class="arg_selects {{or.type}}">
-                                        <select class="arg_type" 
-                                            ng-options="obj | mapper:valfilter as obj.label | loc:lang group by obj.group | loc:lang for obj in types" 
+                                        <select class="arg_type"
+                                            ng-options="obj | mapper:valfilter as obj.label | locObj:lang group by obj.group | loc:lang for obj in types" 
                                             ng-model="or.type" ng-change="setDefault(or)"></select>
                                         
                                         <select class="arg_opts"

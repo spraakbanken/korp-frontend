@@ -47,8 +47,11 @@ export const sidebarComponent = {
         "$rootScope",
         "$compile",
         "$controller",
-        function ($element, utils, $rootScope, $compile, $controller) {
+        "$filter",
+        function ($element, utils, $rootScope, $compile, $controller, $filter) {
             let $ctrl = this
+
+            const locObj = $filter("locObj")
 
             statemachine.listen("select_word", function (data) {
                 safeApply($rootScope, () => {
@@ -243,7 +246,7 @@ export const sidebarComponent = {
                     let output, pattern, ul
                     let val, inner, li, address
                     if (attrs.label) {
-                        output = $(`<p><span rel='localize[${attrs.label}]'></span>: </p>`)
+                        output = $(`<p><span>${locObj(attrs.label, $ctrl.lang)}</span>: </p>`)
                     } else {
                         output = $("<p></p>")
                     }

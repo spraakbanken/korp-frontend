@@ -48,7 +48,7 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
           select(ng-model='reduce', 
              ng-options='obj | \
              mapper:valfilter as obj.label | \
-             loc group by obj.group | \
+             locObj:lang group by obj.group | \
              loc for obj in currentAttrs')
 
           //- reduce-select(reduce-items="currentAttrs", reduce-selected="selectedAttrs", reduce-lang="lang", style='width: 150px')

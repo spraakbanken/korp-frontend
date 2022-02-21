@@ -308,22 +308,13 @@ export class CorpusListing {
         }
     }
 
-    getWordGroup(withCaseInsentive) {
+    getWordGroup() {
         const word = {
             group: "word",
             value: "word",
-            label: "word",
+            label: settings.wordLabel,
         }
-        if (withCaseInsentive) {
-            const wordInsensitive = {
-                group: "word",
-                value: "word_insensitive",
-                label: "word_insensitive",
-            }
-            return [word, wordInsensitive]
-        } else {
-            return [word]
-        }
+        return word
     }
 
     getWordAttributeGroups(lang, setOperator) {
@@ -341,7 +332,7 @@ export class CorpusListing {
                 attrs.push(_.extend({ group: "word_attr", value: key }, obj))
             }
         }
-        
+
         attrs.sort((a, b) => {
             let ord1 = a.order
             let ord2 = b.order
@@ -389,14 +380,14 @@ export class CorpusListing {
     }
 
     getAttributeGroups(lang) {
-        const words = this.getWordGroup(false)
+        const word = this.getWordGroup()
         const attrs = this.getWordAttributeGroups(lang, "union")
         const sentAttrs = this.getStructAttributeGroups(lang, "union")
-        return words.concat(attrs, sentAttrs)
+        return [word].concat(attrs, sentAttrs)
     }
 
     getStatsAttributeGroups(lang) {
-        const words = this.getWordGroup(true)
+        const word = this.getWordGroup()
 
         const wordOp = settings.reduceWordAttributeSelector || "union"
         const attrs = this.getWordAttributeGroups(lang, wordOp)
@@ -404,6 +395,6 @@ export class CorpusListing {
         const structOp = settings.reduceStructAttributeSelector || "union"
         const sentAttrs = this.getStructAttributeGroups(lang, structOp)
 
-        return words.concat(attrs, sentAttrs)
+        return [word].concat(attrs, sentAttrs)
     }
 }

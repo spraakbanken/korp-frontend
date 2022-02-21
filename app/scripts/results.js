@@ -643,7 +643,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         this.tabindex = this.getResultTabs().length - 1 + this.s.$parent.$index
     }
 
-    setupReadingHash() {}
+    setupReadingHash() { }
 
     isReadingMode() {
         return this.s.exampleReadingMode
@@ -1044,6 +1044,29 @@ view.StatsResults = class StatsResults extends BaseResults {
                 })
             })
         })
+
+        const that = this
+        $("body")
+            .scope()
+            .$watch("lang", (lang) => {
+                if (that.grid) {
+                    that.langChange(lang)
+                }
+            })
+    }
+
+    langChange(lang) {
+        var cols = this.grid.getColumns()
+        this.updateLabels(cols, lang)
+        this.grid.setColumns(cols)
+    }
+
+    updateLabels(cols, lang) {
+        for (var i = 0, il = cols.length; i < il; i++) {
+            if (cols[i].translation) {
+                cols[i].name = cols[i].translation[lang] || cols[i].translation
+            }
+        }
     }
 
     updateExportBlob() {
@@ -1216,6 +1239,7 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         columns = [checkboxSelector.getColumnDefinition()].concat(columns)
 
+        this.updateLabels(columns, $("body").scope().lang)
         const grid = new Slick.Grid($("#myGrid"), data, columns, {
             enableCellNavigation: false,
             enableColumnReorder: false,
@@ -1736,7 +1760,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             }
         }
     }
-    setLineMode() {}
+    setLineMode() { }
 
     setTableMode(series) {
         $(".chart,.legend", this.$result).hide()
