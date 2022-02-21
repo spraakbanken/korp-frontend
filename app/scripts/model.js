@@ -607,7 +607,6 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
                 beforeSend: (req, settings) => {
                     this.prevRequest = settings
                     this.addAuthorizationHeader(req)
-                    self.prevUrl = self.makeUrlWithParams(this.url, params)
                 },
 
                 progress: (data, e) => {
