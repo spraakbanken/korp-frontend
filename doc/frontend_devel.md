@@ -117,7 +117,7 @@ Input must be saved to `scope.input` for it to work. Example: `<input ng-model="
 
 ##### Customizing sidebar
 
-In `custom/sidebar.js`, we can define custom (non-Angular) components to be used in the sidebar:
+In `custom/sidebar.js`, we can define custom components to be used in the sidebar:
 
 ```
 export default {
@@ -134,9 +134,21 @@ export default {
 }
 ```
 
-Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link.
+Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link. Also when combining values from several attributes.
 
 Use `imageSidebar` as key for `sidebarComponent` in the configuration files.
+
+Data about the search, the current token and current attribute is stored in a number of variables on `$scope`:
+
+- `$scope.type`: "struct" / "pos", the type of the attribute
+- `$scope.key`: Name of the attribute
+- `$scope.value`: Value of the attribute
+- `$scope.attrs`: The attribute definition from the config
+- `$scope.wordData`: The values of the positional attributes for current token
+- `$scope.sentenceData`: The values of the structural attributes for current token / structure
+- `$scope.tokens`: All the tokens in the current sentence
+
+The component not an actual Angular.js component. It will be added to the interfacce by manually creating a new scope and using `$controller` to instatiate the controller and `$compile` to instantiate the template.
 
 #### Rendering attribute values in the statistics-view
 
