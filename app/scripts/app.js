@@ -50,7 +50,8 @@ window.korpApp = angular.module("korpApp", [
     "angular.filter",
 ])
 
-korpApp.component(kwicPagerName, kwicPager).component(sidebarName, sidebarComponent)
+korpApp.component(kwicPagerName, kwicPager)
+korpApp.component(sidebarName, sidebarComponent)
 korpApp.component(readingmode.componentName, readingmode.component)
 korpApp.component(autoc.componentName, autoc.component)
 korpApp.component(extendedAddBox.componentName, extendedAddBox.component)
