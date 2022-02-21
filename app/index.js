@@ -140,5 +140,5 @@ try {
     // modes-files are optional and have customizing code
     require(`modes/${currentMode}_mode.js`)
 } catch (error) {
-    console.log("No module for extended components available")
+    console.log("No mode file available for mode:", currentMode)
 }

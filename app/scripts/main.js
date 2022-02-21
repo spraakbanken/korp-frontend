@@ -49,13 +49,37 @@ $(document).keyup(function (event) {
 })
 
 const corpusSettingsPromise = new Promise((resolve, reject) => {
-    fetch(`${settings.korpConfigurationBackendURL}/info/${window.currentMode}`)
-        .then((response) => response.json())
-        .then((data) => resolve(data))
+    fetch(`${settings.korpConfigurationBackendURL}/info/${window.currentMode}`).then((response) =>
+        resolve(response.json())
+    )
 })
 
 Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => {
-    _.assign(window.settings, modeSettings)
+    function unpackSettings(modeSettings) {
+        /**
+         * This function takes the backend configuration format and translates it to the old
+         *
+         * We should change the internal representation to a new, more compact one.
+         */
+        for (const corpusId in modeSettings["corpora"]) {
+            const corpus = modeSettings["corpora"][corpusId]
+            for (const attrType of ["attributes", "structAttributes", "customAttributes"]) {
+                const attrList = corpus[attrType]
+                const attrs = {}
+                for (const attrIdx in attrList) {
+                    const attr = modeSettings["attributes"][attrType][attrList[attrIdx]]
+                    attrs[attr.name] = attr
+                }
+                corpus[attrType] = attrs
+            }
+        }
+        delete modeSettings["attributes"]
+        return modeSettings
+    }
+
+    _.assign(window.settings, unpackSettings(modeSettings))
+
+
     const corpora = settings.corpora
 
     if (!window.currentModeParallel) {

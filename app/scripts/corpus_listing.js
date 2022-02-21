@@ -28,7 +28,7 @@ export class CorpusListing {
     }
 
     // only applicable for parallel corpora
-    getReduceLang() {}
+    getReduceLang() { }
 
     // Returns an array of all the selected corpora's IDs in uppercase
     getSelectedCorpora() {
@@ -341,6 +341,20 @@ export class CorpusListing {
                 attrs.push(_.extend({ group: "word_attr", value: key }, obj))
             }
         }
+        
+        attrs.sort((a, b) => {
+            let ord1 = a.order
+            let ord2 = b.order
+
+            if (_.isUndefined(ord1)) {
+                ord1 = 10000
+            }
+            if (_.isUndefined(ord2)) {
+                ord2 = 10000
+            }
+            return ord1 - ord2
+        })
+
         return attrs
     }
 
