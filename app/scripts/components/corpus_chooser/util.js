@@ -122,7 +122,9 @@ export const getAllCorporaInFolders = (lastLevel, folderOrCorpus) => {
         }
 
         // And add the corpora in this folder level
-        outCorpora = outCorpora.concat(lastLevel[folderOrCorpus]["contents"])
+        if (lastLevel[folderOrCorpus].contents) {
+            outCorpora = outCorpora.concat(lastLevel[folderOrCorpus]["contents"])
+        }
     } else {
         // Corpus
         outCorpora.push(folderOrCorpus)
