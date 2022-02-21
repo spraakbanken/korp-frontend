@@ -41,60 +41,18 @@ export const ccTimeGraphComponent = {
         function controller($scope, searches, $rootScope) {
             let $ctrl = this
 
-            searches.infoDef.then(() => {
-                const timeDeferred = initTimeGraph()
+            searches.timeDeferred.then(([allTimestruct, rest]) => {
+                const hoverCallback = (year, val, total, isRestData) => {
+                    safeApply($scope, () => ($ctrl.timeHover = { year, val, total, isRestData }))
+                }
 
-                timeDeferred.then(function ([allTimestruct, rest]) {
-                    const hoverCallback = (year, val, total, isRestData) => {
-                        safeApply($scope, () => ($ctrl.timeHover = { year, val, total, isRestData }))
-                    }
-
-                    $rootScope.$on("corpuschooserchange", (e) => {
-                        onTimeGraphChange(hoverCallback, allTimestruct, rest)
-                    })
+                $rootScope.$on("corpuschooserchange", (e) => {
                     onTimeGraphChange(hoverCallback, allTimestruct, rest)
                 })
+                onTimeGraphChange(hoverCallback, allTimestruct, rest)
             })
         },
     ],
-}
-
-function initTimeGraph() {
-    const timeDeferred = new Promise((resolve) => {
-        timeProxy
-            .makeRequest()
-            .fail((error) => {
-                console.error(error)
-                $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>")
-            })
-            .done(function (...args) {
-                let [dataByCorpus, all_timestruct, rest] = args[0]
-
-                if (all_timestruct.length == 0) {
-                    return
-                }
-
-                // this adds data to the corpora in settings
-                for (let corpus in dataByCorpus) {
-                    let struct = dataByCorpus[corpus]
-                    if (corpus !== "time") {
-                        const cor = settings.corpora[corpus.toLowerCase()]
-                        timeProxy.expandTimeStruct(struct)
-                        cor.non_time = struct[""]
-                        struct = _.omit(struct, "")
-                        cor.time = struct
-                        if (_.keys(struct).length > 1) {
-                            if (cor.common_attributes == null) {
-                                cor.common_attributes = {}
-                            }
-                            cor.common_attributes.date_interval = true
-                        }
-                    }
-                }
-                resolve([all_timestruct, rest])
-            })
-    })
-    return timeDeferred
 }
 
 function getValByDate(date, struct) {

@@ -258,8 +258,10 @@ korpApp.factory("searches", [
 
                 // is resolved when parallel search controller is loaded
                 this.langDef = $q.defer()
+                const that = this
                 this.getInfoData().then(function () {
                     def.resolve()
+                    that.timeDeferred = that.getTimeData()
                 })
             }
 
@@ -305,6 +307,43 @@ korpApp.factory("searches", [
                 })
 
                 return def.promise
+            }
+
+            getTimeData() {
+                const timeDeferred = new Promise((resolve) => {
+                    timeProxy
+                        .makeRequest()
+                        .fail((error) => {
+                            console.error(error)
+                        })
+                        .done(function (...args) {
+                            let [dataByCorpus, all_timestruct, rest] = args[0]
+            
+                            if (all_timestruct.length == 0) {
+                                return
+                            }
+            
+                            // this adds data to the corpora in settings
+                            for (let corpus in dataByCorpus) {
+                                let struct = dataByCorpus[corpus]
+                                if (corpus !== "time") {
+                                    const cor = settings.corpora[corpus.toLowerCase()]
+                                    timeProxy.expandTimeStruct(struct)
+                                    cor.non_time = struct[""]
+                                    struct = _.omit(struct, "")
+                                    cor.time = struct
+                                    if (_.keys(struct).length > 1) {
+                                        if (cor.common_attributes == null) {
+                                            cor.common_attributes = {}
+                                        }
+                                        cor.common_attributes.date_interval = true
+                                    }
+                                }
+                            }
+                            resolve([all_timestruct, rest])
+                        })
+                })
+                return timeDeferred
             }
         }
 
