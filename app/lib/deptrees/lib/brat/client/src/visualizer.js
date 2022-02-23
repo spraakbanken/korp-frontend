@@ -345,9 +345,9 @@ var Visualizer = (function($, window, undefined) {
 
         // due to silly Chrome bug, I have to make it pay attention
         var forceRedraw = function() {
-            if (!$.browser.chrome) return; // not needed
-            $svg.css('margin-bottom', 1);
-            setTimeout(function() { $svg.css('margin-bottom', 0); }, 0);
+            // if (!$.browser.chrome) return; // not needed
+            // $svg.css('margin-bottom', 1);
+            // setTimeout(function() { $svg.css('margin-bottom', 0); }, 0);
         }
 
         var rowBBox = function(span) {
@@ -2425,31 +2425,6 @@ var Visualizer = (function($, window, undefined) {
                 y += rowBoxHeight;
                 y += sizes.texts.height;
                 row.textY = y - rowPadding;
-                if (row.sentence) {
-                    var sentence_hash = new URLHash(coll, doc, { focus: [[ 'sent', row.sentence ]] } );
-                    var link = svg.link(sentNumGroup, sentence_hash.getHash());
-                    var text = svg.text(link, sentNumMargin - Configuration.visual.margin.x, y - rowPadding,
-                                        '' + row.sentence, { 'data-sent': row.sentence });
-                    var sentComment = data.sentComment[row.sentence];
-                    if (sentComment) {
-                        var box = text.getBBox();
-                        svg.remove(text);
-                        // TODO: using rectShadowSize, but this shadow should
-                        // probably have its own setting for shadow size
-                        shadowRect = svg.rect(sentNumGroup,
-                                              box.x - rectShadowSize, box.y - rectShadowSize,
-                                              box.width + 2 * rectShadowSize, box.height + 2 * rectShadowSize, {
-
-                                                  'class': 'shadow_' + sentComment.type,
-                                                  filter: 'url(#Gaussian_Blur)',
-                                                  rx: rectShadowRounding,
-                                                  ry: rectShadowRounding,
-                                                  'data-sent': row.sentence,
-                                              });
-                        var text = svg.text(sentNumGroup, sentNumMargin - Configuration.visual.margin.x, y - rowPadding,
-                                            '' + row.sentence, { 'data-sent': row.sentence });
-                    }
-                }
 
                 var rowY = y - rowPadding;
                 if (roundCoordinates) {
@@ -2692,7 +2667,7 @@ var Visualizer = (function($, window, undefined) {
 
                 dispatcher.post('startedRendering', [coll, doc, args]);
                 dispatcher.post('spin');
-                setTimeout(function() {
+                // setTimeout(function() {
                     try {
                         renderDataReal(sourceData);
                     } catch (e) {
@@ -2703,10 +2678,11 @@ var Visualizer = (function($, window, undefined) {
                         dispatcher.post('renderError: Fatal', [sourceData, e]);
                     }
                     dispatcher.post('unspin');
-                }, 0);
+                // }, 0);
             }
         };
-
+        this.renderData = renderData
+        
         var renderDocument = function() {
             Util.profileStart('invoke getDocument');
             dispatcher.post('ajax', [{
@@ -2720,7 +2696,7 @@ var Visualizer = (function($, window, undefined) {
         };
 
         var triggerRender = function() {
-            if (svg && ((isRenderRequested && isCollectionLoaded) || requestedData) && Visualizer.areFontsLoaded) {
+            if (svg && ((isRenderRequested && isCollectionLoaded) || requestedData)) {
                 isRenderRequested = false;
                 if (requestedData) {
 
@@ -2937,28 +2913,30 @@ var Visualizer = (function($, window, undefined) {
         $svgDiv = $($svgDiv).hide();
 
         // register event listeners
-        var registerHandlers = function(element, events) {
-            $.each(events, function(eventNo, eventName) {
-                element.bind(eventName,
-                             function(evt) {
-                                 dispatcher.post(eventName, [evt], 'all');
-                             }
-                            );
-            });
-        };
-        registerHandlers($svgDiv, [
-            'mouseover', 'mouseout', 'mousemove',
-            'mouseup', 'mousedown',
-            'dragstart',
-            'dblclick', 'click'
-        ]);
-        registerHandlers($(document), [
-            'keydown', 'keypress',
-            'touchstart', 'touchend'
-        ]);
-        registerHandlers($(window), [
-            'resize'
-        ]);
+        // var registerHandlers = function(element, events) {
+        //     $.each(events, function(eventNo, eventName) {
+        //         element.bind(eventName,
+        //                      function(evt) {
+        //                          dispatcher.post(eventName, [evt], 'all');
+        //                      }
+        //                     );
+        //     });
+        // };
+        // registerHandlers($svgDiv, [
+        //     'mouseover', 'mouseout', 'mousemove',
+        //     'mouseup', 'mousedown',
+        //     'dragstart',
+        //     'dblclick', 'click'
+        // ]);
+        // registerHandlers($(document), [
+        //     'keydown', 'keypress',
+        //     'touchstart', 'touchend'
+        // ]);
+        // registerHandlers($(window), [
+        //     'resize'
+        // ]);
+        $svgDiv.bind('mouseover', onMouseOver);
+        $svgDiv.bind('mouseout', onMouseOut);
 
         // create the svg wrapper
         $svgDiv.svg({
@@ -3062,77 +3040,7 @@ var Visualizer = (function($, window, undefined) {
                 // collectionLoaded to handle this
             }
         };
-
-        var isReloadOkay = function() {
-            // do not reload while the user is in the dialog
-            return !drawing;
-        };
-
-        // If we are yet to load our fonts, dispatch them
-        if (!Visualizer.areFontsLoaded) {
-            var webFontConfig = {
-                custom: {
-                    families: [
-                        'Astloch',
-                        'PT Sans Caption',
-                        //        'Ubuntu',
-                        'Liberation Sans'
-                    ],
-                    /* For some cases, in particular for embedding, we need to
-                       allow for fonts being hosted elsewhere */
-                    urls: webFontURLs !== undefined ? webFontURLs : [
-                        'static/fonts/Astloch-Bold.ttf',
-                        'static/fonts/PT_Sans-Caption-Web-Regular.ttf',
-                        //
-                        'static/fonts/Liberation_Sans-Regular.ttf'
-                    ],
-                },
-                active: proceedWithFonts,
-                inactive: proceedWithFonts,
-                fontactive: function(fontFamily, fontDescription) {
-                    // Note: Enable for font debugging
-                    //console.log("font active: ", fontFamily, fontDescription);
-                },
-                fontloading: function(fontFamily, fontDescription) {
-                    // Note: Enable for font debugging
-                    //console.log("font loading:", fontFamily, fontDescription);
-                },
-            };
-            WebFont.load(webFontConfig);
-
-            setTimeout(function() {
-                if (!Visualizer.areFontsLoaded) {
-                    // console.error('Timeout in loading fonts');
-                    proceedWithFonts();
-                }
-            }, fontLoadTimeout);
-        }
-
-        dispatcher.
-            on('collectionChanged', collectionChanged).
-            on('collectionLoaded', collectionLoaded).
-            on('renderData', renderData).
-            on('triggerRender', triggerRender).
-            on('requestRenderData', requestRenderData).
-            on('isReloadOkay', isReloadOkay).
-            on('resetData', resetData).
-            on('abbrevs', setAbbrevs).
-            on('textBackgrounds', setTextBackgrounds).
-            on('layoutDensity', setLayoutDensity).
-            on('svgWidth', setSvgWidth).
-            on('current', gotCurrent).
-            on('clearSVG', clearSVG).
-            on('mouseover', onMouseOver).
-            on('mouseout', onMouseOut);
-    };
-
-    Visualizer.areFontsLoaded = false;
-
-    var proceedWithFonts = function() {
-        Visualizer.areFontsLoaded = true;
-        // Note: Enable for font debugging
-        //console.log("fonts done");
-        Dispatcher.post('triggerRender');
+        this.collectionLoaded = collectionLoaded;
     };
 
     return Visualizer;
