@@ -1,3 +1,5 @@
+/** @format */
+
 export class CorpusListing {
     constructor(corpora) {
         this.struct = corpora
@@ -362,6 +364,11 @@ export class CorpusListing {
             }
         }
         return attrs
+    }
+
+    getWordAttribute(attribute, lang) {
+        const attributes = this.getCurrentAttributes(lang)
+        return attributes[attribute]
     }
 
     getStructAttributeGroups(lang, setOperator) {

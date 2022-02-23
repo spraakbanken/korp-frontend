@@ -10,6 +10,7 @@ import { ccTreeComponent } from "./components/corpus_chooser/tree"
 import { ccInfoBox } from "./components/corpus_chooser/info_box"
 import { loginBoxComponent } from "./components/auth/login_box"
 import { loginStatusComponent } from "./components/auth/login_status"
+import { depTreeComponent } from "./components/deptree/deptree"
 import { setDefaultConfigValues } from "./settings"
 import * as treeUtil from "./components/corpus_chooser/util"
 import statemachine from "@/statemachine"
@@ -61,6 +62,7 @@ korpApp.component("ccTree", ccTreeComponent)
 korpApp.component("ccInfoBox", ccInfoBox)
 korpApp.component("loginStatus", loginStatusComponent)
 korpApp.component("loginBox", loginBoxComponent)
+korpApp.component("depTree", depTreeComponent)
 
 // load all custom components
 let customComponents = {}

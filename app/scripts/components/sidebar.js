@@ -30,9 +30,10 @@ export const sidebarComponent = {
             <div id="selected_sentence" />
             <div id="selected_word" />
 
-            <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.renderGraph()" class="link show_deptree">
+            <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.openDepTree()" class="link show_deptree">
                 {{'show_deptree' | loc:$root.lang}}
             </div>
+            <dep-tree ng-if="$ctrl.showDepTree" tokens="$ctrl.tokens" corpus="$ctrl.corpusObj" on-close="$ctrl.closeDepTree()" />
         </div>
     `,
     bindings: {
@@ -67,6 +68,14 @@ export const sidebarComponent = {
                         $ctrl.updateContent($ctrl.data)
                     }
                 }
+            }
+
+            $ctrl.openDepTree = () => {
+                $ctrl.showDepTree = true
+            }
+
+            $ctrl.closeDepTree = () => {
+                $ctrl.showDepTree = false
             }
 
             Object.assign($ctrl, {
@@ -136,35 +145,6 @@ export const sidebarComponent = {
 
                     $element.localize()
                     this.applyEllipse()
-                },
-
-                renderGraph() {
-                    const outerW = $(window).width() - 80
-                    const info = $("<span class='info' />")
-                    const iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>')
-                        .css("width", outerW - 40)
-                        .on("load", function () {
-                            const wnd = this.contentWindow
-                            wnd.draw_deptree.call(wnd, $ctrl.tokens, function (msg) {
-                                const [type, val] = _.head(_.toPairs(msg))
-                                info.empty().append(
-                                    $("<span>").localeKey(type),
-                                    $("<span>: </span>"),
-                                    $("<span>").localeKey(`${type}_${val}`)
-                                )
-                            })
-                        })
-
-                    $("#deptree_popup")
-                        .empty()
-                        .append(info, iframe)
-                        .dialog({
-                            height: 300,
-                            width: outerW,
-                        })
-                        .parent()
-                        .find(".ui-dialog-title")
-                        .localeKey("dep_tree")
                 },
 
                 renderCorpusContent(type, wordData, sentenceData, corpus_attrs, tokens, customAttrs, customData) {
@@ -289,8 +269,7 @@ export const sidebarComponent = {
                     // linking to the value of the property (URL)
                     let info_link = ""
                     if (attrs.sidebarInfoUrl) {
-                        info_link =
-                            `<a href='${attrs.sidebarInfoUrl}' target='_blank'>
+                        info_link = `<a href='${attrs.sidebarInfoUrl}' target='_blank'>
                                  <span class='sidebar_info ui-icon ui-icon-info'></span>
                              </a>`
                     }
