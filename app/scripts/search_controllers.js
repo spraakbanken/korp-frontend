@@ -614,3 +614,6 @@ korpApp.directive("compareSearchCtrl", () => ({
 }))
 
 korpApp.filter("loc", () => (translationKey, lang) => util.getLocaleString(translationKey, lang))
+korpApp.filter("locObj", () => (translationObject, lang) => {
+    return translationObject ? translationObject[lang] || translationObject : undefined
+})

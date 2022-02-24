@@ -209,10 +209,6 @@ module.exports = {
                     from: korpConfigDir + "/translations/*",
                     to: "translations/[name].[ext]",
                 },
-                {
-                    from: "app/lib/deptrees/",
-                    to: "lib/deptrees",
-                },
             ],
         }),
     ],
