@@ -4906,10 +4906,22 @@ jquery-ui-dist@>=1.12.x:
   resolved "https://registry.yarnpkg.com/jquery-ui-dist/-/jquery-ui-dist-1.12.1.tgz#5c0815d3cc6f90ff5faaf5b268a6e23b4ca904fa"
   integrity sha1-XAgV08xvkP9fqvWyaKbiO0ypBPo=
 
+jquery-ui@>=1.8.0:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.13.1.tgz#d0b7a42e73a04c31bb5706adf86f6f8942f64eaa"
+  integrity sha512-2VlU59N5P4HaumDK1Z3XEVjSvegFbEOQRgpHUBaB2Ak98Axl3hFhJ6RFcNQNuk9SfL6WxIbuLst8dW/U56NSiA==
+  dependencies:
+    jquery ">=1.8.0 <4.0.0"
+
 jquery@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
   integrity sha1-XE2d5lKvbNCncBVKYxu6ErAVx4c=
+
+jquery@>=1.8.0, "jquery@>=1.8.0 <4.0.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
+  integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
 
 jquery@>=3.1.x:
   version "3.5.0"
@@ -7468,9 +7480,13 @@ slice-ansi@^2.1.0:
     astral-regex "^1.0.0"
     is-fullwidth-code-point "^2.0.0"
 
-slickgrid@spraakbanken/SlickGrid#master:
-  version "2.4.27"
-  resolved "https://codeload.github.com/spraakbanken/SlickGrid/tar.gz/d1961d5e3250fb0958c496fd13bccda83e87ab70"
+slickgrid@2.4.44:
+  version "2.4.44"
+  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-2.4.44.tgz#ddcb41c8a0184a2c177bc88d90e428ff42e1cb9a"
+  integrity sha512-DF7ePE5bwitJrRdJSNrV+qAnQsfds0GbRA02ywy6TQrQewkm9DSHGDUxJaoJk2WUMlyQ7Odrf2o1PCZM50BcSg==
+  dependencies:
+    jquery ">=1.8.0"
+    jquery-ui ">=1.8.0"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
