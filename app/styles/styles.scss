@@ -1,9 +1,9 @@
 
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-// @import "bootstrap4-custom";
+// $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 
-$fa-font-path: "~font-awesome/fonts";
-@import "~font-awesome/scss/font-awesome";
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
 
 @font-face {
   font-family: "Source Sans Pro";
@@ -523,7 +523,7 @@ time-interval {
 
 .boxdiv.disabled .checkbox,
 .tree.disabled > label .checkbox {
-  @extend .fa;
+  @extend .fa-solid;
   @extend .fa-lock;
   background: none;
   margin-bottom : 3px;
@@ -1551,7 +1551,7 @@ body.modal-open {
     padding-top: 1em;
     button.delete {
       float : right;
-      .fa {
+      .fa-solid {
         margin-right: 0.8em;
       }
     }

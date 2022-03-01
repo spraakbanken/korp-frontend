@@ -20,7 +20,7 @@ export const ccTreeComponent = {
             </label>
             <i 
                 ng-click="$ctrl.showInfo($event, folder)" 
-                class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
+                class="fa-solid text-xl fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
             <cc-tree ng-if="folder.extended" node="folder" indent="true" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfoLocal(node)" />
         </div>
         <div ng-repeat="corpus in $ctrl.sortedCorpora"
@@ -33,10 +33,10 @@ export const ccTreeComponent = {
                 <span class="checkbox" ng-class="{ checked: corpus.selected, unchecked: !corpus.selected }"></span>
                 <span>{{corpus.title}}</span>
             </label>
-            <i ng-if="corpus.limitedAccess && corpus.userHasAccess" class="fa fa-unlock"></i>
+            <i ng-if="corpus.limitedAccess && corpus.userHasAccess" class="fa-solid fa-unlock"></i>
             <i 
                 ng-click="$ctrl.showInfo($event, corpus)" 
-                class="fa fa-lg fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
+                class="fa-solid text-xl fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
         </div>
     </div>
     `,

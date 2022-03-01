@@ -4,8 +4,8 @@ export const ccInfoBox = {
     template: `
     <div class="p-5 m-8 bg-white">
         <h3 class="mb-6">
-            <i class="fa fa-file-text-o text-blue-700" ng-if="$ctrl.isCorpus"></i>
-            <i class="fa fa-folder-open-o text-blue-700" ng-if="$ctrl.isFolder"></i>
+            <i class="fa-solid fa-file-text-o text-blue-700" ng-if="$ctrl.isCorpus"></i>
+            <i class="fa-solid fa-folder-open-o text-blue-700" ng-if="$ctrl.isFolder"></i>
             {{ $ctrl.title }}
         </h3>
         <div class="text-base my-3" ng-bind-html="$ctrl.description | trust"></div>

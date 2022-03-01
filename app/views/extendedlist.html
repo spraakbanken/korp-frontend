@@ -3,7 +3,7 @@
         <div ng-repeat="token in data track by $index" class="token inline-block">
             <div ng-if="!token.struct" class="query_token">
                 <div class="token_header">
-                    <i class="close_btn fa fa-times-circle-o fa-1" ng-class="{show: !showCloseButton}" ng-click="removeToken($index)"></i>
+                    <i class="close_btn fa-solid fa-times-circle-o fa-1" ng-class="{show: !showCloseButton}" ng-click="removeToken($index)"></i>
                     <div style="clear:both;"></div>
                 </div>
                 
@@ -40,10 +40,10 @@
                 <div class="token_footer">
                     <div>
                         <button class="insert_arg btn btn-xs btn-default" ng-click="addAnd(token)">
-                            <i class="fa fa-arrow-down"></i>
+                            <i class="fa-solid fa-arrow-down"></i>
                             <span style="margin-left: 1px;position: relative;top: -1px;">{{"and" | loc:lang}}</span>
                         </button>
-                        <button popper class="btn btn-xs btn-default token-cog-btn flex items-center"><i class="fa fa-bars mr-1"></i><span>{{'options' | loc:lang}}</span></button>
+                        <button popper class="btn btn-xs btn-default token-cog-btn flex items-center"><i class="fa-solid fa-bars mr-1"></i><span>{{'options' | loc:lang}}</span></button>
                         <ul class="popper_menu dropdown-menu">
                             <li>
                                 <a ng-click="toggleRepeat(token)">{{'repeat' | loc:lang}}</a>
@@ -67,7 +67,7 @@
             </div>
             <div ng-if="token.struct" class="query_token mt-8">
                 <div class="token_header">
-                    <i class="close_btn fa fa-times-circle-o fa-1" ng-click="removeTag($index)"></i>
+                    <i class="close_btn fa-solid fa-times-circle-o fa-1" ng-click="removeTag($index)"></i>
                     <div style="clear:both;"></div>
                 </div>
                 

@@ -24,37 +24,37 @@ export const corpusChooserComponent = {
                 </span>
             </div>
             <div ng-if="!$ctrl.initialized">
-                <i class="fa fa-spinner fa-pulse"></i>
+                <i class="fa-solid fa-spinner fa-pulse"></i>
             </div>
             <div class="transition-colors duration-500">
-                <i class="fa fa-caret-up relative top-2"></i>
+                <i class="fa-solid fa-caret-up relative top-2"></i>
                 <br>
-                <i class="fa fa-caret-down relative bottom-2"></i>
+                <i class="fa-solid fa-caret-down relative bottom-2"></i>
             </div>
         </div>
         <div ng-if="$ctrl.showChooser"  class="corpus-chooser flex bg-gray-100">
             <div class="popupchecks flex-shrink-0 p-4 h-full">
                 <div class="flex">
-                    <cc-time-graph />
+                    <cc-time-graph></cc-time-graph>
                     <div class="p-2">
                         <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
-                            <span class="fa fa-check"></span>
+                            <span class="fa-solid fa-check"></span>
                             <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>
                         </button>
                         <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-full">
-                            <span class="fa fa-times"></span>
+                            <span class="fa-solid fa-times"></span>
                             <span>{{ 'corpselector_buttonselectnone' | loc:$root.lang }}</span>
                         </button>
                     </div>
                 </div>
                 <!-- this is the beginning of the recursive component -->
-                <cc-tree node="$ctrl.root" on-select="$ctrl.onSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfo(node)" />
+                <cc-tree node="$ctrl.root" on-select="$ctrl.onSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfo(node)"></cc-tree>
 
                 <p class="text-sm pb-4">
                     {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' | loc:$root.lang}}
                 </p>
             </div>
-            <cc-info-box ng-if="$ctrl.showInfoBox" class="sticky top-0" style="width: 480px" object="$ctrl.infoNode"/>
+            <cc-info-box ng-if="$ctrl.showInfoBox" class="sticky top-0" style="width: 480px" object="$ctrl.infoNode"></cc-info>
         </div>
     </div>
     `,

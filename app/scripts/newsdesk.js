@@ -8,7 +8,7 @@ angular.module("newsdesk", []).directive("newsDesk", ($window, $document, $rootE
                 <div ng-if="shouldUseThis" class="newsdesk-opener" 
                      ng-click="togglePopover($event)" 
                      ng-class="{'newsdesk-new-news': numNewNews != 0, 'newsdesk-no-new-news' : numNewNews == 0}">
-                    <i class="fa fa-bell newsdesk-bell"></i>
+                    <i class="fa-solid fa-bell newsdesk-bell"></i>
                     <div class="newsdesk-arrow-box">
                         <span>{{numNewNews}}</span>
                     </div>&nbsp;

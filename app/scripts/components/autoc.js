@@ -34,7 +34,7 @@ export const component = {
                 typeahead-click-open
                 typeahead-is-open="$ctrl.typeaheadIsOpen"
                 ng-blur="$ctrl.typeaheadClose()"></div>
-            <div style="margin-left:-20px;margin-top:6px;float:left" ng-if="$ctrl.isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
+            <div style="margin-left:-20px;margin-top:6px;float:left" ng-if="$ctrl.isLoading"><i class="fa-solid fa-spinner fa-pulse"></i></div>
         </div>
         <div ng-show="$ctrl.disableLemgramAutocomplete">
             <div style="float:left">

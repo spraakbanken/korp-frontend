@@ -417,7 +417,7 @@ korpApp.directive("popper", ($rootElement) => ({
 
 korpApp.directive("tabSpinner", () => ({
     template: `\
-<i class="fa fa-times-circle close_icon"></i>
+<i class="fa-solid fa-times-circle close_icon"></i>
 <span class="tab_spinner"
         us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>\
 `,
@@ -681,7 +681,7 @@ korpApp.directive("timeInterval", () => ({
             show-weeks="true" starting-day="1"></div>
 
         <div class="time">
-            <i class="fa fa-3x fa-clock-o"></i><div uib-timepicker class="timepicker" ng-model="timeModel"
+            <i class="fa-solid fa-3x fa-clock-o"></i><div uib-timepicker class="timepicker" ng-model="timeModel"
                 hour-step="1" minute-step="1" show-meridian="false"></div>
         </div>
 </div>\
@@ -854,13 +854,13 @@ angular.module("template/datepicker/day.html", []).run(($templateCache) =>
 <table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}"
   <thead>
     <tr>
-      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa fa-chevron-left"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></button></th>
       <th colspan="{{5 + showWeeks}}">
         <button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm" ng-click="toggleMode()" tabindex="-1" style="width:100%;">
             <strong>{{title}}</strong>
         </button>
       </th>
-      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa fa-chevron-right"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa-solid fa-chevron-right"></i></button></th>
     </tr>
     <tr>
       <th ng-show="showWeeks" class="text-center"></th>
@@ -889,9 +889,9 @@ angular.module("template/datepicker/month.html", []).run(($templateCache) =>
 <table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}">
   <thead>
     <tr>
-      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa fa-chevron-left"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></button></th>
       <th><button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm" ng-click="toggleMode()" tabindex="-1" style="width:100%;"><strong>{{title}}</strong></button></th>
-      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa fa-chevron-right"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa-solid fa-chevron-right"></i></button></th>
     </tr>
   </thead>
   <tbody>
@@ -913,9 +913,9 @@ angular.module("template/datepicker/year.html", []).run(($templateCache) =>
 <table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}">
   <thead>
     <tr>
-      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa fa-chevron-left"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></button></th>
       <th colspan="3"><button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm" ng-click="toggleMode()" tabindex="-1" style="width:100%;"><strong>{{title}}</strong></button></th>
-      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa fa-chevron-right"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa-solid fa-chevron-right"></i></button></th>
     </tr>
   </thead>
   <tbody>
@@ -937,9 +937,9 @@ angular.module("template/timepicker/timepicker.html", []).run(($templateCache) =
 <table>
    <tbody>
        <tr class="text-center">
-           <td><a ng-click="incrementHours()" class="btn btn-link"><span class="fa fa-chevron-up"></span></a></td>
+           <td><a ng-click="incrementHours()" class="btn btn-link"><span class="fa-solid fa-chevron-up"></span></a></td>
            <td>&nbsp;</td>
-           <td><a ng-click="incrementMinutes()" class="btn btn-link"><span class="fa fa-chevron-up"></span></a></td>
+           <td><a ng-click="incrementMinutes()" class="btn btn-link"><span class="fa-solid fa-chevron-up"></span></a></td>
            <td ng-show="showMeridian"></td>
        </tr>
        <tr>
@@ -953,9 +953,9 @@ angular.module("template/timepicker/timepicker.html", []).run(($templateCache) =
            <td ng-show="showMeridian"><button type="button" class="btn btn-default text-center" ng-click="toggleMeridian()">{{meridian}}</button></td>
        </tr>
        <tr class="text-center">
-           <td><a ng-click="decrementHours()" class="btn btn-link"><span class="fa fa-chevron-down"></span></a></td>
+           <td><a ng-click="decrementHours()" class="btn btn-link"><span class="fa-solid fa-chevron-down"></span></a></td>
            <td>&nbsp;</td>
-           <td><a ng-click="decrementMinutes()" class="btn btn-link"><span class="fa fa-chevron-down"></span></a></td>
+           <td><a ng-click="decrementMinutes()" class="btn btn-link"><span class="fa-solid fa-chevron-down"></span></a></td>
            <td ng-show="showMeridian"></td>
        </tr>
    </tbody>

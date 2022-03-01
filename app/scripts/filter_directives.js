@@ -34,7 +34,7 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
         attrDef: "=",
         attrValue: "=",
         possibleValues: "=",
-        lang: "="
+        lang: "=",
     },
     template: `
     <span uib-dropdown auto-close="outsideClick" on-toggle="dropdownToggle(open)">
