@@ -125,50 +125,28 @@ export class CorpusListing {
     // End TODO
 
     getDefaultFilters() {
-        return this._getFilters("intersection", "defaultFilters")
-    }
-
-    getCurrentFilters() {
-        return this._getFilters(settings.filterSelection, "showFilters")
-    }
-
-    _getFilters(selection, filterType) {
-        let attrNames = []
-        let attrs = {}
+        const attrs = {}
 
         for (let corpus of this.selected) {
-            if (filterType in corpus) {
-                for (let filter of corpus[filterType]) {
-                    if (!attrNames.includes(filter)) {
-                        attrNames.push(filter)
+            for (let filter of corpus["defaultFilters"] || []) {
+                if (!(filter in attrs)) {
+                    attrs[filter] = {
+                        settings: corpus.structAttributes[filter],
+                        corpora: [corpus.id],
                     }
-                    if (!(filter in attrs)) {
-                        attrs[filter] = {
-                            settings: corpus.structAttributes[filter],
-                            corpora: [corpus.id],
-                        }
-                    } else {
-                        attrs[filter].corpora.push(corpus.id)
-                    }
+                } else {
+                    attrs[filter].corpora.push(corpus.id)
                 }
             }
         }
 
-        if (selection === "intersection") {
-            const attrNames2 = []
-            const attrs2 = {}
-            const corpusCount = this.selected.length
-            for (let attr of attrNames) {
-                if (attrs[attr].corpora.length === corpusCount) {
-                    attrNames2.push(attr)
-                    attrs2[attr] = attrs[attr]
-                }
+        const corpusCount = this.selected.length
+        for (let attr of Object.keys(attrs)) {
+            if (attrs[attr].corpora.length !== corpusCount) {
+                delete attrs[attr]
             }
-            attrNames = attrNames2
-            attrs = attrs2
         }
-
-        return [attrNames, attrs]
+        return attrs
     }
 
     _invalidateAttrs(attrs) {

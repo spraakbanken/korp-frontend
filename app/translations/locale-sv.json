@@ -344,7 +344,6 @@
     "select_attribute": "Välj attribut",
 
     "global_filter": "Filter",
-    "add_filter": "Lägg till filter",
     "add_filter_value": "Lägg till",
 
     "repeat_error": "Fel: Det går inte att upprepa från 0 på alla token.",

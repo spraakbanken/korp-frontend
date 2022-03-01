@@ -347,7 +347,6 @@
     "select_attribute": "Select attribute",
 
     "global_filter": "Filter",
-    "add_filter": "Add filter",
     "add_filter_value": "Add",
 
     "repeat_error": "Error: Not possible to repeat from 0 for all tokens.",
