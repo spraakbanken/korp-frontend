@@ -163,12 +163,6 @@ class KwicCtrl {
                     output.push(newSent)
                 }
 
-                if (i % 2 === 0) {
-                    hitContext._color = settings.primaryColor
-                } else {
-                    hitContext._color = settings.primaryLight
-                }
-
                 hitContext.corpus = mainCorpusId
 
                 output.push(hitContext)
@@ -190,7 +184,6 @@ class KwicCtrl {
                         tokens,
                         isLinked: true,
                         corpus: corpus_aligned,
-                        _color: hitContext._color,
                     })
                 }
 

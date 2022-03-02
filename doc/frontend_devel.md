@@ -558,9 +558,9 @@ __visibleModes__ - See **Adding modes**
 
 __modeConfig__ - See **Adding modes**
 
-__primaryColor__  - Background color in corpus chooser, CSS color. Example: `"rgb(221, 233, 255)"`
+~~__primaryColor__  - Background color in corpus chooser, CSS color. Example: `"rgb(221, 233, 255)"`~~ (This functionality was broken and is removed.)
 
-__primaryLight__  - Background color of settings area, CSS color. Example: `"rgb(221, 233, 255)"`
+~~__primaryLight__  -Background color of settings area, CSS color. Example: `"rgb(221, 233, 255)"`~~ (This functionality was broken and is removed.)
 
 __defaultOverviewContext__ - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: `"1 sentence"`. For corpora that do not support this context an additional parameter will be sent to the backend based on the `context`-setting in the corpus.
 
