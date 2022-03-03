@@ -13,7 +13,7 @@ korpApp.directive("globalFilters", (globalFilterService) => ({
                              attr-def="dataObj.attributes[filterKey]"
                              attr-value="dataObj.filterValues[filterKey].value",
                              possible-values="dataObj.filterValues[filterKey].possibleValues"
-                             lang="lang" />
+                             lang="lang"></global-filter>
               <span ng-if="!$last">{{"and" | loc:lang}}</span>
            </span>
        </div>

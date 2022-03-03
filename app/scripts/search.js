@@ -29,7 +29,7 @@ view.updateSearchHistory = function (value, href) {
         return
     }
     const opts = $.map(searches, function (item) {
-        const output = $("<option />", { value: item.location }).text(item.label).get(0)
+        const output = $("<option></option>", { value: item.location }).text(item.label).get(0)
         return output
     })
     const placeholder = $("<option>").localeKey("search_history").get(0)

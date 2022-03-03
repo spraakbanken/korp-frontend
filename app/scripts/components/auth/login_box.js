@@ -18,12 +18,12 @@ export const loginBoxComponent = {
             <label for="pass">{{'password' | loc:lang}}</label>
             <input id="pass" ng-model="$ctrl.loginPass" type="password">
             <a class="password-reset" href="https://ws.spraakbanken.gu.se/user/password" target="_blank">{{'forgot_password' | loc:lang}}</a>
-            <div style="clear:both"/>
+            <div style="clear:both"></div>
             <input class="save-login" id="saveLogin" type="checkbox" ng-model="$ctrl.saveLogin">
             <label class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
             <p ng-show="$ctrl.loginErr" class="err_msg">{{'login_fail_msg' | loc:lang}}</p>
             <input class="btn btn-sm btn-primary" type="submit" value="{{'send' | loc:lang}}">
-            <div style="clear:both"/>
+            <div style="clear:both"></div>
         </form>
     </div>
     `,

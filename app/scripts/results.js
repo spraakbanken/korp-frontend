@@ -60,7 +60,7 @@ class BaseResults {
         this.resetView()
         return $(`<object class="korp_fail" type="image/svg+xml" data="${korpFailImg}">`)
             .append(`<img class='korp_fail' src='${korpFailImg}'>`)
-            .add($("<div class='fail_text' />").localeKey("fail_text"))
+            .add($("<div class='fail_text'></div>").localeKey("fail_text"))
             .addClass("inline_block")
             .prependTo(this.$result)
             .wrapAll("<div class='error_msg'>")
@@ -286,7 +286,7 @@ view.KWICResults = class KWICResults extends BaseResults {
         const resultError = super.renderResult(data)
         // If an error occurred or the result is otherwise empty,
         // deselect word and hide the sidebar
-        if (! this.hasData || ! data.kwic || ! data.kwic.length) {
+        if (!this.hasData || !data.kwic || !data.kwic.length) {
             this.selectionManager.deselect()
             statemachine.send("DESELECT_WORD")
         }
@@ -1371,7 +1371,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         $("#dialog").remove()
 
         const relHitsString = util.getLocaleString("statstable_relfigures_hits")
-        $("<div id='dialog' />")
+        $("<div id='dialog'></div>")
             .appendTo("body")
             .append(
                 `<div id="pieDiv"><br/><div id="statistics_switch" style="text-align:center">

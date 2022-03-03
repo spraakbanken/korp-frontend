@@ -27,13 +27,13 @@ export const sidebarComponent = {
                     {{'read_in_korp' | loc:$root.lang}}
                 </span>
             </div>
-            <div id="selected_sentence" />
-            <div id="selected_word" />
+            <div id="selected_sentence"></div>
+            <div id="selected_word"></div>
 
             <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.openDepTree()" class="link show_deptree">
                 {{'show_deptree' | loc:$root.lang}}
             </div>
-            <dep-tree ng-if="$ctrl.showDepTree" tokens="$ctrl.tokens" corpus="$ctrl.corpusObj" on-close="$ctrl.closeDepTree()" />
+            <dep-tree ng-if="$ctrl.showDepTree" tokens="$ctrl.tokens" corpus="$ctrl.corpusObj" on-close="$ctrl.closeDepTree()"></dep-tree>
         </div>
     `,
     bindings: {

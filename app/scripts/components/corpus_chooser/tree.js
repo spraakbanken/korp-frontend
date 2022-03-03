@@ -21,7 +21,7 @@ export const ccTreeComponent = {
             <i 
                 ng-click="$ctrl.showInfo($event, folder)" 
                 class="fa-solid text-xl fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
-            <cc-tree ng-if="folder.extended" node="folder" indent="true" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfoLocal(node)" />
+            <cc-tree ng-if="folder.extended" node="folder" indent="true" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfoLocal(node)"></cc-tree>
         </div>
         <div ng-repeat="corpus in $ctrl.sortedCorpora"
             class="boxdiv"
