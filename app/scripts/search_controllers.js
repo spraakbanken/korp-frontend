@@ -51,6 +51,10 @@ window.SearchCtrl = [
         $scope.settings = settings
         $scope.showStats = () => settings.statistics !== false
 
+        if (!$location.search().stats_reduce && settings.statisticsCaseInsensitiveDefault) {
+            $location.search("stats_reduce_insensitive", "word")
+        }
+
         $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function (event, selected) {
             $scope.noCorporaSelected = !selected.length
             const allAttrs = settings.corpusListing.getStatsAttributeGroups()
