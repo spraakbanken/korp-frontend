@@ -131,8 +131,6 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     $rootScope.textTabs = []
 
     searches.infoDef.then(function () {
-        let currentCorpora = []
-
         // if no preselectedCorpora is defined, use all of them
         if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
             settings.preselectedCorpora = _.map(
@@ -140,23 +138,26 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                 "id"
             )
         } else {
+            let expandedCorpora = []
             for (let preItem of settings.preselectedCorpora) {
                 preItem = preItem.replace(/^__/g, "")
-                currentCorpora = [].concat(
-                    currentCorpora,
+                expandedCorpora = [].concat(
+                    expandedCorpora,
                     treeUtil.getAllCorporaInFolders(settings.corporafolders, preItem)
                 )
             }
             // folders expanded, save
-            settings.preselectedCorpora = currentCorpora
+            settings.preselectedCorpora = expandedCorpora
         }
 
+        let currentCorpora
         let { corpus } = $location.search()
-
         if (corpus) {
             currentCorpora = _.flatten(
                 _.map(corpus.split(","), (val) => treeUtil.getAllCorporaInFolders(settings.corporafolders, val))
             )
+        } else {
+            currentCorpora = settings.preselectedCorpora
         }
 
         const loginNeededFor = []
