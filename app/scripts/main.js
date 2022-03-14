@@ -62,7 +62,6 @@ $.when(loc_dfd, deferred_domReady).then(
         try {
             angular.bootstrap(document, ["korpApp"])
         } catch (error) {
-            console.log("????")
             c.error(error)
         }
 
