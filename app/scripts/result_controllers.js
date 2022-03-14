@@ -50,7 +50,15 @@ class KwicCtrl {
 
         const readingChange = function () {
             if (s.instance && s.instance.getProxy().pendingRequests.length) {
-                return $.when(...(s.instance.getProxy().pendingRequests || [])).then(function () {
+                // If the requests passed to $.when contain rejected
+                // (aborted) requests, .then is not executed, so
+                // filter those out
+                // TODO: Remove at least rejected requests from
+                // pendingRequests somewhere
+                const nonRejectedRequests =
+                      (s.instance.getProxy().pendingRequests || []).filter(
+                          req => req.state() != "rejected")
+                return $.when(...nonRejectedRequests).then(function () {
                     return s.instance.makeRequest()
                 })
             }
