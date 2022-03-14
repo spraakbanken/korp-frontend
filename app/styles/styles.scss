@@ -439,16 +439,13 @@ time-interval {
   margin-top: 1px;
 }
 
-#corpusbox {
-  cursor: pointer;
-  .hp_topframe {
-    width: 480px;
-    padding: .5em 1em .5em 20px;
+.hp_topframe {
+  width: 480px;
+  padding: .5em 1em .5em 20px;
+  color: #222222;
+  position: relative;
+  &:link, &:visited {
     color: #222222;
-    position: relative;
-    &:link, &:visited {
-      color: #222222;
-    }
   }
 }
 

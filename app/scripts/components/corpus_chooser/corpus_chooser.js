@@ -7,8 +7,8 @@ export const corpusChooserComponent = {
     <div class="absolute inset-0 bg-transparent"
         ng-click="$ctrl.showChooser = false"
         ng-if="$ctrl.showChooser"></div>
-    <div id="corpusbox" class="scroll_checkboxes flex-shrink-0 ml-8">
-        <div ng-click="$ctrl.showChooser = !$ctrl.showChooser" class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
+    <div class="scroll_checkboxes flex-shrink-0 ml-8" ng-class="{'cursor-pointer': $ctrl.initialized}">
+        <div ng-click="$ctrl.onShowChooser()" class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
             <div ng-if="$ctrl.initialized">
 
                 <span ng-if-start="$ctrl.selectCount != 1">{{ $ctrl.selectCount }}</span>
@@ -92,6 +92,13 @@ export const corpusChooserComponent = {
 
             $ctrl.initialized = false
             $ctrl.showChooser = false
+
+            $ctrl.onShowChooser = () => {
+                // don't open the chooser unless the info-call is done
+                if ($ctrl.initialized) {
+                    $ctrl.showChooser = !$ctrl.showChooser
+                }
+            }
 
             // should be ON INFO-call done from statemachine
             $rootScope.$on("corpuschooserchange", (e, corpusIds) => {
