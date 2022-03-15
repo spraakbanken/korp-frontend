@@ -15,7 +15,7 @@ export const ccTreeComponent = {
                 class="boxlabel cursor-pointer"
                 ng-click="$ctrl.toggleFolderSelection($event, folder)">
                 <span class="checkbox" ng-class="{ checked: folder.selected == 'all', unchecked: folder.selected == 'none', intermediate: folder.selected == 'some' }"></span>
-                <span>{{ folder.title }}</span>
+                <span>{{ folder.title | locObj:$root.lang }}</span>
                 <span class="numberOfChildren">({{folder.numberOfChildren}})</span>
             </label>
             <i 
@@ -31,7 +31,7 @@ export const ccTreeComponent = {
             >
             <label class="px-2" 'cursor-pointer': corpus.userHasAccess }>
                 <span class="checkbox" ng-class="{ checked: corpus.selected, unchecked: !corpus.selected }"></span>
-                <span>{{corpus.title}}</span>
+                <span>{{ corpus.title | locObj:$root.lang }}</span>
             </label>
             <i ng-if="corpus.limitedAccess && corpus.userHasAccess" class="fa-solid fa-unlock"></i>
             <i 

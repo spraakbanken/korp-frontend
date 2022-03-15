@@ -33,7 +33,12 @@ export const sidebarComponent = {
             <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.openDepTree()" class="link show_deptree">
                 {{'show_deptree' | loc:$root.lang}}
             </div>
-            <dep-tree ng-if="$ctrl.showDepTree" tokens="$ctrl.tokens" corpus="$ctrl.corpusObj" on-close="$ctrl.closeDepTree()"></dep-tree>
+            <dep-tree
+                ng-if="$ctrl.showDepTree"
+                tokens="$ctrl.tokens"
+                corpus="$ctrl.corpusObj"
+                on-close="$ctrl.closeDepTree()"
+            ></dep-tree>
         </div>
     `,
     bindings: {
@@ -162,12 +167,13 @@ export const sidebarComponent = {
                     }
 
                     pairs = _.filter(pairs, function (...args) {
-                        return (
-                            corpus_attrs[key] &&
-                            !(corpus_attrs[key].displayType === "hidden" || corpus_attrs[key].hideSidebar)
-                        )
+                        let [key, val] = args[0]
+                        return corpus_attrs[key]
                     })
-
+                    pairs = _.filter(pairs, function (...args) {
+                        let [key, val] = args[0]
+                        return !(corpus_attrs[key].displayType === "hidden" || corpus_attrs[key].hideSidebar)
+                    })
                     pairs.sort((a, b) => sortingArr.indexOf(a[0]) - sortingArr.indexOf(b[0]))
 
                     for (let custom of customData) {

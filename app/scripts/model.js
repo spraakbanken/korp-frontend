@@ -349,7 +349,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
 
         const reduceValLabels = _.map(reduceVals, function (reduceVal) {
             if (reduceVal === "word") {
-                return "word"
+                return settings.wordLabel
             }
             const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
                 reduceVal

@@ -620,6 +620,9 @@ korpApp.directive("compareSearchCtrl", () => ({
 // TODO move these
 korpApp.filter("loc", () => (translationKey, lang) => util.getLocaleString(translationKey, lang))
 korpApp.filter("locObj", () => (translationObject, lang) => {
+    if (!lang) {
+        lang = window.lang || settings.defaultLanguage || "sv"
+    }
     return translationObject ? translationObject[lang] || translationObject : undefined
 })
 korpApp.filter("replaceEmpty", function () {
