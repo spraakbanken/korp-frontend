@@ -3,7 +3,7 @@
         <div ng-repeat="token in data track by $index" class="token inline-block">
             <div ng-if="!token.struct" class="query_token">
                 <div class="token_header">
-                    <i class="close_btn fa-solid fa-times-circle-o fa-1" ng-class="{show: !showCloseButton}" ng-click="removeToken($index)"></i>
+                    <i class="close_btn fa-solid fa-circle-xmark text-gray-600" ng-class="{show: !showCloseButton}" ng-click="removeToken($index)"></i>
                     <div style="clear:both;"></div>
                 </div>
                 
@@ -67,7 +67,7 @@
             </div>
             <div ng-if="token.struct" class="query_token mt-8">
                 <div class="token_header">
-                    <i class="close_btn fa-solid fa-times-circle-o fa-1" ng-click="removeTag($index)"></i>
+                    <i class="close_btn fa-solid fa-circle-xmark text-gray-600" ng-click="removeTag($index)"></i>
                     <div style="clear:both;"></div>
                 </div>
                 
