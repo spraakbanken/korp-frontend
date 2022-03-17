@@ -22,7 +22,7 @@ export const loginBoxComponent = {
             <input class="save-login" id="saveLogin" type="checkbox" ng-model="$ctrl.saveLogin">
             <label class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
             <p ng-show="$ctrl.loginErr" class="err_msg">{{'login_fail_msg' | loc:lang}}</p>
-            <input class="btn btn-sm btn-primary" type="submit" value="{{'send' | loc:lang}}">
+            <input class="btn btn-sm bg-blue-500 text-white" type="submit" value="{{'send' | loc:lang}}">
             <div style="clear:both"></div>
         </form>
     </div>
