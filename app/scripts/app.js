@@ -173,7 +173,8 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
             }
         }
 
-        if (loginNeededFor.length != 0) {
+        // only ask user to login if corpora came from URL
+        if (corpus && loginNeededFor.length != 0) {
             s.savedState = $location.search()
             $location.url($location.path() + "?")
 
