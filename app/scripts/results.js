@@ -1845,8 +1845,8 @@ view.GraphResults = class GraphResults extends BaseResults {
                     field: timestamp,
                     formatter(row, cell, value, columnDef, dataContext) {
                         const loc = {
-                            sv: "sv-SE",
-                            en: "gb-EN",
+                            swe: "sv-SE",
+                            eng: "gb-EN",
                         }[$("body").scope().lang]
                         const fmt = function (valTup) {
                             if (typeof valTup[0] === "undefined") {

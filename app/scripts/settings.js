@@ -18,4 +18,17 @@ export function setDefaultConfigValues() {
         // some safety margin
         settings.backendURLMaxLength = 8100
     }
+    if (!settings.defaultLanguage) {
+        settings.defaultLanguage = "swe"
+    }
+    // codes for translation ISO-639-1 to 639-2
+    if (!settings.isoLanguages) {
+        settings.isoLanguages = {
+            en: "eng",
+            sv: "swe",
+            fi: "fin",
+            da: "dan",
+            no: "nor",
+        }
+    }
 }

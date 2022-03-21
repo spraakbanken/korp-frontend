@@ -53,11 +53,6 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
     const labParam = window.isLab ? "&include_lab" : ""
     fetch(`${settings.korpBackendURL}/corpus_config?mode=${window.currentMode}${labParam}`).then((response) => {
         response.json().then((modeSettings) => {
-            function changeLangCode(obj, key) {
-                if (typeof obj[key] === "object" && obj[key] !== null && obj[key]["swe"]) {
-                    obj[key] = { en: obj[key]["eng"], sv: obj[key]["swe"] }
-                }
-            }
 
             function rename(obj, from, to) {
                 if (obj[from]) {
@@ -73,7 +68,6 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
             for (const attrType of ["attributes", "structAttributes", "customAttributes"]) {
                 for (const attrId in modeSettings["attributes"][attrType]) {
                     const attr = modeSettings["attributes"][attrType][attrId]
-                    changeLangCode(attr, "label")
                     rename(attr, "extended_component", "extendedComponent")
                     rename(attr, "sidebar_component", "sidebarComponent")
                     rename(attr, "external_search", "externalSearch")
@@ -95,9 +89,6 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
             // TODO the internal representation should be changed to a new, more compact one.
             for (const corpusId in modeSettings["corpora"]) {
                 const corpus = modeSettings["corpora"][corpusId]
-
-                changeLangCode(corpus, "title")
-                changeLangCode(corpus, "description")
 
                 rename(corpus, "pos_attributes", "attributes")
                 rename(corpus, "struct_attributes", "structAttributes")
@@ -144,18 +135,6 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
             rename(modeSettings, "hits_per_page_default", "hitsPerPageDefault")
             rename(modeSettings, "hits_per_page_values", "hitsPerPageValues")
 
-            function recurse(folder) {
-                changeLangCode(folder, "title")
-                changeLangCode(folder, "description")
-
-                for (const subFolderName in folder["subfolders"]) {
-                    recurse(folder["subfolders"][subFolderName])
-                }
-            }
-            for (const folder in modeSettings["corporafolders"]) {
-                recurse(modeSettings.corporafolders[folder])
-            }
-
             resolve(modeSettings)
         })
     })
@@ -172,6 +151,17 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
         settings.corpusListing = new CorpusListing(corpora)
     } else {
         settings.corpusListing = new ParallelCorpusListing(corpora)
+    }
+
+    // rewriting old language codes to new ones
+    if (location.hash.includes("lang=")) {
+        const match = /lang\=(.*?)(&|$)/.exec(location.hash)
+        if (match) {
+            const lang = match[1]
+            if (settings.isoLanguages[lang]) {
+                location.hash = location.hash.replace(`lang=${lang}`, `lang=${settings.isoLanguages[lang]}`)
+            }
+        }
     }
 
     try {

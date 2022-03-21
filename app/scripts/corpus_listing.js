@@ -248,7 +248,7 @@ export class CorpusListing {
             })
         )
         if (_.isEmpty(withins)) {
-            return { sentence: { label: { sv: "mening", en: "sentence" } } }
+            return { sentence: { label: { swe: "mening", eng: "sentence" } } }
         }
         return withins
     }

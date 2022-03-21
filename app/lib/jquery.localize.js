@@ -7,16 +7,8 @@
 			// return 
 			$.localize.options = o;
 			var dfds = [];
-			// some language identifyer aliases
-			var trans = {
-				"swe"  : "sv",
-				"sv" : "sv",
-				"eng" : "en",
-				"en" : "en"
-			};
+
 			var lang = o.language;
-			if(lang in trans)
-				lang = trans[o.language];
 			
 			$.localize.data.lang = lang;
 			if(!$.localize.data[lang])

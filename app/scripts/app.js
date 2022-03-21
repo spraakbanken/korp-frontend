@@ -113,14 +113,14 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
 
     s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
 
-    tmhDynamicLocale.set("en")
+    tmhDynamicLocale.set(settings.defaultLanguage)
 
     s._loc = $location
 
     s.$watch("_loc.search()", function () {
         _.defer(() => (window.onHashChange || _.noop)())
 
-        return tmhDynamicLocale.set($location.search().lang || "sv")
+        return tmhDynamicLocale.set($location.search().lang || settings.defaultLanguage)
     })
 
     $rootScope.kwicTabs = []
