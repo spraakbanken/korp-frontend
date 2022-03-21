@@ -60,7 +60,7 @@ export const ccTreeComponent = {
                         return comparator(...[a, b].map((x) => util.translateAttribute(lang, x, "title")))
                     })
                 }
-                $ctrl.sortedCorpora = sort($ctrl.node.contents)
+                $ctrl.sortedCorpora = sort($ctrl.node.corpora)
                 $ctrl.sortedFolders = sort($ctrl.node.subFolders)
             }
 

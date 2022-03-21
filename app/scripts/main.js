@@ -133,6 +133,9 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
             delete modeSettings["attributes"]
 
             rename(modeSettings, "folders", "corporafolders")
+            if (!modeSettings["corporafolders"]) {
+                modeSettings["corporafolders"] = {}
+            }
             rename(modeSettings, "preselected_corpora", "preselectedCorpora")
             rename(modeSettings, "start_lang", "startLang")
             rename(modeSettings, "default_overview_context", "defaultOverviewContext")
@@ -145,14 +148,9 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
                 changeLangCode(folder, "title")
                 changeLangCode(folder, "description")
 
-                rename(folder, "corpora", "contents")
-
                 for (const subFolderName in folder["subfolders"]) {
-                    const subFolder = folder["subfolders"][subFolderName]
-                    recurse(subFolder)
-                    folder[subFolderName] = subFolder
+                    recurse(folder["subfolders"][subFolderName])
                 }
-                delete folder["subfolders"]
             }
             for (const folder in modeSettings["corporafolders"]) {
                 recurse(modeSettings.corporafolders[folder])
