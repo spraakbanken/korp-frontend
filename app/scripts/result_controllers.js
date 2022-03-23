@@ -384,7 +384,7 @@ korpApp.directive("statsResultCtrl", () => ({
 
         s.onGraphShow = (data) => $rootScope.graphTabs.push(data)
 
-        s.mapEnabled = settings.mapEnabled
+        s.mapEnabled = settings["map_enabled"]
 
         s.getGeoAttributes = function (corpora) {
             let attrs = {}
@@ -583,7 +583,7 @@ korpApp.directive("wordpicCtrl", () => ({
         }
 
         $scope.getTableClass = (wordClass, parentIdx, idx) =>
-            settings.wordPictureConf[wordClass][parentIdx][idx].css_class
+            settings["word_picture_conf"][wordClass][parentIdx][idx].css_class
 
         $scope.getHeaderLabel = function (header, section, idx) {
             if (header.alt_label) {
@@ -609,7 +609,7 @@ korpApp.directive("wordpicCtrl", () => ({
             return section[index] && section[index].table
         }
 
-        $scope.getResultHeader = (index, wordClass) => settings.wordPictureConf[wordClass][index]
+        $scope.getResultHeader = (index, wordClass) => settings["word_picture_conf"][wordClass][index]
 
         $scope.fromLemgram = function (maybeLemgram) {
             if (util.isLemgramId(maybeLemgram)) {

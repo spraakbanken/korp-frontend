@@ -102,7 +102,7 @@ const createStatisticsService = function () {
         statsWorker.postMessage({
             data,
             reduceVals,
-            groupStatistics: settings.groupStatistics,
+            groupStatistics: settings["group_statistics"],
         })
     }
 

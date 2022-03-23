@@ -9,7 +9,7 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
 
         s.loading = true
         s.newDynamicTab()
-        s.center = settings.mapCenter
+        s.center = settings["map_center"]
         s.markers = {}
         s.selectedGroups = []
         s.markerGroups = []

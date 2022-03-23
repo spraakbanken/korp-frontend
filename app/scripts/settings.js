@@ -10,8 +10,8 @@ export function setDefaultConfigValues() {
     if (!settings["hits_per_page_default"]) {
         settings["hits_per_page_default"] = settings["hits_per_page_values"][0]
     }
-    if (!settings.groupStatistics) {
-        settings.groupStatistics = []
+    if (!settings["group_statistics"]) {
+        settings["group_statistics"] = []
     }
     if (!settings.backendURLMaxLength) {
         // The default maximum URI length for Apache is 8190 but keep
@@ -30,5 +30,9 @@ export function setDefaultConfigValues() {
             da: "dan",
             no: "nor",
         }
+    }
+
+    if (!settings["cqp_prio"]) {
+        settings["cqp_prio"] = ["deprel", "pos", "msd", "suffix", "prefix", "grundform", "lemgram", "saldo", "word"]
     }
 }

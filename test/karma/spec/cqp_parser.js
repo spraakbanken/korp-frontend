@@ -10,6 +10,8 @@ require("../../../app/scripts/cqp_parser/CQPParser.js")
 require("../../../app/scripts/cqp_parser/cqp.js")
 window.moment = require("moment")
 
+window.settings["cqp_prio"] = ["deprel", "pos", "msd", "suffix", "prefix", "grundform", "lemgram", "saldo", "word"]
+
 describe("parsing", function() {
     it("can parse simple expr", () =>
         expect(JSON.stringify(CQP.parse("[word = 'foo']")))

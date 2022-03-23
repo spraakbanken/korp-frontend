@@ -202,7 +202,7 @@ util.splitLemgram = function (lemgram) {
 }
 
 // Add download links for other formats, defined in
-// settings.downloadFormats (Jyrki Niemi <jyrki.niemi@helsinki.fi>
+// settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
 util.setDownloadLinks = function (xhr_settings, result_data) {
@@ -250,8 +250,8 @@ util.setDownloadLinks = function (xhr_settings, result_data) {
     }
     $("#download-links").append("<option value='init' rel='localize[download_kwic]'></option>")
     i = 0
-    while (i < settings.downloadFormats.length) {
-        const format = settings.downloadFormats[i]
+    while (i < settings["download_formats"].length) {
+        const format = settings["download_formats"][i]
         // NOTE: Using attribute rel="localize[...]" to localize the
         // title attribute requires a small change to
         // lib/jquery.localize.js. Without that, we could use
@@ -271,17 +271,17 @@ util.setDownloadLinks = function (xhr_settings, result_data) {
             query_params: xhr_settings.url,
             format,
             korp_url: window.location.href,
-            korp_server_url: settings.korpBackendURL,
+            korp_server_url: settings["korp_backend_url"],
             corpus_config: JSON.stringify(result_corpora_settings),
             corpus_config_info_keys: ["metadata", "licence", "homepage", "compiler"].join(","),
             urn_resolver: settings.urnResolver,
         }
         if ("downloadFormatParams" in settings) {
-            if ("*" in settings.downloadFormatParams) {
-                $.extend(download_params, settings.downloadFormatParams["*"])
+            if ("*" in settings["download_format_params"]) {
+                $.extend(download_params, settings["download_format_params"]["*"])
             }
-            if (format in settings.downloadFormatParams) {
-                $.extend(download_params, settings.downloadFormatParams[format])
+            if (format in settings["download_format_params"]) {
+                $.extend(download_params, settings["download_format_params"][format])
             }
         }
         option.appendTo("#download-links").data("params", download_params)
@@ -296,7 +296,7 @@ util.setDownloadLinks = function (xhr_settings, result_data) {
             if (!params) {
                 return
             }
-            $.generateFile(settings.downloadCgiScript, params)
+            $.generateFile(settings["download_cgi_script"], params)
             const self = $(this)
             return setTimeout(() => self.val("init"), 1000)
         })

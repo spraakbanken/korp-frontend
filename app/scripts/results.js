@@ -347,7 +347,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             }
         }
 
-        if (settings.enableBackendKwicDownload) {
+        if (settings["enable_backend_kwic_download"]) {
             util.setDownloadLinks(this.proxy.prevRequest, data)
         }
 
@@ -788,10 +788,10 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             let [word, pos] = args[0]
             return word + pos
         })
-        const tagsetTrans = _.invert(settings.wordpictureTagset)
+        const tagsetTrans = _.invert(settings["wordpicture_tagset"])
         unique_words = _.filter(unique_words, function (...args) {
             const [currentWd, pos] = args[0]
-            return settings.wordPictureConf[tagsetTrans[pos]] != null
+            return settings["word_picture_conf"][tagsetTrans[pos]] != null
         })
         if (!unique_words.length) {
             this.showNoResults()
@@ -826,7 +826,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             }
         }
 
-        const tagsetTrans = _.invert(settings.wordpictureTagset)
+        const tagsetTrans = _.invert(settings["wordpicture_tagset"])
 
         const res = _.map(tables, function ([token, wordClass]) {
             const getRelType = (item) => ({
@@ -835,14 +835,14 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             })
 
             const wordClassShort = wordClass.toLowerCase()
-            wordClass = _.invert(settings.wordpictureTagset)[wordClassShort]
+            wordClass = _.invert(settings["wordpicture_tagset"])[wordClassShort]
 
-            if (settings.wordPictureConf[wordClass] == null) {
+            if (settings["word_picture_conf"][wordClass] == null) {
                 return
             }
             let orderArrays = [[], [], []]
             $.each(data, (index, item) => {
-                $.each(settings.wordPictureConf[wordClass] || [], (i, rel_type_list) => {
+                $.each(settings["word_picture_conf"][wordClass] || [], (i, rel_type_list) => {
                     const list = orderArrays[i]
                     const rel = getRelType(item)
 
@@ -868,8 +868,8 @@ view.LemgramResults = class LemgramResults extends BaseResults {
                     }
                 })
 
-                if (settings.wordPictureConf[wordClass][i] && unsortedList.length) {
-                    const toIndex = $.inArray("_", settings.wordPictureConf[wordClass][i])
+                if (settings["word_picture_conf"][wordClass][i] && unsortedList.length) {
+                    const toIndex = $.inArray("_", settings["word_picture_conf"][wordClass][i])
                     if (util.isLemgramId(token)) {
                         unsortedList[toIndex] = { word: token.split("..")[0].replace(/_/g, " ") }
                     } else {

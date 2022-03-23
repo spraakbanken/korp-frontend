@@ -508,7 +508,7 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
             return
         }
 
-        confObj = _.extend({}, (confObj && confObj.opts) || settings.defaultOptions)
+        confObj = _.extend({}, (confObj && confObj.opts) || settings["default_options"])
 
         if (confObj.type === "set") {
             confObj.is = "contains"

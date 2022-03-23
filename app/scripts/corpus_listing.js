@@ -312,7 +312,7 @@ export class CorpusListing {
         const word = {
             group: "word",
             value: "word",
-            label: settings.wordLabel,
+            label: settings["word_label"],
         }
         return word
     }
@@ -376,10 +376,10 @@ export class CorpusListing {
     getStatsAttributeGroups(lang) {
         const word = this.getWordGroup()
 
-        const wordOp = settings.reduceWordAttributeSelector || "union"
+        const wordOp = settings["reduce_word_attribute_selector"] || "union"
         const attrs = this.getWordAttributeGroups(lang, wordOp)
 
-        const structOp = settings.reduceStructAttributeSelector || "union"
+        const structOp = settings["reduce_struct_attribute_selector"] || "union"
         const sentAttrs = this.getStructAttributeGroups(lang, structOp)
 
         return [word].concat(attrs, sentAttrs)
