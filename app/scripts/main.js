@@ -122,9 +122,8 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
 
             delete modeSettings["attributes"]
 
-            rename(modeSettings, "folders", "corporafolders")
-            if (!modeSettings["corporafolders"]) {
-                modeSettings["corporafolders"] = {}
+            if (!modeSettings["folders"]) {
+                modeSettings["folders"] = {}
             }
             rename(modeSettings, "preselected_corpora", "preselectedCorpora")
             rename(modeSettings, "start_lang", "startLang")

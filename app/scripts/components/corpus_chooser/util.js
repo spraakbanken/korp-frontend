@@ -51,13 +51,13 @@ export const initCorpusStructure = (collection, initalCorpusSelection) => {
     }
 
     // this is needed for folder identity checks in chooser
-    for (const folderId of Object.keys(settings.corporafolders)) {
-        settings.corporafolders[folderId].id = folderId
+    for (const folderId of Object.keys(settings["folders"])) {
+        settings["folders"][folderId].id = folderId
     }
 
-    const [totalCorporaIds, totalTokens, totalSentences] = initFolders(Object.values(settings.corporafolders))
+    const [totalCorporaIds, totalTokens, totalSentences] = initFolders(Object.values(settings["folders"]))
     const topLevelCorpora = _.filter(collection, (corpus) => !totalCorporaIds.includes(corpus.id))
-    const topLevelFolders = Object.values(settings.corporafolders)
+    const topLevelFolders = Object.values(settings["folders"])
 
     return {
         corpora: topLevelCorpora,

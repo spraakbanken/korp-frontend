@@ -142,7 +142,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                 preItem = preItem.replace(/^__/g, "")
                 expandedCorpora = [].concat(
                     expandedCorpora,
-                    treeUtil.getAllCorporaInFolders(settings.corporafolders, preItem)
+                    treeUtil.getAllCorporaInFolders(settings["folders"], preItem)
                 )
             }
             // folders expanded, save
@@ -153,7 +153,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
         let { corpus } = $location.search()
         if (corpus) {
             currentCorpora = _.flatten(
-                _.map(corpus.split(","), (val) => treeUtil.getAllCorporaInFolders(settings.corporafolders, val))
+                _.map(corpus.split(","), (val) => treeUtil.getAllCorporaInFolders(settings["folders"], val))
             )
         } else {
             currentCorpora = settings.preselectedCorpora
