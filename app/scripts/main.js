@@ -53,7 +53,6 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
     const labParam = window.isLab ? "&include_lab" : ""
     fetch(`${settings.korpBackendURL}/corpus_config?mode=${window.currentMode}${labParam}`).then((response) => {
         response.json().then((modeSettings) => {
-
             function rename(obj, from, to) {
                 if (obj[from]) {
                     obj[to] = obj[from]
