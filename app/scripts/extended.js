@@ -45,7 +45,7 @@ const selectController = (autocomplete) => [
             // check which corpora support attributes
             const corpora = []
             for (let corpusSettings of selectedCorpora) {
-                if (attribute in corpusSettings.structAttributes || attribute in corpusSettings.attributes) {
+                if (attribute in corpusSettings["struct_attributes"] || attribute in corpusSettings.attributes) {
                     corpora.push(corpusSettings.id)
                 }
             }

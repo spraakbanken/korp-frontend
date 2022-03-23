@@ -28,7 +28,7 @@ export class CorpusListing {
     }
 
     // only applicable for parallel corpora
-    getReduceLang() {}
+    getReduceLang() { }
 
     // Returns an array of all the selected corpora's IDs in uppercase
     getSelectedCorpora() {
@@ -74,28 +74,28 @@ export class CorpusListing {
 
     getStructAttrsIntersection() {
         const attrs = this.mapSelectedCorpora(function (corpus) {
-            for (let key in corpus.structAttributes) {
-                const value = corpus.structAttributes[key]
-                value["isStructAttr"] = true
+            for (let key in corpus["struct_attributes"]) {
+                const value = corpus["struct_attributes"][key]
+                value["is_struct_attr"] = true
             }
 
-            return corpus.structAttributes
+            return corpus["struct_attributes"]
         })
         return this._mapping_intersection(attrs)
     }
 
     getStructAttrs() {
         const attrs = this.mapSelectedCorpora(function (corpus) {
-            for (let key in corpus.structAttributes) {
-                const value = corpus.structAttributes[key]
-                value["isStructAttr"] = true
+            for (let key in corpus["struct_attributes"]) {
+                const value = corpus["struct_attributes"][key]
+                value["is_struct_attr"] = true
             }
 
             // if a position attribute is declared as structural, include here
             const pos_attrs = _.pickBy(corpus.attributes, (val, key) => {
-                return val.isStructAttr
+                return val["is_struct_attr"]
             })
-            return _.extend({}, pos_attrs, corpus.structAttributes)
+            return _.extend({}, pos_attrs, corpus["struct_attributes"])
         })
         const rest = this._invalidateAttrs(attrs)
 
@@ -131,7 +131,7 @@ export class CorpusListing {
             for (let filter of corpus["defaultFilters"] || []) {
                 if (!(filter in attrs)) {
                     attrs[filter] = {
-                        settings: corpus.structAttributes[filter],
+                        settings: corpus["struct_attributes"][filter],
                         corpora: [corpus.id],
                     }
                 } else {
@@ -168,7 +168,7 @@ export class CorpusListing {
         for (let attr of attrs) {
             if (
                 attr !== "word" &&
-                !(attr in $.extend({}, this.struct[corpus].attributes, this.struct[corpus].structAttributes))
+                !(attr in $.extend({}, this.struct[corpus].attributes, this.struct[corpus]["struct_attributes"]))
             ) {
                 return false
             }
@@ -217,7 +217,7 @@ export class CorpusListing {
     }
 
     getWithinParameters() {
-        const defaultWithin = locationSearch().within || _.keys(settings.defaultWithin)[0]
+        const defaultWithin = locationSearch().within || _.keys(settings["default_within"])[0]
 
         const output = []
         for (let corpus of this.selected) {
@@ -248,7 +248,7 @@ export class CorpusListing {
             })
         )
         if (_.isEmpty(withins)) {
-            return { sentence: { label: { sv: "mening", en: "sentence" } } }
+            return { sentence: { label: { swe: "mening", eng: "sentence" } } }
         }
         return withins
     }
@@ -308,22 +308,13 @@ export class CorpusListing {
         }
     }
 
-    getWordGroup(withCaseInsentive) {
+    getWordGroup() {
         const word = {
             group: "word",
             value: "word",
-            label: "word",
+            label: settings["word_label"],
         }
-        if (withCaseInsentive) {
-            const wordInsensitive = {
-                group: "word",
-                value: "word_insensitive",
-                label: "word_insensitive",
-            }
-            return [word, wordInsensitive]
-        } else {
-            return [word]
-        }
+        return word
     }
 
     getWordAttributeGroups(lang, setOperator) {
@@ -337,10 +328,11 @@ export class CorpusListing {
         const attrs = []
         for (let key in allAttrs) {
             const obj = allAttrs[key]
-            if (obj.displayType !== "hidden") {
+            if (obj["display_type"] !== "hidden") {
                 attrs.push(_.extend({ group: "word_attr", value: key }, obj))
             }
         }
+
         return attrs
     }
 
@@ -364,7 +356,7 @@ export class CorpusListing {
         const object = _.extend({}, common, allAttrs)
         for (let key in object) {
             const obj = object[key]
-            if (obj.displayType !== "hidden") {
+            if (obj["display_type"] !== "hidden") {
                 sentAttrs.push(_.extend({ group: "sentence_attr", value: key }, obj))
             }
         }
@@ -375,21 +367,21 @@ export class CorpusListing {
     }
 
     getAttributeGroups(lang) {
-        const words = this.getWordGroup(false)
+        const word = this.getWordGroup()
         const attrs = this.getWordAttributeGroups(lang, "union")
         const sentAttrs = this.getStructAttributeGroups(lang, "union")
-        return words.concat(attrs, sentAttrs)
+        return [word].concat(attrs, sentAttrs)
     }
 
     getStatsAttributeGroups(lang) {
-        const words = this.getWordGroup(true)
+        const word = this.getWordGroup()
 
-        const wordOp = settings.reduceWordAttributeSelector || "union"
+        const wordOp = settings["reduce_word_attribute_selector"] || "union"
         const attrs = this.getWordAttributeGroups(lang, wordOp)
 
-        const structOp = settings.reduceStructAttributeSelector || "union"
+        const structOp = settings["reduce_struct_attribute_selector"] || "union"
         const sentAttrs = this.getStructAttributeGroups(lang, structOp)
 
-        return words.concat(attrs, sentAttrs)
+        return [word].concat(attrs, sentAttrs)
     }
 }

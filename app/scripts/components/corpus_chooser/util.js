@@ -22,20 +22,18 @@ export const initCorpusStructure = (collection, initalCorpusSelection) => {
         let totalSentences = 0
 
         for (const folder of folders) {
-            totalCorporaIds = totalCorporaIds.concat(folder.contents)
-            folder.contents = _.map(folder.contents, (corpusId) => collection[corpusId])
+            totalCorporaIds = totalCorporaIds.concat(folder.corpora)
+            folder.corpora = _.map(folder.corpora, (corpusId) => collection[corpusId])
 
             const subFolders = []
-            _.map(folder, (value, key) => {
-                if (!["title", "description", "contents", "id"].includes(key)) {
-                    // this is needed for folder identity checks in chooser
-                    value.id = key
-                    subFolders.push(value)
-                }
+            _.map(folder["subfolders"], (value, key) => {
+                // this is needed for folder identity checks in chooser
+                value.id = key
+                subFolders.push(value)
             })
-            folder.numberOfChildren = folder.contents.length
-            folder.tokens = _.reduce(folder.contents, (tokens, corpus) => tokens + corpus.tokens, 0)
-            folder.sentences = _.reduce(folder.contents, (sentences, corpus) => sentences + corpus.sentences, 0)
+            folder.numberOfChildren = folder.corpora.length
+            folder.tokens = _.reduce(folder.corpora, (tokens, corpus) => tokens + corpus.tokens, 0)
+            folder.sentences = _.reduce(folder.corpora, (sentences, corpus) => sentences + corpus.sentences, 0)
             folder.subFolders = subFolders
             if (subFolders.length > 0) {
                 const [corporaIds, tokenCount, sentenceCount] = initFolders(subFolders)
@@ -53,16 +51,16 @@ export const initCorpusStructure = (collection, initalCorpusSelection) => {
     }
 
     // this is needed for folder identity checks in chooser
-    for (const folderId of Object.keys(settings.corporafolders)) {
-        settings.corporafolders[folderId].id = folderId
+    for (const folderId of Object.keys(settings["folders"])) {
+        settings["folders"][folderId].id = folderId
     }
 
-    const [totalCorporaIds, totalTokens, totalSentences] = initFolders(Object.values(settings.corporafolders))
+    const [totalCorporaIds, totalTokens, totalSentences] = initFolders(Object.values(settings["folders"]))
     const topLevelCorpora = _.filter(collection, (corpus) => !totalCorporaIds.includes(corpus.id))
-    const topLevelFolders = Object.values(settings.corporafolders)
+    const topLevelFolders = Object.values(settings["folders"])
 
     return {
-        contents: topLevelCorpora,
+        corpora: topLevelCorpora,
         subFolders: topLevelFolders,
         tokens: _.reduce(topLevelCorpora, (tokens, corpus) => tokens + corpus.tokens, 0) + totalTokens,
         isRoot: true,
@@ -87,7 +85,7 @@ function getCorpora(folder, corpusConstraint = () => true) {
             corporaFolders.push(inner(subFolder))
         }
         const corpora = _.flatten(corporaFolders)
-        for (const corpus of node.contents) {
+        for (const corpus of node.corpora) {
             if (corpusConstraint(corpus)) {
                 corpora.push(corpus.id)
             }
@@ -97,6 +95,10 @@ function getCorpora(folder, corpusConstraint = () => true) {
     return inner(folder)
 }
 
+/**
+ * Given an object where the keys are folders and a string that is either a corpus identifier or a folder
+ * If it is a folder, get all corpora in folder recursively, else, return the corpus identifier in a list.
+ */
 export const getAllCorporaInFolders = (lastLevel, folderOrCorpus) => {
     let outCorpora = []
 
@@ -106,7 +108,7 @@ export const getAllCorporaInFolders = (lastLevel, folderOrCorpus) => {
         const leftPart = folderOrCorpus.substr(0, posOfPeriod)
         const rightPart = folderOrCorpus.substr(posOfPeriod + 1)
         if (lastLevel[leftPart]) {
-            lastLevel = lastLevel[leftPart]
+            lastLevel = lastLevel[leftPart]["subfolders"]
             folderOrCorpus = rightPart
         } else {
             break
@@ -115,14 +117,14 @@ export const getAllCorporaInFolders = (lastLevel, folderOrCorpus) => {
     if (lastLevel[folderOrCorpus]) {
         // Folder
         // Continue to go through any subfolders
-        for (const key in lastLevel[folderOrCorpus]) {
-            if (!["title", "contents", "description"].includes(key)) {
-                outCorpora = outCorpora.concat(getAllCorporaInFolders(lastLevel[folderOrCorpus], key))
-            }
+        for (const subfolder in lastLevel[folderOrCorpus]["subfolders"]) {
+            outCorpora = outCorpora.concat(getAllCorporaInFolders(lastLevel[folderOrCorpus]["subfolders"], subfolder))
         }
 
         // And add the corpora in this folder level
-        outCorpora = outCorpora.concat(lastLevel[folderOrCorpus]["contents"])
+        if (lastLevel[folderOrCorpus].corpora) {
+            outCorpora = outCorpora.concat(lastLevel[folderOrCorpus]["corpora"])
+        }
     } else {
         // Corpus
         outCorpora.push(folderOrCorpus)
@@ -135,7 +137,7 @@ export const getAllCorporaInFolders = (lastLevel, folderOrCorpus) => {
  * figures out if a folder is limited, which it is
  * if the user does not have access to any corpora in it.
  *
- * userHasAccess differs from limitedAccess, since we might
+ * userHasAccess differs from limited_access, since we might
  * want to show that a corpus is restricted AND unlock it for a user
  */
 export const updateLimitedAccess = (rootNode, credentials = []) => {
@@ -148,13 +150,13 @@ export const updateLimitedAccess = (rootNode, credentials = []) => {
                 limitedAccess = false
             }
         }
-        for (const corpus of node.contents) {
-            corpus.userHasAccess = !corpus.limitedAccess || credentials.includes(corpus.id.toUpperCase())
+        for (const corpus of node.corpora) {
+            corpus.userHasAccess = !corpus["limited_access"] || credentials.includes(corpus.id.toUpperCase())
             if (corpus.userHasAccess) {
                 limitedAccess = false
             }
         }
-        node.limitedAccess = limitedAccess
+        node["limited_access"] = limitedAccess
         return limitedAccess
     }
     return inner(rootNode)
@@ -169,7 +171,7 @@ export const filterCorporaOnCredentials = (collection, corporaIds, credentials) 
     for (const corpus of Object.values(collection)) {
         const corpusId = corpus.id
         corpus.selected = false
-        if (corporaIds.includes(corpusId) && (!corpus.limitedAccess || credentials.includes(corpusId.toUpperCase()))) {
+        if (corporaIds.includes(corpusId) && (!corpus["limited_access"] || credentials.includes(corpusId.toUpperCase()))) {
             corpus.selected = true
             selection.push(corpusId)
         }
@@ -202,7 +204,7 @@ function getFolderSelectStatus(folder) {
         }
     }
 
-    for (const corpus of folder.contents) {
+    for (const corpus of folder.corpora) {
         if (corpus.selected) {
             selected = "some"
         } else {

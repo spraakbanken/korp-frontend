@@ -224,7 +224,6 @@
     "graph_material": "Tidsperiod saknar data",
     "graph_material_tooltip": "De valda korpusarna saknar data för de skuggade tidsperioderna.",
 
-    "word_insensitive": "ord (skiftlägesoberoende)",
     "sentence_attr": "Textattribut",
     "word_attr": "Ordattribut",
     "attr": "attribut",

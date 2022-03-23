@@ -55,9 +55,9 @@ span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()"
       span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')
 kwic-pager(ng-if="hits" total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
 #download-links-container
-  select#download-links(ng-if="_settings.enableBackendKwicDownload")
-  select#frontendDownloadLinks(ng-if="_settings.enableFrontendKwicDownload",
+  select#download-links(ng-if="_settings['enable_backend_kwic_download']")
+  select#frontendDownloadLinks(ng-if="_settings['enable_frontend_kwic_download']",
                         ng-change="download.init(download.selected, hits_display)", 
                         ng-model="download.selected",
                         ng-options="item.value as item.label | loc:lang disable when item.disabled for item in download.options")
-  a.kwicDownloadLink(ng-if="_settings.enableFrontendKwicDownload", href="{{download.blobName}}", download="{{download.fileName}}", target="_self", style="display: none;")
+  a.kwicDownloadLink(ng-if="_settings['enable_frontend_kwic_download']", href="{{download.blobName}}", download="{{download.fileName}}", target="_self", style="display: none;")

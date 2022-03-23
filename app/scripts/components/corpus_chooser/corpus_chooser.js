@@ -83,7 +83,7 @@ export const corpusChooserComponent = {
                 }
 
                 if (_.isEmpty(newCorpora)) {
-                    newCorpora = settings.preselectedCorpora
+                    newCorpora = settings["preselected_corpora"]
                 }
                 settings.corpusListing.select(newCorpora)
                 $ctrl.updateSelectedCount(newCorpora)

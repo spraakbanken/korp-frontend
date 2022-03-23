@@ -259,7 +259,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     getPageInterval(page) {
         const hpp = locationSearch().hpp
-        const items_per_page = Number(hpp) || settings.hitsPerPageDefault
+        const items_per_page = Number(hpp) || settings["hits_per_page_default"]
         page = Number(page)
         const output = {}
         output.start = (page || 0) * items_per_page
@@ -347,7 +347,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             }
         }
 
-        if (settings.enableBackendKwicDownload) {
+        if (settings["enable_backend_kwic_download"]) {
             util.setDownloadLinks(this.proxy.prevRequest, data)
         }
 
@@ -432,11 +432,11 @@ view.KWICResults = class KWICResults extends BaseResults {
         }
 
         if (this.isReadingMode()) {
-            preferredContext = settings.defaultReadingContext
-            avoidContext = settings.defaultOverviewContext
+            preferredContext = settings["default_reading_context"]
+            avoidContext = settings["default_overview_context"]
         } else {
-            preferredContext = settings.defaultOverviewContext
-            avoidContext = settings.defaultReadingContext
+            preferredContext = settings["default_overview_context"]
+            avoidContext = settings["default_reading_context"]
         }
 
         const context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
@@ -643,14 +643,14 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         this.tabindex = this.getResultTabs().length - 1 + this.s.$parent.$index
     }
 
-    setupReadingHash() {}
+    setupReadingHash() { }
 
     isReadingMode() {
         return this.s.exampleReadingMode
     }
 
     makeRequest() {
-        const items_per_page = parseInt(locationSearch().hpp || settings.hitsPerPageDefault)
+        const items_per_page = parseInt(locationSearch().hpp || settings["hits_per_page_default"])
         const opts = this.s.$parent.kwicTab.queryParams
 
         this.resetView()
@@ -666,11 +666,11 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
 
         let avoidContext, preferredContext
         if (this.isReadingMode()) {
-            preferredContext = settings.defaultReadingContext
-            avoidContext = settings.defaultOverviewContext
+            preferredContext = settings["default_reading_context"]
+            avoidContext = settings["default_overview_context"]
         } else {
-            preferredContext = settings.defaultOverviewContext
-            avoidContext = settings.defaultReadingContext
+            preferredContext = settings["default_overview_context"]
+            avoidContext = settings["default_reading_context"]
         }
 
         const context = settings.corpusListing.getContextQueryStringFromCorpusId(
@@ -788,10 +788,10 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             let [word, pos] = args[0]
             return word + pos
         })
-        const tagsetTrans = _.invert(settings.wordpictureTagset)
+        const tagsetTrans = _.invert(settings["wordpicture_tagset"])
         unique_words = _.filter(unique_words, function (...args) {
             const [currentWd, pos] = args[0]
-            return settings.wordPictureConf[tagsetTrans[pos]] != null
+            return settings["word_picture_conf"][tagsetTrans[pos]] != null
         })
         if (!unique_words.length) {
             this.showNoResults()
@@ -826,7 +826,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             }
         }
 
-        const tagsetTrans = _.invert(settings.wordpictureTagset)
+        const tagsetTrans = _.invert(settings["wordpicture_tagset"])
 
         const res = _.map(tables, function ([token, wordClass]) {
             const getRelType = (item) => ({
@@ -835,14 +835,14 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             })
 
             const wordClassShort = wordClass.toLowerCase()
-            wordClass = _.invert(settings.wordpictureTagset)[wordClassShort]
+            wordClass = _.invert(settings["wordpicture_tagset"])[wordClassShort]
 
-            if (settings.wordPictureConf[wordClass] == null) {
+            if (settings["word_picture_conf"][wordClass] == null) {
                 return
             }
             let orderArrays = [[], [], []]
             $.each(data, (index, item) => {
-                $.each(settings.wordPictureConf[wordClass] || [], (i, rel_type_list) => {
+                $.each(settings["word_picture_conf"][wordClass] || [], (i, rel_type_list) => {
                     const list = orderArrays[i]
                     const rel = getRelType(item)
 
@@ -868,8 +868,8 @@ view.LemgramResults = class LemgramResults extends BaseResults {
                     }
                 })
 
-                if (settings.wordPictureConf[wordClass][i] && unsortedList.length) {
-                    const toIndex = $.inArray("_", settings.wordPictureConf[wordClass][i])
+                if (settings["word_picture_conf"][wordClass][i] && unsortedList.length) {
+                    const toIndex = $.inArray("_", settings["word_picture_conf"][wordClass][i])
                     if (util.isLemgramId(token)) {
                         unsortedList[toIndex] = { word: token.split("..")[0].replace(/_/g, " ") }
                     } else {
@@ -1044,6 +1044,29 @@ view.StatsResults = class StatsResults extends BaseResults {
                 })
             })
         })
+
+        const that = this
+        $("body")
+            .scope()
+            .$watch("lang", (lang) => {
+                if (that.grid) {
+                    that.langChange(lang)
+                }
+            })
+    }
+
+    langChange(lang) {
+        var cols = this.grid.getColumns()
+        this.updateLabels(cols, lang)
+        this.grid.setColumns(cols)
+    }
+
+    updateLabels(cols, lang) {
+        for (var i = 0, il = cols.length; i < il; i++) {
+            if (cols[i].translation) {
+                cols[i].name = cols[i].translation[lang] || cols[i].translation
+            }
+        }
     }
 
     updateExportBlob() {
@@ -1216,6 +1239,7 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         columns = [checkboxSelector.getColumnDefinition()].concat(columns)
 
+        this.updateLabels(columns, $("body").scope().lang)
         const grid = new Slick.Grid($("#myGrid"), data, columns, {
             enableCellNavigation: false,
             enableColumnReorder: false,
@@ -1736,7 +1760,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             }
         }
     }
-    setLineMode() {}
+    setLineMode() { }
 
     setTableMode(series) {
         $(".chart,.legend", this.$result).hide()
@@ -1821,8 +1845,8 @@ view.GraphResults = class GraphResults extends BaseResults {
                     field: timestamp,
                     formatter(row, cell, value, columnDef, dataContext) {
                         const loc = {
-                            sv: "sv-SE",
-                            en: "gb-EN",
+                            swe: "sv-SE",
+                            eng: "gb-EN",
                         }[$("body").scope().lang]
                         const fmt = function (valTup) {
                             if (typeof valTup[0] === "undefined") {

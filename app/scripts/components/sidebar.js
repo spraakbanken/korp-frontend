@@ -22,7 +22,7 @@ export const sidebarComponent = {
                 </h4>
                 <div class="text-lg">{{$ctrl.corpusObj.title}}</div>
             </div>
-            <div class="openReadingMode" ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj.readingMode">
+            <div class="openReadingMode" ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj['reading_mode']">
                 <span ng-click="$ctrl.openReadingMode()" class="link">
                     {{'read_in_korp' | loc:$root.lang}}
                 </span>
@@ -33,7 +33,12 @@ export const sidebarComponent = {
             <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.openDepTree()" class="link show_deptree">
                 {{'show_deptree' | loc:$root.lang}}
             </div>
-            <dep-tree ng-if="$ctrl.showDepTree" tokens="$ctrl.tokens" corpus="$ctrl.corpusObj" on-close="$ctrl.closeDepTree()"></dep-tree>
+            <dep-tree
+                ng-if="$ctrl.showDepTree"
+                tokens="$ctrl.tokens"
+                corpus="$ctrl.corpusObj"
+                on-close="$ctrl.closeDepTree()"
+            ></dep-tree>
         </div>
     `,
     bindings: {
@@ -47,8 +52,11 @@ export const sidebarComponent = {
         "$rootScope",
         "$compile",
         "$controller",
-        function ($element, utils, $rootScope, $compile, $controller) {
+        "$filter",
+        function ($element, utils, $rootScope, $compile, $controller, $filter) {
             let $ctrl = this
+
+            const locObj = $filter("locObj")
 
             statemachine.listen("select_word", function (data) {
                 safeApply($rootScope, () => {
@@ -94,11 +102,11 @@ export const sidebarComponent = {
                     $ctrl.inReadingMode = inReadingMode
                     $ctrl.tokens = tokens
                     const customData = { pos: [], struct: [] }
-                    if (!$.isEmptyObject(corpusObj.customAttributes)) {
+                    if (!$.isEmptyObject(corpusObj["custom_attributes"])) {
                         const [word, sentence] = this.renderCustomContent(
                             wordData,
                             sentenceData,
-                            corpusObj.customAttributes,
+                            corpusObj["custom_attributes"],
                             tokens
                         )
                         customData.pos = word
@@ -113,19 +121,19 @@ export const sidebarComponent = {
                             sentenceData,
                             corpusObj.attributes,
                             tokens,
-                            corpusObj.customAttributes || {},
+                            corpusObj["custom_attributes"] || {},
                             customData.pos
                         )
                     }
                     let structData = []
-                    if (!$.isEmptyObject(corpusObj.structAttributes)) {
+                    if (!$.isEmptyObject(corpusObj["struct_attributes"])) {
                         structData = this.renderCorpusContent(
                             "struct",
                             wordData,
                             sentenceData,
-                            corpusObj.structAttributes,
+                            corpusObj["struct_attributes"],
                             tokens,
-                            corpusObj.customAttributes || {},
+                            corpusObj["custom_attributes"] || {},
                             customData.struct
                         )
                     }
@@ -149,10 +157,13 @@ export const sidebarComponent = {
 
                 renderCorpusContent(type, wordData, sentenceData, corpus_attrs, tokens, customAttrs, customData) {
                     let pairs
+                    let sortingArr
                     if (type === "struct") {
                         pairs = _.toPairs(sentenceData)
+                        sortingArr = $ctrl.corpusObj["_struct_attributes_order"]
                     } else if (type === "pos") {
                         pairs = _.toPairs(wordData)
+                        sortingArr = $ctrl.corpusObj["_attributes_order"]
                     }
 
                     pairs = _.filter(pairs, function (...args) {
@@ -161,37 +172,13 @@ export const sidebarComponent = {
                     })
                     pairs = _.filter(pairs, function (...args) {
                         let [key, val] = args[0]
-                        return !(corpus_attrs[key].displayType === "hidden" || corpus_attrs[key].hideSidebar)
+                        return !(corpus_attrs[key]["display_type"] === "hidden" || corpus_attrs[key]["hide_sidebar"])
                     })
+                    pairs.sort((a, b) => sortingArr.indexOf(a[0]) - sortingArr.indexOf(b[0]))
 
                     for (let custom of customData) {
                         pairs.push(custom)
                     }
-
-                    pairs.sort(function (...args) {
-                        let ord1, ord2
-                        const [a] = args[0]
-                        const [b] = args[1]
-                        if (a in corpus_attrs) {
-                            ord1 = corpus_attrs[a].order
-                        } else {
-                            ord1 = customAttrs[a].order
-                        }
-
-                        if (b in corpus_attrs) {
-                            ord2 = corpus_attrs[b].order
-                        } else {
-                            ord2 = customAttrs[b].order
-                        }
-
-                        if (_.isUndefined(ord1)) {
-                            ord1 = 10000
-                        }
-                        if (_.isUndefined(ord2)) {
-                            ord2 = 10000
-                        }
-                        return ord1 - ord2
-                    })
 
                     let items = []
                     for (let [key, value] of pairs) {
@@ -227,9 +214,9 @@ export const sidebarComponent = {
                             const output = (
                                 this.renderItem(null, key, "not_used", attrs, wordData, sentenceData, tokens) || $()
                             ).get(0)
-                            if (attrs.customType === "struct") {
+                            if (attrs["custom_type"] === "struct") {
                                 structItems.push([key, output])
-                            } else if (attrs.customType === "pos") {
+                            } else if (attrs["custom_type"] === "pos") {
                                 posItems.push([key, output])
                             }
                         } catch (e) {
@@ -243,13 +230,13 @@ export const sidebarComponent = {
                     let output, pattern, ul
                     let val, inner, li, address
                     if (attrs.label) {
-                        output = $(`<p><span rel='localize[${attrs.label}]'></span>: </p>`)
+                        output = $(`<p><span>${locObj(attrs.label, $ctrl.lang)}</span>: </p>`)
                     } else {
                         output = $("<p></p>")
                     }
-                    if (attrs.sidebarComponent) {
-                        const def = sidebarComponents[attrs.sidebarComponent.name || attrs.sidebarComponent]
-                        let { template, controller } = _.isFunction(def) ? def(attrs.sidebarComponent.options) : def
+                    if (attrs["sidebar_component"]) {
+                        const def = sidebarComponents[attrs["sidebar_component"].name || attrs["sidebar_component"]]
+                        let { template, controller } = _.isFunction(def) ? def(attrs["sidebar_component"].options) : def
                         let scope = $rootScope.$new()
                         let locals = { $scope: scope }
                         Object.assign(scope, {
@@ -265,11 +252,11 @@ export const sidebarComponent = {
                         return output.append($compile(template)(scope))
                     }
 
-                    // If attrs.sidebarInfoUrl, add an info symbol
+                    // If attrs["sidebar_info_url"], add an info symbol
                     // linking to the value of the property (URL)
                     let info_link = ""
-                    if (attrs.sidebarInfoUrl) {
-                        info_link = `<a href='${attrs.sidebarInfoUrl}' target='_blank'>
+                    if (attrs["sidebar_info_url"]) {
+                        info_link = `<a href='${attrs["sidebar_info_url"]}' target='_blank'>
                                  <span class='sidebar_info ui-icon ui-icon-info'></span>
                              </a>`
                     }
@@ -315,7 +302,7 @@ export const sidebarComponent = {
 
                                 inner = $(_.template(pattern)({ key: x, val }))
 
-                                if (attrs.internalSearch) {
+                                if (attrs["internal_search"]) {
                                     inner.addClass("link").click(function () {
                                         const cqpVal = $(this).data("key")
                                         const cqp = `[${key} contains "${regescape(cqpVal)}"]`
@@ -324,8 +311,8 @@ export const sidebarComponent = {
                                 }
 
                                 li = $("<li></li>").data("key", x).append(inner)
-                                if (attrs.externalSearch) {
-                                    address = _.template(attrs.externalSearch)({ val: x })
+                                if (attrs["external_search"]) {
+                                    address = _.template(attrs["external_search"])({ val: x })
                                     li.append($(`<a href='${address}' class='external_link' target='_blank'></a>`))
                                 }
 

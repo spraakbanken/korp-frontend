@@ -53,8 +53,8 @@ export const ccInfoBox = {
                     $ctrl.limitedAccess = $ctrl.object.limitedAccess
                     $ctrl.context = _.keys($ctrl.object.context).length > 1
 
-                    if ($ctrl.object.linkedTo) {
-                        for (const linkedCorpusId of $ctrl.object.linkedTo) {
+                    if ($ctrl.object["linked_to"]) {
+                        for (const linkedCorpusId of $ctrl.object["linked_to"]) {
                             const linkedCorpus = settings.corpora[linkedCorpusId]
                             const sentences = parseInt(linkedCorpus.info.Sentences) || 0
                             const tokens = parseInt(linkedCorpus.info.Size) || 0

@@ -58,7 +58,7 @@ window.SearchCtrl = [
         $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function (event, selected) {
             $scope.noCorporaSelected = !selected.length
             const allAttrs = settings.corpusListing.getStatsAttributeGroups()
-            $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item.hideStatistics)
+            $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
             $scope.statSelectedAttrs = ($location.search().stats_reduce || "word").split(",")
             const insensitiveAttrs = $location.search().stats_reduce_insensitive
             if (insensitiveAttrs) {
@@ -101,16 +101,16 @@ window.SearchCtrl = [
                 }
             }
 
-            $scope.hitsPerPageValues = settings.hitsPerPageValues
-            $scope.hitsPerPage = $location.search().hpp || settings.hitsPerPageDefault
+            $scope.hitsPerPageValues = settings["hits_per_page_values"]
+            $scope.hitsPerPage = $location.search().hpp || settings["hits_per_page_default"]
 
             $scope.$watch(
                 () => $location.search().hpp,
-                (val) => ($scope.hitsPerPage = val || settings.hitsPerPageDefault)
+                (val) => ($scope.hitsPerPage = val || settings["hits_per_page_default"])
             )
 
             return $scope.$watch("hitsPerPage", function (val) {
-                if (val === settings.hitsPerPageDefault) {
+                if (val === settings["hits_per_page_default"]) {
                     return $location.search("hpp", null)
                 } else {
                     return $location.search("hpp", val)
@@ -409,7 +409,7 @@ korpApp.controller("ExtendedSearch", function ($scope, $location, $rootScope, se
         $location.search("in_order", null)
         $timeout(function () {
             $location.search("search", "cqp")
-            if (!_.keys(settings.defaultWithin).includes(s.within)) {
+            if (!_.keys(settings["default_within"]).includes(s.within)) {
                 var { within } = s
             }
             $location.search("within", within)
@@ -508,7 +508,7 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
             return
         }
 
-        confObj = _.extend({}, (confObj && confObj.opts) || settings.defaultOptions)
+        confObj = _.extend({}, (confObj && confObj.opts) || settings["default_options"])
 
         if (confObj.type === "set") {
             confObj.is = "contains"
@@ -524,11 +524,11 @@ korpApp.controller("ExtendedToken", function ($scope, utils) {
         }
         const lang = s.$parent.$parent && s.$parent.$parent.l && s.$parent.$parent.l.lang
         const allAttrs = settings.corpusListing.getAttributeGroups(lang)
-        s.types = _.filter(allAttrs, (item) => !item.hideExtended)
+        s.types = _.filter(allAttrs, (item) => !item["hide_extended"])
         s.tagTypes = settings.corpusListing.getCommonWithins()
         s.typeMapping = _.fromPairs(
             _.map(s.types, function (item) {
-                if (item.isStructAttr) {
+                if (item["is_struct_attr"]) {
                     return [`_.${item.value}`, item]
                 } else {
                     return [item.value, item]
@@ -606,7 +606,7 @@ korpApp.directive("compareSearchCtrl", () => ({
 
             const listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)))
             const allAttrs = listing.getAttributeGroups()
-            s.currentAttrs = _.filter(allAttrs, (item) => !item.hideCompare)
+            s.currentAttrs = _.filter(allAttrs, (item) => !item["hide_compare"])
         })
 
         s.reduce = "word"
@@ -620,6 +620,9 @@ korpApp.directive("compareSearchCtrl", () => ({
 // TODO move these
 korpApp.filter("loc", () => (translationKey, lang) => util.getLocaleString(translationKey, lang))
 korpApp.filter("locObj", () => (translationObject, lang) => {
+    if (!lang) {
+        lang = window.lang || settings["default_language"]
+    }
     return translationObject ? translationObject[lang] || translationObject : undefined
 })
 korpApp.filter("replaceEmpty", function () {

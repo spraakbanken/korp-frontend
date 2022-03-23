@@ -27,7 +27,7 @@ korpApp.factory("structService", ($http, $q) => ({
             }
 
             const conf = util.httpConfAddMethod({
-                url: settings.korpBackendURL + "/struct_values",
+                url: settings["korp_backend_url"] + "/struct_values",
                 params,
                 headers: {},
             })

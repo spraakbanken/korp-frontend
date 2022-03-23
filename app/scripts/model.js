@@ -199,7 +199,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         }
 
         const data = {
-            default_context: settings.defaultOverviewContext,
+            default_context: settings["default_overview_context"],
             show: [],
             show_struct: [],
         }
@@ -215,8 +215,8 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
                 data.show.push(key)
             }
 
-            if (corpus.structAttributes != null) {
-                $.each(corpus.structAttributes, function (key, val) {
+            if (corpus["struct_attributes"] != null) {
+                $.each(corpus["struct_attributes"], function (key, val) {
                     if ($.inArray(key, data.show_struct) === -1) {
                         return data.show_struct.push(key)
                     }
@@ -241,7 +241,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         delete data.command
         const def = $.ajax(
             util.httpConfAddMethod({
-                url: settings.korpBackendURL + "/" + command,
+                url: settings["korp_backend_url"] + "/" + command,
                 data,
                 beforeSend(req, settings) {
                     self.prevRequest = settings
@@ -279,7 +279,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
         this.prevParams = params
         const def = $.ajax(
             util.httpConfAddMethod({
-                url: settings.korpBackendURL + "/relations",
+                url: settings["korp_backend_url"] + "/relations",
                 data: params,
 
                 success() {
@@ -319,7 +319,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const groupBy = []
         const groupByStruct = []
         for (let reduceVal of reduceVals) {
-            if (structAttrs[reduceVal] && (structAttrs[reduceVal].groupBy || "group_by_struct") == "group_by_struct") {
+            if (structAttrs[reduceVal] && (structAttrs[reduceVal]["group_by"] || "group_by_struct") == "group_by_struct") {
                 groupByStruct.push(reduceVal)
             } else {
                 groupBy.push(reduceVal)
@@ -349,7 +349,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
 
         const reduceValLabels = _.map(reduceVals, function (reduceVal) {
             if (reduceVal === "word") {
-                return "word"
+                return settings["word_label"]
             }
             const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
                 reduceVal
@@ -385,7 +385,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         this.pendingRequests.push(
             $.ajax(
                 util.httpConfAddMethod({
-                    url: settings.korpBackendURL + "/count",
+                    url: settings["korp_backend_url"] + "/count",
                     data,
                     beforeSend(req, settings) {
                         self.prevRequest = settings
@@ -441,7 +441,7 @@ model.AuthenticationProxy = class AuthenticationProxy {
         }
         const dfd = $.Deferred()
         $.ajax({
-            url: settings.korpBackendURL + "/authenticate",
+            url: settings["korp_backend_url"] + "/authenticate",
             type: "GET",
             beforeSend(req) {
                 return req.setRequestHeader("Authorization", `Basic ${auth}`)
@@ -484,7 +484,7 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
 
         const xhr = $.ajax(
             util.httpConfAddMethod({
-                url: settings.korpBackendURL + "/timespan",
+                url: settings["korp_backend_url"] + "/timespan",
                 data: {
                     granularity: "y",
                     corpus: settings.corpusListing.stringifyAll(),
@@ -600,7 +600,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
 
         $.ajax(
             util.httpConfAddMethod({
-                url: settings.korpBackendURL + "/count_time",
+                url: settings["korp_backend_url"] + "/count_time",
                 dataType: "json",
                 data: params,
 

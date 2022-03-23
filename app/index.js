@@ -1,4 +1,11 @@
 
+import settings from 'korp_config'
+
+window.settings = settings
+settings.markup = {
+  msd: require("./markup/msd.html")
+}
+
 let $ = require("jquery");
 window.jQuery = $;
 window.$ = $;
@@ -49,7 +56,8 @@ require("./lib/jquery.format.js")
 let deparam = require("jquery-deparam")
 
 window.c = console
-window.isLab = window.location.pathname.split("/")[1] == "korplabb"
+// __IS_LAB__ is defined in webpack and set to true if NODE_ENV is "staging"
+window.isLab = __IS_LAB__
 window.currentMode = deparam(window.location.search.slice(1)).mode || "default"
 
 // tmhDynamicLocale = require("angular-dynamic-locale/src/tmhDynamicLocale")
@@ -81,20 +89,15 @@ require("angular-filter/index.js")
 
 require("./lib/jquery.tooltip.pack.js")
 
-window.settings = {}
-settings.markup = {
-  msd: require("./markup/msd.html")
+let isParallel = false
+for (let mode of settings["mode_config"]) {
+    if (currentMode === mode.mode && mode.parallel) {
+        isParallel = true
+        break
+    }
 }
-require("configjs")
-let commonSettings = require("commonjs")
-// we need to put the exports on window so that the non-webpacked modes modes files
-// can use the exports
-_.map(commonSettings, function(v, k) {
-  if (k in window) {
-    console.error("warning, overwriting setting" + k)
-  }
-  window[k] = v
-})
+
+window.currentModeParallel = isParallel
 
 require("./scripts/components/sidebar.js")
 
@@ -125,14 +128,19 @@ require("./scripts/filter_directives.js")
 require("./scripts/newsdesk.js")
 
 // only if the current mode is parallel, we load the special code required
-for(let mode of settings.modeConfig) {
-  if(currentMode === mode.mode && mode.parallel) {
+if (window.currentModeParallel) {
     require("./scripts/parallel/corpus_listing.js")
     require("./scripts/parallel/search_ctrl.js")
     require("./scripts/parallel/parallel_search.js")
     require("./scripts/parallel/kwic_results.js")
     require("./scripts/parallel/stats_proxy.js")
-  }
 }
 
 require("./index.pug")
+
+try {
+    // modes-files are optional and have customizing code
+    require(`modes/${currentMode}_mode.js`)
+} catch (error) {
+    console.log("No mode file available for mode:", currentMode)
+}
