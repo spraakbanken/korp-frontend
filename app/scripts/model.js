@@ -199,7 +199,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         }
 
         const data = {
-            default_context: settings.defaultOverviewContext,
+            default_context: settings["default_overview_context"],
             show: [],
             show_struct: [],
         }
@@ -215,8 +215,8 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
                 data.show.push(key)
             }
 
-            if (corpus.structAttributes != null) {
-                $.each(corpus.structAttributes, function (key, val) {
+            if (corpus["struct_attributes"] != null) {
+                $.each(corpus["struct_attributes"], function (key, val) {
                     if ($.inArray(key, data.show_struct) === -1) {
                         return data.show_struct.push(key)
                     }
@@ -319,7 +319,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const groupBy = []
         const groupByStruct = []
         for (let reduceVal of reduceVals) {
-            if (structAttrs[reduceVal] && (structAttrs[reduceVal].groupBy || "group_by_struct") == "group_by_struct") {
+            if (structAttrs[reduceVal] && (structAttrs[reduceVal]["group_by"] || "group_by_struct") == "group_by_struct") {
                 groupByStruct.push(reduceVal)
             } else {
                 groupBy.push(reduceVal)

@@ -48,8 +48,8 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
         }
 
         const corpora = _.filter(this.selected, (item) => item.lang === lang)
-        const struct = _.reduce(corpora, (a, b) => $.extend({}, a.structAttributes, b.structAttributes), {})
-        $.each(struct, (key, val) => (val["isStructAttr"] = true))
+        const struct = _.reduce(corpora, (a, b) => $.extend({}, a["struct_attributes"], b["struct_attributes"]), {})
+        $.each(struct, (key, val) => (val["is_struct_attr"] = true))
 
         return struct
     }
@@ -57,12 +57,12 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     getStructAttrsIntersection(lang) {
         const corpora = _.filter(this.selected, (item) => item.lang === lang)
         const attrs = _.map(corpora, function (corpus) {
-            for (let key in corpus.structAttributes) {
-                const value = corpus.structAttributes[key]
-                value["isStructAttr"] = true
+            for (let key in corpus["struct_attributes"]) {
+                const value = corpus["struct_attributes"][key]
+                value["is_struct_attr"] = true
             }
 
-            return corpus.structAttributes
+            return corpus["struct_attributes"]
         })
         return this._mapping_intersection(attrs)
     }
@@ -75,7 +75,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
             only_selected = true
         }
         const target = only_selected ? this.selected : this.struct
-        let output = _.filter(target, (item) => (corp.linkedTo || []).includes(item.id))
+        let output = _.filter(target, (item) => (corp["linked_to"] || []).includes(item.id))
         if (andSelf) {
             output = [corp].concat(output)
         }
@@ -116,7 +116,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
 
             for (var cps of other) {
                 const linked = _(main)
-                    .filter((mainCorpus) => mainCorpus.linkedTo.includes(cps.id))
+                    .filter((mainCorpus) => mainCorpus["linked_to"].includes(cps.id))
                     .value()
 
                 output = output.concat(_.map(linked, (item) => [item, cps]))
@@ -157,7 +157,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     }
 
     getWithinParameters() {
-        const defaultWithin = locationSearch().within || _.keys(settings.defaultWithin)[0]
+        const defaultWithin = locationSearch().within || _.keys(settings["default_within"])[0]
         const within = this.getAttributeQuery("within")
         return { default_within: defaultWithin, within }
     }

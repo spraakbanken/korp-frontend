@@ -270,7 +270,7 @@ class KwicCtrl {
 
         s.$watch(
             () => $location.search().hpp,
-            (hpp) => (s.hitsPerPage = hpp || settings.hitsPerPageDefault)
+            (hpp) => (s.hitsPerPage = hpp || settings["hits_per_page_default"])
         )
 
         const isParallelMode = window.settings.mode ? window.settings.mode.parallel : false
@@ -715,7 +715,7 @@ korpApp.directive("compareCtrl", () => ({
                             const attribute = attributes[attrKey]
                             if (attribute) {
                                 ;({ type } = attribute)
-                                if (attribute.isStructAttr) {
+                                if (attribute["is_struct_attr"]) {
                                     attrKey = `_.${attrKey}`
                                 }
                             }

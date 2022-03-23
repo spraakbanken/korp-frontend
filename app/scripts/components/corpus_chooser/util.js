@@ -137,7 +137,7 @@ export const getAllCorporaInFolders = (lastLevel, folderOrCorpus) => {
  * figures out if a folder is limited, which it is
  * if the user does not have access to any corpora in it.
  *
- * userHasAccess differs from limitedAccess, since we might
+ * userHasAccess differs from limited_access, since we might
  * want to show that a corpus is restricted AND unlock it for a user
  */
 export const updateLimitedAccess = (rootNode, credentials = []) => {
@@ -151,12 +151,12 @@ export const updateLimitedAccess = (rootNode, credentials = []) => {
             }
         }
         for (const corpus of node.corpora) {
-            corpus.userHasAccess = !corpus.limitedAccess || credentials.includes(corpus.id.toUpperCase())
+            corpus.userHasAccess = !corpus["limited_access"] || credentials.includes(corpus.id.toUpperCase())
             if (corpus.userHasAccess) {
                 limitedAccess = false
             }
         }
-        node.limitedAccess = limitedAccess
+        node["limited_access"] = limitedAccess
         return limitedAccess
     }
     return inner(rootNode)
@@ -171,7 +171,7 @@ export const filterCorporaOnCredentials = (collection, corporaIds, credentials) 
     for (const corpus of Object.values(collection)) {
         const corpusId = corpus.id
         corpus.selected = false
-        if (corporaIds.includes(corpusId) && (!corpus.limitedAccess || credentials.includes(corpusId.toUpperCase()))) {
+        if (corporaIds.includes(corpusId) && (!corpus["limited_access"] || credentials.includes(corpusId.toUpperCase()))) {
             corpus.selected = true
             selection.push(corpusId)
         }

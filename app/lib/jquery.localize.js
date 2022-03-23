@@ -42,7 +42,7 @@
 	$.fn.localize = function() {
 		//TODO: make this less slow.
 		// var lang = $("body").scope() ? $("body").scope().lang || "sv" : "sv";
-		var lang = locationSearch().lang || settings.defaultLanguage;
+		var lang = locationSearch().lang || settings["default_language"];
 		var data = loc_data[lang];
 		this.find("[rel^=localize]").each(function(i, elem) {
 			var elem = $(elem);

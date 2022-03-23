@@ -112,7 +112,7 @@ util.getLocaleString = (key, lang) => util.getLocaleStringUndefined(key, lang) |
 
 util.getLocaleStringUndefined = function (key, lang) {
     if (!lang) {
-        lang = window.lang || settings.defaultLanguage
+        lang = window.lang || settings["default_language"]
     }
     try {
         return window.loc_data[lang][key]
@@ -358,7 +358,7 @@ util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
 
 util.translateAttribute = (lang, translations, value) => {
     if (!lang) {
-        lang = window.lang || settings.defaultLanguage
+        lang = window.lang || settings["default_language"]
     }
 
     if (translations && translations[value]) {

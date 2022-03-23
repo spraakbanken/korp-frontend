@@ -259,7 +259,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     getPageInterval(page) {
         const hpp = locationSearch().hpp
-        const items_per_page = Number(hpp) || settings.hitsPerPageDefault
+        const items_per_page = Number(hpp) || settings["hits_per_page_default"]
         page = Number(page)
         const output = {}
         output.start = (page || 0) * items_per_page
@@ -432,11 +432,11 @@ view.KWICResults = class KWICResults extends BaseResults {
         }
 
         if (this.isReadingMode()) {
-            preferredContext = settings.defaultReadingContext
-            avoidContext = settings.defaultOverviewContext
+            preferredContext = settings["default_reading_context"]
+            avoidContext = settings["default_overview_context"]
         } else {
-            preferredContext = settings.defaultOverviewContext
-            avoidContext = settings.defaultReadingContext
+            preferredContext = settings["default_overview_context"]
+            avoidContext = settings["default_reading_context"]
         }
 
         const context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
@@ -650,7 +650,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
     }
 
     makeRequest() {
-        const items_per_page = parseInt(locationSearch().hpp || settings.hitsPerPageDefault)
+        const items_per_page = parseInt(locationSearch().hpp || settings["hits_per_page_default"])
         const opts = this.s.$parent.kwicTab.queryParams
 
         this.resetView()
@@ -666,11 +666,11 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
 
         let avoidContext, preferredContext
         if (this.isReadingMode()) {
-            preferredContext = settings.defaultReadingContext
-            avoidContext = settings.defaultOverviewContext
+            preferredContext = settings["default_reading_context"]
+            avoidContext = settings["default_overview_context"]
         } else {
-            preferredContext = settings.defaultOverviewContext
-            avoidContext = settings.defaultReadingContext
+            preferredContext = settings["default_overview_context"]
+            avoidContext = settings["default_reading_context"]
         }
 
         const context = settings.corpusListing.getContextQueryStringFromCorpusId(

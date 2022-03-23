@@ -61,28 +61,6 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
             }
 
             rename(modeSettings["attributes"], "pos_attributes", "attributes")
-            rename(modeSettings["attributes"], "struct_attributes", "structAttributes")
-            rename(modeSettings["attributes"], "custom_attributes", "customAttributes")
-
-            for (const attrType of ["attributes", "structAttributes", "customAttributes"]) {
-                for (const attrId in modeSettings["attributes"][attrType]) {
-                    const attr = modeSettings["attributes"][attrType][attrId]
-                    rename(attr, "extended_component", "extendedComponent")
-                    rename(attr, "sidebar_component", "sidebarComponent")
-                    rename(attr, "external_search", "externalSearch")
-                    rename(attr, "display_type", "displayType")
-                    rename(attr, "group_by", "groupBy")
-                    rename(attr, "hide_sidebar", "hideSidebar")
-                    rename(attr, "hide_statistics", "hideStatistics")
-                    rename(attr, "hide_extended", "hideExtended")
-                    rename(attr, "hide_compare", "hideCompare")
-                    rename(attr, "extended_template", "extendedTemplate")
-                    rename(attr, "sidebar_info_url", "sidebarInfoUrl")
-                    rename(attr, "internal_search", "internalSearch")
-                    rename(attr, "is_struct_attr", "isStructAttr")
-                    rename(attr, "custom_type", "customType")
-                }
-            }
 
             // take the backend configuration format for attributes and expand it
             // TODO the internal representation should be changed to a new, more compact one.
@@ -90,23 +68,7 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
                 const corpus = modeSettings["corpora"][corpusId]
 
                 rename(corpus, "pos_attributes", "attributes")
-                rename(corpus, "struct_attributes", "structAttributes")
-                rename(corpus, "custom_attributes", "customAttributes")
-                rename(corpus, "linked_to", "linkedTo")
-                rename(corpus, "limited_access", "limitedAccess")
-                rename(corpus, "reading_mode", "readingMode")
-
-                // These are not used in our backend configuration, but it should be possible?
-                rename(corpus, "default_language", "defaultLanguage")
-
-                // These should not be done in the backend probably
-                rename(corpus, "visible_modes", "visibleModes")
-                rename(corpus, "mode_config", "modeConfig")
-
-                // TODO the error is that the attributes should be fixed once, while traversing the top level "attributes"-object
-                // Then expand format for each corpus
-
-                for (const attrType of ["attributes", "structAttributes", "customAttributes"]) {
+                for (const attrType of ["attributes", "struct_attributes", "custom_attributes"]) {
                     const attrList = corpus[attrType]
                     const attrs = {}
                     for (const attrIdx in attrList) {
@@ -116,7 +78,7 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
                     // attrs is an object of attribute settings
                     corpus[attrType] = attrs
                     // attrList is an ordered list of the preferred order of attributes
-                    corpus[attrType + "Order"] = attrList
+                    corpus[`_${attrType}_order`] = attrList
                 }
             }
 
@@ -125,14 +87,6 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
             if (!modeSettings["folders"]) {
                 modeSettings["folders"] = {}
             }
-            rename(modeSettings, "preselected_corpora", "preselectedCorpora")
-            rename(modeSettings, "start_lang", "startLang")
-            rename(modeSettings, "default_overview_context", "defaultOverviewContext")
-            rename(modeSettings, "default_reading_context", "defaultReadingContext")
-            rename(modeSettings, "default_within", "defaultWithin")
-            rename(modeSettings, "hits_per_page_default", "hitsPerPageDefault")
-            rename(modeSettings, "hits_per_page_values", "hitsPerPageValues")
-
             resolve(modeSettings)
         })
     })
@@ -200,7 +154,7 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
     window.onHashChange = function (event, isInit) {
         const hasChanged = (key) => prevFragment[key] !== locationSearch()[key]
         if (hasChanged("lang")) {
-            const newLang = locationSearch().lang || settings.defaultLanguage
+            const newLang = locationSearch().lang || settings["default_language"]
             $("body").scope().lang = newLang
             window.lang = newLang
             util.localize()
@@ -219,11 +173,11 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
         change() {
             const currentLang = $(this).radioList("getSelected").data("mode")
             locationSearch({
-                lang: currentLang !== settings.defaultLanguage ? currentLang : null,
+                lang: currentLang !== settings["default_language"] ? currentLang : null,
             })
         },
         // TODO: this does nothing?
-        selected: settings.defaultLanguage,
+        selected: settings["default_language"],
     })
 
     setTimeout(() => window.onHashChange(null, true), 0)

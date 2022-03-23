@@ -95,7 +95,7 @@ korpApp.config([
 korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $timeout) {
     const s = $rootScope
     s._settings = settings
-    window.lang = s.lang = $location.search().lang || settings.defaultLanguage
+    window.lang = s.lang = $location.search().lang || settings["default_language"]
     s.word_selected = null
     s.isLab = window.isLab
 
@@ -113,14 +113,14 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
 
     s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
 
-    tmhDynamicLocale.set(settings.defaultLanguage)
+    tmhDynamicLocale.set(settings["default_language"])
 
     s._loc = $location
 
     s.$watch("_loc.search()", function () {
         _.defer(() => (window.onHashChange || _.noop)())
 
-        return tmhDynamicLocale.set($location.search().lang || settings.defaultLanguage)
+        return tmhDynamicLocale.set($location.search().lang || settings["default_language"])
     })
 
     $rootScope.kwicTabs = []
@@ -131,14 +131,14 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
 
     searches.infoDef.then(function () {
         // if no preselectedCorpora is defined, use all of them
-        if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
-            settings.preselectedCorpora = _.map(
+        if (!(settings["preselected_corpora"] && settings["preselected_corpora"].length)) {
+            settings["preselected_corpora"] = _.map(
                 _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
                 "id"
             )
         } else {
             let expandedCorpora = []
-            for (let preItem of settings.preselectedCorpora) {
+            for (let preItem of settings["preselected_corpora"]) {
                 preItem = preItem.replace(/^__/g, "")
                 expandedCorpora = [].concat(
                     expandedCorpora,
@@ -146,7 +146,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                 )
             }
             // folders expanded, save
-            settings.preselectedCorpora = expandedCorpora
+            settings["preselected_corpora"] = expandedCorpora
         }
 
         let currentCorpora
@@ -156,13 +156,13 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                 _.map(corpus.split(","), (val) => treeUtil.getAllCorporaInFolders(settings["folders"], val))
             )
         } else {
-            currentCorpora = settings.preselectedCorpora
+            currentCorpora = settings["preselected_corpora"]
         }
 
         const loginNeededFor = []
         for (let corpusId of currentCorpora) {
             const corpusObj = settings.corpora[corpusId]
-            if (corpusObj.limitedAccess) {
+            if (corpusObj["limited_access"]) {
                 if (
                     _.isEmpty(authenticationProxy.loginObj) ||
                     !authenticationProxy.loginObj.credentials.includes(corpusObj.id.toUpperCase())
@@ -266,11 +266,11 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
 
     s.clickX = () => closeModals()
 
-    const N_VISIBLE = settings.visibleModes
+    const N_VISIBLE = settings["visible_modes"]
 
-    s.modes = _.filter(settings.modeConfig)
+    s.modes = _.filter(settings["mode_config"])
     if (!isLab) {
-        s.modes = _.filter(settings.modeConfig, (item) => item.labOnly !== true)
+        s.modes = _.filter(settings["mode_config"], (item) => item.labOnly !== true)
     }
 
     s.visible = s.modes.slice(0, N_VISIBLE)
@@ -295,7 +295,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     }
 
     s.getUrlParts = function (modeId) {
-        const langParam = settings.defaultLanguage === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
+        const langParam = settings["default_language"] === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
         const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
         return [location.pathname, modeParam, langParam]
     }

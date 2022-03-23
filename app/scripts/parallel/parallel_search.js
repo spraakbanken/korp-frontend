@@ -13,7 +13,7 @@ korpApp.controller("ParallelSearch", function ($scope, $location, $rootScope, $t
             return obj
         })
     } else {
-        s.langs = [{ lang: settings.startLang, cqp: "[]" }]
+        s.langs = [{ lang: settings["start_lang"], cqp: "[]" }]
     }
 
     s.negChange = function () {
@@ -109,15 +109,15 @@ korpApp.controller("ParallelSearch", function ($scope, $location, $rootScope, $t
     s.getEnabledLangs = function (i) {
         if (i === 0) {
             if (!s.langs[0].lang) {
-                s.langs[0].lang = settings.startLang
+                s.langs[0].lang = settings["start_lang"]
             }
-            return enabledLangsHelper(settings.startLang)
+            return enabledLangsHelper(settings["start_lang"])
         }
         var currentLangList = _.map(s.langs, "lang")
         delete currentLangList[i]
         var firstlang
         if (s.langs.length) firstlang = s.langs[0].lang
-        var other = enabledLangsHelper(firstlang || settings.startLang)
+        var other = enabledLangsHelper(firstlang || settings["start_lang"])
         var langResult = _.difference(other, currentLangList)
         if (s.langs[i] && !s.langs[i].lang) {
             s.langs[i].lang = langResult[0]

@@ -76,7 +76,7 @@ angular.module("newsdesk", []).directive("newsDesk", ($window, $document, $rootE
             })
         }
 
-        s.currentLang = $location.search().lang || settings.defaultLanguage
+        s.currentLang = $location.search().lang || settings["default_language"]
 
         s.numNewNews = 0
         initData()
@@ -85,7 +85,7 @@ angular.module("newsdesk", []).directive("newsDesk", ($window, $document, $rootE
             if (s.isPopoverVisible) {
                 s.popHide()
             } else {
-                s.currentLang = $location.search().lang || settings.defaultLanguage
+                s.currentLang = $location.search().lang || settings["default_language"]
                 s.popShow()
                 s.numNewNews = 0
             }

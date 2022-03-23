@@ -8,7 +8,7 @@ const korpApp = angular.module("korpApp")
 
 korpApp.factory("utils", ($location) => ({
     valfilter(attrobj) {
-        if (attrobj.isStructAttr) {
+        if (attrobj["is_struct_attr"]) {
             return `_.${attrobj.value}`
         } else {
             return attrobj.value
@@ -212,7 +212,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         // TODO: is this good enough?
         const show = _.keys(corpusSettings.attributes)
-        const showStruct = _.keys(corpusSettings.structAttributes)
+        const showStruct = _.keys(corpusSettings["struct_attributes"])
 
         const params = {
             corpus: corpus,

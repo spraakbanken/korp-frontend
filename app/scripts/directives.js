@@ -182,17 +182,17 @@ korpApp.directive("tokenValue", ($compile, $controller) => ({
 
             const locals = { $scope: childScope }
             prevScope = childScope
-            if (valueObj.extendedComponent) {
-                const def = extendedComponents[valueObj.extendedComponent.name || valueObj.extendedComponent]
+            if (valueObj["extended_component"]) {
+                const def = extendedComponents[valueObj["extended_component"].name || valueObj["extended_component"]]
                 if (_.isFunction(def)) {
-                    ;({ template, controller } = def(valueObj.extendedComponent.options))
+                    ;({ template, controller } = def(valueObj["extended_component"].options))
                 } else {
                     ;({ template, controller } = def)
                 }
             } else {
                 controller = extendedComponents.default.controller
-                if (valueObj.extendedTemplate) {
-                    template = valueObj.extendedTemplate
+                if (valueObj["extended_template"]) {
+                    template = valueObj["extended_template"]
                 } else {
                     let tmplObj
                     if (valueObj.value === "word") {

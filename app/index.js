@@ -89,7 +89,7 @@ settings.markup = {
 require("configjs")
 
 let isParallel = false
-for (let mode of settings.modeConfig) {
+for (let mode of settings["mode_config"]) {
     if (currentMode === mode.mode && mode.parallel) {
         isParallel = true
         break
