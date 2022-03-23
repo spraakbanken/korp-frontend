@@ -1,4 +1,11 @@
 
+import settings from 'korp_config'
+
+window.settings = settings
+settings.markup = {
+  msd: require("./markup/msd.html")
+}
+
 let $ = require("jquery");
 window.jQuery = $;
 window.$ = $;
@@ -81,12 +88,6 @@ require("angular-filter/index.js")
 
 
 require("./lib/jquery.tooltip.pack.js")
-
-window.settings = {}
-settings.markup = {
-  msd: require("./markup/msd.html")
-}
-require("configjs")
 
 let isParallel = false
 for (let mode of settings["mode_config"]) {

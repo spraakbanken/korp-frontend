@@ -2,6 +2,7 @@
     "name": "Korp",
     "version": "9.1.0",
     "dependencies": {
+        "@fortawesome/fontawesome-free": "6.0.0",
         "angular": "~1.8.2",
         "angular-dynamic-locale": "~0.1.37",
         "angular-filter": "0.5.17",
@@ -11,7 +12,6 @@
         "bootstrap-sass": "^3.4.3",
         "comma-separated-values": "3.6.4",
         "components-jqueryui": "1.12.1",
-        "@fortawesome/fontawesome-free": "6.0.0",
         "geokorp": "spraakbanken/geokorp#1.4.2",
         "jquery": "3.6.0",
         "jquery-deparam": "^0.5.3",
@@ -79,7 +79,8 @@
         "webpack-bundle-analyzer": "^3.8.0",
         "webpack-cli": "^3.3.12",
         "webpack-dev-server": "^3.11.0",
-        "webpack-merge": "^5.1.1"
+        "webpack-merge": "^5.1.1",
+        "yaml-loader": "^0.6.0"
     },
     "engines": {
         "node": ">=0.10.0"
