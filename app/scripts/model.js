@@ -231,7 +231,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         data.show = _.uniq(["sentence"].concat(data.show)).join(",")
         data.show_struct = _.uniq(data.show_struct).join(",")
 
-        if (locationSearch()["in_order"] === false) {
+        if (locationSearch()["in_order"] != null) {
             data.in_order = false
         }
 

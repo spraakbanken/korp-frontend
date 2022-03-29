@@ -160,247 +160,8 @@ window.SearchCtrl = [
 
 korpApp.controller("SearchCtrl", window.SearchCtrl)
 
-korpApp.controller("SimpleCtrl", function (
-    $scope,
-    utils,
-    $location,
-    backend,
-    $rootScope,
-    searches,
-    compareSearches,
-    $uibModal,
-    $timeout
-) {
-    const s = $scope
-
-    $scope.inOrder = $location.search().in_order == null
-    $scope.$watch(
-        () => $location.search().in_order,
-        (val) => ($scope.inOrder = val == null)
-    )
-
-    statemachine.listen("lemgram_search", (event) => {
-        s.input = event.value
-        s.isRawInput = false
-        s.onChange(event.value, false)
-    })
-
-    $scope.$watch("inOrder", () => $location.search("in_order", !s.inOrder ? false : null))
-
-    s.prefix = false
-    s.mid_comp = false
-    s.suffix = false
-    s.isCaseInsensitive = false
-    if (settings.inputCaseInsensitiveDefault) {
-        s.isCaseInsensitive = true
-    }
-
-    s.$on("btn_submit", function () {
-        s.updateSearch()
-        $location.search("within", null)
-    })
-
-    // triggers watch on searches.activeSearch
-    s.updateSearch = function () {
-        locationSearch("search", null)
-        $timeout(function () {
-            if (s.currentText) {
-                util.searchHash("word", s.currentText)
-            } else if (s.lemgram) {
-                util.searchHash("lemgram", s.lemgram)
-            }
-        }, 0)
-    }
-
-    s.$watch("getCQP()", function (val) {
-        if (!val) {
-            return
-        }
-        $rootScope.simpleCQP = CQP.expandOperators(val)
-    })
-
-    s.getCQP = function () {
-        let suffix, val
-        const currentText = (s.currentText || "").trim()
-
-        if (currentText) {
-            suffix = s.isCaseInsensitive ? " %c" : ""
-            const wordArray = currentText.split(" ")
-            const tokenArray = _.map(wordArray, (token) => {
-                const orParts = []
-                if (s.prefix) {
-                    orParts.push(token + ".*")
-                }
-                if (s.mid_comp) {
-                    orParts.push(`.*${token}.*`)
-                }
-                if (s.suffix) {
-                    orParts.push(`.*${token}`)
-                }
-                if (!(s.prefix || s.suffix)) {
-                    orParts.push(regescape(token))
-                }
-                const res = _.map(orParts, (orPart) => `word = "${orPart}"${suffix}`)
-                return `[${res.join(" | ")}]`
-            })
-            val = tokenArray.join(" ")
-        } else if (s.lemgram) {
-            const lemgram = s.lemgram
-            val = `[lex contains \"${lemgram}\"`
-            if (s.prefix) {
-                val += ` | complemgram contains \"${lemgram}\\+.*\"`
-            }
-            if (s.mid_comp) {
-                val += ` | complemgram contains \".*\\+${lemgram}\\+.*\"`
-            }
-            if (s.suffix) {
-                val += ` | complemgram contains \".*\\+${lemgram}:.*\"`
-            }
-            val += "]"
-        }
-
-        if ($rootScope.globalFilter) {
-            val = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(val || "[]"), $rootScope.globalFilter))
-        }
-
-        return val
-    }
-
-    s.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, s.getCQP()))
-
-    s.stringifyRelatedHeader = (wd) => wd.replace(/_/g, " ")
-
-    s.stringifyRelated = (wd) => util.saldoToString(wd)
-
-    let modalInstance = null
-    s.clickRelated = function (wd, attribute) {
-        let cqp
-        if (modalInstance != null) {
-            modalInstance.close()
-        }
-        $scope.$root.searchtabs()[1].tab.select()
-        if (attribute === "saldo") {
-            cqp = `[saldo contains \"${regescape(wd)}\"]`
-        } else {
-            cqp = `[sense rank_contains \"${regescape(wd)}\"]`
-        }
-        s.$root.$broadcast("extended_set", cqp)
-        $location.search("search", "cqp")
-        return $location.search("cqp", cqp)
-    }
-
-    s.relatedDefault = 3
-    s.clickX = () => modalInstance.dismiss()
-
-    s.showAllRelated = () =>
-        (modalInstance = $uibModal.open({
-            template: `\
-                <div class="modal-header">
-                    <h3 class="modal-title">{{'similar_header' | loc:lang}} (SWE-FN)</h3>
-                    <span ng-click="clickX()" class="close-x">×</span>
-                </div>
-                <div class="modal-body">
-                    <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="https://spraakbanken.gu.se/karp/#?mode=swefn&lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
-                      <div class="list_wrapper">
-                          <ul>
-                            <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd, relatedObj.attribute)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
-                          </ul>
-                      </div>
-                    </div>
-                </div>\
-                `,
-            scope: s,
-            size: "lg",
-            windowClass: "related",
-        }))
-
-    s.searches = searches
-    s.$watch("searches.activeSearch", function (search) {
-        if (!search) {
-            return
-        }
-        if (search.type === "word" || search.type === "lemgram") {
-            if (search.type === "word") {
-                s.input = search.val
-                s.isRawInput = true
-                s.currentText = search.val
-            } else {
-                s.input = unregescape(search.val)
-                s.isRawInput = false
-                s.lemgram = search.val
-            }
-            s.doSearch()
-        } else {
-            s.input = ""
-            if ("lemgramResults" in window) {
-                lemgramResults.resetView()
-            }
-        }
-    })
-
-    s.onChange = (output, isRawOutput) => {
-        if (isRawOutput) {
-            s.currentText = output
-            s.lemgram = null
-        } else {
-            s.lemgram = regescape(output)
-            s.currentText = null
-        }
-    }
-
-    s.doSearch = function () {
-        const search = searches.activeSearch
-        s.relatedObj = null
-        const cqp = s.getCQP()
-        searches.kwicSearch(cqp, search && search.pageOnly)
-
-        if (!(search && search.pageOnly)) {
-            if (search.type === "lemgram") {
-                let sense = false
-                let saldo = false
-                for (let corpus of settings.corpusListing.selected) {
-                    if ("sense" in corpus.attributes) {
-                        sense = true
-                    }
-                    if ("saldo" in corpus.attributes) {
-                        saldo = true
-                    }
-                }
-
-                if (sense || saldo) {
-                    backend.relatedWordSearch(unregescape(search.val)).then(function (data) {
-                        s.relatedObj = data
-                        if (data.length > 2 && data[0].label == "Excreting") {
-                            let [first, second, ...rest] = data
-                            s.relatedObj.data = [second, first, ...rest]
-                        }
-                        s.relatedObj.attribute = sense ? "sense" : "saldo"
-                    })
-                }
-            }
-
-            if (s.word_pic && (search.type === "lemgram" || !search.val.includes(" "))) {
-                const value = search.type === "lemgram" ? unregescape(search.val) : search.val
-                return searches.lemgramSearch(value, search.type)
-            } else {
-                if ("lemgramResults" in window) {
-                    lemgramResults.resetView()
-                }
-            }
-        }
-    }
-
-    utils.setupHash(s, [
-        { key: "prefix", default: false },
-        { key: "mid_comp", default: false },
-        { key: "suffix", default: false },
-        { key: "isCaseInsensitive" },
-    ])
-})
-
 korpApp.controller("ExtendedSearch", function ($scope, $location, $rootScope, searches, compareSearches, $timeout) {
     const s = $scope
-    s.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, $rootScope.extendedCQP))
 
     // TODO this is *too* weird
     function triggerSearch() {
@@ -426,9 +187,14 @@ korpApp.controller("ExtendedSearch", function ($scope, $location, $rootScope, se
     })
 
     s.searches = searches
-    s.$on("btn_submit", function () {
+
+    s.onSearch = () => {
         triggerSearch()
-    })
+    }
+    
+    s.onSearchSave = (name) => {
+        compareSearches.saveSearch(name, $rootScope.extendedCQP)
+    }
 
     s.$on("extended_set", ($event, val) => (s.cqp = val))
 
@@ -569,22 +335,24 @@ korpApp.directive("advancedSearch", () => ({
             }
         }
 
+        $scope.onSearch = () => {
+            $location.search("search", null)
+            $location.search("page", null)
+            $location.search("within", null)
+            $location.search("in_order", null)
+            $timeout(() => $location.search("search", `cqp|${$scope.cqp}`), 0)
+        }
+
+        $scope.onSearchSave = (name) => {
+            compareSearches.saveSearch(name, $scope.cqp)
+        }
+
         // init value
         updateAdvancedCQP()
 
         // update value
         $scope.$on("updateAdvancedCQP", () => {
             updateAdvancedCQP()
-        })
-
-        $scope.$on("popover_submit", (event, name) => compareSearches.saveSearch(name, $scope.cqp))
-
-        $scope.$on("btn_submit", function () {
-            $location.search("search", null)
-            $location.search("page", null)
-            $location.search("within", null)
-            $location.search("in_order", null)
-            $timeout(() => $location.search("search", `cqp|${$scope.cqp}`), 0)
         })
     },
 }))

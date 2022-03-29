@@ -254,9 +254,14 @@ korpApp.directive("searchSubmit", ($rootElement) => ({
 `,
     restrict: "E",
     replace: true,
+    scope: {
+        onSearch: "&",
+        onSearchSave: "&",
+    },
     link(scope, elem, attr) {
         let at, my
         const s = scope
+
         s.pos = attr.pos || "bottom"
         s.togglePopover = function (event) {
             if (s.isPopoverVisible) {
@@ -323,10 +328,10 @@ korpApp.directive("searchSubmit", ($rootElement) => ({
 
         s.onSubmit = function () {
             s.popHide()
-            return s.$broadcast("popover_submit", s.name)
+            s.onSearchSave({ name: s.name })
         }
 
-        s.onSendClick = () => s.$broadcast("btn_submit")
+        s.onSendClick = () => s.onSearch()
     },
 }))
 

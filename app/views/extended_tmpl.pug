@@ -6,7 +6,7 @@ div(ng-controller='ExtendedSearch')
 
   div(ng-show="repeatError" style="color: red; margin-bottom: 10px;") {{'repeat_error' | loc:lang}}
 
-  search-submit(pos='right')
+  search-submit(pos='right' on-search="onSearch()" on-search-save="onSearchSave(name)")
   span(rel='localize[within]')
 
   select.within_select(ng-model="within"

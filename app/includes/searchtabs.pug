@@ -1,7 +1,7 @@
 div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
   uib-tabset.tabbable.search_tabs(tab-hash='search_tab', active="activeTab")
     uib-tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
-      include simple
+      simple-search(word-pic="word_pic")
     uib-tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]")
       .extended(ng-include='extendedTmpl')
 
@@ -25,7 +25,7 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
             a(href='http://cwb.sourceforge.net/files/CQP_Tutorial.pdf', target='_blank') 
               | {{'cqp_docs' | loc:lang}}
           textarea#cqp_string(ng-model="cqp")
-        search-submit(pos='right')
+        search-submit(pos='right' on-search="onSearch()" on-search-save="onSearchSave(name)")
 
     uib-tab(ng-if="visibleTabs[3]", compare-search-ctrl)
       uib-tab-heading
