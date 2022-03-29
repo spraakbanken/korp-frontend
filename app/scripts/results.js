@@ -116,7 +116,6 @@ view.KWICResults = class KWICResults extends BaseResults {
         this.s = scope
 
         this.selectionManager = scope.selectionManager
-        this.setupReadingHash()
         this.$result.click((event) => {
             if (event.target.id === "frontendDownloadLinks" || event.target.classList.contains("kwicDownloadLink")) {
                 return
@@ -131,10 +130,6 @@ view.KWICResults = class KWICResults extends BaseResults {
         $(document).keydown($.proxy(this.onKeydown, this))
 
         this.$result.on("click", ".word", (event) => this.onWordClick(event))
-    }
-
-    setupReadingHash() {
-        return this.s.setupReadingHash()
     }
 
     onWordClick(event) {
@@ -642,8 +637,6 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         }
         this.tabindex = this.getResultTabs().length - 1 + this.s.$parent.$index
     }
-
-    setupReadingHash() { }
 
     isReadingMode() {
         return this.s.exampleReadingMode

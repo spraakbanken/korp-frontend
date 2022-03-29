@@ -64,16 +64,7 @@ class KwicCtrl {
             }
         }
 
-        s.setupReadingHash = () => {
-            return this.utils.setupHash(s, [
-                {
-                    key: "reading_mode",
-                    post_change: () => {
-                        return readingChange()
-                    },
-                },
-            ])
-        }
+
 
         // used by example kwic
         s.setupReadingWatch = _.once(function () {
@@ -86,9 +77,16 @@ class KwicCtrl {
             })
         })
 
+        s.reading_mode = $location.search().reading_mode
         s.toggleReading = function () {
             s.reading_mode = !s.reading_mode
-            return s.instance.centerScrollbar()
+            if (s.reading_mode) {
+                $location.search("reading_mode", "")
+            } else {
+                $location.search("reading_mode")
+            }
+            readingChange()
+            s.instance.centerScrollbar()
         }
 
         s.hitspictureClick = function (pageNumber) {
