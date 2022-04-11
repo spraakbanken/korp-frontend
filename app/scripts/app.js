@@ -12,6 +12,9 @@ import { loginBoxComponent } from "./components/auth/login_box"
 import { loginStatusComponent } from "./components/auth/login_status"
 import { depTreeComponent } from "./components/deptree/deptree"
 import { simpleSearchComponent } from "./components/simple_search"
+import { extendedSearchComponent } from "./components/extended_search"
+import { standardExtendedComponent } from "./components/standard_extended"
+import { parallelExtendedComponent } from "./components/parallel_extended"
 import * as treeUtil from "./components/corpus_chooser/util"
 import statemachine from "@/statemachine"
 
@@ -64,6 +67,9 @@ korpApp.component("loginStatus", loginStatusComponent)
 korpApp.component("loginBox", loginBoxComponent)
 korpApp.component("depTree", depTreeComponent)
 korpApp.component("simpleSearch", simpleSearchComponent)
+korpApp.component("extendedSearch", extendedSearchComponent)
+korpApp.component("standardExtended", standardExtendedComponent)
+korpApp.component("parallelExtended", parallelExtendedComponent)
 
 // load all custom components
 let customComponents = {}

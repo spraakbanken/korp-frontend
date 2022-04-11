@@ -230,8 +230,8 @@ korpApp.directive("searchSubmit", ($rootElement) => ({
     template: `\
 <div class="search_submit">
         <div class="btn-group">
-            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()" ng-disabled="searchDisabled">{{'search' | loc:lang}}</button>
-            <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)" ng-disabled="searchDisabled">
+            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()" ng-disabled="disabled">{{'search' | loc:lang}}</button>
+            <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)" ng-disabled="disabled">
                 <span class="caret"></span>
             </button>
         </div>
@@ -257,10 +257,13 @@ korpApp.directive("searchSubmit", ($rootElement) => ({
     scope: {
         onSearch: "&",
         onSearchSave: "&",
+        disabled: "<",
     },
     link(scope, elem, attr) {
         let at, my
         const s = scope
+
+        s.disabled = angular.isDefined(s.disabled) ? s.disabled : false
 
         s.pos = attr.pos || "bottom"
         s.togglePopover = function (event) {
@@ -433,10 +436,19 @@ korpApp.directive("extendedList", () => ({
     scope: {
         cqp: "=",
         lang: "=",
-        repeatError: "=",
+        cqpChange: "&",
+        updateRepeatError: "&",
     },
     link($scope) {
         const s = $scope
+
+        s.repeatError = false
+
+        s.$watch("repeatError", (newVal, oldVal) => {
+            if (newVal != oldVal) {
+                s.updateRepeatError({ error: s.repeatError })
+            }
+        })
 
         const setCQP = function (val) {
             if (s.data == undefined || val != CQP.stringify(s.data)) {
@@ -451,8 +463,10 @@ korpApp.directive("extendedList", () => ({
 
         s.$watch(
             "data",
-            () => {
-                s.cqp = CQP.stringify(s.data) || ""
+            (newVal, oldVal) => {
+                if (newVal != oldVal) {
+                    s.cqpChange({cqp: CQP.stringify(s.data)})
+                }
             },
             true
         )

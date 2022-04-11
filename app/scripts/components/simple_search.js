@@ -190,7 +190,8 @@ export const simpleSearchComponent = {
                     } else {
                         cqp = `[sense rank_contains \"${regescape(wd)}\"]`
                     }
-                    $rootScope.$broadcast("extended_set", cqp)
+                    // TODO replace this with statemachine stuff
+                    // $rootScope.$broadcast("extended_set", cqp)
                     $location.search("search", "cqp")
                     $location.search("cqp", cqp)
                 }

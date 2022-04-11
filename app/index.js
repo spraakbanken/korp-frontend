@@ -130,7 +130,6 @@ require("./scripts/newsdesk.js")
 // only if the current mode is parallel, we load the special code required
 if (window.currentModeParallel) {
     require("./scripts/parallel/corpus_listing.js")
-    require("./scripts/parallel/search_ctrl.js")
     require("./scripts/parallel/parallel_search.js")
     require("./scripts/parallel/kwic_results.js")
     require("./scripts/parallel/stats_proxy.js")

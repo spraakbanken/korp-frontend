@@ -2,16 +2,25 @@
 import statemachine from "./statemachine"
 const korpApp = angular.module("korpApp")
 
-window.SearchCtrl = [
+korpApp.controller("SearchCtrl", [
     "$scope",
     "$location",
     "$filter",
     "searches",
-    function ($scope, $location, $filter, searches) {
-        $scope.visibleTabs = [true, true, true, true]
-        $scope.extendedTmpl = require("../views/extended_tmpl.pug")
-        // for parallel mode
-        searches.langDef.resolve()
+    "$rootScope",
+    function ($scope, $location, $filter, searches, $rootScope) {
+        if (window.currentModeParallel) {
+            // resolve globalFilterDef since globalFilter-directive is not used
+            $rootScope.globalFilterDef.resolve()
+            $scope.visibleTabs = [false, true, false, false]
+            settings.corpusListing.setActiveLangs([settings["start_lang"]])
+        } else {
+            $scope.visibleTabs = [true, true, true, true]
+            // only used in parallel mode
+            searches.langDef.resolve()
+        }
+        $scope.parallelMode = window.currentModeParallel
+
         $scope.isCompareSelected = false
 
         $scope.$watch(
@@ -57,7 +66,7 @@ window.SearchCtrl = [
 
         $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function (event, selected) {
             $scope.noCorporaSelected = !selected.length
-            const allAttrs = settings.corpusListing.getStatsAttributeGroups()
+            const allAttrs = settings.corpusListing.getStatsAttributeGroups(settings.corpusListing.getReduceLang())
             $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
             $scope.statSelectedAttrs = ($location.search().stats_reduce || "word").split(",")
             const insensitiveAttrs = $location.search().stats_reduce_insensitive
@@ -156,94 +165,9 @@ window.SearchCtrl = [
         setupHitsPerPage()
         setupKwicSort()
     },
-]
+])
 
-korpApp.controller("SearchCtrl", window.SearchCtrl)
 
-korpApp.controller("ExtendedSearch", function ($scope, $location, $rootScope, searches, compareSearches, $timeout) {
-    const s = $scope
-
-    // TODO this is *too* weird
-    function triggerSearch() {
-        $location.search("search", null)
-        $location.search("page", null)
-        $location.search("in_order", null)
-        $timeout(function () {
-            $location.search("search", "cqp")
-            if (!_.keys(settings["default_within"]).includes(s.within)) {
-                var { within } = s
-            }
-            $location.search("within", within)
-        }, 0)
-    }
-
-    statemachine.listen("cqp_search", (event) => {
-        $scope.$root.searchtabs()[1].tab.select()
-        s.cqp = event.cqp
-        triggerSearch()
-        // sometimes $scope.$apply is needed and sometimes it throws errors
-        // depending on source of the event I guess. $timeout solves it.
-        $timeout(() => $scope.$apply())
-    })
-
-    s.searches = searches
-
-    s.onSearch = () => {
-        triggerSearch()
-    }
-    
-    s.onSearchSave = (name) => {
-        compareSearches.saveSearch(name, $rootScope.extendedCQP)
-    }
-
-    s.$on("extended_set", ($event, val) => (s.cqp = val))
-
-    if ($location.search().cqp) {
-        s.cqp = $location.search().cqp
-    }
-
-    s.$watch("repeatError", (repeatError) => (s.searchDisabled = repeatError))
-
-    const updateExtendedCQP = function () {
-        let val2 = CQP.expandOperators(s.cqp)
-        if ($rootScope.globalFilter) {
-            val2 = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(val2 || "[]"), $rootScope.globalFilter))
-        }
-        $rootScope.extendedCQP = val2
-    }
-
-    $rootScope.$watch("globalFilter", function () {
-        if ($rootScope.globalFilter) {
-            updateExtendedCQP()
-        }
-    })
-
-    s.$watch("cqp", function (val) {
-        if (!val) {
-            return
-        }
-        try {
-            updateExtendedCQP()
-        } catch (e) {
-            c.log("Failed to parse CQP", val)
-            c.log("Error", e)
-        }
-        $location.search("cqp", val)
-    })
-
-    s.withins = []
-
-    s.getWithins = function () {
-        const union = settings.corpusListing.getWithinKeys()
-        const output = _.map(union, (item) => ({ value: item }))
-        return output
-    }
-
-    return s.$on("corpuschooserchange", function () {
-        s.withins = s.getWithins()
-        s.within = s.withins[0] && s.withins[0].value
-    })
-})
 
 korpApp.controller("ExtendedToken", function ($scope, utils) {
     const s = $scope
