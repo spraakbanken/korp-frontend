@@ -482,7 +482,7 @@ korpApp.directive("extendedList", () => ({
         s.addStructToken = function (start = true, idx = -1, within) {
             within = within ? within : Object.keys(settings.corpusListing.getCommonWithins())[0]
             // TODO this is duplicated since s.tagTypes are not available in this scope
-            const token = { struct: within, start: true }
+            const token = { struct: within, start }
             if (idx != -1) {
                 s.data.splice(idx, 0, token)
             } else if (start) {
@@ -525,7 +525,7 @@ korpApp.directive("extendedList", () => ({
         }
 
         s.toggleStart = (idx) => {
-            s.addStructToken(false, idx, "sentence")
+            s.addStructToken(true, idx, "sentence")
         }
         s.toggleEnd = (idx) => {
             s.addStructToken(false, idx + 1, "sentence")
