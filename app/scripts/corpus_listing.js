@@ -128,7 +128,7 @@ export class CorpusListing {
         const attrs = {}
 
         for (let corpus of this.selected) {
-            for (let filter of corpus["defaultFilters"] || []) {
+            for (let filter of corpus["attribute_filters"] || []) {
                 if (!(filter in attrs)) {
                     attrs[filter] = {
                         settings: corpus["struct_attributes"][filter],
