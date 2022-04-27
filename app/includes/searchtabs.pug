@@ -3,7 +3,9 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
     uib-tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
       simple-search(word-pic="word_pic")
     uib-tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]").extended
-      extended-search(parallel="parallelMode")
+      div
+        extended-standard(ng-if="!parallelMode")
+        extended-parallel(ng-if="parallelMode")
     uib-tab(heading='{{"advanced" | loc:lang}}', ng-if="visibleTabs[2]", 
         advanced-search)
       #advanced

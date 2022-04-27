@@ -1259,33 +1259,10 @@ label[for=lemgram_select]:before {
   background-color: #dbeafe;
 }
 
-.query_arg:only-of-type .or_arg:only-child .remove_arg {
+.query_arg:only-of-type .or_arg_outer:only-child .remove_arg {
   cursor: default;
   opacity: 0;
   transition: opacity 200ms ease;
-}
-
-.arg_header {
-  opacity: 0;
-  transition: opacity 200ms ease;
-  margin-bottom: 1px;
-}
-
-.or_arg:not(:only-child):first-child .arg_header {
-  opacity: 1;
-  transition: opacity 200ms ease;
-}
-
-.arg_header {
-  font-size: 10px;
-}
-
-
-.insert_or {
-  padding-top: 6px;
-  right: 0;
-  cursor: pointer;
-  float: right;
 }
 
 

@@ -2,29 +2,33 @@
 import statemachine from "@/statemachine"
 
 let html = String.raw
-export const standardExtendedComponent = {
+export const extendedStandardComponent = {
     template: html`
         <div>
             <global-filters lang="$ctrl.lang"></global-filters>
-            <div id="query_table" extended-list="extended-list" cqp="$ctrl.cqp" lang="$ctrl.lang" cqp-change="$ctrl.cqpChange(cqp)" update-repeat-error="$ctrl.updateRepeatError(error)"></div>
-            <div ng-show="$ctrl.repeatError" style="color: red; margin-bottom: 10px;">{{'repeat_error' | loc:lang}}</div>
+            <extended-tokens
+                cqp="$ctrl.cqp"
+                lang="$ctrl.lang"
+                cqp-change="$ctrl.cqpChange(cqp)"
+                update-repeat-error="$ctrl.updateRepeatError(error)"
+            ></extended-tokens>
+            <div ng-show="$ctrl.repeatError" style="color: red; margin-bottom: 10px;">
+                {{'repeat_error' | loc:$root.lang}}
+            </div>
             <search-submit
                 pos="right"
                 on-search="$ctrl.onSearch()"
                 on-search-save="$ctrl.onSearchSave(name)"
                 disabled="$ctrl.repeatError"
             ></search-submit>
-            <span rel="localize[within]"></span>
+            <span>{{'within' | loc:$root.lang}}</span>
             <select
                 class="within_select"
                 ng-model="$ctrl.within"
-                ng-options="item.value as ('within_' + item.value | loc:lang) for item in $ctrl.withins"
+                ng-options="item.value as ('within_' + item.value | loc:$root.lang) for item in $ctrl.withins"
             ></select>
         </div>
     `,
-    bindings: {
-        parallel: "<",
-    },
     controller: [
         "$location",
         "$rootScope",
@@ -52,10 +56,12 @@ export const standardExtendedComponent = {
             statemachine.listen("cqp_search", (event) => {
                 $rootScope.searchtabs()[1].tab.select()
                 ctrl.cqp = event.cqp
-                triggerSearch()
                 // sometimes $scope.$apply is needed and sometimes it throws errors
                 // depending on source of the event I guess. $timeout solves it.
-                $timeout(() => $scope.$apply())
+                $timeout(() => {
+                    $rootScope.$apply()
+                    triggerSearch()
+                })
             })
 
             ctrl.onSearch = () => {
@@ -67,7 +73,6 @@ export const standardExtendedComponent = {
             }
 
             ctrl.cqpChange = (cqp) => {
-                console.log('cqp', cqp)
                 ctrl.cqp = cqp
                 try {
                     updateExtendedCQP()
@@ -78,7 +83,6 @@ export const standardExtendedComponent = {
                 $location.search("cqp", cqp)
             }
 
-            
             ctrl.cqp = $location.search().cqp
 
             ctrl.repeatError = false

@@ -39,7 +39,13 @@ const selectController = (autocomplete) => [
         })
 
         function reloadValues() {
-            const attribute = $scope.$parent.tokenValue.value
+            // TODO this exploits the API
+            const attributeDefinition = $scope.$parent.$ctrl.attributeDefinition
+            if (!attributeDefinition) {
+                return
+            }
+
+            const attribute = attributeDefinition.value
             const selectedCorpora = settings.corpusListing.selected
 
             // check which corpora support attributes
@@ -160,8 +166,8 @@ export default _.merge(
             <span ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'
                     class='val_mod' popper> Aa </span>
             <ul class='mod_menu popper_menu dropdown-menu'>
-                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:lang}}</a></li>
-                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>
+                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:$root.lang}}</a></li>
+                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:$root.lang}}</a></li>
             </ul>
         `),
             controller: [

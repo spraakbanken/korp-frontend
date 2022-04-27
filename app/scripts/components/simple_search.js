@@ -190,10 +190,7 @@ export const simpleSearchComponent = {
                     } else {
                         cqp = `[sense rank_contains \"${regescape(wd)}\"]`
                     }
-                    // TODO replace this with statemachine stuff
-                    // $rootScope.$broadcast("extended_set", cqp)
-                    $location.search("search", "cqp")
-                    $location.search("cqp", cqp)
+                    statemachine.send("SEARCH_CQP", { cqp })
                 }
                 const modalInstance = $uibModal.open({
                     template: `\
@@ -234,8 +231,6 @@ export const simpleSearchComponent = {
                     }
                     ctrl.doSearch()
                 } else {
-                    // TODO this happends when searching in extended or advanced
-                    ctrl.input = ""
                     if ("lemgramResults" in window) {
                         lemgramResults.resetView()
                     }
