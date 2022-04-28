@@ -50,46 +50,73 @@ $(document).keyup(function (event) {
 })
 
 const corpusSettingsPromise = new Promise((resolve, reject) => {
+    const createSplashScreen = () => {
+        const korpLogo = require("../img/korplogo_block.svg")
+        const splash = document.getElementById("preload")
+        splash.innerHTML = `<img class="splash" height="300" width="300" src="${korpLogo}" />`
+    }
+
+    const createErrorScreen = () => {
+        const korpFail = require("../img/korp_fail.svg")
+        const elem = document.getElementById("preload")
+        elem.innerHTML = `
+            <div class="absolute top-1/3 text-center">
+                <img class="block" height="300" width="300" src="${korpFail}" />
+                Sorry, Korp doesn't seem to work right now
+            </div>
+        `
+    }
+
+    createSplashScreen()
+
     const labParam = window.isLab ? "&include_lab" : ""
-    fetch(`${settings["korp_backend_url"]}/corpus_config?mode=${window.currentMode}${labParam}`).then((response) => {
-        response.json().then((modeSettings) => {
-            function rename(obj, from, to) {
-                if (obj[from]) {
-                    obj[to] = obj[from]
-                    delete obj[from]
-                }
+    fetch(`${settings["korp_backend_url"]}/corpus_config?mode=${window.currentMode}${labParam}`)
+        .then((response) => {
+            if (!response.ok) {
+                console.error("Something wrong with corpus config", response.statusText)
+                createErrorScreen()
             }
 
-            rename(modeSettings["attributes"], "pos_attributes", "attributes")
-
-            // take the backend configuration format for attributes and expand it
-            // TODO the internal representation should be changed to a new, more compact one.
-            for (const corpusId in modeSettings["corpora"]) {
-                const corpus = modeSettings["corpora"][corpusId]
-
-                rename(corpus, "pos_attributes", "attributes")
-                for (const attrType of ["attributes", "struct_attributes", "custom_attributes"]) {
-                    const attrList = corpus[attrType]
-                    const attrs = {}
-                    for (const attrIdx in attrList) {
-                        const attr = modeSettings["attributes"][attrType][attrList[attrIdx]]
-                        attrs[attr.name] = attr
+            response.json().then((modeSettings) => {
+                function rename(obj, from, to) {
+                    if (obj[from]) {
+                        obj[to] = obj[from]
+                        delete obj[from]
                     }
-                    // attrs is an object of attribute settings
-                    corpus[attrType] = attrs
-                    // attrList is an ordered list of the preferred order of attributes
-                    corpus[`_${attrType}_order`] = attrList
                 }
-            }
 
-            delete modeSettings["attributes"]
+                rename(modeSettings["attributes"], "pos_attributes", "attributes")
 
-            if (!modeSettings["folders"]) {
-                modeSettings["folders"] = {}
-            }
-            resolve(modeSettings)
+                // take the backend configuration format for attributes and expand it
+                // TODO the internal representation should be changed to a new, more compact one.
+                for (const corpusId in modeSettings["corpora"]) {
+                    const corpus = modeSettings["corpora"][corpusId]
+
+                    rename(corpus, "pos_attributes", "attributes")
+                    for (const attrType of ["attributes", "struct_attributes", "custom_attributes"]) {
+                        const attrList = corpus[attrType]
+                        const attrs = {}
+                        for (const attrIdx in attrList) {
+                            const attr = modeSettings["attributes"][attrType][attrList[attrIdx]]
+                            attrs[attr.name] = attr
+                        }
+                        // attrs is an object of attribute settings
+                        corpus[attrType] = attrs
+                        // attrList is an ordered list of the preferred order of attributes
+                        corpus[`_${attrType}_order`] = attrList
+                    }
+                }
+
+                delete modeSettings["attributes"]
+
+                if (!modeSettings["folders"]) {
+                    modeSettings["folders"] = {}
+                }
+                resolve(modeSettings)
+                document.getElementById("preload").remove()
+            })
         })
-    })
+        .catch(() => createErrorScreen())
 })
 
 Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => {
@@ -181,7 +208,7 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
     })
 
     setTimeout(() => window.onHashChange(null, true), 0)
-    $("body").animate({ opacity: 1 }, function () {
+    $("#main").animate({ opacity: 1 }, function () {
         $(this).css("opacity", "")
     })
 })
