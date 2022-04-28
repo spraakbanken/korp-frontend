@@ -4,7 +4,7 @@ export class CorpusListing {
     constructor(corpora) {
         this.struct = corpora
         this.corpora = _.values(corpora)
-        this.selected = _.filter(this.corpora, (corp) => !corp.limitedAccess)
+        this.selected = []
     }
 
     get(key) {
