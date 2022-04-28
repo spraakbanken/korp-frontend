@@ -8,7 +8,7 @@ export const ccTreeComponent = {
     <div ng-class="{ 'cc-level-indent' : $ctrl.indent }">
         <div ng-repeat="folder in $ctrl.sortedFolders"
             class="tree"
-            ng-class="{ collapsed: !folder.extended, extended: folder.extended, disabled: folder.limitedAccess }"
+            ng-class="{ collapsed: !folder.extended, extended: folder.extended, disabled: folder['limited_access'] }"
             >
             <img ng-click="$ctrl.toggleFolderVisibility(folder)" src="${collapsedImg}" alt="extend" class="ext cursor-pointer">
             <label 
@@ -33,7 +33,7 @@ export const ccTreeComponent = {
                 <span class="checkbox" ng-class="{ checked: corpus.selected, unchecked: !corpus.selected }"></span>
                 <span>{{ corpus.title | locObj:$root.lang }}</span>
             </label>
-            <i ng-if="corpus.limitedAccess && corpus.userHasAccess" class="fa-solid fa-unlock"></i>
+            <i ng-if="corpus['limited_access'] && corpus.userHasAccess" class="fa-solid fa-unlock"></i>
             <i 
                 ng-click="$ctrl.showInfo($event, corpus)" 
                 class="fa-solid text-xl fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
@@ -69,7 +69,7 @@ export const ccTreeComponent = {
             }
 
             $ctrl.toggleFolderSelection = (e, folder) => {
-                if (folder.limitedAccess) {
+                if (folder["limited_access"]) {
                     folder.extended = !folder.extended
                     return
                 }

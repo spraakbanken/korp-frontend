@@ -75,7 +75,7 @@ export const corpusChooserComponent = {
                 $ctrl.credentials = []
                 let newCorpora = []
                 for (let corpus of settings.corpusListing.getSelectedCorpora()) {
-                    if (!settings.corpora[corpus].limitedAccess) {
+                    if (!settings.corpora[corpus]["limited_access"]) {
                         newCorpora.push(corpus)
                     } else {
                         settings.corpora[corpus].selected = false

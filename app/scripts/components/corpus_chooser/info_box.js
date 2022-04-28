@@ -50,7 +50,7 @@ export const ccInfoBox = {
 
                 $ctrl.langStats = []
                 if ($ctrl.isCorpus) {
-                    $ctrl.limitedAccess = $ctrl.object.limitedAccess
+                    $ctrl.limitedAccess = $ctrl.object["limited_access"]
                     $ctrl.context = _.keys($ctrl.object.context).length > 1
 
                     if ($ctrl.object["linked_to"]) {
