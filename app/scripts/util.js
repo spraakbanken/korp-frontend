@@ -110,6 +110,13 @@ util.SelectionManager.prototype.hasSelected = function () {
 
 util.getLocaleString = (key, lang) => util.getLocaleStringUndefined(key, lang) || key
 
+util.getLocaleStringObject = (translationObject, lang) => {
+    if (!lang) {
+        lang = window.lang || settings["default_language"]
+    }
+    return translationObject ? translationObject[lang] || translationObject : undefined
+}
+
 util.getLocaleStringUndefined = function (key, lang) {
     if (!lang) {
         lang = window.lang || settings["default_language"]

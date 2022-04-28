@@ -28,7 +28,7 @@ export class CorpusListing {
     }
 
     // only applicable for parallel corpora
-    getReduceLang() { }
+    getReduceLang() {}
 
     // Returns an array of all the selected corpora's IDs in uppercase
     getSelectedCorpora() {
@@ -296,16 +296,8 @@ export class CorpusListing {
         return [from, to]
     }
 
-    getNonProtected() {
-        return _.filter(this.corpora, (item) => !item.limitedAccess)
-    }
-
     getTitle(corpus) {
-        try {
-            return this.struct[corpus].title
-        } catch (e) {
-            return c.log("gettitle broken", corpus)
-        }
+        return util.getLocaleStringObject(this.struct[corpus].title)
     }
 
     getWordGroup() {
