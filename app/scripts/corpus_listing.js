@@ -300,13 +300,18 @@ export class CorpusListing {
         return util.getLocaleStringObject(this.struct[corpus].title)
     }
 
+    /*
+     * Avoid triggering watches etc. by only creating this object once.
+     */
     getWordGroup() {
-        const word = {
-            group: "word",
-            value: "word",
-            label: settings["word_label"],
+        if (!this._wordGroup) {
+            this._wordGroup = {
+                group: "word",
+                value: "word",
+                label: settings["word_label"],
+            }
         }
-        return word
+        return this._wordGroup
     }
 
     getWordAttributeGroups(lang, setOperator) {

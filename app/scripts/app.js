@@ -11,10 +11,17 @@ import { ccInfoBox } from "./components/corpus_chooser/info_box"
 import { loginBoxComponent } from "./components/auth/login_box"
 import { loginStatusComponent } from "./components/auth/login_status"
 import { depTreeComponent } from "./components/deptree/deptree"
+import { simpleSearchComponent } from "./components/simple_search"
+import { extendedStandardComponent } from "./components/extended/standard_extended"
+import { extendedParallelComponent } from "./components/extended/parallel_extended"
+import { extendedTokensComponent } from "./components/extended/extended_tokens"
+import { extendedAndTokenComponent } from "./components/extended/and_token"
+import { extendedCQPTermComponent } from "./components/extended/cqp_term"
+import { extendedTokenComponent } from "./components/extended/token"
+import { extendedStructTokenComponent } from "./components/extended/struct_token"
+import { extendedCQPValueComponent } from "./components/extended/cqp_value"
 import * as treeUtil from "./components/corpus_chooser/util"
 import statemachine from "@/statemachine"
-
-
 
 window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.typeahead",
@@ -62,6 +69,15 @@ korpApp.component("ccInfoBox", ccInfoBox)
 korpApp.component("loginStatus", loginStatusComponent)
 korpApp.component("loginBox", loginBoxComponent)
 korpApp.component("depTree", depTreeComponent)
+korpApp.component("simpleSearch", simpleSearchComponent)
+korpApp.component("extendedStandard", extendedStandardComponent)
+korpApp.component("extendedParallel", extendedParallelComponent)
+korpApp.component("extendedTokens", extendedTokensComponent)
+korpApp.component("extendedAndToken", extendedAndTokenComponent)
+korpApp.component("extendedCqpTerm", extendedCQPTermComponent)
+korpApp.component("extendedToken", extendedTokenComponent)
+korpApp.component("extendedStructToken", extendedStructTokenComponent)
+korpApp.component("extendedCqpValue", extendedCQPValueComponent)
 
 // load all custom components
 let customComponents = {}

@@ -85,7 +85,6 @@
     "subsumed_by": "subsumed by",
     "not_subsumed_by": "not subsumed by",
 
-    "any_word_placeholder": "<any word>",
     "case_insensitive": "case-insensitive",
     "case_sensitive": "case-sensitive",
     "reduce_text": "compile based on",
