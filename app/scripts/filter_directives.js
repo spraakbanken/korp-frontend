@@ -44,7 +44,7 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
           <span>{{filterLabel | locObj:lang}}</span>
         </span>
         <span ng-if="attrValue.length != 0">
-          <span style="text-transform: capitalize">{{filterLabel | loc:lang}}:</span>
+          <span style="text-transform: capitalize">{{filterLabel | locObj:lang}}:</span>
           <span ng-repeat="selected in attrValue">{{translateAttribute(selected) | replaceEmpty }} </span>
         </span>
       </button>
