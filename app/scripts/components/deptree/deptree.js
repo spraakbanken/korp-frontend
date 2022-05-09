@@ -44,21 +44,25 @@ export const depTreeComponent = {
 
                     const modal = $uibModal.open({
                         templateUrl: "deptreeModal.html",
-                        controller: ["$scope", "$timeout", ($scope, $timeout) => {
-                            $scope.clickX = () => {
-                                modal.close()
-                            }
+                        controller: [
+                            "$scope",
+                            "$timeout",
+                            ($scope, $timeout) => {
+                                $scope.clickX = () => {
+                                    modal.close()
+                                }
 
-                            $timeout(() => {
-                                draw_deptree($ctrl.tokens, function (msg) {
-                                    const [type, val] = _.head(_.toPairs(msg))
-                                    $scope.$apply((s) => {
-                                        s.label = $ctrl.corpus.attributes[type].label
-                                        s.value = $ctrl.corpus.attributes[type].translation[val]
+                                $timeout(() => {
+                                    draw_deptree($ctrl.tokens, function (msg) {
+                                        const [type, val] = _.head(_.toPairs(msg))
+                                        $scope.$apply((s) => {
+                                            s.label = $ctrl.corpus.attributes[type].label
+                                            s.value = $ctrl.corpus.attributes[type].translation[val]
+                                        })
                                     })
-                                })
-                            }, 0)
-                        }],
+                                }, 0)
+                            },
+                        ],
                         size: "lg",
                     })
 
