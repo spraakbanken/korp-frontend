@@ -56,7 +56,7 @@ export const depTreeComponent = {
                                     draw_deptree($ctrl.tokens, function (msg) {
                                         const [type, val] = _.head(_.toPairs(msg))
                                         $scope.$apply((s) => {
-                                            s.label = $ctrl.corpus.attributes[type].label
+                                            s.label = util.getLocaleStringObject($ctrl.corpus.attributes[type].label)
                                             s.value = $ctrl.corpus.attributes[type].translation[val]
                                         })
                                     })
