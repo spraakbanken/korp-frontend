@@ -108,7 +108,6 @@ export const simpleSearchComponent = {
 
                 $location.search("within", null)
                 locationSearch("search", null)
-                $rootScope.simpleCQP = CQP.expandOperators(ctrl.getCQP())
                 $timeout(function () {
                     if (ctrl.currentText) {
                         util.searchHash("word", ctrl.currentText)
@@ -229,6 +228,7 @@ export const simpleSearchComponent = {
                         ctrl.isRawInput = false
                         ctrl.lemgram = search.val
                     }
+                    $rootScope.simpleCQP = CQP.expandOperators(ctrl.getCQP())
                     ctrl.doSearch()
                 } else {
                     if ("lemgramResults" in window) {
