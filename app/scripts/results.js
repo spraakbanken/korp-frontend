@@ -653,10 +653,6 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         opts.ajaxParams.start = this.s.$parent.page * items_per_page
         opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1
 
-        // use window.kwicProxy to fetch previous searches, since this.proxy is local to the newly created tab
-        const prev = _.pick(window.kwicProxy.prevParams, "cqp", "command", "corpus", "source")
-        _.extend(opts.ajaxParams, prev)
-
         let avoidContext, preferredContext
         if (this.isReadingMode()) {
             preferredContext = settings["default_reading_context"]
@@ -667,7 +663,7 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         }
 
         const context = settings.corpusListing.getContextQueryStringFromCorpusId(
-            (prev.corpus || "").split(","),
+            (opts.ajaxParams.corpus || "").split(","),
             preferredContext,
             avoidContext
         )
