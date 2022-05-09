@@ -203,7 +203,7 @@ export default _.merge(
             is-raw-input="isRawInput"
             type='${options.type || "lemgram"}'
             on-change="onChange(output, isRawOutput)"
-            error-on-empty="${options.errorOnEmpty}"
+            error-on-empty="${options["error_on_empty"]}"
             error-message="choose_value">
         </autoc>`,
             controller: [
