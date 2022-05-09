@@ -55,16 +55,14 @@ class KwicCtrl {
                 // filter those out
                 // TODO: Remove at least rejected requests from
                 // pendingRequests somewhere
-                const nonRejectedRequests =
-                      (s.instance.getProxy().pendingRequests || []).filter(
-                          req => req.state() != "rejected")
+                const nonRejectedRequests = (s.instance.getProxy().pendingRequests || []).filter(
+                    (req) => req.state() != "rejected"
+                )
                 return $.when(...nonRejectedRequests).then(function () {
                     return s.instance.makeRequest()
                 })
             }
         }
-
-
 
         // used by example kwic
         s.setupReadingWatch = _.once(function () {
