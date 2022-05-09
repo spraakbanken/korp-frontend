@@ -1753,7 +1753,6 @@ view.GraphResults = class GraphResults extends BaseResults {
             }
         }
     }
-    setLineMode() { }
 
     setTableMode(series) {
         $(".chart,.legend", this.$result).hide()
