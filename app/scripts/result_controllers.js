@@ -388,7 +388,7 @@ korpApp.directive("statsResultCtrl", () => ({
             let attrs = {}
             for (let corpus of settings.corpusListing.subsetFactory(corpora).selected) {
                 for (let attr of corpus.private_struct_attributes) {
-                    if (attr.indexOf("geo" !== -1)) {
+                    if (attr.indexOf("geo") !== -1) {
                         if (attrs[attr]) {
                             attrs[attr].corpora.push(corpus.id)
                         } else {
