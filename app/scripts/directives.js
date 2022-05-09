@@ -145,23 +145,23 @@ korpApp.directive("searchSubmit", ($rootElement) => ({
     template: `\
 <div class="search_submit">
         <div class="btn-group">
-            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()" ng-disabled="disabled">{{'search' | loc:lang}}</button>
+            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()" ng-disabled="disabled">{{'search' | loc:$root.lang}}</button>
             <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)" ng-disabled="disabled">
                 <span class="caret"></span>
             </button>
         </div>
         <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">
             <div class="arrow"></div>
-            <h3 class="popover-title">{{'compare_save_header' | loc:lang}}</h3>
+            <h3 class="popover-title">{{'compare_save_header' | loc:$root.lang}}</h3>
             <form class="popover-content" ng-submit="onSubmit()">
                 <div>
                     <label>
-                        {{'compare_name' | loc:lang}}:
+                        {{'compare_name' | loc:$root.lang}}:
                         <input class="cmp_input" ng-model="name">
                     </label>
                 </div>
                 <div class="btn_container">
-                    <button class="btn btn-primary btn-sm">{{'compare_save' | loc:lang}}</button>
+                    <button class="btn btn-primary btn-sm">{{'compare_save' | loc:$root.lang}}</button>
                 </div>
             </form>
         </div>

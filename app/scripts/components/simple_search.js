@@ -22,18 +22,18 @@ export const simpleSearchComponent = {
                     ></search-submit>
                     <div class="opts">
                         <input id="inOrderChk" type="checkbox" ng-model="$ctrl.inOrder" />
-                        <label for="inOrderChk"> {{'in_order_chk' | loc:lang}}</label>
-                        <span> {{'and' | loc:lang}} </span>
-                        <span> {{'and_include' | loc:lang}} </span>
+                        <label for="inOrderChk"> {{'in_order_chk' | loc:$root.lang}}</label>
+                        <span> {{'and' | loc:$root.lang}} </span>
+                        <span> {{'and_include' | loc:$root.lang}} </span>
                         <input id="prefixChk" type="checkbox" ng-model="$ctrl.prefix" />
-                        <label for="prefixChk"> {{'prefix_chk' | loc:lang}}</label>
+                        <label for="prefixChk"> {{'prefix_chk' | loc:$root.lang}}</label>
                         <input id="midChk" type="checkbox" ng-model="$ctrl.mid_comp" />
-                        <label for="midChk"> {{'compound_middle' | loc:lang}} </label>
+                        <label for="midChk"> {{'compound_middle' | loc:$root.lang}} </label>
                         <input id="suffixChk" type="checkbox" ng-model="$ctrl.suffix" />
-                        <label for="suffixChk"> {{'suffix_chk' | loc:lang}} </label>
-                        <span> {{'and' | loc:lang}} </span>
+                        <label for="suffixChk"> {{'suffix_chk' | loc:$root.lang}} </label>
+                        <span> {{'and' | loc:$root.lang}} </span>
                         <input id="caseChk" type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
-                        <label for="caseChk"> {{'case_insensitive' | loc:lang}} </label>
+                        <label for="caseChk"> {{'case_insensitive' | loc:$root.lang}} </label>
                     </div>
                 </form>
                 <div id="similar_wrapper" ng-show="$ctrl.relatedObj">
@@ -42,7 +42,7 @@ export const simpleSearchComponent = {
                         ng-click="$ctrl.showAllRelated()"
                         ng-if="$ctrl.relatedObj.length != 0"
                     >
-                        <span class="btn_header">{{ 'similar_header' | loc:lang }} (SWE-FN)</span><br /><span
+                        <span class="btn_header">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
                             ng-repeat="wd in $ctrl.relatedObj[0].words | limitTo:$ctrl.relatedDefault"
                         >
                             {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
@@ -57,8 +57,8 @@ export const simpleSearchComponent = {
                         >
                     </button>
                     <div class="btn btn-sm btn-default" ng-if="$ctrl.relatedObj.length == 0">
-                        <span class="btn_header">{{ 'similar_header' | loc:lang }} (SWE-FN)</span><br /><span
-                            >{{'no_related_words' | loc:lang}}</span
+                        <span class="btn_header">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
+                            >{{'no_related_words' | loc:$root.lang}}</span
                         >
                     </div>
                 </div>
@@ -195,7 +195,7 @@ export const simpleSearchComponent = {
                 const modalInstance = $uibModal.open({
                     template: `\
                         <div class="modal-header">
-                            <h3 class="modal-title">{{'similar_header' | loc:lang}} (SWE-FN)</h3>
+                            <h3 class="modal-title">{{'similar_header' | loc:$root.lang}} (SWE-FN)</h3>
                             <span ng-click="clickX()" class="close-x">×</span>
                         </div>
                         <div class="modal-body">
