@@ -115,8 +115,6 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     s.word_selected = null
     s.isLab = window.isLab
 
-    // s.sidebar_visible = false
-
     s.extendedCQP = null
 
     s.globalFilterDef = $q.defer()

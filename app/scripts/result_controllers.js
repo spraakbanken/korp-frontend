@@ -5,8 +5,8 @@ const korpApp = angular.module("korpApp")
 
 korpApp.controller("resultContainerCtrl", ($scope, searches) => {
     $scope.searches = searches
-    $scope.onSidebarShow = () => ($scope.sidebar_visible = true)
-    $scope.onSidebarHide = () => ($scope.sidebar_visible = false)
+    $scope.onSidebarShow = () => ($scope.sidebarVisible = true)
+    $scope.onSidebarHide = () => ($scope.sidebarVisible = false)
 })
 
 class KwicCtrl {
@@ -34,9 +34,7 @@ class KwicCtrl {
         const s = this.scope
         const $location = this.location
 
-        s.onexit = function () {
-            // s.$root.sidebar_visible = false
-        }
+        s.onexit = function () {}
 
         const punctArray = [",", ".", ";", ":", "!", "?", "..."]
 

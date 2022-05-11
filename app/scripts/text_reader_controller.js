@@ -69,8 +69,6 @@ korpApp.directive("textReader", function ($compile) {
                     inReadingMode: true,
                 })
                 scope.selectedToken = token
-                // scope.$root.sidebar_visible = true
-                // }
             }
 
             scope.$on("on-entry", function () {
@@ -79,9 +77,7 @@ korpApp.directive("textReader", function ($compile) {
                 }
             })
 
-            scope.$on("on-exit", function () {
-                // scope.$root.sidebar_visible = false
-            })
+            scope.$on("on-exit", function () {})
 
             scope.wordClick({})
         },
