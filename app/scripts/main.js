@@ -105,6 +105,20 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
                         // attrList is an ordered list of the preferred order of attributes
                         corpus[`_${attrType}_order`] = attrList
                     }
+                    // TODO use the new format instead
+                    // remake the new format of witihns and contex to the old
+                    const sortingArr = ["sentence", "paragraph", "text", "1 sentence", "1 paragraph", "1 text"]
+                    function contextWithinFix(list) {
+                        // sort the list so that sentence is before paragraph
+                        list.sort((a, b) => sortingArr.indexOf(a.value) - sortingArr.indexOf(b.value))
+                        const res = {}
+                        for (const elem of list) {
+                            res[elem.value] = elem.value
+                        }
+                        return res
+                    }
+                    corpus["within"] = contextWithinFix(corpus["within"])
+                    corpus["context"] = contextWithinFix(corpus["context"])
                 }
 
                 delete modeSettings["attributes"]
