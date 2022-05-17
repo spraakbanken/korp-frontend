@@ -16,7 +16,7 @@ export const corpusChooserComponent = {
                 <span>{{ $ctrl.totalCount }}</span>
                 <span ng-if-end>{{'corpselector_selectedmultiple' | loc:$root.lang }}</span>
                 
-                <span ng-if-start="$ctrl.selectCount == 1">{{ $ctrl.firstCorpus }}</span>
+                <span ng-if-start="$ctrl.selectCount == 1">{{ $ctrl.firstCorpus | locObj:$root.lang}}</span>
                 <span ng-if-end>{{ 'corpselector_selectedone' | loc:$root.lang }}</span>
                 
                 <span class="text-gray-600">
