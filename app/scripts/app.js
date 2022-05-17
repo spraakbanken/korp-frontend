@@ -282,13 +282,16 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
 
     const N_VISIBLE = settings["visible_modes"]
 
-    s.modes = _.filter(settings["mode_config"])
+    s.modes = _.filter(settings["modes"])
     if (!isLab) {
-        s.modes = _.filter(settings["mode_config"], (item) => item.labOnly !== true)
+        s.modes = _.filter(settings["modes"], (item) => item.labOnly !== true)
     }
 
     s.visible = s.modes.slice(0, N_VISIBLE)
-    s.menu = s.modes.slice(N_VISIBLE)
+
+    s.$watch("$root.lang", () => {
+        s.menu = util.collatorSort(s.modes.slice(N_VISIBLE), "label", s.$root.lang)
+    })
 
     const i = _.map(s.menu, "mode").indexOf(currentMode)
     if (i !== -1) {

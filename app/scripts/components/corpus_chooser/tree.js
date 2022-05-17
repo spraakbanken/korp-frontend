@@ -49,16 +49,13 @@ export const ccTreeComponent = {
     },
     controller: [
         "$rootScope",
-        function ($rootScope) {
+        "$scope",
+        function ($rootScope, $scope) {
             let $ctrl = this
 
             $ctrl.$onInit = () => {
-                const lang = $rootScope.lang
-                const comparator = new Intl.Collator(lang).compare
                 function sort(nodes) {
-                    return nodes.slice().sort((a, b) => {
-                        return comparator(...[a, b].map((x) => util.translateAttribute(lang, x, "title")))
-                    })
+                    return util.collatorSort(nodes, "title", $rootScope.lang)
                 }
                 $ctrl.sortedCorpora = sort($ctrl.node.corpora)
                 $ctrl.sortedFolders = sort($ctrl.node.subFolders)

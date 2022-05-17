@@ -3,14 +3,14 @@
     ul#mode_switch
       li(ng-repeat="mode in visible", class="visible", ng-class="{selected: mode.selected}")
         a(ng-href="{{getUrl(mode.mode)}}") 
-          | {{mode.localekey | loc:lang}}
+          | {{mode.label | locObj:lang}}
       li.menu_more.visible(ng-if="menu.length") 
         a.dropdown-toggle(popper, no-close-on-click="true", my="right+15% top+10", at="bottom right") {{'more' | loc:lang}}
           i.fa.fa-angle-double-down
         ul.dropdown-menu.popper_menu
            li(ng-repeat="mode in menu")
              a(ng-href="{{getUrl(mode.mode)}}") 
-               | {{mode.localekey | loc:lang}}
+               | {{mode.label | locObj:lang}}
 
     script(type="text/ng-template" id="aboutTemplate.html")
       ul.my-0.py-1.text-right(ng-click="$root.isPopoverOpen = false")

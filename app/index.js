@@ -89,15 +89,7 @@ require("angular-filter/index.js")
 
 require("./lib/jquery.tooltip.pack.js")
 
-let isParallel = false
-for (let mode of settings["mode_config"]) {
-    if (currentMode === mode.mode && mode.parallel) {
-        isParallel = true
-        break
-    }
-}
 
-window.currentModeParallel = isParallel
 
 require("./scripts/components/sidebar.js")
 
@@ -126,14 +118,6 @@ require("./scripts/directives.js")
 require("./scripts/directives/scroll.js")
 require("./scripts/filter_directives.js")
 require("./scripts/newsdesk.js")
-
-// only if the current mode is parallel, we load the special code required
-if (window.currentModeParallel) {
-    require("./scripts/parallel/corpus_listing.js")
-    require("./scripts/parallel/parallel_search.js")
-    require("./scripts/parallel/kwic_results.js")
-    require("./scripts/parallel/stats_proxy.js")
-}
 
 require("./index.pug")
 

@@ -492,3 +492,10 @@ util.httpConfAddMethodAngular = function (conf) {
 
     return fixedConf
 }
+
+util.collatorSort = (elems, key, lang) => {
+    const comparator = new Intl.Collator(lang).compare
+    return elems.slice().sort((a, b) => {
+        return comparator(...[a, b].map((x) => util.translateAttribute(lang, x, key)))
+    })
+}
