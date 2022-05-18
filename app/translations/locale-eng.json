@@ -101,14 +101,9 @@
     "search_aborted": "The search was aborted",
 
     "show_map": "Show map",
-    "map_activate": "The map is disabled",
-    "map_activate_btn": "Enable and search",
-    "map_warn": "No data available for current search",
-    "map_warn_btn": "Search",
     "map_name": "Place",
     "map_abs_occurrences": "Absolute occurrences",
     "map_rel_occurrences": "Relative occurrences",
-    "map_num_results": "Locations",
 
     "word_is": "word is",
     "word_is_not": "word is not",

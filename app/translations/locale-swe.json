@@ -90,14 +90,9 @@
     "word_pic_hits": "träffar",
 
     "show_map": "Visa karta",
-    "map_activate": "Kartan är avaktiverad.",
-    "map_activate_btn": "Aktivera och sök",
-    "map_warn": "Ingen data tillgänglig för nuvarande sökning",
-    "map_warn_btn": "Sök",
     "map_name": "Plats",
     "map_abs_occurrences": "Absoluta förekomster",
     "map_rel_occurrences": "Relativa förekomster",
-    "map_num_results": "Platser",
 
     "search_aborted": "Sökningen avbröts",
 
