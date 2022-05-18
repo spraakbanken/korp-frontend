@@ -78,6 +78,15 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
             }
 
             response.json().then((modeSettings) => {
+                window.currentModeParallel = modeSettings.parallel
+                // only if the current mode is parallel, we load the special code required
+                if (window.currentModeParallel) {
+                    require("./parallel/corpus_listing.js")
+                    require("./parallel/parallel_search.js")
+                    require("./parallel/kwic_results.js")
+                    require("./parallel/stats_proxy.js")
+                }
+
                 function rename(obj, from, to) {
                     if (obj[from]) {
                         obj[to] = obj[from]
