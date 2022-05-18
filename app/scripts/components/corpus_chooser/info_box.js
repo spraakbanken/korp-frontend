@@ -6,9 +6,9 @@ export const ccInfoBox = {
         <h3 class="mb-6">
             <i class="fa-solid fa-file-text-o text-blue-700" ng-if="$ctrl.isCorpus"></i>
             <i class="fa-solid fa-folder-open-o text-blue-700" ng-if="$ctrl.isFolder"></i>
-            {{ $ctrl.title }}
+            {{ $ctrl.title | locObj:lang }}
         </h3>
-        <div class="text-base my-3" ng-bind-html="$ctrl.description | trust"></div>
+        <div class="text-base my-3" ng-bind-html="$ctrl.description | locObj:lang | trust"></div>
         <ul class="border-l-4 border-blue-500 pl-3 leading-none space-y-1">
             <li ng-if="$ctrl.isFolder">
                 <strong>{{$ctrl.numberOfChildren}}</strong>
