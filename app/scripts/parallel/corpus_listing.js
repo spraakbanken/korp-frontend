@@ -194,6 +194,10 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     }
 
     getTitle(corpusID) {
-        return this.struct[corpusID.split("|")[1]].title
+        return this.get(corpusID).title
+    }
+
+    getTitleObj(corpusID) {
+        return this.get(corpusID).title
     }
 }

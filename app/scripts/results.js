@@ -362,7 +362,7 @@ view.KWICResults = class KWICResults extends BaseResults {
     renderHitsPicture(data) {
         let items = _.map(data.corpus_order, (obj) => ({
             rid: obj,
-            rtitle: settings.corpusListing.getTitle(obj.toLowerCase()),
+            rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
             relative: data.corpus_hits[obj] / data.hits,
             abs: data.corpus_hits[obj],
         }))

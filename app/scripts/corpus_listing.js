@@ -300,6 +300,10 @@ export class CorpusListing {
         return util.getLocaleStringObject(this.struct[corpus].title)
     }
 
+    getTitleObj(corpus) {
+        return this.struct[corpus].title
+    }
+
     /*
      * Avoid triggering watches etc. by only creating this object once.
      */

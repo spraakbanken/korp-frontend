@@ -20,7 +20,7 @@ export const sidebarComponent = {
                 <h4 class="font-normal uppercase text-gray-800 mt-4 mb-1 text-sm tracking-tight">
                     {{'corpus' | loc:$root.lang}}
                 </h4>
-                <div class="text-lg">{{$ctrl.corpusObj.title}}</div>
+                <div class="text-lg">{{$ctrl.corpusObj.title| locObj:$root.lang}}</div>
             </div>
             <div class="openReadingMode" ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj['reading_mode']">
                 <span ng-click="$ctrl.openReadingMode()" class="link">
