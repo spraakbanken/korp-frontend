@@ -85,7 +85,7 @@ korpApp.directive("textReader", function ($compile) {
 })
 
 function prepareData(kwic, settings) {
-    const newTokens = _prepareData(kwic.tokens, 0, settings["reading_mode"].groupElement, false)
+    const newTokens = _prepareData(kwic.tokens, 0, settings["reading_mode"]["group_element"], false)
     delete kwic.tokens
     kwic.tokens = newTokens
     return kwic
