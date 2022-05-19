@@ -40,7 +40,7 @@ korpApp.directive("textReader", function ($compile) {
     return {
         scope: false,
         link: function (scope, element) {
-            const componentName = scope.corpusObj.readingMode.component
+            const componentName = scope.corpusObj["reading_mode"].component
 
             const kebabize = (str) => {
                 return str
@@ -69,8 +69,6 @@ korpApp.directive("textReader", function ($compile) {
                     inReadingMode: true,
                 })
                 scope.selectedToken = token
-                // scope.$root.sidebar_visible = true
-                // }
             }
 
             scope.$on("on-entry", function () {
@@ -79,9 +77,7 @@ korpApp.directive("textReader", function ($compile) {
                 }
             })
 
-            scope.$on("on-exit", function () {
-                // scope.$root.sidebar_visible = false
-            })
+            scope.$on("on-exit", function () {})
 
             scope.wordClick({})
         },
@@ -89,7 +85,7 @@ korpApp.directive("textReader", function ($compile) {
 })
 
 function prepareData(kwic, settings) {
-    const newTokens = _prepareData(kwic.tokens, 0, settings.readingMode.groupElement, false)
+    const newTokens = _prepareData(kwic.tokens, 0, settings["reading_mode"].groupElement, false)
     delete kwic.tokens
     kwic.tokens = newTokens
     return kwic

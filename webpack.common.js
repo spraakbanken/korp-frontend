@@ -27,10 +27,9 @@ module.exports = {
             jreject: path.resolve(__dirname, "app/lib/jquery.reject"),
             jquerylocalize: path.resolve(__dirname, "app/lib/jquery.localize"),
             jqueryhoverintent: path.resolve(__dirname, "app/lib/jquery.hoverIntent"),
-            configjs: path.resolve(korpConfigDir, "config.js"),
-            commonjs: path.resolve(korpConfigDir, "modes/common.js"),
-            defaultmode: path.resolve(korpConfigDir, "modes/default_mode.js"),
+            korp_config: path.resolve(korpConfigDir, "config.yml"),
             custom: path.resolve(korpConfigDir, "custom/"),
+            modes: path.resolve(korpConfigDir, "modes/"),
             '@': path.resolve(__dirname, "app/scripts"),
         },
     },
@@ -173,6 +172,11 @@ module.exports = {
                     },
                 ],
             },
+            {
+                test: /\.ya?ml$/,
+                use: "yaml-loader",
+                type: "json",
+            },
         ],
     },
     plugins: [
@@ -209,11 +213,10 @@ module.exports = {
                     from: korpConfigDir + "/translations/*",
                     to: "translations/[name].[ext]",
                 },
-                {
-                    from: "app/lib/deptrees/",
-                    to: "lib/deptrees",
-                },
             ],
+        }),
+        new webpack.DefinePlugin({
+            __IS_LAB__: process.env.NODE_ENV == "staging",
         }),
     ],
     entry: {

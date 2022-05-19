@@ -8,7 +8,7 @@ const korpApp = angular.module("korpApp")
 
 korpApp.factory("utils", ($location) => ({
     valfilter(attrobj) {
-        if (attrobj.isStructAttr) {
+        if (attrobj["is_struct_attr"]) {
             return `_.${attrobj.value}`
         } else {
             return attrobj.value
@@ -98,7 +98,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
         }
 
         const conf = util.httpConfAddMethodAngular({
-            url: settings.korpBackendURL + "/loglike",
+            url: settings["korp_backend_url"] + "/loglike",
             params,
             headers: {},
         })
@@ -187,7 +187,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
         _.extend(params, cqpSubExprs)
 
         const conf = util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/count",
+            url: settings["korp_backend_url"] + "/count",
             params,
             headers: {},
         })
@@ -212,11 +212,11 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         // TODO: is this good enough?
         const show = _.keys(corpusSettings.attributes)
-        const showStruct = _.keys(corpusSettings.structAttributes)
+        const showStruct = _.keys(corpusSettings["struct_attributes"])
 
         const params = {
             corpus: corpus,
-            cqp: `[_.${settings.readingModeField} = "${sentenceId}" & lbound(sentence)]`,
+            cqp: `[_.${settings["reading_mode_field"]} = "${sentenceId}" & lbound(sentence)]`,
             context: corpus + ":1 text",
             show: show.join(",") + ",sentence_id", // TODO: hard-code sentence id
             show_struct: showStruct.join(","),
@@ -226,7 +226,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
         }
 
         const conf = util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/query",
+            url: settings["korp_backend_url"] + "/query",
             params,
             headers: {},
         })
@@ -254,15 +254,14 @@ korpApp.factory("searches", [
             constructor() {
                 this.activeSearch = null
                 const def = $q.defer()
-                const timedef = $q.defer()
                 this.infoDef = def.promise
-                this.timeDef = timedef.promise
 
                 // is resolved when parallel search controller is loaded
                 this.langDef = $q.defer()
+                const that = this
                 this.getInfoData().then(function () {
                     def.resolve()
-                    return initTimeGraph(timedef)
+                    that.timeDeferred = that.getTimeData()
                 })
             }
 
@@ -285,7 +284,7 @@ korpApp.factory("searches", [
             getInfoData() {
                 const def = $q.defer()
                 const conf = util.httpConfAddMethod({
-                    url: settings.korpBackendURL + "/corpus_info",
+                    url: settings["korp_backend_url"] + "/corpus_info",
                     params: {
                         corpus: _.map(settings.corpusListing.corpora, "id")
                             .map((a) => a.toUpperCase())
@@ -304,11 +303,47 @@ korpApp.factory("searches", [
                         }
                         corpus["private_struct_attributes"] = privateStructAttrs
                     }
-                    util.loadCorpora()
                     return def.resolve()
                 })
 
                 return def.promise
+            }
+
+            getTimeData() {
+                const timeDeferred = new Promise((resolve) => {
+                    timeProxy
+                        .makeRequest()
+                        .fail((error) => {
+                            console.error(error)
+                        })
+                        .done(function (...args) {
+                            let [dataByCorpus, all_timestruct, rest] = args[0]
+            
+                            if (all_timestruct.length == 0) {
+                                return
+                            }
+            
+                            // this adds data to the corpora in settings
+                            for (let corpus in dataByCorpus) {
+                                let struct = dataByCorpus[corpus]
+                                if (corpus !== "time") {
+                                    const cor = settings.corpora[corpus.toLowerCase()]
+                                    timeProxy.expandTimeStruct(struct)
+                                    cor.non_time = struct[""]
+                                    struct = _.omit(struct, "")
+                                    cor.time = struct
+                                    if (_.keys(struct).length > 1) {
+                                        if (cor.common_attributes == null) {
+                                            cor.common_attributes = {}
+                                        }
+                                        cor.common_attributes.date_interval = true
+                                    }
+                                }
+                            }
+                            resolve([all_timestruct, rest])
+                        })
+                })
+                return timeDeferred
             }
         }
 
@@ -457,7 +492,7 @@ korpApp.factory("lexicons", function ($q, $http) {
                         const headers = model.getAuthorizationHeader()
                         return $http(
                             util.httpConfAddMethod({
-                                url: settings.korpBackendURL + "/lemgram_count",
+                                url: settings["korp_backend_url"] + "/lemgram_count",
                                 params: {
                                     lemgram: lemgram,
                                     count: "lemgram",

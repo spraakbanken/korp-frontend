@@ -39,13 +39,19 @@ const selectController = (autocomplete) => [
         })
 
         function reloadValues() {
-            const attribute = $scope.$parent.tokenValue.value
+            // TODO this exploits the API
+            const attributeDefinition = $scope.$parent.$ctrl.attributeDefinition
+            if (!attributeDefinition) {
+                return
+            }
+
+            const attribute = attributeDefinition.value
             const selectedCorpora = settings.corpusListing.selected
 
             // check which corpora support attributes
             const corpora = []
             for (let corpusSettings of selectedCorpora) {
-                if (attribute in corpusSettings.structAttributes || attribute in corpusSettings.attributes) {
+                if (attribute in corpusSettings["struct_attributes"] || attribute in corpusSettings.attributes) {
                     corpora.push(corpusSettings.id)
                 }
             }
@@ -160,8 +166,8 @@ export default _.merge(
             <span ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'
                     class='val_mod' popper> Aa </span>
             <ul class='mod_menu popper_menu dropdown-menu'>
-                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:lang}}</a></li>
-                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>
+                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:$root.lang}}</a></li>
+                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:$root.lang}}</a></li>
             </ul>
         `),
             controller: [
@@ -197,7 +203,7 @@ export default _.merge(
             is-raw-input="isRawInput"
             type='${options.type || "lemgram"}'
             on-change="onChange(output, isRawOutput)"
-            error-on-empty="${options.errorOnEmpty}"
+            error-on-empty="${options["error_on_empty"]}"
             error-message="choose_value">
         </autoc>`,
             controller: [

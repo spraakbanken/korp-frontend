@@ -117,7 +117,7 @@ Input must be saved to `scope.input` for it to work. Example: `<input ng-model="
 
 ##### Customizing sidebar
 
-In `custom/sidebar.js`, we can define custom (non-Angular) components to be used in the sidebar:
+In `custom/sidebar.js`, we can define custom components to be used in the sidebar:
 
 ```
 export default {
@@ -134,9 +134,21 @@ export default {
 }
 ```
 
-Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link.
+Useful for having e.g. a modal window pop up, or for rendering a small video player in the sidebar, or for anything else that isn't simple text or a link. Also when combining values from several attributes.
 
 Use `imageSidebar` as key for `sidebarComponent` in the configuration files.
+
+Data about the search, the current token and current attribute is stored in a number of variables on `$scope`:
+
+- `$scope.type`: "struct" / "pos", the type of the attribute
+- `$scope.key`: Name of the attribute
+- `$scope.value`: Value of the attribute
+- `$scope.attrs`: The attribute definition from the config
+- `$scope.wordData`: The values of the positional attributes for current token
+- `$scope.sentenceData`: The values of the structural attributes for current token / structure
+- `$scope.tokens`: All the tokens in the current sentence
+
+The component not an actual Angular.js component. It will be added to the interfacce by manually creating a new scope and using `$controller` to instatiate the controller and `$compile` to instantiate the template.
 
 #### Rendering attribute values in the statistics-view
 
@@ -546,9 +558,9 @@ __visibleModes__ - See **Adding modes**
 
 __modeConfig__ - See **Adding modes**
 
-__primaryColor__  - Background color in corpus chooser, CSS color. Example: `"rgb(221, 233, 255)"`
+~~__primaryColor__  - Background color in corpus chooser, CSS color. Example: `"rgb(221, 233, 255)"`~~ (This functionality was broken and is removed.)
 
-__primaryLight__  - Background color of settings area, CSS color. Example: `"rgb(221, 233, 255)"`
+~~__primaryLight__  -Background color of settings area, CSS color. Example: `"rgb(221, 233, 255)"`~~ (This functionality was broken and is removed.)
 
 __defaultOverviewContext__ - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: `"1 sentence"`. For corpora that do not support this context an additional parameter will be sent to the backend based on the `context`-setting in the corpus.
 

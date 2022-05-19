@@ -18,9 +18,7 @@ describe("stats table", function () {
     }
 
     it("should show the correct rows and columns", async () => {
-        await browser.get(
-            browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2"
-        )
+        await browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
         // browser.sleep(5000).then(() => {
         const rows = element.all(by.css(".slick-row"))
         await expect(rows.count()).toBe(10)
@@ -35,17 +33,13 @@ describe("stats table", function () {
     })
 
     it("should return expected  results for reduce on word", async () => {
-        await browser.get(
-            browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2"
-        )
+        await browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
         const rows = element.all(by.css(".slick-row"))
 
         // total row
         let totalRow = await rows.get(0)
         let text = await totalRow.getText()
-        await expect(text.replace(/\n/g, " ")).toBe(
-            "Σ 2 145,1 (5 005) 2 144,7 (2 502) 2 145,6 (2 503)"
-        )
+        await expect(text.replace(/\n/g, " ")).toBe("Σ 2 145,1 (5 005) 2 144,7 (2 502) 2 145,6 (2 503)")
 
         // gått
         text = await rows.get(4).getText()
@@ -55,8 +49,7 @@ describe("stats table", function () {
 
     it("should work to open arc diagram with the correct result", async () => {
         await browser.get(
-            browser.params.url +
-                "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&stats_reduce=lemma"
+            browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&stats_reduce=lemma"
         )
         // browser.sleep(1000)
         const table = element(by.css("#myGrid"))
@@ -68,20 +61,13 @@ describe("stats table", function () {
 
         const pieDiv = await waitFor(element(by.css("#pieDiv")))
         await expect(pieDiv.isDisplayed()).toBe(true)
-        await expect(element(by.css("#pieDiv .radioList_selected")).getText()).toBe(
-            "Relativa frekvenser"
-        )
+        await expect(element(by.css("#pieDiv .radioList_selected")).getText()).toBe("Relativa frekvenser")
         await element(by.css("#pieDiv [data-mode=absolute]")).click()
-        await expect(element(by.css("#pieDiv .radioList_selected")).getText()).toBe(
-            "Absoluta frekvenser"
-        )
+        await expect(element(by.css("#pieDiv .radioList_selected")).getText()).toBe("Absoluta frekvenser")
     })
 
     xit("should be possible to do a KWIC search on the rows, multi-word", async () => {
-        await browser.get(
-            browser.params.url +
-                "#?result_tab=2&stats_reduce=saldo&corpus=suc2,suc3&search=word|gå ut"
-        )
+        await browser.get(browser.params.url + "#?result_tab=2&stats_reduce=saldo&corpus=suc2,suc3&search=word|gå ut")
         browser.sleep(500)
         const rows = element.all(by.css(".slick-row .link"))
     })
@@ -96,8 +82,7 @@ describe("stats table", function () {
 
     it("should be possible to reduce on more than one attribute", async () => {
         await browser.get(
-            browser.params.url +
-                "#?result_tab=2&stats_reduce=word,msd,lex&corpus=suc2,suc3&search=word|gå ut"
+            browser.params.url + "#?result_tab=2&stats_reduce=word,msd,lex&corpus=suc2,suc3&search=word|gå ut"
         )
 
         const table = element(by.css("#myGrid"))

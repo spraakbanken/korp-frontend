@@ -7,16 +7,8 @@
 			// return 
 			$.localize.options = o;
 			var dfds = [];
-			// some language identifyer aliases
-			var trans = {
-				"swe"  : "sv",
-				"sv" : "sv",
-				"eng" : "en",
-				"en" : "en"
-			};
+
 			var lang = o.language;
-			if(lang in trans)
-				lang = trans[o.language];
 			
 			$.localize.data.lang = lang;
 			if(!$.localize.data[lang])
@@ -50,7 +42,7 @@
 	$.fn.localize = function() {
 		//TODO: make this less slow.
 		// var lang = $("body").scope() ? $("body").scope().lang || "sv" : "sv";
-		var lang = locationSearch().lang || settings.defaultLanguage;
+		var lang = locationSearch().lang || settings["default_language"];
 		var data = loc_data[lang];
 		this.find("[rel^=localize]").each(function(i, elem) {
 			var elem = $(elem);

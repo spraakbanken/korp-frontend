@@ -1,9 +1,9 @@
 
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-// @import "bootstrap4-custom";
+// $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 
-$fa-font-path: "~font-awesome/fonts";
-@import "~font-awesome/scss/font-awesome";
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
 
 @font-face {
   font-family: "Source Sans Pro";
@@ -431,29 +431,6 @@ time-interval {
   vertical-align: middle;
 }
 
-.scroll_checkboxes {
-  width: 480px;
-  overflow: hidden;
-  vertical-align: bottom;
-}
-
-
-
-.buttonlink {
-  padding: .4em 1em .4em 20px;
-  color: #222222;
-  text-decoration: none;
-  position: relative;
-  white-space : nowrap;
-  &:link, &:visited {
-    color: #222222;
-  }
-  &:hover {
-    color: #444444;
-  }
-}
-
-
 .numberOfChildren {
   color: #888888;
 }
@@ -461,78 +438,29 @@ time-interval {
 .webkit .hp_topframe > div {
   margin-top: 1px;
 }
-$corpusbox-width : 480px;
 
-#corpusbox {
-  cursor: pointer;
-  .hp_topframe {
-    width: $corpusbox-width;
-    padding: .5em 1em .5em 20px;
+.hp_topframe {
+  width: 480px;
+  padding: .5em 1em .5em 20px;
+  color: #222222;
+  position: relative;
+  &:link, &:visited {
     color: #222222;
-    text-decoration: none;
-    position: relative;
-    &:link, &:visited {
-      color: #222222;
-    }
-    &:hover {
-      color: #444444;
-    }
-    span.ui-icon {
-      margin: 0 5px 0 0;
-      position: absolute;
-      left: .2em;
-      top: 50%;
-      margin-top: -8px;
-    }
   }
-
 }
-.popupchecks {
+
+.corpus-chooser {
+  max-height: 80vh;
   z-index: 9999;
-  max-height: 600px;
-  width: $corpusbox-width;
   border: solid thin #CCCCCC;
-  background-color: #FEFEFE;
   overflow-y: auto;
   overflow-x: hidden;
-  display: none;
-  padding: 10px;
   position: absolute;
-  .buttons {
-    margin: 10px 0;
-    display: inline-block;
-    vertical-align: top;
-    font-size: .8em;
-    button {
-      display: block;
-      margin-bottom: 5px;
-      width : 100%;
-      text-align : left;
-      .fa {
-        margin-right : 3px;
-      }
-    }
-  }
 }
 
-.corpusInfoSpace {
-  display: none;
-  border: 1px solid #CCCCCC;
-  z-index: 10000;
-  min-width: 30px;
-  min-height: 30px;
-  max-width: 33%;
-  position: absolute;
-  left: 615px;
-  background-color: white;
-  padding-right: 4px;
-  .popup_icon {
-    margin-right : 4px;
-    width : 24px;
-    height : 24px;
-    vertical-align : middle;
-    margin-top : -1px
-  }
+.popupchecks {
+  background-color: #FEFEFE;
+  width: 480px;
 }
 
 .tree {
@@ -550,9 +478,6 @@ $corpusbox-width : 480px;
   }
 }
 
-.collapsed {
-}
-
 .boxdiv {
   background-color: #F6F6F6;
   padding-top: 2px;
@@ -564,13 +489,6 @@ $corpusbox-width : 480px;
     .ext {
       display: none;
     }
-  }
-}
-
-.hplabel {
-  padding: 0 6px;
-  & > span {
-    vertical-align: middle;
   }
 }
 
@@ -602,7 +520,7 @@ $corpusbox-width : 480px;
 
 .boxdiv.disabled .checkbox,
 .tree.disabled > label .checkbox {
-  @extend .fa;
+  @extend .fa-solid;
   @extend .fa-lock;
   background: none;
   margin-bottom : 3px;
@@ -927,15 +845,6 @@ table {
   padding: 0 4px;
 }
 
-.corpus_title {
-  // font-variant: small-caps;
-  // color: #666;
-  // font-size: 12px;
-  // display : inline;
-  // margin-right: -150px;
-  // padding: 3px 0;
-
-}
 
 .not_corpus_info {
   .corpus_title,.empty_td {
@@ -1350,33 +1259,10 @@ label[for=lemgram_select]:before {
   background-color: #dbeafe;
 }
 
-.query_arg:only-of-type .or_arg:only-child .remove_arg {
+.query_arg:only-of-type .or_arg_outer:only-child .remove_arg {
   cursor: default;
   opacity: 0;
   transition: opacity 200ms ease;
-}
-
-.arg_header {
-  opacity: 0;
-  transition: opacity 200ms ease;
-  margin-bottom: 1px;
-}
-
-.or_arg:not(:only-child):first-child .arg_header {
-  opacity: 1;
-  transition: opacity 200ms ease;
-}
-
-.arg_header {
-  font-size: 10px;
-}
-
-
-.insert_or {
-  padding-top: 6px;
-  right: 0;
-  cursor: pointer;
-  float: right;
 }
 
 
@@ -1386,36 +1272,12 @@ label[for=lemgram_select]:before {
   vertical-align: middle;
 }
 
-#time_inputs {
-  input {
-    border: none;
-    font-weight: bold;
-    width: 30px;
-  }
-}
-
 #time_graph {
   display: inline-block;
   vertical-align: middle;
   width: 335px;
   height: 70px;
   margin-bottom : 1em;
-}
-
-#rest_time_graph {
-  display: inline-block;
-  vertical-align: middle;
-  height: 70px;
-  width: 5px;
-  position: relative;
-  bottom: 20px;
-}
-
-#time_slider {
-  display: inline-block;
-  vertical-align: middle;
-  width: 250px;
-  margin-right: 10px;
 }
 
 .exportTimeStatsSection {
@@ -1663,7 +1525,7 @@ body.modal-open {
     padding-top: 1em;
     button.delete {
       float : right;
-      .fa {
+      .fa-solid {
         margin-right: 0.8em;
       }
     }
@@ -2039,9 +1901,6 @@ warning ~ * {
     vertical-align: top;
   }
 }
-.reading_mode .show_deptree {
-  display : none;
-}
 
 .form-table .preview {
   display : none;
@@ -2124,10 +1983,6 @@ line.tick {
 
 .msd-modal {
     overflow-y: scroll;
-}
-
-.popupchecks .header {
-  white-space : nowrap;
 }
 
 .ui-button-text-only .ui-button-text {
@@ -2695,58 +2550,10 @@ li.active a span .num-to-find {
     }
 }
 
-global-filters {
-  display: block;
-}
-.global-filters-container {
-    margin-bottom: 10px;
-    > div {
-        margin-bottom: 10px;
-    }
-    button {
-      margin-right: 5px;
-      vertical-align: baseline;
-    }
-}
-
-.korp-uib-dropdown-menu {
-    margin-top: 7px;
-    margin-left: 4px;
-    padding: 0px;
-    // font-weight: bold;
-
-    .selected {
-        background: #f2f7ff;
-    }
-
-    .attribute {
-        padding: 5px;
-    }
-
-    .attribute:not(.disabled):hover {
-        background-color: #428bca;
-        color : white;
-        cursor: pointer;
-    }
-    .attribute.disabled {
-      opacity: 0.5;
-    }
-    
-    ul {
-        padding: 0;
-        margin: 0;
-    }
-
-}
-
-.global-filter-toggle {
-    margin-left: 5px;
-    
-    .selected-attr-value {
-        font-weight: bold;
-        padding-left: 4px;
-    }
-    
+.korp-uib-dropdown-menu .attribute:not(.disabled):hover {
+    background-color: #428bca;
+    color : white;
+    cursor: pointer;
 }
 
 .input-error {
@@ -2781,3 +2588,24 @@ global-filters {
 //       padding-bottom: 0;
 //     }
 // }
+
+.cc-level-indent {
+  margin-left: 30px;
+}
+
+#preload {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+
+.splash {
+  animation: blinker 2s infinite;
+  margin: auto;
+}
+
+@keyframes blinker {
+  from { opacity: 1.0; }
+  50% { opacity: 0.5; }
+  to { opacity: 1.0; }
+}

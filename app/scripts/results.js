@@ -60,7 +60,7 @@ class BaseResults {
         this.resetView()
         return $(`<object class="korp_fail" type="image/svg+xml" data="${korpFailImg}">`)
             .append(`<img class='korp_fail' src='${korpFailImg}'>`)
-            .add($("<div class='fail_text' />").localeKey("fail_text"))
+            .add($("<div class='fail_text'></div>").localeKey("fail_text"))
             .addClass("inline_block")
             .prependTo(this.$result)
             .wrapAll("<div class='error_msg'>")
@@ -116,7 +116,6 @@ view.KWICResults = class KWICResults extends BaseResults {
         this.s = scope
 
         this.selectionManager = scope.selectionManager
-        this.setupReadingHash()
         this.$result.click((event) => {
             if (event.target.id === "frontendDownloadLinks" || event.target.classList.contains("kwicDownloadLink")) {
                 return
@@ -131,10 +130,6 @@ view.KWICResults = class KWICResults extends BaseResults {
         $(document).keydown($.proxy(this.onKeydown, this))
 
         this.$result.on("click", ".word", (event) => this.onWordClick(event))
-    }
-
-    setupReadingHash() {
-        return this.s.setupReadingHash()
     }
 
     onWordClick(event) {
@@ -259,7 +254,7 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     getPageInterval(page) {
         const hpp = locationSearch().hpp
-        const items_per_page = Number(hpp) || settings.hitsPerPageDefault
+        const items_per_page = Number(hpp) || settings["hits_per_page_default"]
         page = Number(page)
         const output = {}
         output.start = (page || 0) * items_per_page
@@ -284,6 +279,12 @@ view.KWICResults = class KWICResults extends BaseResults {
 
     renderResult(data) {
         const resultError = super.renderResult(data)
+        // If an error occurred or the result is otherwise empty,
+        // deselect word and hide the sidebar
+        if (!this.hasData || !data.kwic || !data.kwic.length) {
+            this.selectionManager.deselect()
+            statemachine.send("DESELECT_WORD")
+        }
         if (resultError === false) {
             return
         }
@@ -300,10 +301,13 @@ view.KWICResults = class KWICResults extends BaseResults {
             const useContextData = locationSearch()["in_order"] != null
             if (isReading || useContextData) {
                 $scope.setContextData(data)
-                this.selectionManager.deselect()
             } else {
                 $scope.setKwicData(data)
             }
+            // Deselect the possibly selected word, so that a word
+            // will be selected in the new result and the sidebar
+            // content will be updated
+            this.selectionManager.deselect()
         })
 
         if (currentMode === "parallel" && !isReading) {
@@ -338,7 +342,7 @@ view.KWICResults = class KWICResults extends BaseResults {
             }
         }
 
-        if (settings.enableBackendKwicDownload) {
+        if (settings["enable_backend_kwic_download"]) {
             util.setDownloadLinks(this.proxy.prevRequest, data)
         }
 
@@ -358,7 +362,7 @@ view.KWICResults = class KWICResults extends BaseResults {
     renderHitsPicture(data) {
         let items = _.map(data.corpus_order, (obj) => ({
             rid: obj,
-            rtitle: settings.corpusListing.getTitle(obj.toLowerCase()),
+            rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
             relative: data.corpus_hits[obj] / data.hits,
             abs: data.corpus_hits[obj],
         }))
@@ -423,11 +427,11 @@ view.KWICResults = class KWICResults extends BaseResults {
         }
 
         if (this.isReadingMode()) {
-            preferredContext = settings.defaultReadingContext
-            avoidContext = settings.defaultOverviewContext
+            preferredContext = settings["default_reading_context"]
+            avoidContext = settings["default_overview_context"]
         } else {
-            preferredContext = settings.defaultOverviewContext
-            avoidContext = settings.defaultReadingContext
+            preferredContext = settings["default_overview_context"]
+            avoidContext = settings["default_reading_context"]
         }
 
         const context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
@@ -634,14 +638,12 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         this.tabindex = this.getResultTabs().length - 1 + this.s.$parent.$index
     }
 
-    setupReadingHash() {}
-
     isReadingMode() {
         return this.s.exampleReadingMode
     }
 
     makeRequest() {
-        const items_per_page = parseInt(locationSearch().hpp || settings.hitsPerPageDefault)
+        const items_per_page = parseInt(locationSearch().hpp || settings["hits_per_page_default"])
         const opts = this.s.$parent.kwicTab.queryParams
 
         this.resetView()
@@ -651,21 +653,17 @@ view.ExampleResults = class ExampleResults extends view.KWICResults {
         opts.ajaxParams.start = this.s.$parent.page * items_per_page
         opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1
 
-        // use window.kwicProxy to fetch previous searches, since this.proxy is local to the newly created tab
-        const prev = _.pick(window.kwicProxy.prevParams, "cqp", "command", "corpus", "source")
-        _.extend(opts.ajaxParams, prev)
-
         let avoidContext, preferredContext
         if (this.isReadingMode()) {
-            preferredContext = settings.defaultReadingContext
-            avoidContext = settings.defaultOverviewContext
+            preferredContext = settings["default_reading_context"]
+            avoidContext = settings["default_overview_context"]
         } else {
-            preferredContext = settings.defaultOverviewContext
-            avoidContext = settings.defaultReadingContext
+            preferredContext = settings["default_overview_context"]
+            avoidContext = settings["default_reading_context"]
         }
 
         const context = settings.corpusListing.getContextQueryStringFromCorpusId(
-            (prev.corpus || "").split(","),
+            (opts.ajaxParams.corpus || "").split(","),
             preferredContext,
             avoidContext
         )
@@ -779,10 +777,10 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             let [word, pos] = args[0]
             return word + pos
         })
-        const tagsetTrans = _.invert(settings.wordpictureTagset)
+        const tagsetTrans = _.invert(settings["wordpicture_tagset"])
         unique_words = _.filter(unique_words, function (...args) {
             const [currentWd, pos] = args[0]
-            return settings.wordPictureConf[tagsetTrans[pos]] != null
+            return settings["word_picture_conf"][tagsetTrans[pos]] != null
         })
         if (!unique_words.length) {
             this.showNoResults()
@@ -817,7 +815,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             }
         }
 
-        const tagsetTrans = _.invert(settings.wordpictureTagset)
+        const tagsetTrans = _.invert(settings["wordpicture_tagset"])
 
         const res = _.map(tables, function ([token, wordClass]) {
             const getRelType = (item) => ({
@@ -826,14 +824,14 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             })
 
             const wordClassShort = wordClass.toLowerCase()
-            wordClass = _.invert(settings.wordpictureTagset)[wordClassShort]
+            wordClass = _.invert(settings["wordpicture_tagset"])[wordClassShort]
 
-            if (settings.wordPictureConf[wordClass] == null) {
+            if (settings["word_picture_conf"][wordClass] == null) {
                 return
             }
             let orderArrays = [[], [], []]
             $.each(data, (index, item) => {
-                $.each(settings.wordPictureConf[wordClass] || [], (i, rel_type_list) => {
+                $.each(settings["word_picture_conf"][wordClass] || [], (i, rel_type_list) => {
                     const list = orderArrays[i]
                     const rel = getRelType(item)
 
@@ -859,8 +857,8 @@ view.LemgramResults = class LemgramResults extends BaseResults {
                     }
                 })
 
-                if (settings.wordPictureConf[wordClass][i] && unsortedList.length) {
-                    const toIndex = $.inArray("_", settings.wordPictureConf[wordClass][i])
+                if (settings["word_picture_conf"][wordClass][i] && unsortedList.length) {
+                    const toIndex = $.inArray("_", settings["word_picture_conf"][wordClass][i])
                     if (util.isLemgramId(token)) {
                         unsortedList[toIndex] = { word: token.split("..")[0].replace(/_/g, " ") }
                     } else {
@@ -1035,6 +1033,29 @@ view.StatsResults = class StatsResults extends BaseResults {
                 })
             })
         })
+
+        const that = this
+        $("body")
+            .scope()
+            .$watch("lang", (lang) => {
+                if (that.grid) {
+                    that.langChange(lang)
+                }
+            })
+    }
+
+    langChange(lang) {
+        var cols = this.grid.getColumns()
+        this.updateLabels(cols, lang)
+        this.grid.setColumns(cols)
+    }
+
+    updateLabels(cols, lang) {
+        for (var i = 0, il = cols.length; i < il; i++) {
+            if (cols[i].translation) {
+                cols[i].name = cols[i].translation[lang] || cols[i].translation
+            }
+        }
     }
 
     updateExportBlob() {
@@ -1207,6 +1228,7 @@ view.StatsResults = class StatsResults extends BaseResults {
 
         columns = [checkboxSelector.getColumnDefinition()].concat(columns)
 
+        this.updateLabels(columns, $("body").scope().lang)
         const grid = new Slick.Grid($("#myGrid"), data, columns, {
             enableCellNavigation: false,
             enableColumnReorder: false,
@@ -1277,10 +1299,9 @@ view.StatsResults = class StatsResults extends BaseResults {
         $(".slick-row:first input", this.$result).click()
         $(window).trigger("resize")
 
-        $.when(window.timeDeferred).then(() => {
-            safeApply(this.s, () => {
-                this.updateGraphBtnState()
-            })
+        safeApply(this.s, () => {
+            // TODO this must wait until after timedata is fetched
+            this.updateGraphBtnState()
         })
 
         this.s.getGeoAttributes(this.searchParams.corpora)
@@ -1363,7 +1384,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         $("#dialog").remove()
 
         const relHitsString = util.getLocaleString("statstable_relfigures_hits")
-        $("<div id='dialog' />")
+        $("<div id='dialog'></div>")
             .appendTo("body")
             .append(
                 `<div id="pieDiv"><br/><div id="statistics_switch" style="text-align:center">
@@ -1728,7 +1749,6 @@ view.GraphResults = class GraphResults extends BaseResults {
             }
         }
     }
-    setLineMode() {}
 
     setTableMode(series) {
         $(".chart,.legend", this.$result).hide()
@@ -1813,8 +1833,8 @@ view.GraphResults = class GraphResults extends BaseResults {
                     field: timestamp,
                     formatter(row, cell, value, columnDef, dataContext) {
                         const loc = {
-                            sv: "sv-SE",
-                            en: "gb-EN",
+                            swe: "sv-SE",
+                            eng: "gb-EN",
                         }[$("body").scope().lang]
                         const fmt = function (valTup) {
                             if (typeof valTup[0] === "undefined") {

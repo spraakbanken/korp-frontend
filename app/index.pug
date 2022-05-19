@@ -13,16 +13,17 @@ html
     //- link(rel='shortcut icon', type='image/ico', href='img/korp_icon.ico')
     title Korp
 
-  body(style="opacity: 0;")
+  body
     noscript
       h2 You need JavaScript to run Korp.
-    #main
+    #preload
+    #main(style="opacity: 0;")
       include includes/header
       #content.px-3.pb-3
         include includes/searchtabs
 
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length || mapTabs.length', ng-controller='resultContainerCtrl')
-          #columns.flex(ng-class='{sidebar_visible : sidebar_visible}')
+          #columns.flex(ng-class='{sidebar_visible : sidebarVisible}')
             #left-column.overflow-auto.flex-grow
               uib-tabset.tabbable.result_tabs(tab-hash='result_tab', active="activeTab")
                 uib-tab(disabled="!instance.hasData",

@@ -13,7 +13,7 @@
               ng-class='{odd : $index % 2 != 0, \
                          even : $index % 2 == 0}'
               ng-click='hitspictureClick(corpus.page, corpus)'
-              uib-tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
+              uib-tooltip='{{corpus.rtitle | locObj:lang}}: {{corpus.abs}}'
               uib-tooltip-placement='{{$last? "left":"top"}}'
               append-to-body="false")
 kwic-pager(ng-if="hits" total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
@@ -31,7 +31,7 @@ span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()"
       td.empty_td
       td.corpus_title.text-gray-600.uppercase.text-sm(colspan='3')
         div
-          | {{sentence.newCorpus}}
+          | {{sentence.newCorpus | locObj:lang}}
           span.corpus_title_warn(rel='localize[no_context_support]', ng-if='::sentence.noContext')
       td.empty_td
       td.lnk(colspan='3', ng-if='::sentence.isLinked')
@@ -55,9 +55,9 @@ span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()"
       span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')
 kwic-pager(ng-if="hits" total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
 #download-links-container
-  select#download-links(ng-if="_settings.enableBackendKwicDownload")
-  select#frontendDownloadLinks(ng-if="_settings.enableFrontendKwicDownload",
+  select#download-links(ng-if="_settings['enable_backend_kwic_download']")
+  select#frontendDownloadLinks(ng-if="_settings['enable_frontend_kwic_download']",
                         ng-change="download.init(download.selected, hits_display)", 
                         ng-model="download.selected",
                         ng-options="item.value as item.label | loc:lang disable when item.disabled for item in download.options")
-  a.kwicDownloadLink(ng-if="_settings.enableFrontendKwicDownload", href="{{download.blobName}}", download="{{download.fileName}}", target="_self", style="display: none;")
+  a.kwicDownloadLink(ng-if="_settings['enable_frontend_kwic_download']", href="{{download.blobName}}", download="{{download.fileName}}", target="_self", style="display: none;")

@@ -1,14 +1,27 @@
 /** @format */
-
-import jStorage from "../lib/jstorage"
 import { kwicPagerName, kwicPager } from "./components/pager"
 import { sidebarName, sidebarComponent } from "./components/sidebar"
 import * as autoc from "./components/autoc"
 import * as readingmode from "./components/readingmode"
 import * as extendedAddBox from "./components/extended/extended_add_box"
-import { setDefaultConfigValues } from "./settings.js"
-
-setDefaultConfigValues()
+import { corpusChooserComponent } from "./components/corpus_chooser/corpus_chooser"
+import { ccTimeGraphComponent } from "./components/corpus_chooser/time_graph"
+import { ccTreeComponent } from "./components/corpus_chooser/tree"
+import { ccInfoBox } from "./components/corpus_chooser/info_box"
+import { loginBoxComponent } from "./components/auth/login_box"
+import { loginStatusComponent } from "./components/auth/login_status"
+import { depTreeComponent } from "./components/deptree/deptree"
+import { simpleSearchComponent } from "./components/simple_search"
+import { extendedStandardComponent } from "./components/extended/standard_extended"
+import { extendedParallelComponent } from "./components/extended/parallel_extended"
+import { extendedTokensComponent } from "./components/extended/extended_tokens"
+import { extendedAndTokenComponent } from "./components/extended/and_token"
+import { extendedCQPTermComponent } from "./components/extended/cqp_term"
+import { extendedTokenComponent } from "./components/extended/token"
+import { extendedStructTokenComponent } from "./components/extended/struct_token"
+import { extendedCQPValueComponent } from "./components/extended/cqp_value"
+import * as treeUtil from "./components/corpus_chooser/util"
+import statemachine from "@/statemachine"
 
 window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.typeahead",
@@ -44,10 +57,27 @@ window.korpApp = angular.module("korpApp", [
     "angular.filter",
 ])
 
-korpApp.component(kwicPagerName, kwicPager).component(sidebarName, sidebarComponent)
+korpApp.component(kwicPagerName, kwicPager)
+korpApp.component(sidebarName, sidebarComponent)
 korpApp.component(readingmode.componentName, readingmode.component)
 korpApp.component(autoc.componentName, autoc.component)
 korpApp.component(extendedAddBox.componentName, extendedAddBox.component)
+korpApp.component("corpusChooser", corpusChooserComponent)
+korpApp.component("ccTimeGraph", ccTimeGraphComponent)
+korpApp.component("ccTree", ccTreeComponent)
+korpApp.component("ccInfoBox", ccInfoBox)
+korpApp.component("loginStatus", loginStatusComponent)
+korpApp.component("loginBox", loginBoxComponent)
+korpApp.component("depTree", depTreeComponent)
+korpApp.component("simpleSearch", simpleSearchComponent)
+korpApp.component("extendedStandard", extendedStandardComponent)
+korpApp.component("extendedParallel", extendedParallelComponent)
+korpApp.component("extendedTokens", extendedTokensComponent)
+korpApp.component("extendedAndToken", extendedAndTokenComponent)
+korpApp.component("extendedCqpTerm", extendedCQPTermComponent)
+korpApp.component("extendedToken", extendedTokenComponent)
+korpApp.component("extendedStructToken", extendedStructTokenComponent)
+korpApp.component("extendedCqpValue", extendedCQPValueComponent)
 
 // load all custom components
 let customComponents = {}
@@ -81,11 +111,9 @@ korpApp.config([
 korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $timeout) {
     const s = $rootScope
     s._settings = settings
-    window.lang = s.lang = $location.search().lang || settings.defaultLanguage
+    window.lang = s.lang = $location.search().lang || settings["default_language"]
     s.word_selected = null
     s.isLab = window.isLab
-
-    // s.sidebar_visible = false
 
     s.extendedCQP = null
 
@@ -99,14 +127,14 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
 
     s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
 
-    tmhDynamicLocale.set("en")
+    tmhDynamicLocale.set(settings["default_language"])
 
     s._loc = $location
 
     s.$watch("_loc.search()", function () {
         _.defer(() => (window.onHashChange || _.noop)())
 
-        return tmhDynamicLocale.set($location.search().lang || "sv")
+        return tmhDynamicLocale.set($location.search().lang || settings["default_language"])
     })
 
     $rootScope.kwicTabs = []
@@ -115,43 +143,40 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     $rootScope.mapTabs = []
     $rootScope.textTabs = []
 
-    if ($location.search().corpus) {
-        const initialCorpora = []
-
-        function findInFolder(folder) {
-            // checks if folder is an actual folder of corpora and recursively
-            // collects all corpora in this folder and subfolders
-            const corpusIds = []
-            if (folder && folder.contents) {
-                for (let corpusId of folder.contents) {
-                    corpusIds.push(corpusId)
-                }
-                for (let subFolderId of Object.keys(folder)) {
-                    for (let corpusId of findInFolder(folder[subFolderId])) {
-                        corpusIds.push(corpusId)
-                    }
-                }
+    searches.infoDef.then(function () {
+        // if no preselectedCorpora is defined, use all of them
+        if (!(settings["preselected_corpora"] && settings["preselected_corpora"].length)) {
+            settings["preselected_corpora"] = _.map(
+                _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
+                "id"
+            )
+        } else {
+            let expandedCorpora = []
+            for (let preItem of settings["preselected_corpora"]) {
+                preItem = preItem.replace(/^__/g, "")
+                expandedCorpora = [].concat(
+                    expandedCorpora,
+                    treeUtil.getAllCorporaInFolders(settings["folders"], preItem)
+                )
             }
-            return corpusIds
+            // folders expanded, save
+            settings["preselected_corpora"] = expandedCorpora
         }
 
-        for (let corpus of $location.search().corpus.split(",")) {
-            const corpusObj = settings.corpusListing.struct[corpus]
-            if (corpusObj) {
-                initialCorpora.push(corpusObj)
-            } else {
-                // corpus does not correspond to a corpus ID, check if it is a folder
-                for (let folderCorpus of findInFolder(settings.corporafolders[corpus])) {
-                    if (settings.corpusListing.struct[folderCorpus]) {
-                        initialCorpora.push(settings.corpusListing.struct[folderCorpus])
-                    }
-                }
-            }
+        let currentCorpora
+        let { corpus } = $location.search()
+        if (corpus) {
+            currentCorpora = _.flatten(
+                _.map(corpus.split(","), (val) => treeUtil.getAllCorporaInFolders(settings["folders"], val))
+            )
+        } else {
+            currentCorpora = settings["preselected_corpora"]
         }
 
         const loginNeededFor = []
-        for (let corpusObj of initialCorpora) {
-            if (corpusObj.limitedAccess) {
+        for (let corpusId of currentCorpora) {
+            const corpusObj = settings.corpora[corpusId]
+            if (corpusObj["limited_access"]) {
                 if (
                     _.isEmpty(authenticationProxy.loginObj) ||
                     !authenticationProxy.loginObj.credentials.includes(corpusObj.id.toUpperCase())
@@ -160,9 +185,9 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                 }
             }
         }
-        s.loginNeededFor = loginNeededFor
 
-        if (!_.isEmpty(s.loginNeededFor)) {
+        // only ask user to login if corpora came from URL
+        if (corpus && loginNeededFor.length != 0) {
             s.savedState = $location.search()
             $location.url($location.path() + "?")
 
@@ -177,11 +202,13 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                 $location.search("cqp", s.savedState.cqp)
             }
 
-            $location.search("display", "login")
+            statemachine.send("LOGIN_NEEDED", { loginNeededFor })
+        } else {
+            $rootScope.$broadcast("corpuschooserchange", currentCorpora)
         }
-    }
+    })
 
-    s.restorePreLoginState = function () {
+    statemachine.listen("login", function () {
         if (s.savedState) {
             for (let key in s.savedState) {
                 const val = s.savedState[key]
@@ -189,51 +216,12 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
                     $location.search(key, val)
                 }
             }
-
             // some state need special treatment
             s.$broadcast("updateAdvancedCQP")
-
             const corpora = s.savedState.corpus.split(",")
-            settings.corpusListing.select(corpora)
-            corpusChooserInstance.corpusChooser("selectItems", corpora)
-
             s.savedState = null
-            s.loginNeededFor = null
+            $rootScope.$broadcast("corpuschooserchange", corpora)
         }
-    }
-
-    s.searchDisabled = false
-    s.$on("corpuschooserchange", function (event, corpora) {
-        settings.corpusListing.select(corpora)
-        $location.search("corpus", corpora.join(","))
-        s.searchDisabled = settings.corpusListing.selected.length === 0
-    })
-
-    searches.infoDef.then(function () {
-        let { corpus } = $location.search()
-        let currentCorpora = []
-        if (corpus) {
-            currentCorpora = _.flatten(
-                _.map(corpus.split(","), (val) => getAllCorporaInFolders(settings.corporafolders, val))
-            )
-        } else {
-            if (!(settings.preselectedCorpora && settings.preselectedCorpora.length)) {
-                currentCorpora = _.map(settings.corpusListing.corpora, "id")
-            } else {
-                for (let pre_item of settings.preselectedCorpora) {
-                    pre_item = pre_item.replace(/^__/g, "")
-                    currentCorpora = [].concat(
-                        currentCorpora,
-                        getAllCorporaInFolders(settings.corporafolders, pre_item)
-                    )
-                }
-            }
-
-            settings.preselectedCorpora = currentCorpora
-        }
-
-        settings.corpusListing.select(currentCorpora)
-        corpusChooserInstance.corpusChooser("selectItems", currentCorpora)
     })
 })
 
@@ -252,47 +240,58 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         s.show_modal = "about"
     }
 
-    s.showLogin = () => {
-        s.show_modal = "login"
+    s.show_modal = false
+
+    let modal = null
+    utils.setupHash(s, [
+        {
+            key: "display",
+            scope_name: "show_modal",
+            post_change(val) {
+                if (val) {
+                    showAbout()
+                } else {
+                    if (modal != null) {
+                        modal.close()
+                    }
+                    modal = null
+                }
+            },
+        },
+    ])
+
+    const closeModals = function () {
+        s.show_modal = false
     }
 
-    s.logout = function () {
-        authenticationProxy.loginObj = {}
-        jStorage.deleteKey("creds")
-
-        // TODO figure out another way to do this
-        for (let corpusObj of settings.corpusListing.corpora) {
-            const corpus = corpusObj.id
-            if (corpusObj.limitedAccess) {
-                $(`#hpcorpus_${corpus}`).closest(".boxdiv").addClass("disabled")
-            }
+    var showAbout = function () {
+        const params = {
+            template: require("../markup/about.html"),
+            scope: s,
+            windowClass: "about",
         }
-        $("#corpusbox").corpusChooser("updateAllStates")
+        modal = $uibModal.open(params)
 
-        let newCorpora = []
-        for (let corpus of settings.corpusListing.getSelectedCorpora()) {
-            if (!settings.corpora[corpus].limitedAccess) {
-                newCorpora.push(corpus)
-            }
-        }
-
-        if (_.isEmpty(newCorpora)) {
-            newCorpora = settings.preselectedCorpora
-        }
-        settings.corpusListing.select(newCorpora)
-        s.loggedIn = false
-        $("#corpusbox").corpusChooser("selectItems", newCorpora)
+        modal.result.then(
+            () => closeModals(),
+            () => closeModals()
+        )
     }
 
-    const N_VISIBLE = settings.visibleModes
+    s.clickX = () => closeModals()
 
-    s.modes = _.filter(settings.modeConfig)
+    const N_VISIBLE = settings["visible_modes"]
+
+    s.modes = _.filter(settings["modes"])
     if (!isLab) {
-        s.modes = _.filter(settings.modeConfig, (item) => item.labOnly !== true)
+        s.modes = _.filter(settings["modes"], (item) => item.labOnly !== true)
     }
 
     s.visible = s.modes.slice(0, N_VISIBLE)
-    s.menu = s.modes.slice(N_VISIBLE)
+
+    s.$watch("$root.lang", () => {
+        s.menu = util.collatorSort(s.modes.slice(N_VISIBLE), "label", s.$root.lang)
+    })
 
     const i = _.map(s.menu, "mode").indexOf(currentMode)
     if (i !== -1) {
@@ -313,86 +312,11 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
     }
 
     s.getUrlParts = function (modeId) {
-        const langParam = settings.defaultLanguage === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
+        const langParam = settings["default_language"] === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
         const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
         return [location.pathname, modeParam, langParam]
-    }
-
-    s.show_modal = false
-
-    let modal = null
-    utils.setupHash(s, [
-        {
-            key: "display",
-            scope_name: "show_modal",
-            post_change(val) {
-                if (val) {
-                    showModal(val)
-                } else {
-                    if (modal != null) {
-                        modal.close()
-                    }
-                    modal = null
-                }
-            },
-        },
-    ])
-
-    const closeModals = function () {
-        s.login_err = false
-        s.show_modal = false
-    }
-
-    var showModal = function (key) {
-        const tmpl = {
-            about: require("../markup/about.html"),
-            login: require("../markup/login.html"),
-        }[key]
-        const params = {
-            template: tmpl,
-            scope: s,
-            windowClass: key,
-        }
-        if (key === "login") {
-            params.size = "sm"
-        }
-        modal = $uibModal.open(params)
-
-        modal.result.then(
-            () => closeModals(),
-            () => closeModals()
-        )
-    }
-
-    s.clickX = () => closeModals()
-
-    s.loggedIn = false
-    const creds = jStorage.get("creds")
-    if (creds) {
-        util.setLogin()
-        s.loggedIn = true
-        s.username = authenticationProxy.loginObj.name
-    }
-    s.loginSubmit = function (usr, pass, saveLogin) {
-        s.login_err = false
-        authenticationProxy
-            .makeRequest(usr, pass, saveLogin)
-            .done(function () {
-                util.setLogin()
-                safeApply(s, function () {
-                    s.show_modal = null
-                    s.restorePreLoginState()
-                    s.loggedIn = true
-                    s.username = usr
-                })
-            })
-            .fail(function () {
-                c.log("login fail")
-                safeApply(s, () => {
-                    s.login_err = true
-                })
-            })
     }
 })
 
 korpApp.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))
+korpApp.filter("prettyNumber", () => (input) => new Intl.NumberFormat(lang).format(input))

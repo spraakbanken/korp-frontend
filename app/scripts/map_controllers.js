@@ -1,7 +1,7 @@
 /** @format */
 const korpApp = angular.module("korpApp")
 
-korpApp.directive("mapCtrl", ($timeout, searches) => ({
+korpApp.directive("mapCtrl", ($timeout) => ({
     controller($scope, $rootScope) {
         const s = $scope
 
@@ -9,7 +9,7 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
 
         s.loading = true
         s.newDynamicTab()
-        s.center = settings.mapCenter
+        s.center = settings["map_center"]
         s.markers = {}
         s.selectedGroups = []
         s.markerGroups = []
@@ -80,9 +80,7 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
                 // Include point index in the key, so that multiple
                 // places with the same name but different coordinates
                 // each get their own markers
-                const id = [point.name.replace(/-/g, ""),
-                            pointIdx.toString(),
-                            idx].join(":")
+                const id = [point.name.replace(/-/g, ""), pointIdx.toString(), idx].join(":")
                 markers[id] = {
                     lat: point.lat,
                     lng: point.lng,
@@ -112,9 +110,8 @@ korpApp.directive("mapCtrl", ($timeout, searches) => ({
                 ajaxParams: {
                     cqp: queryData.searchCqp,
                     cqp2: `[_.${queryData.label} contains "${regescape(
-                               [point.name, point.countryCode, point.lat, point.lng].join(
-                        ";"
-                    ))}"]{${numberOfTokens}}`,
+                        [point.name, point.countryCode, point.lat, point.lng].join(";")
+                    )}"]{${numberOfTokens}}`,
                     cqp3: queryData.subCqp,
                     corpus: cl.stringifySelected(),
                     show_struct: _.keys(cl.getStructAttrs()),
