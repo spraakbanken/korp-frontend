@@ -4,7 +4,7 @@ import * as treeUtil from "./util"
 
 export const corpusChooserComponent = {
     template: `
-    <div class="absolute inset-0 bg-transparent"
+    <div class="absolute inset-0 bg-transparent z-50"
         ng-click="$ctrl.showChooser = false"
         ng-if="$ctrl.showChooser"></div>
     <div class="scroll_checkboxes flex-shrink-0 ml-8" ng-class="{'cursor-pointer': $ctrl.initialized}">
