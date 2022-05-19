@@ -143,7 +143,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
     $rootScope.mapTabs = []
     $rootScope.textTabs = []
 
-    searches.infoDef.then(function () {
+    $q.all([searches.infoDef, searches.timeDeferred]).then(function () {
         // if no preselectedCorpora is defined, use all of them
         if (!(settings["preselected_corpora"] && settings["preselected_corpora"].length)) {
             settings["preselected_corpora"] = _.map(

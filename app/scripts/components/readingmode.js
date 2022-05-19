@@ -6,7 +6,7 @@ export const component = {
         data: "<",
         wordClick: "&",
     },
-    controller($element) {
+    controller: ["$element", function($element) {
         const ctrl = this
 
         function standardInnerElem(document) {
@@ -39,5 +39,5 @@ export const component = {
                 }
             })
         }
-    },
+    }],
 }

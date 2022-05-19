@@ -1,6 +1,6 @@
 {
     "name": "Korp",
-    "version": "9.1.0",
+    "version": "10.0.0-dev",
     "dependencies": {
         "@fortawesome/fontawesome-free": "6.0.0",
         "angular": "~1.8.2",
