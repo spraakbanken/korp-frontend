@@ -38,7 +38,7 @@
     "about_short": "Om Korp",
     "about_body": "Korp är Språkbankens konkordansverktyg. För mer information, kommentarer eller förslag, kontakta <a href='mailto:sb-info@svenska.gu.se'>Språkbanken</a>.",
     "about_cite_header": "Referera till Korp",
-    "about_cite": "Lars Borin, Markus Forsberg and Johan Roxendal. 2012. <a target='_blank' href='https://spraakbanken.gu.se/eng/publikationer/korp-%E2%80%93-corpus-infrastructure-sprakbanken'>Korp – the corpus infrastructure of Språkbanken</a>. Proceedings of LREC 2012. Istanbul: ELRA, pages 474–478.<br><a href='https://spraakbanken.gu.se/publication/1822/bibtex'><img src='https://spraakbanken.gu.se/sites/spraakbanken.gu.se/modules/custom/gup_publications/images/bibtex.png' alt='BibTeX'></a>",
+    "about_cite": "Lars Borin, Markus Forsberg and Johan Roxendal. 2012. <a target='_blank' href='https://gup.ub.gu.se/publication/156080?lang=sv'>Korp – the corpus infrastructure of Språkbanken</a>. Proceedings of LREC 2012. Istanbul: ELRA, pages 474–478.<br><a href='https://spraakbanken.gu.se/forskning/publikationer/bibtex/156080'><img src='https://spraakbanken.gu.se/modules/custom/sb_publications/assets/bibtex.png' alt='BibTeX'></a>",
     "about_man": "Projektledning",
     "about_dev": "Utvecklare",
     "about_dev_additional": "Annoteringsgruppen",
