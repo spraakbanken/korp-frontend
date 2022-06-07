@@ -777,7 +777,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             let [word, pos] = args[0]
             return word + pos
         })
-        const tagsetTrans = _.invert(settings["wordpicture_tagset"])
+        const tagsetTrans = _.invert(settings["word_picture_tagset"])
         unique_words = _.filter(unique_words, function (...args) {
             const [currentWd, pos] = args[0]
             return settings["word_picture_conf"][tagsetTrans[pos]] != null
@@ -815,7 +815,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             }
         }
 
-        const tagsetTrans = _.invert(settings["wordpicture_tagset"])
+        const tagsetTrans = _.invert(settings["word_picture_tagset"])
 
         const res = _.map(tables, function ([token, wordClass]) {
             const getRelType = (item) => ({
@@ -824,7 +824,7 @@ view.LemgramResults = class LemgramResults extends BaseResults {
             })
 
             const wordClassShort = wordClass.toLowerCase()
-            wordClass = _.invert(settings["wordpicture_tagset"])[wordClassShort]
+            wordClass = _.invert(settings["word_picture_tagset"])[wordClassShort]
 
             if (settings["word_picture_conf"][wordClass] == null) {
                 return

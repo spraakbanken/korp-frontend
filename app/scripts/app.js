@@ -236,6 +236,8 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         }
     }
 
+    s.languages = settings["languages"]
+
     s.citeClick = () => {
         s.show_modal = "about"
     }
