@@ -2,7 +2,7 @@
 
 This section describes how to get the Korp frontend up and running on your own machine and presents the available customization. In this step it is necessary to have a backend with at least one corpus installed. For testing purposes, Språkbankens Korp backend may be enough. It is also assumed that you have a web server available (such as Apache or Nginx).
 
-Download the latest release from [Github](https://github.com/spraakbanken/korp-frontend/releases). The code is distributed under the [MIT license][MIT].
+Download the latest release from [Github](https://github.com/spraakbanken/korp-frontend/releases). The code is distributed under the [MIT license](https://opensource.org/licenses/MIT).
 
 An alternative to downloading a released bundle is to clone the repository:
 
@@ -19,9 +19,7 @@ In this text Korp refers to the frontend only.
 In ideal cases, no changes needs to be done in Korp. Instead
 all configuration will reside in another directory. 
 
-### configDir
-
-Throughout this document, configDir will refer to either `app` or the configured directory (see below).
+Throughout this document, `configDir` will refer to either `app` or the configured directory.
 
 ### Structure of the configuration directory
 
@@ -29,11 +27,11 @@ The only file that is mandatory to make Korp work is
 
 - `config.yml`
 
-These files are neccessary in some cases:
+These files are necessary in some cases:
 - `modes/*mode.js`
 - `translations/*.json`
 
-Mode files should only be neccessary for mode with custom functionality (in short, a mode is a collection of corpora that may have different 
+Mode files should only be necessary for mode with custom functionality (in short, a mode is a collection of corpora that may have different 
   functionality and is described later).
 
 If a new translation key needs to be added, see "Adding Languages" for instructions.
@@ -62,7 +60,7 @@ corresponding to the branch you are using in the main repository.
 
 ## Settings in `config.yml`
 
-2022 there was a rewrite where most of the frontend configuration moved to the backend. We also changed format from camel case to
+In the spring 2022 there was a rewrite where most of the frontend configuration moved to the backend. We also changed format from camel case to
 snake case. So `wordpictureTagset` became `word_picture_tagset`. Also `config.js` was turned into a YAML-file, `config.yml`.
 
 Many of the settings listed here can be given in a modes-file in the backend as well. For example `autocomplete` could be wanted in
@@ -106,8 +104,8 @@ Add `corpora_<lang>.json` files to `<configDir>/translations` where lang is repl
 language you want to support. It is also possible to put translations
 to be used in custom components for extended search and sidebar here.
 
-Files prefixed with `locale` in the codebase controls translations are hard-coded into the 
-application and thus it should not be necessary to change these.
+Files prefixed with `locale` in the code base controls translations that are hard-coded into the 
+application and thus it should not be necessary to change these, unless making code changes.
 
 #### Adding Languages
 
@@ -138,10 +136,10 @@ To make Lithuanian the default language, use:
 
 ##### Angular.js locale
 
-To enable full localization (dates in a datepicker, commas instead of dots for decial separator, etc.), an extra file
+To enable full localization (dates in a date picker, commas instead of dots for decimal separator, etc.), an extra file
 is necessary. Download `angular-locale_lt.js` from here:
 
-[Angular i18n][angular-i18n]
+https://github.com/angular/bower-angular-i18n
 
 Put the file in `<configDir>/translations/`, but rename it using three letter language codes, to: `angular-locale_lit.js`
 
@@ -165,8 +163,6 @@ If no mode is given, mode is `default`. It then asks the backend for settings fo
 https://<backend_url>/corpus_config?mode=kubhist
 ```
 
-
-
 See backend documentation for more information.
 
 ## Parallel mode
@@ -175,11 +171,11 @@ Additional settings in `config.yml`:
 
 `startLang` - language that should be the default search language.
 
-## Autocompletion menu
+## Auto completion menu
 
-Korp features an autocompletion list for searches in the Simple Search as well as in Extended for those corpus 
+Korp features an auto completion list for searches in the Simple Search as well as in Extended for those corpus 
 attributes configured to use `autoc`-directive (see <#ref autoc|autoc-section>). This is implemented using an 
-Angular.js directive `autoc` that calls Karp's autocompletion function. Using Karp, Korp can autocomplete senses 
+Angular.js directive `autoc` that calls Karp's auto completion function. Using Karp, Korp can autocomplete senses 
 and lemgrams. To disable add the following to `config.yml`:
 
 ```
@@ -268,6 +264,19 @@ By setting `news_desk_url`, the news widget is enabled. The widget simply fetche
 Local storage is used to remember when the user last checked the news. If there are new items, the UI will change to reflect this.
 
 ## Customizing
+
+### Localization
+
+Korp does runtime DOM manipulation when the user changes language. Using an Angular filter to specify which translation key looks like this:
+
+    <div>{{'my_key' | loc}}</div>
+
+Sometimes it is neccessary to use `loc:lang` or even `loc:$root.lang`, instead of just `loc`.
+
+Add `my_key` to `<configDir>/translations/corpora-<lang>.json` for all `lang`.
+
+[Deprecation warning] Before the Angular approach we used the `rel` attribute, like so (but you shouldn't any more):
+  `<span rel="localize[translation_key]">...</span>`
 
 #### Components
 
@@ -370,7 +379,7 @@ Data about the search, the current token and current attribute is stored in a nu
 - `$scope.sentenceData`: The values of the structural attributes for current token / structure
 - `$scope.tokens`: All the tokens in the current sentence
 
-The component not an actual Angular.js component. It will be added to the interfacce by manually creating a new scope and using `$controller` to instatiate the controller and `$compile` to instantiate the template.
+The component not an actual Angular.js component. It will be added to the interface by manually creating a new scope and using `$controller` to instantiate the controller and `$compile` to instantiate the template.
 
 #### Rendering attribute values in the statistics-view
 
@@ -435,54 +444,82 @@ It is possible to write a custom reading component. See <https://github.com/spra
 
 # Developing the Korp Frontend
 
-Here is where we present details on how to install development dependencies for the Korp frontend and how to build the frontend code.
+Here is where we present details on how to do code changes in Korp. Changes that improve the code base in may be submitted using pull requests on Github.
 
-## Source code
+## About the code
 
-The source code is available on [Github][github-frontend].
+### Settings
 
-## Setting up the development environment
+Use `snake_case` when defining new attribute in `config.yml`. Add a default  value for the new attribute in `app/scripts/settings.js`, if needed.
 
-The Korp frontend uses a plethora of technologies and has a corresponding amount of dependencies. Luckily, a set of package managers do all the heavy lifting and so you should be up and running in no time. Simply follow these steps:
+When using the settings object, use the following format: `settings["my_setting"]`, instead of `settings.my_setting`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
 
-* Install Yarn
-* Fetch the latest Korp source release.
-* `cd` to the Korp folder you just checked out and run `yarn` in order to fetch the local dependencies. This includes libs for compiling transpiling JavaScript, building, running a dev server, as well as the required client side JavaScript libs utilized directly by Korp.
+### Map
 
-You are now ready to start the dev server, do so by running `yarn dev`. In you browser, open `http://localhost:9111` to launch Korp. Now, as you edit the Korp code, JavaScript and Sass files are automatically compiled/transpiled as required, additionally causing the browser window to be reloaded to reflect the new changes.
+Some of the code for the map is located in this repository:
 
-In practice, settings must be made, either for your own instance of the Korp backend or using Språkbankens. To test Språkbankens setup, fetch our [settings
-repository][github-frontend] from Github and add `run_config.json` to the codebase-directory with this content: 
+https://github.com/spraakbanken/korp-geo
 
-```
-{
-    "configDir": "../korp-frontend-sb/app"
-}
-```
-
-Adapt the path to where the repository is stored.
-
-## Localization
-
-Korp does runtime DOM manipulation when the user changes language. Using an Angular filter to specify which translation key looks like this:
-
-    <div>{{'my_key' | loc}}</div>
-
-[Deprecation warning] Before the Angular approach we used the `rel` attribute, like so (but you shouldn't any more):
-  `<span rel="localize[translation_key]">...</span>`
-
-## Map
-
-Modify the map with configuration, `scripts/map_controllers.coffee` or the [Geokorp-component](https://github.com/spraakbanken/korp-geo). Geokorp wraps [Leaflet][leaflet] and adds further functionality such as integration with Angular, marker clustering, marker styling and information when selecting a marker. 
-
-## Building a distribution
-
-Building a distribution is as simple as running the command `yarn build`. A `dist` folder is created. These are the files to use for production deployment. The build system performs concatenation and minimization of JavaScript and CSS source files, giving the resulting code a lighter footprint.
-
-[MIT]: https://opensource.org/licenses/MIT
-[angular-i18n]: https://github.com/angular/bower-angular-i18n
-[leaflet]: http://leafletjs.com/
 [github-frontend]: https://github.com/spraakbanken/korp-frontend/
-[frontend-settings]: https://github.com/spraakbanken/korp-frontend-sb/
+[github-frontend-sb]: https://github.com/spraakbanken/korp-frontend-sb/
 
+## Contributing with pull requests on Github
 
+### Issues
+
+It is OK to create a pull request without a corresponding issue, but if the pull request aims to fix an issue, it should be clearly stated.
+
+Discussions can be made in the pull request.
+
+### Branching
+
+In general, the pull request should be for the `dev`-branch.
+
+If the pull request is a fix for a critical bug, a pull request can be made for `master`. The changes should of course also be merged to the `dev`-branch, but this willl be made by Språkbanken.
+
+### Description
+
+Try to answer these questions in your pull request description:
+
+- What has been changed?
+- Why was the change made? (Can be excluded, if it is obvious).
+
+### Commits
+
+The pull request may include changes on multiple topics, if they are related. It is OK to include as many commits as needed in the request. The commits will not be squashed when merging.
+
+### Dependencies
+
+If the commit depends on new functions in the backend, add a note of which backend version/commit, is needed for the code to work.
+
+## Contributing - content
+
+### Code format
+
+The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before commiting (`yarn run prettier app/scripts/my_file.js`).
+
+We use [Babel](https://babeljs.io/) to transform modern Javascript to something that works in all browsers. A non-exhaustive list of features available is: https://babeljs.io/docs/en/learn .
+
+Use modern features where it looks good. Always use `const` or `let` instead of `var`.
+
+Identifiers should be in camel case (although our old Korp code may have some identifiers that uses snake case left).
+
+Aim to write code that is easily understood, and supplement with comments as needed. Update comments as a part of a pull request when something changes so that the comments are no longer valid.
+
+### Dependencies
+
+Do not add new dependencies to `package.json`, unless it cannot absolutely be avoided, and the new dependency is a widely used library in active development.
+
+### Angular
+
+We strive to write everything that is possible as an Angular component: https://docs.angularjs.org/guide/component
+
+Avoid using directives and controllers.
+
+### Documentation
+
+Update this document if needed.
+
+### Testing
+
+The state of the frontend testing is quite bad. It is good to add e2e tests in `test/e2e/spec`, but not a demand. The tests are dependent on Språkbankens frontend setup, Korp backend and Karp backend (auto completion feature).
