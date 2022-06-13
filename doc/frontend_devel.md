@@ -67,8 +67,8 @@ Many of the settings listed here can be given in a modes-file in the backend as 
 one mode and not another. Only `korp_backend_url` is mandatory in `config.yml`. The settings one can add to `config.yml` is:
 
 - __korp_backend_url__ - URL to Korps backend. Mandatory. Must be given in `config.yml`.
-- __autocomplete__ - 
-- __default_language__ - 
+- __autocomplete__ - Boolean.
+- __default_language__ - String. The default interface language. Default: `"eng"`
 - __common_struct_types__ -
 - __default_options__ -
 - __default_overview_context__ -
@@ -78,17 +78,30 @@ one mode and not another. Only `korp_backend_url` is mandatory in `config.yml`. 
 - __enable_frontend_kwic_download__ - 
 - __group_statistics__ -
 - __hits_per_page_values__ -
-- __languages__ -
+- __languages__ - Array of objects. The lanuages that are supported in the UI. Default:
+    ```
+    - value: eng
+      label: English
+    - value: swe
+      label: Svenska
+    ```
 - __map_center__ -
 - __map_enabled__ - 
 - __news_desk_url__ - 
 - __reading_mode_field__ -
 - __reduce_word_attribute_selector__ -
 - __reduce_struct_attribute_selector__ -
-- __visible_modes__ - 
-- __word_label__ - 
-- __word_picture_tagset__ -
-- __word_picture_conf__ -
+- __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a dropdown. Default: `6`
+- __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
+    ```
+    swe: ord
+    eng: word
+    ```
+- __word_picture__ - Boolean. Enable/disable the word picture. 
+- __word_picture_tagset__ - See [Word picture](#word-picture)
+- __word_picture_conf__ - See [Word picture](#word-picture)
+
+All of the settings above may be added in modes files in the backend as well.
 
 All configuration parameters are added to a global `settings`-object. For example: 
 
@@ -223,8 +236,6 @@ word_picture_tagset:
 The values are the actual relations returned by the backend. The relation used is determined by `field_reverse`. If `field_reverse` is `false` (default), `dep` is used, else `head`. If you find yourself with a table full of the search word just flip the `field_reverse` switch.
 
 `css_class` simply gives a class to the column, useful for applying background color. The last supported attribute is `alt_label`, used for when another value than the relation name should be used for the table header.
-
-- `wordpicture` - `boolean`. The word picture should be enabled/disabled.
 
 ## Map
 
@@ -505,6 +516,8 @@ Use modern features where it looks good. Always use `const` or `let` instead of 
 Identifiers should be in camel case (although our old Korp code may have some identifiers that uses snake case left).
 
 Aim to write code that is easily understood, and supplement with comments as needed. Update comments as a part of a pull request when something changes so that the comments are no longer valid.
+
+Files should be named using snake case: `my_file.js`.
 
 ### Dependencies
 
