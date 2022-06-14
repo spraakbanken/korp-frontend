@@ -23,10 +23,6 @@ export function setDefaultConfigValues() {
         cqp_prio: ["deprel", "pos", "msd", "suffix", "prefix", "grundform", "lemgram", "saldo", "word"],
         word_label: { swe: "ord", eng: "word" },
         visible_modes: 6,
-        languages: [
-            { value: "eng", label: "English" },
-            { value: "swe", label: "Svenska" },
-        ],
     }
 
     // Assign default values to settings properties if undefined
@@ -35,7 +31,7 @@ export function setDefaultConfigValues() {
     // Default values depending on other settings values, possibly
     // assigned a default value above
     const settingsDefaultsDep = {
-        hits_per_page_default: settings.hits_per_page_values[0],
+        hits_per_page_default: settings["hits_per_page_values"][0],
     }
 
     _.defaults(settings, settingsDefaultsDep)

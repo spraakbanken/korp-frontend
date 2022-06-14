@@ -66,31 +66,48 @@ snake case. So `wordpictureTagset` became `word_picture_tagset`. Also `config.js
 Many of the settings listed here can be given in a modes-file in the backend as well. For example `autocomplete` could be wanted in
 one mode and not another. Only `korp_backend_url` is mandatory in `config.yml`. The settings one can add to `config.yml` is:
 
-- __korp_backend_url__ - URL to Korps backend. Mandatory. Must be given in `config.yml`.
-- __autocomplete__ - Boolean.
-- __default_language__ - String. The default interface language. Default: `"eng"`
-- __common_struct_types__ -
-- __default_options__ -
-- __default_overview_context__ -
-- __default_reading_context__ -
-- __default_within__ -
-- __enable_backend_kwic_download__ - 
-- __enable_frontend_kwic_download__ - 
-- __group_statistics__ -
-- __hits_per_page_values__ -
-- __languages__ - Array of objects. The lanuages that are supported in the UI. Default:
+**Attributes that must be added to `config.yml`:**
+
+- __korp_backend_url__ - URL to Korps backend
+- __languages__ - Array of objects with language code and translation of supported UI languages, for example:
     ```
     - value: eng
       label: English
     - value: swe
       label: Svenska
     ```
+
+**Others:**
+
+All of these settings may be added in `config.yml` or in the modes files in the backend. See the 
+[backend documentation](https://github.com/spraakbanken/korp-backend/blob/dev/README.md) for more 
+settings that affect the frontend.
+
+- __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
+- __default_language__ - String. The default interface language. Default: `"eng"`
+- __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
+    that may be added automatically to a corpus. See [backend documenation](https://github.com/spraakbanken/korp-backend/blob/dev/README.md)
+    for more information about how to define attributes.
+- __default_options__ - See [Operators](#operators).
+- __default_overview_context__ - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: `"1 sentence"`. For corpora that do not support this context an additional parameter will be sent to the backend based on the `context`-setting in the corpus.
+- __default_reading_context__ - Same as __default_overview_context__, but for the context-view. Use a context larger than the __default_overview_context__.
+- __default_within__ - An object containing the structural elements of a corpus. `default_within` is used unless a corpus overrides the setting using `within`. Example:
+    ```
+    default_within:
+      sentence: sentence
+    ```
+    In simple search, we will search within the default context and supply extra information for the corpora that do not support the default context.
+
+    In extended search, the default `within` will be used unless the user specifies something else. In that case the user's choice will be used for all corpora that support it and for corpora that do not support it, a supported `within` will be used.
+- __enable_backend_kwic_download__ - Boolean. Backend download, depends on backend download functionality.
+- __enable_frontend_kwic_download__ - Boolean. Frontend download. Gives CSV created by same data as available in the KWIC.
+- __group_statistics__ - List of attribute names. Attributes that either have a rank or a numbering used for multi-word units. For example, removing `:2` from `ta_bort..vbm.1:2`, to get the lemgram of this word: `ta_bort..vbm.1`.
+- __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
+- __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
 - __map_center__ -
 - __map_enabled__ - 
 - __news_desk_url__ - 
 - __reading_mode_field__ -
-- __reduce_word_attribute_selector__ -
-- __reduce_struct_attribute_selector__ -
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a dropdown. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```
@@ -101,15 +118,11 @@ one mode and not another. Only `korp_backend_url` is mandatory in `config.yml`. 
 - __word_picture_tagset__ - See [Word picture](#word-picture)
 - __word_picture_conf__ - See [Word picture](#word-picture)
 
-All of the settings above may be added in modes files in the backend as well.
 
-All configuration parameters are added to a global `settings`-object. For example: 
-
-```
-default_language: en
-```
-
-Will make `settings["default_language"] available in the app.
+- __word_attribute_selector__ - String, `union` / `intersection`. In extended search, attribute list, show all selected corpora *word* attributes or only the attributes common to selected corpora.
+- __struct_attribute_selector__ - Same as __word_attribute_selector__, but for structural attributes.
+- __reduce_word_attribute_selector__ - Same as __word_attribute_selector__, but for the "compile based on"-configuration in statistics. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
+- __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
 
 ### Localization
 
@@ -187,13 +200,70 @@ Additional settings in `config.yml`:
 ## Auto completion menu
 
 Korp features an auto completion list for searches in the Simple Search as well as in Extended for those corpus 
-attributes configured to use `autoc`-directive (see <#ref autoc|autoc-section>). This is implemented using an 
-Angular.js directive `autoc` that calls Karp's auto completion function. Using Karp, Korp can autocomplete senses 
-and lemgrams. To disable add the following to `config.yml`:
+attributes configured to use `autoc`-directive. This is implemented using an 
+Angular.js directive `autoc` that calls [Karp](https://spraakbanken.gu.se/en/tools/karp)'s auto completion function. 
+Using Karp, Korp can autocomplete senses and lemgrams. To disable add the following to `config.yml`:
 
 ```
 autocomplete: false
 ```
+
+## Operators
+
+`default_options` lists the most common set of wanted operators in extended search. They will be used unless an
+attribute specifies another set of operators using `opts`.
+
+Språkbankens `default_options` is:
+```
+default_options:
+  is: =
+  is_not: '!='
+  starts_with: ^=
+  contains: _=
+  ends_with: '&='
+  matches: '*='
+  matches_not: '!*='
+```
+
+The values in this object refers to internal operators used by Korp. The purpose of the internal operators are, for 
+example, to know if values need to be escaped/unescaped with regards to special regexp characters.
+
+The object above is suitable for simple words/strings where one can be interested in searching for affixes.
+
+If there is a known value set of an attribute, as for example in POS-tagging, this is a suitable values for `opts`:
+
+```
+opts:
+  is: "="
+  is_not": "!="
+```
+
+And if the attribute has a set of values instead of a single one, but regexp should be supported, this:
+
+```
+opts:
+  contains: incontains_contains
+  ends_with: ends_with_contains
+  is: contains
+  is_not: not contains
+  matches": regexp_contains
+  matches_not": not_regexp_contains
+  starts_with": starts_with_contains
+```
+
+And if no regexp or affix-search is needed:
+
+```
+opts:
+  is: contains
+  is_not: not contains
+```
+
+The keys in these objects are translation keys and the values are used in an internal "CQP-format". The values will be translated to 
+proper CWB-supported operators before being sent to the backend. For example `regexp_contains` will be translated to just `contains`,
+while the operand will not be escaped. `starts_with_contains`, will be translated to `contains` and the operand will have `.*` added
+to the end.
+
 
 ## Word picture
 
@@ -461,9 +531,17 @@ Here is where we present details on how to do code changes in Korp. Changes that
 
 ### Settings
 
+All configuration parameters in `config.yml` are added to a global `settings`-object. For example:
+
+```
+my_parameter: my value
+```
+
+Will make `settings["my_parameter"]` available in the app.
+
 Use `snake_case` when defining new attribute in `config.yml`. Add a default  value for the new attribute in `app/scripts/settings.js`, if needed.
 
-When using the settings object, use the following format: `settings["my_setting"]`, instead of `settings.my_setting`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
+When using the settings object, use the following format: `settings["my_parameter"]`, instead of `settings.my_parameter`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
 
 ### Map
 
