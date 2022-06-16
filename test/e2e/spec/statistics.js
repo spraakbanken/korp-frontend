@@ -19,10 +19,9 @@ describe("stats table", function () {
 
     it("should show the correct rows and columns", async () => {
         await browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
-        // browser.sleep(5000).then(() => {
+        await browser.sleep(1000)
         const rows = element.all(by.css(".slick-row"))
         await expect(rows.count()).toBe(10)
-        // })
 
         // expect a column for hit, total, suc2, suc3
         const columns = element.all(by.css(".slick-column-name"))
@@ -34,6 +33,7 @@ describe("stats table", function () {
 
     it("should return expected  results for reduce on word", async () => {
         await browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
+        await browser.sleep(1000)
         const rows = element.all(by.css(".slick-row"))
 
         // total row
