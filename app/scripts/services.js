@@ -216,9 +216,9 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         const params = {
             corpus: corpus,
-            cqp: `[_.${settings["reading_mode_field"]} = "${sentenceId}" & lbound(sentence)]`,
+            cqp: `[_.sentence_id = "${sentenceId}" & lbound(sentence)]`,
             context: corpus + ":1 text",
-            show: show.join(",") + ",sentence_id", // TODO: hard-code sentence id
+            show: show.join(",") + ",sentence_id",
             show_struct: showStruct.join(","),
             within: corpus + ":text",
             start: 0,
@@ -277,7 +277,7 @@ korpApp.factory("searches", [
             }
 
             lemgramSearch(word, type) {
-                if (settings.wordpicture === false) {
+                if (settings["word_picture"] === false) {
                     return
                 }
                 return lemgramResults.makeRequest(word, type)

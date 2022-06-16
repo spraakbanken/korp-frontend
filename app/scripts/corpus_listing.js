@@ -351,7 +351,7 @@ export class CorpusListing {
         }
 
         const common_keys = _.compact(_.flatten(_.map(this.selected, (corp) => _.keys(corp.common_attributes))))
-        const common = _.pick(settings.commonStructTypes, ...common_keys)
+        const common = _.pick(settings["common_struct_types"], ...common_keys)
 
         let sentAttrs = []
         const object = _.extend({}, common, allAttrs)

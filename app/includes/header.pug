@@ -30,9 +30,8 @@
       login-status
 
       #languages
-        a(data-mode='swe', ng-click="lang = 'swe'") {{'swedish' | loc:lang}}
-        a(data-mode='eng', ng-click="lang = 'eng'") {{'english' | loc:lang}}
-        
+        a(ng-repeat="langObj in languages" data-mode="{{langObj.value}}", ng-click="lang = langObj.value") {{langObj.label | locObj:lang}}
+
       #news_area
         div(news-desk="", header="'newsdesk-header'", storage="'korp_last_read_newsitem'")
 

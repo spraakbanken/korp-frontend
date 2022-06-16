@@ -1,60 +1,385 @@
 # Setting up the Korp Frontend
 
-This section describes how to get the Korp frontend up and running on your own machine and presents the available customization. In this step it is necessary to have a backend with at least one corpus installed. For testing purposes, Språkbankens Korp backend may be enough. It is also assumed that you have a web server available (such as Apache or Nginx).
+## Running
 
-Download the latest release from [Github](https://github.com/spraakbanken/korp-frontend/releases). The code is distributed under the [MIT license][MIT].
+To run Korp frontend the following is needed:
+- A [Korp backend](https://github.com/spraakbanken/korp-backend/) with corpora installed and configured 
+- [Node.js](https://nodejs.org/)
+- [Yarn](https://yarnpkg.com/)
 
-An alternative to downloading a released bundle is to clone the repository:
+The easiest way to try the frontend locally is to:
+- Clone and go to the root of this repository (<https://github.com/spraakbanken/korp-frontend>) on your machine
+- Run `yarn` to install dependencies
+- Follow the instructions under [Configuration](#configuration). At least a `config.yml` is needed.
+- Run `yarn start`
+
+`yarn start` uses [Webpack DevServer](https://webpack.js). It builds the code and starts 
+a web server locally, by default on port `9111`.  When the configuration is changed, the server automatically
+rebuilds everything. This makes testing your setup really easy.
+
+## Building
+
+When the frontend instance feels ready to deploy, the code must be built for production using: 
 
 ```
-git clone https://github.com/spraakbanken/korp-frontend.git
+yarn build
 ```
 
-Be sure to use the `master`-branch for production environments.
+The build is put in the `dist`-directory. The build only contains resources that any
+browser understands, such as HTML, Javascript, CSS, images and fonts. Therefore you can try out the build locally by using any web server,
+Node.js and the development dependencies are not needed anymore.
 
-In this text Korp refers to the frontend only.
+A really easy way if you have Python (version 3) installed, is:
+
+```
+cd dist; python -m http.server 8080
+```
+
+If everything still works as expected, the contents of `dist` can be deployed to production.
 
 ## Configuration
 
-In ideal cases, no changes needs to be done in Korp. Instead
-all configuration will reside in another directory. How to make the build
-system detect this directory and its contents will be described below.
+In ideal cases, no changes needs to be done in the frontend code. Instead
+all configuration will reside in another directory. 
 
-### Make Korp detect the configuration directory
-
-To make Korp detect the configuration directory,
-use a `run_config.json` file in the root of the Korp repo with the following content:
-
-```
-{
-    "configDir": "../path/to/my/configuration/folder"
-}
-```
+Throughout this document, `configDir` will refer to either `app` or the configured directory.
 
 ### Structure of the configuration directory
 
-The following type of files are needed to make Korp work properly. They
-are all described in the documentation.
+The only file in the configuration directory that is mandatory to make Korp work is
 
-- `config.js`
-- `modes/common.js`
+- `config.yml`
+
+These files are necessary in some cases:
 - `modes/*mode.js`
 - `translations/*.json`
 
-(In short, a mode is a collection of corpora that may have different 
+Mode files should only be necessary for modes with custom functionality (in short, a mode is a collection of corpora that may have different 
   functionality and is described later).
 
-For more advanced use cases there is also the possibility to add own code, styling etc.
-in `custom`.
+If a new language needs to be added, see [Adding Languages](#adding-languages) for instructions.
 
-### Språkbankens configuration
+For more advanced use cases there is also the possibility to custommize by adding add own code or styling, see [Customizing](#customizing).
 
-Språkbankens configuration repository is https://github.com/spraakbanken/korp-frontend-sb.
-It can be used as a supplement to this documentation.
+### Using a configuration directory
+
+To use a configuration directory,
+add a file called `run_config.json` file in the root of the repository with the following content:
+
+```
+{
+    "configDir": "../path/to/my/configuration/directory"
+}
+```
+
+The directory pointed out should be the one containing `config.yml`.
+
+### Språkbanken's configuration
+
+Språkbanken's configuration repository is <https://github.com/spraakbanken/korp-frontend-sb>.
+It can be used as a supplement to this documentation. Make sure to check out the branch
+corresponding to the branch you are using in the main repository.
+
+## Settings in `config.yml`
+
+*Note: In the spring 2022 there was a rewrite where most of the frontend configuration moved to the backend. We also changed format from camel case to
+snake case. So `wordpictureTagset` became `word_picture_tagset`. Also `config.js` was turned into a YAML-file, `config.yml`.*
+
+Many of the settings listed here can be given in a modes-file in the backend instead of `config.yml`. For example `autocomplete` could be wanted in
+one mode and not another. See the 
+[backend documentation](https://github.com/spraakbanken/korp-backend) for more 
+settings that affect the frontend.
+
+**Attributes that must be added to `config.yml`:**
+
+- __korp_backend_url__ - URL to Korp's backend
+- __languages__ - Array of objects with language code and translation of supported UI languages, for example:
+    ```
+    - value: eng
+      label: English
+    - value: swe
+      label: Svenska
+    ```
+
+**Others:**
+
+- __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
+- __default_language__ - String. The default interface language. Default: `"eng"`
+- __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
+    that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
+    for more information about how to define attributes.
+- __default_options__ - See [Operators](#operators).
+- __default_overview_context__ - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: `"1 sentence"`. For corpora that do not support this context an additional parameter will be sent to the backend based on the `context`-setting in the corpus.
+- __default_reading_context__ - Same as __default_overview_context__, but for the context-view. Use a context larger than the __default_overview_context__.
+- __default_within__ - An object containing the structural elements of a corpus. `default_within` is used unless a corpus overrides the setting using `within`. Example:
+    ```
+    default_within:
+      sentence: sentence
+    ```
+    In simple search, we will search within the default and supply extra information for the corpora that do not support the default.
+
+    In extended search, the default `within` will be used unless the user specifies something else. In that case the user's choice will be used for all corpora that support it and for corpora that do not support it, a supported `within` will be used.
+- __enable_backend_kwic_download__ - Boolean. Backend download, depends on backend download functionality.
+- __enable_frontend_kwic_download__ - Boolean. Frontend download. Gives CSV created by same data as available in the KWIC.
+- __group_statistics__ - List of attribute names. Attributes that either have a rank or a numbering used for multi-word units. For example, removing `:2` from `ta_bort..vbm.1:2`, to get the lemgram of this word: `ta_bort..vbm.1`.
+- __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
+- __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
+- __map_center__ - See [Map](#map)
+- __map_enabled__ - Boolean. See [Map](#map) 
+- __news_desk_url__ - See [News widget](#news-widget)
+- __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
+- __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
+    ```
+    swe: ord
+    eng: word
+    ```
+- __word_picture__ - Boolean. Enable/disable the word picture. 
+- __word_picture_tagset__ - See [Word picture](#word-picture)
+- __word_picture_conf__ - See [Word picture](#word-picture)
+
+
+- __word_attribute_selector__ - String, `union` / `intersection`. In extended search, attribute list, show all selected corpora *word* attributes or only the attributes common to selected corpora.
+- __struct_attribute_selector__ - Same as __word_attribute_selector__, but for structural attributes.
+- __reduce_word_attribute_selector__ - Same as __word_attribute_selector__, but for the "compile based on"-configuration in statistics. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
+- __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
+
+### Localization
+
+Add `corpora_<lang>.json` files to `<configDir>/translations` where lang is replaced with a 
+language you want to support. It is also possible to put translations
+to be used in custom components for extended search and sidebar here.
+
+Files prefixed with `locale` in the code base controls translations that are hard-coded into the 
+application and thus it should not be necessary to change these, unless making code changes.
+
+#### Adding Languages
+
+To add a new language in the frontend, for example Lithuanian, add a `corpora-lit.json` 
+and `locale-lit.json`. `locale-lit.json` may be copied from an existing locale-file and
+then translated. Then add the language in `config.yml`:
+
+```
+languages:
+  - value: swe
+    label: Svenska
+  - value: eng
+    label: English
+```
+
+If for some reason one wants to translate the language names in the language picker, `label` may be an object with translations:
+
+```
+label:
+  swe: "Svenska"
+  eng: "Swedish"
+```
+
+
+To make Lithuanian the default language, use:
+
+`default_language: lit`
+
+To enable full localization (dates in a date picker, commas or dots for decimal separator, etc.), an extra file
+is necessary. Download `angular-locale_lt.js` from here:
+
+https://github.com/angular/bower-angular-i18n
+
+Put the file in `<configDir>/translations/`, but rename it using three letter language codes, to: `angular-locale_lit.js`
+
+## Modes
+
+Each Korp installation has a series of _Modes_ in the top left corner, which 
+are useful for presenting different faces of Korp that might have different 
+layouts or functionality. Modes can either be normal, or be adapted for parallel corpora.
+To trigger parallel functionality, `parallel: true`, must be added to `config.yml`, or the
+mode-config in the backend.
+
+When Korp is loaded, it looks for the `mode` query parameter:
+
+```
+https://<frontend url>/?mode=kubhist
+```
+
+If no mode is given, mode is `default`. It then asks the backend for settings for this specific mode:
+
+```
+https://<backend_url>/corpus_config?mode=kubhist
+```
+
+See backend documentation for more information.
+
+## Parallel mode
+
+Additional settings in `config.yml` (may also be given by the backend for the mode):
+
+`start_lang` - language that should be the default search language.
+
+## Auto completion menu
+
+Korp features an auto completion list for searches in the Simple Search as well as in Extended for those corpus 
+attributes configured to use `autoc`-directive. This is implemented using an 
+Angular.js directive `autoc` that calls [Karp](https://spraakbanken.gu.se/en/tools/karp)'s auto completion function. 
+Using Karp, Korp can autocomplete senses and lemgrams. To disable add the following to `config.yml`:
+
+```
+autocomplete: false
+```
+
+## Operators
+
+`default_options` lists the most common set of wanted operators in extended search. They will be used unless an
+attribute specifies another set of operators using `opts`.
+
+Språkbanken's `default_options` is:
+```
+default_options:
+  is: =
+  is_not: '!='
+  starts_with: ^=
+  contains: _=
+  ends_with: '&='
+  matches: '*='
+  matches_not: '!*='
+```
+
+The values in this object refers to internal operators used by Korp frontend only. The purpose of the internal operators are, for 
+example, to know if values need to be escaped/unescaped with regards to special regexp characters.
+
+The object above is suitable for simple words/strings where one can be interested in searching for affixes.
+
+If there is a known value set of an attribute, as for example in POS-tagging, this is a suitable value for `opts`:
+
+```
+opts:
+  is: "="
+  is_not": "!="
+```
+
+And if the attribute has a set of values instead of a single one, but regexp and affixes should be supported, this:
+
+```
+opts:
+  contains: incontains_contains
+  ends_with: ends_with_contains
+  is: contains
+  is_not: not contains
+  matches": regexp_contains
+  matches_not": not_regexp_contains
+  starts_with": starts_with_contains
+```
+
+And if no regexp or affix-search is needed:
+
+```
+opts:
+  is: contains
+  is_not: not contains
+```
+
+The keys in these objects are translation keys and the values are used in an internal "CQP-format". The values will be translated to 
+proper CWB-supported operators before being sent to the backend. For example `regexp_contains` will be translated to just `contains`,
+while the operand will not be escaped. `starts_with_contains`, will be translated to `contains` and the operand will be escaped and then have `.*` added
+to the end.
+
+
+## Word picture
+
+The word picture-config object looks like this:
+
+```
+word_picture_conf:
+  pos_tag:
+    - table_def1
+    - table_def2
+    ...
+```
+
+where `table_defX` is an array of objects that describe the resulting word picture table. `table_def1` above might look like this:
+
+```
+- rel: subject
+        css_class: color_blue
+      - _
+      - rel: object
+        css_class: color_purple
+      - rel: adverbial
+        css_class: color_green
+```
+
+The `_` refers to the placement of the lookup word in the table order. The value for `rel` refers to a key in `word_picture_tagset` looking like this:
+
+```
+word_picture_tagset:
+    subject: ss
+    object: obj
+    adverbial: adv
+    preposition_rel: pa
+    pre_modifier: at
+    post_modifier: et
+    adverbial2: aa
+    ...
+```
+
+The values are the actual relations returned by the backend. The relation used is determined by `field_reverse`. If `field_reverse` is `false` (default), `dep` is used, else `head`. If you find yourself with a table full of the search word just flip the `field_reverse` switch.
+
+`css_class` simply gives a class to the column, useful for applying background color. The last supported attribute is `alt_label`, used for when another value than the relation name should be used for the table header.
+
+## Map
+
+Korp's map uses annotations to get locations. The user selects rows from the statistics table and points derived from different rows will have different colors. The selected corpora must have structural attributes with location data in them. The format is `Fukuoka;JP;33.6;130.41667` - the location name, the country, latitude and longitude separated by `;`.
+
+    Also the name of the attribute must contain `"__"` and `"geo"` to show up in the list of supported attributes.
+
+- `map_enabled` - Boolean. Enable/disable the map functionality.
+- `map_center` - Where the center of the map should be located when user opens map. Example:  
+
+```
+map_center:
+  lat: 62.99515845212052
+  lng: 16.69921875
+  zoom: 4
+```
+
+
+## News widget
+
+By setting `news_desk_url`, the news widget is enabled. The widget simply fetches a JSON-file from the given URL. Short example of such a file, including only one news item with its title and body in two languages and a date:
+
+    [
+        {
+            "h": {
+                "en": "<p>Longer description in English</p>",
+                "sv": "<p>Längre beskrivning på svenska</p>"
+            },
+            "t": {
+                "en": "English Title",
+                "sv": "Svensk Titel"
+            },
+            "d": "2017-03-01"
+        }
+    ]
+
+Local storage is used to remember when the user last checked the news. If there are new items, the UI will change to reflect this.
+
+## Customizing
+
+### Localization
+
+Korp does runtime DOM manipulation when the user changes language. Using an Angular filter to specify which translation key looks like this:
+
+    <div>{{'my_key' | loc}}</div>
+
+Sometimes it is necessary to use `loc:lang` or even `loc:$root.lang`, instead of just `loc`.
+
+Add `my_key` to `<configDir>/translations/corpora-<lang>.json` for all `lang`.
+
+[Deprecation warning] Before the Angular approach we used the `rel` attribute, like so (but you shouldn't any more):
+  `<span rel="localize[translation_key]">...</span>`
 
 #### Components
 
 Define your own components as a map in `custom/components.js`. `component` will be added as a component with name `componentName` to the Angular app.
+
 
 ```
 import component from 'custom/myComponentFile'
@@ -64,7 +389,11 @@ export default {
 }
 ```
 
-These can then be used in other custom components / extended / sidebar or as reading mode-components. `component` can also be defined in `components.js`.
+
+These can then be used in other custom components / extended / sidebar or as reading mode-components.
+
+Remember that in Angular, if you use `myComponentName` as a name of a component, you must use 
+`my-component-name` when using the component in markup.
 
 #### Customizing extended search
 
@@ -148,7 +477,7 @@ Data about the search, the current token and current attribute is stored in a nu
 - `$scope.sentenceData`: The values of the structural attributes for current token / structure
 - `$scope.tokens`: All the tokens in the current sentence
 
-The component not an actual Angular.js component. It will be added to the interfacce by manually creating a new scope and using `$controller` to instatiate the controller and `$compile` to instantiate the template.
+*Note: The component not an actual Angular.js [component](https://docs.angularjs.org/guide/component). It will be added to the interface by manually creating a new scope and using `$controller` to instantiate the controller and `$compile` to instantiate the template.*
 
 #### Rendering attribute values in the statistics-view
 
@@ -196,513 +525,108 @@ based on the name of the attribute. Will be used in sidebar, statistics, extende
 
 Enable the standard reading mode by using this setting on a corpus:
 
-  ```
-  readingMode: {
-        component: "standardReadingMode"
-    }
-  ```
+```
+reading_mode:
+  component: standardReadingMode
+```
 
-When clicking on a row in the KWIC a link will be added to the sidebar. Clicking this link opens a new tab where the entire text is shown.
+When clicking on a word in the KWIC a link will be added to the sidebar. Clicking this link opens a new tab where the entire text is shown.
 
 Prerequisites are:
-- A structural attribute identifying the currently selected row in the KWIC. This may be configured with `settings.readingModeField`, default is `sentence_id`.
+- The structural attribute `sentence_id`.
 - `_head` and `_tail` attribute on each token. These attributes contain the whitespace before and after a token.
 
-It is possible to write a custom reading component. See <https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js> for an example.
+It is possible to write a custom reading component. See [this file](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js) for an example. See [Components](#components) for documentation on custom components.
 
-### Content of `config.js`
-
-The main configuration file of Korp is `config.js`. In this file we have 
-configuration for where the backend is located, what features should be turned 
-on or off etc. Corpora configuration is done in the modes files. There is more 
-information about that later in this document.
-
-All configuration parameters are added to a global `settings`-object. For example: 
-
-```
-settings.defaultLanguage = "en"
-```
-
-Available settings will be described in feature sections and there is also a 
-[summary of all settings](#summary-settings).
-
-### Content of `modes/common.js`
-
-After `config.js`, but before any mode configuration, `modes/common.js` is 
-loaded. This may include definitions which are used in several modes such as a set 
-of attributes. This helps to keep `config.js` clean. This file must export any 
-variables that can be used in a mode.
-
-```
-var veryCommonAttributes = {
-  pos: {
-    label: "pos",
-    order: 600
-  }
-}
-module.exports = {
-  veryCommonAttributes
-}
-```
-
-Now very `veryCommonAttributes` will be available in all mode-files.
-
-### Localization
-
-Add `corpora_<lang>.json` files to `app/translations` where lang is replaced with a 
-language you want to support. This file is mostly used to translate the names of modes
-and the names of attributes. However, it is also possible to put translations
-to be used in custom components for extended search and sidebar here.
-
-Translation of values of attributes, that will be shown in the sidebar and statistics,
-for example, is done in the corpus configuration.
-
-Files prefixed with `locale` in the codebase controls translations are hard-coded into the 
-application and thus it should not be necessary to change these.
-
-#### Adding Languages
-
-To add a new language in the frontend, for example Lithuanian, add a `corpora-lt.json` 
-and `locale-lt.json`. `locale-lt.json` may be copied from an existing locale-file and
-then translated. Then add the language in `config.js`:
-
-    `settings.languages = ["sv", "en", "lt"];`
-
-To make Lithuanian the default language, use:
-
-    `settings.defaultLanguage = "lt"`
-
-To add a button in the interface for Lithuanian, open
-`includes/header.pug` and look for:
-
-```
-a(data-mode='en', ng-click="lang = 'en'") {{'english' | loc:lang}}
-```
-
-and copy this line, substituting `en` for `lt`
-where applicable.
-
-##### Angular.js locale
-
-To enable full localization (dates in a datepicker for example), an extra file
-is necessary. Download `angular-locale_lt.js` from here:
-
-[Angular i18n][angular-i18n]
-
-Put the file in `app/translations/`.
-
-## Modes
-
-Each Korp installation has a series of _Modes_ in the top left corner, which 
-are useful for presenting different faces of Korp that might have different 
-layouts or functionality. In the Swedish version the parallel corpora have their
-own mode because their KWIC results don't mix particularly well with the 
-'normal' results.
-
-#### Adding modes
-
-Relevant setting fields are `settings.visibleModes` and `settings.modeConfig`. 
-The former controls how many modes are visible in the header (the rest are hidden away in a menu). The latter looks like this:
-
-    [
-      {
-        localekey: "modern_texts", 
-        mode: "default"
-      },
-      {
-        localekey: "parallel_texts", 
-        mode: "parallel",
-        parallel: true
-      },
-      {
-        localekey: "faroese_texts", 
-        mode: "faroe"
-      }
-    ]
-
-
-The `localeKey` key corresponds to a key from the localization files. The `mode` key is the mode identifier and is used to load a script file from the `modes` folder, in
-the configuration directory, corresponding to that ID. So if you click the modeSelectors 'parallel' entry, the page refreshes and the `modes/parallel_mode.js` will be loaded.
-
-The mode called `default` will always be loaded first. If there is no need for more than one mode, leave `settings.modeConfig` empty.
-
-If `parallel: true` Korp's user interface with be adapted for parallel corpora.
-
-## Corpora
-
-The config file contains the corpora declaration, wherein the available corpora are declared 
-together with information about which metadata fields are searchable in them. Adding a test 
-corpus is as simple as:
-
-
-        settings.corpora = {};
-        settings.corpora["testcorpus"] = {
-            id: "testcorpus",
-            title: "The Korp Test Corpus",
-            description: "A test corpus for testing Korp.",
-            within: {"sentence": "sentence"},
-            attributes: {
-                pos: {
-                    label: "pos",
-                    opts: {
-                        "is": "=",
-                        "is_not": "!="
-                    }
-                }
-            },
-            structAttributes: {
-            }
-        }
-
-* `id`: Short form title, should correspond to the key name of the definition.
-* `title`: Long form title, for display in the corpus chooser.
-* `description`: For display in the corpus chooser.
-* `within`: What are the structural elements of the corpus? See `defaultWithin` in [settings summary](#summary-settings) for format and more information.
-* `attributes`: each key here refers to a word attribute in Corpus Workbench. Their values are JSON structures with a few attributes of their own; they are concerned with generating the necessary interface widgets in Extended Search, display in sidebar and statistics. They are:
-    * `display`: **REMOVED** Use `sidebarComponent`
-    * `displayType`: set to `'hidden'` to fetch attribute, but never show it in the frontend. See `hideSidebar`, `hideStatistics`, `hideExtended` and `hideCompare` for more control.
-    * `extendedComponent`: See <#ref customizing-extended-search|customizing extended search>.
-    * `externalSearch`: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>`
-    * `groupBy`; `string`. Should be either `group_by` or `group_by_struct`. Should only be needed for attributes with `isStructAttr: true`. Those attributes are by default sent as `group_by_struct` in the statistics, but can be overridden here.
-    * `hideSidebar`: Default `false`. Hide attribute in sidebar.
-    * `hideStatistics`: Default: `false`. Should it be possible to compile statistics based on this attribute?
-    * `hideExtended`: Default: `false`. Should it be possible to search using this attribute in extended?
-    * `hideCompare`: Default: `false`. Should it be possible to compare searches using this attribute?
-    * `internalSearch`: `boolean`. Should the value be displayed as a link to a new Korp search? Only works for sets. Searches for CQP-expression: `[<attrName> contains "<regescape(attrValue)>"]`
-    * `isStructAttr`: `boolean`. If `true` the attribute will be treated as a structural attribute in all sense except it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural attributes that extend to smaller portions of the text, such as name tagging.
-    * `label`: a translation key for the attributes name
-    * `limitedAccess`: `boolean`, it will not be possible to select this corpus unless a user is logged in and has the correct credentials.
-    * `opts`: this represents the auxiliary select box where you can modify the input value. See `defaultOptions` in [settings summary](#summary-settings) for format and more information.
-    * `order`: Order of attribute in the sidebar. Attributes with a lower `order`-value will be placed over attributes with a higher `order`-value.
-    * `pattern`: HTML snippet with placeholders for replacing values. Available is `key` (attribute name) and `value`. Also works for sets. Example: `'<p style="margin-left: 5px;"><%=val.toLowerCase()%></p>'`
-    * `sidebarComponent`: See <# ref customizing-sidebar|customizing sidebar>
-    * `sidebarInfoUrl`: `string` (URL). If defined and non-empty, add an info symbol ⓘ for the attribute in the sidebar, linking to the given URL. This can be used to link to an explanation page for morphosyntactic tags, for example.
-    * `stats_cqp`: See [Custom statistics functions](#custom-statistics-functions).  
-    * `stats_stringify`: See [Custom statistics functions](#custom-statistics-functions).
-    * `stringify`: *DEPRECATED*, use <# ref stringify-functions | stringify>
-    * `translation`: An object containing translations of possible values of the attribute, in this format:
-        ```
-        {
-            "ROOT": {
-                "en": "Root",
-                "sv": "Rot"
-            },
-            "++": {
-                "en": "Coordinating conjunction",
-                "sv": "Samordnande konjunktion"
-            },
-            "+A": {
-                "en": "Conjunctional adverbial",
-                "sv": "Konjuktionellt adverb"
-            },
-            ...
-        }
-        ```
-        This replaces value-translation in the translation-files, and also the old attribute `translationKey`.
-    * `translationKey`: **REMOVED** use the new `translation`-setting
-    * `type`: Possible values:
-        - "set" - The attribute is formatted as "|value1|value2|". Include contains and not contains in `opts`.
-                  In the sidebar, the value will be split before formatted. When using compile / `groupby` on a "set" attribute in a statistics request, it will be added to `split`.
-        - "url" - The value will be rendered as a link to the URL and possibly truncated if too long. 
-* `structAttributes`: refers to higher level metadata attributes. Examples include author, publishing year, URL etc. Structural attributes support the same settings as the word attributes.
-* `customAttributes`: creates fields in the sidebar that have no corresponding attribute in the backend. Useful for combining two different attributes. All settings concerning sidebar format for normal attributes apply in addition to:
-    * `customType`: `"struct"` / `"pos"` - decides if the attribute should be grouped under word attributes or text attributes.
-    * `pattern`: Same as pattern for normal attributes, but `struct_attrs` and `pos_attrs` also available. Example: `'<p style="margin-left: 5px;"><%=struct_attrs.text_title - struct_attrs.text_description%></p>'`
-* `readingMode`: See [Reading mode](#reading-mode).
-
-## Parallel Corpora
-
-Parallel corpora need to have its own mode. `startLang` settings must be used. Set it to whatever language that should be the default search language.
-
-The corpora declaration for parallel corpora is different in some important ways. Example:
-
-~~~~~~~
-settings.corpora["saltnld-sv"] = {
-    id: "saltnld-sv",
-    lang: "swe",
-    linkedTo: ["saltnld-nl"],
-    title: "SALT svenska-nederländska",
-    context: context.defaultAligned,
-    within: {
-    	"link": "meningspar"
-    },
-    attributes: {},
-    structAttributes: {}
-};
-~~~~~~~
-~~~~~~~
-settings.corpora["saltnld-nl"] = {
-    id: "saltnld-nl",
-    lang: "nld",
-    linkedTo: ["saltnld-sv"],
-    title: "SALT svenska-nederländska",
-    context: context.defaultAligned,
-    within: {
-    	"link": "meningspar"
-    },
-    attributes: {},
-    structAttributes: {},
-    hide: true
-};
-~~~~~~~
-
-The corpus configuration for parallel corpora needs to make explicit the links between the declared corpora. 
-This is done using the `linkedTo` property. A corpus may declare any amount of links to other corpora. Also 
-notice the `lang` property, used for building the correct language select menu. The `within` attribute should 
-use the `"link": "meningspar"` (sentence par in Swedish) value. Also note the `hide` attribute which prevents
-both subcorpora from being listed in the corpus chooser widget.
-
-## Autocompletion menu
-
-Korp features an autocompletion list for searches in the Simple Search as well as in Extended for those corpus 
-attributes configured to use `autoc`-directive (see <#ref autoc|autoc-section>). This is implemented using an 
-ngular.js directive `autoc` that calls Karp's autocompletion function. Using Karp, Korp can autocomplete senses 
-and lemgrams. To disable autocompletion use `settings.autocomplete = false`.
-
-## Word picture
-
-The word picture-config object looks like this:
-
-    setting.wordPictureConf = {
-        pos_tag: [table_def1, tabledef2...]
-    }
-
-where `table_def` is an array of objects that describe the resulting word picture table. `table_def1` above might look like this:
-
-    [
-        {rel: "subject", css_class: "color_blue"},
-        "_",
-        {rel: "object", css_class: "color_purple"},
-        {rel: "adverbial", css_class: "color_purple", field_reverse: false}
-    ]
-
-The `"_"` refers to the placement of the hit in the table order. The value for `rel` refers to a key in `settings.wordpictureTagset` looking like this:
-
-    settings.wordpictureTagset = {
-        // the actual value for the pos-tag must be given in this object
-        pos_tag: "vb",  
-
-        subject: "ss",
-        object: "obj",
-        adverbial: "adv"
-    }
-
-The values are the actual relations returned by the backend. The relation used is determined by `field_reverse`. If `field_reverse` is `false` (default), `dep` is used, else `head`. If you find yourself with a table full of the search word just flip the `field_reverse` switch.
-
-`css_class` simply gives a class to the column, useful for applying background color. The last supported attribute is `alt_label`, used for when another value than the relation name should be used for the table header.
-
-## Map
-
-Korp's map uses annotations to get locations. The user selects rows from the statistics table and points derived from different rows will have different colors. The selected corpora must have structural attributes with location data in them. The format is `Fukuoka;JP;33.6;130.41667` - the location name, the country, latitude and longitude separated by `;`.
-
-    Also the name of the attribute must contain `"__"` and `"geo"` to show up in the list of supported attributes.
-
-- `settings.mapEnabled` - `boolean`. The map should be enabled.
-- `settings.mapCenter` - Where the center of the map should be located when user opens map. Example:  
-   ```
-    settings.mapCenter = {
-      lat: 62.99515845212052,
-      lng: 16.69921875,
-      zoom: 4
-    };
-    ```
-
-
-## News widget
-
-By setting `newsDeskUrl`, the news widget is enabled. The widget simply fetches a JSON-file from the given URL. Short example of such a file, including only one news item with its title and body in two languages and a date:
-
-    [
-        {
-            "h": {
-                "en": "<p>Longer description in English</p>",
-                "sv": "<p>Längre beskrivning på svenska</p>"
-            },
-            "t": {
-                "en": "English Title",
-                "sv": "Svensk Titel"
-            },
-            "d": "2017-03-01"
-        }
-    ]
-
-## <a name="summary-settings">Summary of settings</a>
-
-Settings are required unless specified to be optional.
-
-__autocomplete__ - Boolean. Enable autocomplete (see **autoc**-directive) for simple search.
-
-__languages__ - Array of supported interface language codes s.a. `["en", "sv"]`
-
-__defaultLanguage__ - The default interface language. Example: `"sv"`
-
-__downloadFormats__ - Available formats of KWIC-download.
-
-__downloadFormatParams__ - Settings for KWIC-download.
-
-__wordAttributeSelector__ - `"union"` / `"intersection"`. Controls attribute list in extended search. Use all selected corpora *word* attributes or only the attributes common to selected corpora.
-
-__structAttributeSelector__ - Same as __wordAttributeSelector__, but for structural attributes.
-
-__reduceWordAttributeSelector__ - Same as __wordAttributeSelector__, but for the "compile based on"-configuration in statistics. Warning: if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
-
-__reduceStructAttribute_selector__ - Same as __reduceWordAttributeSelector__, but for structural attributes.
-
-__newsDeskUrl__ - See **News widget**. Optional.
-
-__wordpictureTagset__ - See **Word picture**
-
-__wordPictureConf__ - See **Word picture**
-
-__visibleModes__ - See **Adding modes**
-
-__modeConfig__ - See **Adding modes**
-
-~~__primaryColor__  - Background color in corpus chooser, CSS color. Example: `"rgb(221, 233, 255)"`~~ (This functionality was broken and is removed.)
-
-~~__primaryLight__  -Background color of settings area, CSS color. Example: `"rgb(221, 233, 255)"`~~ (This functionality was broken and is removed.)
-
-__defaultOverviewContext__ - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: `"1 sentence"`. For corpora that do not support this context an additional parameter will be sent to the backend based on the `context`-setting in the corpus.
-
-__defaultReadingContext__ - Same as __defaultOverviewContext__, but for the context-view. Use a context larger than the __defaultOverviewContext__.
-
-__defaultWithin__ - An object containing the structural elements of a corpus. Default within is used unless a corpus overrides the setting using `within`. Example:
-
-    settings.defaultWithin = {
-        "sentence": "sentence",
-        "paragraph": "paragraph"
-    };
-
-In simple search, we will search within the default context and supply extra information for the corpora that do not support the default context.
-
-In extended search, the default `within` will be used unless the user specifies something else. In that case the user's choice will be used for all corpora that support it and for corpora that do not support it, a supported `within` will be used.
-
-__cqpPrio__ - An array of attributes to order and-clauses in CQP-expressions by. Order the array by how specific an attribute is in increasing order. `word` will probably be the most specific attribute and should be placed last, while POS-tags will be near the beginning. A well ordered list will speed up queries significantly.
-
-__defaultOptions__ - Object containing the default operators for extended search. May be overridden for each attribute by setting `opts` on the attribute-configuration. The object keys are translation keys and values are the frontend's internal representation of CQP. Example:
-
-    settings.defaultOptions = {
-        "is": "=",
-        "is_not": "!=",
-        "starts_with": "^=",
-        "contains": "_=",
-        "ends_with": "&=",
-        "matches": "*=",
-        "matches_not": "!*=",
-    }
-
-Explanation of internal format:
-
-             Internal representation       CQP                     Note
-----         -------                       ---                     ----
-starts with  `[key ^= "val"]`              `[key = "val.*"]`
-contains     `[key _= "val"]`              `[key = ".*val.*"]`
-ends with    `[key &= "val"]`              `[key = ".*val"]`
-matches      `[key *= "val"]`              `[key = "val"]`         Used with `escaper`-directive, regexp
-matches not  `[key !*= "val"]`             `[key != "val"]`        special characters will not be escaped.
-
-Then we have the five last operators again, but for `contains` instead of `=`:
-
-             Internal representation            CQP                         Note
-----         -------                            ---                         ----
-starts with  `[key starts_with_contains "val"]` `[key contains "val.*"]`
-contains     `[key incontains_contains "val"]`  `[key contains ".*val.*"]`  Strange name due to CQPParser getting confused by `contains_contains`
-ends with    `[key ends_with_contains "val"]`   `[key contains ".*val"]`
-matches      `[key regexp_contains "val"]`      `[key contains "val"]`      Used with `escaper`-directive, regexp
-matches not  `[key not_regexp_contains "val"]`  `[key not contains "val"]`  special characters will not be escaped.
-
-__cgiScript__ - URL to Korp CGI-script
-
-__downloadCgiScript__ - URL to Korp download CGI-script
-
-__backendURLMaxLength__ - Integer. The maximum length of URL (in bytes) to be passed to the backend. If the URL would be longer, use HTTP POST method instead of GET. The default is 8100, tailored for Apache’s default maximum HTTP request line length of 8190 bytes.
-
-__wordpicture__ - Boolean. Enable word picture.
-
-__statisticsCaseInsensitiveDefault__ - Boolean. Selects case-insensitive for "compile based on" by default.
-
-__inputCaseInsensitiveDefault__ - Boolean. Selects case-insensitive for simple search by default.
-
-__corpora__ - See [Corpora](#corpora)
-
-__corpusListing__ - After specifying all corpora in a modes-file use:
-`settings.corpusListing = new CorpusListing(settings.corpora);` to enable the configuration. For parallel corpora use: `settings.corpusListing = new ParallelCorpusListing(settings.corpora);`
-
-__corporafolders__ - Create a directory-structure in corpus chooser. Example:
-
-    settings.corporafolders.foldername = {
-        title: "A folder",
-        contents: ["corpus1", "corpus2"],
-        description: "Optional description"
-    };
-
-    settings.corporafolders.foldername.subfolder = {
-        title: "A sub folder",
-        contents: ["corpus3", "corpus4"]
-    }
-
-__preselectedCorpora__ - An array of corpus (internal) names or folder names. Given corpora and corpora in folders will be selected on load. To select only a subfolder write `folder.subfolder`.
- 
-__mapEnabled__ - See [Map](#map).
-
-__newMapEnabled__ - Renamed to `mapEnabled`.
-
-__mapCenter__ - See [Map](#map).
-
-__hitsPerPageValues__ - An array of possible number of hits per page for example: `[25,50,75,100]`
-
-__hitsPerPageDefault__ - The number of hits per page that Korp should select by default. If emitted, fallback value is the first element in `hitsPerPageValues`
-
-__startLang__ - The default in the language dropdown for parallel Korp, for example: `"swe"`
 
 # Developing the Korp Frontend
 
-Here is where we present details on how to install development dependencies for the Korp frontend and how to build and distribute the frontend code.
+Here is where we present details on how to do code changes in Korp. Changes that improve the code base in may be submitted using pull requests on Github.
 
-## Source code
+## About the code
 
-The source code is available on [Github][github-frontend].
+### Settings
 
-## Setting up the development environment
-
-The Korp frontend uses a plethora of technologies and has a corresponding amount of dependencies. Luckily, a set of package managers do all the heavy lifting and so you should be up and running in no time. Simply follow these steps:
-
-* Install Yarn
-* Fetch the latest Korp source release.
-* `cd` to the Korp folder you just checked out and run `yarn` in order to fetch the local dependencies. This includes libs for compiling transpiling JavaScript, building, running a dev server, as well as the required client side JavaScript libs utilized directly by Korp.
-
-You are now ready to start the dev server, do so by running `yarn dev`. In you browser, open `http://localhost:9111` to launch Korp. Now, as you edit the Korp code, JavaScript and Sass files are automatically compiled/transpiled as required, additionally causing the browser window to be reloaded to reflect the new changes.
-
-In practice, settings must be made, either for your own instance of the Korp backend or using Språkbankens. To test Språkbankens setup, fetch our [settings
-repository][github-frontend] from Github and add `run_config.json` to the codebase-directory with this content: 
+All configuration parameters in `config.yml` are added to a global `settings`-object. For example:
 
 ```
-{
-    "configDir": "../korp-frontend-sb/app"
-}
+my_parameter: my value
 ```
 
-Adapt the path to where the repository is stored.
+Will make `settings["my_parameter"]` available in the app.
 
-## Localization
+Use `snake_case` when defining new attribute in `config.yml`. Add a default  value for the new attribute in `app/scripts/settings.js`, if needed.
 
-Korp does runtime DOM manipulation when the user changes language. Using an Angular filter to specify which translation key looks like this:
+When using the settings object, use the following format: `settings["my_parameter"]`, instead of `settings.my_parameter`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
 
-    <div>{{'my_key' | loc}}</div>
+### Map
 
-[Deprecation warning] Before the Angular approach we used the `rel` attribute, like so (but you shouldn't any more):
-  `<span rel="localize[translation_key]">...</span>`
+Some of the code for the map is located in this repository:
 
-## Map
+https://github.com/spraakbanken/korp-geo
 
-Modify the map with configuration, `scripts/map_controllers.coffee` or the [Geokorp-component](https://github.com/spraakbanken/korp-geo). Geokorp wraps [Leaflet][leaflet] and adds further functionality such as integration with Angular, marker clustering, marker styling and information when selecting a marker. 
-
-## Building a distribution
-
-Building a distribution is as simple as running the command `yarn build`. A `dist` folder is created. These are the files to use for production deployment. The build system performs concatenation and minimization of JavaScript and CSS source files, giving the resulting code a lighter footprint.
-
-[MIT]: https://opensource.org/licenses/MIT
-[angular-i18n]: https://github.com/angular/bower-angular-i18n
-[leaflet]: http://leafletjs.com/
 [github-frontend]: https://github.com/spraakbanken/korp-frontend/
-[frontend-settings]: https://github.com/spraakbanken/korp-frontend-sb/
+[github-frontend-sb]: https://github.com/spraakbanken/korp-frontend-sb/
+
+## Contributing with pull requests on Github
+
+### Issues
+
+It is OK to create a pull request without a corresponding issue, but if the pull request aims to fix an issue, it should be clearly stated.
+
+Discussions can be made in the pull request.
+
+### Branching
+
+In general, the pull request should be for the `dev`-branch.
+
+If the pull request is a fix for a critical bug, a pull request can be made for `master`. The changes should of course also be merged to the `dev`-branch, but this will be made by Språkbanken.
+
+### Description
+
+Try to answer these questions in your pull request description:
+
+- What has been changed?
+- Why was the change made? (Can be excluded, if it is obvious).
+
+### Commits
+
+The pull request may include changes on multiple topics, if they are related. It is OK to include as many commits as needed in the request. The commits will not be squashed when merging.
+
+### Dependencies
+
+If the commit depends on new functions in the backend, add a note of which backend version/commit, is needed for the code to work.
+
+## Contributing - content
+
+### Code format
+
+The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before committing (`yarn run prettier app/scripts/my_file.js`).
+
+We use [Babel](https://babeljs.io/) to transform modern Javascript to something that works in all browsers. A non-exhaustive list of features available is: https://babeljs.io/docs/en/learn .
+
+Use modern features where it looks good. Always use `const` or `let` instead of `var`.
+
+Identifiers should be in camel case (although our old Korp code may still have some identifiers that uses snake case).
+
+Aim to write code that is easily understood, and supplement with comments as needed. Update comments as a part of a pull request when something changes so that the comments are no longer valid.
+
+Files should be named using snake case: `my_file.js`.
+
+### Dependencies
+
+Do not add new dependencies to `package.json`, unless it cannot absolutely be avoided, and the new dependency is a widely used library in active development.
+
+### Angular
+
+We strive to write everything that is possible as an Angular component: https://docs.angularjs.org/guide/component
+
+Avoid using directives and controllers.
+
+### Documentation
+
+Update this document if needed.
+
+### Testing
+
+The state of the frontend testing is quite bad. It is good to add e2e tests in `test/e2e/spec`, but not a demand. The tests are dependent on Språkbanken's frontend setup, Korp backend and Karp backend (auto completion feature).

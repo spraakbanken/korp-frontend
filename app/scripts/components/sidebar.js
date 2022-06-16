@@ -90,7 +90,7 @@ export const sidebarComponent = {
                 openReadingMode() {
                     $rootScope.textTabs.push({
                         corpus: $ctrl.corpusObj.id,
-                        sentenceId: $ctrl.sentenceData.sentence_id,
+                        sentenceId: $ctrl.sentenceData["sentence_id"],
                     })
                 },
                 updateContent({ sentenceData, wordData, corpus, tokens, inReadingMode }) {

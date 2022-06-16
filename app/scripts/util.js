@@ -35,6 +35,7 @@ window.locationSearch = function (obj, val) {
     return ret
 }
 
+// TODO it would be better only to load additional languages when there is a language change
 window.initLocales = function () {
     const packages = ["locale", "corpora"]
     const prefix = "translations"
@@ -42,7 +43,8 @@ window.initLocales = function () {
     let loc_data = {}
     window.loc_data = loc_data
     const def = $.Deferred()
-    for (let lang of settings.languages) {
+    for (let langObj of settings["languages"]) {
+        const lang = langObj.value
         loc_data[lang] = {}
         for (let pkg of packages) {
             ;(function (lang, pkg) {

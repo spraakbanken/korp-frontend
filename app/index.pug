@@ -108,7 +108,7 @@ html
                           button.btn.btn-sm.btn-default {{'statstable_gen_export' | loc:lang}}
                         a#exportButton.btn.btn-sm.btn-default
                           | {{'statstable_export' | loc:lang}}
-                uib-tab(ng-if="_settings.wordpicture != false",
+                uib-tab(ng-if="_settings['word_picture'] != false",
                     wordpic-ctrl,
                     select="instance.onentry()",
                     deselect="instance.onexit()",

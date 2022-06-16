@@ -69,6 +69,6 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
     div(ng-show="settings.statistics !== false")
       input#show_stats(type="checkbox", ng-model="showStatistics", ng-disabled="inOrder")
       label(for="show_stats") {{'show_stats' | loc:lang}}
-    div(ng-show="settings.wordpicture !== false")
+    div(ng-show="settings['word_picture'] !== false")
       input#word_pic(type="checkbox", ng-model="word_pic")
       label(for="word_pic") {{'show_word_pic' | loc:lang}}
