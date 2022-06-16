@@ -1,29 +1,52 @@
 # Setting up the Korp Frontend
 
-This section describes how to get the Korp frontend up and running on your own machine and presents the available customization. In this step it is necessary to have a backend with at least one corpus installed. For testing purposes, Språkbankens Korp backend may be enough. It is also assumed that you have a web server available (such as Apache or Nginx).
+## Running
 
-Download the latest release from [Github](https://github.com/spraakbanken/korp-frontend/releases). The code is distributed under the [MIT license](https://opensource.org/licenses/MIT).
+To run Korp frontend the following is needed:
+- A [Korp backend](https://github.com/spraakbanken/korp-backend/) with corpora installed and configured 
+- [Node.js](https://nodejs.org/)
+- [Yarn](https://yarnpkg.com/)
 
-An alternative to downloading a released bundle is to clone the repository:
+The easiest way to try the frontend locally is to:
+- Clone and go to the root of this repository (<https://github.com/spraakbanken/korp-frontend>) on your machine
+- Run `yarn` to install dependencies
+- Follow the instructions under [Configuration](#configuration). At least a `config.yml` is needed.
+- Run `yarn start`
+
+`yarn start` uses [Webpack DevServer](https://webpack.js). It builds the code and starts 
+a web server locally, by default on port `9111`.  When the configuration is changed, the server automatically
+rebuilds everything. This makes testing your setup really easy.
+
+## Building
+
+When the frontend instance feels ready to deploy, the code must be built for production using: 
 
 ```
-git clone https://github.com/spraakbanken/korp-frontend.git
+yarn build
 ```
 
-Be sure to use the `master`-branch for production environments.
+The build is put in the `dist`-directory. The build only contains resources that any
+browser understands, such as HTML, Javascript, CSS, images and fonts. Therefore you can try out the build locally by using any web server,
+Node.js and the development dependencies are not needed anymore.
 
-In this text Korp refers to the frontend only.
+A really easy way if you have Python (version 3) installed, is:
+
+```
+cd dist; python -m http.server 8080
+```
+
+If everything still works as expected, the contents of `dist` can be deployed to production.
 
 ## Configuration
 
-In ideal cases, no changes needs to be done in Korp. Instead
+In ideal cases, no changes needs to be done in the frontend code. Instead
 all configuration will reside in another directory. 
 
 Throughout this document, `configDir` will refer to either `app` or the configured directory.
 
 ### Structure of the configuration directory
 
-The only file that is mandatory to make Korp work is
+The only file in the configuration directory that is mandatory to make Korp work is
 
 - `config.yml`
 
@@ -31,18 +54,17 @@ These files are necessary in some cases:
 - `modes/*mode.js`
 - `translations/*.json`
 
-Mode files should only be necessary for mode with custom functionality (in short, a mode is a collection of corpora that may have different 
+Mode files should only be necessary for modes with custom functionality (in short, a mode is a collection of corpora that may have different 
   functionality and is described later).
 
-If a new translation key needs to be added, see "Adding Languages" for instructions.
+If a new language needs to be added, see [Adding Languages](#adding-languages) for instructions.
 
-For more advanced use cases there is also the possibility to add own code, styling etc.
-in `custom`.
+For more advanced use cases there is also the possibility to custommize by adding add own code or styling, see [Customizing](#customizing).
 
-### Make Korp detect the configuration directory
+### Using a configuration directory
 
-To make Korp detect the configuration directory,
-add a file called `run_config.json` file in the root of the Korp repo with the following content:
+To use a configuration directory,
+add a file called `run_config.json` file in the root of the repository with the following content:
 
 ```
 {
@@ -52,23 +74,25 @@ add a file called `run_config.json` file in the root of the Korp repo with the f
 
 The directory pointed out should be the one containing `config.yml`.
 
-### Språkbankens configuration
+### Språkbanken's configuration
 
-Språkbankens configuration repository is https://github.com/spraakbanken/korp-frontend-sb.
+Språkbanken's configuration repository is <https://github.com/spraakbanken/korp-frontend-sb>.
 It can be used as a supplement to this documentation. Make sure to check out the branch
 corresponding to the branch you are using in the main repository.
 
 ## Settings in `config.yml`
 
-In the spring 2022 there was a rewrite where most of the frontend configuration moved to the backend. We also changed format from camel case to
-snake case. So `wordpictureTagset` became `word_picture_tagset`. Also `config.js` was turned into a YAML-file, `config.yml`.
+*Note: In the spring 2022 there was a rewrite where most of the frontend configuration moved to the backend. We also changed format from camel case to
+snake case. So `wordpictureTagset` became `word_picture_tagset`. Also `config.js` was turned into a YAML-file, `config.yml`.*
 
-Many of the settings listed here can be given in a modes-file in the backend as well. For example `autocomplete` could be wanted in
-one mode and not another. Only `korp_backend_url` is mandatory in `config.yml`. The settings one can add to `config.yml` is:
+Many of the settings listed here can be given in a modes-file in the backend instead of `config.yml`. For example `autocomplete` could be wanted in
+one mode and not another. See the 
+[backend documentation](https://github.com/spraakbanken/korp-backend) for more 
+settings that affect the frontend.
 
 **Attributes that must be added to `config.yml`:**
 
-- __korp_backend_url__ - URL to Korps backend
+- __korp_backend_url__ - URL to Korp's backend
 - __languages__ - Array of objects with language code and translation of supported UI languages, for example:
     ```
     - value: eng
@@ -79,14 +103,10 @@ one mode and not another. Only `korp_backend_url` is mandatory in `config.yml`. 
 
 **Others:**
 
-All of these settings may be added in `config.yml` or in the modes files in the backend. See the 
-[backend documentation](https://github.com/spraakbanken/korp-backend/blob/dev/README.md) for more 
-settings that affect the frontend.
-
 - __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
 - __default_language__ - String. The default interface language. Default: `"eng"`
 - __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
-    that may be added automatically to a corpus. See [backend documenation](https://github.com/spraakbanken/korp-backend/blob/dev/README.md)
+    that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
     for more information about how to define attributes.
 - __default_options__ - See [Operators](#operators).
 - __default_overview_context__ - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: `"1 sentence"`. For corpora that do not support this context an additional parameter will be sent to the backend based on the `context`-setting in the corpus.
@@ -96,7 +116,7 @@ settings that affect the frontend.
     default_within:
       sentence: sentence
     ```
-    In simple search, we will search within the default context and supply extra information for the corpora that do not support the default context.
+    In simple search, we will search within the default and supply extra information for the corpora that do not support the default.
 
     In extended search, the default `within` will be used unless the user specifies something else. In that case the user's choice will be used for all corpora that support it and for corpora that do not support it, a supported `within` will be used.
 - __enable_backend_kwic_download__ - Boolean. Backend download, depends on backend download functionality.
@@ -104,11 +124,10 @@ settings that affect the frontend.
 - __group_statistics__ - List of attribute names. Attributes that either have a rank or a numbering used for multi-word units. For example, removing `:2` from `ta_bort..vbm.1:2`, to get the lemgram of this word: `ta_bort..vbm.1`.
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
 - __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
-- __map_center__ -
-- __map_enabled__ - 
-- __news_desk_url__ - 
-- __reading_mode_field__ -
-- __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a dropdown. Default: `6`
+- __map_center__ - See [Map](#map)
+- __map_enabled__ - Boolean. See [Map](#map) 
+- __news_desk_url__ - See [News widget](#news-widget)
+- __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```
     swe: ord
@@ -160,9 +179,7 @@ To make Lithuanian the default language, use:
 
 `default_language: lit`
 
-##### Angular.js locale
-
-To enable full localization (dates in a date picker, commas instead of dots for decimal separator, etc.), an extra file
+To enable full localization (dates in a date picker, commas or dots for decimal separator, etc.), an extra file
 is necessary. Download `angular-locale_lt.js` from here:
 
 https://github.com/angular/bower-angular-i18n
@@ -177,7 +194,7 @@ layouts or functionality. Modes can either be normal, or be adapted for parallel
 To trigger parallel functionality, `parallel: true`, must be added to `config.yml`, or the
 mode-config in the backend.
 
-When Korp is loaded, it looks if there is a mode-given in the `mode` query parameter:
+When Korp is loaded, it looks for the `mode` query parameter:
 
 ```
 https://<frontend url>/?mode=kubhist
@@ -193,9 +210,9 @@ See backend documentation for more information.
 
 ## Parallel mode
 
-Additional settings in `config.yml`:
+Additional settings in `config.yml` (may also be given by the backend for the mode):
 
-`startLang` - language that should be the default search language.
+`start_lang` - language that should be the default search language.
 
 ## Auto completion menu
 
@@ -213,7 +230,7 @@ autocomplete: false
 `default_options` lists the most common set of wanted operators in extended search. They will be used unless an
 attribute specifies another set of operators using `opts`.
 
-Språkbankens `default_options` is:
+Språkbanken's `default_options` is:
 ```
 default_options:
   is: =
@@ -225,12 +242,12 @@ default_options:
   matches_not: '!*='
 ```
 
-The values in this object refers to internal operators used by Korp. The purpose of the internal operators are, for 
+The values in this object refers to internal operators used by Korp frontend only. The purpose of the internal operators are, for 
 example, to know if values need to be escaped/unescaped with regards to special regexp characters.
 
 The object above is suitable for simple words/strings where one can be interested in searching for affixes.
 
-If there is a known value set of an attribute, as for example in POS-tagging, this is a suitable values for `opts`:
+If there is a known value set of an attribute, as for example in POS-tagging, this is a suitable value for `opts`:
 
 ```
 opts:
@@ -238,7 +255,7 @@ opts:
   is_not": "!="
 ```
 
-And if the attribute has a set of values instead of a single one, but regexp should be supported, this:
+And if the attribute has a set of values instead of a single one, but regexp and affixes should be supported, this:
 
 ```
 opts:
@@ -261,7 +278,7 @@ opts:
 
 The keys in these objects are translation keys and the values are used in an internal "CQP-format". The values will be translated to 
 proper CWB-supported operators before being sent to the backend. For example `regexp_contains` will be translated to just `contains`,
-while the operand will not be escaped. `starts_with_contains`, will be translated to `contains` and the operand will have `.*` added
+while the operand will not be escaped. `starts_with_contains`, will be translated to `contains` and the operand will be escaped and then have `.*` added
 to the end.
 
 
@@ -313,7 +330,7 @@ Korp's map uses annotations to get locations. The user selects rows from the sta
 
     Also the name of the attribute must contain `"__"` and `"geo"` to show up in the list of supported attributes.
 
-- `map_enabled` - `boolean`. The map should be enabled/disabled.
+- `map_enabled` - Boolean. Enable/disable the map functionality.
 - `map_center` - Where the center of the map should be located when user opens map. Example:  
 
 ```
@@ -352,7 +369,7 @@ Korp does runtime DOM manipulation when the user changes language. Using an Angu
 
     <div>{{'my_key' | loc}}</div>
 
-Sometimes it is neccessary to use `loc:lang` or even `loc:$root.lang`, instead of just `loc`.
+Sometimes it is necessary to use `loc:lang` or even `loc:$root.lang`, instead of just `loc`.
 
 Add `my_key` to `<configDir>/translations/corpora-<lang>.json` for all `lang`.
 
@@ -460,7 +477,7 @@ Data about the search, the current token and current attribute is stored in a nu
 - `$scope.sentenceData`: The values of the structural attributes for current token / structure
 - `$scope.tokens`: All the tokens in the current sentence
 
-The component not an actual Angular.js component. It will be added to the interface by manually creating a new scope and using `$controller` to instantiate the controller and `$compile` to instantiate the template.
+*Note: The component not an actual Angular.js [component](https://docs.angularjs.org/guide/component). It will be added to the interface by manually creating a new scope and using `$controller` to instantiate the controller and `$compile` to instantiate the template.*
 
 #### Rendering attribute values in the statistics-view
 
@@ -508,19 +525,18 @@ based on the name of the attribute. Will be used in sidebar, statistics, extende
 
 Enable the standard reading mode by using this setting on a corpus:
 
-  ```
-  readingMode: {
-        component: "standardReadingMode"
-    }
-  ```
+```
+reading_mode:
+  component: standardReadingMode
+```
 
-When clicking on a row in the KWIC a link will be added to the sidebar. Clicking this link opens a new tab where the entire text is shown.
+When clicking on a word in the KWIC a link will be added to the sidebar. Clicking this link opens a new tab where the entire text is shown.
 
 Prerequisites are:
-- A structural attribute identifying the currently selected row in the KWIC. This may be configured with `settings.readingModeField`, default is `sentence_id`.
+- The structural attribute `sentence_id`.
 - `_head` and `_tail` attribute on each token. These attributes contain the whitespace before and after a token.
 
-It is possible to write a custom reading component. See <https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js> for an example.
+It is possible to write a custom reading component. See [this file](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js) for an example. See [Components](#components) for documentation on custom components.
 
 
 # Developing the Korp Frontend
@@ -564,7 +580,7 @@ Discussions can be made in the pull request.
 
 In general, the pull request should be for the `dev`-branch.
 
-If the pull request is a fix for a critical bug, a pull request can be made for `master`. The changes should of course also be merged to the `dev`-branch, but this willl be made by Språkbanken.
+If the pull request is a fix for a critical bug, a pull request can be made for `master`. The changes should of course also be merged to the `dev`-branch, but this will be made by Språkbanken.
 
 ### Description
 
@@ -585,13 +601,13 @@ If the commit depends on new functions in the backend, add a note of which backe
 
 ### Code format
 
-The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before commiting (`yarn run prettier app/scripts/my_file.js`).
+The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before committing (`yarn run prettier app/scripts/my_file.js`).
 
 We use [Babel](https://babeljs.io/) to transform modern Javascript to something that works in all browsers. A non-exhaustive list of features available is: https://babeljs.io/docs/en/learn .
 
 Use modern features where it looks good. Always use `const` or `let` instead of `var`.
 
-Identifiers should be in camel case (although our old Korp code may have some identifiers that uses snake case left).
+Identifiers should be in camel case (although our old Korp code may still have some identifiers that uses snake case).
 
 Aim to write code that is easily understood, and supplement with comments as needed. Update comments as a part of a pull request when something changes so that the comments are no longer valid.
 
@@ -613,4 +629,4 @@ Update this document if needed.
 
 ### Testing
 
-The state of the frontend testing is quite bad. It is good to add e2e tests in `test/e2e/spec`, but not a demand. The tests are dependent on Språkbankens frontend setup, Korp backend and Karp backend (auto completion feature).
+The state of the frontend testing is quite bad. It is good to add e2e tests in `test/e2e/spec`, but not a demand. The tests are dependent on Språkbanken's frontend setup, Korp backend and Karp backend (auto completion feature).
