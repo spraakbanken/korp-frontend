@@ -46,7 +46,7 @@ Throughout this document, `configDir` will refer to either `app` or the configur
 
 ### Structure of the configuration directory
 
-The only file in the configuration directory that is mandatory to make Korp work is
+The only file in the configuration directory that is mandatory to make Korp work is:
 
 - `config.yml`
 
@@ -90,7 +90,7 @@ one mode and not another. See the
 [backend documentation](https://github.com/spraakbanken/korp-backend) for more 
 settings that affect the frontend.
 
-**Attributes that must be added to `config.yml`:**
+**Attributes that must be added to `config.yml`, and doesn't work in modes-files:**
 
 - __korp_backend_url__ - URL to Korp's backend
 - __languages__ - Array of objects with language code and translation of supported UI languages, for example:

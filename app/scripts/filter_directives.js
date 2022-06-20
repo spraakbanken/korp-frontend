@@ -349,6 +349,7 @@ korpApp.factory("globalFilterService", function ($rootScope, $location, $q, stru
             if (_.isEmpty(filterAttributes)) {
                 dataObj.showDirective = false
                 $location.search("global_filter", null)
+                $rootScope.globalFilter = null
                 for (let filter of dataObj.defaultFilters) {
                     dataObj.filterValues[filter].value = []
                 }
