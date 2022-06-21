@@ -2609,3 +2609,25 @@ li.active a span .num-to-find {
   50% { opacity: 0.5; }
   to { opacity: 1.0; }
 }
+
+// Overloading "glyphicon" class with "fa".
+.glyphicon {
+
+  @extend .fa;
+
+  &.glyphicon-chevron-left {
+      @extend .fa-chevron-left;
+  }
+
+  &.glyphicon-chevron-right {
+      @extend .fa-chevron-right;
+  }
+
+  &.glyphicon-chevron-up {
+    @extend .fa-chevron-up;
+  }
+
+  &.glyphicon-chevron-down {
+    @extend .fa-chevron-down;
+  }
+}
