@@ -1,6 +1,7 @@
 /** @format */
 import statemachine from "@/statemachine"
 import { setDefaultConfigValues } from "./settings"
+import { updateSearchHistory } from "@/history"
 
 const korpFailImg = require("../img/korp_fail.svg")
 const deparam = require("jquery-deparam")
@@ -159,7 +160,7 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
         if (corpus) {
             settings.corpusListing.select(corpus.split(","))
         }
-        view.updateSearchHistory()
+        updateSearchHistory()
     } catch (error1) {
         c.error("ERROR setting corpora from location", error1)
     }
@@ -177,7 +178,7 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
             location.href = target.val()
         } else if (target.is(".clear")) {
             jStorage.set("searches", [])
-            view.updateSearchHistory()
+            updateSearchHistory()
         }
     })
 

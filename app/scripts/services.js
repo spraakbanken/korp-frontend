@@ -1,8 +1,7 @@
 /** @format */
-
 import jStorage from "../lib/jstorage"
-
 import { parseMapData } from "./map_services.ts"
+import { updateSearchHistory } from "@/history"
 
 const korpApp = angular.module("korpApp")
 
@@ -392,7 +391,7 @@ korpApp.factory("searches", [
                 } else {
                     historyValue = value
                 }
-                view.updateSearchHistory(historyValue, $location.absUrl())
+                updateSearchHistory(historyValue, $location.absUrl())
             }
             $q.all([searches.infoDef, searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(function () {
                 let extendedSearch = false

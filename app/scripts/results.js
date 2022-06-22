@@ -100,6 +100,8 @@ class BaseResults {
     }
 }
 
+window.view = {}
+
 view.KWICResults = class KWICResults extends BaseResults {
     constructor(tabSelector, resultSelector, scope) {
         super(tabSelector, resultSelector, scope)
