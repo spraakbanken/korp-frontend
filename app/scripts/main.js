@@ -18,22 +18,6 @@ if (creds) {
     statemachine.send("USER_NOT_FOUND")
 }
 
-// rewriting old url format to the angular one
-if (location.hash.length && location.hash[1] !== "?") {
-    location.hash = `#?${_.trimStart(location.hash, "#")}`
-}
-
-$.ajaxSetup({
-    dataType: "json",
-    traditional: true,
-})
-
-$.ajaxPrefilter("json", function (options) {
-    if (options.crossDomain && !$.support.cors) {
-        return "jsonp"
-    }
-})
-
 const loc_dfd = window.initLocales()
 $(document).keyup(function (event) {
     if (event.keyCode === 27) {
