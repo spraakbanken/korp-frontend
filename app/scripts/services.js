@@ -252,6 +252,8 @@ korpApp.factory("searches", [
     function ($location, $rootScope, $http, $q) {
         class Searches {
             constructor() {
+                this.timeProxy = new model.TimeProxy()
+
                 this.activeSearch = null
                 const infoDefRef = $q.defer()
                 this.infoDef = infoDefRef.promise
@@ -313,6 +315,7 @@ korpApp.factory("searches", [
 
             getTimeData() {
                 const def = this.timeDefRef
+                const timeProxy = this.timeProxy
                 timeProxy
                     .makeRequest()
                     .fail((error) => {

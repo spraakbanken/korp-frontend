@@ -43,7 +43,6 @@
         "lemgramResults": true,
         "statsResults": true,
         "view": true,
-        "timeProxy": true,
         "CSV": true,
         "locationSearch": true,
         "statisticsService": true,

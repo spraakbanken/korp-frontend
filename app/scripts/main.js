@@ -8,7 +8,6 @@ const deparam = require("jquery-deparam")
 import jStorage from "../lib/jstorage"
 
 window.authenticationProxy = new model.AuthenticationProxy()
-window.timeProxy = new model.TimeProxy()
 
 const creds = jStorage.get("creds")
 if (creds) {
