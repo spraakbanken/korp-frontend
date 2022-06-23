@@ -103,9 +103,12 @@ korpApp.config(($uibTooltipProvider) =>
 
 korpApp.config(["$locationProvider", ($locationProvider) => $locationProvider.hashPrefix("")])
 
+/**
+ * "blob" must be added to the trusted URL:s, otherwise downloading KWIC and statistics etc. will not work
+ */
 korpApp.config([
     "$compileProvider",
-    ($compileProvider) => $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/),
+    ($compileProvider) => $compileProvider.aHrefSanitizationTrustedUrlList(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
 korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $timeout) {
