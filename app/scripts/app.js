@@ -91,6 +91,10 @@ for (const componentName in customComponents) {
     korpApp.component(componentName, customComponents[componentName])
 }
 
+/**
+ * angular-dynamic-locale updates translations in the builtin $locale service, which is used
+ * by at least the datepicker in angular-ui-bootstrap.
+ */
 korpApp.config((tmhDynamicLocaleProvider) =>
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
 )
@@ -130,14 +134,11 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
 
     s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
 
-    tmhDynamicLocale.set(settings["default_language"])
-
     s._loc = $location
 
     s.$watch("_loc.search()", function () {
         _.defer(() => (window.onHashChange || _.noop)())
-
-        return tmhDynamicLocale.set($location.search().lang || settings["default_language"])
+        tmhDynamicLocale.set($location.search().lang || settings["default_language"])
     })
 
     $rootScope.kwicTabs = []

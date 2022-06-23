@@ -60,7 +60,6 @@ window.c = console
 window.isLab = __IS_LAB__
 window.currentMode = deparam(window.location.search.slice(1)).mode || "default"
 
-// tmhDynamicLocale = require("angular-dynamic-locale/src/tmhDynamicLocale")
 require("angular-dynamic-locale/dist/tmhDynamicLocale.js")
 window.Raphael = require("raphael")
 
