@@ -105,6 +105,10 @@ korpApp.config(($uibTooltipProvider) =>
     })
 )
 
+/**
+ * Makes the hashPrefix "" instead of "!" which means our URL:s are ?mode=test#?lang=eng
+ * instead of ?mode=test#!?lang=eng
+ */
 korpApp.config(["$locationProvider", ($locationProvider) => $locationProvider.hashPrefix("")])
 
 /**
