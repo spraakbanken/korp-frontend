@@ -111,11 +111,11 @@ korpApp.config([
     ($compileProvider) => $compileProvider.aHrefSanitizationTrustedUrlList(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
-korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $timeout) {
+korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
     const s = $rootScope
     s._settings = settings
     window.lang = s.lang = $location.search().lang || settings["default_language"]
-    s.word_selected = null
+
     s.isLab = window.isLab
 
     s.extendedCQP = null
