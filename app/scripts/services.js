@@ -324,7 +324,7 @@ korpApp.factory("searches", [
                         let [dataByCorpus, all_timestruct, rest] = args[0]
 
                         if (all_timestruct.length == 0) {
-                            return
+                            def.resolve([[], []])
                         }
 
                         // this adds data to the corpora in settings
