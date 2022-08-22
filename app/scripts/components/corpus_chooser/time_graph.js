@@ -68,6 +68,10 @@ function getValByDate(date, struct) {
 }
 
 function onTimeGraphChange(hoverCallback, all_timestruct, rest) {
+    if (all_timestruct.length == 0) {
+        return
+    }
+
     let timestruct = null
     let restdata = null
     let restyear = null
