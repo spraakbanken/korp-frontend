@@ -50,7 +50,7 @@ span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()"
         even : $even, \
         odd : $odd}')
       span.corpus_title(colspan='0')
-        | {{sentence.newCorpus}}
+        | {{sentence.newCorpus | locObj:lang}}
         span.corpus_title_warn(rel='localize[no_context_support]', ng-if='::sentence.noContext')
       span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')
 kwic-pager(ng-if="hits" total-hits="hits", current-page="page", page-change="pageChange(page)", hits-per-page="pagerHitsPerPage")
