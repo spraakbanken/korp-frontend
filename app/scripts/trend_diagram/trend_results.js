@@ -11,6 +11,15 @@ const granularities = {
     second: "s",
 }
 
+const zoomLevelToFormat = {
+    second: "YYYY-MM-DD hh:mm:ss",
+    minute: "YYYY-MM-DD hh:mm",
+    hour: "YYYY-MM-DD hh",
+    day: "YYYY-MM-DD",
+    month: "YYYY-MM",
+    year: "YYYY",
+}
+
 const validZoomLevels = Object.keys(granularities)
 
 view.GraphResults = class GraphResults extends BaseResults {
@@ -301,7 +310,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             const header = [util.getLocaleString("stats_hit")]
 
             for (let cell of series[0].data) {
-                const stampformat = this.zoomLevelToFormat(cell.zoom)
+                const stampformat = zoomLevelToFormat[cell.zoom]
                 header.push(moment(cell.x * 1000).format(stampformat))
             }
 
@@ -339,25 +348,13 @@ view.GraphResults = class GraphResults extends BaseResults {
         })
     }
 
-    zoomLevelToFormat(zoom) {
-        const stampFormats = {
-            second: "YYYY-MM-DD hh:mm:ss",
-            minute: "YYYY-MM-DD hh:mm",
-            hour: "YYYY-MM-DD hh",
-            day: "YYYY-MM-DD",
-            month: "YYYY-MM",
-            year: "YYYY",
-        }
-        return stampFormats[zoom]
-    }
-
     renderTable(series) {
         const time_table_data = []
         const time_table_columns_intermediate = {}
         for (let row of series) {
             const new_time_row = { label: row.name }
             for (let item of row.data) {
-                const stampformat = this.zoomLevelToFormat(item.zoom)
+                const stampformat = zoomLevelToFormat[item.zoom]
                 const timestamp = moment(item.x * 1000).format(stampformat) // this needs to be fixed for other resolutions
                 time_table_columns_intermediate[timestamp] = {
                     name: timestamp,
