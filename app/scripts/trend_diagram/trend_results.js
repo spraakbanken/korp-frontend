@@ -165,21 +165,14 @@ view.GraphResults = class GraphResults extends BaseResults {
         return [].concat(data, newMoments)
     }
 
-    getSeriesData(data, showSelectedCorporasStartDate, zoom) {
+    getSeriesData(data, zoom) {
         delete data[""]
-        // TODO: getTimeInterval should take the corpora of this parent tab instead of the global ones.
-        // const [firstVal, lastVal] = settings.corpusListing.getMomentInterval()
+
         let output = []
         for (let [x, y] of _.toPairs(data)) {
             const mom = this.parseDate(this.zoom, x)
             output.push({ x: mom, y })
         }
-
-        // if (not hasFirstValue) and showSelectedCorporasStartDate
-        // if showSelectedCorporasStartDate # Don't remove first value for now
-        // output.push {x : firstVal, y:0}
-
-        // const prettyDate = item => moment(item.x).format("YYYYMMDD:HHmmss")
 
         output = this.fillMissingDate(output)
         output = output.sort((a, b) => a.x.unix() - b.x.unix())
@@ -412,29 +405,28 @@ view.GraphResults = class GraphResults extends BaseResults {
 
     makeSeries(data, cqp, labelMapping, zoom) {
         let color, series
-        const [from, to] = CQP.getTimeInterval(CQP.parse(cqp)) || [null, null]
-        const showSelectedCorporasStartDate = !from
+
         if (_.isArray(data.combined)) {
             const palette = new Rickshaw.Color.Palette("colorwheel")
             series = []
             for (let item of data.combined) {
                 color = palette.color()
                 series.push({
-                    data: this.getSeriesData(item.relative, showSelectedCorporasStartDate, zoom),
+                    data: this.getSeriesData(item.relative, zoom),
                     color,
                     name: item.cqp ? this.s.data.labelMapping[item.cqp] : "&Sigma;",
                     cqp: item.cqp || cqp,
-                    abs_data: this.getSeriesData(item.absolute, showSelectedCorporasStartDate, zoom),
+                    abs_data: this.getSeriesData(item.absolute, zoom),
                 })
             }
         } else {
             series = [
                 {
-                    data: this.getSeriesData(data.combined.relative, showSelectedCorporasStartDate, zoom),
+                    data: this.getSeriesData(data.combined.relative, zoom),
                     color: "steelblue",
                     name: "&Sigma;",
                     cqp,
-                    abs_data: this.getSeriesData(data.combined.absolute, showSelectedCorporasStartDate, zoom),
+                    abs_data: this.getSeriesData(data.combined.absolute, zoom),
                 },
             ]
         }
