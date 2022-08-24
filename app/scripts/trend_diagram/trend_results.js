@@ -29,7 +29,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         this.zoom = "year"
         this.proxy = new model.GraphProxy()
 
-        const [from, to] = settings.corpusListing.getMomentInterval()
+        const [from, to] = this.s.data.corpusListing.getMomentInterval()
 
         this.checkZoomLevel(from, to, true)
 
