@@ -1764,7 +1764,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         }
         $(".exportTimeStatsSection", this.$result).show()
 
-        return $(".exportTimeStatsSection .btn.export", this.$result).click(() => {
+        $(".exportTimeStatsSection .btn.export", this.$result).click(() => {
             const selVal = $(".timeKindOfData option:selected", this.$result).val()
             const selType = $(".timeKindOfFormat option:selected", this.$result).val()
             const dataDelimiter = selType === "TSV" ? "\t" : ";"
@@ -2082,9 +2082,9 @@ view.GraphResults = class GraphResults extends BaseResults {
             $(".legend .line:last .action", this.$result).click()
         }
 
-        const hoverDetail = new Rickshaw.Graph.HoverDetail({
+        new Rickshaw.Graph.HoverDetail({
             graph,
-            xFormatter: (x) => {
+            xFormatter(x) {
                 const m = moment.unix(String(x))
 
                 return `<span data-val='${x}'>${m.format("YYYY-MM-DD HH:mm:ss")}</span>`
