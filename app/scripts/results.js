@@ -1744,11 +1744,17 @@ view.GraphResults = class GraphResults extends BaseResults {
     }
 
     setBarMode() {
+        /**
+         * This code enables the first series in the legend if there are none selected (except sum)
+         * It then disables the sum data series since that data does not make sense in bar mode
+         * If the sum data series is disabled first, it will not work
+         */
         if ($(".legend .line", this.$result).length > 1) {
-            $(".legend li:last:not(.disabled) .action", this.$result).click()
-            if (_.every(_.map($(".legend .line", this.$result), (item) => $(item).is(".disabled")))) {
+            const allNonSumSeries = $(".legend li.line:not(:last-child)", this.$result)
+            if (allNonSumSeries.toArray().some((item) => $(item).is(".disabled"))) {
                 $(".legend li:first .action", this.$result).click()
             }
+            $(".legend li:last:not(.disabled) .action", this.$result).click()
         }
     }
 
