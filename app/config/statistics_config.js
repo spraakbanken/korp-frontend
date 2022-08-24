@@ -21,7 +21,7 @@ let getCqp = function (hitValues, ignoreCase) {
         }
         tokens.push("[" + andExpr.join(" & ") + "]")
     }
-    return "(" + tokens.join(" ") + ")"
+    return tokens.join(" ")
 }
 
 let reduceCqp = function (type, tokens, ignoreCase) {
