@@ -678,12 +678,12 @@ view.GraphResults = class GraphResults extends BaseResults {
         })
 
         $("body").on("mouseup", ".preview .middle_handle", () => {
-            return this.previewPanStop()
+            this.previewPanStop()
         })
 
         $("body").on("mouseup", ".preview .left_handle, .preview .right_handle", () => {
             if (!this.s.loading) {
-                return this.previewPanStop()
+                this.previewPanStop()
             }
         })
 
