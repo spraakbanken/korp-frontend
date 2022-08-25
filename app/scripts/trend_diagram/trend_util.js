@@ -35,3 +35,39 @@ export function getTimeCQP(time, zoom, n_tokens, coarseGranularity) {
     timecqp = [timecqp].concat(_.map(_.range(0, n_tokens), () => "[]")).join(" ")
     return timecqp
 }
+
+export function parseDate(zoom, time) {
+    switch (zoom) {
+        case "year":
+            return moment(time, "YYYY")
+        case "month":
+            return moment(time, "YYYYMM")
+        case "day":
+            return moment(time, "YYYYMMDD")
+        case "hour":
+            return moment(time, "YYYYMMDDHH")
+        case "minute":
+            return moment(time, "YYYYMMDDHHmm")
+        case "second":
+            return moment(time, "YYYYMMDDHHmmss")
+    }
+}
+
+export function formatUnixDate(zoom, time) {
+    // TODO this should respect locale and could present whole months as August 2020 instead of 2020-08
+    const m = moment.unix(String(time))
+    switch (zoom) {
+        case "year":
+            return m.format("YYYY")
+        case "month":
+            return m.format("YYYY-MM")
+        case "day":
+            return m.format("YYYY-MM-DD")
+        case "hour":
+            return m.format("YYYY-MM-DD HH:00")
+        case "minute":
+            return m.format("YYYY-MM-DD HH:mm")
+        case "second":
+            return m.format("YYYY-MM-DD HH:mm:ss")
+    }
+}

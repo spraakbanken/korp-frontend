@@ -114,42 +114,6 @@ view.GraphResults = class GraphResults extends BaseResults {
         }
     }
 
-    parseDate(zoom, time) {
-        switch (zoom) {
-            case "year":
-                return moment(time, "YYYY")
-            case "month":
-                return moment(time, "YYYYMM")
-            case "day":
-                return moment(time, "YYYYMMDD")
-            case "hour":
-                return moment(time, "YYYYMMDDHH")
-            case "minute":
-                return moment(time, "YYYYMMDDHHmm")
-            case "second":
-                return moment(time, "YYYYMMDDHHmmss")
-        }
-    }
-
-    formatUnixDate(zoom, time) {
-        // TODO this should respect locale and could present whole months as August 2020 instead of 2020-08
-        const m = moment.unix(String(time))
-        switch (zoom) {
-            case "year":
-                return m.format("YYYY")
-            case "month":
-                return m.format("YYYY-MM")
-            case "day":
-                return m.format("YYYY-MM-DD")
-            case "hour":
-                return m.format("YYYY-MM-DD HH:00")
-            case "minute":
-                return m.format("YYYY-MM-DD HH:mm")
-            case "second":
-                return m.format("YYYY-MM-DD HH:mm:ss")
-        }
-    }
-
     fillMissingDate(data) {
         const dateArray = _.map(data, "x")
         const min = _.minBy(dateArray, (mom) => mom.toDate())
@@ -189,7 +153,7 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         let output = []
         for (let [x, y] of _.toPairs(data)) {
-            const mom = this.parseDate(this.zoom, x)
+            const mom = trendUtil.parseDate(this.zoom, x)
             output.push({ x: mom, y })
         }
 
@@ -625,7 +589,7 @@ view.GraphResults = class GraphResults extends BaseResults {
         new Rickshaw.Graph.HoverDetail({
             graph,
             xFormatter(x) {
-                return `<span>${that.formatUnixDate(that.zoom, x)}</span>`
+                return `<span>${trendUtil.formatUnixDate(that.zoom, x)}</span>`
             },
 
             yFormatter(y) {
