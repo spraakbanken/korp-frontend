@@ -587,6 +587,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
             corpus: corpora,
             granularity: this.granularity,
             incremental: true,
+            per_corpus: false,
         }
 
         if (from) {
