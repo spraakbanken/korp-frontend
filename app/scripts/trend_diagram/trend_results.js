@@ -163,12 +163,13 @@ view.GraphResults = class GraphResults extends BaseResults {
         }
 
         output = this.fillMissingDate(output)
-        output = output.sort((a, b) => a.x.unix() - b.x.unix())
 
         for (let tuple of output) {
             tuple.x = tuple.x.unix()
             tuple.zoom = zoom
         }
+
+        output = output.sort((a, b) => a.x - b.x)
 
         return output
     }
