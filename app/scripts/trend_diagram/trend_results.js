@@ -131,6 +131,25 @@ view.GraphResults = class GraphResults extends BaseResults {
         }
     }
 
+    formatUnixDate(zoom, time) {
+        // TODO this should respect locale and could present whole months as August 2020 instead of 2020-08
+        const m = moment.unix(String(time))
+        switch (zoom) {
+            case "year":
+                return m.format("YYYY")
+            case "month":
+                return m.format("YYYY-MM")
+            case "day":
+                return m.format("YYYY-MM-DD")
+            case "hour":
+                return m.format("YYYY-MM-DD HH:00")
+            case "minute":
+                return m.format("YYYY-MM-DD HH:mm")
+            case "second":
+                return m.format("YYYY-MM-DD HH:mm:ss")
+        }
+    }
+
     fillMissingDate(data) {
         const dateArray = _.map(data, "x")
         const min = _.minBy(dateArray, (mom) => mom.toDate())
@@ -600,12 +619,11 @@ view.GraphResults = class GraphResults extends BaseResults {
             $(".legend .line:last .action", this.$result).click()
         }
 
+        const that = this
         new Rickshaw.Graph.HoverDetail({
             graph,
             xFormatter(x) {
-                const m = moment.unix(String(x))
-
-                return `<span data-val='${x}'>${m.format("YYYY-MM-DD HH:mm:ss")}</span>`
+                return `<span>${that.formatUnixDate(that.zoom, x)}</span>`
             },
 
             yFormatter(y) {
