@@ -33,31 +33,36 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         this.checkZoomLevel(from, to, true)
 
-        $(".chart", this.$result).on("click", (event) => {
-            const target = $(".chart", this.$result)
-            const time = $(".detail .x_label > span", target).data("val")
-            let cqp = $(".detail .item.active > span", target).data("cqp")
-            const zoom = this.zoom
+        $(".chart", this.$result).on("click", this.graphClickHandler)
+    }
 
-            if (cqp) {
-                const n_tokens = this.s.data.cqp.split("]").length - 2
-                const timecqp = trendUtil.getTimeCQP(time, zoom, n_tokens, validZoomLevels.indexOf(zoom) < 3)
-                const decodedCQP = decodeURIComponent(cqp)
-                const opts = {}
-                opts.ajaxParams = {
-                    start: 0,
-                    end: 24,
-                    corpus: this.s.data.corpusListing.stringifySelected(),
-                    cqp: this.s.data.cqp,
-                    cqp2: CQP.expandOperators(decodedCQP),
-                    cqp3: timecqp,
-                    expand_prequeries: false,
-                }
+    graphClickHandler() {
+        const target = $(".chart", this.$result)
+        const time = $(".detail .x_label > span", target).data("val")
+        let cqp = $(".detail .item.active > span", target).data("cqp")
+        const zoom = this.zoom
 
-                safeApply(this.s.$root, () => {
-                    this.s.$root.kwicTabs.push({ queryParams: opts })
-                })
-            }
+        if (!cqp) {
+            return
+        }
+
+        const nTokens = this.s.data.cqp.split("]").length - 2
+        const timecqp = trendUtil.getTimeCQP(time, zoom, nTokens, validZoomLevels.indexOf(zoom) < 3)
+        const decodedCQP = decodeURIComponent(cqp)
+        const opts = {
+            ajaxParams: {
+                start: 0,
+                end: 24,
+                corpus: this.s.data.corpusListing.stringifySelected(),
+                cqp: this.s.data.cqp,
+                cqp2: CQP.expandOperators(decodedCQP),
+                cqp3: timecqp,
+                expand_prequeries: false,
+            },
+        }
+
+        safeApply(this.s.$root, () => {
+            this.s.$root.kwicTabs.push({ queryParams: opts })
         })
     }
 
@@ -390,11 +395,23 @@ view.GraphResults = class GraphResults extends BaseResults {
         let color, series
 
         if (_.isArray(data.combined)) {
-            const palette = ["#ca472f","#0b84a5", "#f6c85f", "#9dd866", "#ffa056", "#8dddd0", "#df9eaa", "#6f4e7c", "#544e4d", "#0e6e16", "#975686"]
+            const palette = [
+                "#ca472f",
+                "#0b84a5",
+                "#f6c85f",
+                "#9dd866",
+                "#ffa056",
+                "#8dddd0",
+                "#df9eaa",
+                "#6f4e7c",
+                "#544e4d",
+                "#0e6e16",
+                "#975686",
+            ]
             let colorIdx = 0
             series = []
             for (let item of data.combined) {
-                color = palette[(colorIdx % palette.length)]
+                color = palette[colorIdx % palette.length]
                 colorIdx += 1
                 series.push({
                     data: this.getSeriesData(item.relative, zoom),
