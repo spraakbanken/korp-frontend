@@ -921,22 +921,13 @@ view.StatsResults = class StatsResults extends BaseResults {
                 labelMapping[cqp] = parts.join(", ")
             }
 
-            const activeCorpora = []
-            // TODO: what is this rowIx reference?
-            const totalRow = this.getDataAt(rowIx)
-            for (let corpus of this.searchParams.corpora) {
-                if (totalRow[corpus + "_value"][0] > 0) {
-                    activeCorpora.push(corpus)
-                }
-            }
-
             this.s.$apply(() => {
                 this.s.onGraphShow({
                     cqp: this.proxy.prevNonExpandedCQP,
                     subcqps: subExprs,
                     labelMapping,
                     showTotal,
-                    corpusListing: settings.corpusListing.subsetFactory(activeCorpora),
+                    corpusListing: settings.corpusListing.subsetFactory(this.searchParams.corpora),
                 })
             })
         })
