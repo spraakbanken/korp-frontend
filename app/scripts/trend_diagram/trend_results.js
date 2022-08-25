@@ -426,10 +426,12 @@ view.GraphResults = class GraphResults extends BaseResults {
         let color, series
 
         if (_.isArray(data.combined)) {
-            const palette = new Rickshaw.Color.Palette("colorwheel")
+            const palette = ["#ca472f","#0b84a5", "#f6c85f", "#9dd866", "#ffa056", "#8dddd0", "#df9eaa", "#6f4e7c", "#544e4d", "#0e6e16", "#975686"]
+            let colorIdx = 0
             series = []
             for (let item of data.combined) {
-                color = palette.color()
+                color = palette[(colorIdx % palette.length)]
+                colorIdx += 1
                 series.push({
                     data: this.getSeriesData(item.relative, zoom),
                     color,
