@@ -605,6 +605,8 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         const that = this
         new Rickshaw.Graph.HoverDetail({
+            // xFormatter and yFormatter are called once for every data series per "hover detail creation"
+            // formatter is only called once per per "hover detail creation"
             graph,
             xFormatter(x) {
                 return `<span>${trendUtil.formatUnixDate(that.zoom, x)}</span>`
