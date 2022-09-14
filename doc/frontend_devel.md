@@ -361,6 +361,74 @@ By setting `news_desk_url`, the news widget is enabled. The widget simply fetche
 
 Local storage is used to remember when the user last checked the news. If there are new items, the UI will change to reflect this.
 
+## Attribute settings
+
+Corpora and their attrbutes are configured in the backend, but most of the
+available settings are frontend related. These are the available configuration
+parameters for attributes.
+
+### Possible settings for `pos_attributes` and `struct_attributes`
+
+- **label**: Label to display wherever the attribute is shown.
+- **display_type**: Set to `hidden` to fetch attribute, but never show it in the frontend. 
+  See `hide_sidebar`, `hide_statistics`, `hide_extended` and `hide_compare` for more control.
+- **extended_component**: See the [customizing extended search](#customizing-extended-search).
+- **external_search**: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended%7C%7Cand%7Csense%7Cequals%7C<%= val %>`
+- **group_by**: Set to either `group_by` or `group_by_struct`. Should only be needed for attributes with `is_struct_attr: true`.
+  Those attributes are by default sent as `group_by_struct` in the statistics, but can be overridden here.
+- **hide_sidebar**: `boolean`. Default `false`. Hide attribute in sidebar.
+- **hide_statistics**: `boolean`. Default: `false`. Should it be possible to compile statistics based on this attribute?
+- **hide_extended**: `boolean`. Default: `false`. Should it be possible to search using this attribute in extended?
+- **hide_compare**: `boolean`. Default: `false`. Should it be possible to compare searches using this attribute?
+- **internal_search**: `boolean`. Should the value be displayed as a link to a new Korp search? Only works for sets.
+  Searches for CQP-expression: `[<attrName> contains "<regescape(attrValue)>"]`
+- **is_struct_attr**: `boolean`. If `true` the attribute will be treated as a structural attribute in every sense except
+  it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural 
+  attributes that extend to smaller portions of the text than the selected context, such as name tagging.
+- **opts**: this represents the auxiliary select box where you can modify the input value.
+  See [Operators](#operators) section for format and more information.
+- **order**: Order of attribute in the sidebar. Attributes with a lower `order`-value will be placed above attributes
+  with a higher `order`-value.
+- **pattern**: HTML snippet with placeholders for replacing values. Available is `key` (attribute name) and `value`.
+  Also works for sets. Example: `'<p style="margin-left: 5px;"><%=val.toLowerCase()%></p>'`
+- **sidebar_component**: See [Customizing sidebar](#customizing-sidebar).
+- **sidebar_info_url**: `string` (URL). If defined and non-empty, add an info symbol ⓘ for the attribute in the
+  sidebar, linking to the given URL. This can be used to link to an explanation page for morphosyntactic tags, for example.
+- **stats_cqp**: See [Custom statistics functions](#custom-statistics-functions).  
+- **stats_stringify**: See [Custom statistics functions](#custom-statistics-functions).
+- **translation**: An object containing translations of possible values of the attribute, in this format:
+    ```
+    {
+        "ROOT": {
+            "en": "Root",
+            "sv": "Rot"
+        },
+        "++": {
+            "en": "Coordinating conjunction",
+            "sv": "Samordnande konjunktion"
+        },
+        "+A": {
+            "en": "Conjunctional adverbial",
+            "sv": "Konjuktionellt adverb"
+        },
+        ...
+    }
+    ```
+    This replaces value-translation in the translation-files, and also the old attribute `translationKey`.
+- **type**: Possible values:
+    - "set" - The attribute is formatted as "|value1|value2|". Include contains and not contains in `opts`.
+              In the sidebar, the value will be split before formatted. When using compile / `groupby` on a "set"
+              attribute in a statistics request, it will be added to `split`.
+    - "url" - The value will be rendered as a link to the URL and possibly truncated if too long.
+
+### Custom attributes
+
+Custom attributes are attributes that do not correspond to an attribute / annotation in the backend. They are mainly used to present information in the sidebar that combines values from other attributes.
+
+- **custom_attributes**: creates fields in the sidebar that have no corresponding attribute in the backend. Useful for combining two different attributes. All settings concerning sidebar format for normal attributes apply in addition to:
+  - **custom_type**: `"struct"` / `"pos"` - decides if the attribute should be grouped under word attributes or text attributes.
+  - **pattern**: Same as pattern for normal attributes, but `struct_attrs` and `pos_attrs` also available. Example: `'<p style="margin-left: 5px;"><%=struct_attrs.text_title - struct_attrs.text_description%></p>'`
+
 ## Customizing
 
 ### Localization
