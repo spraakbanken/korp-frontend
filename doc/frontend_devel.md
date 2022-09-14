@@ -225,6 +225,61 @@ Using Karp, Korp can autocomplete senses and lemgrams. To disable add the follow
 autocomplete: false
 ```
 
+## Extended components
+
+The frontend features a number of components that can be used for the attributes in extended search. For example, dropdowns with
+a static list of search alternatives, autocompletion menus etc. 
+
+The following examples are in YAML, that is used in the backend configuration. Simple usage:
+
+```
+attribute_name:
+  extended_component: autocExtended
+```
+
+Some of the components have support for options. This is the format to use then:
+
+```
+attribute_name:
+  extended_component:
+    name: datasetSelect
+    options:
+      sort: false
+```
+
+If none of the built in components fit the use case, see [customizing extended search](#customizing-extended-search).
+
+The built in components are:
+
+### datasetSelect
+
+Supported options:
+- **sort**, default is **true**
+
+### structServiceSelect
+
+To be documented
+
+### structServiceAutocomplete
+
+To be documented
+
+### singleValue
+
+To be documented
+
+### default
+
+To be documented
+
+### autocExtended
+
+To be documented
+
+### dateInterval
+
+To be documented
+
 ## Operators
 
 `default_options` lists the most common set of wanted operators in extended search. They will be used unless an
@@ -372,7 +427,7 @@ parameters for attributes.
 - **label**: Label to display wherever the attribute is shown.
 - **display_type**: Set to `hidden` to fetch attribute, but never show it in the frontend. 
   See `hide_sidebar`, `hide_statistics`, `hide_extended` and `hide_compare` for more control.
-- **extended_component**: See the [customizing extended search](#customizing-extended-search).
+- **extended_component**: For available components, see [extended components](#extended-componensts). For writing custom components, see [customizing extended search](#customizing-extended-search).
 - **external_search**: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended%7C%7Cand%7Csense%7Cequals%7C<%= val %>`
 - **group_by**: Set to either `group_by` or `group_by_struct`. Should only be needed for attributes with `is_struct_attr: true`.
   Those attributes are by default sent as `group_by_struct` in the statistics, but can be overridden here.

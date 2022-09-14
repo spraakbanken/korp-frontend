@@ -112,7 +112,7 @@ const selectController = (autocomplete) => [
 // - escape: boolean, will be used by the escaper-directive
 export default _.merge(
     {
-        datasetSelect: {
+        datasetSelect: (options) => ({
             template: selectTemplate,
             controller: [
                 "$scope",
@@ -133,13 +133,17 @@ export default _.merge(
                         } else {
                             dataset = _.map(original, (v, k) => [k, localizer(v)])
                         }
-                        $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                        if (options == undefined || options.sort == undefined || options.sort) {
+                            $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                        } else {
+                            $scope.dataset = dataset
+                        }
                         $scope.model = $scope.model || $scope.dataset[0][0]
                     }
                     initialize()
                 },
             ],
-        },
+        }),
 
         // Select-element. Gets values from "struct_values"-command. Use the following settings in the corpus:
         // - escape: boolean, will be used by the escaper-directive
