@@ -29,10 +29,8 @@
         "c": true,
         "_": true,
         "$": true,
-        "corpusChooserInstance": true,
         "currentMode": true,
         "isLab": true,
-        "getAllCorporaInFolders": true,
         "authenticationProxy": true,
         "util": true,
         "safeApply": true,
@@ -51,6 +49,6 @@
         "statisticsService": true,
         "Slick": true,
         "Rickshaw": true,
-        "initTimeGraph": true
+        "currentModeParallel": true,
     }
 }

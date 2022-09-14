@@ -1,7 +1,4 @@
 /** @format */
-
-const prio = settings.cqpPrio || ["deprel", "pos", "msd", "suffix", "prefix", "grundform", "lemgram", "saldo", "word"]
-
 const parseDateInterval = function (op, val, expanded_format) {
     let out
     val = _.invokeMap(val, "toString")
@@ -181,7 +178,7 @@ window.CQP = {
 
     prioSort(cqpObjs) {
         const getPrio = function (and_array) {
-            const numbers = _.map(and_array, (item) => _.indexOf(prio, item.type))
+            const numbers = _.map(and_array, (item) => _.indexOf(settings["cqp_prio"], item.type))
             return Math.min(...(numbers || []))
         }
 

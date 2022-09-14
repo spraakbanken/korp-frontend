@@ -1966,4 +1966,4 @@
     SyntaxError: peg$SyntaxError,
     parse:       peg$parse
   };
-})(this);
+})(window);

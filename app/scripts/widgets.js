@@ -14,7 +14,7 @@ widget("korp.radioList", {
         $.each(this.element, function () {
             return $(this)
                 .children()
-                .wrap("<li />")
+                .wrap("<li></li>")
                 .click(function () {
                     if (!$(this).is(".radioList_selected")) {
                         self.select($(this).data("mode"))
@@ -23,7 +23,7 @@ widget("korp.radioList", {
                 })
                 .parent()
                 .prepend($("<span>").text(self.options.separator))
-                .wrapAll("<ul class='inline_list' />")
+                .wrapAll("<ul class='inline_list'></ul>")
         })
 
         this.element.find(".inline_list span:first").remove()

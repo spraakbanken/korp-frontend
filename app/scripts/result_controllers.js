@@ -5,8 +5,8 @@ const korpApp = angular.module("korpApp")
 
 korpApp.controller("resultContainerCtrl", ($scope, searches) => {
     $scope.searches = searches
-    $scope.onSidebarShow = () => ($scope.sidebar_visible = true)
-    $scope.onSidebarHide = () => ($scope.sidebar_visible = false)
+    $scope.onSidebarShow = () => ($scope.sidebarVisible = true)
+    $scope.onSidebarHide = () => ($scope.sidebarVisible = false)
 })
 
 class KwicCtrl {
@@ -34,9 +34,7 @@ class KwicCtrl {
         const s = this.scope
         const $location = this.location
 
-        s.onexit = function () {
-            // s.$root.sidebar_visible = false
-        }
+        s.onexit = function () {}
 
         const punctArray = [",", ".", ";", ":", "!", "?", "..."]
 
@@ -50,21 +48,18 @@ class KwicCtrl {
 
         const readingChange = function () {
             if (s.instance && s.instance.getProxy().pendingRequests.length) {
-                return $.when(...(s.instance.getProxy().pendingRequests || [])).then(function () {
+                // If the requests passed to $.when contain rejected
+                // (aborted) requests, .then is not executed, so
+                // filter those out
+                // TODO: Remove at least rejected requests from
+                // pendingRequests somewhere
+                const nonRejectedRequests = (s.instance.getProxy().pendingRequests || []).filter(
+                    (req) => req.state() != "rejected"
+                )
+                return $.when(...nonRejectedRequests).then(function () {
                     return s.instance.makeRequest()
                 })
             }
-        }
-
-        s.setupReadingHash = () => {
-            return this.utils.setupHash(s, [
-                {
-                    key: "reading_mode",
-                    post_change: () => {
-                        return readingChange()
-                    },
-                },
-            ])
         }
 
         // used by example kwic
@@ -78,9 +73,16 @@ class KwicCtrl {
             })
         })
 
+        s.reading_mode = $location.search().reading_mode
         s.toggleReading = function () {
             s.reading_mode = !s.reading_mode
-            return s.instance.centerScrollbar()
+            if (s.reading_mode) {
+                $location.search("reading_mode", "")
+            } else {
+                $location.search("reading_mode")
+            }
+            readingChange()
+            s.instance.centerScrollbar()
         }
 
         s.hitspictureClick = function (pageNumber) {
@@ -163,12 +165,6 @@ class KwicCtrl {
                     output.push(newSent)
                 }
 
-                if (i % 2 === 0) {
-                    hitContext._color = settings.primaryColor
-                } else {
-                    hitContext._color = settings.primaryLight
-                }
-
                 hitContext.corpus = mainCorpusId
 
                 output.push(hitContext)
@@ -190,7 +186,6 @@ class KwicCtrl {
                         tokens,
                         isLinked: true,
                         corpus: corpus_aligned,
-                        _color: hitContext._color,
                     })
                 }
 
@@ -269,7 +264,7 @@ class KwicCtrl {
 
         s.$watch(
             () => $location.search().hpp,
-            (hpp) => (s.hitsPerPage = hpp || settings.hitsPerPageDefault)
+            (hpp) => (s.hitsPerPage = hpp || settings["hits_per_page_default"])
         )
 
         const isParallelMode = window.settings.mode ? window.settings.mode.parallel : false
@@ -383,13 +378,13 @@ korpApp.directive("statsResultCtrl", () => ({
 
         s.onGraphShow = (data) => $rootScope.graphTabs.push(data)
 
-        s.mapEnabled = settings.mapEnabled
+        s.mapEnabled = settings["map_enabled"]
 
         s.getGeoAttributes = function (corpora) {
             let attrs = {}
             for (let corpus of settings.corpusListing.subsetFactory(corpora).selected) {
                 for (let attr of corpus.private_struct_attributes) {
-                    if (attr.indexOf("geo" !== -1)) {
+                    if (attr.indexOf("geo") !== -1) {
                         if (attrs[attr]) {
                             attrs[attr].corpora.push(corpus.id)
                         } else {
@@ -582,7 +577,7 @@ korpApp.directive("wordpicCtrl", () => ({
         }
 
         $scope.getTableClass = (wordClass, parentIdx, idx) =>
-            settings.wordPictureConf[wordClass][parentIdx][idx].css_class
+            settings["word_picture_conf"][wordClass][parentIdx][idx].css_class
 
         $scope.getHeaderLabel = function (header, section, idx) {
             if (header.alt_label) {
@@ -608,7 +603,7 @@ korpApp.directive("wordpicCtrl", () => ({
             return section[index] && section[index].table
         }
 
-        $scope.getResultHeader = (index, wordClass) => settings.wordPictureConf[wordClass][index]
+        $scope.getResultHeader = (index, wordClass) => settings["word_picture_conf"][wordClass][index]
 
         $scope.fromLemgram = function (maybeLemgram) {
             if (util.isLemgramId(maybeLemgram)) {
@@ -714,7 +709,7 @@ korpApp.directive("compareCtrl", () => ({
                             const attribute = attributes[attrKey]
                             if (attribute) {
                                 ;({ type } = attribute)
-                                if (attribute.isStructAttr) {
+                                if (attribute["is_struct_attr"]) {
                                     attrKey = `_.${attrKey}`
                                 }
                             }

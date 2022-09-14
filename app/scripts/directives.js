@@ -1,5 +1,4 @@
 /** @format */
-import extendedComponents from "./extended.js"
 
 const korpApp = angular.module("korpApp")
 
@@ -128,90 +127,6 @@ korpApp.directive("escaper", () => ({
     },
 }))
 
-korpApp.directive("tokenValue", ($compile, $controller) => ({
-    scope: {
-        tokenValue: "=",
-        model: "=model",
-        orObj: "=orObj",
-        lang: "=",
-    },
-    template: `\
-<div>{{tokenValue.label}}</div>\
-`,
-    link(scope, elem, attr) {
-        let current = null
-        let prevScope = null
-        let childWatch = null
-
-        return scope.$watch("tokenValue", function (valueObj, prevValueObj) {
-            // if the selected attribute has changed, remove case insensitive flag
-            if (prevValueObj && valueObj && valueObj.value != prevValueObj.value && scope.orObj.flags) {
-                delete scope.orObj.flags["c"]
-            }
-
-            let controller, template
-            if (!valueObj) {
-                return
-            }
-
-            if (valueObj.value === (current && current.value)) {
-                // We need to compare datasets in case we switch between two attributes that
-                // have the same name, but different datasets
-                // This could potentially be fixed in the future by having different ID:s for these
-                // attributes in the configuration.
-                if (_.isEqual(valueObj.dataset, current.dataset)) {
-                    return
-                }
-            }
-
-            if (prevScope != null) {
-                prevScope.$destroy()
-            }
-            if (typeof childWatch === "function") {
-                childWatch()
-            }
-
-            prevScope = null
-            current = valueObj
-
-            const childScope = scope.$new(false, scope)
-            childWatch = childScope.$watch("model", (val) => (scope.model = val))
-
-            childScope.orObj = scope.orObj
-            _.extend(childScope, valueObj)
-
-            const locals = { $scope: childScope }
-            prevScope = childScope
-            if (valueObj.extendedComponent) {
-                const def = extendedComponents[valueObj.extendedComponent.name || valueObj.extendedComponent]
-                if (_.isFunction(def)) {
-                    ;({ template, controller } = def(valueObj.extendedComponent.options))
-                } else {
-                    ;({ template, controller } = def)
-                }
-            } else {
-                controller = extendedComponents.default.controller
-                if (valueObj.extendedTemplate) {
-                    template = valueObj.extendedTemplate
-                } else {
-                    let tmplObj
-                    if (valueObj.value === "word") {
-                        tmplObj = { maybe_placeholder: "placeholder='<{{\"any\" | loc:lang}}>'" }
-                    } else {
-                        tmplObj = { maybe_placeholder: "" }
-                    }
-
-                    template = extendedComponents.default.template(tmplObj)
-                }
-            }
-
-            $controller(controller, locals)
-            const tmplElem = $compile(template)(childScope)
-            return elem.html(tmplElem).addClass("arg_value")
-        })
-    },
-}))
-
 korpApp.directive("constr", ($window) => ({
     scope: true,
 
@@ -230,23 +145,23 @@ korpApp.directive("searchSubmit", ($rootElement) => ({
     template: `\
 <div class="search_submit">
         <div class="btn-group">
-            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()" ng-disabled="searchDisabled">{{'search' | loc:lang}}</button>
-            <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)" ng-disabled="searchDisabled">
+            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()" ng-disabled="disabled">{{'search' | loc:$root.lang}}</button>
+            <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)" ng-disabled="disabled">
                 <span class="caret"></span>
             </button>
         </div>
         <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">
             <div class="arrow"></div>
-            <h3 class="popover-title">{{'compare_save_header' | loc:lang}}</h3>
+            <h3 class="popover-title">{{'compare_save_header' | loc:$root.lang}}</h3>
             <form class="popover-content" ng-submit="onSubmit()">
                 <div>
                     <label>
-                        {{'compare_name' | loc:lang}}:
+                        {{'compare_name' | loc:$root.lang}}:
                         <input class="cmp_input" ng-model="name">
                     </label>
                 </div>
                 <div class="btn_container">
-                    <button class="btn btn-primary btn-sm">{{'compare_save' | loc:lang}}</button>
+                    <button class="btn btn-primary btn-sm">{{'compare_save' | loc:$root.lang}}</button>
                 </div>
             </form>
         </div>
@@ -254,9 +169,17 @@ korpApp.directive("searchSubmit", ($rootElement) => ({
 `,
     restrict: "E",
     replace: true,
+    scope: {
+        onSearch: "&",
+        onSearchSave: "&",
+        disabled: "<",
+    },
     link(scope, elem, attr) {
         let at, my
         const s = scope
+
+        s.disabled = angular.isDefined(s.disabled) ? s.disabled : false
+
         s.pos = attr.pos || "bottom"
         s.togglePopover = function (event) {
             if (s.isPopoverVisible) {
@@ -323,10 +246,10 @@ korpApp.directive("searchSubmit", ($rootElement) => ({
 
         s.onSubmit = function () {
             s.popHide()
-            return s.$broadcast("popover_submit", s.name)
+            s.onSearchSave({ name: s.name })
         }
 
-        s.onSendClick = () => s.$broadcast("btn_submit")
+        s.onSendClick = () => s.onSearch()
     },
 }))
 
@@ -417,170 +340,10 @@ korpApp.directive("popper", ($rootElement) => ({
 
 korpApp.directive("tabSpinner", () => ({
     template: `\
-<i class="fa fa-times-circle close_icon"></i>
+<i class="fa-solid fa-times-circle close_icon"></i>
 <span class="tab_spinner"
         us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>\
 `,
-}))
-
-korpApp.directive("extendedList", () => ({
-    template: require("../views/extendedlist.html"),
-    scope: {
-        cqp: "=",
-        lang: "=",
-        repeatError: "=",
-    },
-    link($scope) {
-        const s = $scope
-
-        const setCQP = function (val) {
-            if (s.data == undefined || val != CQP.stringify(s.data)) {
-                s.data = CQP.parse(val)
-            }
-        }
-
-        if (s.cqp == null) {
-            s.cqp = "[]"
-        }
-        setCQP(s.cqp)
-
-        s.$watch(
-            "data",
-            () => {
-                s.cqp = CQP.stringify(s.data) || ""
-            },
-            true
-        )
-        s.$watch("cqp", () => {
-            setCQP(s.cqp)
-        })
-
-        s.addOr = function (and_array) {
-            let last = _.last(and_array) || {}
-            and_array.push({
-                type: last.type || "word",
-                op: last.op == "contains" ? "contains" : "=",
-                val: "",
-            })
-            return and_array
-        }
-
-        s.addToken = function () {
-            const token = { and_block: [s.addOr([])] }
-            s.data.push(token)
-            s.repeatError = false
-            s.showCloseButton = true
-        }
-
-        function getTokenBoxes() {
-            return s.data.filter((box) => box.and_block)
-        }
-
-        s.showCloseButton = getTokenBoxes().length > 1
-
-        s.scrollToStart = false
-        s.addStructToken = function (start = true, idx = -1, within) {
-            within = within ? within : Object.keys(settings.corpusListing.getCommonWithins())[0]
-            // TODO this is duplicated since s.tagTypes are not available in this scope
-            const token = { struct: within, start: true }
-            if (idx != -1) {
-                s.data.splice(idx, 0, token)
-            } else if (start) {
-                s.scrollToStart = true
-                s.data.unshift(token)
-            } else {
-                s.data.push(token)
-            }
-        }
-
-        s.removeToken = function (i) {
-            const tokenBoxes = getTokenBoxes()
-            s.showCloseButton = tokenBoxes.length > 2
-            if (!(tokenBoxes.length > 1)) {
-                return
-            }
-            s.data.splice(i, 1)
-            let repeatError = true
-            for (let token of s.data) {
-                if (!token.repeat || token.repeat[0] > 0) {
-                    repeatError = false
-                    break
-                }
-            }
-            s.repeatError = repeatError
-        }
-
-        s.removeTag = function (i) {
-            s.data.splice(i, 1)
-        }
-
-        s.toggleRepeat = function (token) {
-            if (!token.repeat) {
-                token.repeat = [1, 1]
-                s.repeatError = false
-            } else {
-                s.repeatError = false
-                delete token.repeat
-            }
-        }
-
-        s.toggleStart = (idx) => {
-            s.addStructToken(false, idx, "sentence")
-        }
-        s.toggleEnd = (idx) => {
-            s.addStructToken(false, idx + 1, "sentence")
-        }
-
-        s.repeatChange = function (repeat_idx, token_idx) {
-            const token = s.data[token_idx]
-
-            if (token.repeat[repeat_idx] === null) {
-                return
-            }
-
-            if (token.repeat[repeat_idx] === -1) {
-                token.repeat[repeat_idx] = 0
-            } else if (token.repeat[repeat_idx] < 0) {
-                token.repeat[repeat_idx] = 1
-            } else if (token.repeat[repeat_idx] > 100) {
-                token.repeat[repeat_idx] = 100
-            }
-
-            if (token.repeat[1] < token.repeat[0] && repeat_idx === 0) {
-                token.repeat[1] = token.repeat[0]
-            }
-
-            if (token.repeat[1] < token.repeat[0] && repeat_idx === 1) {
-                token.repeat[0] = token.repeat[1]
-            }
-
-            if (token.repeat[1] < 1) {
-                token.repeat[1] = 1
-            }
-
-            if (token.repeat[0] > 0) {
-                s.repeatError = false
-            }
-        }
-
-        s.repeatBlur = function (repeat_idx, token_idx) {
-            let token = s.data[token_idx]
-
-            if (token.repeat[repeat_idx] === null) {
-                token.repeat[repeat_idx] = token.repeat[repeat_idx === 0 ? 1 : 0]
-            }
-
-            let repeatError = true
-            for (token of s.data) {
-                if (!token.repeat || token.repeat[0] > 0) {
-                    repeatError = false
-                    break
-                }
-            }
-
-            s.repeatError = repeatError
-        }
-    },
 }))
 
 korpApp.directive("tabPreloader", () => ({
@@ -681,7 +444,7 @@ korpApp.directive("timeInterval", () => ({
             show-weeks="true" starting-day="1"></div>
 
         <div class="time">
-            <i class="fa fa-3x fa-clock-o"></i><div uib-timepicker class="timepicker" ng-model="timeModel"
+            <i class="fa-solid fa-3x fa-clock-o"></i><div uib-timepicker class="timepicker" ng-model="timeModel"
                 hour-step="1" minute-step="1" show-meridian="false"></div>
         </div>
 </div>\
@@ -725,7 +488,7 @@ korpApp.directive("reduceSelect", ($timeout) => ({
         <div class="reduce-dropdown-button-text">
           <span>{{ "reduce_text" | loc:lang }}:</span>
           <span>
-            {{keyItems[selected[0]].label | loc:lang}}
+            {{keyItems[selected[0]].label | locObj:lang}}
           </span>
           <span ng-if="selected.length > 1">
             (+{{ numberAttributes - 1 }})
@@ -737,7 +500,7 @@ korpApp.directive("reduceSelect", ($timeout) => ({
         <ul>
           <li ng-click="toggleSelected('word', $event)" ng-class="keyItems['word'].selected ? 'selected':''" class="attribute">
             <input type="checkbox" class="reduce-check" ng-checked="keyItems['word'].selected">
-            <span class="reduce-label">{{keyItems['word'].label | loc:lang }}</span>
+            <span class="reduce-label">{{keyItems['word'].label | locObj:lang }}</span>
             <span ng-class="keyItems['word'].insensitive ? 'selected':''"
                   class="insensitive-toggle"
                   ng-click="toggleWordInsensitive($event)"><b>Aa</b></span>
@@ -747,14 +510,14 @@ korpApp.directive("reduceSelect", ($timeout) => ({
               ng-click="toggleSelected(item.value, $event)"
               ng-class="item.selected ? 'selected':''" class="attribute">
             <input type="checkbox" class="reduce-check" ng-checked="item.selected">
-            <span class="reduce-label">{{item.label | loc:lang }}</span>
+            <span class="reduce-label">{{item.label | locObj:lang }}</span>
           </li>
           <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:lang}}</b>
           <li ng-repeat="item in items | filter:{ group: 'sentence_attr' }"
               ng-click="toggleSelected(item.value, $event)"
               ng-class="item.selected ? 'selected':''" class="attribute">
             <input type="checkbox" class="reduce-check" ng-checked="item.selected">
-            <span class="reduce-label">{{item.label | loc:lang }}</span>
+            <span class="reduce-label">{{item.label | locObj:lang }}</span>
           </li>
         </ul>
       </div>
@@ -768,8 +531,8 @@ korpApp.directive("reduceSelect", ($timeout) => ({
                     scope.keyItems[item.value] = item
                 }
 
-                scope.hasWordAttrs = _.filter(scope.keyItems, { group: "word_attr" }).length > 0
-                scope.hasStructAttrs = _.filter(scope.keyItems, { group: "sentence_attr" }).length > 0
+                scope.hasWordAttrs = _.find(scope.keyItems, { group: "word_attr" }) != undefined
+                scope.hasStructAttrs = _.find(scope.keyItems, { group: "sentence_attr" }) != undefined
 
                 let somethingSelected = false
                 if (scope.selected && scope.selected.length > 0) {
@@ -854,13 +617,13 @@ angular.module("template/datepicker/day.html", []).run(($templateCache) =>
 <table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}"
   <thead>
     <tr>
-      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa fa-chevron-left"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></button></th>
       <th colspan="{{5 + showWeeks}}">
         <button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm" ng-click="toggleMode()" tabindex="-1" style="width:100%;">
             <strong>{{title}}</strong>
         </button>
       </th>
-      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa fa-chevron-right"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa-solid fa-chevron-right"></i></button></th>
     </tr>
     <tr>
       <th ng-show="showWeeks" class="text-center"></th>
@@ -889,9 +652,9 @@ angular.module("template/datepicker/month.html", []).run(($templateCache) =>
 <table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}">
   <thead>
     <tr>
-      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa fa-chevron-left"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></button></th>
       <th><button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm" ng-click="toggleMode()" tabindex="-1" style="width:100%;"><strong>{{title}}</strong></button></th>
-      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa fa-chevron-right"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa-solid fa-chevron-right"></i></button></th>
     </tr>
   </thead>
   <tbody>
@@ -913,9 +676,9 @@ angular.module("template/datepicker/year.html", []).run(($templateCache) =>
 <table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}">
   <thead>
     <tr>
-      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa fa-chevron-left"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></button></th>
       <th colspan="3"><button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm" ng-click="toggleMode()" tabindex="-1" style="width:100%;"><strong>{{title}}</strong></button></th>
-      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa fa-chevron-right"></i></button></th>
+      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa-solid fa-chevron-right"></i></button></th>
     </tr>
   </thead>
   <tbody>
@@ -937,9 +700,9 @@ angular.module("template/timepicker/timepicker.html", []).run(($templateCache) =
 <table>
    <tbody>
        <tr class="text-center">
-           <td><a ng-click="incrementHours()" class="btn btn-link"><span class="fa fa-chevron-up"></span></a></td>
+           <td><a ng-click="incrementHours()" class="btn btn-link"><span class="fa-solid fa-chevron-up"></span></a></td>
            <td>&nbsp;</td>
-           <td><a ng-click="incrementMinutes()" class="btn btn-link"><span class="fa fa-chevron-up"></span></a></td>
+           <td><a ng-click="incrementMinutes()" class="btn btn-link"><span class="fa-solid fa-chevron-up"></span></a></td>
            <td ng-show="showMeridian"></td>
        </tr>
        <tr>
@@ -953,9 +716,9 @@ angular.module("template/timepicker/timepicker.html", []).run(($templateCache) =
            <td ng-show="showMeridian"><button type="button" class="btn btn-default text-center" ng-click="toggleMeridian()">{{meridian}}</button></td>
        </tr>
        <tr class="text-center">
-           <td><a ng-click="decrementHours()" class="btn btn-link"><span class="fa fa-chevron-down"></span></a></td>
+           <td><a ng-click="decrementHours()" class="btn btn-link"><span class="fa-solid fa-chevron-down"></span></a></td>
            <td>&nbsp;</td>
-           <td><a ng-click="decrementMinutes()" class="btn btn-link"><span class="fa fa-chevron-down"></span></a></td>
+           <td><a ng-click="decrementMinutes()" class="btn btn-link"><span class="fa-solid fa-chevron-down"></span></a></td>
            <td ng-show="showMeridian"></td>
        </tr>
    </tbody>

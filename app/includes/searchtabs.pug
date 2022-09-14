@@ -1,10 +1,11 @@
 div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
   uib-tabset.tabbable.search_tabs(tab-hash='search_tab', active="activeTab")
     uib-tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
-      include simple
-    uib-tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]")
-      .extended(ng-include='extendedTmpl')
-
+      simple-search(word-pic="word_pic")
+    uib-tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]").extended
+      div
+        extended-standard(ng-if="!parallelMode")
+        extended-parallel(ng-if="parallelMode")
     uib-tab(heading='{{"advanced" | loc:lang}}', ng-if="visibleTabs[2]", 
         advanced-search)
       #advanced
@@ -19,13 +20,13 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
           pre {{extendedCQP}}
         
         .well.well-small
-          | {{'cqp_query' | loc}}:
+          | {{'cqp_query' | loc:lang}}:
           .pull-right
             i.fa.fa-file-o
             a(href='http://cwb.sourceforge.net/files/CQP_Tutorial.pdf', target='_blank') 
               | {{'cqp_docs' | loc:lang}}
           textarea#cqp_string(ng-model="cqp")
-        search-submit(pos='right')
+        search-submit(pos='right' on-search="onSearch()" on-search-save="onSearchSave(name)")
 
     uib-tab(ng-if="visibleTabs[3]", compare-search-ctrl)
       uib-tab-heading
@@ -48,7 +49,7 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
           select(ng-model='reduce', 
              ng-options='obj | \
              mapper:valfilter as obj.label | \
-             loc group by obj.group | \
+             locObj:lang group by obj.group | \
              loc for obj in currentAttrs')
 
           //- reduce-select(reduce-items="currentAttrs", reduce-selected="selectedAttrs", reduce-lang="lang", style='width: 150px')
@@ -68,6 +69,6 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
     div(ng-show="settings.statistics !== false")
       input#show_stats(type="checkbox", ng-model="showStatistics", ng-disabled="inOrder")
       label(for="show_stats") {{'show_stats' | loc:lang}}
-    div(ng-show="settings.wordpicture !== false")
+    div(ng-show="settings['word_picture'] !== false")
       input#word_pic(type="checkbox", ng-model="word_pic")
       label(for="word_pic") {{'show_word_pic' | loc:lang}}

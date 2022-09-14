@@ -35,6 +35,12 @@ onmessage = function (e) {
         }
     }
 
+    /**
+     * This function creates a string representation of
+     * the row, to group values by. Using "simplifyValue"
+     * it removes suffixes `:<rank/numbering>` from
+     * attributes that are in `group_statistics` in config.yml
+     */
     const simplifyHitString = function (item: RowsEntity): string {
         var newFields: any[] = []
         map(item.value, function (values, field) {

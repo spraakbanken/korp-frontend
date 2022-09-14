@@ -8,7 +8,7 @@ angular.module("newsdesk", []).directive("newsDesk", ($window, $document, $rootE
                 <div ng-if="shouldUseThis" class="newsdesk-opener" 
                      ng-click="togglePopover($event)" 
                      ng-class="{'newsdesk-new-news': numNewNews != 0, 'newsdesk-no-new-news' : numNewNews == 0}">
-                    <i class="fa fa-bell newsdesk-bell"></i>
+                    <i class="fa-solid fa-bell newsdesk-bell"></i>
                     <div class="newsdesk-arrow-box">
                         <span>{{numNewNews}}</span>
                     </div>&nbsp;
@@ -31,7 +31,7 @@ angular.module("newsdesk", []).directive("newsDesk", ($window, $document, $rootE
     scope: { header: "=", storage: "=" },
     link(scope, elem, attr) {
         const s = scope
-        s.shouldUseThis = settings.newsDeskUrl != null
+        s.shouldUseThis = settings["news_desk_url"] != null
 
         if (!s.shouldUseThis) {
             return
@@ -50,7 +50,7 @@ angular.module("newsdesk", []).directive("newsDesk", ($window, $document, $rootE
             }
             $.ajax({
                 type: "GET",
-                url: settings.newsDeskUrl,
+                url: settings["news_desk_url"],
                 async: false,
                 jsonpCallback: "newsdata",
                 contentType: "application/json",
@@ -76,8 +76,6 @@ angular.module("newsdesk", []).directive("newsDesk", ($window, $document, $rootE
             })
         }
 
-        s.currentLang = $location.search().lang || "sv"
-
         s.numNewNews = 0
         initData()
 
@@ -85,7 +83,7 @@ angular.module("newsdesk", []).directive("newsDesk", ($window, $document, $rootE
             if (s.isPopoverVisible) {
                 s.popHide()
             } else {
-                s.currentLang = $location.search().lang || "sv"
+                s.currentLang = { eng: "en", swe: "sv" }[$location.search().lang || settings["default_language"]]
                 s.popShow()
                 s.numNewNews = 0
             }

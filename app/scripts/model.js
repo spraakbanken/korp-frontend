@@ -16,7 +16,7 @@ model.normalizeStatsData = function (data) {
 }
 
 model.getAuthorizationHeader = function () {
-    if (typeof authenticationProxy !== "undefined" && !$.isEmptyObject(authenticationProxy.loginObj)) {
+    if (!$.isEmptyObject(authenticationProxy.loginObj)) {
         return { Authorization: `Basic ${authenticationProxy.loginObj.auth}` }
     } else {
         return {}
@@ -51,16 +51,29 @@ class BaseProxy {
         this.total = null
     }
 
-    // Return a URL with baseUrl base and data encoded as URL parameters
+    // Return a URL with baseUrl base and data encoded as URL parameters.
+    // If baseUrl already contains URL parameters, return it as is.
+    //
+    // Note that this function is now largely redundant: when called
+    // for GET URLs already containing URL parameters, it does
+    // nothing, whereas the GET URL returned by it for a POST URL
+    // typically results in an "URI too long" error, if
+    // settings.backendURLMaxLength is configured appropriately for
+    // the Web server on which the backend runs.
     makeUrlWithParams(baseUrl, data) {
-        return (baseUrl +
-                "?" +
-                _.toPairs(data)
+        if (baseUrl.indexOf("?") != -1) {
+            return baseUrl
+        }
+        return (
+            baseUrl +
+            "?" +
+            _.toPairs(data)
                 .map(function ([key, val]) {
                     val = encodeURIComponent(val)
                     return key + "=" + val
                 })
-                .join("&"))
+                .join("&")
+        )
     }
 
     abort() {
@@ -186,7 +199,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         }
 
         const data = {
-            default_context: settings.defaultOverviewContext,
+            default_context: settings["default_overview_context"],
             show: [],
             show_struct: [],
         }
@@ -202,8 +215,8 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
                 data.show.push(key)
             }
 
-            if (corpus.structAttributes != null) {
-                $.each(corpus.structAttributes, function (key, val) {
+            if (corpus["struct_attributes"] != null) {
+                $.each(corpus["struct_attributes"], function (key, val) {
                     if ($.inArray(key, data.show_struct) === -1) {
                         return data.show_struct.push(key)
                     }
@@ -218,7 +231,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         data.show = _.uniq(["sentence"].concat(data.show)).join(",")
         data.show_struct = _.uniq(data.show_struct).join(",")
 
-        if (locationSearch()["in_order"] === false) {
+        if (locationSearch()["in_order"] != null) {
             data.in_order = false
         }
 
@@ -226,25 +239,27 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         this.prevParams = data
         const command = data.command || "query"
         delete data.command
-        const def = $.ajax(util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/" + command,
-            data,
-            beforeSend(req, settings) {
-                self.prevRequest = settings
-                self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, data)
-            },
+        const def = $.ajax(
+            util.httpConfAddMethod({
+                url: settings["korp_backend_url"] + "/" + command,
+                data,
+                beforeSend(req, settings) {
+                    self.prevRequest = settings
+                    self.addAuthorizationHeader(req)
+                    self.prevUrl = self.makeUrlWithParams(this.url, data)
+                },
 
-            success(data, status, jqxhr) {
-                self.queryData = data.query_data
-                self.cleanup()
-                if (data.incremental === false || !this.foundKwic) {
-                    return kwicCallback(data)
-                }
-            },
+                success(data, status, jqxhr) {
+                    self.queryData = data.query_data
+                    self.cleanup()
+                    if (data.incremental === false || !this.foundKwic) {
+                        return kwicCallback(data)
+                    }
+                },
 
-            progress: progressObj.progress,
-        }))
+                progress: progressObj.progress,
+            })
+        )
         this.pendingRequests.push(def)
         return def
     }
@@ -262,29 +277,31 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
             max: 1000,
         }
         this.prevParams = params
-        const def = $.ajax(util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/relations",
-            data: params,
+        const def = $.ajax(
+            util.httpConfAddMethod({
+                url: settings["korp_backend_url"] + "/relations",
+                data: params,
 
-            success() {
-                self.prevRequest = params
-                self.cleanup()
-            },
+                success() {
+                    self.prevRequest = params
+                    self.cleanup()
+                },
 
-            progress(data, e) {
-                const progressObj = self.calcProgress(e)
-                if (progressObj == null) {
-                    return
-                }
-                return callback(progressObj)
-            },
+                progress(data, e) {
+                    const progressObj = self.calcProgress(e)
+                    if (progressObj == null) {
+                        return
+                    }
+                    return callback(progressObj)
+                },
 
-            beforeSend(req, settings) {
-                self.prevRequest = settings
-                self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, params)
-            },
-        }))
+                beforeSend(req, settings) {
+                    self.prevRequest = settings
+                    self.addAuthorizationHeader(req)
+                    self.prevUrl = self.makeUrlWithParams(this.url, params)
+                },
+            })
+        )
         this.pendingRequests.push(def)
         return def
     }
@@ -302,7 +319,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const groupBy = []
         const groupByStruct = []
         for (let reduceVal of reduceVals) {
-            if (structAttrs[reduceVal] && (structAttrs[reduceVal].groupBy || "group_by_struct") == "group_by_struct") {
+            if (structAttrs[reduceVal] && (structAttrs[reduceVal]["group_by"] || "group_by_struct") == "group_by_struct") {
                 groupByStruct.push(reduceVal)
             } else {
                 groupBy.push(reduceVal)
@@ -332,7 +349,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
 
         const reduceValLabels = _.map(reduceVals, function (reduceVal) {
             if (reduceVal === "word") {
-                return "word"
+                return settings["word_label"]
             }
             const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
                 reduceVal
@@ -366,41 +383,43 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         this.prevParams = data
         const def = $.Deferred()
         this.pendingRequests.push(
-            $.ajax(util.httpConfAddMethod({
-                url: settings.korpBackendURL + "/count",
-                data,
-                beforeSend(req, settings) {
-                    self.prevRequest = settings
-                    self.addAuthorizationHeader(req)
-                    self.prevUrl = self.makeUrlWithParams(this.url, data)
-                },
+            $.ajax(
+                util.httpConfAddMethod({
+                    url: settings["korp_backend_url"] + "/count",
+                    data,
+                    beforeSend(req, settings) {
+                        self.prevRequest = settings
+                        self.addAuthorizationHeader(req)
+                        self.prevUrl = self.makeUrlWithParams(this.url, data)
+                    },
 
-                error(jqXHR, textStatus, errorThrown) {
-                    c.log(`gettings stats error, status: ${textStatus}`)
-                    return def.reject(textStatus, errorThrown)
-                },
+                    error(jqXHR, textStatus, errorThrown) {
+                        c.log(`gettings stats error, status: ${textStatus}`)
+                        return def.reject(textStatus, errorThrown)
+                    },
 
-                progress(data, e) {
-                    const progressObj = self.calcProgress(e)
-                    if (progressObj == null) {
-                        return
-                    }
-                    if (typeof callback === "function") {
-                        callback(progressObj)
-                    }
-                },
+                    progress(data, e) {
+                        const progressObj = self.calcProgress(e)
+                        if (progressObj == null) {
+                            return
+                        }
+                        if (typeof callback === "function") {
+                            callback(progressObj)
+                        }
+                    },
 
-                success: (data) => {
-                    self.cleanup()
-                    if (data.ERROR != null) {
-                        c.log("gettings stats failed with error", data.ERROR)
-                        def.reject(data)
-                        return
-                    }
-                    model.normalizeStatsData(data)
-                    statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
-                },
-            }))
+                    success: (data) => {
+                        self.cleanup()
+                        if (data.ERROR != null) {
+                            c.log("gettings stats failed with error", data.ERROR)
+                            def.reject(data)
+                            return
+                        }
+                        model.normalizeStatsData(data)
+                        statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
+                    },
+                })
+            )
         )
 
         return def.promise()
@@ -422,7 +441,7 @@ model.AuthenticationProxy = class AuthenticationProxy {
         }
         const dfd = $.Deferred()
         $.ajax({
-            url: settings.korpBackendURL + "/authenticate",
+            url: settings["korp_backend_url"] + "/authenticate",
             type: "GET",
             beforeSend(req) {
                 return req.setRequestHeader("Authorization", `Basic ${auth}`)
@@ -463,13 +482,15 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
     makeRequest() {
         const dfd = $.Deferred()
 
-        const xhr = $.ajax(util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/timespan",
-            data: {
-                granularity: "y",
-                corpus: settings.corpusListing.stringifyAll(),
-            },
-        }))
+        const xhr = $.ajax(
+            util.httpConfAddMethod({
+                url: settings["korp_backend_url"] + "/timespan",
+                data: {
+                    granularity: "y",
+                    corpus: settings.corpusListing.stringifyAll(),
+                },
+            })
+        )
 
         xhr.done((data) => {
             if (data.ERROR) {
@@ -577,33 +598,34 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
         this.prevParams = params
         const def = $.Deferred()
 
-        $.ajax(util.httpConfAddMethod({
-            url: settings.korpBackendURL + "/count_time",
-            dataType: "json",
-            data: params,
+        $.ajax(
+            util.httpConfAddMethod({
+                url: settings["korp_backend_url"] + "/count_time",
+                dataType: "json",
+                data: params,
 
-            beforeSend: (req, settings) => {
-                this.prevRequest = settings
-                this.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, params)
-            },
+                beforeSend: (req, settings) => {
+                    this.prevRequest = settings
+                    this.addAuthorizationHeader(req)
+                },
 
-            progress: (data, e) => {
-                const progressObj = this.calcProgress(e)
-                if (progressObj == null) {
-                    return
-                }
-                def.notify(progressObj)
-            },
+                progress: (data, e) => {
+                    const progressObj = this.calcProgress(e)
+                    if (progressObj == null) {
+                        return
+                    }
+                    def.notify(progressObj)
+                },
 
-            error(jqXHR, textStatus, errorThrown) {
-                def.reject(textStatus)
-            },
-            success(data) {
-                def.resolve(data)
-                self.cleanup()
-            },
-        }))
+                error(jqXHR, textStatus, errorThrown) {
+                    def.reject(textStatus)
+                },
+                success(data) {
+                    def.resolve(data)
+                    self.cleanup()
+                },
+            })
+        )
 
         return def.promise()
     }
