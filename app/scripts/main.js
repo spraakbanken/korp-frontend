@@ -216,6 +216,7 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
     setTimeout(() => window.onHashChange(null, true), 0)
 
     // this is to hide all ugly markup before Angular is fully loaded
+    $("#main").css("display", "block")
     $("#main").animate({ opacity: 1 }, function () {
         $(this).css("opacity", "")
     })
