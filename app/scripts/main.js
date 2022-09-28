@@ -88,14 +88,16 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
                     for (const attrType of ["attributes", "struct_attributes", "custom_attributes"]) {
                         const attrList = corpus[attrType]
                         const attrs = {}
+                        const newAttrList = []
                         for (const attrIdx in attrList) {
                             const attr = modeSettings["attributes"][attrType][attrList[attrIdx]]
                             attrs[attr.name] = attr
+                            newAttrList.push(attr.name)
                         }
                         // attrs is an object of attribute settings
                         corpus[attrType] = attrs
                         // attrList is an ordered list of the preferred order of attributes
-                        corpus[`_${attrType}_order`] = attrList
+                        corpus[`_${attrType}_order`] = newAttrList
                     }
                     // TODO use the new format instead
                     // remake the new format of witihns and contex to the old
