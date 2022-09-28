@@ -114,6 +114,10 @@
     "interval": "interval",
     "matches": "regexp",
     "matches_not": "not regexp",
+    "is_possible": "is possible",
+    "is_not_possible": "is not possible",
+    "most_likely": "most likely",
+    "not_most_likely": "not most likely",
 
     "repeat": "Repeat",
     "from": "from",
