@@ -217,7 +217,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             corpus: corpus,
             cqp: `[_.sentence_id = "${sentenceId}" & lbound(sentence)]`,
             context: corpus + ":1 text",
-            show: show.join(",") + ",sentence_id",
+            show: show.join(",") + ",sentence_id,_head,_tail",
             show_struct: showStruct.join(","),
             within: corpus + ":text",
             start: 0,

@@ -40,7 +40,7 @@ korpApp.directive("textReader", function ($compile) {
     return {
         scope: false,
         link: function (scope, element) {
-            const componentName = scope.corpusObj["reading_mode"].component
+            const componentName = scope.corpusObj["reading_mode"].component || "standardReadingMode"
 
             const kebabize = (str) => {
                 return str

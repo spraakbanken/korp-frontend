@@ -221,6 +221,9 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
                         return data.show_struct.push(key)
                     }
                 })
+                if (corpus["reading_mode"]) {
+                    data.show_struct.push("sentence_id")
+                }
             }
         }
 
