@@ -205,7 +205,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
         )
     },
 
-    getDataForReadingMode(inputCorpus, sentenceId) {
+    getDataForReadingMode(inputCorpus, textId) {
         const corpus = inputCorpus.toUpperCase()
         const corpusSettings = settings.corpusListing.get(inputCorpus)
 
@@ -215,8 +215,12 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
 
         const params = {
             corpus: corpus,
-            cqp: `[_.sentence_id = "${sentenceId}" & lbound(sentence)]`,
+            cqp: `[_.text__id = "${textId}" & lbound(text)]`,
             context: corpus + ":1 text",
+            // _head and _tail are needed for all corpora, so that Korp will know what whitespace to use
+            // For sentence_id, we should find a more general solution, but here is one Språkbanken
+            // corpus who needs sentence_id in order to map the selected sentence in the KWIC to
+            // a sentence in the reading mode text.
             show: show.join(",") + ",sentence_id,_head,_tail",
             show_struct: showStruct.join(","),
             within: corpus + ":text",

@@ -649,15 +649,12 @@ based on the name of the attribute. Will be used in sidebar, statistics, extende
 Enable the standard reading mode by using this setting on a corpus:
 
 ```
-reading_mode:
-  component: standardReadingMode
+reading_mode: true
 ```
 
 When clicking on a word in the KWIC a link will be added to the sidebar. Clicking this link opens a new tab where the entire text is shown.
 
-Prerequisites are:
-- The structural attribute `sentence_id`.
-- `_head` and `_tail` attribute on each token. These attributes contain the whitespace before and after a token.
+The corpus must have the structural attribute `text__id`, which should be a unique ID in the corpus. `_head` and `_tail` are also needed and should contain the whitespace before and after the token. The frontend will assume that any corpus with `reading_mode: true` will have these attributes.
 
 It is possible to write a custom reading component. See [this file](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js) for an example. See [Components](#components) for documentation on custom components.
 
