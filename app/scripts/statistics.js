@@ -76,7 +76,7 @@ const createStatisticsService = function () {
         $.each(corporaKeys.sort(), (i, corpus) => {
             return columns.push({
                 id: corpus,
-                name: settings.corpora[corpus.toLowerCase()].title,
+                translation: settings.corpora[corpus.toLowerCase()].title,
                 field: corpus + "_value",
                 sortable: true,
                 formatter: valueFormatter,
