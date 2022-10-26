@@ -10,7 +10,7 @@ export const loginBoxComponent = {
     <div id="login_popup" class="modal-body">
         <div ng-if="$ctrl.loginNeededFor.length" style="font-size: 0.75em">
             <span style="display: inline">{{'login_needed_for_corpora' | loc:lang}}</span>
-            <span style="display: inline; margin-right: 2px;" ng-repeat="corpus in $ctrl.loginNeededFor">{{corpus.title}}</span>
+            <span style="display: inline; margin-right: 2px;" ng-repeat="corpus in $ctrl.loginNeededFor">{{corpus.title | locObj:$root.lang}}</span>
         </div>
         <form ng-submit="$ctrl.loginSubmit()">
             <label for="usrname">{{'username' | loc:lang}}</label>
