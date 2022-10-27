@@ -296,10 +296,6 @@ export class CorpusListing {
         return [from, to]
     }
 
-    getTitle(corpus) {
-        return util.getLocaleStringObject(this.struct[corpus].title)
-    }
-
     getTitleObj(corpus) {
         return this.struct[corpus].title
     }

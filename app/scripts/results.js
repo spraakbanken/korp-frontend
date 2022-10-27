@@ -972,7 +972,7 @@ view.StatsResults = class StatsResults extends BaseResults {
         }
 
         header.push(util.getLocaleString("stats_total"))
-        header = header.concat(_.map(cl.corpora, "title"))
+        header = header.concat(_.map(cl.corpora, (corpus) => util.getLocaleStringObject(corpus["title"])))
 
         const fmt = (what) => what.toString()
 
@@ -1267,7 +1267,7 @@ view.StatsResults = class StatsResults extends BaseResults {
                         dataItems.push({
                             value: freq,
                             caption:
-                                settings.corpora[corpus.toLowerCase()]["title"] +
+                                util.getLocaleStringObject(settings.corpora[corpus.toLowerCase()]["title"]) +
                                 ": " +
                                 util.formatDecimalString(freq.toString()),
                             shape_id: rowId,
