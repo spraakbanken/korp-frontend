@@ -38,7 +38,10 @@ korpApp.controller("SearchCtrl", [
         }
 
         const setupWatchStats = function () {
-            $scope.showStatistics = true
+            $scope.showStatistics = settings["statistics_search_default"]
+            if (!$scope.showStatistics) {
+                $location.search("hide_stats", true)
+            }
 
             $scope.$watch(
                 () => $location.search().hide_stats,
@@ -166,7 +169,6 @@ korpApp.controller("SearchCtrl", [
         setupKwicSort()
     },
 ])
-
 
 korpApp.directive("advancedSearch", () => ({
     controller($scope, compareSearches, $location, $timeout) {

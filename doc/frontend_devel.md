@@ -128,6 +128,7 @@ settings that affect the frontend.
 - __map_enabled__ - Boolean. See [Map](#map) 
 - __news_desk_url__ - See [News widget](#news-widget)
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
+- __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```
     swe: ord
