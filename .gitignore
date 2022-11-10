@@ -8,3 +8,4 @@ release
 run_config.json
 *~
 .python-version
+*.pem
