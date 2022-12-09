@@ -1,6 +1,6 @@
 /** @format */
-import { BaseResults } from "../base_results.js"
-import * as trendUtil from "./trend_util"
+import { BaseResults } from "../results/base_results.js"
+import * as trendUtil from "../trend_diagram/trend_util"
 
 const granularities = {
     year: "y",
@@ -22,7 +22,7 @@ const zoomLevelToFormat = {
 
 const validZoomLevels = Object.keys(granularities)
 
-view.GraphResults = class GraphResults extends BaseResults {
+export class GraphResults extends BaseResults {
     constructor(tabSelector, resultSelector, scope) {
         super(tabSelector, resultSelector, scope)
 

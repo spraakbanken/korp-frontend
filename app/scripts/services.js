@@ -285,7 +285,7 @@ korpApp.factory("searches", [
                 if (settings["word_picture"] === false) {
                     return
                 }
-                return lemgramResults.makeRequest(word, type)
+                return wordPictureResults.makeRequest(word, type)
             }
 
             getInfoData() {

@@ -40,7 +40,7 @@
         "unregescape": true,
         "model": true,
         "kwicResults": true,
-        "lemgramResults": true,
+        "wordPictureResults": true,
         "statsResults": true,
         "view": true,
         "CSV": true,

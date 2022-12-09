@@ -23,8 +23,8 @@ $(document).keyup(function (event) {
         if (kwicResults) {
             kwicResults.abort()
         }
-        if ("lemgramResults" in window) {
-            lemgramResults.abort()
+        if ("wordPictureResults" in window) {
+            wordPictureResults.abort()
         }
         if (statsResults) {
             statsResults.abort()

@@ -10,7 +10,7 @@ warning(ng-if="word_pic && aborted && !loading")
   | {{'search_aborted' | loc:lang}}
 warning(ng-if="word_pic && no_hits")
   | {{"no_stats_results" | loc:lang}}
-div(constr='LemgramResults', constr-name='lemgramResults')
+div(constr='WordPictureResults', constr-name='wordPictureResults')
   #wordPicSettings(ng-show="word_pic && instance.hasData")
     div()
       input#wordclassChk(ng-model="showWordClass", type='checkbox')

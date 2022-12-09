@@ -231,8 +231,8 @@ export const simpleSearchComponent = {
                     $rootScope.simpleCQP = CQP.expandOperators(ctrl.getCQP())
                     ctrl.doSearch()
                 } else {
-                    if ("lemgramResults" in window) {
-                        lemgramResults.resetView()
+                    if ("wordPictureResults" in window) {
+                        wordPictureResults.resetView()
                     }
                 }
             })
@@ -282,8 +282,8 @@ export const simpleSearchComponent = {
                         const value = search.type === "lemgram" ? unregescape(search.val) : search.val
                         return searches.lemgramSearch(value, search.type)
                     } else {
-                        if ("lemgramResults" in window) {
-                            lemgramResults.resetView()
+                        if ("wordPictureResults" in window) {
+                            wordPictureResults.resetView()
                         }
                     }
                 }
