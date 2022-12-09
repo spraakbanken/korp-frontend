@@ -26,17 +26,27 @@ html
           #columns.flex(ng-class='{sidebar_visible : sidebarVisible}')
             #left-column.overflow-auto.flex-grow
               uib-tabset.tabbable.result_tabs(tab-hash='result_tab', active="activeTab")
-                uib-tab(disabled="!instance.hasData",
-                    select="instance.onentry()",
-                    deselect="instance.onexit()",
+                uib-tab(disabled="!hasData",
                     kwic-ctrl,
                     index=0
                 )
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading}")
                     | KWIC
-                    tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
-                  .results-kwic(ng-class="{reading_mode : reading_mode, loading: loading}", constr='KWICResults', constr-name='kwicResults')
-                    include includes/kwicresult
+                    tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
+                  .results-kwic(ng-class="{reading_mode : reading_mode, loading: loading}")
+                    kwic(
+                      aborted="aborted", 
+                      loading="loading",
+                      hits-display="hits_display",
+                      hits-picture-data="hitsPictureData",
+                      hits="hits",
+                      kwic="kwic",
+                      context-kwic="contextKwic",
+                      is-reading="is_reading",
+                      page-event="pageChange",
+                      context-change-event="toggleReading",
+                      hits-per-page="hitsPerPage"
+                    )
                 uib-tab(stats-result-ctrl,
                     ng-if="_settings.statistics != false"
                     select="instance.onentry()"

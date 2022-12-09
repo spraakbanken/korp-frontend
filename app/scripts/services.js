@@ -272,12 +272,10 @@ korpApp.factory("searches", [
                 })
             }
 
-            kwicSearch(cqp, isPaging) {
-                kwicResults.makeRequest(cqp, isPaging)
-                if (!isPaging) {
-                    if (window.statsResults) {
-                        statsResults.makeRequest(cqp)
-                    }
+            kwicSearch(cqp) {
+                $rootScope.$emit("kwic_make_request", cqp)
+                if (window.statsResults) {
+                    statsResults.makeRequest(cqp)
                 }
             }
 
@@ -368,64 +366,65 @@ korpApp.factory("searches", [
             return cqpExpr
         }
 
-        let oldValues = []
-        $rootScope.$watchGroup([() => $location.search().search, "_loc.search().page"], (newValues) => {
-            let pageChanged, searchChanged
-            const searchExpr = $location.search().search
-            if (!searchExpr) {
-                return
-            }
-            let [type, ...value] = (searchExpr && searchExpr.split("|")) || []
-            value = value.join("|")
+        let oldValue = null
+        $rootScope.$watch(
+            () => $location.search().search,
+            (newValue) => {
+                let searchChanged
+                const searchExpr = $location.search().search
+                if (!searchExpr) {
+                    return
+                }
+                let [type, ...value] = (searchExpr && searchExpr.split("|")) || []
+                value = value.join("|")
 
-            if (_.isEqual(newValues, oldValues)) {
-                pageChanged = false
-                searchChanged = true
-            } else {
-                pageChanged = newValues[1] !== (oldValues[1] || 0)
-                searchChanged = newValues[0] !== oldValues[0]
-            }
-
-            const pageOnly = pageChanged && !searchChanged
-
-            if (value) {
-                let historyValue
-                if (type === "lemgram") {
-                    historyValue = unregescape(value)
+                if (_.isEqual(newValue, oldValue)) {
+                    searchChanged = true
                 } else {
-                    historyValue = value
+                    searchChanged = newValue !== oldValue
                 }
-                updateSearchHistory(historyValue, $location.absUrl())
+
+                if (value) {
+                    let historyValue
+                    if (type === "lemgram") {
+                        historyValue = unregescape(value)
+                    } else {
+                        historyValue = value
+                    }
+                    updateSearchHistory(historyValue, $location.absUrl())
+                }
+                $q.all([searches.infoDef, searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(
+                    function () {
+                        let extendedSearch = false
+                        if (type === "cqp") {
+                            extendedSearch = true
+                            if (!value) {
+                                value = $location.search().cqp
+                            }
+                        }
+                        if (["cqp", "word", "lemgram"].includes(type)) {
+                            searches.activeSearch = {
+                                type,
+                                val: value,
+                            }
+                        } else if (type === "saldo") {
+                            extendedSearch.setOneToken("saldo", value)
+                        }
+
+                        if (type === "cqp") {
+                            if (extendedSearch && $rootScope.globalFilter) {
+                                value = CQP.stringify(
+                                    CQP.mergeCqpExprs(CQP.parse(value || "[]"), $rootScope.globalFilter)
+                                )
+                            }
+                            searches.kwicSearch(value)
+                        }
+
+                        oldValue = newValue
+                    }
+                )
             }
-            $q.all([searches.infoDef, searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(function () {
-                let extendedSearch = false
-                if (type === "cqp") {
-                    extendedSearch = true
-                    if (!value) {
-                        value = $location.search().cqp
-                    }
-                }
-                if (["cqp", "word", "lemgram"].includes(type)) {
-                    searches.activeSearch = {
-                        type,
-                        val: value,
-                        page: newValues[1],
-                        pageOnly,
-                    }
-                } else if (type === "saldo") {
-                    extendedSearch.setOneToken("saldo", value)
-                }
-
-                if (type === "cqp") {
-                    if (extendedSearch && $rootScope.globalFilter) {
-                        value = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(value || "[]"), $rootScope.globalFilter))
-                    }
-                    searches.kwicSearch(value, pageOnly)
-                }
-
-                oldValues = [].concat(newValues)
-            })
-        })
+        )
 
         return searches
     },

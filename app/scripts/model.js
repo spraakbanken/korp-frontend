@@ -177,7 +177,10 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         const self = this
         this.foundKwic = false
         super.makeRequest()
-        kwicCallback = kwicCallback || $.proxy(kwicResults.renderResult, kwicResults)
+        if (!kwicCallback) {
+            console.error("No callback for query result")
+            return
+        }
         self.progress = 0
         var progressObj = {
             progress(data, e) {
@@ -204,7 +207,17 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
             show_struct: [],
         }
 
-        $.extend(data, kwicResults.getPageInterval(page), options.ajaxParams)
+        function getPageInterval(page) {
+            const hpp = locationSearch().hpp
+            const itemsPerPage = Number(hpp) || settings["hits_per_page_default"]
+            page = Number(page)
+            const output = {}
+            output.start = (page || 0) * itemsPerPage
+            output.end = output.start + itemsPerPage - 1
+            return output
+        }
+
+        $.extend(data, getPageInterval(page), options.ajaxParams)
         for (let corpus of settings.corpusListing.selected) {
             for (let key in corpus.within) {
                 // val = corpus.within[key]

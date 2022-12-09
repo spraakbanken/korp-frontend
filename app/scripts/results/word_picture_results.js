@@ -2,8 +2,8 @@
 import { BaseResults } from "./base_results.js"
 
 export class WordPictureResults extends BaseResults {
-    constructor(tabSelector, resultSelector, scope) {
-        super(tabSelector, resultSelector, scope)
+    constructor(selector, scope) {
+        super(selector, scope)
         this.s = scope
         this.tabindex = 3
         this.proxy = new model.LemgramProxy()

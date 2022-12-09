@@ -2,12 +2,11 @@
 const korpFailImg = require("../img/korp_fail.svg")
 
 export class BaseResults {
-    constructor(resultSelector, tabSelector, scope) {
+    constructor(selector, scope) {
         this.s = scope
-        this.$tab = $(tabSelector)
-        this.$result = $(resultSelector)
 
-        this.$result.add(this.$tab).addClass("not_loading")
+        this.$result = $(selector)
+        this.$result.add($(selector)).addClass("not_loading")
 
         this.injector = angular.injector(["ng"])
 
@@ -18,7 +17,6 @@ export class BaseResults {
     onProgress(progressObj) {
         return safeApply(this.s, () => {
             this.s.$parent.progress = Math.round(progressObj["stats"])
-            this.s.hits_display = util.prettyNumbers(progressObj["total_results"])
         })
     }
 

@@ -1,10 +1,21 @@
-uib-tab(example-ctrl, ng-repeat='kwicTab in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
-  uib-tab-heading(ng-class="{not_loading: progress == 100, loading : !instance.hasData}")
+uib-tab(example-ctrl, ng-repeat='kwicTab in kwicTabs')
+  uib-tab-heading(ng-class="{not_loading: progress == 100, loading : !hasData}")
     | KWIC
-
     span(ng-click='closeTab($index, $event)', tab-spinner)
-  .results-kwic(ng-class="{reading_mode : exampleReadingMode, not_loading: !loading, loading : loading}", constr='ExampleResults' )
-    include kwicresult
+  .results-kwic(ng-class="{reading_mode : exampleReadingMode, not_loading: !loading, loading : loading}")
+    kwic(
+      aborted="aborted", 
+      loading="loading",
+      hits-display="hits_display",
+      hits-picture-data="hitsPictureData",
+      hits="hits",
+      kwic="kwic",
+      context-kwic="contextKwic",
+      is-reading="is_reading",
+      page-event="pageChange",
+      context-change-event="toggleReading",
+      hits-per-page="hitsPerPage"
+    )
 uib-tab(ng-repeat='data in graphTabs', graph-ctrl)
   uib-tab-heading(ng-class="{not_loading: progress > 99}")
     | {{'graph' | loc:lang}}

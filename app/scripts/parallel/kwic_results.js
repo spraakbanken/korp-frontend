@@ -1,6 +1,16 @@
 /** @format */
 
-view.KWICResults = class ParallelKwicResults extends view.KWICResults {
+import { KWICResults } from "../results/kwic_results.js"
+
+export class ParallelKwicResults extends KWICResults {
+    getActiveData() {
+        if (this.isReadingMode()) {
+            return this.s.contextKwic
+        } else {
+            return this.s.kwic
+        }
+    }
+
     selectWord(word, scope, sentence) {
         // c.log ("word, scope, sentence", word, scope, sentence)
         super.selectWord(word, scope, sentence)

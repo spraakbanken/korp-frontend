@@ -23,8 +23,8 @@ const zoomLevelToFormat = {
 const validZoomLevels = Object.keys(granularities)
 
 export class GraphResults extends BaseResults {
-    constructor(tabSelector, resultSelector, scope) {
-        super(tabSelector, resultSelector, scope)
+    constructor(selector, scope) {
+        super(selector, scope)
 
         this.zoom = "year"
         this.proxy = new model.GraphProxy()

@@ -20,6 +20,7 @@ import { extendedCQPTermComponent } from "./components/extended/cqp_term"
 import { extendedTokenComponent } from "./components/extended/token"
 import { extendedStructTokenComponent } from "./components/extended/struct_token"
 import { extendedCQPValueComponent } from "./components/extended/cqp_value"
+import { kwicComponent } from "./components/kwic"
 import * as treeUtil from "./components/corpus_chooser/util"
 import statemachine from "@/statemachine"
 
@@ -78,6 +79,7 @@ korpApp.component("extendedCqpTerm", extendedCQPTermComponent)
 korpApp.component("extendedToken", extendedTokenComponent)
 korpApp.component("extendedStructToken", extendedStructTokenComponent)
 korpApp.component("extendedCqpValue", extendedCQPValueComponent)
+korpApp.component("kwic", kwicComponent)
 
 // load all custom components
 let customComponents = {}

@@ -772,37 +772,13 @@ table {
   margin-top: 15px;
 }
 
-.loading .reading_btn {
-  display: none;
-}
-
-.pager-wrapper:empty ~ .reading_btn {
-  margin-left: 0;
-}
-
 .reading_btn {
-  .show_reading {
-    line-height: 1.1;
-  }
+  line-height: 1.1;
   margin-left: 1em;
-  display: none;
+  display: inline;
   vertical-align: middle;
   margin-top: 3px;
   white-space : nowrap;
-}
-
-.not_loading .reading_btn {
-  display: inline;
-}
-
-.reading_mode .reading_btn.show_reading,
-.reading_btn.hide_reading,
-.zero_results .reading_btn {
-  display: none;
-}
-
-.reading_mode .reading_btn.hide_reading {
-  display: inline;
 }
 
 .results_table.reading {
@@ -1728,48 +1704,44 @@ warning ~ * {
 }
 
 
+.controls_n {
+  margin-right: 5px;
+  min-width: 125px;
+}
+.pager-wrapper {
+  display: inline;
+}
 
-.results-kwic {
-  .controls_n {
-    margin-right: 5px;
-    min-width: 125px;
-  }
-  .pager-wrapper {
-    display: inline;
-  }
-
-  .result_controls {
-    position: relative;
-    > * {
-      display: inline-block;
-      vertical-align: bottom;
-    }
-  }
-
-  .result_controls, .pager-wrapper {
-    margin-bottom: 8px;
-  }
-  
-  .page_input {
+.result_controls {
+  position: relative;
+  > * {
     display: inline-block;
-    vertical-align: middle;
-    margin-left : 1em;
-    span {
-      color : #666;
-    }
-    input {
-      width : 45px;
-      text-align: center;
-    }
-  }
-  &.loading {
-    .controls_n {
-      color: darkgrey;
-      font-style: italic;
-    }
+    vertical-align: bottom;
   }
 }
 
+.result_controls, .pager-wrapper {
+  margin-bottom: 8px;
+}
+
+.page_input {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left : 1em;
+  span {
+    color : #666;
+  }
+  input {
+    width : 45px;
+    text-align: center;
+  }
+}
+.results-kwic .loading {
+  .controls_n {
+    color: darkgrey;
+    font-style: italic;
+  }
+}
 
 .arg_value {
   .from, .to {

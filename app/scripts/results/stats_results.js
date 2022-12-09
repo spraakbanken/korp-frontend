@@ -3,8 +3,8 @@ import statisticsFormatting from "../../config/statistics_config.js"
 import { BaseResults } from "./base_results.js"
 
 export class StatsResults extends BaseResults {
-    constructor(resultSelector, tabSelector, scope) {
-        super(resultSelector, tabSelector, scope)
+    constructor(selector, scope) {
+        super(selector, scope)
         const self = this
         this.tabindex = 2
         this.gridData = null
