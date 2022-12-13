@@ -1,5 +1,5 @@
 /** @format */
-import statisticsFormatting from "../../../config/statistics_config.js"
+import statisticsFormatting from "../../config/statistics_config.js"
 
 const korpApp = angular.module("korpApp")
 

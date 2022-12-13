@@ -1,6 +1,4 @@
 /** @format */
-import statemachine from "../../statemachine"
-
 const korpApp = angular.module("korpApp")
 
 export class KwicCtrl {
