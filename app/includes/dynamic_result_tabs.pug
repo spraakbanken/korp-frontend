@@ -21,39 +21,7 @@ uib-tab(ng-repeat='data in graphTabs', graph-ctrl)
     | {{'graph' | loc:lang}}
     .tab_progress(style="width:{{progress || 0}}%", ng-show="loading")
     span(ng-click='closeTab($index, $event)', tab-spinner)
-  div.graph_tab
-    .graph_header
-      .controls()
-        .btn-group.form_switch
-          label.btn.btn-default.btn-sm(ng-model="$parent.mode", uib-btn-radio="'line'") {{'line' | loc:lang}}
-          label.btn.btn-default.btn-sm(ng-model="$parent.mode", uib-btn-radio="'bar'") {{'bar' | loc:lang}}
-          label.btn.btn-default.btn-sm(ng-model="$parent.mode", uib-btn-radio="'table'") {{'table' | loc:lang}}
-
-        .non_time_div
-          span(rel='localize[non_time_before]')
-          span.non_time
-          span(rel='localize[non_time_after]')
-      .legend(ng-style='{visibility : !loading && isGraph() ? "visible" : "hidden"}')
-        .line(ng-show="hasEmptyIntervals", uib-tooltip="{{'graph_material_tooltip' | loc:lang}}")
-          a.action
-          .swatch(style="background-color: #999")
-          span.label 
-            em {{'graph_material' | loc:lang}} 
-      div(style='clear: both;')
-    .chart_container
-      .preloader(ng-class="{loading: loading}")
-        i.fa.fa-spinner.fa-spin.fa-5x
-      .chart(ng-show="isGraph()")
-    .preview
-    .time_table(style="margin-top:20px", ng-show="isTable()")
-    .exportTimeStatsSection(ng-show="isTable()")
-      select.timeKindOfData
-        option(value='relative') {{'statstable_relfigures' | loc:lang}}
-        option(value='absolute') {{'statstable_absfigures' | loc:lang}}
-      select.timeKindOfFormat
-        option(value='TSV') {{'statstable_exp_tsv' | loc:lang}}
-        option(value='CSV') {{'statstable_exp_csv' | loc:lang}}
-      a.export.btn.btn-default.btn-sm {{'statstable_export' | loc:lang}}
+  trend-diagram(data="data")
 uib-tab(ng-repeat='promise in compareTabs', compare-ctrl)
   uib-tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc:lang}}
