@@ -39,7 +39,6 @@
         "regescape": true,
         "unregescape": true,
         "model": true,
-        "wordPictureResults": true,
         "view": true,
         "CSV": true,
         "locationSearch": true,

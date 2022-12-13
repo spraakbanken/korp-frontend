@@ -1,11 +1,9 @@
 /** @format */
-import { WordPictureResults } from "./results/word_picture_results.js"
 import { GraphResults } from "./results/trend_results.js"
 
 const korpFailImg = require("../img/korp_fail.svg")
 
 const resultClasses = {}
-resultClasses.WordPictureResults = WordPictureResults
 resultClasses.GraphResults = GraphResults
 
 angular.module("korpApp").directive("constr", ($window) => ({

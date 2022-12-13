@@ -280,10 +280,7 @@ korpApp.factory("searches", [
             }
 
             lemgramSearch(word, type) {
-                if (settings["word_picture"] === false) {
-                    return
-                }
-                return wordPictureResults.makeRequest(word, type)
+                $rootScope.$emit("word_picture_make_request", word, type)
             }
 
             getInfoData() {

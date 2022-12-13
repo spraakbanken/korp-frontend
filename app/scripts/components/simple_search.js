@@ -230,10 +230,6 @@ export const simpleSearchComponent = {
                     }
                     $rootScope.simpleCQP = CQP.expandOperators(ctrl.getCQP())
                     ctrl.doSearch()
-                } else {
-                    if ("wordPictureResults" in window) {
-                        wordPictureResults.resetView()
-                    }
                 }
             })
 
@@ -279,11 +275,7 @@ export const simpleSearchComponent = {
 
                 if (ctrl.wordPic && (search.type === "lemgram" || !search.val.includes(" "))) {
                     const value = search.type === "lemgram" ? unregescape(search.val) : search.val
-                    return searches.lemgramSearch(value, search.type)
-                } else {
-                    if ("wordPictureResults" in window) {
-                        wordPictureResults.resetView()
-                    }
+                    searches.lemgramSearch(value, search.type)
                 }
             }
         },

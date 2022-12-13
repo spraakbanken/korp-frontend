@@ -123,12 +123,10 @@ html
                           | {{'statstable_export' | loc:lang}}
                 uib-tab(ng-if="_settings['word_picture'] != false",
                     wordpic-ctrl,
-                    select="instance.onentry()",
-                    deselect="instance.onexit()",
                     index=3)
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading}")
                     | {{'word_picture' | loc:lang}}
-                    tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
+                    tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
                   div()
                     include includes/word_picture
 
