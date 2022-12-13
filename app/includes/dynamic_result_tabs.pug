@@ -21,7 +21,7 @@ uib-tab(ng-repeat='data in graphTabs', graph-ctrl)
     | {{'graph' | loc:lang}}
     .tab_progress(style="width:{{progress || 0}}%", ng-show="loading")
     span(ng-click='closeTab($index, $event)', tab-spinner)
-  div.graph_tab(constr='GraphResults')
+  div.graph_tab
     .graph_header
       .controls()
         .btn-group.form_switch
