@@ -11,6 +11,7 @@ class ExampleCtrl extends KwicCtrl {
         super(scope, utils, $location, $rootScope, $timeout)
         const s = this.scope
 
+        // TODO s.$parent.$index?
         s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$parent.$index
 
         s.newDynamicTab()
@@ -60,6 +61,7 @@ class ExampleCtrl extends KwicCtrl {
         }
 
         s.makeRequest = () => {
+            console.log("example kwic make request")
             const items_per_page = parseInt(locationSearch().hpp || settings["hits_per_page_default"])
             const opts = s.kwicTab.queryParams
 
@@ -67,7 +69,7 @@ class ExampleCtrl extends KwicCtrl {
             // example tab cannot handle incremental = true
             opts.ajaxParams.incremental = false
 
-            opts.ajaxParams.start = s.$parent.page * items_per_page
+            opts.ajaxParams.start = s.page * items_per_page
             opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1
 
             let avoidContext, preferredContext
@@ -107,7 +109,7 @@ class ExampleCtrl extends KwicCtrl {
             )
 
             def.fail(() => {
-                $timeout(() => s.loading = false)
+                $timeout(() => (s.loading = false))
             })
 
             return def
@@ -119,7 +121,7 @@ class ExampleCtrl extends KwicCtrl {
 
         if (s.kwicTab.queryParams) {
             s.makeRequest().then(() => {
-                s.onentry()
+                // s.onentry()
             })
         }
     }
