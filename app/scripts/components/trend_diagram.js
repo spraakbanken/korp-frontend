@@ -58,7 +58,7 @@ export const trendDiagramComponent = {
                 <div class="preloader" ng-class="{loading: $ctrl.loading}">
                     <i class="fa fa-spinner fa-spin fa-5x"></i>
                 </div>
-                <div class="chart" ng-show="$ctrl.isGraph()"></div>
+                <div class="chart" ng-show="$ctrl.isGraph()" ng-click="$ctrl.graphClickHandler()"></div>
             </div>
             <div class="preview"></div>
             <div class="time_table" style="margin-top:20px" ng-show="$ctrl.isTable()"></div>
@@ -91,9 +91,6 @@ export const trendDiagramComponent = {
                 const [from, to] = $ctrl.data.corpusListing.getMomentInterval()
                 checkZoomLevel(from, to, true)
             }
-
-            // TODO angular click handler
-            // $(".chart", $ctrl.$result).on("click", $ctrl.graphClickHandler)
 
             $ctrl.isGraph = () => ["line", "bar"].includes($ctrl.mode)
             $ctrl.isTable = () => $ctrl.mode === "table"
