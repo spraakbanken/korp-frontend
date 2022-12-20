@@ -99,6 +99,7 @@ export const trendDiagramComponent = {
                 const target = $(".chart", $ctrl.$result)
                 const time = $(".detail .x_label > span", target).data("val")
                 let cqp = $(".detail .item.active > span", target).data("cqp")
+                console.log("click", time, cqp)
                 const zoom = $ctrl.zoom
 
                 if (!cqp) {
