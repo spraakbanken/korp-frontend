@@ -99,7 +99,6 @@ export const trendDiagramComponent = {
                 const target = $(".chart", $ctrl.$result)
                 const time = $(".detail .x_label > span", target).data("val")
                 let cqp = $(".detail .item.active > span", target).data("cqp")
-                console.log("click", time, cqp)
                 const zoom = $ctrl.zoom
 
                 if (!cqp) {
@@ -643,7 +642,7 @@ export const trendDiagramComponent = {
                     // formatter is only called once per per "hover detail creation"
                     graph,
                     xFormatter(x) {
-                        return `<span>${trendUtil.formatUnixDate($ctrl.zoom, x)}</span>`
+                        return `<span data-val='${x}'>${trendUtil.formatUnixDate($ctrl.zoom, x)}</span>`
                     },
 
                     yFormatter(y) {
