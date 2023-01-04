@@ -33,37 +33,39 @@ view.GraphResults = class GraphResults extends BaseResults {
 
         this.checkZoomLevel(from, to, true)
 
-        $(".chart", this.$result).on("click", this.graphClickHandler)
+        $(".chart", this.$result).on("click", this.graphClickHandler(this))
     }
 
-    graphClickHandler() {
-        const target = $(".chart", this.$result)
-        const time = $(".detail .x_label > span", target).data("val")
-        let cqp = $(".detail .item.active > span", target).data("cqp")
-        const zoom = this.zoom
+    graphClickHandler(that) {
+        return () => {
+            const target = $(".chart", that.$result)
+            const time = $(".detail .x_label > span", target).data("val")
+            let cqp = $(".detail .item.active > span", target).data("cqp")
+            const zoom = that.zoom
 
-        if (!cqp) {
-            return
+            if (!cqp) {
+                return
+            }
+
+            const nTokens = that.s.data.cqp.split("]").length - 2
+            const timecqp = trendUtil.getTimeCQP(time, zoom, nTokens, validZoomLevels.indexOf(zoom) < 3)
+            const decodedCQP = decodeURIComponent(cqp)
+            const opts = {
+                ajaxParams: {
+                    start: 0,
+                    end: 24,
+                    corpus: that.s.data.corpusListing.stringifySelected(),
+                    cqp: that.s.data.cqp,
+                    cqp2: CQP.expandOperators(decodedCQP),
+                    cqp3: timecqp,
+                    expand_prequeries: false,
+                },
+            }
+
+            safeApply(that.s.$root, () => {
+                that.s.$root.kwicTabs.push({ queryParams: opts })
+            })
         }
-
-        const nTokens = this.s.data.cqp.split("]").length - 2
-        const timecqp = trendUtil.getTimeCQP(time, zoom, nTokens, validZoomLevels.indexOf(zoom) < 3)
-        const decodedCQP = decodeURIComponent(cqp)
-        const opts = {
-            ajaxParams: {
-                start: 0,
-                end: 24,
-                corpus: this.s.data.corpusListing.stringifySelected(),
-                cqp: this.s.data.cqp,
-                cqp2: CQP.expandOperators(decodedCQP),
-                cqp3: timecqp,
-                expand_prequeries: false,
-            },
-        }
-
-        safeApply(this.s.$root, () => {
-            this.s.$root.kwicTabs.push({ queryParams: opts })
-        })
     }
 
     drawPreloader(from, to) {
@@ -609,7 +611,7 @@ view.GraphResults = class GraphResults extends BaseResults {
             // formatter is only called once per per "hover detail creation"
             graph,
             xFormatter(x) {
-                return `<span>${trendUtil.formatUnixDate(that.zoom, x)}</span>`
+                return `<span data-val='${x}'>${trendUtil.formatUnixDate(that.zoom, x)}</span>`
             },
 
             yFormatter(y) {
