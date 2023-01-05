@@ -118,7 +118,7 @@ html
                         select#kindOfFormat
                           option(value='csv', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
                           option(value='tsv', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
-                        a#generateExportButton
+                        a#generateExportButton(ng-click="generateExport()")
                           button.btn.btn-sm.btn-default {{'statstable_gen_export' | loc:lang}}
                         a#exportButton.btn.btn-sm.btn-default
                           | {{'statstable_export' | loc:lang}}

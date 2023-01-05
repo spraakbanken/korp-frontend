@@ -80,16 +80,14 @@ korpApp.directive("statsResultCtrl", () => ({
         })
 
         $("#exportButton").hide()
-        $("#generateExportButton")
-            .unbind("click")
-            .click(() => {
-                hideGenerateExport()
-                s.updateExportBlob()
-            })
+        s.generateExport = () => {
+            hideGenerateExport()
+            updateExportBlob()
+        }
 
         s.onGraphClick = () => {
             let cqp, rowIx
-            if(!s.graphEnabled) {
+            if (!s.graphEnabled) {
                 return
             }
 
@@ -425,7 +423,7 @@ korpApp.directive("statsResultCtrl", () => ({
             const blob = new Blob([csvstr], { type: `text/${selType}` })
             const csvUrl = URL.createObjectURL(blob)
 
-            $("#exportButton", this.$result).attr({
+            $("#exportButton").attr({
                 download: `export.${selType}`,
                 href: csvUrl,
             })
