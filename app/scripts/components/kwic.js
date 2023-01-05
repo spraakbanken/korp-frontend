@@ -152,11 +152,13 @@ export const kwicComponent = {
         pageEvent: "<",
         contextChangeEvent: "<",
         hitsPerPage: "<",
+        prevParams: "<",
     },
     controller: [
         "$location",
         "$element",
-        function ($location, $element) {
+        "kwicDownload",
+        function ($location, $element, kwicDownload) {
             let $ctrl = this
 
             const selectionManager = new util.SelectionManager()
@@ -227,24 +229,22 @@ export const kwicComponent = {
                 ],
                 selected: "",
                 init: (value, hitsDisplay) => {
-                    if (s.download.blobName) {
-                        URL.revokeObjectURL(s.download.blobName)
+                    if ($ctrl.download.blobName) {
+                        URL.revokeObjectURL($ctrl.download.blobName)
                     }
                     if (value === "") {
                         return
                     }
-                    const requestData = s.instance.getProxy().prevParams
-                    const [fileName, blobName] = this.kwicDownload.makeDownload(
+                    const [fileName, blobName] = kwicDownload.makeDownload(
                         ...value.split("/"),
-                        s.kwic.length > 0 ? s.kwic : s.contextKwic,
-                        requestData,
+                        $ctrl.kwic.length > 0 ? $ctrl.kwic : $ctrl.contextKwic,
+                        $ctrl.prevParams,
                         hitsDisplay
                     )
-                    s.download.fileName = fileName
-                    s.download.blobName = blobName
-                    s.download.selected = ""
-                    // TODO this needs to be fixed
-                    // this.timeout(() => s.instance.$result[0].getElementsByClassName("kwicDownloadLink")[0].click(), 0)
+                    $ctrl.download.fileName = fileName
+                    $ctrl.download.blobName = blobName
+                    $ctrl.download.selected = ""
+                    $element[0].getElementsByClassName("kwicDownloadLink")[0].click()
                 },
             }
 

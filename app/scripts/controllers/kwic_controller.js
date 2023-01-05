@@ -66,7 +66,7 @@ export class KwicCtrl {
                 })
             }
         }
-        
+
         s.reading_mode = $location.search().reading_mode
         s.toggleReading = function () {
             s.reading_mode = !s.reading_mode
