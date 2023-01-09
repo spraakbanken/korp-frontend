@@ -28,11 +28,11 @@ export const trendDiagramComponent = {
             <div class="graph_header">
                 <div class="controls">
                     <div class="btn-group form_switch">
-                        <label class="btn btn-default btn-sm" ng-model="$parent.mode" uib-btn-radio="'line'"
+                        <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'line'"
                             >{{'line' | loc:lang}}</label
-                        ><label class="btn btn-default btn-sm" ng-model="$parent.mode" uib-btn-radio="'bar'"
+                        ><label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'bar'"
                             >{{'bar' | loc:lang}}</label
-                        ><label class="btn btn-default btn-sm" ng-model="$parent.mode" uib-btn-radio="'table'"
+                        ><label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'table'"
                             >{{'table' | loc:lang}}</label
                         >
                     </div>
@@ -599,7 +599,7 @@ export const trendDiagramComponent = {
                     }, 200)
                 )
 
-                $(".form_switch", $ctrl.$result).click((event) => {
+                $(".form_switch", $ctrl.$result).click(() => {
                     const val = $ctrl.mode
                     for (let cls of $ctrl.$result.attr("class").split(" ")) {
                         if (cls.match(/^form-/)) {
