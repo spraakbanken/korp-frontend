@@ -1736,11 +1736,10 @@ warning ~ * {
     text-align: center;
   }
 }
-.results-kwic .loading {
-  .controls_n {
-    color: darkgrey;
-    font-style: italic;
-  }
+
+.results-kwic.loading .controls_n {
+  color: darkgrey;
+  font-style: italic;
 }
 
 .arg_value {

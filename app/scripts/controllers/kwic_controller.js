@@ -277,9 +277,11 @@ export class KwicCtrl {
             return opts
         }
 
-        s.onProgress = (progressObj) => {
+        s.onProgress = (progressObj, isPaging) => {
             s.progress = Math.round(progressObj["stats"])
-            s.hits_display = util.prettyNumbers(progressObj["total_results"])
+            if (!isPaging) {
+                s.hits_display = util.prettyNumbers(progressObj["total_results"])
+            }
         }
 
         s.makeRequest = (isPaging) => {
@@ -294,7 +296,7 @@ export class KwicCtrl {
                 params,
                 s.page,
                 (progressObj) => {
-                    $timeout(() => s.onProgress(progressObj))
+                    $timeout(() => s.onProgress(progressObj, isPaging))
                 },
                 (data) => {
                     $timeout(() => s.renderResult(data))
@@ -303,7 +305,7 @@ export class KwicCtrl {
             req.done((data) => {
                 $timeout(() => {
                     s.loading = false
-                    s.renderCompleteResult(data)
+                    s.renderCompleteResult(data, isPaging)
                 })
             })
 
@@ -328,15 +330,17 @@ export class KwicCtrl {
             return s.reading_mode
         }
 
-        s.renderCompleteResult = (data) => {
+        s.renderCompleteResult = (data, isPaging) => {
             s.loading = false
-            s.hits = data.hits
-            s.hits_display = util.prettyNumbers(data.hits)
-            if (!data.hits) {
-                c.log("no kwic results")
-                s.hitsPictureData = null
-            } else {
-                s.renderHitsPicture(data)
+            if (!isPaging) {
+                s.hits = data.hits
+                s.hits_display = util.prettyNumbers(data.hits)
+                if (!data.hits) {
+                    c.log("no kwic results")
+                    s.hitsPictureData = null
+                } else {
+                    s.renderHitsPicture(data)
+                }
             }
         }
 
