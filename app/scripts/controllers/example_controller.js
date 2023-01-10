@@ -11,6 +11,11 @@ class ExampleCtrl extends KwicCtrl {
         super(scope, utils, $location, $rootScope, $timeout)
         const s = this.scope
 
+        // ugly, but because the kwic-tab-scope is parent of this scope it needs to be done
+        s.hits = null
+        s.hits_display = null
+        s.page = 0
+
         // TODO s.$parent.$index?
         s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$parent.$index
 
