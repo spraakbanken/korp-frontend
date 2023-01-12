@@ -170,17 +170,16 @@ export const kwicComponent = {
             $ctrl.$onChanges = (changeObj) => {
                 if ("kwic" in changeObj) {
                     if (!$ctrl.isReading) {
-                        if (currentMode === "parallel") {
-                            centerScrollbarParallel()
-                        } else {
-                            centerScrollbar()
-                        }
+                        centerScrollbar()
                     }
                 }
                 // TODO backend download, make sure it still works, maybe rewrite to angular
                 // if (settings["enable_backend_kwic_download"]) {
                 //     util.setDownloadLinks(this.proxy.prevRequest, data)
                 // }
+                if (currentMode === "parallel" && !$ctrl.isReading) {
+                    centerScrollbarParallel()
+                }
             }
 
             $ctrl.onKwicClick = (event) => {
@@ -274,8 +273,6 @@ export const kwicComponent = {
 
             function onWordClick(event) {
                 event.stopPropagation()
-                // if (this.isActive()) {
-                // }
                 const scope = $(event.target).scope()
                 const obj = scope.wd
                 const sent = scope.sentence
@@ -288,7 +285,11 @@ export const kwicComponent = {
                     tokens: sent.tokens,
                     inReadingMode: false,
                 })
-                selectWord(word, scope, sent)
+                if (currentMode === "parallel") {
+                    selectWordParallel(word, scope, sent)
+                } else {
+                    selectWord(word, scope)
+                }
             }
 
             function selectWord(word, scope) {
@@ -309,6 +310,80 @@ export const kwicComponent = {
                     aux = $(paragraph.get(sent_start + i - 1))
                 }
                 selectionManager.select(word, aux)
+            }
+
+            function selectWordParallel(word, scope, sentence) {
+                selectWord(word, scope)
+                clearLinks()
+                var obj = scope.wd
+                if (!obj.linkref) return
+                var corpus = settings.corpora[sentence.corpus]
+
+                function findRef(ref, sentence) {
+                    var out = null
+                    _.each(sentence, function (word) {
+                        if (word.linkref == ref.toString()) {
+                            out = word
+                            return false
+                        }
+                    })
+                    return out
+                }
+
+                if (sentence.isLinked) {
+                    // a secondary language was clicked
+                    var sent_index = scope.$parent.$index
+                    var data = getActiveData()
+                    var mainSent = null
+                    while (data[sent_index]) {
+                        var sent = data[sent_index]
+                        if (!sent.isLinked) {
+                            mainSent = sent
+                            break
+                        }
+                        sent_index--
+                    }
+
+                    var linkNum = Number(obj.linkref)
+                    var lang = corpus.id.split("-")[1]
+
+                    _.each(mainSent.tokens, function (token) {
+                        var refs = _.map(_.compact(token["wordlink-" + lang].split("|")), Number)
+                        if (_.includes(refs, linkNum)) {
+                            token._link_selected = true
+                            $ctrl.parallelSelected.push(token)
+                        }
+                    })
+                } else {
+                    var links = _.pickBy(obj, function (val, key) {
+                        return _.startsWith(key, "wordlink")
+                    })
+                    _.each(links, function (val, key) {
+                        _.each(_.compact(val.split("|")), function (num) {
+                            var lang = key.split("-")[1]
+                            var mainCorpus = corpus.id.split("-")[0]
+
+                            var link = findRef(num, sentence.aligned[mainCorpus + "-" + lang])
+                            link._link_selected = true
+                            $ctrl.parallelSelected.push(link)
+                        })
+                    })
+                }
+            }
+
+            function getActiveData() {
+                if ($ctrl.readingMode) {
+                    return $ctrl.contextKwic
+                } else {
+                    return $ctrl.kwic
+                }
+            }
+
+            function clearLinks() {
+                _.each($ctrl.parallelSelected, function (word) {
+                    delete word._link_selected
+                })
+                $ctrl.parallelSelected = []
             }
 
             function centerScrollbar() {
@@ -460,7 +535,7 @@ export const kwicComponent = {
 
             function selectDown() {
                 let nextMatch
-                const current = selectionManager.selected
+                const current = getActiveData
                 if (!$ctrl.readingMode) {
                     nextMatch = getWordAt(
                         current.offset().left + current.width() / 2,
