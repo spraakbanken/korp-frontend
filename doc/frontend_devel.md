@@ -226,6 +226,14 @@ Using Karp, Korp can autocomplete senses and lemgrams. To disable add the follow
 autocomplete: false
 ```
 
+## Sidebar
+
+When clicking on a word in the KWIC (or text in the reading mode), a sidebar appears with information about the 
+current word. By default, all the attributes listed under `pos_attributes`, `struct_attributes` and `custom_attributes` are shown. Which attributes to show and how they should be displayed are customizable. See [Attribute settings](#attribute-settings).
+
+The order of the attributes arrays determine the order in the sidebar. Custom attributes are 
+added to the end of their respective category.
+
 ## Extended components
 
 The frontend features a number of components that can be used for the attributes in extended search. For example, dropdowns with
@@ -428,7 +436,7 @@ parameters for attributes.
 - **label**: Label to display wherever the attribute is shown.
 - **display_type**: Set to `hidden` to fetch attribute, but never show it in the frontend. 
   See `hide_sidebar`, `hide_statistics`, `hide_extended` and `hide_compare` for more control.
-- **extended_component**: For available components, see [extended components](#extended-componensts). For writing custom components, see [customizing extended search](#customizing-extended-search).
+- **extended_component**: For available components, see [extended components](#extended-components). For writing custom components, see [customizing extended search](#customizing-extended-search).
 - **external_search**: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended%7C%7Cand%7Csense%7Cequals%7C<%= val %>`
 - **group_by**: Set to either `group_by` or `group_by_struct`. Should only be needed for attributes with `is_struct_attr: true`.
   Those attributes are by default sent as `group_by_struct` in the statistics, but can be overridden here.
