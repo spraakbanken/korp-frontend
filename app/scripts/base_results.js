@@ -1,4 +1,6 @@
 /** @format */
+const korpFailImg = require("../img/korp_fail.svg")
+
 export class BaseResults {
     constructor(resultSelector, tabSelector, scope) {
         this.s = scope

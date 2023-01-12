@@ -3,7 +3,6 @@ import statemachine from "@/statemachine"
 import { setDefaultConfigValues } from "./settings"
 import { updateSearchHistory } from "@/history"
 
-const korpFailImg = require("../img/korp_fail.svg")
 const deparam = require("jquery-deparam")
 
 import jStorage from "../lib/jstorage"

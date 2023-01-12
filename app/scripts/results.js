@@ -3,8 +3,6 @@ import statisticsFormatting from "../config/statistics_config.js"
 import statemachine from "./statemachine"
 import { BaseResults } from "./base_results.js"
 
-const korpFailImg = require("../img/korp_fail.svg")
-
 window.view = {}
 
 view.KWICResults = class KWICResults extends BaseResults {
