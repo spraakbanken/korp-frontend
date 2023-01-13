@@ -170,6 +170,8 @@ export const kwicComponent = {
 
             $ctrl.$onChanges = (changeObj) => {
                 if ("kwic" in changeObj) {
+                    $ctrl.page = Number($location.search().page) || 0
+
                     if (!$ctrl.isReading) {
                         centerScrollbar()
                         $element.find(".match").children().first().click()
@@ -203,8 +205,6 @@ export const kwicComponent = {
             }
 
             $ctrl._settings = settings
-
-            $ctrl.page = Number($location.search().page) || 0
 
             $ctrl.pageChange = (page) => {
                 $ctrl.page = page

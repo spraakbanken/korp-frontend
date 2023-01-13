@@ -285,6 +285,10 @@ export class KwicCtrl {
         }
 
         s.makeRequest = (isPaging) => {
+            if (!isPaging) {
+                s.page = Number($location.search().page) || 0
+            }
+
             s.loading = true
             s.aborted = false
 
