@@ -172,6 +172,7 @@ export const kwicComponent = {
                 if ("kwic" in changeObj) {
                     if (!$ctrl.isReading) {
                         centerScrollbar()
+                        $element.find(".match").children().first().click()
                     }
                 }
                 // TODO backend download, make sure it still works, maybe rewrite to angular
