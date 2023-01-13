@@ -157,8 +157,9 @@ export const kwicComponent = {
     controller: [
         "$location",
         "$element",
+        "$timeout",
         "kwicDownload",
-        function ($location, $element, kwicDownload) {
+        function ($location, $element, $timeout, kwicDownload) {
             let $ctrl = this
 
             const selectionManager = new util.SelectionManager()
@@ -243,7 +244,7 @@ export const kwicComponent = {
                     $ctrl.download.fileName = fileName
                     $ctrl.download.blobName = blobName
                     $ctrl.download.selected = ""
-                    $element[0].getElementsByClassName("kwicDownloadLink")[0].click()
+                    $timeout(() => $element[0].getElementsByClassName("kwicDownloadLink")[0].click(), 0)
                 },
             }
 
