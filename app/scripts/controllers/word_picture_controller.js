@@ -68,6 +68,20 @@ korpApp.directive("wordpicCtrl", () => ({
             })
         }
 
+        s.onentry = () => {
+            if (s.hasData) {
+                s.$root.jsonUrl = s.proxy.prevUrl
+            }
+        }
+
+        s.onexit = () => {
+            s.$root.jsonUrl = null
+        }
+
+        s.isActive = () => {
+            return s.tabindex == s.$parent.$parent.tabset.active
+        }
+
         s.renderResult = (data, query) => {
             s.loading = false
             s.progress = 100
@@ -76,6 +90,11 @@ korpApp.directive("wordpicCtrl", () => ({
                 // show dead Korp?
                 return
             }
+
+            if (s.isActive()) {
+                s.$root.jsonUrl = s.proxy.prevUrl
+            }
+
             s.hasData = true
             if (!data.relations) {
                 s.no_hits = true

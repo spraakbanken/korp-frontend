@@ -127,10 +127,19 @@ korpApp.directive("statsResultCtrl", () => ({
             })
 
         s.onentry = () => {
+            s.$root.jsonUrl = s.proxy.prevUrl
             // workaround for bug in slickgrid
             // slickgrid should add this automatically, but doesn't
             $("#myGrid").css("position", "relative")
             $(window).trigger("resize")
+        }
+
+        s.onexit = () => {
+            s.$root.jsonUrl = null
+        }
+
+        s.isActive = () => {
+            return s.tabindex == s.$parent.$parent.tabset.active
         }
 
         s.resetView = () => {

@@ -393,6 +393,14 @@ export class KwicCtrl {
             s.corpusOrder = data.corpus_order
         }
 
+        s.onentry = () => {
+            s.$root.jsonUrl = s.proxy.prevUrl
+        }
+
+        s.onexit = () => {
+            s.$root.jsonUrl = null
+        }
+
         s.isActive = () => {
             return s.tabindex == s.$parent.tabset.active
         }

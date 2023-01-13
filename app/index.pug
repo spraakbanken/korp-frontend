@@ -28,7 +28,9 @@ html
               uib-tabset.tabbable.result_tabs(tab-hash='result_tab', active="activeTab")
                 uib-tab(disabled="!hasData",
                     kwic-ctrl,
-                    index=0
+                    index=0,
+                    select="onentry()",
+                    deselect="onexit()"
                 )
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading}")
                     | KWIC
@@ -52,7 +54,8 @@ html
                     )
                 uib-tab(stats-result-ctrl,
                     ng-if="_settings.statistics != false"
-                    select="onentry()"
+                    select="onentry()",
+                    deselect="onexit()"
                     index=2
                     )
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading}")
@@ -126,7 +129,10 @@ html
                           | {{'statstable_export' | loc:lang}}
                 uib-tab(ng-if="_settings['word_picture'] != false",
                     wordpic-ctrl,
-                    index=3)
+                    index=3,
+                    select="onentry()",
+                    deselect="onexit()"
+                    )
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading}")
                     | {{'word_picture' | loc:lang}}
                     tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
