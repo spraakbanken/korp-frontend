@@ -15,7 +15,9 @@ uib-tab(example-ctrl, ng-repeat='kwicTab in kwicTabs')
       page-event="pageChange",
       context-change-event="toggleReading",
       hits-per-page="hitsPerPage",
-      prev-params="proxy.prevParams"
+      prev-params="proxy.prevParams",
+      prev-request="proxy.prevRequest",
+      corpus-order="corpusOrder"
     )
 uib-tab(ng-repeat='data in graphTabs', graph-ctrl)
   uib-tab-heading(ng-class="{not_loading: progress > 99}")

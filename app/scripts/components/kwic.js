@@ -121,7 +121,7 @@ export const kwicComponent = {
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
             <div id="download-links-container">
-                <select id="download-links" ng-if="_settings['enable_backend_kwic_download']"></select>
+                <select id="download-links" ng-if="$ctrl._settings['enable_backend_kwic_download']"></select>
                 <select
                     id="frontendDownloadLinks"
                     ng-if="$ctrl._settings['enable_frontend_kwic_download']"
@@ -153,6 +153,8 @@ export const kwicComponent = {
         contextChangeEvent: "<",
         hitsPerPage: "<",
         prevParams: "<",
+        prevRequest: "<",
+        corpusOrder: "<",
     },
     controller: [
         "$location",
@@ -177,10 +179,13 @@ export const kwicComponent = {
                         $element.find(".match").children().first().click()
                     }
                 }
-                // TODO backend download, make sure it still works, maybe rewrite to angular
-                // if (settings["enable_backend_kwic_download"]) {
-                //     util.setDownloadLinks(this.proxy.prevRequest, data)
-                // }
+                if (settings["enable_backend_kwic_download"] && $ctrl.hitsDisplay) {
+                    // using hitsDisplay here, since hits is not set until request is complete
+                    util.setDownloadLinks($ctrl.prevRequest, {
+                        kwic: $ctrl.isReading ? $ctrl.contextKwic : $ctrl.kwic,
+                        corpus_order: $ctrl.corpusOrder,
+                    })
+                }
                 if (currentMode === "parallel" && !$ctrl.isReading) {
                     centerScrollbarParallel()
                 }

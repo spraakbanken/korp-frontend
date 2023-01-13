@@ -390,6 +390,7 @@ export class KwicCtrl {
             } else {
                 s.setKwicData(data)
             }
+            s.corpusOrder = data.corpus_order
         }
 
         s.isActive = () => {

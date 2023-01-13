@@ -46,7 +46,9 @@ html
                       page-event="pageChange",
                       context-change-event="toggleReading",
                       hits-per-page="hitsPerPage",
-                      prev-params="proxy.prevParams"
+                      prev-params="proxy.prevParams",
+                      prev-request="proxy.prevRequest",
+                      corpus-order="corpusOrder"
                     )
                 uib-tab(stats-result-ctrl,
                     ng-if="_settings.statistics != false"
