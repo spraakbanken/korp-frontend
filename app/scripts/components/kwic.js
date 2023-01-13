@@ -3,17 +3,6 @@ import statemachine from "../statemachine"
 
 let html = String.raw
 
-// show no hits
-// $element.addClass("zero_results").click()
-// return $element.find(".hits_picture").html("")
-
-// // If an error occurred or the result is otherwise empty,
-// // deselect word and hide the sidebar
-// if (!this.hasData || !data.kwic || !data.kwic.length) {
-//     selectionManager.deselect()
-//     statemachine.send("DESELECT_WORD")
-// }
-
 export const kwicComponent = {
     template: html`
         <div ng-click="$ctrl.onKwicClick($event)">
