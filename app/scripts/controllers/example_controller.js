@@ -15,6 +15,7 @@ class ExampleCtrl extends KwicCtrl {
         s.hits = null
         s.hits_display = null
         s.page = 0
+        s.error = false
 
         // TODO s.$parent.$index?
         s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$parent.$index
@@ -70,7 +71,6 @@ class ExampleCtrl extends KwicCtrl {
             const items_per_page = parseInt(locationSearch().hpp || settings["hits_per_page_default"])
             const opts = s.kwicTab.queryParams
 
-            s.hasData = false
             // example tab cannot handle incremental = true
             opts.ajaxParams.incremental = false
 
@@ -114,7 +114,10 @@ class ExampleCtrl extends KwicCtrl {
             )
 
             def.fail(() => {
-                $timeout(() => (s.loading = false))
+                $timeout(() => {
+                    s.error = true
+                    s.loading = false
+                })
             })
 
             return def

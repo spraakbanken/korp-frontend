@@ -1,8 +1,9 @@
 uib-tab(example-ctrl, ng-repeat='kwicTab in kwicTabs')
-  uib-tab-heading(ng-class="{not_loading: progress == 100, loading : !hasData}")
+  uib-tab-heading(ng-class="{not_loading: progress == 100, loading : loading}")
     | KWIC
     span(ng-click='closeTab($index, $event)', tab-spinner)
-  .results-kwic(ng-class="{reading_mode : exampleReadingMode, not_loading: !loading, loading : loading}")
+  korp-error(ng-if="error")
+  .results-kwic(ng-if="!error", ng-class="{reading_mode : exampleReadingMode, not_loading: !loading, loading : loading}")
     kwic(
       aborted="aborted", 
       loading="loading",

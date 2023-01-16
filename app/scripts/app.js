@@ -22,6 +22,7 @@ import { extendedStructTokenComponent } from "./components/extended/struct_token
 import { extendedCQPValueComponent } from "./components/extended/cqp_value"
 import { kwicComponent } from "./components/kwic"
 import { trendDiagramComponent } from "./components/trend_diagram"
+import { korpErrorComponent } from "./components/korp_error"
 import * as treeUtil from "./components/corpus_chooser/util"
 import statemachine from "@/statemachine"
 
@@ -82,6 +83,7 @@ korpApp.component("extendedStructToken", extendedStructTokenComponent)
 korpApp.component("extendedCqpValue", extendedCQPValueComponent)
 korpApp.component("kwic", kwicComponent)
 korpApp.component("trendDiagram", trendDiagramComponent)
+korpApp.component("korpError", korpErrorComponent)
 
 // load all custom components
 let customComponents = {}

@@ -26,7 +26,7 @@ html
           #columns.flex(ng-class='{sidebar_visible : sidebarVisible}')
             #left-column.overflow-auto.flex-grow
               uib-tabset.tabbable.result_tabs(tab-hash='result_tab', active="activeTab")
-                uib-tab(disabled="!hasData",
+                uib-tab(
                     kwic-ctrl,
                     index=0,
                     select="onentry()",
@@ -36,7 +36,9 @@ html
                     | KWIC
                     tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
                   .results-kwic(ng-class="{reading_mode : reading_mode, loading: loading}")
+                    korp-error(ng-if="error")
                     kwic(
+                      ng-if="!error"
                       aborted="aborted", 
                       loading="loading",
                       hits-display="hits_display",
@@ -61,7 +63,8 @@ html
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading}")
                     | {{'statistics' | loc:lang}}
                     tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
-                  div(ng-click="onStatsClick($event)")
+                  korp-error(ng-if="error")
+                  div(ng-click="onStatsClick($event)" ng-if="!error")
                     div(ng-if="!inOrder && !hasResult")
                       | {{'stats_not_in_order_warn' | loc:lang}}
 
@@ -136,8 +139,9 @@ html
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading}")
                     | {{'word_picture' | loc:lang}}
                     tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
-                  div()
+                  div(ng-if="!error")
                     include includes/word_picture
+                  korp-error(ng-if="error")
 
                 include includes/dynamic_result_tabs
 

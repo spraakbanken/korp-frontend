@@ -314,15 +314,20 @@ export class KwicCtrl {
             })
 
             req.fail((jqXHR, status, errorThrown) => {
-                c.log("kwic fail")
-                if (s.ignoreAbort) {
-                    c.log("stats ignoreabort")
-                    return
-                }
-                if (status === "abort") {
+                $timeout(() => {
+                    c.log("kwic fail")
+                    if (s.ignoreAbort) {
+                        c.log("stats ignoreabort")
+                        return
+                    }
                     s.loading = false
-                    s.aborted = true
-                }
+
+                    if (status === "abort") {
+                        s.aborted = true
+                    } else {
+                        s.error = true
+                    }
+                })
             })
         }
 
@@ -368,11 +373,10 @@ export class KwicCtrl {
 
         s.renderResult = (data) => {
             if (data.ERROR) {
-                s.hasData = false
-                // show dead korp
+                s.error = true
                 return
             } else {
-                s.hasData = true
+                s.error = false
             }
 
             if (!data.kwic) {

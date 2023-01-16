@@ -7,6 +7,7 @@ korpApp.directive("statsResultCtrl", () => ({
     controller($scope, $location, backend, searches, $rootScope, $timeout) {
         const s = $scope
         s.loading = false
+        s.error = false
         s.progress = 0
         s.noRowsError = false
 
@@ -143,7 +144,6 @@ korpApp.directive("statsResultCtrl", () => ({
         }
 
         s.resetView = () => {
-            s.hasData = false
             $("myGrid").empty()
             $("#exportStatsSection").show()
             $("#exportButton").attr({
@@ -152,6 +152,7 @@ korpApp.directive("statsResultCtrl", () => ({
             })
             s.no_hits = false
             s.aborted = false
+            s.error = false
         }
 
         s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["stats"]))
@@ -220,7 +221,7 @@ korpApp.directive("statsResultCtrl", () => ({
             c.error("json fetch error: ", data)
             s.loading = false
             s.resetView()
-            // TODO show dead Korp
+            s.error = true
         }
 
         s.renderResult = (columns, data) => {
@@ -239,7 +240,6 @@ korpApp.directive("statsResultCtrl", () => ({
 
             s.gridData = data
             const resultError = data.ERROR
-            // TODO investigate properly
             if (resultError != undefined && !resultError) {
                 s.resultError(data)
                 return

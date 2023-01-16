@@ -24,7 +24,8 @@ const validZoomLevels = Object.keys(granularities)
 let html = String.raw
 export const trendDiagramComponent = {
     template: html`
-        <div class="graph_tab">
+        <korp-error ng-show="$ctrl.error"></korp-error>
+        <div class="graph_tab" ng-show="!$ctrl.error">
             <div class="graph_header">
                 <div class="controls">
                     <div class="btn-group form_switch">
@@ -86,6 +87,7 @@ export const trendDiagramComponent = {
             $ctrl.proxy = new model.GraphProxy()
             $ctrl.$result = $element.find(".graph_tab")
             $ctrl.mode = "line"
+            $ctrl.error = false
 
             $ctrl.$onInit = () => {
                 const [from, to] = $ctrl.data.corpusListing.getMomentInterval()
@@ -542,7 +544,7 @@ export const trendDiagramComponent = {
                 }
 
                 if (data.ERROR) {
-                    // TODO show error
+                    $ctrl.error = true
                     return
                 }
 
@@ -754,11 +756,11 @@ export const trendDiagramComponent = {
             }
 
             async function makeRequest(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
-                $ctrl.loading = true
                 if (!window.Rickshaw) {
                     var rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
                 }
                 $ctrl.loading = true
+                $ctrl.error = false
                 const currentZoom = $ctrl.zoom
                 let reqPromise = $ctrl.proxy
                     .makeRequest(cqp, subcqps, corpora.stringifySelected(), from, to)
@@ -768,13 +770,15 @@ export const trendDiagramComponent = {
 
                 try {
                     var [rickshawModule, graphData] = await Promise.all([rickshawPromise || Rickshaw, reqPromise])
+                    window.Rickshaw = rickshawModule
+                    $timeout(() => renderGraph(graphData, cqp, labelMapping, currentZoom, showTotal))
                 } catch (e) {
-                    c.error("graph crash", e)
-                    // TODO show error
-                    $ctrl.loading = false
+                    $timeout(() => {
+                        c.error("graph crash", e)
+                        $ctrl.loading = false
+                        $ctrl.error = true
+                    })
                 }
-                window.Rickshaw = rickshawModule
-                $timeout(() => renderGraph(graphData, cqp, labelMapping, currentZoom, showTotal))
             }
         },
     ],

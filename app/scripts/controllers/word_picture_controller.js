@@ -7,6 +7,7 @@ korpApp.directive("wordpicCtrl", () => ({
         s.tabindex = 3
         s.proxy = new model.LemgramProxy()
 
+        s.error = false
         s.loading = false
         s.progress = 0
         s.word_pic = $location.search().word_pic != null
@@ -30,6 +31,7 @@ korpApp.directive("wordpicCtrl", () => ({
             s.hasData = false
             s.aborted = false
             s.no_hits = false
+            s.error = false
         }
 
         s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["stats"]))
@@ -60,9 +62,11 @@ korpApp.directive("wordpicCtrl", () => ({
                     if (s.ignoreAbort) {
                         return
                     }
+                    s.loading = false
                     if (status === "abort") {
-                        s.loading = false
                         s.aborted = true
+                    } else {
+                        s.error = true
                     }
                 })
             })
@@ -87,7 +91,7 @@ korpApp.directive("wordpicCtrl", () => ({
             s.progress = 100
             if (data.ERROR != undefined) {
                 s.hasData = false
-                // show dead Korp?
+                s.error = true
                 return
             }
 
