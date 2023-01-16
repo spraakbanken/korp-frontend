@@ -38,21 +38,9 @@ export const kwicComponent = {
                 page-change="$ctrl.pageChange(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-            <span
-                ng-if="!$ctrl.readingMode"
-                class="reading_btn link"
-                ng-hide="$ctrl.loading"
-                ng-click="$ctrl.toggleReading()"
-            >
-                {{'show_reading' | loc:lang}}
-            </span>
-            <span
-                ng-if="$ctrl.readingMode"
-                class="reading_btn link"
-                ng-hide="$ctrl.loading"
-                ng-click="$ctrl.toggleReading()"
-            >
-                {{'show_kwic' | loc:lang}}
+            <span ng-if="$ctrl.hits" class="reading_btn link" ng-click="$ctrl.toggleReading()">
+                <span ng-if="!$ctrl.readingMode">{{'show_reading' | loc:lang}}</span>
+                <span ng-if="$ctrl.readingMode">{{'show_kwic' | loc:lang}}</span>
             </span>
             <div class="table_scrollarea">
                 <table class="results_table kwic" ng-if="$ctrl.kwic.length > 0" cellspacing="0">
