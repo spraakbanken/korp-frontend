@@ -151,6 +151,12 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
         tmhDynamicLocale.set($location.search().lang || settings["default_language"])
     })
 
+    $(document).keyup(function (event) {
+        if (event.keyCode === 27) {
+            $rootScope.$broadcast("abort_requests")
+        }
+    })
+
     $rootScope.kwicTabs = []
     $rootScope.compareTabs = []
     $rootScope.graphTabs = []

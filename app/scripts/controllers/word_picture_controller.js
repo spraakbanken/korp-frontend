@@ -20,6 +20,10 @@ korpApp.directive("wordpicCtrl", () => ({
             s.makeRequest(word, type)
         })
 
+        s.$on("abort_requests", () => {
+            s.proxy.abort()
+        })
+
         s.activate = function () {
             $location.search("word_pic", true)
             const search = searches.activeSearch

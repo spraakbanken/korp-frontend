@@ -16,6 +16,7 @@ class ExampleCtrl extends KwicCtrl {
         s.hits_display = null
         s.page = 0
         s.error = false
+        s.hitsPictureData = null
 
         // TODO s.$parent.$index?
         s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$parent.$index

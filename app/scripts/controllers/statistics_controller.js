@@ -23,6 +23,10 @@ korpApp.directive("statsResultCtrl", () => ({
             s.makeRequest(cqp)
         })
 
+        s.$on("abort_requests", () => {
+            s.proxy.abort()
+        })
+
         s.onStatsClick = (event) => {
             if (event.target.classList.contains("arcDiagramPicture")) {
                 const parts = $(event.target).attr("id").split("__")

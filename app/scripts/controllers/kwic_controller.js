@@ -51,6 +51,10 @@ export class KwicCtrl {
 
         this.setupHash()
 
+        s.$on("abort_requests", () => {
+            s.proxy.abort()
+        })
+
         s.readingChange = function () {
             if (s.getProxy().pendingRequests.length) {
                 // If the requests passed to $.when contain rejected
