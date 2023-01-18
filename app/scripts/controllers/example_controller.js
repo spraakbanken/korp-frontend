@@ -138,6 +138,7 @@ class ExampleCtrl extends KwicCtrl {
     initPage() {
         this.scope.page = 0
     }
+    setupListeners() {}
     setupHash() {}
 }
 ExampleCtrl.initClass()

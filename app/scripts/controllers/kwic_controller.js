@@ -17,19 +17,23 @@ export class KwicCtrl {
     initPage() {
         this.scope.page = Number(this.location.search().page) || 0
     }
+    setupListeners() {
+        this.$rootScope.$on("kwic_make_request", (msg, cqp) => {
+            this.scope.cqp = cqp
+            // only set this on the inital search, not when paging
+            this.scope.hitsPerPage = this.location.search()["hpp"] || settings["hits_per_page_default"]
+            this.scope.makeRequest(false)
+        })
+    }
     constructor(scope, utils, $location, $rootScope, $timeout) {
         this.utils = utils
         this.scope = scope
         this.location = $location
+        this.$rootScope = $rootScope
 
         const s = scope
 
-        $rootScope.$on("kwic_make_request", (msg, cqp) => {
-            s.cqp = cqp
-            // only set this on the inital search, not when paging
-            s.hitsPerPage = $location.search()["hpp"] || settings["hits_per_page_default"]
-            s.makeRequest(false)
-        })
+        this.setupListeners()
 
         s.proxy = new model.KWICProxy()
 
