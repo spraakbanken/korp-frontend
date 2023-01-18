@@ -17,6 +17,7 @@ class ExampleCtrl extends KwicCtrl {
         s.page = 0
         s.error = false
         s.hitsPictureData = null
+        s.aborted = false
 
         // TODO s.$parent.$index?
         s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$parent.$index
@@ -116,6 +117,7 @@ class ExampleCtrl extends KwicCtrl {
 
             def.fail(() => {
                 $timeout(() => {
+                    // TODO it could be abort
                     s.error = true
                     s.loading = false
                 })
