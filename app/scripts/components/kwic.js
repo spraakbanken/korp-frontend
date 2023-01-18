@@ -21,7 +21,7 @@ export const kwicComponent = {
                                     ng-repeat="corpus in $ctrl.hitsPictureData"
                                     ng-style='{width : corpus.relative + "%"}'
                                     ng-class="{odd : $index % 2 != 0, even : $index % 2 == 0}"
-                                    ng-click="$ctrl.pageChange(corpus.page)"
+                                    ng-click="$ctrl.pageEvent(corpus.page)"
                                     uib-tooltip="{{corpus.rtitle | locObj:lang}}: {{corpus.abs}}"
                                     uib-tooltip-placement='{{$last? "left":"top"}}'
                                     append-to-body="false"
@@ -35,7 +35,7 @@ export const kwicComponent = {
                 ng-if="$ctrl.hits"
                 total-hits="$ctrl.hits"
                 current-page="$ctrl.page"
-                page-change="$ctrl.pageChange(page)"
+                page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
             <span ng-if="$ctrl.hits" class="reading_btn link" ng-click="$ctrl.toggleReading()">
@@ -94,7 +94,7 @@ export const kwicComponent = {
                 ng-if="$ctrl.hits"
                 total-hits="$ctrl.hits"
                 current-page="$ctrl.page"
-                page-change="$ctrl.pageChange(page)"
+                page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
             <div id="download-links-container">
@@ -126,6 +126,7 @@ export const kwicComponent = {
         kwic: "<",
         contextKwic: "<",
         isReading: "<",
+        page: "<",
         pageEvent: "<",
         contextChangeEvent: "<",
         hitsPerPage: "<",
@@ -149,8 +150,6 @@ export const kwicComponent = {
 
             $ctrl.$onChanges = (changeObj) => {
                 if ("kwic" in changeObj) {
-                    $ctrl.page = Number($location.search().page) || 0
-
                     if (!$ctrl.isReading) {
                         centerScrollbar()
                         $element.find(".match").children().first().click()
@@ -191,11 +190,6 @@ export const kwicComponent = {
             }
 
             $ctrl._settings = settings
-
-            $ctrl.pageChange = (page) => {
-                $ctrl.page = page
-                $ctrl.pageEvent(page)
-            }
 
             const isParallelMode = window.currentModeParallel
 
@@ -428,13 +422,13 @@ export const kwicComponent = {
 
                     switch (event.which) {
                         case 78: // n
-                            $ctrl.pageChange($ctrl.page + 1)
+                            $ctrl.pageEvent($ctrl.page + 1)
                             return false
                         case 70: // f
                             if ($ctrl.page === 0) {
                                 return
                             }
-                            $ctrl.pageChange($ctrl.page - 1)
+                            $ctrl.pageEvent($ctrl.page - 1)
                             return false
                     }
                     if (!selectionManager.hasSelected()) {
