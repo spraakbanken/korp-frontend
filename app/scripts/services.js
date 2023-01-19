@@ -277,6 +277,7 @@ korpApp.factory("searches", [
                 // future events for word picture and other kinds of tabs
                 $rootScope.$emit("kwic_make_request", cqp)
                 $rootScope.$emit("stats_make_request", cqp)
+                $rootScope.$emit("word_pic_reset")
             }
 
             lemgramSearch(word, type) {

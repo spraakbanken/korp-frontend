@@ -20,6 +20,10 @@ korpApp.directive("wordpicCtrl", () => ({
             s.makeRequest(word, type)
         })
 
+        $rootScope.$on("word_pic_reset", () => {
+            s.resetView()
+        })
+
         s.$on("abort_requests", () => {
             s.proxy.abort()
         })
