@@ -1,4 +1,6 @@
 /** @format */
+import statemachine from "@/statemachine"
+
 const korpApp = angular.module("korpApp")
 
 export class KwicCtrl {
@@ -407,10 +409,12 @@ export class KwicCtrl {
 
         s.onentry = () => {
             s.$root.jsonUrl = s.proxy.prevUrl
+            s.active = true
         }
 
         s.onexit = () => {
             s.$root.jsonUrl = null
+            s.active = false
         }
 
         s.isActive = () => {

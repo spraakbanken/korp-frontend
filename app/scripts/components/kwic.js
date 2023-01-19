@@ -120,6 +120,7 @@ export const kwicComponent = {
     bindings: {
         aborted: "<",
         loading: "<",
+        active: "<",
         hitsDisplay: "<",
         hitsPictureData: "<",
         hits: "<",
@@ -168,6 +169,15 @@ export const kwicComponent = {
                 if ($ctrl.kwic.length == 0) {
                     selectionManager.deselect()
                     statemachine.send("DESELECT_WORD")
+                }
+                if ("active" in changeObj) {
+                    if ($ctrl.active) {
+                        // TODO copied
+                        centerScrollbar()
+                        $timeout(() => $element.find(".token_selected").click(), 0)
+                    } else {
+                        statemachine.send("DESELECT_WORD")
+                    }
                 }
             }
 

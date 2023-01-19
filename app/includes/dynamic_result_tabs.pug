@@ -1,4 +1,4 @@
-uib-tab(example-ctrl, ng-repeat='kwicTab in kwicTabs', select="onentry()", deselct="onexit()")
+uib-tab(example-ctrl, ng-repeat='kwicTab in kwicTabs', select="onentry()", deselect="onexit()")
   uib-tab-heading(ng-class="{not_loading: progress == 100, loading : loading}")
     | KWIC
     span(ng-click='closeTab($index, $event)', tab-spinner)
@@ -7,6 +7,7 @@ uib-tab(example-ctrl, ng-repeat='kwicTab in kwicTabs', select="onentry()", desel
     kwic(
       aborted="aborted", 
       loading="loading",
+      active="active",
       hits-display="hits_display",
       hits-picture-data="hitsPictureData",
       hits="hits",
