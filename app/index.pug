@@ -65,7 +65,7 @@ html
                     | {{'statistics' | loc:lang}}
                     tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
                   korp-error(ng-if="error")
-                  div(ng-click="onStatsClick($event)" ng-if="!error")
+                  div(ng-click="onStatsClick($event)" ng-show="!error")
                     div(ng-if="!inOrder && !hasResult")
                       | {{'stats_not_in_order_warn' | loc:lang}}
 

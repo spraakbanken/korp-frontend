@@ -156,12 +156,12 @@ korpApp.directive("statsResultCtrl", () => ({
             })
             s.no_hits = false
             s.aborted = false
-            s.error = false
         }
 
         s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["stats"]))
 
         s.makeRequest = (cqp) => {
+            s.error = false
             const grid = document.getElementById("myGrid")
             grid.innerHTML = ""
 
