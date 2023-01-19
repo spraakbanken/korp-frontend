@@ -26,7 +26,7 @@ uib-tab(ng-repeat='data in graphTabs', graph-ctrl)
     | {{'graph' | loc:lang}}
     .tab_progress(style="width:{{progress || 0}}%", ng-show="loading")
     span(ng-click='closeTab($index, $event)', tab-spinner)
-  trend-diagram(data="data")
+  trend-diagram(data="data", on-progress="onProgress", update-loading="updateLoading")
 uib-tab(ng-repeat='promise in compareTabs', compare-ctrl)
   uib-tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc:lang}}

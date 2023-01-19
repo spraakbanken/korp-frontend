@@ -76,6 +76,8 @@ export const trendDiagramComponent = {
     `,
     bindings: {
         data: "<",
+        onProgress: "<",
+        updateLoading: "<",
     },
     controller: [
         "$rootScope",
@@ -123,6 +125,11 @@ export const trendDiagramComponent = {
                 }
 
                 $rootScope.kwicTabs.push({ queryParams: opts })
+            }
+
+            $ctrl.localUpdateLoading = (loading) => {
+                $ctrl.updateLoading(loading)
+                $ctrl.loading = loading
             }
 
             function drawPreloader(from, to) {
@@ -539,7 +546,7 @@ export const trendDiagramComponent = {
                 let series
 
                 const done = () => {
-                    $ctrl.loading = false
+                    $ctrl.localUpdateLoading(false)
                     $(window).trigger("resize")
                 }
 
@@ -752,14 +759,14 @@ export const trendDiagramComponent = {
             }
 
             function onProgress(progressObj) {
-                $ctrl.progress = Math.round(progressObj["stats"])
+                $ctrl.onProgress(Math.round(progressObj["stats"]))
             }
 
             async function makeRequest(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
                 if (!window.Rickshaw) {
                     var rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
                 }
-                $ctrl.loading = true
+                $ctrl.localUpdateLoading(true)
                 $ctrl.error = false
                 const currentZoom = $ctrl.zoom
                 let reqPromise = $ctrl.proxy
@@ -775,7 +782,7 @@ export const trendDiagramComponent = {
                 } catch (e) {
                     $timeout(() => {
                         c.error("graph crash", e)
-                        $ctrl.loading = false
+                        $ctrl.localUpdateLoading(false)
                         $ctrl.error = true
                     })
                 }

@@ -13,5 +13,12 @@ korpApp.directive("graphCtrl", () => ({
             s.graphTabs.splice(idx, 1)
             s.closeDynamicTab()
         }
+
+        s.onProgress = (progress) => (s.progress = progress)
+
+        s.updateLoading = (loading) => {
+            console.log("asdf")
+            s.loading = loading
+        }
     },
 }))
