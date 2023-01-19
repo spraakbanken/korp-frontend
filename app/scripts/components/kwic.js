@@ -166,7 +166,7 @@ export const kwicComponent = {
                 if (currentMode === "parallel" && !$ctrl.isReading) {
                     centerScrollbarParallel()
                 }
-                if ($ctrl.kwic.length == 0) {
+                if ($ctrl.kwic && $ctrl.kwic.length == 0 && $ctrl.contextKwic && $ctrl.contextKwic.length == 0) {
                     selectionManager.deselect()
                     statemachine.send("DESELECT_WORD")
                 }
