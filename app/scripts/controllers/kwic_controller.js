@@ -20,7 +20,7 @@ export class KwicCtrl {
         this.scope.page = Number(this.location.search().page) || 0
     }
     setupListeners() {
-        this.$rootScope.$on("kwic_make_request", (msg, cqp) => {
+        this.$rootScope.$on("make_request", (msg, cqp) => {
             this.scope.cqp = cqp
             // only set this on the inital search, not when paging
             this.scope.hitsPerPage = this.location.search()["hpp"] || settings["hits_per_page_default"]

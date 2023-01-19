@@ -65,9 +65,6 @@ export const simpleSearchComponent = {
             </div>
         </div>
     `,
-    bindings: {
-        wordPic: "<",
-    },
     controller: [
         "$location",
         "backend",
@@ -271,11 +268,6 @@ export const simpleSearchComponent = {
                             ctrl.relatedObj.attribute = sense ? "sense" : "saldo"
                         })
                     }
-                }
-
-                if (ctrl.wordPic && (search.type === "lemgram" || !search.val.includes(" "))) {
-                    const value = search.type === "lemgram" ? unregescape(search.val) : search.val
-                    searches.lemgramSearch(value, search.type)
                 }
             }
         },

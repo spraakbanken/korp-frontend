@@ -19,7 +19,7 @@ korpApp.directive("statsResultCtrl", () => ({
 
         s.proxy = new model.StatsProxy()
 
-        $rootScope.$on("kwic_make_request", (msg, cqp) => {
+        $rootScope.$on("make_request", (msg, cqp) => {
             s.makeRequest(cqp)
         })
 

@@ -16,12 +16,8 @@ korpApp.directive("wordpicCtrl", () => ({
             (val) => (s.word_pic = Boolean(val))
         )
 
-        $rootScope.$on("word_picture_make_request", (msg, word, type) => {
-            s.makeRequest(word, type)
-        })
-
-        $rootScope.$on("word_pic_reset", () => {
-            s.resetView()
+        $rootScope.$on("make_request", () => {
+            s.makeRequest()
         })
 
         s.$on("abort_requests", () => {
@@ -30,9 +26,8 @@ korpApp.directive("wordpicCtrl", () => ({
 
         s.activate = function () {
             $location.search("word_pic", true)
-            const search = searches.activeSearch
-            const searchVal = search.type === "lemgram" ? unregescape(search.val) : search.val
-            s.makeRequest(searchVal, search.type)
+            s.word_pic = true
+            s.makeRequest()
         }
 
         s.resetView = () => {
@@ -44,7 +39,15 @@ korpApp.directive("wordpicCtrl", () => ({
 
         s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["stats"]))
 
-        s.makeRequest = (word, type) => {
+        s.makeRequest = () => {
+            const search = searches.activeSearch
+            if (!s.word_pic || (search.type !== "lemgram" && search.val.includes(" "))) {
+                s.resetView()
+                return
+            }
+            const word = search.type === "lemgram" ? unregescape(search.val) : search.val
+            const type = search.type
+
             // if a global filter is set, do not generate a word picture
             if ($rootScope.globalFilter) {
                 s.hasData = false

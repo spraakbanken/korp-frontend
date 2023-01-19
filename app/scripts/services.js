@@ -273,15 +273,7 @@ korpApp.factory("searches", [
             }
 
             kwicSearch(cqp) {
-                // TODO maybe merge these to one event, including
-                // future events for word picture and other kinds of tabs
-                $rootScope.$emit("kwic_make_request", cqp)
-                $rootScope.$emit("stats_make_request", cqp)
-                $rootScope.$emit("word_pic_reset")
-            }
-
-            lemgramSearch(word, type) {
-                $rootScope.$emit("word_picture_make_request", word, type)
+                $rootScope.$emit("make_request", cqp, this.activeSearch)
             }
 
             getInfoData() {
