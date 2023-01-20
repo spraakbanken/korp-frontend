@@ -8,7 +8,7 @@ try {
     console.log("No module for statistics functions available")
 }
 
-let getCqp = function(hitValues, ignoreCase) {
+let getCqp = function (hitValues, ignoreCase) {
     var tokens = []
     for (var i = 0; i < hitValues.length; i++) {
         var token = hitValues[i]
@@ -21,16 +21,16 @@ let getCqp = function(hitValues, ignoreCase) {
         }
         tokens.push("[" + andExpr.join(" & ") + "]")
     }
-    return "(" + tokens.join(" ") + ")"
+    return tokens.join(" ")
 }
 
-let reduceCqp = function(type, tokens, ignoreCase) {
+let reduceCqp = function (type, tokens, ignoreCase) {
     let attrs = settings.corpusListing.getCurrentAttributes()
     if (attrs[type] && attrs[type].stats_cqp) {
         // A stats_cqp function should call regescape for the value as appropriate
         return customFunctions[attrs[type].stats_cqp](tokens, ignoreCase)
     }
-    tokens = _.map(tokens, val => regescape(val))
+    tokens = _.map(tokens, (val) => regescape(val))
     switch (type) {
         case "saldo":
         case "prefix":
@@ -44,7 +44,7 @@ let reduceCqp = function(type, tokens, ignoreCase) {
                 var key = tokens[0].split(":")[0]
 
                 var variants = []
-                _.map(tokens, function(val) {
+                _.map(tokens, function (val) {
                     const parts = val.split(":")
                     if (variants.length == 0) {
                         for (var idx = 0; idx < parts.length - 1; idx++) variants.push([])
@@ -52,7 +52,7 @@ let reduceCqp = function(type, tokens, ignoreCase) {
                     for (var idx = 1; idx < parts.length; idx++) variants[idx - 1].push(parts[idx])
                 })
 
-                variants = _.map(variants, function(variant) {
+                variants = _.map(variants, function (variant) {
                     return ":(" + variant.join("|") + ")"
                 })
 
@@ -85,7 +85,7 @@ let reduceCqp = function(type, tokens, ignoreCase) {
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-let reduceStringify = function(type, values, structAttributes) {
+let reduceStringify = function (type, values, structAttributes) {
     let attrs = settings.corpusListing.getCurrentAttributes()
 
     if (attrs[type] && attrs[type].stats_stringify) {
@@ -97,7 +97,7 @@ let reduceStringify = function(type, values, structAttributes) {
         case "msd":
             return values.join(" ")
         case "pos":
-            var output = _.map(values, function(token) {
+            var output = _.map(values, function (token) {
                 return util.translateAttribute(null, attrs["pos"].translation, token)
             }).join(" ")
             return output
@@ -110,12 +110,12 @@ let reduceStringify = function(type, values, structAttributes) {
             if (type == "saldo" || type == "sense") {
                 var stringify = util.saldoToString
             } else if (type == "lemma") {
-                stringify = lemma => lemma.replace(/_/g, " ")
+                stringify = (lemma) => lemma.replace(/_/g, " ")
             } else {
                 stringify = util.lemgramToString
             }
 
-            var html = _.map(values, function(token) {
+            var html = _.map(values, function (token) {
                 if (token === "") return "–"
                 return stringify(token.replace(/:.*/g, ""), true)
             })
@@ -123,15 +123,13 @@ let reduceStringify = function(type, values, structAttributes) {
             return html.join(" ")
 
         case "deprel":
-            var output = _.map(values, function(token) {
+            var output = _.map(values, function (token) {
                 return util.translateAttribute(null, attrs["deprel"].translation, token)
             }).join(" ")
             return output
         case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
-            var output = _.map(values, function(token) {
-                return $("<span>")
-                    .text(token)
-                    .outerHTML()
+            var output = _.map(values, function (token) {
+                return $("<span>").text(token).outerHTML()
             }).join(" ")
             return output
         default:
@@ -140,7 +138,7 @@ let reduceStringify = function(type, values, structAttributes) {
                 return values.join(" ")
             } else {
                 // structural attributes
-                var mapped = _.map(values, function(value) {
+                var mapped = _.map(values, function (value) {
                     if (structAttributes["set"] && value === "") {
                         return "–"
                     } else if (value === "") {
@@ -158,5 +156,5 @@ let reduceStringify = function(type, values, structAttributes) {
 
 export default {
     getCqp,
-    reduceStringify
+    reduceStringify,
 }

@@ -8,6 +8,8 @@ try {
     console.log("No module for extended components available")
 }
 
+let html = String.raw
+
 const autocompleteTemplate = `\
 <div>
     <input type="text"
@@ -110,7 +112,7 @@ const selectController = (autocomplete) => [
 // - escape: boolean, will be used by the escaper-directive
 export default _.merge(
     {
-        datasetSelect: {
+        datasetSelect: (options) => ({
             template: selectTemplate,
             controller: [
                 "$scope",
@@ -131,13 +133,17 @@ export default _.merge(
                         } else {
                             dataset = _.map(original, (v, k) => [k, localizer(v)])
                         }
-                        $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                        if (options == undefined || options.sort == undefined || options.sort) {
+                            $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                        } else {
+                            $scope.dataset = dataset
+                        }
                         $scope.model = $scope.model || $scope.dataset[0][0]
                     }
                     initialize()
                 },
             ],
-        },
+        }),
 
         // Select-element. Gets values from "struct_values"-command. Use the following settings in the corpus:
         // - escape: boolean, will be used by the escaper-directive
@@ -223,57 +229,62 @@ export default _.merge(
             ],
         }),
         dateInterval: {
-            template: `
-            <div class="date_interval_arg_type">
-                <h3>{{'simple' | loc:$root.lang}}</h3>
-                <form ng-submit="commitDateInput()">
-                    <div class="" style="margin-bottom: 1rem;">
-                        <span class="" style="display : inline-block; width: 32px; text-transform: capitalize;">{{'from' | loc:$root.lang}}</span> <input type="text" ng-blur="commitDateInput()" ng-model="fromDateString" placeholder="'1945' {{'or' | loc:$root.lang}} '1945-08-06'"/>
-                    </div>
-                    <div>
-                        <span class="" style="display : inline-block; width: 32px; text-transform: capitalize;">{{'to' | loc:$root.lang}}</span> <input type="text" ng-blur="commitDateInput()" ng-model="toDateString" placeholder="'1968' {{'or' | loc:$root.lang}} '1968-04-04'"/>
-                    </div>
-                    <button type="submit" class="hidden" />
-                </form>
-                <div class="section mt-4"> 
+            template: html`
+                <div class="date_interval_arg_type">
+                    <h3>{{'simple' | loc:$root.lang}}</h3>
+                    <form ng-submit="commitDateInput()">
+                        <div class="" style="margin-bottom: 1rem;">
+                            <span class="" style="display : inline-block; width: 32px; text-transform: capitalize;"
+                                >{{'from' | loc:$root.lang}}</span
+                            >
+                            <input
+                                type="text"
+                                ng-blur="commitDateInput()"
+                                ng-model="fromDateString"
+                                placeholder="'1945' {{'or' | loc:$root.lang}} '1945-08-06'"
+                            />
+                        </div>
+                        <div>
+                            <span class="" style="display : inline-block; width: 32px; text-transform: capitalize;"
+                                >{{'to' | loc:$root.lang}}</span
+                            >
+                            <input
+                                type="text"
+                                ng-blur="commitDateInput()"
+                                ng-model="toDateString"
+                                placeholder="'1968' {{'or' | loc:$root.lang}} '1968-04-04'"
+                            />
+                        </div>
+                        <button type="submit" class="hidden"></button>
+                    </form>
+
                     <h3>{{'advanced' | loc:$root.lang}}</h3>
-                    <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top"> 
-                        <i class="fa fa-calendar"></i> <span style="text-transform: capitalize;">{{'from' | loc:$root.lang}} </span>
-                    </button> 
-                    {{combined.format("YYYY-MM-DD HH:mm")}} 
-                    <time-interval 
-                        ng-click="from_click($event)" 
-                        class="date_interval popper_menu dropdown-menu" 
-                        date-model="from_date" 
-                        time-model="from_time" 
-                        model="combined" 
-                        min-date="minDate" 
-                        max-date="maxDate"></time-interval>
+                    <div class="section mt-4">
+                        <time-interval
+                            label="from"
+                            date-model="fromDate"
+                            time-model="fromTime"
+                            min-date="minDate"
+                            max-date="maxDate"
+                            update="update()"
+                        ></time-interval>
+                    </div>
+
+                    <div class="section">
+                        <time-interval
+                            label="to"
+                            date-model="toDate"
+                            time-model="toTime"
+                            min-date="minDate"
+                            max-date="maxDate"
+                            update="update()"
+                        ></time-interval>
+                    </div>
                 </div>
-                    
-                <div class="section"> 
-                    <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top"> 
-                        <i class="fa fa-calendar"></i> <span style="text-transform: capitalize;">{{'to' | loc:$root.lang}} </span>
-                    </button> 
-                    {{combined2.format("YYYY-MM-DD HH:mm")}} 
-                    
-                    <time-interval 
-                        ng-click="from_click($event)" 
-                        class="date_interval popper_menu dropdown-menu" 
-                        date-model="to_date" 
-                        time-model="to_time" 
-                        model="combined2" 
-                        my="left top" 
-                        at="right top"
-                        min-date="minDate"
-                        max-date="maxDate"></time-interval>
-                </div>
-            </div>`,
+            `,
             controller: [
                 "$scope",
-                "searches",
-                "$timeout",
-                function ($scope, searches, $timeout) {
+                function ($scope) {
                     let s = $scope
                     let cl = settings.corpusListing
 
@@ -292,15 +303,15 @@ export default _.merge(
                     s.commitDateInput = () => {
                         if (s.fromDateString) {
                             let simpleFrom = s.fromDateString.length == 4
-                            s.from_date = moment(s.fromDateString, simpleFrom ? "YYYY" : "YYYY-MM-DD").toDate()
+                            s.fromDate = moment(s.fromDateString, simpleFrom ? "YYYY" : "YYYY-MM-DD").toDate()
                         }
                         if (s.toDateString) {
                             let simpleTo = s.toDateString.length == 4
                             if (simpleTo) {
                                 var dateString = `${s.toDateString}-12-31`
                             }
-                            s.to_date = moment(dateString || s.dateString).toDate()
-                            s.to_time = moment("235959", "HHmmss").toDate()
+                            s.toDate = moment(dateString || s.dateString).toDate()
+                            s.toTime = moment("235959", "HHmmss").toDate()
                         }
                     }
                     s.$on("corpuschooserchange", function () {
@@ -308,11 +319,6 @@ export default _.merge(
                     })
 
                     updateIntervals()
-
-                    s.from_click = function (event) {
-                        event.originalEvent.preventDefault()
-                        event.originalEvent.stopPropagation()
-                    }
 
                     let getYear = function (val) {
                         return moment(val.toString(), "YYYYMMDD").toDate()
@@ -323,27 +329,28 @@ export default _.merge(
                     }
 
                     if (!s.model) {
-                        s.from_date = s.minDate
-                        s.to_date = s.maxDate
+                        s.fromDate = s.minDate
+                        s.toDate = s.maxDate
                         let [from, to] = _.invokeMap(cl.getMomentInterval(), "toDate")
-                        s.from_time = from
-                        s.to_time = to
+                        s.fromTime = from
+                        s.toTime = to
                     } else if (s.model.length === 4) {
                         let [fromYear, toYear] = _.map(s.model.slice(0, 3), getYear)
-                        s.from_date = fromYear
-                        s.to_date = toYear
+                        s.fromDate = fromYear
+                        s.toDate = toYear
                         let [fromTime, toTime] = _.map(s.model.slice(2), getTime)
-                        s.from_time = fromTime
-                        s.to_time = toTime
+                        s.fromTime = fromTime
+                        s.toTime = toTime
                     }
-                    s.$watchGroup(["combined", "combined2"], function ([combined, combined2]) {
+
+                    s.update = () => {
                         s.model = [
-                            moment(s.from_date).format("YYYYMMDD"),
-                            moment(s.to_date).format("YYYYMMDD"),
-                            moment(s.from_time).format("HHmmss"),
-                            moment(s.to_time).format("HHmmss"),
+                            moment(s.fromDate).format("YYYYMMDD"),
+                            moment(s.toDate).format("YYYYMMDD"),
+                            moment(s.fromTime).format("HHmmss"),
+                            moment(s.toTime).format("HHmmss"),
                         ]
-                    })
+                    }
                 },
             ],
         },

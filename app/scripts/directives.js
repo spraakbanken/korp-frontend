@@ -1,5 +1,7 @@
 /** @format */
 
+let html = String.raw
+
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("kwicWord", () => ({
@@ -124,20 +126,6 @@ korpApp.directive("escaper", () => ({
         $scope.$watch("input", () => ($scope.model = escape($scope.input)))
 
         $scope.$watch("orObj.op", () => ($scope.model = escape($scope.input)))
-    },
-}))
-
-korpApp.directive("constr", ($window) => ({
-    scope: true,
-
-    link(scope, elem, attr) {
-        const instance = new $window.view[attr.constr](elem, elem, scope)
-        if (attr.constrName) {
-            $window[attr.constrName] = instance
-        }
-
-        scope.instance = instance
-        scope.$parent.instance = instance
     },
 }))
 
@@ -429,47 +417,64 @@ korpApp.directive("typeaheadClickOpen", ($timeout) => ({
 
 korpApp.directive("timeInterval", () => ({
     scope: {
+        label: "@",
         dateModel: "=",
         timeModel: "=",
-        model: "=",
         minDate: "=",
         maxDate: "=",
+        update: "&",
     },
 
     restrict: "E",
-    template: `\
-<div>
-        <div uib-datepicker class="well well-sm" ng-model="dateModel"
-            min-date="minDate" max-date="maxDate" init-date="minDate"
-            show-weeks="true" starting-day="1"></div>
+    template: html`
+        <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top">
+            <i class="fa fa-calendar"></i> <span style="text-transform: capitalize;">{{label | loc:$root.lang}} </span>
+        </button>
+        {{ combined.format("YYYY-MM-DD HH:mm") }}
+        <div ng-click="handleClick($event)" class="date_interval popper_menu dropdown-menu">
+            <div
+                uib-datepicker
+                class="well well-sm"
+                ng-model="dateModel"
+                min-date="minDate"
+                max-date="maxDate"
+                init-date="minDate"
+                show-weeks="true"
+                starting-day="1"
+            ></div>
 
-        <div class="time">
-            <i class="fa-solid fa-3x fa-clock-o"></i><div uib-timepicker class="timepicker" ng-model="timeModel"
-                hour-step="1" minute-step="1" show-meridian="false"></div>
+            <div class="time">
+                <i class="fa-solid fa-3x fa-clock-o"></i>
+                <div
+                    uib-timepicker
+                    class="timepicker"
+                    ng-model="timeModel"
+                    hour-step="1"
+                    minute-step="1"
+                    show-meridian="false"
+                ></div>
+            </div>
         </div>
-</div>\
-`,
-
+    `,
     link(s) {
-        s.isOpen = false
-        s.open = function (event) {
-            event.preventDefault()
-            event.stopPropagation()
-            s.isOpen = true
-        }
-
-        const time_units = ["hour", "minute"]
+        const timeUnits = ["hour", "minute"]
         s.$watchGroup(["dateModel", "timeModel"], function (...args) {
             const [date, time] = args[0]
             if (date && time) {
                 const m = moment(moment(date).format("YYYY-MM-DD"))
-                for (let t of time_units) {
+                for (let t of timeUnits) {
                     const m_time = moment(time)
                     m.add(m_time[t](), t)
                 }
-                s.model = m
+                s.update({})
+                s.combined = m
             }
         })
+
+        s.handleClick = function (event) {
+            event.originalEvent.preventDefault()
+            event.originalEvent.stopPropagation()
+        }
     },
 }))
 
@@ -609,120 +614,3 @@ korpApp.directive("reduceSelect", ($timeout) => ({
         }
     },
 }))
-
-angular.module("template/datepicker/day.html", []).run(($templateCache) =>
-    $templateCache.put(
-        "template/datepicker/day.html",
-        `\
-<table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}"
-  <thead>
-    <tr>
-      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></button></th>
-      <th colspan="{{5 + showWeeks}}">
-        <button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm" ng-click="toggleMode()" tabindex="-1" style="width:100%;">
-            <strong>{{title}}</strong>
-        </button>
-      </th>
-      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa-solid fa-chevron-right"></i></button></th>
-    </tr>
-    <tr>
-      <th ng-show="showWeeks" class="text-center"></th>
-      <th ng-repeat="label in labels track by $index" class="text-center"><small aria-label="{{label.full}}">{{label.abbr}}</small></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="row in rows track by $index">
-      <td ng-show="showWeeks" class="text-center h6"><em>{{ weekNumbers[$index] }}</em></td>
-      <td ng-repeat="dt in row track by dt.date" class="text-center" role="gridcell" id="{{dt.uid}}" aria-disabled="{{!!dt.disabled}}">
-        <button type="button" style="width:100%;" class="btn btn-default btn-sm" ng-class="{'btn-info': dt.selected, active: isActive(dt)}" ng-click="select(dt.date)" ng-disabled="dt.disabled" tabindex="-1">
-            <span ng-class="{'text-muted': dt.secondary, 'text-info': dt.current}">{{dt.label}}</span>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table\
-`
-    )
-)
-
-angular.module("template/datepicker/month.html", []).run(($templateCache) =>
-    $templateCache.put(
-        "template/datepicker/month.html",
-        `\
-<table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}">
-  <thead>
-    <tr>
-      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></button></th>
-      <th><button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm" ng-click="toggleMode()" tabindex="-1" style="width:100%;"><strong>{{title}}</strong></button></th>
-      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa-solid fa-chevron-right"></i></button></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="row in rows track by $index">
-      <td ng-repeat="dt in row track by dt.date" class="text-center" role="gridcell" id="{{dt.uid}}" aria-disabled="{{!!dt.disabled}}">
-        <button type="button" style="width:100%;" class="btn btn-default" ng-class="{'btn-info': dt.selected, active: isActive(dt)}" ng-click="select(dt.date)" ng-disabled="dt.disabled" tabindex="-1"><span ng-class="{'text-info': dt.current}">{{dt.label}}</span></button>
-      </td>
-    </tr>
-  </tbody>
-</table>\
-`
-    )
-)
-
-angular.module("template/datepicker/year.html", []).run(($templateCache) =>
-    $templateCache.put(
-        "template/datepicker/year.html",
-        `\
-<table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}">
-  <thead>
-    <tr>
-      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></button></th>
-      <th colspan="3"><button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm" ng-click="toggleMode()" tabindex="-1" style="width:100%;"><strong>{{title}}</strong></button></th>
-      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)" tabindex="-1"><i class="fa-solid fa-chevron-right"></i></button></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="row in rows track by $index">
-      <td ng-repeat="dt in row track by dt.date" class="text-center" role="gridcell" id="{{dt.uid}}" aria-disabled="{{!!dt.disabled}}">
-        <button type="button" style="width:100%;" class="btn btn-default" ng-class="{'btn-info': dt.selected, active: isActive(dt)}" ng-click="select(dt.date)" ng-disabled="dt.disabled" tabindex="-1"><span ng-class="{'text-info': dt.current}">{{dt.label}}</span></button>
-      </td>
-    </tr>
-  </tbody>
-</table>\
-`
-    )
-)
-
-angular.module("template/timepicker/timepicker.html", []).run(($templateCache) =>
-    $templateCache.put(
-        "template/timepicker/timepicker.html",
-        `\
-<table>
-   <tbody>
-       <tr class="text-center">
-           <td><a ng-click="incrementHours()" class="btn btn-link"><span class="fa-solid fa-chevron-up"></span></a></td>
-           <td>&nbsp;</td>
-           <td><a ng-click="incrementMinutes()" class="btn btn-link"><span class="fa-solid fa-chevron-up"></span></a></td>
-           <td ng-show="showMeridian"></td>
-       </tr>
-       <tr>
-           <td style="width:50px;" class="form-group" ng-class="{'has-error': invalidHours}">
-               <input type="text" ng-model="hours" ng-change="updateHours()" class="form-control text-center" ng-mousewheel="incrementHours()" ng-readonly="readonlyInput" maxlength="2">
-           </td>
-           <td>:</td>
-           <td style="width:50px;" class="form-group" ng-class="{'has-error': invalidMinutes}">
-               <input type="text" ng-model="minutes" ng-change="updateMinutes()" class="form-control text-center" ng-readonly="readonlyInput" maxlength="2">
-           </td>
-           <td ng-show="showMeridian"><button type="button" class="btn btn-default text-center" ng-click="toggleMeridian()">{{meridian}}</button></td>
-       </tr>
-       <tr class="text-center">
-           <td><a ng-click="decrementHours()" class="btn btn-link"><span class="fa-solid fa-chevron-down"></span></a></td>
-           <td>&nbsp;</td>
-           <td><a ng-click="decrementMinutes()" class="btn btn-link"><span class="fa-solid fa-chevron-down"></span></a></td>
-           <td ng-show="showMeridian"></td>
-       </tr>
-   </tbody>
-</table>\
-`
-    )
-)

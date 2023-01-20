@@ -1,12 +1,7 @@
 /** @format */
-window.view = {}
 import jStorage from "../lib/jstorage"
 
-//* *************
-// Search view objects
-//* *************
-
-view.updateSearchHistory = function (value, href) {
+export function updateSearchHistory(value, href) {
     const filterParam = (url) => {
         return $.grep(
             url.split("#")[1].split("&"),

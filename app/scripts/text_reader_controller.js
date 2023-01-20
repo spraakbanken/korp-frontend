@@ -17,12 +17,12 @@ korpApp.directive("textReaderCtrl", ($timeout) => ({
 
         const corpus = s.inData.corpus
         s.corpusObj = settings.corpora[corpus]
-        const sentenceId = s.inData.sentenceId
-        backend.getDataForReadingMode(corpus, sentenceId).then(function (data) {
+        const textId = s.inData.sentenceData["text__id"]
+        backend.getDataForReadingMode(corpus, textId).then(function (data) {
             new Promise((resolve, reject) => {
                 resolve(prepareData(data.kwic[0], s.corpusObj))
             }).then((document) => {
-                s.data = { corpus, sentenceId, document }
+                s.data = { corpus, document, sentenceData: s.inData.sentenceData }
                 $timeout(() => (s.loading = false), 0)
             })
         })
@@ -40,7 +40,7 @@ korpApp.directive("textReader", function ($compile) {
     return {
         scope: false,
         link: function (scope, element) {
-            const componentName = scope.corpusObj["reading_mode"].component
+            const componentName = scope.corpusObj["reading_mode"].component || "standardReadingMode"
 
             const kebabize = (str) => {
                 return str

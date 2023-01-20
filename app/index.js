@@ -60,7 +60,6 @@ window.c = console
 window.isLab = __IS_LAB__
 window.currentMode = deparam(window.location.search.slice(1)).mode || "default"
 
-// tmhDynamicLocale = require("angular-dynamic-locale/src/tmhDynamicLocale")
 require("angular-dynamic-locale/dist/tmhDynamicLocale.js")
 window.Raphael = require("raphael")
 
@@ -98,8 +97,6 @@ require("./scripts/cqp_parser/CQPParser.js")
 require("./scripts/cqp_parser/cqp.js")
 require("./scripts/util.js")
 require("./scripts/pie-widget.js")
-require("./scripts/search.js")
-require("./scripts/results.js")
 require("./scripts/model.js")
 require("./scripts/widgets.js")
 require("./scripts/main.js")
@@ -107,7 +104,15 @@ require("./scripts/app.js")
 require("./scripts/search_controllers.js")
 
 require("./scripts/kwic_download.js")
-require("./scripts/result_controllers.js")
+
+require("./scripts/controllers/result_controllers.js")
+require("./scripts/controllers/comparison_controller.js")
+require("./scripts/controllers/kwic_controller.js")
+require("./scripts/controllers/example_controller.js")
+require("./scripts/controllers/statistics_controller.js")
+require("./scripts/controllers/trend_diagram_controller.js")
+require("./scripts/controllers/word_picture_controller.js")
+
 require("./scripts/map_controllers.js")
 require("./scripts/text_reader_controller.js")
 require("./scripts/video_controllers.js")

@@ -114,6 +114,10 @@
     "interval": "intervall",
     "matches": "regexp",
     "matches_not": "inte regexp",
+    "is_possible": "är möjlig",
+    "is_not_possible": "är inte möjlig",
+    "most_likely": "mest trolig",
+    "not_most_likely": "inte mest trolig",
 
     "repeat": "Upprepa",
     "from": "från",

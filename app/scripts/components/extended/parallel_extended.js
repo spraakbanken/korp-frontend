@@ -63,6 +63,8 @@ export const extendedParallelComponent = {
             ctrl.$onInit = () => {
                 ctrl.onLangChange()
                 ctrl.initialized = true
+
+                $rootScope.$on("corpuschooserchange", () => ctrl.onLangChange(false))
             }
 
             ctrl.negates = []
@@ -130,13 +132,13 @@ export const extendedParallelComponent = {
                 return output
             }
 
-            ctrl.onLangChange = function () {
+            ctrl.onLangChange = function (broadcast = true) {
                 var currentLangList = _.map(ctrl.langs, "lang")
                 settings.corpusListing.setActiveLangs(currentLangList)
                 $location.search("parallel_corpora", currentLangList.join(","))
 
                 // hacky fix to make attributes update when switching languages
-                if (ctrl.initialized) {
+                if (ctrl.initialized && broadcast) {
                     $rootScope.$broadcast("corpuschooserchange", [""])
                 }
                 searches.langDef.resolve()

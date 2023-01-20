@@ -5,7 +5,7 @@ import * as treeUtil from "./util"
 export const corpusChooserComponent = {
     template: `
     <div class="absolute inset-0 bg-transparent z-50"
-        ng-click="$ctrl.showChooser = false"
+        ng-click="$ctrl.closeChooser()"
         ng-if="$ctrl.showChooser"></div>
     <div class="scroll_checkboxes flex-shrink-0 ml-8" ng-class="{'cursor-pointer': $ctrl.initialized}">
         <div ng-click="$ctrl.onShowChooser()" class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
@@ -98,6 +98,12 @@ export const corpusChooserComponent = {
                 if ($ctrl.initialized) {
                     $ctrl.showChooser = !$ctrl.showChooser
                 }
+            }
+
+            $ctrl.closeChooser = () => {
+                $ctrl.showChooser = false
+                $ctrl.showInfoBox = false
+                $ctrl.infoNode = null
             }
 
             // should be ON INFO-call done from statemachine

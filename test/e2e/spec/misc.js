@@ -54,11 +54,6 @@ describe("page", function () {
         const isZero = page == 0 || page == null || page == undefined
         await expect(isZero).toBe(true)
     })
-
-    it("should should use the correct start/end values", async function () {
-        await expect(browser.executeScript("return kwicResults.proxy.prevParams.start")).toBe(175)
-        await expect(browser.executeScript("return kwicResults.proxy.prevParams.end")).toBe(199)
-    })
 })
 
 describe("json button", function () {

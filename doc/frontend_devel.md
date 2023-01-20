@@ -128,6 +128,7 @@ settings that affect the frontend.
 - __map_enabled__ - Boolean. See [Map](#map) 
 - __news_desk_url__ - See [News widget](#news-widget)
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
+- __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```
     swe: ord
@@ -224,6 +225,69 @@ Using Karp, Korp can autocomplete senses and lemgrams. To disable add the follow
 ```
 autocomplete: false
 ```
+
+## Sidebar
+
+When clicking on a word in the KWIC (or text in the reading mode), a sidebar appears with information about the 
+current word. By default, all the attributes listed under `pos_attributes`, `struct_attributes` and `custom_attributes` are shown. Which attributes to show and how they should be displayed are customizable. See [Attribute settings](#attribute-settings).
+
+The order of the attributes arrays determine the order in the sidebar. Custom attributes are 
+added to the end of their respective category.
+
+## Extended components
+
+The frontend features a number of components that can be used for the attributes in extended search. For example, dropdowns with
+a static list of search alternatives, autocompletion menus etc. 
+
+The following examples are in YAML, that is used in the backend configuration. Simple usage:
+
+```
+attribute_name:
+  extended_component: autocExtended
+```
+
+Some of the components have support for options. This is the format to use then:
+
+```
+attribute_name:
+  extended_component:
+    name: datasetSelect
+    options:
+      sort: false
+```
+
+If none of the built in components fit the use case, see [customizing extended search](#customizing-extended-search).
+
+The built in components are:
+
+### datasetSelect
+
+Supported options:
+- **sort**, default is **true**
+
+### structServiceSelect
+
+To be documented
+
+### structServiceAutocomplete
+
+To be documented
+
+### singleValue
+
+To be documented
+
+### default
+
+To be documented
+
+### autocExtended
+
+To be documented
+
+### dateInterval
+
+To be documented
 
 ## Operators
 
@@ -372,7 +436,7 @@ parameters for attributes.
 - **label**: Label to display wherever the attribute is shown.
 - **display_type**: Set to `hidden` to fetch attribute, but never show it in the frontend. 
   See `hide_sidebar`, `hide_statistics`, `hide_extended` and `hide_compare` for more control.
-- **extended_component**: See the [customizing extended search](#customizing-extended-search).
+- **extended_component**: For available components, see [extended components](#extended-components). For writing custom components, see [customizing extended search](#customizing-extended-search).
 - **external_search**: Link with placeholder for replacing value. Example `https://spraakbanken.gu.se/karp/#?search=extended%7C%7Cand%7Csense%7Cequals%7C<%= val %>`
 - **group_by**: Set to either `group_by` or `group_by_struct`. Should only be needed for attributes with `is_struct_attr: true`.
   Those attributes are by default sent as `group_by_struct` in the statistics, but can be overridden here.
@@ -594,15 +658,12 @@ based on the name of the attribute. Will be used in sidebar, statistics, extende
 Enable the standard reading mode by using this setting on a corpus:
 
 ```
-reading_mode:
-  component: standardReadingMode
+reading_mode: true
 ```
 
 When clicking on a word in the KWIC a link will be added to the sidebar. Clicking this link opens a new tab where the entire text is shown.
 
-Prerequisites are:
-- The structural attribute `sentence_id`.
-- `_head` and `_tail` attribute on each token. These attributes contain the whitespace before and after a token.
+The corpus must have the structural attribute `text__id`, which should be a unique ID in the corpus. `_head` and `_tail` are also needed and should contain the whitespace before and after the token. It is optional to put whitespace in both attributes. The simplest use case is to just put the trailing whitespace in `_tail` of that token and leave `_head` empty. The frontend will assume that any corpus with `reading_mode: true` will have these attributes.
 
 It is possible to write a custom reading component. See [this file](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js) for an example. See [Components](#components) for documentation on custom components.
 

@@ -20,6 +20,9 @@ import { extendedCQPTermComponent } from "./components/extended/cqp_term"
 import { extendedTokenComponent } from "./components/extended/token"
 import { extendedStructTokenComponent } from "./components/extended/struct_token"
 import { extendedCQPValueComponent } from "./components/extended/cqp_value"
+import { kwicComponent } from "./components/kwic"
+import { trendDiagramComponent } from "./components/trend_diagram"
+import { korpErrorComponent } from "./components/korp_error"
 import * as treeUtil from "./components/corpus_chooser/util"
 import statemachine from "@/statemachine"
 
@@ -78,6 +81,9 @@ korpApp.component("extendedCqpTerm", extendedCQPTermComponent)
 korpApp.component("extendedToken", extendedTokenComponent)
 korpApp.component("extendedStructToken", extendedStructTokenComponent)
 korpApp.component("extendedCqpValue", extendedCQPValueComponent)
+korpApp.component("kwic", kwicComponent)
+korpApp.component("trendDiagram", trendDiagramComponent)
+korpApp.component("korpError", korpErrorComponent)
 
 // load all custom components
 let customComponents = {}
@@ -91,6 +97,10 @@ for (const componentName in customComponents) {
     korpApp.component(componentName, customComponents[componentName])
 }
 
+/**
+ * angular-dynamic-locale updates translations in the builtin $locale service, which is used
+ * by at least the datepicker in angular-ui-bootstrap.
+ */
 korpApp.config((tmhDynamicLocaleProvider) =>
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
 )
@@ -101,18 +111,25 @@ korpApp.config(($uibTooltipProvider) =>
     })
 )
 
+/**
+ * Makes the hashPrefix "" instead of "!" which means our URL:s are ?mode=test#?lang=eng
+ * instead of ?mode=test#!?lang=eng
+ */
 korpApp.config(["$locationProvider", ($locationProvider) => $locationProvider.hashPrefix("")])
 
+/**
+ * "blob" must be added to the trusted URL:s, otherwise downloading KWIC and statistics etc. will not work
+ */
 korpApp.config([
     "$compileProvider",
-    ($compileProvider) => $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/),
+    ($compileProvider) => $compileProvider.aHrefSanitizationTrustedUrlList(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
-korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $timeout) {
+korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
     const s = $rootScope
     s._settings = settings
     window.lang = s.lang = $location.search().lang || settings["default_language"]
-    s.word_selected = null
+
     s.isLab = window.isLab
 
     s.extendedCQP = null
@@ -127,14 +144,17 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q, $ti
 
     s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
 
-    tmhDynamicLocale.set(settings["default_language"])
-
     s._loc = $location
 
     s.$watch("_loc.search()", function () {
         _.defer(() => (window.onHashChange || _.noop)())
+        tmhDynamicLocale.set($location.search().lang || settings["default_language"])
+    })
 
-        return tmhDynamicLocale.set($location.search().lang || settings["default_language"])
+    $(document).keyup(function (event) {
+        if (event.keyCode === 27) {
+            $rootScope.$broadcast("abort_requests")
+        }
     })
 
     $rootScope.kwicTabs = []

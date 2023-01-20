@@ -1,14 +1,13 @@
 /** @format */
 import statemachine from "@/statemachine"
 import { setDefaultConfigValues } from "./settings"
+import { updateSearchHistory } from "@/history"
 
-const korpFailImg = require("../img/korp_fail.svg")
 const deparam = require("jquery-deparam")
 
 import jStorage from "../lib/jstorage"
 
 window.authenticationProxy = new model.AuthenticationProxy()
-window.timeProxy = new model.TimeProxy()
 
 const creds = jStorage.get("creds")
 if (creds) {
@@ -18,36 +17,7 @@ if (creds) {
     statemachine.send("USER_NOT_FOUND")
 }
 
-// rewriting old url format to the angular one
-if (location.hash.length && location.hash[1] !== "?") {
-    location.hash = `#?${_.trimStart(location.hash, "#")}`
-}
-
-$.ajaxSetup({
-    dataType: "json",
-    traditional: true,
-})
-
-$.ajaxPrefilter("json", function (options) {
-    if (options.crossDomain && !$.support.cors) {
-        return "jsonp"
-    }
-})
-
 const loc_dfd = window.initLocales()
-$(document).keyup(function (event) {
-    if (event.keyCode === 27) {
-        if (kwicResults) {
-            kwicResults.abort()
-        }
-        if ("lemgramResults" in window) {
-            lemgramResults.abort()
-        }
-        if (statsResults) {
-            statsResults.abort()
-        }
-    }
-})
 
 const corpusSettingsPromise = new Promise((resolve, reject) => {
     const createSplashScreen = () => {
@@ -82,8 +52,6 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
                 // only if the current mode is parallel, we load the special code required
                 if (window.currentModeParallel) {
                     require("./parallel/corpus_listing.js")
-                    require("./parallel/parallel_search.js")
-                    require("./parallel/kwic_results.js")
                     require("./parallel/stats_proxy.js")
                 }
 
@@ -105,14 +73,16 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
                     for (const attrType of ["attributes", "struct_attributes", "custom_attributes"]) {
                         const attrList = corpus[attrType]
                         const attrs = {}
+                        const newAttrList = []
                         for (const attrIdx in attrList) {
                             const attr = modeSettings["attributes"][attrType][attrList[attrIdx]]
                             attrs[attr.name] = attr
+                            newAttrList.push(attr.name)
                         }
                         // attrs is an object of attribute settings
                         corpus[attrType] = attrs
                         // attrList is an ordered list of the preferred order of attributes
-                        corpus[`_${attrType}_order`] = attrList
+                        corpus[`_${attrType}_order`] = newAttrList
                     }
                     // TODO use the new format instead
                     // remake the new format of witihns and contex to the old
@@ -177,7 +147,7 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
         if (corpus) {
             settings.corpusListing.select(corpus.split(","))
         }
-        view.updateSearchHistory()
+        updateSearchHistory()
     } catch (error1) {
         c.error("ERROR setting corpora from location", error1)
     }
@@ -195,7 +165,7 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
             location.href = target.val()
         } else if (target.is(".clear")) {
             jStorage.set("searches", [])
-            view.updateSearchHistory()
+            updateSearchHistory()
         }
     })
 
@@ -231,6 +201,9 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
     })
 
     setTimeout(() => window.onHashChange(null, true), 0)
+
+    // this is to hide all ugly markup before Angular is fully loaded
+    $("#main").css("display", "block")
     $("#main").animate({ opacity: 1 }, function () {
         $(this).css("opacity", "")
     })
