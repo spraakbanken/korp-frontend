@@ -18,19 +18,6 @@ if (creds) {
 }
 
 const loc_dfd = window.initLocales()
-$(document).keyup(function (event) {
-    if (event.keyCode === 27) {
-        if (kwicResults) {
-            kwicResults.abort()
-        }
-        if ("lemgramResults" in window) {
-            lemgramResults.abort()
-        }
-        if (statsResults) {
-            statsResults.abort()
-        }
-    }
-})
 
 const corpusSettingsPromise = new Promise((resolve, reject) => {
     const createSplashScreen = () => {
@@ -65,7 +52,6 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
                 // only if the current mode is parallel, we load the special code required
                 if (window.currentModeParallel) {
                     require("./parallel/corpus_listing.js")
-                    require("./parallel/kwic_results.js")
                     require("./parallel/stats_proxy.js")
                 }
 

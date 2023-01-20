@@ -224,7 +224,7 @@ util.setDownloadLinks = function (xhr_settings, result_data) {
         return
     }
 
-    if (result_data.hits === 0) {
+    if (result_data.kwic.length == 0) {
         $("#download-links").hide()
         return
     }

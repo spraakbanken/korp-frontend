@@ -20,6 +20,9 @@ import { extendedCQPTermComponent } from "./components/extended/cqp_term"
 import { extendedTokenComponent } from "./components/extended/token"
 import { extendedStructTokenComponent } from "./components/extended/struct_token"
 import { extendedCQPValueComponent } from "./components/extended/cqp_value"
+import { kwicComponent } from "./components/kwic"
+import { trendDiagramComponent } from "./components/trend_diagram"
+import { korpErrorComponent } from "./components/korp_error"
 import * as treeUtil from "./components/corpus_chooser/util"
 import statemachine from "@/statemachine"
 
@@ -78,6 +81,9 @@ korpApp.component("extendedCqpTerm", extendedCQPTermComponent)
 korpApp.component("extendedToken", extendedTokenComponent)
 korpApp.component("extendedStructToken", extendedStructTokenComponent)
 korpApp.component("extendedCqpValue", extendedCQPValueComponent)
+korpApp.component("kwic", kwicComponent)
+korpApp.component("trendDiagram", trendDiagramComponent)
+korpApp.component("korpError", korpErrorComponent)
 
 // load all custom components
 let customComponents = {}
@@ -143,6 +149,12 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
     s.$watch("_loc.search()", function () {
         _.defer(() => (window.onHashChange || _.noop)())
         tmhDynamicLocale.set($location.search().lang || settings["default_language"])
+    })
+
+    $(document).keyup(function (event) {
+        if (event.keyCode === 27) {
+            $rootScope.$broadcast("abort_requests")
+        }
     })
 
     $rootScope.kwicTabs = []

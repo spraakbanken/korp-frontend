@@ -129,20 +129,6 @@ korpApp.directive("escaper", () => ({
     },
 }))
 
-korpApp.directive("constr", ($window) => ({
-    scope: true,
-
-    link(scope, elem, attr) {
-        const instance = new $window.view[attr.constr](elem, elem, scope)
-        if (attr.constrName) {
-            $window[attr.constrName] = instance
-        }
-
-        scope.instance = instance
-        scope.$parent.instance = instance
-    },
-}))
-
 korpApp.directive("searchSubmit", ($rootElement) => ({
     template: `\
 <div class="search_submit">

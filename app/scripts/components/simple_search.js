@@ -65,9 +65,6 @@ export const simpleSearchComponent = {
             </div>
         </div>
     `,
-    bindings: {
-        wordPic: "<",
-    },
     controller: [
         "$location",
         "backend",
@@ -230,10 +227,6 @@ export const simpleSearchComponent = {
                     }
                     $rootScope.simpleCQP = CQP.expandOperators(ctrl.getCQP())
                     ctrl.doSearch()
-                } else {
-                    if ("lemgramResults" in window) {
-                        lemgramResults.resetView()
-                    }
                 }
             })
 
@@ -251,40 +244,29 @@ export const simpleSearchComponent = {
                 const search = searches.activeSearch
                 ctrl.relatedObj = null
                 const cqp = ctrl.getCQP()
-                searches.kwicSearch(cqp, search && search.pageOnly)
+                searches.kwicSearch(cqp)
 
-                if (!(search && search.pageOnly)) {
-                    if (search.type === "lemgram") {
-                        let sense = false
-                        let saldo = false
-                        for (let corpus of settings.corpusListing.selected) {
-                            if ("sense" in corpus.attributes) {
-                                sense = true
-                            }
-                            if ("saldo" in corpus.attributes) {
-                                saldo = true
-                            }
+                if (search.type === "lemgram") {
+                    let sense = false
+                    let saldo = false
+                    for (let corpus of settings.corpusListing.selected) {
+                        if ("sense" in corpus.attributes) {
+                            sense = true
                         }
-
-                        if (sense || saldo) {
-                            backend.relatedWordSearch(unregescape(search.val)).then(function (data) {
-                                ctrl.relatedObj = data
-                                if (data.length > 2 && data[0].label == "Excreting") {
-                                    let [first, second, ...rest] = data
-                                    ctrl.relatedObj.data = [second, first, ...rest]
-                                }
-                                ctrl.relatedObj.attribute = sense ? "sense" : "saldo"
-                            })
+                        if ("saldo" in corpus.attributes) {
+                            saldo = true
                         }
                     }
 
-                    if (ctrl.wordPic && (search.type === "lemgram" || !search.val.includes(" "))) {
-                        const value = search.type === "lemgram" ? unregescape(search.val) : search.val
-                        return searches.lemgramSearch(value, search.type)
-                    } else {
-                        if ("lemgramResults" in window) {
-                            lemgramResults.resetView()
-                        }
+                    if (sense || saldo) {
+                        backend.relatedWordSearch(unregescape(search.val)).then(function (data) {
+                            ctrl.relatedObj = data
+                            if (data.length > 2 && data[0].label == "Excreting") {
+                                let [first, second, ...rest] = data
+                                ctrl.relatedObj.data = [second, first, ...rest]
+                            }
+                            ctrl.relatedObj.attribute = sense ? "sense" : "saldo"
+                        })
                     }
                 }
             }

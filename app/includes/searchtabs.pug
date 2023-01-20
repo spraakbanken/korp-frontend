@@ -1,7 +1,7 @@
 div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
   uib-tabset.tabbable.search_tabs(tab-hash='search_tab', active="activeTab")
     uib-tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
-      simple-search(word-pic="word_pic")
+      simple-search
     uib-tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]").extended
       div
         extended-standard(ng-if="!parallelMode")
