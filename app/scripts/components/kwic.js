@@ -10,7 +10,7 @@ export const kwicComponent = {
                 <warning ng-if="$ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:lang}}</warning>
                 <div class="controls_n" ng-show="$ctrl.hitsDisplay">
                     <span>{{'num_results' | loc:lang}}: </span>
-                    <span ng-bind-html="$ctrl.hitsDisplay | trust"></span>
+                    <span class="num-result" ng-bind-html="$ctrl.hitsDisplay | trust"></span>
                 </div>
                 <div class="hits_picture" ng-if="$ctrl.hitsPictureData.length > 1">
                     <table class="hits_picture_table">

@@ -66,20 +66,6 @@ describe("stats table", function () {
         await expect(element(by.css("#pieDiv .radioList_selected")).getText()).toBe("Absoluta frekvenser")
     })
 
-    xit("should be possible to do a KWIC search on the rows, multi-word", async () => {
-        await browser.get(browser.params.url + "#?result_tab=2&stats_reduce=saldo&corpus=suc2,suc3&search=word|gå ut")
-        browser.sleep(500)
-        const rows = element.all(by.css(".slick-row .link"))
-    })
-    // todo this does not count all rows
-    // await expect(rows.count()).toBe ??
-
-    // TODO fails because if weird NaN error on start & end parameters
-    // 1. rows.get(14).click()
-    // 2. assert result total is 80
-    // 3. rows.get(17).click()
-    // 4. assert result total is 4
-
     it("should be possible to reduce on more than one attribute", async () => {
         await browser.get(
             browser.params.url + "#?result_tab=2&stats_reduce=word,msd,lex&corpus=suc2,suc3&search=word|gå ut"
