@@ -38,21 +38,42 @@ korpApp.controller("SearchCtrl", [
         }
 
         const setupWatchStats = function () {
-            $scope.showStatistics = settings["statistics_search_default"]
-            if (!$scope.showStatistics) {
-                $location.search("hide_stats", true)
+            const defaultVal = settings["statistics_search_default"]
+            // incoming values
+            const hide = $location.search().hide_stats
+            const show = $location.search().show_stats
+
+            if (hide != null) {
+                $scope.showStatistics = false
+                if(!defaultVal) {
+                    $location.search("hide_stats", null)
+                }
+            } else if (show != null) {
+                $scope.showStatistics = true
+                if(defaultVal) {
+                    $location.search("show_stats", null)
+                }
+            } else {
+                $scope.showStatistics = defaultVal
             }
 
-            $scope.$watch(
-                () => $location.search().hide_stats,
-                (val) => ($scope.showStatistics = val == null)
-            )
+            if (defaultVal) {
+                $scope.$watch(
+                    () => $location.search().hide_stats,
+                    (val) => ($scope.showStatistics = val == null)
+                )
+            } else {
+                $scope.$watch(
+                    () => $location.search().show_stats,
+                    (val) => ($scope.showStatistics = val != null)
+                )
+            }
 
             $scope.$watch("showStatistics", function (val) {
-                if ($scope.showStatistics) {
-                    $location.search("hide_stats", null)
+                if(defaultVal) {
+                    $location.search("hide_stats", $scope.showStatistics ? null : true)
                 } else {
-                    $location.search("hide_stats", true)
+                    $location.search("show_stats", $scope.showStatistics ? true : null)
                 }
             })
         }

@@ -551,10 +551,17 @@ korpApp.directive("statsResultCtrl", () => ({
             })
         }
 
-        s.$watch(
-            () => $location.search().hide_stats,
-            (val) => (s.showStatistics = val == null)
-        )
+        if (settings["statistics_search_default"]) {
+            s.$watch(
+                () => $location.search().hide_stats,
+                (val) => (s.showStatistics = val == null)
+            )
+        } else {
+            s.$watch(
+                () => $location.search().show_stats,
+                (val) => (s.showStatistics = val != null)
+            )
+        }
 
         s.$watch(
             () => $location.search().in_order,
@@ -564,7 +571,11 @@ korpApp.directive("statsResultCtrl", () => ({
         s.shouldSearch = () => s.showStatistics && s.inOrder
 
         $scope.activate = function () {
-            $location.search("hide_stats", null)
+            if (settings["statistics_search_default"]) {
+                $location.search("hide_stats", null)
+            } else {
+                $location.search("show_stats", true)
+            }
             const cqp = searches.getCqpExpr()
             s.showStatistics = true
             s.makeRequest(cqp)
