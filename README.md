@@ -1,5 +1,5 @@
 This repo contains the frontend for [Korp](https://spraakbanken.gu.se/korp), 
-a frontend for the IMS Open Corpus Workbench (CWB). The Korp frontend is a great
+a tool using the IMS Open Corpus Workbench (CWB). Korp is a great
 tool for searching and visualising natural language corpus data. 
 
 Korp is developed by [Språkbanken](https://spraakbanken.gu.se) at the 
