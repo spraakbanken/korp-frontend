@@ -172,7 +172,6 @@ export const kwicComponent = {
                 }
                 if ("active" in changeObj) {
                     if ($ctrl.active) {
-                        // TODO copied
                         centerScrollbar()
                         $timeout(() => $element.find(".token_selected").click(), 0)
                     } else {

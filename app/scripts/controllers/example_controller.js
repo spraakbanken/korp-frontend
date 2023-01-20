@@ -19,7 +19,6 @@ class ExampleCtrl extends KwicCtrl {
         s.hitsPictureData = null
         s.aborted = false
 
-        // TODO s.$parent.$index?
         s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$parent.$index
 
         s.newDynamicTab()
