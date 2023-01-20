@@ -78,3 +78,28 @@ There are several instances of Korp, here are a list of some:
 - [Iceland / Stofnun Árna Magnússonar í íslenskum fræðum](https://malheildir.arnastofnun.is/)
 - [Tromsø / Giellatekno](https://gtweb.uit.no/korp/)
 - [Copenhagen / Institut for Nordiske Studier og Sprogvidenskab](https://alf.hum.ku.dk/korp/)
+
+# The development server
+
+When developing, the frontend is served at http://localhost:9111 by default.
+
+Host and port can be changed by the environment variables:
+- `KORP_HOST=<host>`
+- `KORP_PORT=<port>`
+
+It is also possible to serve the frontend from HTTPS using the environment variables:
+- `KORP_HTTPS=true`
+- `KORP_KEY=<path_to_key>-key.pem`
+- `KORP_CERT=<path to cert>.pem`
+
+The key and cert can be created using [mkcert](https://github.com/FiloSottile/mkcert).
+
+```
+mkcert korp.spraakbanken.gu.se
+mkcert -install
+```
+
+Now use `korp.spraakbanken.gu.se` as the value for `KORP_HOST`. It must also be added
+to `/etc/hosts`.
+
+One way to set the environment variables automatically is to use [direnv](https://direnv.net/):
