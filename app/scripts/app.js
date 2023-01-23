@@ -8,8 +8,6 @@ import { corpusChooserComponent } from "./components/corpus_chooser/corpus_choos
 import { ccTimeGraphComponent } from "./components/corpus_chooser/time_graph"
 import { ccTreeComponent } from "./components/corpus_chooser/tree"
 import { ccInfoBox } from "./components/corpus_chooser/info_box"
-import { loginBoxComponent } from "./components/auth/login_box"
-import { loginStatusComponent } from "./components/auth/login_status"
 import { depTreeComponent } from "./components/deptree/deptree"
 import { simpleSearchComponent } from "./components/simple_search"
 import { extendedStandardComponent } from "./components/extended/standard_extended"
@@ -69,8 +67,6 @@ korpApp.component("corpusChooser", corpusChooserComponent)
 korpApp.component("ccTimeGraph", ccTimeGraphComponent)
 korpApp.component("ccTree", ccTreeComponent)
 korpApp.component("ccInfoBox", ccInfoBox)
-korpApp.component("loginStatus", loginStatusComponent)
-korpApp.component("loginBox", loginBoxComponent)
 korpApp.component("depTree", depTreeComponent)
 korpApp.component("simpleSearch", simpleSearchComponent)
 korpApp.component("extendedStandard", extendedStandardComponent)
@@ -96,6 +92,8 @@ try {
 for (const componentName in customComponents) {
     korpApp.component(componentName, customComponents[componentName])
 }
+
+authenticationProxy.initAngular()
 
 /**
  * angular-dynamic-locale updates translations in the builtin $locale service, which is used
@@ -197,10 +195,7 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
         for (let corpusId of currentCorpora) {
             const corpusObj = settings.corpora[corpusId]
             if (corpusObj["limited_access"]) {
-                if (
-                    _.isEmpty(authenticationProxy.loginObj) ||
-                    !authenticationProxy.loginObj.credentials.includes(corpusObj.id.toUpperCase())
-                ) {
+                if (!authenticationProxy.hasCredential(corpusObj.id.toUpperCase())) {
                     loginNeededFor.push(corpusObj)
                 }
             }
@@ -315,6 +310,7 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         s.menu = util.collatorSort(s.modes.slice(N_VISIBLE), "label", s.$root.lang)
     })
 
+    s.currentMode = currentMode
     const i = _.map(s.menu, "mode").indexOf(currentMode)
     if (i !== -1) {
         s.visible.push(s.menu[i])

@@ -20,9 +20,9 @@ export const loginStatusComponent = {
 
             $ctrl.loggedIn = false
 
-            if (authenticationProxy.loginObj && authenticationProxy.loginObj.name) {
-                $ctrl.loggedIn = true
-                $ctrl.username = authenticationProxy.loginObj.name
+            $ctrl.loggedIn = authenticationProxy.isLoggedIn()
+            if ($ctrl.loggedIn) {
+                $ctrl.username = authenticationProxy.getUsername()
             }
 
             $ctrl.logout = function () {
@@ -32,7 +32,7 @@ export const loginStatusComponent = {
 
             statemachine.listen("login", () => {
                 $ctrl.loggedIn = true
-                $ctrl.username = authenticationProxy.loginObj.name
+                $ctrl.username = authenticationProxy.getUsername()
             })
 
             $ctrl.showModal = false

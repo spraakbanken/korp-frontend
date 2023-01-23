@@ -1,5 +1,6 @@
 /** @format */
 import statemachine from "@/statemachine"
+import { login } from "./basic_auth"
 
 export const loginBoxComponent = {
     template: `
@@ -38,8 +39,7 @@ export const loginBoxComponent = {
 
             $ctrl.loginSubmit = function () {
                 $ctrl.loginErr = false
-                authenticationProxy
-                    .makeRequest($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
+                login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
                     .done(function () {
                         // no send to statemachine
                         statemachine.send("LOGIN")

@@ -60,6 +60,13 @@ window.c = console
 window.isLab = __IS_LAB__
 window.currentMode = deparam(window.location.search.slice(1)).mode || "default"
 
+try {
+  // modes-files are optional and have customizing code
+  require(`modes/${currentMode}_mode.js`)
+} catch (error) {
+  console.log("No mode file available for mode:", currentMode)
+}
+
 require("angular-dynamic-locale/dist/tmhDynamicLocale.js")
 window.Raphael = require("raphael")
 
@@ -125,10 +132,3 @@ require("./scripts/filter_directives.js")
 require("./scripts/newsdesk.js")
 
 require("./index.pug")
-
-try {
-    // modes-files are optional and have customizing code
-    require(`modes/${currentMode}_mode.js`)
-} catch (error) {
-    console.log("No mode file available for mode:", currentMode)
-}

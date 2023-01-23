@@ -1,5 +1,4 @@
 /** @format */
-import statemachine from "@/statemachine"
 import { setDefaultConfigValues } from "./settings"
 import { updateSearchHistory } from "@/history"
 
@@ -7,17 +6,11 @@ const deparam = require("jquery-deparam")
 
 import jStorage from "../lib/jstorage"
 
-window.authenticationProxy = new model.AuthenticationProxy()
-
-const creds = jStorage.get("creds")
-if (creds) {
-    authenticationProxy.loginObj = creds
-    statemachine.send("USER_FOUND", creds)
-} else {
-    statemachine.send("USER_NOT_FOUND")
-}
+window.authenticationProxy = require("./components/auth/auth.js")
 
 const loc_dfd = window.initLocales()
+
+let initAuth
 
 const corpusSettingsPromise = new Promise((resolve, reject) => {
     const createSplashScreen = () => {
@@ -38,6 +31,8 @@ const corpusSettingsPromise = new Promise((resolve, reject) => {
     }
 
     createSplashScreen()
+
+    initAuth = authenticationProxy.init()
 
     const labParam = window.isLab ? "&include_lab" : ""
     fetch(`${settings["korp_backend_url"]}/corpus_config?mode=${window.currentMode}${labParam}`)
@@ -135,6 +130,12 @@ Promise.all([loc_dfd, corpusSettingsPromise]).then(([locData, modeSettings]) => 
             }
         }
     }
+
+    // Need to wait for authentication before Angular.js is started, otherwise we can't if
+    // login needs to be reinforced
+    ;(async () => {
+        await initAuth
+    })()
 
     try {
         angular.bootstrap(document, ["korpApp"])

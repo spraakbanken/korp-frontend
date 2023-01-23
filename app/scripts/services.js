@@ -102,7 +102,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             headers: {},
         })
 
-        _.extend(conf.headers, model.getAuthorizationHeader())
+        _.extend(conf.headers, authenticationProxy.getAuthorizationHeader())
 
         const xhr = $http(conf)
 
@@ -191,7 +191,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             headers: {},
         })
 
-        _.extend(conf.headers, model.getAuthorizationHeader())
+        _.extend(conf.headers, authenticationProxy.getAuthorizationHeader())
 
         return $http(conf).then(
             function ({ data }) {
@@ -234,7 +234,7 @@ korpApp.factory("backend", ($http, $q, utils, lexicons) => ({
             headers: {},
         })
 
-        _.extend(conf.headers, model.getAuthorizationHeader())
+        _.extend(conf.headers, authenticationProxy.getAuthorizationHeader())
 
         return $http(conf).then(
             function ({ data }) {
@@ -484,7 +484,7 @@ korpApp.factory("lexicons", function ($q, $http) {
 
                         let lemgram = karpLemgrams.join(",")
                         const corpora = corporaIDs.join(",")
-                        const headers = model.getAuthorizationHeader()
+                        const headers = authenticationProxy.getAuthorizationHeader()
                         return $http(
                             util.httpConfAddMethod({
                                 url: settings["korp_backend_url"] + "/lemgram_count",

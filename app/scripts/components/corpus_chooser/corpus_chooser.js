@@ -66,7 +66,7 @@ export const corpusChooserComponent = {
             let $ctrl = this
 
             statemachine.listen("login", function () {
-                $ctrl.credentials = authenticationProxy.loginObj.credentials
+                $ctrl.credentials = authenticationProxy.getCredentials()
                 // recalculate folder status and repaint it all
                 $ctrl.updateLimitedAccess()
             })
@@ -108,7 +108,7 @@ export const corpusChooserComponent = {
 
             // should be ON INFO-call done from statemachine
             $rootScope.$on("corpuschooserchange", (e, corpusIds) => {
-                $ctrl.credentials = authenticationProxy.loginObj.credentials || []
+                $ctrl.credentials = authenticationProxy.getCredentials()
 
                 // change of corpora from outside the chooser
                 // happens on initialzation when corpora is either decided by
@@ -185,7 +185,9 @@ export const corpusChooserComponent = {
             }
 
             $ctrl.updateLimitedAccess = function () {
-                treeUtil.updateLimitedAccess($ctrl.root, $ctrl.credentials)
+                if ($ctrl.root) {
+                    treeUtil.updateLimitedAccess($ctrl.root, $ctrl.credentials)
+                }
             }
 
             function select(corporaIds) {

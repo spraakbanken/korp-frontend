@@ -15,14 +15,6 @@ model.normalizeStatsData = function (data) {
     }
 }
 
-model.getAuthorizationHeader = function () {
-    if (!$.isEmptyObject(authenticationProxy.loginObj)) {
-        return { Authorization: `Basic ${authenticationProxy.loginObj.auth}` }
-    } else {
-        return {}
-    }
-}
-
 class BaseProxy {
     constructor() {
         this.prev = ""
@@ -108,7 +100,7 @@ class BaseProxy {
     }
 
     addAuthorizationHeader(req) {
-        const pairs = _.toPairs(model.getAuthorizationHeader())
+        const pairs = _.toPairs(authenticationProxy.getAuthorizationHeader())
         if (pairs.length) {
             return req.setRequestHeader(...(pairs[0] || []))
         }
@@ -442,58 +434,6 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         )
 
         return def.promise()
-    }
-}
-
-model.AuthenticationProxy = class AuthenticationProxy {
-    constructor() {
-        this.loginObj = {}
-    }
-
-    makeRequest(usr, pass, saveLogin) {
-        let auth
-        const self = this
-        if (window.btoa) {
-            auth = window.btoa(usr + ":" + pass)
-        } else {
-            throw Error("window.btoa is undefined")
-        }
-        const dfd = $.Deferred()
-        $.ajax({
-            url: settings["korp_backend_url"] + "/authenticate",
-            type: "GET",
-            beforeSend(req) {
-                return req.setRequestHeader("Authorization", `Basic ${auth}`)
-            },
-        })
-            .done(function (data, status, xhr) {
-                if (!data.corpora) {
-                    dfd.reject()
-                    return
-                }
-                self.loginObj = {
-                    name: usr,
-                    credentials: data.corpora,
-                    auth,
-                }
-                if (saveLogin) {
-                    jStorage.set("creds", self.loginObj)
-                }
-                return dfd.resolve(data)
-            })
-            .fail(function (xhr, status, error) {
-                c.log("auth fail", arguments)
-                return dfd.reject()
-            })
-
-        return dfd
-    }
-
-    hasCred(corpusId) {
-        if (!this.loginObj.credentials) {
-            return false
-        }
-        return this.loginObj.credentials.includes(corpusId.toUpperCase())
     }
 }
 

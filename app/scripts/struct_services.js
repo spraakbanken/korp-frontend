@@ -32,7 +32,7 @@ korpApp.factory("structService", ($http, $q) => ({
                 headers: {},
             })
 
-            _.extend(conf.headers, model.getAuthorizationHeader())
+            _.extend(conf.headers, authenticationProxy.getAuthorizationHeader())
 
             $http(conf).then(function ({ data }) {
                 let result, values
