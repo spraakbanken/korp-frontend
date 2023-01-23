@@ -106,16 +106,9 @@ export const corpusChooserComponent = {
                 $ctrl.infoNode = null
             }
 
-            // should be ON INFO-call done from statemachine
-            $rootScope.$on("corpuschooserchange", (e, corpusIds) => {
+            // should be ON INFO-call done from statemachine)
+            $rootScope.$on("initialcorpuschooserchange", (e, corpusIds) => {
                 $ctrl.credentials = authenticationProxy.getCredentials()
-
-                // change of corpora from outside the chooser
-                // happens on initialzation when corpora is either decided by
-                // settings.preselectedCorpora / URL query param
-                if ($ctrl.initialized) {
-                    return
-                }
 
                 $ctrl.initialized = true
 

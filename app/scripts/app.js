@@ -21,7 +21,6 @@ import { extendedCQPValueComponent } from "./components/extended/cqp_value"
 import { kwicComponent } from "./components/kwic"
 import { trendDiagramComponent } from "./components/trend_diagram"
 import { korpErrorComponent } from "./components/korp_error"
-import * as treeUtil from "./components/corpus_chooser/util"
 import statemachine from "@/statemachine"
 
 window.korpApp = angular.module("korpApp", [
@@ -123,7 +122,7 @@ korpApp.config([
     ($compileProvider) => $compileProvider.aHrefSanitizationTrustedUrlList(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
-korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
+korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout) {
     const s = $rootScope
     s._settings = settings
     window.lang = s.lang = $location.search().lang || settings["default_language"]
@@ -161,81 +160,49 @@ korpApp.run(function ($rootScope, $location, searches, tmhDynamicLocale, $q) {
     $rootScope.mapTabs = []
     $rootScope.textTabs = []
 
-    $q.all([searches.infoDef, searches.timeDeferred]).then(function () {
-        // if no preselectedCorpora is defined, use all of them
-        if (!(settings["preselected_corpora"] && settings["preselected_corpora"].length)) {
-            settings["preselected_corpora"] = _.map(
-                _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
-                "id"
-            )
-        } else {
-            let expandedCorpora = []
-            for (let preItem of settings["preselected_corpora"]) {
-                preItem = preItem.replace(/^__/g, "")
-                expandedCorpora = [].concat(
-                    expandedCorpora,
-                    treeUtil.getAllCorporaInFolders(settings["folders"], preItem)
-                )
+    s.waitForLogin = false
+
+    const loginNeededFor = []
+
+    for (let corpusObj of settings.corpusListing.selected) {
+        if (corpusObj["limited_access"]) {
+            if (!authenticationProxy.hasCredential(corpusObj.id.toUpperCase())) {
+                loginNeededFor.push(corpusObj)
             }
-            // folders expanded, save
-            settings["preselected_corpora"] = expandedCorpora
         }
+    }
 
-        let currentCorpora
-        let { corpus } = $location.search()
-        if (corpus) {
-            currentCorpora = _.flatten(
-                _.map(corpus.split(","), (val) => treeUtil.getAllCorporaInFolders(settings["folders"], val))
-            )
-        } else {
-            currentCorpora = settings["preselected_corpora"]
-        }
+    const selectedIds = settings.corpusListing.selected.map((corpus) => corpus.id)
 
-        const loginNeededFor = []
-        for (let corpusId of currentCorpora) {
-            const corpusObj = settings.corpora[corpusId]
-            if (corpusObj["limited_access"]) {
-                if (!authenticationProxy.hasCredential(corpusObj.id.toUpperCase())) {
-                    loginNeededFor.push(corpusObj)
+    function initialzeCorpusSelection() {
+        if (_.isEmpty(settings.corpora)) {
+            console.log("looks like the configuration was not fetched. Try reloading Korp.")
+        } else if (loginNeededFor.length != 0) {
+            if (authenticationProxy.isLoggedIn()) {
+                console.log("Not authorized")
+                if (settings.corpusListing.corpora.length == loginNeededFor.length) {
+                    console.log("No corpus available in mode, do you want to go to default mode?")
+                } else {
+                    console.log(
+                        "Some corpora in your search are not available, do you want to remove them from the search?"
+                    )
                 }
+            } else {
+                console.log("You are tryign to access restricted corpora when logged out. Log in?")
+                s.waitForLogin = true
             }
-        }
-
-        // only ask user to login if corpora came from URL
-        if (corpus && loginNeededFor.length != 0) {
-            s.savedState = $location.search()
-            $location.url($location.path() + "?")
-
-            // some state need special treatment
-            if (s.savedState.reading_mode) {
-                $location.search("reading_mode")
-            }
-            if (s.savedState.search_tab) {
-                $location.search("search_tab", s.savedState.search_tab)
-            }
-            if (s.savedState.cqp) {
-                $location.search("cqp", s.savedState.cqp)
-            }
-
-            statemachine.send("LOGIN_NEEDED", { loginNeededFor })
         } else {
-            $rootScope.$broadcast("corpuschooserchange", currentCorpora)
+            // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
+            $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", selectedIds), 0)
         }
-    })
+    }
+
+    initialzeCorpusSelection()
 
     statemachine.listen("login", function () {
-        if (s.savedState) {
-            for (let key in s.savedState) {
-                const val = s.savedState[key]
-                if (key !== "search_tab") {
-                    $location.search(key, val)
-                }
-            }
-            // some state need special treatment
-            s.$broadcast("updateAdvancedCQP")
-            const corpora = s.savedState.corpus.split(",")
-            s.savedState = null
-            $rootScope.$broadcast("corpuschooserchange", corpora)
+        if (s.waitForLogin) {
+            s.waitForLogin = false
+            initialzeCorpusSelection()
         }
     })
 })

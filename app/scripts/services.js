@@ -255,89 +255,14 @@ korpApp.factory("searches", [
     function ($location, $rootScope, $http, $q) {
         class Searches {
             constructor() {
-                this.timeProxy = new model.TimeProxy()
-
                 this.activeSearch = null
-                const infoDefRef = $q.defer()
-                this.infoDef = infoDefRef.promise
-                this.timeDefRef = $q.defer()
-                this.timeDeferred = this.timeDefRef.promise
 
                 // is resolved when parallel search controller is loaded
                 this.langDef = $q.defer()
-                const that = this
-                this.getInfoData().then(function () {
-                    infoDefRef.resolve()
-                    that.getTimeData()
-                })
             }
 
             kwicSearch(cqp) {
                 $rootScope.$emit("make_request", cqp, this.activeSearch)
-            }
-
-            getInfoData() {
-                const def = $q.defer()
-                const conf = util.httpConfAddMethod({
-                    url: settings["korp_backend_url"] + "/corpus_info",
-                    params: {
-                        corpus: _.map(settings.corpusListing.corpora, "id")
-                            .map((a) => a.toUpperCase())
-                            .join(","),
-                    },
-                })
-                $http(conf).then(function (response) {
-                    const { data } = response
-                    for (let corpus of settings.corpusListing.corpora) {
-                        corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
-                        const privateStructAttrs = []
-                        for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
-                            if (attr.indexOf("__") !== -1) {
-                                privateStructAttrs.push(attr)
-                            }
-                        }
-                        corpus["private_struct_attributes"] = privateStructAttrs
-                    }
-                    return def.resolve()
-                })
-
-                return def.promise
-            }
-
-            getTimeData() {
-                const def = this.timeDefRef
-                const timeProxy = this.timeProxy
-                timeProxy
-                    .makeRequest()
-                    .fail((error) => {
-                        console.error(error)
-                    })
-                    .done(function (...args) {
-                        let [dataByCorpus, all_timestruct, rest] = args[0]
-
-                        if (all_timestruct.length == 0) {
-                            def.resolve([[], []])
-                        }
-
-                        // this adds data to the corpora in settings
-                        for (let corpus in dataByCorpus) {
-                            let struct = dataByCorpus[corpus]
-                            if (corpus !== "time") {
-                                const cor = settings.corpora[corpus.toLowerCase()]
-                                timeProxy.expandTimeStruct(struct)
-                                cor.non_time = struct[""]
-                                struct = _.omit(struct, "")
-                                cor.time = struct
-                                if (_.keys(struct).length > 1) {
-                                    if (cor.common_attributes == null) {
-                                        cor.common_attributes = {}
-                                    }
-                                    cor.common_attributes.date_interval = true
-                                }
-                            }
-                        }
-                        def.resolve([all_timestruct, rest])
-                    })
             }
         }
 
@@ -383,7 +308,7 @@ korpApp.factory("searches", [
                     }
                     updateSearchHistory(historyValue, $location.absUrl())
                 }
-                $q.all([searches.infoDef, searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(
+                $q.all([searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(
                     function () {
                         let extendedSearch = false
                         if (type === "cqp") {

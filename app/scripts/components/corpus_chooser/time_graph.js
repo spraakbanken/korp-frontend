@@ -43,16 +43,16 @@ export const ccTimeGraphComponent = {
 
             $ctrl.timeProxy = new model.TimeProxy()
 
-            searches.timeDeferred.then(([allTimestruct, rest]) => {
-                const hoverCallback = (year, val, total, isRestData) => {
-                    safeApply($scope, () => ($ctrl.timeHover = { year, val, total, isRestData }))
-                }
+            const [allTimestruct, rest] = settings["time_data"]
 
-                $rootScope.$on("corpuschooserchange", (e) => {
-                    onTimeGraphChange($ctrl.timeProxy, hoverCallback, allTimestruct, rest)
-                })
+            const hoverCallback = (year, val, total, isRestData) => {
+                safeApply($scope, () => ($ctrl.timeHover = { year, val, total, isRestData }))
+            }
+
+            $rootScope.$on("corpuschooserchange", (e) => {
                 onTimeGraphChange($ctrl.timeProxy, hoverCallback, allTimestruct, rest)
             })
+            onTimeGraphChange($ctrl.timeProxy, hoverCallback, allTimestruct, rest)
         },
     ],
 }
