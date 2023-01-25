@@ -2,6 +2,7 @@
 import statemachine from "@/statemachine"
 import { login } from "./basic_auth"
 
+// TODO make it not closable when login is NEEDED
 export const loginBoxComponent = {
     template: `
     <div class="modal-header login-modal-header">
@@ -9,10 +10,6 @@ export const loginBoxComponent = {
         <span ng-click="$ctrl.clickX()" class="close-x">×</span>
     </div>
     <div id="login_popup" class="modal-body">
-        <div ng-if="$ctrl.loginNeededFor.length" style="font-size: 0.75em">
-            <span style="display: inline">{{'login_needed_for_corpora' | loc:lang}}</span>
-            <span style="display: inline; margin-right: 2px;" ng-repeat="corpus in $ctrl.loginNeededFor">{{corpus.title | locObj:lang}}</span>
-        </div>
         <form ng-submit="$ctrl.loginSubmit()">
             <label for="usrname">{{'username' | loc:lang}}</label>
             <input id="usrname" ng-model="$ctrl.loginUsr" type="text">
@@ -29,7 +26,6 @@ export const loginBoxComponent = {
     </div>
     `,
     bindings: {
-        loginNeededFor: "<",
         closeClick: "&",
     },
     controller: [

@@ -345,6 +345,10 @@
 
     "choose_value": "Välj ett värde",
     "login_needed_for_corpora": "Inloggning behövs för åtkomst till",
+    "access_partly_denied": "Du har inte tillgång till vissa korpusar som du har valt",
+    "access_partly_denied_continue": "För att kunna fortsätta tas korpusarna bort ur sökningen.",
+    "access_denied": "Du har inte tillgång till någon korpus i det här läget.",
+    "go_to_start": "Gå till startsidan",
 
     "stats_warn": "Statistiken är avaktiverad",
     "stats_not_in_order_warn": "Statistiken stödjs för nuvarande inte när \"i följd\" är avaktiverad.",

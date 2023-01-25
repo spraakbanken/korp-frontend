@@ -35,10 +35,9 @@ export const ccTimeGraphComponent = {
     </style>
 `,
     controller: [
-        "$scope",
-        "searches",
+        "$timeout",
         "$rootScope",
-        function controller($scope, searches, $rootScope) {
+        function controller($timeout, $rootScope) {
             let $ctrl = this
 
             $ctrl.timeProxy = new model.TimeProxy()
@@ -46,7 +45,7 @@ export const ccTimeGraphComponent = {
             const [allTimestruct, rest] = settings["time_data"]
 
             const hoverCallback = (year, val, total, isRestData) => {
-                safeApply($scope, () => ($ctrl.timeHover = { year, val, total, isRestData }))
+                $timeout(() => ($ctrl.timeHover = { year, val, total, isRestData }), 0)
             }
 
             $rootScope.$on("corpuschooserchange", (e) => {

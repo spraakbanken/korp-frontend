@@ -34,7 +34,7 @@ async function getTimeData() {
     let [dataByCorpus, all_timestruct, rest] = args
 
     if (all_timestruct.length == 0) {
-        def.resolve([[], []])
+        return [[], []]
     }
 
     // this adds data to the corpora in settings
@@ -72,7 +72,10 @@ async function getConfig() {
         throw Error("Something wrong with corpus config")
     }
 
-    const modeSettings = await response.json()
+    return await response.json()
+}
+
+function transformConfig(modeSettings) {
     window.currentModeParallel = modeSettings.parallel
     // only if the current mode is parallel, we load the special code required
     if (window.currentModeParallel) {
@@ -140,10 +143,19 @@ async function getConfig() {
 function setInitialCorpora() {
     // if no preselectedCorpora is defined, use all of them
     if (!(settings["preselected_corpora"] && settings["preselected_corpora"].length)) {
-        settings["preselected_corpora"] = _.map(
-            _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
-            "id"
-        )
+        // if all corpora in mode is limited_access, make them all preselected
+        if (settings.corpusListing.corpora.filter((corpus) => !corpus.limited_access).length == 0) {
+            settings["preselected_corpora"] = _.map(
+                _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
+                "id"
+            )
+            // else filter out the ones with limited_access
+        } else {
+            settings["preselected_corpora"] = _.map(
+                _.filter(settings.corpusListing.corpora, (corpus) => !(corpus.hide || corpus.limited_access)),
+                "id"
+            )
+        }
     } else {
         let expandedCorpora = []
         for (let preItem of settings["preselected_corpora"]) {
@@ -168,6 +180,11 @@ function setInitialCorpora() {
     settings.corpusListing.select(currentCorpora)
 }
 
+/**
+ * This function is part of Korp's initialization process
+ * It both fetches data, such as config and populates the
+ * `settings` object.
+ */
 export async function fetchInitialData(authDef) {
     if (settings["config_dependent_on_authentication"]) {
         await authDef
@@ -175,14 +192,13 @@ export async function fetchInitialData(authDef) {
 
     const loc_dfd = window.initLocales()
 
-    const modeSettings = await getConfig()
+    const modeSettings = transformConfig(await getConfig())
 
     _.assign(window.settings, modeSettings)
 
     setDefaultConfigValues()
 
     const corpora = settings.corpora
-
     if (!window.currentModeParallel) {
         settings.corpusListing = new CorpusListing(corpora)
     } else {
@@ -190,12 +206,15 @@ export async function fetchInitialData(authDef) {
     }
 
     const infoDef = getInfoData()
-
-    const timeDef = getTimeData()
-
+    let timeDef
+    if (settings["has_timespan"]) {
+        timeDef = getTimeData()
+    }
     setInitialCorpora()
 
     await loc_dfd
     await infoDef
-    settings["time_data"] = await timeDef
+    if (settings["has_timespan"]) {
+        settings["time_data"] = await timeDef
+    }
 }

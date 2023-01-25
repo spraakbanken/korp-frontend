@@ -38,20 +38,18 @@ export const loginStatusComponent = {
             $ctrl.showModal = false
 
             statemachine.listen("login_needed", function (event) {
-                $ctrl.showLogin(event.loginNeededFor)
+                $ctrl.showLogin()
             })
 
-            $ctrl.showLogin = (loginNeededFor) => {
+            $ctrl.showLogin = () => {
                 const s = $rootScope.$new(true)
 
                 s.closeModal = () => {
                     modal.close()
                 }
 
-                s.loginNeededFor = loginNeededFor
-
                 const modal = $uibModal.open({
-                    template: `<login-box close-click='closeModal()' login-needed-for="loginNeededFor"></login-box>`,
+                    template: `<login-box close-click='closeModal()'></login-box>`,
                     windowClass: "login",
                     scope: s,
                     size: "sm",

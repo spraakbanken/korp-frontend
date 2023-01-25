@@ -347,6 +347,10 @@
 
     "choose_value": "Choose a value",
     "login_needed_for_corpora": "Login needed for access to",
+    "access_partly_denied": "You do not have access to some corpora that you have selected",
+    "access_partly_denied_continue": "To be able to continue, they will be removed.",
+    "access_denied": "You do not have access to any corpus in this mode.",
+    "go_to_start": "Go to start page",
 
     "stats_warn": "Statistics is disabled",
     "stats_not_in_order_warn": "Statistics is currently not supported when \"in order\" is disabled.",

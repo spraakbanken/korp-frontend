@@ -109,10 +109,14 @@ function initApp() {
 createSplashScreen()
 ;(async () => {
     try {
+        // Check if user is logged in
         const initAuth = authenticationProxy.init()
+        // Fetch everything that only needs to be check once
         await fetchInitialData(initAuth)
+        // Now wait for login to resolve
         await initAuth
         document.getElementById("preload").remove()
+        // startup Angular.js app
         initApp()
     } catch (error) {
         console.log(error)

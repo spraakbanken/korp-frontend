@@ -35,7 +35,7 @@ export const corpusChooserComponent = {
         <div ng-if="$ctrl.showChooser"  class="corpus-chooser flex bg-gray-100">
             <div class="popupchecks flex-shrink-0 p-4 h-full">
                 <div class="flex">
-                    <cc-time-graph></cc-time-graph>
+                    <cc-time-graph ng-if="$ctrl.showTimeGraph"></cc-time-graph>
                     <div class="p-2">
                         <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
                             <span class="fa-solid fa-check"></span>
@@ -92,6 +92,7 @@ export const corpusChooserComponent = {
 
             $ctrl.initialized = false
             $ctrl.showChooser = false
+            $ctrl.showTimeGraph = settings["has_timespan"]
 
             $ctrl.onShowChooser = () => {
                 // don't open the chooser unless the info-call is done

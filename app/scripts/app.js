@@ -23,6 +23,8 @@ import { trendDiagramComponent } from "./components/trend_diagram"
 import { korpErrorComponent } from "./components/korp_error"
 import statemachine from "@/statemachine"
 
+let html = String.raw
+
 window.korpApp = angular.module("korpApp", [
     "ui.bootstrap.typeahead",
     "uib/template/typeahead/typeahead-popup.html",
@@ -122,7 +124,7 @@ korpApp.config([
     ($compileProvider) => $compileProvider.aHrefSanitizationTrustedUrlList(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
-korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout) {
+korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout, $uibModal) {
     const s = $rootScope
     s._settings = settings
     window.lang = s.lang = $location.search().lang || settings["default_language"]
@@ -162,34 +164,69 @@ korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout) {
 
     s.waitForLogin = false
 
-    const loginNeededFor = []
+    function initialzeCorpusSelection() {
+        let loginNeededFor = []
 
-    for (let corpusObj of settings.corpusListing.selected) {
-        if (corpusObj["limited_access"]) {
-            if (!authenticationProxy.hasCredential(corpusObj.id.toUpperCase())) {
-                loginNeededFor.push(corpusObj)
+        for (let corpusObj of settings.corpusListing.selected) {
+            if (corpusObj["limited_access"]) {
+                if (!authenticationProxy.hasCredential(corpusObj.id.toUpperCase())) {
+                    loginNeededFor.push(corpusObj)
+                }
             }
         }
-    }
 
-    const selectedIds = settings.corpusListing.selected.map((corpus) => corpus.id)
+        let selectedIds
+        let { corpus } = $location.search()
+        if (corpus) {
+            selectedIds = corpus.split(",")
+        } else {
+            selectedIds = settings["preselected_corpora"]
+        }
 
-    function initialzeCorpusSelection() {
         if (_.isEmpty(settings.corpora)) {
-            console.log("looks like the configuration was not fetched. Try reloading Korp.")
+            s.openErrorModal({
+                content: "<korp-error></korp-error>",
+                resolvable: false,
+            })
         } else if (loginNeededFor.length != 0) {
+            const loginNeededHTML = () =>
+                loginNeededFor.map((corpus) => `<span>${util.getLocaleStringObject(corpus.title)}</span>`).join(", ")
+
             if (authenticationProxy.isLoggedIn()) {
-                console.log("Not authorized")
                 if (settings.corpusListing.corpora.length == loginNeededFor.length) {
-                    console.log("No corpus available in mode, do you want to go to default mode?")
+                    s.openErrorModal({
+                        content: "{{'access_denied' | loc:lang}}",
+                        buttonText: "go_to_start",
+                        onClose: () => {
+                            window.location.href = window.location.href.split("?")[0]
+                        },
+                    })
                 } else {
-                    console.log(
-                        "Some corpora in your search are not available, do you want to remove them from the search?"
-                    )
+                    s.openErrorModal({
+                        content: html`<div>{{'access_partly_denied' | loc:lang}}:</div>
+                            <div>${loginNeededHTML()}</div>
+                            <div>{{'access_partly_denied_continue' | loc:lang}}</div>`,
+                        onClose: () => {
+                            const neededIds = loginNeededFor.map((corpus) => corpus.id)
+                            selectedIds = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
+                            loginNeededFor = []
+                            if (selectedIds.length == 0) {
+                                selectedIds = settings["preselected_corpora"]
+                                settings.corpusListing.select(selectedIds)
+                            }
+                            initialzeCorpusSelection()
+                        },
+                    })
                 }
             } else {
-                console.log("You are tryign to access restricted corpora when logged out. Log in?")
-                s.waitForLogin = true
+                s.openErrorModal({
+                    content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:lang}}:</span
+                        >${loginNeededHTML()}`,
+                    onClose: () => {
+                        s.waitForLogin = true
+                        statemachine.send("LOGIN_NEEDED", { loginNeededFor })
+                    },
+                })
             }
         } else {
             // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
@@ -197,7 +234,40 @@ korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout) {
         }
     }
 
-    initialzeCorpusSelection()
+    // TODO the top bar could show even though the modal is open,
+    // thus allowing switching modes or language when an error has occured.
+    s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null }) => {
+        const s = $rootScope.$new(true)
+
+        const useCustomButton = !_.isEmpty(buttonText)
+
+        const modal = $uibModal.open({
+            template: html` <div class="modal-body mt-10">
+                <div>${content}</div>
+                <div class="ml-auto mr-0 w-fit">
+                    <button
+                        ng-if="${resolvable}"
+                        ng-click="closeModal()"
+                        class="btn bg-blue-500 text-white font-bold mt-3"
+                    >
+                        <span ng-if="${useCustomButton}">{{'${buttonText}' | loc:lang }}</span>
+                        <span ng-if="!${useCustomButton}">OK</span>
+                    </button>
+                </div>
+            </div>`,
+            scope: s,
+            size: "md",
+            backdrop: "static",
+            keyboard: false,
+        })
+
+        s.closeModal = () => {
+            if (onClose && resolvable) {
+                modal.close()
+                onClose()
+            }
+        }
+    }
 
     statemachine.listen("login", function () {
         if (s.waitForLogin) {
@@ -205,6 +275,8 @@ korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout) {
             initialzeCorpusSelection()
         }
     })
+
+    initialzeCorpusSelection()
 })
 
 korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
@@ -277,6 +349,16 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
         s.menu = util.collatorSort(s.modes.slice(N_VISIBLE), "label", s.$root.lang)
     })
 
+    s.getUrl = function (modeId) {
+        return s.getUrlParts(modeId).join("")
+    }
+
+    s.getUrlParts = function (modeId) {
+        const langParam = settings["default_language"] === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
+        const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
+        return [location.pathname, modeParam, langParam]
+    }
+
     s.currentMode = currentMode
     const i = _.map(s.menu, "mode").indexOf(currentMode)
     if (i !== -1) {
@@ -290,16 +372,6 @@ korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
             window.settings.mode = mode
             mode.selected = true
         }
-    }
-
-    s.getUrl = function (modeId) {
-        return s.getUrlParts(modeId).join("")
-    }
-
-    s.getUrlParts = function (modeId) {
-        const langParam = settings["default_language"] === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
-        const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
-        return [location.pathname, modeParam, langParam]
     }
 })
 
