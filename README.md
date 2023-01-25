@@ -2,14 +2,15 @@ This repo contains the frontend for [Korp](https://spraakbanken.gu.se/korp),
 a tool using the IMS Open Corpus Workbench (CWB). Korp is a great
 tool for searching and visualising natural language corpus data. 
 
-Korp is developed by [Språkbanken](https://spraakbanken.gu.se) at the 
-University of Gothenburg, Sweden. 
+Korp is mainly developed by [Språkbanken](https://spraakbanken.gu.se) at the 
+University of Gothenburg, Sweden. Contributions are also made from other
+organizations that use the software.
 
 Documentation:
 - [Frontend documentation](../master/doc/frontend_devel.md)
 - [Backend documentation](https://github.com/spraakbanken/korp-backend/)
 - Sparv - The pipeline used to tag and otherwise process raw Swedish-language corpus data is documented [here](https://spraakbanken.gu.se/sparv)
-- [Our Korp configuration directory](https://github.com/spraakbanken/korp-frontend-sb/) (supplement to documentation)
+- [Språkbanken's Korp configuration directory](https://github.com/spraakbanken/korp-frontend-sb/) (supplement to documentation)
 
 # Getting started
 
