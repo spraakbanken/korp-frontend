@@ -18,7 +18,7 @@ describe("stats table", function () {
     }
 
     it("should show the correct rows and columns", async () => {
-        await browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
+        await browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&show_stats")
         await browser.sleep(1000)
         const rows = element.all(by.css(".slick-row"))
         await expect(rows.count()).toBe(10)
@@ -32,7 +32,7 @@ describe("stats table", function () {
     })
 
     it("should return expected  results for reduce on word", async () => {
-        await browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
+        await browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&show_stats")
         await browser.sleep(1000)
         const rows = element.all(by.css(".slick-row"))
 
@@ -49,7 +49,7 @@ describe("stats table", function () {
 
     it("should work to open arc diagram with the correct result", async () => {
         await browser.get(
-            browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&stats_reduce=lemma"
+            browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&stats_reduce=lemma&show_stats"
         )
         // browser.sleep(1000)
         const table = element(by.css("#myGrid"))
@@ -68,7 +68,8 @@ describe("stats table", function () {
 
     it("should be possible to reduce on more than one attribute", async () => {
         await browser.get(
-            browser.params.url + "#?result_tab=2&stats_reduce=word,msd,lex&corpus=suc2,suc3&search=word|gå ut"
+            browser.params.url +
+                "#?result_tab=2&stats_reduce=word,msd,lex&corpus=suc2,suc3&search=word|gå ut&show_stats"
         )
 
         const table = element(by.css("#myGrid"))

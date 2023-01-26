@@ -22,9 +22,7 @@ describe("page", function () {
 
     beforeEach(async function () {
         // browser.ignoreSynchronization = true
-        await browser.get(
-            browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${cycleSearch()}&page=7`
-        )
+        await browser.get(browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${cycleSearch()}&page=7`)
         elm = element.all(by.css(".results-kwic kwic-pager .pager-wrapper .active a")).first()
         await waitFor(elm)
     })
@@ -36,10 +34,7 @@ describe("page", function () {
     })
 
     it("should page to the correct page", async function () {
-        await element
-            .all(by.css(".results-kwic kwic-pager .pagination li:nth-last-child(2)"))
-            .first()
-            .click()
+        await element.all(by.css(".results-kwic kwic-pager .pagination li:nth-last-child(2)")).first().click()
         await expect(elm.getText()).toContain("9")
         // await expect(EC.textToBePresentInElement(elm, 9))
     })
@@ -62,9 +57,7 @@ describe("json button", function () {
     beforeEach(async () => {
         // browser.ignoreSynchronization = true
         const wd = cycleSearch()
-        await browser.get(
-            browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${wd}&page=7`
-        )
+        await browser.get(browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${wd}&page=7&show_stats`)
     })
 
     it("should display the correct url", async function () {
@@ -87,8 +80,6 @@ describe("json button", function () {
 describe("kwic download menu", () =>
     // would love to test that download is really performed but it's hard to test side effects...
     it("should show the csv download option", async () => {
-        await browser.get(
-            browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2"
-        )
+        await browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2")
         await expect(element(by.cssContainingText("option", "CSV")).isPresent()).toBe(true)
     }))
