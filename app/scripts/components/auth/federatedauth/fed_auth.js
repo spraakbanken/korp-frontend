@@ -63,7 +63,7 @@ const login = () => {
 }
 
 const getAuthorizationHeader = () => {
-    if (isLoggedIn) {
+    if (isLoggedIn()) {
         return { Authorization: `Bearer ${state.jwt}` }
     }
     return {}
