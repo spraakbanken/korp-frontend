@@ -46,6 +46,17 @@ const init = async () => {
         []
     )
 
+    state.otherCredentials = _.reduce(
+        jwtPayload.scope.other,
+        (acc, val, key) => {
+            if (val >= jwtPayload.levels["READ"]) {
+                acc.push(key.toUpperCase())
+            }
+            return acc
+        },
+        []
+    )
+
     return true
 }
 
@@ -89,6 +100,8 @@ const isLoggedIn = () => {
     return !_.isEmpty(state.jwt)
 }
 
+const getOtherCredentials = () => state.otherCredentials || []
+
 export {
     init,
     initAngular,
@@ -99,4 +112,5 @@ export {
     getCredentials,
     getUsername,
     isLoggedIn,
+    getOtherCredentials,
 }

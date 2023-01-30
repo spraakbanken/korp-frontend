@@ -58,8 +58,14 @@ async function getTimeData() {
 }
 
 async function getConfig() {
-    const labParam = window.isLab ? "&include_lab" : ""
-    const configUrl = `${settings["korp_backend_url"]}/corpus_config?mode=${window.currentMode}${labParam}`
+    let configUrl
+    // The corpora to include can be defined elsewhere can in a mode
+    if (settings["corpus_config_url"]) {
+        configUrl = await settings["corpus_config_url"]()
+    } else {
+        const labParam = window.isLab ? "&include_lab" : ""
+        configUrl = `${settings["korp_backend_url"]}/corpus_config?mode=${window.currentMode}${labParam}`
+    }
     let response
     try {
         response = await fetch(configUrl)
@@ -191,8 +197,8 @@ export async function fetchInitialData(authDef) {
     }
 
     const loc_dfd = window.initLocales()
-
-    const modeSettings = transformConfig(await getConfig())
+    const config = await getConfig()
+    const modeSettings = transformConfig(config)
 
     _.assign(window.settings, modeSettings)
 
@@ -205,16 +211,19 @@ export async function fetchInitialData(authDef) {
         settings.corpusListing = new ParallelCorpusListing(corpora)
     }
 
-    const infoDef = getInfoData()
-    let timeDef
-    if (settings["has_timespan"]) {
-        timeDef = getTimeData()
-    }
-    setInitialCorpora()
+    // if the previous config calls didn't yield any corpora, don't ask for info or time
+    if (!_.isEmpty(settings["corpora"])) {
+        const infoDef = getInfoData()
+        let timeDef
+        if (settings["has_timespan"]) {
+            timeDef = getTimeData()
+        }
+        setInitialCorpora()
 
-    await loc_dfd
-    await infoDef
-    if (settings["has_timespan"]) {
-        settings["time_data"] = await timeDef
+        await infoDef
+        if (settings["has_timespan"]) {
+            settings["time_data"] = await timeDef
+        }
     }
+    await loc_dfd
 }

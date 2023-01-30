@@ -183,7 +183,9 @@ korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout, $ui
             selectedIds = settings["preselected_corpora"]
         }
 
-        if (_.isEmpty(settings.corpora)) {
+        if (settings["initalization_checks"] && settings["initalization_checks"](s)) {
+            // something was triggered
+        } else if (_.isEmpty(settings.corpora)) {
             s.openErrorModal({
                 content: "<korp-error></korp-error>",
                 resolvable: false,
@@ -236,13 +238,13 @@ korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout, $ui
 
     // TODO the top bar could show even though the modal is open,
     // thus allowing switching modes or language when an error has occured.
-    s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null }) => {
+    s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null, translations = {} }) => {
         const s = $rootScope.$new(true)
 
         const useCustomButton = !_.isEmpty(buttonText)
 
         const modal = $uibModal.open({
-            template: html` <div class="modal-body mt-10">
+            template: html` <div class="modal-body" ng-class="{'mt-10' : resolvable }">
                 <div>${content}</div>
                 <div class="ml-auto mr-0 w-fit">
                     <button
@@ -260,6 +262,8 @@ korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout, $ui
             backdrop: "static",
             keyboard: false,
         })
+
+        s.translations = translations
 
         s.closeModal = () => {
             if (onClose && resolvable) {

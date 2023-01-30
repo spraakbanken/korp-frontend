@@ -28,4 +28,5 @@ module.exports = {
     },
     variants: {},
     plugins: [],
+    safelist: ["my-5", "h-16"],
 }
