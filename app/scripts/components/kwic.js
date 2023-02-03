@@ -526,7 +526,7 @@ export const kwicComponent = {
 
             function selectDown() {
                 let nextMatch
-                const current = getActiveData
+                const current = selectionManager.selected
                 if (!$ctrl.readingMode) {
                     nextMatch = getWordAt(
                         current.offset().left + current.width() / 2,
