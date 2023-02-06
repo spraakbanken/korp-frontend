@@ -26,6 +26,7 @@ import { graphTabsComponent } from "./components/dynamic_tabs/graph_tabs"
 import { compareTabsComponent } from "./components/dynamic_tabs/compare_tabs"
 import { mapTabsComponent } from "./components/dynamic_tabs/map_tabs"
 import { textTabsComponent } from "./components/dynamic_tabs/text_tabs"
+import { headerComponent } from "./components/header"
 import statemachine from "@/statemachine"
 
 let html = String.raw
@@ -86,6 +87,7 @@ korpApp.component("extendedCqpValue", extendedCQPValueComponent)
 korpApp.component("kwic", kwicComponent)
 korpApp.component("trendDiagram", trendDiagramComponent)
 korpApp.component("korpError", korpErrorComponent)
+korpApp.component("header", headerComponent)
 // these are directives because it needs replace: true, which is not supported in component
 korpApp.directive("kwicTabs", kwicTabsComponent)
 korpApp.directive("graphTabs", graphTabsComponent)
@@ -292,102 +294,6 @@ korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout, $ui
     })
 
     initialzeCorpusSelection()
-})
-
-korpApp.controller("headerCtrl", function ($scope, $uibModal, utils) {
-    const s = $scope
-
-    s.logoClick = function () {
-        const [baseUrl, modeParam, langParam] = $scope.getUrlParts(currentMode)
-        window.location = baseUrl + modeParam + langParam
-        if (langParam.length > 0) {
-            window.location.reload()
-        }
-    }
-
-    s.languages = settings["languages"]
-
-    s.citeClick = () => {
-        s.show_modal = "about"
-    }
-
-    s.show_modal = false
-
-    let modal = null
-    utils.setupHash(s, [
-        {
-            key: "display",
-            scope_name: "show_modal",
-            post_change(val) {
-                if (val) {
-                    showAbout()
-                } else {
-                    if (modal != null) {
-                        modal.close()
-                    }
-                    modal = null
-                }
-            },
-        },
-    ])
-
-    const closeModals = function () {
-        s.show_modal = false
-    }
-
-    var showAbout = function () {
-        const params = {
-            template: require("../markup/about.html"),
-            scope: s,
-            windowClass: "about",
-        }
-        modal = $uibModal.open(params)
-
-        modal.result.then(
-            () => closeModals(),
-            () => closeModals()
-        )
-    }
-
-    s.clickX = () => closeModals()
-
-    const N_VISIBLE = settings["visible_modes"]
-
-    s.modes = _.filter(settings["modes"])
-    if (!isLab) {
-        s.modes = _.filter(settings["modes"], (item) => item.labOnly !== true)
-    }
-
-    s.visible = s.modes.slice(0, N_VISIBLE)
-
-    s.$watch("$root.lang", () => {
-        s.menu = util.collatorSort(s.modes.slice(N_VISIBLE), "label", s.$root.lang)
-    })
-
-    s.getUrl = function (modeId) {
-        return s.getUrlParts(modeId).join("")
-    }
-
-    s.getUrlParts = function (modeId) {
-        const langParam = settings["default_language"] === s.$root.lang ? "" : `#?lang=${s.$root.lang}`
-        const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
-        return [location.pathname, modeParam, langParam]
-    }
-
-    s.currentMode = currentMode
-    const i = _.map(s.menu, "mode").indexOf(currentMode)
-    if (i !== -1) {
-        s.visible.push(s.menu[i])
-        s.menu.splice(i, 1)
-    }
-
-    for (let mode of s.modes) {
-        mode.selected = false
-        if (mode.mode === currentMode) {
-            window.settings.mode = mode
-            mode.selected = true
-        }
-    }
 })
 
 korpApp.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))

@@ -1,6 +1,7 @@
 /** @format */
 import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
+import korpLogo from "../img/korplogo_block.svg"
 
 const deparam = require("jquery-deparam")
 
@@ -9,7 +10,6 @@ import jStorage from "../lib/jstorage"
 window.authenticationProxy = require("./components/auth/auth.js")
 
 const createSplashScreen = () => {
-    const korpLogo = require("../img/korplogo_block.svg")
     const splash = document.getElementById("preload")
     splash.innerHTML = `<img class="splash" height="300" width="300" src="${korpLogo}" />`
 }
