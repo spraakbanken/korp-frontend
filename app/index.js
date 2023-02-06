@@ -78,6 +78,7 @@ require("slickgrid/slick.core")
 require("slickgrid/slick.grid")
 require("slickgrid/plugins/slick.checkboxselectcolumn")
 require("slickgrid/plugins/slick.rowselectionmodel")
+require("slickgrid/slick.interactions.js")
 
 require("./scripts/jq_extensions.js")
 
