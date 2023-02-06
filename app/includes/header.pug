@@ -43,7 +43,7 @@
         i.fa.fa-lg.fa-bars.ml-2.align-middle.text-indigo-600
       
   #header_left.flex.items-end.ml-2.pb-1.mb-3.mt-3.px-3
-    a.flex-shrink-0.ml-4.relative(ng-click="logoClick()")
+    a.shrink-0.ml-4.relative(ng-click="logoClick()")
       //- img(src='img/korplogo.png')
       img.-mb-1(src='img/korplogo_block.svg' height="300" width="300")
       span.version.absolute.bottom-0 {{isLab ? 'v10' : 'v9'}}
@@ -53,10 +53,10 @@
     corpus-chooser
 
     // spacer
-    div.flex-grow
+    div.grow
     span.flex.items-end.mr-4.max-w-lg.justify-end
       a.hidden.lg_inline(href="https://spraakbanken.gu.se" target="_blank")
         img(src="img/sbx1r.svg" style='margin-bottom: -6%;')
-      a.hidden.lg_inline.flex-grow-0(href="https://sweclarin.se" target="_blank")
+      a.hidden.lg_inline.grow-0(href="https://sweclarin.se" target="_blank")
         img(src="img/sweclarin_logo.png" style='margin-bottom: 2px')
-    select#search_history.hidden.md_block.flex-shrink.min-w-0
+    select#search_history.hidden.md_block.shrink.min-w-0

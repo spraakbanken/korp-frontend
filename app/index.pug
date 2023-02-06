@@ -24,7 +24,7 @@ html
 
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length || mapTabs.length', ng-controller='resultContainerCtrl')
           #columns.flex(ng-class='{sidebar_visible : sidebarVisible}')
-            #left-column.overflow-auto.flex-grow
+            #left-column.overflow-auto.grow
               uib-tabset.tabbable.result_tabs(tab-hash='result_tab', active="activeTab")
                 uib-tab(
                     kwic-ctrl,
@@ -149,7 +149,7 @@ html
 
               a#json-link(ng-href='{{jsonUrl}}', ng-show="jsonUrl", target="_blank")
                 img(src='img/json.png')
-            sidebar.sidebar.flex-shrink-0.ml-2(on-show="onSidebarShow()", on-hide="onSidebarHide()", lang="$root.lang")
+            sidebar.sidebar.shrink-0.ml-2(on-show="onSidebarShow()", on-hide="onSidebarHide()", lang="$root.lang")
 
     #deptree_popup
   

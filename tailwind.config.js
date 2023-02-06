@@ -2,7 +2,7 @@
 module.exports = {
     // pug doesn't support special characters in class names, so no colon.
     separator: "_",
-    purge: ["./app/**/*.js", "./app/**/*.html", "./app/**/*.pug"],
+    content: ["./app/**/*.js", "./app/**/*.html", "./app/**/*.pug"],
     theme: {
         extend: {
             colors: {
@@ -26,7 +26,5 @@ module.exports = {
             },
         },
     },
-    variants: {},
-    plugins: [],
     safelist: ["my-5", "h-16"],
 }
