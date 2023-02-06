@@ -17,7 +17,6 @@ korpApp.directive("graphCtrl", () => ({
         s.onProgress = (progress) => (s.progress = progress)
 
         s.updateLoading = (loading) => {
-            console.log("asdf")
             s.loading = loading
         }
     },
