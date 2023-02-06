@@ -21,6 +21,11 @@ import { extendedCQPValueComponent } from "./components/extended/cqp_value"
 import { kwicComponent } from "./components/kwic"
 import { trendDiagramComponent } from "./components/trend_diagram"
 import { korpErrorComponent } from "./components/korp_error"
+import { kwicTabsComponent } from "./components/dynamic_tabs/kwic_tabs"
+import { graphTabsComponent } from "./components/dynamic_tabs/graph_tabs"
+import { compareTabsComponent } from "./components/dynamic_tabs/compare_tabs"
+import { mapTabsComponent } from "./components/dynamic_tabs/map_tabs"
+import { textTabsComponent } from "./components/dynamic_tabs/text_tabs"
 import statemachine from "@/statemachine"
 
 let html = String.raw
@@ -81,6 +86,12 @@ korpApp.component("extendedCqpValue", extendedCQPValueComponent)
 korpApp.component("kwic", kwicComponent)
 korpApp.component("trendDiagram", trendDiagramComponent)
 korpApp.component("korpError", korpErrorComponent)
+// these are directives because it needs replace: true, which is not supported in component
+korpApp.directive("kwicTabs", kwicTabsComponent)
+korpApp.directive("graphTabs", graphTabsComponent)
+korpApp.directive("compareTabs", compareTabsComponent)
+korpApp.directive("mapTabs", mapTabsComponent)
+korpApp.directive("textTabs", textTabsComponent)
 
 // load all custom components
 let customComponents = {}

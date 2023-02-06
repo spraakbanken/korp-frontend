@@ -19,7 +19,7 @@ class ExampleCtrl extends KwicCtrl {
         s.hitsPictureData = null
         s.aborted = false
 
-        s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$parent.$index
+        s.tabindex = s.$parent.$parent.$parent.tabset.tabs.length - 1 + s.$index
 
         s.newDynamicTab()
 
@@ -126,7 +126,7 @@ class ExampleCtrl extends KwicCtrl {
         }
 
         s.isActive = () => {
-            return s.tabindex == s.$parent.$parent.tabset.active
+            return s.tabindex == s.$parent.$parent.$parent.tabset.active
         }
 
         if (s.kwicTab.queryParams) {

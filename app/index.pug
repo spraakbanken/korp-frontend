@@ -144,8 +144,11 @@ html
                   div(ng-if="!error")
                     include includes/word_picture
                   korp-error(ng-if="error")
-
-                include includes/dynamic_result_tabs
+                kwic-tabs(tabs="$root.kwicTabs")
+                graph-tabs(tabs="$root.graphTabs")
+                compare-tabs(tabs="$root.compareTabs")
+                map-tabs(tabs="$root.mapTabs")
+                text-tabs(tabs="$root.textTabs")
 
               a#json-link(ng-href='{{jsonUrl}}', ng-show="jsonUrl", target="_blank")
                 img(src='img/json.png')
