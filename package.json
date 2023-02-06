@@ -2,9 +2,9 @@
     "name": "Korp",
     "version": "9.3.0",
     "dependencies": {
-        "@fortawesome/fontawesome-free": "6.0.0",
-        "angular": "~1.8.2",
-        "angular-dynamic-locale": "~0.1.37",
+        "@fortawesome/fontawesome-free": "6.2.1",
+        "angular": "1.8.3",
+        "angular-dynamic-locale": "0.1.38",
         "angular-filter": "0.5.17",
         "angular-spinner": "1.0.1",
         "angular-ui-bootstrap": "2.5.6",
