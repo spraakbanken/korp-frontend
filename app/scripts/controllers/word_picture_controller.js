@@ -256,7 +256,7 @@ korpApp.directive("wordpicCtrl", () => ({
                 }
             })
 
-            $rootScope.$broadcast("word_picture_data_available", res)
+            prepareScope(res)
         }
 
         s.countCorpora = () => {
@@ -266,7 +266,7 @@ korpApp.directive("wordpicCtrl", () => ({
         s.hitSettings = ["15"]
         s.settings = { showNumberOfHits: "15" }
 
-        $rootScope.$on("word_picture_data_available", function (event, data) {
+        const prepareScope = (data) => {
             s.data = data
 
             let max = 0
@@ -302,7 +302,7 @@ korpApp.directive("wordpicCtrl", () => ({
                 s.hitSettings.push("500")
             }
 
-            return s.hitSettings.push("1000")
-        })
+            s.hitSettings.push("1000")
+        }
     },
 }))
