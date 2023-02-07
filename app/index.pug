@@ -142,7 +142,17 @@ html
                     | {{'word_picture' | loc:lang}}
                     tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
                   div(ng-if="!error")
-                    include includes/word_picture
+                    word-picture(
+                      word-pic="wordPic",
+                      activate="activate",
+                      loading="loading",
+                      has-data="hasData",
+                      aborted="aborted",
+                      hit-settings="hitSettings",
+                      settings="settings",
+                      data="data",
+                      no-hits="noHits"
+                    )
                   korp-error(ng-if="error")
                 kwic-tabs(tabs="$root.kwicTabs")
                 graph-tabs(tabs="$root.graphTabs")

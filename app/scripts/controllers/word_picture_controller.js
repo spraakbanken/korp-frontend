@@ -10,10 +10,10 @@ korpApp.directive("wordpicCtrl", () => ({
         s.error = false
         s.loading = false
         s.progress = 0
-        s.word_pic = $location.search().word_pic != null
+        s.wordPic = $location.search().word_pic != null
         s.$watch(
             () => $location.search().word_pic,
-            (val) => (s.word_pic = Boolean(val))
+            (val) => (s.wordPic = Boolean(val))
         )
 
         $rootScope.$on("make_request", () => {
@@ -26,14 +26,14 @@ korpApp.directive("wordpicCtrl", () => ({
 
         s.activate = function () {
             $location.search("word_pic", true)
-            s.word_pic = true
+            s.wordPic = true
             s.makeRequest()
         }
 
         s.resetView = () => {
             s.hasData = false
             s.aborted = false
-            s.no_hits = false
+            s.noHits = false
             s.error = false
         }
 
@@ -41,7 +41,7 @@ korpApp.directive("wordpicCtrl", () => ({
 
         s.makeRequest = () => {
             const search = searches.activeSearch
-            if (!s.word_pic || (search.type !== "lemgram" && search.val.includes(" "))) {
+            if (!s.wordPic || (search.type !== "lemgram" && search.val.includes(" "))) {
                 s.resetView()
                 return
             }
@@ -112,7 +112,7 @@ korpApp.directive("wordpicCtrl", () => ({
 
             s.hasData = true
             if (!data.relations) {
-                s.no_hits = true
+                s.noHits = true
             } else if (util.isLemgramId(query)) {
                 s.renderTables(query, data.relations)
             } else {
@@ -263,28 +263,8 @@ korpApp.directive("wordpicCtrl", () => ({
             return s.proxy.prevParams && s.proxy.prevParams.corpus.split(",").length
         }
 
-        s.settings = { showNumberOfHits: "15" }
-
         s.hitSettings = ["15"]
-
-        s.minimize = (table) => table.slice(0, s.settings.showNumberOfHits)
-
-        s.onClickExample = function (event, row) {
-            const data = row
-
-            const opts = {}
-            opts.ajaxParams = {
-                start: 0,
-                end: 24,
-                command: "relations_sentences",
-                source: data.source.join(","),
-                corpus: data.corpus,
-            }
-
-            return $rootScope.kwicTabs.push({ queryParams: opts })
-        }
-
-        s.showWordClass = false
+        s.settings = { showNumberOfHits: "15" }
 
         $rootScope.$on("word_picture_data_available", function (event, data) {
             s.data = data
@@ -324,91 +304,5 @@ korpApp.directive("wordpicCtrl", () => ({
 
             return s.hitSettings.push("1000")
         })
-
-        s.localeString = function (lang, hitSetting) {
-            if (hitSetting === "1000") {
-                return util.getLocaleString("word_pic_show_all", lang)
-            } else {
-                return (
-                    util.getLocaleString("word_pic_show_some", lang) +
-                    " " +
-                    hitSetting +
-                    " " +
-                    util.getLocaleString("word_pic_hits", lang)
-                )
-            }
-        }
-
-        s.isLemgram = (word) => {
-            util.isLemgramId(word)
-        }
-
-        s.renderTable = (obj) => obj instanceof Array
-
-        s.parseLemgram = function (row) {
-            const set = row[row.show_rel].split("|")
-            const lemgram = set[0]
-
-            let infixIndex = ""
-            let concept = lemgram
-            infixIndex = ""
-            let type = "-"
-
-            const prefix = row.depextra
-
-            if (util.isLemgramId(lemgram)) {
-                const match = util.splitLemgram(lemgram)
-                infixIndex = match.index
-                if (row.dep) {
-                    concept = match.form.replace(/_/g, " ")
-                } else {
-                    concept = "-"
-                }
-                type = match.pos.slice(0, 2)
-            }
-            return {
-                label: prefix + " " + concept,
-                pos: type,
-                idx: infixIndex,
-                showIdx: !(infixIndex === "" || infixIndex === "1"),
-            }
-        }
-
-        s.getTableClass = (wordClass, parentIdx, idx) =>
-            settings["word_picture_conf"][wordClass][parentIdx][idx].css_class
-
-        s.getHeaderLabel = function (header, section, idx) {
-            if (header.alt_label) {
-                return header.alt_label
-            } else {
-                return `rel_${section[idx].rel}`
-            }
-        }
-
-        s.getHeaderClasses = function (header, token) {
-            if (header !== "_") {
-                return `lemgram_header_item ${header.css_class}`
-            } else {
-                let classes = "hit"
-                if (s.isLemgram(token)) {
-                    classes += " lemgram"
-                }
-                return classes
-            }
-        }
-
-        s.renderResultHeader = function (parentIndex, section, wordClass, index) {
-            return section[index] && section[index].table
-        }
-
-        s.getResultHeader = (index, wordClass) => settings["word_picture_conf"][wordClass][index]
-
-        s.fromLemgram = function (maybeLemgram) {
-            if (util.isLemgramId(maybeLemgram)) {
-                return util.splitLemgram(maybeLemgram).form
-            } else {
-                return maybeLemgram
-            }
-        }
     },
 }))
