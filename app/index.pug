@@ -20,7 +20,7 @@ html
     #main(style="opacity: 0; display: none;")
       header
       #content.px-3.pb-3
-        include includes/searchtabs
+        searchtabs
 
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length || mapTabs.length', ng-controller='resultContainerCtrl')
           #columns.flex(ng-class='{sidebar_visible : sidebarVisible}')

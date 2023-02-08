@@ -28,6 +28,7 @@ import { mapTabsComponent } from "./components/dynamic_tabs/map_tabs"
 import { textTabsComponent } from "./components/dynamic_tabs/text_tabs"
 import { headerComponent } from "./components/header"
 import { wordPictureComponent } from "./components/word_picture"
+import { searchtabsComponent } from "./components/searchtabs"
 import statemachine from "@/statemachine"
 
 let html = String.raw
@@ -90,6 +91,7 @@ korpApp.component("trendDiagram", trendDiagramComponent)
 korpApp.component("korpError", korpErrorComponent)
 korpApp.component("header", headerComponent)
 korpApp.component("wordPicture", wordPictureComponent)
+korpApp.component("searchtabs", searchtabsComponent)
 // these are directives because it needs replace: true, which is not supported in component
 korpApp.directive("kwicTabs", kwicTabsComponent)
 korpApp.directive("graphTabs", graphTabsComponent)

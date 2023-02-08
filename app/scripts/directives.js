@@ -485,13 +485,14 @@ korpApp.directive("reduceSelect", ($timeout) => ({
         selected: "=reduceSelected",
         insensitive: "=reduceInsensitive",
         lang: "=reduceLang",
+        onChange: "<",
     },
     replace: true,
     template: `\
     <div uib-dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">
       <div uib-dropdown-toggle class="reduce-dropdown-button inline_block bg-white border border-gray-500">
         <div class="reduce-dropdown-button-text">
-          <span>{{ "reduce_text" | loc:lang }}:</span>
+          <span>{{ "reduce_text" | loc:$root.lang }}:</span>
           <span>
             {{keyItems[selected[0]].label | locObj:lang}}
           </span>
@@ -510,14 +511,14 @@ korpApp.directive("reduceSelect", ($timeout) => ({
                   class="insensitive-toggle"
                   ng-click="toggleWordInsensitive($event)"><b>Aa</b></span>
           </li>
-          <b ng-if="hasWordAttrs">{{'word_attr' | loc:lang}}</b>
+          <b ng-if="hasWordAttrs">{{'word_attr' | loc:$root.lang}}</b>
           <li ng-repeat="item in items | filter:{ group: 'word_attr' }"
               ng-click="toggleSelected(item.value, $event)"
               ng-class="item.selected ? 'selected':''" class="attribute">
             <input type="checkbox" class="reduce-check" ng-checked="item.selected">
             <span class="reduce-label">{{item.label | locObj:lang }}</span>
           </li>
-          <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:lang}}</b>
+          <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:$root.lang}}</b>
           <li ng-repeat="item in items | filter:{ group: 'sentence_attr' }"
               ng-click="toggleSelected(item.value, $event)"
               ng-class="item.selected ? 'selected':''" class="attribute">
@@ -569,6 +570,7 @@ korpApp.directive("reduceSelect", ($timeout) => ({
                 "value"
             )
             scope.numberAttributes = scope.selected.length
+            scope.onChange()
         }
 
         scope.toggleSelected = function (value, event) {
@@ -600,6 +602,7 @@ korpApp.directive("reduceSelect", ($timeout) => ({
             } else {
                 scope.insensitive = []
             }
+            scope.onChange()
 
             if (!scope.keyItems["word"].selected) {
                 return scope.toggleSelected("word")
