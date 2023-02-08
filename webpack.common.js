@@ -30,7 +30,7 @@ module.exports = {
             korp_config: path.resolve(korpConfigDir, "config.yml"),
             custom: path.resolve(korpConfigDir, "custom/"),
             modes: path.resolve(korpConfigDir, "modes/"),
-            '@': path.resolve(__dirname, "app/scripts"),
+            "@": path.resolve(__dirname, "app/scripts"),
         },
     },
     module: {
@@ -53,29 +53,11 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: require.resolve(
-                    path.resolve(__dirname, "app/scripts/cqp_parser/CQPParser.js")
-                ),
+                test: require.resolve(path.resolve(__dirname, "app/scripts/cqp_parser/CQPParser.js")),
                 use: "imports-loader?this=>window",
             },
             {
-                test: /\.pug$/i,
-                exclude: [
-                    // does not work
-                    path.resolve(__dirname, "app/index.pug"),
-                ],
-                use: [
-                    { loader: "file-loader" },
-                    {
-                        loader: "extract-loader",
-                        options: { publicPath: "" },
-                    },
-                    { loader: "html-loader" },
-                    { loader: "pug-html-loader" },
-                ],
-            },
-            {
-                test: /index.pug$/,
+                test: /index.html$/,
                 use: [
                     { loader: "file-loader?name=index.html" },
                     {
@@ -88,19 +70,11 @@ module.exports = {
                             attrs: ["img:src", "link:href"],
                         },
                     },
-                    {
-                        loader: "pug-html-loader",
-                        options: {
-                            // TODO we should not pretty-print HTML, but removing this
-                            // option will result in that some elements get closer together
-                            // and need to be fixed with CSS
-                            pretty: true,
-                        },
-                    },
                 ],
             },
             {
                 test: /\.html$/,
+                exclude: [path.resolve(__dirname, "app/index.html")],
                 use: [
                     {
                         loader: "html-loader",

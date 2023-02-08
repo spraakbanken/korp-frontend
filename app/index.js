@@ -132,4 +132,4 @@ require("./scripts/directives/scroll.js")
 require("./scripts/filter_directives.js")
 require("./scripts/newsdesk.js")
 
-require("./index.pug")
+require("./index.html")
