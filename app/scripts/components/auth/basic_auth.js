@@ -29,8 +29,21 @@ const getAuthorizationHeader = () => {
     }
 }
 
+function toBase64(str) {
+    // copied from https://stackoverflow.com/a/43271130
+    function u_btoa(buffer) {
+        var binary = []
+        var bytes = new Uint8Array(buffer)
+        for (var i = 0, il = bytes.byteLength; i < il; i++) {
+            binary.push(String.fromCharCode(bytes[i]))
+        }
+        return window.btoa(binary.join(""))
+    }
+    return u_btoa(new TextEncoder().encode(str))
+}
+
 const login = (usr, pass, saveLogin) => {
-    const auth = window.btoa(usr + ":" + pass)
+    const auth = toBase64(usr + ":" + pass)
 
     const dfd = $.Deferred()
     $.ajax({
