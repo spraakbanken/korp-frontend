@@ -34,68 +34,73 @@ korpApp.directive("kwicWord", () => ({
     },
 }))
 
-korpApp.directive("tabHash", (utils, $location, $timeout) => ({
-    link(scope, elem, attr) {
-        const s = scope
-        const contentScope = elem.find(".tab-content").scope()
+korpApp.directive("tabHash", [
+    "utils",
+    "$location",
+    "$timeout",
+    (utils, $location, $timeout) => ({
+        link(scope, elem, attr) {
+            const s = scope
+            const contentScope = elem.find(".tab-content").scope()
 
-        const watchHash = () =>
-            utils.setupHash(s, [
-                {
-                    expr: "activeTab",
-                    val_out(val) {
-                        return val
+            const watchHash = () =>
+                utils.setupHash(s, [
+                    {
+                        expr: "activeTab",
+                        val_out(val) {
+                            return val
+                        },
+                        val_in(val) {
+                            s.setSelected(parseInt(val))
+                            return s.activeTab
+                        },
+                        key: attr.tabHash,
+                        default: 0,
                     },
-                    val_in(val) {
-                        s.setSelected(parseInt(val))
-                        return s.activeTab
-                    },
-                    key: attr.tabHash,
-                    default: 0,
-                },
-            ])
+                ])
 
-        s.setSelected = function (index, ignoreCheck) {
-            if (!ignoreCheck && !(index in s.fixedTabs)) {
-                index = s.maxTab
-            }
-
-            s.activeTab = index
-        }
-
-        const initTab = parseInt($location.search()[attr.tabHash]) || 0
-        $timeout(function () {
-            s.fixedTabs = {}
-            s.maxTab = -1
-            for (let tab of contentScope.tabset.tabs) {
-                s.fixedTabs[tab.index] = tab
-                if (tab.index > s.maxTab) {
-                    s.maxTab = tab.index
+            s.setSelected = function (index, ignoreCheck) {
+                if (!ignoreCheck && !(index in s.fixedTabs)) {
+                    index = s.maxTab
                 }
+
+                s.activeTab = index
             }
-            s.setSelected(initTab)
-            return watchHash()
-        }, 0)
 
-        s.newDynamicTab = function () {
-            return $timeout(function () {
-                s.setSelected(s.maxTab + 1, true)
-                s.maxTab += 1
-            }, 0)
-        }
-
-        s.closeDynamicTab = function () {
+            const initTab = parseInt($location.search()[attr.tabHash]) || 0
             $timeout(function () {
+                s.fixedTabs = {}
                 s.maxTab = -1
                 for (let tab of contentScope.tabset.tabs) {
+                    s.fixedTabs[tab.index] = tab
                     if (tab.index > s.maxTab) {
                         s.maxTab = tab.index
                     }
                 }
+                s.setSelected(initTab)
+                return watchHash()
             }, 0)
-        }
-    },
-}))
+
+            s.newDynamicTab = function () {
+                return $timeout(function () {
+                    s.setSelected(s.maxTab + 1, true)
+                    s.maxTab += 1
+                }, 0)
+            }
+
+            s.closeDynamicTab = function () {
+                $timeout(function () {
+                    s.maxTab = -1
+                    for (let tab of contentScope.tabset.tabs) {
+                        if (tab.index > s.maxTab) {
+                            s.maxTab = tab.index
+                        }
+                    }
+                }, 0)
+            }
+        },
+    }),
+])
 
 korpApp.directive("escaper", () => ({
     link($scope) {
@@ -129,8 +134,10 @@ korpApp.directive("escaper", () => ({
     },
 }))
 
-korpApp.directive("searchSubmit", ($rootElement) => ({
-    template: `\
+korpApp.directive("searchSubmit", [
+    "$rootElement",
+    ($rootElement) => ({
+        template: `\
 <div class="search_submit">
         <div class="btn-group">
             <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()" ng-disabled="disabled">{{'search' | loc:$root.lang}}</button>
@@ -155,91 +162,92 @@ korpApp.directive("searchSubmit", ($rootElement) => ({
         </div>
 </div>\
 `,
-    restrict: "E",
-    replace: true,
-    scope: {
-        onSearch: "&",
-        onSearchSave: "&",
-        disabled: "<",
-    },
-    link(scope, elem, attr) {
-        let at, my
-        const s = scope
+        restrict: "E",
+        replace: true,
+        scope: {
+            onSearch: "&",
+            onSearchSave: "&",
+            disabled: "<",
+        },
+        link(scope, elem, attr) {
+            let at, my
+            const s = scope
 
-        s.disabled = angular.isDefined(s.disabled) ? s.disabled : false
+            s.disabled = angular.isDefined(s.disabled) ? s.disabled : false
 
-        s.pos = attr.pos || "bottom"
-        s.togglePopover = function (event) {
-            if (s.isPopoverVisible) {
-                s.popHide()
-            } else {
-                s.popShow()
-            }
-            event.preventDefault()
-            return event.stopPropagation()
-        }
-
-        const popover = elem.find(".popover")
-        s.onPopoverClick = function (event) {
-            if (event.target !== popover.find(".btn")[0]) {
+            s.pos = attr.pos || "bottom"
+            s.togglePopover = function (event) {
+                if (s.isPopoverVisible) {
+                    s.popHide()
+                } else {
+                    s.popShow()
+                }
                 event.preventDefault()
                 return event.stopPropagation()
             }
-        }
-        s.isPopoverVisible = false
-        const trans = {
-            bottom: "top",
-            top: "bottom",
-            right: "left",
-            left: "right",
-        }
-        const horizontal = ["top", "bottom"].includes(s.pos)
-        if (horizontal) {
-            my = `center ${trans[s.pos]}`
-            at = `center ${s.pos}+10`
-        } else {
-            my = trans[s.pos] + " center"
-            at = s.pos + "+10 center"
-        }
 
-        const onEscape = function (event) {
-            if (event.which === 27) {
-                // escape
-                s.popHide()
-                return false
+            const popover = elem.find(".popover")
+            s.onPopoverClick = function (event) {
+                if (event.target !== popover.find(".btn")[0]) {
+                    event.preventDefault()
+                    return event.stopPropagation()
+                }
             }
-        }
-
-        s.popShow = function () {
-            s.isPopoverVisible = true
-            popover
-                .fadeIn("fast")
-                .focus()
-                .position({
-                    my,
-                    at,
-                    of: elem.find(".opener"),
-                })
-
-            $rootElement.on("keydown", onEscape)
-            $rootElement.on("click", s.popHide)
-        }
-
-        s.popHide = function () {
             s.isPopoverVisible = false
-            popover.fadeOut("fast")
-            $rootElement.off("keydown", onEscape)
-            $rootElement.off("click", s.popHide)
-        }
+            const trans = {
+                bottom: "top",
+                top: "bottom",
+                right: "left",
+                left: "right",
+            }
+            const horizontal = ["top", "bottom"].includes(s.pos)
+            if (horizontal) {
+                my = `center ${trans[s.pos]}`
+                at = `center ${s.pos}+10`
+            } else {
+                my = trans[s.pos] + " center"
+                at = s.pos + "+10 center"
+            }
 
-        s.onSubmit = function () {
-            s.popHide()
-            s.onSearchSave({ name: s.name })
-        }
+            const onEscape = function (event) {
+                if (event.which === 27) {
+                    // escape
+                    s.popHide()
+                    return false
+                }
+            }
 
-        s.onSendClick = () => s.onSearch()
-    },
-}))
+            s.popShow = function () {
+                s.isPopoverVisible = true
+                popover
+                    .fadeIn("fast")
+                    .focus()
+                    .position({
+                        my,
+                        at,
+                        of: elem.find(".opener"),
+                    })
+
+                $rootElement.on("keydown", onEscape)
+                $rootElement.on("click", s.popHide)
+            }
+
+            s.popHide = function () {
+                s.isPopoverVisible = false
+                popover.fadeOut("fast")
+                $rootElement.off("keydown", onEscape)
+                $rootElement.off("click", s.popHide)
+            }
+
+            s.onSubmit = function () {
+                s.popHide()
+                s.onSearchSave({ name: s.name })
+            }
+
+            s.onSendClick = () => s.onSearch()
+        },
+    }),
+])
 
 korpApp.directive("meter", () => ({
     template: `\
@@ -283,48 +291,51 @@ korpApp.directive("meter", () => ({
     },
 }))
 
-korpApp.directive("popper", ($rootElement) => ({
-    scope: {},
-    link(scope, elem, attrs) {
-        const popup = elem.next()
-        popup.appendTo("body").hide()
-        const closePopup = () => popup.hide()
+korpApp.directive("popper", [
+    "$rootElement",
+    ($rootElement) => ({
+        scope: {},
+        link(scope, elem, attrs) {
+            const popup = elem.next()
+            popup.appendTo("body").hide()
+            const closePopup = () => popup.hide()
 
-        if (attrs.noCloseOnClick == null) {
-            popup.on("click", function () {
-                closePopup()
+            if (attrs.noCloseOnClick == null) {
+                popup.on("click", function () {
+                    closePopup()
+                    return false
+                })
+            }
+
+            elem.on("click", function () {
+                const other = $(".popper_menu:visible").not(popup)
+                if (other.length) {
+                    other.hide()
+                }
+                if (popup.is(":visible")) {
+                    closePopup()
+                } else {
+                    popup.show()
+                }
+
+                const pos = {
+                    my: attrs.my || "right top",
+                    at: attrs.at || "bottom right",
+                    of: elem,
+                }
+                if (scope.offset) {
+                    pos.offset = scope.offset
+                }
+
+                popup.position(pos)
+
                 return false
             })
-        }
 
-        elem.on("click", function () {
-            const other = $(".popper_menu:visible").not(popup)
-            if (other.length) {
-                other.hide()
-            }
-            if (popup.is(":visible")) {
-                closePopup()
-            } else {
-                popup.show()
-            }
-
-            const pos = {
-                my: attrs.my || "right top",
-                at: attrs.at || "bottom right",
-                of: elem,
-            }
-            if (scope.offset) {
-                pos.offset = scope.offset
-            }
-
-            popup.position(pos)
-
-            return false
-        })
-
-        return $rootElement.on("click", () => closePopup())
-    },
-}))
+            return $rootElement.on("click", () => closePopup())
+        },
+    }),
+])
 
 korpApp.directive("tabSpinner", () => ({
     template: `\
@@ -374,21 +385,24 @@ korpApp.directive("clickCover", () => ({
     },
 }))
 
-korpApp.directive("toBody", ($compile) => ({
-    restrict: "A",
-    compile(elm) {
-        elm.remove()
-        elm.attr("to-body", null)
-        const wrapper = $("<div>").append(elm)
-        const cmp = $compile(wrapper.html())
+korpApp.directive("toBody", [
+    "$compile",
+    ($compile) => ({
+        restrict: "A",
+        compile(elm) {
+            elm.remove()
+            elm.attr("to-body", null)
+            const wrapper = $("<div>").append(elm)
+            const cmp = $compile(wrapper.html())
 
-        return function (scope) {
-            const newElem = cmp(scope)
-            $("body").append(newElem)
-            return scope.$on("$destroy", () => newElem.remove())
-        }
-    },
-}))
+            return function (scope) {
+                const newElem = cmp(scope)
+                $("body").append(newElem)
+                return scope.$on("$destroy", () => newElem.remove())
+            }
+        },
+    }),
+])
 
 korpApp.directive("warning", () => ({
     restrict: "E",
@@ -398,22 +412,25 @@ korpApp.directive("warning", () => ({
 
 // This directive is only used by the autoc-component (autoc.js)
 // It is therefore made to work with magic variables such as $scope.$ctrl.typeaheadIsOpen
-korpApp.directive("typeaheadClickOpen", ($timeout) => ({
-    restrict: "A",
-    require: ["ngModel"],
-    link($scope, elem, attrs, ctrls) {
-        const triggerFunc = function (event) {
-            if (event.keyCode === 40 && !$scope.$ctrl.typeaheadIsOpen) {
-                const prev = ctrls[0].$modelValue || ""
-                if (prev) {
-                    ctrls[0].$setViewValue("")
-                    $timeout(() => ctrls[0].$setViewValue(`${prev}`))
+korpApp.directive("typeaheadClickOpen", [
+    "$timeout",
+    ($timeout) => ({
+        restrict: "A",
+        require: ["ngModel"],
+        link($scope, elem, attrs, ctrls) {
+            const triggerFunc = function (event) {
+                if (event.keyCode === 40 && !$scope.$ctrl.typeaheadIsOpen) {
+                    const prev = ctrls[0].$modelValue || ""
+                    if (prev) {
+                        ctrls[0].$setViewValue("")
+                        $timeout(() => ctrls[0].$setViewValue(`${prev}`))
+                    }
                 }
             }
-        }
-        elem.bind("keyup", triggerFunc)
-    },
-}))
+            elem.bind("keyup", triggerFunc)
+        },
+    }),
+])
 
 korpApp.directive("timeInterval", () => ({
     scope: {
@@ -478,7 +495,7 @@ korpApp.directive("timeInterval", () => ({
     },
 }))
 
-korpApp.directive("reduceSelect", ($timeout) => ({
+korpApp.directive("reduceSelect", ["$timeout", ($timeout) => ({
     restrict: "AE",
     scope: {
         items: "=reduceItems",
@@ -616,4 +633,4 @@ korpApp.directive("reduceSelect", ($timeout) => ({
             }
         }
     },
-}))
+})])

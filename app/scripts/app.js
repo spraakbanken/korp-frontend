@@ -117,15 +117,19 @@ authenticationProxy.initAngular()
  * angular-dynamic-locale updates translations in the builtin $locale service, which is used
  * by at least the datepicker in angular-ui-bootstrap.
  */
-korpApp.config((tmhDynamicLocaleProvider) =>
-    tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
-)
+korpApp.config([
+    "tmhDynamicLocaleProvider",
+    (tmhDynamicLocaleProvider) =>
+        tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js"),
+])
 
-korpApp.config(($uibTooltipProvider) =>
-    $uibTooltipProvider.options({
-        appendToBody: true,
-    })
-)
+korpApp.config([
+    "$uibTooltipProvider",
+    ($uibTooltipProvider) =>
+        $uibTooltipProvider.options({
+            appendToBody: true,
+        }),
+])
 
 /**
  * Makes the hashPrefix "" instead of "!" which means our URL:s are ?mode=test#?lang=eng
@@ -141,166 +145,176 @@ korpApp.config([
     ($compileProvider) => $compileProvider.aHrefSanitizationTrustedUrlList(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
-korpApp.run(function ($rootScope, $location, tmhDynamicLocale, $q, $timeout, $uibModal) {
-    const s = $rootScope
-    s._settings = settings
-    window.lang = s.lang = $location.search().lang || settings["default_language"]
+korpApp.run([
+    "$rootScope",
+    "$location",
+    "tmhDynamicLocale",
+    "$q",
+    "$timeout",
+    "$uibModal",
+    function ($rootScope, $location, tmhDynamicLocale, $q, $timeout, $uibModal) {
+        const s = $rootScope
+        s._settings = settings
+        window.lang = s.lang = $location.search().lang || settings["default_language"]
 
-    s.isLab = window.isLab
+        s.isLab = window.isLab
 
-    s.extendedCQP = null
+        s.extendedCQP = null
 
-    s.globalFilterDef = $q.defer()
+        s.globalFilterDef = $q.defer()
 
-    s.locationSearch = function () {
-        const search = $location.search(...arguments)
-        $location.replace()
-        return search
-    }
-
-    s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
-
-    s._loc = $location
-
-    s.$watch("_loc.search()", function () {
-        _.defer(() => (window.onHashChange || _.noop)())
-        tmhDynamicLocale.set($location.search().lang || settings["default_language"])
-    })
-
-    $(document).keyup(function (event) {
-        if (event.keyCode === 27) {
-            $rootScope.$broadcast("abort_requests")
+        s.locationSearch = function () {
+            const search = $location.search(...arguments)
+            $location.replace()
+            return search
         }
-    })
 
-    $rootScope.kwicTabs = []
-    $rootScope.compareTabs = []
-    $rootScope.graphTabs = []
-    $rootScope.mapTabs = []
-    $rootScope.textTabs = []
+        s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
 
-    s.waitForLogin = false
+        s._loc = $location
 
-    function initialzeCorpusSelection() {
-        let loginNeededFor = []
+        s.$watch("_loc.search()", function () {
+            _.defer(() => (window.onHashChange || _.noop)())
+            tmhDynamicLocale.set($location.search().lang || settings["default_language"])
+        })
 
-        for (let corpusObj of settings.corpusListing.selected) {
-            if (corpusObj["limited_access"]) {
-                if (!authenticationProxy.hasCredential(corpusObj.id.toUpperCase())) {
-                    loginNeededFor.push(corpusObj)
+        $(document).keyup(function (event) {
+            if (event.keyCode === 27) {
+                $rootScope.$broadcast("abort_requests")
+            }
+        })
+
+        $rootScope.kwicTabs = []
+        $rootScope.compareTabs = []
+        $rootScope.graphTabs = []
+        $rootScope.mapTabs = []
+        $rootScope.textTabs = []
+
+        s.waitForLogin = false
+
+        function initialzeCorpusSelection() {
+            let loginNeededFor = []
+
+            for (let corpusObj of settings.corpusListing.selected) {
+                if (corpusObj["limited_access"]) {
+                    if (!authenticationProxy.hasCredential(corpusObj.id.toUpperCase())) {
+                        loginNeededFor.push(corpusObj)
+                    }
                 }
             }
-        }
 
-        let selectedIds
-        let { corpus } = $location.search()
-        if (corpus) {
-            selectedIds = corpus.split(",")
-        } else {
-            selectedIds = settings["preselected_corpora"]
-        }
+            let selectedIds
+            let { corpus } = $location.search()
+            if (corpus) {
+                selectedIds = corpus.split(",")
+            } else {
+                selectedIds = settings["preselected_corpora"]
+            }
 
-        if (settings["initalization_checks"] && settings["initalization_checks"](s)) {
-            // something was triggered
-        } else if (_.isEmpty(settings.corpora)) {
-            s.openErrorModal({
-                content: "<korp-error></korp-error>",
-                resolvable: false,
-            })
-        } else if (loginNeededFor.length != 0) {
-            const loginNeededHTML = () =>
-                loginNeededFor.map((corpus) => `<span>${util.getLocaleStringObject(corpus.title)}</span>`).join(", ")
+            if (settings["initalization_checks"] && settings["initalization_checks"](s)) {
+                // something was triggered
+            } else if (_.isEmpty(settings.corpora)) {
+                s.openErrorModal({
+                    content: "<korp-error></korp-error>",
+                    resolvable: false,
+                })
+            } else if (loginNeededFor.length != 0) {
+                const loginNeededHTML = () =>
+                    loginNeededFor
+                        .map((corpus) => `<span>${util.getLocaleStringObject(corpus.title)}</span>`)
+                        .join(", ")
 
-            if (authenticationProxy.isLoggedIn()) {
-                if (settings.corpusListing.corpora.length == loginNeededFor.length) {
-                    s.openErrorModal({
-                        content: "{{'access_denied' | loc:lang}}",
-                        buttonText: "go_to_start",
-                        onClose: () => {
-                            window.location.href = window.location.href.split("?")[0]
-                        },
-                    })
+                if (authenticationProxy.isLoggedIn()) {
+                    if (settings.corpusListing.corpora.length == loginNeededFor.length) {
+                        s.openErrorModal({
+                            content: "{{'access_denied' | loc:lang}}",
+                            buttonText: "go_to_start",
+                            onClose: () => {
+                                window.location.href = window.location.href.split("?")[0]
+                            },
+                        })
+                    } else {
+                        s.openErrorModal({
+                            content: html`<div>{{'access_partly_denied' | loc:lang}}:</div>
+                                <div>${loginNeededHTML()}</div>
+                                <div>{{'access_partly_denied_continue' | loc:lang}}</div>`,
+                            onClose: () => {
+                                const neededIds = loginNeededFor.map((corpus) => corpus.id)
+                                selectedIds = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
+                                loginNeededFor = []
+                                if (selectedIds.length == 0) {
+                                    selectedIds = settings["preselected_corpora"]
+                                    settings.corpusListing.select(selectedIds)
+                                }
+                                initialzeCorpusSelection()
+                            },
+                        })
+                    }
                 } else {
                     s.openErrorModal({
-                        content: html`<div>{{'access_partly_denied' | loc:lang}}:</div>
-                            <div>${loginNeededHTML()}</div>
-                            <div>{{'access_partly_denied_continue' | loc:lang}}</div>`,
+                        content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:lang}}:</span
+                            >${loginNeededHTML()}`,
                         onClose: () => {
-                            const neededIds = loginNeededFor.map((corpus) => corpus.id)
-                            selectedIds = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
-                            loginNeededFor = []
-                            if (selectedIds.length == 0) {
-                                selectedIds = settings["preselected_corpora"]
-                                settings.corpusListing.select(selectedIds)
-                            }
-                            initialzeCorpusSelection()
+                            s.waitForLogin = true
+                            statemachine.send("LOGIN_NEEDED", { loginNeededFor })
                         },
                     })
                 }
             } else {
-                s.openErrorModal({
-                    content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:lang}}:</span
-                        >${loginNeededHTML()}`,
-                    onClose: () => {
-                        s.waitForLogin = true
-                        statemachine.send("LOGIN_NEEDED", { loginNeededFor })
-                    },
-                })
+                // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
+                $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", selectedIds), 0)
             }
-        } else {
-            // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
-            $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", selectedIds), 0)
         }
-    }
 
-    // TODO the top bar could show even though the modal is open,
-    // thus allowing switching modes or language when an error has occured.
-    s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null, translations = {} }) => {
-        const s = $rootScope.$new(true)
+        // TODO the top bar could show even though the modal is open,
+        // thus allowing switching modes or language when an error has occured.
+        s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null, translations = {} }) => {
+            const s = $rootScope.$new(true)
 
-        const useCustomButton = !_.isEmpty(buttonText)
+            const useCustomButton = !_.isEmpty(buttonText)
 
-        const modal = $uibModal.open({
-            template: html` <div class="modal-body" ng-class="{'mt-10' : resolvable }">
-                <div>${content}</div>
-                <div class="ml-auto mr-0 w-fit">
-                    <button
-                        ng-if="${resolvable}"
-                        ng-click="closeModal()"
-                        class="btn bg-blue-500 text-white font-bold mt-3"
-                    >
-                        <span ng-if="${useCustomButton}">{{'${buttonText}' | loc:lang }}</span>
-                        <span ng-if="!${useCustomButton}">OK</span>
-                    </button>
-                </div>
-            </div>`,
-            scope: s,
-            size: "md",
-            backdrop: "static",
-            keyboard: false,
+            const modal = $uibModal.open({
+                template: html` <div class="modal-body" ng-class="{'mt-10' : resolvable }">
+                    <div>${content}</div>
+                    <div class="ml-auto mr-0 w-fit">
+                        <button
+                            ng-if="${resolvable}"
+                            ng-click="closeModal()"
+                            class="btn bg-blue-500 text-white font-bold mt-3"
+                        >
+                            <span ng-if="${useCustomButton}">{{'${buttonText}' | loc:lang }}</span>
+                            <span ng-if="!${useCustomButton}">OK</span>
+                        </button>
+                    </div>
+                </div>`,
+                scope: s,
+                size: "md",
+                backdrop: "static",
+                keyboard: false,
+            })
+
+            s.translations = translations
+
+            s.closeModal = () => {
+                if (onClose && resolvable) {
+                    modal.close()
+                    onClose()
+                }
+            }
+        }
+
+        statemachine.listen("login", function () {
+            if (s.waitForLogin) {
+                s.waitForLogin = false
+                initialzeCorpusSelection()
+            }
         })
 
-        s.translations = translations
+        initialzeCorpusSelection()
+    },
+])
 
-        s.closeModal = () => {
-            if (onClose && resolvable) {
-                modal.close()
-                onClose()
-            }
-        }
-    }
-
-    statemachine.listen("login", function () {
-        if (s.waitForLogin) {
-            s.waitForLogin = false
-            initialzeCorpusSelection()
-        }
-    })
-
-    initialzeCorpusSelection()
-})
-
-korpApp.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))
+korpApp.filter("trust", ["$sce", ($sce) => (input) => $sce.trustAsHtml(input)])
 korpApp.filter("prettyNumber", () => (input) => new Intl.NumberFormat(lang).format(input))
 angular.module("korpApp").filter("maxLength", function () {
     return function (val) {

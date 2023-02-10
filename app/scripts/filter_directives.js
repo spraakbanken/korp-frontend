@@ -1,5 +1,5 @@
 /** @format */
-korpApp.directive("globalFilters", (globalFilterService) => ({
+korpApp.directive("globalFilters", ["globalFilterService", (globalFilterService) => ({
     restrict: "E",
     scope: {
         lang: "=",
@@ -25,9 +25,9 @@ korpApp.directive("globalFilters", (globalFilterService) => ({
 
         scope.update = (dataObj) => (scope.dataObj = dataObj)
     },
-}))
+})])
 
-korpApp.directive("globalFilter", (globalFilterService) => ({
+korpApp.directive("globalFilter", ["globalFilterService", (globalFilterService) => ({
     restrict: "E",
     scope: {
         attr: "=",
@@ -105,7 +105,7 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
             return util.translateAttribute(scope.lang, scope.attrDef.settings.translation, value)
         }
     },
-}))
+})])
 
 // Data service for the global filter in korp
 // Directive is duplicated in simple and extended search
@@ -114,7 +114,7 @@ korpApp.directive("globalFilter", (globalFilterService) => ({
 
 // diretives calls registerScope to register for updates
 // service calls scope.update() when changes occur
-korpApp.factory("globalFilterService", function ($rootScope, $location, $q, structService) {
+korpApp.factory("globalFilterService", ["$rootScope", "$location", "$q", "structService", function ($rootScope, $location, $q, structService) {
     const scopes = []
 
     const callDirectives = () => listenerDef.promise.then(() => scopes.map((scope) => scope.update(dataObj)))
@@ -387,4 +387,4 @@ korpApp.factory("globalFilterService", function ($rootScope, $location, $q, stru
             updateData()
         },
     }
-})
+}])

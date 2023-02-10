@@ -1,7 +1,7 @@
 /** @format */
 const korpApp = angular.module("korpApp")
 
-korpApp.factory("structService", ($http, $q) => ({
+korpApp.factory("structService", ["$http", "$q", ($http, $q) => ({
     // Memoize the function so that the backend /struct_values is called
     // only once for each combination of corpora, attributes and options
     getStructValues: _.memoize(
@@ -63,4 +63,4 @@ korpApp.factory("structService", ($http, $q) => ({
         // Memoize based on the values of all arguments
         (...args) => JSON.stringify(args)
     ),
-}))
+})])
