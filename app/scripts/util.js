@@ -116,7 +116,19 @@ util.getLocaleStringObject = (translationObject, lang) => {
     if (!lang) {
         lang = window.lang || settings["default_language"]
     }
-    return translationObject ? translationObject[lang] || translationObject : undefined
+    if (translationObject) {
+        if (typeof translationObject == "string") {
+            return translationObject
+        } else if (translationObject[lang]) {
+            return translationObject[lang]
+        } else if (translationObject[settings["default_language"]]) {
+            return translationObject[settings["default_language"]]
+        } else {
+            // fall back to the first value if neither the selected or default langauge are available
+            return translationObject.values()[0]
+        }
+    }
+    return undefined
 }
 
 util.getLocaleStringUndefined = function (key, lang) {
@@ -158,16 +170,16 @@ util.lemgramToString = function (lemgram, appendIndex) {
 }
 
 const numberToSuperscript = {
-    "1": "",
-    "2": "²",
-    "3": "³",
-    "4": "⁴",
-    "5": "⁵",
-    "6": "⁶",
-    "7": "⁷",
-    "8": "⁸",
-    "9": "⁹",
-    "0": "⁰",
+    1: "",
+    2: "²",
+    3: "³",
+    4: "⁴",
+    5: "⁵",
+    6: "⁶",
+    7: "⁷",
+    8: "⁸",
+    9: "⁹",
+    0: "⁰",
 }
 
 // use this function to get a pretty printed lemgram with no HTML
