@@ -44,8 +44,6 @@
         "copy-webpack-plugin": "^11.0.0",
         "css-loader": "^6.0.0",
         "html-loader": "^4.0.0",
-        "http-server": "^14.0.0",
-        "imports-loader": "^4.0.0",
         "jasmine-core": "^4.0.0",
         "karma": "^6.0.0",
         "karma-chrome-launcher": "^3.0.0",
@@ -81,7 +79,6 @@
         "start:labb": "NODE_ENV=staging webpack-dev-server --config webpack.dev.js",
         "dev": "webpack-dev-server --config webpack.dev.js",
         "testserver": "KORP_HOST=localhost KORP_HTTPS= webpack-dev-server --config webpack.dev.js --port 9112 &",
-        "start:dist": "http-server -p ${KORP_PORT:-9111} dist/",
         "build": "NODE_ENV=production webpack --config webpack.prod.js",
         "build:labb": "NODE_ENV=staging webpack --config webpack.prod.js",
         "lint": "tslint --project tslint.json"
