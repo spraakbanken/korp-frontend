@@ -1,7 +1,0 @@
-{
-  "presets": ["@babel/preset-env"],
-  "plugins": ["syntax-dynamic-import", "@babel/transform-runtime", "angularjs-annotate"],
-  "ignore": [
-    "app/modes/*.js"
-  ]
-}
