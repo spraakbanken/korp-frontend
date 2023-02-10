@@ -7,7 +7,7 @@ export const ccTreeComponent = {
     template: `
     <div ng-class="{ 'cc-level-indent' : $ctrl.indent }">
         <div ng-repeat="folder in $ctrl.sortedFolders"
-            class="tree"
+            class="tree relative"
             ng-class="{ collapsed: !folder.extended, extended: folder.extended, disabled: folder['limited_access'] }"
             >
             <img ng-click="$ctrl.toggleFolderVisibility(folder)" src="${collapsedImg}" alt="extend" class="ext cursor-pointer">
@@ -20,11 +20,11 @@ export const ccTreeComponent = {
             </label>
             <i 
                 ng-click="$ctrl.showInfo($event, folder)" 
-                class="fa-solid text-xl fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
+                class="fa-solid text-xl fa-info-circle text-gray-700 mt-1 rounded-full bg-white text-blue-500 absolute right-2"></i>
             <cc-tree ng-if="folder.extended" node="folder" indent="true" on-select="$ctrl.onChildSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfoLocal(node)"></cc-tree>
         </div>
         <div ng-repeat="corpus in $ctrl.sortedCorpora"
-            class="boxdiv"
+            class="boxdiv relative"
             ng-class="{ 'disabled cursor-default': !corpus.userHasAccess }"
             style="margin-left:16px; background-color: rgb(221, 233, 255)"
             ng-click="$ctrl.toggleCorpusSelection($event, corpus)"
@@ -36,7 +36,7 @@ export const ccTreeComponent = {
             <i ng-if="corpus['limited_access'] && corpus.userHasAccess" class="fa-solid fa-unlock"></i>
             <i 
                 ng-click="$ctrl.showInfo($event, corpus)" 
-                class="fa-solid text-xl fa-info-circle text-gray-700 float-right mr-2 mt-1 rounded-full bg-white text-blue-500"></i>
+                class="fa-solid text-xl fa-info-circle text-gray-700 mt-1 rounded-full bg-white text-blue-500 absolute right-2"></i>
         </div>
     </div>
     `,
