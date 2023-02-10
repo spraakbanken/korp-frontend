@@ -8,10 +8,5 @@
         "esModuleInterop": true,
         "jsx": "react",
         "allowJs": true,
-        "plugins": [
-            {
-                "name": "typescript-tslint-plugin"
-            }
-        ]
     }
 }
