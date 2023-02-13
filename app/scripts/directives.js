@@ -589,7 +589,7 @@ korpApp.directive("reduceSelect", [
                     "value"
                 )
                 scope.numberAttributes = scope.selected.length
-                scope.onChange()
+                $timeout(() => scope.onChange())
             }
 
             scope.toggleSelected = function (value, event) {
@@ -621,7 +621,7 @@ korpApp.directive("reduceSelect", [
                 } else {
                     scope.insensitive = []
                 }
-                scope.onChange()
+                $timeout(() => scope.onChange())
 
                 if (!scope.keyItems["word"].selected) {
                     return scope.toggleSelected("word")
