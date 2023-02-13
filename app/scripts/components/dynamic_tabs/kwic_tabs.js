@@ -3,12 +3,7 @@ let html = String.raw
 export const kwicTabsComponent = () => ({
     replace: true,
     template: html`
-        <uib-tab
-            example-ctrl="example-ctrl"
-            ng-repeat="kwicTab in $ctrl.tabs"
-            select="onentry()"
-            deselect="onexit()"
-        >
+        <uib-tab example-ctrl="example-ctrl" ng-repeat="kwicTab in $ctrl.tabs" select="onentry()" deselect="onexit()">
             <uib-tab-heading ng-class="{not_loading: progress == 100, loading : loading}"
                 >KWIC<span ng-click="closeTab($index, $event)" tab-spinner="tab-spinner"></span
             ></uib-tab-heading>

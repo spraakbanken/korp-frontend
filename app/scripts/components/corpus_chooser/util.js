@@ -171,7 +171,10 @@ export const filterCorporaOnCredentials = (collection, corporaIds, credentials) 
     for (const corpus of Object.values(collection)) {
         const corpusId = corpus.id
         corpus.selected = false
-        if (corporaIds.includes(corpusId) && (!corpus["limited_access"] || credentials.includes(corpusId.toUpperCase()))) {
+        if (
+            corporaIds.includes(corpusId) &&
+            (!corpus["limited_access"] || credentials.includes(corpusId.toUpperCase()))
+        ) {
             corpus.selected = true
             selection.push(corpusId)
         }

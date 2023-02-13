@@ -25,7 +25,7 @@ export const kwicPager = {
                     ng-model="$ctrl.gotoPage"
                     ng-keyup="$ctrl.onPageInput($event)"
                     ng-click="$event.stopPropagation()"
-                >
+                />
                 {{'of' | loc:$root.lang}} {{$ctrl.numPages}}
             </div>
         </div>

@@ -495,17 +495,19 @@ korpApp.directive("timeInterval", () => ({
     },
 }))
 
-korpApp.directive("reduceSelect", ["$timeout", ($timeout) => ({
-    restrict: "AE",
-    scope: {
-        items: "=reduceItems",
-        selected: "=reduceSelected",
-        insensitive: "=reduceInsensitive",
-        lang: "=reduceLang",
-        onChange: "<",
-    },
-    replace: true,
-    template: `\
+korpApp.directive("reduceSelect", [
+    "$timeout",
+    ($timeout) => ({
+        restrict: "AE",
+        scope: {
+            items: "=reduceItems",
+            selected: "=reduceSelected",
+            insensitive: "=reduceInsensitive",
+            lang: "=reduceLang",
+            onChange: "<",
+        },
+        replace: true,
+        template: `\
     <div uib-dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">
       <div uib-dropdown-toggle class="reduce-dropdown-button inline_block bg-white border border-gray-500">
         <div class="reduce-dropdown-button-text">
@@ -546,91 +548,92 @@ korpApp.directive("reduceSelect", ["$timeout", ($timeout) => ({
       </div>
     </div>`,
 
-    link(scope) {
-        scope.$watchCollection("items", function () {
-            if (scope.items) {
-                scope.keyItems = {}
-                for (let item of scope.items) {
-                    scope.keyItems[item.value] = item
-                }
+        link(scope) {
+            scope.$watchCollection("items", function () {
+                if (scope.items) {
+                    scope.keyItems = {}
+                    for (let item of scope.items) {
+                        scope.keyItems[item.value] = item
+                    }
 
-                scope.hasWordAttrs = _.find(scope.keyItems, { group: "word_attr" }) != undefined
-                scope.hasStructAttrs = _.find(scope.keyItems, { group: "sentence_attr" }) != undefined
+                    scope.hasWordAttrs = _.find(scope.keyItems, { group: "word_attr" }) != undefined
+                    scope.hasStructAttrs = _.find(scope.keyItems, { group: "sentence_attr" }) != undefined
 
-                let somethingSelected = false
-                if (scope.selected && scope.selected.length > 0) {
-                    for (let select of scope.selected) {
-                        const item = scope.keyItems[select]
-                        if (item) {
-                            item.selected = true
-                            somethingSelected = true
+                    let somethingSelected = false
+                    if (scope.selected && scope.selected.length > 0) {
+                        for (let select of scope.selected) {
+                            const item = scope.keyItems[select]
+                            if (item) {
+                                item.selected = true
+                                somethingSelected = true
+                            }
                         }
                     }
-                }
 
-                if (!somethingSelected) {
-                    scope.keyItems["word"].selected = true
-                }
+                    if (!somethingSelected) {
+                        scope.keyItems["word"].selected = true
+                    }
 
-                if (scope.insensitive) {
-                    for (let insensitive of scope.insensitive) {
-                        scope.keyItems[insensitive].insensitive = true
+                    if (scope.insensitive) {
+                        for (let insensitive of scope.insensitive) {
+                            scope.keyItems[insensitive].insensitive = true
+                        }
+                    }
+                    return updateSelected(scope)
+                }
+            })
+
+            var updateSelected = function (scope) {
+                scope.selected = _.map(
+                    _.filter(scope.keyItems, (item, key) => item.selected),
+                    "value"
+                )
+                scope.numberAttributes = scope.selected.length
+                scope.onChange()
+            }
+
+            scope.toggleSelected = function (value, event) {
+                const item = scope.keyItems[value]
+                const isLinux = window.navigator.userAgent.indexOf("Linux") !== -1
+                if (event && ((!isLinux && event.altKey) || (isLinux && event.ctrlKey))) {
+                    _.map(_.values(scope.keyItems), (item) => (item.selected = false))
+                    item.selected = true
+                } else {
+                    item.selected = !item.selected
+                    if (value === "word" && !item.selected) {
+                        item.insensitive = false
+                        scope.insensitive = []
                     }
                 }
-                return updateSelected(scope)
-            }
-        })
 
-        var updateSelected = function (scope) {
-            scope.selected = _.map(
-                _.filter(scope.keyItems, (item, key) => item.selected),
-                "value"
-            )
-            scope.numberAttributes = scope.selected.length
-            scope.onChange()
-        }
+                updateSelected(scope)
 
-        scope.toggleSelected = function (value, event) {
-            const item = scope.keyItems[value]
-            const isLinux = window.navigator.userAgent.indexOf("Linux") !== -1
-            if (event && ((!isLinux && event.altKey) || (isLinux && event.ctrlKey))) {
-                _.map(_.values(scope.keyItems), (item) => (item.selected = false))
-                item.selected = true
-            } else {
-                item.selected = !item.selected
-                if (value === "word" && !item.selected) {
-                    item.insensitive = false
-                    scope.insensitive = []
+                if (event) {
+                    return event.stopPropagation()
                 }
             }
 
-            updateSelected(scope)
+            scope.toggleWordInsensitive = function (event) {
+                event.stopPropagation()
+                scope.keyItems["word"].insensitive = !scope.keyItems["word"].insensitive
+                if (scope.keyItems["word"].insensitive) {
+                    scope.insensitive = ["word"]
+                } else {
+                    scope.insensitive = []
+                }
+                scope.onChange()
 
-            if (event) {
-                return event.stopPropagation()
+                if (!scope.keyItems["word"].selected) {
+                    return scope.toggleSelected("word")
+                }
             }
-        }
 
-        scope.toggleWordInsensitive = function (event) {
-            event.stopPropagation()
-            scope.keyItems["word"].insensitive = !scope.keyItems["word"].insensitive
-            if (scope.keyItems["word"].insensitive) {
-                scope.insensitive = ["word"]
-            } else {
-                scope.insensitive = []
+            scope.toggled = function (open) {
+                // if no element is selected when closing popop, select word
+                if (!open && scope.numberAttributes === 0) {
+                    return $timeout(() => scope.toggleSelected("word"), 0)
+                }
             }
-            scope.onChange()
-
-            if (!scope.keyItems["word"].selected) {
-                return scope.toggleSelected("word")
-            }
-        }
-
-        scope.toggled = function (open) {
-            // if no element is selected when closing popop, select word
-            if (!open && scope.numberAttributes === 0) {
-                return $timeout(() => scope.toggleSelected("word"), 0)
-            }
-        }
-    },
-})])
+        },
+    }),
+])
