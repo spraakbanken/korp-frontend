@@ -38,10 +38,6 @@
         "css-loader": "^6.0.0",
         "html-loader": "^4.0.0",
         "jasmine-core": "^4.0.0",
-        "karma": "^6.0.0",
-        "karma-chrome-launcher": "^3.0.0",
-        "karma-jasmine": "^5.0.0",
-        "karma-webpack": "^5.0.0",
         "postcss-loader": "^7.0.0",
         "prettier": "^2.0.5",
         "protractor": "^5.4.2",
@@ -62,10 +58,9 @@
         "node": ">=14"
     },
     "scripts": {
-        "test": "yarn run test:karma && yarn run test:e2e",
-        "actions-test": "yarn run test:karma && yarn run test:e2e",
+        "test": "yarn run test:e2e",
+        "actions-test": "yarn run test:e2e",
         "posttest": "kill $(lsof -t -i:9112)",
-        "test:karma": "karma start test/karma/karma.conf.js",
         "pretest:e2e": "yarn run testserver && node_modules/protractor/bin/webdriver-manager update --standalone chrome --gecko false && wait-on --delay 500 --interval 500 http://localhost:9112",
         "test:e2e": "KORP_HOST=localhost node_modules/protractor/bin/protractor --browser chrome test/e2e/conf_e2e.js || true",
         "start": "webpack-dev-server --config webpack.dev.js",

@@ -288,7 +288,26 @@ To be documented
 
 ### dateInterval
 
-To be documented
+There is a built-in component for searching time intervals in extended search.
+
+To use it, simply set `extended_component: dateInterval` in the attribute's configuration.
+
+There is also another possibility. If the corpus has time data enabled, as explained here:
+
+https://github.com/spraakbanken/korp-backend#time-data
+
+Then time interval will be added automatically as a search alternative, but this needs to be added to `config.yml`:
+
+```
+common_struct_types:
+  date_interval:
+    label: "time interval"
+    hide_sidebar: 'true'
+    hide_compare: 'true'
+    hide_statistics: 'true'
+    opts: false
+    extended_component: dateInterval
+```
 
 ## Operators
 

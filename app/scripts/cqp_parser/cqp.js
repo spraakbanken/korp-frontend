@@ -107,7 +107,7 @@ const stringifyCqp = function (cqp_obj, expanded_format) {
 
                 if (type === "word" && val === "") {
                     out = ""
-                } else if (type === "date_interval") {
+                } else if (settings.corpusListing.isDateInterval(type)) {
                     out = parseDateInterval(op, val, expanded_format)
                 } else {
                     out = `${type} ${op} \"${val}\"`
