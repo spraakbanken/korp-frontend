@@ -47,15 +47,22 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                exclude: [path.resolve(__dirname, "app/index.html")],
                 use: [
                     {
                         loader: "html-loader",
                         options: {
                             minimize: {
+                                caseSensitive: true,
+                                collapseWhitespace: true,
                                 conservativeCollapse: false,
+                                keepClosingSlash: true,
+                                minifyCSS: true,
+                                minifyJS: true,
+                                removeComments: true,
+                                removeRedundantAttributes: true,
+                                removeScriptTypeAttributes: true,
+                                removeStyleLinkTypeAttributes: true,
                             },
-
                             esModule: false,
                         },
                     },
