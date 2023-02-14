@@ -24,6 +24,14 @@ export class KwicCtrl {
             this.scope.cqp = cqp
             // only set this on the inital search, not when paging
             this.scope.hitsPerPage = this.location.search()["hpp"] || settings["hits_per_page_default"]
+
+            // reset randomSeed when doing a search, but not for the first request
+            if (!this.scope.initialSearch) {
+                this.scope.randomSeed = null
+            } else {
+                this.scope.randomSeed = this.location.search()["random_seed"]
+            }
+            this.scope.initialSearch = false
             this.scope.makeRequest(false)
         })
     }
@@ -34,6 +42,8 @@ export class KwicCtrl {
         this.$rootScope = $rootScope
 
         const s = scope
+
+        s.initialSearch = true
 
         this.setupListeners()
 
@@ -244,18 +254,16 @@ export class KwicCtrl {
                     return {}
                 }
                 if (sort === "random") {
-                    let rnd
-                    if (locationSearch().random_seed) {
-                        rnd = locationSearch().random_seed
-                    } else {
-                        rnd = Math.ceil(Math.random() * 10000000)
-                        locationSearch({ random_seed: rnd })
+                    if (!isPaging && !s.randomSeed) {
+                        s.randomSeed = Math.ceil(Math.random() * 10000000)
+                        $location.search("random_seed", s.randomSeed)
                     }
-
                     return {
                         sort,
-                        random_seed: rnd,
+                        random_seed: s.randomSeed,
                     }
+                } else {
+                    $location.search("random_seed", null)
                 }
                 return { sort }
             }
