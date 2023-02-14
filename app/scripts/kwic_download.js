@@ -74,7 +74,7 @@ korpApp.factory("kwicDownload", function () {
 
                 for (let token of row.tokens || []) {
                     let match = ""
-                    for (matchObj of [row.match].flat()) {
+                    for (let matchObj of [row.match].flat()) {
                         if (token.position >= matchObj.start && token.position < matchObj.end) {
                             match = "***"
                             break
