@@ -35,7 +35,7 @@ export const searchtabsComponent = {
                                     {{'cqp_docs' | loc:$root.lang}}</a
                                 >
                             </div>
-                            <textarea id="cqp_string" ng-model="cqp"></textarea>
+                            <textarea class="w-full font-mono" ng-model="cqp"></textarea>
                         </div>
                         <search-submit
                             pos="right"
