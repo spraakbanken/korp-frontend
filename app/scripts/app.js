@@ -314,7 +314,7 @@ korpApp.run([
             if (corpus) {
                 selectedIds = corpus.split(",")
             } else {
-                selectedIds = settings["preselected_corpora"]
+                selectedIds = settings["preselected_corpora"] || []
             }
             return selectedIds
         }
