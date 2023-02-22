@@ -1782,19 +1782,6 @@ warning ~ * {
 
 }
 
-#deptree_popup {
-  display: none;
-  overflow-y : hidden;
-  iframe {
-    border : none;
-    height : 400px;
-  }
-  .info:empty {
-    display : block;
-    height : 1.3em;
-  }
-}
-
 .smoother.ui-slider {
   width : 200px;
 }
