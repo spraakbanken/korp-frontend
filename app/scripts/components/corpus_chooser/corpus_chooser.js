@@ -32,7 +32,7 @@ export const corpusChooserComponent = {
                 <i class="fa-solid fa-caret-down relative bottom-2"></i>
             </div>
         </div>
-        <div ng-if="$ctrl.showChooser"  class="corpus-chooser flex bg-gray-100">
+        <div ng-if="$ctrl.showChooser"  class="corpus-chooser flex bg-white">
             <div class="popupchecks shrink-0 p-4 h-full">
                 <div class="flex">
                     <cc-time-graph ng-if="$ctrl.showTimeGraph"></cc-time-graph>
@@ -54,7 +54,7 @@ export const corpusChooserComponent = {
                     {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' | loc:$root.lang}}
                 </p>
             </div>
-            <cc-info-box ng-if="$ctrl.showInfoBox" class="sticky top-0" style="width: 480px" object="$ctrl.infoNode"></cc-info>
+            <cc-info-box ng-if="$ctrl.showInfoBox" class="sticky top-0 bg-gray-100" style="width: 480px" object="$ctrl.infoNode"></cc-info>
         </div>
     </div>
     `,
