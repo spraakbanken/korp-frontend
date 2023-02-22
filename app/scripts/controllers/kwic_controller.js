@@ -362,31 +362,8 @@ export class KwicCtrl {
             if (!isPaging) {
                 s.hits = data.hits
                 s.hits_display = util.prettyNumbers(data.hits)
-                if (!data.hits) {
-                    c.log("no kwic results")
-                    s.hitsPictureData = null
-                } else {
-                    s.renderHitsPicture(data)
-                }
+                s.data = data
             }
-        }
-
-        s.renderHitsPicture = (data) => {
-            let items = _.map(data.corpus_order, (obj) => ({
-                rid: obj,
-                rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
-                relative: data.corpus_hits[obj] / data.hits,
-                abs: data.corpus_hits[obj],
-            }))
-            items = _.filter(items, (item) => item.abs > 0)
-            // calculate which is the first page of hits for each item
-            let index = 0
-            _.each(items, (obj) => {
-                obj.page = Math.floor(index / data.kwic.length)
-                index += obj.abs
-            })
-
-            s.hitsPictureData = items
         }
 
         s.renderResult = (data) => {

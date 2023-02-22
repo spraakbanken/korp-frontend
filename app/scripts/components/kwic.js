@@ -122,7 +122,6 @@ export const kwicComponent = {
         loading: "<",
         active: "<",
         hitsDisplay: "<",
-        hitsPictureData: "<",
         hits: "<",
         kwic: "<",
         contextKwic: "<",
@@ -177,6 +176,24 @@ export const kwicComponent = {
                     } else {
                         statemachine.send("DESELECT_WORD")
                     }
+                }
+
+                if ("data" in changeObj) {
+                    let items = _.map($ctrl.corpusOrder, (obj) => ({
+                        rid: obj,
+                        rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
+                        relative: $ctrl.data.corpus_hits[obj] / $ctrl.hits,
+                        abs: $ctrl.data.corpus_hits[obj],
+                    })).filter(items, (item) => item.abs > 0)
+
+                    // calculate which is the first page of hits for each item
+                    let index = 0
+                    _.each(items, (obj) => {
+                        obj.page = Math.floor(index / $ctrl.data.kwic.length)
+                        index += obj.abs
+                    })
+
+                    $ctrl.hitsPictureData = items
                 }
             }
 
