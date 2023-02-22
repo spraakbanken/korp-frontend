@@ -49,11 +49,6 @@ export class KwicCtrl {
 
         s.proxy = new model.KWICProxy()
 
-        // there can be only one global kwicproxy
-        if (!window.kwicProxy) {
-            window.kwicProxy = s.proxy
-        }
-
         s.tabindex = 0
 
         this.initPage()
