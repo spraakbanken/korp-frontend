@@ -350,6 +350,7 @@
     "access_partly_denied": "You do not have access to some corpora that you have selected",
     "access_partly_denied_continue": "To be able to continue, they will be removed.",
     "access_denied": "You do not have access to any corpus in this mode.",
+    "corpus_not_available": "Some selected corpora are not available. Remove from search?",
     "go_to_start": "Go to start page",
 
     "stats_warn": "Statistics is disabled",

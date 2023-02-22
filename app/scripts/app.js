@@ -192,24 +192,19 @@ korpApp.run([
 
         s.waitForLogin = false
 
-        function initialzeCorpusSelection() {
+        function initialzeCorpusSelection(selectedIds) {
             let loginNeededFor = []
 
-            for (let corpusObj of settings.corpusListing.selected) {
-                if (corpusObj["limited_access"]) {
-                    if (!authenticationProxy.hasCredential(corpusObj.id.toUpperCase())) {
+            for (let corpusId of selectedIds) {
+                const corpusObj = settings.corpora[corpusId]
+                if (corpusObj && corpusObj["limited_access"]) {
+                    if (!authenticationProxy.hasCredential(corpusId.toUpperCase())) {
                         loginNeededFor.push(corpusObj)
                     }
                 }
             }
 
-            let selectedIds
-            let { corpus } = $location.search()
-            if (corpus) {
-                selectedIds = corpus.split(",")
-            } else {
-                selectedIds = settings["preselected_corpora"]
-            }
+            const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
 
             if (settings["initalization_checks"] && settings["initalization_checks"](s)) {
                 // something was triggered
@@ -240,13 +235,11 @@ korpApp.run([
                                 <div>{{'access_partly_denied_continue' | loc:lang}}</div>`,
                             onClose: () => {
                                 const neededIds = loginNeededFor.map((corpus) => corpus.id)
-                                selectedIds = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
-                                loginNeededFor = []
-                                if (selectedIds.length == 0) {
-                                    selectedIds = settings["preselected_corpora"]
-                                    settings.corpusListing.select(selectedIds)
+                                let newIds = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
+                                if (newIds.length == 0) {
+                                    newIds = settings["preselected_corpora"]
                                 }
-                                initialzeCorpusSelection()
+                                initialzeCorpusSelection(newIds)
                             },
                         })
                     }
@@ -260,8 +253,20 @@ korpApp.run([
                         },
                     })
                 }
+            } else if (!selectedIds.every((r) => allCorpusIds.includes(r))) {
+                s.openErrorModal({
+                    content: `{{'corpus_not_available' | loc:lang}}`,
+                    onClose: () => {
+                        const newIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
+                        if (newIds.length == 0) {
+                            newIds = settings["preselected_corpora"]
+                        }
+                        initialzeCorpusSelection(newIds)
+                    },
+                })
             } else {
                 // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
+                settings.corpusListing.select(selectedIds)
                 $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", selectedIds), 0)
             }
         }
@@ -303,14 +308,25 @@ korpApp.run([
             }
         }
 
+        function getCorporaFromHash() {
+            let selectedIds
+            let { corpus } = $location.search()
+            if (corpus) {
+                selectedIds = corpus.split(",")
+            } else {
+                selectedIds = settings["preselected_corpora"]
+            }
+            return selectedIds
+        }
+
         statemachine.listen("login", function () {
             if (s.waitForLogin) {
                 s.waitForLogin = false
-                initialzeCorpusSelection()
+                initialzeCorpusSelection(getCorporaFromHash())
             }
         })
 
-        initialzeCorpusSelection()
+        initialzeCorpusSelection(getCorporaFromHash())
     },
 ])
 

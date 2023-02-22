@@ -348,6 +348,7 @@
     "access_partly_denied": "Du har inte tillgång till vissa korpusar som du har valt",
     "access_partly_denied_continue": "För att kunna fortsätta tas korpusarna bort ur sökningen.",
     "access_denied": "Du har inte tillgång till någon korpus i det här läget.",
+    "corpus_not_available": "Vissa valda korpusar är inte tillgänliga. Ta bort från sökningen?",
     "go_to_start": "Gå till startsidan",
 
     "stats_warn": "Statistiken är avaktiverad",
