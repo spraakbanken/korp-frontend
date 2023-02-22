@@ -66,13 +66,12 @@ korpApp.directive("statsResultCtrl", () => ({
                     } else {
                         cqp2 = statisticsFormatting.getCqp(rowData.statsValues, s.searchParams.ignoreCase)
                     }
-                    const { corpora } = s.searchParams
 
                     const opts = {}
                     opts.ajaxParams = {
                         start: 0,
                         end: 24,
-                        corpus: corpora.join(","),
+                        corpus: s.searchParams.originalCorpora,
                         cqp: s.proxy.prevParams.cqp,
                         cqp2,
                         expand_prequeries: false,

@@ -373,6 +373,8 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         })
 
         const data = this.makeParameters(reduceVals, cqp, ignoreCase)
+        // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
+        const originalCorpora = settings.corpusListing.stringifySelected(false)
 
         const wordAttrs = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())
         const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
@@ -427,7 +429,14 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                             return
                         }
                         model.normalizeStatsData(data)
-                        statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
+                        statisticsService.processData(
+                            def,
+                            originalCorpora,
+                            data,
+                            reduceVals,
+                            reduceValLabels,
+                            ignoreCase
+                        )
                     },
                 })
             )
