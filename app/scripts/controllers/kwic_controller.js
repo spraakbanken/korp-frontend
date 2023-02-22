@@ -56,8 +56,6 @@ export class KwicCtrl {
 
         s.tabindex = 0
 
-        const punctArray = [",", ".", ";", ":", "!", "?", "..."]
-
         this.initPage()
 
         s.pageChange = function (page) {
@@ -96,151 +94,6 @@ export class KwicCtrl {
                 $location.search("reading_mode", undefined)
             }
             s.readingChange()
-        }
-
-        const massageData = function (hitArray) {
-            let prevCorpus = ""
-            const output = []
-
-            for (let i = 0; i < hitArray.length; i++) {
-                var corpus, linkCorpusId, mainCorpusId, matches
-                const hitContext = hitArray[i]
-                if (currentMode === "parallel") {
-                    mainCorpusId = hitContext.corpus.split("|")[0].toLowerCase()
-                    linkCorpusId = hitContext.corpus.split("|")[1].toLowerCase()
-                } else {
-                    mainCorpusId = hitContext.corpus.toLowerCase()
-                }
-
-                const id = linkCorpusId || mainCorpusId
-
-                const [matchSentenceStart, matchSentenceEnd] = findMatchSentence(hitContext)
-
-                if (!(hitContext.match instanceof Array)) {
-                    matches = [{ start: hitContext.match.start, end: hitContext.match.end }]
-                } else {
-                    matches = hitContext.match
-                }
-
-                const currentStruct = {}
-                for (let i in _.range(0, hitContext.tokens.length)) {
-                    const wd = hitContext.tokens[i]
-                    wd.position = i
-
-                    for (let { start, end } of matches) {
-                        if (start <= i && i < end) {
-                            _.extend(wd, { _match: true })
-                        }
-                    }
-
-                    if (matchSentenceStart <= i && i <= matchSentenceEnd) {
-                        _.extend(wd, { _matchSentence: true })
-                    }
-                    if (punctArray.includes(wd.word)) {
-                        _.extend(wd, { _punct: true })
-                    }
-
-                    wd.structs = wd.structs || {}
-
-                    for (let structItem of wd.structs.open || []) {
-                        const structKey = _.keys(structItem)[0]
-                        if (structKey == "sentence") {
-                            wd._open_sentence = true
-                        }
-
-                        currentStruct[structKey] = {}
-                        const attrs = _.toPairs(structItem[structKey]).map(([key, val]) => [structKey + "_" + key, val])
-                        for (let [key, val] of _.concat([[structKey, ""]], attrs)) {
-                            if (key in settings.corpora[id].attributes) {
-                                currentStruct[structKey][key] = val
-                            }
-                        }
-                    }
-
-                    const attrs = _.reduce(_.values(currentStruct), (val, ack) => _.merge(val, ack), {})
-                    _.extend(wd, attrs)
-
-                    for (let structItem of wd.structs.close || []) {
-                        delete currentStruct[structItem]
-                    }
-                }
-
-                if (prevCorpus !== id) {
-                    corpus = settings.corpora[id]
-                    const newSent = {
-                        newCorpus: corpus.title,
-                        noContext: _.keys(corpus.context).length === 1,
-                    }
-                    output.push(newSent)
-                }
-
-                hitContext.corpus = mainCorpusId
-
-                output.push(hitContext)
-                if (hitContext.aligned) {
-                    // just check for sentence opened, no other structs
-                    const alignedTokens = Object.values(hitContext.aligned)[0]
-                    for (let wd of alignedTokens) {
-                        if (wd.structs && wd.structs.open) {
-                            for (let structItem of wd.structs.open) {
-                                if (_.keys(structItem)[0] == "sentence") {
-                                    wd._open_sentence = true
-                                }
-                            }
-                        }
-                    }
-
-                    const [corpus_aligned, tokens] = _.toPairs(hitContext.aligned)[0]
-                    output.push({
-                        tokens,
-                        isLinked: true,
-                        corpus: corpus_aligned,
-                    })
-                }
-
-                prevCorpus = id
-            }
-
-            return output
-        }
-
-        var findMatchSentence = function (hitContext) {
-            const span = []
-            const { start, end } = hitContext.match
-            let decr = start
-            let incr = end
-            while (decr >= 0) {
-                const token = hitContext.tokens[decr]
-                const sentenceOpen = _.filter((token.structs && token.structs.open) || [], (attr) => attr.sentence)
-                if (sentenceOpen.length > 0) {
-                    span[0] = decr
-                    break
-                }
-                decr--
-            }
-            while (incr < hitContext.tokens.length) {
-                const token = hitContext.tokens[incr]
-                const closed = (token.structs && token.structs.close) || []
-                if (closed.includes("sentence")) {
-                    span[1] = incr
-                    break
-                }
-                incr++
-            }
-
-            return span
-        }
-
-        s.kwic = []
-        s.contextKwic = []
-        s.setContextData = function (data) {
-            s.kwic = []
-            s.contextKwic = massageData(data.kwic)
-        }
-
-        s.setKwicData = function (data) {
-            s.contextKwic = []
-            s.kwic = massageData(data.kwic)
         }
 
         s.selectionManager = new util.SelectionManager()
@@ -377,18 +230,11 @@ export class KwicCtrl {
             if (!data.kwic) {
                 data.kwic = []
             }
-            const isReading = s.isReadingMode()
 
             if (s.isActive()) {
                 s.$root.jsonUrl = s.proxy.prevUrl
             }
 
-            const useContextData = locationSearch()["in_order"] != null
-            if (isReading || useContextData) {
-                s.setContextData(data)
-            } else {
-                s.setKwicData(data)
-            }
             s.corpusOrder = data.corpus_order
         }
 

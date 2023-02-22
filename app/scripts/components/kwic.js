@@ -43,7 +43,7 @@ export const kwicComponent = {
                 <span ng-if="$ctrl.readingMode">{{'show_kwic' | loc:lang}}</span>
             </span>
             <div class="table_scrollarea">
-                <table class="results_table kwic" ng-if="$ctrl.kwic.length > 0" cellspacing="0">
+                <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0">
                     <tr
                         class="sentence"
                         ng-repeat="sentence in $ctrl.kwic"
@@ -73,10 +73,10 @@ export const kwicComponent = {
                         </td>
                     </tr>
                 </table>
-                <div class="results_table reading" ng-if="$ctrl.contextKwic.length > 0">
+                <div class="results_table reading" ng-if="$ctrl.useContext">
                     <p
                         class="sentence"
-                        ng-repeat="sentence in $ctrl.contextKwic"
+                        ng-repeat="sentence in $ctrl.kwic"
                         ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}"
                     >
                         <span class="corpus_title" colspan="0"
@@ -123,8 +123,6 @@ export const kwicComponent = {
         active: "<",
         hitsDisplay: "<",
         hits: "<",
-        kwic: "<",
-        contextKwic: "<",
         isReading: "<",
         page: "<",
         pageEvent: "<",
@@ -133,6 +131,7 @@ export const kwicComponent = {
         prevParams: "<",
         prevRequest: "<",
         corpusOrder: "<",
+        data: "<",
     },
     controller: [
         "$location",
@@ -149,23 +148,44 @@ export const kwicComponent = {
             }
 
             $ctrl.$onChanges = (changeObj) => {
-                if ("kwic" in changeObj) {
+                if ("data" in changeObj && $ctrl.data != undefined) {
+                    $ctrl.useContext = $ctrl.isReading || locationSearch()["in_order"] != null
+
+                    $ctrl.kwic = massageData($ctrl.data.kwic)
+
                     if (!$ctrl.isReading) {
                         centerScrollbar()
                         $element.find(".match").children().first().click()
                     }
+
+                    let items = _.map($ctrl.corpusOrder, (obj) => ({
+                        rid: obj,
+                        rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
+                        relative: $ctrl.data.corpus_hits[obj] / $ctrl.hits,
+                        abs: $ctrl.data.corpus_hits[obj],
+                    })).filter((item) => item.abs > 0)
+
+                    // calculate which is the first page of hits for each item
+                    let index = 0
+                    _.each(items, (obj) => {
+                        obj.page = Math.floor(index / $ctrl.data.kwic.length)
+                        index += obj.abs
+                    })
+
+                    $ctrl.hitsPictureData = items
                 }
+
                 if (settings["enable_backend_kwic_download"] && $ctrl.hitsDisplay) {
                     // using hitsDisplay here, since hits is not set until request is complete
                     util.setDownloadLinks($ctrl.prevRequest, {
-                        kwic: $ctrl.isReading ? $ctrl.contextKwic : $ctrl.kwic,
+                        kwic: $ctrl.kwic,
                         corpus_order: $ctrl.corpusOrder,
                     })
                 }
                 if (currentMode === "parallel" && !$ctrl.isReading) {
                     centerScrollbarParallel()
                 }
-                if ($ctrl.kwic && $ctrl.kwic.length == 0 && $ctrl.contextKwic && $ctrl.contextKwic.length == 0) {
+                if ($ctrl.kwic && $ctrl.kwic.length == 0) {
                     selectionManager.deselect()
                     statemachine.send("DESELECT_WORD")
                 }
@@ -176,24 +196,6 @@ export const kwicComponent = {
                     } else {
                         statemachine.send("DESELECT_WORD")
                     }
-                }
-
-                if ("data" in changeObj) {
-                    let items = _.map($ctrl.corpusOrder, (obj) => ({
-                        rid: obj,
-                        rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
-                        relative: $ctrl.data.corpus_hits[obj] / $ctrl.hits,
-                        abs: $ctrl.data.corpus_hits[obj],
-                    })).filter(items, (item) => item.abs > 0)
-
-                    // calculate which is the first page of hits for each item
-                    let index = 0
-                    _.each(items, (obj) => {
-                        obj.page = Math.floor(index / $ctrl.data.kwic.length)
-                        index += obj.abs
-                    })
-
-                    $ctrl.hitsPictureData = items
                 }
             }
 
@@ -244,7 +246,7 @@ export const kwicComponent = {
                     }
                     const [fileName, blobName] = kwicDownload.makeDownload(
                         ...value.split("/"),
-                        $ctrl.kwic.length > 0 ? $ctrl.kwic : $ctrl.contextKwic,
+                        $ctrl.kwic,
                         $ctrl.prevParams,
                         hitsDisplay
                     )
@@ -277,6 +279,144 @@ export const kwicComponent = {
                 const from = sentence.match.end
                 const len = sentence.tokens.length
                 return sentence.tokens.slice(from, len)
+            }
+
+            function massageData(hitArray) {
+                const punctArray = [",", ".", ";", ":", "!", "?", "..."]
+
+                let prevCorpus = ""
+                const output = []
+
+                for (let i = 0; i < hitArray.length; i++) {
+                    var corpus, linkCorpusId, mainCorpusId, matches
+                    const hitContext = hitArray[i]
+                    if (currentMode === "parallel") {
+                        mainCorpusId = hitContext.corpus.split("|")[0].toLowerCase()
+                        linkCorpusId = hitContext.corpus.split("|")[1].toLowerCase()
+                    } else {
+                        mainCorpusId = hitContext.corpus.toLowerCase()
+                    }
+
+                    const id = linkCorpusId || mainCorpusId
+
+                    const [matchSentenceStart, matchSentenceEnd] = findMatchSentence(hitContext)
+
+                    if (!(hitContext.match instanceof Array)) {
+                        matches = [{ start: hitContext.match.start, end: hitContext.match.end }]
+                    } else {
+                        matches = hitContext.match
+                    }
+
+                    const currentStruct = {}
+                    for (let i in _.range(0, hitContext.tokens.length)) {
+                        const wd = hitContext.tokens[i]
+                        wd.position = i
+
+                        for (let { start, end } of matches) {
+                            if (start <= i && i < end) {
+                                _.extend(wd, { _match: true })
+                            }
+                        }
+
+                        if (matchSentenceStart <= i && i <= matchSentenceEnd) {
+                            _.extend(wd, { _matchSentence: true })
+                        }
+                        if (punctArray.includes(wd.word)) {
+                            _.extend(wd, { _punct: true })
+                        }
+
+                        wd.structs = wd.structs || {}
+
+                        for (let structItem of wd.structs.open || []) {
+                            const structKey = _.keys(structItem)[0]
+                            if (structKey == "sentence") {
+                                wd._open_sentence = true
+                            }
+
+                            currentStruct[structKey] = {}
+                            const attrs = _.toPairs(structItem[structKey]).map(([key, val]) => [
+                                structKey + "_" + key,
+                                val,
+                            ])
+                            for (let [key, val] of _.concat([[structKey, ""]], attrs)) {
+                                if (key in settings.corpora[id].attributes) {
+                                    currentStruct[structKey][key] = val
+                                }
+                            }
+                        }
+
+                        const attrs = _.reduce(_.values(currentStruct), (val, ack) => _.merge(val, ack), {})
+                        _.extend(wd, attrs)
+
+                        for (let structItem of wd.structs.close || []) {
+                            delete currentStruct[structItem]
+                        }
+                    }
+
+                    if (prevCorpus !== id) {
+                        corpus = settings.corpora[id]
+                        const newSent = {
+                            newCorpus: corpus.title,
+                            noContext: _.keys(corpus.context).length === 1,
+                        }
+                        output.push(newSent)
+                    }
+
+                    hitContext.corpus = mainCorpusId
+
+                    output.push(hitContext)
+                    if (hitContext.aligned) {
+                        // just check for sentence opened, no other structs
+                        const alignedTokens = Object.values(hitContext.aligned)[0]
+                        for (let wd of alignedTokens) {
+                            if (wd.structs && wd.structs.open) {
+                                for (let structItem of wd.structs.open) {
+                                    if (_.keys(structItem)[0] == "sentence") {
+                                        wd._open_sentence = true
+                                    }
+                                }
+                            }
+                        }
+
+                        const [corpus_aligned, tokens] = _.toPairs(hitContext.aligned)[0]
+                        output.push({
+                            tokens,
+                            isLinked: true,
+                            corpus: corpus_aligned,
+                        })
+                    }
+
+                    prevCorpus = id
+                }
+
+                return output
+            }
+
+            function findMatchSentence(hitContext) {
+                const span = []
+                const { start, end } = hitContext.match
+                let decr = start
+                let incr = end
+                while (decr >= 0) {
+                    const token = hitContext.tokens[decr]
+                    const sentenceOpen = _.filter((token.structs && token.structs.open) || [], (attr) => attr.sentence)
+                    if (sentenceOpen.length > 0) {
+                        span[0] = decr
+                        break
+                    }
+                    decr--
+                }
+                while (incr < hitContext.tokens.length) {
+                    const token = hitContext.tokens[incr]
+                    const closed = (token.structs && token.structs.close) || []
+                    if (closed.includes("sentence")) {
+                        span[1] = incr
+                        break
+                    }
+                    incr++
+                }
+
+                return span
             }
 
             function onWordClick(event) {
@@ -380,11 +520,7 @@ export const kwicComponent = {
             }
 
             function getActiveData() {
-                if ($ctrl.readingMode) {
-                    return $ctrl.contextKwic
-                } else {
-                    return $ctrl.kwic
-                }
+                return $ctrl.kwic
             }
 
             function clearLinks() {

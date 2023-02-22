@@ -20,8 +20,6 @@ export const kwicTabsComponent = () => ({
                     hits-display="hits_display"
                     hits="hits"
                     data="data"
-                    kwic="kwic"
-                    context-kwic="contextKwic"
                     is-reading="is_reading"
                     page="page"
                     page-event="pageChange"
