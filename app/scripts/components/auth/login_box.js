@@ -1,4 +1,5 @@
 /** @format */
+
 import statemachine from "@/statemachine"
 import { login } from "./basic_auth"
 
@@ -17,8 +18,8 @@ export const loginBoxComponent = {
             <input id="pass" ng-model="$ctrl.loginPass" type="password">
             <a class="password-reset" href="https://ws.spraakbanken.gu.se/user/password" target="_blank">{{'forgot_password' | loc:lang}}</a>
             <div style="clear:both"></div>
-            <input class="save-login" id="saveLogin" type="checkbox" ng-model="$ctrl.saveLogin">
-            <label class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
+            <input ng-if="$ctrl.showSave" class="save-login" id="saveLogin" type="checkbox" ng-model="$ctrl.saveLogin">
+            <label ng-if="$ctrl.showSave" class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
             <p ng-show="$ctrl.loginErr" class="err_msg">{{'login_fail_msg' | loc:lang}}</p>
             <input class="btn btn-sm bg-blue-500 text-white" type="submit" value="{{'send' | loc:lang}}">
             <div style="clear:both"></div>
@@ -32,6 +33,13 @@ export const loginBoxComponent = {
         "$timeout",
         function ($timeout) {
             const $ctrl = this
+
+            const options = settings["auth_module"]?.["options"] || {}
+
+            // default value of show_remember is true
+            $ctrl.showSave = options["show_remember"] == undefined ? true : options["show_remember"]
+            // default value of default_value_remember is false
+            $ctrl.saveLogin = $ctrl.showSave ? Boolean(options["default_value_remember"]) : true
 
             $ctrl.loginSubmit = function () {
                 $ctrl.loginErr = false

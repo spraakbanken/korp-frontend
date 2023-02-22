@@ -2,14 +2,15 @@
 import statemachine from "@/statemachine"
 
 let authModule
-if (settings["auth_module"] == "federated_auth") {
+let authModuleName = settings["auth_module"]?.["module"] || settings["auth_module"]
+if (authModuleName == "federated_auth") {
     authModule = require("./federatedauth/fed_auth.js")
-} else if (settings["auth_module"] == "basic_auth" || settings["auth_module"] == undefined) {
+} else if (authModuleName == "basic_auth" || authModuleName == undefined) {
     // load the default athentication
     authModule = require("./basic_auth")
 } else {
     // must be a custom auth module
-    authModule = require("custom/" + settings["auth_module"])
+    authModule = require("custom/" + authModuleName)
 }
 
 const init = async () => {

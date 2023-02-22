@@ -14,7 +14,7 @@ const state = {
 }
 
 const init = async () => {
-    const response = await fetch(settings["federated_auth_jwt_url"], {
+    const response = await fetch(settings["auth_module"]["options"]["jwt_url"], {
         headers: { accept: "text/plain" },
         credentials: "include",
     })
@@ -70,7 +70,7 @@ const login = () => {
     // if we already tried to login, don't redirect again, to avoid infinite loops
     // if (document.referrer == "") {
     // }
-    window.location.href = `${settings["federated_auth_login_service"]}?redirect=${window.location.href}`
+    window.location.href = `${settings["auth_module"]["options"]["login_service"]}?redirect=${window.location.href}`
 }
 
 const getAuthorizationHeader = () => {
@@ -85,7 +85,7 @@ const hasCredential = (corpusId) => {
 }
 
 const logout = () => {
-    window.location.href = settings["federated_auth_logout_service"]
+    window.location.href = settings["auth_module"]["options"]["logout_service"]
 }
 
 const getCredentials = () => {
