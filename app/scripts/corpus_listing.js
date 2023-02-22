@@ -398,6 +398,9 @@ export class CorpusListing {
     }
 
     isDateInterval(type) {
+        if (_.isEmpty(type)) {
+            return false
+        }
         const attribute = type.split("_.").slice(-1)[0]
         return (
             this.commonAttributes[attribute]?.["extended_component"] == "dateInterval" ||
