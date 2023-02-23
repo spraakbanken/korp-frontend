@@ -154,7 +154,7 @@ export const kwicComponent = {
                     $ctrl.kwic = massageData($ctrl.data.kwic)
 
                     if (!$ctrl.isReading) {
-                        centerScrollbar()
+                        $timeout(() => centerScrollbar())
                         $element.find(".match").children().first().click()
                     }
 
