@@ -1,5 +1,4 @@
 /** @format */
-import statemachine from "./statemachine"
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("advancedSearch", () => ({
@@ -9,17 +8,15 @@ korpApp.directive("advancedSearch", () => ({
         "$location",
         "$timeout",
         ($scope, compareSearches, $location, $timeout) => {
-            function updateAdvancedCQP() {
-                if ($location.search().search && $location.search().search.split("|")) {
-                    var [type, ...expr] = $location.search().search.split("|")
-                    expr = expr.join("|")
-                }
+            if ($location.search().search && $location.search().search.split("|")) {
+                var [type, ...expr] = $location.search().search.split("|")
+                expr = expr.join("|")
+            }
 
-                if (type === "cqp") {
-                    $scope.cqp = expr || "[]"
-                } else {
-                    $scope.cqp = "[]"
-                }
+            if (type === "cqp" && expr) {
+                $scope.cqp = expr
+            } else {
+                $scope.cqp = "[]"
             }
 
             $scope.onSearch = () => {
@@ -33,14 +30,6 @@ korpApp.directive("advancedSearch", () => ({
             $scope.onSearchSave = (name) => {
                 compareSearches.saveSearch(name, $scope.cqp)
             }
-
-            // init value
-            updateAdvancedCQP()
-
-            // update value
-            $scope.$on("updateAdvancedCQP", () => {
-                updateAdvancedCQP()
-            })
         },
     ],
 }))
