@@ -16,42 +16,12 @@ export const searchtabsComponent = {
                 <uib-tab heading='{{"advanced" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[2]">
                     <advanced-search></advanced-search>
                 </uib-tab>
-                <uib-tab ng-if="$ctrl.visibleTabs[3]" compare-search-ctrl>
-                    <uib-tab-heading
-                        >{{'compare' | loc:$root.lang}}
-                        <span class="badge" ng-if="savedSearches.length"
-                            >{{savedSearches.length}}</span
-                        ></uib-tab-heading
-                    >
-                    <div class="search_compare">
-                        <button
-                            class="btn btn-sm btn-danger delete"
-                            ng-click="deleteCompares()"
-                            ng-show="savedSearches.length &gt; 1"
-                        >
-                            <i class="fa fa-trash-o"></i>{{'compare_delete' | loc:$root.lang}}
-                        </button>
-                        <div ng-show="savedSearches.length &lt; 2">
-                            <div class="bs-callout bs-callout-warning">{{'compare_warning' | loc:$root.lang}}</div>
-                        </div>
-                        <div ng-show="savedSearches.length &gt; 1">
-                            {{'compare_vb' | loc:$root.lang}}<select
-                                ng-options="search.label for search in savedSearches"
-                                ng-model="cmp1"
-                            ></select
-                            >{{'compare_with' | loc:$root.lang}}<select
-                                ng-options="search.label for search in savedSearches"
-                                ng-model="cmp2"
-                            ></select
-                            >{{'compare_reduce' | loc:$root.lang}}<select
-                                ng-model="reduce"
-                                ng-options="obj | mapper:valfilter as obj.label | locObj:lang group by obj.group | loc for obj in currentAttrs"
-                            ></select
-                            ><button class="btn btn-sm btn-default search" ng-click="sendCompare()">
-                                {{'compare_vb' | loc:$root.lang}}
-                            </button>
-                        </div>
-                    </div>
+                <uib-tab ng-if="$ctrl.visibleTabs[3]">
+                    <uib-tab-heading>
+                        {{'compare' | loc:$root.lang}}
+                        <span class="badge" ng-if="$ctrl.savedSearches.length">{{$ctrl.savedSearches.length}}</span>
+                    </uib-tab-heading>
+                    <compare-search></compare-search>
                 </uib-tab>
             </uib-tabset>
             <div
@@ -111,7 +81,8 @@ export const searchtabsComponent = {
         "$filter",
         "searches",
         "$rootScope",
-        function ($location, $filter, searches, $rootScope) {
+        "compareSearches",
+        function ($location, $filter, searches, $rootScope, compareSearches) {
             const $ctrl = this
 
             if (window.currentModeParallel) {
@@ -138,6 +109,8 @@ export const searchtabsComponent = {
                 () => $location.search().in_order,
                 (val) => ($ctrl.inOrder = val == undefined)
             )
+
+            $ctrl.savedSearches = compareSearches.savedSearches
 
             const setupWatchWordPic = function () {
                 $rootScope.$watch(

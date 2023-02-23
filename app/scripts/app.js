@@ -19,6 +19,7 @@ import { extendedTokenComponent } from "./components/extended/token"
 import { extendedStructTokenComponent } from "./components/extended/struct_token"
 import { extendedCQPValueComponent } from "./components/extended/cqp_value"
 import { advancedSearchComponent } from "./components/advanced_search"
+import { compareSearchComponent } from "./components/compare_search"
 import { kwicComponent } from "./components/kwic"
 import { trendDiagramComponent } from "./components/trend_diagram"
 import { korpErrorComponent } from "./components/korp_error"
@@ -88,6 +89,7 @@ korpApp.component("extendedToken", extendedTokenComponent)
 korpApp.component("extendedStructToken", extendedStructTokenComponent)
 korpApp.component("extendedCqpValue", extendedCQPValueComponent)
 korpApp.component("advancedSearch", advancedSearchComponent)
+korpApp.component("compareSearch", compareSearchComponent)
 korpApp.component("kwic", kwicComponent)
 korpApp.component("trendDiagram", trendDiagramComponent)
 korpApp.component("korpError", korpErrorComponent)

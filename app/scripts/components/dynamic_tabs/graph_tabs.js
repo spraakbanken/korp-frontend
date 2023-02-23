@@ -4,7 +4,7 @@ export const graphTabsComponent = () => ({
     replace: true,
     template: html`
         <uib-tab ng-repeat="data in $ctrl.tabs" graph-ctrl="graph-ctrl">
-            <uib-tab-heading ng-class="{not_loading: progress &gt; 99}"
+            <uib-tab-heading ng-class="{not_loading: progress > 99}"
                 >{{'graph' | loc:lang}}
                 <div class="tab_progress" style="width:{{progress || 0}}%" ng-show="loading"></div>
                 <span ng-click="closeTab($index, $event)" tab-spinner="tab-spinner"></span>
