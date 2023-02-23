@@ -13,11 +13,7 @@ export const searchtabsComponent = {
                         <extended-parallel ng-if="$ctrl.parallelMode"></extended-parallel>
                     </div>
                 </uib-tab>
-                <uib-tab
-                    heading='{{"advanced" | loc:$root.lang}}'
-                    ng-if="$ctrl.visibleTabs[2]"
-                    advanced-search="advanced-search"
-                >
+                <uib-tab heading='{{"advanced" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[2]" advanced-search>
                     <div id="advanced">
                         <div class="well well-small">
                             {{'active_cqp_simple' | loc:$root.lang}}:
@@ -44,7 +40,7 @@ export const searchtabsComponent = {
                         ></search-submit>
                     </div>
                 </uib-tab>
-                <uib-tab ng-if="$ctrl.visibleTabs[3]" compare-search-ctrl="compare-search-ctrl">
+                <uib-tab ng-if="$ctrl.visibleTabs[3]" compare-search-ctrl>
                     <uib-tab-heading
                         >{{'compare' | loc:$root.lang}}
                         <span class="badge" ng-if="savedSearches.length"
