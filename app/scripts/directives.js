@@ -509,7 +509,7 @@ korpApp.directive("reduceSelect", [
         replace: true,
         template: `\
     <div uib-dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">
-      <div uib-dropdown-toggle class="reduce-dropdown-button inline_block bg-white border border-gray-500">
+      <div uib-dropdown-toggle class="reduce-dropdown-button inline-block align-middle bg-white border border-gray-500">
         <div class="reduce-dropdown-button-text">
           <span>{{ "reduce_text" | loc:$root.lang }}:</span>
           <span>
