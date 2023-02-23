@@ -1,5 +1,5 @@
 /** @format */
-import "./sidebar.scss"
+import "../../styles/sidebar.scss"
 export const sidebarName = "sidebar"
 import statemachine from "../statemachine"
 import { stringify } from "@/stringify.js"
