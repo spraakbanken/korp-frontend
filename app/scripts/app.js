@@ -18,6 +18,7 @@ import { extendedCQPTermComponent } from "./components/extended/cqp_term"
 import { extendedTokenComponent } from "./components/extended/token"
 import { extendedStructTokenComponent } from "./components/extended/struct_token"
 import { extendedCQPValueComponent } from "./components/extended/cqp_value"
+import { advancedSearchComponent } from "./components/advanced_search"
 import { kwicComponent } from "./components/kwic"
 import { trendDiagramComponent } from "./components/trend_diagram"
 import { korpErrorComponent } from "./components/korp_error"
@@ -86,6 +87,7 @@ korpApp.component("extendedCqpTerm", extendedCQPTermComponent)
 korpApp.component("extendedToken", extendedTokenComponent)
 korpApp.component("extendedStructToken", extendedStructTokenComponent)
 korpApp.component("extendedCqpValue", extendedCQPValueComponent)
+korpApp.component("advancedSearch", advancedSearchComponent)
 korpApp.component("kwic", kwicComponent)
 korpApp.component("trendDiagram", trendDiagramComponent)
 korpApp.component("korpError", korpErrorComponent)
@@ -110,6 +112,19 @@ try {
 for (const componentName in customComponents) {
     korpApp.component(componentName, customComponents[componentName])
 }
+
+korpApp.filter("mapper", () => (item, f) => f(item))
+korpApp.filter("loc", () => util.getLocaleString)
+korpApp.filter("locObj", () => util.getLocaleStringObject)
+korpApp.filter("replaceEmpty", function () {
+    return function (input) {
+        if (input === "") {
+            return "–"
+        } else {
+            return input
+        }
+    }
+})
 
 authenticationProxy.initAngular()
 

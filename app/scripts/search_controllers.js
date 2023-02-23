@@ -1,41 +1,6 @@
 /** @format */
 const korpApp = angular.module("korpApp")
 
-korpApp.directive("advancedSearch", () => ({
-    controller: [
-        "$scope",
-        "compareSearches",
-        "$location",
-        "$timeout",
-        ($scope, compareSearches, $location, $timeout) => {
-            if ($location.search().search && $location.search().search.split("|")) {
-                var [type, ...expr] = $location.search().search.split("|")
-                expr = expr.join("|")
-            }
-
-            if (type === "cqp" && expr) {
-                $scope.cqp = expr
-            } else {
-                $scope.cqp = "[]"
-            }
-
-            $scope.onSearch = () => {
-                $location.search("search", null)
-                $location.search("page", null)
-                $location.search("within", null)
-                $location.search("in_order", null)
-                $timeout(() => $location.search("search", `cqp|${$scope.cqp}`), 0)
-            }
-
-            $scope.onSearchSave = (name) => {
-                compareSearches.saveSearch(name, $scope.cqp)
-            }
-        },
-    ],
-}))
-
-korpApp.filter("mapper", () => (item, f) => f(item))
-
 korpApp.directive("compareSearchCtrl", () => ({
     controller: [
         "$scope",
@@ -68,16 +33,3 @@ korpApp.directive("compareSearchCtrl", () => ({
         },
     ],
 }))
-
-// TODO move these
-korpApp.filter("loc", () => util.getLocaleString)
-korpApp.filter("locObj", () => util.getLocaleStringObject)
-korpApp.filter("replaceEmpty", function () {
-    return function (input) {
-        if (input === "") {
-            return "–"
-        } else {
-            return input
-        }
-    }
-})

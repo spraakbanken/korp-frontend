@@ -13,32 +13,8 @@ export const searchtabsComponent = {
                         <extended-parallel ng-if="$ctrl.parallelMode"></extended-parallel>
                     </div>
                 </uib-tab>
-                <uib-tab heading='{{"advanced" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[2]" advanced-search>
-                    <div id="advanced">
-                        <div class="well well-small">
-                            {{'active_cqp_simple' | loc:$root.lang}}:
-                            <pre>{{$root.simpleCQP}}</pre>
-                        </div>
-                        <div class="well well-small">
-                            {{'active_cqp_extended' | loc:$root.lang}}:
-                            <pre>{{$root.extendedCQP}}</pre>
-                        </div>
-                        <div class="well well-small">
-                            {{'cqp_query' | loc:$root.lang}}:
-                            <div class="pull-right">
-                                <i class="fa fa-file-o"></i
-                                ><a href="http://cwb.sourceforge.net/files/CQP_Tutorial.pdf" target="_blank">
-                                    {{'cqp_docs' | loc:$root.lang}}</a
-                                >
-                            </div>
-                            <textarea class="w-full font-mono" ng-model="cqp"></textarea>
-                        </div>
-                        <search-submit
-                            pos="right"
-                            on-search="onSearch()"
-                            on-search-save="onSearchSave(name)"
-                        ></search-submit>
-                    </div>
+                <uib-tab heading='{{"advanced" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[2]">
+                    <advanced-search></advanced-search>
                 </uib-tab>
                 <uib-tab ng-if="$ctrl.visibleTabs[3]" compare-search-ctrl>
                     <uib-tab-heading
