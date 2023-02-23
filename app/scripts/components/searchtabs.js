@@ -21,11 +21,11 @@ export const searchtabsComponent = {
                     <div id="advanced">
                         <div class="well well-small">
                             {{'active_cqp_simple' | loc:$root.lang}}:
-                            <pre>{{simpleCQP}}</pre>
+                            <pre>{{$root.simpleCQP}}</pre>
                         </div>
                         <div class="well well-small">
                             {{'active_cqp_extended' | loc:$root.lang}}:
-                            <pre>{{extendedCQP}}</pre>
+                            <pre>{{$root.extendedCQP}}</pre>
                         </div>
                         <div class="well well-small">
                             {{'cqp_query' | loc:$root.lang}}:

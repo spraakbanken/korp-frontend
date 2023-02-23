@@ -7,7 +7,8 @@ korpApp.directive("advancedSearch", () => ({
         "compareSearches",
         "$location",
         "$timeout",
-        ($scope, compareSearches, $location, $timeout) => {
+        "$rootScope",
+        ($scope, compareSearches, $location, $timeout, $rootScope) => {
             if ($location.search().search && $location.search().search.split("|")) {
                 var [type, ...expr] = $location.search().search.split("|")
                 expr = expr.join("|")
