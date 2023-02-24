@@ -21,6 +21,7 @@ import { extendedCQPValueComponent } from "./components/extended/cqp_value"
 import { advancedSearchComponent } from "./components/advanced_search"
 import { compareSearchComponent } from "./components/compare_search"
 import { kwicComponent } from "./components/kwic"
+import { statisticsComponent } from "./components/statistics"
 import { trendDiagramComponent } from "./components/trend_diagram"
 import { korpErrorComponent } from "./components/korp_error"
 import { kwicTabsComponent } from "./components/dynamic_tabs/kwic_tabs"
@@ -92,6 +93,7 @@ korpApp.component("extendedCqpValue", extendedCQPValueComponent)
 korpApp.component("advancedSearch", advancedSearchComponent)
 korpApp.component("compareSearch", compareSearchComponent)
 korpApp.component("kwic", kwicComponent)
+korpApp.component("statistics", statisticsComponent)
 korpApp.component("trendDiagram", trendDiagramComponent)
 korpApp.component("korpError", korpErrorComponent)
 korpApp.component("header", headerComponent)
