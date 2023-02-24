@@ -218,7 +218,7 @@ export const resultsComponent = {
                         <map-tabs tabs="$root.mapTabs"></map-tabs>
                         <text-tabs tabs="$root.textTabs"></text-tabs>
                     </uib-tabset>
-                    <a id="json-link" ng-href="{{jsonUrl}}" ng-show="jsonUrl" target="_blank">
+                    <a id="json-link" ng-href="{{$root.jsonUrl}}" ng-show="$root.jsonUrl" target="_blank">
                         <img src="img/json.png" />
                     </a>
                 </div>

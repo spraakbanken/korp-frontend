@@ -113,7 +113,6 @@ require("./scripts/search_controllers.js")
 
 require("./scripts/kwic_download.js")
 
-require("./scripts/controllers/result_controllers.js")
 require("./scripts/controllers/comparison_controller.js")
 require("./scripts/controllers/kwic_controller.js")
 require("./scripts/controllers/example_controller.js")
