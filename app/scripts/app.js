@@ -274,7 +274,7 @@ korpApp.run([
                 s.openErrorModal({
                     content: `{{'corpus_not_available' | loc:lang}}`,
                     onClose: () => {
-                        const newIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
+                        let newIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
                         if (newIds.length == 0) {
                             newIds = settings["preselected_corpora"]
                         }
