@@ -228,19 +228,22 @@ korpApp.run([
             const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
 
             if (settings["initalization_checks"] && settings["initalization_checks"](s)) {
-                // something was triggered
+                // custom initalization code called
             } else if (_.isEmpty(settings.corpora)) {
+                // no corpora
                 s.openErrorModal({
                     content: "<korp-error></korp-error>",
                     resolvable: false,
                 })
             } else if (loginNeededFor.length != 0) {
+                // check if user has access
                 const loginNeededHTML = () =>
                     loginNeededFor
                         .map((corpus) => `<span>${util.getLocaleStringObject(corpus.title)}</span>`)
                         .join(", ")
 
                 if (authenticationProxy.isLoggedIn()) {
+                    // access partly or fully denied to selected corpora
                     if (settings.corpusListing.corpora.length == loginNeededFor.length) {
                         s.openErrorModal({
                             content: "{{'access_denied' | loc:lang}}",
@@ -265,6 +268,7 @@ korpApp.run([
                         })
                     }
                 } else {
+                    // login needed before access can be checked
                     s.openErrorModal({
                         content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:lang}}:</span
                             >${loginNeededHTML()}`,
@@ -275,6 +279,7 @@ korpApp.run([
                     })
                 }
             } else if (!selectedIds.every((r) => allCorpusIds.includes(r))) {
+                // some corpora missing
                 s.openErrorModal({
                     content: `{{'corpus_not_available' | loc:lang}}`,
                     onClose: () => {
