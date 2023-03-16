@@ -227,7 +227,7 @@ export const sidebarComponent = {
                 renderItem(type, key, value, attrs, wordData, sentenceData, tokens) {
                     let output, pattern, ul
                     let val, inner, li, address
-                    if (attrs.label) {
+                    if (attrs.label && ! attrs["sidebar_hide_label"]) {
                         output = $(`<p><span>${locObj(attrs.label, $ctrl.lang)}</span>: </p>`)
                     } else {
                         output = $("<p></p>")
