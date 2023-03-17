@@ -26,5 +26,6 @@ module.exports = {
             },
         },
     },
-    safelist: ["my-5", "h-16"],
+    // classes used in, for example, mode-files are not added to bundle automatically
+    safelist: ["my-5", "h-32", "p-5", "text-lg", "mt-2", "mt-3"],
 }
