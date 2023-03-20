@@ -85,6 +85,7 @@ export const resultsComponent = {
                                 </uib-tab-heading>
                                 <div ng-if="!error">
                                     <word-picture
+                                        data="data"
                                         word-pic="wordPic"
                                         activate="activate"
                                         loading="loading"

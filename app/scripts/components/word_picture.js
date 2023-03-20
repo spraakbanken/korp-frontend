@@ -15,8 +15,8 @@ export const wordPictureComponent = {
         >
         <warning ng-if="$ctrl.wordPic && $ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:lang}}</warning>
         <warning ng-if="$ctrl.wordPic && $ctrl.noHits">{{"no_stats_results" | loc:lang}}</warning>
-        <div>
-            <div id="wordPicSettings" ng-show="$ctrl.wordPic && $ctrl.hasData">
+        <div ng-if="$ctrl.wordPic && $ctrl.hasData">
+            <div id="wordPicSettings">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" /><label for="wordclassChk"
                         >{{'show_wordclass' | loc:lang}}</label
@@ -30,7 +30,7 @@ export const wordPictureComponent = {
                     </select>
                 </div>
             </div>
-            <div class="content_target" ng-show="$ctrl.wordPic">
+            <div class="content_target">
                 <div class="tableContainer radialBkg" ng-repeat="word in $ctrl.data">
                     <div class="header" ng-if="!$ctrl.isLemgram(word.token)">
                         {{word.token}} (<span>{{word.wordClassShort | loc:lang}}</span>)
