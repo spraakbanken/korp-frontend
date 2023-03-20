@@ -38,6 +38,7 @@ korpApp.directive("wordpicCtrl", () => ({
 
             s.resetView = () => {
                 s.hasData = false
+                s.data = null
                 s.aborted = false
                 s.noHits = false
                 s.error = false
