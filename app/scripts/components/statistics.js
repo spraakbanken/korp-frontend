@@ -132,7 +132,6 @@ export const statisticsComponent = {
         inOrder: "<",
         loading: "<",
         noHits: "<",
-        prevNonExpandedCQP: "<",
         prevParams: "<",
         searchParams: "<",
         showStatistics: "<",
@@ -354,7 +353,7 @@ export const statisticsComponent = {
                 }
 
                 $rootScope.graphTabs.push({
-                    cqp: $ctrl.prevNonExpandedCQP,
+                    cqp: $ctrl.searchParams.prevNonExpandedCQP,
                     subcqps: subExprs,
                     labelMapping,
                     showTotal,

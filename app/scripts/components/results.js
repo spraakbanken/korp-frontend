@@ -63,7 +63,6 @@ export const resultsComponent = {
                                     in-order="inOrder"
                                     loading="loading"
                                     no-hits="no_hits"
-                                    prev-non-expanded-cqp="prevNonExpandedCQP"
                                     prev-params="prevParams"
                                     search-params="searchParams"
                                     show-statistics="showStatistics"

@@ -392,7 +392,6 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         })
         data.top = _.map(rankedReduceVals, (reduceVal) => reduceVal + ":1").join(",")
 
-        this.prevNonExpandedCQP = cqp
         this.prevParams = data
         const def = $.Deferred()
         this.pendingRequests.push(
@@ -435,7 +434,8 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                             data,
                             reduceVals,
                             reduceValLabels,
-                            ignoreCase
+                            ignoreCase,
+                            cqp
                         )
                     },
                 })
