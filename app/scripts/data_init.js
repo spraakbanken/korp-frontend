@@ -3,7 +3,7 @@ import { setDefaultConfigValues } from "./settings"
 import * as treeUtil from "./components/corpus_chooser/util"
 
 async function getInfoData() {
-    const conf = util.httpConfAddMethod({
+    const conf = util.httpConfAddMethodFetch({
         url: settings["korp_backend_url"] + "/corpus_info",
         params: {
             corpus: _.map(settings.corpusListing.corpora, "id")
@@ -12,7 +12,7 @@ async function getInfoData() {
         },
     })
 
-    const response = await fetch(conf.url + "?" + new URLSearchParams(conf.params), { method: conf.method })
+    const response = await fetch(conf.url, conf)
     const data = await response.json()
 
     for (let corpus of settings.corpusListing.corpora) {
