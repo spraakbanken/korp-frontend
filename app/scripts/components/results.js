@@ -38,7 +38,7 @@ export const resultsComponent = {
                             </uib-tab>
                             <uib-tab
                                 stats-result-ctrl
-                                ng-if="_settings.statistics != false"
+                                ng-if="$root._settings.statistics != false"
                                 select="onentry()"
                                 deselect="onexit()"
                                 index="2"
@@ -69,7 +69,7 @@ export const resultsComponent = {
                                 ></statistics>
                             </uib-tab>
                             <uib-tab
-                                ng-if="_settings['word_picture'] != false"
+                                ng-if="$root._settings['word_picture'] != false"
                                 wordpic-ctrl
                                 index="3"
                                 select="onentry()"
