@@ -20,7 +20,10 @@ The material in Korp is divided into different modes. The default mode holds mat
 
 To the right of the Korp logo you can find the *corpus selector* which is used to choose the corpus or corpora you would
 like to search in. Some corpora are sorted into different categories. You can select a corpus or a category by ticking
-the check box in front of its name. Hovering over a corpus name will give you some information about the corpus such as how many tokens and sentences it contains.
+the check box in front of its name. 
+
+To get more information about a corpus, click the blue info icon to the right. The information contains size in number 
+of tokens and sentences, and sometimes also other description.
 
 Above the list of corpora there is a time line with bars that will give you an idea on the distribution of the material
 over time. The selected corpora are shown as blue bars and the remaining material is shown in gray. Material that does not contain any time information is shown in red to the right of the time line.
@@ -176,8 +179,7 @@ The results view, which appears only after a search has been performed, is divid
 
 
 KWIC, which stands for "keyword in context", displays the searched word or words in their context, usually a sentence. The search results, if there are many, are
-divided into a number of pages, and to page back and forth between the pages you use the *‹* and *›* keys, or the *f* and *n* keys
-on the keyboard.
+divided into a number of pages, and to page back and forth between the pages you use the *f* and *n* keys on the keyboard.
 
 Provided you have searched in more than one corpus, there will be a colored strip to the right of the number of hits the search yielded. This
 shows the ratio between the number of hits in the different corpora, and by moving the mouse over them, you can see which
@@ -265,3 +267,9 @@ instead of executing it. When you have two searches saved, you can go to the *Co
 Here you select the two searches you want to compare, and then which attribute the comparison should be performed on. An example of a comparison is the two searches
 *all nouns in novels* and *all nouns in news texts*, with compilation on *base form*. When this comparison is complete, two columns of base forms are presented:
 the first lists the base forms most distinctive for search #1, and the second lists base forms distinctive for search #2. The columns are sorted in descending order by distinctness. The numbers on the right show absolute frequency.
+
+## Other user manuals
+
+There are user manuals for other instances of Korp, for example the one at Kielipankki, they can be found here:
+- https://www.kielipankki.fi/support/korp/
+- https://www.kielipankki.fi/support/korp-advanced

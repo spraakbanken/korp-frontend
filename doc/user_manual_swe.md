@@ -27,8 +27,9 @@ mellan dessa olika lägen kan skilja något, och nedanstående beskrivning gäll
 Till höger om Korp-logotypen finns *korpusväljaren*. Det är med hjälp av den man väljer vilka material man är intresserad
 av att söka i. Korpusarna ligger sorterade i kategorier, och man väljer eller väljer bort korpusar genom att kryssa i
 eller ur rutan framför varje korpusnamn.
-När man för muspekaren över en korpus får man även fram information om den, bland annat dess storlek i antal token och
-antal meningar.
+
+När man klickar på den blå info-ikonen till höger om ett korpusnamnet får man även fram information om den, bland annat 
+dess storlek i antal token och antal meningar.
 
 Ovanför korpusarna finns det en tidslinje med staplar, som ger en överblick över materialets fördelning över tid.
 Markerade korpusar syns som blå staplar, medan ej markerade syns som grå. Allt material innehåller inte information
@@ -179,8 +180,7 @@ Resultatvyn, som visas först efter att en sökning har utförts, är uppdelad i
 ### KWIC
 
 KWIC, som står för "keyword in context", visar det sökta ordet eller orden i sin kontext, vanligtvis en mening. Sökresultaten, om de är många, är
-uppdelade på ett antal sidor, och för att bläddra mellan sidorna använder man *‹*- och *›*-knapparna, alternativt tangenterna *f* respektive *n*
-på tangentbordet.
+uppdelade på ett antal sidor, och för att bläddra mellan sidorna använder man tangenterna *f* respektive *n* på tangentbordet.
 
 Förutsatt att man har sökt i mer än en korpus, kommer det till höger om texten som anger hur många träffar sökningen gav finnas en färgad remsa. Denna
 visar med alternerande färger storleksförhållandet mellan träffmängden i de olika korpusarna, och genom att föra musen över dem ser man vilken
@@ -270,3 +270,9 @@ Här väljer man de två sökningar man vill jämföra, och därefter vilket att
 *alla substantiv i romaner* och *alla substantiv i nyhetstexter*, med sammanställning på *grundform*. När denna jämförelse är klar presenteras två kolumner med grundformer:
 den första listar de grundformer som är mest utmärkande för sökning #1, och den andra listar grundformer utmärkande för sökning #2. Kolumnerna är sorterade med de mest
 urmärkande orden överst. Siffrorna till höger visar absolut frekvens.
+
+## Andra användarmanualer
+
+Det finns användarmanualer för andra instanser av Korp, t.ex. instansen på Kielipankki, här hittar man dem (enbart på engelska):
+- https://www.kielipankki.fi/support/korp/
+- https://www.kielipankki.fi/support/korp-advanced
