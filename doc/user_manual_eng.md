@@ -28,7 +28,7 @@ over time. The selected corpora are shown as blue bars and the remaining materia
 ## Searching in Korp
 
 The Korp interface is divided into two main sections: the upper section where the search parameters are defined and the
-lower section where to search result is shown. The search section has three different versions: *Simple*, *Extended* and
+lower section where the search result is shown. The search section has three different versions: *Simple*, *Extended* and
 *Advanced*, each of which allows for searches with different degrees of complexity.
 The *Simple* tab only allows for searches for words or phrases while *Extended* offers tools for building more complex
 queries. Usage of the *Advanced* tab requires some knowledge about the query language used within Korp (CQP).
@@ -89,7 +89,7 @@ In the text field below the drop-down menus you can specify the value for your c
 part of speech) will provide you with their drop-down instead of a text field and in some special cases (*lemgram* and *sense*) you will need to pick a value from the list that pops up after writing in the text field.
 
 The small "Aa"-symbol to the right of the text field lets you switch on and off case-sensitivity  for each token. The
-default search is case-sensitive. Please note that sase-insentive searches are considerably slower.
+default search is case-sensitive. Please note that case-insensitive searches are considerably slower.
 
 If you choose the attribute "word" and do not enter any value, you will be searching for any token.
 
@@ -114,7 +114,7 @@ By default, all searches are performed *within* sentence boundaries, meaning you
 hit that extends beyond a sentence. For some corpora, however, it is possible to allow hits
 that span a larger amount of text, such as a paragraph, making it possible to search across sentence boundaries.
 
-The option to activate this can be found just to the right of the Search button under Extended search. If the
+The option to activate this can be found just to the right of the search button under Extended search. If the
 corpora you have chosen do not support extended context, only "sentence" can be chosen here. However, if at least one corpus that allows extended context is selected, you will be able to select an extended context in the list. If at least one of the
 selected corpora has this support, you will be able to select something like "up to paragraph". This means that the search will be performed within the paragraph limit *for the corpora that support it*, and within the largest
 possible context that is less than a paragraph for those that do not support it, which in most cases will be a sentence.
@@ -129,13 +129,13 @@ switch to the parallel mode in Korp, via the "Parallel" link at the top of the p
 Parallel search can only be performed with Extended search. This works mostly like a regular search,
 with the difference that you now have the option to choose which of the language versions you want to search in.
 This is done in a language menu above
-the first token box. It is also possible to search in parallel in both languages by pressing the "More languages" button below the Search button.
+the first token box. It is also possible to search in parallel in both languages by pressing the "More languages" button below the search button.
 This
 adds an extra row of tokens, in which one can specify search criteria for the second language.
 Searching like this
 means that your search criteria must be met by both languages in each sentence pair for a match to be found.
 For example,
-with a Swedish-English translation corpus, you can search for linked pairs where the Swedish part must contain the word "elk", while the English part
+with a Swedish-English translation corpus, you can search for linked pairs where the Swedish part must contain the word "älg", while the English part
 must contain "elk".
 You can also tick the "Does not contain" box to specify that you only want hits where
 the word "elk" *does not** appear in the English part.
@@ -147,7 +147,7 @@ reliable.
 
 ### Advanced search
 
-Regardless of whether you use Simple or Extended search, your query is converted into an expression in the query language CQP Query Language. Under the tab
+Regardless of whether you use Simple or Extended search, your query is converted into an expression in the CQP query language. Under the tab
 *Advanced*, you can see the expressions for Simple and Extended search, as well as construct your own search query if you want to
 do something more advanced than what is currently possible in an Extended Search.
 
@@ -163,7 +163,7 @@ they appear in the corpus (which may be a partially random order for copyright r
 
 For the statistics, you can choose which attribute the statistics should be compiled on.
 
-It is also possible to disable certain functions in the result view, such as e.g. statistics, if you are not interested in statistics and want to
+It is also possible to disable certain functions in the result view, such as statistics, if you are not interested in statistics and want to
 speed up your searches somewhat.
 
 ![Search Settings](images/sokval.png)
@@ -186,7 +186,7 @@ in this strip.
 
 The search hits are grouped by corpus, and the corpus which the subsequent hits come from is written in a small heading above.
 
-At the bottom of the page below the KWIC lines, you have the option to export the current page's hits for download in various formats .
+At the bottom of the page below the KWIC lines, you have the option to export the current page's hits for download in various formats.
 
 **Larger Context**
 In some corpora it is possible to see a larger context than just a sentence, usually whole paragraphs. To display any larger
@@ -199,7 +199,7 @@ contains information about the selected word (under the heading *Word attributes
 The word attributes are information such as part of speech, base form, compound analysis, and more, while the text attributes can be author, year of publication and the like.
 
 Some attributes are clickable. If you click e.g. on a lemgram, then a new search is performed on that lemgram. When hovering over many clickable attributes,
-a small link appears on the right which in a new browser tab takes one to *Karp*, the Language Bank's search interface for lexical resources.
+a small link appears on the right which in a new browser tab takes one to *Karp*, Språkbankens's search interface for lexical resources.
 
 When a word is highlighted, its syntactic head in the same sentence is also highlighted, with a pink background (when syntactic annotations are available).
 
@@ -260,7 +260,7 @@ By clicking on the small icon next to each word, you can bring up a new KWIC tab
 ## Comparisons
 
 It is possible to run a log-likelihood comparison of the results from two searches. To run such a comparison, you first need to save two searches.
-This is done from any search tab by first creating your search expression and then clicking on the arrow to the right of the Search button. This allows you to save the search itself with a name of your choice,
+This is done from any search tab by first creating your search expression and then clicking on the arrow to the right of the search button. This allows you to save the search itself with a name of your choice,
 instead of executing it. When you have two searches saved, you can go to the *Comparison* tab, which is to the right of the three search tabs.
 Here you select the two searches you want to compare, and then which attribute the comparison should be performed on. An example of a comparison is the two searches
 *all nouns in novels* and *all nouns in news texts*, with compilation on *base form*. When this comparison is complete, two columns of base forms are presented:
