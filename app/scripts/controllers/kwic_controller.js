@@ -231,6 +231,7 @@ export class KwicCtrl {
             }
 
             s.corpusOrder = data.corpus_order
+            s.data = data
         }
 
         s.onentry = () => {
