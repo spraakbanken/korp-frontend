@@ -364,5 +364,11 @@
     "prefix_chk": "initial part",
     "compound_middle": "medial part",
     "suffix_chk": "final part",
-    "text_tab_header": "Reading mode"
+    "text_tab_header": "Reading mode",
+
+    "not_compound_middle": "not medial part",
+    "not_prefix": "do not start with",
+    "not_suffix": "do not end with",
+    "prefix": "starts with",
+    "suffix": "ends with"
 }

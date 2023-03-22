@@ -362,5 +362,11 @@
     "prefix_chk": "förled",
     "compound_middle": "mellanled",
     "suffix_chk": "efterled",
-    "text_tab_header": "Läsläge"
+    "text_tab_header": "Läsläge",
+
+    "not_compound_middle": "inte mellanled",
+    "not_prefix": "börjar inte med",
+    "not_suffix": "slutar inte med",
+    "prefix": "börjar med",
+    "suffix": "slutar med"
 }
