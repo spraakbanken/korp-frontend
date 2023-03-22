@@ -63,7 +63,7 @@ export const resultsComponent = {
                                     in-order="inOrder"
                                     loading="loading"
                                     no-hits="no_hits"
-                                    prev-params="prevParams"
+                                    prev-params="proxy.prevParams"
                                     search-params="searchParams"
                                     show-statistics="showStatistics"
                                 ></statistics>
