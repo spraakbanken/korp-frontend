@@ -7,9 +7,9 @@ export const kwicComponent = {
     template: html`
         <div ng-click="$ctrl.onKwicClick($event)">
             <div class="result_controls">
-                <warning ng-if="$ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:lang}}</warning>
+                <warning ng-if="$ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:$root.lang}}</warning>
                 <div class="controls_n" ng-show="$ctrl.hitsDisplay">
-                    <span>{{'num_results' | loc:lang}}: </span>
+                    <span>{{'num_results' | loc:$root.lang}}: </span>
                     <span class="num-result" ng-bind-html="$ctrl.hitsDisplay | trust"></span>
                 </div>
                 <div class="hits_picture" ng-if="$ctrl.hitsPictureData.length > 1">
@@ -39,8 +39,8 @@ export const kwicComponent = {
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
             <span ng-if="$ctrl.hits" class="reading_btn link" ng-click="$ctrl.toggleReading()">
-                <span ng-if="!$ctrl.readingMode">{{'show_reading' | loc:lang}}</span>
-                <span ng-if="$ctrl.readingMode">{{'show_kwic' | loc:lang}}</span>
+                <span ng-if="!$ctrl.readingMode">{{'show_reading' | loc:$root.lang}}</span>
+                <span ng-if="$ctrl.readingMode">{{'show_kwic' | loc:$root.lang}}</span>
             </span>
             <div class="table_scrollarea">
                 <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0">
@@ -54,7 +54,7 @@ export const kwicComponent = {
                             <div>
                                 {{sentence.newCorpus | locObj:lang}}
                                 <span class="corpus_title_warn" ng-if="::sentence.noContext"
-                                    >{{'no_context_support' | loc:lang}}</span
+                                    >{{'no_context_support' | loc:$root.lang}}</span
                                 >
                             </div>
                         </td>
@@ -83,7 +83,7 @@ export const kwicComponent = {
                             >{{sentence.newCorpus | locObj:lang}}<span
                                 class="corpus_title_warn"
                                 ng-if="::sentence.noContext"
-                                >{{'no_context_support' | loc:lang}}</span
+                                >{{'no_context_support' | loc:$root.lang}}</span
                             ></span
                         >
                         <span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span>
@@ -104,7 +104,7 @@ export const kwicComponent = {
                     ng-if="$ctrl._settings['enable_frontend_kwic_download']"
                     ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hitsDisplay)"
                     ng-model="$ctrl.download.selected"
-                    ng-options="item.value as item.label | loc:lang disable when item.disabled for item in $ctrl.download.options"
+                    ng-options="item.value as item.label | loc:$root.lang disable when item.disabled for item in $ctrl.download.options"
                 ></select>
                 <a
                     class="kwicDownloadLink"
