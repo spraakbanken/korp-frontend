@@ -9,7 +9,7 @@ export const kwicPager = {
                 uib-pagination
                 total-items="$ctrl.totalHits"
                 ng-model="$ctrl.page"
-                ng-click="$ctrl.localPageChange()"
+                ng-click="$ctrl.localPageChange($event)"
                 max-size="15"
                 items-per-page="$ctrl.hitsPerPage"
                 previous-text="‹"
@@ -62,7 +62,11 @@ export const kwicPager = {
             }
         }
 
-        ctrl.localPageChange = function () {
+        ctrl.localPageChange = function (e) {
+            if (e) {
+                e.preventDefault()
+                e.stopPropagation()
+            }
             ctrl.pageChange({ page: Number(ctrl.page - 1) }) // pager starts counting at 1
         }
     },

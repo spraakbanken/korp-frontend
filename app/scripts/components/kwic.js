@@ -208,7 +208,8 @@ export const kwicComponent = {
                 } else {
                     if (
                         event.target.id === "frontendDownloadLinks" ||
-                        event.target.classList.contains("kwicDownloadLink")
+                        event.target.classList.contains("kwicDownloadLink") ||
+                        event.target.classList.contains("hits_picture_corp")
                     ) {
                         return
                     }
