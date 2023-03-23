@@ -21,7 +21,7 @@ export const kwicTabsComponent = () => ({
                     hits="hits"
                     kwic-input="kwic"
                     corpus-hits="corpusHits"
-                    is-reading="is_reading"
+                    is-reading="reading_mode"
                     page="page"
                     page-event="pageChange"
                     context-change-event="toggleReading"
