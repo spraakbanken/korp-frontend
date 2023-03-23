@@ -87,7 +87,7 @@ korpApp.factory("kwicDownload", function () {
                     res.push(newRow)
                 }
             } else if (row.newCorpus) {
-                corpus = row.newCorpus
+                corpus = util.getLocaleStringObject(row.newCorpus)
             }
         }
 
@@ -155,7 +155,7 @@ korpApp.factory("kwicDownload", function () {
                 ].concat(structs)
                 res.push(newRow)
             } else if (row.newCorpus) {
-                corpus = row.newCorpus
+                corpus = util.getLocaleStringObject(row.newCorpus)
             }
         }
 
