@@ -131,7 +131,8 @@ export const kwicComponent = {
         prevParams: "<",
         prevRequest: "<",
         corpusOrder: "<",
-        data: "<",
+        kwicInput: "<",
+        corpusHits: "<",
     },
     controller: [
         "$location",
@@ -148,50 +149,52 @@ export const kwicComponent = {
             }
 
             $ctrl.$onChanges = (changeObj) => {
-                if ("data" in changeObj && $ctrl.data != undefined) {
+                if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
+                    $ctrl.kwic = massageData($ctrl.kwicInput)
                     $ctrl.useContext = $ctrl.isReading || locationSearch()["in_order"] != null
-
-                    $ctrl.kwic = massageData($ctrl.data.kwic)
-
                     if (!$ctrl.isReading) {
-                        $timeout(() => centerScrollbar())
-                        $element.find(".match").children().first().click()
+                        $timeout(() => {
+                            centerScrollbar()
+                            $element.find(".match").children().first().click()
+                        })
                     }
 
+                    if (settings["enable_backend_kwic_download"] && $ctrl.hitsDisplay) {
+                        // using hitsDisplay here, since hits is not set until request is complete
+                        util.setDownloadLinks($ctrl.prevRequest, {
+                            kwic: $ctrl.kwic,
+                            corpus_order: $ctrl.corpusOrder,
+                        })
+                    }
+
+                    if (currentMode === "parallel" && !$ctrl.isReading) {
+                        centerScrollbarParallel()
+                    }
+                    if ($ctrl.kwic.length == 0) {
+                        selectionManager.deselect()
+                        statemachine.send("DESELECT_WORD")
+                    }
+                }
+                if ("corpusHits" in changeObj) {
                     let items = _.map($ctrl.corpusOrder, (obj) => ({
                         rid: obj,
                         rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
-                        relative: $ctrl.data.corpus_hits[obj] / $ctrl.hits,
-                        abs: $ctrl.data.corpus_hits[obj],
+                        relative: $ctrl.corpusHits[obj] / $ctrl.hits,
+                        abs: $ctrl.corpusHits[obj],
                     })).filter((item) => item.abs > 0)
 
                     // calculate which is the first page of hits for each item
                     let index = 0
                     _.each(items, (obj) => {
-                        obj.page = Math.floor(index / $ctrl.data.kwic.length)
+                        obj.page = Math.floor(index / $ctrl.kwic.length)
                         index += obj.abs
                     })
 
                     $ctrl.hitsPictureData = items
                 }
 
-                if (settings["enable_backend_kwic_download"] && $ctrl.hitsDisplay) {
-                    // using hitsDisplay here, since hits is not set until request is complete
-                    util.setDownloadLinks($ctrl.prevRequest, {
-                        kwic: $ctrl.kwic,
-                        corpus_order: $ctrl.corpusOrder,
-                    })
-                }
-                if (currentMode === "parallel" && !$ctrl.isReading) {
-                    centerScrollbarParallel()
-                }
-                if ($ctrl.kwic && $ctrl.kwic.length == 0) {
-                    selectionManager.deselect()
-                    statemachine.send("DESELECT_WORD")
-                }
                 if ("active" in changeObj) {
                     if ($ctrl.active) {
-                        centerScrollbar()
                         $timeout(() => $element.find(".token_selected").click(), 0)
                     } else {
                         statemachine.send("DESELECT_WORD")
@@ -426,13 +429,16 @@ export const kwicComponent = {
                 const sent = scope.sentence
                 const word = $(event.target)
 
-                statemachine.send("SELECT_WORD", {
-                    sentenceData: sent.structs,
-                    wordData: obj,
-                    corpus: sent.corpus.toLowerCase(),
-                    tokens: sent.tokens,
-                    inReadingMode: false,
-                })
+                if ($ctrl.active) {
+                    statemachine.send("SELECT_WORD", {
+                        sentenceData: sent.structs,
+                        wordData: obj,
+                        corpus: sent.corpus.toLowerCase(),
+                        tokens: sent.tokens,
+                        inReadingMode: false,
+                    })
+                }
+
                 if (currentMode === "parallel") {
                     selectWordParallel(word, scope, sent)
                 } else {

@@ -210,7 +210,7 @@ export class KwicCtrl {
             if (!isPaging) {
                 s.hits = data.hits
                 s.hits_display = util.prettyNumbers(data.hits)
-                s.data = data
+                s.corpusHits = data.corpus_hits
             }
         }
 
@@ -231,7 +231,7 @@ export class KwicCtrl {
             }
 
             s.corpusOrder = data.corpus_order
-            s.data = data
+            s.kwic = data.kwic
         }
 
         s.onentry = () => {
