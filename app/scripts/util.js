@@ -346,9 +346,17 @@ util.prettyNumbers = function (numstring) {
     return outStrNum
 }
 
-window.regescape = (s) => s.replace(/[.|?|+|*||'|()^$]/g, "\\$&").replace(/"/g, '""')
+window.regescape = (s) => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
 
-window.unregescape = (s) => s.replace(/\\/g, "").replace(/""/g, '"')
+window.unregescape = (s) =>
+    // remove single backslashes and replace double backslashes with one backslash
+    s.replace(/\\\\|\\/g, (match) => {
+        if (match === "\\\\") {
+            return "\\"
+        } else {
+            return ""
+        }
+    })
 
 util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
     if (_.includes(x, ".")) {
