@@ -186,7 +186,8 @@ export const kwicComponent = {
                     // calculate which is the first page of hits for each item
                     let index = 0
                     _.each(items, (obj) => {
-                        obj.page = Math.floor(index / $ctrl.kwic.length)
+                        // $ctrl.kwicInput.length == page size
+                        obj.page = Math.floor(index / $ctrl.kwicInput.length)
                         index += obj.abs
                     })
 
