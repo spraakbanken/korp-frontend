@@ -90,7 +90,8 @@ export const wordPictureComponent = {
         noHits: "<",
     },
     controller: [
-        function () {
+        "$rootScope",
+        function ($rootScope) {
             const $ctrl = this
 
             $ctrl.showWordClass = false
