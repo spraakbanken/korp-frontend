@@ -3,23 +3,25 @@ let html = String.raw
 export const wordPictureComponent = {
     template: html`
         <div class="wordpic_disabled" ng-if="!$ctrl.wordPic">
-            {{'word_pic_warn' | loc:lang}}
+            {{'word_pic_warn' | loc:$root.lang}}
             <div>
                 <button class="btn btn-sm btn-default activate_word_pic" ng-click="$ctrl.activate()">
-                    {{'word_pic_warn_btn' | loc:lang}}
+                    {{'word_pic_warn_btn' | loc:$root.lang}}
                 </button>
             </div>
         </div>
         <warning ng-if="$ctrl.wordPic && !$ctrl.hasData && !$ctrl.loading && !$ctrl.aborted"
-            >{{'word_pic_bad_search' | loc:lang}}</warning
+            >{{'word_pic_bad_search' | loc:$root.lang}}</warning
         >
-        <warning ng-if="$ctrl.wordPic && $ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:lang}}</warning>
-        <warning ng-if="$ctrl.wordPic && $ctrl.noHits">{{"no_stats_results" | loc:lang}}</warning>
+        <warning ng-if="$ctrl.wordPic && $ctrl.aborted && !$ctrl.loading"
+            >{{'search_aborted' | loc:$root.lang}}</warning
+        >
+        <warning ng-if="$ctrl.wordPic && $ctrl.noHits">{{"no_stats_results" | loc:$root.lang}}</warning>
         <div ng-if="$ctrl.wordPic && $ctrl.hasData">
             <div id="wordPicSettings">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" /><label for="wordclassChk"
-                        >{{'show_wordclass' | loc:lang}}</label
+                        >{{'show_wordclass' | loc:$root.lang}}</label
                     >
                 </div>
                 <div>
@@ -33,7 +35,7 @@ export const wordPictureComponent = {
             <div class="content_target">
                 <div class="tableContainer radialBkg" ng-repeat="word in $ctrl.data">
                     <div class="header" ng-if="!$ctrl.isLemgram(word.token)">
-                        {{word.token}} (<span>{{word.wordClassShort | loc:lang}}</span>)
+                        {{word.token}} (<span>{{word.wordClassShort | loc:$root.lang}}</span>)
                     </div>
                     <div class="lemgram_section" ng-repeat="section in word.data" ng-init="parentIndex = $index">
                         <div class="lemgram_help">
@@ -42,7 +44,7 @@ export const wordPictureComponent = {
                                 ng-class="$ctrl.getHeaderClasses(header, word.token)"
                                 ng-if="$ctrl.renderResultHeader(parentIndex, section, word.wordClass, $index)"
                                 ><span ng-if="header != '_'"
-                                    >{{$ctrl.getHeaderLabel(header, section, $index) | loc:lang}}</span
+                                    >{{$ctrl.getHeaderLabel(header, section, $index) | loc:$root.lang}}</span
                                 ><span ng-if="header == '_'"><b>{{$ctrl.fromLemgram(word.token)}}</b></span></span
                             >
                         </div>
@@ -61,7 +63,7 @@ export const wordPictureComponent = {
                                         <td><span class="enumerate"></span></td>
                                         <td>
                                             {{ data.label }}<sup ng-if="data.showIdx">{{data.idx}}</sup>
-                                            <span ng-if="$ctrl.showWordClass">({{data.pos | loc:lang}})</span>
+                                            <span ng-if="$ctrl.showWordClass">({{data.pos | loc:$root.lang}})</span>
                                         </td>
                                         <td title="mi: {{row.mi | number:2}}">{{row.freq}}</td>
                                         <td ng-click="$ctrl.onClickExample($event, row)">
