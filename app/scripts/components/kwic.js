@@ -175,7 +175,7 @@ export const kwicComponent = {
                         statemachine.send("DESELECT_WORD")
                     }
                 }
-                if ("corpusHits" in changeObj) {
+                if ("corpusHits" in changeObj && $ctrl.corpusHits) {
                     let items = _.map($ctrl.corpusOrder, (obj) => ({
                         rid: obj,
                         rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
