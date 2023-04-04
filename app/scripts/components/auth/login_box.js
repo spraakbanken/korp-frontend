@@ -22,6 +22,7 @@ export const loginBoxComponent = {
             <label ng-if="$ctrl.showSave" class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
             <p ng-show="$ctrl.loginErr" class="err_msg">{{'login_fail_msg' | loc:lang}}</p>
             <input class="btn btn-sm bg-blue-500 text-white" type="submit" value="{{'send' | loc:lang}}">
+            <div ng-if="$ctrl.loading" style="float: right; margin-top: 11px; margin-right: 9px;"><i class="fa-solid fa-spinner fa-pulse w-fit"></i></div>
             <div style="clear:both"></div>
         </form>
     </div>
@@ -41,8 +42,11 @@ export const loginBoxComponent = {
             // default value of default_value_remember is false
             $ctrl.saveLogin = $ctrl.showSave ? Boolean(options["default_value_remember"]) : true
 
+            $ctrl.loading = false
+
             $ctrl.loginSubmit = function () {
                 $ctrl.loginErr = false
+                $ctrl.loading = true
                 login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
                     .done(function () {
                         // no send to statemachine
@@ -50,7 +54,10 @@ export const loginBoxComponent = {
                         $ctrl.closeModals()
                     })
                     .fail(function () {
-                        $timeout(() => ($ctrl.loginErr = true))
+                        $timeout(() => {
+                            $ctrl.loginErr = true
+                            $ctrl.loading = false
+                        })
                     })
             }
 
