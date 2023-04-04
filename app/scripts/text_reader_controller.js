@@ -7,8 +7,9 @@ korpApp.directive("textReaderCtrl", [
     ($timeout) => ({
         controller: [
             "$scope",
+            "$rootScope",
             "backend",
-            ($scope, backend) => {
+            ($scope, $rootScope, backend) => {
                 const s = $scope
 
                 s.loading = true
@@ -16,7 +17,7 @@ korpApp.directive("textReaderCtrl", [
 
                 s.closeTab = function (idx, e) {
                     e.preventDefault()
-                    s.textTabs.splice(idx, 1)
+                    $rootScope.textTabs.splice(idx, 1)
                     s.closeDynamicTab()
                 }
 
