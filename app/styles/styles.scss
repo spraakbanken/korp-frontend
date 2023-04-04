@@ -95,13 +95,6 @@ a.btn {
   color : #333;
 }
 
-.radio, .checkbox {
-  // bootstrap override
-  display: inherit;
-  min-height: initial;
-  margin-top: initial;
-  margin-bottom: initial;
-}
 label {
   font-weight : initial;
   margin-bottom : 0;
@@ -356,11 +349,6 @@ time-interval {
   }
 }
 
-.ext {
-  margin-right: 0px;
-  vertical-align: middle;
-}
-
 .numberOfChildren {
   color: #888888;
 }
@@ -393,26 +381,16 @@ time-interval {
 }
 
 .tree {
-  // margin-top: 1px;
-  margin-bottom: 0px;
-  margin-left: 2px;
-  padding-top: 2px;
-  padding-bottom: 1px;
   overflow-x: hidden;
-  & > .ext {
+  div > .ext {
     transition: all 200ms ease-in-out;
   }
-  &.extended > .ext {
+  &.extended > div > .ext {
     transform: rotate(90deg);
   }
 }
 
 .boxdiv {
-  background-color: #F6F6F6;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  margin-top: 2px;
-  margin-bottom: 2px;
   &.disabled {
     color: grey;
     .ext {
@@ -432,8 +410,6 @@ time-interval {
 .checkbox {
   width: 12px;
   height: 12px;
-  display: inline-block;
-  vertical-align: middle;
   &.checked {
     background: url("../img/checked.png") no-repeat;
   }
@@ -443,12 +419,10 @@ time-interval {
   &.intermediate {
     background: url("../img/intermediate.png") no-repeat;
   }
-
-  margin-right: 2px;
 }
 
 .boxdiv.disabled .checkbox,
-.tree.disabled > label .checkbox {
+.tree.disabled > div > label .checkbox {
   @extend .fa-solid;
   @extend .fa-lock;
   background: none;
