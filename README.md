@@ -111,4 +111,5 @@ Development is done on the `dev`-branch. When doing a release:
 - Update version in `package.json` to the next version
 - Add relevent changes to `CHANGELOG.md`
 - Check that the user manual and development documentation is up to date
-- Merge `dev` to `master`
+- Merge `dev` to `master` (using `--no-ff`)
+- Tag the merge commit with the new version (prefixed with `v`, see the other tag names)
