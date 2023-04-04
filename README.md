@@ -103,3 +103,12 @@ Now use `korp.spraakbanken.gu.se` as the value for `KORP_HOST`. It must also be 
 to `/etc/hosts`.
 
 One way to set the environment variables automatically is to use [direnv](https://direnv.net/):
+
+# Branches, releases and versions
+
+Development is done on the `dev`-branch. When doing a release:
+
+- Update version in `package.json` to the next version
+- Add relevent changes to `CHANGELOG.md`
+- Check that the user manual and development documentation is up to date
+- Merge `dev` to `master`
