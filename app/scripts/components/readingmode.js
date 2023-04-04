@@ -35,6 +35,8 @@ export const component = {
 
                 $element[0].addEventListener("click", (e) => {
                     if (e.target.dataset.idx) {
+                        document.querySelector(".word.selected")?.classList.remove("selected")
+                        e.target.classList.add("selected")
                         const idx = e.target.dataset.idx
                         const token = ctrl.data.document.tokens[idx]
                         ctrl.wordClick(["wordClick"])(token)

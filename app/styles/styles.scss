@@ -2391,6 +2391,15 @@ li.active a span .num-to-find {
   margin: auto;
 }
 
+// reading mode
+.word.selected {
+  color: #fff !important;
+  background-color: #666;
+  border-radius: 10px;
+  padding-left: 3px;
+  margin-left: -3px;
+}
+
 @keyframes blinker {
   from { opacity: 1.0; }
   50% { opacity: 0.5; }

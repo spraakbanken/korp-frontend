@@ -70,7 +70,7 @@ korpApp.directive("textReader", [
                 scope.selectedToken = {}
 
                 scope.wordClick = (token) => {
-                    statemachine.send("select_word", {
+                    statemachine.send("SELECT_WORD", {
                         sentenceData: scope.data.document.structs,
                         wordData: token.attrs,
                         corpus: scope.data.corpus,
