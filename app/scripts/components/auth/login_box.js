@@ -1,6 +1,9 @@
 /** @format */
-import statemachine from "@/statemachine"
 
+import statemachine from "@/statemachine"
+import { login } from "./basic_auth"
+
+// TODO make it not closable when login is NEEDED
 export const loginBoxComponent = {
     template: `
     <div class="modal-header login-modal-header">
@@ -8,10 +11,6 @@ export const loginBoxComponent = {
         <span ng-click="$ctrl.clickX()" class="close-x">×</span>
     </div>
     <div id="login_popup" class="modal-body">
-        <div ng-if="$ctrl.loginNeededFor.length" style="font-size: 0.75em">
-            <span style="display: inline">{{'login_needed_for_corpora' | loc:lang}}</span>
-            <span style="display: inline; margin-right: 2px;" ng-repeat="corpus in $ctrl.loginNeededFor">{{corpus.title | locObj:lang}}</span>
-        </div>
         <form ng-submit="$ctrl.loginSubmit()">
             <label for="usrname">{{'username' | loc:lang}}</label>
             <input id="usrname" ng-model="$ctrl.loginUsr" type="text">
@@ -19,16 +18,16 @@ export const loginBoxComponent = {
             <input id="pass" ng-model="$ctrl.loginPass" type="password">
             <a class="password-reset" href="https://ws.spraakbanken.gu.se/user/password" target="_blank">{{'forgot_password' | loc:lang}}</a>
             <div style="clear:both"></div>
-            <input class="save-login" id="saveLogin" type="checkbox" ng-model="$ctrl.saveLogin">
-            <label class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
+            <input ng-if="$ctrl.showSave" class="save-login" id="saveLogin" type="checkbox" ng-model="$ctrl.saveLogin">
+            <label ng-if="$ctrl.showSave" class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
             <p ng-show="$ctrl.loginErr" class="err_msg">{{'login_fail_msg' | loc:lang}}</p>
             <input class="btn btn-sm bg-blue-500 text-white" type="submit" value="{{'send' | loc:lang}}">
+            <div ng-if="$ctrl.loading" style="float: right; margin-top: 11px; margin-right: 9px;"><i class="fa-solid fa-spinner fa-pulse w-fit"></i></div>
             <div style="clear:both"></div>
         </form>
     </div>
     `,
     bindings: {
-        loginNeededFor: "<",
         closeClick: "&",
     },
     controller: [
@@ -36,17 +35,29 @@ export const loginBoxComponent = {
         function ($timeout) {
             const $ctrl = this
 
+            const options = settings["auth_module"]?.["options"] || {}
+
+            // default value of show_remember is true
+            $ctrl.showSave = options["show_remember"] == undefined ? true : options["show_remember"]
+            // default value of default_value_remember is false
+            $ctrl.saveLogin = $ctrl.showSave ? Boolean(options["default_value_remember"]) : true
+
+            $ctrl.loading = false
+
             $ctrl.loginSubmit = function () {
                 $ctrl.loginErr = false
-                authenticationProxy
-                    .makeRequest($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
+                $ctrl.loading = true
+                login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
                     .done(function () {
                         // no send to statemachine
                         statemachine.send("LOGIN")
                         $ctrl.closeModals()
                     })
                     .fail(function () {
-                        $timeout(() => ($ctrl.loginErr = true))
+                        $timeout(() => {
+                            $ctrl.loginErr = true
+                            $ctrl.loading = false
+                        })
                     })
             }
 

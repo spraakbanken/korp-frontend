@@ -1,5 +1,5 @@
 /** @format */
-import "./sidebar.scss"
+import "../../styles/sidebar.scss"
 export const sidebarName = "sidebar"
 import statemachine from "../statemachine"
 import { stringify } from "@/stringify.js"
@@ -23,9 +23,7 @@ export const sidebarComponent = {
                 <div class="text-lg">{{$ctrl.corpusObj.title| locObj:$root.lang}}</div>
             </div>
             <div class="openReadingMode" ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj['reading_mode']">
-                <span ng-click="$ctrl.openReadingMode()" class="link">
-                    {{'read_in_korp' | loc:$root.lang}}
-                </span>
+                <span ng-click="$ctrl.openReadingMode()" class="link"> {{'read_in_korp' | loc:$root.lang}} </span>
             </div>
             <div id="selected_sentence"></div>
             <div id="selected_word"></div>
@@ -229,7 +227,7 @@ export const sidebarComponent = {
                 renderItem(type, key, value, attrs, wordData, sentenceData, tokens) {
                     let output, pattern, ul
                     let val, inner, li, address
-                    if (attrs.label) {
+                    if (attrs.label && ! attrs["sidebar_hide_label"]) {
                         output = $(`<p><span>${locObj(attrs.label, $ctrl.lang)}</span>: </p>`)
                     } else {
                         output = $("<p></p>")

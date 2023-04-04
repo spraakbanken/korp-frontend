@@ -122,6 +122,7 @@ settings that affect the frontend.
 - __enable_backend_kwic_download__ - Boolean. Backend download, depends on backend download functionality.
 - __enable_frontend_kwic_download__ - Boolean. Frontend download. Gives CSV created by same data as available in the KWIC.
 - __group_statistics__ - List of attribute names. Attributes that either have a rank or a numbering used for multi-word units. For example, removing `:2` from `ta_bort..vbm.1:2`, to get the lemgram of this word: `ta_bort..vbm.1`.
+- __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
 - __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
 - __map_center__ - See [Map](#map)
@@ -287,7 +288,26 @@ To be documented
 
 ### dateInterval
 
-To be documented
+There is a built-in component for searching time intervals in extended search.
+
+To use it, simply set `extended_component: dateInterval` in the attribute's configuration.
+
+There is also another possibility. If the corpus has time data enabled, as explained here:
+
+https://github.com/spraakbanken/korp-backend#time-data
+
+Then time interval will be added automatically as a search alternative, but this needs to be added to `config.yml`:
+
+```
+common_struct_types:
+  date_interval:
+    label: "time interval"
+    hide_sidebar: 'true'
+    hide_compare: 'true'
+    hide_statistics: 'true'
+    opts: false
+    extended_component: dateInterval
+```
 
 ## Operators
 
@@ -425,6 +445,47 @@ By setting `news_desk_url`, the news widget is enabled. The widget simply fetche
 
 Local storage is used to remember when the user last checked the news. If there are new items, the UI will change to reflect this.
 
+## Authentication
+
+Korp comes with two implementations of login. Choose implementation using `auth_module` in `config.yml.
+
+Either just give your chosen implementation like this:
+
+`auth_module: "name"`
+
+Or as an object, if options are needed:
+
+```
+auth_module:
+  module: "name"
+  options:
+    an_option: true
+```
+
+### Basic authentication
+
+The module name is `basic_auth`. This is the default implementation. It has two options:
+
+- **show_remember**: Default `true`. Whether or not to show the "Remember me" option. 
+- **default_value_remember**: Default `false`. If the remember checkbox is ticke or not by default
+
+If the login should be remembered, the user's credentials are stored in local storage.
+
+### Federated authentication
+
+The module name is `federated_auth`. It checks if a JWT is available at an endpoint and uses the JWT in
+any subsequent communication with the backend. If the user clicks Login, they are redirected to 
+a login service. If the user clicks Logout, they are redirected to a logout service. The options are:
+
+- **jwt_url**
+- **login_service**
+- **logout_service**
+
+### Custom
+
+It is possible to define your own authentication module and set this using `auth_module`. The code should be
+located in `custom/` and support the functions used in `components/auth.js`.
+
 ## Attribute settings
 
 Corpora and their attrbutes are configured in the backend, but most of the
@@ -458,6 +519,9 @@ parameters for attributes.
 - **sidebar_component**: See [Customizing sidebar](#customizing-sidebar).
 - **sidebar_info_url**: `string` (URL). If defined and non-empty, add an info symbol ⓘ for the attribute in the
   sidebar, linking to the given URL. This can be used to link to an explanation page for morphosyntactic tags, for example.
+- **sidebar_hide_label**: `boolean`. If `true`, do not show the localized attribute label and the colon following it in the
+  sidebar, only the attribute value. This can be used, for example, if the `pattern` for the attribute includes the label but
+  the label should be shown in the attribute lists of the extended search or statistics.
 - **stats_cqp**: See [Custom statistics functions](#custom-statistics-functions).  
 - **stats_stringify**: See [Custom statistics functions](#custom-statistics-functions).
 - **translation**: An object containing translations of possible values of the attribute, in this format:

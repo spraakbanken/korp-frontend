@@ -95,24 +95,9 @@ a.btn {
   color : #333;
 }
 
-#welcome {
-  padding: 0.2em;
-}
-
-.radio, .checkbox {
-  // bootstrap override
-  display: inherit;
-  min-height: initial;
-  margin-top: initial;
-  margin-bottom: initial;
-}
 label {
   font-weight : initial;
   margin-bottom : 0;
-}
-
-.welcome-header {
-  padding: 0.7em;
 }
 
 .ui-widget {
@@ -259,12 +244,6 @@ label.placeholder {
   color: #999999;
 }
 
-/* html5 placeholder support */
-
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:placeholder, textarea:placeholder {
-  color: #999999;
-}
-
 #search_options {
   border-top: none;
   padding: 8px;
@@ -290,25 +269,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   opacity: 0.6;
 }
 
-#corpus_id {
-  font-family: monospace;
-}
-
-#cqp_string {
-  font-family: monospace;
-  width: 100%;
-}
-
-#header {
-}
-
-#content {
-}
-
-.lang_selected {
-  color: black;
-}
-
 #languages {
   margin-top : -1px;
 }
@@ -323,31 +283,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   overflow-y: hidden;
 }
 
-.lang_row {
-  overflow: auto;
-  white-space: nowrap;
-  margin-bottom: 15px;
-  padding: 8px;
-}
-
 #query_table > select {
   margin-left: 2px;
   display: block;
 }
-
-.lang_row {
-  > select {
-    margin-left: 2px;
-    display: block;
-  }
-  &:nth-child(2n) {
-    background-color: #F5F5F5;
-  }
-}
-
-// #removeLang, #linkedLang {
-//   display : none;
-// }
 
 .extended {
   .search_submit {
@@ -392,10 +331,6 @@ time-interval {
   }
 }
 
-#advanced pre {
-  white-space : inherit;
-}
-
 .mode-parallel {
   #linkedLang {
     display: inline;
@@ -412,23 +347,6 @@ time-interval {
       background-color : lighten($color_yellow, 4%);
     }
   }
-}
-
-.lang_row + #removeLang {
-  display: inline;
-}
-
-.statisticWords {
-  border-style: hidden;
-}
-
-.searchForWordformInCorpus, .corpusTitleHeader {
-  cursor: pointer;
-}
-
-.ext {
-  margin-right: 0px;
-  vertical-align: middle;
 }
 
 .numberOfChildren {
@@ -459,31 +377,20 @@ time-interval {
 }
 
 .popupchecks {
-  background-color: #FEFEFE;
   width: 480px;
 }
 
 .tree {
-  // margin-top: 1px;
-  margin-bottom: 0px;
-  margin-left: 2px;
-  padding-top: 2px;
-  padding-bottom: 1px;
   overflow-x: hidden;
-  & > .ext {
+  div > .ext {
     transition: all 200ms ease-in-out;
   }
-  &.extended > .ext {
+  &.extended > div > .ext {
     transform: rotate(90deg);
   }
 }
 
 .boxdiv {
-  background-color: #F6F6F6;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  margin-top: 2px;
-  margin-bottom: 2px;
   &.disabled {
     color: grey;
     .ext {
@@ -503,8 +410,6 @@ time-interval {
 .checkbox {
   width: 12px;
   height: 12px;
-  display: inline-block;
-  vertical-align: middle;
   &.checked {
     background: url("../img/checked.png") no-repeat;
   }
@@ -514,25 +419,15 @@ time-interval {
   &.intermediate {
     background: url("../img/intermediate.png") no-repeat;
   }
-
-  margin-right: 2px;
 }
 
 .boxdiv.disabled .checkbox,
-.tree.disabled > label .checkbox {
+.tree.disabled > div > label .checkbox {
   @extend .fa-solid;
   @extend .fa-lock;
   background: none;
   margin-bottom : 3px;
   text-align : center;
-}
-
-.query_footer {
-  background-color: #e1e1e1;
-  padding: 1px 8px 8px 8px;
-  margin-bottom: 5px;
-  width: 50%;
-  display: table;
 }
 
 .ui-autocomplete-tall {
@@ -683,18 +578,6 @@ table {
     cursor: pointer;
     width: 100px;
   }
-
-
-}
-
-.cqp_toggle {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-
-#results-stats {
-  overflow-x : hidden;
 }
 
 .lemgram_help {
@@ -762,10 +645,6 @@ table {
   .even {
     background-color : $primaryLight;
   }
-}
-
-#display_word {
-  margin: auto 0;
 }
 
 .table_scrollarea + .pager-wrapper {
@@ -941,11 +820,6 @@ table {
   background-color: #FFDDD8;
 }
 
-#result-container {
-  clear: both;
-  min-height: 400px;
-}
-
 #json-link {
   float: right;
   // Clear floats so that the JSON link is right-justified and not
@@ -1101,18 +975,6 @@ a {
   margin-left: 3px;
 }
 
-/* when selecting a word, not a lemgram, this pops up. */
-
-.lemgram_select {
-  margin-top: 8px;
-}
-
-label[for=lemgram_select]:before {
-  display : block;
-}
-
-
-
 #highlight {
   position: absolute;
   background-color: #FFF3D8;
@@ -1183,16 +1045,6 @@ label[for=lemgram_select]:before {
   cursor: default;
 }
 
-.custom_anchor {
-  padding-right: 8px !important;
-}
-
-.tabClose {
-  padding: 0 !important;
-  margin-right: 6px;
-  cursor: pointer !important;
-}
-
 .hits_picture_table {
   border : 1px solid lightgrey;
   width: 100%;
@@ -1206,13 +1058,6 @@ label[for=lemgram_select]:before {
   left: 280px;
   top: -1px;
   transition: left 400ms ease;
-}
-
-.right_col {
-  padding-right: 2px;
-}
-.ie8 .right_col .input {
-    float: right;
 }
 
 .query_arg {
@@ -1307,11 +1152,6 @@ label[for=lemgram_select]:before {
     margin-bottom: 1em;
     font-family: Lucida Grande, sans-serif;
   }
-}
-
-.explanation {
-  font-size: 12px;
-  padding: 0 20px;
 }
 
 .ui-dialog ul, ol {
@@ -1764,36 +1604,6 @@ warning ~ * {
   text-transform: uppercase;
   color: grey;
   letter-spacing: 1.1;
-}
-
-#keyboard {
-  cursor: pointer;
-  padding: 0 3px;
-  display: none;
-}
-
-#char_table {
-  display: none;
-}
-
-.specialkey {
-  width: 12px;
-  text-align: center;
-  cursor: pointer;
-
-}
-
-#deptree_popup {
-  display: none;
-  overflow-y : hidden;
-  iframe {
-    border : none;
-    height : 400px;
-  }
-  .info:empty {
-    display : block;
-    height : 1.3em;
-  }
 }
 
 .smoother.ui-slider {
@@ -2536,25 +2346,9 @@ li.active a span .num-to-find {
   pointer-events: auto;
 }
 
-.strix-link {
-    margin-top: 20px;
-}
-
 .lemgram-namespace {
     color: #777777;
 }
-
-// .logos {
-//     position: absolute;
-//     right: 160px;
-//     img {
-//         padding:5px;
-//         height: 68px;
-//     }
-//     .sb {
-//       padding-bottom: 0;
-//     }
-// }
 
 .cc-level-indent {
   margin-left: 30px;
@@ -2569,6 +2363,15 @@ li.active a span .num-to-find {
 .splash {
   animation: blinker 2s infinite;
   margin: auto;
+}
+
+// reading mode
+.word.selected {
+  color: #fff !important;
+  background-color: #666;
+  border-radius: 10px;
+  padding-left: 3px;
+  margin-left: -3px;
 }
 
 @keyframes blinker {

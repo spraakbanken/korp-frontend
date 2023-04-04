@@ -7,9 +7,9 @@ export const kwicComponent = {
     template: html`
         <div ng-click="$ctrl.onKwicClick($event)">
             <div class="result_controls">
-                <warning ng-if="$ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:lang}}</warning>
+                <warning ng-if="$ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:$root.lang}}</warning>
                 <div class="controls_n" ng-show="$ctrl.hitsDisplay">
-                    <span>{{'num_results' | loc:lang}}: </span>
+                    <span>{{'num_results' | loc:$root.lang}}: </span>
                     <span class="num-result" ng-bind-html="$ctrl.hitsDisplay | trust"></span>
                 </div>
                 <div class="hits_picture" ng-if="$ctrl.hitsPictureData.length > 1">
@@ -39,11 +39,11 @@ export const kwicComponent = {
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
             <span ng-if="$ctrl.hits" class="reading_btn link" ng-click="$ctrl.toggleReading()">
-                <span ng-if="!$ctrl.readingMode">{{'show_reading' | loc:lang}}</span>
-                <span ng-if="$ctrl.readingMode">{{'show_kwic' | loc:lang}}</span>
+                <span ng-if="!$ctrl.readingMode">{{'show_reading' | loc:$root.lang}}</span>
+                <span ng-if="$ctrl.readingMode">{{'show_kwic' | loc:$root.lang}}</span>
             </span>
             <div class="table_scrollarea">
-                <table class="results_table kwic" ng-if="$ctrl.kwic.length > 0" cellspacing="0">
+                <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0">
                     <tr
                         class="sentence"
                         ng-repeat="sentence in $ctrl.kwic"
@@ -54,7 +54,7 @@ export const kwicComponent = {
                             <div>
                                 {{sentence.newCorpus | locObj:lang}}
                                 <span class="corpus_title_warn" ng-if="::sentence.noContext"
-                                    >{{'no_context_support' | loc:lang}}</span
+                                    >{{'no_context_support' | loc:$root.lang}}</span
                                 >
                             </div>
                         </td>
@@ -73,17 +73,17 @@ export const kwicComponent = {
                         </td>
                     </tr>
                 </table>
-                <div class="results_table reading" ng-if="$ctrl.contextKwic.length > 0">
+                <div class="results_table reading" ng-if="$ctrl.useContext">
                     <p
                         class="sentence"
-                        ng-repeat="sentence in $ctrl.contextKwic"
+                        ng-repeat="sentence in $ctrl.kwic"
                         ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}"
                     >
                         <span class="corpus_title" colspan="0"
                             >{{sentence.newCorpus | locObj:lang}}<span
                                 class="corpus_title_warn"
                                 ng-if="::sentence.noContext"
-                                >{{'no_context_support' | loc:lang}}</span
+                                >{{'no_context_support' | loc:$root.lang}}</span
                             ></span
                         >
                         <span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span>
@@ -104,7 +104,7 @@ export const kwicComponent = {
                     ng-if="$ctrl._settings['enable_frontend_kwic_download']"
                     ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hitsDisplay)"
                     ng-model="$ctrl.download.selected"
-                    ng-options="item.value as item.label | loc:lang disable when item.disabled for item in $ctrl.download.options"
+                    ng-options="item.value as item.label | loc:$root.lang disable when item.disabled for item in $ctrl.download.options"
                 ></select>
                 <a
                     class="kwicDownloadLink"
@@ -122,10 +122,7 @@ export const kwicComponent = {
         loading: "<",
         active: "<",
         hitsDisplay: "<",
-        hitsPictureData: "<",
         hits: "<",
-        kwic: "<",
-        contextKwic: "<",
         isReading: "<",
         page: "<",
         pageEvent: "<",
@@ -134,6 +131,8 @@ export const kwicComponent = {
         prevParams: "<",
         prevRequest: "<",
         corpusOrder: "<",
+        kwicInput: "<",
+        corpusHits: "<",
     },
     controller: [
         "$location",
@@ -150,29 +149,53 @@ export const kwicComponent = {
             }
 
             $ctrl.$onChanges = (changeObj) => {
-                if ("kwic" in changeObj) {
+                if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
+                    $ctrl.kwic = massageData($ctrl.kwicInput)
+                    $ctrl.useContext = $ctrl.isReading || locationSearch()["in_order"] != null
                     if (!$ctrl.isReading) {
-                        centerScrollbar()
-                        $element.find(".match").children().first().click()
+                        $timeout(() => {
+                            centerScrollbar()
+                            $element.find(".match").children().first().click()
+                        })
+                    }
+
+                    if (settings["enable_backend_kwic_download"] && $ctrl.hitsDisplay) {
+                        // using hitsDisplay here, since hits is not set until request is complete
+                        util.setDownloadLinks($ctrl.prevRequest, {
+                            kwic: $ctrl.kwic,
+                            corpus_order: $ctrl.corpusOrder,
+                        })
+                    }
+
+                    if (currentMode === "parallel" && !$ctrl.isReading) {
+                        centerScrollbarParallel()
+                    }
+                    if ($ctrl.kwic.length == 0) {
+                        selectionManager.deselect()
+                        statemachine.send("DESELECT_WORD")
                     }
                 }
-                if (settings["enable_backend_kwic_download"] && $ctrl.hitsDisplay) {
-                    // using hitsDisplay here, since hits is not set until request is complete
-                    util.setDownloadLinks($ctrl.prevRequest, {
-                        kwic: $ctrl.isReading ? $ctrl.contextKwic : $ctrl.kwic,
-                        corpus_order: $ctrl.corpusOrder,
+                if ("corpusHits" in changeObj && $ctrl.corpusHits) {
+                    let items = _.map($ctrl.corpusOrder, (obj) => ({
+                        rid: obj,
+                        rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
+                        relative: $ctrl.corpusHits[obj] / $ctrl.hits,
+                        abs: $ctrl.corpusHits[obj],
+                    })).filter((item) => item.abs > 0)
+
+                    // calculate which is the first page of hits for each item
+                    let index = 0
+                    _.each(items, (obj) => {
+                        // $ctrl.kwicInput.length == page size
+                        obj.page = Math.floor(index / $ctrl.kwicInput.length)
+                        index += obj.abs
                     })
+
+                    $ctrl.hitsPictureData = items
                 }
-                if (currentMode === "parallel" && !$ctrl.isReading) {
-                    centerScrollbarParallel()
-                }
-                if ($ctrl.kwic && $ctrl.kwic.length == 0 && $ctrl.contextKwic && $ctrl.contextKwic.length == 0) {
-                    selectionManager.deselect()
-                    statemachine.send("DESELECT_WORD")
-                }
+
                 if ("active" in changeObj) {
                     if ($ctrl.active) {
-                        centerScrollbar()
                         $timeout(() => $element.find(".token_selected").click(), 0)
                     } else {
                         statemachine.send("DESELECT_WORD")
@@ -186,7 +209,8 @@ export const kwicComponent = {
                 } else {
                     if (
                         event.target.id === "frontendDownloadLinks" ||
-                        event.target.classList.contains("kwicDownloadLink")
+                        event.target.classList.contains("kwicDownloadLink") ||
+                        event.target.classList.contains("hits_picture_corp")
                     ) {
                         return
                     }
@@ -227,7 +251,7 @@ export const kwicComponent = {
                     }
                     const [fileName, blobName] = kwicDownload.makeDownload(
                         ...value.split("/"),
-                        $ctrl.kwic.length > 0 ? $ctrl.kwic : $ctrl.contextKwic,
+                        $ctrl.kwic,
                         $ctrl.prevParams,
                         hitsDisplay
                     )
@@ -262,6 +286,144 @@ export const kwicComponent = {
                 return sentence.tokens.slice(from, len)
             }
 
+            function massageData(hitArray) {
+                const punctArray = [",", ".", ";", ":", "!", "?", "..."]
+
+                let prevCorpus = ""
+                const output = []
+
+                for (let i = 0; i < hitArray.length; i++) {
+                    var corpus, linkCorpusId, mainCorpusId, matches
+                    const hitContext = hitArray[i]
+                    if (currentMode === "parallel") {
+                        mainCorpusId = hitContext.corpus.split("|")[0].toLowerCase()
+                        linkCorpusId = hitContext.corpus.split("|")[1].toLowerCase()
+                    } else {
+                        mainCorpusId = hitContext.corpus.toLowerCase()
+                    }
+
+                    const id = linkCorpusId || mainCorpusId
+
+                    const [matchSentenceStart, matchSentenceEnd] = findMatchSentence(hitContext)
+
+                    if (!(hitContext.match instanceof Array)) {
+                        matches = [{ start: hitContext.match.start, end: hitContext.match.end }]
+                    } else {
+                        matches = hitContext.match
+                    }
+
+                    const currentStruct = {}
+                    for (let i in _.range(0, hitContext.tokens.length)) {
+                        const wd = hitContext.tokens[i]
+                        wd.position = i
+
+                        for (let { start, end } of matches) {
+                            if (start <= i && i < end) {
+                                _.extend(wd, { _match: true })
+                            }
+                        }
+
+                        if (matchSentenceStart <= i && i <= matchSentenceEnd) {
+                            _.extend(wd, { _matchSentence: true })
+                        }
+                        if (punctArray.includes(wd.word)) {
+                            _.extend(wd, { _punct: true })
+                        }
+
+                        wd.structs = wd.structs || {}
+
+                        for (let structItem of wd.structs.open || []) {
+                            const structKey = _.keys(structItem)[0]
+                            if (structKey == "sentence") {
+                                wd._open_sentence = true
+                            }
+
+                            currentStruct[structKey] = {}
+                            const attrs = _.toPairs(structItem[structKey]).map(([key, val]) => [
+                                structKey + "_" + key,
+                                val,
+                            ])
+                            for (let [key, val] of _.concat([[structKey, ""]], attrs)) {
+                                if (key in settings.corpora[id].attributes) {
+                                    currentStruct[structKey][key] = val
+                                }
+                            }
+                        }
+
+                        const attrs = _.reduce(_.values(currentStruct), (val, ack) => _.merge(val, ack), {})
+                        _.extend(wd, attrs)
+
+                        for (let structItem of wd.structs.close || []) {
+                            delete currentStruct[structItem]
+                        }
+                    }
+
+                    if (prevCorpus !== id) {
+                        corpus = settings.corpora[id]
+                        const newSent = {
+                            newCorpus: corpus.title,
+                            noContext: _.keys(corpus.context).length === 1,
+                        }
+                        output.push(newSent)
+                    }
+
+                    hitContext.corpus = mainCorpusId
+
+                    output.push(hitContext)
+                    if (hitContext.aligned) {
+                        // just check for sentence opened, no other structs
+                        const alignedTokens = Object.values(hitContext.aligned)[0]
+                        for (let wd of alignedTokens) {
+                            if (wd.structs && wd.structs.open) {
+                                for (let structItem of wd.structs.open) {
+                                    if (_.keys(structItem)[0] == "sentence") {
+                                        wd._open_sentence = true
+                                    }
+                                }
+                            }
+                        }
+
+                        const [corpus_aligned, tokens] = _.toPairs(hitContext.aligned)[0]
+                        output.push({
+                            tokens,
+                            isLinked: true,
+                            corpus: corpus_aligned,
+                        })
+                    }
+
+                    prevCorpus = id
+                }
+
+                return output
+            }
+
+            function findMatchSentence(hitContext) {
+                const span = []
+                const { start, end } = hitContext.match
+                let decr = start
+                let incr = end
+                while (decr >= 0) {
+                    const token = hitContext.tokens[decr]
+                    const sentenceOpen = _.filter((token.structs && token.structs.open) || [], (attr) => attr.sentence)
+                    if (sentenceOpen.length > 0) {
+                        span[0] = decr
+                        break
+                    }
+                    decr--
+                }
+                while (incr < hitContext.tokens.length) {
+                    const token = hitContext.tokens[incr]
+                    const closed = (token.structs && token.structs.close) || []
+                    if (closed.includes("sentence")) {
+                        span[1] = incr
+                        break
+                    }
+                    incr++
+                }
+
+                return span
+            }
+
             function onWordClick(event) {
                 event.stopPropagation()
                 const scope = $(event.target).scope()
@@ -269,13 +431,16 @@ export const kwicComponent = {
                 const sent = scope.sentence
                 const word = $(event.target)
 
-                statemachine.send("SELECT_WORD", {
-                    sentenceData: sent.structs,
-                    wordData: obj,
-                    corpus: sent.corpus.toLowerCase(),
-                    tokens: sent.tokens,
-                    inReadingMode: false,
-                })
+                if ($ctrl.active) {
+                    statemachine.send("SELECT_WORD", {
+                        sentenceData: sent.structs,
+                        wordData: obj,
+                        corpus: sent.corpus.toLowerCase(),
+                        tokens: sent.tokens,
+                        inReadingMode: false,
+                    })
+                }
+
                 if (currentMode === "parallel") {
                     selectWordParallel(word, scope, sent)
                 } else {
@@ -363,11 +528,7 @@ export const kwicComponent = {
             }
 
             function getActiveData() {
-                if ($ctrl.readingMode) {
-                    return $ctrl.contextKwic
-                } else {
-                    return $ctrl.kwic
-                }
+                return $ctrl.kwic
             }
 
             function clearLinks() {
@@ -526,7 +687,7 @@ export const kwicComponent = {
 
             function selectDown() {
                 let nextMatch
-                const current = getActiveData
+                const current = selectionManager.selected
                 if (!$ctrl.readingMode) {
                     nextMatch = getWordAt(
                         current.offset().left + current.width() / 2,

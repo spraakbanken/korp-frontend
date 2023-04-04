@@ -55,11 +55,12 @@ let machine = createMachine(
                     },
                     logged_out: {
                         on: {
-                            LOGIN: { target: "logged_in", actions: "logged_in" },
+                            LOGIN: { target: "logged_in" },
                             LOGIN_NEEDED: { target: "login_needed", actions: "login_needed" },
                         },
                     },
                     logged_in: {
+                        entry: ["logged_in"],
                         on: {
                             LOGOUT: { target: "logged_out", actions: "logged_out" },
                         },
@@ -123,8 +124,7 @@ let machine = createMachine(
                 broadcast("login", event)
             },
             logged_out: () => {
-                authenticationProxy.loginObj = {}
-                jStorage.deleteKey("creds")
+                authenticationProxy.logout()
                 broadcast("logout")
             },
             login_needed: (context, event) => broadcast("login_needed", event),

@@ -60,6 +60,13 @@ window.c = console
 window.isLab = __IS_LAB__
 window.currentMode = deparam(window.location.search.slice(1)).mode || "default"
 
+try {
+  // modes-files are optional and have customizing code
+  require(`modes/${currentMode}_mode.js`)
+} catch (error) {
+  console.log("No mode file available for mode:", currentMode)
+}
+
 require("angular-dynamic-locale/dist/tmhDynamicLocale.js")
 window.Raphael = require("raphael")
 
@@ -71,6 +78,7 @@ require("slickgrid/slick.core")
 require("slickgrid/slick.grid")
 require("slickgrid/plugins/slick.checkboxselectcolumn")
 require("slickgrid/plugins/slick.rowselectionmodel")
+require("slickgrid/slick.interactions.js")
 
 require("./scripts/jq_extensions.js")
 
@@ -105,7 +113,6 @@ require("./scripts/search_controllers.js")
 
 require("./scripts/kwic_download.js")
 
-require("./scripts/controllers/result_controllers.js")
 require("./scripts/controllers/comparison_controller.js")
 require("./scripts/controllers/kwic_controller.js")
 require("./scripts/controllers/example_controller.js")
@@ -123,12 +130,3 @@ require("./scripts/directives.js")
 require("./scripts/directives/scroll.js")
 require("./scripts/filter_directives.js")
 require("./scripts/newsdesk.js")
-
-require("./index.pug")
-
-try {
-    // modes-files are optional and have customizing code
-    require(`modes/${currentMode}_mode.js`)
-} catch (error) {
-    console.log("No mode file available for mode:", currentMode)
-}

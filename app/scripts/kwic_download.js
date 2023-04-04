@@ -74,7 +74,7 @@ korpApp.factory("kwicDownload", function () {
 
                 for (let token of row.tokens || []) {
                     let match = ""
-                    for (matchObj of [row.match].flat()) {
+                    for (let matchObj of [row.match].flat()) {
                         if (token.position >= matchObj.start && token.position < matchObj.end) {
                             match = "***"
                             break
@@ -87,7 +87,7 @@ korpApp.factory("kwicDownload", function () {
                     res.push(newRow)
                 }
             } else if (row.newCorpus) {
-                corpus = row.newCorpus
+                corpus = util.getLocaleStringObject(row.newCorpus)
             }
         }
 
@@ -155,7 +155,7 @@ korpApp.factory("kwicDownload", function () {
                 ].concat(structs)
                 res.push(newRow)
             } else if (row.newCorpus) {
-                corpus = row.newCorpus
+                corpus = util.getLocaleStringObject(row.newCorpus)
             }
         }
 

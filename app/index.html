@@ -1,0 +1,31 @@
+<!-- @format -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta
+            name="description"
+            content="Med Korp kan den språkligt nyfikna göra avancerade sökningar i stora mängder av skriven text."
+        />
+        <link rel="icon" href="img/raven_simple.svg" />
+        <link rel="mask-icon" href="img/raven_simple.svg" color="#333333" />
+        <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+        <title>Korp</title>
+    </head>
+
+    <body>
+        <noscript>
+            <h2>You need JavaScript to run Korp.</h2>
+        </noscript>
+        <div id="preload"></div>
+        <div id="main" style="opacity: 0; display: none">
+            <header></header>
+            <div class="px-3 pb-3" id="content">
+                <searchtabs></searchtabs>
+                <results></results>
+            </div>
+        </div>
+        <script src="bundle.js"></script>
+    </body>
+</html>

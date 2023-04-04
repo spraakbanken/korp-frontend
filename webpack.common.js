@@ -30,18 +30,11 @@ module.exports = {
             korp_config: path.resolve(korpConfigDir, "config.yml"),
             custom: path.resolve(korpConfigDir, "custom/"),
             modes: path.resolve(korpConfigDir, "modes/"),
-            '@': path.resolve(__dirname, "app/scripts"),
+            "@": path.resolve(__dirname, "app/scripts"),
         },
     },
     module: {
         rules: [
-            {
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: "babel-loader",
-                },
-            },
             {
                 test: /\.tsx?$/,
                 use: {
@@ -53,91 +46,31 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: require.resolve(
-                    path.resolve(__dirname, "app/scripts/cqp_parser/CQPParser.js")
-                ),
-                use: "imports-loader?this=>window",
-            },
-            {
-                test: /\.pug$/i,
-                exclude: [
-                    // does not work
-                    path.resolve(__dirname, "app/index.pug"),
-                ],
-                use: [
-                    { loader: "file-loader" },
-                    {
-                        loader: "extract-loader",
-                        options: { publicPath: "" },
-                    },
-                    { loader: "html-loader" },
-                    { loader: "pug-html-loader" },
-                ],
-            },
-            {
-                test: /index.pug$/,
-                use: [
-                    { loader: "file-loader?name=index.html" },
-                    {
-                        loader: "extract-loader",
-                        options: { publicPath: "" },
-                    },
-                    {
-                        loader: "html-loader",
-                        options: {
-                            attrs: ["img:src", "link:href"],
-                        },
-                    },
-                    {
-                        loader: "pug-html-loader",
-                        options: {
-                            // TODO we should not pretty-print HTML, but removing this
-                            // option will result in that some elements get closer together
-                            // and need to be fixed with CSS
-                            pretty: true,
-                        },
-                    },
-                ],
-            },
-            {
                 test: /\.html$/,
                 use: [
                     {
                         loader: "html-loader",
                         options: {
-                            minimize: true,
-                            conservativeCollapse: false,
+                            minimize: {
+                                caseSensitive: true,
+                                collapseWhitespace: true,
+                                conservativeCollapse: false,
+                                keepClosingSlash: true,
+                                minifyCSS: true,
+                                minifyJS: true,
+                                removeComments: true,
+                                removeRedundantAttributes: true,
+                                removeScriptTypeAttributes: true,
+                                removeStyleLinkTypeAttributes: true,
+                            },
+                            esModule: false,
                         },
                     },
                 ],
             },
             {
-                test: /\.(jpe?g|png|gif|svg)$/i,
-                loader: "file-loader?name=[name].[contenthash].[ext]",
-            },
-            {
-                test: /\.ico$/i,
-                loader: "file-loader?name=[name].[ext]",
-            },
-            {
-                test: /\.otf$/i,
-                loader: "file-loader",
-            },
-            {
-                test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-                loader: "file-loader?mimetype=application/font-woff",
-            },
-            {
-                test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-                loader: "file-loader?mimetype=application/font-woff",
-            },
-            {
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: "file-loader?mimetype=application/octet-stream",
-            },
-            {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: "file-loader",
+                test: /\.(jpe?g|svg|png|gif|ico|eot|ttf|woff2|otf|woff?)(\?v=\d+\.\d+\.\d+)?$/i,
+                type: "asset/resource",
             },
             {
                 test: /\.css$/,
@@ -172,7 +105,6 @@ module.exports = {
             {
                 test: /\.ya?ml$/,
                 use: "yaml-loader",
-                type: "json",
             },
         ],
     },
@@ -182,21 +114,39 @@ module.exports = {
             $: "jquery",
             jQuery: "jquery",
         }),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new webpack.IgnorePlugin({
+            resourceRegExp: /^\.\/locale$/,
+            contextRegExp: /moment$/,
+        }),
         new CopyWebpackPlugin({
             patterns: [
                 {
+                    from: "app/index.html",
+                },
+                {
+                    from: "app/img/raven_simple.svg",
+                    to: "img",
+                },
+                {
+                    from: "app/img/apple-touch-icon.png",
+                    to: "img",
+                },
+                {
+                    from: "app/img/json.png",
+                    to: "img",
+                },
+                {
                     from: korpConfigDir + "/modes/*mode.js",
-                    to: "modes/[name].[ext]",
+                    to: "modes/[name][ext]",
                 },
                 {
                     from: korpConfigDir + "/modes/*html",
-                    to: "modes/[name].[ext]",
+                    to: "modes/[name][ext]",
                     noErrorOnMissing: true,
                 },
                 {
                     from: "app/translations/angular-locale_*.js",
-                    to: "translations/[name].[ext]",
+                    to: "translations/[name][ext]",
                 },
                 {
                     from: "app/markup/msdtags.html",
@@ -204,11 +154,11 @@ module.exports = {
                 },
                 {
                     from: "app/translations/locale-*.json",
-                    to: "translations/[name].[ext]",
+                    to: "translations/[name][ext]",
                 },
                 {
                     from: korpConfigDir + "/translations/*",
-                    to: "translations/[name].[ext]",
+                    to: "translations/[name][ext]",
                 },
             ],
         }),

@@ -35,24 +35,23 @@ export const ccTimeGraphComponent = {
     </style>
 `,
     controller: [
-        "$scope",
-        "searches",
+        "$timeout",
         "$rootScope",
-        function controller($scope, searches, $rootScope) {
+        function controller($timeout, $rootScope) {
             let $ctrl = this
 
             $ctrl.timeProxy = new model.TimeProxy()
 
-            searches.timeDeferred.then(([allTimestruct, rest]) => {
-                const hoverCallback = (year, val, total, isRestData) => {
-                    safeApply($scope, () => ($ctrl.timeHover = { year, val, total, isRestData }))
-                }
+            const [allTimestruct, rest] = settings["time_data"]
 
-                $rootScope.$on("corpuschooserchange", (e) => {
-                    onTimeGraphChange($ctrl.timeProxy, hoverCallback, allTimestruct, rest)
-                })
+            const hoverCallback = (year, val, total, isRestData) => {
+                $timeout(() => ($ctrl.timeHover = { year, val, total, isRestData }), 0)
+            }
+
+            $rootScope.$on("corpuschooserchange", (e) => {
                 onTimeGraphChange($ctrl.timeProxy, hoverCallback, allTimestruct, rest)
             })
+            onTimeGraphChange($ctrl.timeProxy, hoverCallback, allTimestruct, rest)
         },
     ],
 }

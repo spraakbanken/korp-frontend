@@ -24,6 +24,14 @@ export class KwicCtrl {
             this.scope.cqp = cqp
             // only set this on the inital search, not when paging
             this.scope.hitsPerPage = this.location.search()["hpp"] || settings["hits_per_page_default"]
+
+            // reset randomSeed when doing a search, but not for the first request
+            if (!this.scope.initialSearch) {
+                this.scope.randomSeed = null
+            } else {
+                this.scope.randomSeed = this.location.search()["random_seed"]
+            }
+            this.scope.initialSearch = false
             this.scope.makeRequest(false)
         })
     }
@@ -35,18 +43,13 @@ export class KwicCtrl {
 
         const s = scope
 
+        s.initialSearch = true
+
         this.setupListeners()
 
         s.proxy = new model.KWICProxy()
 
-        // there can be only one global kwicproxy
-        if (!window.kwicProxy) {
-            window.kwicProxy = s.proxy
-        }
-
         s.tabindex = 0
-
-        const punctArray = [",", ".", ";", ":", "!", "?", "..."]
 
         this.initPage()
 
@@ -88,151 +91,6 @@ export class KwicCtrl {
             s.readingChange()
         }
 
-        const massageData = function (hitArray) {
-            let prevCorpus = ""
-            const output = []
-
-            for (let i = 0; i < hitArray.length; i++) {
-                var corpus, linkCorpusId, mainCorpusId, matches
-                const hitContext = hitArray[i]
-                if (currentMode === "parallel") {
-                    mainCorpusId = hitContext.corpus.split("|")[0].toLowerCase()
-                    linkCorpusId = hitContext.corpus.split("|")[1].toLowerCase()
-                } else {
-                    mainCorpusId = hitContext.corpus.toLowerCase()
-                }
-
-                const id = linkCorpusId || mainCorpusId
-
-                const [matchSentenceStart, matchSentenceEnd] = findMatchSentence(hitContext)
-
-                if (!(hitContext.match instanceof Array)) {
-                    matches = [{ start: hitContext.match.start, end: hitContext.match.end }]
-                } else {
-                    matches = hitContext.match
-                }
-
-                const currentStruct = {}
-                for (let i in _.range(0, hitContext.tokens.length)) {
-                    const wd = hitContext.tokens[i]
-                    wd.position = i
-
-                    for (let { start, end } of matches) {
-                        if (start <= i && i < end) {
-                            _.extend(wd, { _match: true })
-                        }
-                    }
-
-                    if (matchSentenceStart <= i && i <= matchSentenceEnd) {
-                        _.extend(wd, { _matchSentence: true })
-                    }
-                    if (punctArray.includes(wd.word)) {
-                        _.extend(wd, { _punct: true })
-                    }
-
-                    wd.structs = wd.structs || {}
-
-                    for (let structItem of wd.structs.open || []) {
-                        const structKey = _.keys(structItem)[0]
-                        if (structKey == "sentence") {
-                            wd._open_sentence = true
-                        }
-
-                        currentStruct[structKey] = {}
-                        const attrs = _.toPairs(structItem[structKey]).map(([key, val]) => [structKey + "_" + key, val])
-                        for (let [key, val] of _.concat([[structKey, ""]], attrs)) {
-                            if (key in settings.corpora[id].attributes) {
-                                currentStruct[structKey][key] = val
-                            }
-                        }
-                    }
-
-                    const attrs = _.reduce(_.values(currentStruct), (val, ack) => _.merge(val, ack), {})
-                    _.extend(wd, attrs)
-
-                    for (let structItem of wd.structs.close || []) {
-                        delete currentStruct[structItem]
-                    }
-                }
-
-                if (prevCorpus !== id) {
-                    corpus = settings.corpora[id]
-                    const newSent = {
-                        newCorpus: corpus.title,
-                        noContext: _.keys(corpus.context).length === 1,
-                    }
-                    output.push(newSent)
-                }
-
-                hitContext.corpus = mainCorpusId
-
-                output.push(hitContext)
-                if (hitContext.aligned) {
-                    // just check for sentence opened, no other structs
-                    const alignedTokens = Object.values(hitContext.aligned)[0]
-                    for (let wd of alignedTokens) {
-                        if (wd.structs && wd.structs.open) {
-                            for (let structItem of wd.structs.open) {
-                                if (_.keys(structItem)[0] == "sentence") {
-                                    wd._open_sentence = true
-                                }
-                            }
-                        }
-                    }
-
-                    const [corpus_aligned, tokens] = _.toPairs(hitContext.aligned)[0]
-                    output.push({
-                        tokens,
-                        isLinked: true,
-                        corpus: corpus_aligned,
-                    })
-                }
-
-                prevCorpus = id
-            }
-
-            return output
-        }
-
-        var findMatchSentence = function (hitContext) {
-            const span = []
-            const { start, end } = hitContext.match
-            let decr = start
-            let incr = end
-            while (decr >= 0) {
-                const token = hitContext.tokens[decr]
-                const sentenceOpen = _.filter((token.structs && token.structs.open) || [], (attr) => attr.sentence)
-                if (sentenceOpen.length > 0) {
-                    span[0] = decr
-                    break
-                }
-                decr--
-            }
-            while (incr < hitContext.tokens.length) {
-                const token = hitContext.tokens[incr]
-                const closed = (token.structs && token.structs.close) || []
-                if (closed.includes("sentence")) {
-                    span[1] = incr
-                    break
-                }
-                incr++
-            }
-
-            return span
-        }
-
-        s.kwic = []
-        s.contextKwic = []
-        s.setContextData = function (data) {
-            s.kwic = []
-            s.contextKwic = massageData(data.kwic)
-        }
-
-        s.setKwicData = function (data) {
-            s.contextKwic = []
-            s.kwic = massageData(data.kwic)
-        }
-
         s.selectionManager = new util.SelectionManager()
 
         s.buildQueryOptions = (cqp, isPaging) => {
@@ -244,18 +102,16 @@ export class KwicCtrl {
                     return {}
                 }
                 if (sort === "random") {
-                    let rnd
-                    if (locationSearch().random_seed) {
-                        rnd = locationSearch().random_seed
-                    } else {
-                        rnd = Math.ceil(Math.random() * 10000000)
-                        locationSearch({ random_seed: rnd })
+                    if (!isPaging && !s.randomSeed) {
+                        s.randomSeed = Math.ceil(Math.random() * 10000000)
+                        $location.search("random_seed", s.randomSeed)
                     }
-
                     return {
                         sort,
-                        random_seed: rnd,
+                        random_seed: s.randomSeed,
                     }
+                } else {
+                    $location.search("random_seed", null)
                 }
                 return { sort }
             }
@@ -354,31 +210,8 @@ export class KwicCtrl {
             if (!isPaging) {
                 s.hits = data.hits
                 s.hits_display = util.prettyNumbers(data.hits)
-                if (!data.hits) {
-                    c.log("no kwic results")
-                    s.hitsPictureData = null
-                } else {
-                    s.renderHitsPicture(data)
-                }
+                s.corpusHits = data.corpus_hits
             }
-        }
-
-        s.renderHitsPicture = (data) => {
-            let items = _.map(data.corpus_order, (obj) => ({
-                rid: obj,
-                rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
-                relative: data.corpus_hits[obj] / data.hits,
-                abs: data.corpus_hits[obj],
-            }))
-            items = _.filter(items, (item) => item.abs > 0)
-            // calculate which is the first page of hits for each item
-            let index = 0
-            _.each(items, (obj) => {
-                obj.page = Math.floor(index / data.kwic.length)
-                index += obj.abs
-            })
-
-            s.hitsPictureData = items
         }
 
         s.renderResult = (data) => {
@@ -392,19 +225,13 @@ export class KwicCtrl {
             if (!data.kwic) {
                 data.kwic = []
             }
-            const isReading = s.isReadingMode()
 
             if (s.isActive()) {
                 s.$root.jsonUrl = s.proxy.prevUrl
             }
 
-            const useContextData = locationSearch()["in_order"] != null
-            if (isReading || useContextData) {
-                s.setContextData(data)
-            } else {
-                s.setKwicData(data)
-            }
             s.corpusOrder = data.corpus_order
+            s.kwic = data.kwic
         }
 
         s.onentry = () => {

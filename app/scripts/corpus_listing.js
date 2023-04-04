@@ -24,6 +24,7 @@ export class CorpusListing {
         idArray = _.invokeMap(idArray, "toLowerCase")
         const cl = new CorpusListing(_.pick(this.struct, ...idArray))
         cl.selected = cl.corpora
+        cl.updateAttributes()
         return cl
     }
 
@@ -37,6 +38,8 @@ export class CorpusListing {
 
     select(idArray) {
         this.selected = _.values(_.pick.apply(this, [this.struct].concat(idArray)))
+
+        this.updateAttributes()
     }
 
     mapSelectedCorpora(f) {
@@ -85,6 +88,10 @@ export class CorpusListing {
     }
 
     getStructAttrs() {
+        return this.structAttributes
+    }
+
+    _getStructAttrs() {
         const attrs = this.mapSelectedCorpora(function (corpus) {
             for (let key in corpus["struct_attributes"]) {
                 const value = corpus["struct_attributes"][key]
@@ -346,8 +353,7 @@ export class CorpusListing {
             allAttrs = this.getStructAttrsIntersection(lang)
         }
 
-        const common_keys = _.compact(_.flatten(_.map(this.selected, (corp) => _.keys(corp.common_attributes))))
-        const common = _.pick(settings["common_struct_types"], ...common_keys)
+        const common = this.commonAttributes
 
         let sentAttrs = []
         const object = _.extend({}, common, allAttrs)
@@ -380,5 +386,25 @@ export class CorpusListing {
         const sentAttrs = this.getStructAttributeGroups(lang, structOp)
 
         return [word].concat(attrs, sentAttrs)
+    }
+
+    // update attributes so that we don't need to check them multiple times
+    // currently done only for common and struct attributes, but code for
+    // positional could be added here, but is tricky because parallel mode lang might be needed
+    updateAttributes() {
+        const common_keys = _.compact(_.flatten(_.map(this.selected, (corp) => _.keys(corp.common_attributes))))
+        this.commonAttributes = _.pick(settings["common_struct_types"], ...common_keys)
+        this.structAttributes = this._getStructAttrs()
+    }
+
+    isDateInterval(type) {
+        if (_.isEmpty(type)) {
+            return false
+        }
+        const attribute = type.split("_.").slice(-1)[0]
+        return (
+            this.commonAttributes[attribute]?.["extended_component"] == "dateInterval" ||
+            this.structAttributes[attribute]?.["extended_component"] == "dateInterval"
+        )
     }
 }

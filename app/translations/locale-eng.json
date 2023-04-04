@@ -347,6 +347,11 @@
 
     "choose_value": "Choose a value",
     "login_needed_for_corpora": "Login needed for access to",
+    "access_partly_denied": "You do not have access to some corpora that you have selected",
+    "access_partly_denied_continue": "To be able to continue, they will be removed.",
+    "access_denied": "You do not have access to any corpus in this mode.",
+    "corpus_not_available": "Some selected corpora are not available. Remove from search?",
+    "go_to_start": "Go to start page",
 
     "stats_warn": "Statistics is disabled",
     "stats_not_in_order_warn": "Statistics is currently not supported when \"in order\" is disabled.",
@@ -359,5 +364,11 @@
     "prefix_chk": "initial part",
     "compound_middle": "medial part",
     "suffix_chk": "final part",
-    "text_tab_header": "Reading mode"
+    "text_tab_header": "Reading mode",
+
+    "not_compound_middle": "not medial part",
+    "not_prefix": "do not start with",
+    "not_suffix": "do not end with",
+    "prefix": "starts with",
+    "suffix": "ends with"
 }

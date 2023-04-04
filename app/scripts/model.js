@@ -15,14 +15,6 @@ model.normalizeStatsData = function (data) {
     }
 }
 
-model.getAuthorizationHeader = function () {
-    if (!$.isEmptyObject(authenticationProxy.loginObj)) {
-        return { Authorization: `Basic ${authenticationProxy.loginObj.auth}` }
-    } else {
-        return {}
-    }
-}
-
 class BaseProxy {
     constructor() {
         this.prev = ""
@@ -108,7 +100,7 @@ class BaseProxy {
     }
 
     addAuthorizationHeader(req) {
-        const pairs = _.toPairs(model.getAuthorizationHeader())
+        const pairs = _.toPairs(authenticationProxy.getAuthorizationHeader())
         if (pairs.length) {
             return req.setRequestHeader(...(pairs[0] || []))
         }
@@ -381,6 +373,8 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         })
 
         const data = this.makeParameters(reduceVals, cqp, ignoreCase)
+        // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
+        const originalCorpora = settings.corpusListing.stringifySelected(false)
 
         const wordAttrs = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())
         const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
@@ -398,7 +392,6 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         })
         data.top = _.map(rankedReduceVals, (reduceVal) => reduceVal + ":1").join(",")
 
-        this.prevNonExpandedCQP = cqp
         this.prevParams = data
         const def = $.Deferred()
         this.pendingRequests.push(
@@ -435,65 +428,21 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
                             return
                         }
                         model.normalizeStatsData(data)
-                        statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
+                        statisticsService.processData(
+                            def,
+                            originalCorpora,
+                            data,
+                            reduceVals,
+                            reduceValLabels,
+                            ignoreCase,
+                            cqp
+                        )
                     },
                 })
             )
         )
 
         return def.promise()
-    }
-}
-
-model.AuthenticationProxy = class AuthenticationProxy {
-    constructor() {
-        this.loginObj = {}
-    }
-
-    makeRequest(usr, pass, saveLogin) {
-        let auth
-        const self = this
-        if (window.btoa) {
-            auth = window.btoa(usr + ":" + pass)
-        } else {
-            throw Error("window.btoa is undefined")
-        }
-        const dfd = $.Deferred()
-        $.ajax({
-            url: settings["korp_backend_url"] + "/authenticate",
-            type: "GET",
-            beforeSend(req) {
-                return req.setRequestHeader("Authorization", `Basic ${auth}`)
-            },
-        })
-            .done(function (data, status, xhr) {
-                if (!data.corpora) {
-                    dfd.reject()
-                    return
-                }
-                self.loginObj = {
-                    name: usr,
-                    credentials: data.corpora,
-                    auth,
-                }
-                if (saveLogin) {
-                    jStorage.set("creds", self.loginObj)
-                }
-                return dfd.resolve(data)
-            })
-            .fail(function (xhr, status, error) {
-                c.log("auth fail", arguments)
-                return dfd.reject()
-            })
-
-        return dfd
-    }
-
-    hasCred(corpusId) {
-        if (!this.loginObj.credentials) {
-            return false
-        }
-        return this.loginObj.credentials.includes(corpusId.toUpperCase())
     }
 }
 

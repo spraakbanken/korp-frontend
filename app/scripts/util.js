@@ -116,7 +116,19 @@ util.getLocaleStringObject = (translationObject, lang) => {
     if (!lang) {
         lang = window.lang || settings["default_language"]
     }
-    return translationObject ? translationObject[lang] || translationObject : undefined
+    if (translationObject) {
+        if (typeof translationObject == "string") {
+            return translationObject
+        } else if (translationObject[lang]) {
+            return translationObject[lang]
+        } else if (translationObject[settings["default_language"]]) {
+            return translationObject[settings["default_language"]]
+        } else {
+            // fall back to the first value if neither the selected or default langauge are available
+            return translationObject.values()[0]
+        }
+    }
+    return undefined
 }
 
 util.getLocaleStringUndefined = function (key, lang) {
@@ -158,16 +170,16 @@ util.lemgramToString = function (lemgram, appendIndex) {
 }
 
 const numberToSuperscript = {
-    "1": "",
-    "2": "²",
-    "3": "³",
-    "4": "⁴",
-    "5": "⁵",
-    "6": "⁶",
-    "7": "⁷",
-    "8": "⁸",
-    "9": "⁹",
-    "0": "⁰",
+    1: "",
+    2: "²",
+    3: "³",
+    4: "⁴",
+    5: "⁵",
+    6: "⁶",
+    7: "⁷",
+    8: "⁸",
+    9: "⁹",
+    0: "⁰",
 }
 
 // use this function to get a pretty printed lemgram with no HTML
@@ -334,9 +346,17 @@ util.prettyNumbers = function (numstring) {
     return outStrNum
 }
 
-window.regescape = (s) => s.replace(/[.|?|+|*||'|()^$]/g, "\\$&").replace(/"/g, '""')
+window.regescape = (s) => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
 
-window.unregescape = (s) => s.replace(/\\/g, "").replace(/""/g, '"')
+window.unregescape = (s) =>
+    // remove single backslashes and replace double backslashes with one backslash
+    s.replace(/\\\\|\\/g, (match) => {
+        if (match === "\\\\") {
+            return "\\"
+        } else {
+            return ""
+        }
+    })
 
 util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
     if (_.includes(x, ".")) {
@@ -446,6 +466,11 @@ window.__.remove = function (arr, elem) {
     }
 }
 
+// Return the length of baseUrl with params added
+const calcUrlLength = function (baseUrl, params) {
+    return baseUrl.length + new URLSearchParams(params).toString().length + 1
+}
+
 // Add HTTP method to the HTTP configuration object conf for
 // jQuery.ajax or AngularJS $http call: if the result URL would be
 // longer than settings.backendURLMaxLength, use POST, otherwise GET.
@@ -453,11 +478,6 @@ window.__.remove = function (arr, elem) {
 // property "params" of conf (moved to "data" for POST), and for a
 // jQuery.ajax configuration, they should be in "data".
 util.httpConfAddMethod = function (conf) {
-    // Return the length of baseUrl with params added
-    const calcUrlLength = function (baseUrl, params) {
-        return baseUrl.length + new URLSearchParams(params).toString().length + 1
-    }
-
     // The property to use for GET: AngularJS $http uses params for
     // GET and data for POST, whereas jQuery.ajax uses data for both
     const getDataProp = conf.params != undefined ? "params" : "data"
@@ -493,6 +513,24 @@ util.httpConfAddMethodAngular = function (conf) {
     }
 
     return fixedConf
+}
+
+// again, for the native fetch method, we must configure the object differently from jQuery.ajax / angular $http
+util.httpConfAddMethodFetch = function (conf) {
+    const params = conf.params
+    delete conf.params
+    if (calcUrlLength(conf.url, params)) {
+        conf.method = "POST"
+        const form = new FormData()
+        for (const key in params) {
+            form.append(key, params[key])
+        }
+        conf.body = form
+    } else {
+        conf.method = "GET"
+        conf.url = "?" + new URLSearchParams(params)
+    }
+    return conf
 }
 
 util.collatorSort = (elems, key, lang) => {

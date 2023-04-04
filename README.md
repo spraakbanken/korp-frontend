@@ -2,14 +2,15 @@ This repo contains the frontend for [Korp](https://spraakbanken.gu.se/korp),
 a tool using the IMS Open Corpus Workbench (CWB). Korp is a great
 tool for searching and visualising natural language corpus data. 
 
-Korp is developed by [Språkbanken](https://spraakbanken.gu.se) at the 
-University of Gothenburg, Sweden. 
+Korp is mainly developed by [Språkbanken](https://spraakbanken.gu.se) at the 
+University of Gothenburg, Sweden. Contributions are also made from other
+organizations that use the software.
 
 Documentation:
 - [Frontend documentation](../master/doc/frontend_devel.md)
 - [Backend documentation](https://github.com/spraakbanken/korp-backend/)
 - Sparv - The pipeline used to tag and otherwise process raw Swedish-language corpus data is documented [here](https://spraakbanken.gu.se/sparv)
-- [Our Korp configuration directory](https://github.com/spraakbanken/korp-frontend-sb/) (supplement to documentation)
+- [Språkbanken's Korp configuration directory](https://github.com/spraakbanken/korp-frontend-sb/) (supplement to documentation)
 
 # Getting started
 
@@ -77,3 +78,37 @@ There are several instances of Korp, here are a list of some:
 - [Iceland / Stofnun Árna Magnússonar í íslenskum fræðum](https://malheildir.arnastofnun.is/)
 - [Tromsø / Giellatekno](https://gtweb.uit.no/korp/)
 - [Copenhagen / Institut for Nordiske Studier og Sprogvidenskab](https://alf.hum.ku.dk/korp/)
+
+# The development server
+
+When developing, the frontend is served at http://localhost:9111 by default.
+
+Host and port can be changed by the environment variables:
+- `KORP_HOST=<host>`
+- `KORP_PORT=<port>`
+
+It is also possible to serve the frontend from HTTPS using the environment variables:
+- `KORP_HTTPS=true`
+- `KORP_KEY=<path_to_key>-key.pem`
+- `KORP_CERT=<path to cert>.pem`
+
+The key and cert can be created using [mkcert](https://github.com/FiloSottile/mkcert).
+
+```
+mkcert korp.spraakbanken.gu.se
+mkcert -install
+```
+
+Now use `korp.spraakbanken.gu.se` as the value for `KORP_HOST`. It must also be added
+to `/etc/hosts`.
+
+One way to set the environment variables automatically is to use [direnv](https://direnv.net/):
+
+# Branches, releases and versions
+
+Development is done on the `dev`-branch. When doing a release:
+
+- Update version in `package.json` to the next version
+- Add relevent changes to `CHANGELOG.md`
+- Check that the user manual and development documentation is up to date
+- Merge `dev` to `master`

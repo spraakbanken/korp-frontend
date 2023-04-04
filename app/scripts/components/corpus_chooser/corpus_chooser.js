@@ -7,7 +7,7 @@ export const corpusChooserComponent = {
     <div class="absolute inset-0 bg-transparent z-50"
         ng-click="$ctrl.closeChooser()"
         ng-if="$ctrl.showChooser"></div>
-    <div class="scroll_checkboxes flex-shrink-0 ml-8" ng-class="{'cursor-pointer': $ctrl.initialized}">
+    <div class="scroll_checkboxes shrink-0 ml-8" ng-class="{'cursor-pointer': $ctrl.initialized}">
         <div ng-click="$ctrl.onShowChooser()" class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
             <div ng-if="$ctrl.initialized">
 
@@ -32,10 +32,10 @@ export const corpusChooserComponent = {
                 <i class="fa-solid fa-caret-down relative bottom-2"></i>
             </div>
         </div>
-        <div ng-if="$ctrl.showChooser"  class="corpus-chooser flex bg-gray-100">
-            <div class="popupchecks flex-shrink-0 p-4 h-full">
+        <div ng-if="$ctrl.showChooser"  class="corpus-chooser flex bg-white">
+            <div class="popupchecks shrink-0 p-4 h-full">
                 <div class="flex">
-                    <cc-time-graph></cc-time-graph>
+                    <cc-time-graph ng-if="$ctrl.showTimeGraph"></cc-time-graph>
                     <div class="p-2">
                         <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
                             <span class="fa-solid fa-check"></span>
@@ -54,7 +54,7 @@ export const corpusChooserComponent = {
                     {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' | loc:$root.lang}}
                 </p>
             </div>
-            <cc-info-box ng-if="$ctrl.showInfoBox" class="sticky top-0" style="width: 480px" object="$ctrl.infoNode"></cc-info>
+            <cc-info-box ng-if="$ctrl.showInfoBox" class="sticky top-0 bg-gray-100" style="width: 480px" object="$ctrl.infoNode"></cc-info>
         </div>
     </div>
     `,
@@ -66,7 +66,7 @@ export const corpusChooserComponent = {
             let $ctrl = this
 
             statemachine.listen("login", function () {
-                $ctrl.credentials = authenticationProxy.loginObj.credentials
+                $ctrl.credentials = authenticationProxy.getCredentials()
                 // recalculate folder status and repaint it all
                 $ctrl.updateLimitedAccess()
             })
@@ -92,6 +92,7 @@ export const corpusChooserComponent = {
 
             $ctrl.initialized = false
             $ctrl.showChooser = false
+            $ctrl.showTimeGraph = settings["has_timespan"]
 
             $ctrl.onShowChooser = () => {
                 // don't open the chooser unless the info-call is done
@@ -106,16 +107,9 @@ export const corpusChooserComponent = {
                 $ctrl.infoNode = null
             }
 
-            // should be ON INFO-call done from statemachine
-            $rootScope.$on("corpuschooserchange", (e, corpusIds) => {
-                $ctrl.credentials = authenticationProxy.loginObj.credentials || []
-
-                // change of corpora from outside the chooser
-                // happens on initialzation when corpora is either decided by
-                // settings.preselectedCorpora / URL query param
-                if ($ctrl.initialized) {
-                    return
-                }
+            // should be ON INFO-call done from statemachine)
+            $rootScope.$on("initialcorpuschooserchange", (e, corpusIds) => {
+                $ctrl.credentials = authenticationProxy.getCredentials()
 
                 $ctrl.initialized = true
 
@@ -185,7 +179,9 @@ export const corpusChooserComponent = {
             }
 
             $ctrl.updateLimitedAccess = function () {
-                treeUtil.updateLimitedAccess($ctrl.root, $ctrl.credentials)
+                if ($ctrl.root) {
+                    treeUtil.updateLimitedAccess($ctrl.root, $ctrl.credentials)
+                }
             }
 
             function select(corporaIds) {

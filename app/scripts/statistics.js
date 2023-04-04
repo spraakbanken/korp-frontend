@@ -86,7 +86,15 @@ const createStatisticsService = function () {
         return columns
     }
 
-    const processData = function (def, data, reduceVals, reduceValLabels, ignoreCase) {
+    const processData = function (
+        def,
+        originalCorpora,
+        data,
+        reduceVals,
+        reduceValLabels,
+        ignoreCase,
+        prevNonExpandedCQP
+    ) {
         const columns = createColumns(data.corpora, reduceVals, reduceValLabels)
 
         const statsWorker = new Worker("worker.js")
@@ -94,7 +102,9 @@ const createStatisticsService = function () {
             const searchParams = {
                 reduceVals,
                 ignoreCase,
+                originalCorpora,
                 corpora: _.keys(data.corpora),
+                prevNonExpandedCQP,
             }
             def.resolve([e.data, columns, searchParams])
         }

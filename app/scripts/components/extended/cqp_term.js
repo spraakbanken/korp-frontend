@@ -16,7 +16,7 @@ export const extendedCQPTermComponent = {
             <div class="left_col">
                 <img class="image_button remove_arg" src="${minusImage}" ng-click="$ctrl.removeOr()" />
             </div>
-            <div class="right_col inline_block ml-2">
+            <div class="pr-1 inline-block align-middle ml-2">
                 <div class="arg_selects {{$ctrl.term.type}}">
                     <select
                         class="arg_type"

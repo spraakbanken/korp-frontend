@@ -2,87 +2,98 @@
 import statemachine from "./statemachine"
 const korpApp = angular.module("korpApp")
 
-korpApp.directive("textReaderCtrl", ($timeout) => ({
-    controller($scope, backend) {
-        const s = $scope
+korpApp.directive("textReaderCtrl", [
+    "$timeout",
+    ($timeout) => ({
+        controller: [
+            "$scope",
+            "$rootScope",
+            "backend",
+            ($scope, $rootScope, backend) => {
+                const s = $scope
 
-        s.loading = true
-        s.newDynamicTab()
+                s.loading = true
+                s.newDynamicTab()
 
-        s.closeTab = function (idx, e) {
-            e.preventDefault()
-            s.textTabs.splice(idx, 1)
-            s.closeDynamicTab()
-        }
+                s.closeTab = function (idx, e) {
+                    e.preventDefault()
+                    $rootScope.textTabs.splice(idx, 1)
+                    s.closeDynamicTab()
+                }
 
-        const corpus = s.inData.corpus
-        s.corpusObj = settings.corpora[corpus]
-        const textId = s.inData.sentenceData["text__id"]
-        backend.getDataForReadingMode(corpus, textId).then(function (data) {
-            new Promise((resolve, reject) => {
-                resolve(prepareData(data.kwic[0], s.corpusObj))
-            }).then((document) => {
-                s.data = { corpus, document, sentenceData: s.inData.sentenceData }
-                $timeout(() => (s.loading = false), 0)
-            })
-        })
+                const corpus = s.inData.corpus
+                s.corpusObj = settings.corpora[corpus]
+                const textId = s.inData.sentenceData["text__id"]
+                backend.getDataForReadingMode(corpus, textId).then(function (data) {
+                    new Promise((resolve, reject) => {
+                        resolve(prepareData(data.kwic[0], s.corpusObj))
+                    }).then((document) => {
+                        s.data = { corpus, document, sentenceData: s.inData.sentenceData }
+                        $timeout(() => (s.loading = false), 0)
+                    })
+                })
 
-        s.onentry = function () {
-            s.$broadcast("on-entry")
-        }
-        s.onexit = function () {
-            s.$broadcast("on-exit")
+                s.onentry = function () {
+                    s.$broadcast("on-entry")
+                }
+                s.onexit = function () {
+                    s.$broadcast("on-exit")
+                }
+            },
+        ],
+    }),
+])
+
+korpApp.directive("textReader", [
+    "$compile",
+    function ($compile) {
+        return {
+            scope: false,
+            link: function (scope, element) {
+                const componentName = scope.corpusObj["reading_mode"].component || "standardReadingMode"
+
+                const kebabize = (str) => {
+                    return str
+                        .split("")
+                        .map((letter, idx) => {
+                            return letter.toUpperCase() === letter
+                                ? `${idx !== 0 ? "-" : ""}${letter.toLowerCase()}`
+                                : letter
+                        })
+                        .join("")
+                }
+
+                const actualComponentName = kebabize(componentName)
+
+                var generatedTemplate = `<${actualComponentName} data="data" word-click="wordClick"></${actualComponentName}>`
+                element.append($compile(generatedTemplate)(scope))
+
+                scope.selectedToken = {}
+
+                scope.wordClick = (token) => {
+                    statemachine.send("SELECT_WORD", {
+                        sentenceData: scope.data.document.structs,
+                        wordData: token.attrs,
+                        corpus: scope.data.corpus,
+                        tokens: token.currentSentence,
+                        inReadingMode: true,
+                    })
+                    scope.selectedToken = token
+                }
+
+                scope.$on("on-entry", function () {
+                    if (scope.data) {
+                        scope.wordClick(scope.selectedToken)
+                    }
+                })
+
+                scope.$on("on-exit", function () {})
+
+                scope.wordClick({})
+            },
         }
     },
-}))
-
-korpApp.directive("textReader", function ($compile) {
-    return {
-        scope: false,
-        link: function (scope, element) {
-            const componentName = scope.corpusObj["reading_mode"].component || "standardReadingMode"
-
-            const kebabize = (str) => {
-                return str
-                    .split("")
-                    .map((letter, idx) => {
-                        return letter.toUpperCase() === letter
-                            ? `${idx !== 0 ? "-" : ""}${letter.toLowerCase()}`
-                            : letter
-                    })
-                    .join("")
-            }
-
-            const actualComponentName = kebabize(componentName)
-
-            var generatedTemplate = `<${actualComponentName} data="data" word-click="wordClick"></${actualComponentName}>`
-            element.append($compile(generatedTemplate)(scope))
-
-            scope.selectedToken = {}
-
-            scope.wordClick = (token) => {
-                statemachine.send("select_word", {
-                    sentenceData: scope.data.document.structs,
-                    wordData: token.attrs,
-                    corpus: scope.data.corpus,
-                    tokens: token.currentSentence,
-                    inReadingMode: true,
-                })
-                scope.selectedToken = token
-            }
-
-            scope.$on("on-entry", function () {
-                if (scope.data) {
-                    scope.wordClick(scope.selectedToken)
-                }
-            })
-
-            scope.$on("on-exit", function () {})
-
-            scope.wordClick({})
-        },
-    }
-})
+])
 
 function prepareData(kwic, settings) {
     const newTokens = _prepareData(kwic.tokens, 0, settings["reading_mode"]["group_element"], false)

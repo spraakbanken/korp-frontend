@@ -345,6 +345,11 @@
 
     "choose_value": "Välj ett värde",
     "login_needed_for_corpora": "Inloggning behövs för åtkomst till",
+    "access_partly_denied": "Du har inte tillgång till vissa korpusar som du har valt",
+    "access_partly_denied_continue": "För att kunna fortsätta tas korpusarna bort ur sökningen.",
+    "access_denied": "Du har inte tillgång till någon korpus i det här läget.",
+    "corpus_not_available": "Vissa valda korpusar är inte tillgänliga. Ta bort från sökningen?",
+    "go_to_start": "Gå till startsidan",
 
     "stats_warn": "Statistiken är avaktiverad",
     "stats_not_in_order_warn": "Statistiken stödjs för nuvarande inte när \"i följd\" är avaktiverad.",
@@ -357,5 +362,11 @@
     "prefix_chk": "förled",
     "compound_middle": "mellanled",
     "suffix_chk": "efterled",
-    "text_tab_header": "Läsläge"
+    "text_tab_header": "Läsläge",
+
+    "not_compound_middle": "inte mellanled",
+    "not_prefix": "börjar inte med",
+    "not_suffix": "slutar inte med",
+    "prefix": "börjar med",
+    "suffix": "slutar med"
 }

@@ -22,6 +22,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
         })
 
         this.selected = _.uniq(this.selected)
+        this.updateAttributes()
     }
 
     setActiveLangs(langlist) {
