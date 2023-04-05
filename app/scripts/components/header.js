@@ -102,7 +102,7 @@ export const headerComponent = {
                 <a class="shrink-0 ml-4 relative" ng-click="$ctrl.logoClick()"
                     ><img class="-mb-1" src="${korpLogo}" height="300" width="300" /><span
                         class="version absolute bottom-0"
-                        >{{isLab ? 'v10' : 'v9'}}</span
+                        >{{$ctrl.isLab ? 'v10' : 'v9'}}</span
                     ></a
                 >
                 <div id="labs_logo">
@@ -205,6 +205,7 @@ export const headerComponent = {
             if (!isLab) {
                 $ctrl.modes = _.filter(settings["modes"], (item) => item.labOnly !== true)
             }
+            $ctrl.isLab = isLab
 
             $ctrl.visible = $ctrl.modes.slice(0, N_VISIBLE)
 
