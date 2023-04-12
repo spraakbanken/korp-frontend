@@ -816,6 +816,31 @@ We strive to write everything that is possible as an Angular component: https://
 
 Avoid using directives and controllers.
 
+#### Angular.js dependency injection
+
+This is how it looks everywhere in the Angular.js code:
+
+```
+controller: [
+  "$scope",
+  "$rootScope",
+  "backend",
+  ($scope, $rootScope, backend) => {
+    ...
+  }
+]
+```
+
+The variables of the controller is created automatically by Angular.js and "injected". When reading documenation online you can find the alternative:
+
+```
+controller: ($scope, $rootScope, backend) => {
+  ...
+}
+```
+
+But this doesn't work in Korp (anymore). Due to minification done by Webpack when building the frontend (`yarn build`). It probably works with `yarn start`, so beware.
+
 ### Documentation
 
 Update this document if needed.
