@@ -138,6 +138,7 @@ module.exports = {
                 {
                     from: korpConfigDir + "/modes/*mode.js",
                     to: "modes/[name][ext]",
+                    noErrorOnMissing: true,
                 },
                 {
                     from: korpConfigDir + "/modes/*html",
