@@ -64,7 +64,7 @@ About the current loaders in `webpack.config.js`:
 
 In addition to this, some specific files will simply be copied as is, for example Korp mode-files.
 
-## configuration
+## Configuration
 
 Use `config.yml` for settings needed in the frontend. In some cases, mode-files can be used. For example 
 it is possible to have different backends for modes.
