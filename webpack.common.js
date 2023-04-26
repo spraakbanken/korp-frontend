@@ -167,6 +167,10 @@ module.exports = {
             __IS_LAB__: process.env.NODE_ENV == "staging",
         }),
     ],
+    ignoreWarnings: [
+        (e) => e.message.includes("Can't resolve 'custom"),
+        (e) => e.message.includes("Can't resolve 'modes"),
+    ],
     entry: {
         bundle: "./app/index.js",
         worker: "./app/scripts/statistics_worker.ts",
