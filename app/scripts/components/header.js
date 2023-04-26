@@ -22,7 +22,7 @@ export const headerComponent = {
                             >{{'more' | loc:$root.lang}}<i class="fa fa-angle-double-down"></i
                         ></a>
                         <ul class="dropdown-menu popper_menu">
-                            <li ng-repeat="mode in $ctrl.menu">
+                            <li ng-repeat="mode in $ctrl.menu" ng-class="{selected: mode.selected}">
                                 <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:lang}}</a>
                             </li>
                         </ul>
@@ -211,6 +211,12 @@ export const headerComponent = {
 
             $rootScope.$watch("lang", () => {
                 $ctrl.menu = util.collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
+            
+                const i = _.map($ctrl.menu, "mode").indexOf(currentMode)
+                if (i !== -1) {
+                    $ctrl.visible.push($ctrl.menu[i])
+                    $ctrl.menu.splice(i, 1)
+                }
             })
 
             $ctrl.getUrl = function (modeId) {
@@ -221,12 +227,6 @@ export const headerComponent = {
                 const langParam = settings["default_language"] === $rootScope.lang ? "" : `#?lang=${$rootScope.lang}`
                 const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
                 return [location.pathname, modeParam, langParam]
-            }
-
-            const i = _.map($ctrl.menu, "mode").indexOf(currentMode)
-            if (i !== -1) {
-                $ctrl.visible.push(s.menu[i])
-                $ctrl.menu.splice(i, 1)
             }
 
             for (let mode of $ctrl.modes) {
