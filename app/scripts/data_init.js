@@ -192,6 +192,15 @@ function setInitialCorpora() {
  * `settings` object.
  */
 export async function fetchInitialData(authDef) {
+    settings["korp_backend_url"] = settings["korp_backend_url"].trim()
+    if (settings["korp_backend_url"].slice(-1) == "/") {
+        settings["korp_backend_url"] = settings["korp_backend_url"].slice(0, -1)
+    }
+    if (!settings["korp_backend_url"].startsWith("http")) {
+        console.error('"korp_backend_url" in config.yml must start with http:// or https://')
+        return
+    }
+
     if (settings["config_dependent_on_authentication"]) {
         await authDef
     }
