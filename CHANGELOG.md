@@ -1,5 +1,16 @@
 # Changelog
 
+## [9.4.1] - 20230427
+
+### Changed
+
+- Improvements for instances running the frontend without `run_config.json`
+- Improved error handling
+
+### Bug fixes
+
+- https://github.com/spraakbanken/korp-frontend/issues/320
+
 ## [9.4.0] - 20230404
 
 ### Changed
