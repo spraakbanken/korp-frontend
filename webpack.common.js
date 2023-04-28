@@ -12,7 +12,6 @@ function getKorpConfigDir() {
         config = JSON.parse(json).configDir || "app"
         console.log('Using "' + config + '" as config directory.')
     } catch (err) {
-        console.error(err)
         console.log('No run_config.json given, using "app" as config directory (default).')
     }
     return config
