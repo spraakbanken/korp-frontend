@@ -35,40 +35,6 @@ window.locationSearch = function (obj, val) {
     return ret
 }
 
-// TODO it would be better only to load additional languages when there is a language change
-window.initLocales = function () {
-    const packages = ["locale", "corpora"]
-    const prefix = "translations"
-    const defs = []
-    let loc_data = {}
-    window.loc_data = loc_data
-    const def = $.Deferred()
-    for (let langObj of settings["languages"]) {
-        const lang = langObj.value
-        loc_data[lang] = {}
-        for (let pkg of packages) {
-            ;(function (lang, pkg) {
-                let file = pkg + "-" + lang + ".json"
-                file = prefix + "/" + file
-                return defs.push(
-                    $.ajax({
-                        url: file,
-                        dataType: "json",
-                        cache: false,
-                        success(data) {
-                            return _.extend(loc_data[lang], data)
-                        },
-                    })
-                )
-            })(lang, pkg)
-        }
-    }
-
-    $.when.apply($, defs).then(() => def.resolve(loc_data))
-
-    return def
-}
-
 window.safeApply = function (scope, fn) {
     if (scope.$$phase || scope.$root.$$phase) {
         return fn(scope)
