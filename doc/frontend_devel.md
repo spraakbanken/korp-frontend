@@ -125,6 +125,7 @@ settings that affect the frontend.
 - __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
 - __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
+- __iso_languages__ - A map of two-letter ISO language codes to three-letter. Only used for fixing old links. Default: See `settings.js`
 - __map_center__ - See [Map](#map)
 - __map_enabled__ - Boolean. See [Map](#map) 
 - __news_desk_url__ - See [News widget](#news-widget)
@@ -815,6 +816,31 @@ Do not add new dependencies to `package.json`, unless it cannot absolutely be av
 We strive to write everything that is possible as an Angular component: https://docs.angularjs.org/guide/component
 
 Avoid using directives and controllers.
+
+#### Angular.js dependency injection
+
+This is how it looks everywhere in the Angular.js code:
+
+```
+controller: [
+  "$scope",
+  "$rootScope",
+  "backend",
+  ($scope, $rootScope, backend) => {
+    ...
+  }
+]
+```
+
+The variables of the controller is created automatically by Angular.js and "injected". When reading documenation online you can find the alternative:
+
+```
+controller: ($scope, $rootScope, backend) => {
+  ...
+}
+```
+
+But this doesn't work in Korp (anymore). Due to minification done by Webpack when building the frontend (`yarn build`). It probably works with `yarn start`, so beware.
 
 ### Documentation
 

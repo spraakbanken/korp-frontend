@@ -22,7 +22,7 @@ export const headerComponent = {
                             >{{'more' | loc:$root.lang}}<i class="fa fa-angle-double-down"></i
                         ></a>
                         <ul class="dropdown-menu popper_menu">
-                            <li ng-repeat="mode in $ctrl.menu">
+                            <li ng-repeat="mode in $ctrl.menu" ng-class="{selected: mode.selected}">
                                 <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:lang}}</a>
                             </li>
                         </ul>
@@ -102,7 +102,7 @@ export const headerComponent = {
                 <a class="shrink-0 ml-4 relative" ng-click="$ctrl.logoClick()"
                     ><img class="-mb-1" src="${korpLogo}" height="300" width="300" /><span
                         class="version absolute bottom-0"
-                        >{{isLab ? 'v10' : 'v9'}}</span
+                        >{{$ctrl.isLab ? 'v10' : 'v9'}}</span
                     ></a
                 >
                 <div id="labs_logo">
@@ -205,11 +205,18 @@ export const headerComponent = {
             if (!isLab) {
                 $ctrl.modes = _.filter(settings["modes"], (item) => item.labOnly !== true)
             }
+            $ctrl.isLab = isLab
 
             $ctrl.visible = $ctrl.modes.slice(0, N_VISIBLE)
 
             $rootScope.$watch("lang", () => {
                 $ctrl.menu = util.collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
+            
+                const i = _.map($ctrl.menu, "mode").indexOf(currentMode)
+                if (i !== -1) {
+                    $ctrl.visible.push($ctrl.menu[i])
+                    $ctrl.menu.splice(i, 1)
+                }
             })
 
             $ctrl.getUrl = function (modeId) {
@@ -220,12 +227,6 @@ export const headerComponent = {
                 const langParam = settings["default_language"] === $rootScope.lang ? "" : `#?lang=${$rootScope.lang}`
                 const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
                 return [location.pathname, modeParam, langParam]
-            }
-
-            const i = _.map($ctrl.menu, "mode").indexOf(currentMode)
-            if (i !== -1) {
-                $ctrl.visible.push(s.menu[i])
-                $ctrl.menu.splice(i, 1)
             }
 
             for (let mode of $ctrl.modes) {

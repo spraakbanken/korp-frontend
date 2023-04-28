@@ -13,14 +13,14 @@ export function setDefaultConfigValues() {
         backendURLMaxLength: 8100,
         default_language: "eng",
         // codes for translation ISO-639-1 to 639-2
-        isoLanguages: {
+        iso_languages: {
             en: "eng",
             sv: "swe",
             fi: "fin",
             da: "dan",
             no: "nor",
         },
-        cqp_prio: ["deprel", "pos", "msd", "suffix", "prefix", "grundform", "lemgram", "saldo", "word"],
+        cqp_prio: ["deprel", "pos", "msd", "suffix", "prefix", "lemma", "lex", "word"],
         statistics_search_default: true,
         word_label: { swe: "ord", eng: "word" },
         visible_modes: 6,

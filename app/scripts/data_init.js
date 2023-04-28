@@ -2,6 +2,47 @@
 import { setDefaultConfigValues } from "./settings"
 import * as treeUtil from "./components/corpus_chooser/util"
 
+// TODO it would be better only to load additional languages when there is a language change
+async function initLocales() {
+    const packages = ["locale", "corpora"]
+    const prefix = "translations"
+    const locData = {}
+
+    const defs = []
+    for (let langObj of settings["languages"]) {
+        const lang = langObj.value
+        locData[lang] = {}
+        for (let pkg of packages) {
+            let file = pkg + "-" + lang + ".json"
+            file = prefix + "/" + file
+            const def = new Promise((resolve) => {
+                fetch(file)
+                    .then((response) => {
+                        if (response.status >= 300) {
+                            throw new Error()
+                        }
+                        response.json().then((data) => {
+                            _.extend(locData[lang], data)
+                        })
+                        resolve()
+                    })
+                    .catch(() => {
+                        resolve()
+                        console.log("No language file: ", file)
+                    })
+            })
+            defs.push(def)
+        }
+    }
+
+    for (const def of defs) {
+        await def
+    }
+
+    window.loc_data = locData
+    return locData
+}
+
 async function getInfoData() {
     const conf = util.httpConfAddMethodFetch({
         url: settings["korp_backend_url"] + "/corpus_info",
@@ -192,11 +233,20 @@ function setInitialCorpora() {
  * `settings` object.
  */
 export async function fetchInitialData(authDef) {
+    settings["korp_backend_url"] = settings["korp_backend_url"].trim()
+    if (settings["korp_backend_url"].slice(-1) == "/") {
+        settings["korp_backend_url"] = settings["korp_backend_url"].slice(0, -1)
+    }
+    if (!settings["korp_backend_url"].startsWith("http")) {
+        console.error('"korp_backend_url" in config.yml must start with http:// or https://')
+        return
+    }
+
     if (settings["config_dependent_on_authentication"]) {
         await authDef
     }
 
-    const loc_dfd = window.initLocales()
+    const translationFiles = initLocales()
     const config = await getConfig()
     const modeSettings = transformConfig(config)
 
@@ -225,5 +275,5 @@ export async function fetchInitialData(authDef) {
             settings["time_data"] = await timeDef
         }
     }
-    await loc_dfd
+    await translationFiles
 }

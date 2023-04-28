@@ -10,7 +10,11 @@ if (authModuleName == "federated_auth") {
     authModule = require("./basic_auth")
 } else {
     // must be a custom auth module
-    authModule = require("custom/" + authModuleName)
+    try {
+        authModule = require("custom/" + authModuleName)
+    } catch (error) {
+        console.log("Auth module not available: ", authModule)
+    }
 }
 
 const init = async () => {

@@ -1004,7 +1004,7 @@ a {
   margin-right: 10px;
   padding-left: 0;
   a:visited {
-    color : navy;
+    color : rgb(67 56 202 / var(--tw-text-opacity));
   }
   a:hover {
     color: indianred;
@@ -2035,6 +2035,18 @@ line.tick {
   border-radius: 2px;
   max-height : 575px;
   overflow-y: auto;
+  li {
+    &.selected a {
+      color : black;
+    }
+    a {
+      color: rgb(67 56 202 / var(--tw-text-opacity));
+    }
+    a:hover {
+      color: indianred;
+    }
+  }
+  
 }
 
 /* ----------- Newsdesk ----------- */
