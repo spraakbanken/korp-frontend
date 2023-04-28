@@ -9,3 +9,4 @@ run_config.json
 *~
 .python-version
 *.pem
+config.yml
