@@ -13,7 +13,7 @@ export function setDefaultConfigValues() {
         backendURLMaxLength: 8100,
         default_language: "eng",
         // codes for translation ISO-639-1 to 639-2
-        isoLanguages: {
+        iso_languages: {
             en: "eng",
             sv: "swe",
             fi: "fin",

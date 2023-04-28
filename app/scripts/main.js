@@ -31,8 +31,8 @@ function initApp() {
         const match = /lang\=(.*?)(&|$)/.exec(location.hash)
         if (match) {
             const lang = match[1]
-            if (settings.isoLanguages[lang]) {
-                location.hash = location.hash.replace(`lang=${lang}`, `lang=${settings.isoLanguages[lang]}`)
+            if (settings["iso_languages"][lang]) {
+                location.hash = location.hash.replace(`lang=${lang}`, `lang=${settings["iso_languages"][lang]}`)
             }
         }
     }

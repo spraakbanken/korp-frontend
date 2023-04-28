@@ -125,6 +125,7 @@ settings that affect the frontend.
 - __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
 - __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
+- __iso_languages__ - A map of two-letter ISO language codes to three-letter. Only used for fixing old links. Default: See `settings.js`
 - __map_center__ - See [Map](#map)
 - __map_enabled__ - Boolean. See [Map](#map) 
 - __news_desk_url__ - See [News widget](#news-widget)
