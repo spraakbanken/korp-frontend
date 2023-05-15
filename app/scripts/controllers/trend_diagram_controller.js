@@ -4,15 +4,16 @@ const korpApp = angular.module("korpApp")
 
 korpApp.directive("graphCtrl", () => ({
     controller: [
-        "$scope",
-        ($scope) => {
+        "$scope", "$rootScope",
+        ($scope, $rootScope) => {
             const s = $scope
+            const r = $rootScope
 
             s.newDynamicTab()
 
             s.closeTab = function (idx, e) {
                 e.preventDefault()
-                s.graphTabs.splice(idx, 1)
+                r.graphTabs.splice(idx, 1)
                 s.closeDynamicTab()
             }
 
