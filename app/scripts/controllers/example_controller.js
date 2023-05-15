@@ -10,6 +10,7 @@ class ExampleCtrl extends KwicCtrl {
     constructor(scope, utils, $location, $rootScope, $timeout) {
         super(scope, utils, $location, $rootScope, $timeout)
         const s = this.scope
+        const r = this.$rootScope
 
         // ugly, but because the kwic-tab-scope is parent of this scope it needs to be done
         s.hits = null
@@ -49,7 +50,7 @@ class ExampleCtrl extends KwicCtrl {
 
         s.closeTab = function (idx, e) {
             e.preventDefault()
-            s.kwicTabs.splice(idx, 1)
+            r.kwicTabs.splice(idx, 1)
             s.closeDynamicTab()
         }
 

@@ -9,6 +9,7 @@ korpApp.directive("compareCtrl", () => ({
         "$rootScope",
         ($scope, $rootScope) => {
             const s = $scope
+            const r = $rootScope
             s.loading = true
             s.newDynamicTab()
 
@@ -16,7 +17,7 @@ korpApp.directive("compareCtrl", () => ({
 
             s.closeTab = function (idx, e) {
                 e.preventDefault()
-                s.compareTabs.splice(idx, 1)
+                r.compareTabs.splice(idx, 1)
                 s.closeDynamicTab()
             }
 

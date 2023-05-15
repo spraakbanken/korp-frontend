@@ -9,6 +9,7 @@ korpApp.directive("mapCtrl", [
             "$rootScope",
             ($scope, $rootScope) => {
                 const s = $scope
+                const r = $rootScope
 
                 s.onentry = () => s.$broadcast("update_map")
 
@@ -136,7 +137,7 @@ korpApp.directive("mapCtrl", [
 
                 s.closeTab = function (idx, e) {
                     e.preventDefault()
-                    s.mapTabs.splice(idx, 1)
+                    r.mapTabs.splice(idx, 1)
                     s.closeDynamicTab()
                 }
             },
