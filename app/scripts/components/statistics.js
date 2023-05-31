@@ -113,7 +113,7 @@ export const statisticsComponent = {
                         <option value="csv" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
                         <option value="tsv" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
                     </select>
-                    <a id="generateExportButton" ng-click="generateExport()">
+                    <a id="generateExportButton" ng-click="$ctrl.generateExport()">
                         <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
                     </a>
                     <a class="btn btn-sm btn-default" id="exportButton"> {{'statstable_export' | loc:$root.lang}} </a>
