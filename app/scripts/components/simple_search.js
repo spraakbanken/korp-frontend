@@ -88,7 +88,7 @@ export const simpleSearchComponent = {
             ctrl.prefix = $location.search().prefix != null
             ctrl.mid_comp = $location.search().mid_comp != null
             ctrl.suffix = $location.search().suffix != null
-            if (settings.inputCaseInsensitiveDefault) {
+            if (settings.input_case_insensitive_default) {
                 ctrl.isCaseInsensitive = true
                 $location.search("isCaseInsensitive", "")
             } else {

@@ -6,7 +6,7 @@ korpApp.factory("kwicDownload", function () {
     }
 
     const createFile = function (dataType, fileType, content) {
-        const date = moment().format("YYYYDDMM_HHmmss")
+        const date = moment().format("YYYYMMDD_HHmmss")
         const filename = `korp_${dataType}_${date}.${fileType}`
         const blobURL = window.URL.createObjectURL(new Blob([content], { type: `text/${fileType}` }))
         return [filename, blobURL]

@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.4.4] - 20231031
+
+### Bug fixes
+
+- https://github.com/spraakbanken/korp-frontend/issues/326
+- https://github.com/spraakbanken/korp-frontend/issues/328
+
 ## [9.4.3] - 20230531
 
 ### Bug fixes
