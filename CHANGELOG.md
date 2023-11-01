@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Logo changes: New Korp, new Språkbanken Text, replaced Swe-CLARIN with University of Gothenburg
+- Logo changes: New Korp, new Språkbanken Text, replaced Swe-CLARIN with University of Gothenburg, new Karp icon
 - The search history selector has been moved down to the search tab bar
 
 ## [9.4.4] - 20231031
