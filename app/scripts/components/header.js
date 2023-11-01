@@ -1,7 +1,7 @@
 /** @format */
-import korpLogo from "../../img/korplogo_block.svg"
-import sbxLogo from "../../img/sbx1r.svg"
-import sweClarinLogo from "../../img/sweclarin_logo.png"
+import korpLogo from "../../img/korp.svg"
+import sbxLogo from "../../img/sprakbanken_text.svg"
+import guLogo from "../../img/gu_logo_hack.png"
 
 let html = String.raw
 export const headerComponent = {
@@ -98,13 +98,10 @@ export const headerComponent = {
                 </div>
                 <!-- TODO too many divs -->
             </div>
-            <div class="flex items-end ml-2 pb-1 mb-3 mt-3 px-3" id="header_left">
-                <a class="shrink-0 ml-4 relative" ng-click="$ctrl.logoClick()"
-                    ><img class="-mb-1" src="${korpLogo}" height="300" width="300" /><span
-                        class="version absolute bottom-0"
-                        >{{$ctrl.isLab ? 'v10' : 'v9'}}</span
-                    ></a
-                >
+            <div class="flex items-end pb-1 mb-5 mt-2 px-3" id="header_left">
+                <a class="shrink-0 relative" ng-click="$ctrl.logoClick()">
+                    <img class="-mb-5" src="${korpLogo}" height="300" width="300" />
+                </a>
                 <div id="labs_logo">
                     <svg
                         height="60"
@@ -128,12 +125,12 @@ export const headerComponent = {
                 <corpus-chooser></corpus-chooser
                 ><!-- spacer-->
                 <div class="grow"></div>
-                <span class="flex items-end mr-4 max-w-lg justify-end"
+                <span class="flex items-end justify-end gap-2 ml-2 max-w-lg"
                     ><a class="hidden lg_inline" href="https://spraakbanken.gu.se" target="_blank"
-                        ><img src="${sbxLogo}" style="margin-bottom: -6%;" /></a
-                    ><a class="hidden lg_inline grow-0" href="https://sweclarin.se" target="_blank"
-                        ><img src="${sweClarinLogo}" style="margin-bottom: 2px" /></a></span
-                ><select class="hidden md_block shrink min-w-0" id="search_history"></select>
+                        ><img src="${sbxLogo}" /></a
+                    ><a class="hidden xl_inline-block h-full w-28 shrink" href="https://gu.se" target="_blank"
+                        ><img src="${guLogo}" class="-mt-2" /></a
+                ></span>
             </div>
         </div>
     `,
@@ -211,7 +208,7 @@ export const headerComponent = {
 
             $rootScope.$watch("lang", () => {
                 $ctrl.menu = util.collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
-            
+
                 const i = _.map($ctrl.menu, "mode").indexOf(currentMode)
                 if (i !== -1) {
                     $ctrl.visible.push($ctrl.menu[i])

@@ -209,18 +209,6 @@ button, input, select {
   }
 }
 
-#header_left {
-  .version {
-    right: 92px;
-    line-height: 1;
-    font-size: 1.1rem;
-    color: lightslategray;
-  }
-  > a {
-    margin-right: 10px;
-  }
-}
-
 #search_history {
   max-width: 150px;
   > option:first-child {
