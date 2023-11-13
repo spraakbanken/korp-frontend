@@ -2,6 +2,10 @@
 
 ## [9.5.0-dev]
 
+### Added
+
+- A GitHub action to check the build
+
 ### Changed
 
 - Logo changes: New Korp, new Språkbanken Text, replaced Swe-CLARIN with University of Gothenburg, new Karp icon
