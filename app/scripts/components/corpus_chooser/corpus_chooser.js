@@ -7,7 +7,7 @@ export const corpusChooserComponent = {
     <div class="absolute inset-0 bg-transparent z-50"
         ng-click="$ctrl.closeChooser()"
         ng-if="$ctrl.showChooser"></div>
-    <div class="scroll_checkboxes shrink-0 ml-8" ng-class="{'cursor-pointer': $ctrl.initialized}">
+    <div class="scroll_checkboxes shrink-0" ng-class="{'cursor-pointer': $ctrl.initialized}">
         <div ng-click="$ctrl.onShowChooser()" class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
             <div ng-if="$ctrl.initialized">
 

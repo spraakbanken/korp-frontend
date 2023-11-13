@@ -1,7 +1,7 @@
 /** @format */
 import korpLogo from "../../img/korp.svg"
 import sbxLogo from "../../img/sprakbanken_text.svg"
-import guLogo from "../../img/gu_logo_hack.png"
+import guLogo from "../../img/gu_logo_sv_head.svg"
 
 let html = String.raw
 export const headerComponent = {
@@ -98,8 +98,9 @@ export const headerComponent = {
                 </div>
                 <!-- TODO too many divs -->
             </div>
-            <div class="flex items-end pb-1 mb-5 mt-2 px-3" id="header_left">
-                <a class="shrink-0 relative" ng-click="$ctrl.logoClick()">
+
+            <div class="flex justify-between items-end gap-3 h-24 pb-1 mb-5 mt-2 px-3" id="header_left">
+                <a class="shrink-0 relative ml-4 pl-0.5" ng-click="$ctrl.logoClick()">
                     <img class="-mb-5" src="${korpLogo}" height="300" width="300" />
                 </a>
                 <div id="labs_logo">
@@ -122,15 +123,18 @@ export const headerComponent = {
                         ></path>
                     </svg>
                 </div>
-                <corpus-chooser></corpus-chooser
-                ><!-- spacer-->
-                <div class="grow"></div>
-                <span class="flex items-end justify-end gap-2 ml-2 max-w-lg"
-                    ><a class="hidden lg_inline" href="https://spraakbanken.gu.se" target="_blank"
-                        ><img src="${sbxLogo}" /></a
-                    ><a class="hidden xl_inline-block h-full w-28 shrink" href="https://gu.se" target="_blank"
-                        ><img src="${guLogo}" class="-mt-2" /></a
-                ></span>
+
+                <div class="grow lg_hidden"></div>
+                <corpus-chooser></corpus-chooser>
+                <div class="grow hidden lg_block"></div>
+
+                <a class="hidden lg_block h-12 shrink" href="https://spraakbanken.gu.se" target="_blank">
+                    <img src="${sbxLogo}" class="h-full" />
+                </a>
+
+                <a class="hidden xl_block shrink-0 h-32 pt-1 -mb-6" href="https://gu.se" target="_blank">
+                    <img src="${guLogo}" class="h-full" />
+                </a>
             </div>
         </div>
     `,
