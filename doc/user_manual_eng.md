@@ -271,5 +271,6 @@ the first lists the base forms most distinctive for search #1, and the second li
 ## Other user manuals
 
 There are user manuals for other instances of Korp, for example the one at Kielipankki, they can be found here:
+
 - https://www.kielipankki.fi/support/korp/
 - https://www.kielipankki.fi/support/korp-advanced

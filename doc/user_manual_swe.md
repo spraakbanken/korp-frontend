@@ -274,5 +274,6 @@ urmärkande orden överst. Siffrorna till höger visar absolut frekvens.
 ## Andra användarmanualer
 
 Det finns användarmanualer för andra instanser av Korp, t.ex. instansen på Kielipankki, här hittar man dem (enbart på engelska):
+
 - https://www.kielipankki.fi/support/korp/
 - https://www.kielipankki.fi/support/korp-advanced
