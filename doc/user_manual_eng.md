@@ -154,7 +154,10 @@ Regardless of whether you use Simple or Extended search, your query is converted
 *Advanced*, you can see the expressions for Simple and Extended search, as well as construct your own search query if you want to
 do something more advanced than what is currently possible in an Extended Search.
 
-To read more about the query language, see [CQP Query Language Tutorial](https://cwb.sourceforge.io/files/CQP_Tutorial.pdf).
+To read more about the query language, see:
+
+- [Att söka i Korp med CQP och Regexp – en introduktion (PDF)](https://www.gu.se/sites/default/files/2021-03/Att%20so%CC%88ka%20i%20Korp%20med%20CQP%20och%20Regexp.pdf) (Klas Hjortstam, 2018)
+- [CQP Interface and Query Language Manual (PDF)](https://cwb.sourceforge.io/files/CQP_Manual.pdf) (Stephanie Evert & The CWB Development Team, 2022)
 
 ### Display options
 

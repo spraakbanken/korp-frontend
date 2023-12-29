@@ -156,7 +156,10 @@ Oavsett om man använder Enkel eller Utökad sökning så omvandlas ens fråga t
 *Avancerad* kan man både se hur de skapade uttrycken för Enkel och Utökad ser ut, samt konstuera en egen sökfråga om man vill
 göra något som är mer avancerat än vad som för närvarande är möjligt i en Utökad sökning.
 
-För att läsa mer om frågespråket, se [CQP Query Language Tutorial](https://cwb.sourceforge.io/files/CQP_Tutorial.pdf).
+För att läsa mer om frågespråket, se:
+
+- [Att söka i Korp med CQP och Regexp – en introduktion (pdf)](https://www.gu.se/sites/default/files/2021-03/Att%20so%CC%88ka%20i%20Korp%20med%20CQP%20och%20Regexp.pdf) (Klas Hjortstam, 2018)
+- [CQP Interface and Query Language Manual (pdf)](https://cwb.sourceforge.io/files/CQP_Manual.pdf) (Stephanie Evert & The CWB Development Team, 2022)
 
 ### Visningsalternativ
 

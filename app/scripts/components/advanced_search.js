@@ -12,13 +12,22 @@ export const advancedSearchComponent = {
         </div>
         <div class="well well-small">
             {{'cqp_query' | loc:$root.lang}}:
-            <div class="pull-right">
-                <i class="fa fa-file-o"></i>
-                <a href="http://cwb.sourceforge.net/files/CQP_Tutorial.pdf" target="_blank">
-                    {{'cqp_docs' | loc:$root.lang}}
+            <textarea class="w-full font-mono" ng-model="$ctrl.cqp"></textarea>
+            <div>
+                {{'cqp_docs' | loc:$root.lang}}
+                <a
+                    href="https://www.gu.se/sites/default/files/2021-03/Att%20so%CC%88ka%20i%20Korp%20med%20CQP%20och%20Regexp.pdf"
+                    target="_blank"
+                >
+                    <i class="fa fa-file"></i>
+                    {{'cqp_docs_guide' | loc:$root.lang}}
+                </a>
+                {{'or' | loc:$root.lang}}
+                <a href="https://cwb.sourceforge.io/files/CQP_Manual.pdf" target="_blank">
+                    <i class="fa fa-file"></i>
+                    {{'cqp_docs_manual' | loc:$root.lang}}
                 </a>
             </div>
-            <textarea class="w-full font-mono" ng-model="$ctrl.cqp"></textarea>
         </div>
         <search-submit
             pos="right"

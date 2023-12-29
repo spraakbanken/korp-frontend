@@ -19,7 +19,7 @@
     "lang_SV": "Swedish",
     "lang_SK": "Slovak",
     "lang_ET": "Estonian",
-    
+
     "menu": "Menu",
     "docs": "Manual (Swedish only)",
     "more": "More",
@@ -50,7 +50,9 @@
     "show_less": "Show fewer",
     "in_corpus": "in corpus",
     "cqp_query": "Custom CQP query",
-    "cqp_docs": "Get the CQP tutorial",
+    "cqp_docs": "Get the CQP",
+    "cqp_docs_guide": "guide (in Swedish)",
+    "cqp_docs_manual": "manual",
     "active_cqp_simple": "Active CQP query in simple search",
     "active_cqp_extended": "Active CQP query in extended",
     "max": "up to",
