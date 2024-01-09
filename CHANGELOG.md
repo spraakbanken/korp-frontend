@@ -5,6 +5,7 @@
 ### Added
 
 - A GitHub action to check the build
+- Add support for "not in order" in extended and advanced search
 
 ### Changed
 

@@ -34,6 +34,8 @@ export const advancedSearchComponent = {
             on-search="$ctrl.onSearch()"
             on-search-save="$ctrl.onSearchSave(name)"
         ></search-submit>
+        <input id="inOrderChkAdv" type="checkbox" ng-model="$ctrl.inOrder" ng-disabled="!$ctrl.inOrderEnabled" />
+        <label for="inOrderChkAdv"> {{'in_order_chk' | loc:$root.lang}}</label>
     </div>`,
     bindings: {},
     controller: [
@@ -42,6 +44,10 @@ export const advancedSearchComponent = {
         "$timeout",
         function (compareSearches, $location, $timeout) {
             const $ctrl = this
+
+            $ctrl.inOrder = $location.search().in_order == null
+            /** Whether the "in order" option is applicable. */
+            $ctrl.inOrderEnabled = true
 
             if ($location.search().search && $location.search().search.split("|")) {
                 var [type, ...expr] = $location.search().search.split("|")
@@ -55,10 +61,14 @@ export const advancedSearchComponent = {
             }
 
             $ctrl.onSearch = () => {
+                // The "in order" option should be available only if >1 token and no wildcards.
+                const cqpObjs = CQP.parse($ctrl.cqp)
+                $ctrl.inOrderEnabled = cqpObjs.length > 1 && !CQP.hasWildcards(cqpObjs)
+
                 $location.search("search", null)
                 $location.search("page", null)
                 $location.search("within", null)
-                $location.search("in_order", null)
+                $location.search("in_order", !$ctrl.inOrder && $ctrl.inOrderEnabled ? false : null)
                 $timeout(() => $location.search("search", `cqp|${$ctrl.cqp}`), 0)
             }
 

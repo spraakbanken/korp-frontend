@@ -21,6 +21,9 @@ export const extendedStandardComponent = {
                 on-search-save="$ctrl.onSearchSave(name)"
                 disabled="$ctrl.repeatError"
             ></search-submit>
+            <input id="inOrderChkExt" type="checkbox" ng-model="$ctrl.inOrder" ng-disabled="!$ctrl.inOrderEnabled" />
+            <label for="inOrderChkExt"> {{'in_order_chk' | loc:$root.lang}}</label>
+            <span> {{'and' | loc:$root.lang}} </span>
             <span>{{'within' | loc:$root.lang}}</span>
             <select
                 class="within_select"
@@ -38,12 +41,15 @@ export const extendedStandardComponent = {
             const ctrl = this
 
             ctrl.lang = $rootScope.lang
+            ctrl.inOrder = $location.search().in_order == null
+            /** Whether the "in order" option is applicable. */
+            ctrl.inOrderEnabled = true
 
             // TODO this is *too* weird
             function triggerSearch() {
                 $location.search("search", null)
                 $location.search("page", null)
-                $location.search("in_order", null)
+                $location.search("in_order", !ctrl.inOrder && ctrl.inOrderEnabled ? false : null)
                 $timeout(function () {
                     $location.search("search", "cqp")
                     if (!_.keys(settings["default_within"]).includes(ctrl.within)) {
@@ -80,6 +86,11 @@ export const extendedStandardComponent = {
                     c.log("Failed to parse CQP", ctrl.cqp)
                     c.log("Error", e)
                 }
+
+                // The "in order" option should be available only if >1 token and no wildcards.
+                const cqpObjs = CQP.parse(cqp)
+                ctrl.inOrderEnabled = cqpObjs.length > 1 && !CQP.hasWildcards(cqpObjs)
+
                 $location.search("cqp", cqp)
             }
 

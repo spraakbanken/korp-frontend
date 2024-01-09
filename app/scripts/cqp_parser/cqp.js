@@ -202,4 +202,14 @@ window.CQP = {
         }
         return cqpObj1
     },
+
+    /** Check if a query has any wildcards (`[]`) */
+    hasWildcards(cqpObjs) {
+        for (const token of cqpObjs) {
+            // Stringify individual token
+            const str = CQP.stringify([token])
+            if (str.indexOf("[]") === 0) return true
+        }
+        return false
+    },
 }
