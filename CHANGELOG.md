@@ -6,6 +6,7 @@
 
 - A GitHub action to check the build
 - Add support for "not in order" in extended and advanced search
+- The `stats_rewrite` setting for altering the statistics table
 
 ### Changed
 

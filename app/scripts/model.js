@@ -15,6 +15,7 @@ model.normalizeStatsData = function (data) {
     }
 }
 
+/** The Proxy classes wrap API requests with pre-/postprocessing and progress reporting. */
 class BaseProxy {
     constructor() {
         this.prev = ""

@@ -106,7 +106,12 @@ const createStatisticsService = function () {
                 corpora: _.keys(data.corpora),
                 prevNonExpandedCQP,
             }
-            def.resolve([e.data, columns, searchParams])
+            let result = [e.data, columns, searchParams]
+            // Invoke configurable stats rewriting
+            if (settings.stats_rewrite) {
+                result = settings.stats_rewrite(result)
+            }
+            def.resolve(result)
         }
 
         statsWorker.postMessage({

@@ -523,8 +523,9 @@ parameters for attributes.
 - **sidebar_hide_label**: `boolean`. If `true`, do not show the localized attribute label and the colon following it in the
   sidebar, only the attribute value. This can be used, for example, if the `pattern` for the attribute includes the label but
   the label should be shown in the attribute lists of the extended search or statistics.
-- **stats_cqp**: See [Custom statistics functions](#custom-statistics-functions).  
-- **stats_stringify**: See [Custom statistics functions](#custom-statistics-functions).
+- **stats_cqp**: See [Rendering attribute values in the statistics view](#rendering-attribute-values-in-the-statistics-view).
+- **stats_rewrite**: A function that takes the array `[data, columns, searchParams]`, modifies and returns it.
+- **stats_stringify**: See [Rendering attribute values in the statistics view](#rendering-attribute-values-in-the-statistics-view).
 - **translation**: An object containing translations of possible values of the attribute, in this format:
     ```
     {
@@ -676,7 +677,7 @@ Data about the search, the current token and current attribute is stored in a nu
 
 *Note: The component not an actual Angular.js [component](https://docs.angularjs.org/guide/component). It will be added to the interface by manually creating a new scope and using `$controller` to instantiate the controller and `$compile` to instantiate the template.*
 
-#### Rendering attribute values in the statistics-view
+#### Rendering attribute values in the statistics view
 
 Define your own rules for rendering values and generating CQP-expressions for certain attributes.
 
@@ -702,6 +703,8 @@ export default {
 
 Rendering values and generating CQP can also be controlled by editing `app/config/statistics_config.js`, but 
 of course it is best to avoid editing the actual code if it is possible.
+
+If you need to merge rows or otherwise alter the table structure, implement and assign a function to the `stats_rewrite` setting.
 
 #### Stringify functions
 
