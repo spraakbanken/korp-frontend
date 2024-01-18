@@ -227,7 +227,7 @@ export const sidebarComponent = {
                 renderItem(type, key, value, attrs, wordData, sentenceData, tokens) {
                     let output, pattern, ul
                     let val, inner, li, address
-                    if (attrs.label && ! attrs["sidebar_hide_label"]) {
+                    if (attrs.label && !attrs["sidebar_hide_label"]) {
                         output = $(`<p><span>${locObj(attrs.label, $ctrl.lang)}</span>: </p>`)
                     } else {
                         output = $("<p></p>")
@@ -353,24 +353,26 @@ export const sidebarComponent = {
                     return output.append(info_link)
                 },
 
+                /** Iteratively shorten displayed URL from the middle until it fits inside the container element */
                 applyEllipse() {
-                    const totalWidth = $element.width()
-
-                    // ellipse for too long links of type=url
                     $element
                         .find(".sidebar_url")
                         .css("white-space", "nowrap")
                         .each(function () {
+                            const totalWidth = $(this).parent().width()
+                            // Drop the scheme part ("https://")
+                            let text = $(this)
+                                .text()
+                                .replace(/[^/]*\/\//, "")
+                            // Replace a larger part at each iteration
                             while ($(this).width() > totalWidth) {
-                                const oldtext = $(this).text()
-                                const a = _.trim(oldtext, "/").replace("...", "").split("/")
-                                const domain = a.slice(2, 3)
-                                let midsection = a.slice(3).join("/")
-                                midsection = `...${midsection.slice(2)}`
-                                $(this).text(["http:/"].concat(domain, midsection).join("/"))
-                                if (midsection === "...") {
-                                    break
-                                }
+                                // Drop first two chars after first slash
+                                const textNew = text.replace(/\/…?../, "/…")
+                                // Abort if there is no change (ellipsis reached the end, or URL is malformed)
+                                if (textNew == text) break
+                                // Replace text
+                                text = textNew
+                                $(this).text(text)
                             }
                         })
                 },

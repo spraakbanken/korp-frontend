@@ -16,6 +16,7 @@
 ### Fixed
 
 - Resolve folder name in corpus param
+- Long URLs in sidebar are always presented as http:// links [#330](https://github.com/spraakbanken/korp-frontend/issues/330)
 
 ## [9.4.4] - 20231031
 
