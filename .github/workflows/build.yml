@@ -1,0 +1,47 @@
+name: Build
+
+on: [push]
+
+jobs:
+  build:
+    # This job doesn't run the tests because they are a bit unstable.
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: korp-frontend
+
+    strategy:
+      matrix:
+        # Having "" here enables the `node-version-file` option
+        node-version: ["", 18, 20]
+
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v4
+        with:
+          path: korp-frontend
+
+      - name: Checkout Språkbanken config repo
+        uses: actions/checkout@v4
+        with:
+          repository: spraakbanken/korp-frontend-sb
+          token: ${{ secrets.ACCESS_TOKEN }}
+          ref: ${{ github.ref == 'master' && 'master' || 'dev' }} # Choose dev or master matching the main repo.
+          path: korp-frontend-sb
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          node-version-file: korp-frontend/.nvmrc
+
+      - name: Install dependencies
+        run: yarn install
+      
+      - name: Link config
+        run: |
+          echo '{"configDir": "../korp-frontend-sb/app"}' > run_config.json
+
+      - name: Build
+        run: yarn build

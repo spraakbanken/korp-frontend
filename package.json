@@ -1,6 +1,6 @@
 {
-    "name": "Korp",
-    "version": "9.4.4",
+    "name": "korp-frontend",
+    "version": "9.5.0",
     "dependencies": {
         "@fortawesome/fontawesome-free": "6.2.1",
         "angular": "1.8.3",
@@ -32,6 +32,7 @@
     "devDependencies": {
         "@types/lodash": "^4.14.118",
         "autoprefixer": "^10.2.4",
+        "chromedriver": "^120.0.2",
         "clean-webpack-plugin": "^4.0.0",
         "compression-webpack-plugin": "^10.0.0",
         "copy-webpack-plugin": "^11.0.0",
@@ -55,13 +56,13 @@
         "yaml-loader": "^0.8.0"
     },
     "engines": {
-        "node": ">=14"
+        "node": ">=18"
     },
     "scripts": {
         "test": "yarn run test:e2e",
         "actions-test": "yarn run test:e2e",
         "posttest": "kill $(lsof -t -i:9112)",
-        "pretest:e2e": "yarn run testserver && node_modules/protractor/bin/webdriver-manager update --standalone chrome --gecko false && wait-on --delay 500 --interval 500 http://localhost:9112",
+        "pretest:e2e": "yarn run testserver && wait-on --delay 500 --interval 500 http://localhost:9112",
         "test:e2e": "KORP_HOST=localhost node_modules/protractor/bin/protractor --browser chrome test/e2e/conf_e2e.js || true",
         "start": "webpack-dev-server --config webpack.dev.js",
         "start:labb": "NODE_ENV=staging webpack-dev-server --config webpack.dev.js",

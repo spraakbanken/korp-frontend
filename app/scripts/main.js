@@ -1,7 +1,7 @@
 /** @format */
 import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
-import korpLogo from "../img/korplogo_block.svg"
+import korpLogo from "../img/korp.svg"
 
 const deparam = require("jquery-deparam")
 

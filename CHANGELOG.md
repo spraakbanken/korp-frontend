@@ -1,5 +1,24 @@
 # Changelog
 
+## [9.5.0] - 2023-01-22
+
+### Added
+
+- A GitHub action to check the build
+- Add support for "not in order" in extended and advanced search [#17](https://github.com/spraakbanken/korp-frontend/issues/17)
+- The `stats_rewrite` setting for altering the statistics table
+
+### Changed
+
+- Logo changes: New Korp, new Språkbanken Text, replaced Swe-CLARIN with University of Gothenburg, new Karp icon [#329](https://github.com/spraakbanken/korp-frontend/issues/329)
+- The search history selector has been moved down to the search tab bar
+
+### Fixed
+
+- Resolve folder name in corpus param [#13](https://github.com/spraakbanken/korp-frontend/issues/13)
+- Long URLs in sidebar are always presented as http:// links [#330](https://github.com/spraakbanken/korp-frontend/issues/330)
+- Enable newer ChromeDriver versions for testing [#331](https://github.com/spraakbanken/korp-frontend/issues/331)
+
 ## [9.4.4] - 20231031
 
 ### Bug fixes
@@ -53,3 +72,11 @@
 
 - Most bug fixes was related to the refactoring breaking things
 - Lots of bug fixes for the sidebar
+
+
+[9.5.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.0
+[9.4.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.4.4
+[9.4.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.4.3
+[9.4.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.4.2
+[9.4.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.4.1
+[9.4.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.4.0

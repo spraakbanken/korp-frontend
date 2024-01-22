@@ -23,6 +23,9 @@ export const searchtabsComponent = {
                     </uib-tab-heading>
                     <compare-search></compare-search>
                 </uib-tab>
+                <div class="flex justify-end items-center">
+                    <select class="hidden md_block shrink min-w-0 m-1" id="search_history"></select>
+                </div>
             </uib-tabset>
             <div
                 class="flex items-baseline bg-blue-100 border border-blue-200 shadow-inner"

@@ -213,7 +213,38 @@ korpApp.run([
 
         s.waitForLogin = false
 
+        /** Recursively collect the corpus ids found in a corpus folder */
+        function collectCorpusIdsInFolder(folder) {
+            if (!folder) return []
+
+            // Collect direct child corpora
+            const ids = folder.corpora || []
+
+            // Recurse into subfolders and add
+            for (const subfolder of Object.values(folder.subfolders || {})) {
+                ids.push(...collectCorpusIdsInFolder(subfolder))
+            }
+
+            return ids
+        }
+
         function initialzeCorpusSelection(selectedIds) {
+            // Resolve any folder ids to the contained corpus ids
+            const corpusIds = []
+            for (const id of selectedIds) {
+                // If it is a corpus, copy the id
+                if (settings.corpora[id]) {
+                    corpusIds.push(id)
+                }
+                // If it is not a corpus, but a folder
+                else if (settings.folders[id]) {
+                    // Resolve contained corpora
+                    corpusIds.push(...collectCorpusIdsInFolder(settings.folders[id]))
+                }
+            }
+            // Replace the possibly mixed list with the list of corpus-only ids
+            selectedIds = corpusIds
+
             let loginNeededFor = []
 
             for (let corpusId of selectedIds) {

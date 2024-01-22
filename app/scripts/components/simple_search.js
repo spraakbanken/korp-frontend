@@ -21,7 +21,12 @@ export const simpleSearchComponent = {
                         on-search-save="$ctrl.onSearchSave(name)"
                     ></search-submit>
                     <div class="opts">
-                        <input id="inOrderChk" type="checkbox" ng-model="$ctrl.inOrder" />
+                        <input
+                            id="inOrderChk"
+                            type="checkbox"
+                            ng-model="$ctrl.inOrder"
+                            ng-disabled="!$ctrl.inOrderEnabled"
+                        />
                         <label for="inOrderChk"> {{'in_order_chk' | loc:$root.lang}}</label>
                         <span> {{'and' | loc:$root.lang}} </span>
                         <span> {{'and_include' | loc:$root.lang}} </span>
@@ -85,6 +90,8 @@ export const simpleSearchComponent = {
             })
 
             ctrl.inOrder = $location.search().in_order == null
+            /** Whether the "in order" option is applicable. */
+            ctrl.inOrderEnabled = true
             ctrl.prefix = $location.search().prefix != null
             ctrl.mid_comp = $location.search().mid_comp != null
             ctrl.suffix = $location.search().suffix != null
@@ -97,7 +104,7 @@ export const simpleSearchComponent = {
 
             // triggers watch on searches.activeSearch
             ctrl.updateSearch = function () {
-                $location.search("in_order", !ctrl.inOrder ? false : null)
+                $location.search("in_order", !ctrl.inOrder && ctrl.inOrderEnabled ? false : null)
                 $location.search("prefix", ctrl.prefix ? true : null)
                 $location.search("mid_comp", ctrl.mid_comp ? true : null)
                 $location.search("suffix", ctrl.suffix ? true : null)
@@ -238,6 +245,10 @@ export const simpleSearchComponent = {
                     ctrl.lemgram = regescape(output)
                     ctrl.currentText = null
                 }
+
+                // The "in order" option should be available only if >1 token.
+                const cqpObjs = CQP.parse(ctrl.getCQP())
+                ctrl.inOrderEnabled = cqpObjs.length > 1 && !CQP.hasWildcards(cqpObjs)
             }
 
             ctrl.doSearch = function () {

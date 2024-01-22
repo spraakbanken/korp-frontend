@@ -36,15 +36,15 @@
 }
 
 .sidebar li:hover .external_link {
-    background-image: url("../img/fish_icon.png");
+    background-image: url("../img/karp_icon.svg");
     background-origin: content-box;
     background-repeat: no-repeat;
     display: inline-block !important;
     vertical-align: middle;
-    height: 12px;
-    width: 20px;
-    background-size: 20px;
-    margin-left: 2em;
+    height: 0.9em;
+    width: 1.8em;
+    background-size: 1.8em;
+    margin-left: 1em;
     position: relative;
     cursor: pointer;
 }
