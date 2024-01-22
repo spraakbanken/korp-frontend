@@ -1,4 +1,7 @@
 exports.config = {
+  // Protractor (webdriver-manager) doesn't pull ChromeDriver versions above 114, so use the chromedriver package instead.
+  // Thanks @jan-molak https://github.com/angular/protractor/issues/5563#issuecomment-1736459776
+  chromeDriver: require("chromedriver/lib/chromedriver").path,
   params: {
     url: 'http://' + (process.env.KORP_HOST || "localhost") + ':'+ (process.env.KORP_PORT || 9112) +'/'
   },
