@@ -1,5 +1,5 @@
 {
-    "name": "Korp",
+    "name": "korp-frontend",
     "version": "9.4.4",
     "dependencies": {
         "@fortawesome/fontawesome-free": "6.2.1",
