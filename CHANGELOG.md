@@ -5,17 +5,17 @@
 ### Added
 
 - A GitHub action to check the build
-- Add support for "not in order" in extended and advanced search
+- Add support for "not in order" in extended and advanced search [#17](https://github.com/spraakbanken/korp-frontend/issues/17)
 - The `stats_rewrite` setting for altering the statistics table
 
 ### Changed
 
-- Logo changes: New Korp, new Språkbanken Text, replaced Swe-CLARIN with University of Gothenburg, new Karp icon
+- Logo changes: New Korp, new Språkbanken Text, replaced Swe-CLARIN with University of Gothenburg, new Karp icon [#329](https://github.com/spraakbanken/korp-frontend/issues/329)
 - The search history selector has been moved down to the search tab bar
 
 ### Fixed
 
-- Resolve folder name in corpus param
+- Resolve folder name in corpus param [#13](https://github.com/spraakbanken/korp-frontend/issues/13)
 - Long URLs in sidebar are always presented as http:// links [#330](https://github.com/spraakbanken/korp-frontend/issues/330)
 - Enable newer ChromeDriver versions for testing [#331](https://github.com/spraakbanken/korp-frontend/issues/331)
 
