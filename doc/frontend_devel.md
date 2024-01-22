@@ -131,6 +131,7 @@ settings that affect the frontend.
 - __news_desk_url__ - See [News widget](#news-widget)
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
+- __stats_rewrite__: A function that takes the array `[data, columns, searchParams]`, modifies and returns it.
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```
     swe: ord
@@ -524,7 +525,6 @@ parameters for attributes.
   sidebar, only the attribute value. This can be used, for example, if the `pattern` for the attribute includes the label but
   the label should be shown in the attribute lists of the extended search or statistics.
 - **stats_cqp**: See [Rendering attribute values in the statistics view](#rendering-attribute-values-in-the-statistics-view).
-- **stats_rewrite**: A function that takes the array `[data, columns, searchParams]`, modifies and returns it.
 - **stats_stringify**: See [Rendering attribute values in the statistics view](#rendering-attribute-values-in-the-statistics-view).
 - **translation**: An object containing translations of possible values of the attribute, in this format:
     ```
