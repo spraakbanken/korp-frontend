@@ -63,6 +63,7 @@ export const extendedTokenComponent = {
         showClose: "=",
         token: "=",
         parallellLang: "<",
+        repeatError: "<",
         remove: "&",
         change: "&",
         toggleStart: "&",
