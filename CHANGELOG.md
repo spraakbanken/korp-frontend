@@ -5,6 +5,7 @@
 ### Fixed
 
 - Unnecessary scrollbars in the corpus selector info panel [#333](https://github.com/spraakbanken/korp-frontend/issues/333)
+- Bug with undefined `arguments`
 
 ## [9.5.0] - 2023-01-22
 
