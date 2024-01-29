@@ -1,5 +1,11 @@
 # Changelog
 
+## [9.5.1-dev]
+
+### Fixed
+
+- Unnecessary scrollbars in the corpus selector info panel [#333](https://github.com/spraakbanken/korp-frontend/issues/333)
+
 ## [9.5.0] - 2023-01-22
 
 ### Added
