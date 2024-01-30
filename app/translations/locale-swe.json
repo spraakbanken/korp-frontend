@@ -344,6 +344,8 @@
     "add_filter_value": "Lägg till",
 
     "repeat_error": "Fel: Det går inte att upprepa från 0 på alla token.",
+    "order_error": "Fel: Det går bara att välja bort \"i följd\" om sökfrågan har flera tokens samt inga repetitioner, gränser eller tomma token.",
+    "order_help": "Att välja bort \"i följd\" är kompatibelt med sökfrågor som har flera tokens samt inga repetitioner, gränser eller tomma token.",
 
     "choose_value": "Välj ett värde",
     "login_needed_for_corpora": "Inloggning behövs för åtkomst till",

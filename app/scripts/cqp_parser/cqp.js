@@ -204,12 +204,15 @@ window.CQP = {
     },
 
     /** Check if a query has any wildcards (`[]`) */
-    hasWildcards(cqpObjs) {
-        for (const token of cqpObjs) {
-            // Stringify individual token
-            const str = CQP.stringify([token])
-            if (str.indexOf("[]") === 0) return true
-        }
-        return false
-    },
+    hasWildcard: (cqpObjs) => cqpObjs.some((token) => CQP.stringify([token]).indexOf("[]") === 0),
+
+    /** Check if a query has any tokens with repetition */
+    hasRepetition: (cqpObjs) => cqpObjs.some((token) => token.repeat),
+
+    /** Check if a query has any structure boundaries, e.g. sentence start */
+    hasStruct: (cqpObjs) => cqpObjs.some((token) => token.struct),
+
+    /** Determine whether a query will work with the in_order option */
+    supportsInOrder: (cqpObjs) =>
+        cqpObjs.length > 1 && !CQP.hasWildcard(cqpObjs) && !CQP.hasRepetition(cqpObjs) && !CQP.hasStruct(cqpObjs),
 }

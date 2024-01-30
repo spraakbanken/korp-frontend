@@ -4,6 +4,7 @@
 
 ### Fixed
 
+- Improve UX for "in order" option [#335](https://github.com/spraakbanken/korp-frontend/issues/335)
 - Unnecessary scrollbars in the corpus selector info panel [#333](https://github.com/spraakbanken/korp-frontend/issues/333)
 - Bug with undefined `arguments`
 - On repetition error (all tokens repeat from 0), restore red outline for input

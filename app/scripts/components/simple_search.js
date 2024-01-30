@@ -91,7 +91,7 @@ export const simpleSearchComponent = {
 
             ctrl.inOrder = $location.search().in_order == null
             /** Whether the "in order" option is applicable. */
-            ctrl.inOrderEnabled = true
+            ctrl.inOrderEnabled = false
             ctrl.prefix = $location.search().prefix != null
             ctrl.mid_comp = $location.search().mid_comp != null
             ctrl.suffix = $location.search().suffix != null
@@ -233,6 +233,7 @@ export const simpleSearchComponent = {
                         ctrl.lemgram = search.val
                     }
                     $rootScope.simpleCQP = CQP.expandOperators(ctrl.getCQP())
+                    ctrl.updateInOrderEnabled()
                     ctrl.doSearch()
                 }
             })
@@ -246,9 +247,12 @@ export const simpleSearchComponent = {
                     ctrl.currentText = null
                 }
 
-                // The "in order" option should be available only if >1 token.
-                const cqpObjs = CQP.parse(ctrl.getCQP())
-                ctrl.inOrderEnabled = cqpObjs.length > 1 && !CQP.hasWildcards(cqpObjs)
+                ctrl.updateInOrderEnabled()
+            }
+
+            ctrl.updateInOrderEnabled = () => {
+                const cqpObjs = CQP.parse(ctrl.getCQP() || "[]")
+                ctrl.inOrderEnabled = CQP.supportsInOrder(cqpObjs)
             }
 
             ctrl.doSearch = function () {
