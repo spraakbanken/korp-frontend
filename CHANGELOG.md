@@ -2,6 +2,10 @@
 
 ## [9.5.1-dev]
 
+### Changed
+
+- Logos with taglines
+
 ### Fixed
 
 - Improve UX for "in order" option [#335](https://github.com/spraakbanken/korp-frontend/issues/335)
