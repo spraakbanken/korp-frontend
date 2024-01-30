@@ -23,7 +23,7 @@ export const kwicComponent = {
                                     ng-class="{odd : $index % 2 != 0, even : $index % 2 == 0}"
                                     ng-click="$ctrl.pageEvent(corpus.page)"
                                     uib-tooltip="{{corpus.rtitle | locObj:lang}}: {{corpus.abs}}"
-                                    uib-tooltip-placement='{{$last? "left":"top"}}'
+                                    tooltip-placement='{{$last? "left":"top"}}'
                                     append-to-body="false"
                                 ></td>
                             </tr>
