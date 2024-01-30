@@ -12,6 +12,7 @@
 - Unnecessary scrollbars in the corpus selector info panel [#333](https://github.com/spraakbanken/korp-frontend/issues/333)
 - Bug with undefined `arguments`
 - On repetition error (all tokens repeat from 0), restore red outline for input
+- Use `<match>` to constraint CQP subqueries (from statistics rows etc)
 
 ## [9.5.0] - 2023-01-22
 
