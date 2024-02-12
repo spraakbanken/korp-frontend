@@ -13,8 +13,9 @@ jobs:
 
     strategy:
       matrix:
-        # Having "" here enables the `node-version-file` option
-        node-version: ["", 18, 20]
+        # From lowest supported version up to the one pinned in .nvmrc
+        # The empty string enables the `node-version-file` option which reads from .nvmrc
+        node-version: [18, ""]
 
     steps:
       - name: Checkout main repo

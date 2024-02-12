@@ -14,6 +14,7 @@ export const extendedTokensComponent = {
                         parallell-lang="$ctrl.parallellLang"
                         toggle-start="$ctrl.toggleStart($index)()"
                         toggle-end="$ctrl.toggleEnd($index)()"
+                        repeat-error="$ctrl.repeatError"
                     ></extended-token>
                     <extended-struct-token
                         ng-if="!token.and_block"

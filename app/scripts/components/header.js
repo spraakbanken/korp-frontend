@@ -1,6 +1,8 @@
 /** @format */
-import korpLogo from "../../img/korp.svg"
-import sbxLogo from "../../img/sprakbanken_text.svg"
+import korpLogo from "../../img/korp_slogan.svg"
+import korpLogoEn from "../../img/korp_slogan_en.svg"
+import sbxLogo from "../../img/sprakbanken_text_slogan.svg"
+import sbxLogoEn from "../../img/sprakbanken_text_slogan_en.svg"
 import guLogo from "../../img/gu_logo_sv_head.svg"
 
 let html = String.raw
@@ -99,9 +101,10 @@ export const headerComponent = {
                 <!-- TODO too many divs -->
             </div>
 
-            <div class="flex justify-between items-end gap-3 h-24 pb-1 mb-5 mt-2 px-3" id="header_left">
+            <div class="flex justify-between items-end gap-3 my-3 px-3" id="header_left">
                 <a class="shrink-0 relative ml-4 pl-0.5" ng-click="$ctrl.logoClick()">
-                    <img class="-mb-5" src="${korpLogo}" height="300" width="300" />
+                    <img ng-if="$root.lang == 'swe'" src="${korpLogo}" height="300" width="300" />
+                    <img ng-if="$root.lang != 'swe'" src="${korpLogoEn}" height="300" width="300" />
                 </a>
                 <div id="labs_logo">
                     <svg
@@ -124,15 +127,20 @@ export const headerComponent = {
                     </svg>
                 </div>
 
-                <div class="grow lg_hidden"></div>
+                <div class="grow min-[1150px]_hidden"></div>
                 <corpus-chooser></corpus-chooser>
-                <div class="grow hidden lg_block"></div>
+                <div class="grow hidden min-[1150px]_block"></div>
 
-                <a class="hidden lg_block h-12 shrink" href="https://spraakbanken.gu.se" target="_blank">
-                    <img src="${sbxLogo}" class="h-full" />
+                <a
+                    class="hidden min-[1150px]_flex h-20 shrink flex-col justify-end"
+                    href="https://spraakbanken.gu.se/"
+                    target="_blank"
+                >
+                    <img ng-if="$root.lang == 'swe'" src="${sbxLogo}" />
+                    <img ng-if="$root.lang != 'swe'" src="${sbxLogoEn}" />
                 </a>
 
-                <a class="hidden xl_block shrink-0 h-32 pt-1 -mb-6" href="https://gu.se" target="_blank">
+                <a class="hidden xl_block shrink-0 h-32 -mt-2" href="https://gu.se/" target="_blank">
                     <img src="${guLogo}" class="h-full" />
                 </a>
             </div>

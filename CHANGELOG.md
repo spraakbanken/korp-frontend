@@ -1,5 +1,19 @@
 # Changelog
 
+## [9.5.1] - 2024-02-12
+
+### Changed
+
+- Logos with taglines
+
+### Fixed
+
+- Improve UX for "in order" option [#335](https://github.com/spraakbanken/korp-frontend/issues/335)
+- Unnecessary scrollbars in the corpus selector info panel [#333](https://github.com/spraakbanken/korp-frontend/issues/333)
+- Bug with undefined `arguments`
+- On repetition error (all tokens repeat from 0), restore red outline for input
+- Use `<match>` to constraint CQP subqueries (from statistics rows etc)
+
 ## [9.5.0] - 2023-01-22
 
 ### Added
@@ -73,7 +87,7 @@
 - Most bug fixes was related to the refactoring breaking things
 - Lots of bug fixes for the sidebar
 
-
+[9.5.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.1
 [9.5.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.0
 [9.4.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.4.4
 [9.4.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.4.3

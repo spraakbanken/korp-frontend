@@ -346,6 +346,8 @@
     "add_filter_value": "Add",
 
     "repeat_error": "Error: Not possible to repeat from 0 for all tokens.",
+    "order_error": "Error: Disabling \"in order\" requires multiple tokens, no repetition, no boundaries and no wildcards.",
+    "order_help": "Disabling the \"in order\" option is compatible with queries that have multiple tokens, no repetition, no boundaries and no wildcards.",
 
     "choose_value": "Choose a value",
     "login_needed_for_corpora": "Login needed for access to",

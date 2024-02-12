@@ -12,16 +12,22 @@ export const extendedStandardComponent = {
                 cqp-change="$ctrl.cqpChange(cqp)"
                 update-repeat-error="$ctrl.updateRepeatError(error)"
             ></extended-tokens>
+
             <div ng-show="$ctrl.repeatError" style="color: red; margin-bottom: 10px;">
                 {{'repeat_error' | loc:$root.lang}}
             </div>
+
+            <div ng-show="$ctrl.orderError" style="color: red; margin-bottom: 10px;">
+                {{'order_error' | loc:$root.lang}}
+            </div>
+
             <search-submit
                 pos="right"
                 on-search="$ctrl.onSearch()"
                 on-search-save="$ctrl.onSearchSave(name)"
-                disabled="$ctrl.repeatError"
+                disabled="$ctrl.repeatError || $ctrl.orderError"
             ></search-submit>
-            <input id="inOrderChkExt" type="checkbox" ng-model="$ctrl.inOrder" ng-disabled="!$ctrl.inOrderEnabled" />
+            <input id="inOrderChkExt" type="checkbox" ng-model="inOrder" ng-disabled="!$ctrl.inOrderEnabled" />
             <label for="inOrderChkExt"> {{'in_order_chk' | loc:$root.lang}}</label>
             <span> {{'and' | loc:$root.lang}} </span>
             <span>{{'within' | loc:$root.lang}}</span>
@@ -35,21 +41,23 @@ export const extendedStandardComponent = {
     controller: [
         "$location",
         "$rootScope",
+        "$scope",
         "compareSearches",
         "$timeout",
-        function ($location, $rootScope, compareSearches, $timeout) {
+        function ($location, $rootScope, $scope, compareSearches, $timeout) {
             const ctrl = this
 
             ctrl.lang = $rootScope.lang
-            ctrl.inOrder = $location.search().in_order == null
+            $scope.inOrder = $location.search().in_order == null
             /** Whether the "in order" option is applicable. */
             ctrl.inOrderEnabled = true
+            ctrl.orderError = false
 
             // TODO this is *too* weird
             function triggerSearch() {
                 $location.search("search", null)
                 $location.search("page", null)
-                $location.search("in_order", !ctrl.inOrder && ctrl.inOrderEnabled ? false : null)
+                $location.search("in_order", !$scope.inOrder && ctrl.inOrderEnabled ? false : null)
                 $timeout(function () {
                     $location.search("search", "cqp")
                     if (!_.keys(settings["default_within"]).includes(ctrl.within)) {
@@ -87,11 +95,27 @@ export const extendedStandardComponent = {
                     c.log("Error", e)
                 }
 
-                // The "in order" option should be available only if >1 token and no wildcards.
-                const cqpObjs = CQP.parse(cqp)
-                ctrl.inOrderEnabled = cqpObjs.length > 1 && !CQP.hasWildcards(cqpObjs)
+                ctrl.validateInOrder()
 
                 $location.search("cqp", cqp)
+            }
+
+            $scope.$watch("inOrder", () => {
+                ctrl.validateInOrder()
+            })
+
+            /** Trigger error if the "in order" option is incompatible with the query */
+            ctrl.validateInOrder = () => {
+                const cqpObjs = CQP.parse(ctrl.cqp)
+                if (!CQP.supportsInOrder(cqpObjs)) {
+                    // If query doesn't support free word order, and the "in order" checkbox has been unchecked,
+                    // then disable search, show explanation and let user resolve the conflict
+                    ctrl.orderError = !$scope.inOrder
+                    ctrl.inOrderEnabled = !$scope.inOrder
+                } else {
+                    ctrl.orderError = false
+                    ctrl.inOrderEnabled = true
+                }
             }
 
             ctrl.cqp = $location.search().cqp
