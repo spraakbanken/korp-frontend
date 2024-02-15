@@ -27,7 +27,7 @@ export const extendedStandardComponent = {
                 on-search-save="$ctrl.onSearchSave(name)"
                 disabled="$ctrl.repeatError || $ctrl.orderError"
             ></search-submit>
-            <input id="freeOrderChkExt" type="checkbox" ng-model="freeOrder" ng-disabled="!$ctrl.freeOrderEnabled" />
+            <input id="freeOrderChkExt" type="checkbox" ng-model="freeOrder" />
             <label for="freeOrderChkExt"> {{'free_order_chk' | loc:$root.lang}}</label>
             <span> {{'and' | loc:$root.lang}} </span>
             <span>{{'within' | loc:$root.lang}}</span>
@@ -49,15 +49,13 @@ export const extendedStandardComponent = {
 
             ctrl.lang = $rootScope.lang
             $scope.freeOrder = $location.search().in_order != null
-            /** Whether the "free order" option is applicable. */
-            ctrl.freeOrderEnabled = true
             ctrl.orderError = false
 
             // TODO this is *too* weird
             function triggerSearch() {
                 $location.search("search", null)
                 $location.search("page", null)
-                $location.search("in_order", $scope.freeOrder && ctrl.freeOrderEnabled ? false : null)
+                $location.search("in_order", $scope.freeOrder ? false : null)
                 $timeout(function () {
                     $location.search("search", "cqp")
                     if (!_.keys(settings["default_within"]).includes(ctrl.within)) {
@@ -107,15 +105,9 @@ export const extendedStandardComponent = {
             /** Trigger error if the "free order" option is incompatible with the query */
             ctrl.validateFreeOrder = () => {
                 const cqpObjs = CQP.parse(ctrl.cqp)
-                if (!CQP.supportsInOrder(cqpObjs)) {
-                    // If query doesn't support free word order, and the "free order" checkbox is checked,
-                    // then disable search, show explanation and let user resolve the conflict
-                    ctrl.orderError = $scope.freeOrder
-                    ctrl.freeOrderEnabled = $scope.freeOrder
-                } else {
-                    ctrl.orderError = false
-                    ctrl.freeOrderEnabled = true
-                }
+                // If query doesn't support free word order, and the "free order" checkbox is checked,
+                // then show explanation and let user resolve the conflict
+                ctrl.orderError = !CQP.supportsInOrder(cqpObjs) && $scope.freeOrder
             }
 
             ctrl.cqp = $location.search().cqp
