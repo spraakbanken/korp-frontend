@@ -1,5 +1,11 @@
 # Changelog
 
+## [9.5.2-dev]
+
+### Changed
+
+- The "in order" option is inverted, so it is now "in free order" and unchecked by default (but still `in_order` in the URL query param and in the API)
+
 ## [9.5.1] - 2024-02-12
 
 ### Changed

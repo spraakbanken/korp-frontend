@@ -55,9 +55,9 @@ the search button or hitting Enter.
 
 Below the search field are a selection of check boxes, giving you a few options for your search.
 
-**In order**
+**In free order**
 When searching for more than one word, the default search requires all words to occur in exactly the given order next to each
-other. By unchecking the *in order* box, the search will instead find all sentences containing the search words, but the
+other. By checking the *in free order* box, the search will instead find all sentences containing the search words, but the
 order does not matter, and they do not need to be next to each other.
 
 **Initial part and final part**

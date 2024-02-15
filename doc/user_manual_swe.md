@@ -59,10 +59,10 @@ För att göra en lemgramsökning väljer man ett av dessa med piltangenterna sa
 
 Under sökfältet finns ett antal kryssrutor med inställningsmöjligheter för ens sökning.
 
-**I följd**  
+**I fri följd**
 Vid sökning på fler än ett ord görs som standard en frassökning, vilket innebär att man enbart får träffar där sökorden
 förekommer i exakt den ordning man angivit, och direkt efter varandra.
-Genom att kryssa ur rutan *i följd* söks det i stället efter meningar som innehåller samtliga
+Genom att kryssa i rutan *i fri följd* söks det i stället efter meningar som innehåller samtliga
 sökord, i valfri ordning och inte nödvändigtvis intill varandra.
 
 **Förled och efterled**  

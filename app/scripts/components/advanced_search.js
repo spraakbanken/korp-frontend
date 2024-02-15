@@ -34,9 +34,9 @@ export const advancedSearchComponent = {
             on-search="$ctrl.onSearch()"
             on-search-save="$ctrl.onSearchSave(name)"
         ></search-submit>
-        <input id="inOrderChkAdv" type="checkbox" ng-model="$ctrl.inOrder" />
-        <label for="inOrderChkAdv">
-            {{'in_order_chk' | loc:$root.lang}}
+        <input id="freeOrderChkAdv" type="checkbox" ng-model="$ctrl.freeOrder" />
+        <label for="freeOrderChkAdv">
+            {{'free_order_chk' | loc:$root.lang}}
             <i
                 class="fa fa-info-circle text-gray-400"
                 uib-tooltip="{{'order_help' | loc:$root.lang}}"
@@ -52,7 +52,7 @@ export const advancedSearchComponent = {
         function (compareSearches, $location, $timeout) {
             const $ctrl = this
 
-            $ctrl.inOrder = $location.search().in_order == null
+            $ctrl.freeOrder = $location.search().in_order == null
 
             if ($location.search().search && $location.search().search.split("|")) {
                 var [type, ...expr] = $location.search().search.split("|")
@@ -69,7 +69,7 @@ export const advancedSearchComponent = {
                 $location.search("search", null)
                 $location.search("page", null)
                 $location.search("within", null)
-                $location.search("in_order", !$ctrl.inOrder ? false : null)
+                $location.search("in_order", $ctrl.freeOrder ? false : null)
                 $timeout(() => $location.search("search", `cqp|${$ctrl.cqp}`), 0)
             }
 
