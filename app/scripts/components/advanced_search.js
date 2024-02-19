@@ -52,7 +52,7 @@ export const advancedSearchComponent = {
         function (compareSearches, $location, $timeout) {
             const $ctrl = this
 
-            $ctrl.freeOrder = $location.search().in_order == null
+            $ctrl.freeOrder = $location.search().in_order != null
 
             if ($location.search().search && $location.search().search.split("|")) {
                 var [type, ...expr] = $location.search().search.split("|")
