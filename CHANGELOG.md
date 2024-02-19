@@ -7,6 +7,10 @@
 - The "in order" option is inverted, so it is now "in free order" and unchecked by default (but still `in_order` in the URL query param and in the API)
 - The checkbox of said option no longer gets disabled in Extended mode
 
+### Removed
+
+- Automatic disabling of the "Show statistics" checkbox
+
 ## [9.5.1] - 2024-02-12
 
 ### Changed
