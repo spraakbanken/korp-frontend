@@ -6,7 +6,11 @@
 
 - The "in order" option is inverted, so it is now "in free order" and unchecked by default (but still `in_order` in the URL query param and in the API)
 - The checkbox of said option no longer gets disabled in Extended mode
-- Fixed parallel sentence alignment [#323](https://github.com/spraakbanken/korp-frontend/issues/323)
+
+### Fixed
+
+- Parallel sentence alignment [#323](https://github.com/spraakbanken/korp-frontend/issues/323)
+- Trend diagram subquery with repetition [#288](https://github.com/spraakbanken/korp-frontend/issues/288)
 
 ### Removed
 
