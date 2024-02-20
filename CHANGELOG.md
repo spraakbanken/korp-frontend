@@ -2,6 +2,10 @@
 
 ## [9.5.2-dev]
 
+### Added
+
+- Basic visitor analytics with Matomo [#149](https://github.com/spraakbanken/korp-frontend/issues/149)
+
 ### Changed
 
 - The "in order" option is inverted, so it is now "in free order" and unchecked by default (but still `in_order` in the URL query param and in the API)
