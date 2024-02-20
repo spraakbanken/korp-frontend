@@ -168,7 +168,7 @@ export const kwicComponent = {
                     }
 
                     if (currentMode === "parallel" && !$ctrl.isReading) {
-                        centerScrollbarParallel()
+                        $timeout(() => alignParallelSentences())
                     }
                     if ($ctrl.kwic.length == 0) {
                         selectionManager.deselect()
@@ -549,36 +549,29 @@ export const kwicComponent = {
                 area.stop(true, true).scrollLeft(match - ($("body").innerWidth() - sidebarWidth) / 2)
             }
 
-            function centerScrollbarParallel() {
-                const scrollLeft = $(".table_scrollarea", $element).scrollLeft() || 0
-                let changed = true
-                const prevValues = []
-
-                // loop until the placement of linked sentences have settled
-                while (changed) {
-                    changed = false
-                    let i = 0
-                    for (let linked of $(".table_scrollarea > .kwic .linked_sentence").get()) {
-                        const mainrow = $(linked).prev()
-                        if (!mainrow.length) {
-                            continue
-                        }
-                        let firstWord = mainrow.find(".left .word:first")
-                        if (!firstWord.length) {
-                            firstWord = mainrow.find(".match .word:first")
-                        }
-                        const offset = Math.round(firstWord.position().left + scrollLeft - 25)
-                        $(linked).find(".lnk").css("padding-left", offset)
-
-                        const threshold = 25
-                        if (offset - (prevValues[i] || 0) > threshold) {
-                            changed = true
-                        }
-
-                        prevValues[i] = offset
-                        i++
-                    }
+            /** Add offsets to align each linked sentence with its main one */
+            function alignParallelSentences() {
+                /** A helper to get horizontal coordinates relative to a container. */
+                function getBounds($elements, $container) {
+                    const container = $container.get(0).getBoundingClientRect()
+                    const left = $elements.get(0).getBoundingClientRect().left - container.left
+                    const right = $elements.get(-1).getBoundingClientRect().right - container.left
+                    const width = right - left
+                    const center = left + width / 2
+                    const space = container.width - width
+                    return { left, right, width, center, space }
                 }
+
+                $(".table_scrollarea > .kwic .linked_sentence").each((i, el) => {
+                    const $linkedRow = $(el)
+                    const $mainRow = $linkedRow.prev()
+                    const linked = getBounds($linkedRow.find(".word"), $linkedRow)
+                    const main = getBounds($mainRow.find(".word"), $mainRow)
+
+                    const offset = main.center - linked.width / 2
+                    // Add offset as cell padding
+                    $linkedRow.find(".lnk").css("padding-left", Math.min(offset, linked.space))
+                })
             }
 
             function addKeydownHandler() {
