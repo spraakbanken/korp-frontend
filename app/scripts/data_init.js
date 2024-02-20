@@ -104,7 +104,7 @@ async function getConfig() {
     if (settings["corpus_config_url"]) {
         configUrl = await settings["corpus_config_url"]()
     } else {
-        const labParam = window.isLab ? "&include_lab" : ""
+        const labParam = process.env.ENVIRONMENT == "staging" ? "&include_lab" : ""
         configUrl = `${settings["korp_backend_url"]}/corpus_config?mode=${window.currentMode}${labParam}`
     }
     let response

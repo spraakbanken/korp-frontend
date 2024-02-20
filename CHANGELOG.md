@@ -6,6 +6,7 @@
 
 - The "in order" option is inverted, so it is now "in free order" and unchecked by default (but still `in_order` in the URL query param and in the API)
 - The checkbox of said option no longer gets disabled in Extended mode
+- Replaced `NODE_ENV` with our own variable `ENVIRONMENT` to properly allow the `"staging"` value
 
 ### Fixed
 

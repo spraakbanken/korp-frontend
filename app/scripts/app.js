@@ -178,8 +178,6 @@ korpApp.run([
         s._settings = settings
         window.lang = s.lang = $location.search().lang || settings["default_language"]
 
-        s.isLab = window.isLab
-
         s.extendedCQP = null
 
         s.globalFilterDef = $q.defer()
