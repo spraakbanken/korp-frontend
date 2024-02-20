@@ -1,5 +1,5 @@
 /** @format */
-export function getTimeCQP(time, zoom, n_tokens, coarseGranularity) {
+export function getTimeCQP(time, zoom, coarseGranularity) {
     let timecqp
     const m = moment(time * 1000)
 
@@ -32,7 +32,7 @@ export function getTimeCQP(time, zoom, n_tokens, coarseGranularity) {
                     ))]`
     }
 
-    timecqp = [timecqp].concat(_.map(_.range(0, n_tokens), () => "[]")).join(" ")
+    timecqp = `<match> ${timecqp} []* </match>`
     return timecqp
 }
 
