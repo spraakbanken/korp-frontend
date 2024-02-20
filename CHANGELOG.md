@@ -11,6 +11,7 @@
 
 - Parallel sentence alignment [#323](https://github.com/spraakbanken/korp-frontend/issues/323)
 - Trend diagram subquery with repetition [#288](https://github.com/spraakbanken/korp-frontend/issues/288)
+- Restore lab logo
 
 ### Removed
 
