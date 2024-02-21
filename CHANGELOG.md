@@ -1,6 +1,6 @@
 # Changelog
 
-## [9.5.2-dev]
+## [9.5.2] - 2024-02-21
 
 ### Added
 
@@ -109,6 +109,7 @@
 - Most bug fixes was related to the refactoring breaking things
 - Lots of bug fixes for the sidebar
 
+[9.5.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.2
 [9.5.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.1
 [9.5.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.0
 [9.4.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.4.4
