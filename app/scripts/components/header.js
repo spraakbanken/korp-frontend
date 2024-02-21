@@ -211,10 +211,9 @@ export const headerComponent = {
             const N_VISIBLE = settings["visible_modes"]
 
             $ctrl.modes = _.filter(settings["modes"])
-            if (!isLab) {
+            if (process.env.ENVIRONMENT != "staging") {
                 $ctrl.modes = _.filter(settings["modes"], (item) => item.labOnly !== true)
             }
-            $ctrl.isLab = isLab
 
             $ctrl.visible = $ctrl.modes.slice(0, N_VISIBLE)
 

@@ -64,7 +64,6 @@ export const searchtabsComponent = {
                         ng-model="$ctrl.showStatistics"
                         ng-change="$ctrl.showStatisticsChange()"
                         class="mr-1"
-                        ng-disabled="!$ctrl.inOrder"
                     /><label for="show_stats">{{'show_stats' | loc:$root.lang}}</label>
                 </div>
                 <div ng-show="$ctrl.settings['word_picture'] !== false">
@@ -105,12 +104,6 @@ export const searchtabsComponent = {
             $rootScope.$watch(
                 () => $location.search().search_tab,
                 (val) => ($ctrl.isCompareSelected = val === 3)
-            )
-
-            $ctrl.inOrder = true
-            $rootScope.$watch(
-                () => $location.search().in_order,
-                (val) => ($ctrl.inOrder = val == undefined)
             )
 
             $ctrl.savedSearches = compareSearches.savedSearches

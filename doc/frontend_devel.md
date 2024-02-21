@@ -127,7 +127,18 @@ settings that affect the frontend.
 - __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
 - __iso_languages__ - A map of two-letter ISO language codes to three-letter. Only used for fixing old links. Default: See `settings.js`
 - __map_center__ - See [Map](#map)
-- __map_enabled__ - Boolean. See [Map](#map) 
+- __map_enabled__ - Boolean. See [Map](#map)
+- __matomo__ - Object. Enable analytics with a [Matomo](https://matomo.org/) instance.
+  - __url__: String. The URL of the Matomo instance, including trailing slash.
+  - __site__: Integer. The site ID that Matomo has assigned for the Korp instance.
+  - It is also possible to override each value underneath keys corresponding to `ENVIRONMENT` values, e.g:
+      ```
+      matomo:
+        url: https://matomo.example.com/
+        site: 1
+        production:
+          site: 2
+      ```
 - __news_desk_url__ - See [News widget](#news-widget)
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`

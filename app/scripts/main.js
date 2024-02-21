@@ -49,7 +49,7 @@ function initApp() {
         c.error("ERROR setting corpora from location", error1)
     }
 
-    if (isLab) {
+    if (process.env.ENVIRONMENT == "staging") {
         $("body").addClass("lab")
     }
 

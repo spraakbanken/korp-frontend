@@ -1,5 +1,27 @@
 # Changelog
 
+## [9.5.2] - 2024-02-21
+
+### Added
+
+- Basic visitor analytics with Matomo [#149](https://github.com/spraakbanken/korp-frontend/issues/149)
+
+### Changed
+
+- The "in order" option is inverted, so it is now "in free order" and unchecked by default (but still `in_order` in the URL query param and in the API)
+- The checkbox of said option no longer gets disabled in Extended mode
+- Replaced `NODE_ENV` with our own variable `ENVIRONMENT` to properly allow the `"staging"` value
+
+### Fixed
+
+- Parallel sentence alignment [#323](https://github.com/spraakbanken/korp-frontend/issues/323)
+- Trend diagram subquery with repetition [#288](https://github.com/spraakbanken/korp-frontend/issues/288)
+- Restore lab logo
+
+### Removed
+
+- Automatic disabling of the "Show statistics" checkbox
+
 ## [9.5.1] - 2024-02-12
 
 ### Changed
@@ -87,6 +109,7 @@
 - Most bug fixes was related to the refactoring breaking things
 - Lots of bug fixes for the sidebar
 
+[9.5.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.2
 [9.5.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.1
 [9.5.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.0
 [9.4.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.4.4

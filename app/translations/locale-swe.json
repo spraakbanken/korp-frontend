@@ -344,8 +344,8 @@
     "add_filter_value": "Lägg till",
 
     "repeat_error": "Fel: Det går inte att upprepa från 0 på alla token.",
-    "order_error": "Fel: Det går bara att välja bort \"i följd\" om sökfrågan har flera tokens samt inga repetitioner, gränser eller tomma token.",
-    "order_help": "Att välja bort \"i följd\" är kompatibelt med sökfrågor som har flera tokens samt inga repetitioner, gränser eller tomma token.",
+    "order_error": "Fel: Alternativet \"i fri följd\" fungerar bara om sökfrågan har flera tokens samt inga repetitioner, gränser eller tomma token.",
+    "order_help": "Alternativet \"i fri följd\" är kompatibelt med sökfrågor som har flera tokens samt inga repetitioner, gränser eller tomma token.",
 
     "choose_value": "Välj ett värde",
     "login_needed_for_corpora": "Inloggning behövs för åtkomst till",
@@ -356,13 +356,13 @@
     "go_to_start": "Gå till startsidan",
 
     "stats_warn": "Statistiken är avaktiverad",
-    "stats_not_in_order_warn": "Statistiken stödjs för nuvarande inte när \"i följd\" är avaktiverad.",
+    "stats_not_in_order_warn": "Statistiken stödjer för närvarande inte sökalternativet \"i fri följd\".",
 
     "read_in_strix": "Läs texten i Strix",
     "read_in_korp": "Läs i Korp",
     "add_token": "Lägg till token",
 
-    "in_order_chk": "i följd",
+    "free_order_chk": "i fri följd",
     "prefix_chk": "förled",
     "compound_middle": "mellanled",
     "suffix_chk": "efterled",

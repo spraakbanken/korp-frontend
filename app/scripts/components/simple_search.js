@@ -22,12 +22,12 @@ export const simpleSearchComponent = {
                     ></search-submit>
                     <div class="opts">
                         <input
-                            id="inOrderChk"
+                            id="freeOrderChk"
                             type="checkbox"
-                            ng-model="$ctrl.inOrder"
-                            ng-disabled="!$ctrl.inOrderEnabled"
+                            ng-model="$ctrl.freeOrder"
+                            ng-disabled="!$ctrl.freeOrderEnabled"
                         />
-                        <label for="inOrderChk"> {{'in_order_chk' | loc:$root.lang}}</label>
+                        <label for="freeOrderChk"> {{'free_order_chk' | loc:$root.lang}}</label>
                         <span> {{'and' | loc:$root.lang}} </span>
                         <span> {{'and_include' | loc:$root.lang}} </span>
                         <input id="prefixChk" type="checkbox" ng-model="$ctrl.prefix" />
@@ -89,9 +89,10 @@ export const simpleSearchComponent = {
                 ctrl.onChange(event.value, false)
             })
 
-            ctrl.inOrder = $location.search().in_order == null
-            /** Whether the "in order" option is applicable. */
-            ctrl.inOrderEnabled = false
+            /** Whether tokens should be matched in arbitrary order. */
+            ctrl.freeOrder = $location.search().in_order != null
+            /** Whether the "free order" option is applicable. */
+            ctrl.freeOrderEnabled = false
             ctrl.prefix = $location.search().prefix != null
             ctrl.mid_comp = $location.search().mid_comp != null
             ctrl.suffix = $location.search().suffix != null
@@ -104,7 +105,7 @@ export const simpleSearchComponent = {
 
             // triggers watch on searches.activeSearch
             ctrl.updateSearch = function () {
-                $location.search("in_order", !ctrl.inOrder && ctrl.inOrderEnabled ? false : null)
+                $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
                 $location.search("prefix", ctrl.prefix ? true : null)
                 $location.search("mid_comp", ctrl.mid_comp ? true : null)
                 $location.search("suffix", ctrl.suffix ? true : null)
@@ -233,7 +234,7 @@ export const simpleSearchComponent = {
                         ctrl.lemgram = search.val
                     }
                     $rootScope.simpleCQP = CQP.expandOperators(ctrl.getCQP())
-                    ctrl.updateInOrderEnabled()
+                    ctrl.updateFreeOrderEnabled()
                     ctrl.doSearch()
                 }
             })
@@ -247,12 +248,12 @@ export const simpleSearchComponent = {
                     ctrl.currentText = null
                 }
 
-                ctrl.updateInOrderEnabled()
+                ctrl.updateFreeOrderEnabled()
             }
 
-            ctrl.updateInOrderEnabled = () => {
+            ctrl.updateFreeOrderEnabled = () => {
                 const cqpObjs = CQP.parse(ctrl.getCQP() || "[]")
-                ctrl.inOrderEnabled = CQP.supportsInOrder(cqpObjs)
+                ctrl.freeOrderEnabled = CQP.supportsInOrder(cqpObjs)
             }
 
             ctrl.doSearch = function () {

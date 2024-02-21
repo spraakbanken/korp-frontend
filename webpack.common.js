@@ -162,8 +162,11 @@ module.exports = {
                 },
             ],
         }),
-        new webpack.DefinePlugin({
-            __IS_LAB__: process.env.NODE_ENV == "staging",
+        new webpack.EnvironmentPlugin({
+            // Values here are defaults, in case the named variable is undefined
+            // See https://webpack.js.org/plugins/environment-plugin/
+            // Using our own variable instead of NODE_ENV, since NODE_ENV should really only be "development" or "production"
+            ENVIRONMENT: "development", // Can be: "development", "staging" or "production"
         }),
     ],
     ignoreWarnings: [

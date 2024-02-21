@@ -1,5 +1,5 @@
 /** @format */
-export function getTimeCQP(time, zoom, n_tokens, coarseGranularity) {
+export function getTimeCQP(time, zoom, coarseGranularity) {
     let timecqp
     const m = moment(time * 1000)
 
@@ -13,26 +13,21 @@ export function getTimeCQP(time, zoom, n_tokens, coarseGranularity) {
 
     if (coarseGranularity) {
         // year, month, day
-        timecqp = `[(int(_.text_datefrom) >= ${datefrom} & int(_.text_dateto) <= ${dateto}) |
-                    (int(_.text_datefrom) <= ${datefrom} & int(_.text_dateto) >= ${dateto})
-                    ]`
+        const dateInside = `(int(_.text_datefrom) >= ${datefrom} & int(_.text_dateto) <= ${dateto})`
+        const dateOutside = `(int(_.text_datefrom) <= ${datefrom} & int(_.text_dateto) >= ${dateto})`
+        timecqp = `[${dateInside} | ${dateOutside}]`
     } else {
         // hour, minute, second
         const timefrom = moment(m).startOf(zoom).format("HHmmss")
         const timeto = moment(m).endOf(zoom).format("HHmmss")
-        timecqp = `[(int(_.text_datefrom) = ${datefrom} &
-                        int(_.text_timefrom) >= ${timefrom} &
-                        int(_.text_dateto) <= ${dateto} &
-                        int(_.text_timeto) <= ${timeto}) |
-                    ((int(_.text_datefrom) < ${datefrom} |
-                        (int(_.text_datefrom) = ${datefrom} & int(_.text_timefrom) <= ${timefrom})
-                    ) &
-                        (int(_.text_dateto) > ${dateto} |
-                        (int(_.text_dateto) = ${dateto} & int(_.text_timeto) >= ${timeto})
-                    ))]`
+        const startsSameDate = `(int(_.text_datefrom) = ${datefrom} & int(_.text_dateto) <= ${dateto})`
+        const timeInside = `(int(_.text_timefrom) >= ${timefrom} & int(_.text_timeto) <= ${timeto})`
+        const startsBefore = `(int(_.text_datefrom) < ${datefrom} | (int(_.text_datefrom) = ${datefrom} & int(_.text_timefrom) <= ${timefrom}))`
+        const endsAfter = `(int(_.text_dateto) > ${dateto} | (int(_.text_dateto) = ${dateto} & int(_.text_timeto) >= ${timeto}))`
+        timecqp = `[(${startsSameDate} & ${timeInside}) | (${startsBefore} & ${endsAfter})]`
     }
 
-    timecqp = [timecqp].concat(_.map(_.range(0, n_tokens), () => "[]")).join(" ")
+    timecqp = `<match> ${timecqp} []* </match>`
     return timecqp
 }
 
