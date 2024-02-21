@@ -1,5 +1,11 @@
 # Changelog
 
+## [9.5.3-dev]
+
+### Fixed
+
+- Drop console error when loading page without `cqp` param
+
 ## [9.5.2] - 2024-02-21
 
 ### Added
