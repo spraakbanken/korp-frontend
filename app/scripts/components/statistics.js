@@ -466,12 +466,12 @@ export const statisticsComponent = {
                 $("<div id='dialog'></div>")
                     .appendTo("body")
                     .append(
-                        `<div id="pieDiv"><br/><div id="statistics_switch" style="text-align:center">
+                        `<div id="pieDiv"><div id="statistics_switch" class="text-center my-2">
                         <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a>
                         <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a>
                     </div>
-                    <div id="chartFrame" style="height:380"></div>
-                    <p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">${relHitsString}</p>
+                    <div id="chartFrame" class="h-[340px] mx-auto" />
+                    <p id="hitsDescription" class="text-center my-2" rel="localize[statstable_absfigures_hits]">${relHitsString}</p>
                     </div>`
                     )
                     .dialog({
