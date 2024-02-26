@@ -145,7 +145,7 @@ export class KwicCtrl {
 
         s.onProgress = (progressObj, isPaging) => {
             s.progress = Math.round(progressObj["stats"])
-            if (!isPaging) {
+            if (!isPaging && progressObj["total_results"] !== null) {
                 s.hits_display = util.prettyNumbers(progressObj["total_results"])
             }
         }

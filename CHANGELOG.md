@@ -2,6 +2,10 @@
 
 ## [9.5.3-dev]
 
+### Changed
+
+- Do not say "Results: 0" while loading
+
 ### Fixed
 
 - Drop console error when loading page without `cqp` param
