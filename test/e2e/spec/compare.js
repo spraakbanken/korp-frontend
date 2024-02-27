@@ -1,7 +1,4 @@
 /** @format */
-/* eslint-disable
-    no-undef,
-*/
 
 describe("compare", function () {
     const selectLemgram = async function (word) {

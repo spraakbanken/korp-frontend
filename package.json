@@ -69,7 +69,6 @@
         "dev": "webpack-dev-server --config webpack.dev.js",
         "testserver": "KORP_HOST=localhost KORP_HTTPS= webpack-dev-server --config webpack.dev.js --port 9112 &",
         "build": "ENVIRONMENT=production webpack --config webpack.prod.js",
-        "build:labb": "ENVIRONMENT=staging webpack --config webpack.prod.js",
-        "lint": "tslint --project tslint.json"
+        "build:labb": "ENVIRONMENT=staging webpack --config webpack.prod.js"
     }
 }
