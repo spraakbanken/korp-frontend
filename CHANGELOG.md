@@ -2,6 +2,10 @@
 
 ## [9.5.3-dev]
 
+### Added
+
+- Add content hash to bundle.js to fix caching [#318](https://github.com/spraakbanken/korp-frontend/issues/318)
+
 ### Changed
 
 - Do not say "Results: 0" while loading
