@@ -1,7 +1,6 @@
 /** @format */
 const webpack = require("webpack")
 const path = require("path")
-const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 
 function getKorpConfigDir() {
@@ -108,7 +107,6 @@ module.exports = {
         ],
     },
     plugins: [
-        new CleanWebpackPlugin(),
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
@@ -181,5 +179,6 @@ module.exports = {
         filename: "[name].js",
         path: path.resolve(__dirname, "dist"),
         globalObject: "this",
+        clean: true,
     },
 }
