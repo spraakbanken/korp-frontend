@@ -97,7 +97,7 @@ const createStatisticsService = function () {
     ) {
         const columns = createColumns(data.corpora, reduceVals, reduceValLabels)
 
-        const statsWorker = new Worker("worker.js")
+        const statsWorker = new Worker(new URL("./statistics_worker.ts", import.meta.url))
         statsWorker.onmessage = function (e) {
             const searchParams = {
                 reduceVals,
