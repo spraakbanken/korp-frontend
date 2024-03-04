@@ -99,6 +99,11 @@ async function getTimeData() {
 }
 
 async function getConfig() {
+    // Allow providing static corpus config.
+    if (settings["corpus_config"]) {
+        return settings["corpus_config"]
+    }
+
     let configUrl
     // The corpora to include can be defined elsewhere can in a mode
     if (settings["corpus_config_url"]) {

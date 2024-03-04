@@ -5,6 +5,7 @@
 ### Added
 
 - Add content hash to bundle.js to fix caching [#318](https://github.com/spraakbanken/korp-frontend/issues/318)
+- Allow static corpus config
 
 ### Changed
 
