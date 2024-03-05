@@ -2,6 +2,8 @@
 //
 // https://peggyjs.org/
 
+import _ from "lodash";
+
 
 function peg$subclass(child, parent) {
   function C() { this.constructor = child; }
@@ -1910,9 +1912,7 @@ function peg$parse(input, options) {
     return output
   }
 
-  var _ = window._
   var c = console
-
 
   peg$result = peg$startRuleFunction();
 

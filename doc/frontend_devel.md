@@ -794,7 +794,7 @@ To rebuild JS code from the Peggy file, do:
 
 ```sh
 cd app/scripts/cqp_parser
-npx peggy --format es CQPParser.pegjs
+npx peggy --format es -d _:lodash CQPParser.peggy
 ```
 
 ## Contributing with pull requests on Github

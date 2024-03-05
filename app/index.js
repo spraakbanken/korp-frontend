@@ -26,9 +26,6 @@ require("./styles/tailwind.scss")
 require("./styles/styles.scss")
 require("./styles/textreader.css")
 
-// TODO Remove from window. Still used in CQPParser.pegjs.
-window._ = require("lodash")
-
 require("components-jqueryui/ui/widget.js")
 require("components-jqueryui/ui/widgets/sortable.js")
 require("components-jqueryui/ui/widgets/dialog.js")
@@ -89,8 +86,6 @@ require("angular-filter/index.js")
 
 
 require("./lib/jquery.tooltip.pack.js")
-
-
 
 require("./scripts/components/sidebar.js")
 
