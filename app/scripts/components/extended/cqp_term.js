@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 const minusImage = require("../../../img/minus.png")
 
 /**

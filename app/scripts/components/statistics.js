@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import statisticsFormatting from "../../config/statistics_config.js"
 
 let html = String.raw

@@ -3,6 +3,7 @@
  *   and then merged with the tokens of the query when sending it to the backend.
  * @format
  */
+import _ from "lodash"
 
 korpApp.directive("globalFilters", [
     "globalFilterService",

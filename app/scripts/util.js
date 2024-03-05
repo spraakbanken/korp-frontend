@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import { CorpusListing } from "./corpus_listing"
 
 const jRejectBackgroundImg = require("../img/browsers/background_browser.gif")

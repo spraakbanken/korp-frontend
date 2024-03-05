@@ -1,4 +1,6 @@
 /** @format */
+import _ from "lodash"
+
 const parseDateInterval = function (op, val, expanded_format) {
     let out
     val = _.invokeMap(val, "toString")

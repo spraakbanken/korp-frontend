@@ -6,6 +6,7 @@ This is a login module that fetches a JWT from a source to see if the user is al
 If the JWT call fails, it will redirect the user to a login service, a service that will redirect
 the user back to Korp. After that the JWT call is expected to return a JWT.
 */
+import _ from "lodash"
 import { loginStatusComponent } from "./login_status"
 
 const state = {

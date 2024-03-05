@@ -1,10 +1,8 @@
 /** @format */
+import _ from "lodash"
 import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
 import korpLogo from "../img/korp.svg"
-
-const deparam = require("jquery-deparam")
-
 import jStorage from "../lib/jstorage"
 
 window.authenticationProxy = require("./components/auth/auth.js")

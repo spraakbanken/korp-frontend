@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import { KwicCtrl } from "./kwic_controller"
 
 const korpApp = angular.module("korpApp")

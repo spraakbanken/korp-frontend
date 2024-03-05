@@ -1,4 +1,6 @@
 /** @format */
+import _ from "lodash"
+
 const korpApp = angular.module("korpApp")
 
 korpApp.factory("structService", [

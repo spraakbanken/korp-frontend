@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import * as trendUtil from "../trend_diagram/trend_util"
 
 const granularities = {

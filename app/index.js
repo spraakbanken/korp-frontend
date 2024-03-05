@@ -27,6 +27,7 @@ require("./styles/tailwind.scss")
 require("./styles/styles.scss")
 require("./styles/textreader.css")
 
+// TODO Remove from window. Still used in CQPParser.pegjs.
 window._ = require("lodash")
 
 require("components-jqueryui/ui/widget.js")

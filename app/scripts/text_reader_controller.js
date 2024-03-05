@@ -1,5 +1,7 @@
 /** @format */
+import _ from "lodash"
 import statemachine from "./statemachine"
+
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("textReaderCtrl", [

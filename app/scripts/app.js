@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import { kwicPagerName, kwicPager } from "./components/pager"
 import { sidebarName, sidebarComponent } from "./components/sidebar"
 import * as autoc from "./components/autoc"

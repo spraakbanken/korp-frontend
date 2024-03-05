@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import jStorage from "../lib/jstorage"
 import { parseMapData } from "./map_services.ts"
 import { updateSearchHistory } from "@/history"

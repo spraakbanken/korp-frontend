@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import extendedComponents from "@/extended.js"
 
 export const extendedCQPValueComponent = {

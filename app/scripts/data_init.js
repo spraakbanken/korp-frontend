@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import { setDefaultConfigValues } from "./settings"
 import * as treeUtil from "./components/corpus_chooser/util"
 

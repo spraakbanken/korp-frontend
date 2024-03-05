@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import statemachine from "@/statemachine"
 import * as treeUtil from "./util"
 

@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import "../../styles/sidebar.scss"
 export const sidebarName = "sidebar"
 import statemachine from "../statemachine"

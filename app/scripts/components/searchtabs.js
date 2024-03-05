@@ -1,4 +1,6 @@
 /** @format */
+import _ from "lodash"
+
 let html = String.raw
 export const searchtabsComponent = {
     template: html`

@@ -1,6 +1,7 @@
 /** @format */
 "use strict"
-import jStorage from "../lib/jstorage"
+import _ from "lodash"
+
 window.model = {}
 
 model.normalizeStatsData = function (data) {

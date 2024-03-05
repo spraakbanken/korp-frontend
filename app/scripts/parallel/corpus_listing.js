@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 
 window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing {
     constructor(corpora) {
