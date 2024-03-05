@@ -19,6 +19,7 @@
 ### Removed
 
 - Dependency `jquery-deparam`
+- Dependency `jReject`
 
 ## [9.5.2] - 2024-02-21
 

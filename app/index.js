@@ -11,7 +11,6 @@ window.jQuery = $;
 window.$ = $;
 
 require("slickgrid/slick.grid.css")
-require("./lib/jquery.reject.css")
 require("./styles/ui_mods.css")
 require("./styles/jquery.tooltip.css")
 require("rickshaw/rickshaw.css")
@@ -49,7 +48,6 @@ require("angular-ui-bootstrap/src/popover")
 require("angular-spinner")
 require("angular-ui-sortable/src/sortable")
 
-require("jreject")
 require("jquerylocalize")
 require("jqueryhoverintent")
 require("./lib/jquery.format.js")

@@ -52,7 +52,6 @@ function initApp() {
     }
 
     $("body").addClass(`mode-${window.currentMode}`)
-    util.browserWarn()
 
     $("#search_history").change(function (event) {
         const target = $(this).find(":selected")
