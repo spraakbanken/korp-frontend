@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import { parse } from "./CQPParser"
 
 const parseDateInterval = function (op, val, expanded_format) {
     let out
@@ -145,9 +146,7 @@ const stringifyCqp = function (cqp_obj, expanded_format) {
 }
 
 window.CQP = {
-    parse: function () {
-        return CQPParser.parse(...arguments)
-    },
+    parse,
 
     stringify: stringifyCqp,
 

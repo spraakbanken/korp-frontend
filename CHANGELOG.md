@@ -10,6 +10,7 @@
 ### Changed
 
 - Do not say "Results: 0" while loading
+- Switch from PEG.js to its successor Peggy
 
 ### Fixed
 

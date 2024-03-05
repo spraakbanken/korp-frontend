@@ -786,6 +786,17 @@ https://github.com/spraakbanken/korp-geo
 [github-frontend]: https://github.com/spraakbanken/korp-frontend/
 [github-frontend-sb]: https://github.com/spraakbanken/korp-frontend-sb/
 
+### CQP Parser
+
+CQP queries are of course parsed in the backend to perform searching. But they are also parsed in the frontend, for programmatic manipulation etc. The frontend parser is written in [Peggy](https://peggyjs.org/) syntax: [CQPParser.peggy](../app/scripts/cqp_parser/CQPParser.peggy). It covers only some of the full CQP syntax supported by the backend, and it is quite expected to throw errors when parsing user-crafted queries.
+
+To rebuild JS code from the Peggy file, do:
+
+```sh
+cd app/scripts/cqp_parser
+npx peggy --format es CQPParser.pegjs
+```
+
 ## Contributing with pull requests on Github
 
 ### Issues
