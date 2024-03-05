@@ -131,18 +131,21 @@ export const simpleSearchComponent = {
                     const wordArray = currentText.split(" ")
                     const tokenArray = _.map(wordArray, (token) => {
                         const orParts = []
-                        if (ctrl.prefix) {
-                            orParts.push(token + ".*")
-                        }
+
                         if (ctrl.mid_comp) {
                             orParts.push(`.*${token}.*`)
+                        } else {
+                            if (ctrl.prefix) {
+                                orParts.push(token + ".*")
+                            }
+                            if (ctrl.suffix) {
+                                orParts.push(".*" + token)
+                            }
+                            if (!ctrl.prefix && !ctrl.suffix) {
+                                orParts.push(regescape(token))
+                            }
                         }
-                        if (ctrl.suffix) {
-                            orParts.push(`.*${token}`)
-                        }
-                        if (!(ctrl.prefix || ctrl.suffix)) {
-                            orParts.push(regescape(token))
-                        }
+
                         const res = _.map(orParts, (orPart) => `word = "${orPart}"${suffix}`)
                         return `[${res.join(" | ")}]`
                     })
