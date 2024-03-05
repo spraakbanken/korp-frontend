@@ -16,6 +16,10 @@
 - Unnecessarily complex query when combining initial/medial/final part [#235](https://github.com/spraakbanken/korp-frontend/issues/235)
 - Drop console error when loading page without `cqp` param
 
+### Removed
+
+- Dependency `jquery-deparam`
+
 ## [9.5.2] - 2024-02-21
 
 ### Added

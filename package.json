@@ -14,7 +14,6 @@
         "components-jqueryui": "1.12.1",
         "geokorp": "spraakbanken/geokorp#1.4.2",
         "jquery": "3.6.3",
-        "jquery-deparam": "^0.5.3",
         "jquery-flot": "0.8.3",
         "json3": "3.3.3",
         "jstorage": "andris9/jStorage#0.4.12",

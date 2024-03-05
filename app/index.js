@@ -54,10 +54,8 @@ require("jquerylocalize")
 require("jqueryhoverintent")
 require("./lib/jquery.format.js")
 
-let deparam = require("jquery-deparam")
-
 window.c = console
-window.currentMode = deparam(window.location.search.slice(1)).mode || "default"
+window.currentMode = new URLSearchParams(window.location.search).get('mode') || "default"
 
 try {
   // modes-files are optional and have customizing code

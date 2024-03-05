@@ -255,7 +255,6 @@ util.setDownloadLinks = function (xhr_settings, result_data) {
 `)
 
         const download_params = {
-            // query_params: JSON.stringify($.deparam.querystring(xhr_settings.url)),
             query_params: xhr_settings.url,
             format,
             korp_url: window.location.href,

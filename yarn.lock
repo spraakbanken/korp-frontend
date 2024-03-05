@@ -2503,11 +2503,6 @@ joi@^17.7.0:
     "@sideway/formula" "^3.0.0"
     "@sideway/pinpoint" "^2.0.0"
 
-jquery-deparam@^0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/jquery-deparam/-/jquery-deparam-0.5.3.tgz#51f937c448175445499081b87bf32b241b1e2693"
-  integrity sha512-R+X/F4echMhrcy2ko2I0Ek6nNN0ffnoK3VbwECEQ4hVmUu87sGjsxlLet/4nK/HtsG4ZHN/2SqqC2PkH/nKngg==
-
 jquery-flot@0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/jquery-flot/-/jquery-flot-0.8.3.tgz#a273acf43f13190f6e78701869ee24bfef12c22a"
