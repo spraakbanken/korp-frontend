@@ -131,9 +131,12 @@ export class CorpusListing {
     }
     // End TODO
 
+    /** Compile list of filters applicable to all selected corpora. */
     getDefaultFilters() {
+        /** @type {Object.<string, {settings: any, corpora: string[]}>} */
         const attrs = {}
 
+        // Collect filters of all selected corpora
         for (let corpus of this.selected) {
             for (let filter of corpus["attribute_filters"] || []) {
                 if (!(filter in attrs)) {
@@ -147,6 +150,7 @@ export class CorpusListing {
             }
         }
 
+        // Drop filters which do not apply to all selected corpora
         const corpusCount = this.selected.length
         for (let attr of Object.keys(attrs)) {
             if (attrs[attr].corpora.length !== corpusCount) {

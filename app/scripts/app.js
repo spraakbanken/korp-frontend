@@ -180,6 +180,7 @@ korpApp.run([
 
         s.extendedCQP = null
 
+        /** This deferred is used to signal that the filter feature is ready. */
         s.globalFilterDef = $q.defer()
 
         s.locationSearch = function () {
