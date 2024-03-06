@@ -84,7 +84,18 @@ export const statisticsComponent = {
                             <span class="empty-attribute-list" ng-show="$ctrl.mapAttributes.length == 0">
                                 {{ 'no_geo_info' | loc:$root.lang}}
                             </span>
-                            <div class="btn-container">
+                            <div class="p-2 flex justify-end items-baseline gap-2">
+                                <div>
+                                    <input type="checkbox" id="map-relative" ng-model="$ctrl.mapRelative" />
+                                    <label for="map-relative">
+                                        {{'map_relative' | loc:$root.lang}}
+                                        <i
+                                            class="fa fa-info-circle text-gray-400"
+                                            uib-tooltip="{{'map_relative_help' | loc:$root.lang}}"
+                                            tooltip-placement="bottom"
+                                        ></i>
+                                    </label>
+                                </div>
                                 <button
                                     class="btn btn-sm btn-primary"
                                     ng-disabled="$ctrl.mapAttributes.length == 0"
@@ -145,9 +156,9 @@ export const statisticsComponent = {
             const $ctrl = this
 
             $ctrl.noRowsError = false
-
             $ctrl.doSort = true
             $ctrl.sortColumn = null
+            $ctrl.mapRelative = true
 
             $ctrl.$onInit = () => {
                 $(window).resize(
@@ -392,7 +403,8 @@ export const statisticsComponent = {
                 const selectedAttribute = selectedAttributes[0]
 
                 const within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
-                $rootScope.mapTabs.push(backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute))
+                const request = backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
+                $rootScope.mapTabs.push(request)
             }
 
             $ctrl.mapEnabled = settings["map_enabled"]
