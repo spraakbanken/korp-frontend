@@ -95,7 +95,7 @@ korpApp.directive("statsResultCtrl", () => ({
                                 s.renderResult(columns, data)
                             })
                         },
-                        (textStatus, err) => {
+                        function (textStatus, err) {
                             const arguments_ = arguments
                             $timeout(() => {
                                 c.log("fail", arguments_)
