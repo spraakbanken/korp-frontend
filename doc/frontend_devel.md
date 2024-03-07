@@ -105,11 +105,6 @@ settings that affect the frontend.
 
 - __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
 - __corpus_config_url__ - String. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
-- __corpus_config__ - Object. Configuration for the selected mode can be given in full as a value to this option. In this case, the `corpus_config_url` call is skipped. As the corpus config can be large, you may want to use a [mode file](#modes) to load it from a file:
-    ```js
-    const corpusConfig = require("../data/corpus_config.json");
-    settings["corpus_config"] = corpusConfig;
-    ```
 - __default_language__ - String. The default interface language. Default: `"eng"`
 - __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
     that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
@@ -225,13 +220,13 @@ If no mode is given, mode is `default`.
 
 It then looks for mode-specific code in `<configDir>/modes/<mode>_mode.js`. Mode code may overwrite values from `config.yml` by altering `window.settings`.
 
-It then asks the backend for settings for this specific mode, from the url given by the `corpus_config_url` option, which defaults to:
+It then looks for settings for this specific mode, the **corpus config**. If it exists at `<configDir>/modes/<mode>_corpus_config.json`, it will be loaded from there. Otherwise, it retrieves it from the url given by the `corpus_config_url` option, which defaults to:
 
 ```
 https://<korp_backend_url>/corpus_config?mode=<mode>
 ```
 
-See backend documentation for more information.
+See the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API for more information.
 
 ## Parallel mode
 
