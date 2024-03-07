@@ -89,7 +89,7 @@
     "word_pic_hits": "träffar",
 
     "show_map": "Visa karta",
-    "map_relative": "Relativt",
+    "map_relative": "Relativ",
     "map_relative_help": "Gör varje platsmarkörs storlek relativ till platsens förekomst i korpusurvalet.",
     "map_name": "Plats",
     "map_abs_occurrences": "Absoluta förekomster",

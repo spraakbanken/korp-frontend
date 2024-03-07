@@ -85,7 +85,7 @@ export const statisticsComponent = {
                                 {{ 'no_geo_info' | loc:$root.lang}}
                             </span>
                             <div class="p-2 flex justify-end items-baseline gap-2">
-                                <div>
+                                <div class="whitespace-nowrap">
                                     <input type="checkbox" id="map-relative" ng-model="$ctrl.mapRelative" />
                                     <label for="map-relative">
                                         {{'map_relative' | loc:$root.lang}}
