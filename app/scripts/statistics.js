@@ -116,6 +116,7 @@ const createStatisticsService = function () {
         }
 
         statsWorker.postMessage({
+            type: "korpStatistics",
             data,
             reduceVals,
             groupStatistics: settings["group_statistics"],
