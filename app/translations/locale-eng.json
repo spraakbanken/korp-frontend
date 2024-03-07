@@ -100,6 +100,7 @@
     "search_aborted": "The search was aborted",
 
     "show_map": "Show map",
+    "map_no_data": "Selected corpora have no geographical data.",
     "map_relative": "Relative",
     "map_relative_help": "Make map marker sizes relative to location prevalence in the corpus selection.",
     "map_name": "Place",

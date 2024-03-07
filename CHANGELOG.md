@@ -16,6 +16,7 @@
 ### Fixed
 
 - Unnecessarily complex query when combining initial/medial/final part [#235](https://github.com/spraakbanken/korp-frontend/issues/235)
+- Disable "Show map" button if no location data is available [#238](https://github.com/spraakbanken/korp-frontend/issues/238)
 - Drop console error when loading page without `cqp` param
 
 ### Removed

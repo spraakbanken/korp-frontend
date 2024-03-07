@@ -66,7 +66,14 @@ export const statisticsComponent = {
                         auto-close="outsideClick"
                         ng-show="$ctrl.mapEnabled"
                     >
-                        <button class="btn btn-sm btn-default" uib-dropdown-toggle>
+                        <button
+                            class="btn btn-sm btn-default"
+                            uib-dropdown-toggle
+                            ng-disabled="!$ctrl.mapAttributes.length"
+                            uib-tooltip="{{'map_no_data' | loc:$root.lang}}"
+                            tooltip-placement="right"
+                            tooltip-enable="!$ctrl.mapAttributes.length"
+                        >
                             {{'show_map' | loc:$root.lang}}<span class="caret"></span>
                         </button>
                         <div uib-dropdown-menu>
@@ -426,12 +433,12 @@ export const statisticsComponent = {
                     }
                 }
 
-                attrs = _.map(attrs, (val) => val)
-                if (attrs && attrs.length > 0) {
-                    attrs[0].selected = true
-                }
+                $ctrl.mapAttributes = Object.values(attrs)
 
-                $ctrl.mapAttributes = attrs
+                // Select first attribute
+                if ($ctrl.mapAttributes.length) {
+                    $ctrl.mapAttributes[0].selected = true
+                }
             }
 
             $ctrl.mapToggleSelected = function (index, event) {
