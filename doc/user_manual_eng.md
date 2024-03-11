@@ -56,21 +56,25 @@ the search button or hitting Enter.
 Below the search field are a selection of check boxes, giving you a few options for your search.
 
 **In free order**
+
 When searching for more than one word, the default search requires all words to occur in exactly the given order next to each
 other. By checking the *in free order* box, the search will instead find all sentences containing the search words, but the
 order does not matter, and they do not need to be next to each other.
 
 **Initial part and final part**
+
 The check boxes *initial part* and *final part* extend the search to words that include the given word as a prefix
 or suffix. In the case of a lemgram search a compound analysis is used to determine the possible results that can have
 the chosen word as initial or final part.
 
 **Case-insensitive search**
+
 There is also a check box for *case-insensitive* search. If it is ticked the result will include both upper-cased and
 lower-cased words (i.e. searching for "katt" will also yield hits for "KATT" and "Katt"). This has however no effect on
 a lemgram search since lemgram searches are always case-insensitive.
 
 **Related words**
+
 After performing a lemgram search a button will appear to the very right of the search field which leads to a list of
 related words. Clicking on any of the listed words will initiate a new search.
 
@@ -104,6 +108,7 @@ To add *and* including a new *or* group press on the +-button in the bottom left
 ![Repeat token in extended search](images/utokad-upprepa.png)
 
 **Repetition, sentence start and sentence end**
+
 In the bottom right corner of every token box you can find a cogwheel button which provides further search criteria.
 The first one, *Repeat* lets you repeat the current token as many times as specified. By specifying a token with
 *Any word* and *Repeat 1 to 3 times* you can define a gap in your search query consisting of at least one and at max
@@ -113,6 +118,7 @@ first or last in the sentence. Remember that punctuation also counts as a token 
 sentence most often is a full stop instead of a word.
 
 **Search across sentence boundaries**
+
 By default, all searches are performed *within* sentence boundaries, meaning you'll never get a
 hit that extends beyond a sentence. For some corpora, however, it is possible to allow hits
 that span a larger amount of text, such as a paragraph, making it possible to search across sentence boundaries.
@@ -123,6 +129,7 @@ selected corpora has this support, you will be able to select something like "up
 possible context that is less than a paragraph for those that do not support it, which in most cases will be a sentence.
 
 **Parallel Search**
+
 Some of the corpora in Korp are so-called parallel corpora, which consist of two versions of the same text that are linked
 at the sentence level.
 Most often, these are texts in two different languages. The search result from such a corpus
@@ -194,11 +201,13 @@ The search hits are grouped by corpus, and the corpus which the subsequent hits 
 At the bottom of the page below the KWIC lines, you have the option to export the current page's hits for download in various formats.
 
 **Larger Context**
+
 In some corpora it is possible to see a larger context than just a sentence, usually whole paragraphs. To display any larger
 context, you click on the "Show context" link to the right of the page browser. This switches to an alternative hit page, where more context is shown where
 possible, and each hit line is wrapped for easier reading. Otherwise, the context mode works just like the regular KWIC mode.
 
 **Side Panel**
+
 By clicking on the token in the KWIC, words can be selected, and when a word has been selected, a side panel appears on the right hand side. This sidebar
 contains information about the selected word (under the heading *Word attributes*), and possibly also about the sentence or larger text that the word is part of (under *Text attributes*).
 The word attributes are information such as part of speech, base form, compound analysis, and more, while the text attributes can be author, year of publication and the like.
@@ -227,6 +236,7 @@ in the different corpora, in absolute or relative numbers.
 At the bottom of the page, under the table, you have the option to export the statistics table for download in various formats.
 
 **Trend Diagram**
+
 If any of the corpora searched contain time information, it is possible to produce a trend diagram. The trend diagram is based on rows in the statistics table,
 and shows their relative frequency over time. The relative frequency is calculated as the number of hits per million tokens for each specific unit of time.
 
@@ -239,6 +249,7 @@ Below the trend diagram there is a miniature version of the chart with handles t
 is determined by the size of the time span displayed, and by zooming in it is possible to display time information down to the level of seconds, provided the selected material supports it.
 
 **Map**
+
 The map function, like the trend diagram, is based on rows in the statistics table. If available, you reach it by selecting one or more
 rows in the statistics table, and then click the "Show map" button.
 In the menu that appears, you choose which attribute you want to base the map on. For some corpora it is only possible

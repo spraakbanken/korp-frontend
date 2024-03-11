@@ -4,7 +4,8 @@ const korpApp = angular.module("korpApp")
 
 korpApp.directive("graphCtrl", () => ({
     controller: [
-        "$scope", "$rootScope",
+        "$scope",
+        "$rootScope",
         ($scope, $rootScope) => {
             const s = $scope
             const r = $rootScope

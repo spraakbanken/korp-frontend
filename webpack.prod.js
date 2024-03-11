@@ -1,9 +1,9 @@
 /** @format */
-const {merge} = require("webpack-merge")
+const { merge } = require("webpack-merge")
 const common = require("./webpack.common.js")
 const CompressionPlugin = require("compression-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer")
 
 module.exports = merge(common, {
     plugins: [
@@ -11,19 +11,19 @@ module.exports = merge(common, {
         new BundleAnalyzerPlugin({
             // creates a report.html in the dist folder.
             analyzerMode: "static",
-            openAnalyzer: false
-        })
+            openAnalyzer: false,
+        }),
     ],
     optimization: {
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
                     mangle: {
-                        reserved: ["$super"]
-                    }
-                }
-            })
-        ]
+                        reserved: ["$super"],
+                    },
+                },
+            }),
+        ],
     },
-    mode: "production"
+    mode: "production",
 })

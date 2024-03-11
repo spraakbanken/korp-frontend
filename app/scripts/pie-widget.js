@@ -1,4 +1,6 @@
 /** @format */
+import Raphael from "raphael"
+
 const pie_widget = {
     options: {
         container_id: "",
@@ -131,7 +133,7 @@ const pie_widget = {
             }
         }
 
-        const r = window.Raphael(this.options.container_id)
+        const r = Raphael(this.options.container_id)
         this.canvas = r
         const pieTrack = []
         pieTrack["accumulatedArc"] = 0

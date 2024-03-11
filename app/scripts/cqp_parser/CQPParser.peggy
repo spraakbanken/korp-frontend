@@ -11,9 +11,7 @@
     return output
   }
 
-  var _ = window._
   var c = console
-
 }
 
 

@@ -1,5 +1,29 @@
 # Changelog
 
+## [9.5.3] - 2024-03-11
+
+### Added
+
+- Add content hash to bundle.js to fix caching [#318](https://github.com/spraakbanken/korp-frontend/issues/318)
+- Add relative hits to map view [#52](https://github.com/spraakbanken/korp-frontend/issues/52)
+- Allow static corpus config
+
+### Changed
+
+- Do not say "Results: 0" while loading
+- Switch from PEG.js to its successor Peggy
+
+### Fixed
+
+- Unnecessarily complex query when combining initial/medial/final part [#235](https://github.com/spraakbanken/korp-frontend/issues/235)
+- Disable "Show map" button if no location data is available [#238](https://github.com/spraakbanken/korp-frontend/issues/238)
+- Drop console error when loading page without `cqp` param
+
+### Removed
+
+- Dependency `jquery-deparam`
+- Dependency `jReject`
+
 ## [9.5.2] - 2024-02-21
 
 ### Added
@@ -109,6 +133,8 @@
 - Most bug fixes was related to the refactoring breaking things
 - Lots of bug fixes for the sidebar
 
+[unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.5.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.3
 [9.5.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.2
 [9.5.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.1
 [9.5.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.0

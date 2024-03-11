@@ -1,6 +1,7 @@
 /** @format */
 // SB-newsdesk 1.0b
 // Requirements: JQuery, JQuery.ui.position, trust filter, loc filter, Font Awesome
+import _ from "lodash"
 
 angular.module("newsdesk", []).directive("newsDesk", [
     "$rootElement",

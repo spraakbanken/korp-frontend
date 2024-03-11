@@ -1,5 +1,5 @@
-Install pegjs:
-npm install -g pegjs
-
 Rebuild parser:
-pegjs --format globals -e  CQPParser CQPParser.pegjs
+
+```sh
+npx peggy --format es -d _:lodash CQPParser.peggy
+```

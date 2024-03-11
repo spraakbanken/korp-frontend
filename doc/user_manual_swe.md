@@ -60,22 +60,26 @@ För att göra en lemgramsökning väljer man ett av dessa med piltangenterna sa
 Under sökfältet finns ett antal kryssrutor med inställningsmöjligheter för ens sökning.
 
 **I fri följd**
+
 Vid sökning på fler än ett ord görs som standard en frassökning, vilket innebär att man enbart får träffar där sökorden
 förekommer i exakt den ordning man angivit, och direkt efter varandra.
 Genom att kryssa i rutan *i fri följd* söks det i stället efter meningar som innehåller samtliga
 sökord, i valfri ordning och inte nödvändigtvis intill varandra.
 
-**Förled och efterled**  
+**Förled och efterled**
+
 De två kryssrutorna *förled* och *efterled* utökar ens sökning till att även inkludera ord där det sökta ordet eller orden förekommer som del av ett annat ord.
 Vid vanlig ordsökning betyder detta helt enkelt att man söker på ord som börjar eller slutar med en
 viss teckensekvens. Vid lemgramsökning används i stället en sammansättningsanalys som varje ord genomgått.
 
-**Skiftlägesoberoende sökning**  
+**Skiftlägesoberoende sökning**
+
 Utöver kryssrutorna för förled och efterled så finns det även en kryssruta för *skiftlägesoberoende* sökning. Om denna är
 ikryssad innebär det att om man söker på till exempel "katt", så kommer man även att få träffar som "KATT" och "Katt". Det görs
 alltså ingen skillnad på stora och små bokstäver. Detta har ingen effekt vid en lemgramsökning, eftersom de alltid är skiftlägesoberoende.
 
-**Relaterade ord**  
+**Relaterade ord**
+
 När en lemgramsökning har utförts dyker det upp en knapp längst till höger, som leder till en lista över relaterade ord.
 Genom att klicka på dessa ord kan man utföra nya sökningar.
 
@@ -110,14 +114,16 @@ i högra hörnet. För att lägga till ett *och* samt en ny *eller*-grupp trycke
 
 ![Upprepa token i utökad sökning](images/utokad-upprepa.png)
 
-**Upprepning, meningsbörjan och meningsslut**  
+**Upprepning, meningsbörjan och meningsslut**
+
 Längst ner i högra hörnet på varje token finns det en knapp med ett kugghjul. Klickar man på denna får man upp en liten meny
 med ytterligare kriterier. Det första av dessa, *Upprepa*, låter en uppge att aktuellt token får upprepas ett visst antal gånger.
 Ett token med till exempel *Vilket ord som helst* och *Upprepa 1 till 3 gånger* tillåter en "lucka" i ens sökuttryck på minst ett och max tre token.
 De två andra kriterierna är *Meningsbörjan* och *Meningsslut*, som anger att aktuellt token ska vara antingen först eller sist
 i meningen. Tänk på att skiljetecken också räknas som token, vilket innebär att att sista tokenet i en mening oftast är en punkt och inte ett ord.
 
-**Sök över meningsgränser**  
+**Sök över meningsgränser**
+
 Som standard utförs alla sökningar *inom* meningsgränserna, vilket betyder att man aldrig kommer att få en
 träff som sträcker sig utanför en mening. För vissa korpusar finns det dock möjlighet att i stället tillåta träffar som spänner
 över en större mängd text, till exempel ett stycke, vilket gör det möjligt att söka över meningsgränser.
@@ -128,7 +134,8 @@ utökad kontext så kommer man kunna välja det i listan. Om bara en del av de v
 något i stil med "upp till stycke". Detta innebär att sökningen kommer ske inom styckesgränsen *för de korpusar som stöder det*, och största
 möjliga kontext som är mindre än ett stycke, för de som inte stöder det, vilket i de flesta fall kommer vara en mening.
 
-**Parallellsökning**  
+**Parallellsökning**
+
 Vissa av korpusarna i Korp är så kallade parallellkorpusar, som består av två versioner av samma text som är länkade sinsemellan
 på meningsnivå. Oftast rör det sig om texter på två olika språk. Sökresultatet från en sådan korpus kommer bestå av
 *par* av meningar, en för varje version av texten. För att kunna utföra parallellsökningar måste man först växla till det
@@ -194,12 +201,14 @@ Sökträffarna är grupperade efter korpus, och vilken korpus de efterföljande 
 
 Längst ner på sidan under KWIC-raderna, finns möjligheten att exportera den aktuella sidans träffar i olika format för nedladdning.
 
-**Större kontext**  
+**Större kontext**
+
 I vissa korpusar är det möjligt att få se en större kontext än bara en mening. Vanligtvis rör det sig om hela stycken. För att visa eventuell större
 kontext klickar man på länken "Via kontext" till höger om sidbläddraren. Detta växlar till en alternativ träffsida, där större kontext visas i de fall
 det är möjligt, och varje träffrad är radbruten för enklare läsning. I övrigt fungerar kontextläget precis som det vanliga KWIC-läget.
 
-**Sidopanelen**  
+**Sidopanelen**
+
 Genom att klicka på token i KWICen kan man markera ord, och när ett ord har markerats visas till höger en sidopanel. Denna sidopanel
 innehåller både information om det markerade ordet (under rubriken *Ordattribut*), och eventuellt också den mening eller större text som ordet ingår i (under *Textattribut*).
 Ordattributen är information som ordklass, grundform, sammansättningsanalys med mera, medan textattributen kan vara författare, utgivninsår och liknande.
@@ -227,7 +236,8 @@ i de olika korpusarna. Här kan man också växla mellan att visa diagram för a
 
 Längst ner på sidan, under tabellen, finns möjligheten att exportera statistiktabellen i olika format för nedladdning.
 
-**Trenddiagram**  
+**Trenddiagram**
+
 Om någon av korpusarna man har sökt i innehåller tidsinformation, är det möjligt att ta fram ett trenddiagram. Trenddiagrammet utgår från rader i statistiktabellen,
 och visar förändringen av dessa raders relativa frekvens över tid. Den relativa frekvensen i diagrammet visar antalet träffar per en miljon token för varje specifik tidsenhet.
 
@@ -239,7 +249,8 @@ klicka på en punkt på en linje, öppnas en ny flik med alla träffar för just
 Under trenddiagrammet finns en miniatyrversion av diagrammet, med handtag som låter en zooma in och panorera runt i det stora diagrammet. Upplösningen på trenddiagrammets tidaxel
 bestäms av storleken på det tidsspann som visas, och genom att zooma in går det att visa tidsinformation ner på sekundnivå, förutsatt att det valda materialet har stöd för det.
 
-**Karta**  
+**Karta**
+
 Kartfunktionen utgår likt trenddiagrammet från rader i statistiktabellen. Du når den genom att kryssa för en eller flera
 rader i statistiken med hjälp av kryssrutorna längst till vänster i tabellen, och därefter klicka på knappen "Visa karta".
 I den meny som då fälls ut väljer du vilket attribut du vill basera kartan på. För de flesta korpusar är det endast möjligt

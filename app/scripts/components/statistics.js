@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import statisticsFormatting from "../../config/statistics_config.js"
 
 let html = String.raw
@@ -65,7 +66,14 @@ export const statisticsComponent = {
                         auto-close="outsideClick"
                         ng-show="$ctrl.mapEnabled"
                     >
-                        <button class="btn btn-sm btn-default" uib-dropdown-toggle>
+                        <button
+                            class="btn btn-sm btn-default"
+                            uib-dropdown-toggle
+                            ng-disabled="!$ctrl.mapAttributes.length"
+                            uib-tooltip="{{'map_no_data' | loc:$root.lang}}"
+                            tooltip-placement="right"
+                            tooltip-enable="!$ctrl.mapAttributes.length"
+                        >
                             {{'show_map' | loc:$root.lang}}<span class="caret"></span>
                         </button>
                         <div uib-dropdown-menu>
@@ -83,7 +91,18 @@ export const statisticsComponent = {
                             <span class="empty-attribute-list" ng-show="$ctrl.mapAttributes.length == 0">
                                 {{ 'no_geo_info' | loc:$root.lang}}
                             </span>
-                            <div class="btn-container">
+                            <div class="p-2 flex justify-end items-baseline gap-2">
+                                <div class="whitespace-nowrap">
+                                    <input type="checkbox" id="map-relative" ng-model="$ctrl.mapRelative" />
+                                    <label for="map-relative">
+                                        {{'map_relative' | loc:$root.lang}}
+                                        <i
+                                            class="fa fa-info-circle text-gray-400"
+                                            uib-tooltip="{{'map_relative_help' | loc:$root.lang}}"
+                                            tooltip-placement="bottom"
+                                        ></i>
+                                    </label>
+                                </div>
                                 <button
                                     class="btn btn-sm btn-primary"
                                     ng-disabled="$ctrl.mapAttributes.length == 0"
@@ -144,9 +163,9 @@ export const statisticsComponent = {
             const $ctrl = this
 
             $ctrl.noRowsError = false
-
             $ctrl.doSort = true
             $ctrl.sortColumn = null
+            $ctrl.mapRelative = true
 
             $ctrl.$onInit = () => {
                 $(window).resize(
@@ -391,7 +410,8 @@ export const statisticsComponent = {
                 const selectedAttribute = selectedAttributes[0]
 
                 const within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
-                $rootScope.mapTabs.push(backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute))
+                const request = backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
+                $rootScope.mapTabs.push(request)
             }
 
             $ctrl.mapEnabled = settings["map_enabled"]
@@ -413,12 +433,12 @@ export const statisticsComponent = {
                     }
                 }
 
-                attrs = _.map(attrs, (val) => val)
-                if (attrs && attrs.length > 0) {
-                    attrs[0].selected = true
-                }
+                $ctrl.mapAttributes = Object.values(attrs)
 
-                $ctrl.mapAttributes = attrs
+                // Select first attribute
+                if ($ctrl.mapAttributes.length) {
+                    $ctrl.mapAttributes[0].selected = true
+                }
             }
 
             $ctrl.mapToggleSelected = function (index, event) {
@@ -465,12 +485,12 @@ export const statisticsComponent = {
                 $("<div id='dialog'></div>")
                     .appendTo("body")
                     .append(
-                        `<div id="pieDiv"><br/><div id="statistics_switch" style="text-align:center">
+                        `<div id="pieDiv"><div id="statistics_switch" class="text-center my-2">
                         <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a>
                         <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a>
                     </div>
-                    <div id="chartFrame" style="height:380"></div>
-                    <p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">${relHitsString}</p>
+                    <div id="chartFrame" class="h-[340px] mx-auto" />
+                    <p id="hitsDescription" class="text-center my-2" rel="localize[statstable_absfigures_hits]">${relHitsString}</p>
                     </div>`
                     )
                     .dialog({

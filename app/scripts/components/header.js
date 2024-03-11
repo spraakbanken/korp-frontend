@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import korpLogo from "../../img/korp_slogan.svg"
 import korpLogoEn from "../../img/korp_slogan_en.svg"
 import sbxLogo from "../../img/sprakbanken_text_slogan.svg"

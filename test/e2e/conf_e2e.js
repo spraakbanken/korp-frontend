@@ -12,13 +12,18 @@ exports.config = {
     }
   },
   specs: ['spec/*.js'],
+  getPageTimeout: 20_000,
+  allScriptsTimeout: 20_000,
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
-    showColors: true,
-    defaultTimeoutInterval: 20000
+    defaultTimeoutInterval: 40_000,
   },
   directConnect: true,
   restartBrowserBetweenTests: true,
   SELENIUM_PROMISE_MANAGER: false
 };
+
+// Protractor seems to add 4 listeners to run, and then 1 for each test (`it()`). Default max is 10.
+// TODO Find out what the listeners are and how not to remove them instead.
+process.setMaxListeners(20);

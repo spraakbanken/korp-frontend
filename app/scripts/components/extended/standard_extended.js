@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import statemachine from "@/statemachine"
 
 let html = String.raw
@@ -104,10 +105,15 @@ export const extendedStandardComponent = {
 
             /** Trigger error if the "free order" option is incompatible with the query */
             ctrl.validateFreeOrder = () => {
-                const cqpObjs = CQP.parse(ctrl.cqp)
-                // If query doesn't support free word order, and the "free order" checkbox is checked,
-                // then show explanation and let user resolve the conflict
-                ctrl.orderError = !CQP.supportsInOrder(cqpObjs) && $scope.freeOrder
+                try {
+                    const cqpObjs = CQP.parse(ctrl.cqp || "[]")
+                    // If query doesn't support free word order, and the "free order" checkbox is checked,
+                    // then show explanation and let user resolve the conflict
+                    ctrl.orderError = !CQP.supportsInOrder(cqpObjs) && $scope.freeOrder
+                } catch (e) {
+                    console.error("Failed to parse CQP", ctrl.cqp)
+                    ctrl.orderError = false
+                }
             }
 
             ctrl.cqp = $location.search().cqp

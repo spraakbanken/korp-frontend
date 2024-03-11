@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import statisticsFormatting from "../config/statistics_config.js"
 const pieChartImg = require("../img/stats2.png")
 
@@ -97,7 +98,7 @@ const createStatisticsService = function () {
     ) {
         const columns = createColumns(data.corpora, reduceVals, reduceValLabels)
 
-        const statsWorker = new Worker("worker.js")
+        const statsWorker = new Worker(new URL("./statistics_worker.ts", import.meta.url))
         statsWorker.onmessage = function (e) {
             const searchParams = {
                 reduceVals,
@@ -115,6 +116,7 @@ const createStatisticsService = function () {
         }
 
         statsWorker.postMessage({
+            type: "korpStatistics",
             data,
             reduceVals,
             groupStatistics: settings["group_statistics"],

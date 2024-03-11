@@ -1,7 +1,4 @@
 /** @format */
-/* eslint-disable
-    no-undef,
-*/
 
 let i = 0
 const cycleSearch = function () {

@@ -13,8 +13,10 @@ import { StatsData, RowsEntity, Value } from "./interfaces/stats"
 */
 
 onmessage = function (e) {
-    const data: StatsData = e.data.data
+    // Ignore messages sent by Webpack dev server.
+    if (e.data.type != "korpStatistics") return
 
+    const data: StatsData = e.data.data
     const { combined, corpora, count } = data
     const reduceVals: string[] = e.data.reduceVals
     const groupStatistics: string[] = e.data.groupStatistics

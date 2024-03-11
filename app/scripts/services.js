@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import jStorage from "../lib/jstorage"
 import { parseMapData } from "./map_services.ts"
 import { updateSearchHistory } from "@/history"
@@ -176,17 +177,17 @@ korpApp.factory("backend", [
             return lexicons.relatedWordSearch(lemgram)
         },
 
-        requestMapData(cqp, cqpExprs, within, attribute) {
+        requestMapData(cqp, cqpExprs, within, attribute, relative) {
             const cqpSubExprs = {}
             _.map(_.keys(cqpExprs), (subCqp, idx) => (cqpSubExprs[`subcqp${idx}`] = subCqp))
 
-            const def = $q.defer()
             const params = {
                 group_by_struct: attribute.label,
                 cqp,
                 corpus: attribute.corpora.join(","),
                 incremental: true,
                 split: attribute.label,
+                relative_to_struct: relative ? attribute.label : undefined,
             }
             _.extend(params, settings.corpusListing.getWithinParameters())
 

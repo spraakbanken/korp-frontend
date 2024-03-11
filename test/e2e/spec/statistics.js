@@ -1,7 +1,5 @@
 /** @format */
-/* eslint-disable
-    no-undef,
-*/
+
 browser
     .manage()
     .logs()

@@ -11,7 +11,6 @@ window.jQuery = $;
 window.$ = $;
 
 require("slickgrid/slick.grid.css")
-require("./lib/jquery.reject.css")
 require("./styles/ui_mods.css")
 require("./styles/jquery.tooltip.css")
 require("rickshaw/rickshaw.css")
@@ -26,8 +25,6 @@ require("./styles/tailwind.scss")
 
 require("./styles/styles.scss")
 require("./styles/textreader.css")
-
-window._ = require("lodash")
 
 require("components-jqueryui/ui/widget.js")
 require("components-jqueryui/ui/widgets/sortable.js")
@@ -48,15 +45,12 @@ require("angular-ui-bootstrap/src/popover")
 require("angular-spinner")
 require("angular-ui-sortable/src/sortable")
 
-require("jreject")
 require("jquerylocalize")
 require("jqueryhoverintent")
 require("./lib/jquery.format.js")
 
-let deparam = require("jquery-deparam")
-
 window.c = console
-window.currentMode = deparam(window.location.search.slice(1)).mode || "default"
+window.currentMode = new URLSearchParams(window.location.search).get('mode') || "default"
 
 try {
   // modes-files are optional and have customizing code
@@ -66,7 +60,6 @@ try {
 }
 
 require("angular-dynamic-locale/dist/tmhDynamicLocale.js")
-window.Raphael = require("raphael")
 
 require("jquery-flot/jquery.flot.js")
 require("jquery-flot/jquery.flot.stack.js")
@@ -93,8 +86,6 @@ require("angular-filter/index.js")
 
 
 require("./lib/jquery.tooltip.pack.js")
-
-
 
 require("./scripts/components/sidebar.js")
 

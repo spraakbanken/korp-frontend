@@ -1,4 +1,10 @@
-/** @format */
+/**
+ * @file "Global filters" are similar to token conditions (like `word = "rock"`), but are managed separately in the GUI
+ *   and then merged with the tokens of the query when sending it to the backend.
+ * @format
+ */
+import _ from "lodash"
+
 korpApp.directive("globalFilters", [
     "globalFilterService",
     (globalFilterService) => ({
@@ -133,15 +139,27 @@ korpApp.factory("globalFilterService", [
         // deferred for waiting for all directives to register
         var listenerDef = $q.defer()
 
+        /**
+         * @typedef {Object} FilterValuesItem
+         * @property {any[]} value
+         * @property {[any, number][]} possibleValues
+         */
+
+        /** Model of filter data. */
         var dataObj = {
+            /** Selected values for each filter. @type {Object.<string, FilterValuesItem>} */
             filterValues: {},
+            /** @type {string[]} */
             defaultFilters: [],
+            /** @type {Object.<string, {settings: any, corpora: string[]}>} */
             attributes: {},
+            /** Whether to show the filter controls. @type {boolean} */
             showDirective: false,
         }
 
         let currentData = {}
 
+        /** Populate `filterValues` from `defaultFilters`. */
         const initFilters = function () {
             let filter
             const filterValues = dataObj.filterValues || {}
@@ -292,6 +310,7 @@ korpApp.factory("globalFilterService", [
             }
         }
 
+        /** Parse encoded url param value to local data. */
         const setFromLocation = function (globalFilter) {
             let attrKey
             if (!globalFilter) {
@@ -301,6 +320,8 @@ korpApp.factory("globalFilterService", [
                 return
             }
             const parsedFilter = JSON.parse(atob(globalFilter))
+
+            // Set values from param, if corresponding filter is available.
             for (attrKey in parsedFilter) {
                 const attrValues = parsedFilter[attrKey]
                 if (dataObj.defaultFilters.includes(attrKey)) {
@@ -308,6 +329,7 @@ korpApp.factory("globalFilterService", [
                 }
             }
 
+            // Set other available filters to empty.
             for (attrKey in dataObj.filterValues) {
                 if (!(attrKey in parsedFilter)) {
                     dataObj.filterValues[attrKey].value = []
@@ -315,6 +337,7 @@ korpApp.factory("globalFilterService", [
             }
         }
 
+        /** Build a CQP token object of AND-combined conditions from active filters. */
         const makeCqp = function () {
             const exprs = []
             const andArray = []
@@ -334,6 +357,7 @@ korpApp.factory("globalFilterService", [
             return [{ and_block: andArray }]
         }
 
+        /** Set url param from local data, as base64-encoded json. */
         const updateLocation = function () {
             const rep = {}
             for (let attrKey in dataObj.filterValues) {
@@ -351,16 +375,20 @@ korpApp.factory("globalFilterService", [
             }
         }
 
+        /** Update available filters when changing corpus selection. */
         $rootScope.$on("corpuschooserchange", function () {
             if (settings.corpusListing.selected.length === 0) {
                 dataObj.showDirective = false
             } else {
+                /** @type {Object.<string, {settings: any, corpora: string[]}>} */
                 const filterAttributes = settings.corpusListing.getDefaultFilters()
 
+                // Disable the filters feature if none are applicable to all selected corpora.
                 if (_.isEmpty(filterAttributes)) {
                     dataObj.showDirective = false
                     $location.search("global_filter", null)
                     $rootScope.globalFilter = null
+                    // Unset any active filters.
                     for (let filter of dataObj.defaultFilters) {
                         dataObj.filterValues[filter].value = []
                     }
@@ -377,9 +405,11 @@ korpApp.factory("globalFilterService", [
                     callDirectives()
                 }
             }
+            // Flag that the filter feature is ready.
             $rootScope.globalFilterDef.resolve()
         })
 
+        /** Set up sync from url params to local data. */
         $rootScope.$watch(
             () => $location.search().global_filter,
             (filter) => setFromLocation(filter)

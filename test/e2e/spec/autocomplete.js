@@ -1,7 +1,5 @@
 /** @format */
-/* eslint-disable
-    no-undef,
-*/
+
 const waitFor = async function (elm) {
     await browser.wait(() => elm.isPresent())
     await browser.wait(() => elm.isDisplayed())

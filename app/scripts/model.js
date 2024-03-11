@@ -1,6 +1,7 @@
 /** @format */
 "use strict"
-import jStorage from "../lib/jstorage"
+import _ from "lodash"
+
 window.model = {}
 
 model.normalizeStatsData = function (data) {
@@ -22,7 +23,7 @@ class BaseProxy {
         this.chunkCache = ""
         this.progress = 0
         this.total = null
-        this.total_results = 0
+        this.total_results = null
         this.pendingRequests = []
     }
 
@@ -40,7 +41,7 @@ class BaseProxy {
         this.prev = ""
         this.chunkCache = ""
         this.progress = 0
-        this.total_results = 0
+        this.total_results = null
         this.total = null
     }
 
@@ -129,7 +130,7 @@ class BaseProxy {
                     .map((corpus) => Number(settings.corpora[corpus.toLowerCase()].info.Size))
                     .reduce((a, b) => a + b, 0)
                 this.progress += sum
-                this.total_results += parseInt(val.hits)
+                this.total_results += val.hits !== null ? parseInt(val.hits) : null
             }
         })
 

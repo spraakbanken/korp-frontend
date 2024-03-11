@@ -1,11 +1,6 @@
 /** @format */
+import _ from "lodash"
 import { CorpusListing } from "./corpus_listing"
-
-const jRejectBackgroundImg = require("../img/browsers/background_browser.gif")
-require("../img/browsers/browser_chrome.gif")
-require("../img/browsers/browser_firefox.gif")
-require("../img/browsers/browser_safari.gif")
-require("../img/browsers/browser_opera.gif")
 
 window.util = {}
 
@@ -254,7 +249,6 @@ util.setDownloadLinks = function (xhr_settings, result_data) {
 `)
 
         const download_params = {
-            // query_params: JSON.stringify($.deparam.querystring(xhr_settings.url)),
             query_params: xhr_settings.url,
             format,
             korp_url: window.location.href,
@@ -361,67 +355,6 @@ util.translateAttribute = (lang, translations, value) => {
     } else {
         return value
     }
-}
-
-util.browserWarn = function () {
-    $.reject({
-        reject: {
-            msie5: true,
-            msie6: true,
-            msie7: true,
-            msie8: true,
-            msie9: true,
-        },
-
-        imagePath: _.split(jRejectBackgroundImg, "/").slice(0, -1).join("/"),
-        display: ["firefox", "chrome", "safari", "opera"],
-        browserInfo: {
-            // Settings for which browsers to display
-            firefox: {
-                text: "Firefox", // Text below the icon
-                url: "http://www.mozilla.com/firefox/",
-            }, // URL For icon/text link
-
-            safari: {
-                text: "Safari",
-                url: "http://www.apple.com/safari/download/",
-            },
-
-            opera: {
-                text: "Opera",
-                url: "http://www.opera.com/download/",
-            },
-
-            chrome: {
-                text: "Chrome",
-                url: "http://www.google.com/chrome/",
-            },
-
-            msie: {
-                text: "Internet Explorer",
-                url: "http://www.microsoft.com/windows/Internet-explorer/",
-            },
-        },
-
-        header: "Du använder en omodern webbläsare", // Header of pop-up window
-        paragraph1:
-            "Korp använder sig av moderna webbteknologier som inte stödjs av din webbläsare. En lista på de mest populära moderna alternativen visas nedan. Firefox rekommenderas varmt.", // Paragraph 1
-        paragraph2: "", // Paragraph 2
-        closeMessage:
-            "Du kan fortsätta ändå – all funktionalitet är densamma – men så fort du önskar att Korp vore snyggare och snabbare är det bara att installera Firefox, det tar bara en minut.", // Message displayed below closing link
-        closeLink: "Stäng varningen", // Text for closing link
-        //   header: 'Did you know that your Internet Browser is out of date?', // Header of pop-up window
-        //     paragraph1: 'Your browser is out of date, and may not be compatible with our website. A list of the most popular web browsers can be found below.', // Paragraph 1
-        //     paragraph2: 'Just click on the icons to get to the download page', // Paragraph 2
-        //     closeMessage: 'By closing this window you acknowledge that your experience on this website may be degraded', // Message displayed below closing link
-        //     closeLink: 'Close This Window', // Text for closing link
-        closeCookie: true, // If cookies should be used to remmember if the window was closed (see cookieSettings for more options)
-        // Cookie settings are only used if closeCookie is true
-        cookieSettings: {
-            path: "/", // Path for the cookie to be saved on (should be root domain in most cases)
-            expires: 100000,
-        },
-    }) // Expiration Date (in seconds), 0 (default) means it ends with the current session
 }
 
 window.__ = {}

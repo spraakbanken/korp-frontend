@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 
 /**
  * function to set default values if parameters have been left out of config.js

@@ -1,4 +1,5 @@
 /** @format */
+import _ from "lodash"
 import jStorage from "@/../lib/jstorage"
 
 import { loginBoxComponent } from "./login_box"
