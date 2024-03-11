@@ -15,7 +15,6 @@
         "geokorp": "spraakbanken/geokorp#1.4.2",
         "jquery": "3.6.3",
         "jquery-flot": "0.8.3",
-        "json3": "3.3.3",
         "jstorage": "andris9/jStorage#0.4.12",
         "leaflet": "^1.9.3",
         "leaflet-providers": "^1.13.0",

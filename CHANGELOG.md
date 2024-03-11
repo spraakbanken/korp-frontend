@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Removed
+
+- Dependency `json3`
+
 ## [9.5.3] - 2024-03-11
 
 ### Added
