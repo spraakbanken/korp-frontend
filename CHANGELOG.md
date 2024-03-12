@@ -5,6 +5,7 @@
 ### Removed
 
 - Dependency `json3`
+- Map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
 
 ## [9.5.3] - 2024-03-11
 

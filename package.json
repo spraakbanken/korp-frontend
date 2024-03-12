@@ -12,7 +12,7 @@
         "bootstrap-sass": "^3.4.3",
         "comma-separated-values": "3.6.4",
         "components-jqueryui": "1.12.1",
-        "geokorp": "spraakbanken/geokorp#1.4.2",
+        "geokorp": "spraakbanken/geokorp#1.5.0",
         "jquery": "3.6.3",
         "jquery-flot": "0.8.3",
         "jstorage": "andris9/jStorage#0.4.12",
