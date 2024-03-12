@@ -61,16 +61,36 @@ export const kwicComponent = {
                         </td>
                         <td class="empty_td"></td>
                         <td class="lnk" colspan="3" ng-if="::sentence.isLinked">
-                            <span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span>
+                            <kwic-word
+                                ng-repeat="word in sentence.tokens"
+                                word="word"
+                                sentence="sentence"
+                                sentence-index="$parent.$index"
+                            />
                         </td>
                         <td class="left" ng-if="::!sentence.newCorpus">
-                            <span kwic-word="kwic-word" ng-repeat="wd in $ctrl.selectLeft(sentence)"></span>
+                            <kwic-word
+                                ng-repeat="word in $ctrl.selectLeft(sentence)"
+                                word="word"
+                                sentence="sentence"
+                                sentence-index="$parent.$index"
+                            />
                         </td>
                         <td class="match" ng-if="::!sentence.newCorpus">
-                            <span kwic-word="kwic-word" ng-repeat="wd in $ctrl.selectMatch(sentence)"></span>
+                            <kwic-word
+                                ng-repeat="word in $ctrl.selectMatch(sentence)"
+                                word="word"
+                                sentence="sentence"
+                                sentence-index="$parent.$index"
+                            />
                         </td>
                         <td class="right" ng-if="::!sentence.newCorpus">
-                            <span kwic-word="kwic-word" ng-repeat="wd in $ctrl.selectRight(sentence)"> </span>
+                            <kwic-word
+                                ng-repeat="word in $ctrl.selectRight(sentence)"
+                                word="word"
+                                sentence="sentence"
+                                sentence-index="$parent.$index"
+                            />
                         </td>
                     </tr>
                 </table>
@@ -87,7 +107,12 @@ export const kwicComponent = {
                                 >{{'no_context_support' | loc:$root.lang}}</span
                             ></span
                         >
-                        <span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span>
+                        <kwic-word
+                            ng-repeat="word in sentence.tokens"
+                            word="word"
+                            sentence="sentence"
+                            sentence-index="$parent.$index"
+                        />
                     </p>
                 </div>
             </div>
@@ -428,7 +453,7 @@ export const kwicComponent = {
             function onWordClick(event) {
                 event.stopPropagation()
                 const scope = $(event.target).scope()
-                const obj = scope.wd
+                const obj = scope.word
                 const sent = scope.sentence
                 const word = $(event.target)
 
@@ -450,7 +475,7 @@ export const kwicComponent = {
             }
 
             function selectWord(word, scope) {
-                const obj = scope.wd
+                const obj = scope.word
                 let aux = null
                 if (obj.dephead != null) {
                     const i = Number(obj.dephead)
@@ -469,12 +494,18 @@ export const kwicComponent = {
                 selectionManager.select(word, aux)
             }
 
+            /** Select a given token, follow links to different languages and give linked tokens a secondary highlighting. */
             function selectWordParallel(word, scope, sentence) {
+                // Select the given word.
                 selectWord(word, scope)
+
+                // Clear any previous linked-token highlighting.
                 clearLinks()
-                var obj = scope.wd
+
+                var obj = scope.word
                 if (!obj.linkref) return
                 var corpus = settings.corpora[sentence.corpus]
+                var [mainCorpus, lang] = corpus.id.split("-")
 
                 function findRef(ref, sentence) {
                     var out = null
@@ -489,8 +520,10 @@ export const kwicComponent = {
 
                 if (sentence.isLinked) {
                     // a secondary language was clicked
-                    var sent_index = scope.$parent.$index
+                    var sent_index = scope.sentenceIndex
                     var data = getActiveData()
+
+                    // Find main sentence, as nearest previous non-linked sentence.
                     var mainSent = null
                     while (data[sent_index]) {
                         var sent = data[sent_index]
@@ -502,8 +535,8 @@ export const kwicComponent = {
                     }
 
                     var linkNum = Number(obj.linkref)
-                    var lang = corpus.id.split("-")[1]
 
+                    // Find linked tokens in main sentence and highlight them.
                     _.each(mainSent.tokens, function (token) {
                         var refs = _.map(_.compact(token["wordlink-" + lang].split("|")), Number)
                         if (_.includes(refs, linkNum)) {
@@ -512,14 +545,14 @@ export const kwicComponent = {
                         }
                     })
                 } else {
+                    // Collect references to linked tokens from wordlink-(lang) values
                     var links = _.pickBy(obj, function (val, key) {
                         return _.startsWith(key, "wordlink")
                     })
+                    // Follow each link and highlight linked tokens
                     _.each(links, function (val, key) {
+                        var lang = key.split("-")[1]
                         _.each(_.compact(val.split("|")), function (num) {
-                            var lang = key.split("-")[1]
-                            var mainCorpus = corpus.id.split("-")[0]
-
                             var link = findRef(num, sentence.aligned[mainCorpus + "-" + lang])
                             link._link_selected = true
                             $ctrl.parallelSelected.push(link)

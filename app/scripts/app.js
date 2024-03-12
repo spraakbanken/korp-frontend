@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import korpApp from "./korp.module"
 import { kwicPagerName, kwicPager } from "./components/pager"
 import { sidebarName, sidebarComponent } from "./components/sidebar"
 import * as autoc from "./components/autoc"
@@ -21,6 +22,7 @@ import { extendedStructTokenComponent } from "./components/extended/struct_token
 import { extendedCQPValueComponent } from "./components/extended/cqp_value"
 import { advancedSearchComponent } from "./components/advanced_search"
 import { compareSearchComponent } from "./components/compare_search"
+import "./components/kwic_word"
 import { kwicComponent } from "./components/kwic"
 import { statisticsComponent } from "./components/statistics"
 import { trendDiagramComponent } from "./components/trend_diagram"
@@ -37,40 +39,6 @@ import { resultsComponent } from "./components/results"
 import statemachine from "@/statemachine"
 
 let html = String.raw
-
-window.korpApp = angular.module("korpApp", [
-    "ui.bootstrap.typeahead",
-    "uib/template/typeahead/typeahead-popup.html",
-    "uib/template/typeahead/typeahead-match.html",
-    "ui.bootstrap.tooltip",
-    "uib/template/tooltip/tooltip-popup.html",
-    "uib/template/tooltip/tooltip-html-popup.html",
-    "ui.bootstrap.modal",
-    "uib/template/modal/window.html",
-    "ui.bootstrap.tabs",
-    "uib/template/tabs/tabset.html",
-    "uib/template/tabs/tab.html",
-    "ui.bootstrap.dropdown",
-    "ui.bootstrap.pagination",
-    "uib/template/pagination/pagination.html",
-    "ui.bootstrap.datepicker",
-    "uib/template/datepicker/datepicker.html",
-    "uib/template/datepicker/day.html",
-    "uib/template/datepicker/month.html",
-    "uib/template/datepicker/year.html",
-    "ui.bootstrap.timepicker",
-    "uib/template/timepicker/timepicker.html",
-    "ui.bootstrap.buttons",
-    "ui.bootstrap.popover",
-    "uib/template/popover/popover.html",
-    "uib/template/popover/popover-template.html",
-    "angularSpinner",
-    "ui.sortable",
-    "newsdesk",
-    "sbMap",
-    "tmh.dynamicLocale",
-    "angular.filter",
-])
 
 korpApp.component(kwicPagerName, kwicPager)
 korpApp.component(sidebarName, sidebarComponent)

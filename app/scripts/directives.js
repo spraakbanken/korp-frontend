@@ -5,36 +5,6 @@ let html = String.raw
 
 const korpApp = angular.module("korpApp")
 
-korpApp.directive("kwicWord", () => ({
-    replace: true,
-    template: `<span class="word" ng-class="getClassObj(wd)">
-{{::wd.word}} </span>\
-`,
-    link(scope) {
-        scope.getClassObj = function (wd) {
-            let struct
-            const output = {
-                reading_match: wd._match,
-                punct: wd._punct,
-                match_sentence: wd._matchSentence,
-                link_selected: wd._link_selected,
-            }
-
-            if ("_open_sentence" in wd) {
-                output[`open_sentence`] = true
-            }
-
-            const result = []
-            for (let [x, y] of _.toPairs(output)) {
-                if (y) {
-                    result.push(x)
-                }
-            }
-            return result.join(" ")
-        }
-    },
-}))
-
 korpApp.directive("tabHash", [
     "utils",
     "$location",
