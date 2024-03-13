@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import jStorage from "../lib/jstorage"
-import { parseMapData } from "./map_services.ts"
+import { parseMapData } from "./map_services"
 import { updateSearchHistory } from "@/history"
 
 const korpApp = angular.module("korpApp")

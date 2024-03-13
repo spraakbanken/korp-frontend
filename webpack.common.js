@@ -21,6 +21,7 @@ const korpConfigDir = getKorpConfigDir()
 
 module.exports = {
     resolve: {
+        extensions: [".ts", "..."],
         alias: {
             jquery: path.resolve(__dirname, "node_modules/jquery/src/jquery"),
             jquerylocalize: path.resolve(__dirname, "app/lib/jquery.localize"),
