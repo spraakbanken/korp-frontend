@@ -153,15 +153,20 @@ export const simpleSearchComponent = {
                     val = tokenArray.join(" ")
                 } else if (ctrl.lemgram) {
                     const lemgram = ctrl.lemgram
-                    val = `[lex contains \"${lemgram}\"`
+                    val = `[lex contains "${lemgram}"`
+
+                    // The complemgram attribute is a set of strings like: <part1>+<part2>+<...>:<probability>
                     if (ctrl.prefix) {
-                        val += ` | complemgram contains \"${lemgram}\\+.*\"`
+                        // Must match first part
+                        val += ` | complemgram contains "${lemgram}\\+.*"`
                     }
                     if (ctrl.mid_comp) {
-                        val += ` | complemgram contains \".*\\+${lemgram}\\+.*\"`
+                        // Can be anywhere in the string, as long as it's surrounded by start, end or the "+" separator.
+                        val += ` | complemgram contains "(.*\\+)?${lemgram}(\\+|:).*"`
                     }
                     if (ctrl.suffix) {
-                        val += ` | complemgram contains \".*\\+${lemgram}:.*\"`
+                        // Must match last part
+                        val += ` | complemgram contains ".*\\+${lemgram}:.*"`
                     }
                     val += "]"
                 }

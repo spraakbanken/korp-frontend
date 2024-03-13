@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- The "medial part" option now includes first/last parts also for lemgram search [#347](https://github.com/spraakbanken/korp-frontend/issues/347)
+
 ### Removed
 
 - Map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
