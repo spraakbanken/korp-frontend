@@ -35,6 +35,7 @@ import { textTabsComponent } from "./components/dynamic_tabs/text_tabs"
 import { headerComponent } from "./components/header"
 import { wordPictureComponent } from "./components/word_picture"
 import { searchtabsComponent } from "./components/searchtabs"
+import "./components/frontpage"
 import { resultsComponent } from "./components/results"
 import statemachine from "@/statemachine"
 
