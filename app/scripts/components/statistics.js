@@ -32,7 +32,7 @@ export const statisticsComponent = {
                     <button
                         class="btn btn-sm btn-default show-graph-btn"
                         ng-click="$ctrl.onGraphClick()"
-                        ng-class="{disabled: !$ctrl.graphEnabled}"
+                        ng-disabled="$ctrl.loading || !$ctrl.graphEnabled"
                         uib-tooltip="{{'material_warn' | loc:$root.lang}}"
                         tooltip-placement="right"
                         tooltip-enable="!$ctrl.graphEnabled"
@@ -70,7 +70,7 @@ export const statisticsComponent = {
                         <button
                             class="btn btn-sm btn-default"
                             uib-dropdown-toggle
-                            ng-disabled="!$ctrl.mapAttributes.length"
+                            ng-disabled="$ctrl.loading || !$ctrl.mapAttributes.length"
                             uib-tooltip="{{'map_no_data' | loc:$root.lang}}"
                             tooltip-placement="right"
                             tooltip-enable="!$ctrl.mapAttributes.length"
@@ -350,10 +350,6 @@ export const statisticsComponent = {
 
             $ctrl.onGraphClick = () => {
                 let cqp, rowIx
-                if (!$ctrl.graphEnabled) {
-                    return
-                }
-
                 const subExprs = []
                 const labelMapping = {}
 
@@ -562,11 +558,8 @@ export const statisticsComponent = {
             }
 
             function updateGraphBtnState() {
-                $ctrl.graphEnabled = true
                 const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
-                if (!_.compact(cl.getTimeInterval()).length) {
-                    $ctrl.graphEnabled = false
-                }
+                $ctrl.graphEnabled = _.compact(cl.getTimeInterval()).length > 0
             }
 
             function getSelectedRows() {

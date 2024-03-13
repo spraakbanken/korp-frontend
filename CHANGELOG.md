@@ -6,6 +6,10 @@
 
 - The "medial part" option now includes first/last parts also for lemgram search [#347](https://github.com/spraakbanken/korp-frontend/issues/347)
 
+### Fixed
+
+- Disable Trend diagram and Map buttons while waiting for statistics search to finish [#346](https://github.com/spraakbanken/korp-frontend/issues/346)
+
 ### Removed
 
 - Map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
