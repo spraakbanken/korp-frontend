@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
-import statemachine from "@/statemachine"
+import "jquery-flot/jquery.flot.js"
+import "jquery-flot/jquery.flot.stack.js"
 
 export const ccTimeGraphComponent = {
     template: `

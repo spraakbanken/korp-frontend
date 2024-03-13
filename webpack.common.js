@@ -24,7 +24,6 @@ module.exports = {
         alias: {
             jquery: path.resolve(__dirname, "node_modules/jquery/src/jquery"),
             jquerylocalize: path.resolve(__dirname, "app/lib/jquery.localize"),
-            jqueryhoverintent: path.resolve(__dirname, "app/lib/jquery.hoverIntent"),
             korp_config: path.resolve(korpConfigDir, "config.yml"),
             custom: path.resolve(korpConfigDir, "custom/"),
             modes: path.resolve(korpConfigDir, "modes/"),

@@ -1,4 +1,7 @@
 /** @format */
+import "components-jqueryui/ui/widgets/sortable.js"
+import "angular-ui-sortable/src/sortable"
+
 let html = String.raw
 export const extendedTokensComponent = {
     template: html`

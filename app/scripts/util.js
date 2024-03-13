@@ -357,14 +357,6 @@ util.translateAttribute = (lang, translations, value) => {
     }
 }
 
-window.__ = {}
-window.__.remove = function (arr, elem) {
-    const index = arr.indexOf(elem)
-    if (index !== -1) {
-        return arr.splice(arr.indexOf(elem), 1)
-    }
-}
-
 // Return the length of baseUrl with params added
 const calcUrlLength = function (baseUrl, params) {
     return baseUrl.length + new URLSearchParams(params).toString().length + 1

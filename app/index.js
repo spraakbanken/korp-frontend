@@ -1,14 +1,14 @@
-
-import settings from 'korp_config'
+/** @format */
+import settings from "korp_config"
 
 window.settings = settings
 settings.markup = {
-  msd: require("./markup/msd.html")
+    msd: require("./markup/msd.html"),
 }
 
-let $ = require("jquery");
-window.jQuery = $;
-window.$ = $;
+let $ = require("jquery")
+window.jQuery = $
+window.$ = $
 
 require("slickgrid/slick.grid.css")
 require("./styles/ui_mods.css")
@@ -27,8 +27,6 @@ require("./styles/styles.scss")
 require("./styles/textreader.css")
 
 require("components-jqueryui/ui/widget.js")
-require("components-jqueryui/ui/widgets/sortable.js")
-require("components-jqueryui/ui/widgets/dialog.js")
 
 require("angular")
 require("angular-ui-bootstrap/src/typeahead")
@@ -43,26 +41,21 @@ require("angular-ui-bootstrap/src/buttons")
 require("angular-ui-bootstrap/src/popover")
 
 require("angular-spinner")
-require("angular-ui-sortable/src/sortable")
 
 require("jquerylocalize")
-require("jqueryhoverintent")
 require("./lib/jquery.format.js")
 
 window.c = console
-window.currentMode = new URLSearchParams(window.location.search).get('mode') || "default"
+window.currentMode = new URLSearchParams(window.location.search).get("mode") || "default"
 
 try {
-  // modes-files are optional and have customizing code
-  require(`modes/${currentMode}_mode.js`)
+    // modes-files are optional and have customizing code
+    require(`modes/${currentMode}_mode.js`)
 } catch (error) {
-  console.log("No mode file available for mode:", currentMode)
+    console.log("No mode file available for mode:", currentMode)
 }
 
 require("angular-dynamic-locale/dist/tmhDynamicLocale.js")
-
-require("jquery-flot/jquery.flot.js")
-require("jquery-flot/jquery.flot.stack.js")
 
 require("slickgrid/lib/jquery.event.drag-2.3.0")
 require("slickgrid/slick.core")
@@ -76,7 +69,6 @@ require("./scripts/jq_extensions.js")
 window.moment = require("moment")
 window.CSV = require("comma-separated-values/csv")
 
-require("./lib/leaflet-settings.js")
 require("leaflet")
 require("leaflet.markercluster")
 require("leaflet-providers")
@@ -84,10 +76,7 @@ require("geokorp/dist/scripts/geokorp")
 require("geokorp/dist/scripts/geokorp-templates")
 require("angular-filter/index.js")
 
-
 require("./lib/jquery.tooltip.pack.js")
-
-require("./scripts/components/sidebar.js")
 
 require("./scripts/statistics.js")
 require("./scripts/cqp_parser/CQPParser.js")
