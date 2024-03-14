@@ -20,6 +20,9 @@
     "lang_SK": "Slovak",
     "lang_ET": "Estonian",
 
+    "front_corpus_updates": "Corpus updates",
+    "front_corpus_updated": "was updated",
+
     "menu": "Menu",
     "docs": "Manual (Swedish only)",
     "more": "More",

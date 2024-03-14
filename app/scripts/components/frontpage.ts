@@ -3,14 +3,21 @@ import angular from "angular"
 
 export default angular.module("korpApp").component("frontpage", {
     template: /* HTML */ `
-        <div ng-if="!$ctrl.hasResult()" class="my-4 flex justify-center">
-            <div ng-if="$ctrl.showDescription" class="max-w-screen-md text-lg">
-                <div
-                    ng-if="$root._settings['description']"
-                    ng-bind-html="$root._settings['description'] | locObj:lang | trust"
-                ></div>
-                <div ng-if="!$root._settings['description']">Default description</div>
+        <div ng-if="!$ctrl.hasResult()" class="max-w-screen-md my-4 mx-auto flex gap-4 flex-wrap">
+            <div ng-if="$ctrl.showDescription && $root._settings['description']" class="text-lg">
+                <div ng-bind-html="$root._settings['description'] | locObj:lang | trust"></div>
             </div>
+
+            <section ng-if="$ctrl.recentUpdates" class="w-80 grow">
+                <h2 class="text-xl font-bold">{{"front_corpus_updates" | loc:$root.lang}}</h2>
+                <div class="my-2 flex flex-col gap-2">
+                    <article ng-repeat="corpus in $ctrl.recentUpdates" class="flex-1">
+                        <strong>{{::corpus.info.Updated}}</strong>
+                        <em>{{corpus.title | locObj:$root.lang}}</em>
+                        {{"front_corpus_updated" | loc:$root.lang}}.
+                    </article>
+                </div>
+            </section>
         </div>
     `,
     bindings: {},
@@ -19,6 +26,8 @@ export default angular.module("korpApp").component("frontpage", {
         "searches",
         function ($rootScope, searches) {
             const $ctrl = this
+            $ctrl.showDescription = false
+            $ctrl.recentUpdates = null
 
             $ctrl.hasResult = () =>
                 searches.activeSearch ||
@@ -26,10 +35,18 @@ export default angular.module("korpApp").component("frontpage", {
                 $rootScope.graphTabs.length ||
                 $rootScope.mapTabs.length
 
-            $ctrl.showDescription = false
-
             // Don't show the mode description until the inital corpora have been selected, to avoid text behind any modals
             $rootScope.$on("initialcorpuschooserchange", () => ($ctrl.showDescription = true))
+
+            $ctrl.$onInit = () => {
+                if ($rootScope._settings.frontpage?.corpus_updates) {
+                    // Find most recently updated corpora
+                    $ctrl.recentUpdates = (window as any).settings.corpusListing.corpora
+                        .filter((corpus) => corpus.info.Updated)
+                        .sort((a, b) => b.info.Updated.localeCompare(a.info.Updated))
+                        .slice(0, 5)
+                }
+            }
         },
     ],
 })

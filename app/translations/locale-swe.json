@@ -20,6 +20,9 @@
     "lang_SK": "slovakiska",
     "lang_ET": "estniska",
 
+    "front_corpus_updates": "Korpusuppdateringar",
+    "front_corpus_updated": "har uppdaterats",
+
     "menu": "Meny",
     "docs": "Användarhandledning",
     "more": "Fler",
