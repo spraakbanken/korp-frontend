@@ -31,11 +31,11 @@ export const trendDiagramComponent = {
                 <div class="controls">
                     <div class="btn-group form_switch">
                         <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'line'"
-                            >{{'line' | loc:lang}}</label
+                            >{{'line' | loc:$root.lang}}</label
                         ><label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'bar'"
-                            >{{'bar' | loc:lang}}</label
+                            >{{'bar' | loc:$root.lang}}</label
                         ><label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'table'"
-                            >{{'table' | loc:lang}}</label
+                            >{{'table' | loc:$root.lang}}</label
                         >
                     </div>
                     <div class="non_time_div">
@@ -47,11 +47,11 @@ export const trendDiagramComponent = {
                     <div
                         class="line"
                         ng-show="$ctrl.hasEmptyIntervals"
-                        uib-tooltip="{{'graph_material_tooltip' | loc:lang}}"
+                        uib-tooltip="{{'graph_material_tooltip' | loc:$root.lang}}"
                     >
                         <a class="action"></a>
                         <div class="swatch" style="background-color: #999"></div>
-                        <span class="label"> <em>{{'graph_material' | loc:lang}} </em></span>
+                        <span class="label"> <em>{{'graph_material' | loc:$root.lang}} </em></span>
                     </div>
                 </div>
                 <div style="clear: both;"></div>
@@ -66,12 +66,12 @@ export const trendDiagramComponent = {
             <div class="time_table" style="margin-top:20px" ng-show="$ctrl.isTable()"></div>
             <div class="exportTimeStatsSection" ng-show="$ctrl.isTable()">
                 <select class="timeKindOfData">
-                    <option value="relative">{{'statstable_relfigures' | loc:lang}}</option>
-                    <option value="absolute">{{'statstable_absfigures' | loc:lang}}</option></select
+                    <option value="relative">{{'statstable_relfigures' | loc:$root.lang}}</option>
+                    <option value="absolute">{{'statstable_absfigures' | loc:$root.lang}}</option></select
                 ><select class="timeKindOfFormat">
-                    <option value="TSV">{{'statstable_exp_tsv' | loc:lang}}</option>
-                    <option value="CSV">{{'statstable_exp_csv' | loc:lang}}</option></select
-                ><a class="export btn btn-default btn-sm">{{'statstable_export' | loc:lang}}</a>
+                    <option value="TSV">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
+                    <option value="CSV">{{'statstable_exp_csv' | loc:$root.lang}}</option></select
+                ><a class="export btn btn-default btn-sm">{{'statstable_export' | loc:$root.lang}}</a>
             </div>
         </div>
     `,

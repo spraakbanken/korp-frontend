@@ -45,7 +45,7 @@ export const resultsComponent = {
                                 index="2"
                             >
                                 <uib-tab-heading ng-class="{not_loading: progress > 99, loading : loading}"
-                                    >{{'statistics' | loc:lang}}
+                                    >{{'statistics' | loc:$root.lang}}
                                     <tab-preloader
                                         ng-if="loading"
                                         value="progress"
@@ -77,7 +77,7 @@ export const resultsComponent = {
                                 deselect="onexit()"
                             >
                                 <uib-tab-heading ng-class="{not_loading: progress > 99, loading : loading}">
-                                    {{'word_picture' | loc:lang}}
+                                    {{'word_picture' | loc:$root.lang}}
                                     <tab-preloader
                                         ng-if="loading"
                                         value="progress"

@@ -13,23 +13,23 @@ export const ccInfoBox = {
         <ul class="border-l-4 border-blue-500 pl-3 leading-none space-y-1">
             <li ng-if="$ctrl.isFolder">
                 <strong>{{$ctrl.numberOfChildren}}</strong>
-                {{$ctrl.numberOfChildren == 1 ? 'corpselector_corporawith_sing' : 'corpselector_corporawith_plur' | loc:lang}}
+                {{$ctrl.numberOfChildren == 1 ? 'corpselector_corporawith_sing' : 'corpselector_corporawith_plur' | loc:$root.lang}}
             </li>
             <li ng-repeat-start="stats in $ctrl.langStats">
                 <strong>{{ stats.tokens | prettyNumber }}</strong>
-                {{ 'corpselector_tokens' | loc:lang }}
-                <span ng-if="$ctrl.langStats.length > 1">({{ stats.lang | loc:lang }})</span>
+                {{ 'corpselector_tokens' | loc:$root.lang }}
+                <span ng-if="$ctrl.langStats.length > 1">({{ stats.lang | loc:$root.lang }})</span>
             </li>
             <li ng-repeat-end ng-if="stats.sentences > 0">
                 <strong>{{ stats.sentences | prettyNumber }}</strong>
-                {{ 'corpselector_sentences' | loc:lang }}
-                <span ng-if="$ctrl.langStats.length > 1">({{ stats.lang | loc:lang }})</span>
+                {{ 'corpselector_sentences' | loc:$root.lang }}
+                <span ng-if="$ctrl.langStats.length > 1">({{ stats.lang | loc:$root.lang }})</span>
             </li>
         </ul>
-        <div ng-if="$ctrl.context">{{'corpselector_supports' | loc:lang}}</div>
-        <div ng-if="$ctrl.limitedAccess">{{'corpselector_limited' | loc:lang}}</div>
+        <div ng-if="$ctrl.context">{{'corpselector_supports' | loc:$root.lang}}</div>
+        <div ng-if="$ctrl.limitedAccess">{{'corpselector_limited' | loc:$root.lang}}</div>
         <div class="text-sm mt-3" ng-if="$ctrl.isCorpus">
-            <span class="mr-1">{{'corpselector_lastupdate' | loc:lang}}:</span>
+            <span class="mr-1">{{'corpselector_lastupdate' | loc:$root.lang}}:</span>
             <span class="font-bold">{{ $ctrl.lastUpdated }}</span>
         </div>
     </div>

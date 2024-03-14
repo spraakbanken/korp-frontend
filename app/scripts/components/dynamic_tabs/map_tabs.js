@@ -5,7 +5,7 @@ export const mapTabsComponent = () => ({
     template: html`
         <uib-tab ng-repeat="promise in $ctrl.tabs" map-ctrl="map-ctrl" select="onentry()">
             <uib-tab-heading class="map_tab" ng-class="{loading : loading}"
-                >{{ 'map' | loc:lang}}<span tab-spinner="tab-spinner" ng-click="closeTab($index, $event)"></span
+                >{{ 'map' | loc:$root.lang}}<span tab-spinner="tab-spinner" ng-click="closeTab($index, $event)"></span
             ></uib-tab-heading>
             <div class="map_result" ng-class="{loading : loading}">
                 <korp-error ng-if="error"></korp-error>
@@ -28,7 +28,7 @@ export const mapTabsComponent = () => ({
                                     style="vertical-align: top;margin-top: 0px;margin-right: 5px;"
                                     type="checkbox"
                                     ng-model="useClustering"
-                                />{{'map_cluster' | loc:lang}}</label
+                                />{{'map_cluster' | loc:$root.lang}}</label
                             >
                         </div>
                     </div>

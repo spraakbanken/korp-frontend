@@ -9,7 +9,10 @@ export const textTabsComponent = () => ({
         deselect="onexit()"
     >
         <uib-tab-heading ng-class="{loading : loading}"
-            >{{ 'text_tab_header' | loc:lang}}<span tab-spinner="tab-spinner" ng-click="closeTab($index, $event)"></span
+            >{{ 'text_tab_header' | loc:$root.lang}}<span
+                tab-spinner="tab-spinner"
+                ng-click="closeTab($index, $event)"
+            ></span
         ></uib-tab-heading>
         <div>
             <korp-error ng-if="error"></korp-error>

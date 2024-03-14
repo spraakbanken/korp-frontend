@@ -7,21 +7,21 @@ import { login } from "./basic_auth"
 export const loginBoxComponent = {
     template: `
     <div class="modal-header login-modal-header">
-        <span class="login-header">{{'log_in' | loc:lang}}</span>
+        <span class="login-header">{{'log_in' | loc:$root.lang}}</span>
         <span ng-click="$ctrl.clickX()" class="close-x">×</span>
     </div>
     <div id="login_popup" class="modal-body">
         <form ng-submit="$ctrl.loginSubmit()">
-            <label for="usrname">{{'username' | loc:lang}}</label>
+            <label for="usrname">{{'username' | loc:$root.lang}}</label>
             <input id="usrname" ng-model="$ctrl.loginUsr" type="text">
-            <label for="pass">{{'password' | loc:lang}}</label>
+            <label for="pass">{{'password' | loc:$root.lang}}</label>
             <input id="pass" ng-model="$ctrl.loginPass" type="password">
-            <a class="password-reset" href="https://ws.spraakbanken.gu.se/user/password" target="_blank">{{'forgot_password' | loc:lang}}</a>
+            <a class="password-reset" href="https://ws.spraakbanken.gu.se/user/password" target="_blank">{{'forgot_password' | loc:$root.lang}}</a>
             <div style="clear:both"></div>
             <input ng-if="$ctrl.showSave" class="save-login" id="saveLogin" type="checkbox" ng-model="$ctrl.saveLogin">
-            <label ng-if="$ctrl.showSave" class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
-            <p ng-show="$ctrl.loginErr" class="err_msg">{{'login_fail_msg' | loc:lang}}</p>
-            <input class="btn btn-sm bg-blue-500 text-white" type="submit" value="{{'send' | loc:lang}}">
+            <label ng-if="$ctrl.showSave" class="save-login" for="saveLogin">{{'save_login' | loc:$root.lang}}</label>
+            <p ng-show="$ctrl.loginErr" class="err_msg">{{'login_fail_msg' | loc:$root.lang}}</p>
+            <input class="btn btn-sm bg-blue-500 text-white" type="submit" value="{{'send' | loc:$root.lang}}">
             <div ng-if="$ctrl.loading" style="float: right; margin-top: 11px; margin-right: 9px;"><i class="fa-solid fa-spinner fa-pulse w-fit"></i></div>
             <div style="clear:both"></div>
         </form>

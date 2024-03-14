@@ -42,7 +42,7 @@ export const component = {
                 <input autofocus type="text" ng-model="$ctrl.textInField" ng-change="$ctrl.textInput()">
             </div>
         </div>
-        <span ng-if='$ctrl.isError' style='color: red; position: relative; top: 3px; margin-left: 6px'>{{$ctrl.errorMessage | loc:lang}}</span>
+        <span ng-if='$ctrl.isError' style='color: red; position: relative; top: 3px; margin-left: 6px'>{{$ctrl.errorMessage | loc:$root.lang}}</span>
     </div>    
     `,
     bindings: {

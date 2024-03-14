@@ -5,11 +5,11 @@ import { login } from "./fed_auth"
 export const loginStatusComponent = {
     template: `
     <div class="link" id="log_out" ng-click="$ctrl.logout()" ng-if="$ctrl.loggedIn">
-        <span>{{ 'log_out' | loc:lang }}</span>
+        <span>{{ 'log_out' | loc:$root.lang }}</span>
         <span>{{ $ctrl.username }}</span>
     </div>
     <div id="login">
-        <a ng-click="$ctrl.doLogin()" ng-show="!$ctrl.loggedIn">{{'log_in' | loc:lang}}</a>
+        <a ng-click="$ctrl.doLogin()" ng-show="!$ctrl.loggedIn">{{'log_in' | loc:$root.lang}}</a>
     </div>
     `,
     bindings: {},

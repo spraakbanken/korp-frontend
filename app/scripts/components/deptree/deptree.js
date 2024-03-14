@@ -7,11 +7,11 @@ export const depTreeComponent = {
         <div>
             <script type="text/ng-template" id="deptreeModal.html">
                 <div class="modal-header py-0">
-                    <h3 class="modal-title">{{ 'dep_tree' | loc:lang }}</h3>
+                    <h3 class="modal-title">{{ 'dep_tree' | loc:$root.lang }}</h3>
                     <span ng-click="clickX()" class="close-x">×</span>
                 </div>
                 <div class="modal-body">
-                    <div ng-if="label">{{label | loc:lang}}: {{value | locObj:lang}}</div>
+                    <div ng-if="label">{{label | loc:$root.lang}}: {{value | locObj:lang}}</div>
                     <div id="magic_secret_id"></div>
                 </div>
             </script>

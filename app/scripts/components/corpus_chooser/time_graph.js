@@ -8,16 +8,16 @@ export const ccTimeGraphComponent = {
     <script type="text/ng-template" id="timepopover.html">
         <div class="p-4">
             <h4 ng-if="$ctrl.timeHover.isRestData" class="mt-0">
-                {{"corpselector_rest_time" | loc:lang}}
+                {{"corpselector_rest_time" | loc:$root.lang}}
             </h4>
 
             <h4 ng-if="!$ctrl.timeHover.isRestData" class="mt-0">
-                {{"corpselector_time" | loc:lang}} {{$ctrl.timeHover.year}}
+                {{"corpselector_time" | loc:$root.lang}} {{$ctrl.timeHover.year}}
             </h4>
 
-            {{'corpselector_time_chosen' | loc:lang}}: {{$ctrl.timeHover.val | prettyNumber}} {{'corpselector_tokens' | loc:lang}}
+            {{'corpselector_time_chosen' | loc:$root.lang}}: {{$ctrl.timeHover.val | prettyNumber}} {{'corpselector_tokens' | loc:$root.lang}}
             <br>
-            {{'corpselector_of_total' | loc:lang}}: {{$ctrl.timeHover.total | prettyNumber}} {{'corpselector_tokens' | loc:lang}}
+            {{'corpselector_of_total' | loc:$root.lang}}: {{$ctrl.timeHover.total | prettyNumber}} {{'corpselector_tokens' | loc:$root.lang}}
         </div>
     </script>
     <div id="time"

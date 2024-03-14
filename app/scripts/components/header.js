@@ -39,7 +39,7 @@ export const headerComponent = {
                                 class="block transiton duration-200 hover_text-blue-600"
                                 id="about"
                                 ng-click="$ctrl.citeClick()"
-                                >{{'about' | loc:lang}}</a
+                                >{{'about' | loc:$root.lang}}</a
                             >
                         </li>
                         <li class="bg-white hover_bg-gray-200 p-1 transition duration-500">
@@ -47,17 +47,17 @@ export const headerComponent = {
                                 class="block transiton duration-200 hover_text-blue-600"
                                 href="https://spraakbanken.gu.se/verktyg/korp/användarhandledning"
                                 target="_blank"
-                                >{{'docs' | loc:lang}}</a
+                                >{{'docs' | loc:$root.lang}}</a
                             >
                         </li>
                         <li class="bg-white hover_bg-gray-200 p-1 transition duration-200" id="korplink">
                             <a class="block transiton duration-200 hover_text-blue-600" href="/korp"
-                                >{{'korp' | loc:lang}}</a
+                                >{{'korp' | loc:$root.lang}}</a
                             >
                         </li>
                         <li class="bg-white hover_bg-gray-200 p-1 transition duration-200" id="korplablink">
                             <a class="block transiton duration-200 hover_text-blue-600" href="/korplabb"
-                                >{{'korp_lab' | loc:lang}}</a
+                                >{{'korp_lab' | loc:$root.lang}}</a
                             >
                         </li>
                         <li class="bg-white hover_bg-gray-200 p-1 transition duration-200">
@@ -65,7 +65,7 @@ export const headerComponent = {
                                 class="block transiton duration-200 hover_text-blue-600"
                                 href="https://spraakbanken.gu.se/sparv"
                                 target="_blank"
-                                >{{'import_chain' | loc:lang}}</a
+                                >{{'import_chain' | loc:$root.lang}}</a
                             >
                         </li>
                     </ul>
