@@ -45,7 +45,7 @@ token
       output.repeat = repeat
     return output
   }
-  / "<" end:"/"? tag:[A-Za-z_0-9]+ ">" {
+  / "<" end:"/"? tag:[A-Za-z0-9_-]+ ">" {
     return { struct: tag.join(""), start: end ? false : true }
   }
 
@@ -84,7 +84,7 @@ and
 
 
 or
-  = lhs:("_."? [A-Za-z_0-9]+) " "? infix_op:infix_op " "? rhs:value_expr flags:(" %"[lcd]+)? {
+  = lhs:attribute " "? infix_op:infix_op " "? rhs:value_expr flags:(" %"[lcd]+)? {
     var prefix = ""
     if(lhs[0])
       prefix = lhs[0]
@@ -95,6 +95,9 @@ or
     return makeObj(prefix + lhs[1].join(""), infix_op, rhs, flags)
   }
   / date
+
+attribute
+  = "_."? [A-Za-z0-9_-]+
 
 value_expr
     = ["] rhs:('""' / [^"])* ["] {
