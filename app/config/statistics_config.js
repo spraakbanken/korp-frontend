@@ -39,6 +39,7 @@ let reduceCqp = function (type, tokens, ignoreCase) {
         case "lex":
         case "lemma":
         case "sense":
+        case "transformer-neighbour":
             if (tokens[0] === "") return "ambiguity(" + type + ") = 0"
             else var res
             if (tokens.length > 1) {
@@ -122,6 +123,9 @@ let reduceStringify = function (type, values, structAttributes) {
             })
 
             return html.join(" ")
+
+        case "transformer-neighbour":
+            return values.map((value) => value.replace(/:.*/g, "")).join(" ")
 
         case "deprel":
             var output = _.map(values, function (token) {
