@@ -36,4 +36,3 @@ const korpApp = angular.module("korpApp", [
 ])
 
 export default korpApp
-window.korpApp = korpApp

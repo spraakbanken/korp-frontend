@@ -5,6 +5,8 @@
  */
 import _ from "lodash"
 
+const korpApp = angular.module("korpApp")
+
 korpApp.directive("globalFilters", [
     "globalFilterService",
     (globalFilterService) => ({
