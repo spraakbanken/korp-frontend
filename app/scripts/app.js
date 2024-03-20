@@ -161,9 +161,7 @@ korpApp.run([
 
         s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
 
-        s._loc = $location
-
-        s.$watch("_loc.search()", function () {
+        s.$on("$locationChangeSuccess", () => {
             _.defer(() => (window.onHashChange || _.noop)())
             tmhDynamicLocale.set($location.search().lang || settings["default_language"])
         })

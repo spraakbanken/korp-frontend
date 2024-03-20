@@ -591,7 +591,7 @@ export const trendDiagramComponent = {
                 let width = $(".tab-pane").width()
                 graph.setSize({ width })
                 graph.render()
-                window._graph = $ctrl.graph = graph
+                $ctrl.graph = graph
 
                 drawIntervals(graph)
 
@@ -733,8 +733,6 @@ export const trendDiagramComponent = {
                         previewPanStop()
                     }
                 })
-
-                window._xaxis = xAxis
 
                 const old_render = xAxis.render
                 xAxis.render = _.throttle(
