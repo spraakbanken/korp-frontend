@@ -5,9 +5,10 @@ import moment from "moment"
 export default angular.module("korpApp").component("frontpage", {
     template: /* HTML */ `
         <div ng-if="!$ctrl.hasResult()" class="max-w-screen-md my-4 mx-auto flex gap-4 flex-wrap">
-            <div ng-if="$ctrl.showDescription && $root._settings['description']" class="text-lg">
-                <div ng-bind-html="$root._settings['description'] | locObj:lang | trust"></div>
-            </div>
+            <section ng-if="$ctrl.showDescription && ($root._settings['description'] || $root._settings['mode_description'])" class="text-lg">
+                <div ng-if="$root._settings['description']" ng-bind-html="$root._settings['description'] | locObj:lang | trust"></div>
+                <div ng-if="$root._settings['mode_description']" ng-bind-html="$root._settings['mode_description'] | locObj:lang | trust"></div>
+            </section>
 
             <section ng-if="$ctrl.recentUpdates && $ctrl.recentUpdates.length" class="w-80 grow">
                 <h2 class="text-xl font-bold">{{"front_corpus_updates" | loc:$root.lang}}</h2>
