@@ -24,9 +24,6 @@ window.locationSearch = function (obj, val) {
         }
     })
 
-    if (val === null) {
-        window.onHashChange()
-    }
     return ret
 }
 
@@ -101,11 +98,6 @@ util.getLocaleStringUndefined = function (key, lang) {
     } catch (e) {
         return undefined
     }
-}
-
-util.localize = function (root) {
-    root = root || "body"
-    $(root).localize()
 }
 
 util.lemgramToString = function (lemgram, appendIndex) {

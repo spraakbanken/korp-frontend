@@ -63,26 +63,6 @@ function initApp() {
         }
     })
 
-    let prevFragment = {}
-    // Note that this is _not_ window.onhashchange (lowercase only) and is not called by the browser
-    window.onHashChange = function (event, isInit) {
-        const hasChanged = (key) => prevFragment[key] !== locationSearch()[key]
-        if (hasChanged("lang")) {
-            const newLang = locationSearch().lang || settings["default_language"]
-            $("body").scope().lang = newLang
-            window.lang = newLang
-            util.localize()
-
-            $("#languages").radioList("select", newLang)
-        }
-
-        if (isInit) {
-            util.localize()
-        }
-
-        prevFragment = _.extend({}, locationSearch())
-    }
-
     $("#languages").radioList({
         change() {
             const currentLang = $(this).radioList("getSelected").data("mode")
@@ -93,8 +73,6 @@ function initApp() {
         // TODO: this does nothing?
         selected: settings["default_language"],
     })
-
-    setTimeout(() => window.onHashChange(null, true), 0)
 
     // this is to hide all ugly markup before Angular is fully loaded
     $("#main").css("display", "block")
