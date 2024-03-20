@@ -439,7 +439,7 @@ export const trendDiagramComponent = {
                 $ctrl.time_grid = time_grid
             }
 
-            function makeSeries(data, cqp, labelMapping, zoom) {
+            function makeSeries(Rickshaw, data, cqp, labelMapping, zoom) {
                 let color, series
 
                 if (_.isArray(data.combined)) {
@@ -542,7 +542,7 @@ export const trendDiagramComponent = {
                 }
             }
 
-            function renderGraph(data, cqp, labelMapping, currentZoom, showTotal) {
+            function renderGraph(Rickshaw, data, cqp, labelMapping, currentZoom, showTotal) {
                 let series
 
                 const done = () => {
@@ -556,7 +556,7 @@ export const trendDiagramComponent = {
                 }
 
                 if ($ctrl.graph) {
-                    series = makeSeries(data, cqp, labelMapping, currentZoom)
+                    series = makeSeries(Rickshaw, data, cqp, labelMapping, currentZoom)
                     spliceData(series)
                     drawIntervals($ctrl.graph)
                     $ctrl.graph.render()
@@ -576,7 +576,7 @@ export const trendDiagramComponent = {
                     $(".non_time_div", $ctrl.$result).hide()
                 }
 
-                series = makeSeries(data, cqp, labelMapping, currentZoom)
+                series = makeSeries(Rickshaw, data, cqp, labelMapping, currentZoom)
 
                 const graph = new Rickshaw.Graph({
                     element: $(".chart", $ctrl.$result).empty().get(0),
@@ -763,9 +763,7 @@ export const trendDiagramComponent = {
             }
 
             async function makeRequest(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
-                if (!window.Rickshaw) {
-                    var rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
-                }
+                const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
                 $ctrl.localUpdateLoading(true)
                 $ctrl.error = false
                 const currentZoom = $ctrl.zoom
@@ -776,9 +774,8 @@ export const trendDiagramComponent = {
                     })
 
                 try {
-                    var [rickshawModule, graphData] = await Promise.all([rickshawPromise || Rickshaw, reqPromise])
-                    window.Rickshaw = rickshawModule
-                    $timeout(() => renderGraph(graphData, cqp, labelMapping, currentZoom, showTotal))
+                    const [Rickshaw, graphData] = await Promise.all([rickshawPromise, reqPromise])
+                    $timeout(() => renderGraph(Rickshaw, graphData, cqp, labelMapping, currentZoom, showTotal))
                 } catch (e) {
                     $timeout(() => {
                         c.error("graph crash", e)

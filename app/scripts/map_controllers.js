@@ -25,17 +25,14 @@ korpApp.directive("mapCtrl", [
                 s.numResults = 0
                 s.useClustering = false
 
-                if (!window.Rickshaw) {
-                    var rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
-                }
+                const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
 
-                Promise.all([rickshawPromise || Rickshaw, s.promise]).then(
-                    ([rickshawModule, result]) => {
-                        window.Rickshaw = rickshawModule
+                Promise.all([rickshawPromise, s.promise]).then(
+                    ([Rickshaw, result]) => {
                         s.$apply(($scope) => {
                             $scope.loading = false
                             $scope.numResults = 20
-                            $scope.markerGroups = getMarkerGroups(result)
+                            $scope.markerGroups = getMarkerGroups(Rickshaw, result)
                             $scope.selectedGroups = _.keys($scope.markerGroups)
                         })
                     },
@@ -57,7 +54,7 @@ korpApp.directive("mapCtrl", [
                     }
                 }
 
-                var getMarkerGroups = function (result) {
+                var getMarkerGroups = function (Rickshaw, result) {
                     const palette = new Rickshaw.Color.Palette({ scheme: "colorwheel" }) // spectrum2000
                     const groups = {}
                     _.map(
