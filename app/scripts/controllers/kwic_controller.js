@@ -22,7 +22,7 @@ export class KwicCtrl {
     setupListeners() {
         this.$rootScope.$on("make_request", (msg, cqp) => {
             this.scope.cqp = cqp
-            // only set this on the inital search, not when paging
+            // only set this on the initial search, not when paging
             this.scope.hitsPerPage = this.location.search()["hpp"] || settings["hits_per_page_default"]
 
             // reset randomSeed when doing a search, but not for the first request

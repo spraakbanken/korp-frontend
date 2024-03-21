@@ -222,7 +222,7 @@ korpApp.run([
             return ids
         }
 
-        function initialzeCorpusSelection(selectedIds) {
+        function initializeCorpusSelection(selectedIds) {
             // Resolve any folder ids to the contained corpus ids
             const corpusIds = []
             for (const id of selectedIds) {
@@ -252,8 +252,8 @@ korpApp.run([
 
             const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
 
-            if (settings["initalization_checks"] && settings["initalization_checks"](s)) {
-                // custom initalization code called
+            if (settings["initialization_checks"] && settings["initialization_checks"](s)) {
+                // custom initialization code called
             } else if (_.isEmpty(settings.corpora)) {
                 // no corpora
                 s.openErrorModal({
@@ -288,7 +288,7 @@ korpApp.run([
                                 if (newIds.length == 0) {
                                     newIds = settings["preselected_corpora"]
                                 }
-                                initialzeCorpusSelection(newIds)
+                                initializeCorpusSelection(newIds)
                             },
                         })
                     }
@@ -312,7 +312,7 @@ korpApp.run([
                         if (newIds.length == 0) {
                             newIds = settings["preselected_corpora"]
                         }
-                        initialzeCorpusSelection(newIds)
+                        initializeCorpusSelection(newIds)
                     },
                 })
             } else {
@@ -373,11 +373,11 @@ korpApp.run([
         statemachine.listen("login", function () {
             if (s.waitForLogin) {
                 s.waitForLogin = false
-                initialzeCorpusSelection(getCorporaFromHash())
+                initializeCorpusSelection(getCorporaFromHash())
             }
         })
 
-        initialzeCorpusSelection(getCorporaFromHash())
+        initializeCorpusSelection(getCorporaFromHash())
     },
 ])
 

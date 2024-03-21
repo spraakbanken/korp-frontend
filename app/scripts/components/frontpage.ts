@@ -53,7 +53,7 @@ export default angular.module("korpApp").component("frontpage", {
                 $rootScope.graphTabs.length ||
                 $rootScope.mapTabs.length
 
-            // Don't show the mode description until the inital corpora have been selected, to avoid text behind any modals
+            // Don't show the mode description until the initial corpora have been selected, to avoid text behind any modals
             $rootScope.$on("initialcorpuschooserchange", () => ($ctrl.showDescription = true))
 
             $ctrl.$onInit = () => {
