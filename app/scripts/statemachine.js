@@ -1,7 +1,6 @@
 /** @format */
 import { interpret, createMachine } from "xstate"
-
-import jStorage from "../lib/jstorage"
+import * as authenticationProxy from "@/components/auth/auth"
 
 const listenerMap = {}
 function listen(eventName, fn) {

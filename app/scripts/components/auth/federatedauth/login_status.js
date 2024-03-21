@@ -1,6 +1,6 @@
 /** @format */
 import statemachine from "@/statemachine"
-import { login } from "./fed_auth"
+import * as authenticationProxy from "../auth"
 
 export const loginStatusComponent = {
     template: `
@@ -42,7 +42,7 @@ export const loginStatusComponent = {
 
             $ctrl.doLogin = (loginNeededFor) => {
                 // TODO here we must get the URL so that the state can be restored that way
-                login()
+                authenticationProxy.login()
             }
         },
     ],

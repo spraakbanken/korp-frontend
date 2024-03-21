@@ -38,6 +38,7 @@ import { searchtabsComponent } from "./components/searchtabs"
 import "./components/frontpage"
 import { resultsComponent } from "./components/results"
 import statemachine from "@/statemachine"
+import * as authenticationProxy from "@/components/auth/auth"
 
 let html = String.raw
 
@@ -145,7 +146,7 @@ korpApp.run([
     "$q",
     "$timeout",
     "$uibModal",
-    function ($rootScope, $location, $locale, tmhDynamicLocale, tmhDynamicLocaleCache, $q, $timeout, $uibModal) {
+    async function ($rootScope, $location, $locale, tmhDynamicLocale, tmhDynamicLocaleCache, $q, $timeout, $uibModal) {
         const s = $rootScope
         s._settings = settings
         window.lang = s.lang = $location.search().lang || settings["default_language"]
@@ -222,7 +223,7 @@ korpApp.run([
             return ids
         }
 
-        function initializeCorpusSelection(selectedIds) {
+        async function initializeCorpusSelection(selectedIds) {
             // Resolve any folder ids to the contained corpus ids
             const corpusIds = []
             for (const id of selectedIds) {
@@ -252,7 +253,7 @@ korpApp.run([
 
             const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
 
-            if (settings["initialization_checks"] && settings["initialization_checks"](s)) {
+            if (settings["initialization_checks"] && (await settings["initialization_checks"](s))) {
                 // custom initialization code called
             } else if (_.isEmpty(settings.corpora)) {
                 // no corpora
