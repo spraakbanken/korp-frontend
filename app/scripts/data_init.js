@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import { setDefaultConfigValues } from "./settings"
+import currentMode from "@/mode"
 import * as treeUtil from "./components/corpus_chooser/util"
 
 // TODO it would be better only to load additional languages when there is a language change
@@ -102,7 +103,7 @@ async function getTimeData() {
 async function getConfig() {
     // Load static corpus config if it exists.
     try {
-        const corpusConfig = require(`modes/${window.currentMode}_corpus_config.json`)
+        const corpusConfig = require(`modes/${currentMode}_corpus_config.json`)
         console.log(`Using static corpus config`)
         return corpusConfig
     } catch {}

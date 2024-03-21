@@ -1,4 +1,6 @@
 /** @format */
+import currentMode from "@/mode"
+
 let $ = require("jquery")
 window.jQuery = $
 window.$ = $
@@ -39,7 +41,6 @@ require("jquerylocalize")
 require("./lib/jquery.format.js")
 
 window.c = console
-window.currentMode = new URLSearchParams(window.location.search).get("mode") || "default"
 
 try {
     // modes-files are optional and have customizing code

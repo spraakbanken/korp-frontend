@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "korp_config"
 
-// TODO Remove from window, import this file ("@/config/settings") instead
+// TODO Remove from window, import this file ("@/settings") instead
 window.settings = settings
 export default settings
 

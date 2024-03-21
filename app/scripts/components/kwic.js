@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
-import statemachine from "../statemachine"
+import statemachine from "@/statemachine"
+import currentMode from "@/mode"
 
 let html = String.raw
 

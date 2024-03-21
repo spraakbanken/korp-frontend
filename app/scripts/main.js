@@ -2,6 +2,7 @@
 import _ from "lodash"
 import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
+import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
 import korpLogo from "../img/korp.svg"
 import jStorage from "../lib/jstorage"
@@ -50,7 +51,7 @@ function initApp() {
         $("body").addClass("lab")
     }
 
-    $("body").addClass(`mode-${window.currentMode}`)
+    $("body").addClass(`mode-${currentMode}`)
 
     $("#search_history").change(function (event) {
         const target = $(this).find(":selected")

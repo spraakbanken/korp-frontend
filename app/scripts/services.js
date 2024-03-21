@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import jStorage from "../lib/jstorage"
+import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
 import { parseMapData } from "./map_services"
 import { updateSearchHistory } from "@/history"
