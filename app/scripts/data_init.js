@@ -2,6 +2,7 @@
 import _ from "lodash"
 import { setDefaultConfigValues } from "./settings"
 import currentMode from "@/mode"
+import model from "@/model"
 import * as treeUtil from "./components/corpus_chooser/util"
 
 // TODO it would be better only to load additional languages when there is a language change

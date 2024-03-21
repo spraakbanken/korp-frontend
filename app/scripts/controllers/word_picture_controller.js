@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import model from "@/model"
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("wordpicCtrl", () => ({

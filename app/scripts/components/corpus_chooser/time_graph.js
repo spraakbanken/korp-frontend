@@ -2,6 +2,7 @@
 import _ from "lodash"
 import "jquery-flot/jquery.flot.js"
 import "jquery-flot/jquery.flot.stack.js"
+import model from "@/model"
 
 export const ccTimeGraphComponent = {
     template: `

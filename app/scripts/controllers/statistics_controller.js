@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import currentMode from "@/mode"
+import model from "@/model"
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("statsResultCtrl", () => ({

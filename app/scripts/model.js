@@ -3,7 +3,8 @@
 import _ from "lodash"
 import * as authenticationProxy from "@/components/auth/auth"
 
-window.model = {}
+const model = {}
+export default model
 
 model.normalizeStatsData = function (data) {
     if (!_.isArray(data.combined)) {
