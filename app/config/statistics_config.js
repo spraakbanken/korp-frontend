@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
 
 let customFunctions = {}
 

@@ -1,5 +1,14 @@
 /** @format */
 import _ from "lodash"
+import settings from "korp_config"
+
+// TODO Remove from window, import this file ("@/config/settings") instead
+window.settings = settings
+export default settings
+
+settings.markup = {
+    msd: require("../markup/msd.html"),
+}
 
 /**
  * function to set default values if parameters have been left out of config.js

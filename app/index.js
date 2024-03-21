@@ -1,11 +1,4 @@
 /** @format */
-import settings from "korp_config"
-
-window.settings = settings
-settings.markup = {
-    msd: require("./markup/msd.html"),
-}
-
 let $ = require("jquery")
 window.jQuery = $
 window.$ = $

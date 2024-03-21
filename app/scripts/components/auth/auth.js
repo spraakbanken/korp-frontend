@@ -1,5 +1,6 @@
 /** @format */
 import statemachine from "@/statemachine"
+import settings from "@/settings"
 
 let authModule
 let authModuleName = settings["auth_module"]?.["module"] || settings["auth_module"]
