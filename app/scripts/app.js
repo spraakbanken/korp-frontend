@@ -175,7 +175,12 @@ korpApp.run([
             // Find the configured 3-letter UI language matching the new 2-letter locale
             const lang = settings["languages"]
                 .map((language) => language.value)
-                .find((lang3) => tmhDynamicLocaleCache.get(lang3).id == $locale.id)
+                .find((lang3) => tmhDynamicLocaleCache.get(lang3)?.id == $locale.id)
+
+            if (!lang) {
+                console.warn(`No locale matching "${$locale.id}"`)
+                return
+            }
 
             // Update global variables
             s.lang = lang
