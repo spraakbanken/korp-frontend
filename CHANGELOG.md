@@ -6,6 +6,8 @@
 
 - Extended support for description on frontpage, with corpus updates [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
 - The "medial part" option now includes first/last parts also for lemgram search [#347](https://github.com/spraakbanken/korp-frontend/issues/347)
+- Removed global variables `currentMode`, `model`, `settings` – import them instead
+- Deprecated global variable `settings` – import it instead
 
 ### Fixed
 
