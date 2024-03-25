@@ -24,18 +24,6 @@ require("./styles/textreader.css")
 require("components-jqueryui/ui/widget.js")
 
 require("angular")
-require("angular-ui-bootstrap/src/typeahead")
-require("angular-ui-bootstrap/src/tooltip")
-require("angular-ui-bootstrap/src/modal")
-require("angular-ui-bootstrap/src/tabs")
-require("angular-ui-bootstrap/src/dropdown")
-require("angular-ui-bootstrap/src/pagination")
-require("angular-ui-bootstrap/src/datepicker")
-require("angular-ui-bootstrap/src/timepicker")
-require("angular-ui-bootstrap/src/buttons")
-require("angular-ui-bootstrap/src/popover")
-
-require("angular-spinner")
 
 require("jquerylocalize")
 require("./lib/jquery.format.js")
@@ -48,8 +36,6 @@ try {
 } catch (error) {
     console.log("No mode file available for mode:", currentMode)
 }
-
-require("angular-dynamic-locale/dist/tmhDynamicLocale.js")
 
 require("slickgrid/lib/jquery.event.drag-2.3.0")
 require("slickgrid/slick.core")
@@ -66,8 +52,6 @@ window.CSV = require("comma-separated-values/csv")
 require("leaflet")
 require("leaflet.markercluster")
 require("leaflet-providers")
-require("geokorp/dist/scripts/geokorp")
-require("geokorp/dist/scripts/geokorp-templates")
 require("angular-filter/index.js")
 
 require("./lib/jquery.tooltip.pack.js")
