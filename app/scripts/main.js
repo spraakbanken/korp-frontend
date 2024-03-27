@@ -1,11 +1,12 @@
 /** @format */
 import _ from "lodash"
+import jStorage from "../lib/jstorage"
+import settings from "@/settings"
 import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
 import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
 import korpLogo from "../img/korp.svg"
-import jStorage from "../lib/jstorage"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")

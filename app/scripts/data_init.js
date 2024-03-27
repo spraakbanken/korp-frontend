@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import { setDefaultConfigValues } from "./settings"
+import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
 import model from "@/model"
 import * as treeUtil from "./components/corpus_chooser/util"
@@ -115,7 +115,7 @@ async function getConfig() {
         configUrl = await settings["corpus_config_url"]()
     } else {
         const labParam = process.env.ENVIRONMENT == "staging" ? "&include_lab" : ""
-        configUrl = `${settings["korp_backend_url"]}/corpus_config?mode=${window.currentMode}${labParam}`
+        configUrl = `${settings["korp_backend_url"]}/corpus_config?mode=${currentMode}${labParam}`
     }
     let response
     try {
