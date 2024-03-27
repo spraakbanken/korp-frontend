@@ -1,6 +1,7 @@
 /** @format */
 
 import statemachine from "@/statemachine"
+import settings from "@/settings"
 import { login } from "./basic_auth"
 
 // TODO make it not closable when login is NEEDED

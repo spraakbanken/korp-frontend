@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
 import statisticsFormatting from "../config/statistics_config.js"
 const pieChartImg = require("../img/stats2.png")
 

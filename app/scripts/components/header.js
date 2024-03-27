@@ -5,6 +5,7 @@ import korpLogoEn from "../../img/korp_slogan_en.svg"
 import sbxLogo from "../../img/sprakbanken_text_slogan.svg"
 import sbxLogoEn from "../../img/sprakbanken_text_slogan_en.svg"
 import guLogo from "../../img/gu_logo_sv_head.svg"
+import settings from "@/settings"
 import currentMode from "@/mode"
 
 let html = String.raw
@@ -242,7 +243,7 @@ export const headerComponent = {
             for (let mode of $ctrl.modes) {
                 mode.selected = false
                 if (mode.mode === currentMode) {
-                    window.settings.mode = mode
+                    settings.mode = mode
                     mode.selected = true
                 }
             }

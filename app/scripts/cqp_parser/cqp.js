@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
 import { parse } from "./CQPParser"
 
 const parseDateInterval = function (op, val, expanded_format) {

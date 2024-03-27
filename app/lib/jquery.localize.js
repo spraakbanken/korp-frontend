@@ -1,3 +1,5 @@
+const { default: settings } = require("@/settings");
+
 (function($) {
 	dl_cache = {}
 	$.localize = function(cmd, o) {

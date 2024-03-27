@@ -1,5 +1,8 @@
-/** @format */
-// See: https://developer.matomo.org/guides/tracking-javascript-guide
+/**
+ * @format
+ * @see: https://developer.matomo.org/guides/tracking-javascript-guide
+ */
+import settings from "@/settings"
 
 // Allow environment-specific (development/staging/production) settings or fallback to general settings
 const matomoSettings = { ...settings["matomo"], ...settings["matomo"]?.[process.env.ENVIRONMENT] }

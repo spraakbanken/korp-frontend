@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
 
 export const initCorpusStructure = (collection, initialCorpusSelection) => {
     // first set the select status of all corpora

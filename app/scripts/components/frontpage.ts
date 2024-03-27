@@ -1,6 +1,7 @@
 /** @format */
 import angular from "angular"
 import moment from "moment"
+import settings from "@/settings"
 
 export default angular.module("korpApp").component("frontpage", {
     template: /* HTML */ `
@@ -60,7 +61,7 @@ export default angular.module("korpApp").component("frontpage", {
                 if ($rootScope._settings.frontpage?.corpus_updates) {
                     const limitDate = moment().subtract(6, "months")
                     // Find most recently updated corpora
-                    $ctrl.recentUpdates = (window as any).settings.corpusListing.corpora
+                    $ctrl.recentUpdates = settings.corpusListing.corpora
                         .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
                         .sort((a, b) => b.info.Updated.localeCompare(a.info.Updated))
                     $ctrl.toggleRecentUpdatesExpanded(false)

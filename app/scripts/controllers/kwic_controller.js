@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
 import model from "@/model"
 
 const korpApp = angular.module("korpApp")

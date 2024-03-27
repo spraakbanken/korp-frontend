@@ -1,4 +1,6 @@
 /** @format */
+import settings from "@/settings"
+
 let html = String.raw
 export const wordPictureComponent = {
     template: html`

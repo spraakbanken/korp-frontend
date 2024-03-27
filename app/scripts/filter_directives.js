@@ -4,6 +4,7 @@
  * @format
  */
 import _ from "lodash"
+import settings from "@/settings"
 
 const korpApp = angular.module("korpApp")
 

@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import jStorage from "../lib/jstorage"
+import settings from "@/settings"
 import currentMode from "@/mode"
 import model from "@/model"
 import * as authenticationProxy from "@/components/auth/auth"

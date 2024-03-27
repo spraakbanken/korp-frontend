@@ -260,7 +260,7 @@ export async function fetchInitialData(authDef) {
     const config = await getConfig()
     const modeSettings = transformConfig(config)
 
-    _.assign(window.settings, modeSettings)
+    _.assign(settings, modeSettings)
 
     setDefaultConfigValues()
 

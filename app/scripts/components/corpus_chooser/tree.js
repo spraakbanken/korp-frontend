@@ -1,6 +1,6 @@
 /** @format */
 import * as treeUtil from "./util"
-
+import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
 let html = String.raw
 

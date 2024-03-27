@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import statemachine from "@/statemachine"
+import settings from "@/settings"
 
 let html = String.raw
 export const extendedStandardComponent = {

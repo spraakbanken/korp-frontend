@@ -1,6 +1,7 @@
 /** @format */
 "use strict"
 import _ from "lodash"
+import settings from "@/settings"
 import * as authenticationProxy from "@/components/auth/auth"
 
 const model = {}

@@ -2,8 +2,6 @@
 import _ from "lodash"
 import settings from "korp_config"
 
-// TODO Remove from window, import this file ("@/settings") instead
-window.settings = settings
 export default settings
 
 settings.markup = {

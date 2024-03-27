@@ -3,6 +3,7 @@ import _ from "lodash"
 import "../../styles/sidebar.scss"
 export const sidebarName = "sidebar"
 import statemachine from "../statemachine"
+import settings from "@/settings"
 import { stringify } from "@/stringify.js"
 
 let sidebarComponents = {}

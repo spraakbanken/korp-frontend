@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
 import { stringifyFunc } from "@/stringify.js"
 
 const korpApp = angular.module("korpApp")

@@ -1,5 +1,6 @@
 /** @format */
 import model from "@/model"
+import settings from "@/settings"
 
 model.StatsProxy = class ParallelStatsProxy extends model.StatsProxy {
     makeParameters(reduceVals, cqp, ignoreCase) {

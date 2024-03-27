@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import "components-jqueryui/ui/widgets/dialog.js"
+import settings from "@/settings"
 import statisticsFormatting from "../../config/statistics_config.js"
 
 let html = String.raw
