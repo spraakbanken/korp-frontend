@@ -1,10 +1,12 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
+import { html } from "@/util"
+import "@/components/extended/tokens"
 
-let html = String.raw
-export const extendedStandardComponent = {
+angular.module("korpApp").component("extendedStandard", {
     template: html`
         <div>
             <global-filters lang="$ctrl.lang"></global-filters>
@@ -152,4 +154,4 @@ export const extendedStandardComponent = {
             })
         },
     ],
-}
+})

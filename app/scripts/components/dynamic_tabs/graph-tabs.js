@@ -1,6 +1,9 @@
 /** @format */
-let html = String.raw
-export const graphTabsComponent = () => ({
+import angular from "angular"
+import { html } from "@/util"
+import "@/components/trend-diagram"
+
+angular.module("korpApp").directive("graphTabs", () => ({
     replace: true,
     template: html`
         <uib-tab ng-repeat="data in $ctrl.tabs" graph-ctrl="graph-ctrl">
@@ -18,4 +21,4 @@ export const graphTabsComponent = () => ({
     scope: {},
     controllerAs: "$ctrl",
     controller: [() => {}],
-})
+}))

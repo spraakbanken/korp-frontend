@@ -2,6 +2,9 @@
 import _ from "lodash"
 import settings from "@/settings"
 
+/** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
+export const html = String.raw
+
 window.util = {}
 
 // TODO never use this, remove when sure it is not used

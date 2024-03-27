@@ -1,8 +1,9 @@
 /** @format */
+import angular from "angular"
 import settings from "@/settings"
+import { html } from "@/util"
 
-let html = String.raw
-export const wordPictureComponent = {
+angular.module("korpApp").component("wordPicture", {
     template: html`
         <div class="wordpic_disabled" ng-if="!$ctrl.wordPic">
             {{'word_pic_warn' | loc:$root.lang}}
@@ -202,4 +203,4 @@ export const wordPictureComponent = {
             }
         },
     ],
-}
+})

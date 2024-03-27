@@ -1,9 +1,13 @@
 /** @format */
+import angular from "angular"
 import "components-jqueryui/ui/widgets/sortable.js"
 import "angular-ui-sortable/src/sortable"
+import { html } from "@/util"
+import "@/components/extended/token"
+import "@/components/extended/struct-token"
+import "@/components/extended/add-box"
 
-let html = String.raw
-export const extendedTokensComponent = {
+angular.module("korpApp").component("extendedTokens", {
     template: html`
         <div id="query_table">
             <div ui-sortable="{ items: '> .token', delay : 100 }" ng-model="$ctrl.data" scroll-to-start="scrollToStart">
@@ -109,4 +113,4 @@ export const extendedTokensComponent = {
             }
         },
     ],
-}
+})

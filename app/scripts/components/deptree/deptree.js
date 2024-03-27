@@ -1,8 +1,9 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
+import { html } from "@/util.js"
 
-let html = String.raw
-export const depTreeComponent = {
+angular.module("korpApp").component("depTree", {
     template: html`
         <div>
             <script type="text/ng-template" id="deptreeModal.html">
@@ -215,4 +216,4 @@ export const depTreeComponent = {
             }
         },
     ],
-}
+})

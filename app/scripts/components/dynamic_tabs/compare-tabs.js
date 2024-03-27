@@ -1,6 +1,9 @@
 /** @format */
-let html = String.raw
-export const compareTabsComponent = () => ({
+import angular from "angular"
+import { html } from "@/util"
+import "@/components/korp-error"
+
+angular.module("korpApp").directive("compareTabs", () => ({
     replace: true,
     template: html`
         <uib-tab ng-repeat="promise in $ctrl.tabs" compare-ctrl="compare-ctrl">
@@ -37,4 +40,4 @@ export const compareTabsComponent = () => ({
     scope: {},
     controllerAs: "$ctrl",
     controller: [() => {}],
-})
+}))

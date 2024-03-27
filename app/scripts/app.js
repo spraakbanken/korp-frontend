@@ -2,82 +2,14 @@
 import _ from "lodash"
 import korpApp from "./korp.module"
 import settings from "@/settings"
-import { kwicPagerName, kwicPager } from "./components/pager"
-import { sidebarName, sidebarComponent } from "./components/sidebar"
-import * as autoc from "./components/autoc"
-import * as readingmode from "./components/readingmode"
-import * as extendedAddBox from "./components/extended/extended_add_box"
-import { corpusChooserComponent } from "./components/corpus_chooser/corpus_chooser"
-import { ccTimeGraphComponent } from "./components/corpus_chooser/time_graph"
-import { ccTreeComponent } from "./components/corpus_chooser/tree"
-import { ccInfoBox } from "./components/corpus_chooser/info_box"
-import { depTreeComponent } from "./components/deptree/deptree"
-import { simpleSearchComponent } from "./components/simple_search"
-import { extendedStandardComponent } from "./components/extended/standard_extended"
-import { extendedParallelComponent } from "./components/extended/parallel_extended"
-import { extendedTokensComponent } from "./components/extended/extended_tokens"
-import { extendedAndTokenComponent } from "./components/extended/and_token"
-import { extendedCQPTermComponent } from "./components/extended/cqp_term"
-import { extendedTokenComponent } from "./components/extended/token"
-import { extendedStructTokenComponent } from "./components/extended/struct_token"
-import { extendedCQPValueComponent } from "./components/extended/cqp_value"
-import { advancedSearchComponent } from "./components/advanced_search"
-import { compareSearchComponent } from "./components/compare_search"
-import "./components/kwic_word"
-import { kwicComponent } from "./components/kwic"
-import { statisticsComponent } from "./components/statistics"
-import { trendDiagramComponent } from "./components/trend_diagram"
-import { korpErrorComponent } from "./components/korp_error"
-import { kwicTabsComponent } from "./components/dynamic_tabs/kwic_tabs"
-import { graphTabsComponent } from "./components/dynamic_tabs/graph_tabs"
-import { compareTabsComponent } from "./components/dynamic_tabs/compare_tabs"
-import { mapTabsComponent } from "./components/dynamic_tabs/map_tabs"
-import { textTabsComponent } from "./components/dynamic_tabs/text_tabs"
-import { headerComponent } from "./components/header"
-import { wordPictureComponent } from "./components/word_picture"
-import { searchtabsComponent } from "./components/searchtabs"
-import "./components/frontpage"
-import { resultsComponent } from "./components/results"
 import statemachine from "@/statemachine"
 import * as authenticationProxy from "@/components/auth/auth"
-
-let html = String.raw
-
-korpApp.component(kwicPagerName, kwicPager)
-korpApp.component(sidebarName, sidebarComponent)
-korpApp.component(readingmode.componentName, readingmode.component)
-korpApp.component(autoc.componentName, autoc.component)
-korpApp.component(extendedAddBox.componentName, extendedAddBox.component)
-korpApp.component("corpusChooser", corpusChooserComponent)
-korpApp.component("ccTimeGraph", ccTimeGraphComponent)
-korpApp.component("ccTree", ccTreeComponent)
-korpApp.component("ccInfoBox", ccInfoBox)
-korpApp.component("depTree", depTreeComponent)
-korpApp.component("simpleSearch", simpleSearchComponent)
-korpApp.component("extendedStandard", extendedStandardComponent)
-korpApp.component("extendedParallel", extendedParallelComponent)
-korpApp.component("extendedTokens", extendedTokensComponent)
-korpApp.component("extendedAndToken", extendedAndTokenComponent)
-korpApp.component("extendedCqpTerm", extendedCQPTermComponent)
-korpApp.component("extendedToken", extendedTokenComponent)
-korpApp.component("extendedStructToken", extendedStructTokenComponent)
-korpApp.component("extendedCqpValue", extendedCQPValueComponent)
-korpApp.component("advancedSearch", advancedSearchComponent)
-korpApp.component("compareSearch", compareSearchComponent)
-korpApp.component("kwic", kwicComponent)
-korpApp.component("statistics", statisticsComponent)
-korpApp.component("trendDiagram", trendDiagramComponent)
-korpApp.component("korpError", korpErrorComponent)
-korpApp.component("header", headerComponent)
-korpApp.component("wordPicture", wordPictureComponent)
-korpApp.component("searchtabs", searchtabsComponent)
-korpApp.component("results", resultsComponent)
-// these are directives because it needs replace: true, which is not supported in component
-korpApp.directive("kwicTabs", kwicTabsComponent)
-korpApp.directive("graphTabs", graphTabsComponent)
-korpApp.directive("compareTabs", compareTabsComponent)
-korpApp.directive("mapTabs", mapTabsComponent)
-korpApp.directive("textTabs", textTabsComponent)
+import { html } from "@/util"
+import "@/components/header"
+import "@/components/searchtabs"
+import "@/components/frontpage"
+import "@/components/results"
+import "@/components/korp-error"
 
 // load all custom components
 let customComponents = {}

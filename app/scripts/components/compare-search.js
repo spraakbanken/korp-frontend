@@ -1,9 +1,10 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
+import { html } from "@/util"
 
-let html = String.raw
-export const compareSearchComponent = {
+angular.module("korpApp").component("compareSearch", {
     template: html`
         <div class="search_compare">
             <button
@@ -80,4 +81,4 @@ export const compareSearchComponent = {
             $ctrl.deleteCompares = () => compareSearches.flush()
         },
     ],
-}
+})

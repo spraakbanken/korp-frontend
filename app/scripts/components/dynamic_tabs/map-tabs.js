@@ -1,6 +1,9 @@
 /** @format */
-let html = String.raw
-export const mapTabsComponent = () => ({
+import angular from "angular"
+import { html } from "@/util"
+import "@/components/korp-error"
+
+angular.module("korpApp").directive("mapTabs", () => ({
     replace: true,
     template: html`
         <uib-tab ng-repeat="promise in $ctrl.tabs" map-ctrl="map-ctrl" select="onentry()">
@@ -52,4 +55,4 @@ export const mapTabsComponent = () => ({
     scope: {},
     controllerAs: "$ctrl",
     controller: [() => {}],
-})
+}))

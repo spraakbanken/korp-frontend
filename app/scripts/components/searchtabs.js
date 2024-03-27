@@ -1,9 +1,15 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
+import { html } from "@/util"
+import "@/components/simple-search"
+import "@/components/extended/extended-standard"
+import "@/components/extended/extended-parallel"
+import "@/components/advanced-search"
+import "@/components/compare-search"
 
-let html = String.raw
-export const searchtabsComponent = {
+angular.module("korpApp").component("searchtabs", {
     template: html`
         <div click-cover="$ctrl.noCorporaSelected">
             <uib-tabset class="tabbable search_tabs" tab-hash="search_tab" active="activeTab">
@@ -266,4 +272,4 @@ export const searchtabsComponent = {
             setupKwicSort()
         },
     ],
-}
+})

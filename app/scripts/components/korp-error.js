@@ -1,9 +1,9 @@
 /** @format */
+import angular from "angular"
+import { html } from "@/util"
 const korpFailImg = require("../../img/korp_fail.svg")
 
-let html = String.raw
-
-export const korpErrorComponent = {
+angular.module("korpApp").component("korpError", {
     template: html`
         <div>
             <object class="korp_fail inline-block" type="image/svg+xml" data="${korpFailImg}">
@@ -12,4 +12,4 @@ export const korpErrorComponent = {
             <div class="fail_text inline-block">{{'fail_text' | loc:$root.lang}}</div>
         </div>
     `,
-}
+})

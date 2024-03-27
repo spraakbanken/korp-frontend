@@ -1,43 +1,47 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import "jquery-flot/jquery.flot.js"
 import "jquery-flot/jquery.flot.stack.js"
 import settings from "@/settings"
 import model from "@/model"
+import { html } from "@/util"
 
-export const ccTimeGraphComponent = {
-    template: `
-    <script type="text/ng-template" id="timepopover.html">
-        <div class="p-4">
-            <h4 ng-if="$ctrl.timeHover.isRestData" class="mt-0">
-                {{"corpselector_rest_time" | loc:$root.lang}}
-            </h4>
+angular.module("korpApp").component("ccTimeGraph", {
+    template: html`
+        <script type="text/ng-template" id="timepopover.html">
+            <div class="p-4">
+                <h4 ng-if="$ctrl.timeHover.isRestData" class="mt-0">
+                    {{"corpselector_rest_time" | loc:$root.lang}}
+                </h4>
 
-            <h4 ng-if="!$ctrl.timeHover.isRestData" class="mt-0">
-                {{"corpselector_time" | loc:$root.lang}} {{$ctrl.timeHover.year}}
-            </h4>
+                <h4 ng-if="!$ctrl.timeHover.isRestData" class="mt-0">
+                    {{"corpselector_time" | loc:$root.lang}} {{$ctrl.timeHover.year}}
+                </h4>
 
-            {{'corpselector_time_chosen' | loc:$root.lang}}: {{$ctrl.timeHover.val | prettyNumber}} {{'corpselector_tokens' | loc:$root.lang}}
-            <br>
-            {{'corpselector_of_total' | loc:$root.lang}}: {{$ctrl.timeHover.total | prettyNumber}} {{'corpselector_tokens' | loc:$root.lang}}
+                {{'corpselector_time_chosen' | loc:$root.lang}}: {{$ctrl.timeHover.val | prettyNumber}} {{'corpselector_tokens' | loc:$root.lang}}
+                <br>
+                {{'corpselector_of_total' | loc:$root.lang}}: {{$ctrl.timeHover.total | prettyNumber}} {{'corpselector_tokens' | loc:$root.lang}}
+            </div>
+        </script>
+        <div
+            id="time"
+            class="flex"
+            uib-popover-template="'timepopover.html'"
+            popover-class="timepopover"
+            popover-popup-delay="200"
+            popover-placement="right"
+            popover-trigger="'mouseenter'"
+        >
+            <div id="time_graph"></div>
         </div>
-    </script>
-    <div id="time"
-        class="flex"
-        uib-popover-template="'timepopover.html'"
-        popover-class="timepopover"
-        popover-popup-delay="200"
-        popover-placement="right"
-        popover-trigger="'mouseenter'">
-        <div id="time_graph"></div>        
-    </div>
-    <style>
-        .timepopover {
-            margin-left: 0 !important;
-            z-index: 10000;
-        }
-    </style>
-`,
+        <style>
+            .timepopover {
+                margin-left: 0 !important;
+                z-index: 10000;
+            }
+        </style>
+    `,
     controller: [
         "$timeout",
         "$rootScope",
@@ -58,7 +62,7 @@ export const ccTimeGraphComponent = {
             onTimeGraphChange($ctrl.timeProxy, hoverCallback, allTimestruct, rest)
         },
     ],
-}
+})
 
 function getValByDate(date, struct) {
     let output = null

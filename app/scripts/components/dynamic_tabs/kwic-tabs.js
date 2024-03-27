@@ -1,6 +1,11 @@
 /** @format */
-let html = String.raw
-export const kwicTabsComponent = () => ({
+import angular from "angular"
+import { html } from "@/util"
+import "@/components/korp-error"
+import "@/components/kwic"
+
+// This is a directives because it needs `replace: true`, which is not supported in component
+angular.module("korpApp").directive("kwicTabs", () => ({
     replace: true,
     template: html`
         <uib-tab example-ctrl="example-ctrl" ng-repeat="kwicTab in $ctrl.tabs" select="onentry()" deselect="onexit()">
@@ -39,4 +44,4 @@ export const kwicTabsComponent = () => ({
     scope: {},
     controllerAs: "$ctrl",
     controller: [() => {}],
-})
+}))

@@ -1,10 +1,12 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import "../../styles/sidebar.scss"
-export const sidebarName = "sidebar"
 import statemachine from "../statemachine"
 import settings from "@/settings"
 import { stringify } from "@/stringify.js"
+import { html } from "@/util"
+import "@/components/deptree/deptree"
 
 let sidebarComponents = {}
 
@@ -14,8 +16,7 @@ try {
     console.log("No module for sidebar components available")
 }
 
-let html = String.raw
-export const sidebarComponent = {
+angular.module("korpApp").component("sidebar", {
     template: html`
         <div class="sticky top-10 border border-gray-300 p-2 rounded-sm" ng-show="$ctrl.corpusObj">
             <div>
@@ -381,4 +382,4 @@ export const sidebarComponent = {
             })
         },
     ],
-}
+})

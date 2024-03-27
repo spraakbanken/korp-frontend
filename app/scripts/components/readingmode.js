@@ -1,7 +1,7 @@
 /** @format */
-export const componentName = "standardReadingMode"
+import angular from "angular"
 
-export const component = {
+angular.module("korpApp").component("standardReadingMode", {
     bindings: {
         data: "<",
         wordClick: "&",
@@ -45,4 +45,4 @@ export const component = {
             }
         },
     ],
-}
+})

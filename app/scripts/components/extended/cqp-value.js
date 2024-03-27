@@ -1,8 +1,9 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import extendedComponents from "@/extended.js"
 
-export const extendedCQPValueComponent = {
+angular.module("korpApp").component("extendedCqpValue", {
     bindings: {
         change: "&",
         attributeDefinition: "<",
@@ -94,4 +95,4 @@ export const extendedCQPValueComponent = {
             }
         },
     ],
-}
+})

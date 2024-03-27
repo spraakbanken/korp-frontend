@@ -1,9 +1,11 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
+import { html } from "@/util"
+import "@/components/extended/tokens"
 
-let html = String.raw
-export const extendedParallelComponent = {
+angular.module("korpApp").component("extendedParallel", {
     template: html`
         <div ng-keydown="$ctrl.keydown($event)">
             <div ng-repeat="l in $ctrl.langs">
@@ -204,4 +206,4 @@ export const extendedParallelComponent = {
             }
         },
     ],
-}
+})

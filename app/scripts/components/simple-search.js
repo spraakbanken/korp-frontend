@@ -1,10 +1,12 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
+import { html } from "@/util"
+import "@/components/autoc"
 
-let html = String.raw
-export const simpleSearchComponent = {
+angular.module("korpApp").component("simpleSearch", {
     template: html`
         <div id="korp-simple">
             <global-filters lang="lang"></global-filters>
@@ -298,4 +300,4 @@ export const simpleSearchComponent = {
             }
         },
     ],
-}
+})

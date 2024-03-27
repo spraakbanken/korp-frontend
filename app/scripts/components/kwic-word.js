@@ -1,9 +1,9 @@
 /** @format */
-export default angular.module("korpApp").component("kwicWord", {
-    template: `<span class="word" ng-class="$ctrl.getClass()">
-    {{::$ctrl.word.word}}
-    </span>\
-    `,
+import angular from "angular"
+import { html } from "@/util"
+
+angular.module("korpApp").component("kwicWord", {
+    template: html`<span class="word" ng-class="$ctrl.getClass()"> {{::$ctrl.word.word}} </span> `,
     bindings: {
         word: "<",
         sentence: "<",

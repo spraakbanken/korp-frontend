@@ -1,6 +1,9 @@
 /** @format */
-let html = String.raw
-export const textTabsComponent = () => ({
+import angular from "angular"
+import { html } from "@/util"
+import "@/components/korp-error"
+
+angular.module("korpApp").directive("textTabs", () => ({
     replace: true,
     template: html`<uib-tab
         ng-repeat="inData in $ctrl.tabs"
@@ -25,4 +28,4 @@ export const textTabsComponent = () => ({
     scope: {},
     controllerAs: "$ctrl",
     controller: [() => {}],
-})
+}))

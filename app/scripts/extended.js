@@ -1,6 +1,8 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
+import { html } from "@/util"
+import "@/components/autoc"
 
 let customExtendedTemplates = {}
 
@@ -9,8 +11,6 @@ try {
 } catch (error) {
     console.log("No module for extended components available")
 }
-
-let html = String.raw
 
 const autocompleteTemplate = `\
 <div>

@@ -1,8 +1,11 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import model from "@/model"
+import { html } from "@/util"
 import * as trendUtil from "../trend_diagram/trend_util"
+import "@/components/korp-error"
 
 const granularities = {
     year: "y",
@@ -24,8 +27,7 @@ const zoomLevelToFormat = {
 
 const validZoomLevels = Object.keys(granularities)
 
-let html = String.raw
-export const trendDiagramComponent = {
+angular.module("korpApp").component("trendDiagram", {
     template: html`
         <korp-error ng-show="$ctrl.error"></korp-error>
         <div class="graph_tab" ng-show="!$ctrl.error">
@@ -786,4 +788,4 @@ export const trendDiagramComponent = {
             }
         },
     ],
-}
+})

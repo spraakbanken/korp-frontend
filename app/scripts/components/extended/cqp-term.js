@@ -1,7 +1,10 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
+import { html } from "@/util"
 const minusImage = require("../../../img/minus.png")
+import "@/components/extended/cqp-value"
 
 /**
  * TODO
@@ -11,8 +14,8 @@ const minusImage = require("../../../img/minus.png")
  * This means that the operator is optional and probably should move to the contents of the extended components
  * that are added by cqp-value
  */
-let html = String.raw
-export const extendedCQPTermComponent = {
+
+angular.module("korpApp").component("extendedCqpTerm", {
     template: html`
         <div class="or or_arg">
             <div class="left_col">
@@ -131,4 +134,4 @@ export const extendedCQPTermComponent = {
             }
         },
     ],
-}
+})

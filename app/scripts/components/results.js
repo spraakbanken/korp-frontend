@@ -1,6 +1,18 @@
 /** @format */
-let html = String.raw
-export const resultsComponent = {
+import angular from "angular"
+import { html } from "@/util"
+import "@/components/dynamic_tabs/compare-tabs"
+import "@/components/dynamic_tabs/graph-tabs"
+import "@/components/dynamic_tabs/kwic-tabs"
+import "@/components/dynamic_tabs/map-tabs"
+import "@/components/dynamic_tabs/text-tabs"
+import "@/components/korp-error"
+import "@/components/kwic"
+import "@/components/statistics"
+import "@/components/sidebar"
+import "@/components/word-picture"
+
+angular.module("korpApp").component("results", {
     template: html`
         <div>
             <div id="results-wrapper" ng-show="$ctrl.hasResult()">
@@ -137,4 +149,4 @@ export const resultsComponent = {
                 $rootScope.mapTabs.length
         },
     ],
-}
+})

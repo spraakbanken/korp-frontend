@@ -1,11 +1,12 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import "components-jqueryui/ui/widgets/dialog.js"
 import settings from "@/settings"
+import { html } from "@/util.js"
 import statisticsFormatting from "../../config/statistics_config.js"
 
-let html = String.raw
-export const statisticsComponent = {
+angular.module("korpApp").component("statistics", {
     template: html`
         <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
             <div ng-if="!$ctrl.inOrder && !$ctrl.hasResult">{{'stats_not_in_order_warn' | loc:$root.lang}}</div>
@@ -483,13 +484,20 @@ export const statisticsComponent = {
                 $("<div id='dialog'></div>")
                     .appendTo("body")
                     .append(
-                        `<div id="pieDiv"><div id="statistics_switch" class="text-center my-2">
-                        <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a>
-                        <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a>
-                    </div>
-                    <div id="chartFrame" class="h-[340px] mx-auto" />
-                    <p id="hitsDescription" class="text-center my-2" rel="localize[statstable_absfigures_hits]">${relHitsString}</p>
-                    </div>`
+                        html`<div id="pieDiv">
+                            <div id="statistics_switch" class="text-center my-2">
+                                <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">
+                                    Relativa frekvenser
+                                </a>
+                                <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">
+                                    Absoluta frekvenser
+                                </a>
+                            </div>
+                            <div id="chartFrame" class="h-[340px] mx-auto" />
+                            <p id="hitsDescription" class="text-center my-2" rel="localize[statstable_absfigures_hits]">
+                                ${relHitsString}
+                            </p>
+                        </div>`
                     )
                     .dialog({
                         width: 400,
@@ -648,4 +656,4 @@ export const statisticsComponent = {
             }
         },
     ],
-}
+})

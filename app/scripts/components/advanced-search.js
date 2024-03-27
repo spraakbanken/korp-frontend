@@ -1,6 +1,8 @@
 /** @format */
-let html = String.raw
-export const advancedSearchComponent = {
+import angular from "angular"
+import { html } from "@/util"
+
+angular.module("korpApp").component("advancedSearch", {
     template: html` <div>
         <div class="well well-small">
             {{'active_cqp_simple' | loc:$root.lang}}:
@@ -78,4 +80,4 @@ export const advancedSearchComponent = {
             }
         },
     ],
-}
+})

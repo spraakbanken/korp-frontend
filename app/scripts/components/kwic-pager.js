@@ -1,8 +1,8 @@
 /** @format */
-export const kwicPagerName = "kwicPager"
+import angular from "angular"
+import { html } from "@/util"
 
-let html = String.raw
-export const kwicPager = {
+angular.module("korpApp").component("kwicPager", {
     template: html`
         <div class="pager-wrapper" ng-show="$ctrl.totalHits > 0">
             <ul
@@ -70,4 +70,4 @@ export const kwicPager = {
             ctrl.pageChange({ page: Number(ctrl.page - 1) }) // pager starts counting at 1
         }
     },
-}
+})

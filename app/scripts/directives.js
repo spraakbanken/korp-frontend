@@ -1,7 +1,6 @@
 /** @format */
 import _ from "lodash"
-
-let html = String.raw
+import { html } from "@/util"
 
 const korpApp = angular.module("korpApp")
 

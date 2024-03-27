@@ -1,65 +1,89 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import * as authenticationProxy from "@/components/auth/auth"
+import { html } from "@/util"
 import * as treeUtil from "./util"
+import "@/components/corpus_chooser/info-box"
+import "@/components/corpus_chooser/time-graph"
+import "@/components/corpus_chooser/tree"
 
-export const corpusChooserComponent = {
-    template: `
-    <div class="absolute inset-0 bg-transparent z-50"
-        ng-click="$ctrl.closeChooser()"
-        ng-if="$ctrl.showChooser"></div>
-    <div class="scroll_checkboxes shrink-0" ng-class="{'cursor-pointer': $ctrl.initialized}">
-        <div ng-click="$ctrl.onShowChooser()" class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12">
-            <div ng-if="$ctrl.initialized">
+angular.module("korpApp").component("corpusChooser", {
+    template: html`
+        <div
+            class="absolute inset-0 bg-transparent z-50"
+            ng-click="$ctrl.closeChooser()"
+            ng-if="$ctrl.showChooser"
+        ></div>
+        <div class="scroll_checkboxes shrink-0" ng-class="{'cursor-pointer': $ctrl.initialized}">
+            <div
+                ng-click="$ctrl.onShowChooser()"
+                class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12"
+            >
+                <div ng-if="$ctrl.initialized">
+                    <span ng-if-start="$ctrl.selectCount != 1">{{ $ctrl.selectCount }}</span>
+                    <span>{{ 'corpselector_of' | loc:$root.lang }}</span>
+                    <span>{{ $ctrl.totalCount }}</span>
+                    <span ng-if-end>{{'corpselector_selectedmultiple' | loc:$root.lang }}</span>
 
-                <span ng-if-start="$ctrl.selectCount != 1">{{ $ctrl.selectCount }}</span>
-                <span>{{ 'corpselector_of' | loc:$root.lang }}</span>
-                <span>{{ $ctrl.totalCount }}</span>
-                <span ng-if-end>{{'corpselector_selectedmultiple' | loc:$root.lang }}</span>
-                
-                <span ng-if-start="$ctrl.selectCount == 1">{{ $ctrl.firstCorpus | locObj:$root.lang | maxLength}}</span>
-                <span ng-if-end>{{ 'corpselector_selectedone' | loc:$root.lang }}</span>
-                
-                <span class="text-gray-600">
-                    — {{ $ctrl.suffixedNumbers($ctrl.selectedNumberOfTokens, $root.lang) }} {{ 'corpselector_of' | loc:$root.lang }} {{ $ctrl.suffixedNumbers($ctrl.totalNumberOfTokens, $root.lang) }} {{ 'corpselector_tokens' | loc:$root.lang }}
-                </span>
-            </div>
-            <div ng-if="!$ctrl.initialized">
-                <i class="fa-solid fa-spinner fa-pulse"></i>
-            </div>
-            <div class="transition-colors duration-500">
-                <i class="fa-solid fa-caret-up relative top-2"></i>
-                <br>
-                <i class="fa-solid fa-caret-down relative bottom-2"></i>
-            </div>
-        </div>
-        <div ng-if="$ctrl.showChooser"  class="corpus-chooser flex bg-white">
-            <div class="popupchecks shrink-0 p-4 h-full">
-                <div class="flex">
-                    <cc-time-graph ng-if="$ctrl.showTimeGraph"></cc-time-graph>
-                    <div class="p-2">
-                        <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
-                            <span class="fa-solid fa-check"></span>
-                            <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>
-                        </button>
-                        <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-full">
-                            <span class="fa-solid fa-times"></span>
-                            <span>{{ 'corpselector_buttonselectnone' | loc:$root.lang }}</span>
-                        </button>
-                    </div>
+                    <span ng-if-start="$ctrl.selectCount == 1"
+                        >{{ $ctrl.firstCorpus | locObj:$root.lang | maxLength}}</span
+                    >
+                    <span ng-if-end>{{ 'corpselector_selectedone' | loc:$root.lang }}</span>
+
+                    <span class="text-gray-600">
+                        — {{ $ctrl.suffixedNumbers($ctrl.selectedNumberOfTokens, $root.lang) }} {{ 'corpselector_of' |
+                        loc:$root.lang }} {{ $ctrl.suffixedNumbers($ctrl.totalNumberOfTokens, $root.lang) }} {{
+                        'corpselector_tokens' | loc:$root.lang }}
+                    </span>
                 </div>
-                <!-- this is the beginning of the recursive component -->
-                <cc-tree node="$ctrl.root" on-select="$ctrl.onSelect()" on-select-only="$ctrl.selectOnly(corporaIds)" on-show-info="$ctrl.onShowInfo(node)"></cc-tree>
-
-                <p class="text-sm pb-4">
-                    {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' | loc:$root.lang}}
-                </p>
+                <div ng-if="!$ctrl.initialized">
+                    <i class="fa-solid fa-spinner fa-pulse"></i>
+                </div>
+                <div class="transition-colors duration-500">
+                    <i class="fa-solid fa-caret-up relative top-2"></i>
+                    <br />
+                    <i class="fa-solid fa-caret-down relative bottom-2"></i>
+                </div>
             </div>
-            <cc-info-box ng-if="$ctrl.showInfoBox" class="sticky top-0 bg-gray-100 overflow-auto" style="width: 480px;" object="$ctrl.infoNode"></cc-info>
+            <div ng-if="$ctrl.showChooser" class="corpus-chooser flex bg-white">
+                <div class="popupchecks shrink-0 p-4 h-full">
+                    <div class="flex">
+                        <cc-time-graph ng-if="$ctrl.showTimeGraph"></cc-time-graph>
+                        <div class="p-2">
+                            <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
+                                <span class="fa-solid fa-check"></span>
+                                <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>
+                            </button>
+                            <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-full">
+                                <span class="fa-solid fa-times"></span>
+                                <span>{{ 'corpselector_buttonselectnone' | loc:$root.lang }}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- this is the beginning of the recursive component -->
+                    <cc-tree
+                        node="$ctrl.root"
+                        on-select="$ctrl.onSelect()"
+                        on-select-only="$ctrl.selectOnly(corporaIds)"
+                        on-show-info="$ctrl.onShowInfo(node)"
+                    ></cc-tree>
+
+                    <p class="text-sm pb-4">
+                        {{ $ctrl.selectedNumberOfSentences | prettyNumber }} {{'corpselector_sentences_long' |
+                        loc:$root.lang}}
+                    </p>
+                </div>
+                <cc-info-box
+                    ng-if="$ctrl.showInfoBox"
+                    class="sticky top-0 bg-gray-100 overflow-auto"
+                    style="width: 480px;"
+                    object="$ctrl.infoNode"
+                ></cc-info-box>
+            </div>
         </div>
-    </div>
     `,
     bindings: {},
     controller: [
@@ -207,4 +231,4 @@ export const corpusChooserComponent = {
             }
         },
     ],
-}
+})

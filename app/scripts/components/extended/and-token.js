@@ -1,6 +1,9 @@
 /** @format */
-let html = String.raw
-export const extendedAndTokenComponent = {
+import angular from "angular"
+import { html } from "@/util"
+import "@/components/extended/cqp-term"
+
+angular.module("korpApp").component("extendedAndToken", {
     template: html`
         <div>
             <span ng-show="!$ctrl.first">{{'and' | loc:$root.lang}}</span>
@@ -49,4 +52,4 @@ export const extendedAndTokenComponent = {
             }
         },
     ],
-}
+})

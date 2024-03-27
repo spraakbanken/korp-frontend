@@ -1,12 +1,14 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import currentMode from "@/mode"
+import { html } from "@/util"
+import "@/components/kwic-pager"
+import "@/components/kwic-word"
 
-let html = String.raw
-
-export const kwicComponent = {
+angular.module("korpApp").component("kwic", {
     template: html`
         <div ng-click="$ctrl.onKwicClick($event)">
             <div class="result_controls">
@@ -251,7 +253,6 @@ export const kwicComponent = {
             }
 
             $ctrl._settings = settings
-
 
             $ctrl.toggleReading = () => {
                 $ctrl.readingMode = !$ctrl.readingMode
@@ -794,4 +795,4 @@ export const kwicComponent = {
             }
         },
     ],
-}
+})
