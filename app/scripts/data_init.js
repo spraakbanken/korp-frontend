@@ -4,6 +4,8 @@ import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
 import model from "@/model"
 import * as treeUtil from "./components/corpus_chooser/util"
+import { CorpusListing } from "./corpus_listing"
+import { ParallelCorpusListing } from "./parallel/corpus_listing"
 
 // TODO it would be better only to load additional languages when there is a language change
 async function initLocales() {

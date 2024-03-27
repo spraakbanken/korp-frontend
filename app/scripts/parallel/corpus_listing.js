@@ -1,8 +1,9 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
+import { CorpusListing } from "@/corpus_listing"
 
-window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing {
+export class ParallelCorpusListing extends CorpusListing {
     constructor(corpora) {
         super(corpora)
 

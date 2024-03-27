@@ -1,11 +1,8 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import { CorpusListing } from "./corpus_listing"
 
 window.util = {}
-
-window.CorpusListing = CorpusListing
 
 // TODO never use this, remove when sure it is not used
 window.search = (obj, val) => window.locationSearch(obj, val)
