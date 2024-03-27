@@ -135,9 +135,8 @@ async function getConfig() {
 }
 
 function transformConfig(modeSettings) {
-    window.currentModeParallel = modeSettings.parallel
     // only if the current mode is parallel, we load the special code required
-    if (window.currentModeParallel) {
+    if (modeSettings["parallel"]) {
         require("./parallel/corpus_listing.js")
         require("./parallel/stats_proxy.js")
     }
@@ -266,11 +265,10 @@ export async function fetchInitialData(authDef) {
 
     setDefaultConfigValues()
 
-    const corpora = settings.corpora
-    if (!window.currentModeParallel) {
-        settings.corpusListing = new CorpusListing(corpora)
+    if (!settings["parallel"]) {
+        settings.corpusListing = new CorpusListing(settings.corpora)
     } else {
-        settings.corpusListing = new ParallelCorpusListing(corpora)
+        settings.corpusListing = new ParallelCorpusListing(settings.corpora)
     }
 
     // if the previous config calls didn't yield any corpora, don't ask for info or time

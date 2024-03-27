@@ -90,7 +90,8 @@ export const searchtabsComponent = {
         function ($location, $filter, searches, $rootScope, compareSearches) {
             const $ctrl = this
 
-            if (window.currentModeParallel) {
+            $ctrl.parallelMode = settings["parallel"]
+            if ($ctrl.parallelMode) {
                 // resolve globalFilterDef since globalFilter-directive is not used
                 $rootScope.globalFilterDef.resolve()
                 $ctrl.visibleTabs = [false, true, false, false]
@@ -100,7 +101,6 @@ export const searchtabsComponent = {
                 // only used in parallel mode
                 searches.langDef.resolve()
             }
-            $ctrl.parallelMode = window.currentModeParallel
 
             $ctrl.isCompareSelected = false
 

@@ -4,6 +4,8 @@ import settings from "korp_config"
 
 export default settings
 
+if (process.env.ENVIRONMENT != "production") window.settings = settings
+
 settings.markup = {
     msd: require("../markup/msd.html"),
 }

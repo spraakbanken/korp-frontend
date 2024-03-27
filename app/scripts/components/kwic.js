@@ -252,7 +252,6 @@ export const kwicComponent = {
 
             $ctrl._settings = settings
 
-            const isParallelMode = window.currentModeParallel
 
             $ctrl.toggleReading = () => {
                 $ctrl.readingMode = !$ctrl.readingMode
@@ -266,8 +265,8 @@ export const kwicComponent = {
                     { value: "", label: "download_kwic" },
                     { value: "kwic/csv", label: "download_kwic_csv" },
                     { value: "kwic/tsv", label: "download_kwic_tsv" },
-                    { value: "annotations/csv", label: "download_annotations_csv", disabled: isParallelMode },
-                    { value: "annotations/tsv", label: "download_annotations_tsv", disabled: isParallelMode },
+                    { value: "annotations/csv", label: "download_annotations_csv", disabled: settings["parallel"] },
+                    { value: "annotations/tsv", label: "download_annotations_tsv", disabled: settings["parallel"] },
                 ],
                 selected: "",
                 init: (value, hitsDisplay) => {
