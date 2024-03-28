@@ -34,7 +34,7 @@ try {
     // modes-files are optional and have customizing code
     require(`modes/${currentMode}_mode.js`)
 } catch (error) {
-    console.log("No mode file available for mode:", currentMode)
+    if (error.code != "MODULE_NOT_FOUND") console.error("Error importing mode file:", error)
 }
 
 require("slickgrid/lib/jquery.event.drag-2.3.0")
