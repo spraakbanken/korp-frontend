@@ -78,11 +78,12 @@ angular.module("korpApp").component("simpleSearch", {
         "$location",
         "backend",
         "$rootScope",
+        "$scope",
         "searches",
         "compareSearches",
         "$uibModal",
         "$timeout",
-        function ($location, backend, $rootScope, searches, compareSearches, $uibModal, $timeout) {
+        function ($location, backend, $rootScope, $scope, searches, compareSearches, $uibModal, $timeout) {
             const ctrl = this
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
@@ -94,17 +95,16 @@ angular.module("korpApp").component("simpleSearch", {
             })
 
             /** Whether tokens should be matched in arbitrary order. */
-            ctrl.freeOrder = $location.search().in_order != null
+            ctrl.freeOrder = false
             /** Whether the "free order" option is applicable. */
             ctrl.freeOrderEnabled = false
-            ctrl.prefix = $location.search().prefix != null
-            ctrl.mid_comp = $location.search().mid_comp != null
-            ctrl.suffix = $location.search().suffix != null
-            if (settings.input_case_insensitive_default) {
-                ctrl.isCaseInsensitive = true
+            ctrl.prefix = false
+            ctrl.mid_comp = false
+            ctrl.suffix = false
+            ctrl.isCaseInsensitive = false
+
+            if (settings["input_case_insensitive_default"]) {
                 $location.search("isCaseInsensitive", "")
-            } else {
-                ctrl.isCaseInsensitive = $location.search().isCaseInsensitive != null
             }
 
             // triggers watch on searches.activeSearch
@@ -250,6 +250,18 @@ angular.module("korpApp").component("simpleSearch", {
                     ctrl.doSearch()
                 }
             })
+
+            // Reach to changes in URL params
+            $scope.$watch(
+                () => $location.search(),
+                (search) => {
+                    ctrl.freeOrder = search.in_order != null
+                    ctrl.prefix = search.prefix != null
+                    ctrl.mid_comp = search.mid_comp != null
+                    ctrl.suffix = search.suffix != null
+                    ctrl.isCaseInsensitive = search.isCaseInsensitive != null
+                }
+            )
 
             ctrl.onChange = (output, isRawOutput) => {
                 if (isRawOutput) {
