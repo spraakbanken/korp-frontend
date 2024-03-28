@@ -260,6 +260,14 @@ korpApp.factory("backend", [
     }),
 ])
 
+/**
+ * This service watches the `search` URL param and tells result controllers to send API requests.
+ *
+ * It also reads the `cqp` URL param (but doesn't watch it).
+ * If the search query has meaningfully changed, the result controllers are notified so they can make their API
+ * requests.
+ *
+ */
 korpApp.factory("searches", [
     "$location",
     "$rootScope",
@@ -268,12 +276,19 @@ korpApp.factory("searches", [
     function ($location, $rootScope, $http, $q) {
         class Searches {
             constructor() {
+                /**
+                 * @typedef ActiveSearch
+                 * @property {string} type "word", "lemgram" or "cqp"
+                 * @property {string} val
+                 */
+                /** @type {ActiveSearch | null} */
                 this.activeSearch = null
 
                 // is resolved when parallel search controller is loaded
                 this.langDef = $q.defer()
             }
 
+            /** Tell result controllers (kwic/statistics/word picture) to send their requests. */
             kwicSearch(cqp) {
                 $rootScope.$emit("make_request", cqp, this.activeSearch)
             }
@@ -294,24 +309,18 @@ korpApp.factory("searches", [
             return cqpExpr
         }
 
-        let oldValue = null
+        // Watch the `search` URL param
         $rootScope.$watch(
             () => $location.search().search,
-            (newValue) => {
-                let searchChanged
-                const searchExpr = $location.search().search
-                if (!searchExpr) {
-                    return
-                }
+            (searchExpr) => {
+                if (!searchExpr) return
+
+                // The value is a string like <type>|<expr>
                 let [type, ...value] = (searchExpr && searchExpr.split("|")) || []
                 value = value.join("|")
 
-                if (_.isEqual(newValue, oldValue)) {
-                    searchChanged = true
-                } else {
-                    searchChanged = newValue !== oldValue
-                }
-
+                // Store new query in search history
+                // For Extended search, `value` is empty (then the CQP is instead in the `cqp` URL param)
                 if (value) {
                     let historyValue
                     if (type === "lemgram") {
@@ -322,30 +331,24 @@ korpApp.factory("searches", [
                     updateSearchHistory(historyValue, $location.absUrl())
                 }
                 $q.all([searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(function () {
-                    let extendedSearch = false
                     if (type === "cqp") {
-                        extendedSearch = true
                         if (!value) {
                             value = $location.search().cqp
                         }
                     }
+                    // Update stored search query
                     if (["cqp", "word", "lemgram"].includes(type)) {
-                        searches.activeSearch = {
-                            type,
-                            val: value,
-                        }
-                    } else if (type === "saldo") {
-                        extendedSearch.setOneToken("saldo", value)
+                        searches.activeSearch = { type, val: value }
                     }
 
+                    // For Extended/Advanced search, merge with global filters and trigger API requests
+                    // (For Simple search, the equivalent is handled in the simple-search component)
                     if (type === "cqp") {
-                        if (extendedSearch && $rootScope.globalFilter) {
+                        if ($rootScope.globalFilter) {
                             value = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(value || "[]"), $rootScope.globalFilter))
                         }
                         searches.kwicSearch(value)
                     }
-
-                    oldValue = newValue
                 })
             }
         )
