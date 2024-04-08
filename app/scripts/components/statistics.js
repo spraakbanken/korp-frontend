@@ -4,7 +4,7 @@ import _ from "lodash"
 import "components-jqueryui/ui/widgets/dialog.js"
 import settings from "@/settings"
 import { html } from "@/util.js"
-import statisticsFormatting from "../../config/statistics_config.js"
+import { getCqp } from "../../config/statistics_config.js"
 
 angular.module("korpApp").component("statistics", {
     template: html`
@@ -317,23 +317,14 @@ angular.module("korpApp").component("statistics", {
                         linkElem = linkElem.find(".statistics-link")
                     }
                     const rowIx = parseInt(linkElem.data("row"))
-                    // TODO don't loop
-                    let rowData
-                    for (let row of $ctrl.data) {
-                        if (row.rowId === rowIx) {
-                            rowData = row
-                            break
-                        }
-                    }
+                    const rowData = $ctrl.data.find((row) => row.rowId === rowIx)
                     let cqp2 = null
                     // isPhraseLevelDisjunction: used for constructing cqp like: ([] | [])
                     if (rowData.isPhraseLevelDisjunction) {
-                        let tokens = rowData.statsValues.map((vals) =>
-                            statisticsFormatting.getCqp(vals, $ctrl.searchParams.ignoreCase)
-                        )
+                        let tokens = rowData.statsValues.map((vals) => getCqp(vals, $ctrl.searchParams.ignoreCase))
                         cqp2 = tokens.join(" | ")
                     } else {
-                        cqp2 = statisticsFormatting.getCqp(rowData.statsValues, $ctrl.searchParams.ignoreCase)
+                        cqp2 = getCqp(rowData.statsValues, $ctrl.searchParams.ignoreCase)
                     }
 
                     const opts = {}
@@ -364,7 +355,7 @@ angular.module("korpApp").component("statistics", {
                     }
 
                     var row = getDataAt(rowIx)
-                    cqp = statisticsFormatting.getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
+                    cqp = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
                     subExprs.push(cqp)
                     const parts = $ctrl.searchParams.reduceVals.map((reduceVal) => row.formattedValue[reduceVal])
                     labelMapping[cqp] = parts.join(", ")
@@ -397,7 +388,7 @@ angular.module("korpApp").component("statistics", {
                         continue
                     }
                     var row = getDataAt(rowIx)
-                    const cqp = statisticsFormatting.getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
+                    const cqp = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
                     const parts = $ctrl.searchParams.reduceVals.map((reduceVal) => row.formattedValue[reduceVal])
                     cqpExprs[cqp] = parts.join(", ")
                 }

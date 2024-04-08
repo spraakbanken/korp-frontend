@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import statisticsFormatting from "../config/statistics_config.js"
+import { reduceStringify } from "../config/statistics_config.js"
 const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function () {
@@ -34,11 +34,7 @@ const createStatisticsService = function () {
                 sortable: true,
                 formatter(row, cell, value, columnDef, dataContext) {
                     if (dataContext["rowId"] !== 0) {
-                        const formattedValue = statisticsFormatting.reduceStringify(
-                            reduceVal,
-                            dataContext[reduceVal],
-                            attrObj[reduceVal]
-                        )
+                        const formattedValue = reduceStringify(reduceVal, dataContext[reduceVal], attrObj[reduceVal])
                         dataContext["formattedValue"][reduceVal] = formattedValue
                         return `<span class="statistics-link" data-row=${dataContext["rowId"]}>${formattedValue}</span>`
                     } else {

@@ -10,7 +10,7 @@ try {
     console.log("No module for statistics functions available")
 }
 
-let getCqp = function (hitValues, ignoreCase) {
+export function getCqp(hitValues, ignoreCase) {
     var tokens = []
     for (var i = 0; i < hitValues.length; i++) {
         var token = hitValues[i]
@@ -26,7 +26,7 @@ let getCqp = function (hitValues, ignoreCase) {
     return `<match> ${tokens.join(" ")} []* </match>`
 }
 
-let reduceCqp = function (type, tokens, ignoreCase) {
+function reduceCqp(type, tokens, ignoreCase) {
     let attrs = settings.corpusListing.getCurrentAttributes()
     if (attrs[type] && attrs[type].stats_cqp) {
         // A stats_cqp function should call regescape for the value as appropriate
@@ -88,7 +88,7 @@ let reduceCqp = function (type, tokens, ignoreCase) {
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-let reduceStringify = function (type, values, structAttributes) {
+export function reduceStringify(type, values, structAttributes) {
     let attrs = settings.corpusListing.getCurrentAttributes()
 
     if (attrs[type] && attrs[type].stats_stringify) {
@@ -158,9 +158,4 @@ let reduceStringify = function (type, values, structAttributes) {
                 return mapped.join(" ")
             }
     }
-}
-
-export default {
-    getCqp,
-    reduceStringify,
 }
