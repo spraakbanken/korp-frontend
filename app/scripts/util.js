@@ -7,9 +7,6 @@ export const html = String.raw
 
 window.util = {}
 
-// TODO never use this, remove when sure it is not used
-window.search = (obj, val) => window.locationSearch(obj, val)
-
 window.locationSearch = function (obj, val) {
     const s = angular.element("body").scope()
 
