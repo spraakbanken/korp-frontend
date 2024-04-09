@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { stringifyFunc } from "@/stringify.js"
-import { translateAttribute } from "@/util"
+import { locAttribute } from "@/util"
 
 const korpApp = angular.module("korpApp")
 
@@ -43,7 +43,7 @@ korpApp.directive("compareCtrl", () => ({
                             stringify = stringifyFunc(reduceAttrName)
                         } else if (attributes[reduceAttrName].translation) {
                             stringify = (value) =>
-                                translateAttribute($rootScope.lang, attributes[reduceAttrName].translation, value)
+                                locAttribute(attributes[reduceAttrName].translation, value, $rootScope.lang)
                         }
                     }
                     s.stringify = [stringify]

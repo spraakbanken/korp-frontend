@@ -73,7 +73,6 @@ export class SelectionManager {
 
 /**
  * Get translated string from global localization data.
- *
  * @param {string} key A translation key.
  * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
  * @returns {string} The translated string, or the value of `key` if no translation is found.
@@ -106,6 +105,23 @@ export function locObj(map, lang) {
 
     // fall back to the first value if neither the selected or default language are available
     return Object.values(map)[0]
+}
+
+/**
+ * Translate a given key in a translations list.
+ * Very similar to `locObj(translations[key], lang)` but handles edge cases differently.
+ * TODO Can we merge this with locObj?
+ * @param {object} translations A two-dimensional map keyed first by translation keys and secondly by language codes, with translated strings as values.
+ *   Alternatively, a one-dimensional map keyed only by translation keys, with non-translated strings as values.
+ * @param {string} key A translation key.
+ * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
+ * @returns {string} The translated string, undefined if no translation is found, or the value of `key` if `translations` is unusable.
+ */
+export function locAttribute(translations, key, lang) {
+    lang = lang || window.lang || settings["default_language"]
+    if (translations && translations[key])
+        return _.isObject(translations[key]) ? translations[key][lang] : translations[key]
+    return key
 }
 
 /**
@@ -256,10 +272,10 @@ export function setDownloadLinks(xhr_settings, result_data) {
         // NOTE: Using attribute rel="localize[...]" to localize the
         // title attribute requires a small change to
         // lib/jquery.localize.js. Without that, we could use
-        // util.getLocaleString, but it would not change the
+        // `loc`, but it would not change the
         // localizations immediately when switching languages but only
         // after reloading the page.
-        // # title = util.getLocaleString('formatdescr_' + format)
+        // # title = loc('formatdescr_' + format)
         const option = $(`\
 <option
     value="${format}"
@@ -354,13 +370,6 @@ util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
             return util.prettyNumbers(x)
         }
     }
-}
-
-export function translateAttribute(lang, translations, value) {
-    lang = lang || window.lang || settings["default_language"]
-    if (translations && translations[value])
-        return _.isObject(translations[value]) ? translations[value][lang] : translations[value]
-    return value
 }
 
 /** Return the length of baseUrl with params added. */

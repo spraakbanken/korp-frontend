@@ -19,6 +19,7 @@
 - Renamed localization functions (just like the template filters):
   - `getLocaleString` to `loc`
   - `getLocaleStringObject` to `locObj`
+  - `translateAttribute` to `locAttribute`
 - Renamed lemgram/saldo functions:
   - `lemgramToString` to `lemgramToHtml`
   - `lemgramToPlainString` to `lemgramToString`
@@ -26,12 +27,12 @@
   - `saldoToString` to `saldoToHtml`
   - `saldoToPlaceholderString` to `saldoToString`
 - Converted from `window.util` props to exported members:
-  - `loc`, `locObj`
+  - `loc`, `locObj`, `locAttribute`
   - lemgram/saldo functions
   - `setDownloadLinks`
-  - `translateAttribute`
   - `httpConfAddMethod`, `httpConfAddMethodAngular`, `httpConfAddMethodFetch`
   - `collatorSort`
+- In `locAttribute`, moved the optional `lang` parameter last
 
 ### Fixed
 
