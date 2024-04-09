@@ -7,7 +7,7 @@ import model from "@/model"
 import * as authenticationProxy from "@/components/auth/auth"
 import { parseMapData } from "./map_services"
 import { updateSearchHistory } from "@/history"
-import { unregescape } from "@/util"
+import { httpConfAddMethod, httpConfAddMethodAngular, unregescape } from "@/util"
 
 const korpApp = angular.module("korpApp")
 
@@ -109,7 +109,7 @@ korpApp.factory("backend", [
                 top,
             }
 
-            const conf = util.httpConfAddMethodAngular({
+            const conf = httpConfAddMethodAngular({
                 url: settings["korp_backend_url"] + "/loglike",
                 params,
                 headers: {},
@@ -198,7 +198,7 @@ korpApp.factory("backend", [
 
             _.extend(params, cqpSubExprs)
 
-            const conf = util.httpConfAddMethod({
+            const conf = httpConfAddMethod({
                 url: settings["korp_backend_url"] + "/count",
                 params,
                 headers: {},
@@ -241,7 +241,7 @@ korpApp.factory("backend", [
                 end: 0,
             }
 
-            const conf = util.httpConfAddMethod({
+            const conf = httpConfAddMethod({
                 url: settings["korp_backend_url"] + "/query",
                 params,
                 headers: {},
@@ -427,7 +427,7 @@ korpApp.factory("lexicons", [
                             const corpora = corporaIDs.join(",")
                             const headers = authenticationProxy.getAuthorizationHeader()
                             return $http(
-                                util.httpConfAddMethod({
+                                httpConfAddMethod({
                                     url: settings["korp_backend_url"] + "/lemgram_count",
                                     params: {
                                         lemgram: lemgram,

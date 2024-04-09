@@ -3,6 +3,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import * as authenticationProxy from "@/components/auth/auth"
+import { httpConfAddMethod } from "@/util"
 
 const model = {}
 export default model
@@ -253,7 +254,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         const command = data.command || "query"
         delete data.command
         const def = $.ajax(
-            util.httpConfAddMethod({
+            httpConfAddMethod({
                 url: settings["korp_backend_url"] + "/" + command,
                 data,
                 beforeSend(req, settings) {
@@ -291,7 +292,7 @@ model.LemgramProxy = class LemgramProxy extends BaseProxy {
         }
         this.prevParams = params
         const def = $.ajax(
-            util.httpConfAddMethod({
+            httpConfAddMethod({
                 url: settings["korp_backend_url"] + "/relations",
                 data: params,
 
@@ -401,7 +402,7 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
         const def = $.Deferred()
         this.pendingRequests.push(
             $.ajax(
-                util.httpConfAddMethod({
+                httpConfAddMethod({
                     url: settings["korp_backend_url"] + "/count",
                     data,
                     beforeSend(req, settings) {
@@ -456,7 +457,7 @@ model.TimeProxy = class TimeProxy extends BaseProxy {
         const dfd = $.Deferred()
 
         const xhr = $.ajax(
-            util.httpConfAddMethod({
+            httpConfAddMethod({
                 url: settings["korp_backend_url"] + "/timespan",
                 data: {
                     granularity: "y",
@@ -573,7 +574,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
         const def = $.Deferred()
 
         $.ajax(
-            util.httpConfAddMethod({
+            httpConfAddMethod({
                 url: settings["korp_backend_url"] + "/count_time",
                 dataType: "json",
                 data: params,

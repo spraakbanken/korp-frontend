@@ -363,16 +363,18 @@ export function translateAttribute(lang, translations, value) {
     return value
 }
 
-// Return the length of baseUrl with params added
+/** Return the length of baseUrl with params added. */
 const calcUrlLength = (baseUrl, params) => baseUrl.length + new URLSearchParams(params).toString().length + 1
 
-// Add HTTP method to the HTTP configuration object conf for
-// jQuery.ajax or AngularJS $http call: if the result URL would be
-// longer than settings.backendURLMaxLength, use POST, otherwise GET.
-// For a $http configuration, the request parameters should be in
-// property "params" of conf (moved to "data" for POST), and for a
-// jQuery.ajax configuration, they should be in "data".
-util.httpConfAddMethod = function (conf) {
+/**
+ * Add HTTP method to the HTTP configuration object conf for jQuery.ajax or AngularJS $http call:
+ * if the result URL would be longer than settings.backendURLMaxLength, use POST, otherwise GET.
+ * @param {object} conf A $http or jQuery.ajax configuration object.
+ *   For $http, the request parameters should be in `params` (moved to `data` for POST),
+ *   and for jQuery.ajax, they should be in `data`.
+ * @returns The same object, possibly modified in-place
+ */
+export function httpConfAddMethod(conf) {
     // The property to use for GET: AngularJS $http uses params for
     // GET and data for POST, whereas jQuery.ajax uses data for both
     const getDataProp = conf.params != undefined ? "params" : "data"
@@ -388,10 +390,13 @@ util.httpConfAddMethod = function (conf) {
     return conf
 }
 
-// For POST with the Angular $http service, handling data must be done a
-// bit differenly to assure that the data is sent and "Form Data" and not JSON
-util.httpConfAddMethodAngular = function (conf) {
-    const fixedConf = util.httpConfAddMethod(conf)
+/**
+ * Like `httpConfAddMethod`, but for use with $http, to ensure data is sent as form data and not JSON.
+ * @param {object} conf A $http or jQuery.ajax configuration object.
+ * @returns The same object, possibly modified in-place
+ */
+export function httpConfAddMethodAngular(conf) {
+    const fixedConf = httpConfAddMethod(conf)
 
     if (fixedConf.method == "POST") {
         const formDataParams = new FormData()
@@ -410,8 +415,12 @@ util.httpConfAddMethodAngular = function (conf) {
     return fixedConf
 }
 
-// again, for the native fetch method, we must configure the object differently from jQuery.ajax / angular $http
-util.httpConfAddMethodFetch = function (conf) {
+/**
+ * Like `httpConfAddMethod`, but for use with native `fetch()`.
+ * @param {object} conf A $http or jQuery.ajax configuration object.
+ * @returns The same object, possibly modified in-place
+ */
+export function httpConfAddMethodFetch(conf) {
     const params = conf.params
     delete conf.params
     if (calcUrlLength(conf.url, params)) {

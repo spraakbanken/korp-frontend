@@ -30,6 +30,7 @@
   - lemgram/saldo functions
   - `setDownloadLinks`
   - `translateAttribute`
+  - `httpConfAddMethod`, `httpConfAddMethodAngular`, `httpConfAddMethodFetch`
 
 ### Fixed
 

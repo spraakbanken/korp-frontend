@@ -2,6 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import * as authenticationProxy from "@/components/auth/auth"
+import { httpConfAddMethod } from "@/util"
 
 const korpApp = angular.module("korpApp")
 
@@ -33,7 +34,7 @@ korpApp.factory("structService", [
                     params.split = _.last(attributes)
                 }
 
-                const conf = util.httpConfAddMethod({
+                const conf = httpConfAddMethod({
                     url: settings["korp_backend_url"] + "/struct_values",
                     params,
                     headers: {},

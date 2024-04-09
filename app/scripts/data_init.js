@@ -6,6 +6,7 @@ import model from "@/model"
 import * as treeUtil from "./components/corpus_chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
+import { httpConfAddMethodFetch } from "@/util"
 
 // TODO it would be better only to load additional languages when there is a language change
 async function initLocales() {
@@ -49,7 +50,7 @@ async function initLocales() {
 }
 
 async function getInfoData() {
-    const conf = util.httpConfAddMethodFetch({
+    const conf = httpConfAddMethodFetch({
         url: settings["korp_backend_url"] + "/corpus_info",
         params: {
             corpus: _.map(settings.corpusListing.corpora, "id")
