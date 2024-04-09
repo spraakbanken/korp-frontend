@@ -28,11 +28,13 @@
   - `saldoToPlaceholderString` to `saldoToString`
 - Converted from `window.util` props to exported members:
   - `loc`, `locObj`, `locAttribute`
+  - `prettyNumbers`, `formatDecimalString`
   - lemgram/saldo functions
   - `setDownloadLinks`
   - `httpConfAddMethod`, `httpConfAddMethodAngular`, `httpConfAddMethodFetch`
   - `collatorSort`
 - In `locAttribute`, moved the optional `lang` parameter last
+- Simplified `formatDecimalString`
 
 ### Fixed
 

@@ -3,7 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import model from "@/model"
-import { html, loc } from "@/util"
+import { formatDecimalString, html, loc } from "@/util"
 import * as trendUtil from "../trend_diagram/trend_util"
 import "@/components/korp-error"
 
@@ -659,7 +659,7 @@ angular.module("korpApp").component("trendDiagram", {
                     },
 
                     yFormatter(y) {
-                        const val = util.formatDecimalString(y.toFixed(2), false, true, true)
+                        const val = formatDecimalString(y.toFixed(2), true)
 
                         return `<br><span rel='localize[rel_hits_short]'>${loc("rel_hits_short")}</span> ` + val
                     },

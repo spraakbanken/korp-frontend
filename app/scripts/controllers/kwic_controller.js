@@ -2,6 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import model from "@/model"
+import { prettyNumbers } from "@/util"
 
 const korpApp = angular.module("korpApp")
 
@@ -146,7 +147,7 @@ export class KwicCtrl {
         s.onProgress = (progressObj, isPaging) => {
             s.progress = Math.round(progressObj["stats"])
             if (!isPaging && progressObj["total_results"] !== null) {
-                s.hits_display = util.prettyNumbers(progressObj["total_results"])
+                s.hits_display = prettyNumbers(progressObj["total_results"])
             }
         }
 
@@ -209,7 +210,7 @@ export class KwicCtrl {
             s.loading = false
             if (!isPaging) {
                 s.hits = data.hits
-                s.hits_display = util.prettyNumbers(data.hits)
+                s.hits_display = prettyNumbers(data.hits)
                 s.corpusHits = data.corpus_hits
             }
         }

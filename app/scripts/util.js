@@ -25,6 +25,13 @@ window.locationSearch = function (obj, val) {
     return ret
 }
 
+util.searchHash = function (type, value) {
+    locationSearch({
+        search: type + "|" + value,
+        page: 0,
+    })
+}
+
 window.safeApply = function (scope, fn) {
     if (scope.$$phase || scope.$root.$$phase) {
         return fn(scope)
@@ -315,15 +322,19 @@ export function setDownloadLinks(xhr_settings, result_data) {
         })
 }
 
-util.searchHash = function (type, value) {
-    locationSearch({
-        search: type + "|" + value,
-        page: 0,
-    })
-}
+/** Escape special characters in a string so it can be safely inserted in a regular expression. */
+export const regescape = (s) => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
 
-// Helper function to turn "8455999" into "8 455 999"
-util.prettyNumbers = function (numstring) {
+/** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
+export const unregescape = (s) => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
+
+/**
+ * Helper function to turn "8455999" into "8 455 999".
+ * Adds HTML employing dynamic translation to ensure the thousands separator is updated when switching locale.
+ * @param {string | number} numstring An integer number.
+ * @returns A string, possibly containing HTML.
+ */
+export function prettyNumbers(numstring) {
     const regex = /(\d+)(\d{3})/
     let outStrNum = numstring.toString()
     while (regex.test(outStrNum)) {
@@ -336,37 +347,21 @@ util.prettyNumbers = function (numstring) {
     return outStrNum
 }
 
-/** Escape special characters in a string so it can be safely inserted in a regular expression. */
-export const regescape = (s) => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
+/**
+ * Format a numerical string.
+ * @param {string} x A decimal numerical string, with or without decimal point "."
+ * @param {boolean} plaintext Whether output should be plain text instead of HTML.
+ * @returns A plain-text or HTML string with the number nicely formatted.
+ */
+export function formatDecimalString(x, plaintext) {
+    if (x.indexOf(".") === -1) return plaintext ? x : prettyNumbers(x)
 
-/** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
-export const unregescape = (s) => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
+    const [int, frac] = x.split(".")
+    const decimalSeparator = loc("util_decimalseparator")
+    if (plaintext) return int + decimalSeparator + frac
 
-util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
-    if (_.includes(x, ".")) {
-        const parts = x.split(".")
-        const decimalSeparator = loc("util_decimalseparator")
-        if (stringOnly) {
-            return parts[0] + decimalSeparator + parts[1]
-        }
-        if (mode) {
-            return (
-                util.prettyNumbers(parts[0]) +
-                '<span rel="localize[util_decimalseparator]">' +
-                decimalSeparator +
-                "</span>" +
-                parts[1]
-            )
-        } else {
-            return util.prettyNumbers(parts[0]) + decimalSeparator + parts[1]
-        }
-    } else {
-        if (statsmode) {
-            return x
-        } else {
-            return util.prettyNumbers(x)
-        }
-    }
+    const decimalHtml = `<span rel="localize[util_decimalseparator]">${decimalSeparator}</span>`
+    return `${prettyNumbers(int)}${decimalHtml}${frac}`
 }
 
 /** Return the length of baseUrl with params added. */
