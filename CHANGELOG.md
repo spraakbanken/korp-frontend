@@ -16,6 +16,7 @@
   - `ParallelCorpusListing`
   - `regescape`
   - `unregescape`
+  - `safeApply`
 - Renamed localization functions (just like the template filters):
   - `getLocaleString` to `loc`
   - `getLocaleStringObject` to `locObj`

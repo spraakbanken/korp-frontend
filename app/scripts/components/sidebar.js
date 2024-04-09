@@ -5,7 +5,7 @@ import "../../styles/sidebar.scss"
 import statemachine from "../statemachine"
 import settings from "@/settings"
 import { stringify } from "@/stringify.js"
-import { html, loc, regescape, splitLemgram, locAttribute } from "@/util"
+import { html, loc, regescape, splitLemgram, locAttribute, safeApply } from "@/util"
 import "@/components/deptree/deptree"
 
 let sidebarComponents = {}

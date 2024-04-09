@@ -3,6 +3,7 @@
 // Requirements: JQuery, JQuery.ui.position, trust filter, loc filter, Font Awesome
 import _ from "lodash"
 import settings from "@/settings"
+import { safeApply } from "@/util"
 
 angular.module("newsdesk", []).directive("newsDesk", [
     "$rootElement",

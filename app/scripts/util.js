@@ -24,7 +24,7 @@ export function angularLocationSearch(...args) {
 /** @deprecated */
 window.locationSearch = angularLocationSearch
 
-window.safeApply = function (scope, fn) {
+export function safeApply(scope, fn) {
     if (scope.$$phase || scope.$root.$$phase) {
         return fn(scope)
     } else {
