@@ -1,10 +1,12 @@
+import { loc } from "@/util"
+
 $.fn.outerHTML = function() {
 	return $(this).clone().wrap('<div></div>').parent().html();
 };
 
 $.fn.localeKey = function(key) {
 	this.each(function() {
-		$(this).attr("rel", $.format("localize[%s]", key)).html(util.getLocaleString(key));
+		$(this).attr("rel", $.format("localize[%s]", key)).html(loc(key));
 	});
 	return this;
 };

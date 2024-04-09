@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
+import { loc } from "@/util"
 
 export class CorpusListing {
     constructor(corpora) {
@@ -370,7 +371,7 @@ export class CorpusListing {
             }
         }
 
-        sentAttrs = _.sortBy(sentAttrs, (item) => util.getLocaleString(item.label))
+        sentAttrs = _.sortBy(sentAttrs, (item) => loc(item.label))
 
         return sentAttrs
     }

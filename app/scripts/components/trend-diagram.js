@@ -3,7 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import model from "@/model"
-import { html } from "@/util"
+import { html, loc } from "@/util"
 import * as trendUtil from "../trend_diagram/trend_util"
 import "@/components/korp-error"
 
@@ -340,7 +340,7 @@ angular.module("korpApp").component("trendDiagram", {
                     const selType = $(".timeKindOfFormat option:selected", $ctrl.$result).val()
                     const dataDelimiter = selType === "TSV" ? "\t" : ";"
 
-                    const header = [util.getLocaleString("stats_hit")]
+                    const header = [loc("stats_hit")]
 
                     for (let cell of series[0].data) {
                         const stampformat = zoomLevelToFormat[cell.zoom]
@@ -661,11 +661,7 @@ angular.module("korpApp").component("trendDiagram", {
                     yFormatter(y) {
                         const val = util.formatDecimalString(y.toFixed(2), false, true, true)
 
-                        return (
-                            `<br><span rel='localize[rel_hits_short]'>${util.getLocaleString(
-                                "rel_hits_short"
-                            )}</span> ` + val
-                        )
+                        return `<br><span rel='localize[rel_hits_short]'>${loc("rel_hits_short")}</span> ` + val
                     },
                     formatter(series, x, y, formattedX, formattedY, d) {
                         let abs_y
@@ -680,7 +676,7 @@ angular.module("korpApp").component("trendDiagram", {
                         return `<span data-cqp="${encodeURIComponent(series.cqp)}">
                                 ${rel}
                                 <br>
-                                ${util.getLocaleString("abs_hits_short")}: ${abs_y}
+                                ${loc("abs_hits_short")}: ${abs_y}
                             </span>`
                     },
                 })

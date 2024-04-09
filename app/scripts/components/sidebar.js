@@ -5,7 +5,7 @@ import "../../styles/sidebar.scss"
 import statemachine from "../statemachine"
 import settings from "@/settings"
 import { stringify } from "@/stringify.js"
-import { html } from "@/util"
+import { html, loc } from "@/util"
 import "@/components/deptree/deptree"
 
 let sidebarComponents = {}
@@ -264,9 +264,7 @@ angular.module("korpApp").component("sidebar", {
 
                     output.data("attrs", attrs)
                     if (value === "|" || value === "" || value === null) {
-                        output.append(
-                            `<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>`
-                        )
+                        output.append(`<i rel='localize[empty]' style='color : grey'>${loc("empty")}</i>`)
                         return output
                     }
 

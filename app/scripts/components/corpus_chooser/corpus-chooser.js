@@ -4,7 +4,7 @@ import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import * as authenticationProxy from "@/components/auth/auth"
-import { html } from "@/util"
+import { html, loc } from "@/util"
 import * as treeUtil from "./util"
 import "@/components/corpus_chooser/info-box"
 import "@/components/corpus_chooser/time-graph"
@@ -185,7 +185,7 @@ angular.module("korpApp").component("corpusChooser", {
                     // 232,21T
                     out = (num / 1e12).toFixed(2).toString() + "T"
                 }
-                return out.replace(".", util.getLocaleString("util_decimalseparator", lang))
+                return out.replace(".", loc("util_decimalseparator", lang))
             }
 
             $ctrl.onSelect = function () {

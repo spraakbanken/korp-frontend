@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import { html } from "@/util"
+import { html, loc } from "@/util"
 import "@/components/autoc"
 
 let customExtendedTemplates = {}
@@ -72,7 +72,7 @@ const selectController = (autocomplete) => [
 
                     const dataset = _.map(_.uniq(data), function (item) {
                         if (item === "") {
-                            return [item, util.getLocaleString("empty")]
+                            return [item, loc("empty")]
                         }
                         return [item, localizer(item)]
                     })

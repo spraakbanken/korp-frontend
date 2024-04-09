@@ -1,7 +1,7 @@
 /** @format */
 import angular from "angular"
 import settings from "@/settings"
-import { html } from "@/util"
+import { html, loc } from "@/util"
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
@@ -101,15 +101,9 @@ angular.module("korpApp").component("wordPicture", {
 
             $ctrl.localeString = function (lang, hitSetting) {
                 if (hitSetting === "1000") {
-                    return util.getLocaleString("word_pic_show_all", lang)
+                    return loc("word_pic_show_all", lang)
                 } else {
-                    return (
-                        util.getLocaleString("word_pic_show_some", lang) +
-                        " " +
-                        hitSetting +
-                        " " +
-                        util.getLocaleString("word_pic_hits", lang)
-                    )
+                    return loc("word_pic_show_some", lang) + " " + hitSetting + " " + loc("word_pic_hits", lang)
                 }
             }
 

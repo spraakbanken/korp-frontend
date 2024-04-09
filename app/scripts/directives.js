@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import { html } from "@/util"
+import { html, loc } from "@/util"
 
 const korpApp = angular.module("korpApp")
 
@@ -248,7 +248,7 @@ korpApp.directive("meter", () => ({
         scope.loglike = Math.abs(scope.meter.loglike)
 
         scope.tooltipHTML = `\
-            ${util.getLocaleString("statstable_absfreq")}: ${scope.meter.abs}
+            ${loc("statstable_absfreq")}: ${scope.meter.abs}
             <br>
             loglike: ${scope.loglike}\
 `

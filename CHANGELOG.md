@@ -8,6 +8,8 @@
 - The "medial part" option now includes first/last parts also for lemgram search [#347](https://github.com/spraakbanken/korp-frontend/issues/347)
 - Improved UI reactivity for Simple search
 - Removed globals `settings`, `currentMode`, `currentModeParallel`, `model`, `CorpusListing`, `ParallelCorpusListing` – import them instead
+- Renamed localization functions: `getLocaleString` => `loc`, `getLocaleStringObject` => `locObj` (just like the template filters)
+- Converted from `window.util` props to exported members: `loc`, `locObj`
 
 ### Fixed
 

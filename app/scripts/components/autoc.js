@@ -2,7 +2,7 @@
 import _ from "lodash"
 import angular from "angular"
 import settings from "@/settings"
-import { html } from "@/util"
+import { html, loc } from "@/util"
 
 angular.module("korpApp").component("autoc", {
     template: html`
@@ -94,7 +94,7 @@ angular.module("korpApp").component("autoc", {
                 }
                 return {
                     main: match[2].replace(/_/g, " "),
-                    pos: util.getLocaleString(match[3].slice(0, 2)),
+                    pos: loc(match[3].slice(0, 2)),
                     index: match[4],
                     namespace: match[1] ? match[1].slice(0, -2) : "",
                 }

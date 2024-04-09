@@ -4,7 +4,7 @@ import korpApp from "./korp.module"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
 import * as authenticationProxy from "@/components/auth/auth"
-import { html } from "@/util"
+import { html, loc, locObj } from "@/util"
 import "@/components/header"
 import "@/components/searchtabs"
 import "@/components/frontpage"
@@ -24,8 +24,8 @@ for (const componentName in customComponents) {
 }
 
 korpApp.filter("mapper", () => (item, f) => f(item))
-korpApp.filter("loc", () => util.getLocaleString)
-korpApp.filter("locObj", () => util.getLocaleStringObject)
+korpApp.filter("loc", () => loc)
+korpApp.filter("locObj", () => locObj)
 korpApp.filter("replaceEmpty", function () {
     return function (input) {
         if (input === "") {
@@ -197,9 +197,7 @@ korpApp.run([
             } else if (loginNeededFor.length != 0) {
                 // check if user has access
                 const loginNeededHTML = () =>
-                    loginNeededFor
-                        .map((corpus) => `<span>${util.getLocaleStringObject(corpus.title)}</span>`)
-                        .join(", ")
+                    loginNeededFor.map((corpus) => `<span>${locObj(corpus.title)}</span>`).join(", ")
 
                 if (authenticationProxy.isLoggedIn()) {
                     // access partly or fully denied to selected corpora

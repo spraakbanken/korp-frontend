@@ -3,7 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import "components-jqueryui/ui/widgets/dialog.js"
 import settings from "@/settings"
-import { html } from "@/util.js"
+import { html, loc, locObj } from "@/util"
 import { getCqp } from "../../config/statistics_config.js"
 
 angular.module("korpApp").component("statistics", {
@@ -454,12 +454,11 @@ angular.module("korpApp").component("statistics", {
                         if (row.rowId === rowId) {
                             for (let corpus of $ctrl.searchParams.corpora) {
                                 const freq = row[corpus + "_value"][valueType]
+                                const freqStr = util.formatDecimalString(freq.toString())
+                                const title = locObj(settings.corpora[corpus.toLowerCase()]["title"])
                                 dataItems.push({
                                     value: freq,
-                                    caption:
-                                        util.getLocaleStringObject(settings.corpora[corpus.toLowerCase()]["title"]) +
-                                        ": " +
-                                        util.formatDecimalString(freq.toString()),
+                                    caption: `${title}: ${freqStr}`,
                                     shape_id: rowId,
                                 })
                             }
@@ -471,7 +470,7 @@ angular.module("korpApp").component("statistics", {
 
                 $("#dialog").remove()
 
-                const relHitsString = util.getLocaleString("statstable_relfigures_hits")
+                const relHitsString = loc("statstable_relfigures_hits")
                 $("<div id='dialog'></div>")
                     .appendTo("body")
                     .append(
@@ -589,8 +588,8 @@ angular.module("korpApp").component("statistics", {
                     header.push(reduceVal)
                 }
 
-                header.push(util.getLocaleString("stats_total"))
-                header = header.concat(_.map(cl.corpora, (corpus) => util.getLocaleStringObject(corpus["title"])))
+                header.push(loc("stats_total"))
+                header = header.concat(_.map(cl.corpora, (corpus) => locObj(corpus["title"])))
 
                 const fmt = (what) => what.toString()
 

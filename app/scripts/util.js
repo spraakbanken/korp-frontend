@@ -71,36 +71,41 @@ export class SelectionManager {
     }
 }
 
-util.getLocaleString = (key, lang) => util.getLocaleStringUndefined(key, lang) || key
-
-util.getLocaleStringObject = (translationObject, lang) => {
-    if (!lang) {
-        lang = window.lang || settings["default_language"]
-    }
-    if (translationObject) {
-        if (typeof translationObject == "string") {
-            return translationObject
-        } else if (translationObject[lang]) {
-            return translationObject[lang]
-        } else if (translationObject[settings["default_language"]]) {
-            return translationObject[settings["default_language"]]
-        } else {
-            // fall back to the first value if neither the selected or default langauge are available
-            return translationObject.values()[0]
-        }
-    }
-    return undefined
-}
-
-util.getLocaleStringUndefined = function (key, lang) {
-    if (!lang) {
-        lang = window.lang || settings["default_language"]
-    }
+/**
+ * Get translated string from global localization data.
+ *
+ * @param {string} key A translation key.
+ * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
+ * @returns {string} The translated string, or the value of `key` if no translation is found.
+ */
+export function loc(key, lang) {
+    if (!lang) lang = window.lang || settings["default_language"]
     try {
         return window.loc_data[lang][key]
     } catch (e) {
-        return undefined
+        return key
     }
+}
+
+/**
+ * Get translated string from a given object.
+ * @param {object | string} map An object of strings keyed by language codes. Alternatively, just a string.
+ * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
+ * @returns {string | undefined} The translated string, or undefined if no translation is found.
+ */
+export function locObj(map, lang) {
+    if (!map) return undefined
+    if (typeof map == "string") return map
+
+    lang = lang || window.lang || settings["default_language"]
+    if (map[lang]) {
+        return map[lang]
+    } else if (map[settings["default_language"]]) {
+        return map[settings["default_language"]]
+    }
+
+    // fall back to the first value if neither the selected or default language are available
+    return Object.values(map)[0]
 }
 
 util.lemgramToString = function (lemgram, appendIndex) {
@@ -121,7 +126,7 @@ util.lemgramToString = function (lemgram, appendIndex) {
         concept,
         infixIndex,
         type,
-        util.getLocaleString(type),
+        loc(type),
     ])
 }
 
@@ -144,7 +149,7 @@ util.lemgramToPlainString = function (lemgram) {
     const infixIndex = _.map(index, (indexPart) => numberToSuperscript[indexPart]).join("")
     const concept = form.replace(/_/g, " ")
     const type = pos.slice(0, 2)
-    return `${concept}${infixIndex} (${util.getLocaleString(type)})`
+    return `${concept}${infixIndex} (${loc(type)})`
 }
 
 util.saldoRegExp = /(.*?)\.\.(\d\d?)(:\d+)?$/
@@ -239,7 +244,7 @@ util.setDownloadLinks = function (xhr_settings, result_data) {
         const option = $(`\
 <option
     value="${format}"
-    title="${util.getLocaleString(`formatdescr_${format}`)}"
+    title="${loc(`formatdescr_${format}`)}"
     class="download_link">${format.toUpperCase()}</option>\
 `)
 
@@ -292,9 +297,7 @@ util.prettyNumbers = function (numstring) {
     while (regex.test(outStrNum)) {
         outStrNum = outStrNum.replace(
             regex,
-            `$1<span rel="localize[util_numbergroupseparator]">${util.getLocaleString(
-                "util_numbergroupseparator"
-            )}</span>$2`
+            `$1<span rel="localize[util_numbergroupseparator]">${loc("util_numbergroupseparator")}</span>$2`
         )
     }
 
@@ -316,7 +319,7 @@ window.unregescape = (s) =>
 util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
     if (_.includes(x, ".")) {
         const parts = x.split(".")
-        const decimalSeparator = util.getLocaleString("util_decimalseparator")
+        const decimalSeparator = loc("util_decimalseparator")
         if (stringOnly) {
             return parts[0] + decimalSeparator + parts[1]
         }
