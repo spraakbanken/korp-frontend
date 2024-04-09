@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import model from "@/model"
-import { isLemgram, lemgramToHtml } from "@/util"
+import { isLemgram, lemgramToHtml, unregescape } from "@/util"
 
 const korpApp = angular.module("korpApp")
 

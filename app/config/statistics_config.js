@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import { lemgramToHtml, saldoToHtml } from "@/util"
+import { lemgramToHtml, regescape, saldoToHtml, translateAttribute } from "@/util"
 
 let customFunctions = {}
 
@@ -102,7 +102,7 @@ export function reduceStringify(type, values, structAttributes) {
             return values.join(" ")
         case "pos":
             var output = _.map(values, function (token) {
-                return util.translateAttribute(null, attrs["pos"].translation, token)
+                return translateAttribute(null, attrs["pos"].translation, token)
             }).join(" ")
             return output
         case "saldo":
@@ -131,7 +131,7 @@ export function reduceStringify(type, values, structAttributes) {
 
         case "deprel":
             var output = _.map(values, function (token) {
-                return util.translateAttribute(null, attrs["deprel"].translation, token)
+                return translateAttribute(null, attrs["deprel"].translation, token)
             }).join(" ")
             return output
         case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
@@ -151,7 +151,7 @@ export function reduceStringify(type, values, structAttributes) {
                     } else if (value === "") {
                         return "-"
                     } else if (structAttributes.translation) {
-                        return util.translateAttribute(null, structAttributes.translation, value)
+                        return translateAttribute(null, structAttributes.translation, value)
                     } else {
                         return value
                     }

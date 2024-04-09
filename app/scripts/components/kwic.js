@@ -4,7 +4,7 @@ import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import currentMode from "@/mode"
-import { SelectionManager, html } from "@/util"
+import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
 
@@ -191,7 +191,7 @@ angular.module("korpApp").component("kwic", {
 
                     if (settings["enable_backend_kwic_download"] && $ctrl.hitsDisplay) {
                         // using hitsDisplay here, since hits is not set until request is complete
-                        util.setDownloadLinks($ctrl.prevRequest, {
+                        setDownloadLinks($ctrl.prevRequest, {
                             kwic: $ctrl.kwic,
                             corpus_order: $ctrl.corpusOrder,
                         })

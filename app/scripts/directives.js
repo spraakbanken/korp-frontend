@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import { html, loc } from "@/util"
+import { html, loc, regescape, unregescape } from "@/util"
 
 const korpApp = angular.module("korpApp")
 
@@ -80,21 +80,8 @@ korpApp.directive("escaper", () => ({
             unescape = (val) => val
         } else {
             const doNotEscape = ["*=", "!*=", "regexp_contains", "not_regexp_contains"]
-            escape = function (val) {
-                if (!doNotEscape.includes($scope.orObj.op)) {
-                    return regescape(val)
-                } else {
-                    return val
-                }
-            }
-
-            unescape = function (val) {
-                if (!doNotEscape.includes($scope.orObj.op)) {
-                    return unregescape(val)
-                } else {
-                    return val
-                }
-            }
+            escape = (val) => (!doNotEscape.includes($scope.orObj.op) ? regescape(val) : val)
+            unescape = (val) => (!doNotEscape.includes($scope.orObj.op) ? unregescape(val) : val)
         }
 
         $scope.input = unescape($scope.model)

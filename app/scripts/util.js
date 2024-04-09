@@ -79,7 +79,7 @@ export class SelectionManager {
  * @returns {string} The translated string, or the value of `key` if no translation is found.
  */
 export function loc(key, lang) {
-    if (!lang) lang = window.lang || settings["default_language"]
+    lang = lang || window.lang || settings["default_language"]
     try {
         return window.loc_data[lang][key]
     } catch (e) {
@@ -206,7 +206,7 @@ function numberToSuperscript(number) {
 // settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
-util.setDownloadLinks = function (xhr_settings, result_data) {
+export function setDownloadLinks(xhr_settings, result_data) {
     // If some of the required parameters are null, return without
     // adding the download links.
     if (
@@ -323,17 +323,11 @@ util.prettyNumbers = function (numstring) {
     return outStrNum
 }
 
-window.regescape = (s) => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
+/** Escape special characters in a string so it can be safely inserted in a regular expression. */
+export const regescape = (s) => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
 
-window.unregescape = (s) =>
-    // remove single backslashes and replace double backslashes with one backslash
-    s.replace(/\\\\|\\/g, (match) => {
-        if (match === "\\\\") {
-            return "\\"
-        } else {
-            return ""
-        }
-    })
+/** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
+export const unregescape = (s) => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
 
 util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
     if (_.includes(x, ".")) {
@@ -362,22 +356,15 @@ util.formatDecimalString = function (x, mode, statsmode, stringOnly) {
     }
 }
 
-util.translateAttribute = (lang, translations, value) => {
-    if (!lang) {
-        lang = window.lang || settings["default_language"]
-    }
-
-    if (translations && translations[value]) {
+export function translateAttribute(lang, translations, value) {
+    lang = lang || window.lang || settings["default_language"]
+    if (translations && translations[value])
         return _.isObject(translations[value]) ? translations[value][lang] : translations[value]
-    } else {
-        return value
-    }
+    return value
 }
 
 // Return the length of baseUrl with params added
-const calcUrlLength = function (baseUrl, params) {
-    return baseUrl.length + new URLSearchParams(params).toString().length + 1
-}
+const calcUrlLength = (baseUrl, params) => baseUrl.length + new URLSearchParams(params).toString().length + 1
 
 // Add HTTP method to the HTTP configuration object conf for
 // jQuery.ajax or AngularJS $http call: if the result URL would be

@@ -3,7 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
-import { html, saldoToHtml } from "@/util"
+import { html, regescape, saldoToHtml, unregescape } from "@/util"
 import "@/components/autoc"
 
 angular.module("korpApp").component("simpleSearch", {

@@ -7,6 +7,7 @@ import model from "@/model"
 import * as authenticationProxy from "@/components/auth/auth"
 import { parseMapData } from "./map_services"
 import { updateSearchHistory } from "@/history"
+import { unregescape } from "@/util"
 
 const korpApp = angular.module("korpApp")
 

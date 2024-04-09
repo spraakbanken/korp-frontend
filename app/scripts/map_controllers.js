@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
+import { regescape } from "@/util"
 
 const korpApp = angular.module("korpApp")
 

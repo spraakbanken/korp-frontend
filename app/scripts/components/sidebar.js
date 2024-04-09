@@ -5,7 +5,7 @@ import "../../styles/sidebar.scss"
 import statemachine from "../statemachine"
 import settings from "@/settings"
 import { stringify } from "@/stringify.js"
-import { html, loc, splitLemgram } from "@/util"
+import { html, loc, regescape, splitLemgram, translateAttribute } from "@/util"
 import "@/components/deptree/deptree"
 
 let sidebarComponents = {}
@@ -296,7 +296,7 @@ angular.module("korpApp").component("sidebar", {
                                 val = stringify(stringifyKey, x)
 
                                 if (attrs.translation != null) {
-                                    val = util.translateAttribute($ctrl.lang, attrs.translation, val)
+                                    val = translateAttribute($ctrl.lang, attrs.translation, val)
                                 }
 
                                 inner = $(_.template(pattern)({ key: x, val }))
@@ -328,7 +328,7 @@ angular.module("korpApp").component("sidebar", {
                     if (attrs.stringify) {
                         str_value = stringify(attrs.stringify, value)
                     } else if (attrs.translation) {
-                        str_value = util.translateAttribute($ctrl.lang, attrs.translation, value)
+                        str_value = translateAttribute($ctrl.lang, attrs.translation, value)
                     }
 
                     if (attrs.type === "url") {
