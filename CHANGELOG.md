@@ -38,6 +38,10 @@
   - Added `formatRelativeHits` to format a number with exactly one decimal
     - All occurrences of relative hit counts now use this
   - Added `hitCountHtml` to consistently format a relative+absolute tuple
+- Deprecated global `locationSearch` in favor of using `$location` directly
+- Removed global `searchHash` in favor of using `$location` directly
+- Added `angularLocationSearch` to expose `$location.search` to code outside Angular
+- Removed map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
 
 ### Fixed
 
@@ -48,10 +52,6 @@
 - Fix dynamic translation for tabs etc
 - Modes in "More" menu sorted locale-awarely
 - Allow dash in attribute name
-
-### Removed
-
-- Map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
 
 ## [9.5.3] - 2024-03-11
 

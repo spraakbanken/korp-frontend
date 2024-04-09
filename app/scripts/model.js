@@ -3,7 +3,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import * as authenticationProxy from "@/components/auth/auth"
-import { httpConfAddMethod } from "@/util"
+import { angularLocationSearch, httpConfAddMethod } from "@/util"
 
 const model = {}
 export default model
@@ -206,7 +206,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         }
 
         function getPageInterval(page) {
-            const hpp = locationSearch().hpp
+            const hpp = angularLocationSearch().hpp
             const itemsPerPage = Number(hpp) || settings["hits_per_page_default"]
             page = Number(page)
             const output = {}
@@ -245,7 +245,7 @@ model.KWICProxy = class KWICProxy extends BaseProxy {
         data.show = _.uniq(["sentence"].concat(data.show)).join(",")
         data.show_struct = _.uniq(data.show_struct).join(",")
 
-        if (locationSearch()["in_order"] != null) {
+        if (angularLocationSearch()["in_order"] != null) {
             data.in_order = false
         }
 
@@ -359,10 +359,10 @@ model.StatsProxy = class StatsProxy extends BaseProxy {
     makeRequest(cqp, callback) {
         const self = this
         super.makeRequest()
-        const reduceval = locationSearch().stats_reduce || "word"
+        const reduceval = angularLocationSearch().stats_reduce || "word"
         const reduceVals = reduceval.split(",")
 
-        const ignoreCase = locationSearch().stats_reduce_insensitive != null
+        const ignoreCase = angularLocationSearch().stats_reduce_insensitive != null
 
         const reduceValLabels = _.map(reduceVals, function (reduceVal) {
             if (reduceVal === "word") {

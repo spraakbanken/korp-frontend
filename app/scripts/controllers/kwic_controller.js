@@ -101,7 +101,7 @@ export class KwicCtrl {
             let avoidContext, preferredContext
             const opts = {}
             const getSortParams = function () {
-                const { sort } = locationSearch()
+                const { sort } = $location.search()
                 if (!sort) {
                     return {}
                 }

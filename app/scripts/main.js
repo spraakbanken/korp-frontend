@@ -7,6 +7,7 @@ import { fetchInitialData } from "@/data_init"
 import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
 import korpLogo from "../img/korp.svg"
+import { angularLocationSearch } from "./util"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
@@ -67,9 +68,7 @@ function initApp() {
     $("#languages").radioList({
         change() {
             const currentLang = $(this).radioList("getSelected").data("mode")
-            locationSearch({
-                lang: currentLang !== settings["default_language"] ? currentLang : null,
-            })
+            angularLocationSearch("lang", currentLang !== settings["default_language"] ? currentLang : null)
         },
         // TODO: this does nothing?
         selected: settings["default_language"],

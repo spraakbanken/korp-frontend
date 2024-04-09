@@ -114,15 +114,18 @@ angular.module("korpApp").component("simpleSearch", {
                 $location.search("mid_comp", ctrl.mid_comp ? true : null)
                 $location.search("suffix", ctrl.suffix ? true : null)
                 $location.search("isCaseInsensitive", ctrl.isCaseInsensitive ? true : null)
-
                 $location.search("within", null)
-                locationSearch("search", null)
+
+                // Unset and set query in next time step in order to trigger changes correctly in `searches`.
+                $location.search("search", null)
+                $location.replace()
                 $timeout(function () {
                     if (ctrl.currentText) {
-                        util.searchHash("word", ctrl.currentText)
+                        $location.search("search", `word|${ctrl.currentText}`)
                     } else if (ctrl.lemgram) {
-                        util.searchHash("lemgram", ctrl.lemgram)
+                        $location.search("search", `lemgram|${ctrl.lemgram}`)
                     }
+                    $location.search("page", null)
                 }, 0)
             }
 

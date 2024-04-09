@@ -57,6 +57,7 @@ angular.module("korpApp").component("extendedStandard", {
 
             // TODO this is *too* weird
             function triggerSearch() {
+                // Unset and set query in next time step in order to trigger changes correctly in `searches`.
                 $location.search("search", null)
                 $location.search("page", null)
                 $location.search("in_order", $scope.freeOrder ? false : null)

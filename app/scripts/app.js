@@ -89,12 +89,6 @@ korpApp.run([
         /** This deferred is used to signal that the filter feature is ready. */
         s.globalFilterDef = $q.defer()
 
-        s.locationSearch = function () {
-            const search = $location.search(...arguments)
-            $location.replace()
-            return search
-        }
-
         s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
 
         // Listen to url changes like #?lang=swe

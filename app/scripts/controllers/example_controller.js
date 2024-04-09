@@ -73,8 +73,7 @@ class ExampleCtrl extends KwicCtrl {
         }
 
         s.makeRequest = () => {
-            console.log("example kwic make request")
-            const items_per_page = parseInt(locationSearch().hpp || settings["hits_per_page_default"])
+            const items_per_page = parseInt($location.search().hpp || settings["hits_per_page_default"])
             const opts = s.kwicTab.queryParams
 
             // example tab cannot handle incremental = true

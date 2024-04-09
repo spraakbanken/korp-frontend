@@ -77,8 +77,8 @@ angular.module("korpApp").component("extendedParallel", {
             if ($location.search().parallel_corpora) {
                 ctrl.langs = _.map($location.search().parallel_corpora.split(","), function (lang) {
                     var obj = { lang: lang, cqp: "[]" }
-                    if (locationSearch()["cqp_" + lang]) {
-                        obj.cqp = locationSearch()["cqp_" + lang]
+                    if ($location.search()["cqp_" + lang]) {
+                        obj.cqp = $location.search()["cqp_" + lang]
                     }
                     return obj
                 })
@@ -130,7 +130,7 @@ angular.module("korpApp").component("extendedParallel", {
 
                 _.each(ctrl.langs, function (langobj, i) {
                     if (!_.isEmpty(langobj.lang)) {
-                        locationSearch("cqp_" + langobj.lang, langobj.cqp)
+                        $location.search("cqp_" + langobj.lang, langobj.cqp)
                     }
                 })
                 $rootScope.extendedCQP = output
@@ -150,9 +150,12 @@ angular.module("korpApp").component("extendedParallel", {
             }
 
             ctrl.onSubmit = function () {
+                // Unset and set query in next time step in order to trigger changes correctly in `searches`.
                 $location.search("search", null)
+                $location.replace()
                 $timeout(function () {
-                    util.searchHash("cqp", onCQPChange())
+                    $location.search("search", `cqp|${onCQPChange()}`)
+                    $location.search("page", null)
                 }, 0)
             }
 
@@ -201,7 +204,7 @@ angular.module("korpApp").component("extendedParallel", {
             }
             ctrl.removeLangRow = function (i) {
                 const lang = ctrl.langs.pop()
-                locationSearch("cqp_" + lang.lang, null)
+                $location.search("cqp_" + lang.lang, null)
                 ctrl.onLangChange()
             }
         },

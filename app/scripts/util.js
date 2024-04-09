@@ -7,30 +7,22 @@ export const html = String.raw
 
 window.util = {}
 
-window.locationSearch = function (obj, val) {
-    const s = angular.element("body").scope()
-
-    const ret = safeApply(s.$root, function () {
-        if (!obj) {
-            return s.$root.locationSearch()
-        }
-        if (_.isObject(obj)) {
-            obj = _.extend({}, s.$root.locationSearch(), obj)
-            return s.$root.locationSearch(obj)
-        } else {
-            return s.$root.locationSearch(obj, val)
-        }
-    })
-
-    return ret
-}
-
-util.searchHash = function (type, value) {
-    locationSearch({
-        search: type + "|" + value,
-        page: 0,
+/**
+ * Get/set values from the URL search string via Angular.
+ * Only use this in code outside Angular. Inside, use `$location.search()`.
+ * Note that this is sensitive to the number of arguments; omitting an argument is different from passing undefined.
+ */
+export function angularLocationSearch(...args) {
+    const $root = angular.element("body")
+    return safeApply($root.scope(), function () {
+        const $location = $root.injector().get("$location")
+        return $location.search(...args)
     })
 }
+
+// TODO Remove, currently used in tests
+/** @deprecated */
+window.locationSearch = angularLocationSearch
 
 window.safeApply = function (scope, fn) {
     if (scope.$$phase || scope.$root.$$phase) {

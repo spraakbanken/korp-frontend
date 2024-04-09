@@ -2,6 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { CorpusListing } from "@/corpus_listing"
+import { angularLocationSearch } from "@/util"
 
 export class ParallelCorpusListing extends CorpusListing {
     constructor(corpora) {
@@ -161,7 +162,7 @@ export class ParallelCorpusListing extends CorpusListing {
     }
 
     getWithinParameters() {
-        const defaultWithin = locationSearch().within || _.keys(settings["default_within"])[0]
+        const defaultWithin = angularLocationSearch().within || _.keys(settings["default_within"])[0]
         const within = this.getAttributeQuery("within")
         return { default_within: defaultWithin, within }
     }
