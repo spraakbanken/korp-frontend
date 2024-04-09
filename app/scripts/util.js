@@ -108,79 +108,98 @@ export function locObj(map, lang) {
     return Object.values(map)[0]
 }
 
-util.lemgramToString = function (lemgram, appendIndex) {
+/**
+ * Render a lemgram string as pretty HTML.
+ * @param {string} lemgram A lemgram string, e.g. "vara..nn.2"
+ * @param {boolean} [appendIndex] Whether the numerical index should be included in output.
+ * @returns {string} An HTML string.
+ */
+export function lemgramToHtml(lemgram, appendIndex) {
     lemgram = _.trim(lemgram)
-    let infixIndex = ""
-    let concept = lemgram
-    infixIndex = ""
-    let type = ""
-    if (util.isLemgramId(lemgram)) {
-        const match = util.splitLemgram(lemgram)
-        if (appendIndex != null && match.index !== "1") {
-            infixIndex = $.format("<sup>%s</sup>", match.index)
-        }
-        concept = match.form.replace(/_/g, " ")
-        type = match.pos.slice(0, 2)
-    }
-    return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", [
-        concept,
-        infixIndex,
-        type,
-        loc(type),
-    ])
-}
-
-const numberToSuperscript = {
-    1: "",
-    2: "²",
-    3: "³",
-    4: "⁴",
-    5: "⁵",
-    6: "⁶",
-    7: "⁷",
-    8: "⁸",
-    9: "⁹",
-    0: "⁰",
-}
-
-// use this function to get a pretty printed lemgram with no HTML
-util.lemgramToPlainString = function (lemgram) {
-    const { form, pos, index } = util.splitLemgram(_.trim(lemgram))
-    const infixIndex = _.map(index, (indexPart) => numberToSuperscript[indexPart]).join("")
+    if (!isLemgram(lemgram)) return lemgram
+    const { form, pos, index } = splitLemgram(lemgram)
+    const indexHtml = appendIndex != null && index !== "1" ? `<sup>${index}</sup>` : ""
     const concept = form.replace(/_/g, " ")
     const type = pos.slice(0, 2)
-    return `${concept}${infixIndex} (${loc(type)})`
+    return `${concept}${indexHtml} (<span rel="localize[${type}]">${loc(type)}</span>)`
 }
 
-util.saldoRegExp = /(.*?)\.\.(\d\d?)(:\d+)?$/
-util.saldoToString = function (saldoId, appendIndex) {
-    const match = saldoId.match(util.saldoRegExp)
-    let infixIndex = ""
-    if (appendIndex != null && match[2] !== "1") {
-        infixIndex = $.format("<sup>%s</sup>", match[2])
-    }
-    return $.format("%s%s", [match[1].replace(/_/g, " "), infixIndex])
+/**
+ * Render a lemgram string in pretty plain text.
+ * @param {string} lemgram A lemgram string, e.g. "vara..n.2"
+ * @returns {string} A plain-text string.
+ */
+export function lemgramToString(lemgram) {
+    const { form, pos, index } = splitLemgram(_.trim(lemgram))
+    const indexSup = parseInt(index) > 1 ? numberToSuperscript(index) : ""
+    const concept = form.replace(/_/g, " ")
+    const type = pos.slice(0, 2)
+    return `${concept}${indexSup} (${loc(type)})`
 }
 
-util.saldoToPlaceholderString = function (saldoId, appendIndex) {
-    const match = saldoId.match(util.saldoRegExp)
-    let infixIndex = ""
-    if (appendIndex != null && match[2] !== "1") {
-        infixIndex = $.format(" (%s)", match[2])
+const lemgramRegexp = /\.\.\w+\.\d\d?(:\d+)?$/
+
+/**
+ * Determines if a string is a lemgram string, e.g. "vara..n.2"
+ * @param {string} str A string to test.
+ * @returns {boolean}
+ */
+export const isLemgram = (str) => str.search(lemgramRegexp) !== -1
+
+/**
+ * Analyze a lemgram string into its constituents.
+ * @param {string} lemgram A lemgram string, e.g. "vara..n.2"
+ * @returns {object} A map with the keys `morph`, `form`, `pos`, `index` and `startIndex`. Values are strings.
+ * @throws If input is not a lemgram. You can test it first with `isLemgram`!
+ */
+export function splitLemgram(lemgram) {
+    if (!isLemgram(lemgram)) {
+        throw new Error(`Input to splitLemgram is not a lemgram: ${lemgram}`)
     }
-    return $.format("%s%s", [match[1].replace(/_/g, " "), infixIndex])
+    const match = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d+)(:\d+)?$/)
+    return {
+        morph: match[2],
+        form: match[3],
+        pos: match[4],
+        index: match[5],
+        startIndex: match[6],
+    }
 }
 
-util.lemgramRegexp = /\.\.\w+\.\d\d?(:\d+)?$/
-util.isLemgramId = (lemgram) => lemgram.search(util.lemgramRegexp) !== -1
+const saldoRegexp = /(.*?)\.\.(\d\d?)(:\d+)?$/
 
-util.splitLemgram = function (lemgram) {
-    if (!util.isLemgramId(lemgram)) {
-        throw new Error(`Input to util.splitLemgram is not a lemgram: ${lemgram}`)
-    }
-    const keys = ["morph", "form", "pos", "index", "startIndex"]
-    const splitArray = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d\d?)(:\d+)?$/).slice(2)
-    return _.zipObject(keys, splitArray)
+/**
+ * Render a SALDO string as pretty HTML.
+ * @param {string} saldoId A SALDO string, e.g. "vara..2"
+ * @param {boolean} [appendIndex] Whether the numerical index should be included in output.
+ * @returns {string} An HTML string.
+ */
+export function saldoToHtml(saldoId, appendIndex) {
+    const match = saldoId.match(saldoRegexp)
+    const concept = match[1].replace(/_/g, " ")
+    const indexHtml = appendIndex != null && match[2] !== "1" ? `<sup>${match[2]}</sup>` : ""
+    return `${concept}${indexHtml}`
+}
+
+/**
+ * Render a SALDO string in pretty plain text.
+ * @param {string} saldoId A SALDO string, e.g. "vara..2"
+ * @returns {string} An plain-text string.
+ */
+export function saldoToString(saldoId) {
+    const match = saldoId.match(saldoRegexp)
+    const concept = match[1].replace(/_/g, " ")
+    const indexSup = parseInt(match[2]) > 1 ? numberToSuperscript(match[2]) : ""
+    return `${concept}${indexSup}`
+}
+
+/**
+ * Represent a number with superscript characters like "⁴²".
+ * @param {number | string} n A decimal number.
+ * @returns A string of superscript numbers.
+ */
+function numberToSuperscript(number) {
+    return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[n]).join("")
 }
 
 // Add download links for other formats, defined in

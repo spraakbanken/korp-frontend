@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
+import { lemgramToHtml, saldoToHtml } from "@/util"
 
 let customFunctions = {}
 
@@ -111,11 +112,11 @@ export function reduceStringify(type, values, structAttributes) {
         case "lemma":
         case "sense":
             if (type == "saldo" || type == "sense") {
-                var stringify = util.saldoToString
+                var stringify = saldoToHtml
             } else if (type == "lemma") {
                 stringify = (lemma) => lemma.replace(/_/g, " ")
             } else {
-                stringify = util.lemgramToString
+                stringify = lemgramToHtml
             }
 
             var html = _.map(values, function (token) {

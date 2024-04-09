@@ -2,6 +2,8 @@
 import _ from "lodash"
 import settings from "@/settings"
 import model from "@/model"
+import { isLemgram, lemgramToHtml } from "@/util"
+
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("wordpicCtrl", () => ({
@@ -123,7 +125,7 @@ korpApp.directive("wordpicCtrl", () => ({
                 s.hasData = true
                 if (!data.relations) {
                     s.noHits = true
-                } else if (util.isLemgramId(query)) {
+                } else if (isLemgram(query)) {
                     s.renderTables(query, data.relations)
                 } else {
                     s.renderWordTables(query, data.relations)
@@ -227,10 +229,10 @@ korpApp.directive("wordpicCtrl", () => ({
 
                         if (settings["word_picture_conf"][wordClass][i] && unsortedList.length) {
                             const toIndex = $.inArray("_", settings["word_picture_conf"][wordClass][i])
-                            if (util.isLemgramId(token)) {
+                            if (isLemgram(token)) {
                                 unsortedList[toIndex] = { word: token.split("..")[0].replace(/_/g, " ") }
                             } else {
-                                unsortedList[toIndex] = { word: util.lemgramToString(token) }
+                                unsortedList[toIndex] = { word: lemgramToHtml(token) }
                             }
                         }
 
@@ -244,7 +246,7 @@ korpApp.directive("wordpicCtrl", () => ({
                                 const { show_rel } = table[0]
                                 const all_lemgrams = _.uniq(
                                     _.map(_.map(table, show_rel), function (item) {
-                                        if (util.isLemgramId(item)) {
+                                        if (isLemgram(item)) {
                                             return item.slice(0, -1)
                                         } else {
                                             return item

@@ -3,7 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
-import { html } from "@/util"
+import { html, saldoToHtml } from "@/util"
 import "@/components/autoc"
 
 angular.module("korpApp").component("simpleSearch", {
@@ -185,7 +185,7 @@ angular.module("korpApp").component("simpleSearch", {
                 compareSearches.saveSearch(name, ctrl.getCQP())
             }
 
-            ctrl.stringifyRelated = (wd) => util.saldoToString(wd)
+            ctrl.stringifyRelated = (wd) => saldoToHtml(wd)
 
             ctrl.relatedDefault = 3
 

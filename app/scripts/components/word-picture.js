@@ -1,7 +1,7 @@
 /** @format */
 import angular from "angular"
 import settings from "@/settings"
-import { html, loc } from "@/util"
+import { html, isLemgram, loc, splitLemgram } from "@/util"
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
@@ -124,20 +124,18 @@ angular.module("korpApp").component("wordPicture", {
                     return `lemgram_header_item ${header.css_class}`
                 } else {
                     let classes = "hit"
-                    if ($ctrl.isLemgram(token)) {
+                    if (isLemgram(token)) {
                         classes += " lemgram"
                     }
                     return classes
                 }
             }
 
-            $ctrl.isLemgram = (word) => {
-                util.isLemgramId(word)
-            }
+            $ctrl.isLemgram = isLemgram
 
             $ctrl.fromLemgram = function (maybeLemgram) {
-                if (util.isLemgramId(maybeLemgram)) {
-                    return util.splitLemgram(maybeLemgram).form
+                if (isLemgram(maybeLemgram)) {
+                    return splitLemgram(maybeLemgram).form
                 } else {
                     return maybeLemgram
                 }
@@ -163,8 +161,8 @@ angular.module("korpApp").component("wordPicture", {
 
                 const prefix = row.depextra
 
-                if (util.isLemgramId(lemgram)) {
-                    const match = util.splitLemgram(lemgram)
+                if (isLemgram(lemgram)) {
+                    const match = splitLemgram(lemgram)
                     infixIndex = match.index
                     if (row.dep) {
                         concept = match.form.replace(/_/g, " ")

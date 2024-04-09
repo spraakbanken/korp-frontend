@@ -727,10 +727,12 @@ If you need to merge rows or otherwise alter the table structure, implement and 
 Add all custom pretty-printing to `custom/stringify.js`. Example file:
 
 ```
+import { lemgramToHtml, saldoToHtml } from "@/util"
+
 export const {
-    sense: (sense) => util.saldoToString(sense, true),
-    lemgram: (str) => util.lemgramToString(str, true),
-    complemgram: (str) => str.split('+').map((lemgram) => util.lemgramToString(lemgram, true)).join('+')
+    sense: (sense) => saldoToHtml(sense, true),
+    lemgram: (str) => lemgramToHtml(str, true),
+    complemgram: (str) => str.split('+').map((lemgram) => lemgramToHtml(lemgram, true)).join('+')
 }
 ```
 

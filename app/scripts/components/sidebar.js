@@ -5,7 +5,7 @@ import "../../styles/sidebar.scss"
 import statemachine from "../statemachine"
 import settings from "@/settings"
 import { stringify } from "@/stringify.js"
-import { html, loc } from "@/util"
+import { html, loc, splitLemgram } from "@/util"
 import "@/components/deptree/deptree"
 
 let sidebarComponents = {}
@@ -279,8 +279,8 @@ angular.module("korpApp").component("sidebar", {
                         if (key === "variants") {
                             // TODO: this doesn't sort quite as expected
                             valueArray.sort(function (a, b) {
-                                const splita = util.splitLemgram(a)
-                                const splitb = util.splitLemgram(b)
+                                const splita = splitLemgram(a)
+                                const splitb = splitLemgram(b)
                                 const strvala = getStringVal(splita.form) + splita.index + getStringVal(splita.pos)
                                 const strvalb = getStringVal(splitb.form) + splitb.index + getStringVal(splitb.pos)
 
