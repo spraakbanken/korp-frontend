@@ -4,7 +4,7 @@ import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import currentMode from "@/mode"
-import { html } from "@/util"
+import { SelectionManager, html } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
 
@@ -172,7 +172,7 @@ angular.module("korpApp").component("kwic", {
         function ($location, $element, $timeout, kwicDownload) {
             let $ctrl = this
 
-            const selectionManager = new util.SelectionManager()
+            const selectionManager = new SelectionManager()
 
             $ctrl.$onInit = () => {
                 addKeydownHandler()

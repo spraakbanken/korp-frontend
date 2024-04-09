@@ -36,37 +36,39 @@ window.safeApply = function (scope, fn) {
     }
 }
 
-util.SelectionManager = function () {
-    this.selected = $()
-    this.aux = $()
-}
-
-util.SelectionManager.prototype.select = function (word, aux) {
-    if (word == null || !word.length) {
-        return
+export class SelectionManager {
+    constructor() {
+        this.selected = $()
+        this.aux = $()
     }
-    if (this.selected.length) {
+
+    select(word, aux) {
+        if (word == null || !word.length) {
+            return
+        }
+        if (this.selected.length) {
+            this.selected.removeClass("word_selected token_selected")
+            this.aux.removeClass("word_selected aux_selected")
+        }
+        this.selected = word
+        this.aux = aux || $()
+        this.aux.addClass("word_selected aux_selected")
+        word.addClass("word_selected token_selected")
+    }
+
+    deselect() {
+        if (!this.selected.length) {
+            return
+        }
         this.selected.removeClass("word_selected token_selected")
+        this.selected = $()
         this.aux.removeClass("word_selected aux_selected")
+        this.aux = $()
     }
-    this.selected = word
-    this.aux = aux || $()
-    this.aux.addClass("word_selected aux_selected")
-    word.addClass("word_selected token_selected")
-}
 
-util.SelectionManager.prototype.deselect = function () {
-    if (!this.selected.length) {
-        return
+    hasSelected() {
+        return this.selected.length > 0
     }
-    this.selected.removeClass("word_selected token_selected")
-    this.selected = $()
-    this.aux.removeClass("word_selected aux_selected")
-    this.aux = $()
-}
-
-util.SelectionManager.prototype.hasSelected = function () {
-    return this.selected.length > 0
 }
 
 util.getLocaleString = (key, lang) => util.getLocaleStringUndefined(key, lang) || key

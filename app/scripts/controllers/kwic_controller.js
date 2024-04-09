@@ -93,8 +93,6 @@ export class KwicCtrl {
             s.readingChange()
         }
 
-        s.selectionManager = new util.SelectionManager()
-
         s.buildQueryOptions = (cqp, isPaging) => {
             let avoidContext, preferredContext
             const opts = {}
