@@ -31,11 +31,13 @@
   - `setDownloadLinks`
   - `translateAttribute`
   - `httpConfAddMethod`, `httpConfAddMethodAngular`, `httpConfAddMethodFetch`
+  - `collatorSort`
 
 ### Fixed
 
 - Disable Trend diagram and Map buttons while waiting for statistics search to finish [#346](https://github.com/spraakbanken/korp-frontend/issues/346)
 - Fix dynamic translation for tabs etc
+- Modes in "More" menu sorted locale-awarely
 - Allow dash in attribute name
 
 ### Removed

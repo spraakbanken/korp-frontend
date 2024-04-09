@@ -3,7 +3,7 @@ import angular from "angular"
 import * as treeUtil from "./util"
 import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
-import { html } from "@/util"
+import { collatorSort, html } from "@/util"
 
 angular.module("korpApp").component("ccTree", {
     template: html`
@@ -81,7 +81,7 @@ angular.module("korpApp").component("ccTree", {
 
             $ctrl.$onInit = () => {
                 function sort(nodes) {
-                    return util.collatorSort(nodes, "title", $rootScope.lang)
+                    return collatorSort(nodes, "title", $rootScope.lang)
                 }
                 $ctrl.sortedCorpora = sort($ctrl.node.corpora)
                 $ctrl.sortedFolders = sort($ctrl.node.subFolders)

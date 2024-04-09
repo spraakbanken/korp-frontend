@@ -437,9 +437,14 @@ export function httpConfAddMethodFetch(conf) {
     return conf
 }
 
-util.collatorSort = (elems, key, lang) => {
+/**
+ * Sort elements alphabetically by a given attribute.
+ * @param {object[]} elems A list of objects.
+ * @param {string | number} key A key that should be present in the objects.
+ * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
+ * @returns A copy of the list, sorted.
+ */
+export function collatorSort(elems, key, lang) {
     const comparator = new Intl.Collator(lang).compare
-    return elems.slice().sort((a, b) => {
-        return comparator(...[a, b].map((x) => util.translateAttribute(lang, x, key)))
-    })
+    return elems.slice().sort((a, b) => comparator(...[a, b].map((x) => locObj(x[key], lang))))
 }

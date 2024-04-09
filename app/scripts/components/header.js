@@ -8,7 +8,7 @@ import sbxLogoEn from "../../img/sprakbanken_text_slogan_en.svg"
 import guLogo from "../../img/gu_logo_sv_head.svg"
 import settings from "@/settings"
 import currentMode from "@/mode"
-import { html } from "@/util"
+import { collatorSort, html } from "@/util"
 import "@/components/corpus_chooser/corpus-chooser"
 
 angular.module("korpApp").component("header", {
@@ -223,7 +223,7 @@ angular.module("korpApp").component("header", {
             $ctrl.visible = $ctrl.modes.slice(0, N_VISIBLE)
 
             $rootScope.$watch("lang", () => {
-                $ctrl.menu = util.collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
+                $ctrl.menu = collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
 
                 const i = _.map($ctrl.menu, "mode").indexOf(currentMode)
                 if (i !== -1) {
