@@ -3,7 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import "components-jqueryui/ui/widgets/dialog.js"
 import settings from "@/settings"
-import { formatDecimalString, html, loc, locObj } from "@/util"
+import { formatRelativeHits, html, loc, locObj } from "@/util"
 import { getCqp } from "../../config/statistics_config.js"
 
 angular.module("korpApp").component("statistics", {
@@ -454,7 +454,7 @@ angular.module("korpApp").component("statistics", {
                         if (row.rowId === rowId) {
                             for (let corpus of $ctrl.searchParams.corpora) {
                                 const freq = row[corpus + "_value"][valueType]
-                                const freqStr = formatDecimalString(freq.toString())
+                                const freqStr = formatRelativeHits(freq.toString(), $rootScope.lang)
                                 const title = locObj(settings.corpora[corpus.toLowerCase()]["title"])
                                 dataItems.push({
                                     value: freq,

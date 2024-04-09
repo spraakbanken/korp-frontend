@@ -2,7 +2,7 @@
 import _ from "lodash"
 import angular from "angular"
 import settings from "@/settings"
-import { html, lemgramToHtml, loc, saldoToString } from "@/util"
+import { html, lemgramToString, loc, saldoToString } from "@/util"
 
 angular.module("korpApp").component("autoc", {
     template: html`
@@ -113,7 +113,7 @@ angular.module("korpApp").component("autoc", {
                     return
                 }
                 if (ctrl.type === "lemgram") {
-                    return lemgramToHtml(placeholder)
+                    return lemgramToString(placeholder)
                 } else {
                     return saldoToString(placeholder)
                 }

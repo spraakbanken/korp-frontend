@@ -2,23 +2,13 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config.js"
+import { hitCountHtml } from "./util.js"
 const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function () {
     const createColumns = function (corpora, reduceVals, reduceValLabels) {
-        const loc = {
-            swe: "sv-SE",
-            eng: "gb-EN",
-        }[$("body").scope().lang]
-
         const valueFormatter = function (row, cell, value, columnDef, dataContext) {
-            const valTup = dataContext[columnDef.id + "_value"]
-            return (
-                `<span><span class='relStat'>${Number(valTup[1].toFixed(1)).toLocaleString(loc)}</span> ` +
-                "<span class='absStat'>(" +
-                valTup[0].toLocaleString(loc) +
-                ")</span></span>"
-            )
+            return hitCountHtml(...dataContext[columnDef.id + "_value"], window.lang)
         }
 
         const corporaKeys = _.keys(corpora)

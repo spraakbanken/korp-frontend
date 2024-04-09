@@ -28,17 +28,23 @@
   - `saldoToPlaceholderString` to `saldoToString`
 - Converted from `window.util` props to exported members:
   - `loc`, `locObj`, `locAttribute`
-  - `prettyNumbers`, `formatDecimalString`
   - lemgram/saldo functions
   - `setDownloadLinks`
   - `httpConfAddMethod`, `httpConfAddMethodAngular`, `httpConfAddMethodFetch`
   - `collatorSort`
 - In `locAttribute`, moved the optional `lang` parameter last
-- Simplified `formatDecimalString`
+- Revised number formatting:
+  - Removed `formatDecimalString` and `prettyNumbers`
+  - Added `formatRelativeHits` to format a number with exactly one decimal
+    - All occurrences of relative hit counts now use this
+  - Added `hitCountHtml` to consistently format a relative+absolute tuple
 
 ### Fixed
 
+- Correct order of numbers in trend diagram table (first relative, then absolute)
+- Update number formatting in statistics table when switching language
 - Disable Trend diagram and Map buttons while waiting for statistics search to finish [#346](https://github.com/spraakbanken/korp-frontend/issues/346)
+- Strip HTML from total hits in annotated KWIC dowload
 - Fix dynamic translation for tabs etc
 - Modes in "More" menu sorted locale-awarely
 - Allow dash in attribute name

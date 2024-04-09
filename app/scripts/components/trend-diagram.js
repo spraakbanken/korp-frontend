@@ -3,7 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import model from "@/model"
-import { formatDecimalString, html, loc } from "@/util"
+import { formatRelativeHits, hitCountHtml, html, loc } from "@/util"
 import * as trendUtil from "../trend_diagram/trend_util"
 import "@/components/korp-error"
 
@@ -393,30 +393,14 @@ angular.module("korpApp").component("trendDiagram", {
                             name: timestamp,
                             field: timestamp,
                             formatter(row, cell, value, columnDef, dataContext) {
-                                const loc = {
-                                    swe: "sv-SE",
-                                    eng: "gb-EN",
-                                }[$("body").scope().lang]
-                                const fmt = function (valTup) {
-                                    if (typeof valTup[0] === "undefined") {
-                                        return ""
-                                    }
-                                    return (
-                                        "<span>" +
-                                        "<span class='relStat'>" +
-                                        Number(valTup[1].toFixed(1)).toLocaleString(loc) +
-                                        "</span> " +
-                                        "<span class='absStat'>(" +
-                                        valTup[0].toLocaleString(loc) +
-                                        ")</span> " +
-                                        "<span>"
-                                    )
-                                }
-                                return fmt(value)
+                                return typeof value[0] === "undefined"
+                                    ? ""
+                                    : hitCountHtml(value[0], value[1], $rootScope.lang)
                             },
                         }
                         const i = _.sortedIndexOf(_.map(row.abs_data, "x"), item.x)
-                        new_time_row[timestamp] = [item.y, row.abs_data[i].y]
+                        // [absolute, relative], like in statistics_worker.ts
+                        new_time_row[timestamp] = [row.abs_data[i].y, item.y]
                     }
                     time_table_data.push(new_time_row)
                 }
@@ -659,8 +643,7 @@ angular.module("korpApp").component("trendDiagram", {
                     },
 
                     yFormatter(y) {
-                        const val = formatDecimalString(y.toFixed(2), true)
-
+                        const val = formatRelativeHits(y, $rootScope.lang)
                         return `<br><span rel='localize[rel_hits_short]'>${loc("rel_hits_short")}</span> ` + val
                     },
                     formatter(series, x, y, formattedX, formattedY, d) {
@@ -676,7 +659,7 @@ angular.module("korpApp").component("trendDiagram", {
                         return `<span data-cqp="${encodeURIComponent(series.cqp)}">
                                 ${rel}
                                 <br>
-                                ${loc("abs_hits_short")}: ${abs_y}
+                                ${loc("abs_hits_short")}: ${abs_y.toLocaleString($rootScope.lang)}
                             </span>`
                     },
                 })

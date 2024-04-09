@@ -129,7 +129,33 @@ export function locAttribute(translations, key, lang) {
 }
 
 /**
+ * Format a number of "relative hits" (hits per 1 million tokens), using exactly one decimal.
+ * @param {number|string} x Number of relative hits
+ * @param {string} lang The locale to use.
+ * @returns A string with the number nicely formatted.
+ */
+export function formatRelativeHits(x, lang) {
+    return Number(x).toLocaleString(lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+}
+
+/**
+ * Format as `<relative> (<absolute>)` plus surrounding HTML.
+ * @param {number} absolute Number of absolute hits
+ * @param {number} relative Number of relative hits (hits per 1 million tokens)
+ * @param {string} lang The locale to use.
+ * @returns A HTML snippet.
+ */
+export function hitCountHtml(absolute, relative, lang) {
+    const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
+    // TODO Remove outer span?
+    // TODO Flexbox?
+    const absoluteHtml = `<span class='absStat'>(${absolute.toLocaleString(lang)})</span>`
+    return `<span>${relativeHtml} ${absoluteHtml}</span>`
+}
+
+/**
  * Render a lemgram string as pretty HTML.
+ * TODO No HTML in placeholder in Extended!
  * @param {string} lemgram A lemgram string, e.g. "vara..nn.2"
  * @param {boolean} [appendIndex] Whether the numerical index should be included in output.
  * @returns {string} An HTML string.
@@ -327,42 +353,6 @@ export const regescape = (s) => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replac
 
 /** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
 export const unregescape = (s) => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
-
-/**
- * Helper function to turn "8455999" into "8 455 999".
- * Adds HTML employing dynamic translation to ensure the thousands separator is updated when switching locale.
- * @param {string | number} numstring An integer number.
- * @returns A string, possibly containing HTML.
- */
-export function prettyNumbers(numstring) {
-    const regex = /(\d+)(\d{3})/
-    let outStrNum = numstring.toString()
-    while (regex.test(outStrNum)) {
-        outStrNum = outStrNum.replace(
-            regex,
-            `$1<span rel="localize[util_numbergroupseparator]">${loc("util_numbergroupseparator")}</span>$2`
-        )
-    }
-
-    return outStrNum
-}
-
-/**
- * Format a numerical string.
- * @param {string} x A decimal numerical string, with or without decimal point "."
- * @param {boolean} plaintext Whether output should be plain text instead of HTML.
- * @returns A plain-text or HTML string with the number nicely formatted.
- */
-export function formatDecimalString(x, plaintext) {
-    if (x.indexOf(".") === -1) return plaintext ? x : prettyNumbers(x)
-
-    const [int, frac] = x.split(".")
-    const decimalSeparator = loc("util_decimalseparator")
-    if (plaintext) return int + decimalSeparator + frac
-
-    const decimalHtml = `<span rel="localize[util_decimalseparator]">${decimalSeparator}</span>`
-    return `${prettyNumbers(int)}${decimalHtml}${frac}`
-}
 
 /** Return the length of baseUrl with params added. */
 const calcUrlLength = (baseUrl, params) => baseUrl.length + new URLSearchParams(params).toString().length + 1

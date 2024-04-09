@@ -314,9 +314,10 @@ korpApp.run([
 ])
 
 korpApp.filter("trust", ["$sce", ($sce) => (input) => $sce.trustAsHtml(input)])
-korpApp.filter("prettyNumber", () => (input) => new Intl.NumberFormat(lang).format(input))
-angular.module("korpApp").filter("maxLength", function () {
-    return function (val) {
-        return val.length > 39 ? val.slice(0, 36) + "…" : val
-    }
-})
+// Passing `lang` seems to be necessary to have the string updated when switching language.
+// Can fall back on using $rootScope for numbers that will anyway be re-rendered when switching language.
+korpApp.filter("prettyNumber", [
+    "$rootScope",
+    ($rootScope) => (input, lang) => Number(input).toLocaleString(lang || $rootScope.lang),
+])
+korpApp.filter("maxLength", () => (val) => val.length > 39 ? val.slice(0, 36) + "…" : val)

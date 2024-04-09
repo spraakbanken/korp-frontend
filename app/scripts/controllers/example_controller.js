@@ -16,7 +16,7 @@ class ExampleCtrl extends KwicCtrl {
 
         // ugly, but because the kwic-tab-scope is parent of this scope it needs to be done
         s.hits = null
-        s.hits_display = null
+        s.hitsInProgress = null
         s.page = 0
         s.error = false
         s.hitsPictureData = null

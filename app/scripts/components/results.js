@@ -34,7 +34,7 @@ angular.module("korpApp").component("results", {
                                         aborted="aborted"
                                         loading="loading"
                                         active="active"
-                                        hits-display="hits_display"
+                                        hits-in-progress="hitsInProgress"
                                         hits="hits"
                                         kwic-input="kwic"
                                         corpus-hits="corpusHits"

@@ -13,9 +13,9 @@ angular.module("korpApp").component("kwic", {
         <div ng-click="$ctrl.onKwicClick($event)">
             <div class="result_controls">
                 <warning ng-if="$ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:$root.lang}}</warning>
-                <div class="controls_n" ng-show="$ctrl.hitsDisplay">
+                <div class="controls_n" ng-if="$ctrl.hitsInProgress != null">
                     <span>{{'num_results' | loc:$root.lang}}: </span>
-                    <span class="num-result" ng-bind-html="$ctrl.hitsDisplay | trust"></span>
+                    <span class="num-result">{{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}</span>
                 </div>
                 <div class="hits_picture" ng-if="$ctrl.hitsPictureData.length > 1">
                     <table class="hits_picture_table">
@@ -127,12 +127,12 @@ angular.module("korpApp").component("kwic", {
                 page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-            <div id="download-links-container">
+            <div ng-if="!$ctrl.loading">
                 <select id="download-links" ng-if="$ctrl._settings['enable_backend_kwic_download']"></select>
                 <select
                     id="frontendDownloadLinks"
                     ng-if="$ctrl._settings['enable_frontend_kwic_download']"
-                    ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hitsDisplay)"
+                    ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hits)"
                     ng-model="$ctrl.download.selected"
                     ng-options="item.value as item.label | loc:$root.lang disable when item.disabled for item in $ctrl.download.options"
                 ></select>
@@ -151,7 +151,7 @@ angular.module("korpApp").component("kwic", {
         aborted: "<",
         loading: "<",
         active: "<",
-        hitsDisplay: "<",
+        hitsInProgress: "<",
         hits: "<",
         isReading: "<",
         page: "<",
@@ -161,6 +161,7 @@ angular.module("korpApp").component("kwic", {
         prevParams: "<",
         prevRequest: "<",
         corpusOrder: "<",
+        /** Current page of results. */
         kwicInput: "<",
         corpusHits: "<",
     },
@@ -189,8 +190,7 @@ angular.module("korpApp").component("kwic", {
                         })
                     }
 
-                    if (settings["enable_backend_kwic_download"] && $ctrl.hitsDisplay) {
-                        // using hitsDisplay here, since hits is not set until request is complete
+                    if (settings["enable_backend_kwic_download"]) {
                         setDownloadLinks($ctrl.prevRequest, {
                             kwic: $ctrl.kwic,
                             corpus_order: $ctrl.corpusOrder,
@@ -270,7 +270,7 @@ angular.module("korpApp").component("kwic", {
                     { value: "annotations/tsv", label: "download_annotations_tsv", disabled: settings["parallel"] },
                 ],
                 selected: "",
-                init: (value, hitsDisplay) => {
+                init: (value, hits) => {
                     if ($ctrl.download.blobName) {
                         URL.revokeObjectURL($ctrl.download.blobName)
                     }
@@ -281,7 +281,7 @@ angular.module("korpApp").component("kwic", {
                         ...value.split("/"),
                         $ctrl.kwic,
                         $ctrl.prevParams,
-                        hitsDisplay
+                        hits
                     )
                     $ctrl.download.fileName = fileName
                     $ctrl.download.blobName = blobName
