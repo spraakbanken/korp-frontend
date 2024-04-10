@@ -32,7 +32,7 @@
   - `isLemgramId` to `isLemgram`
   - `saldoToString` to `saldoToHtml`
   - `saldoToPlaceholderString` to `saldoToString`
-- Converted from `window.util` props to exported members:
+- Removed `window.util` and converted its members to exported functions:
   - `loc`, `locObj`, `locAttribute`
   - lemgram/saldo functions
   - `setDownloadLinks`

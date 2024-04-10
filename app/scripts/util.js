@@ -5,8 +5,6 @@ import settings from "@/settings"
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
 
-window.util = {}
-
 /**
  * Get/set values from the URL search string via Angular.
  * Only use this in code outside Angular. Inside, use `$location.search()`.
@@ -19,10 +17,6 @@ export function angularLocationSearch(...args) {
         return $location.search(...args)
     })
 }
-
-// TODO Remove, currently used in tests
-/** @deprecated */
-window.locationSearch = angularLocationSearch
 
 export function safeApply(scope, fn) {
     if (scope.$$phase || scope.$root.$$phase) {

@@ -1,5 +1,6 @@
 /** @format */
 import currentMode from "@/mode"
+import { angularLocationSearch } from "@/util"
 
 let $ = require("jquery")
 window.jQuery = $
@@ -59,7 +60,6 @@ require("./lib/jquery.tooltip.pack.js")
 require("./scripts/statistics.js")
 require("./scripts/cqp_parser/CQPParser.js")
 require("./scripts/cqp_parser/cqp.js")
-require("./scripts/util.js")
 require("./scripts/pie-widget.js")
 require("./scripts/widgets.js")
 require("./scripts/main.js")
@@ -85,3 +85,7 @@ require("./scripts/directives.js")
 require("./scripts/directives/scroll.js")
 require("./scripts/filter_directives.js")
 require("./scripts/matomo.js")
+
+// TODO Remove, currently used in tests
+/** @deprecated */
+window.locationSearch = angularLocationSearch
