@@ -555,7 +555,8 @@ angular.module("korpApp").component("kwic", {
                     _.each(links, function (val, key) {
                         var lang = key.split("-")[1]
                         _.each(_.compact(val.split("|")), function (num) {
-                            var link = findRef(num, sentence.aligned[mainCorpus + "-" + lang])
+                            const link = findRef(num, sentence.aligned[mainCorpus + "-" + lang])
+                            if (!link) return
                             link._link_selected = true
                             $ctrl.parallelSelected.push(link)
                         })
