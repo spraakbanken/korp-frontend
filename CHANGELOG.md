@@ -2,9 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- Corpus updates on frontpage [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
+- Configurable generated link in corpus info [#355](https://github.com/spraakbanken/korp-frontend/issues/355)
+
 ### Changed
 
-- Extended support for description on frontpage, with corpus updates [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
+- Extended support for description on frontpage [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
 - The "medial part" option now includes first/last parts also for lemgram search [#347](https://github.com/spraakbanken/korp-frontend/issues/347)
 - Improved UI reactivity for Simple search
 - Removed globals – import them instead:
@@ -39,9 +44,10 @@
   - Added `formatRelativeHits` to format a number with exactly one decimal
     - All occurrences of relative hit counts now use this
   - Added `hitCountHtml` to consistently format a relative+absolute tuple
-- Deprecated global `locationSearch` in favor of using `$location` directly
-- Removed global `searchHash` in favor of using `$location` directly
-- Added `angularLocationSearch` to expose `$location.search` to code outside Angular
+- Revised the `locationSearch` and `searchHash` util functions:
+  - Deprecated global `locationSearch` in favor of using `$location` directly
+  - Removed global `searchHash` in favor of using `$location` directly
+  - Added `angularLocationSearch` to expose `$location.search` to code outside Angular
 - Removed map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
 
 ### Fixed

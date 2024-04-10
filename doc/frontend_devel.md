@@ -105,6 +105,9 @@ settings that affect the frontend.
 
 - __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
 - __corpus_config_url__ - String. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
+- __corpus_info_link__ - Object. Use this to render a link for each corpus in the corpus chooser.
+  - __url_template__ - String or translation object. A URL containing a token "%s", which will be replaced with the corpus id.
+  - __label__ - String or translation object. The label is the the same for all corpora.
 - __default_language__ - String. The default interface language. Default: `"eng"`
 - __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
     that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
