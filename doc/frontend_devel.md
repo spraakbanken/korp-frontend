@@ -109,6 +109,7 @@ settings that affect the frontend.
   - __url_template__ - String or translation object. A URL containing a token "%s", which will be replaced with the corpus id.
   - __label__ - String or translation object. The label is the the same for all corpora.
 - __default_language__ - String. The default interface language. Default: `"eng"`
+- __description__ - String. Any HTML content to show on frontpage until search is made.
 - __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
     that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
     for more information about how to define attributes.
@@ -125,6 +126,12 @@ settings that affect the frontend.
     In extended search, the default `within` will be used unless the user specifies something else. In that case the user's choice will be used for all corpora that support it and for corpora that do not support it, a supported `within` will be used.
 - __enable_backend_kwic_download__ - Boolean. Backend download, depends on backend download functionality.
 - __enable_frontend_kwic_download__ - Boolean. Frontend download. Gives CSV created by same data as available in the KWIC.
+- __frontpage__ - Object. Settings for what to show under the search form until a search is made.
+  - __corpus_updates__ - Boolean. Enables a listing of most recently updated corpora.
+  - __examples__ - List of objects. A random selection of three of these are shown on the frontpage as search links.
+    - __label__: String or translation object.
+    - __params__: Object. This is translated to URL search params when the link is clicked.
+    - __hint__: String or translation object. Can contain HTML.
 - __group_statistics__ - List of attribute names. Attributes that either have a rank or a numbering used for multi-word units. For example, removing `:2` from `ta_bort..vbm.1:2`, to get the lemgram of this word: `ta_bort..vbm.1`.
 - __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`

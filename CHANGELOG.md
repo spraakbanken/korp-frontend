@@ -4,12 +4,11 @@
 
 ### Added
 
-- Corpus updates on frontpage [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
+- Frontpage with description, corpus updates and example search queries [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
 - Configurable generated link in corpus info [#355](https://github.com/spraakbanken/korp-frontend/issues/355)
 
 ### Changed
 
-- Extended support for description on frontpage [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
 - The "medial part" option now includes first/last parts also for lemgram search [#347](https://github.com/spraakbanken/korp-frontend/issues/347)
 - Improved UI reactivity for Simple search
 - Removed globals – import them instead:

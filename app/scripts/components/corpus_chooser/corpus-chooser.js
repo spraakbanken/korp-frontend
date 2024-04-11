@@ -211,19 +211,26 @@ angular.module("korpApp").component("corpusChooser", {
                 }
             }
 
-            function select(corporaIds) {
+            function select(corporaIds, quiet = false) {
                 const selection = treeUtil.filterCorporaOnCredentials(settings.corpora, corporaIds, $ctrl.credentials)
                 treeUtil.recalcFolderStatus($ctrl.root)
-                settings.corpusListing.select(selection)
                 $ctrl.updateSelectedCount(selection)
-                $rootScope.$broadcast("corpuschooserchange", selection)
-                $location.search("corpus", selection.join(","))
-
                 // used when there is only one corpus selected to show name
                 if (selection.length == 1) {
                     $ctrl.firstCorpus = settings.corpora[selection[0]].title
                 }
+
+                if (!quiet) {
+                    settings.corpusListing.select(selection)
+                    $rootScope.$broadcast("corpuschooserchange", selection)
+                    $location.search("corpus", selection.join(","))
+                }
             }
+
+            // Sync when corpus selection is modified elsewhere.
+            $rootScope.$on("corpuschooserchange", (e, selected) => {
+                select(selected, true)
+            })
 
             $ctrl.onShowInfo = (node) => {
                 $ctrl.showInfoBox = node.id != $ctrl.infoNode?.id

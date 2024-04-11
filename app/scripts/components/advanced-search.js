@@ -50,22 +50,27 @@ angular.module("korpApp").component("advancedSearch", {
     controller: [
         "compareSearches",
         "$location",
+        "$scope",
         "$timeout",
-        function (compareSearches, $location, $timeout) {
+        function (compareSearches, $location, $scope, $timeout) {
             const $ctrl = this
 
+            $ctrl.cqp = "[]"
             $ctrl.freeOrder = $location.search().in_order != null
 
-            if ($location.search().search && $location.search().search.split("|")) {
-                var [type, ...expr] = $location.search().search.split("|")
-                expr = expr.join("|")
+            /** Read advanced CQP from `search` URL param. */
+            function readSearchParam() {
+                const search = $location.search().search
+                if (search?.slice(0, 4) == "cqp|") {
+                    $ctrl.cqp = search.slice(4)
+                }
             }
 
-            if (type === "cqp" && expr) {
-                $ctrl.cqp = expr
-            } else {
-                $ctrl.cqp = "[]"
-            }
+            // Sync CQP from URL to component.
+            $scope.$watch(
+                () => $location.search().search,
+                () => readSearchParam()
+            )
 
             $ctrl.onSearch = () => {
                 $location.search("search", null)

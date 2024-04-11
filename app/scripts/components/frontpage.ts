@@ -1,6 +1,8 @@
 /** @format */
 import angular from "angular"
+import _ from "lodash"
 import moment from "moment"
+import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { html } from "@/util"
 
@@ -19,6 +21,18 @@ export default angular.module("korpApp").component("frontpage", {
                     ng-if="$root._settings['mode_description']"
                     ng-bind-html="$root._settings['mode_description'] | locObj:lang | trust"
                 />
+            </section>
+
+            <section ng-if="$ctrl.examples" class="w-80 grow">
+                <h2 class="text-xl font-bold">{{"example_queries" | loc:$root.lang}}</h2>
+                <ul class="my-2 list-disc">
+                    <li ng-repeat="example in $ctrl.examples" class="ml-6 mt-2 first_mt-0">
+                        <a ng-click="$ctrl.setSearch(example.params)"> {{example.label | locObj:$root.lang}} </a>
+                        <span ng-if="example.hint" class="italic">
+                            – <span ng-bind-html="example.hint | locObj:$root.lang | trust" />
+                        </span>
+                    </li>
+                </ul>
             </section>
 
             <section ng-if="$ctrl.recentUpdates && $ctrl.recentUpdates.length" class="w-80 grow">
@@ -47,11 +61,13 @@ export default angular.module("korpApp").component("frontpage", {
     bindings: {},
     controller: [
         "$rootScope",
+        "$location",
         "searches",
-        function ($rootScope, searches) {
+        function ($rootScope, $location, searches) {
             const $ctrl = this
             $ctrl.RECENT_UPDATES_LIMIT = 5
             $ctrl.showDescription = false
+            $ctrl.examples = undefined
             $ctrl.recentUpdates = null
             $ctrl.recentUpdatesExpanded = false
             $ctrl.recentUpdatesFiltered = null
@@ -66,6 +82,13 @@ export default angular.module("korpApp").component("frontpage", {
             $rootScope.$on("initialcorpuschooserchange", () => ($ctrl.showDescription = true))
 
             $ctrl.$onInit = () => {
+                // Find search query examples
+                const examples = $rootScope._settings.frontpage?.examples
+                if (examples) {
+                    // Pick three random examples
+                    $ctrl.examples = _.shuffle(examples).slice(0, 3)
+                }
+
                 if ($rootScope._settings.frontpage?.corpus_updates) {
                     const limitDate = moment().subtract(6, "months")
                     // Find most recently updated corpora
@@ -74,6 +97,18 @@ export default angular.module("korpApp").component("frontpage", {
                         .sort((a, b) => b.info.Updated.localeCompare(a.info.Updated))
                     $ctrl.toggleRecentUpdatesExpanded(false)
                 }
+            }
+
+            $ctrl.setSearch = (params: Record<string, any>) => {
+                if (params.corpus) {
+                    const corpora = params.corpus.split(",")
+                    $rootScope._settings.corpusListing.select(corpora)
+                    $rootScope.$broadcast("corpuschooserchange", corpora)
+                }
+                if (params.cqp) {
+                    statemachine.send("SEARCH_CQP", { cqp: params.cqp })
+                }
+                $location.search(params)
             }
 
             $ctrl.toggleRecentUpdatesExpanded = (to?: boolean) => {
