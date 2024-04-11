@@ -2,19 +2,29 @@
 import angular from "angular"
 import moment from "moment"
 import settings from "@/settings"
+import { html } from "@/util"
 
 export default angular.module("korpApp").component("frontpage", {
-    template: /* HTML */ `
+    template: html`
         <div ng-if="!$ctrl.hasResult()" class="max-w-screen-md my-4 mx-auto flex gap-4 flex-wrap">
-            <section ng-if="$ctrl.showDescription && ($root._settings['description'] || $root._settings['mode_description'])" class="text-lg">
-                <div ng-if="$root._settings['description']" ng-bind-html="$root._settings['description'] | locObj:lang | trust"></div>
-                <div ng-if="$root._settings['mode_description']" ng-bind-html="$root._settings['mode_description'] | locObj:lang | trust"></div>
+            <section
+                ng-if="$ctrl.showDescription && ($root._settings['description'] || $root._settings['mode_description'])"
+                class="text-lg"
+            >
+                <div
+                    ng-if="$root._settings['description']"
+                    ng-bind-html="$root._settings['description'] | locObj:lang | trust"
+                />
+                <div
+                    ng-if="$root._settings['mode_description']"
+                    ng-bind-html="$root._settings['mode_description'] | locObj:lang | trust"
+                />
             </section>
 
             <section ng-if="$ctrl.recentUpdates && $ctrl.recentUpdates.length" class="w-80 grow">
                 <h2 class="text-xl font-bold">{{"front_corpus_updates" | loc:$root.lang}}</h2>
                 <div class="my-2 flex flex-col gap-2">
-                    <article ng-repeat="corpus in $ctrl.recentUpdatesFiltered" class="flex-1">
+                    <article ng-repeat="corpus in $ctrl.recentUpdatesFiltered">
                         <strong>{{::corpus.info.Updated}}</strong>
                         <em>{{corpus.title | locObj:$root.lang}}</em>
                         {{"front_corpus_updated" | loc:$root.lang}}.
@@ -22,15 +32,13 @@ export default angular.module("korpApp").component("frontpage", {
 
                     <div ng-if="$ctrl.recentUpdates.length > $ctrl.RECENT_UPDATES_LIMIT">
                         <a ng-if="!$ctrl.recentUpdatesExpanded" ng-click="$ctrl.toggleRecentUpdatesExpanded()">
-                                <i class="fa fa-angle-double-down"></i>
-                                {{"show_more" | loc:$root.lang}}
-                            </a>
-                        </span>
+                            <i class="fa fa-angle-double-down"></i>
+                            {{"show_more" | loc:$root.lang}}
+                        </a>
                         <a ng-if="$ctrl.recentUpdatesExpanded" ng-click="$ctrl.toggleRecentUpdatesExpanded()">
-                                <i class="fa fa-angle-double-up"></i>
-                                {{"show_less" | loc:$root.lang}}
-                            </a>
-                        </span>
+                            <i class="fa fa-angle-double-up"></i>
+                            {{"show_less" | loc:$root.lang}}
+                        </a>
                     </div>
                 </div>
             </section>
