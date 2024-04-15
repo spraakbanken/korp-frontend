@@ -27,7 +27,7 @@ export function getTimeCQP(time, zoom, coarseGranularity) {
         timecqp = `[(${startsSameDate} & ${timeInside}) | (${startsBefore} & ${endsAfter})]`
     }
 
-    timecqp = `<match> ${timecqp} []* </match>`
+    timecqp = `<match> ${timecqp} []{0,} </match>`
     return timecqp
 }
 

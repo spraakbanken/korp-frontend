@@ -54,6 +54,7 @@
 - Correct order of numbers in trend diagram table (first relative, then absolute)
 - Update number formatting in statistics table when switching language
 - Disable Trend diagram and Map buttons while waiting for statistics search to finish [#346](https://github.com/spraakbanken/korp-frontend/issues/346)
+- Error when clicking trend diagram with multiple series [#358](https://github.com/spraakbanken/korp-frontend/issues/358)
 - Strip HTML from total hits in annotated KWIC dowload
 - Fix dynamic translation for tabs etc
 - Modes in "More" menu sorted locale-awarely

@@ -24,7 +24,7 @@ export function getCqp(hitValues, ignoreCase) {
         }
         tokens.push("[" + andExpr.join(" & ") + "]")
     }
-    return `<match> ${tokens.join(" ")} []* </match>`
+    return `<match> ${tokens.join(" ")} []{0,} </match>`
 }
 
 function reduceCqp(type, tokens, ignoreCase) {
