@@ -2,6 +2,8 @@
 // SB-newsdesk 1.0b
 // Requirements: JQuery, JQuery.ui.position, trust filter, loc filter, Font Awesome
 import _ from "lodash"
+import Yaml from "js-yaml"
+import moment from "moment"
 import settings from "@/settings"
 import { safeApply } from "@/util"
 
@@ -21,13 +23,13 @@ angular.module("newsdesk", []).directive("newsDesk", [
                 </div>
                 <div class="popover newsdesk-popover" ng-click="onPopoverClick($event)" to-body>
                     <div class="arrow"></div>
-                    <h2 class="popover-title">{{header | loc:lang}}<span style="float:right;cursor:pointer" ng-click="popHide()">×</span></h2>
+                    <h2 class="popover-title">{{header | loc:$root.lang}}<span style="float:right;cursor:pointer" ng-click="popHide()">×</span></h2>
                     <div class="newsdesk-around-items">
                         <div class="newsdesk-news-item" ng-repeat="item in newsitems" 
-                             ng-class="{'newsdesk-new-news-item': (item.d > lastChecked)}">
-                            <h4>{{item.t[currentLang]}}</h4>
-                            <span class="newsdesk-item-date">{{item.d}}</span>
-                            <div ng-bind-html="item.h[currentLang] | trust"></div>
+                            ng-class="{'newsdesk-new-news-item': (item.created > lastChecked)}">
+                            <h4>{{item.title | locObj}}</h4>
+                            <span class="newsdesk-item-date">{{item.created}}</span>
+                            <div ng-bind-html="item.body | locObj | trust"></div>
                         </div>
                     </div>
                 </div>
@@ -47,32 +49,28 @@ angular.module("newsdesk", []).directive("newsDesk", [
 
             s.newsitems = []
             function initData() {
-                let d
                 s.lastChecked = localStorage.getItem(s.storage)
+                // If visitor hasn't been here before, fall back to marking items since one year ago as unread.
                 if (!s.lastChecked) {
-                    d = new Date()
+                    const d = new Date()
                     d.setFullYear(d.getFullYear() - 1)
                     s.lastChecked = d.toISOString().slice(0, 10)
                 }
+
                 $.ajax({
                     type: "GET",
                     url: settings["news_desk_url"],
                     async: false,
-                    jsonpCallback: "newsdata",
-                    contentType: "application/json",
-                    dataType: "jsonp",
-                    success(json) {
+                    success(feedYaml) {
+                        const items = Yaml.load(feedYaml)
+                        // Hide expired items.
                         const currentDate = new Date().toISOString().slice(0, 10)
-                        s.newsitems = _.filter(json, (newsitem) => {
-                            return !newsitem.e || newsitem.e >= currentDate
-                        })
-                        let n = 0
-                        for (let nItem of s.newsitems) {
-                            if (nItem.d > s.lastChecked) {
-                                n += 1
-                            }
-                        }
+                        s.newsitems = items.filter((item) => !item.expires || item.expires >= currentDate)
+                        // Stringify dates.
+                        s.newsitems.forEach((item) => (item.created = moment(item.created).format("YYYY-MM-DD")))
 
+                        // Count unread items.
+                        const n = items.filter((item) => item.created > s.lastChecked).length
                         safeApply(s, () => (s.numNewNews = n))
                     },
 
@@ -89,7 +87,6 @@ angular.module("newsdesk", []).directive("newsDesk", [
                 if (s.isPopoverVisible) {
                     s.popHide()
                 } else {
-                    s.currentLang = { eng: "en", swe: "sv" }[$location.search().lang || settings["default_language"]]
                     s.popShow()
                     s.numNewNews = 0
                 }
@@ -118,7 +115,8 @@ angular.module("newsdesk", []).directive("newsDesk", [
                 $rootElement.on("keydown", handleEscape)
                 $rootElement.on("click", s.popHide)
 
-                localStorage.setItem(s.storage, s.newsitems[0].d)
+                // Remember the date of the newest item, so any future items can be marked as unread.
+                localStorage.setItem(s.storage, s.newsitems[0].created)
             }
 
             s.popHide = function () {
