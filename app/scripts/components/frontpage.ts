@@ -36,9 +36,7 @@ export default angular.module("korpApp").component("frontpage", {
                 </ul>
             </section>
 
-            <section class="w-80 grow">
-                <newsdesk></newsdesk>
-            </section>
+            <newsdesk class="w-80 grow"></newsdesk>
 
             <section ng-if="$ctrl.recentUpdates && $ctrl.recentUpdates.length" class="w-80 grow">
                 <h2 class="text-xl font-bold">{{"front_corpus_updates" | loc:$root.lang}}</h2>
