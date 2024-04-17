@@ -14,13 +14,21 @@ export async function fetchNews(): Promise<NewsItem[]> {
     const itemsRaw = Yaml.load(feedYaml) as NewsItemRaw[]
 
     const currentDate = new Date().toISOString().slice(0, 10)
+    const oneYearAgo = modifyYear(new Date(), -1).toISOString().slice(0, 10)
     const items: NewsItem[] = itemsRaw
         // Hide expired items.
         .filter((item) => !item.expires || formatDate(item.expires) >= currentDate)
         // Stringify dates.
-        .map((item) => ({ ...item, created: moment(item.created).format("YYYY-MM-DD") }))
+        .map((item) => ({ ...item, created: formatDate(item.created) }))
+        // Hide old items.
+        .filter((item) => item.created >= oneYearAgo)
 
     return items
+}
+
+function modifyYear(date: Date, years: number) {
+    date.setFullYear(date.getFullYear() + years)
+    return date
 }
 
 const formatDate = (date: Date) => moment(date).format("YYYY-MM-DD")
