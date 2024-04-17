@@ -5,6 +5,7 @@ import moment from "moment"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { html } from "@/util"
+import "@/components/newsdesk"
 
 export default angular.module("korpApp").component("frontpage", {
     template: html`
@@ -33,6 +34,10 @@ export default angular.module("korpApp").component("frontpage", {
                         </span>
                     </li>
                 </ul>
+            </section>
+
+            <section class="w-80 grow">
+                <newsdesk></newsdesk>
             </section>
 
             <section ng-if="$ctrl.recentUpdates && $ctrl.recentUpdates.length" class="w-80 grow">
