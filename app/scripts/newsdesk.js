@@ -39,7 +39,7 @@ angular.module("newsdesk", []).directive("newsDesk", [
         scope: { header: "=", storage: "=" },
         link(scope, elem, attr) {
             const s = scope
-            s.shouldUseThis = settings["news_desk_url"] != null
+            s.shouldUseThis = settings["news_url"] != null
 
             if (!s.shouldUseThis) {
                 return
@@ -59,7 +59,7 @@ angular.module("newsdesk", []).directive("newsDesk", [
 
                 $.ajax({
                     type: "GET",
-                    url: settings["news_desk_url"],
+                    url: settings["news_url"],
                     async: false,
                     success(feedYaml) {
                         const items = Yaml.load(feedYaml)
