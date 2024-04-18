@@ -103,6 +103,7 @@ settings that affect the frontend.
 
 **Others:**
 
+- __auth_module__ - String or object. See [Authentication](#authentication)
 - __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
 - __corpus_config_url__ - String. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
 - __corpus_info_link__ - Object. Use this to render a link for each corpus in the corpus chooser.
@@ -475,7 +476,7 @@ Local storage is used to remember when the user last checked the news. If there 
 
 ## Authentication
 
-Korp comes with two implementations of login. Choose implementation using `auth_module` in `config.yml.
+Korp comes with two implementations of login. Choose implementation using `auth_module` in `config.yml`.
 
 Either just give your chosen implementation like this:
 
