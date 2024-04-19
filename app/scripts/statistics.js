@@ -42,10 +42,7 @@ const createStatisticsService = function () {
             field: "hit_value",
             sortable: false,
             formatter(row, cell, value, columnDef, dataContext) {
-                return $.format(
-                    `<img id="circlediagrambutton__%s" src="${pieChartImg}" class="arcDiagramPicture"/>`,
-                    dataContext.rowId
-                )
+                return `<img id="circlediagrambutton__${dataContext.rowId}" src="${pieChartImg}" class="arcDiagramPicture"/>`
             },
             maxWidth: 25,
             minWidth: 25,

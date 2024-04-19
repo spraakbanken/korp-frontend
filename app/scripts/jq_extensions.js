@@ -6,7 +6,7 @@ $.fn.outerHTML = function() {
 
 $.fn.localeKey = function(key) {
 	this.each(function() {
-		$(this).attr("rel", $.format("localize[%s]", key)).html(loc(key));
+		$(this).attr("rel", `localize[${key}]`).html(loc(key));
 	});
 	return this;
 };

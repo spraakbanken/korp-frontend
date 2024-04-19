@@ -72,18 +72,18 @@ function reduceCqp(type, tokens, ignoreCase) {
         case "pos":
         case "deprel":
         case "msd":
-            return $.format('%s="%s"', [type, tokens[0]])
+            return `${type}="${tokens[0]}"`
         case "text_blingbring":
         case "text_swefn":
-            return $.format('_.%s contains "%s"', [type, tokens[0]])
+            return `_.${type} contains "${tokens[0]}"`
         default:
             if (attrs[type]) {
                 // word attributes
                 const op = attrs[type]["type"] === "set" ? " contains " : "="
-                return $.format('%s%s"%s"', [type, op, tokens[0]])
+                return `${type}${op}"${tokens[0]}"`
             } else {
                 // structural attributes
-                return $.format('_.%s="%s"', [type, tokens[0]])
+                return `_.${type}="${tokens[0]}`
             }
     }
 }

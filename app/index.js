@@ -27,7 +27,6 @@ require("components-jqueryui/ui/widget.js")
 require("angular")
 
 require("jquerylocalize")
-require("./lib/jquery.format.js")
 
 window.c = console
 

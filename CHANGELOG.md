@@ -51,6 +51,7 @@
   - Added `angularLocationSearch` to expose `$location.search` to code outside Angular
 - Switched to parsing news from YAML file [#348](https://github.com/spraakbanken/korp-frontend/issues/348)
 - Removed map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
+- Removed dependency `jquery.format`
 
 ### Fixed
 
