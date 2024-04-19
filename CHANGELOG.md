@@ -18,6 +18,7 @@
   - `model`
   - `CorpusListing`
   - `ParallelCorpusListing`
+  - `statisticsService`
   - `regescape`
   - `unregescape`
   - `safeApply`

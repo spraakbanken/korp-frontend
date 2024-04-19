@@ -4,6 +4,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import * as authenticationProxy from "@/components/auth/auth"
 import { angularLocationSearch, httpConfAddMethod } from "@/util"
+import { statisticsService } from "@/statistics"
 
 const model = {}
 export default model

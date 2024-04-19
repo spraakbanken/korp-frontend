@@ -1,8 +1,8 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import { reduceStringify } from "../config/statistics_config.js"
-import { hitCountHtml } from "./util.js"
+import { reduceStringify } from "../config/statistics_config"
+import { hitCountHtml } from "@/util"
 const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function () {
@@ -113,4 +113,4 @@ const createStatisticsService = function () {
     return { processData }
 }
 
-window.statisticsService = createStatisticsService()
+export const statisticsService = createStatisticsService()
