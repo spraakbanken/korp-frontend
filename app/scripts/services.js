@@ -8,6 +8,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { parseMapData } from "./map_services"
 import { updateSearchHistory } from "@/history"
 import { httpConfAddMethod, httpConfAddMethodAngular, unregescape } from "@/util"
+import { mergeCqpExprs, parse, stringify } from "./cqp_parser/cqp"
 
 const korpApp = angular.module("korpApp")
 
@@ -346,7 +347,7 @@ korpApp.factory("searches", [
                     // (For Simple search, the equivalent is handled in the simple-search component)
                     if (type === "cqp") {
                         if ($rootScope.globalFilter) {
-                            value = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(value || "[]"), $rootScope.globalFilter))
+                            value = stringify(mergeCqpExprs(parse(value || "[]"), $rootScope.globalFilter))
                         }
                         searches.kwicSearch(value)
                     }

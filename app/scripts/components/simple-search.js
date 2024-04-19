@@ -3,6 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
+import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html, regescape, saldoToHtml, unregescape } from "@/util"
 import "@/components/autoc"
 
@@ -178,7 +179,7 @@ angular.module("korpApp").component("simpleSearch", {
                 }
 
                 if ($rootScope.globalFilter) {
-                    val = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(val || "[]"), $rootScope.globalFilter))
+                    val = stringify(mergeCqpExprs(parse(val || "[]"), $rootScope.globalFilter))
                 }
 
                 return val
@@ -248,7 +249,7 @@ angular.module("korpApp").component("simpleSearch", {
                         ctrl.isRawInput = false
                         ctrl.lemgram = search.val
                     }
-                    $rootScope.simpleCQP = CQP.expandOperators(ctrl.getCQP())
+                    $rootScope.simpleCQP = expandOperators(ctrl.getCQP())
                     ctrl.updateFreeOrderEnabled()
                     ctrl.doSearch()
                 }
@@ -279,8 +280,8 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             ctrl.updateFreeOrderEnabled = () => {
-                const cqpObjs = CQP.parse(ctrl.getCQP() || "[]")
-                ctrl.freeOrderEnabled = CQP.supportsInOrder(cqpObjs)
+                const cqpObjs = parse(ctrl.getCQP() || "[]")
+                ctrl.freeOrderEnabled = supportsInOrder(cqpObjs)
             }
 
             ctrl.doSearch = function () {

@@ -2,6 +2,7 @@
 import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
+import { expandOperators } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import "@/components/extended/tokens"
 
@@ -111,7 +112,7 @@ angular.module("korpApp").component("extendedParallel", {
                 }
                 function expandCQP(cqp) {
                     try {
-                        return CQP.expandOperators(cqp)
+                        return expandOperators(cqp)
                     } catch (e) {
                         c.log("parallel cqp parsing error", e)
                         return cqp

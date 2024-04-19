@@ -3,6 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import model from "@/model"
+import { expandOperators } from "@/cqp_parser/cqp"
 import { formatRelativeHits, hitCountHtml, html, loc } from "@/util"
 import * as trendUtil from "../trend_diagram/trend_util"
 import "@/components/korp-error"
@@ -122,7 +123,7 @@ angular.module("korpApp").component("trendDiagram", {
                         end: 24,
                         corpus: $ctrl.data.corpusListing.stringifySelected(),
                         cqp: $ctrl.data.cqp,
-                        cqp2: CQP.expandOperators(decodedCQP),
+                        cqp2: expandOperators(decodedCQP),
                         cqp3: timecqp,
                         expand_prequeries: false,
                     },

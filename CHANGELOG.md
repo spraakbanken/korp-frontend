@@ -11,10 +11,11 @@
 
 - The "medial part" option now includes first/last parts also for lemgram search [#347](https://github.com/spraakbanken/korp-frontend/issues/347)
 - Improved UI reactivity for Simple search
-- Removed globals – import them instead:
+- Removed globals – import them instead (or their members):
   - `settings`
   - `currentMode`
   - `currentModeParallel`
+  - `CQP`
   - `model`
   - `CorpusListing`
   - `ParallelCorpusListing`

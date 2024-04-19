@@ -2,6 +2,7 @@
 import angular from "angular"
 import "components-jqueryui/ui/widgets/sortable.js"
 import "angular-ui-sortable/src/sortable"
+import { parse, stringify } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import "@/components/extended/token"
 import "@/components/extended/struct-token"
@@ -60,7 +61,7 @@ angular.module("korpApp").component("extendedTokens", {
 
                 ctrl.showCloseButton = getTokenBoxes().length > 1
 
-                const cqp = CQP.stringify(ctrl.data)
+                const cqp = stringify(ctrl.data)
                 if (ctrl.prev != cqp) {
                     ctrl.cqpChange({ cqp })
                 }
@@ -69,10 +70,10 @@ angular.module("korpApp").component("extendedTokens", {
 
             ctrl.$onChanges = (changeObj) => {
                 if (changeObj.cqp && ctrl.cqp != ctrl.prev) {
-                    ctrl.data = CQP.parse(ctrl.cqp || "[]")
+                    ctrl.data = parse(ctrl.cqp || "[]")
                 }
             }
-            ctrl.data = CQP.parse(ctrl.cqp || "[]")
+            ctrl.data = parse(ctrl.cqp || "[]")
 
             ctrl.addToken = function () {
                 const token = { and_block: [[{ type: "word", op: "=", val: "" }]] }

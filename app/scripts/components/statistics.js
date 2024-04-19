@@ -5,6 +5,7 @@ import "components-jqueryui/ui/widgets/dialog.js"
 import settings from "@/settings"
 import { formatRelativeHits, html, loc, locObj } from "@/util"
 import { getCqp } from "../../config/statistics_config.js"
+import { expandOperators } from "@/cqp_parser/cqp.js"
 
 angular.module("korpApp").component("statistics", {
     template: html`
@@ -380,7 +381,7 @@ angular.module("korpApp").component("statistics", {
                 $ctrl.noRowsError = false
 
                 // TODO this is wrong, it should use the previous search
-                const cqpExpr = CQP.expandOperators(searches.getCqpExpr())
+                const cqpExpr = expandOperators(searches.getCqpExpr())
 
                 const cqpExprs = {}
                 for (let rowIx of selectedRows) {

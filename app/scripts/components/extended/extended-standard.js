@@ -3,6 +3,7 @@ import angular from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
+import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import "@/components/extended/tokens"
 
@@ -110,10 +111,10 @@ angular.module("korpApp").component("extendedStandard", {
             /** Trigger error if the "free order" option is incompatible with the query */
             ctrl.validateFreeOrder = () => {
                 try {
-                    const cqpObjs = CQP.parse(ctrl.cqp || "[]")
+                    const cqpObjs = parse(ctrl.cqp || "[]")
                     // If query doesn't support free word order, and the "free order" checkbox is checked,
                     // then show explanation and let user resolve the conflict
-                    ctrl.orderError = !CQP.supportsInOrder(cqpObjs) && $scope.freeOrder
+                    ctrl.orderError = !supportsInOrder(cqpObjs) && $scope.freeOrder
                 } catch (e) {
                     console.error("Failed to parse CQP", ctrl.cqp)
                     ctrl.orderError = false
@@ -128,9 +129,9 @@ angular.module("korpApp").component("extendedStandard", {
             }
 
             const updateExtendedCQP = function () {
-                let val2 = CQP.expandOperators(ctrl.cqp)
+                let val2 = expandOperators(ctrl.cqp)
                 if ($rootScope.globalFilter) {
-                    val2 = CQP.stringify(CQP.mergeCqpExprs(CQP.parse(val2 || "[]"), $rootScope.globalFilter))
+                    val2 = stringify(mergeCqpExprs(parse(val2 || "[]"), $rootScope.globalFilter))
                 }
                 $rootScope.extendedCQP = val2
             }

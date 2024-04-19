@@ -5,6 +5,7 @@ import settings from "@/settings"
 import * as authenticationProxy from "@/components/auth/auth"
 import { angularLocationSearch, httpConfAddMethod } from "@/util"
 import { statisticsService } from "@/statistics"
+import { expandOperators } from "@/cqp_parser/cqp"
 
 const model = {}
 export default model
@@ -34,7 +35,7 @@ class BaseProxy {
 
     expandCQP(cqp) {
         try {
-            return CQP.expandOperators(cqp)
+            return expandOperators(cqp)
         } catch (e) {
             c.warn("CQP expansion failed", cqp, e)
             return cqp
