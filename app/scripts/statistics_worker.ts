@@ -25,6 +25,7 @@ onmessage = function (e) {
         if (groupStatistics.indexOf(field) != -1) {
             const newValues: string[] = []
             map(values, function (value) {
+                // TODO Can this pattern produce false positives? Will ":" not be used for something other than ranking or MWE indexing?
                 newValues.push(value.replace(/(:.+?)($| )/g, "$2"))
             })
             return newValues

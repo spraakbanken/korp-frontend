@@ -105,15 +105,13 @@ settings that affect the frontend.
 
 - __auth_module__ - String or object. See [Authentication](#authentication)
 - __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
+- __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
+    that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
+    for more information about how to define attributes.
 - __corpus_config_url__ - String. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
 - __corpus_info_link__ - Object. Use this to render a link for each corpus in the corpus chooser.
   - __url_template__ - String or translation object. A URL containing a token "%s", which will be replaced with the corpus id.
   - __label__ - String or translation object. The label is the the same for all corpora.
-- __default_language__ - String. The default interface language. Default: `"eng"`
-- __description__ - String. Any HTML content to show on frontpage until search is made.
-- __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
-    that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
-    for more information about how to define attributes.
 - __default_options__ - See [Operators](#operators).
 - __default_overview_context__ - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: `"1 sentence"`. For corpora that do not support this context an additional parameter will be sent to the backend based on the `context`-setting in the corpus.
 - __default_reading_context__ - Same as __default_overview_context__, but for the context-view. Use a context larger than the __default_overview_context__.
@@ -125,6 +123,8 @@ settings that affect the frontend.
     In simple search, we will search within the default and supply extra information for the corpora that do not support the default.
 
     In extended search, the default `within` will be used unless the user specifies something else. In that case the user's choice will be used for all corpora that support it and for corpora that do not support it, a supported `within` will be used.
+- __default_language__ - String. The default interface language. Default: `"eng"`
+- __description__ - String. Any HTML content to show on frontpage until search is made.
 - __enable_backend_kwic_download__ - Boolean. Backend download, depends on backend download functionality.
 - __enable_frontend_kwic_download__ - Boolean. Frontend download. Gives CSV created by same data as available in the KWIC.
 - __frontpage__ - Object. Settings for what to show under the search form until a search is made.
@@ -151,10 +151,12 @@ settings that affect the frontend.
         production:
           site: 2
       ```
-- __news_desk_url__ - See [News widget](#news-widget)
-- __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
+- __news_url__ - See [News widget](#news-widget)
+- __reduce_word_attribute_selector__ - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora *word* attributes or only the attributes common to selected corpora. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
+- __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
 - __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
 - __stats_rewrite__: A function that takes the array `[data, columns, searchParams]`, modifies and returns it.
+- __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```yaml
     swe: ord
@@ -163,12 +165,6 @@ settings that affect the frontend.
 - __word_picture__ - Boolean. Enable/disable the word picture. 
 - __word_picture_tagset__ - See [Word picture](#word-picture)
 - __word_picture_conf__ - See [Word picture](#word-picture)
-
-
-- __word_attribute_selector__ - String, `union` / `intersection`. In extended search, attribute list, show all selected corpora *word* attributes or only the attributes common to selected corpora.
-- __struct_attribute_selector__ - Same as __word_attribute_selector__, but for structural attributes.
-- __reduce_word_attribute_selector__ - Same as __word_attribute_selector__, but for the "compile based on"-configuration in statistics. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
-- __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
 
 ### Localization
 
@@ -217,9 +213,7 @@ Put the file in `<configDir>/translations/`, but rename it using three letter la
 
 Each Korp installation has a series of _Modes_ in the top left corner, which 
 are useful for presenting different faces of Korp that might have different 
-layouts or functionality. Modes can either be normal, or be adapted for parallel corpora.
-To trigger parallel functionality, `parallel: true`, must be added to `config.yml`, or the
-mode-config in the backend.
+layouts or functionality.
 
 When Korp is loaded, it looks for the `mode` query parameter:
 
@@ -239,10 +233,12 @@ https://<korp_backend_url>/corpus_config?mode=<mode>
 
 See the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API for more information.
 
-## Parallel mode
+## Parallel corpora
 
+By enabling the parallel option, a mode can be adapted for parallel corpora.
 Additional settings in `config.yml` (may also be given by the backend for the mode):
 
+`parallel` - Set to `true` to enable parallel functionality
 `start_lang` - language that should be the default search language.
 
 ## Auto completion menu
@@ -457,21 +453,17 @@ map_center:
 
 ## News widget
 
-By setting `news_desk_url`, the news widget is enabled. The widget simply fetches a JSON-file from the given URL. Short example of such a file, including only one news item with its title and body in two languages and a date:
+By setting `news_url`, the news widget is enabled. The widget simply fetches a YAML file from the given URL. Short example of such a file, including only one news item with its title and body in two languages and a date:
 
-    [
-        {
-            "h": {
-                "en": "<p>Longer description in English</p>",
-                "sv": "<p>Längre beskrivning på svenska</p>"
-            },
-            "t": {
-                "en": "English Title",
-                "sv": "Svensk Titel"
-            },
-            "d": "2017-03-01"
-        }
-    ]
+```yaml
+- title:
+    swe: "Ny korpus: Tvåkammarriksdagen"
+    eng: "New corpus: Tvåkammarriksdagen"
+  body:
+    swe: <p><a href="...">Tvåkammarriksdagen</a> finns nu i Korp.</p>
+    eng: <p><a href="...">Tvåkammarriksdagen</a> is now available in Korp.</p>
+  created: 2023-11-30
+```
 
 Local storage is used to remember when the user last checked the news. If there are new items, the UI will change to reflect this.
 
