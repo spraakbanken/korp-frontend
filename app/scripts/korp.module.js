@@ -2,7 +2,6 @@
 import "angular-ui-bootstrap"
 import "angular-spinner"
 import "angular-ui-sortable"
-import "./newsdesk"
 import "geokorp/dist/scripts/geokorp"
 import "geokorp/dist/scripts/geokorp-templates"
 import "angular-dynamic-locale"
@@ -36,7 +35,6 @@ const korpApp = angular.module("korpApp", [
     "uib/template/popover/popover-template.html",
     "angularSpinner",
     "ui.sortable",
-    "newsdesk",
     "sbMap",
     "tmh.dynamicLocale",
     "angular.filter",

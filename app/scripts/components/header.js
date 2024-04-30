@@ -75,7 +75,7 @@ angular.module("korpApp").component("header", {
                     </ul>
                 </script>
 
-                <div class="flex items-center">
+                <div class="flex items-center gap-4">
                     <login-status></login-status>
                     <div id="languages">
                         <a
@@ -85,10 +85,8 @@ angular.module("korpApp").component("header", {
                             >{{langObj.label | locObj:lang}}</a
                         >
                     </div>
-                    <div id="news_area">
-                        <div news-desk="" header="'newsdesk-header'" storage="'korp_last_read_newsitem'"></div>
-                    </div>
-                    <a class="mr-2 transiton duration-200 hover_text-blue-600 mx-2" ng-click="$ctrl.citeClick()"
+
+                    <a class="transiton duration-200 hover_text-blue-600" ng-click="$ctrl.citeClick()"
                         >{{'about_cite_header' | loc:$root.lang}}</a
                     ><button
                         class="px-2 py-1 border border-gray-300 bg-gray-200 rounded text-gray-800"
