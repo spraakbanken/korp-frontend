@@ -1,7 +1,7 @@
 /** @format */
-import angular from "angular"
+import angular, { IScope } from "angular"
 import { html } from "@/util"
-import { fetchNews, isEnabled } from "@/news-service"
+import { type NewsItem, fetchNews, isEnabled } from "@/news-service"
 
 angular.module("korpApp").component("newsdesk", {
     template: html`
@@ -31,7 +31,7 @@ angular.module("korpApp").component("newsdesk", {
     `,
     controller: [
         "$scope",
-        function ($scope) {
+        function ($scope: NewsdeskScope) {
             const $ctrl = this
 
             $scope.isEnabled = isEnabled()
@@ -65,3 +65,12 @@ angular.module("korpApp").component("newsdesk", {
         },
     ],
 })
+
+type NewsdeskScope = IScope & {
+    isEnabled: boolean
+    items: NewsItem[] | null
+    itemsFiltered: NewsItem[] | null
+    expanded: boolean
+    NEWS_LIMIT: number
+    toggleExpanded: () => void
+}
