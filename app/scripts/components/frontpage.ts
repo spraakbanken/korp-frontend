@@ -44,9 +44,13 @@ export default angular.module("korpApp").component("frontpage", {
                 <h2 class="text-xl font-bold">{{"front_corpus_updates" | loc:$root.lang}}</h2>
                 <div class="my-2 flex flex-col gap-2">
                     <article ng-repeat="corpus in $ctrl.recentUpdatesFiltered">
-                        <strong>{{::corpus.info.Updated}}</strong>
-                        <em>{{corpus.title | locObj:$root.lang}}</em>
-                        {{"front_corpus_updated" | loc:$root.lang}}.
+                        <time datetime="{{::corpus.info.Updated}}" class="opacity-75 float-right">
+                            {{::corpus.info.Updated}}
+                        </time>
+                        <div>
+                            <strong>{{corpus.title | locObj:$root.lang}}</strong>
+                            {{"front_corpus_updated" | loc:$root.lang}}.
+                        </div>
                     </article>
 
                     <div ng-if="$ctrl.recentUpdates.length > $ctrl.RECENT_UPDATES_LIMIT">
