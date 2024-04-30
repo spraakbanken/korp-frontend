@@ -1,10 +1,9 @@
 /** @format */
 import angular from "angular"
 import _ from "lodash"
-import moment from "moment"
 import statemachine from "@/statemachine"
-import settings from "@/settings"
 import { html } from "@/util"
+import "@/components/corpus-updates"
 
 export default angular.module("korpApp").component("frontpage", {
     template: html`
@@ -35,27 +34,7 @@ export default angular.module("korpApp").component("frontpage", {
                 </ul>
             </section>
 
-            <section ng-if="$ctrl.recentUpdates && $ctrl.recentUpdates.length" class="w-80 grow">
-                <h2 class="text-xl font-bold">{{"front_corpus_updates" | loc:$root.lang}}</h2>
-                <div class="my-2 flex flex-col gap-2">
-                    <article ng-repeat="corpus in $ctrl.recentUpdatesFiltered">
-                        <strong>{{::corpus.info.Updated}}</strong>
-                        <em>{{corpus.title | locObj:$root.lang}}</em>
-                        {{"front_corpus_updated" | loc:$root.lang}}.
-                    </article>
-
-                    <div ng-if="$ctrl.recentUpdates.length > $ctrl.RECENT_UPDATES_LIMIT">
-                        <a ng-if="!$ctrl.recentUpdatesExpanded" ng-click="$ctrl.toggleRecentUpdatesExpanded()">
-                            <i class="fa fa-angle-double-down"></i>
-                            {{"show_more" | loc:$root.lang}}
-                        </a>
-                        <a ng-if="$ctrl.recentUpdatesExpanded" ng-click="$ctrl.toggleRecentUpdatesExpanded()">
-                            <i class="fa fa-angle-double-up"></i>
-                            {{"show_less" | loc:$root.lang}}
-                        </a>
-                    </div>
-                </div>
-            </section>
+            <corpus-updates class="w-80 grow"></corpus-updates>
         </div>
     `,
     bindings: {},
@@ -65,12 +44,8 @@ export default angular.module("korpApp").component("frontpage", {
         "searches",
         function ($rootScope, $location, searches) {
             const $ctrl = this
-            $ctrl.RECENT_UPDATES_LIMIT = 5
             $ctrl.showDescription = false
             $ctrl.examples = undefined
-            $ctrl.recentUpdates = null
-            $ctrl.recentUpdatesExpanded = false
-            $ctrl.recentUpdatesFiltered = null
 
             $ctrl.hasResult = () =>
                 searches.activeSearch ||
@@ -88,15 +63,6 @@ export default angular.module("korpApp").component("frontpage", {
                     // Pick three random examples
                     $ctrl.examples = _.shuffle(examples).slice(0, 3)
                 }
-
-                if ($rootScope._settings.frontpage?.corpus_updates) {
-                    const limitDate = moment().subtract(6, "months")
-                    // Find most recently updated corpora
-                    $ctrl.recentUpdates = settings.corpusListing.corpora
-                        .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
-                        .sort((a, b) => b.info.Updated.localeCompare(a.info.Updated))
-                    $ctrl.toggleRecentUpdatesExpanded(false)
-                }
             }
 
             $ctrl.setSearch = (params: Record<string, any>) => {
@@ -109,13 +75,6 @@ export default angular.module("korpApp").component("frontpage", {
                     statemachine.send("SEARCH_CQP", { cqp: params.cqp })
                 }
                 $location.search(params)
-            }
-
-            $ctrl.toggleRecentUpdatesExpanded = (to?: boolean) => {
-                $ctrl.recentUpdatesExpanded = to !== undefined ? to : !$ctrl.recentUpdatesExpanded
-                $ctrl.recentUpdatesFiltered = $ctrl.recentUpdatesExpanded
-                    ? $ctrl.recentUpdates
-                    : $ctrl.recentUpdates.slice(0, $ctrl.RECENT_UPDATES_LIMIT)
             }
         },
     ],
