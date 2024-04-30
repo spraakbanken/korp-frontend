@@ -8,13 +8,24 @@ angular.module("korpApp").component("newsdesk", {
         <div ng-if="isEnabled">
             <h2 class="text-xl font-bold">{{ 'newsdesk-header' | loc:$root.lang }}</h2>
             <div class="my-2 flex flex-col gap-2">
-                <article ng-repeat="item in items">
-                <div class=my-1">
-                    <time datetime="{{item.created}}" class="opacity-75 float-right">{{item.created}}</time>
-                    <h3 class="my-0 text-base font-bold">{{item.title | locObj}}</h3>
+                <article ng-repeat="item in itemsFiltered">
+                    <div class="my-1">
+                        <time datetime="{{item.created}}" class="opacity-75 float-right">{{item.created}}</time>
+                        <h3 class="my-0 text-base font-bold">{{item.title | locObj}}</h3>
                     </div>
                     <div ng-bind-html="item.body | locObj | trust"></div>
                 </article>
+
+                <div ng-if="items.length > NEWS_LIMIT">
+                    <a ng-if="!expanded" ng-click="toggleExpanded()">
+                        <i class="fa fa-angle-double-down"></i>
+                        {{"show_more" | loc:$root.lang}}
+                    </a>
+                    <a ng-if="expanded" ng-click="toggleExpanded()">
+                        <i class="fa fa-angle-double-up"></i>
+                        {{"show_less" | loc:$root.lang}}
+                    </a>
+                </div>
             </div>
         </div>
     `,
@@ -25,6 +36,8 @@ angular.module("korpApp").component("newsdesk", {
 
             $scope.isEnabled = isEnabled()
             $scope.items = null
+            $scope.expanded = false
+            $scope.NEWS_LIMIT = 3
 
             $ctrl.$onInit = async () => {
                 try {
@@ -33,6 +46,21 @@ angular.module("korpApp").component("newsdesk", {
                     console.error("Error fetching news:", error)
                     $scope.isEnabled = false
                 }
+            }
+
+            $scope.toggleExpanded = () => {
+                $scope.expanded = !$scope.expanded
+            }
+
+            $scope.$watch("expanded", updateItemsFiltered)
+            $scope.$watch("items", updateItemsFiltered)
+
+            function updateItemsFiltered() {
+                $scope.itemsFiltered = $scope.items
+                    ? $scope.expanded
+                        ? [...$scope.items]
+                        : $scope.items.slice(0, $scope.NEWS_LIMIT)
+                    : null
             }
         },
     ],

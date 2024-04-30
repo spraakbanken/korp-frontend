@@ -23,7 +23,8 @@ export async function fetchNews(): Promise<NewsItem[]> {
         // Hide old items.
         .filter((item) => item.created >= oneYearAgo)
 
-    return items
+    // Sort newest first
+    return items.sort((a, b) => b.created.localeCompare(a.created))
 }
 
 function modifyYear(date: Date, years: number) {
