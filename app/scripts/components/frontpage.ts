@@ -2,6 +2,7 @@
 import angular from "angular"
 import { html } from "@/util"
 import "@/components/corpus-updates"
+import "@/components/newsdesk"
 import "@/components/search-examples"
 
 export default angular.module("korpApp").component("frontpage", {
@@ -22,6 +23,8 @@ export default angular.module("korpApp").component("frontpage", {
             </section>
 
             <search-examples class="w-80 grow"></search-examples>
+
+            <newsdesk class="w-80 grow"></newsdesk>
 
             <corpus-updates class="w-80 grow"></corpus-updates>
         </div>
