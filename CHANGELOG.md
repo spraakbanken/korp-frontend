@@ -4,11 +4,13 @@
 
 ### Added
 
-- Frontpage with description, corpus updates and example search queries [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
+- Frontpage with description, news, corpus updates and example search queries [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
 - Configurable generated link in corpus info [#355](https://github.com/spraakbanken/korp-frontend/issues/355)
 
 ### Changed
 
+- Newsdesk moved from icon+popup in header to frontpage [#348](https://github.com/spraakbanken/korp-frontend/issues/348)
+- Switched to parsing news from YAML file, using new setting `news_url` instead of `news_desk_url` (see [docs/frontend_devel.md](frontend_devel.md)) [#348](https://github.com/spraakbanken/korp-frontend/issues/348)
 - The "medial part" option now includes first/last parts also for lemgram search [#347](https://github.com/spraakbanken/korp-frontend/issues/347)
 - Improved UI reactivity for Simple search
 - Removed globals – import them instead (or their members):
@@ -49,7 +51,6 @@
   - Deprecated global `locationSearch` in favor of using `$location` directly
   - Removed global `searchHash` in favor of using `$location` directly
   - Added `angularLocationSearch` to expose `$location.search` to code outside Angular
-- Switched to parsing news from YAML file [#348](https://github.com/spraakbanken/korp-frontend/issues/348)
 - Removed map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
 - Removed dependency `jquery.format`
 
