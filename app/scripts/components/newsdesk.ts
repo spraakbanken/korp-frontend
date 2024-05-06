@@ -42,6 +42,8 @@ angular.module("korpApp").component("newsdesk", {
             $ctrl.$onInit = async () => {
                 try {
                     $scope.items = await fetchNews()
+                    // The watcher may not yet be in place when the fetch finishes.
+                    $ctrl.updateItemsFiltered()
                 } catch (error) {
                     console.error("Error fetching news:", error)
                     $scope.isEnabled = false

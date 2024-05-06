@@ -1,6 +1,7 @@
 /** @format */
 import angular from "angular"
 import { html } from "@/util"
+import { isEnabled } from "@/news-service"
 import "@/components/corpus-updates"
 import "@/components/newsdesk"
 import "@/components/search-examples"
@@ -26,10 +27,10 @@ export default angular.module("korpApp").component("frontpage", {
                     </div>
                 </section>
 
-                <search-examples class="w-80 grow"></search-examples>
+                <search-examples ng-if="$root._settings['frontpage']['examples']" class="w-80 grow"></search-examples>
             </div>
 
-            <newsdesk class="w-80 grow"></newsdesk>
+            <newsdesk ng-if="newsdeskIsEnabled" class="w-80 grow"></newsdesk>
 
             <corpus-updates class="w-80 grow"></corpus-updates>
         </div>
@@ -37,10 +38,13 @@ export default angular.module("korpApp").component("frontpage", {
     bindings: {},
     controller: [
         "$rootScope",
+        "$scope",
         "searches",
-        function ($rootScope, searches) {
+        function ($rootScope, $scope, searches) {
             const $ctrl = this
             $ctrl.showDescription = false
+
+            $scope.newsdeskIsEnabled = isEnabled()
 
             $ctrl.hasResult = () =>
                 searches.activeSearch ||
