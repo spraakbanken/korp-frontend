@@ -54,10 +54,10 @@ angular.module("korpApp").component("newsdesk", {
                 $scope.expanded = !$scope.expanded
             }
 
-            $scope.$watch("expanded", updateItemsFiltered)
-            $scope.$watch("items", updateItemsFiltered)
+            $scope.$watch("expanded", $ctrl.updateItemsFiltered)
+            $scope.$watch("items", $ctrl.updateItemsFiltered)
 
-            function updateItemsFiltered() {
+            $ctrl.updateItemsFiltered = () => {
                 $scope.itemsFiltered = $scope.items
                     ? $scope.expanded
                         ? [...$scope.items]
