@@ -392,29 +392,6 @@ time-interval {
   }
 }
 
-.checkbox {
-  width: 12px;
-  height: 12px;
-  &.checked {
-    background: url("../img/checked.png") no-repeat;
-  }
-  &.unchecked {
-    background: url("../img/unchecked.png") no-repeat;
-  }
-  &.intermediate {
-    background: url("../img/intermediate.png") no-repeat;
-  }
-}
-
-.boxdiv.disabled .checkbox,
-.tree.disabled > div > label .checkbox {
-  @extend .fa-solid;
-  @extend .fa-lock;
-  background: none;
-  margin-bottom : 3px;
-  text-align : center;
-}
-
 .ui-autocomplete-tall {
   max-height: 335px;
   overflow-y: auto;

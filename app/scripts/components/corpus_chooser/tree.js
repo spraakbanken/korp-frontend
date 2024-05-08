@@ -4,6 +4,7 @@ import * as treeUtil from "./util"
 import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
 import { collatorSort, html } from "@/util"
+import "@/components/checkbox-ternary"
 
 angular.module("korpApp").component("ccTree", {
     template: html`
@@ -20,15 +21,15 @@ angular.module("korpApp").component("ccTree", {
                         alt="extend"
                         class="ext cursor-pointer self-start mt-2"
                     />
-                    <label
-                        class="flex-1 boxlabel cursor-pointer"
-                        ng-click="$ctrl.toggleFolderSelection($event, folder)"
-                    >
-                        <span
-                            class="inline-block checkbox mr-1"
-                            ng-class="{ checked: folder.selected == 'all', unchecked: folder.selected == 'none', intermediate: folder.selected == 'some' }"
-                        ></span>
-                        <span>{{ folder.title | locObj:$root.lang }}</span>
+                    <label class="flex-1 boxlabel cursor-pointer">
+                        <checkbox-ternary
+                            ng-if="!folder['limited_access']"
+                            state="folder.selected == 'all' ? 'checked' : folder.selected == 'none' ? 'unchecked' : 'indeterminate'"
+                            ng-click="$ctrl.toggleFolderSelection($event, folder)"
+                        ></checkbox-ternary>
+                        <i ng-if="folder['limited_access']" class="fa-solid fa-lock"></i>
+
+                        <span class="ml-1">{{ folder.title | locObj:$root.lang }}</span>
                         <span class="numberOfChildren">({{folder.numberOfChildren}})</span>
                     </label>
                     <i
@@ -52,10 +53,9 @@ angular.module("korpApp").component("ccTree", {
                 style="margin-left:16px; background-color: rgb(221, 233, 255); margin-bottom: 2px; padding-top: 1px; padding-bottom: 1px;"
                 ng-click="$ctrl.toggleCorpusSelection($event, corpus)"
             >
-                <span
-                    class="mx-1 my-1 checkbox"
-                    ng-class="{ checked: corpus.selected, unchecked: !corpus.selected }"
-                ></span>
+                <input ng-if="corpus.userHasAccess" type="checkbox" ng-checked="corpus.selected" class="mx-1" />
+                <i ng-if="!corpus.userHasAccess" class="fa-solid fa-lock m-1"></i>
+
                 <label class="px-1 flex-1"> {{ corpus.title | locObj:$root.lang }} </label>
                 <i ng-if="corpus['limited_access'] && corpus.userHasAccess" class="fa-solid fa-unlock mx-1 my-1"></i>
                 <i
