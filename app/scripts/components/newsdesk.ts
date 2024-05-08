@@ -5,7 +5,7 @@ import { type NewsItem, fetchNews, isEnabled } from "@/news-service"
 
 angular.module("korpApp").component("newsdesk", {
     template: html`
-        <div ng-if="isEnabled">
+        <div ng-if="isEnabled && itemsFiltered && itemsFiltered.length">
             <h2 class="text-xl font-bold">{{ 'newsdesk-header' | loc:$root.lang }}</h2>
             <div class="my-2 flex flex-col gap-2">
                 <article ng-repeat="item in itemsFiltered">
@@ -36,6 +36,7 @@ angular.module("korpApp").component("newsdesk", {
 
             $scope.isEnabled = isEnabled()
             $scope.items = null
+            $scope.itemsFiltered = null
             $scope.expanded = false
             $scope.NEWS_LIMIT = 3
 
