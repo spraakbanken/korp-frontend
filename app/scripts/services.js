@@ -392,172 +392,135 @@ korpApp.factory("lexicons", [
     "$q",
     "$http",
     function ($q, $http) {
-        const karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v4"
+        const karpURL = "https://spraakbanken4.it.gu.se/karp/v7"
+        // query for saldom resource to find all entries that have wf as a non-compound word form
+        const wfQuery = (wf) =>
+            "inflectionTable(and(equals|writtenForm|" +
+            wf +
+            "||not(equals|msd|c||equals|msd|ci||equals|msd|cm||equals|msd|sms)))"
         return {
             getLemgrams(wf, resources, corporaIDs) {
                 const deferred = $q.defer()
 
-                const args = {
-                    q: wf,
-                    resource: $.isArray(resources) ? resources.join(",") : resources,
-                    mode: "external",
-                }
-
                 $http({
                     method: "GET",
-                    url: `${karpURL}/autocomplete`,
-                    params: args,
+                    url: `${karpURL}/query/${resources.join(",")}`,
+                    params: {
+                        q: wfQuery(wf),
+                        path: "entry.lemgram",
+                    },
                 })
-                    .then(function (response) {
-                        let { data } = response
-                        if (data === null) {
-                            return deferred.resolve([])
-                        } else {
-                            // Pick the lemgrams. Would be nice if this was done by the backend instead.
-                            const karpLemgrams = _.map(
-                                data.hits.hits,
-                                (entry) => entry._source.FormRepresentations[0].lemgram
-                            )
-
-                            if (karpLemgrams.length === 0) {
-                                deferred.resolve([])
-                                return
-                            }
-
-                            let lemgram = karpLemgrams.join(",")
-                            const corpora = corporaIDs.join(",")
-                            const headers = authenticationProxy.getAuthorizationHeader()
-                            return $http(
-                                httpConfAddMethod({
-                                    url: settings["korp_backend_url"] + "/lemgram_count",
-                                    params: {
-                                        lemgram: lemgram,
-                                        count: "lemgram",
-                                        corpus: corpora,
-                                    },
-                                    headers,
-                                })
-                            ).then(({ data }) => {
-                                delete data.time
-                                const allLemgrams = []
-                                for (lemgram in data) {
-                                    const count = data[lemgram]
-                                    allLemgrams.push({ lemgram: lemgram, count: count })
-                                }
-                                for (let klemgram of karpLemgrams) {
-                                    if (!data[klemgram]) {
-                                        allLemgrams.push({ lemgram: klemgram, count: 0 })
-                                    }
-                                }
-                                return deferred.resolve(allLemgrams)
-                            })
+                    .then(({ data }) => {
+                        if (data.total === 0) {
+                            deferred.resolve([])
+                            return
                         }
+
+                        const karpLemgrams = data.hits
+                        $http(
+                            httpConfAddMethod({
+                                url: settings["korp_backend_url"] + "/lemgram_count",
+                                params: {
+                                    lemgram: karpLemgrams.join(","),
+                                    count: "lemgram",
+                                    corpus: corporaIDs.join(","),
+                                },
+                                headers: authenticationProxy.getAuthorizationHeader(),
+                            })
+                        ).then(({ data }) => {
+                            delete data.time
+                            const allLemgrams = []
+                            for (let lemgram in data) {
+                                const count = data[lemgram]
+                                allLemgrams.push({ lemgram: lemgram, count: count })
+                            }
+                            for (let klemgram of karpLemgrams) {
+                                if (!data[klemgram]) {
+                                    allLemgrams.push({ lemgram: klemgram, count: 0 })
+                                }
+                            }
+                            deferred.resolve(allLemgrams)
+                        })
                     })
-                    .catch((response) => deferred.resolve([]))
+                    .catch(() => deferred.resolve([]))
                 return deferred.promise
             },
 
             getSenses(wf) {
                 const deferred = $q.defer()
 
-                const args = {
-                    q: wf,
-                    resource: "saldom",
-                    mode: "external",
-                }
-
                 $http({
                     method: "GET",
-                    url: `${karpURL}/autocomplete`,
-                    params: args,
+                    url: `${karpURL}/query/saldom`,
+                    params: {
+                        q: wfQuery(wf),
+                        path: "entry.lemgram",
+                    },
                 })
-                    .then((response) => {
-                        let { data } = response
-                        if (data === null) {
-                            return deferred.resolve([])
-                        } else {
-                            let karpLemgrams = _.map(
-                                data.hits.hits,
-                                (entry) => entry._source.FormRepresentations[0].lemgram
-                            )
-                            if (karpLemgrams.length === 0) {
-                                deferred.resolve([])
-                                return
-                            }
-
-                            karpLemgrams = karpLemgrams.slice(0, 100)
-
-                            const senseargs = {
-                                q: `extended||and|lemgram|equals|${karpLemgrams.join("|")}`,
-                                resource: "saldo",
-                                show: "sense,primary",
-                                size: 500,
-                            }
-
-                            return $http({
-                                method: "GET",
-                                url: `${karpURL}/minientry`,
-                                params: senseargs,
-                            })
-                                .then(function ({ data }) {
-                                    if (data.hits.total === 0) {
-                                        deferred.resolve([])
-                                        return
-                                    }
-                                    const senses = _.map(data.hits.hits, (entry) => ({
-                                        sense: entry._source.Sense[0].senseid,
-                                        desc:
-                                            entry._source.Sense[0].SenseRelations &&
-                                            entry._source.Sense[0].SenseRelations.primary,
-                                    }))
-                                    deferred.resolve(senses)
-                                })
-                                .catch((response) => deferred.resolve([]))
+                    .then(({ data }) => {
+                        if (data.total === 0) {
+                            deferred.resolve([])
+                            return
                         }
+
+                        const karpLemgrams = data.hits.slice(0, 100)
+                        if (karpLemgrams.length === 0) {
+                            deferred.resolve([])
+                            return
+                        }
+
+                        $http({
+                            method: "GET",
+                            url: `${karpURL}/query/saldo`,
+                            params: {
+                                q:
+                                    "or(" +
+                                    _.map(karpLemgrams, (lemgram) => `equals|lemgrams|${lemgram}`).join("||") +
+                                    ")",
+                                path: "entry",
+                                size: 500,
+                            },
+                        })
+                            .then(function ({ data }) {
+                                const senses = _.map(data.hits, ({ senseID, primary }) => ({
+                                    sense: senseID,
+                                    desc: primary,
+                                }))
+                                deferred.resolve(senses)
+                            })
+                            .catch(() => deferred.resolve([]))
                     })
-                    .catch((response) => deferred.resolve([]))
+                    .catch(() => deferred.resolve([]))
                 return deferred.promise
             },
 
             relatedWordSearch(lemgram) {
                 const def = $q.defer()
                 $http({
-                    url: `${karpURL}/minientry`,
-                    method: "GET",
+                    url: `${karpURL}/query/saldo`,
                     params: {
-                        q: `extended||and|lemgram|equals|${lemgram}`,
-                        show: "sense",
-                        resource: "saldo",
+                        q: `equals|lemgrams|${lemgram}`,
+                        path: "entry.senseID",
                     },
-                }).then(function ({ data }) {
-                    if (data.hits.total === 0) {
+                }).then(({ data }) => {
+                    if (data.total === 0) {
                         def.resolve([])
                     } else {
-                        const senses = _.map(data.hits.hits, (entry) => entry._source.Sense[0].senseid)
-
                         $http({
-                            url: `${karpURL}/minientry`,
-                            method: "GET",
+                            url: `${karpURL}/query/swefn`,
                             params: {
-                                q: `extended||and|LU|equals|${senses.join("|")}`,
-                                show: "LU,sense",
-                                resource: "swefn",
+                                q: "and(" + _.map(data.hits, (sense) => `equals|LUs|${sense}`).join("||") + ")",
+                                path: "entry",
                             },
-                        }).then(function ({ data }) {
-                            if (data.hits.total === 0) {
-                                def.resolve([])
-                            } else {
-                                const eNodes = _.map(data.hits.hits, (entry) => ({
-                                    label: entry._source.Sense[0].senseid.replace("swefn--", ""),
-                                    words: entry._source.Sense[0].LU,
-                                }))
-
-                                return def.resolve(eNodes)
-                            }
+                        }).then(({ data }) => {
+                            const eNodes = _.map(data.hits, (entry) => ({
+                                label: entry.swefnID,
+                                words: entry.LUs,
+                            }))
+                            def.resolve(eNodes)
                         })
                     }
                 })
-
                 return def.promise
             },
         }
