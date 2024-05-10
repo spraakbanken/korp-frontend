@@ -18,7 +18,7 @@ korpApp.directive("globalFilters", [
         },
         template: `\
 <div ng-if="dataObj.showDirective" class="mb-4">
-      <span class="font-bold"> {{ 'global_filter' | loc:lang}}:</span>
+      <span class="font-bold"> {{ 'global_filter' | loc:$root.lang}}:</span>
       <div class="inline-block">
           <span ng-repeat="filterKey in dataObj.defaultFilters">
               <global-filter attr="filterKey"
@@ -26,7 +26,7 @@ korpApp.directive("globalFilters", [
                              attr-value="dataObj.filterValues[filterKey].value",
                              possible-values="dataObj.filterValues[filterKey].possibleValues"
                              lang="lang"></global-filter>
-              <span ng-if="!$last">{{"and" | loc:lang}}</span>
+              <span ng-if="!$last">{{"and" | loc:$root.lang}}</span>
            </span>
        </div>
 </div>`,
@@ -55,7 +55,7 @@ korpApp.directive("globalFilter", [
     <span uib-dropdown auto-close="outsideClick" on-toggle="dropdownToggle(open)">
       <button uib-dropdown-toggle class="btn btn-sm btn-default mr-1 align-baseline">
         <span ng-if="attrValue.length == 0">
-          <span>{{ "add_filter_value" | loc:lang }}</span>
+          <span>{{ "add_filter_value" | loc:$root.lang }}</span>
           <span>{{filterLabel | locObj:lang}}</span>
         </span>
         <span ng-if="attrValue.length != 0">
