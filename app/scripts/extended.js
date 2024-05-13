@@ -164,7 +164,12 @@ export default _.merge(
         // puts the first values from a dataset paramater into model
         singleValue: {
             template: '<input type="hidden">',
-            controller: ["$scope", ($scope) => ($scope.model = _.values($scope.dataset)[0])],
+            controller: [
+                "$scope",
+                function ($scope) {
+                    $scope.model = _.values($scope.dataset)[0]
+                },
+            ],
         },
         default: {
             template: _.template(`\
