@@ -143,7 +143,7 @@ korpApp.directive("statsResultCtrl", () => ({
                     return
                 }
 
-                if (data[0].total_value.absolute === 0) {
+                if (data[0].total_value[0] === 0) {
                     s.no_hits = true
                     return
                 }
