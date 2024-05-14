@@ -342,25 +342,6 @@ korpApp.directive("clickCover", () => ({
     },
 }))
 
-korpApp.directive("toBody", [
-    "$compile",
-    ($compile) => ({
-        restrict: "A",
-        compile(elm) {
-            elm.remove()
-            elm.attr("to-body", null)
-            const wrapper = $("<div>").append(elm)
-            const cmp = $compile(wrapper.html())
-
-            return function (scope) {
-                const newElem = cmp(scope)
-                $("body").append(newElem)
-                return scope.$on("$destroy", () => newElem.remove())
-            }
-        },
-    }),
-])
-
 // This directive is only used by the autoc-component (autoc.js)
 // It is therefore made to work with magic variables such as $scope.$ctrl.typeaheadIsOpen
 korpApp.directive("typeaheadClickOpen", [
