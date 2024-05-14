@@ -364,69 +364,6 @@ korpApp.directive("typeaheadClickOpen", [
     }),
 ])
 
-korpApp.directive("timeInterval", () => ({
-    scope: {
-        label: "@",
-        dateModel: "=",
-        timeModel: "=",
-        minDate: "=",
-        maxDate: "=",
-        update: "&",
-    },
-
-    restrict: "E",
-    template: html`
-        <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top">
-            <i class="fa fa-calendar"></i> <span style="text-transform: capitalize;">{{label | loc:$root.lang}} </span>
-        </button>
-        {{ combined.format("YYYY-MM-DD HH:mm") }}
-        <div ng-click="handleClick($event)" class="date_interval popper_menu dropdown-menu">
-            <div
-                uib-datepicker
-                class="well well-sm"
-                ng-model="dateModel"
-                min-date="minDate"
-                max-date="maxDate"
-                init-date="minDate"
-                show-weeks="true"
-                starting-day="1"
-            ></div>
-
-            <div class="time">
-                <i class="fa-solid fa-3x fa-clock-o"></i>
-                <div
-                    uib-timepicker
-                    class="timepicker"
-                    ng-model="timeModel"
-                    hour-step="1"
-                    minute-step="1"
-                    show-meridian="false"
-                ></div>
-            </div>
-        </div>
-    `,
-    link(s) {
-        const timeUnits = ["hour", "minute"]
-        s.$watchGroup(["dateModel", "timeModel"], function (...args) {
-            const [date, time] = args[0]
-            if (date && time) {
-                const m = moment(moment(date).format("YYYY-MM-DD"))
-                for (let t of timeUnits) {
-                    const m_time = moment(time)
-                    m.add(m_time[t](), t)
-                }
-                s.update({})
-                s.combined = m
-            }
-        })
-
-        s.handleClick = function (event) {
-            event.originalEvent.preventDefault()
-            event.originalEvent.stopPropagation()
-        }
-    },
-}))
-
 korpApp.directive("reduceSelect", [
     "$timeout",
     ($timeout) => ({

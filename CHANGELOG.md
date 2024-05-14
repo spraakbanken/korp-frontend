@@ -16,6 +16,7 @@
 - Make the search button(s) more visible [#308](https://github.com/spraakbanken/korp-frontend/issues/308)
 - Use native checkboxes in corpus chooser, not images [#362](https://github.com/spraakbanken/korp-frontend/issues/362)
 - Removed globals – import them instead (or their members):
+  - `authenticationProxy`
   - `settings`
   - `currentMode`
   - `currentModeParallel`
@@ -29,6 +30,7 @@
   - `safeApply`
 - Removed the `warning` directive – use the `korp-warning` class directly instead.
 - Removed the unused `toBody` directive
+- Converted the `timeInterval` directive to a component `datetimePicker`
 - Renamed localization functions (just like the template filters):
   - `getLocaleString` to `loc`
   - `getLocaleStringObject` to `locObj`

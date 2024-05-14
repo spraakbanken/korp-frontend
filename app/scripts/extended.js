@@ -3,6 +3,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import { html, loc, regescape, locAttribute, unregescape } from "@/util"
 import "@/components/autoc"
+import "@/components/datetime-picker"
 
 let customExtendedTemplates = {}
 
@@ -267,25 +268,25 @@ export default _.merge(
 
                     <h3>{{'advanced' | loc:$root.lang}}</h3>
                     <div class="section mt-4">
-                        <time-interval
+                        <datetime-picker
                             label="from"
                             date-model="fromDate"
                             time-model="fromTime"
                             min-date="minDate"
                             max-date="maxDate"
-                            update="update()"
-                        ></time-interval>
+                            update="updateFrom(m)"
+                        ></datetime-picker>
                     </div>
 
                     <div class="section">
-                        <time-interval
+                        <datetime-picker
                             label="to"
                             date-model="toDate"
                             time-model="toTime"
                             min-date="minDate"
                             max-date="maxDate"
-                            update="update()"
-                        ></time-interval>
+                            update="updateTo(m)"
+                        ></datetime-picker>
                     </div>
                 </div>
             `,
@@ -350,13 +351,16 @@ export default _.merge(
                         s.toTime = toTime
                     }
 
-                    s.update = () => {
-                        s.model = [
-                            moment(s.fromDate).format("YYYYMMDD"),
-                            moment(s.toDate).format("YYYYMMDD"),
-                            moment(s.fromTime).format("HHmmss"),
-                            moment(s.toTime).format("HHmmss"),
-                        ]
+                    s.updateFrom = (m) => {
+                        // We cannot just patch the list, we need to re-set it to trigger watcher.
+                        // [fromdate, todate, fromtime, totime]
+                        s.model = [m.format("YYYYMMDD"), s.model[1], m.format("HHmmss"), s.model[3]]
+                    }
+
+                    s.updateTo = (m) => {
+                        // We cannot just patch the list, we need to re-set it to trigger watcher.
+                        // [fromdate, todate, fromtime, totime]
+                        s.model = [s.model[0], m.format("YYYYMMDD"), s.model[2], m.format("HHmmss")]
                     }
                 },
             ],
