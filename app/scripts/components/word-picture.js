@@ -24,7 +24,7 @@ angular.module("korpApp").component("wordPicture", {
 
         <div ng-if="$ctrl.wordPic && $ctrl.noHits" class="korp-warning">{{"no_stats_results" | loc:$root.lang}}</div>
 
-        <div ng-if="$ctrl.wordPic && $ctrl.hasData">
+        <div ng-if="$ctrl.wordPic && $ctrl.hasData && !$ctrl.noHits">
             <div id="wordPicSettings">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" /><label for="wordclassChk"

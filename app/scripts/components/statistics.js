@@ -34,7 +34,7 @@ angular.module("korpApp").component("statistics", {
                 {{'search_aborted' | loc:$root.lang}}
             </div>
 
-            <div ng-show="$ctrl.showStatistics && $ctrl.hasResult">
+            <div ng-show="$ctrl.showStatistics && $ctrl.hasResult && !$ctrl.noHits && !$ctrl.aborted">
                 <div class="stats_header">
                     <button
                         class="btn btn-sm btn-default show-graph-btn"
