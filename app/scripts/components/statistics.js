@@ -26,10 +26,14 @@ angular.module("korpApp").component("statistics", {
                     </button>
                 </div>
             </div>
-            <warning ng-if="$ctrl.showStatistics && $ctrl.noHits"> {{"no_stats_results" | loc:$root.lang}} </warning>
-            <warning ng-if="$ctrl.showStatistics && $ctrl.aborted && !$ctrl.loading">
+
+            <div ng-if="$ctrl.showStatistics && $ctrl.noHits" class="korp-warning">
+                {{"no_stats_results" | loc:$root.lang}}
+            </div>
+            <div ng-if="$ctrl.showStatistics && $ctrl.aborted && !$ctrl.loading" class="korp-warning">
                 {{'search_aborted' | loc:$root.lang}}
-            </warning>
+            </div>
+
             <div ng-show="$ctrl.showStatistics && $ctrl.hasResult">
                 <div class="stats_header">
                     <button

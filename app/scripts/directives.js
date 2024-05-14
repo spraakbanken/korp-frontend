@@ -361,12 +361,6 @@ korpApp.directive("toBody", [
     }),
 ])
 
-korpApp.directive("warning", () => ({
-    restrict: "E",
-    transclude: true,
-    template: "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>",
-}))
-
 // This directive is only used by the autoc-component (autoc.js)
 // It is therefore made to work with magic variables such as $scope.$ctrl.typeaheadIsOpen
 korpApp.directive("typeaheadClickOpen", [

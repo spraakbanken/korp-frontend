@@ -13,13 +13,17 @@ angular.module("korpApp").component("wordPicture", {
                 </button>
             </div>
         </div>
-        <warning ng-if="$ctrl.wordPic && !$ctrl.hasData && !$ctrl.loading && !$ctrl.aborted"
-            >{{'word_pic_bad_search' | loc:$root.lang}}</warning
-        >
-        <warning ng-if="$ctrl.wordPic && $ctrl.aborted && !$ctrl.loading"
-            >{{'search_aborted' | loc:$root.lang}}</warning
-        >
-        <warning ng-if="$ctrl.wordPic && $ctrl.noHits">{{"no_stats_results" | loc:$root.lang}}</warning>
+
+        <div ng-if="$ctrl.wordPic && !$ctrl.hasData && !$ctrl.loading && !$ctrl.aborted" class="korp-warning">
+            {{'word_pic_bad_search' | loc:$root.lang}}
+        </div>
+
+        <div ng-if="$ctrl.wordPic && $ctrl.aborted && !$ctrl.loading" class="korp-warning">
+            {{'search_aborted' | loc:$root.lang}}
+        </div>
+
+        <div ng-if="$ctrl.wordPic && $ctrl.noHits" class="korp-warning">{{"no_stats_results" | loc:$root.lang}}</div>
+
         <div ng-if="$ctrl.wordPic && $ctrl.hasData">
             <div id="wordPicSettings">
                 <div>

@@ -1435,8 +1435,12 @@ slider {
 
 .korp-warning {
   max-width : 500px;
+  @extend .bs-callout;
+  @extend .bs-callout-warning;
 }
-warning ~ * {
+// Hide everything after a warning.
+// TODO: Too magic, use ng-if to hide stuff instead.
+.korp-warning ~ * {
   display : none !important;
 }
 

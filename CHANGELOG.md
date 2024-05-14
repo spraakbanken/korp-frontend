@@ -27,6 +27,7 @@
   - `regescape`
   - `unregescape`
   - `safeApply`
+- Removed the `warning` directive – use the `korp-warning` class directly instead.
 - Renamed localization functions (just like the template filters):
   - `getLocaleString` to `loc`
   - `getLocaleStringObject` to `locObj`

@@ -12,7 +12,10 @@ angular.module("korpApp").component("kwic", {
     template: html`
         <div ng-click="$ctrl.onKwicClick($event)">
             <div class="result_controls">
-                <warning ng-if="$ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:$root.lang}}</warning>
+                <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">
+                    {{'search_aborted' | loc:$root.lang}}
+                </div>
+
                 <div class="controls_n" ng-if="$ctrl.hitsInProgress != null">
                     <span>{{'num_results' | loc:$root.lang}}: </span>
                     <span class="num-result">{{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}</span>
