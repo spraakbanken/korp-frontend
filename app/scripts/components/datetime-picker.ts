@@ -1,6 +1,7 @@
 /** @format */
-import angular from "angular"
+import angular, { type IComponentController, type IScope } from "angular"
 import { html } from "@/util"
+import moment, { type Moment } from "moment"
 
 angular.module("korpApp").component("datetimePicker", {
     template: html`
@@ -47,8 +48,8 @@ angular.module("korpApp").component("datetimePicker", {
     },
     controller: [
         "$scope",
-        function ($scope) {
-            const $ctrl = this
+        function ($scope: DatetimePickerScope) {
+            const $ctrl = this as DatetimePickerController
 
             $ctrl.$onInit = () => {
                 // Sync incoming values to internal model
@@ -85,3 +86,19 @@ angular.module("korpApp").component("datetimePicker", {
         },
     ],
 })
+
+type DatetimePickerController = IComponentController & {
+    label: string
+    dateModel: Date
+    timeModel: Date
+    minDate: Date
+    maxDate: Date
+    update: (values: { m: Moment }) => void
+}
+
+type DatetimePickerScope = IScope & {
+    date: Date
+    time: Date
+    combined: Moment
+    handleClick: (event: JQuery.ClickEvent) => void
+}
