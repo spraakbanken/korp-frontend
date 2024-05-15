@@ -6,6 +6,7 @@ import { angularLocationSearch, httpConfAddMethod } from "@/util"
 import { statisticsService } from "@/statistics"
 import BaseProxy from "@/korp-api/base-proxy"
 import KwicProxy from "@/korp-api/kwic-proxy"
+import LemgramProxy from "./korp-api/lemgram-proxy"
 
 const model = {}
 export default model
@@ -24,47 +25,7 @@ model.normalizeStatsData = function (data) {
 
 model.KwicProxy = KwicProxy
 
-model.LemgramProxy = class LemgramProxy extends BaseProxy {
-    makeRequest(word, type, callback) {
-        super.makeRequest()
-        const self = this
-        const params = {
-            word,
-            corpus: settings.corpusListing.stringifySelected(),
-            incremental: true,
-            type,
-            max: 1000,
-        }
-        this.prevParams = params
-        const def = $.ajax(
-            httpConfAddMethod({
-                url: settings["korp_backend_url"] + "/relations",
-                data: params,
-
-                success() {
-                    self.prevRequest = params
-                    self.cleanup()
-                },
-
-                progress(data, e) {
-                    const progressObj = self.calcProgress(e)
-                    if (progressObj == null) {
-                        return
-                    }
-                    return callback(progressObj)
-                },
-
-                beforeSend(req, settings) {
-                    self.prevRequest = settings
-                    self.addAuthorizationHeader(req)
-                    self.prevUrl = self.makeUrlWithParams(this.url, params)
-                },
-            })
-        )
-        this.pendingRequests.push(def)
-        return def
-    }
-}
+model.LemgramProxy = LemgramProxy
 
 model.StatsProxy = class StatsProxy extends BaseProxy {
     constructor() {
