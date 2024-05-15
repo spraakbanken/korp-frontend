@@ -2,6 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { html, loc, regescape, locAttribute, unregescape } from "@/util"
+import { datasetSelect } from "@/components/extended/input/dataset-select"
 import "@/components/autoc"
 import "@/components/datetime-picker"
 
@@ -12,17 +13,6 @@ try {
 } catch (error) {
     console.log("No module for extended components available")
 }
-
-const autocompleteTemplate = `\
-<div>
-    <input type="text"
-            size="37"
-            ng-model="input"
-            escaper
-            typeahead-min-length="0"
-            typeahead-input-formatter="typeaheadInputFormatter($model)"            
-            uib-typeahead="tuple[0] as tuple[1] for tuple in getRows($viewValue)"></input>
-</div>`
 
 const selectTemplate =
     "<select ng-show='!inputOnly' ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset'></select>" +
@@ -110,43 +100,12 @@ const selectController = (autocomplete) => [
     },
 ]
 
-// Select-element. Use the following settings in the corpus:
-// - dataset: an object or an array of values
-// - escape: boolean, will be used by the escaper-directive
 export default _.merge(
     {
-        datasetSelect: (options) => ({
-            template: selectTemplate,
-            controller: [
-                "$scope",
-                "$rootScope",
-                function ($scope, $rootScope) {
-                    let dataset
-                    const original = $scope.dataset
-
-                    $rootScope.$watch("lang", (newVal, oldVal) => {
-                        if (newVal != oldVal) {
-                            initialize()
-                        }
-                    })
-                    function initialize() {
-                        const localizer = localize($scope)
-                        if (_.isArray(original)) {
-                            dataset = _.map(original, (item) => [item, localizer(item)])
-                        } else {
-                            dataset = _.map(original, (v, k) => [k, localizer(v)])
-                        }
-                        if (options == undefined || options.sort == undefined || options.sort) {
-                            $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
-                        } else {
-                            $scope.dataset = dataset
-                        }
-                        $scope.model = $scope.model || $scope.dataset[0][0]
-                    }
-                    initialize()
-                },
-            ],
-        }),
+        // Select-element. Use the following settings in the corpus:
+        // - dataset: an object or an array of values
+        // - escape: boolean, will be used by the escaper-directive
+        datasetSelect,
 
         // Select-element. Gets values from "struct_values"-command. Use the following settings in the corpus:
         // - escape: boolean, will be used by the escaper-directive
@@ -158,7 +117,17 @@ export default _.merge(
         // Autocomplete. Gets values from "struct_values"-command. Use the following settings in the corpus:
         // - escape: boolean, will be used by the escaper-directive
         structServiceAutocomplete: {
-            template: autocompleteTemplate,
+            template: html`<div>
+                <input
+                    type="text"
+                    size="37"
+                    ng-model="input"
+                    escaper
+                    typeahead-min-length="0"
+                    typeahead-input-formatter="typeaheadInputFormatter($model)"
+                    uib-typeahead="tuple[0] as tuple[1] for tuple in getRows($viewValue)"
+                />
+            </div>`,
             controller: selectController(true),
         },
 
