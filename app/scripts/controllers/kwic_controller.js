@@ -53,7 +53,7 @@ export class KwicCtrl {
 
         this.setupListeners()
 
-        s.proxy = new model.KWICProxy()
+        s.proxy = new model.KwicProxy()
 
         s.tabindex = 0
 
