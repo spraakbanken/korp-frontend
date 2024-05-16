@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import BaseProxy, { AjaxSettings } from "@/korp-api/base-proxy"
+import BaseProxy, { AjaxSettings, KorpResponse } from "@/korp-api/base-proxy"
 import { angularLocationSearch, httpConfAddMethod } from "@/util"
 import { statisticsService } from "@/statistics"
 
@@ -170,7 +170,7 @@ type KorpStatsParams = {
 }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count/get */
-type KorpStatsResponse = {
+type KorpStatsResponse = KorpResponse<{
     corpora: {
         [name: string]: StatsColumn
     }
@@ -179,7 +179,7 @@ type KorpStatsResponse = {
     count: number
     /** Execution time in seconds */
     time: number
-}
+}>
 
 type StatsColumn = {
     sums: AbsRelTuple

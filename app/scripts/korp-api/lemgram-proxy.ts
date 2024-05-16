@@ -1,6 +1,6 @@
 /** @format */
 import settings from "@/settings"
-import BaseProxy, { AjaxSettings } from "@/korp-api/base-proxy"
+import BaseProxy, { AjaxSettings, KorpResponse } from "@/korp-api/base-proxy"
 import { httpConfAddMethod } from "@/util"
 
 export default class LemgramProxy extends BaseProxy {
@@ -61,11 +61,11 @@ type KorpRelationsParams = {
     incremental?: boolean
 }
 
-type KorpRelationsResponse = {
+type KorpRelationsResponse = KorpResponse<{
     relations: ApiRelation[]
     /** Execution time in seconds */
     time: number
-}
+}>
 
 type ApiRelation = {
     dep: string

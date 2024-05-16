@@ -5,8 +5,9 @@ import settings from "@/settings"
 import { httpConfAddMethod } from "@/util"
 import BaseProxy from "@/korp-api/base-proxy"
 import KwicProxy from "@/korp-api/kwic-proxy"
-import LemgramProxy from "./korp-api/lemgram-proxy"
-import StatsProxy from "./korp-api/stats-proxy"
+import LemgramProxy from "@/korp-api/lemgram-proxy"
+import StatsProxy from "@/korp-api/stats-proxy"
+import TimeProxy from "@/korp-api/time-proxy"
 
 const model = {}
 export default model
@@ -17,86 +18,7 @@ model.LemgramProxy = LemgramProxy
 
 model.StatsProxy = StatsProxy
 
-model.TimeProxy = class TimeProxy extends BaseProxy {
-    makeRequest() {
-        const dfd = $.Deferred()
-
-        const xhr = $.ajax(
-            httpConfAddMethod({
-                url: settings["korp_backend_url"] + "/timespan",
-                data: {
-                    granularity: "y",
-                    corpus: settings.corpusListing.stringifyAll(),
-                },
-            })
-        )
-
-        xhr.done((data) => {
-            if (data.ERROR) {
-                c.error("timespan error", data.ERROR)
-                dfd.reject(data.ERROR)
-                return
-            }
-
-            const rest = data.combined[""]
-            delete data.combined[""]
-
-            this.expandTimeStruct(data.combined)
-            const combined = this.compilePlotArray(data.combined)
-
-            if (_.keys(data).length < 2 || data.ERROR) {
-                dfd.reject()
-                return
-            }
-
-            return dfd.resolve([data.corpora, combined, rest])
-        })
-
-        xhr.fail(function () {
-            c.log("timeProxy.makeRequest failed", arguments)
-            return dfd.reject()
-        })
-
-        return dfd
-    }
-
-    compilePlotArray(dataStruct) {
-        let output = []
-        $.each(dataStruct, function (key, val) {
-            if (!key || !val) {
-                return
-            }
-            return output.push([parseInt(key), val])
-        })
-
-        output = output.sort((a, b) => a[0] - b[0])
-        return output
-    }
-
-    expandTimeStruct(struct) {
-        const years = _.map(_.toPairs(_.omit(struct, "")), (item) => Number(item[0]))
-        if (!years.length) {
-            return
-        }
-        const minYear = _.min(years)
-        const maxYear = _.max(years)
-
-        if (_.isNaN(maxYear) || _.isNaN(minYear)) {
-            c.log("expandTimestruct broken, years:", years)
-            return
-        }
-
-        let prevVal = null
-        for (let y of _.range(minYear, maxYear + 1)) {
-            let thisVal = struct[y]
-            if (typeof thisVal == "undefined") {
-                struct[y] = prevVal
-            } else {
-                prevVal = thisVal
-            }
-        }
-    }
-}
+model.TimeProxy = TimeProxy
 
 model.GraphProxy = class GraphProxy extends BaseProxy {
     constructor() {

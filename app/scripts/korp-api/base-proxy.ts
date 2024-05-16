@@ -152,6 +152,19 @@ export default abstract class BaseProxy {
     }
 }
 
+/** A Korp response is either successful or has error info. */
+export type KorpResponse<T> = (T | KorpErrorResponse) & {
+    /** Execution time in seconds */
+    time?: number
+}
+
+export type KorpErrorResponse = {
+    ERROR: {
+        type: string
+        value: string
+    }
+}
+
 type ProgressResponse = {
     progress?: string | { corpus: string }
     progress_corpora?: any

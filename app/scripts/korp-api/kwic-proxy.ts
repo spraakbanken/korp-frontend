@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import BaseProxy, { type AjaxSettings } from "@/korp-api/base-proxy"
+import BaseProxy, { KorpResponse, type AjaxSettings } from "@/korp-api/base-proxy"
 import { angularLocationSearch, httpConfAddMethod } from "@/util"
 
 export default class KwicProxy extends BaseProxy {
@@ -160,7 +160,7 @@ type MakeRequestOptions = {
 type Interval = { start: number; end: number }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
-type KorpQueryResponse = {
+type KorpQueryResponse = KorpResponse<{
     /** Search hits */
     kwic: ApiKwic[]
     /** Total number of hits */
@@ -171,7 +171,7 @@ type KorpQueryResponse = {
     time: number
     /** A hash of this query */
     query_data: string
-}
+}>
 
 /** Search hits */
 type ApiKwic = {
