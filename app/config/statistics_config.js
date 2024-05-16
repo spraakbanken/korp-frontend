@@ -83,7 +83,7 @@ function reduceCqp(type, tokens, ignoreCase) {
                 return `${type}${op}"${tokens[0]}"`
             } else {
                 // structural attributes
-                return `_.${type}="${tokens[0]}`
+                return `_.${type}="${tokens[0]}"`
             }
     }
 }
