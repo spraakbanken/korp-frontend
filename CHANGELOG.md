@@ -63,6 +63,7 @@
 
 ### Fixed
 
+- Statistics subquery incorrect when using repetition and boundaries [#354](https://github.com/spraakbanken/korp-frontend/issues/354)
 - Correct order of numbers in trend diagram table (first relative, then absolute)
 - Update number formatting in statistics table when switching language
 - Disable Trend diagram and Map buttons while waiting for statistics search to finish [#346](https://github.com/spraakbanken/korp-frontend/issues/346)

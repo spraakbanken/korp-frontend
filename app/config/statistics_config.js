@@ -12,6 +12,9 @@ try {
 }
 
 export function getCqp(hitValues, ignoreCase) {
+    const positionalAttributes = ["word", ...Object.keys(settings.corpusListing.getCurrentAttributes())]
+    let hasPositionalAttributes = false
+
     var tokens = []
     for (var i = 0; i < hitValues.length; i++) {
         var token = hitValues[i]
@@ -21,10 +24,18 @@ export function getCqp(hitValues, ignoreCase) {
                 var values = token[attribute]
                 andExpr.push(reduceCqp(attribute, values, ignoreCase))
             }
+
+            // Flag if any of the attributes is positional
+            if (positionalAttributes.includes(attribute)) hasPositionalAttributes = true
         }
         tokens.push("[" + andExpr.join(" & ") + "]")
     }
-    return `<match> ${tokens.join(" ")} []{0,} </match>`
+
+    // If reducing by structural attributes only, then `hitValues` has only the first match token,
+    // so allow any number of subsequent tokens in the match.
+    if (!hasPositionalAttributes) tokens.push("[]{0,}")
+
+    return `<match> ${tokens.join(" ")} </match>`
 }
 
 function reduceCqp(type, tokens, ignoreCase) {
