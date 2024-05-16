@@ -31,17 +31,14 @@ export default abstract class BaseProxy {
         }
     }
 
-    makeRequest(...args: any[]): void | JQuery.jqXHR {
+    resetRequest(): void {
         this.abort()
         this.prev = ""
         this.chunkCache = ""
         this.progress = 0
         this.total_results = null
         this.total = null
-        // return this.doMakeRequest()
     }
-
-    // abstract doMakeRequest(...args: any[]): JQuery.jqXHR
 
     /**
      * Return a URL with baseUrl base and data encoded as URL parameters.
@@ -162,5 +159,5 @@ type ProgressResponse = {
 }
 
 export type AjaxSettings<T = any> = JQuery.AjaxSettings<T> & {
-    progress: (data: T, e: any) => void
+    progress?: (data: T, e: any) => void
 }

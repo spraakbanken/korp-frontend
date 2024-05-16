@@ -7,6 +7,7 @@ import model from "@/model"
 import * as authenticationProxy from "@/components/auth/auth"
 import { parseMapData } from "./map_services"
 import { updateSearchHistory } from "@/history"
+import { normalizeStatsData } from "@/korp-api/stats-proxy"
 import { httpConfAddMethod, httpConfAddMethodAngular, unregescape } from "@/util"
 import { mergeCqpExprs, parse, stringify } from "./cqp_parser/cqp"
 
@@ -209,7 +210,7 @@ korpApp.factory("backend", [
 
             return $http(conf).then(
                 function ({ data }) {
-                    model.normalizeStatsData(data)
+                    normalizeStatsData(data)
                     let result = parseMapData(data, cqp, cqpExprs)
                     return { corpora: attribute.corpora, cqp, within, data: result, attribute }
                 },

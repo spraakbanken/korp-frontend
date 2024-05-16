@@ -20,10 +20,15 @@ export default class KwicProxy extends BaseProxy {
         this.foundKwic = false
     }
 
-    makeRequest(options: MakeRequestOptions, page: number, progressCallback, kwicCallback) {
+    makeRequest(
+        options: MakeRequestOptions,
+        page: number,
+        progressCallback,
+        kwicCallback
+    ): JQuery.jqXHR<KorpQueryResponse> {
         const self = this
         this.foundKwic = false
-        super.makeRequest()
+        this.resetRequest()
         if (!kwicCallback) {
             console.error("No callback for query result")
             return

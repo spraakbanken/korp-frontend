@@ -5,11 +5,11 @@ import { httpConfAddMethod } from "@/util"
 
 export default class LemgramProxy extends BaseProxy {
     prevParams?: KorpRelationsParams
-    prevRequest?: JQuery.AjaxSettings
+    prevRequest?: AjaxSettings
     prevUrl?: string
 
-    makeRequest(word: string, type: string, callback) {
-        super.makeRequest()
+    makeRequest(word: string, type: string, callback): JQuery.jqXHR<KorpRelationsResponse> {
+        this.resetRequest()
         const self = this
 
         const params = {

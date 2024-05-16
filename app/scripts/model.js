@@ -2,161 +2,20 @@
 "use strict"
 import _ from "lodash"
 import settings from "@/settings"
-import { angularLocationSearch, httpConfAddMethod } from "@/util"
-import { statisticsService } from "@/statistics"
+import { httpConfAddMethod } from "@/util"
 import BaseProxy from "@/korp-api/base-proxy"
 import KwicProxy from "@/korp-api/kwic-proxy"
 import LemgramProxy from "./korp-api/lemgram-proxy"
+import StatsProxy from "./korp-api/stats-proxy"
 
 const model = {}
 export default model
-
-model.normalizeStatsData = function (data) {
-    if (!_.isArray(data.combined)) {
-        data.combined = [data.combined]
-    }
-
-    for (let [corpusID, obj] of _.toPairs(data.corpora)) {
-        if (!_.isArray(obj)) {
-            data.corpora[corpusID] = [obj]
-        }
-    }
-}
 
 model.KwicProxy = KwicProxy
 
 model.LemgramProxy = LemgramProxy
 
-model.StatsProxy = class StatsProxy extends BaseProxy {
-    constructor() {
-        super()
-        this.prevRequest = null
-        this.prevParams = null
-    }
-
-    makeParameters(reduceVals, cqp, ignoreCase) {
-        const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
-        const groupBy = []
-        const groupByStruct = []
-        for (let reduceVal of reduceVals) {
-            if (
-                structAttrs[reduceVal] &&
-                (structAttrs[reduceVal]["group_by"] || "group_by_struct") == "group_by_struct"
-            ) {
-                groupByStruct.push(reduceVal)
-            } else {
-                groupBy.push(reduceVal)
-            }
-        }
-        const parameters = {
-            group_by: groupBy.join(","),
-            group_by_struct: groupByStruct.join(","),
-            cqp: this.expandCQP(cqp),
-            corpus: settings.corpusListing.stringifySelected(true),
-            incremental: true,
-        }
-        _.extend(parameters, settings.corpusListing.getWithinParameters())
-        if (ignoreCase) {
-            _.extend(parameters, { ignore_case: "word" })
-        }
-        return parameters
-    }
-
-    makeRequest(cqp, callback) {
-        const self = this
-        super.makeRequest()
-        const reduceval = angularLocationSearch().stats_reduce || "word"
-        const reduceVals = reduceval.split(",")
-
-        const ignoreCase = angularLocationSearch().stats_reduce_insensitive != null
-
-        const reduceValLabels = _.map(reduceVals, function (reduceVal) {
-            if (reduceVal === "word") {
-                return settings["word_label"]
-            }
-            const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
-                reduceVal
-            ]
-            if (maybeReduceAttr) {
-                return maybeReduceAttr.label
-            } else {
-                return settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())[reduceVal].label
-            }
-        })
-
-        const data = this.makeParameters(reduceVals, cqp, ignoreCase)
-        // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
-        const originalCorpora = settings.corpusListing.stringifySelected(false)
-
-        const wordAttrs = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())
-        const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
-        data.split = _.filter(reduceVals, (reduceVal) => {
-            return (
-                (wordAttrs[reduceVal] && wordAttrs[reduceVal].type == "set") ||
-                (structAttrs[reduceVal] && structAttrs[reduceVal].type == "set")
-            )
-        }).join(",")
-
-        const rankedReduceVals = _.filter(reduceVals, (reduceVal) => {
-            if (wordAttrs[reduceVal]) {
-                return wordAttrs[reduceVal].ranked
-            }
-        })
-        data.top = _.map(rankedReduceVals, (reduceVal) => reduceVal + ":1").join(",")
-
-        this.prevParams = data
-        const def = $.Deferred()
-        this.pendingRequests.push(
-            $.ajax(
-                httpConfAddMethod({
-                    url: settings["korp_backend_url"] + "/count",
-                    data,
-                    beforeSend(req, settings) {
-                        self.prevRequest = settings
-                        self.addAuthorizationHeader(req)
-                        self.prevUrl = self.makeUrlWithParams(this.url, data)
-                    },
-
-                    error(jqXHR, textStatus, errorThrown) {
-                        c.log(`gettings stats error, status: ${textStatus}`)
-                        return def.reject(textStatus, errorThrown)
-                    },
-
-                    progress(data, e) {
-                        const progressObj = self.calcProgress(e)
-                        if (progressObj == null) {
-                            return
-                        }
-                        if (typeof callback === "function") {
-                            callback(progressObj)
-                        }
-                    },
-
-                    success: (data) => {
-                        self.cleanup()
-                        if (data.ERROR != null) {
-                            c.log("gettings stats failed with error", data.ERROR)
-                            def.reject(data)
-                            return
-                        }
-                        model.normalizeStatsData(data)
-                        statisticsService.processData(
-                            def,
-                            originalCorpora,
-                            data,
-                            reduceVals,
-                            reduceValLabels,
-                            ignoreCase,
-                            cqp
-                        )
-                    },
-                })
-            )
-        )
-
-        return def.promise()
-    }
-}
+model.StatsProxy = StatsProxy
 
 model.TimeProxy = class TimeProxy extends BaseProxy {
     makeRequest() {
@@ -257,7 +116,7 @@ model.GraphProxy = class GraphProxy extends BaseProxy {
     }
 
     makeRequest(cqp, subcqps, corpora, from, to) {
-        super.makeRequest()
+        this.resetRequest()
         const self = this
         const params = {
             cqp: this.expandCQP(cqp),
