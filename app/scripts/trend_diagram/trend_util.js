@@ -27,7 +27,8 @@ export function getTimeCQP(time, zoom, coarseGranularity) {
         timecqp = `[(${startsSameDate} & ${timeInside}) | (${startsBefore} & ${endsAfter})]`
     }
 
-    timecqp = `<match> ${timecqp} []{0,} </match>`
+    // In case the main query matches multiple tokens, this subquery must only match the first token in the main match.
+    timecqp = `<match> ${timecqp}`
     return timecqp
 }
 
