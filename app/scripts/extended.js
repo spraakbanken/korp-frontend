@@ -22,6 +22,7 @@ const autocompleteTemplate = `\
             typeahead-min-length="0"
             typeahead-input-formatter="typeaheadInputFormatter($model)"            
             uib-typeahead="tuple[0] as tuple[1] for tuple in getRows($viewValue)"></input>
+            <i ng-if="loading" class="fa-solid fa-spinner fa-pulse w-fit"></i>
 </div>`
 
 const selectTemplate =

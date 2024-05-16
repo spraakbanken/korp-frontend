@@ -6,6 +6,7 @@
 
 - Frontpage with description, news, corpus updates and example search queries [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
 - Configurable generated link in corpus info [#355](https://github.com/spraakbanken/korp-frontend/issues/355)
+- Loading spinner in the autocomplete for structural values (`structServiceAutocomplete`)
 
 ### Changed
 
