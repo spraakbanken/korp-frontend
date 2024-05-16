@@ -4,35 +4,6 @@ import settings from "@/settings"
 import BaseProxy, { type AjaxSettings } from "@/korp-api/base-proxy"
 import { angularLocationSearch, httpConfAddMethod } from "@/util"
 
-type Interval = { start: number; end: number }
-
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
-type KorpQueryParams = {
-    corpus: string
-    cqp: string
-    start?: number
-    end?: number
-    default_context?: string
-    context?: string
-    show?: string
-    show_struct?: string
-    default_within?: string
-    within?: string
-    in_order?: boolean
-    sort?: string
-    random_seed?: number
-    cut?: number
-    [cqpn: `cqp${number}`]: string
-    expand_prequeries?: boolean
-    incremental?: boolean
-}
-
-type MakeRequestOptions = {
-    ajaxParams?: KorpQueryParams & {
-        command?: string
-    }
-}
-
 export default class KwicProxy extends BaseProxy {
     foundKwic: boolean
     prevCQP?: string
@@ -148,8 +119,73 @@ export default class KwicProxy extends BaseProxy {
             },
         }
 
-        const def = $.ajax(httpConfAddMethod(ajaxSettings))
+        const def = $.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpQueryResponse>
         this.pendingRequests.push(def)
         return def
     }
+}
+
+/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
+type KorpQueryParams = {
+    corpus: string
+    cqp: string
+    start?: number
+    end?: number
+    default_context?: string
+    context?: string
+    show?: string
+    show_struct?: string
+    default_within?: string
+    within?: string
+    in_order?: boolean
+    sort?: string
+    random_seed?: number
+    cut?: number
+    [cqpn: `cqp${number}`]: string
+    expand_prequeries?: boolean
+    incremental?: boolean
+}
+
+type MakeRequestOptions = {
+    ajaxParams?: KorpQueryParams & {
+        command?: string
+    }
+}
+
+type Interval = { start: number; end: number }
+
+/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
+type KorpQueryResponse = {
+    /** Search hits */
+    kwic: ApiKwic[]
+    /** Total number of hits */
+    hits: number
+    /** Number of hits for each corpus */
+    corpus_hits: Record<string, number>
+    /** Execution time in seconds */
+    time: number
+    /** A hash of this query */
+    query_data: string
+}
+
+/** Search hits */
+type ApiKwic = {
+    /** An object for each token in the context, with attribute values for that token */
+    tokens: Record<string, any>[]
+    /** Attribute values for the context (e.g. sentence) */
+    structs: Record<string, any>
+    /** Specifies the position of the match in the context. If `in_order` is false, `match` will consist of a list of match objects, one per highlighted word */
+    match: KwicMatch | KwicMatch[]
+    /** Hits from aligned corpora if available, otherwise omitted */
+    aligned: Record<string, any[]>
+}
+
+/** Specifies the position of a match in a context */
+type KwicMatch = {
+    /** Start position of the match within the context */
+    start: number
+    /** End position of the match within the context */
+    end: number
+    /** Global corpus position of the match */
+    position: number
 }
