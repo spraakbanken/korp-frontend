@@ -3,16 +3,6 @@ import settings from "@/settings"
 import BaseProxy, { AjaxSettings } from "@/korp-api/base-proxy"
 import { httpConfAddMethod } from "@/util"
 
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture */
-type KorpRelationsParams = {
-    corpus: string
-    word: string
-    type?: string
-    min?: number
-    max?: number
-    incremental?: boolean
-}
-
 export default class LemgramProxy extends BaseProxy {
     prevParams?: KorpRelationsParams
     prevRequest?: JQuery.AjaxSettings
@@ -55,8 +45,38 @@ export default class LemgramProxy extends BaseProxy {
             },
         }
 
-        const def = $.ajax(httpConfAddMethod(ajaxSettings))
+        const def = $.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpRelationsResponse>
         this.pendingRequests.push(def)
         return def
     }
+}
+
+/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture */
+type KorpRelationsParams = {
+    corpus: string
+    word: string
+    type?: string
+    min?: number
+    max?: number
+    incremental?: boolean
+}
+
+type KorpRelationsResponse = {
+    relations: ApiRelation[]
+    /** Execution time in seconds */
+    time: number
+}
+
+type ApiRelation = {
+    dep: string
+    depextra: string
+    deppos: string
+    freq: number
+    head: string
+    headpos: string
+    /** Lexicographer's mutual information score */
+    mi: number
+    rel: string
+    /** List of IDs, for getting the source sentences */
+    source: string[]
 }
