@@ -73,6 +73,7 @@
 - Modes in "More" menu sorted locale-awarely
 - Allow dash in attribute name
 - Restore UI message when search gives no hits
+- The `corpus_info` request uses `GET` when possible
 
 ## [9.5.3] - 2024-03-11
 

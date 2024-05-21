@@ -348,7 +348,7 @@ export function httpConfAddMethodAngular(conf) {
 export function httpConfAddMethodFetch(conf) {
     const params = conf.params
     delete conf.params
-    if (calcUrlLength(conf.url, params)) {
+    if (calcUrlLength(conf.url, params) > settings["backendURLMaxLength"]) {
         conf.method = "POST"
         const form = new FormData()
         for (const key in params) {
@@ -357,7 +357,7 @@ export function httpConfAddMethodFetch(conf) {
         conf.body = form
     } else {
         conf.method = "GET"
-        conf.url = "?" + new URLSearchParams(params)
+        conf.url += "?" + new URLSearchParams(params)
     }
     return conf
 }
