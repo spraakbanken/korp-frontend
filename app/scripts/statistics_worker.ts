@@ -5,7 +5,8 @@ import sumBy from "lodash/sumBy"
 import isArray from "lodash/isArray"
 import keys from "lodash/keys"
 
-import { StatsData, RowsEntity, Value } from "./interfaces/stats"
+import { RowsEntity } from "./interfaces/stats"
+import { StatisticsWorkerMessage, StatsNormalized, StatsRow } from "./statistics.types"
 
 /*
     This is optimized code for transforming the statistics data.
@@ -16,10 +17,11 @@ onmessage = function (e) {
     // Ignore messages sent by Webpack dev server.
     if (e.data.type != "korpStatistics") return
 
-    const data: StatsData = e.data.data
+    const message: StatisticsWorkerMessage = e.data
+    const data: StatsNormalized = message.data
     const { combined, corpora, count } = data
-    const reduceVals: string[] = e.data.reduceVals
-    const groupStatistics: string[] = e.data.groupStatistics
+    const reduceVals = message.reduceVals
+    const groupStatistics = message.groupStatistics
 
     const simplifyValue = function (values: string[], field: string): string[] {
         if (groupStatistics.indexOf(field) != -1) {
@@ -45,7 +47,7 @@ onmessage = function (e) {
      * attributes that are in `group_statistics` in config.yml
      */
     const simplifyHitString = function (item: RowsEntity): string {
-        var newFields: any[] = []
+        var newFields: string[] = []
         map(item.value, function (values, field) {
             var newValues = simplifyValue(values, field)
             newFields.push(newValues.join(" "))
@@ -56,28 +58,27 @@ onmessage = function (e) {
     // TODO: why first element of combined?
     const totalAbsoluteGroups = groupBy(combined[0].rows, (item) => simplifyHitString(item))
 
-    const totalRow = {
+    const totalRow: TotalRow = {
         id: "row_total",
         total_value: [combined[0].sums.absolute, combined[0].sums.relative],
         rowId: 0,
     }
 
     const corporaKeys = keys(data.corpora)
-    const corporaFreqs = {}
+    const corporaFreqs: Record<string, Record<string, StatsRow[]>> = {}
     for (const id of corporaKeys) {
         const obj = data.corpora[id]
         totalRow[id + "_value"] = [obj[0].sums.absolute, obj[0].sums.relative]
-
-        corporaFreqs[id] = groupBy(obj[0].rows, simplifyHitString)
+        corporaFreqs[id] = groupBy(obj[0].rows, (item) => simplifyHitString(item))
     }
 
     const rowIds = keys(totalAbsoluteGroups)
     const rowCount = rowIds.length + 1
-    const dataset = new Array(rowCount)
+    const dataset: Dataset = new Array(rowCount)
 
     dataset[0] = totalRow
 
-    const reduceMap = {}
+    const reduceMap: Record<string, string[]> = {}
 
     for (let i = 0; i < rowCount - 1; i++) {
         let word = rowIds[i]
@@ -113,7 +114,7 @@ onmessage = function (e) {
 
         let row = {
             rowId: i + 1,
-            total_value: [totalAbs, totalRel],
+            total_value: [totalAbs, totalRel] as AbsRelSeq,
             formattedValue: {},
             statsValues,
         }
@@ -138,3 +139,24 @@ onmessage = function (e) {
     const ctx: Worker = self as any
     ctx.postMessage(dataset)
 }
+
+export type Row = TotalRow | SingleRow
+
+export type TotalRow = RowBase & {
+    id: "row_total"
+}
+
+export type SingleRow = RowBase & {
+    formattedValue: {}
+    statsValues: Record<number, Record<string, string[]>>
+}
+
+export type RowBase = {
+    rowId: number
+    total_value: AbsRelSeq
+    [name: `${string}_value`]: AbsRelSeq
+}
+
+export type Dataset = Row[]
+
+export type AbsRelSeq = [number, number]

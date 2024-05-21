@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import model from "@/model"
+import model from "@/korp-api/model"
 import * as treeUtil from "./components/corpus_chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
@@ -139,7 +139,7 @@ function transformConfig(modeSettings) {
     // only if the current mode is parallel, we load the special code required
     if (modeSettings["parallel"]) {
         require("./parallel/corpus_listing.js")
-        require("./parallel/stats_proxy.js")
+        require("./parallel/stats_proxy.ts")
     }
 
     function rename(obj, from, to) {

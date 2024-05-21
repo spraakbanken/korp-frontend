@@ -16,6 +16,7 @@
 - Improved UI reactivity for Simple search
 - Make the search button(s) more visible [#308](https://github.com/spraakbanken/korp-frontend/issues/308)
 - Use native checkboxes in corpus chooser, not images [#362](https://github.com/spraakbanken/korp-frontend/issues/362)
+- Added TypeScript definitions for Korp backend parameters and responses, and moved `@/model` to `@/korp-api/model`
 - Removed globals – import them instead (or their members):
   - `authenticationProxy`
   - `settings`

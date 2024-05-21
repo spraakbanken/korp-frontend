@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import model from "@/model"
+import model from "@/korp-api/model"
 
 const korpApp = angular.module("korpApp")
 
@@ -53,7 +53,7 @@ export class KwicCtrl {
 
         this.setupListeners()
 
-        s.proxy = new model.KWICProxy()
+        s.proxy = new model.KwicProxy()
 
         s.tabindex = 0
 

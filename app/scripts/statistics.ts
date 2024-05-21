@@ -2,18 +2,25 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config"
+import type { StatsNormalized, StatisticsWorkerMessage, StatisticsWorkerResult, SearchParams } from "./statistics.types"
 import { hitCountHtml } from "@/util"
+import { Row } from "./statistics_worker"
 const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function () {
-    const createColumns = function (corpora, reduceVals, reduceValLabels) {
-        const valueFormatter = function (row, cell, value, columnDef, dataContext) {
-            return hitCountHtml(...dataContext[columnDef.id + "_value"], window.lang)
+    const createColumns = function (
+        corpora: Record<string, any>,
+        reduceVals: string[],
+        reduceValLabels: Label[]
+    ): SlickgridColumn[] {
+        const valueFormatter: SlickgridFormatter = function (row, cell, value, columnDef, dataContext) {
+            const [absolute, relative] = [...dataContext[columnDef.id + "_value"]]
+            return hitCountHtml(absolute, relative, (window as any).lang as string)
         }
 
         const corporaKeys = _.keys(corpora)
         const minWidth = 100
-        const columns = []
+        const columns: SlickgridColumn[] = []
         const cl = settings.corpusListing.subsetFactory(corporaKeys)
         const attrObj = cl.getStructAttrs()
         for (let [reduceVal, reduceValLabel] of _.zip(reduceVals, reduceValLabels)) {
@@ -72,19 +79,19 @@ const createStatisticsService = function () {
     }
 
     const processData = function (
-        def,
-        originalCorpora,
-        data,
-        reduceVals,
-        reduceValLabels,
-        ignoreCase,
-        prevNonExpandedCQP
+        def: JQuery.Deferred<StatisticsWorkerResult>,
+        originalCorpora: string,
+        data: StatsNormalized,
+        reduceVals: string[],
+        reduceValLabels: Label[],
+        ignoreCase: boolean,
+        prevNonExpandedCQP: string
     ) {
         const columns = createColumns(data.corpora, reduceVals, reduceValLabels)
 
         const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
-        statsWorker.onmessage = function (e) {
-            const searchParams = {
+        statsWorker.onmessage = function (e: MessageEvent<StatisticsWorkerResult>) {
+            const searchParams: SearchParams = {
                 reduceVals,
                 ignoreCase,
                 originalCorpora,
@@ -93,10 +100,10 @@ const createStatisticsService = function () {
             }
             let result = [e.data, columns, searchParams]
             // Invoke configurable stats rewriting
-            if (settings.stats_rewrite) {
+            if (settings["stats_rewrite"]) {
                 result = settings.stats_rewrite(result)
             }
-            def.resolve(result)
+            def.resolve(result as StatisticsWorkerResult)
         }
 
         statsWorker.postMessage({
@@ -104,10 +111,34 @@ const createStatisticsService = function () {
             data,
             reduceVals,
             groupStatistics: settings["group_statistics"],
-        })
+        } as StatisticsWorkerMessage)
     }
 
     return { processData }
 }
 
 export const statisticsService = createStatisticsService()
+
+export type SlickgridColumn = {
+    id: string
+    field: string
+    formatter: SlickgridFormatter
+    name?: string
+    translation?: Label
+    sortable?: boolean
+    minWidth?: number
+    maxWidth?: number
+    cssClass?: string
+    headerCssClass?: string
+}
+
+type Label = string | Record<string, string>
+
+type SlickgridFormatter = (
+    // There's currently no Korp code that uses these first three args
+    row: unknown,
+    cell: unknown,
+    value: unknown,
+    columnDef: SlickgridColumn,
+    dataContext: Row
+) => string
