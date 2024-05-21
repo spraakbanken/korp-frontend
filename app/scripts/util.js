@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
+import { locObj } from "@/i18n"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -59,59 +60,6 @@ export class SelectionManager {
     hasSelected() {
         return this.selected.length > 0
     }
-}
-
-/**
- * Get translated string from global localization data.
- * @param {string} key A translation key.
- * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
- * @returns {string} The translated string, or the value of `key` if no translation is found.
- */
-export function loc(key, lang) {
-    lang = lang || window.lang || settings["default_language"]
-    try {
-        return window.loc_data[lang][key]
-    } catch (e) {
-        return key
-    }
-}
-
-/**
- * Get translated string from a given object.
- * @param {object | string} map An object of strings keyed by language codes. Alternatively, just a string.
- * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
- * @returns {string | undefined} The translated string, or undefined if no translation is found.
- */
-export function locObj(map, lang) {
-    if (!map) return undefined
-    if (typeof map == "string") return map
-
-    lang = lang || window.lang || settings["default_language"]
-    if (map[lang]) {
-        return map[lang]
-    } else if (map[settings["default_language"]]) {
-        return map[settings["default_language"]]
-    }
-
-    // fall back to the first value if neither the selected or default language are available
-    return Object.values(map)[0]
-}
-
-/**
- * Translate a given key in a translations list.
- * Very similar to `locObj(translations[key], lang)` but handles edge cases differently.
- * TODO Can we merge this with locObj?
- * @param {object} translations A two-dimensional map keyed first by translation keys and secondly by language codes, with translated strings as values.
- *   Alternatively, a one-dimensional map keyed only by translation keys, with non-translated strings as values.
- * @param {string} key A translation key.
- * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
- * @returns {string} The translated string, undefined if no translation is found, or the value of `key` if `translations` is unusable.
- */
-export function locAttribute(translations, key, lang) {
-    lang = lang || window.lang || settings["default_language"]
-    if (translations && translations[key])
-        return _.isObject(translations[key]) ? translations[key][lang] : translations[key]
-    return key
 }
 
 /**

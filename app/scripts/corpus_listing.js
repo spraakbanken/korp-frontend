@@ -1,7 +1,8 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import { angularLocationSearch, loc } from "@/util"
+import { angularLocationSearch } from "@/util"
+import { loc } from "@/i18n"
 
 export class CorpusListing {
     constructor(corpora) {

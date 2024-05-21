@@ -1,7 +1,8 @@
 /** @format */
 import angular from "angular"
 import settings from "@/settings"
-import { html, isLemgram, loc, splitLemgram } from "@/util"
+import { html, isLemgram, splitLemgram } from "@/util"
+import { loc } from "@/i18n"
 
 angular.module("korpApp").component("wordPicture", {
     template: html`

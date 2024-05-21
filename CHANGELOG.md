@@ -33,10 +33,10 @@
 - Removed the `warning` directive – use the `korp-warning` class directly instead.
 - Removed the unused `toBody` directive
 - Converted the `timeInterval` directive to a component `datetimePicker`
-- Renamed localization functions (just like the template filters):
+- Renamed localization functions (just like the template filters) and moved them to `@/i18n`:
   - `getLocaleString` to `loc`
   - `getLocaleStringObject` to `locObj`
-  - `translateAttribute` to `locAttribute`
+  - `translateAttribute` to `locAttribute` (also moved the optional `lang` parameter last)
 - Renamed lemgram/saldo functions:
   - `lemgramToString` to `lemgramToHtml`
   - `lemgramToPlainString` to `lemgramToString`
@@ -44,12 +44,10 @@
   - `saldoToString` to `saldoToHtml`
   - `saldoToPlaceholderString` to `saldoToString`
 - Removed `window.util` and converted its members to exported functions:
-  - `loc`, `locObj`, `locAttribute`
   - lemgram/saldo functions
   - `setDownloadLinks`
   - `httpConfAddMethod`, `httpConfAddMethodAngular`, `httpConfAddMethodFetch`
   - `collatorSort`
-- In `locAttribute`, moved the optional `lang` parameter last
 - Revised number formatting:
   - Removed `formatDecimalString` and `prettyNumbers`
   - Added `formatRelativeHits` to format a number with exactly one decimal

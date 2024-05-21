@@ -2,7 +2,8 @@
 import _ from "lodash"
 import angular from "angular"
 import settings from "@/settings"
-import { html, lemgramToString, loc, saldoToString } from "@/util"
+import { html, lemgramToString, saldoToString } from "@/util"
+import { loc } from "@/i18n"
 
 angular.module("korpApp").component("autoc", {
     template: html`

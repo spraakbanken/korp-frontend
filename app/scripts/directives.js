@@ -1,6 +1,7 @@
 /** @format */
 import _ from "lodash"
-import { html, loc, regescape, unregescape } from "@/util"
+import { regescape, unregescape } from "@/util"
+import { loc } from "./i18n"
 
 const korpApp = angular.module("korpApp")
 

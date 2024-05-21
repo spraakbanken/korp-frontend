@@ -2,7 +2,8 @@
 import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import { html, locObj } from "@/util"
+import { html } from "@/util"
+import { locObj } from "@/i18n"
 
 angular.module("korpApp").component("ccInfoBox", {
     template: html`

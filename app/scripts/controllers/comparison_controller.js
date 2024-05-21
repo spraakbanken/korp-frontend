@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { stringifyFunc } from "@/stringify.js"
-import { locAttribute } from "@/util"
+import { locAttribute } from "@/i18n"
 
 const korpApp = angular.module("korpApp")
 

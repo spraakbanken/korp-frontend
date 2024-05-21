@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import { locObj } from "@/util"
+import { locObj } from "@/i18n"
 
 const korpApp = angular.module("korpApp")
 korpApp.factory("kwicDownload", function () {

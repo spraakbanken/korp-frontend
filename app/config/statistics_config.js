@@ -1,7 +1,8 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import { lemgramToHtml, regescape, saldoToHtml, locAttribute } from "@/util"
+import { lemgramToHtml, regescape, saldoToHtml } from "@/util"
+import { locAttribute } from "@/i18n"
 
 let customFunctions = {}
 

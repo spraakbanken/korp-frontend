@@ -1,4 +1,4 @@
-import { loc } from "@/util"
+import { loc } from "@/i18n"
 
 $.fn.outerHTML = function() {
 	return $(this).clone().wrap('<div></div>').parent().html();

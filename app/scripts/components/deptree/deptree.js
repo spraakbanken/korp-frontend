@@ -1,7 +1,8 @@
 /** @format */
 import angular from "angular"
 import _ from "lodash"
-import { html, locObj } from "@/util"
+import { html } from "@/util"
+import { locObj } from "@/i18n"
 
 angular.module("korpApp").component("depTree", {
     template: html`

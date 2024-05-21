@@ -1,7 +1,8 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import { html, loc, regescape, locAttribute, unregescape } from "@/util"
+import { html, regescape, unregescape } from "@/util"
+import { loc, locAttribute } from "@/i18n"
 import "@/components/autoc"
 import "@/components/datetime-picker"
 

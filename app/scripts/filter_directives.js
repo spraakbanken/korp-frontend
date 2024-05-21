@@ -5,7 +5,8 @@
  */
 import _ from "lodash"
 import settings from "@/settings"
-import { regescape, locAttribute } from "@/util"
+import { regescape } from "@/util"
+import { locAttribute } from "@/i18n"
 
 const korpApp = angular.module("korpApp")
 
