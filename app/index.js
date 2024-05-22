@@ -1,8 +1,8 @@
 /** @format */
+import $ from "jquery"
 import currentMode from "@/mode"
 import { angularLocationSearch } from "@/util"
 
-let $ = require("jquery")
 window.jQuery = $
 window.$ = $
 

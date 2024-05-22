@@ -50,16 +50,14 @@ async function initLocales() {
 }
 
 async function getInfoData() {
-    const conf = httpConfAddMethodFetch({
-        url: settings["korp_backend_url"] + "/corpus_info",
-        params: {
-            corpus: _.map(settings.corpusListing.corpora, "id")
-                .map((a) => a.toUpperCase())
-                .join(","),
-        },
-    })
+    const params = {
+        corpus: _.map(settings.corpusListing.corpora, "id")
+            .map((a) => a.toUpperCase())
+            .join(","),
+    }
+    const { url, request } = httpConfAddMethodFetch(settings["korp_backend_url"] + "/corpus_info", params)
 
-    const response = await fetch(conf.url, conf)
+    const response = await fetch(url, request)
     const data = await response.json()
 
     for (let corpus of settings.corpusListing.corpora) {

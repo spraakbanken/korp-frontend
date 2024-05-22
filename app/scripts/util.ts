@@ -1,7 +1,9 @@
 /** @format */
 import _ from "lodash"
+import angular, { type ILocationService, type IRequestConfig, type IScope } from "angular"
 import settings from "@/settings"
-import { locObj } from "@/i18n"
+import { getLang, loc, locObj } from "@/i18n"
+import { LangMap } from "./i18n/types"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -11,15 +13,18 @@ export const html = String.raw
  * Only use this in code outside Angular. Inside, use `$location.search()`.
  * Note that this is sensitive to the number of arguments; omitting an argument is different from passing undefined.
  */
-export function angularLocationSearch(...args) {
+// Sorry for messy typing. Looks like the `P extends Parameters ? ReturnType : any` is necessary for some reason.
+export function angularLocationSearch<P extends [] | Parameters<ILocationService["search"]>>(
+    ...args: P
+): P extends Parameters<ILocationService["search"]> ? ReturnType<ILocationService["search"]> : any {
     const $root = angular.element("body")
     return safeApply($root.scope(), function () {
         const $location = $root.injector().get("$location")
-        return $location.search(...args)
+        return $location.search(args[0], args[1])
     })
 }
 
-export function safeApply(scope, fn) {
+export function safeApply<R>(scope: IScope, fn: (scope: IScope) => R): R {
     if (scope.$$phase || scope.$root.$$phase) {
         return fn(scope)
     } else {
@@ -27,13 +32,17 @@ export function safeApply(scope, fn) {
     }
 }
 
+/** Toggles class names for selected word elements in KWIC. */
 export class SelectionManager {
+    selected: JQuery<HTMLElement>
+    aux: JQuery<HTMLElement>
+
     constructor() {
         this.selected = $()
         this.aux = $()
     }
 
-    select(word, aux) {
+    select(word: JQuery<HTMLElement>, aux: JQuery<HTMLElement>): void {
         if (word == null || !word.length) {
             return
         }
@@ -47,7 +56,7 @@ export class SelectionManager {
         word.addClass("word_selected token_selected")
     }
 
-    deselect() {
+    deselect(): void {
         if (!this.selected.length) {
             return
         }
@@ -57,29 +66,29 @@ export class SelectionManager {
         this.aux = $()
     }
 
-    hasSelected() {
+    hasSelected(): boolean {
         return this.selected.length > 0
     }
 }
 
 /**
  * Format a number of "relative hits" (hits per 1 million tokens), using exactly one decimal.
- * @param {number|string} x Number of relative hits
- * @param {string} lang The locale to use.
+ * @param x Number of relative hits
+ * @param lang The locale to use.
  * @returns A string with the number nicely formatted.
  */
-export function formatRelativeHits(x, lang) {
+export function formatRelativeHits(x: number | string, lang: string) {
     return Number(x).toLocaleString(lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 }
 
 /**
  * Format as `<relative> (<absolute>)` plus surrounding HTML.
- * @param {number} absolute Number of absolute hits
- * @param {number} relative Number of relative hits (hits per 1 million tokens)
- * @param {string} lang The locale to use.
+ * @param absolute Number of absolute hits
+ * @param relative Number of relative hits (hits per 1 million tokens)
+ * @param lang The locale to use.
  * @returns A HTML snippet.
  */
-export function hitCountHtml(absolute, relative, lang) {
+export function hitCountHtml(absolute: number, relative: number, lang: string) {
     const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
     // TODO Remove outer span?
     // TODO Flexbox?
@@ -90,15 +99,15 @@ export function hitCountHtml(absolute, relative, lang) {
 /**
  * Render a lemgram string as pretty HTML.
  * TODO No HTML in placeholder in Extended!
- * @param {string} lemgram A lemgram string, e.g. "vara..nn.2"
- * @param {boolean} [appendIndex] Whether the numerical index should be included in output.
- * @returns {string} An HTML string.
+ * @param lemgram A lemgram string, e.g. "vara..nn.2"
+ * @param appendIndex Whether the numerical index should be included in output.
+ * @returns An HTML string.
  */
-export function lemgramToHtml(lemgram, appendIndex) {
+export function lemgramToHtml(lemgram: string, appendIndex?: boolean): string {
     lemgram = _.trim(lemgram)
     if (!isLemgram(lemgram)) return lemgram
     const { form, pos, index } = splitLemgram(lemgram)
-    const indexHtml = appendIndex != null && index !== "1" ? `<sup>${index}</sup>` : ""
+    const indexHtml = appendIndex && index !== "1" ? `<sup>${index}</sup>` : ""
     const concept = form.replace(/_/g, " ")
     const type = pos.slice(0, 2)
     return `${concept}${indexHtml} (<span rel="localize[${type}]">${loc(type)}</span>)`
@@ -106,10 +115,10 @@ export function lemgramToHtml(lemgram, appendIndex) {
 
 /**
  * Render a lemgram string in pretty plain text.
- * @param {string} lemgram A lemgram string, e.g. "vara..n.2"
- * @returns {string} A plain-text string.
+ * @param lemgram A lemgram string, e.g. "vara..n.2"
+ * @returns A plain-text string.
  */
-export function lemgramToString(lemgram) {
+export function lemgramToString(lemgram: string): string {
     const { form, pos, index } = splitLemgram(_.trim(lemgram))
     const indexSup = parseInt(index) > 1 ? numberToSuperscript(index) : ""
     const concept = form.replace(/_/g, " ")
@@ -121,18 +130,15 @@ const lemgramRegexp = /\.\.\w+\.\d\d?(:\d+)?$/
 
 /**
  * Determines if a string is a lemgram string, e.g. "vara..n.2"
- * @param {string} str A string to test.
- * @returns {boolean}
  */
-export const isLemgram = (str) => str.search(lemgramRegexp) !== -1
+export const isLemgram = (str: string): boolean => str.search(lemgramRegexp) !== -1
 
 /**
  * Analyze a lemgram string into its constituents.
- * @param {string} lemgram A lemgram string, e.g. "vara..n.2"
- * @returns {object} A map with the keys `morph`, `form`, `pos`, `index` and `startIndex`. Values are strings.
+ * @param lemgram A lemgram string, e.g. "vara..n.2"
  * @throws If input is not a lemgram. You can test it first with `isLemgram`!
  */
-export function splitLemgram(lemgram) {
+export function splitLemgram(lemgram: string): LemgramSplit {
     if (!isLemgram(lemgram)) {
         throw new Error(`Input to splitLemgram is not a lemgram: ${lemgram}`)
     }
@@ -146,27 +152,35 @@ export function splitLemgram(lemgram) {
     }
 }
 
+type LemgramSplit = {
+    morph: string
+    form: string
+    pos: string
+    index: string
+    startIndex: string
+}
+
 const saldoRegexp = /(.*?)\.\.(\d\d?)(:\d+)?$/
 
 /**
  * Render a SALDO string as pretty HTML.
- * @param {string} saldoId A SALDO string, e.g. "vara..2"
- * @param {boolean} [appendIndex] Whether the numerical index should be included in output.
- * @returns {string} An HTML string.
+ * @param saldoId A SALDO string, e.g. "vara..2"
+ * @param appendIndex Whether the numerical index should be included in output.
+ * @returns An HTML string.
  */
-export function saldoToHtml(saldoId, appendIndex) {
+export function saldoToHtml(saldoId: string, appendIndex?: boolean): string {
     const match = saldoId.match(saldoRegexp)
     const concept = match[1].replace(/_/g, " ")
-    const indexHtml = appendIndex != null && match[2] !== "1" ? `<sup>${match[2]}</sup>` : ""
+    const indexHtml = appendIndex && match[2] !== "1" ? `<sup>${match[2]}</sup>` : ""
     return `${concept}${indexHtml}`
 }
 
 /**
  * Render a SALDO string in pretty plain text.
- * @param {string} saldoId A SALDO string, e.g. "vara..2"
- * @returns {string} An plain-text string.
+ * @param saldoId A SALDO string, e.g. "vara..2"
+ * @returns An plain-text string.
  */
-export function saldoToString(saldoId) {
+export function saldoToString(saldoId: string): string {
     const match = saldoId.match(saldoRegexp)
     const concept = match[1].replace(/_/g, " ")
     const indexSup = parseInt(match[2]) > 1 ? numberToSuperscript(match[2]) : ""
@@ -175,10 +189,10 @@ export function saldoToString(saldoId) {
 
 /**
  * Represent a number with superscript characters like "⁴²".
- * @param {number | string} n A decimal number.
+ * @param n A decimal number.
  * @returns A string of superscript numbers.
  */
-function numberToSuperscript(number) {
+function numberToSuperscript(number: string | number): string {
     return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[n]).join("")
 }
 
@@ -186,13 +200,13 @@ function numberToSuperscript(number) {
 // settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
-export function setDownloadLinks(xhr_settings, result_data) {
+export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data): void {
     // If some of the required parameters are null, return without
     // adding the download links.
     if (
         !(xhr_settings != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)
     ) {
-        c.log("failed to do setDownloadLinks")
+        console.log("failed to do setDownloadLinks")
         return
     }
 
@@ -208,7 +222,7 @@ export function setDownloadLinks(xhr_settings, result_data) {
     // result.
     const get_corpus_num = (hit_num) => result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus)
 
-    c.log("setDownloadLinks data:", result_data)
+    console.log("setDownloadLinks data:", result_data)
     $("#download-links").empty()
     // Corpora in the query result
     const result_corpora = result_data.corpus_order.slice(
@@ -268,7 +282,7 @@ export function setDownloadLinks(xhr_settings, result_data) {
         i++
     }
     $("#download-links").off("change")
-    $("#download-links")
+    ;($ as any)("#download-links")
         .localize()
         .click(false)
         .change(function (event) {
@@ -276,41 +290,41 @@ export function setDownloadLinks(xhr_settings, result_data) {
             if (!params) {
                 return
             }
-            $.generateFile(settings["download_cgi_script"], params)
+            ;($ as any).generateFile(settings["download_cgi_script"], params)
             const self = $(this)
             return setTimeout(() => self.val("init"), 1000)
         })
 }
 
 /** Escape special characters in a string so it can be safely inserted in a regular expression. */
-export const regescape = (s) => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
+export const regescape = (s: string): string => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
 
 /** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
-export const unregescape = (s) => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
+export const unregescape = (s: string): string => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
 
 /** Return the length of baseUrl with params added. */
-const calcUrlLength = (baseUrl, params) => baseUrl.length + new URLSearchParams(params).toString().length + 1
+const calcUrlLength = (baseUrl: string, params: any): number =>
+    baseUrl.length + new URLSearchParams(params).toString().length + 1
 
 /**
  * Add HTTP method to the HTTP configuration object conf for jQuery.ajax or AngularJS $http call:
  * if the result URL would be longer than settings.backendURLMaxLength, use POST, otherwise GET.
- * @param {object} conf A $http or jQuery.ajax configuration object.
+ * @param conf A $http or jQuery.ajax configuration object.
  *   For $http, the request parameters should be in `params` (moved to `data` for POST),
  *   and for jQuery.ajax, they should be in `data`.
  * @returns The same object, possibly modified in-place
  */
-export function httpConfAddMethod(conf) {
+export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T): T {
     // The property to use for GET: AngularJS $http uses params for
     // GET and data for POST, whereas jQuery.ajax uses data for both
-    const getDataProp = conf.params != undefined ? "params" : "data"
-    const data = conf.data || conf.params
+    const data = "params" in conf ? conf.params : conf.data
     if (calcUrlLength(conf.url, data) > settings.backendURLMaxLength) {
         conf.method = "POST"
         conf.data = data
-        delete conf.params
+        if ("params" in conf) delete conf.params
     } else {
         conf.method = "GET"
-        conf[getDataProp] = data
+        conf["params" in conf ? "params" : "data"] = data
     }
     return conf
 }
@@ -320,7 +334,7 @@ export function httpConfAddMethod(conf) {
  * @param {object} conf A $http or jQuery.ajax configuration object.
  * @returns The same object, possibly modified in-place
  */
-export function httpConfAddMethodAngular(conf) {
+export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T): T {
     const fixedConf = httpConfAddMethod(conf)
 
     if (fixedConf.method == "POST") {
@@ -342,34 +356,33 @@ export function httpConfAddMethodAngular(conf) {
 
 /**
  * Like `httpConfAddMethod`, but for use with native `fetch()`.
- * @param {object} conf A $http or jQuery.ajax configuration object.
+ * @param conf A $http or jQuery.ajax configuration object.
  * @returns The same object, possibly modified in-place
  */
-export function httpConfAddMethodFetch(conf) {
-    const params = conf.params
-    delete conf.params
-    if (calcUrlLength(conf.url, params) > settings["backendURLMaxLength"]) {
-        conf.method = "POST"
-        const form = new FormData()
+export function httpConfAddMethodFetch(
+    url: string,
+    params: Record<string, string>
+): { url: string; request?: RequestInit } {
+    if (calcUrlLength(url, params) > settings["backendURLMaxLength"]) {
+        const body = new FormData()
         for (const key in params) {
-            form.append(key, params[key])
+            body.append(key, params[key])
         }
-        conf.body = form
+        return { url, request: { method: "POST", body } }
     } else {
-        conf.method = "GET"
-        conf.url += "?" + new URLSearchParams(params)
+        return { url: url + "?" + new URLSearchParams(params) }
     }
-    return conf
 }
 
 /**
  * Sort elements alphabetically by a given attribute.
- * @param {object[]} elems A list of objects.
- * @param {string | number} key A key that should be present in the objects.
- * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
+ * @param elems A list of objects.
+ * @param key A key that should be present in the objects.
+ * @param lang The code of the language to translate to. Defaults to the global current language.
  * @returns A copy of the list, sorted.
  */
-export function collatorSort(elems, key, lang) {
+export function collatorSort(elems: LangMap[], key: string | number, lang?: string) {
+    lang = lang || getLang()
     const comparator = new Intl.Collator(lang).compare
-    return elems.slice().sort((a, b) => comparator(...[a, b].map((x) => locObj(x[key], lang))))
+    return elems.slice().sort((a, b) => comparator(locObj(a[key], lang), locObj(b[key], lang)))
 }
