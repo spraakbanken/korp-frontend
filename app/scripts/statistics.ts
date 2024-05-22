@@ -99,10 +99,6 @@ const createStatisticsService = function () {
                 prevNonExpandedCQP,
             }
             let result = [e.data, columns, searchParams]
-            // Invoke configurable stats rewriting
-            if (settings["stats_rewrite"]) {
-                result = settings.stats_rewrite(result)
-            }
             def.resolve(result as StatisticsWorkerResult)
         }
 

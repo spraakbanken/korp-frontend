@@ -18,6 +18,7 @@
 - Use native checkboxes in corpus chooser, not images [#362](https://github.com/spraakbanken/korp-frontend/issues/362)
 - Added TypeScript definitions for Korp backend parameters and responses
 - Wrapped `GraphProxy`, `KwicProxy`, `LemgramProxy`, `StatsProxy` and `TimeProxy` with factories; see [@/util/Factory](./app/scripts/util.ts)
+  - Removed the `stats_rewrite` config option, as the change above eliminated the need for this
 - Removed globals – import them instead (or their members):
   - `authenticationProxy`
   - `settings`

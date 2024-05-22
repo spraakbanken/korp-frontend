@@ -155,7 +155,6 @@ settings that affect the frontend.
 - __reduce_word_attribute_selector__ - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora *word* attributes or only the attributes common to selected corpora. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
 - __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
 - __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
-- __stats_rewrite__: A function that takes the array `[data, columns, searchParams]`, modifies and returns it.
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```yaml
@@ -718,7 +717,7 @@ export default {
 Rendering values and generating CQP can also be controlled by editing `app/config/statistics_config.js`, but 
 of course it is best to avoid editing the actual code if it is possible.
 
-If you need to merge rows or otherwise alter the table structure, implement and assign a function to the `stats_rewrite` setting.
+If you need to merge rows or otherwise alter the table structure, you can extend the `StatsProxy` class and do `statsProxyFactory.setClass(MyStatsProxy)`.
 
 #### Stringify functions
 
