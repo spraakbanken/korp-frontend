@@ -1,7 +1,7 @@
 /** @format */
 import $ from "jquery"
 import currentMode from "@/mode"
-import { angularLocationSearch } from "@/util"
+import { locationSearchGet } from "@/util"
 
 window.jQuery = $
 window.$ = $
@@ -84,4 +84,4 @@ require("./scripts/matomo.js")
 
 // TODO Remove, currently used in tests
 /** @deprecated */
-window.locationSearch = angularLocationSearch
+window.locationSearch = locationSearchGet

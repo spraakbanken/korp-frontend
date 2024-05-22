@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import { angularLocationSearch } from "@/util"
+import { locationSearchGet } from "@/util"
 import { loc } from "@/i18n"
 
 export class CorpusListing {
@@ -232,7 +232,7 @@ export class CorpusListing {
     }
 
     getWithinParameters() {
-        const defaultWithin = angularLocationSearch().within || _.keys(settings["default_within"])[0]
+        const defaultWithin = locationSearchGet("within") || _.keys(settings["default_within"])[0]
 
         const output = []
         for (let corpus of this.selected) {

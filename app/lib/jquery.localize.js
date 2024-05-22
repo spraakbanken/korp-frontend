@@ -1,5 +1,5 @@
 const { default: settings } = require("@/settings");
-const { angularLocationSearch } = require("@/util");
+const { locationSearchGet } = require("@/util");
 
 (function($) {
 	dl_cache = {}
@@ -44,7 +44,7 @@ const { angularLocationSearch } = require("@/util");
 
 	$.fn.localize = function() {
 		//TODO: make this less slow.
-		var lang = angularLocationSearch().lang || settings["default_language"];
+		var lang = locationSearchGet("lang") || settings["default_language"];
 		var data = loc_data[lang];
 		this.find("[rel^=localize]").each(function(i, elem) {
 			var elem = $(elem);

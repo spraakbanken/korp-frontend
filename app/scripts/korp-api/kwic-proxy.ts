@@ -3,7 +3,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/korp-api/base-proxy"
 import type { AjaxSettings, KorpResponse } from "@/korp-api/korp-api.types"
-import { angularLocationSearch, httpConfAddMethod } from "@/util"
+import { locationSearchGet, httpConfAddMethod } from "@/util"
 
 export default class KwicProxy extends BaseProxy {
     foundKwic: boolean
@@ -41,7 +41,7 @@ export default class KwicProxy extends BaseProxy {
         }
 
         function getPageInterval(): Interval {
-            const hpp: string | number = angularLocationSearch().hpp
+            const hpp: string | number = locationSearchGet("hpp")
             const itemsPerPage = Number(hpp) || settings["hits_per_page_default"]
             const start = (page || 0) * itemsPerPage
             const end = start + itemsPerPage - 1
@@ -90,7 +90,7 @@ export default class KwicProxy extends BaseProxy {
         data.show = _.uniq(["sentence"].concat(show)).join(",")
         data.show_struct = _.uniq(show_struct).join(",")
 
-        if (angularLocationSearch()["in_order"] != null) {
+        if (locationSearchGet("in_order") != null) {
             data.in_order = false
         }
 

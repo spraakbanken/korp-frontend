@@ -56,7 +56,7 @@
 - Revised the `locationSearch` and `searchHash` util functions:
   - Deprecated global `locationSearch` in favor of using `$location` directly
   - Removed global `searchHash` in favor of using `$location` directly
-  - Added `angularLocationSearch` to expose `$location.search` to code outside Angular
+  - Added `locationSearchGet`/`locationSearchSet` to expose `$location.search` to code outside Angular
 - Removed map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
 - Removed dependency `jquery.format`
 

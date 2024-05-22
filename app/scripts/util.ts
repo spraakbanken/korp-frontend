@@ -1,6 +1,13 @@
 /** @format */
 import _ from "lodash"
-import angular, { type ILocationService, type IRequestConfig, type IScope } from "angular"
+import angular, {
+    IControllerService,
+    IHttpService,
+    IRootScopeService,
+    type ILocationService,
+    type IRequestConfig,
+    type IScope,
+} from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangMap } from "./i18n/types"
@@ -8,29 +15,39 @@ import { LangMap } from "./i18n/types"
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
 
-/**
- * Get/set values from the URL search string via Angular.
- * Only use this in code outside Angular. Inside, use `$location.search()`.
- * Note that this is sensitive to the number of arguments; omitting an argument is different from passing undefined.
- */
-// Sorry for messy typing. Looks like the `P extends Parameters ? ReturnType : any` is necessary for some reason.
-export function angularLocationSearch<P extends [] | Parameters<ILocationService["search"]>>(
-    ...args: P
-): P extends Parameters<ILocationService["search"]> ? ReturnType<ILocationService["search"]> : any {
-    const $root = angular.element("body")
-    return safeApply($root.scope(), function () {
-        const $location = $root.injector().get("$location")
-        return $location.search(args[0], args[1])
-    })
+/** Mapping from service names to their TS types. */
+type ServiceTypes = {
+    $controller: IControllerService
+    $http: IHttpService
+    $location: ILocationService
+    $rootScope: IRootScopeService
+    // Add types here as needed.
 }
 
-export function safeApply<R>(scope: IScope, fn: (scope: IScope) => R): R {
-    if (scope.$$phase || scope.$root.$$phase) {
-        return fn(scope)
-    } else {
-        return scope.$apply(fn)
-    }
-}
+/** Get an Angular service from outside the Angular context. */
+export const getService = <K extends keyof ServiceTypes>(name: K): ServiceTypes[K] =>
+    angular.element("body").injector().get(name)
+
+/** Wraps `scope.$apply()` to interfere less with the digest cycle (?) */
+export const safeApply = <R>(scope: IScope, fn: (scope: IScope) => R): R =>
+    scope.$$phase || scope.$root.$$phase ? fn(scope) : scope.$apply(fn)
+
+/** Safely (?) use an Angular service from outside the Angular context. */
+export const withService = <K extends keyof ServiceTypes, R>(name: K, fn: (service: ServiceTypes[K]) => R) =>
+    safeApply(getService("$rootScope"), () => fn(getService(name)))
+
+/**
+ * Get values from the URL search string via Angular.
+ * Only use this in code outside Angular. Inside, use `$location.search()`.
+ */
+export const locationSearchGet = (key: string) => withService("$location", ($location) => $location.search()[key])
+
+/**
+ * Set values in the URL search string via Angular.
+ * Only use this in code outside Angular. Inside, use `$location.search()`.
+ */
+export const locationSearchSet = (name: string, value: string | number | boolean | string[]): ILocationService =>
+    withService("$location", ($location) => $location.search(name, value))
 
 /** Toggles class names for selected word elements in KWIC. */
 export class SelectionManager {

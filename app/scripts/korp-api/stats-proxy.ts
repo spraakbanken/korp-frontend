@@ -4,7 +4,7 @@ import settings from "@/settings"
 import BaseProxy from "@/korp-api/base-proxy"
 import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressCallback } from "@/korp-api/korp-api.types"
 import { StatsNormalized, StatsColumn, StatisticsWorkerResult } from "@/statistics.types"
-import { angularLocationSearch, httpConfAddMethod } from "@/util"
+import { locationSearchGet, httpConfAddMethod } from "@/util"
 import { statisticsService } from "@/statistics"
 
 /**
@@ -67,10 +67,10 @@ export default class StatsProxy extends BaseProxy {
     makeRequest(cqp: string, callback: ProgressCallback): JQuery.Promise<StatisticsWorkerResult> {
         const self = this
         this.resetRequest()
-        const reduceval = angularLocationSearch().stats_reduce || "word"
+        const reduceval = locationSearchGet("stats_reduce") || "word"
         const reduceVals = reduceval.split(",")
 
-        const ignoreCase = angularLocationSearch().stats_reduce_insensitive != null
+        const ignoreCase = locationSearchGet("stats_reduce_insensitive") != null
 
         const reduceValLabels = _.map(reduceVals, function (reduceVal) {
             if (reduceVal === "word") {
