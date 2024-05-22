@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import model from "@/backend/model"
+import timeProxyFactory from "@/backend/time-proxy"
 import * as treeUtil from "./components/corpus_chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
@@ -73,7 +73,7 @@ async function getInfoData() {
 }
 
 async function getTimeData() {
-    const timeProxy = new model.TimeProxy()
+    const timeProxy = timeProxyFactory.create()
     const args = await timeProxy.makeRequest()
 
     let [dataByCorpus, all_timestruct, rest] = args

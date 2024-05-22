@@ -49,6 +49,27 @@ export const locationSearchGet = (key: string) => withService("$location", ($loc
 export const locationSearchSet = (name: string, value: string | number | boolean | string[]): ILocationService =>
     withService("$location", ($location) => $location.search(name, value))
 
+/**
+ * Allows a given class to be overridden before instantiation.
+ *
+ * Define a factory for the standard class: `fooFactory = new Factory(Foo)`
+ * Then optionally override the class to be used: `fooFactory.setService(Bar)`
+ * Finally instantiate: `fooFactory.create()`
+ */
+export class Factory<T extends new (...args: any) => InstanceType<T>> {
+    private class_: T
+    constructor(class_: T) {
+        this.setClass(class_)
+    }
+    setClass(class_: T) {
+        this.class_ = class_
+    }
+    create(...args: ConstructorParameters<T>): InstanceType<T>
+    create(...args: any[]): InstanceType<T> {
+        return new this.class_(...args)
+    }
+}
+
 /** Toggles class names for selected word elements in KWIC. */
 export class SelectionManager {
     selected: JQuery<HTMLElement>

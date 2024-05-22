@@ -3,9 +3,9 @@ import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
 import type { AjaxSettings, KorpResponse } from "@/backend/types"
-import { locationSearchGet, httpConfAddMethod } from "@/util"
+import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 
-export default class KwicProxy extends BaseProxy {
+export class KwicProxy extends BaseProxy {
     foundKwic: boolean
     prevCQP?: string
     prevParams: KorpQueryParams | null
@@ -130,6 +130,9 @@ export default class KwicProxy extends BaseProxy {
         return def
     }
 }
+
+const kwicProxyFactory = new Factory(KwicProxy)
+export default kwicProxyFactory
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
 type KorpQueryParams = {

@@ -3,9 +3,9 @@ import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
 import type { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
-import { httpConfAddMethod } from "@/util"
+import { Factory, httpConfAddMethod } from "@/util"
 
-export default class TimeProxy extends BaseProxy {
+export class TimeProxy extends BaseProxy {
     makeRequest() {
         const data: KorpTimespanParams = {
             granularity: "y",
@@ -85,6 +85,9 @@ export default class TimeProxy extends BaseProxy {
         }
     }
 }
+
+const timeProxyFactory = new Factory(TimeProxy)
+export default timeProxyFactory
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1timespan/get */
 type KorpTimespanParams = {

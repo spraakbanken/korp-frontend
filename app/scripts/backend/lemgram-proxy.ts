@@ -2,9 +2,9 @@
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
 import type { AjaxSettings, KorpResponse, ProgressCallback } from "@/backend/types"
-import { httpConfAddMethod } from "@/util"
+import { Factory, httpConfAddMethod } from "@/util"
 
-export default class LemgramProxy extends BaseProxy {
+export class LemgramProxy extends BaseProxy {
     prevParams?: KorpRelationsParams
     prevRequest?: AjaxSettings
     prevUrl?: string
@@ -55,6 +55,9 @@ export default class LemgramProxy extends BaseProxy {
         return def
     }
 }
+
+const lemgramProxyFactory = new Factory(LemgramProxy)
+export default lemgramProxyFactory
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture */
 type KorpRelationsParams = {

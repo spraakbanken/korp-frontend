@@ -2,7 +2,7 @@
 import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import model from "@/backend/model"
+import graphProxyFactory from "@/backend/graph-proxy"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { formatRelativeHits, hitCountHtml, html } from "@/util"
 import { loc } from "@/i18n"
@@ -93,7 +93,7 @@ angular.module("korpApp").component("trendDiagram", {
         function ($rootScope, $timeout, $element) {
             const $ctrl = this
             $ctrl.zoom = "year"
-            $ctrl.proxy = new model.GraphProxy()
+            $ctrl.proxy = graphProxyFactory.create()
             $ctrl.$result = $element.find(".graph_tab")
             $ctrl.mode = "line"
             $ctrl.error = false

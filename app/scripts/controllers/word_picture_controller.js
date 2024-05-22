@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import model from "@/backend/model"
+import lemgramProxyFactory from "@/backend/lemgram-proxy"
 import { isLemgram, lemgramToHtml, unregescape } from "@/util"
 
 const korpApp = angular.module("korpApp")
@@ -16,7 +16,7 @@ korpApp.directive("wordpicCtrl", () => ({
         ($scope, $rootScope, $location, $timeout, searches) => {
             const s = $scope
             s.tabindex = 3
-            s.proxy = new model.LemgramProxy()
+            s.proxy = lemgramProxyFactory.create()
 
             s.error = false
             s.loading = false

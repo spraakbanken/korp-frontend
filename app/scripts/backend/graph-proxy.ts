@@ -4,9 +4,9 @@ import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
 import { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
 import { AbsRelTuple } from "@/statistics.types"
-import { httpConfAddMethod } from "@/util"
+import { Factory, httpConfAddMethod } from "@/util"
 
-export default class GraphProxy extends BaseProxy {
+export class GraphProxy extends BaseProxy {
     granularity: Granularity
     prevParams: KorpCountTimeParams
     prevRequest: AjaxSettings
@@ -88,6 +88,9 @@ export default class GraphProxy extends BaseProxy {
         return def.promise()
     }
 }
+
+const graphProxyFactory = new Factory(GraphProxy)
+export default graphProxyFactory
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count_time/get */
 type KorpCountTimeParams = {

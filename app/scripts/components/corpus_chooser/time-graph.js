@@ -4,7 +4,7 @@ import _ from "lodash"
 import "jquery-flot/jquery.flot.js"
 import "jquery-flot/jquery.flot.stack.js"
 import settings from "@/settings"
-import model from "@/backend/model"
+import timeProxyFactory from "@/backend/time-proxy"
 import { html } from "@/util"
 
 angular.module("korpApp").component("ccTimeGraph", {
@@ -48,7 +48,7 @@ angular.module("korpApp").component("ccTimeGraph", {
         function controller($timeout, $rootScope) {
             let $ctrl = this
 
-            $ctrl.timeProxy = new model.TimeProxy()
+            $ctrl.timeProxy = timeProxyFactory.create()
 
             const [allTimestruct, rest] = settings["time_data"]
 
