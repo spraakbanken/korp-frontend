@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import model from "@/korp-api/model"
+import model from "@/backend/model"
 import * as treeUtil from "./components/corpus_chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"

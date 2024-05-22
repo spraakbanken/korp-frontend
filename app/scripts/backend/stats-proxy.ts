@@ -1,8 +1,8 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import BaseProxy from "@/korp-api/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressCallback } from "@/korp-api/korp-api.types"
+import BaseProxy from "@/backend/base-proxy"
+import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressCallback } from "@/backend/types"
 import { StatsNormalized, StatsColumn, StatisticsWorkerResult } from "@/statistics.types"
 import { locationSearchGet, httpConfAddMethod } from "@/util"
 import { statisticsService } from "@/statistics"

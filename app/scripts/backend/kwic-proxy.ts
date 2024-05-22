@@ -1,8 +1,8 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import BaseProxy from "@/korp-api/base-proxy"
-import type { AjaxSettings, KorpResponse } from "@/korp-api/korp-api.types"
+import BaseProxy from "@/backend/base-proxy"
+import type { AjaxSettings, KorpResponse } from "@/backend/types"
 import { locationSearchGet, httpConfAddMethod } from "@/util"
 
 export default class KwicProxy extends BaseProxy {

@@ -2,7 +2,7 @@
 import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import model from "@/korp-api/model"
+import model from "@/backend/model"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { formatRelativeHits, hitCountHtml, html } from "@/util"
 import { loc } from "@/i18n"

@@ -1,5 +1,5 @@
 /** @format */
-import model from "@/korp-api/model"
+import model from "@/backend/model"
 import settings from "@/settings"
 
 model.StatsProxy = class ParallelStatsProxy extends model.StatsProxy {

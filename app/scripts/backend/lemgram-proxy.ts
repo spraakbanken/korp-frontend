@@ -1,7 +1,7 @@
 /** @format */
 import settings from "@/settings"
-import BaseProxy from "@/korp-api/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressCallback } from "@/korp-api/korp-api.types"
+import BaseProxy from "@/backend/base-proxy"
+import type { AjaxSettings, KorpResponse, ProgressCallback } from "@/backend/types"
 import { httpConfAddMethod } from "@/util"
 
 export default class LemgramProxy extends BaseProxy {

@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import currentMode from "@/mode"
-import model from "@/korp-api/model"
+import model from "@/backend/model"
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("statsResultCtrl", () => ({

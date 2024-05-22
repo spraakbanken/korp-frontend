@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import model from "@/korp-api/model"
+import model from "@/backend/model"
 import { isLemgram, lemgramToHtml, unregescape } from "@/util"
 
 const korpApp = angular.module("korpApp")

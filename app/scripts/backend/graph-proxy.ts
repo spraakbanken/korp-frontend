@@ -1,8 +1,8 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import BaseProxy from "@/korp-api/base-proxy"
-import { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/korp-api/korp-api.types"
+import BaseProxy from "@/backend/base-proxy"
+import { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
 import { AbsRelTuple } from "@/statistics.types"
 import { httpConfAddMethod } from "@/util"
 

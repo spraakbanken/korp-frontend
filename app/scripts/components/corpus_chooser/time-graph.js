@@ -4,7 +4,7 @@ import _ from "lodash"
 import "jquery-flot/jquery.flot.js"
 import "jquery-flot/jquery.flot.stack.js"
 import settings from "@/settings"
-import model from "@/korp-api/model"
+import model from "@/backend/model"
 import { html } from "@/util"
 
 angular.module("korpApp").component("ccTimeGraph", {
