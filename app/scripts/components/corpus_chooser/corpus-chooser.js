@@ -7,8 +7,8 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { html } from "@/util"
 import { loc } from "@/i18n"
 import * as treeUtil from "./util"
+import "@/components/corpus_chooser/corpus-time-graph"
 import "@/components/corpus_chooser/info-box"
-import "@/components/corpus_chooser/time-graph"
 import "@/components/corpus_chooser/tree"
 
 angular.module("korpApp").component("corpusChooser", {
@@ -52,7 +52,7 @@ angular.module("korpApp").component("corpusChooser", {
             <div ng-if="$ctrl.showChooser" class="corpus-chooser flex bg-white">
                 <div class="popupchecks shrink-0 p-4 h-full">
                     <div class="flex">
-                        <cc-time-graph ng-if="$ctrl.showTimeGraph"></cc-time-graph>
+                        <corpus-time-graph ng-if="$ctrl.showTimeGraph"></corpus-time-graph>
                         <div class="p-2">
                             <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
                                 <span class="fa-solid fa-check"></span>

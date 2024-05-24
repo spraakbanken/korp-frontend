@@ -16,6 +16,7 @@
 - Improved UI reactivity for Simple search
 - Make the search button(s) more visible [#308](https://github.com/spraakbanken/korp-frontend/issues/308)
 - Use native checkboxes in corpus chooser, not images [#362](https://github.com/spraakbanken/korp-frontend/issues/362)
+- Replaced JQuery Flot library with Chart.js, used in corpus chooser time graph
 - Added TypeScript definitions for Korp backend parameters and responses
 - Wrapped `GraphProxy`, `KwicProxy`, `LemgramProxy`, `StatsProxy` and `TimeProxy` with factories; see [@/util/Factory](./app/scripts/util.ts)
   - Removed the `stats_rewrite` config option, as the change above eliminated the need for this
