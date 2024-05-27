@@ -27,7 +27,7 @@ describe("page", function () {
     it("should bring up the correct page", async function () {
         // await browser.sleep(2000)
         await expect(elm.getText()).toBe("8")
-        await expect(browser.executeScript("return locationSearch().page")).toBe(7)
+        await expect(browser.executeScript("return locationSearch('page')")).toBe(7)
     })
 
     it("should page to the correct page", async function () {
@@ -42,7 +42,7 @@ describe("page", function () {
         await input.sendKeys("gå")
         await input.sendKeys(protractor.Key.ESCAPE)
         await input.sendKeys(protractor.Key.ENTER)
-        const page = await browser.executeScript("return locationSearch().page")
+        const page = await browser.executeScript("return locationSearch('page')")
         const isZero = page == 0 || page == null || page == undefined
         await expect(isZero).toBe(true)
     })

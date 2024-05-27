@@ -20,6 +20,10 @@
     "lang_SK": "Slovak",
     "lang_ET": "Estonian",
 
+    "front_corpus_updates": "Corpus updates",
+    "front_corpus_updated": "was updated",
+    "example_queries": "Search examples",
+
     "menu": "Menu",
     "docs": "Manual (Swedish only)",
     "more": "More",
@@ -277,11 +281,10 @@
     "corpselector_lastupdate": "Last update",
     "corpselector_supports": "Supports extended context.",
     "corpselector_limited": "The corpus is protected.",
-    "corpselector_time": "Material dated",
-    "corpselector_rest_time": "Undated material",
-    "corpselector_time_chosen": "Selected material",
-    "corpselector_of": " of ",
-    "corpselector_of_total": "of total",
+    "corpselector_year": "Tokens in material dated",
+    "corpselector_undated": "Tokens in undated material",
+    "corpselector_all": "Available",
+    "corpselector_selected": "Selected",
 
     "statstable_allcorpora": "All&nbsp;corpora",
     "statstable_relfreq": "relative frequency (per million words):",

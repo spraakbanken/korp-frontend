@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
 import { KwicCtrl } from "./kwic_controller"
 
 const korpApp = angular.module("korpApp")
@@ -15,7 +16,7 @@ class ExampleCtrl extends KwicCtrl {
 
         // ugly, but because the kwic-tab-scope is parent of this scope it needs to be done
         s.hits = null
-        s.hits_display = null
+        s.hitsInProgress = null
         s.page = 0
         s.error = false
         s.hitsPictureData = null
@@ -72,8 +73,7 @@ class ExampleCtrl extends KwicCtrl {
         }
 
         s.makeRequest = () => {
-            console.log("example kwic make request")
-            const items_per_page = parseInt(locationSearch().hpp || settings["hits_per_page_default"])
+            const items_per_page = parseInt($location.search().hpp || settings["hits_per_page_default"])
             const opts = s.kwicTab.queryParams
 
             // example tab cannot handle incremental = true

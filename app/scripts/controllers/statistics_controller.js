@@ -1,5 +1,8 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
+import currentMode from "@/mode"
+import statsProxyFactory from "@/backend/stats-proxy"
 const korpApp = angular.module("korpApp")
 
 korpApp.directive("statsResultCtrl", () => ({
@@ -18,7 +21,7 @@ korpApp.directive("statsResultCtrl", () => ({
             s.tabindex = 2
             s.gridData = null
 
-            s.proxy = new model.StatsProxy()
+            s.proxy = statsProxyFactory.create()
 
             $rootScope.$on("make_request", (msg, cqp) => {
                 s.makeRequest(cqp)
@@ -140,7 +143,7 @@ korpApp.directive("statsResultCtrl", () => ({
                     return
                 }
 
-                if (data[0].total_value.absolute === 0) {
+                if (data[0].total_value[0] === 0) {
                     s.no_hits = true
                     return
                 }

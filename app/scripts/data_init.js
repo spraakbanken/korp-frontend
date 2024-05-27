@@ -1,7 +1,12 @@
 /** @format */
 import _ from "lodash"
-import { setDefaultConfigValues } from "./settings"
+import settings, { setDefaultConfigValues } from "@/settings"
+import currentMode from "@/mode"
+import timeProxyFactory from "@/backend/time-proxy"
 import * as treeUtil from "./components/corpus_chooser/util"
+import { CorpusListing } from "./corpus_listing"
+import { ParallelCorpusListing } from "./parallel/corpus_listing"
+import { httpConfAddMethodFetch } from "@/util"
 
 // TODO it would be better only to load additional languages when there is a language change
 async function initLocales() {
@@ -45,16 +50,14 @@ async function initLocales() {
 }
 
 async function getInfoData() {
-    const conf = util.httpConfAddMethodFetch({
-        url: settings["korp_backend_url"] + "/corpus_info",
-        params: {
-            corpus: _.map(settings.corpusListing.corpora, "id")
-                .map((a) => a.toUpperCase())
-                .join(","),
-        },
-    })
+    const params = {
+        corpus: _.map(settings.corpusListing.corpora, "id")
+            .map((a) => a.toUpperCase())
+            .join(","),
+    }
+    const { url, request } = httpConfAddMethodFetch(settings["korp_backend_url"] + "/corpus_info", params)
 
-    const response = await fetch(conf.url, conf)
+    const response = await fetch(url, request)
     const data = await response.json()
 
     for (let corpus of settings.corpusListing.corpora) {
@@ -70,7 +73,7 @@ async function getInfoData() {
 }
 
 async function getTimeData() {
-    const timeProxy = new model.TimeProxy()
+    const timeProxy = timeProxyFactory.create()
     const args = await timeProxy.makeRequest()
 
     let [dataByCorpus, all_timestruct, rest] = args
@@ -102,7 +105,7 @@ async function getTimeData() {
 async function getConfig() {
     // Load static corpus config if it exists.
     try {
-        const corpusConfig = require(`modes/${window.currentMode}_corpus_config.json`)
+        const corpusConfig = require(`modes/${currentMode}_corpus_config.json`)
         console.log(`Using static corpus config`)
         return corpusConfig
     } catch {}
@@ -113,7 +116,7 @@ async function getConfig() {
         configUrl = await settings["corpus_config_url"]()
     } else {
         const labParam = process.env.ENVIRONMENT == "staging" ? "&include_lab" : ""
-        configUrl = `${settings["korp_backend_url"]}/corpus_config?mode=${window.currentMode}${labParam}`
+        configUrl = `${settings["korp_backend_url"]}/corpus_config?mode=${currentMode}${labParam}`
     }
     let response
     try {
@@ -131,11 +134,10 @@ async function getConfig() {
 }
 
 function transformConfig(modeSettings) {
-    window.currentModeParallel = modeSettings.parallel
     // only if the current mode is parallel, we load the special code required
-    if (window.currentModeParallel) {
+    if (modeSettings["parallel"]) {
         require("./parallel/corpus_listing.js")
-        require("./parallel/stats_proxy.js")
+        require("./parallel/stats_proxy.ts")
     }
 
     function rename(obj, from, to) {
@@ -258,15 +260,14 @@ export async function fetchInitialData(authDef) {
     const config = await getConfig()
     const modeSettings = transformConfig(config)
 
-    _.assign(window.settings, modeSettings)
+    _.assign(settings, modeSettings)
 
     setDefaultConfigValues()
 
-    const corpora = settings.corpora
-    if (!window.currentModeParallel) {
-        settings.corpusListing = new CorpusListing(corpora)
+    if (!settings["parallel"]) {
+        settings.corpusListing = new CorpusListing(settings.corpora)
     } else {
-        settings.corpusListing = new ParallelCorpusListing(corpora)
+        settings.corpusListing = new ParallelCorpusListing(settings.corpora)
     }
 
     // if the previous config calls didn't yield any corpora, don't ask for info or time

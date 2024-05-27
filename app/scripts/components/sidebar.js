@@ -1,9 +1,13 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import "../../styles/sidebar.scss"
-export const sidebarName = "sidebar"
 import statemachine from "../statemachine"
+import settings from "@/settings"
 import { stringify } from "@/stringify.js"
+import { html, regescape, splitLemgram, safeApply } from "@/util"
+import { loc, locAttribute } from "@/i18n"
+import "@/components/deptree/deptree"
 
 let sidebarComponents = {}
 
@@ -13,8 +17,7 @@ try {
     console.log("No module for sidebar components available")
 }
 
-let html = String.raw
-export const sidebarComponent = {
+angular.module("korpApp").component("sidebar", {
     template: html`
         <div class="sticky top-10 border border-gray-300 p-2 rounded-sm" ng-show="$ctrl.corpusObj">
             <div>
@@ -262,9 +265,7 @@ export const sidebarComponent = {
 
                     output.data("attrs", attrs)
                     if (value === "|" || value === "" || value === null) {
-                        output.append(
-                            `<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>`
-                        )
+                        output.append(`<i rel='localize[empty]' style='color : grey'>${loc("empty")}</i>`)
                         return output
                     }
 
@@ -279,8 +280,8 @@ export const sidebarComponent = {
                         if (key === "variants") {
                             // TODO: this doesn't sort quite as expected
                             valueArray.sort(function (a, b) {
-                                const splita = util.splitLemgram(a)
-                                const splitb = util.splitLemgram(b)
+                                const splita = splitLemgram(a)
+                                const splitb = splitLemgram(b)
                                 const strvala = getStringVal(splita.form) + splita.index + getStringVal(splita.pos)
                                 const strvalb = getStringVal(splitb.form) + splitb.index + getStringVal(splitb.pos)
 
@@ -296,7 +297,7 @@ export const sidebarComponent = {
                                 val = stringify(stringifyKey, x)
 
                                 if (attrs.translation != null) {
-                                    val = util.translateAttribute($ctrl.lang, attrs.translation, val)
+                                    val = locAttribute(attrs.translation, val, $ctrl.lang)
                                 }
 
                                 inner = $(_.template(pattern)({ key: x, val }))
@@ -328,7 +329,7 @@ export const sidebarComponent = {
                     if (attrs.stringify) {
                         str_value = stringify(attrs.stringify, value)
                     } else if (attrs.translation) {
-                        str_value = util.translateAttribute($ctrl.lang, attrs.translation, value)
+                        str_value = locAttribute(attrs.translation, value, $ctrl.lang)
                     }
 
                     if (attrs.type === "url") {
@@ -380,4 +381,4 @@ export const sidebarComponent = {
             })
         },
     ],
-}
+})

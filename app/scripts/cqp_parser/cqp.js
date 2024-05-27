@@ -1,8 +1,11 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
 import { parse } from "./CQPParser"
 
-const parseDateInterval = function (op, val, expanded_format) {
+export { parse }
+
+export function parseDateInterval(op, val, expanded_format) {
     let out
     val = _.invokeMap(val, "toString")
     if (!expanded_format) {
@@ -58,12 +61,12 @@ const parseDateInterval = function (op, val, expanded_format) {
     return out
 }
 
-const stringifyCqp = function (cqp_obj, expanded_format) {
+export function stringify(cqp_obj, expanded_format) {
     if (expanded_format == null) {
         expanded_format = false
     }
     const output = []
-    cqp_obj = CQP.prioSort(_.cloneDeep(cqp_obj))
+    cqp_obj = prioSort(_.cloneDeep(cqp_obj))
 
     for (let token of cqp_obj) {
         if (typeof token === "string") {
@@ -145,75 +148,67 @@ const stringifyCqp = function (cqp_obj, expanded_format) {
     return output.join(" ")
 }
 
-window.CQP = {
-    parse,
+export const expandOperators = (cqpstr) => stringify(parse(cqpstr), true)
 
-    stringify: stringifyCqp,
-
-    expandOperators(cqpstr) {
-        return CQP.stringify(CQP.parse(cqpstr), true)
-    },
-
-    getTimeInterval(obj) {
-        let from = []
-        let to = []
-        for (let token of obj) {
-            for (let or_block of token.and_block) {
-                for (let item of or_block) {
-                    if (item.type === "date_interval") {
-                        from.push(moment(`${item.val[0]}${item.val[2]}`, "YYYYMMDDhhmmss"))
-                        to.push(moment(`${item.val[1]}${item.val[3]}`, "YYYYMMDDhhmmss"))
-                    }
+export function getTimeInterval(obj) {
+    let from = []
+    let to = []
+    for (let token of obj) {
+        for (let or_block of token.and_block) {
+            for (let item of or_block) {
+                if (item.type === "date_interval") {
+                    from.push(moment(`${item.val[0]}${item.val[2]}`, "YYYYMMDDhhmmss"))
+                    to.push(moment(`${item.val[1]}${item.val[3]}`, "YYYYMMDDhhmmss"))
                 }
             }
         }
+    }
 
-        if (!from.length) {
-            return
-        }
-        from = _.minBy(from, (mom) => mom.toDate())
-        to = _.maxBy(to, (mom) => mom.toDate())
+    if (!from.length) {
+        return
+    }
+    from = _.minBy(from, (mom) => mom.toDate())
+    to = _.maxBy(to, (mom) => mom.toDate())
 
-        return [from, to]
-    },
-
-    prioSort(cqpObjs) {
-        const getPrio = function (and_array) {
-            const numbers = _.map(and_array, (item) => _.indexOf(settings["cqp_prio"], item.type))
-            return Math.min(...(numbers || []))
-        }
-
-        for (let token of cqpObjs) {
-            token.and_block = _.sortBy(token.and_block, getPrio).reverse()
-        }
-
-        return cqpObjs
-    },
-
-    // assume cqpObj2 to contain fewer tokens than cqpObj1
-    mergeCqpExprs(cqpObj1, cqpObj2) {
-        for (let i = 0; i < cqpObj2.length; i++) {
-            const token = cqpObj2[i]
-            for (let j = 0; j < cqpObj1.length; j++) {
-                if (cqpObj1[j].and_block) {
-                    cqpObj1[j].and_block = cqpObj1[j].and_block.concat(token.and_block)
-                    break
-                }
-            }
-        }
-        return cqpObj1
-    },
-
-    /** Check if a query has any wildcards (`[]`) */
-    hasWildcard: (cqpObjs) => cqpObjs.some((token) => CQP.stringify([token]).indexOf("[]") === 0),
-
-    /** Check if a query has any tokens with repetition */
-    hasRepetition: (cqpObjs) => cqpObjs.some((token) => token.repeat),
-
-    /** Check if a query has any structure boundaries, e.g. sentence start */
-    hasStruct: (cqpObjs) => cqpObjs.some((token) => token.struct),
-
-    /** Determine whether a query will work with the in_order option */
-    supportsInOrder: (cqpObjs) =>
-        cqpObjs.length > 1 && !CQP.hasWildcard(cqpObjs) && !CQP.hasRepetition(cqpObjs) && !CQP.hasStruct(cqpObjs),
+    return [from, to]
 }
+
+export function prioSort(cqpObjs) {
+    const getPrio = function (and_array) {
+        const numbers = _.map(and_array, (item) => _.indexOf(settings["cqp_prio"], item.type))
+        return Math.min(...(numbers || []))
+    }
+
+    for (let token of cqpObjs) {
+        token.and_block = _.sortBy(token.and_block, getPrio).reverse()
+    }
+
+    return cqpObjs
+}
+
+// assume cqpObj2 to contain fewer tokens than cqpObj1
+export function mergeCqpExprs(cqpObj1, cqpObj2) {
+    for (let i = 0; i < cqpObj2.length; i++) {
+        const token = cqpObj2[i]
+        for (let j = 0; j < cqpObj1.length; j++) {
+            if (cqpObj1[j].and_block) {
+                cqpObj1[j].and_block = cqpObj1[j].and_block.concat(token.and_block)
+                break
+            }
+        }
+    }
+    return cqpObj1
+}
+
+/** Check if a query has any wildcards (`[]`) */
+export const hasWildcard = (cqpObjs) => cqpObjs.some((token) => stringify([token]).indexOf("[]") === 0)
+
+/** Check if a query has any tokens with repetition */
+export const hasRepetition = (cqpObjs) => cqpObjs.some((token) => token.repeat)
+
+/** Check if a query has any structure boundaries, e.g. sentence start */
+export const hasStruct = (cqpObjs) => cqpObjs.some((token) => token.struct)
+
+/** Determine whether a query will work with the in_order option */
+export const supportsInOrder = (cqpObjs) =>
+    cqpObjs.length > 1 && !hasWildcard(cqpObjs) && !hasRepetition(cqpObjs) && !hasStruct(cqpObjs)

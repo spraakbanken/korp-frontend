@@ -1,49 +1,59 @@
 /** @format */
 import _ from "lodash"
+import angular from "angular"
+import settings from "@/settings"
+import { html, lemgramToString, saldoToString } from "@/util"
+import { loc } from "@/i18n"
 
-export const componentName = "autoc"
-export const component = {
-    template: `
-    <div>
-        <script type="text/ng-template" id="lemgramautocomplete.html">
-            <a style="cursor:pointer">
-                <span ng-class="{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : (match.model.variant != 'dalin' && match.model.count == 0)}">
-                    <span ng-if="match.model.parts.namespace" class="label lemgram-namespace">{{match.model.parts.namespace | loc}}</span>
-                    <span>{{match.model.parts.main}}</span>
-                    <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
-                    <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
-                    <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.main}}</span>
-                    <sup ng-if="match.model.desc && match.model.desc.index != 1" style="color:gray">{{match.model.desc.index}}</sup>
-                    <span class="num-to-find" ng-if="match.model.count && match.model.count > 0">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}
+angular.module("korpApp").component("autoc", {
+    template: html`
+        <div>
+            <script type="text/ng-template" id="lemgramautocomplete.html">
+                <a style="cursor:pointer">
+                    <span ng-class="{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : (match.model.variant != 'dalin' && match.model.count == 0)}">
+                        <span ng-if="match.model.parts.namespace" class="label lemgram-namespace">{{match.model.parts.namespace | loc}}</span>
+                        <span>{{match.model.parts.main}}</span>
+                        <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
+                        <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
+                        <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.main}}</span>
+                        <sup ng-if="match.model.desc && match.model.desc.index != 1" style="color:gray">{{match.model.desc.index}}</sup>
+                        <span class="num-to-find" ng-if="match.model.count && match.model.count > 0">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}
+                        </span>
                     </span>
-                </span>
-            </a>
-        </script>
-        <div ng-show="!$ctrl.disableLemgramAutocomplete">
-            <div style="float:left"><input
-                autofocus
-                type="text"
-                ng-model="$ctrl.textInField"
-                ng-change="$ctrl.textInput()"
-                uib-typeahead="row for row in $ctrl.getRows($viewValue)"
-                typeahead-wait-ms="500"
-                typeahead-template-url="lemgramautocomplete.html"
-                typeahead-loading="$ctrl.isLoading"
-                typeahead-on-select="$ctrl.selectedItem($item, $model, $label)"
-                placeholder="{{$ctrl.placeholderToString($ctrl.placeholder)}}"
-                typeahead-click-open
-                typeahead-is-open="$ctrl.typeaheadIsOpen"
-                ng-blur="$ctrl.typeaheadClose()"></div>
-            <div style="margin-left:-20px;margin-top:6px;float:left" ng-if="$ctrl.isLoading"><i class="fa-solid fa-spinner fa-pulse"></i></div>
-        </div>
-        <div ng-show="$ctrl.disableLemgramAutocomplete">
-            <div style="float:left">
-                <input autofocus type="text" ng-model="$ctrl.textInField" ng-change="$ctrl.textInput()">
+                </a>
+            </script>
+            <div ng-show="!$ctrl.disableLemgramAutocomplete">
+                <div style="float:left">
+                    <input
+                        autofocus
+                        type="text"
+                        ng-model="$ctrl.textInField"
+                        ng-change="$ctrl.textInput()"
+                        uib-typeahead="row for row in $ctrl.getRows($viewValue)"
+                        typeahead-wait-ms="500"
+                        typeahead-template-url="lemgramautocomplete.html"
+                        typeahead-loading="$ctrl.isLoading"
+                        typeahead-on-select="$ctrl.selectedItem($item, $model, $label)"
+                        placeholder="{{$ctrl.placeholderToString($ctrl.placeholder)}}"
+                        typeahead-click-open
+                        typeahead-is-open="$ctrl.typeaheadIsOpen"
+                        ng-blur="$ctrl.typeaheadClose()"
+                    />
+                </div>
+                <div style="margin-left:-20px;margin-top:6px;float:left" ng-if="$ctrl.isLoading">
+                    <i class="fa-solid fa-spinner fa-pulse"></i>
+                </div>
             </div>
+            <div ng-show="$ctrl.disableLemgramAutocomplete">
+                <div style="float:left">
+                    <input autofocus type="text" ng-model="$ctrl.textInField" ng-change="$ctrl.textInput()" />
+                </div>
+            </div>
+            <span ng-if="$ctrl.isError" style="color: red; position: relative; top: 3px; margin-left: 6px"
+                >{{$ctrl.errorMessage | loc:$root.lang}}</span
+            >
         </div>
-        <span ng-if='$ctrl.isError' style='color: red; position: relative; top: 3px; margin-left: 6px'>{{$ctrl.errorMessage | loc:lang}}</span>
-    </div>    
     `,
     bindings: {
         input: "<",
@@ -85,7 +95,7 @@ export const component = {
                 }
                 return {
                     main: match[2].replace(/_/g, " "),
-                    pos: util.getLocaleString(match[3].slice(0, 2)),
+                    pos: loc(match[3].slice(0, 2)),
                     index: match[4],
                     namespace: match[1] ? match[1].slice(0, -2) : "",
                 }
@@ -104,9 +114,9 @@ export const component = {
                     return
                 }
                 if (ctrl.type === "lemgram") {
-                    return util.lemgramToPlainString(placeholder)
+                    return lemgramToString(placeholder)
                 } else {
-                    return util.saldoToPlaceholderString(placeholder, true)
+                    return saldoToString(placeholder)
                 }
             })
 
@@ -194,4 +204,4 @@ export const component = {
             }
         },
     ],
-}
+})

@@ -61,11 +61,13 @@ When searching for more than one word, the default search requires all words to 
 other. By checking the *in free order* box, the search will instead find all sentences containing the search words, but the
 order does not matter, and they do not need to be next to each other.
 
-**Initial part and final part**
+**Part of a word**
 
-The check boxes *initial part* and *final part* extend the search to words that include the given word as a prefix
-or suffix. In the case of a lemgram search a compound analysis is used to determine the possible results that can have
-the chosen word as initial or final part.
+The checkboxes *initial part*, *medial part* and *final part* extend the search to words that include the given word at
+the corresponding location. With *medial part* selected, matches can include the given word at any location, including
+the start and the end.
+
+In the case of a lemgram search, a compound analysis is used to determine matches.
 
 **Case-insensitive search**
 

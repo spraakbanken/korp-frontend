@@ -1,13 +1,17 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
 import korpLogo from "../../img/korp_slogan.svg"
 import korpLogoEn from "../../img/korp_slogan_en.svg"
 import sbxLogo from "../../img/sprakbanken_text_slogan.svg"
 import sbxLogoEn from "../../img/sprakbanken_text_slogan_en.svg"
 import guLogo from "../../img/gu_logo_sv_head.svg"
+import settings from "@/settings"
+import currentMode from "@/mode"
+import { collatorSort, html } from "@/util"
+import "@/components/corpus_chooser/corpus-chooser"
 
-let html = String.raw
-export const headerComponent = {
+angular.module("korpApp").component("header", {
     template: html`
         <div id="header">
             <div class="flex items-center justify-between px-3 py-2" id="top_bar">
@@ -39,7 +43,7 @@ export const headerComponent = {
                                 class="block transiton duration-200 hover_text-blue-600"
                                 id="about"
                                 ng-click="$ctrl.citeClick()"
-                                >{{'about' | loc:lang}}</a
+                                >{{'about' | loc:$root.lang}}</a
                             >
                         </li>
                         <li class="bg-white hover_bg-gray-200 p-1 transition duration-500">
@@ -47,17 +51,17 @@ export const headerComponent = {
                                 class="block transiton duration-200 hover_text-blue-600"
                                 href="https://spraakbanken.gu.se/verktyg/korp/användarhandledning"
                                 target="_blank"
-                                >{{'docs' | loc:lang}}</a
+                                >{{'docs' | loc:$root.lang}}</a
                             >
                         </li>
                         <li class="bg-white hover_bg-gray-200 p-1 transition duration-200" id="korplink">
                             <a class="block transiton duration-200 hover_text-blue-600" href="/korp"
-                                >{{'korp' | loc:lang}}</a
+                                >{{'korp' | loc:$root.lang}}</a
                             >
                         </li>
                         <li class="bg-white hover_bg-gray-200 p-1 transition duration-200" id="korplablink">
                             <a class="block transiton duration-200 hover_text-blue-600" href="/korplabb"
-                                >{{'korp_lab' | loc:lang}}</a
+                                >{{'korp_lab' | loc:$root.lang}}</a
                             >
                         </li>
                         <li class="bg-white hover_bg-gray-200 p-1 transition duration-200">
@@ -65,13 +69,13 @@ export const headerComponent = {
                                 class="block transiton duration-200 hover_text-blue-600"
                                 href="https://spraakbanken.gu.se/sparv"
                                 target="_blank"
-                                >{{'import_chain' | loc:lang}}</a
+                                >{{'import_chain' | loc:$root.lang}}</a
                             >
                         </li>
                     </ul>
                 </script>
 
-                <div class="flex items-center">
+                <div class="flex items-center gap-4">
                     <login-status></login-status>
                     <div id="languages">
                         <a
@@ -81,10 +85,8 @@ export const headerComponent = {
                             >{{langObj.label | locObj:lang}}</a
                         >
                     </div>
-                    <div id="news_area">
-                        <div news-desk="" header="'newsdesk-header'" storage="'korp_last_read_newsitem'"></div>
-                    </div>
-                    <a class="mr-2 transiton duration-200 hover_text-blue-600 mx-2" ng-click="$ctrl.citeClick()"
+
+                    <a class="transiton duration-200 hover_text-blue-600" ng-click="$ctrl.citeClick()"
                         >{{'about_cite_header' | loc:$root.lang}}</a
                     ><button
                         class="px-2 py-1 border border-gray-300 bg-gray-200 rounded text-gray-800"
@@ -219,7 +221,7 @@ export const headerComponent = {
             $ctrl.visible = $ctrl.modes.slice(0, N_VISIBLE)
 
             $rootScope.$watch("lang", () => {
-                $ctrl.menu = util.collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
+                $ctrl.menu = collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
 
                 const i = _.map($ctrl.menu, "mode").indexOf(currentMode)
                 if (i !== -1) {
@@ -241,10 +243,10 @@ export const headerComponent = {
             for (let mode of $ctrl.modes) {
                 mode.selected = false
                 if (mode.mode === currentMode) {
-                    window.settings.mode = mode
+                    settings.mode = mode
                     mode.selected = true
                 }
             }
         },
     ],
-}
+})

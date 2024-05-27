@@ -1,39 +1,9 @@
 /** @format */
 import _ from "lodash"
-
-let html = String.raw
+import { regescape, unregescape } from "@/util"
+import { loc } from "./i18n"
 
 const korpApp = angular.module("korpApp")
-
-korpApp.directive("kwicWord", () => ({
-    replace: true,
-    template: `<span class="word" ng-class="getClassObj(wd)">
-{{::wd.word}} </span>\
-`,
-    link(scope) {
-        scope.getClassObj = function (wd) {
-            let struct
-            const output = {
-                reading_match: wd._match,
-                punct: wd._punct,
-                match_sentence: wd._matchSentence,
-                link_selected: wd._link_selected,
-            }
-
-            if ("_open_sentence" in wd) {
-                output[`open_sentence`] = true
-            }
-
-            const result = []
-            for (let [x, y] of _.toPairs(output)) {
-                if (y) {
-                    result.push(x)
-                }
-            }
-            return result.join(" ")
-        }
-    },
-}))
 
 korpApp.directive("tabHash", [
     "utils",
@@ -111,21 +81,8 @@ korpApp.directive("escaper", () => ({
             unescape = (val) => val
         } else {
             const doNotEscape = ["*=", "!*=", "regexp_contains", "not_regexp_contains"]
-            escape = function (val) {
-                if (!doNotEscape.includes($scope.orObj.op)) {
-                    return regescape(val)
-                } else {
-                    return val
-                }
-            }
-
-            unescape = function (val) {
-                if (!doNotEscape.includes($scope.orObj.op)) {
-                    return unregescape(val)
-                } else {
-                    return val
-                }
-            }
+            escape = (val) => (!doNotEscape.includes($scope.orObj.op) ? regescape(val) : val)
+            unescape = (val) => (!doNotEscape.includes($scope.orObj.op) ? unregescape(val) : val)
         }
 
         $scope.input = unescape($scope.model)
@@ -141,8 +98,8 @@ korpApp.directive("searchSubmit", [
         template: `\
 <div class="search_submit">
         <div class="btn-group">
-            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()" ng-disabled="disabled">{{'search' | loc:$root.lang}}</button>
-            <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)" ng-disabled="disabled">
+            <button class="btn btn-primary" id="sendBtn" ng-click="onSendClick()" ng-disabled="disabled">{{'search' | loc:$root.lang}}</button>
+            <button class="btn btn-default opener" ng-click="togglePopover($event)" ng-disabled="disabled">
                 <span class="caret"></span>
             </button>
         </div>
@@ -279,7 +236,7 @@ korpApp.directive("meter", () => ({
         scope.loglike = Math.abs(scope.meter.loglike)
 
         scope.tooltipHTML = `\
-            ${util.getLocaleString("statstable_absfreq")}: ${scope.meter.abs}
+            ${loc("statstable_absfreq")}: ${scope.meter.abs}
             <br>
             loglike: ${scope.loglike}\
 `
@@ -386,31 +343,6 @@ korpApp.directive("clickCover", () => ({
     },
 }))
 
-korpApp.directive("toBody", [
-    "$compile",
-    ($compile) => ({
-        restrict: "A",
-        compile(elm) {
-            elm.remove()
-            elm.attr("to-body", null)
-            const wrapper = $("<div>").append(elm)
-            const cmp = $compile(wrapper.html())
-
-            return function (scope) {
-                const newElem = cmp(scope)
-                $("body").append(newElem)
-                return scope.$on("$destroy", () => newElem.remove())
-            }
-        },
-    }),
-])
-
-korpApp.directive("warning", () => ({
-    restrict: "E",
-    transclude: true,
-    template: "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>",
-}))
-
 // This directive is only used by the autoc-component (autoc.js)
 // It is therefore made to work with magic variables such as $scope.$ctrl.typeaheadIsOpen
 korpApp.directive("typeaheadClickOpen", [
@@ -432,69 +364,6 @@ korpApp.directive("typeaheadClickOpen", [
         },
     }),
 ])
-
-korpApp.directive("timeInterval", () => ({
-    scope: {
-        label: "@",
-        dateModel: "=",
-        timeModel: "=",
-        minDate: "=",
-        maxDate: "=",
-        update: "&",
-    },
-
-    restrict: "E",
-    template: html`
-        <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top">
-            <i class="fa fa-calendar"></i> <span style="text-transform: capitalize;">{{label | loc:$root.lang}} </span>
-        </button>
-        {{ combined.format("YYYY-MM-DD HH:mm") }}
-        <div ng-click="handleClick($event)" class="date_interval popper_menu dropdown-menu">
-            <div
-                uib-datepicker
-                class="well well-sm"
-                ng-model="dateModel"
-                min-date="minDate"
-                max-date="maxDate"
-                init-date="minDate"
-                show-weeks="true"
-                starting-day="1"
-            ></div>
-
-            <div class="time">
-                <i class="fa-solid fa-3x fa-clock-o"></i>
-                <div
-                    uib-timepicker
-                    class="timepicker"
-                    ng-model="timeModel"
-                    hour-step="1"
-                    minute-step="1"
-                    show-meridian="false"
-                ></div>
-            </div>
-        </div>
-    `,
-    link(s) {
-        const timeUnits = ["hour", "minute"]
-        s.$watchGroup(["dateModel", "timeModel"], function (...args) {
-            const [date, time] = args[0]
-            if (date && time) {
-                const m = moment(moment(date).format("YYYY-MM-DD"))
-                for (let t of timeUnits) {
-                    const m_time = moment(time)
-                    m.add(m_time[t](), t)
-                }
-                s.update({})
-                s.combined = m
-            }
-        })
-
-        s.handleClick = function (event) {
-            event.originalEvent.preventDefault()
-            event.originalEvent.stopPropagation()
-        }
-    },
-}))
 
 korpApp.directive("reduceSelect", [
     "$timeout",

@@ -1,17 +1,19 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
+import { html } from "@/util"
+import { locObj } from "@/i18n"
 
-let html = String.raw
-export const depTreeComponent = {
+angular.module("korpApp").component("depTree", {
     template: html`
         <div>
             <script type="text/ng-template" id="deptreeModal.html">
                 <div class="modal-header py-0">
-                    <h3 class="modal-title">{{ 'dep_tree' | loc:lang }}</h3>
+                    <h3 class="modal-title">{{ 'dep_tree' | loc:$root.lang }}</h3>
                     <span ng-click="clickX()" class="close-x">×</span>
                 </div>
                 <div class="modal-body">
-                    <div ng-if="label">{{label | loc:lang}}: {{value | locObj:lang}}</div>
+                    <div ng-if="label">{{label | loc:$root.lang}}: {{value | locObj:lang}}</div>
                     <div id="magic_secret_id"></div>
                 </div>
             </script>
@@ -57,7 +59,7 @@ export const depTreeComponent = {
                                     draw_deptree($ctrl.tokens, function (msg) {
                                         const [type, val] = _.head(_.toPairs(msg))
                                         $scope.$apply((s) => {
-                                            s.label = util.getLocaleStringObject($ctrl.corpus.attributes[type].label)
+                                            s.label = locObj($ctrl.corpus.attributes[type].label)
                                             s.value = $ctrl.corpus.attributes[type].translation[val]
                                         })
                                     })
@@ -215,4 +217,4 @@ export const depTreeComponent = {
             }
         },
     ],
-}
+})

@@ -1,6 +1,8 @@
 /** @format */
 import _ from "lodash"
 import statemachine from "./statemachine"
+import settings from "@/settings"
+import "@/components/readingmode"
 
 const korpApp = angular.module("korpApp")
 

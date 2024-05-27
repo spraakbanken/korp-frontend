@@ -1,10 +1,11 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
 
-export const initCorpusStructure = (collection, initalCorpusSelection) => {
+export const initCorpusStructure = (collection, initialCorpusSelection) => {
     // first set the select status of all corpora
     for (const corpus of Object.values(collection)) {
-        corpus.selected = initalCorpusSelection.includes(corpus.id)
+        corpus.selected = initialCorpusSelection.includes(corpus.id)
 
         const tokens = parseInt(corpus["info"]["Size"])
         corpus.tokens = tokens

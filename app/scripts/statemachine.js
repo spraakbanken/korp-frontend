@@ -1,7 +1,6 @@
 /** @format */
 import { interpret, createMachine } from "xstate"
-
-import jStorage from "../lib/jstorage"
+import * as authenticationProxy from "@/components/auth/auth"
 
 const listenerMap = {}
 function listen(eventName, fn) {
@@ -15,26 +14,6 @@ function broadcast(eventName, ...payload) {
     for (let fn of listenerMap[eventName]) {
         fn(...payload)
     }
-}
-
-const sidebarStates = {
-    initial: "hidden",
-    states: {
-        hidden: {
-            on: {
-                SELECT_WORD: { target: "visible", actions: "select_word" },
-            },
-        },
-        visible: {
-            onentry: {},
-            on: {
-                SELECT_WORD: { actions: "select_word" },
-            },
-        },
-    },
-    on: {
-        DESELECT_WORD: { target: "sidebar.hidden", actions: "deselect_word" },
-    },
 }
 
 let machine = createMachine(
@@ -104,7 +83,23 @@ let machine = createMachine(
                 },
             },
             sidebar: {
-                ...sidebarStates,
+                initial: "hidden",
+                states: {
+                    hidden: {
+                        on: {
+                            SELECT_WORD: { target: "visible", actions: "select_word" },
+                        },
+                    },
+                    visible: {
+                        onentry: {},
+                        on: {
+                            SELECT_WORD: { actions: "select_word" },
+                        },
+                    },
+                },
+                on: {
+                    DESELECT_WORD: { target: "sidebar.hidden", actions: "deselect_word" },
+                },
             },
         },
     },

@@ -1,5 +1,8 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
+import { lemgramToHtml, regescape, saldoToHtml } from "@/util"
+import { locAttribute } from "@/i18n"
 
 let customFunctions = {}
 
@@ -9,7 +12,10 @@ try {
     console.log("No module for statistics functions available")
 }
 
-let getCqp = function (hitValues, ignoreCase) {
+export function getCqp(hitValues, ignoreCase) {
+    const positionalAttributes = ["word", ...Object.keys(settings.corpusListing.getCurrentAttributes())]
+    let hasPositionalAttributes = false
+
     var tokens = []
     for (var i = 0; i < hitValues.length; i++) {
         var token = hitValues[i]
@@ -19,13 +25,21 @@ let getCqp = function (hitValues, ignoreCase) {
                 var values = token[attribute]
                 andExpr.push(reduceCqp(attribute, values, ignoreCase))
             }
+
+            // Flag if any of the attributes is positional
+            if (positionalAttributes.includes(attribute)) hasPositionalAttributes = true
         }
         tokens.push("[" + andExpr.join(" & ") + "]")
     }
-    return `<match> ${tokens.join(" ")} []* </match>`
+
+    // If reducing by structural attributes only, then `hitValues` has only the first match token,
+    // so allow any number of subsequent tokens in the match.
+    if (!hasPositionalAttributes) tokens.push("[]{0,}")
+
+    return `<match> ${tokens.join(" ")} </match>`
 }
 
-let reduceCqp = function (type, tokens, ignoreCase) {
+function reduceCqp(type, tokens, ignoreCase) {
     let attrs = settings.corpusListing.getCurrentAttributes()
     if (attrs[type] && attrs[type].stats_cqp) {
         // A stats_cqp function should call regescape for the value as appropriate
@@ -39,6 +53,7 @@ let reduceCqp = function (type, tokens, ignoreCase) {
         case "lex":
         case "lemma":
         case "sense":
+        case "transformer-neighbour":
             if (tokens[0] === "") return "ambiguity(" + type + ") = 0"
             else var res
             if (tokens.length > 1) {
@@ -69,24 +84,24 @@ let reduceCqp = function (type, tokens, ignoreCase) {
         case "pos":
         case "deprel":
         case "msd":
-            return $.format('%s="%s"', [type, tokens[0]])
+            return `${type}="${tokens[0]}"`
         case "text_blingbring":
         case "text_swefn":
-            return $.format('_.%s contains "%s"', [type, tokens[0]])
+            return `_.${type} contains "${tokens[0]}"`
         default:
             if (attrs[type]) {
                 // word attributes
                 const op = attrs[type]["type"] === "set" ? " contains " : "="
-                return $.format('%s%s"%s"', [type, op, tokens[0]])
+                return `${type}${op}"${tokens[0]}"`
             } else {
                 // structural attributes
-                return $.format('_.%s="%s"', [type, tokens[0]])
+                return `_.${type}="${tokens[0]}"`
             }
     }
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-let reduceStringify = function (type, values, structAttributes) {
+export function reduceStringify(type, values, structAttributes) {
     let attrs = settings.corpusListing.getCurrentAttributes()
 
     if (attrs[type] && attrs[type].stats_stringify) {
@@ -99,7 +114,7 @@ let reduceStringify = function (type, values, structAttributes) {
             return values.join(" ")
         case "pos":
             var output = _.map(values, function (token) {
-                return util.translateAttribute(null, attrs["pos"].translation, token)
+                return locAttribute(attrs["pos"].translation, token)
             }).join(" ")
             return output
         case "saldo":
@@ -109,11 +124,11 @@ let reduceStringify = function (type, values, structAttributes) {
         case "lemma":
         case "sense":
             if (type == "saldo" || type == "sense") {
-                var stringify = util.saldoToString
+                var stringify = saldoToHtml
             } else if (type == "lemma") {
                 stringify = (lemma) => lemma.replace(/_/g, " ")
             } else {
-                stringify = util.lemgramToString
+                stringify = lemgramToHtml
             }
 
             var html = _.map(values, function (token) {
@@ -123,9 +138,12 @@ let reduceStringify = function (type, values, structAttributes) {
 
             return html.join(" ")
 
+        case "transformer-neighbour":
+            return values.map((value) => value.replace(/:.*/g, "")).join(" ")
+
         case "deprel":
             var output = _.map(values, function (token) {
-                return util.translateAttribute(null, attrs["deprel"].translation, token)
+                return locAttribute(attrs["deprel"].translation, token)
             }).join(" ")
             return output
         case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
@@ -145,7 +163,7 @@ let reduceStringify = function (type, values, structAttributes) {
                     } else if (value === "") {
                         return "-"
                     } else if (structAttributes.translation) {
-                        return util.translateAttribute(null, structAttributes.translation, value)
+                        return locAttribute(structAttributes.translation, value)
                     } else {
                         return value
                     }
@@ -153,9 +171,4 @@ let reduceStringify = function (type, values, structAttributes) {
                 return mapped.join(" ")
             }
     }
-}
-
-export default {
-    getCqp,
-    reduceStringify,
 }

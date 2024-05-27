@@ -1,6 +1,9 @@
 /** @format */
-let html = String.raw
-export const extendedTokenComponent = {
+import angular from "angular"
+import { html } from "@/util"
+import "@/components/extended/and-token"
+
+angular.module("korpApp").component("extendedToken", {
     template: html`
         <div class="query_token">
             <div class="token_header">
@@ -123,4 +126,4 @@ export const extendedTokenComponent = {
             }
         },
     ],
-}
+})

@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import jStorage from "@/../lib/jstorage"
-
+import settings from "@/settings"
 import { loginBoxComponent } from "./login_box"
 import { loginStatusComponent } from "./login_status"
 

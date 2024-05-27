@@ -1,17 +1,22 @@
 /** @format */
+import angular from "angular"
 import _ from "lodash"
-import statemachine from "../statemachine"
+import statemachine from "@/statemachine"
+import settings from "@/settings"
+import currentMode from "@/mode"
+import { SelectionManager, html, setDownloadLinks } from "@/util"
+import "@/components/kwic-pager"
+import "@/components/kwic-word"
 
-let html = String.raw
-
-export const kwicComponent = {
+angular.module("korpApp").component("kwic", {
     template: html`
-        <div ng-click="$ctrl.onKwicClick($event)">
+        <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">{{'search_aborted' | loc:$root.lang}}</div>
+
+        <div ng-if="!$ctrl.aborted || $ctrl.loading" ng-click="$ctrl.onKwicClick($event)">
             <div class="result_controls">
-                <warning ng-if="$ctrl.aborted && !$ctrl.loading">{{'search_aborted' | loc:$root.lang}}</warning>
-                <div class="controls_n" ng-show="$ctrl.hitsDisplay">
+                <div class="controls_n" ng-if="$ctrl.hitsInProgress != null">
                     <span>{{'num_results' | loc:$root.lang}}: </span>
-                    <span class="num-result" ng-bind-html="$ctrl.hitsDisplay | trust"></span>
+                    <span class="num-result">{{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}</span>
                 </div>
                 <div class="hits_picture" ng-if="$ctrl.hitsPictureData.length > 1">
                     <table class="hits_picture_table">
@@ -61,16 +66,36 @@ export const kwicComponent = {
                         </td>
                         <td class="empty_td"></td>
                         <td class="lnk" colspan="3" ng-if="::sentence.isLinked">
-                            <span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span>
+                            <kwic-word
+                                ng-repeat="word in sentence.tokens"
+                                word="word"
+                                sentence="sentence"
+                                sentence-index="$parent.$index"
+                            />
                         </td>
                         <td class="left" ng-if="::!sentence.newCorpus">
-                            <span kwic-word="kwic-word" ng-repeat="wd in $ctrl.selectLeft(sentence)"></span>
+                            <kwic-word
+                                ng-repeat="word in $ctrl.selectLeft(sentence)"
+                                word="word"
+                                sentence="sentence"
+                                sentence-index="$parent.$index"
+                            />
                         </td>
                         <td class="match" ng-if="::!sentence.newCorpus">
-                            <span kwic-word="kwic-word" ng-repeat="wd in $ctrl.selectMatch(sentence)"></span>
+                            <kwic-word
+                                ng-repeat="word in $ctrl.selectMatch(sentence)"
+                                word="word"
+                                sentence="sentence"
+                                sentence-index="$parent.$index"
+                            />
                         </td>
                         <td class="right" ng-if="::!sentence.newCorpus">
-                            <span kwic-word="kwic-word" ng-repeat="wd in $ctrl.selectRight(sentence)"> </span>
+                            <kwic-word
+                                ng-repeat="word in $ctrl.selectRight(sentence)"
+                                word="word"
+                                sentence="sentence"
+                                sentence-index="$parent.$index"
+                            />
                         </td>
                     </tr>
                 </table>
@@ -87,7 +112,12 @@ export const kwicComponent = {
                                 >{{'no_context_support' | loc:$root.lang}}</span
                             ></span
                         >
-                        <span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span>
+                        <kwic-word
+                            ng-repeat="word in sentence.tokens"
+                            word="word"
+                            sentence="sentence"
+                            sentence-index="$parent.$index"
+                        />
                     </p>
                 </div>
             </div>
@@ -98,12 +128,12 @@ export const kwicComponent = {
                 page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-            <div id="download-links-container">
+            <div ng-if="!$ctrl.loading">
                 <select id="download-links" ng-if="$ctrl._settings['enable_backend_kwic_download']"></select>
                 <select
                     id="frontendDownloadLinks"
                     ng-if="$ctrl._settings['enable_frontend_kwic_download']"
-                    ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hitsDisplay)"
+                    ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hits)"
                     ng-model="$ctrl.download.selected"
                     ng-options="item.value as item.label | loc:$root.lang disable when item.disabled for item in $ctrl.download.options"
                 ></select>
@@ -122,7 +152,7 @@ export const kwicComponent = {
         aborted: "<",
         loading: "<",
         active: "<",
-        hitsDisplay: "<",
+        hitsInProgress: "<",
         hits: "<",
         isReading: "<",
         page: "<",
@@ -132,6 +162,7 @@ export const kwicComponent = {
         prevParams: "<",
         prevRequest: "<",
         corpusOrder: "<",
+        /** Current page of results. */
         kwicInput: "<",
         corpusHits: "<",
     },
@@ -143,7 +174,7 @@ export const kwicComponent = {
         function ($location, $element, $timeout, kwicDownload) {
             let $ctrl = this
 
-            const selectionManager = new util.SelectionManager()
+            const selectionManager = new SelectionManager()
 
             $ctrl.$onInit = () => {
                 addKeydownHandler()
@@ -152,7 +183,7 @@ export const kwicComponent = {
             $ctrl.$onChanges = (changeObj) => {
                 if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
                     $ctrl.kwic = massageData($ctrl.kwicInput)
-                    $ctrl.useContext = $ctrl.isReading || locationSearch()["in_order"] != null
+                    $ctrl.useContext = $ctrl.isReading || $location.search()["in_order"] != null
                     if (!$ctrl.isReading) {
                         $timeout(() => {
                             centerScrollbar()
@@ -160,9 +191,8 @@ export const kwicComponent = {
                         })
                     }
 
-                    if (settings["enable_backend_kwic_download"] && $ctrl.hitsDisplay) {
-                        // using hitsDisplay here, since hits is not set until request is complete
-                        util.setDownloadLinks($ctrl.prevRequest, {
+                    if (settings["enable_backend_kwic_download"]) {
+                        setDownloadLinks($ctrl.prevRequest, {
                             kwic: $ctrl.kwic,
                             corpus_order: $ctrl.corpusOrder,
                         })
@@ -225,8 +255,6 @@ export const kwicComponent = {
 
             $ctrl._settings = settings
 
-            const isParallelMode = window.currentModeParallel
-
             $ctrl.toggleReading = () => {
                 $ctrl.readingMode = !$ctrl.readingMode
                 $ctrl.contextChangeEvent()
@@ -239,11 +267,11 @@ export const kwicComponent = {
                     { value: "", label: "download_kwic" },
                     { value: "kwic/csv", label: "download_kwic_csv" },
                     { value: "kwic/tsv", label: "download_kwic_tsv" },
-                    { value: "annotations/csv", label: "download_annotations_csv", disabled: isParallelMode },
-                    { value: "annotations/tsv", label: "download_annotations_tsv", disabled: isParallelMode },
+                    { value: "annotations/csv", label: "download_annotations_csv", disabled: settings["parallel"] },
+                    { value: "annotations/tsv", label: "download_annotations_tsv", disabled: settings["parallel"] },
                 ],
                 selected: "",
-                init: (value, hitsDisplay) => {
+                init: (value, hits) => {
                     if ($ctrl.download.blobName) {
                         URL.revokeObjectURL($ctrl.download.blobName)
                     }
@@ -254,7 +282,7 @@ export const kwicComponent = {
                         ...value.split("/"),
                         $ctrl.kwic,
                         $ctrl.prevParams,
-                        hitsDisplay
+                        hits
                     )
                     $ctrl.download.fileName = fileName
                     $ctrl.download.blobName = blobName
@@ -428,7 +456,7 @@ export const kwicComponent = {
             function onWordClick(event) {
                 event.stopPropagation()
                 const scope = $(event.target).scope()
-                const obj = scope.wd
+                const obj = scope.word
                 const sent = scope.sentence
                 const word = $(event.target)
 
@@ -450,7 +478,7 @@ export const kwicComponent = {
             }
 
             function selectWord(word, scope) {
-                const obj = scope.wd
+                const obj = scope.word
                 let aux = null
                 if (obj.dephead != null) {
                     const i = Number(obj.dephead)
@@ -469,12 +497,18 @@ export const kwicComponent = {
                 selectionManager.select(word, aux)
             }
 
+            /** Select a given token, follow links to different languages and give linked tokens a secondary highlighting. */
             function selectWordParallel(word, scope, sentence) {
+                // Select the given word.
                 selectWord(word, scope)
+
+                // Clear any previous linked-token highlighting.
                 clearLinks()
-                var obj = scope.wd
+
+                var obj = scope.word
                 if (!obj.linkref) return
                 var corpus = settings.corpora[sentence.corpus]
+                var [mainCorpus, lang] = corpus.id.split("-")
 
                 function findRef(ref, sentence) {
                     var out = null
@@ -489,8 +523,10 @@ export const kwicComponent = {
 
                 if (sentence.isLinked) {
                     // a secondary language was clicked
-                    var sent_index = scope.$parent.$index
+                    var sent_index = scope.sentenceIndex
                     var data = getActiveData()
+
+                    // Find main sentence, as nearest previous non-linked sentence.
                     var mainSent = null
                     while (data[sent_index]) {
                         var sent = data[sent_index]
@@ -502,8 +538,8 @@ export const kwicComponent = {
                     }
 
                     var linkNum = Number(obj.linkref)
-                    var lang = corpus.id.split("-")[1]
 
+                    // Find linked tokens in main sentence and highlight them.
                     _.each(mainSent.tokens, function (token) {
                         var refs = _.map(_.compact(token["wordlink-" + lang].split("|")), Number)
                         if (_.includes(refs, linkNum)) {
@@ -512,15 +548,16 @@ export const kwicComponent = {
                         }
                     })
                 } else {
+                    // Collect references to linked tokens from wordlink-(lang) values
                     var links = _.pickBy(obj, function (val, key) {
                         return _.startsWith(key, "wordlink")
                     })
+                    // Follow each link and highlight linked tokens
                     _.each(links, function (val, key) {
+                        var lang = key.split("-")[1]
                         _.each(_.compact(val.split("|")), function (num) {
-                            var lang = key.split("-")[1]
-                            var mainCorpus = corpus.id.split("-")[0]
-
-                            var link = findRef(num, sentence.aligned[mainCorpus + "-" + lang])
+                            const link = findRef(num, sentence.aligned[mainCorpus + "-" + lang])
+                            if (!link) return
                             link._link_selected = true
                             $ctrl.parallelSelected.push(link)
                         })
@@ -760,4 +797,4 @@ export const kwicComponent = {
             }
         },
     ],
-}
+})

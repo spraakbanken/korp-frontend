@@ -1,5 +1,10 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
+import { html, regescape, unregescape } from "@/util"
+import { loc, locAttribute } from "@/i18n"
+import "@/components/autoc"
+import "@/components/datetime-picker"
 
 let customExtendedTemplates = {}
 
@@ -8,8 +13,6 @@ try {
 } catch (error) {
     console.log("No module for extended components available")
 }
-
-let html = String.raw
 
 const autocompleteTemplate = `\
 <div>
@@ -20,6 +23,7 @@ const autocompleteTemplate = `\
             typeahead-min-length="0"
             typeahead-input-formatter="typeaheadInputFormatter($model)"            
             uib-typeahead="tuple[0] as tuple[1] for tuple in getRows($viewValue)"></input>
+            <i ng-if="loading" class="fa-solid fa-spinner fa-pulse w-fit"></i>
 </div>`
 
 const selectTemplate =
@@ -27,7 +31,7 @@ const selectTemplate =
     "<input ng-show='inputOnly' type='text' ng-model='input'/>"
 const localize = ($scope) =>
     function (str) {
-        return util.translateAttribute(null, $scope.translation, str)
+        return locAttribute($scope.translation, str)
     }
 
 const selectController = (autocomplete) => [
@@ -71,7 +75,7 @@ const selectController = (autocomplete) => [
 
                     const dataset = _.map(_.uniq(data), function (item) {
                         if (item === "") {
-                            return [item, util.getLocaleString("empty")]
+                            return [item, loc("empty")]
                         }
                         return [item, localizer(item)]
                     })
@@ -163,7 +167,12 @@ export default _.merge(
         // puts the first values from a dataset paramater into model
         singleValue: {
             template: '<input type="hidden">',
-            controller: ["$scope", ($scope) => ($scope.model = _.values($scope.dataset)[0])],
+            controller: [
+                "$scope",
+                function ($scope) {
+                    $scope.model = _.values($scope.dataset)[0]
+                },
+            ],
         },
         default: {
             template: _.template(`\
@@ -261,25 +270,25 @@ export default _.merge(
 
                     <h3>{{'advanced' | loc:$root.lang}}</h3>
                     <div class="section mt-4">
-                        <time-interval
+                        <datetime-picker
                             label="from"
                             date-model="fromDate"
                             time-model="fromTime"
                             min-date="minDate"
                             max-date="maxDate"
-                            update="update()"
-                        ></time-interval>
+                            update="updateFrom(m)"
+                        ></datetime-picker>
                     </div>
 
                     <div class="section">
-                        <time-interval
+                        <datetime-picker
                             label="to"
                             date-model="toDate"
                             time-model="toTime"
                             min-date="minDate"
                             max-date="maxDate"
-                            update="update()"
-                        ></time-interval>
+                            update="updateTo(m)"
+                        ></datetime-picker>
                     </div>
                 </div>
             `,
@@ -344,13 +353,16 @@ export default _.merge(
                         s.toTime = toTime
                     }
 
-                    s.update = () => {
-                        s.model = [
-                            moment(s.fromDate).format("YYYYMMDD"),
-                            moment(s.toDate).format("YYYYMMDD"),
-                            moment(s.fromTime).format("HHmmss"),
-                            moment(s.toTime).format("HHmmss"),
-                        ]
+                    s.updateFrom = (m) => {
+                        // We cannot just patch the list, we need to re-set it to trigger watcher.
+                        // [fromdate, todate, fromtime, totime]
+                        s.model = [m.format("YYYYMMDD"), s.model[1], m.format("HHmmss"), s.model[3]]
+                    }
+
+                    s.updateTo = (m) => {
+                        // We cannot just patch the list, we need to re-set it to trigger watcher.
+                        // [fromdate, todate, fromtime, totime]
+                        s.model = [s.model[0], m.format("YYYYMMDD"), s.model[2], m.format("HHmmss")]
                     }
                 },
             ],

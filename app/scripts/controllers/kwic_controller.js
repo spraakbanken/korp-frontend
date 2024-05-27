@@ -1,5 +1,7 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
+import kwicProxyFactory from "@/backend/kwic-proxy"
 
 const korpApp = angular.module("korpApp")
 
@@ -22,7 +24,7 @@ export class KwicCtrl {
     setupListeners() {
         this.$rootScope.$on("make_request", (msg, cqp) => {
             this.scope.cqp = cqp
-            // only set this on the inital search, not when paging
+            // only set this on the initial search, not when paging
             this.scope.hitsPerPage = this.location.search()["hpp"] || settings["hits_per_page_default"]
 
             // reset randomSeed when doing a search, but not for the first request
@@ -44,10 +46,14 @@ export class KwicCtrl {
         const s = scope
 
         s.initialSearch = true
+        /** Number of total search hits, updated when a search is completed. */
+        s.hits = undefined
+        /** Number of search hits, may change while search is in progress. */
+        s.hitsProgress = undefined
 
         this.setupListeners()
 
-        s.proxy = new model.KWICProxy()
+        s.proxy = kwicProxyFactory.create()
 
         s.tabindex = 0
 
@@ -91,13 +97,11 @@ export class KwicCtrl {
             s.readingChange()
         }
 
-        s.selectionManager = new util.SelectionManager()
-
         s.buildQueryOptions = (cqp, isPaging) => {
             let avoidContext, preferredContext
             const opts = {}
             const getSortParams = function () {
-                const { sort } = locationSearch()
+                const { sort } = $location.search()
                 if (!sort) {
                     return {}
                 }
@@ -146,7 +150,7 @@ export class KwicCtrl {
         s.onProgress = (progressObj, isPaging) => {
             s.progress = Math.round(progressObj["stats"])
             if (!isPaging && progressObj["total_results"] !== null) {
-                s.hits_display = util.prettyNumbers(progressObj["total_results"])
+                s.hitsInProgress = progressObj["total_results"]
             }
         }
 
@@ -209,7 +213,7 @@ export class KwicCtrl {
             s.loading = false
             if (!isPaging) {
                 s.hits = data.hits
-                s.hits_display = util.prettyNumbers(data.hits)
+                s.hitsInProgress = data.hits
                 s.corpusHits = data.corpus_hits
             }
         }

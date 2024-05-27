@@ -1,5 +1,83 @@
 # Changelog
 
+## [9.6.0] - 2024-05-27
+
+### Added
+
+- Frontpage with description, news, corpus updates and example search queries [#341](https://github.com/spraakbanken/korp-frontend/issues/341)
+- Configurable generated link in corpus info [#355](https://github.com/spraakbanken/korp-frontend/issues/355)
+- Loading spinner in the autocomplete for structural values (`structServiceAutocomplete`)
+
+### Changed
+
+- Newsdesk moved from icon+popup in header to frontpage [#348](https://github.com/spraakbanken/korp-frontend/issues/348)
+- Switched to parsing news from YAML file, using new setting `news_url` instead of `news_desk_url` (see [docs/frontend_devel.md](frontend_devel.md)) [#348](https://github.com/spraakbanken/korp-frontend/issues/348)
+- The "medial part" option now includes first/last parts also for lemgram search [#347](https://github.com/spraakbanken/korp-frontend/issues/347)
+- Improved UI reactivity for Simple search
+- Make the search button(s) more visible [#308](https://github.com/spraakbanken/korp-frontend/issues/308)
+- Use native checkboxes in corpus chooser, not images [#362](https://github.com/spraakbanken/korp-frontend/issues/362)
+- Replaced JQuery Flot library with Chart.js, used in corpus chooser time graph
+- Added TypeScript definitions for Korp backend parameters and responses
+- Wrapped `GraphProxy`, `KwicProxy`, `LemgramProxy`, `StatsProxy` and `TimeProxy` with factories; see [@/util/Factory](./app/scripts/util.ts)
+  - Removed the `stats_rewrite` config option, as the change above eliminated the need for this
+- Removed globals – import them instead (or their members):
+  - `authenticationProxy`
+  - `settings`
+  - `currentMode`
+  - `currentModeParallel`
+  - `CQP`
+  - `model`
+  - `CorpusListing`
+  - `ParallelCorpusListing`
+  - `statisticsService`
+  - `regescape`
+  - `unregescape`
+  - `safeApply`
+- Removed the `warning` directive – use the `korp-warning` class directly instead.
+- Removed the unused `toBody` directive
+- Converted the `timeInterval` directive to a component `datetimePicker`
+- Renamed localization functions (just like the template filters) and moved them to `@/i18n`:
+  - `getLocaleString` to `loc`
+  - `getLocaleStringObject` to `locObj`
+  - `translateAttribute` to `locAttribute` (also moved the optional `lang` parameter last)
+- Renamed lemgram/saldo functions:
+  - `lemgramToString` to `lemgramToHtml`
+  - `lemgramToPlainString` to `lemgramToString`
+  - `isLemgramId` to `isLemgram`
+  - `saldoToString` to `saldoToHtml`
+  - `saldoToPlaceholderString` to `saldoToString`
+- Removed `window.util` and converted its members to exported functions:
+  - lemgram/saldo functions
+  - `setDownloadLinks`
+  - `httpConfAddMethod`, `httpConfAddMethodAngular`, `httpConfAddMethodFetch`
+  - `collatorSort`
+- Revised number formatting:
+  - Removed `formatDecimalString` and `prettyNumbers`
+  - Added `formatRelativeHits` to format a number with exactly one decimal
+    - All occurrences of relative hit counts now use this
+  - Added `hitCountHtml` to consistently format a relative+absolute tuple
+- Revised the `locationSearch` and `searchHash` util functions:
+  - Deprecated global `locationSearch` in favor of using `$location` directly
+  - Removed global `searchHash` in favor of using `$location` directly
+  - Added `locationSearchGet`/`locationSearchSet` to expose `$location.search` to code outside Angular
+- Removed map layer "Stamen Watercolor" [#339](https://github.com/spraakbanken/korp-frontend/issues/339)
+- Removed dependency `jquery.format`
+
+### Fixed
+
+- Statistics subquery incorrect when using repetition and boundaries [#354](https://github.com/spraakbanken/korp-frontend/issues/354)
+- Correct order of numbers in trend diagram table (first relative, then absolute)
+- Update number formatting in statistics table when switching language
+- Disable Trend diagram and Map buttons while waiting for statistics search to finish [#346](https://github.com/spraakbanken/korp-frontend/issues/346)
+- Error when clicking trend diagram with multiple series [#358](https://github.com/spraakbanken/korp-frontend/issues/358)
+- Broken singleValue component [#361](https://github.com/spraakbanken/korp-frontend/issues/361)
+- Strip HTML from total hits in annotated KWIC dowload
+- Fix dynamic translation for tabs, filters etc
+- Modes in "More" menu sorted locale-awarely
+- Allow dash in attribute name
+- Restore UI message when search gives no hits
+- The `corpus_info` request uses `GET` when possible
+
 ## [9.5.3] - 2024-03-11
 
 ### Added
@@ -134,7 +212,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
-[9.5.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.3
+[9.6.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.6.0
 [9.5.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.2
 [9.5.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.1
 [9.5.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.0

@@ -1,7 +1,10 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
+import { CorpusListing } from "@/corpus_listing"
+import { locationSearchGet } from "@/util"
 
-window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing {
+export class ParallelCorpusListing extends CorpusListing {
     constructor(corpora) {
         super(corpora)
 
@@ -159,7 +162,7 @@ window.ParallelCorpusListing = class ParallelCorpusListing extends CorpusListing
     }
 
     getWithinParameters() {
-        const defaultWithin = locationSearch().within || _.keys(settings["default_within"])[0]
+        const defaultWithin = locationSearchGet("within") || _.keys(settings["default_within"])[0]
         const within = this.getAttributeQuery("within")
         return { default_within: defaultWithin, within }
     }

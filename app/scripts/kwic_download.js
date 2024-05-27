@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import { locObj } from "@/i18n"
 
 const korpApp = angular.module("korpApp")
 korpApp.factory("kwicDownload", function () {
@@ -89,7 +90,7 @@ korpApp.factory("kwicDownload", function () {
                     res.push(newRow)
                 }
             } else if (row.newCorpus) {
-                corpus = util.getLocaleStringObject(row.newCorpus)
+                corpus = locObj(row.newCorpus)
             }
         }
 
@@ -157,7 +158,7 @@ korpApp.factory("kwicDownload", function () {
                 ].concat(structs)
                 res.push(newRow)
             } else if (row.newCorpus) {
-                corpus = util.getLocaleStringObject(row.newCorpus)
+                corpus = locObj(row.newCorpus)
             }
         }
 

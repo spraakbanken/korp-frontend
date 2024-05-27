@@ -1,6 +1,18 @@
 /** @format */
-let html = String.raw
-export const resultsComponent = {
+import angular from "angular"
+import { html } from "@/util"
+import "@/components/dynamic_tabs/compare-tabs"
+import "@/components/dynamic_tabs/graph-tabs"
+import "@/components/dynamic_tabs/kwic-tabs"
+import "@/components/dynamic_tabs/map-tabs"
+import "@/components/dynamic_tabs/text-tabs"
+import "@/components/korp-error"
+import "@/components/kwic"
+import "@/components/statistics"
+import "@/components/sidebar"
+import "@/components/word-picture"
+
+angular.module("korpApp").component("results", {
     template: html`
         <div>
             <div id="results-wrapper" ng-show="$ctrl.hasResult()">
@@ -22,7 +34,7 @@ export const resultsComponent = {
                                         aborted="aborted"
                                         loading="loading"
                                         active="active"
-                                        hits-display="hits_display"
+                                        hits-in-progress="hitsInProgress"
                                         hits="hits"
                                         kwic-input="kwic"
                                         corpus-hits="corpusHits"
@@ -45,7 +57,7 @@ export const resultsComponent = {
                                 index="2"
                             >
                                 <uib-tab-heading ng-class="{not_loading: progress > 99, loading : loading}"
-                                    >{{'statistics' | loc:lang}}
+                                    >{{'statistics' | loc:$root.lang}}
                                     <tab-preloader
                                         ng-if="loading"
                                         value="progress"
@@ -77,7 +89,7 @@ export const resultsComponent = {
                                 deselect="onexit()"
                             >
                                 <uib-tab-heading ng-class="{not_loading: progress > 99, loading : loading}">
-                                    {{'word_picture' | loc:lang}}
+                                    {{'word_picture' | loc:$root.lang}}
                                     <tab-preloader
                                         ng-if="loading"
                                         value="progress"
@@ -118,12 +130,6 @@ export const resultsComponent = {
                     </sidebar>
                 </div>
             </div>
-            <!-- mode description -->
-            <div
-                ng-if="!$ctrl.hasResult() && $ctrl.showDescription"
-                style="margin: 0 auto; width: 650px; margin-top: 70px"
-                ng-bind-html="$root._settings['description'] | locObj:lang | trust"
-            ></div>
         </div>
     `,
     bindings: {},
@@ -141,14 +147,6 @@ export const resultsComponent = {
                 $rootScope.compareTabs.length ||
                 $rootScope.graphTabs.length ||
                 $rootScope.mapTabs.length
-
-            $ctrl.showDescription = false
-
-            // Don't show the mode description until the inital corpora has been selected, to avoid text behind any modals
-            $rootScope.$on(
-                "initialcorpuschooserchange",
-                () => ($ctrl.showDescription = settings["description"] != undefined)
-            )
         },
     ],
-}
+})

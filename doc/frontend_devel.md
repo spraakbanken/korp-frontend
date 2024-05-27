@@ -21,7 +21,7 @@ rebuilds everything. This makes testing your setup really easy.
 
 When the frontend instance feels ready to deploy, the code must be built for production using: 
 
-```
+```sh
 yarn build
 ```
 
@@ -31,7 +31,7 @@ Node.js and the development dependencies are not needed anymore.
 
 A really easy way if you have Python (version 3) installed, is:
 
-```
+```sh
 cd dist; python -m http.server 8080
 ```
 
@@ -66,7 +66,7 @@ For more advanced use cases there is also the possibility to custommize by addin
 To use a configuration directory,
 add a file called `run_config.json` file in the root of the repository with the following content:
 
-```
+```json
 {
     "configDir": "../path/to/my/configuration/directory"
 }
@@ -94,7 +94,7 @@ settings that affect the frontend.
 
 - __korp_backend_url__ - URL to Korp's backend
 - __languages__ - Array of objects with language code and translation of supported UI languages, for example:
-    ```
+    ```yaml
     - value: eng
       label: English
     - value: swe
@@ -103,25 +103,36 @@ settings that affect the frontend.
 
 **Others:**
 
+- __auth_module__ - String or object. See [Authentication](#authentication)
 - __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
-- __corpus_config_url__ - String. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
-- __default_language__ - String. The default interface language. Default: `"eng"`
 - __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
     that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
     for more information about how to define attributes.
+- __corpus_config_url__ - String. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
+- __corpus_info_link__ - Object. Use this to render a link for each corpus in the corpus chooser.
+  - __url_template__ - String or translation object. A URL containing a token "%s", which will be replaced with the corpus id.
+  - __label__ - String or translation object. The label is the the same for all corpora.
 - __default_options__ - See [Operators](#operators).
 - __default_overview_context__ - The default context for KWIC-view. Use a context that is supported by the majority of corpora in the mode (URLs will be shorter). E.g.: `"1 sentence"`. For corpora that do not support this context an additional parameter will be sent to the backend based on the `context`-setting in the corpus.
 - __default_reading_context__ - Same as __default_overview_context__, but for the context-view. Use a context larger than the __default_overview_context__.
 - __default_within__ - An object containing the structural elements of a corpus. `default_within` is used unless a corpus overrides the setting using `within`. Example:
-    ```
+    ```yaml
     default_within:
       sentence: sentence
     ```
     In simple search, we will search within the default and supply extra information for the corpora that do not support the default.
 
     In extended search, the default `within` will be used unless the user specifies something else. In that case the user's choice will be used for all corpora that support it and for corpora that do not support it, a supported `within` will be used.
+- __default_language__ - String. The default interface language. Default: `"eng"`
+- __description__ - String. Any HTML content to show on frontpage until search is made.
 - __enable_backend_kwic_download__ - Boolean. Backend download, depends on backend download functionality.
 - __enable_frontend_kwic_download__ - Boolean. Frontend download. Gives CSV created by same data as available in the KWIC.
+- __frontpage__ - Object. Settings for what to show under the search form until a search is made.
+  - __corpus_updates__ - Boolean. Enables a listing of most recently updated corpora.
+  - __examples__ - List of objects. A random selection of three of these are shown on the frontpage as search links.
+    - __label__: String or translation object.
+    - __params__: Object. This is translated to URL search params when the link is clicked.
+    - __hint__: String or translation object. Can contain HTML.
 - __group_statistics__ - List of attribute names. Attributes that either have a rank or a numbering used for multi-word units. For example, removing `:2` from `ta_bort..vbm.1:2`, to get the lemgram of this word: `ta_bort..vbm.1`.
 - __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
@@ -133,31 +144,26 @@ settings that affect the frontend.
   - __url__: String. The URL of the Matomo instance, including trailing slash.
   - __site__: Integer. The site ID that Matomo has assigned for the Korp instance.
   - It is also possible to override each value underneath keys corresponding to `ENVIRONMENT` values, e.g:
-      ```
+      ```yaml
       matomo:
         url: https://matomo.example.com/
         site: 1
         production:
           site: 2
       ```
-- __news_desk_url__ - See [News widget](#news-widget)
-- __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
+- __news_url__ - See [News widget](#news-widget)
+- __reduce_word_attribute_selector__ - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora *word* attributes or only the attributes common to selected corpora. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
+- __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
 - __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
-- __stats_rewrite__: A function that takes the array `[data, columns, searchParams]`, modifies and returns it.
+- __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
-    ```
+    ```yaml
     swe: ord
     eng: word
     ```
 - __word_picture__ - Boolean. Enable/disable the word picture. 
 - __word_picture_tagset__ - See [Word picture](#word-picture)
 - __word_picture_conf__ - See [Word picture](#word-picture)
-
-
-- __word_attribute_selector__ - String, `union` / `intersection`. In extended search, attribute list, show all selected corpora *word* attributes or only the attributes common to selected corpora.
-- __struct_attribute_selector__ - Same as __word_attribute_selector__, but for structural attributes.
-- __reduce_word_attribute_selector__ - Same as __word_attribute_selector__, but for the "compile based on"-configuration in statistics. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
-- __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
 
 ### Localization
 
@@ -174,7 +180,7 @@ To add a new language in the frontend, for example Lithuanian, add a `corpora-li
 and `locale-lit.json`. `locale-lit.json` may be copied from an existing locale-file and
 then translated. Then add the language in `config.yml`:
 
-```
+```yaml
 languages:
   - value: swe
     label: Svenska
@@ -184,7 +190,7 @@ languages:
 
 If for some reason one wants to translate the language names in the language picker, `label` may be an object with translations:
 
-```
+```yaml
 label:
   swe: "Svenska"
   eng: "Swedish"
@@ -206,9 +212,7 @@ Put the file in `<configDir>/translations/`, but rename it using three letter la
 
 Each Korp installation has a series of _Modes_ in the top left corner, which 
 are useful for presenting different faces of Korp that might have different 
-layouts or functionality. Modes can either be normal, or be adapted for parallel corpora.
-To trigger parallel functionality, `parallel: true`, must be added to `config.yml`, or the
-mode-config in the backend.
+layouts or functionality.
 
 When Korp is loaded, it looks for the `mode` query parameter:
 
@@ -218,7 +222,7 @@ https://<frontend url>/?mode=kubhist
 
 If no mode is given, mode is `default`.
 
-It then looks for mode-specific code in `<configDir>/modes/<mode>_mode.js`. Mode code may overwrite values from `config.yml` by altering `window.settings`.
+It then looks for mode-specific code in `<configDir>/modes/<mode>_mode.js`. Mode code may overwrite values from `config.yml` by altering the `settings` object imported from `@/settings`.
 
 It then looks for settings for this specific mode, the **corpus config**. If it exists at `<configDir>/modes/<mode>_corpus_config.json`, it will be loaded from there. Otherwise, it retrieves it from the url given by the `corpus_config_url` option, which defaults to:
 
@@ -228,10 +232,12 @@ https://<korp_backend_url>/corpus_config?mode=<mode>
 
 See the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API for more information.
 
-## Parallel mode
+## Parallel corpora
 
+By enabling the parallel option, a mode can be adapted for parallel corpora.
 Additional settings in `config.yml` (may also be given by the backend for the mode):
 
+`parallel` - Set to `true` to enable parallel functionality
 `start_lang` - language that should be the default search language.
 
 ## Auto completion menu
@@ -241,7 +247,7 @@ attributes configured to use `autoc`-directive. This is implemented using an
 Angular.js directive `autoc` that calls [Karp](https://spraakbanken.gu.se/en/tools/karp)'s auto completion function. 
 Using Karp, Korp can autocomplete senses and lemgrams. To disable add the following to `config.yml`:
 
-```
+```yaml
 autocomplete: false
 ```
 
@@ -260,14 +266,14 @@ a static list of search alternatives, autocompletion menus etc.
 
 The following examples are in YAML, that is used in the backend configuration. Simple usage:
 
-```
+```yaml
 attribute_name:
   extended_component: autocExtended
 ```
 
 Some of the components have support for options. This is the format to use then:
 
-```
+```yaml
 attribute_name:
   extended_component:
     name: datasetSelect
@@ -316,7 +322,7 @@ https://github.com/spraakbanken/korp-backend#time-data
 
 Then time interval will be added automatically as a search alternative, but this needs to be added to `config.yml`:
 
-```
+```yaml
 common_struct_types:
   date_interval:
     label: "time interval"
@@ -333,7 +339,8 @@ common_struct_types:
 attribute specifies another set of operators using `opts`.
 
 Språkbanken's `default_options` is:
-```
+
+```yaml
 default_options:
   is: =
   is_not: '!='
@@ -351,7 +358,7 @@ The object above is suitable for simple words/strings where one can be intereste
 
 If there is a known value set of an attribute, as for example in POS-tagging, this is a suitable value for `opts`:
 
-```
+```yaml
 opts:
   is: "="
   is_not": "!="
@@ -359,20 +366,20 @@ opts:
 
 And if the attribute has a set of values instead of a single one, but regexp and affixes should be supported, this:
 
-```
+```yaml
 opts:
   contains: incontains_contains
   ends_with: ends_with_contains
   is: contains
   is_not: not contains
-  matches": regexp_contains
-  matches_not": not_regexp_contains
-  starts_with": starts_with_contains
+  matches: regexp_contains
+  matches_not: not_regexp_contains
+  starts_with: starts_with_contains
 ```
 
 And if no regexp or affix-search is needed:
 
-```
+```yaml
 opts:
   is: contains
   is_not: not contains
@@ -388,7 +395,7 @@ to the end.
 
 The word picture-config object looks like this:
 
-```
+```yaml
 word_picture_conf:
   pos_tag:
     - table_def1
@@ -398,19 +405,19 @@ word_picture_conf:
 
 where `table_defX` is an array of objects that describe the resulting word picture table. `table_def1` above might look like this:
 
-```
+```yaml
 - rel: subject
-        css_class: color_blue
-      - _
-      - rel: object
-        css_class: color_purple
-      - rel: adverbial
-        css_class: color_green
+  css_class: color_blue
+- _
+- rel: object
+  css_class: color_purple
+- rel: adverbial
+  css_class: color_green
 ```
 
 The `_` refers to the placement of the lookup word in the table order. The value for `rel` refers to a key in `word_picture_tagset` looking like this:
 
-```
+```yaml
 word_picture_tagset:
     subject: ss
     object: obj
@@ -430,12 +437,12 @@ The values are the actual relations returned by the backend. The relation used i
 
 Korp's map uses annotations to get locations. The user selects rows from the statistics table and points derived from different rows will have different colors. The selected corpora must have structural attributes with location data in them. The format is `Fukuoka;JP;33.6;130.41667` - the location name, the country, latitude and longitude separated by `;`.
 
-    Also the name of the attribute must contain `"__"` and `"geo"` to show up in the list of supported attributes.
+Also the name of the attribute must contain `"__"` and `"geo"` to show up in the list of supported attributes.
 
 - `map_enabled` - Boolean. Enable/disable the map functionality.
 - `map_center` - Where the center of the map should be located when user opens map. Example:  
 
-```
+```yaml
 map_center:
   lat: 62.99515845212052
   lng: 16.69921875
@@ -445,27 +452,23 @@ map_center:
 
 ## News widget
 
-By setting `news_desk_url`, the news widget is enabled. The widget simply fetches a JSON-file from the given URL. Short example of such a file, including only one news item with its title and body in two languages and a date:
+By setting `news_url`, the news widget is enabled. The widget simply fetches a YAML file from the given URL. Short example of such a file, including only one news item with its title and body in two languages and a date:
 
-    [
-        {
-            "h": {
-                "en": "<p>Longer description in English</p>",
-                "sv": "<p>Längre beskrivning på svenska</p>"
-            },
-            "t": {
-                "en": "English Title",
-                "sv": "Svensk Titel"
-            },
-            "d": "2017-03-01"
-        }
-    ]
+```yaml
+- title:
+    swe: "Ny korpus: Tvåkammarriksdagen"
+    eng: "New corpus: Tvåkammarriksdagen"
+  body:
+    swe: <p><a href="...">Tvåkammarriksdagen</a> finns nu i Korp.</p>
+    eng: <p><a href="...">Tvåkammarriksdagen</a> is now available in Korp.</p>
+  created: 2023-11-30
+```
 
 Local storage is used to remember when the user last checked the news. If there are new items, the UI will change to reflect this.
 
 ## Authentication
 
-Korp comes with two implementations of login. Choose implementation using `auth_module` in `config.yml.
+Korp comes with two implementations of login. Choose implementation using `auth_module` in `config.yml`.
 
 Either just give your chosen implementation like this:
 
@@ -473,7 +476,7 @@ Either just give your chosen implementation like this:
 
 Or as an object, if options are needed:
 
-```
+```yaml
 auth_module:
   module: "name"
   options:
@@ -543,22 +546,16 @@ parameters for attributes.
 - **stats_cqp**: See [Rendering attribute values in the statistics view](#rendering-attribute-values-in-the-statistics-view).
 - **stats_stringify**: See [Rendering attribute values in the statistics view](#rendering-attribute-values-in-the-statistics-view).
 - **translation**: An object containing translations of possible values of the attribute, in this format:
-    ```
-    {
-        "ROOT": {
-            "en": "Root",
-            "sv": "Rot"
-        },
-        "++": {
-            "en": "Coordinating conjunction",
-            "sv": "Samordnande konjunktion"
-        },
-        "+A": {
-            "en": "Conjunctional adverbial",
-            "sv": "Konjuktionellt adverb"
-        },
-        ...
-    }
+    ```yaml
+    ROOT:
+      eng: Root
+      swe: Rot
+    ++:
+      eng: Coordinating conjunction
+      swe: Samordnande konjunktion
+    +A:
+      eng: Conjunctional adverbial
+      swe: Konjuktionellt adverb
     ```
     This replaces value-translation in the translation-files, and also the old attribute `translationKey`.
 - **type**: Possible values:
@@ -595,7 +592,7 @@ Add `my_key` to `<configDir>/translations/corpora-<lang>.json` for all `lang`.
 Define your own components as a map in `custom/components.js`. `component` will be added as a component with name `componentName` to the Angular app.
 
 
-```
+```js
 import component from 'custom/myComponentFile'
 
 export default {
@@ -613,7 +610,7 @@ Remember that in Angular, if you use `myComponentName` as a name of a component,
 
 In `custom/extended.js`, we can define custom (non-Angular) components to be used in extended search:
 
-```
+```js
 export default {
     complemgramExtended: {
         template: `<input type="text" ng-model="model" />
@@ -642,7 +639,7 @@ Make sure to set `$scope.model` as the final result to be used in the CQP-query.
 
 `complemgramExtended` can then be used as key for `extendedComponent` in the configuration files.
 
-```
+```js
 attributes: {
     complemgram: {
         label: "Compounds",
@@ -662,7 +659,7 @@ Input must be saved to `scope.input` for it to work. Example: `<input ng-model="
 
 In `custom/sidebar.js`, we can define custom components to be used in the sidebar:
 
-```
+```js
 export default {
     imageSidebar: {
         template: `<img ng-src="myImg" />
@@ -699,7 +696,7 @@ Define your own rules for rendering values and generating CQP-expressions for ce
 
 When configuring an attribute that needs special handling, use the `stats_cqp` and `stats_stringify` keywords:
 
-```
+```js
 const myAttribute = {
     label: "category",
     order: 80,
@@ -710,7 +707,7 @@ const myAttribute = {
 
 Then create `custom/statistics.js` and define the functions there:
 
-```
+```js
 export default {
     customStringify: (values) => values.join(' == '),
     customCQP: (tokens) => "(" + tokens.map(item => `_.cat="${item}"`).join(" | ") + ")",
@@ -720,17 +717,19 @@ export default {
 Rendering values and generating CQP can also be controlled by editing `app/config/statistics_config.js`, but 
 of course it is best to avoid editing the actual code if it is possible.
 
-If you need to merge rows or otherwise alter the table structure, implement and assign a function to the `stats_rewrite` setting.
+If you need to merge rows or otherwise alter the table structure, you can extend the `StatsProxy` class and do `statsProxyFactory.setClass(MyStatsProxy)`.
 
 #### Stringify functions
 
 Add all custom pretty-printing to `custom/stringify.js`. Example file:
 
-```
+```js
+import { lemgramToHtml, saldoToHtml } from "@/util"
+
 export const {
-    sense: (sense) => util.saldoToString(sense, true),
-    lemgram: (str) => util.lemgramToString(str, true),
-    complemgram: (str) => str.split('+').map((lemgram) => util.lemgramToString(lemgram, true)).join('+')
+    sense: (sense) => saldoToHtml(sense, true),
+    lemgram: (str) => lemgramToHtml(str, true),
+    complemgram: (str) => str.split('+').map((lemgram) => lemgramToHtml(lemgram, true)).join('+')
 }
 ```
 
@@ -741,7 +740,7 @@ based on the name of the attribute. Will be used in sidebar, statistics, extende
 
 Enable the standard reading mode by using this setting on a corpus:
 
-```
+```yaml
 reading_mode: true
 ```
 
@@ -762,7 +761,7 @@ Here is where we present details on how to do code changes in Korp. Changes that
 
 All configuration parameters in `config.yml` are added to a global `settings`-object. For example:
 
-```
+```yaml
 my_parameter: my value
 ```
 
@@ -851,7 +850,7 @@ Avoid using directives and controllers.
 
 This is how it looks everywhere in the Angular.js code:
 
-```
+```js
 controller: [
   "$scope",
   "$rootScope",
@@ -864,7 +863,7 @@ controller: [
 
 The variables of the controller is created automatically by Angular.js and "injected". When reading documenation online you can find the alternative:
 
-```
+```js
 controller: ($scope, $rootScope, backend) => {
   ...
 }

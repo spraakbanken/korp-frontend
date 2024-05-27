@@ -1,5 +1,8 @@
 /** @format */
 import _ from "lodash"
+import settings from "@/settings"
+import { locationSearchGet } from "@/util"
+import { loc } from "@/i18n"
 
 export class CorpusListing {
     constructor(corpora) {
@@ -229,7 +232,7 @@ export class CorpusListing {
     }
 
     getWithinParameters() {
-        const defaultWithin = locationSearch().within || _.keys(settings["default_within"])[0]
+        const defaultWithin = locationSearchGet("within") || _.keys(settings["default_within"])[0]
 
         const output = []
         for (let corpus of this.selected) {
@@ -369,7 +372,7 @@ export class CorpusListing {
             }
         }
 
-        sentAttrs = _.sortBy(sentAttrs, (item) => util.getLocaleString(item.label))
+        sentAttrs = _.sortBy(sentAttrs, (item) => loc(item.label))
 
         return sentAttrs
     }
