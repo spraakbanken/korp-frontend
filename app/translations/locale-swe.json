@@ -281,6 +281,7 @@
     "corpselector_lastupdate": "Senast uppdaterad",
     "corpselector_supports": "Stödjer utökad kontextvisning.",
     "corpselector_limited": "Korpusen är skyddad.",
+    "corpselector_of": " av ",
     "corpselector_year": "Antal token i material daterat",
     "corpselector_undated": "Antal token i odaterat material",
     "corpselector_all": "Tillgängligt",

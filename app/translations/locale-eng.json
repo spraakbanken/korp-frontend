@@ -281,6 +281,7 @@
     "corpselector_lastupdate": "Last update",
     "corpselector_supports": "Supports extended context.",
     "corpselector_limited": "The corpus is protected.",
+    "corpselector_of": " of ",
     "corpselector_year": "Tokens in material dated",
     "corpselector_undated": "Tokens in undated material",
     "corpselector_all": "Available",
