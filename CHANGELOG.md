@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
+
 ## [9.6.0] - 2024-05-27
 
 ### Added

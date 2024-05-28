@@ -2,7 +2,7 @@
 import angular, { IRootScopeService } from "angular"
 import range from "lodash/range"
 import { Chart } from "chart.js/auto"
-import { getLang, loc } from "@/i18n"
+import { loc } from "@/i18n"
 import {
     calculateYearTicks,
     getSeries,
@@ -94,7 +94,7 @@ angular.module("korpApp").component("corpusTimeGraph", {
                             minBarLength: 2,
                         },
                     },
-                    locale: getLang(),
+                    locale: $rootScope["lang"],
                     plugins: {
                         legend: {
                             display: false,

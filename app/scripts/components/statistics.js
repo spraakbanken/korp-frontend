@@ -1,12 +1,12 @@
 /** @format */
 import angular from "angular"
 import _ from "lodash"
-import "components-jqueryui/ui/widgets/dialog.js"
 import settings from "@/settings"
-import { formatRelativeHits, html } from "@/util"
+import { html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import { getCqp } from "../../config/statistics_config.js"
 import { expandOperators } from "@/cqp_parser/cqp.js"
+import "@/components/corpus-distribution-chart"
 
 angular.module("korpApp").component("statistics", {
     template: html`
@@ -166,15 +166,18 @@ angular.module("korpApp").component("statistics", {
     },
     controller: [
         "$rootScope",
+        "$scope",
+        "$uibModal",
         "searches",
         "backend",
-        function ($rootScope, searches, backend) {
+        function ($rootScope, $scope, $uibModal, searches, backend) {
             const $ctrl = this
 
             $ctrl.noRowsError = false
             $ctrl.doSort = true
             $ctrl.sortColumn = null
             $ctrl.mapRelative = true
+            $scope.row = null
 
             $ctrl.$onInit = () => {
                 $(window).resize(
@@ -446,88 +449,27 @@ angular.module("korpApp").component("statistics", {
             }
 
             function showPieChart(rowId) {
-                let statsSwitchInstance
-                const pieChartCurrentRowId = rowId
+                const row = $ctrl.data.find((row) => row.rowId == rowId)
 
-                const getDataItems = (rowId, valueType) => {
-                    const dataItems = []
-                    if (valueType === "relative") {
-                        valueType = 1
-                    } else {
-                        valueType = 0
-                    }
-                    for (let row of $ctrl.data) {
-                        if (row.rowId === rowId) {
-                            for (let corpus of $ctrl.searchParams.corpora) {
-                                const freq = row[corpus + "_value"][valueType]
-                                const freqStr = formatRelativeHits(freq.toString(), $rootScope.lang)
-                                const title = locObj(settings.corpora[corpus.toLowerCase()]["title"])
-                                dataItems.push({
-                                    value: freq,
-                                    caption: `${title}: ${freqStr}`,
-                                    shape_id: rowId,
-                                })
-                            }
-                            break
-                        }
-                    }
-                    return dataItems
-                }
+                $scope.rowData = $ctrl.searchParams.corpora.map((corpus) => ({
+                    title: locObj(settings.corpora[corpus.toLowerCase()]["title"]),
+                    values: row[corpus + "_value"], // [absolute, relative]
+                }))
 
-                $("#dialog").remove()
-
-                const relHitsString = loc("statstable_relfigures_hits")
-                $("<div id='dialog'></div>")
-                    .appendTo("body")
-                    .append(
-                        html`<div id="pieDiv">
-                            <div id="statistics_switch" class="text-center my-2">
-                                <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">
-                                    Relativa frekvenser
-                                </a>
-                                <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">
-                                    Absoluta frekvenser
-                                </a>
-                            </div>
-                            <div id="chartFrame" class="h-[340px] mx-auto" />
-                            <p id="hitsDescription" class="text-center my-2" rel="localize[statstable_absfigures_hits]">
-                                ${relHitsString}
-                            </p>
-                        </div>`
-                    )
-                    .dialog({
-                        width: 400,
-                        height: 500,
-                        close() {
-                            return $("#pieDiv").remove()
-                        },
-                    })
-                    .css("opacity", 0)
-                    .parent()
-                    .find(".ui-dialog-title")
-                    .localeKey("statstable_hitsheader_lemgram")
-
-                $("#dialog").fadeTo(400, 1)
-                $("#dialog").find("a").blur() // Prevents the focus of the first link in the "dialog"
-
-                const stats2Instance = $("#chartFrame").pie_widget({
-                    container_id: "chartFrame",
-                    data_items: getDataItems(rowId, "relative"),
+                const modal = $uibModal.open({
+                    template: html`
+                        <div class="modal-header">
+                            <h3 class="modal-title !w-full">{{ 'statstable_distribution' | loc }}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <corpus-distribution-chart row="$parent.rowData"></corpus-distribution-chart>
+                        </div>
+                    `,
+                    scope: $scope,
+                    windowClass: "!text-base",
                 })
-                statsSwitchInstance = $("#statistics_switch").radioList({
-                    change: () => {
-                        let loc
-                        const typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode")
-                        stats2Instance.pie_widget("newData", getDataItems(pieChartCurrentRowId, typestring))
-                        if (typestring === "absolute") {
-                            loc = "statstable_absfigures_hits"
-                        } else {
-                            loc = "statstable_relfigures_hits"
-                        }
-                        return $("#hitsDescription").localeKey(loc)
-                    },
-                    selected: "relative",
-                })
+                // Ignore rejection from closing the modal
+                modal.result.catch(() => {})
             }
 
             $ctrl.resizeGrid = (resizeColumns) => {

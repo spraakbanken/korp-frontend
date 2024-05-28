@@ -56,7 +56,6 @@ require("angular-filter/index.js")
 
 require("./lib/jquery.tooltip.pack.js")
 
-require("./scripts/pie-widget.js")
 require("./scripts/widgets.js")
 require("./scripts/main.js")
 require("./scripts/app.js")
