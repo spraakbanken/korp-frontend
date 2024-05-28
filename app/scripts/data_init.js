@@ -10,41 +10,27 @@ import { httpConfAddMethodFetch } from "@/util"
 
 // TODO it would be better only to load additional languages when there is a language change
 async function initLocales() {
-    const packages = ["locale", "corpora"]
-    const prefix = "translations"
     const locData = {}
-
     const defs = []
-    for (let langObj of settings["languages"]) {
+    for (const langObj of settings["languages"]) {
         const lang = langObj.value
         locData[lang] = {}
-        for (let pkg of packages) {
-            let file = pkg + "-" + lang + ".json"
-            file = prefix + "/" + file
-            const def = new Promise((resolve) => {
-                fetch(file)
-                    .then((response) => {
-                        if (response.status >= 300) {
-                            throw new Error()
-                        }
-                        response.json().then((data) => {
-                            _.extend(locData[lang], data)
-                        })
-                        resolve()
-                    })
-                    .catch(() => {
-                        resolve()
-                        console.log("No language file: ", file)
-                    })
-            })
+        for (const pkg of ["locale", "corpora"]) {
+            const file = `translations/${pkg}-${lang}.json`
+            const def = fetch(file)
+                .then(async (response) => {
+                    if (response.status >= 300) throw new Error()
+                    const data = await response.json()
+                    Object.assign(locData[lang], data)
+                })
+                .catch(() => {
+                    console.log("No language file: ", file)
+                })
             defs.push(def)
         }
     }
 
-    for (const def of defs) {
-        await def
-    }
-
+    await Promise.all(defs)
     window.loc_data = locData
     return locData
 }
