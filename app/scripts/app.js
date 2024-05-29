@@ -11,6 +11,7 @@ import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
 import "@/components/korp-error"
+import { initLocales, locDataPromise } from "./data_init"
 
 // load all custom components
 let customComponents = {}
@@ -131,6 +132,11 @@ korpApp.run([
         $rootScope.graphTabs = []
         $rootScope.mapTabs = []
         $rootScope.textTabs = []
+
+        // This fetch was started in data_init.js, but only here can we store the result.
+        const initLocalesPromise = initLocales().then((data) =>
+            $rootScope.$apply(() => ($rootScope["loc_data"] = data))
+        )
 
         s.waitForLogin = false
 
@@ -303,6 +309,7 @@ korpApp.run([
         })
 
         initializeCorpusSelection(getCorporaFromHash())
+        await initLocalesPromise
     },
 ])
 

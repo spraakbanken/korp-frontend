@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import memoize from "lodash/memoize"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
 import timeProxyFactory from "@/backend/time-proxy"
@@ -8,8 +9,9 @@ import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
 import { httpConfAddMethodFetch } from "@/util"
 
+// Using memoize, this will only fetch once and then return the same promise when called again.
 // TODO it would be better only to load additional languages when there is a language change
-async function initLocales() {
+export const initLocales = memoize(async () => {
     const locData = {}
     const defs = []
     for (const langObj of settings["languages"]) {
@@ -31,9 +33,8 @@ async function initLocales() {
     }
 
     await Promise.all(defs)
-    window.loc_data = locData
     return locData
-}
+})
 
 async function getInfoData() {
     const params = {
@@ -242,7 +243,8 @@ export async function fetchInitialData(authDef) {
         await authDef
     }
 
-    const translationFiles = initLocales()
+    // Start fetching locales asap. Await and read it later, in the Angular context.
+    initLocales()
     const config = await getConfig()
     const modeSettings = transformConfig(config)
 
@@ -270,5 +272,4 @@ export async function fetchInitialData(authDef) {
             settings["time_data"] = await timeDef
         }
     }
-    await translationFiles
 }

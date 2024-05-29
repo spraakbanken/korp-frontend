@@ -18,7 +18,7 @@ export function getLang(): string {
 export function loc(key: string, lang?: string) {
     lang = lang || getLang()
     try {
-        return ((window as any).loc_data as LangLocMap)[lang][key]
+        return (getService("$rootScope")["loc_data"] as LangLocMap)[lang][key]
     } catch (e) {
         return key
     }

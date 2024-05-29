@@ -1,5 +1,5 @@
 const { default: settings } = require("@/settings");
-const { locationSearchGet } = require("@/util");
+const { locationSearchGet, getService } = require("@/util");
 
 (function($) {
 	dl_cache = {}
@@ -45,7 +45,7 @@ const { locationSearchGet } = require("@/util");
 	$.fn.localize = function() {
 		//TODO: make this less slow.
 		var lang = locationSearchGet("lang") || settings["default_language"];
-		var data = loc_data[lang];
+		var data = getService("$rootScope")["loc_data"][lang];
 		this.find("[rel^=localize]").each(function(i, elem) {
 			var elem = $(elem);
 			var key = elem.attr("rel").match(/localize\[(.*?)\]/)[1];
