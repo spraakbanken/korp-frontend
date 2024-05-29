@@ -1,4 +1,6 @@
 /** @format */
+import moment from "moment"
+
 export function getTimeCQP(time, zoom, coarseGranularity) {
     let timecqp
     const m = moment(time * 1000)

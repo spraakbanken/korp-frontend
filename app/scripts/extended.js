@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import moment from "moment"
 import settings from "@/settings"
 import { html, regescape, unregescape } from "@/util"
 import { loc, locAttribute } from "@/i18n"

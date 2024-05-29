@@ -44,8 +44,6 @@ require("slickgrid/slick.interactions.js")
 
 require("./scripts/jq_extensions.js")
 
-window.moment = require("moment")
-
 require("leaflet")
 require("leaflet.markercluster")
 require("leaflet-providers")
