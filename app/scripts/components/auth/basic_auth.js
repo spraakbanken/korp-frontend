@@ -70,7 +70,7 @@ const login = (usr, pass, saveLogin) => {
             return dfd.resolve(data)
         })
         .fail(function (xhr, status, error) {
-            c.log("auth fail", arguments)
+            console.log("auth fail", arguments)
             return dfd.reject()
         })
 

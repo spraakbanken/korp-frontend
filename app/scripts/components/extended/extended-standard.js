@@ -95,8 +95,8 @@ angular.module("korpApp").component("extendedStandard", {
                 try {
                     updateExtendedCQP()
                 } catch (e) {
-                    c.log("Failed to parse CQP", ctrl.cqp)
-                    c.log("Error", e)
+                    console.log("Failed to parse CQP", ctrl.cqp)
+                    console.log("Error", e)
                 }
 
                 ctrl.validateFreeOrder()

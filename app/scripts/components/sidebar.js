@@ -222,7 +222,7 @@ angular.module("korpApp").component("sidebar", {
                                 posItems.push([key, output])
                             }
                         } catch (e) {
-                            c.log("failed to render custom attribute", e)
+                            console.log("failed to render custom attribute", e)
                         }
                     }
                     return [posItems, structItems]

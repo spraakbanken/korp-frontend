@@ -28,8 +28,6 @@ require("angular")
 
 require("jquerylocalize")
 
-window.c = console
-
 try {
     // modes-files are optional and have customizing code
     require(`modes/${currentMode}_mode.js`)

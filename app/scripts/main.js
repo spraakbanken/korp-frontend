@@ -40,13 +40,13 @@ function initApp() {
     try {
         angular.bootstrap(document, ["korpApp"])
     } catch (error) {
-        c.error(error)
+        console.error(error)
     }
 
     try {
         updateSearchHistory()
     } catch (error1) {
-        c.error("ERROR setting corpora from location", error1)
+        console.error("ERROR setting corpora from location", error1)
     }
 
     if (process.env.ENVIRONMENT == "staging") {

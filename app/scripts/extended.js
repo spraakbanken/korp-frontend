@@ -84,7 +84,7 @@ const selectController = (autocomplete) => [
                         $scope.input = _.includes(data, $scope.input) ? $scope.input : $scope.dataset[0][0]
                     }
                 },
-                () => c.log("struct_values error")
+                () => console.log("struct_values error")
             )
         }
 

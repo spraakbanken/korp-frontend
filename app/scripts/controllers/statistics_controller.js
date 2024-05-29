@@ -101,14 +101,14 @@ korpApp.directive("statsResultCtrl", () => ({
                         function (textStatus, err) {
                             const arguments_ = arguments
                             $timeout(() => {
-                                c.log("fail", arguments_)
-                                c.log(
+                                console.log("fail", arguments_)
+                                console.log(
                                     "stats fail",
                                     s.loading,
                                     _.map(s.proxy.pendingRequests, (item) => item.readyState)
                                 )
                                 if (s.ignoreAbort) {
-                                    c.log("stats ignoreabort")
+                                    console.log("stats ignoreabort")
                                     return
                                 }
                                 s.loading = false
@@ -123,7 +123,7 @@ korpApp.directive("statsResultCtrl", () => ({
             }
 
             s.resultError = (data) => {
-                c.error("json fetch error: ", data)
+                console.error("json fetch error: ", data)
                 s.loading = false
                 s.resetView()
                 s.error = true

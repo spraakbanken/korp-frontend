@@ -100,7 +100,7 @@ $.fn.localeKey = function(key) {
     // Creating a jQuery plugin:
     $.generateFile = function(script, data) {
 
-        c.log("generateFile", script, data);
+        console.log("generateFile", script, data);
         data = data || {};
 
         // Creating a 1 by 1 px invisible iframe:

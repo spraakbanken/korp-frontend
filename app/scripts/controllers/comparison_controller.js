@@ -80,7 +80,7 @@ korpApp.directive("compareCtrl", () => ({
                                 const attrVal = token[attrI]
 
                                 if (attrKey.includes("_.")) {
-                                    c.log("error, attribute key contains _.")
+                                    console.log("error, attribute key contains _.")
                                 }
 
                                 const attribute = attributes[attrKey]

@@ -208,7 +208,7 @@ korpApp.factory("globalFilterService", [
             } else if (_.every(values, (val) => Number.isInteger(val))) {
                 return _.reduce(values, (a, b) => a + b, 0)
             } else {
-                c.error("Cannot merge objects a and b")
+                console.error("Cannot merge objects a and b")
             }
         }
 

@@ -114,7 +114,7 @@ angular.module("korpApp").component("extendedParallel", {
                     try {
                         return expandOperators(cqp)
                     } catch (e) {
-                        c.log("parallel cqp parsing error", e)
+                        console.log("parallel cqp parsing error", e)
                         return cqp
                     }
                 }

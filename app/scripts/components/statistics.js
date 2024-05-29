@@ -404,7 +404,7 @@ angular.module("korpApp").component("statistics", {
 
                 const selectedAttributes = _.filter($ctrl.mapAttributes, "selected")
                 if (selectedAttributes.length > 1) {
-                    c.log("Warning: more than one selected attribute, choosing first")
+                    console.log("Warning: more than one selected attribute, choosing first")
                 }
                 const selectedAttribute = selectedAttributes[0]
 

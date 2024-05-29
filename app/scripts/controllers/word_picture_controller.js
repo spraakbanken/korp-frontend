@@ -81,7 +81,7 @@ korpApp.directive("wordpicCtrl", () => ({
                 })
                 def.fail((jqXHR, status, errorThrown) => {
                     $timeout(() => {
-                        c.log("def fail", status)
+                        console.log("def fail", status)
                         if (s.ignoreAbort) {
                             return
                         }

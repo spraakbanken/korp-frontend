@@ -106,7 +106,7 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 }
                 let confObj = ctrl.typeMapping && ctrl.typeMapping[type]
                 if (!confObj) {
-                    c.log("confObj missing", type, ctrl.typeMapping)
+                    console.log("confObj missing", type, ctrl.typeMapping)
                     return
                 }
 

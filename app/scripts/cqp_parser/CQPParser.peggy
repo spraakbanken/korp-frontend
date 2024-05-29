@@ -10,8 +10,6 @@
     })
     return output
   }
-
-  var c = console
 }
 
 

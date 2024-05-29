@@ -185,9 +185,9 @@ export class KwicCtrl {
 
             req.fail((jqXHR, status, errorThrown) => {
                 $timeout(() => {
-                    c.log("kwic fail")
+                    console.log("kwic fail")
                     if (s.ignoreAbort) {
-                        c.log("stats ignoreabort")
+                        console.log("stats ignoreabort")
                         return
                     }
                     s.loading = false
