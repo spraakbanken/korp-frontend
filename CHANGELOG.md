@@ -8,6 +8,10 @@
 - Removed the global `c` alias for `console`
 - Removed globals `CSV` and `moment`, import the libraries instead
 
+### Fixed
+
+- News were sometimes not shown immediately after fetch
+
 ## [9.6.0] - 2024-05-27
 
 ### Added
