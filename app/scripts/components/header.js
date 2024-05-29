@@ -81,8 +81,8 @@ angular.module("korpApp").component("header", {
                         <a
                             ng-repeat="langObj in $ctrl.languages"
                             data-mode="{{langObj.value}}"
-                            ng-click="lang = langObj.value"
-                            >{{langObj.label | locObj:lang}}</a
+                            ng-click="$root.lang = langObj.value"
+                            >{{langObj.label | locObj:$root.lang}}</a
                         >
                     </div>
 

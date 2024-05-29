@@ -1,11 +1,12 @@
 /** @format */
 import isObject from "lodash/isObject"
 import settings from "@/settings"
+import { getService } from "@/util"
 import type { LangLocMap, LangMap, LocLangMap, LocMap } from "@/i18n/types"
 
 /** Get the current UI language. */
 export function getLang(): string {
-    return (window as any).lang || settings["default_language"]
+    return getService("$rootScope")["lang"] || settings["default_language"]
 }
 
 /**

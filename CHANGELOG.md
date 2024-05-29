@@ -6,6 +6,7 @@
 
 - Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
 - Removed the global `c` alias for `console`
+- Removed global `lang`, use `$rootScope["lang"]` instead (outside Angular: `getService("$rootScope")["lang"]`)
 - Removed globals `CSV` and `moment`, import the libraries instead
 
 ### Fixed

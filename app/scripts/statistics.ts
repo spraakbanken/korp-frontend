@@ -15,7 +15,7 @@ const createStatisticsService = function () {
     ): SlickgridColumn[] {
         const valueFormatter: SlickgridFormatter = function (row, cell, value, columnDef, dataContext) {
             const [absolute, relative] = [...dataContext[columnDef.id + "_value"]]
-            return hitCountHtml(absolute, relative, (window as any).lang as string)
+            return hitCountHtml(absolute, relative)
         }
 
         const corporaKeys = _.keys(corpora)

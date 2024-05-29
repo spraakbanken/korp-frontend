@@ -28,7 +28,7 @@ angular.module("korpApp").component("kwic", {
                                     ng-style='{width : corpus.relative + "%"}'
                                     ng-class="{odd : $index % 2 != 0, even : $index % 2 == 0}"
                                     ng-click="$ctrl.pageEvent(corpus.page)"
-                                    uib-tooltip="{{corpus.rtitle | locObj:lang}}: {{corpus.abs}}"
+                                    uib-tooltip="{{corpus.rtitle | locObj:$root.lang}}: {{corpus.abs}}"
                                     tooltip-placement='{{$last? "left":"top"}}'
                                     append-to-body="false"
                                 ></td>
@@ -58,7 +58,7 @@ angular.module("korpApp").component("kwic", {
                         <td class="empty_td"></td>
                         <td class="corpus_title text-gray-600 uppercase text-sm" colspan="3">
                             <div>
-                                {{sentence.newCorpus | locObj:lang}}
+                                {{sentence.newCorpus | locObj:$root.lang}}
                                 <span class="corpus_title_warn" ng-if="::sentence.noContext"
                                     >{{'no_context_support' | loc:$root.lang}}</span
                                 >
@@ -106,7 +106,7 @@ angular.module("korpApp").component("kwic", {
                         ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}"
                     >
                         <span class="corpus_title" colspan="0"
-                            >{{sentence.newCorpus | locObj:lang}}<span
+                            >{{sentence.newCorpus | locObj:$root.lang}}<span
                                 class="corpus_title_warn"
                                 ng-if="::sentence.noContext"
                                 >{{'no_context_support' | loc:$root.lang}}</span

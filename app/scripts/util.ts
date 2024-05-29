@@ -115,7 +115,8 @@ export class SelectionManager {
  * @param lang The locale to use.
  * @returns A string with the number nicely formatted.
  */
-export function formatRelativeHits(x: number | string, lang: string) {
+export function formatRelativeHits(x: number | string, lang?: string) {
+    lang = lang || getLang()
     return Number(x).toLocaleString(lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 }
 
@@ -126,7 +127,8 @@ export function formatRelativeHits(x: number | string, lang: string) {
  * @param lang The locale to use.
  * @returns A HTML snippet.
  */
-export function hitCountHtml(absolute: number, relative: number, lang: string) {
+export function hitCountHtml(absolute: number, relative: number, lang?: string) {
+    lang = lang || getLang()
     const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
     // TODO Remove outer span?
     // TODO Flexbox?

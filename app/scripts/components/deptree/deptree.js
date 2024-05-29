@@ -13,7 +13,7 @@ angular.module("korpApp").component("depTree", {
                     <span ng-click="clickX()" class="close-x">×</span>
                 </div>
                 <div class="modal-body">
-                    <div ng-if="label">{{label | loc:$root.lang}}: {{value | locObj:lang}}</div>
+                    <div ng-if="label">{{label | loc:$root.lang}}: {{value | locObj:$root.lang}}</div>
                     <div id="magic_secret_id"></div>
                 </div>
             </script>

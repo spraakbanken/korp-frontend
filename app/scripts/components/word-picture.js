@@ -35,7 +35,7 @@ angular.module("korpApp").component("wordPicture", {
                 <div>
                     <select id="numberHitsSelect" ng-model="$ctrl.settings.showNumberOfHits">
                         <option ng-repeat="hitSetting in $ctrl.hitSettings" value="{{hitSetting}}">
-                            {{ $ctrl.localeString(lang, hitSetting) }}
+                            {{ $ctrl.localeString($root.lang, hitSetting) }}
                         </option>
                     </select>
                 </div>

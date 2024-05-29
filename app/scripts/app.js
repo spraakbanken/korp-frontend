@@ -83,7 +83,6 @@ korpApp.run([
     async function ($rootScope, $location, $locale, tmhDynamicLocale, tmhDynamicLocaleCache, $q, $timeout, $uibModal) {
         const s = $rootScope
         s._settings = settings
-        window.lang = s.lang = $location.search().lang || settings["default_language"]
 
         s.extendedCQP = null
 
@@ -112,8 +111,7 @@ korpApp.run([
             }
 
             // Update global variables
-            s.lang = lang
-            window.lang = lang
+            $rootScope["lang"] = lang
 
             // Trigger jQuery Localize
             $("body").localize()
@@ -198,7 +196,7 @@ korpApp.run([
                     // access partly or fully denied to selected corpora
                     if (settings.corpusListing.corpora.length == loginNeededFor.length) {
                         s.openErrorModal({
-                            content: "{{'access_denied' | loc:lang}}",
+                            content: "{{'access_denied' | loc:$root.lang}}",
                             buttonText: "go_to_start",
                             onClose: () => {
                                 window.location.href = window.location.href.split("?")[0]
@@ -206,9 +204,9 @@ korpApp.run([
                         })
                     } else {
                         s.openErrorModal({
-                            content: html`<div>{{'access_partly_denied' | loc:lang}}:</div>
+                            content: html`<div>{{'access_partly_denied' | loc:$root.lang}}:</div>
                                 <div>${loginNeededHTML()}</div>
-                                <div>{{'access_partly_denied_continue' | loc:lang}}</div>`,
+                                <div>{{'access_partly_denied_continue' | loc:$root.lang}}</div>`,
                             onClose: () => {
                                 const neededIds = loginNeededFor.map((corpus) => corpus.id)
                                 let newIds = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
@@ -222,7 +220,7 @@ korpApp.run([
                 } else {
                     // login needed before access can be checked
                     s.openErrorModal({
-                        content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:lang}}:</span
+                        content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:$root.lang}}:</span
                             >${loginNeededHTML()}`,
                         onClose: () => {
                             s.waitForLogin = true
@@ -233,7 +231,7 @@ korpApp.run([
             } else if (!selectedIds.every((r) => allCorpusIds.includes(r))) {
                 // some corpora missing
                 s.openErrorModal({
-                    content: `{{'corpus_not_available' | loc:lang}}`,
+                    content: `{{'corpus_not_available' | loc:$root.lang}}`,
                     onClose: () => {
                         let newIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
                         if (newIds.length == 0) {
@@ -265,7 +263,7 @@ korpApp.run([
                             ng-click="closeModal()"
                             class="btn bg-blue-500 text-white font-bold mt-3"
                         >
-                            <span ng-if="${useCustomButton}">{{'${buttonText}' | loc:lang }}</span>
+                            <span ng-if="${useCustomButton}">{{'${buttonText}' | loc:$root.lang }}</span>
                             <span ng-if="!${useCustomButton}">OK</span>
                         </button>
                     </div>

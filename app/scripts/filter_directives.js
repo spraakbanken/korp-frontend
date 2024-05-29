@@ -57,10 +57,10 @@ korpApp.directive("globalFilter", [
       <button uib-dropdown-toggle class="btn btn-sm btn-default mr-1 align-baseline">
         <span ng-if="attrValue.length == 0">
           <span>{{ "add_filter_value" | loc:$root.lang }}</span>
-          <span>{{filterLabel | locObj:lang}}</span>
+          <span>{{filterLabel | locObj:$root.lang}}</span>
         </span>
         <span ng-if="attrValue.length != 0">
-          <span style="text-transform: capitalize">{{filterLabel | locObj:lang}}:</span>
+          <span style="text-transform: capitalize">{{filterLabel | locObj:$root.lang}}:</span>
           <span ng-repeat="selected in attrValue">{{translateAttribute(selected) | replaceEmpty }} </span>
         </span>
       </button>

@@ -580,7 +580,7 @@ Korp does runtime DOM manipulation when the user changes language. Using an Angu
 
     <div>{{'my_key' | loc}}</div>
 
-Sometimes it is necessary to use `loc:lang` or even `loc:$root.lang`, instead of just `loc`.
+For proper reactivity, it is generally necessary to use `loc:lang` or even `loc:$root.lang`, instead of just `loc`.
 
 Add `my_key` to `<configDir>/translations/corpora-<lang>.json` for all `lang`.
 

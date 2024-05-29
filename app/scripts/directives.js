@@ -383,7 +383,7 @@ korpApp.directive("reduceSelect", [
         <div class="reduce-dropdown-button-text">
           <span>{{ "reduce_text" | loc:$root.lang }}:</span>
           <span>
-            {{keyItems[selected[0]].label | locObj:lang}}
+            {{keyItems[selected[0]].label | locObj:$root.lang}}
           </span>
           <span ng-if="selected.length > 1">
             (+{{ numberAttributes - 1 }})
@@ -395,7 +395,7 @@ korpApp.directive("reduceSelect", [
         <ul>
           <li ng-click="toggleSelected('word', $event)" ng-class="keyItems['word'].selected ? 'selected':''" class="attribute">
             <input type="checkbox" class="reduce-check" ng-checked="keyItems['word'].selected">
-            <span class="reduce-label">{{keyItems['word'].label | locObj:lang }}</span>
+            <span class="reduce-label">{{keyItems['word'].label | locObj:$root.lang }}</span>
             <span ng-class="keyItems['word'].insensitive ? 'selected':''"
                   class="insensitive-toggle"
                   ng-click="toggleWordInsensitive($event)"><b>Aa</b></span>
@@ -405,14 +405,14 @@ korpApp.directive("reduceSelect", [
               ng-click="toggleSelected(item.value, $event)"
               ng-class="item.selected ? 'selected':''" class="attribute">
             <input type="checkbox" class="reduce-check" ng-checked="item.selected">
-            <span class="reduce-label">{{item.label | locObj:lang }}</span>
+            <span class="reduce-label">{{item.label | locObj:$root.lang }}</span>
           </li>
           <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:$root.lang}}</b>
           <li ng-repeat="item in items | filter:{ group: 'sentence_attr' }"
               ng-click="toggleSelected(item.value, $event)"
               ng-class="item.selected ? 'selected':''" class="attribute">
             <input type="checkbox" class="reduce-check" ng-checked="item.selected">
-            <span class="reduce-label">{{item.label | locObj:lang }}</span>
+            <span class="reduce-label">{{item.label | locObj:$root.lang }}</span>
           </li>
         </ul>
       </div>
