@@ -1,6 +1,7 @@
 /** @format */
 import angular from "angular"
 import _ from "lodash"
+import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
 import graphProxyFactory from "@/backend/graph-proxy"
 import { expandOperators } from "@/cqp_parser/cqp"

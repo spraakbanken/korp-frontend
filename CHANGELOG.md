@@ -6,6 +6,7 @@
 
 - Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
 - Removed the global `c` alias for `console`
+- Removed global `CSV`, import the library instead
 
 ## [9.6.0] - 2024-05-27
 

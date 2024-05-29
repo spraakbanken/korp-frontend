@@ -1,5 +1,6 @@
 /** @format */
 import _ from "lodash"
+import CSV from "comma-separated-values/csv"
 import { locObj } from "@/i18n"
 
 const korpApp = angular.module("korpApp")

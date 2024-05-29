@@ -1,6 +1,7 @@
 /** @format */
 import angular from "angular"
 import _ from "lodash"
+import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
 import { html } from "@/util"
 import { loc, locObj } from "@/i18n"

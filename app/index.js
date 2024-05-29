@@ -45,7 +45,6 @@ require("slickgrid/slick.interactions.js")
 require("./scripts/jq_extensions.js")
 
 window.moment = require("moment")
-window.CSV = require("comma-separated-values/csv")
 
 require("leaflet")
 require("leaflet.markercluster")
