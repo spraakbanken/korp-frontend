@@ -994,6 +994,11 @@ a {
   }
 }
 
+.radioList_selected {
+  color: black !important;
+  cursor: default;
+}
+
 .hits_picture_table {
   border : 1px solid lightgrey;
   width: 100%;
