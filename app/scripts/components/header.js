@@ -10,6 +10,7 @@ import settings from "@/settings"
 import currentMode from "@/mode"
 import { collatorSort, html } from "@/util"
 import "@/components/corpus_chooser/corpus-chooser"
+import "@/components/radio-list"
 
 angular.module("korpApp").component("header", {
     template: html`
@@ -77,14 +78,8 @@ angular.module("korpApp").component("header", {
 
                 <div class="flex items-center gap-4">
                     <login-status></login-status>
-                    <div id="languages">
-                        <a
-                            ng-repeat="langObj in $ctrl.languages"
-                            data-mode="{{langObj.value}}"
-                            ng-click="$root.lang = langObj.value"
-                            >{{langObj.label | locObj:$root.lang}}</a
-                        >
-                    </div>
+
+                    <radio-list options="$ctrl.languages" ng-model="lang"> </radio-list>
 
                     <a class="transiton duration-200 hover_text-blue-600" ng-click="$ctrl.citeClick()"
                         >{{'about_cite_header' | loc:$root.lang}}</a
@@ -151,11 +146,15 @@ angular.module("korpApp").component("header", {
     `,
     bindings: {},
     controller: [
+        "$location",
         "$uibModal",
         "$rootScope",
+        "$scope",
         "utils",
-        function ($uibModal, $rootScope, utils) {
+        function ($location, $uibModal, $rootScope, $scope, utils) {
             const $ctrl = this
+
+            $scope.lang = $rootScope.lang
 
             $ctrl.logoClick = function () {
                 const [baseUrl, modeParam, langParam] = $ctrl.getUrlParts(currentMode)
@@ -166,6 +165,14 @@ angular.module("korpApp").component("header", {
             }
 
             $ctrl.languages = settings["languages"]
+
+            $scope.$watch("lang", (newVal, oldVal) => {
+                // Watcher gets called with `undefined` on init.
+                if (!$scope.lang) return
+                $rootScope["lang"] = $scope.lang
+                // Set url param if different from default.
+                $location.search("lang", $scope.lang !== settings["default_language"] ? $scope.lang : null)
+            })
 
             $ctrl.citeClick = () => {
                 $rootScope.show_modal = "about"
@@ -221,6 +228,7 @@ angular.module("korpApp").component("header", {
             $ctrl.visible = $ctrl.modes.slice(0, N_VISIBLE)
 
             $rootScope.$watch("lang", () => {
+                $scope.lang = $rootScope.lang
                 $ctrl.menu = collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
 
                 const i = _.map($ctrl.menu, "mode").indexOf(currentMode)

@@ -7,7 +7,6 @@ import { fetchInitialData } from "@/data_init"
 import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
 import korpLogo from "../img/korp.svg"
-import { locationSearchSet } from "./util"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
@@ -63,15 +62,6 @@ function initApp() {
             jStorage.set("searches", [])
             updateSearchHistory()
         }
-    })
-
-    $("#languages").radioList({
-        change() {
-            const currentLang = $(this).radioList("getSelected").data("mode")
-            locationSearchSet("lang", currentLang !== settings["default_language"] ? currentLang : null)
-        },
-        // TODO: this does nothing?
-        selected: settings["default_language"],
     })
 
     // this is to hide all ugly markup before Angular is fully loaded

@@ -116,9 +116,6 @@ korpApp.run([
 
             // Trigger jQuery Localize
             $("body").localize()
-
-            // Update language switcher
-            $("#languages").radioList("select", lang)
         })
 
         $(document).keyup(function (event) {
