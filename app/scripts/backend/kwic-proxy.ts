@@ -135,7 +135,7 @@ const kwicProxyFactory = new Factory(KwicProxy)
 export default kwicProxyFactory
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
-type KorpQueryParams = {
+export type KorpQueryParams = {
     corpus: string
     cqp: string
     start?: number
@@ -164,7 +164,7 @@ type MakeRequestOptions = {
 type Interval = { start: number; end: number }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
-type KorpQueryResponse = {
+export type KorpQueryResponse = {
     /** Search hits */
     kwic: ApiKwic[]
     /** Total number of hits */
@@ -178,7 +178,7 @@ type KorpQueryResponse = {
 }
 
 /** Search hits */
-type ApiKwic = {
+export type ApiKwic = {
     /** An object for each token in the context, with attribute values for that token */
     tokens: Record<string, any>[]
     /** Attribute values for the context (e.g. sentence) */
@@ -186,7 +186,9 @@ type ApiKwic = {
     /** Specifies the position of the match in the context. If `in_order` is false, `match` will consist of a list of match objects, one per highlighted word */
     match: KwicMatch | KwicMatch[]
     /** Hits from aligned corpora if available, otherwise omitted */
-    aligned: Record<string, any[]>
+    aligned: {
+        [linkedCorpusId: `${string}-${string}`]: Record<string, any>[]
+    }
 }
 
 /** Specifies the position of a match in a context */
