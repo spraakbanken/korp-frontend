@@ -4,6 +4,7 @@ import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import currentMode from "@/mode"
+import { makeDownload } from "@/kwic_download"
 import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
@@ -170,8 +171,7 @@ angular.module("korpApp").component("kwic", {
         "$location",
         "$element",
         "$timeout",
-        "kwicDownload",
-        function ($location, $element, $timeout, kwicDownload) {
+        function ($location, $element, $timeout) {
             let $ctrl = this
 
             const selectionManager = new SelectionManager()
@@ -278,12 +278,7 @@ angular.module("korpApp").component("kwic", {
                     if (value === "") {
                         return
                     }
-                    const [fileName, blobName] = kwicDownload.makeDownload(
-                        ...value.split("/"),
-                        $ctrl.kwic,
-                        $ctrl.prevParams,
-                        hits
-                    )
+                    const [fileName, blobName] = makeDownload(...value.split("/"), $ctrl.kwic, $ctrl.prevParams, hits)
                     $ctrl.download.fileName = fileName
                     $ctrl.download.blobName = blobName
                     $ctrl.download.selected = ""
