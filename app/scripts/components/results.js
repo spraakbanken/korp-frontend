@@ -149,10 +149,7 @@ angular.module("korpApp").component("results", {
                 $rootScope.graphTabs.length ||
                 $rootScope.mapTabs.length
 
-            // TODO: Add some magic to avoid watching everywhere
-            kwicStore.watch("hits", () => {
-                $ctrl.hits = kwicStore.get("hits")
-            })
+            kwicStore.syncTo($ctrl, ["hits"])
         },
     ],
 })
