@@ -53,7 +53,6 @@ require("./lib/jquery.tooltip.pack.js")
 
 require("./scripts/main.js")
 require("./scripts/app.js")
-require("./scripts/search_controllers.js")
 
 require("./scripts/controllers/comparison_controller.js")
 require("./scripts/controllers/kwic_controller.js")
