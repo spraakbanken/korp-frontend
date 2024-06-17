@@ -35,7 +35,7 @@ angular.module("korpApp").component("results", {
                                         loading="loading"
                                         active="active"
                                         hits-in-progress="hitsInProgress"
-                                        hits="hits"
+                                        hits="$root.store.hits"
                                         kwic-input="kwic"
                                         corpus-hits="corpusHits"
                                         is-reading="reading_mode"

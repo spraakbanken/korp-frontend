@@ -46,8 +46,6 @@ export class KwicCtrl {
         const s = scope
 
         s.initialSearch = true
-        /** Number of total search hits, updated when a search is completed. */
-        s.hits = undefined
         /** Number of search hits, may change while search is in progress. */
         s.hitsProgress = undefined
 
@@ -212,7 +210,7 @@ export class KwicCtrl {
         s.renderCompleteResult = (data, isPaging) => {
             s.loading = false
             if (!isPaging) {
-                s.hits = data.hits
+                $rootScope.store.hits = data.hits
                 s.hitsInProgress = data.hits
                 s.corpusHits = data.corpus_hits
             }

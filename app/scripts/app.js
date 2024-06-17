@@ -85,6 +85,13 @@ korpApp.run([
         const s = $rootScope
         s._settings = settings
 
+        // Store global app state.
+        $rootScope.store = {}
+        $rootScope.store.kwic = {
+            /** Number of total search hits, updated when a search is completed. */
+            hits: undefined,
+        }
+
         s.extendedCQP = null
 
         /** This deferred is used to signal that the filter feature is ready. */
