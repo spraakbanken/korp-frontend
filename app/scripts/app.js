@@ -6,6 +6,7 @@ import statemachine from "@/statemachine"
 import * as authenticationProxy from "@/components/auth/auth"
 import { html } from "@/util"
 import { loc, locObj } from "@/i18n"
+import "@/store/kwic.store"
 import "@/components/header"
 import "@/components/searchtabs"
 import "@/components/frontpage"
@@ -84,13 +85,6 @@ korpApp.run([
     async function ($rootScope, $location, $locale, tmhDynamicLocale, tmhDynamicLocaleCache, $q, $timeout, $uibModal) {
         const s = $rootScope
         s._settings = settings
-
-        // Store global app state.
-        $rootScope.store = {}
-        $rootScope.store.kwic = {
-            /** Number of total search hits, updated when a search is completed. */
-            hits: undefined,
-        }
 
         s.extendedCQP = null
 

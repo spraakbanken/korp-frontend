@@ -35,7 +35,7 @@ angular.module("korpApp").component("results", {
                                         loading="loading"
                                         active="active"
                                         hits-in-progress="hitsInProgress"
-                                        hits="$root.store.hits"
+                                        hits="$ctrl.hits"
                                         kwic-input="kwic"
                                         corpus-hits="corpusHits"
                                         is-reading="reading_mode"
@@ -136,7 +136,8 @@ angular.module("korpApp").component("results", {
     controller: [
         "$rootScope",
         "searches",
-        function ($rootScope, searches) {
+        "kwicStore",
+        function ($rootScope, searches, kwicStore) {
             const $ctrl = this
             $ctrl.searches = searches
             $ctrl.onSidebarShow = () => ($ctrl.sidebarVisible = true)
@@ -147,6 +148,11 @@ angular.module("korpApp").component("results", {
                 $rootScope.compareTabs.length ||
                 $rootScope.graphTabs.length ||
                 $rootScope.mapTabs.length
+
+            // TODO: Add some magic to avoid watching everywhere
+            kwicStore.watch("hits", () => {
+                $ctrl.hits = kwicStore.get().hits
+            })
         },
     ],
 })

@@ -7,7 +7,7 @@ const korpApp = angular.module("korpApp")
 
 export class KwicCtrl {
     static initClass() {
-        this.$inject = ["$scope", "utils", "$location", "$rootScope", "$timeout"]
+        this.$inject = ["$scope", "utils", "$location", "$rootScope", "$timeout", "kwicStore"]
     }
     setupHash() {
         return this.utils.setupHash(this.scope, [
@@ -37,7 +37,7 @@ export class KwicCtrl {
             this.scope.makeRequest(false)
         })
     }
-    constructor(scope, utils, $location, $rootScope, $timeout) {
+    constructor(scope, utils, $location, $rootScope, $timeout, kwicStore) {
         this.utils = utils
         this.scope = scope
         this.location = $location
@@ -210,7 +210,7 @@ export class KwicCtrl {
         s.renderCompleteResult = (data, isPaging) => {
             s.loading = false
             if (!isPaging) {
-                $rootScope.store.hits = data.hits
+                kwicStore.get().hits = data.hits
                 s.hitsInProgress = data.hits
                 s.corpusHits = data.corpus_hits
             }
