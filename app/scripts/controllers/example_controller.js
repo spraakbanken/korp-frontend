@@ -66,6 +66,15 @@ class ExampleCtrl extends KwicCtrl {
             })
         })
 
+        s.renderCompleteResult = (data, isPaging) => {
+            s.loading = false
+            if (!isPaging) {
+                s.hits = data.hits
+                s.hitsInProgress = data.hits
+                s.corpusHits = data.corpus_hits
+            }
+        }
+
         s.superRenderResult = s.renderResult
         s.renderResult = (data) => {
             s.superRenderResult(data)
