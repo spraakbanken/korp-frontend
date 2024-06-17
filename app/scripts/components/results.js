@@ -151,7 +151,7 @@ angular.module("korpApp").component("results", {
 
             // TODO: Add some magic to avoid watching everywhere
             kwicStore.watch("hits", () => {
-                $ctrl.hits = kwicStore.get().hits
+                $ctrl.hits = kwicStore.get("hits")
             })
         },
     ],

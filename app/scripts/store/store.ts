@@ -14,9 +14,10 @@ export function createStore<S extends State>(name: string, init: () => S) {
 
             return {
                 /** Return current state. */
-                get: () => $rootScope._store[name],
-                watch: <T>(member: keyof S, f: (newVal: T, oldVal: T) => void) =>
-                    $rootScope.$watch(`_store.${name}.${String(member)}`, f),
+                get: (key: keyof S) => ($rootScope._store[name] as S)[key],
+                set: <K extends keyof S>(key: K, value: S[K]) => (($rootScope._store[name] as S)[key] = value),
+                watch: <T>(key: keyof S, f: (newVal: T, oldVal: T) => void) =>
+                    $rootScope.$watch(`_store.${name}.${String(key)}`, f),
             }
         },
     ]

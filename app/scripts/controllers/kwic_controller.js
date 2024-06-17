@@ -210,7 +210,7 @@ export class KwicCtrl {
         s.renderCompleteResult = (data, isPaging) => {
             s.loading = false
             if (!isPaging) {
-                kwicStore.get().hits = data.hits
+                kwicStore.set("hits", data.hits)
                 s.hitsInProgress = data.hits
                 s.corpusHits = data.corpus_hits
             }
