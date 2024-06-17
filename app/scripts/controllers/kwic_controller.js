@@ -46,8 +46,6 @@ export class KwicCtrl {
         const s = scope
 
         s.initialSearch = true
-        /** Number of search hits, may change while search is in progress. */
-        s.hitsProgress = undefined
 
         this.setupListeners()
 
@@ -148,7 +146,7 @@ export class KwicCtrl {
         s.onProgress = (progressObj, isPaging) => {
             s.progress = Math.round(progressObj["stats"])
             if (!isPaging && progressObj["total_results"] !== null) {
-                s.hitsInProgress = progressObj["total_results"]
+                kwicStore.set("hitsInProgress", progressObj["total_results"])
             }
         }
 
@@ -211,7 +209,7 @@ export class KwicCtrl {
             s.loading = false
             if (!isPaging) {
                 kwicStore.set("hits", data.hits)
-                s.hitsInProgress = data.hits
+                kwicStore.set("hitsInProgress", data.hits)
                 s.corpusHits = data.corpus_hits
             }
         }

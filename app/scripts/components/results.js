@@ -34,7 +34,7 @@ angular.module("korpApp").component("results", {
                                         aborted="aborted"
                                         loading="loading"
                                         active="active"
-                                        hits-in-progress="hitsInProgress"
+                                        hits-in-progress="$ctrl.hitsInProgress"
                                         hits="$ctrl.hits"
                                         kwic-input="kwic"
                                         corpus-hits="corpusHits"
@@ -149,7 +149,7 @@ angular.module("korpApp").component("results", {
                 $rootScope.graphTabs.length ||
                 $rootScope.mapTabs.length
 
-            kwicStore.syncTo($ctrl, ["hits"])
+            kwicStore.syncTo($ctrl, ["hits", "hitsInProgress"])
         },
     ],
 })
