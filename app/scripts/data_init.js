@@ -120,9 +120,14 @@ async function getConfig() {
     return await response.json()
 }
 
+/**
+ *
+ * @param {import("@/settings/config.types").Config} modeSettings
+ * @returns {import("@/settings/config.types").ConfigTransformed}
+ */
 function transformConfig(modeSettings) {
     // only if the current mode is parallel, we load the special code required
-    if (modeSettings["parallel"]) {
+    if (modeSettings.parallel) {
         require("./parallel/corpus_listing.js")
         require("./parallel/stats_proxy.ts")
     }
@@ -134,15 +139,15 @@ function transformConfig(modeSettings) {
         }
     }
 
-    rename(modeSettings["attributes"], "pos_attributes", "attributes")
+    rename(modeSettings.attributes, "pos_attributes", "attributes")
 
     // take the backend configuration format for attributes and expand it
     // TODO the internal representation should be changed to a new, more compact one.
-    for (const corpusId in modeSettings["corpora"]) {
-        const corpus = modeSettings["corpora"][corpusId]
+    for (const corpusId in modeSettings.corpora) {
+        const corpus = modeSettings.corpora[corpusId]
 
-        if (corpus["title"] == undefined) {
-            corpus["title"] = corpusId
+        if (corpus.title == undefined) {
+            corpus.title = corpusId
         }
 
         rename(corpus, "pos_attributes", "attributes")
@@ -151,7 +156,7 @@ function transformConfig(modeSettings) {
             const attrs = {}
             const newAttrList = []
             for (const attrIdx in attrList) {
-                const attr = modeSettings["attributes"][attrType][attrList[attrIdx]]
+                const attr = modeSettings.attributes[attrType][attrList[attrIdx]]
                 attrs[attr.name] = attr
                 newAttrList.push(attr.name)
             }

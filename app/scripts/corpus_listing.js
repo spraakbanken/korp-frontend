@@ -92,7 +92,7 @@ export class CorpusListing {
         return this._mapping_intersection(attrs)
     }
 
-    getStructAttrs() {
+    getStructAttrs(lang) {
         return this.structAttributes
     }
 
@@ -192,7 +192,7 @@ export class CorpusListing {
         return true
     }
 
-    stringifySelected() {
+    stringifySelected(onlyMain) {
         return _.map(this.selected, "id")
             .map((a) => a.toUpperCase())
             .join(",")

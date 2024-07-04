@@ -3,6 +3,7 @@ import angular, { IScope } from "angular"
 import moment from "moment"
 import settings from "@/settings"
 import { html } from "@/util"
+import { LangMap } from "@/i18n/types"
 
 export default angular.module("korpApp").component("corpusUpdates", {
     template: html`
@@ -44,7 +45,7 @@ export default angular.module("korpApp").component("corpusUpdates", {
             $scope.expanded = false
 
             $ctrl.$onInit = () => {
-                if (settings["frontpage"]?.["corpus_updates"]) {
+                if (settings.frontpage?.corpus_updates) {
                     const limitDate = moment().subtract(6, "months")
                     // Find most recently updated corpora
                     $scope.recentUpdates = settings.corpusListing.corpora
@@ -74,7 +75,5 @@ type CorpusUpdatesScope = IScope & {
 
 type Corpus = {
     info: { Updated: string }
-    title: TranslatedString | string
+    title: LangMap | string
 }
-
-type TranslatedString = { [lang: string]: string }

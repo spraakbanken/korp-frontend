@@ -14,7 +14,7 @@ export class TimeProxy extends BaseProxy {
 
         const dfd = $.Deferred()
         const ajaxSettings: AjaxSettings = {
-            url: settings["korp_backend_url"] + "/timespan",
+            url: settings.korp_backend_url + "/timespan",
             data,
         }
         const xhr = $.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpTimespanResponse>

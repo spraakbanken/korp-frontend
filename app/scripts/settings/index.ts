@@ -1,13 +1,14 @@
 /** @format */
 import _ from "lodash"
 import settings from "korp_config"
+import { AppSettings } from "./app-settings.types"
 
 export default settings
 
-if (process.env.ENVIRONMENT != "production") window.settings = settings
+if (process.env.ENVIRONMENT != "production") (window as any).settings = settings
 
 settings.markup = {
-    msd: require("../markup/msd.html"),
+    msd: require("@/../markup/msd.html"),
 }
 
 /**
@@ -15,7 +16,7 @@ settings.markup = {
  */
 export function setDefaultConfigValues() {
     // Default values for some settings properties
-    const settingsDefaults = {
+    const settingsDefaults: Partial<AppSettings> = {
         hits_per_page_values: [25, 50, 75, 100],
         group_statistics: [],
         // The default maximum URI length for Apache is 8190 but keep
@@ -42,8 +43,8 @@ export function setDefaultConfigValues() {
 
     // Default values depending on other settings values, possibly
     // assigned a default value above
-    const settingsDefaultsDep = {
-        hits_per_page_default: settings["hits_per_page_values"][0],
+    const settingsDefaultsDep: Partial<AppSettings> = {
+        hits_per_page_default: settings.hits_per_page_values[0],
     }
 
     _.defaults(settings, settingsDefaultsDep)

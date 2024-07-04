@@ -106,7 +106,7 @@ const createStatisticsService = function () {
             type: "korpStatistics",
             data,
             reduceVals,
-            groupStatistics: settings["group_statistics"],
+            groupStatistics: settings.group_statistics,
         } as StatisticsWorkerMessage)
     }
 

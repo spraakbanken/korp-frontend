@@ -2,11 +2,15 @@
 
 ## [Unreleased]
 
+### Added
+
+- TypeScript typings for config/settings
+
 ### Changed
 
 - Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
 
-### Refactoring
+### Refactored
 
 - Removed the global `c` alias for `console`
 - Removed global `lang`, use `$rootScope["lang"]` instead (outside Angular: `getService("$rootScope")["lang"]`)

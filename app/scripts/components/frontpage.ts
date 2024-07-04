@@ -5,29 +5,22 @@ import { isEnabled } from "@/news-service"
 import "@/components/corpus-updates"
 import "@/components/newsdesk"
 import "@/components/search-examples"
+import settings from "@/settings"
 
 export default angular.module("korpApp").component("frontpage", {
     template: html`
         <div ng-if="!$ctrl.hasResult()" class="max-w-screen-md my-10 mx-auto flex gap-8 flex-wrap">
             <div class="w-full flex gap-8 flex-wrap">
-                <section
-                    ng-if="$ctrl.showDescription && ($root._settings['description'] || $root._settings['mode_description'])"
-                    class="w-80 grow text-lg"
-                >
-                    <div
-                        ng-if="$root._settings['description']"
-                        ng-bind-html="$root._settings['description'] | locObj:$root.lang | trust"
-                    ></div>
+                <section ng-if="$ctrl.showDescription && (description || modeDescription)" class="w-80 grow text-lg">
+                    <div ng-if="description" ng-bind-html="description | locObj:$root.lang | trust"></div>
 
-                    <div ng-if="$root._settings['mode_description']">
-                        <h3 ng-if="$root._settings['mode']['label']" class="font-bold">
-                            {{$root._settings['mode']['label'] | locObj:$root.lang}}
-                        </h3>
-                        <div ng-bind-html="$root._settings['mode_description'] | locObj:$root.lang | trust"></div>
+                    <div ng-if="modeDescription">
+                        <h3 ng-if="modeLabel" class="font-bold">{{modeLabel | locObj:$root.lang}}</h3>
+                        <div ng-bind-html="modeDescription | locObj:$root.lang | trust"></div>
                     </div>
                 </section>
 
-                <search-examples ng-if="$root._settings['frontpage']['examples']" class="w-80 grow"></search-examples>
+                <search-examples ng-if="examples" class="w-80 grow"></search-examples>
             </div>
 
             <corpus-updates class="w-80 grow"></corpus-updates>
@@ -45,6 +38,10 @@ export default angular.module("korpApp").component("frontpage", {
             $ctrl.showDescription = false
 
             $scope.newsdeskIsEnabled = isEnabled()
+            $scope.description = settings.description
+            $scope.modeDescription = settings.mode_description
+            $scope.modeLabel = settings.mode?.label
+            $scope.examples = settings.frontpage?.examples
 
             $ctrl.hasResult = () =>
                 searches.activeSearch ||

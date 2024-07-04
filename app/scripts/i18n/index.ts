@@ -6,7 +6,7 @@ import type { LangLocMap, LangMap, LocLangMap, LocMap } from "@/i18n/types"
 
 /** Get the current UI language. */
 export function getLang(): string {
-    return getService("$rootScope")["lang"] || settings["default_language"]
+    return getService("$rootScope")["lang"] || settings.default_language
 }
 
 /**
@@ -37,8 +37,8 @@ export function locObj(map: LangMap | string, lang?: string): string | undefined
     lang = lang || getLang()
     if (map[lang]) {
         return map[lang]
-    } else if (map[settings["default_language"]]) {
-        return map[settings["default_language"]]
+    } else if (map[settings.default_language]) {
+        return map[settings.default_language]
     }
 
     // fall back to the first value if neither the selected or default language are available

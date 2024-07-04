@@ -42,7 +42,7 @@ export class KwicProxy extends BaseProxy {
 
         function getPageInterval(): Interval {
             const hpp: string | number = locationSearchGet("hpp")
-            const itemsPerPage = Number(hpp) || settings["hits_per_page_default"]
+            const itemsPerPage = Number(hpp) || settings.hits_per_page_default
             const start = (page || 0) * itemsPerPage
             const end = start + itemsPerPage - 1
             return { start, end }
@@ -52,7 +52,7 @@ export class KwicProxy extends BaseProxy {
         delete options.ajaxParams.command
 
         const data: KorpQueryParams = {
-            default_context: settings["default_overview_context"],
+            default_context: settings.default_overview_context,
             ...getPageInterval(),
             ...options.ajaxParams,
         }
@@ -97,7 +97,7 @@ export class KwicProxy extends BaseProxy {
         this.prevRequest = data
         this.prevParams = data
         const ajaxSettings: AjaxSettings = {
-            url: settings["korp_backend_url"] + "/" + command,
+            url: settings.korp_backend_url + "/" + command,
             data: data,
             beforeSend(req, settings) {
                 self.prevRequest = settings

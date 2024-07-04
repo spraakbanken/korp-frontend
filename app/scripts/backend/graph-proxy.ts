@@ -57,7 +57,7 @@ export class GraphProxy extends BaseProxy {
         const def = $.Deferred()
 
         const ajaxSettings: AjaxSettings = {
-            url: settings["korp_backend_url"] + "/count_time",
+            url: settings.korp_backend_url + "/count_time",
             dataType: "json",
             data: params,
 

@@ -2,13 +2,14 @@
 import Yaml from "js-yaml"
 import settings from "./settings"
 import moment from "moment"
+import { LangString } from "./i18n/types"
 
 export function isEnabled(): boolean {
-    return !!settings["news_url"]
+    return !!settings.news_url
 }
 
 export async function fetchNews(): Promise<NewsItem[]> {
-    const response = await fetch(settings["news_url"])
+    const response = await fetch(settings.news_url)
     const feedYaml: string = await response.text()
 
     const itemsRaw = Yaml.load(feedYaml) as NewsItemRaw[]
@@ -37,14 +38,12 @@ const formatDate = (date: Date) => moment(date).format("YYYY-MM-DD")
 type NewsItemRaw = {
     created: Date
     expires?: Date
-    title: string | TranslatedString
-    body: string | TranslatedString
+    title: LangString
+    body: LangString
 }
 
 export type NewsItem = {
     created: string
-    title: string | TranslatedString
-    body: string | TranslatedString
+    title: LangString
+    body: LangString
 }
-
-type TranslatedString = { [lang: string]: string }

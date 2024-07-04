@@ -27,7 +27,7 @@ export class LemgramProxy extends BaseProxy {
         this.prevParams = params
 
         const ajaxSettings: AjaxSettings = {
-            url: settings["korp_backend_url"] + "/relations",
+            url: settings.korp_backend_url + "/relations",
             data: params,
 
             success() {

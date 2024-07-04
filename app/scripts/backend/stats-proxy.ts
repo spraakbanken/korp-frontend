@@ -74,7 +74,7 @@ export class StatsProxy extends BaseProxy {
 
         const reduceValLabels = _.map(reduceVals, function (reduceVal) {
             if (reduceVal === "word") {
-                return settings["word_label"]
+                return settings.word_label
             }
             const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
                 reduceVal
@@ -109,7 +109,7 @@ export class StatsProxy extends BaseProxy {
         this.prevParams = data
         const def: JQuery.Deferred<StatisticsWorkerResult> = $.Deferred()
 
-        const url = settings["korp_backend_url"] + "/count"
+        const url = settings.korp_backend_url + "/count"
         const ajaxSettings: AjaxSettings<KorpResponse<KorpStatsResponse>> = {
             url,
             data,

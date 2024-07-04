@@ -138,7 +138,7 @@ export default abstract class BaseProxy {
                 }
 
                 return _(corpus.split("|"))
-                    .map((corpus) => parseInt(settings.corpora[corpus.toLowerCase()].info.Size))
+                    .map((corpus) => Number(settings.corpora[corpus.toLowerCase()].info.Size))
                     .reduce((a, b) => a + b, 0)
             })
             this.total = _.reduce(tmp, (val1, val2) => val1 + val2, 0)
