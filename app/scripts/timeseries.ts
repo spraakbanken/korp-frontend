@@ -32,16 +32,14 @@ export const getSeries = () => fromPairs(getTimeDataPairs()) as YearSeries
 
 /** Get data size per year of selected corpora. */
 export function getSeriesSelected() {
-    const corpora: { time?: YearSeries }[] = settings.corpusListing.selected
     // `pickBy` removes zeroes.
-    const series = corpora.map((corpus) => ("time" in corpus ? pickBy(corpus.time) : {}))
+    const series = settings.corpusListing.selected.map((corpus) => ("time" in corpus ? pickBy(corpus.time) : {}))
     return sumYearSeries(...series)
 }
 
 /** Get data size of unknown year in selected corpora */
 export function getCountUndatedSelected() {
-    const corpora: { non_time?: number }[] = settings.corpusListing.selected
-    return corpora.reduce((sum, corpus) => sum + (corpus["non_time"] || 0), 0)
+    return settings.corpusListing.selected.reduce((sum, corpus) => sum + (corpus["non_time"] || 0), 0)
 }
 
 /** Get first and last year in all available corpora. */

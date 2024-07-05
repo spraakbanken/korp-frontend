@@ -40,7 +40,8 @@ export const withService = <K extends keyof ServiceTypes, R>(name: K, fn: (servi
  * Get values from the URL search string via Angular.
  * Only use this in code outside Angular. Inside, use `$location.search()`.
  */
-export const locationSearchGet = (key: string) => withService("$location", ($location) => $location.search()[key])
+export const locationSearchGet = (key: string): string =>
+    withService("$location", ($location) => $location.search()[key])
 
 /**
  * Set values in the URL search string via Angular.

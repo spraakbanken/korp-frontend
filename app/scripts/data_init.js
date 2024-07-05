@@ -128,8 +128,8 @@ async function getConfig() {
 function transformConfig(modeSettings) {
     // only if the current mode is parallel, we load the special code required
     if (modeSettings.parallel) {
-        require("./parallel/corpus_listing.js")
-        require("./parallel/stats_proxy.ts")
+        require("./parallel/corpus_listing")
+        require("./parallel/stats_proxy")
     }
 
     function rename(obj, from, to) {

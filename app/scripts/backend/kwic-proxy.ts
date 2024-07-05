@@ -41,7 +41,7 @@ export class KwicProxy extends BaseProxy {
         }
 
         function getPageInterval(): Interval {
-            const hpp: string | number = locationSearchGet("hpp")
+            const hpp = locationSearchGet("hpp")
             const itemsPerPage = Number(hpp) || settings.hits_per_page_default
             const start = (page || 0) * itemsPerPage
             const end = start + itemsPerPage - 1

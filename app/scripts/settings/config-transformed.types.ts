@@ -35,4 +35,7 @@ export type CorpusTransformed = Omit<
         LastDate?: string
         Protected?: boolean
     }
+    common_attributes?: Record<string, true>
+    time?: Record<number, number>
+    non_time?: number
 }

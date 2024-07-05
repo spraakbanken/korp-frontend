@@ -4,12 +4,15 @@
 
 ### Added
 
-- TypeScript typings for config/settings
-- TypeScript typings for CQP queries
+- TypeScript typings for:
+  - config/settings
+  - CQP queries
+  - CorpusListing
 
 ### Changed
 
 - Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
+- In the `CorpusListing` class, the methods `getLinked` and `getEnabledByLang` have new parameter signatures
 
 ### Refactored
 

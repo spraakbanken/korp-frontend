@@ -3,7 +3,7 @@ import angular, { IScope } from "angular"
 import moment from "moment"
 import settings from "@/settings"
 import { html } from "@/util"
-import { LangString } from "@/i18n/types"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
 
 export default angular.module("korpApp").component("corpusUpdates", {
     template: html`
@@ -67,13 +67,8 @@ export default angular.module("korpApp").component("corpusUpdates", {
 
 type CorpusUpdatesScope = IScope & {
     LIMIT: number
-    recentUpdates: Corpus[] | null
-    recentUpdatesFiltered: Corpus[] | null
+    recentUpdates: CorpusTransformed[] | null
+    recentUpdatesFiltered: CorpusTransformed[] | null
     expanded: boolean
     toggleExpanded: (to?: boolean) => void
-}
-
-type Corpus = {
-    info: { Updated: string }
-    title: LangString
 }

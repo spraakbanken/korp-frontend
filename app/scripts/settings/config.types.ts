@@ -29,6 +29,8 @@ export type Corpus = {
     context: Labeled[]
     description: LangString
     id: string
+    lang?: string
+    pivot?: boolean
     pos_attributes: string[]
     struct_attributes: string[]
     custom_attributes: string[]
