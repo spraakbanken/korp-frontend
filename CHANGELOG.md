@@ -5,6 +5,7 @@
 ### Added
 
 - TypeScript typings for config/settings
+- TypeScript typings for CQP queries
 
 ### Changed
 

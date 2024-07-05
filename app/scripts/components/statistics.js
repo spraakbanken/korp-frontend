@@ -6,7 +6,7 @@ import settings from "@/settings"
 import { html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import { getCqp } from "../../config/statistics_config.js"
-import { expandOperators } from "@/cqp_parser/cqp.js"
+import { expandOperators } from "@/cqp_parser/cqp"
 import "@/components/corpus-distribution-chart"
 
 angular.module("korpApp").component("statistics", {
