@@ -3,14 +3,14 @@
  * @format
  */
 
-import { LangMap } from "@/i18n/types"
+import { LangString } from "@/i18n/types"
 import { Attribute, Config, Corpus, CustomAttribute, Folder } from "./config.types"
 
 export type ConfigTransformed = Omit<Config, "attributes" | "corpora" | "label"> & {
     corpora: Record<string, CorpusTransformed>
     folders: Record<string, Folder>
     mode: {
-        label: string | LangMap
+        label: LangString
     }
 }
 

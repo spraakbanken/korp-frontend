@@ -5,13 +5,14 @@ import { reduceStringify } from "../config/statistics_config"
 import type { StatsNormalized, StatisticsWorkerMessage, StatisticsWorkerResult, SearchParams } from "./statistics.types"
 import { hitCountHtml } from "@/util"
 import { Row } from "./statistics_worker"
+import { LangString } from "./i18n/types"
 const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function () {
     const createColumns = function (
         corpora: Record<string, any>,
         reduceVals: string[],
-        reduceValLabels: Label[]
+        reduceValLabels: LangString[]
     ): SlickgridColumn[] {
         const valueFormatter: SlickgridFormatter = function (row, cell, value, columnDef, dataContext) {
             const [absolute, relative] = [...dataContext[columnDef.id + "_value"]]
@@ -83,7 +84,7 @@ const createStatisticsService = function () {
         originalCorpora: string,
         data: StatsNormalized,
         reduceVals: string[],
-        reduceValLabels: Label[],
+        reduceValLabels: LangString[],
         ignoreCase: boolean,
         prevNonExpandedCQP: string
     ) {
@@ -120,15 +121,13 @@ export type SlickgridColumn = {
     field: string
     formatter: SlickgridFormatter
     name?: string
-    translation?: Label
+    translation?: LangString
     sortable?: boolean
     minWidth?: number
     maxWidth?: number
     cssClass?: string
     headerCssClass?: string
 }
-
-type Label = string | Record<string, string>
 
 type SlickgridFormatter = (
     // There's currently no Korp code that uses these first three args
