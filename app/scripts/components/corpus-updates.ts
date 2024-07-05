@@ -3,7 +3,7 @@ import angular, { IScope } from "angular"
 import moment from "moment"
 import settings from "@/settings"
 import { html } from "@/util"
-import { LangMap } from "@/i18n/types"
+import { LangString } from "@/i18n/types"
 
 export default angular.module("korpApp").component("corpusUpdates", {
     template: html`
@@ -75,5 +75,5 @@ type CorpusUpdatesScope = IScope & {
 
 type Corpus = {
     info: { Updated: string }
-    title: LangMap | string
+    title: LangString
 }

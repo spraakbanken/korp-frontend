@@ -4,7 +4,7 @@ import moment from "moment"
 import CSV from "comma-separated-values/csv"
 import { locObj } from "@/i18n"
 import { type ApiKwic, type KorpQueryParams } from "@/backend/kwic-proxy"
-import { LangMap } from "./i18n/types"
+import { LangString } from "./i18n/types"
 
 // This is what is returned by massageData in kwic.js
 type Row = ApiKwic | LinkedKwic | CorpusHeading
@@ -18,7 +18,7 @@ type LinkedKwic = {
 }
 
 type CorpusHeading = {
-    newCorpus: LangMap | string
+    newCorpus: LangString
     noContext?: boolean
 }
 

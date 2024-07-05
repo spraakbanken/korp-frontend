@@ -3,7 +3,7 @@
  * @format
  */
 
-import { Labeled, LangMap, LangString } from "@/i18n/types"
+import { Labeled, LangString } from "@/i18n/types"
 
 export type Config = {
     attributes: {
