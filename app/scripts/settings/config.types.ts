@@ -28,8 +28,10 @@ export type Config = {
 export type Corpus = {
     context: Labeled[]
     description: LangString
+    hide?: boolean
     id: string
     lang?: string
+    limited_access?: boolean
     pivot?: boolean
     pos_attributes: string[]
     struct_attributes: string[]

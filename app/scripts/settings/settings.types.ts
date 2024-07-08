@@ -3,7 +3,7 @@
  * @format
  */
 
-import { CorpusListing } from "@/corpus_listing"
+import { type CorpusListing } from "@/corpus_listing"
 import { AppSettings } from "./app-settings.types"
 import { ConfigTransformed } from "./config-transformed.types"
 

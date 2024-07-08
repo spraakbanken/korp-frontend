@@ -108,7 +108,8 @@ settings that affect the frontend.
 - __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
     that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
     for more information about how to define attributes.
-- __corpus_config_url__ - String. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
+- __config_dependent_on_authentication__ - Boolean. If true, backend config will not be fetched until login check has finished.
+- __corpus_config_url__ - Async function returning a url string. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
 - __corpus_info_link__ - Object. Use this to render a link for each corpus in the corpus chooser.
   - __url_template__ - String or translation object. A URL containing a token "%s", which will be replaced with the corpus id.
   - __label__ - String or translation object. The label is the the same for all corpora.

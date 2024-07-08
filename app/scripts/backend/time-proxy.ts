@@ -6,7 +6,7 @@ import type { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString 
 import { Factory, httpConfAddMethod } from "@/util"
 
 export class TimeProxy extends BaseProxy {
-    makeRequest() {
+    makeRequest(): JQueryDeferred<TimeData> {
         const data: KorpTimespanParams = {
             granularity: "y",
             corpus: settings.corpusListing.stringifyAll(),
@@ -110,3 +110,10 @@ type KorpTimespanResponse = KorpResponse<{
     /** Execution time in seconds */
     time: number
 }>
+
+/** Data returned after slight mangling. */
+export type TimeData = [
+    Record<string, Histogram>, // Same as KorpTimespanResponse.corpora
+    [number, number][], // Tokens per time period, as pairs ordered by time period
+    number // Tokens in undated material
+]

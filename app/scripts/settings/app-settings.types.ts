@@ -11,7 +11,8 @@ export type AppSettings = {
     autocomplete?: boolean
     backendURLMaxLength: number
     common_struct_types?: Record<string, Attribute>
-    corpus_config_url?: string
+    config_dependent_on_authentication?: boolean
+    corpus_config_url?: () => Promise<string>
     corpus_info_link?: {
         url_template: string
         label: LangString

@@ -8,13 +8,17 @@ import * as treeUtil from "./components/corpus_chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
 import { httpConfAddMethodFetch } from "@/util"
+import { Labeled, LangLocMap, LocMap } from "./i18n/types"
+import { CorpusInfoResponse } from "./settings/corpus-info.types"
+import { Config } from "./settings/config.types"
+import { ConfigTransformed } from "./settings/config-transformed.types"
 
 // Using memoize, this will only fetch once and then return the same promise when called again.
 // TODO it would be better only to load additional languages when there is a language change
 export const initLocales = memoize(async () => {
-    const locData = {}
-    const defs = []
-    for (const langObj of settings["languages"]) {
+    const locData: LangLocMap = {}
+    const defs: Promise<void>[] = []
+    for (const langObj of settings.languages) {
         const lang = langObj.value
         locData[lang] = {}
         for (const pkg of ["locale", "corpora"]) {
@@ -22,7 +26,7 @@ export const initLocales = memoize(async () => {
             const def = fetch(file)
                 .then(async (response) => {
                     if (response.status >= 300) throw new Error()
-                    const data = await response.json()
+                    const data = (await response.json()) as LocMap
                     Object.assign(locData[lang], data)
                 })
                 .catch(() => {
@@ -36,37 +40,37 @@ export const initLocales = memoize(async () => {
     return locData
 })
 
-async function getInfoData() {
+async function getInfoData(): Promise<void> {
     const params = {
         corpus: _.map(settings.corpusListing.corpora, "id")
             .map((a) => a.toUpperCase())
             .join(","),
     }
-    const { url, request } = httpConfAddMethodFetch(settings["korp_backend_url"] + "/corpus_info", params)
+    const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/corpus_info", params)
 
     const response = await fetch(url, request)
-    const data = await response.json()
+    const data = (await response.json()) as CorpusInfoResponse
 
     for (let corpus of settings.corpusListing.corpora) {
-        corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
-        const privateStructAttrs = []
+        corpus.info = data.corpora[corpus.id.toUpperCase()].info
+        const privateStructAttrs: string[] = []
         for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
             if (attr.indexOf("__") !== -1) {
                 privateStructAttrs.push(attr)
             }
         }
-        corpus["private_struct_attributes"] = privateStructAttrs
+        corpus.private_struct_attributes = privateStructAttrs
     }
 }
 
-async function getTimeData() {
+async function getTimeData(): Promise<[[number, number][], number]> {
     const timeProxy = timeProxyFactory.create()
     const args = await timeProxy.makeRequest()
 
     let [dataByCorpus, all_timestruct, rest] = args
 
     if (all_timestruct.length == 0) {
-        return [[], []]
+        return [[], 0]
     }
 
     // this adds data to the corpora in settings
@@ -89,23 +93,23 @@ async function getTimeData() {
     return [all_timestruct, rest]
 }
 
-async function getConfig() {
+async function getConfig(): Promise<Config> {
     // Load static corpus config if it exists.
     try {
-        const corpusConfig = require(`modes/${currentMode}_corpus_config.json`)
+        const corpusConfig = require(`modes/${currentMode}_corpus_config.json`) as Config
         console.log(`Using static corpus config`)
         return corpusConfig
     } catch {}
 
-    let configUrl
+    let configUrl: string
     // The corpora to include can be defined elsewhere can in a mode
-    if (settings["corpus_config_url"]) {
-        configUrl = await settings["corpus_config_url"]()
+    if (settings.corpus_config_url) {
+        configUrl = await settings.corpus_config_url()
     } else {
         const labParam = process.env.ENVIRONMENT == "staging" ? "&include_lab" : ""
-        configUrl = `${settings["korp_backend_url"]}/corpus_config?mode=${currentMode}${labParam}`
+        configUrl = `${settings.korp_backend_url}/corpus_config?mode=${currentMode}${labParam}`
     }
-    let response
+    let response: Response
     try {
         response = await fetch(configUrl)
     } catch (error) {
@@ -117,22 +121,24 @@ async function getConfig() {
         throw Error("Something wrong with corpus config")
     }
 
-    return await response.json()
+    return (await response.json()) as Config
 }
 
 /**
+ * Transform the raw config fetched form backend, to a structure that frontend code can handle.
  *
- * @param {import("@/settings/config.types").Config} modeSettings
- * @returns {import("@/settings/config.types").ConfigTransformed}
+ * TODO: Use the `Config` and `ConfigTransformed` types, not `any`.
+ *
+ * @see ./settings/README.md
  */
-function transformConfig(modeSettings) {
+function transformConfig(modeSettings: any): ConfigTransformed {
     // only if the current mode is parallel, we load the special code required
     if (modeSettings.parallel) {
         require("./parallel/corpus_listing")
         require("./parallel/stats_proxy")
     }
 
-    function rename(obj, from, to) {
+    function rename<T extends {}>(obj: T, from: keyof T, to: keyof T): void {
         if (obj[from]) {
             obj[to] = obj[from]
             delete obj[from]
@@ -168,10 +174,10 @@ function transformConfig(modeSettings) {
         // TODO use the new format instead
         // remake the new format of witihns and contex to the old
         const sortingArr = ["sentence", "paragraph", "text", "1 sentence", "1 paragraph", "1 text"]
-        function contextWithinFix(list) {
+        function contextWithinFix(list: Labeled[]) {
             // sort the list so that sentence is before paragraph
             list.sort((a, b) => sortingArr.indexOf(a.value) - sortingArr.indexOf(b.value))
-            const res = {}
+            const res: Record<string, string> = {}
             for (const elem of list) {
                 res[elem.value] = elem.value
             }
@@ -181,50 +187,46 @@ function transformConfig(modeSettings) {
         corpus["context"] = contextWithinFix(corpus["context"])
     }
 
-    delete modeSettings["attributes"]
+    delete modeSettings.attributes
 
-    if (!modeSettings["folders"]) {
-        modeSettings["folders"] = {}
+    if (!modeSettings.folders) {
+        modeSettings.folders = {}
     }
     return modeSettings
 }
 
-function setInitialCorpora() {
+/** Determine initial corpus selection and mark them selected in the CorpusListing. */
+function setInitialCorpora(): void {
     // if no preselectedCorpora is defined, use all of them
-    if (!(settings["preselected_corpora"] && settings["preselected_corpora"].length)) {
+    if (!(settings.preselected_corpora && settings.preselected_corpora.length)) {
         // if all corpora in mode is limited_access, make them all preselected
         if (settings.corpusListing.corpora.filter((corpus) => !corpus.limited_access).length == 0) {
-            settings["preselected_corpora"] = _.map(
+            settings.preselected_corpora = _.map(
                 _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
                 "id"
             )
             // else filter out the ones with limited_access
         } else {
-            settings["preselected_corpora"] = _.map(
+            settings.preselected_corpora = _.map(
                 _.filter(settings.corpusListing.corpora, (corpus) => !(corpus.hide || corpus.limited_access)),
                 "id"
             )
         }
     } else {
         let expandedCorpora = []
-        for (let preItem of settings["preselected_corpora"]) {
+        for (let preItem of settings.preselected_corpora) {
             preItem = preItem.replace(/^__/g, "")
-            expandedCorpora = [].concat(expandedCorpora, treeUtil.getAllCorporaInFolders(settings["folders"], preItem))
+            expandedCorpora = [].concat(expandedCorpora, treeUtil.getAllCorporaInFolders(settings.folders, preItem))
         }
         // folders expanded, save
-        settings["preselected_corpora"] = expandedCorpora
+        settings.preselected_corpora = expandedCorpora
     }
 
     const corpusParam = new URLSearchParams(window.location.hash.slice(2)).get("corpus")
 
-    let currentCorpora
-    if (corpusParam) {
-        currentCorpora = _.flatten(
-            _.map(corpusParam.split(","), (val) => treeUtil.getAllCorporaInFolders(settings["folders"], val))
-        )
-    } else {
-        currentCorpora = settings["preselected_corpora"]
-    }
+    const currentCorpora = corpusParam
+        ? _.flatten(_.map(corpusParam.split(","), (val) => treeUtil.getAllCorporaInFolders(settings.folders, val)))
+        : settings.preselected_corpora
 
     settings.corpusListing.select(currentCorpora)
 }
@@ -234,17 +236,17 @@ function setInitialCorpora() {
  * It both fetches data, such as config and populates the
  * `settings` object.
  */
-export async function fetchInitialData(authDef) {
-    settings["korp_backend_url"] = settings["korp_backend_url"].trim()
-    if (settings["korp_backend_url"].slice(-1) == "/") {
-        settings["korp_backend_url"] = settings["korp_backend_url"].slice(0, -1)
+export async function fetchInitialData(authDef: Promise<boolean>) {
+    settings.korp_backend_url = settings.korp_backend_url.trim()
+    if (settings.korp_backend_url.slice(-1) == "/") {
+        settings.korp_backend_url = settings.korp_backend_url.slice(0, -1)
     }
-    if (!settings["korp_backend_url"].startsWith("http")) {
+    if (!settings.korp_backend_url.startsWith("http")) {
         console.error('"korp_backend_url" in config.yml must start with http:// or https://')
         return
     }
 
-    if (settings["config_dependent_on_authentication"]) {
+    if (settings.config_dependent_on_authentication) {
         await authDef
     }
 
@@ -257,24 +259,24 @@ export async function fetchInitialData(authDef) {
 
     setDefaultConfigValues()
 
-    if (!settings["parallel"]) {
+    if (!settings.parallel) {
         settings.corpusListing = new CorpusListing(settings.corpora)
     } else {
         settings.corpusListing = new ParallelCorpusListing(settings.corpora)
     }
 
     // if the previous config calls didn't yield any corpora, don't ask for info or time
-    if (!_.isEmpty(settings["corpora"])) {
+    if (!_.isEmpty(settings.corpora)) {
         const infoDef = getInfoData()
-        let timeDef
-        if (settings["has_timespan"]) {
+        let timeDef: Promise<[[number, number][], number]>
+        if (settings.has_timespan) {
             timeDef = getTimeData()
         }
         setInitialCorpora()
 
         await infoDef
-        if (settings["has_timespan"]) {
-            settings["time_data"] = await timeDef
+        if (settings.has_timespan) {
+            settings.time_data = await timeDef
         }
     }
 }

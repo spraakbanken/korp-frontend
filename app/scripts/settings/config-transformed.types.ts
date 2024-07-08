@@ -5,6 +5,7 @@
 
 import { LangString } from "@/i18n/types"
 import { Attribute, Config, Corpus, CustomAttribute, Folder } from "./config.types"
+import { CorpusInfoInfo } from "./corpus-info.types"
 
 export type ConfigTransformed = Omit<Config, "attributes" | "corpora" | "label"> & {
     corpora: Record<string, CorpusTransformed>
@@ -24,17 +25,10 @@ export type CorpusTransformed = Omit<
     _attributes_order: string[]
     _struct_attributes_order: string[]
     _custom_attributes_order: string[]
+    private_struct_attributes: string[]
     within: Record<string, string>
     context: Record<string, string>
-    info: {
-        Name: string
-        Size: string | number
-        Sentences: string | number
-        Updated?: string
-        FirstDate?: string
-        LastDate?: string
-        Protected?: boolean
-    }
+    info: CorpusInfoInfo
     common_attributes?: Record<string, true>
     time?: Record<number, number>
     non_time?: number
