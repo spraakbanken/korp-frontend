@@ -12,7 +12,7 @@
 ### Changed
 
 - Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
-- In the `CorpusListing` class, the methods `getLinked` and `getEnabledByLang` have new parameter signatures
+- In the `ParallelCorpusListing` class, the methods `getLinked` and `getEnabledByLang` have new parameter signatures
 
 ### Refactored
 

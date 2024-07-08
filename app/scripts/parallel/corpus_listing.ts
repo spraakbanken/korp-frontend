@@ -14,7 +14,7 @@ export class ParallelCorpusListing extends CorpusListing {
         super(corpora)
 
         // Cannot use Angular helpers (`locationSearchGet`) here, it's not initialized yet.
-        const activeLangs = new URLSearchParams(window.location.hash.slice(2)).get("parallel_corpora")
+        const activeLangs = new URLSearchParams(window.location.hash.slice(2)).get("parallel_corpora") || ""
         this.setActiveLangs(activeLangs.split(","))
     }
 
