@@ -35,7 +35,7 @@ export type Corpus = {
     pivot?: boolean
     pos_attributes: string[]
     struct_attributes: string[]
-    custom_attributes: string[]
+    custom_attributes?: string[]
     reading_mode?: boolean
     title?: LangString
     within: Labeled[]

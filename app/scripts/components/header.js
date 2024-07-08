@@ -247,14 +247,6 @@ angular.module("korpApp").component("header", {
                 const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
                 return [location.pathname, modeParam, langParam]
             }
-
-            for (let mode of $ctrl.modes) {
-                mode.selected = false
-                if (mode.mode === currentMode) {
-                    settings.mode = mode
-                    mode.selected = true
-                }
-            }
         },
     ],
 })

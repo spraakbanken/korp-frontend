@@ -15,6 +15,10 @@ import { LangMap } from "./i18n/types"
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
 
+/** Create an object from a list of keys and a function for creating corresponding values. */
+export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
+    Object.fromEntries(keys.map((key) => [key, getValue(key)]))
+
 /** Mapping from service names to their TS types. */
 type ServiceTypes = {
     $controller: IControllerService

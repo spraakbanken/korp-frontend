@@ -7,11 +7,11 @@ import timeProxyFactory from "@/backend/time-proxy"
 import * as treeUtil from "./components/corpus_chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
-import { httpConfAddMethodFetch } from "@/util"
+import { fromKeys, httpConfAddMethodFetch } from "@/util"
 import { Labeled, LangLocMap, LocMap } from "./i18n/types"
 import { CorpusInfoResponse } from "./settings/corpus-info.types"
-import { Config } from "./settings/config.types"
-import { ConfigTransformed } from "./settings/config-transformed.types"
+import { Attribute, Config, Corpus, CustomAttribute } from "./settings/config.types"
+import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
 
 // Using memoize, this will only fetch once and then return the same promise when called again.
 // TODO it would be better only to load additional languages when there is a language change
@@ -40,27 +40,23 @@ export const initLocales = memoize(async () => {
     return locData
 })
 
-async function getInfoData(): Promise<void> {
-    const params = {
-        corpus: _.map(settings.corpusListing.corpora, "id")
-            .map((a) => a.toUpperCase())
-            .join(","),
-    }
-    const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/corpus_info", params)
+type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_attributes">>
 
+/**
+ * Fetch CWB corpus info (Size, Updated etc).
+ */
+async function getInfoData(corpusIds: string[]): Promise<InfoData> {
+    const params = { corpus: corpusIds.map((id) => id.toUpperCase()).join(",") }
+    const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/corpus_info", params)
     const response = await fetch(url, request)
     const data = (await response.json()) as CorpusInfoResponse
 
-    for (let corpus of settings.corpusListing.corpora) {
-        corpus.info = data.corpora[corpus.id.toUpperCase()].info
-        const privateStructAttrs: string[] = []
-        for (let attr of data["corpora"][corpus.id.toUpperCase()].attrs.s) {
-            if (attr.indexOf("__") !== -1) {
-                privateStructAttrs.push(attr)
-            }
-        }
-        corpus.private_struct_attributes = privateStructAttrs
-    }
+    return fromKeys(corpusIds, (corpusId) => ({
+        info: data.corpora[corpusId.toUpperCase()].info,
+        private_struct_attributes: data.corpora[corpusId.toUpperCase()].attrs.s.filter(
+            (name) => name.indexOf("__") !== -1
+        ),
+    }))
 }
 
 async function getTimeData(): Promise<[[number, number][], number]> {
@@ -131,68 +127,64 @@ async function getConfig(): Promise<Config> {
  *
  * @see ./settings/README.md
  */
-function transformConfig(modeSettings: any): ConfigTransformed {
-    // only if the current mode is parallel, we load the special code required
-    if (modeSettings.parallel) {
-        require("./parallel/corpus_listing")
-        require("./parallel/stats_proxy")
-    }
-
-    function rename<T extends {}>(obj: T, from: keyof T, to: keyof T): void {
-        if (obj[from]) {
-            obj[to] = obj[from]
-            delete obj[from]
-        }
-    }
-
-    rename(modeSettings.attributes, "pos_attributes", "attributes")
-
+function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
     // take the backend configuration format for attributes and expand it
     // TODO the internal representation should be changed to a new, more compact one.
-    for (const corpusId in modeSettings.corpora) {
-        const corpus = modeSettings.corpora[corpusId]
-
+    function transformCorpus(corpus: Corpus): CorpusTransformed {
         if (corpus.title == undefined) {
-            corpus.title = corpusId
+            corpus.title = corpus.id
         }
 
-        rename(corpus, "pos_attributes", "attributes")
-        for (const attrType of ["attributes", "struct_attributes", "custom_attributes"]) {
-            const attrList = corpus[attrType]
-            const attrs = {}
-            const newAttrList = []
-            for (const attrIdx in attrList) {
-                const attr = modeSettings.attributes[attrType][attrList[attrIdx]]
-                attrs[attr.name] = attr
-                newAttrList.push(attr.name)
-            }
-            // attrs is an object of attribute settings
-            corpus[attrType] = attrs
-            // attrList is an ordered list of the preferred order of attributes
-            corpus[`_${attrType}_order`] = newAttrList
+        function transformAttributes<T extends keyof Config["attributes"]>(type: T) {
+            console.log(corpus.id, type, corpus)
+            type AttrType = T extends "custom_attributes" ? CustomAttribute : Attribute
+            const attrs = _.fromPairs(
+                corpus[type]?.map((name) => {
+                    const attr = config.attributes[type][name] as AttrType
+                    return [attr.name, attr]
+                }) || []
+            )
+            const order = corpus[type]?.map((name) => config.attributes[type][name].name) || []
+            return { attrs, order }
         }
-        // TODO use the new format instead
-        // remake the new format of witihns and contex to the old
+
+        const { attrs: attributes, order: _attributes_order } = transformAttributes("pos_attributes")
+        const { attrs: struct_attributes, order: _struct_attributes_order } = transformAttributes("struct_attributes")
+        const { attrs: custom_attributes, order: _custom_attributes_order } = transformAttributes("custom_attributes")
+
+        return {
+            ..._.omit(corpus, "pos_attributes"),
+            attributes,
+            struct_attributes,
+            custom_attributes,
+            _attributes_order,
+            _struct_attributes_order,
+            _custom_attributes_order,
+            context: contextWithinFix(corpus["context"]),
+            within: contextWithinFix(corpus["within"]),
+            info: infos[corpus.id].info,
+            private_struct_attributes: infos[corpus.id].private_struct_attributes,
+        }
+    }
+
+    // TODO use the new format instead
+    // remake the new format of witihns and contex to the old
+    function contextWithinFix(list: Labeled[]) {
+        // sort the list so that sentence is before paragraph
         const sortingArr = ["sentence", "paragraph", "text", "1 sentence", "1 paragraph", "1 text"]
-        function contextWithinFix(list: Labeled[]) {
-            // sort the list so that sentence is before paragraph
-            list.sort((a, b) => sortingArr.indexOf(a.value) - sortingArr.indexOf(b.value))
-            const res: Record<string, string> = {}
-            for (const elem of list) {
-                res[elem.value] = elem.value
-            }
-            return res
-        }
-        corpus["within"] = contextWithinFix(corpus["within"])
-        corpus["context"] = contextWithinFix(corpus["context"])
+        list.sort((a, b) => sortingArr.indexOf(a.value) - sortingArr.indexOf(b.value))
+        return _.fromPairs(list.map((elem) => [elem.value, elem.value]))
     }
 
-    delete modeSettings.attributes
+    const modes = config.modes.map((mode) => ({ ...mode, selected: mode.mode == currentMode }))
 
-    if (!modeSettings.folders) {
-        modeSettings.folders = {}
+    return {
+        folders: {},
+        ..._.omit(config, "pos_attributes", "corpora"),
+        corpora: _.mapValues(config.corpora, transformCorpus),
+        modes,
+        mode: modes.find((mode) => mode.selected),
     }
-    return modeSettings
 }
 
 /** Determine initial corpus selection and mark them selected in the CorpusListing. */
@@ -252,10 +244,19 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
 
     // Start fetching locales asap. Await and read it later, in the Angular context.
     initLocales()
-    const config = await getConfig()
-    const modeSettings = transformConfig(config)
 
-    _.assign(settings, modeSettings)
+    // Fetch corpus configuration and metadata
+    const config = await getConfig()
+    const infos = await getInfoData(Object.keys(config.corpora))
+    // Add config and metadata to settings
+    const configTransformed = transformConfig(config, infos)
+    Object.assign(settings, configTransformed)
+
+    // only if the current mode is parallel, we load the special code required
+    if (config.parallel) {
+        require("./parallel/corpus_listing")
+        require("./parallel/stats_proxy")
+    }
 
     setDefaultConfigValues()
 
@@ -265,18 +266,12 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
         settings.corpusListing = new ParallelCorpusListing(settings.corpora)
     }
 
-    // if the previous config calls didn't yield any corpora, don't ask for info or time
+    // if the previous config calls didn't yield any corpora, don't ask for time
     if (!_.isEmpty(settings.corpora)) {
-        const infoDef = getInfoData()
-        let timeDef: Promise<[[number, number][], number]>
-        if (settings.has_timespan) {
-            timeDef = getTimeData()
-        }
         setInitialCorpora()
 
-        await infoDef
         if (settings.has_timespan) {
-            settings.time_data = await timeDef
+            settings.time_data = await getTimeData()
         }
     }
 }
