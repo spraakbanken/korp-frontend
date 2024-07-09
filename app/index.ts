@@ -3,8 +3,21 @@ import $ from "jquery"
 import currentMode from "@/mode"
 import { locationSearchGet } from "@/util"
 
+declare global {
+    interface Window {
+        jQuery: JQueryStatic
+        $: JQueryStatic
+        /**
+         * TODO Remove, currently used in tests
+         * @deprecated
+         */
+        locationSearch: (key: string) => string
+    }
+}
+
 window.jQuery = $
 window.$ = $
+window.locationSearch = locationSearchGet
 
 require("slickgrid/slick.grid.css")
 require("./styles/ui_mods.css")
@@ -23,8 +36,6 @@ require("./styles/styles.scss")
 require("./styles/textreader.css")
 
 require("components-jqueryui/ui/widget.js")
-
-require("angular")
 
 require("jquerylocalize")
 
@@ -71,7 +82,3 @@ require("./scripts/directives.js")
 require("./scripts/directives/scroll.js")
 require("./scripts/filter_directives.js")
 require("./scripts/matomo.js")
-
-// TODO Remove, currently used in tests
-/** @deprecated */
-window.locationSearch = locationSearchGet

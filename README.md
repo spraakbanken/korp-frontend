@@ -51,8 +51,7 @@ imgPath = require("img/image.png")
 myTemplate = `<img src='${imgPath}'>`
 ```
 
-Most dependencies are only specified in `app/index.js` and where needed
-added to the `window`-object.
+Some dependencies are only specified in `app/index.ts`.
 
 About the current loaders in `webpack.config.js`:
 - `pug` and `html` files: all `src`-attributes in `<img>` tags and all `href`s in `<link>` tags will be

@@ -1,4 +1,5 @@
 /** @format */
+import angular from "angular"
 import "angular-ui-bootstrap"
 import "angular-spinner"
 import "angular-ui-sortable"
