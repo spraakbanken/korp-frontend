@@ -1,9 +1,10 @@
 /** @format */
-import angular, { type IController, type IRootScopeService, type IScope } from "angular"
+import angular, { type IController, type IScope } from "angular"
 import { Chart } from "chart.js"
 import { html } from "@/util"
 import { loc } from "@/i18n"
 import { type Option } from "@/components/radio-list"
+import { RootScope } from "@/root-scope.types"
 
 angular.module("korpApp").component("corpusDistributionChart", {
     template: html`
@@ -18,16 +19,16 @@ angular.module("korpApp").component("corpusDistributionChart", {
     controller: [
         "$rootScope",
         "$scope",
-        function ($rootScope: IRootScopeService, $scope: CorpusDistributionChartScope) {
+        function ($rootScope: RootScope, $scope: CorpusDistributionChartScope) {
             const $ctrl = this as CorpusDistributionChartController
             $ctrl.modeOptions = [
                 {
                     value: "relative",
-                    label: loc("statstable_relfigures", $rootScope["lang"]),
+                    label: loc("statstable_relfigures", $rootScope.lang),
                 },
                 {
                     value: "absolute",
-                    label: loc("statstable_absfigures", $rootScope["lang"]),
+                    label: loc("statstable_absfigures", $rootScope.lang),
                 },
             ]
             $scope.mode = "relative"
@@ -43,7 +44,7 @@ angular.module("korpApp").component("corpusDistributionChart", {
                         datasets: [{ data: getValues() }],
                     },
                     options: {
-                        locale: $rootScope["lang"],
+                        locale: $rootScope.lang,
                         plugins: {
                             legend: {
                                 display: false,

@@ -8,11 +8,13 @@
   - config/settings
   - CQP queries
   - CorpusListing
+  - `$rootScope`
 
 ### Changed
 
 - Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
 - In the `ParallelCorpusListing` class, the methods `getLinked` and `getEnabledByLang` have new parameter signatures
+- Removed the `mapper` template filter; change `x | mapper:f` to `f(x)`
 
 ### Refactored
 

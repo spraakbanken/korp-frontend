@@ -11,6 +11,7 @@ import angular, {
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangMap } from "./i18n/types"
+import { RootScope } from "./root-scope.types"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -24,7 +25,7 @@ type ServiceTypes = {
     $controller: IControllerService
     $http: IHttpService
     $location: ILocationService
-    $rootScope: IRootScopeService
+    $rootScope: RootScope
     // Add types here as needed.
 }
 

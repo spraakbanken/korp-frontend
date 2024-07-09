@@ -1,9 +1,25 @@
 /** @format */
 import _ from "lodash"
+import {
+    ICacheObject,
+    ICompileProvider,
+    IComponentOptions,
+    ILocaleService,
+    ILocationProvider,
+    ILocationService,
+    IQService,
+    IScope,
+    ITimeoutService,
+    ui,
+} from "angular"
 import korpApp from "./korp.module"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
 import * as authenticationProxy from "@/components/auth/auth"
+import { initLocales } from "@/data_init"
+import { RootScope } from "@/root-scope.types"
+import { Folder } from "./settings/config.types"
+import { CorpusTransformed } from "./settings/config-transformed.types"
 import { html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import "@/components/header"
@@ -11,10 +27,9 @@ import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
 import "@/components/korp-error"
-import { initLocales, locDataPromise } from "./data_init"
 
 // load all custom components
-let customComponents = {}
+let customComponents: Record<string, IComponentOptions> = {}
 
 try {
     customComponents = require("custom/components.js").default
@@ -25,18 +40,14 @@ for (const componentName in customComponents) {
     korpApp.component(componentName, customComponents[componentName])
 }
 
-korpApp.filter("mapper", () => (item, f) => f(item))
 korpApp.filter("loc", () => loc)
 korpApp.filter("locObj", () => locObj)
-korpApp.filter("replaceEmpty", function () {
-    return function (input) {
-        if (input === "") {
-            return "–"
-        } else {
-            return input
-        }
-    }
-})
+korpApp.filter(
+    "replaceEmpty",
+    () =>
+        <T>(input: T) =>
+            input === "" ? "–" : input
+)
 
 authenticationProxy.initAngular()
 
@@ -46,13 +57,13 @@ authenticationProxy.initAngular()
  */
 korpApp.config([
     "tmhDynamicLocaleProvider",
-    (tmhDynamicLocaleProvider) =>
+    (tmhDynamicLocaleProvider: tmh.tmh.IDynamicLocaleProvider) =>
         tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js"),
 ])
 
 korpApp.config([
     "$uibTooltipProvider",
-    ($uibTooltipProvider) =>
+    ($uibTooltipProvider: ui.bootstrap.ITooltipProvider) =>
         $uibTooltipProvider.options({
             appendToBody: true,
         }),
@@ -62,14 +73,15 @@ korpApp.config([
  * Makes the hashPrefix "" instead of "!" which means our URL:s are ?mode=test#?lang=eng
  * instead of ?mode=test#!?lang=eng
  */
-korpApp.config(["$locationProvider", ($locationProvider) => $locationProvider.hashPrefix("")])
+korpApp.config(["$locationProvider", ($locationProvider: ILocationProvider) => $locationProvider.hashPrefix("")])
 
 /**
  * "blob" must be added to the trusted URL:s, otherwise downloading KWIC and statistics etc. will not work
  */
 korpApp.config([
     "$compileProvider",
-    ($compileProvider) => $compileProvider.aHrefSanitizationTrustedUrlList(/^\s*(https?|ftp|mailto|tel|file|blob):/),
+    ($compileProvider: ICompileProvider) =>
+        $compileProvider.aHrefSanitizationTrustedUrlList(/^\s*(https?|ftp|mailto|tel|file|blob):/),
 ])
 
 korpApp.run([
@@ -81,7 +93,16 @@ korpApp.run([
     "$q",
     "$timeout",
     "$uibModal",
-    async function ($rootScope, $location, $locale, tmhDynamicLocale, tmhDynamicLocaleCache, $q, $timeout, $uibModal) {
+    async function (
+        $rootScope: RootScope,
+        $location: ILocationService,
+        $locale: ILocaleService,
+        tmhDynamicLocale: tmh.tmh.IDynamicLocale,
+        tmhDynamicLocaleCache: ICacheObject,
+        $q: IQService,
+        $timeout: ITimeoutService,
+        $uibModal: ui.bootstrap.IModalService
+    ) {
         const s = $rootScope
         s._settings = settings
 
@@ -90,7 +111,8 @@ korpApp.run([
         /** This deferred is used to signal that the filter feature is ready. */
         s.globalFilterDef = $q.defer()
 
-        s.searchtabs = () => $(".search_tabs > ul").scope().tabset.tabs
+        type BootstrapTabsetScope = IScope & { tabset: { tabs: any } }
+        s.searchtabs = () => ($(".search_tabs > ul").scope() as BootstrapTabsetScope).tabset.tabs
 
         // Listen to url changes like #?lang=swe
         s.$on("$locationChangeSuccess", () => {
@@ -104,7 +126,7 @@ korpApp.run([
             // Find the configured 3-letter UI language matching the new 2-letter locale
             const lang = settings["languages"]
                 .map((language) => language.value)
-                .find((lang3) => tmhDynamicLocaleCache.get(lang3)?.id == $locale.id)
+                .find((lang3) => tmhDynamicLocaleCache.get<ILocaleService>(lang3)?.id == $locale.id)
 
             if (!lang) {
                 console.warn(`No locale matching "${$locale.id}"`)
@@ -115,7 +137,7 @@ korpApp.run([
             $rootScope["lang"] = lang
 
             // Trigger jQuery Localize
-            $("body").localize()
+            ;($("body") as any).localize()
         })
 
         $(document).keyup(function (event) {
@@ -131,30 +153,31 @@ korpApp.run([
         $rootScope.textTabs = []
 
         // This fetch was started in data_init.js, but only here can we store the result.
-        const initLocalesPromise = initLocales().then((data) =>
+        const initLocalesPromise = initLocales().then((data): void =>
             $rootScope.$apply(() => ($rootScope["loc_data"] = data))
         )
 
         s.waitForLogin = false
 
         /** Recursively collect the corpus ids found in a corpus folder */
-        function collectCorpusIdsInFolder(folder) {
+        function collectCorpusIdsInFolder(folder: Folder): string[] {
             if (!folder) return []
 
             // Collect direct child corpora
             const ids = folder.corpora || []
 
             // Recurse into subfolders and add
-            for (const subfolder of Object.values(folder.subfolders || {})) {
+            const subfolders = folder.subfolders || {}
+            for (const subfolder of Object.values(subfolders)) {
                 ids.push(...collectCorpusIdsInFolder(subfolder))
             }
 
             return ids
         }
 
-        async function initializeCorpusSelection(selectedIds) {
+        async function initializeCorpusSelection(selectedIds: string[]): Promise<void> {
             // Resolve any folder ids to the contained corpus ids
-            const corpusIds = []
+            const corpusIds: string[] = []
             for (const id of selectedIds) {
                 // If it is a corpus, copy the id
                 if (settings.corpora[id]) {
@@ -169,11 +192,11 @@ korpApp.run([
             // Replace the possibly mixed list with the list of corpus-only ids
             selectedIds = corpusIds
 
-            let loginNeededFor = []
+            let loginNeededFor: CorpusTransformed[] = []
 
-            for (let corpusId of selectedIds) {
+            for (const corpusId of selectedIds) {
                 const corpusObj = settings.corpora[corpusId]
-                if (corpusObj && corpusObj["limited_access"]) {
+                if (corpusObj && corpusObj.limited_access) {
                     if (!authenticationProxy.hasCredential(corpusId.toUpperCase())) {
                         loginNeededFor.push(corpusObj)
                     }
@@ -182,7 +205,7 @@ korpApp.run([
 
             const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
 
-            if (settings["initialization_checks"] && (await settings["initialization_checks"](s))) {
+            if (settings.initialization_checks && (await settings.initialization_checks(s))) {
                 // custom initialization code called
             } else if (_.isEmpty(settings.corpora)) {
                 // no corpora
@@ -236,10 +259,8 @@ korpApp.run([
                 s.openErrorModal({
                     content: `{{'corpus_not_available' | loc:$root.lang}}`,
                     onClose: () => {
-                        let newIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
-                        if (newIds.length == 0) {
-                            newIds = settings["preselected_corpora"]
-                        }
+                        const validIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
+                        const newIds = validIds.length >= 0 ? validIds : settings["preselected_corpora"]
                         initializeCorpusSelection(newIds)
                     },
                 })
@@ -252,8 +273,9 @@ korpApp.run([
 
         // TODO the top bar could show even though the modal is open,
         // thus allowing switching modes or language when an error has occured.
-        s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null, translations = {} }) => {
-            const s = $rootScope.$new(true)
+        s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null }) => {
+            type ModalScope = IScope & { closeModal: () => void }
+            const s = $rootScope.$new(true) as ModalScope
 
             const useCustomButton = !_.isEmpty(buttonText)
 
@@ -277,8 +299,6 @@ korpApp.run([
                 keyboard: false,
             })
 
-            s.translations = translations
-
             s.closeModal = () => {
                 if (onClose && resolvable) {
                     modal.close()
@@ -287,15 +307,9 @@ korpApp.run([
             }
         }
 
-        function getCorporaFromHash() {
-            let selectedIds
-            let { corpus } = $location.search()
-            if (corpus) {
-                selectedIds = corpus.split(",")
-            } else {
-                selectedIds = settings["preselected_corpora"] || []
-            }
-            return selectedIds
+        function getCorporaFromHash(): string[] {
+            const corpus: string = $location.search().corpus
+            return corpus ? corpus.split(",") : settings["preselected_corpora"] || []
         }
 
         statemachine.listen("login", function () {
@@ -310,11 +324,11 @@ korpApp.run([
     },
 ])
 
-korpApp.filter("trust", ["$sce", ($sce) => (input) => $sce.trustAsHtml(input)])
+korpApp.filter("trust", ["$sce", ($sce) => (input: string) => $sce.trustAsHtml(input)])
 // Passing `lang` seems to be necessary to have the string updated when switching language.
 // Can fall back on using $rootScope for numbers that will anyway be re-rendered when switching language.
 korpApp.filter("prettyNumber", [
     "$rootScope",
-    ($rootScope) => (input, lang) => Number(input).toLocaleString(lang || $rootScope.lang),
+    ($rootScope) => (input: string, lang: string) => Number(input).toLocaleString(lang || $rootScope.lang),
 ])
-korpApp.filter("maxLength", () => (val) => val.length > 39 ? val.slice(0, 36) + "…" : val)
+korpApp.filter("maxLength", () => (val: string) => val.length > 39 ? val.slice(0, 36) + "…" : val)

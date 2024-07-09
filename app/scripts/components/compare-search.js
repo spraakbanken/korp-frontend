@@ -33,7 +33,7 @@ angular.module("korpApp").component("compareSearch", {
                 {{'compare_reduce' | loc:$root.lang}}
                 <select
                     ng-model="$ctrl.reduce"
-                    ng-options="obj | mapper:$ctrl.valfilter as obj.label | locObj:$root.lang group by obj.group | loc for obj in $ctrl.currentAttrs"
+                    ng-options="$ctrl.valfilter(obj) as obj.label | locObj:$root.lang group by obj.group | loc for obj in $ctrl.currentAttrs"
                 ></select>
                 <button class="btn btn-sm btn-default search" ng-click="$ctrl.sendCompare()">
                     {{'compare_vb' | loc:$root.lang}}

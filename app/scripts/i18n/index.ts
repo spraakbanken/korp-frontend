@@ -6,7 +6,7 @@ import type { LangLocMap, LangString, LocLangMap, LocMap } from "@/i18n/types"
 
 /** Get the current UI language. */
 export function getLang(): string {
-    return getService("$rootScope")["lang"] || settings.default_language
+    return getService("$rootScope").lang || settings.default_language
 }
 
 /**
@@ -18,7 +18,7 @@ export function getLang(): string {
 export function loc(key: string, lang?: string) {
     lang = lang || getLang()
     try {
-        return (getService("$rootScope")["loc_data"] as LangLocMap)[lang][key]
+        return getService("$rootScope").loc_data[lang][key]
     } catch (e) {
         return key
     }

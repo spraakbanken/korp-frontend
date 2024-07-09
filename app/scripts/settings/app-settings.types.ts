@@ -5,6 +5,7 @@
 
 import { Labeled, LangString } from "@/i18n/types"
 import { Attribute } from "./config.types"
+import { RootScope } from "@/root-scope.types"
 
 export type AppSettings = {
     auth_module?: string | { module: string; options: Record<string, any> }
@@ -37,6 +38,7 @@ export type AppSettings = {
     has_timespan: boolean
     hits_per_page_values: number[]
     hits_per_page_default: number
+    initialization_checks?: (rootScope: RootScope) => Promise<boolean>
     /** codes for translation ISO-639-1 to 639-2 */
     iso_languages: Record<string, string>
     korp_backend_url: string

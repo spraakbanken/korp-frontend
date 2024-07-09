@@ -44,7 +44,9 @@ export type Corpus = {
 export type Folder = {
     description?: LangString
     title: LangString
-} & ({ subfolders?: Record<string, Folder> } | { corpora?: string[] })
+    subfolders?: Record<string, Folder>
+    corpora?: string[]
+}
 
 export type Attribute = {
     dataset?: Record<string, string>

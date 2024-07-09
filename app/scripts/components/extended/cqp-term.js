@@ -25,7 +25,7 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 <div class="arg_selects {{$ctrl.term.type}}">
                     <select
                         class="arg_type"
-                        ng-options="obj | mapper:$ctrl.valfilter as obj.label | locObj group by obj.group | loc for obj in $ctrl.types"
+                        ng-options="$ctrl.valfilter(obj) as obj.label | locObj group by obj.group | loc for obj in $ctrl.types"
                         ng-model="$ctrl.term.type"
                         ng-change="$ctrl.setDefault($ctrl.term)"
                     ></select>

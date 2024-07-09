@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IRootScopeService } from "angular"
+import angular from "angular"
 import range from "lodash/range"
 import { Chart } from "chart.js/auto"
 import { loc } from "@/i18n"
@@ -12,12 +12,13 @@ import {
     getCountUndated,
 } from "@/timeseries"
 import { html } from "@/util"
+import { RootScope } from "@/root-scope.types"
 
 angular.module("korpApp").component("corpusTimeGraph", {
     template: html`<canvas id="time-graph-chart" height="80"></canvas>`,
     controller: [
         "$rootScope",
-        function ($rootScope: IRootScopeService) {
+        function ($rootScope: RootScope) {
             const { min, max } = getSpan()
 
             const datasetsDated = [
@@ -94,7 +95,7 @@ angular.module("korpApp").component("corpusTimeGraph", {
                             minBarLength: 2,
                         },
                     },
-                    locale: $rootScope["lang"],
+                    locale: $rootScope.lang,
                     plugins: {
                         legend: {
                             display: false,

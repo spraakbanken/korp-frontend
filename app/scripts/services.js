@@ -15,13 +15,8 @@ const korpApp = angular.module("korpApp")
 korpApp.factory("utils", [
     "$location",
     ($location) => ({
-        valfilter(attrobj) {
-            if (attrobj["is_struct_attr"]) {
-                return `_.${attrobj.value}`
-            } else {
-                return attrobj.value
-            }
-        },
+        /** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
+        valfilter: (attrobj) => (attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value),
 
         setupHash(scope, config) {
             const onWatch = () => {

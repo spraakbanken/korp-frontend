@@ -156,6 +156,25 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/quickjs-emscripten/-/quickjs-emscripten-0.23.0.tgz#db4ecfd499a9765ab24002c3b696d02e6d32a12c"
   integrity sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==
 
+"@types/angular-dynamic-locale@^0.1.35":
+  version "0.1.35"
+  resolved "https://registry.yarnpkg.com/@types/angular-dynamic-locale/-/angular-dynamic-locale-0.1.35.tgz#55ad0c54d8c1bfce2c9604d12e6cace142f36bf4"
+  integrity sha512-MnO5qyU7HpSSHDUvpf+Em9smDLjREGCgt6SRlrf3YlhlVNHqKvEad8GL2riFkSe/NlDtNdUkudIvpGQCo2R9lw==
+  dependencies:
+    angular-dynamic-locale "*"
+
+"@types/angular-ui-bootstrap@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@types/angular-ui-bootstrap/-/angular-ui-bootstrap-1.0.7.tgz#53e26f12147049d7f03c536ffa981472c3b75c2d"
+  integrity sha512-pYtOQ6aqfmOg0pQHXfG4YHiMAyr56YSmobt2QwcIvsVxKeKkz8i/YuUVJ+WMoptaAmb25/HQrjT8bV28HtY1xA==
+  dependencies:
+    "@types/angular" "*"
+
+"@types/angular@*":
+  version "1.8.9"
+  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.8.9.tgz#d1ae3e87a67f72342d55ff26e611df83df0fb176"
+  integrity sha512-Z0HukqZkx0fotsV3QO00yqU9NzcQI+tMcrum+8MvfB4ePqCawZctF/gz6QiuII+T1ax+LitNoPx/eICTgnF4sg==
+
 "@types/angular@^1.8.4":
   version "1.8.4"
   resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.8.4.tgz#a2cc163e508389c51d4c4119ebff6b9395cec472"
@@ -612,7 +631,7 @@ ajv@^8.0.0, ajv@^8.8.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-angular-dynamic-locale@0.1.38:
+angular-dynamic-locale@*, angular-dynamic-locale@0.1.38:
   version "0.1.38"
   resolved "https://registry.yarnpkg.com/angular-dynamic-locale/-/angular-dynamic-locale-0.1.38.tgz#9373d5531e6825d291fc92f9e3bcf551f1ec9b9f"
   integrity sha512-O+bWvCNkIhnedBCYPUgYzVrzXlaYwN8Ke4XpoXoGDu4zIyWNdaFAzMWsuB+dnOD7pKrp8pVkk+ShPSGVnj/3uQ==
