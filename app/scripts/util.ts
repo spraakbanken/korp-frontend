@@ -1,18 +1,12 @@
 /** @format */
 import _ from "lodash"
-import angular, {
-    IControllerService,
-    IHttpService,
-    IRootScopeService,
-    type ILocationService,
-    type IRequestConfig,
-    type IScope,
-} from "angular"
+import angular, { IControllerService, IHttpService, type IRequestConfig, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangMap } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
 import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
+import { HashParams, LocationService, UrlParams } from "./urlparams"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -25,10 +19,22 @@ export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) =
 type ServiceTypes = {
     $controller: IControllerService
     $http: IHttpService
-    $location: ILocationService
+    $location: LocationService
     $rootScope: RootScope
     // Add types here as needed.
 }
+
+/** Get a parameter from the `?<key>=<value>` part of the URL. */
+export const getUrlParam = <K extends keyof UrlParams>(key: K) =>
+    new URLSearchParams(window.location.search).get(key) as UrlParams[K]
+
+/**
+ * Get a parameter from the `#?<key>=<value>` part of the URL.
+ * It is preferred to use the Angular `$location` service to read and modify this.
+ * Use this only when outside Angular context.
+ */
+export const getUrlHash = <K extends keyof HashParams>(key: K) =>
+    new URLSearchParams(window.location.hash.slice(2)).get(key) as HashParams[K]
 
 /** Get an Angular service from outside the Angular context. */
 export const getService = <K extends keyof ServiceTypes>(name: K): ServiceTypes[K] =>
@@ -46,14 +52,14 @@ export const withService = <K extends keyof ServiceTypes, R>(name: K, fn: (servi
  * Get values from the URL search string via Angular.
  * Only use this in code outside Angular. Inside, use `$location.search()`.
  */
-export const locationSearchGet = (key: string): string =>
-    withService("$location", ($location) => $location.search()[key])
+export const locationSearchGet = <K extends keyof HashParams>(key: K): HashParams[K] =>
+    withService("$location", ($location) => ($location.search() as HashParams)[key])
 
 /**
  * Set values in the URL search string via Angular.
  * Only use this in code outside Angular. Inside, use `$location.search()`.
  */
-export const locationSearchSet = (name: string, value: string | number | boolean | string[]): ILocationService =>
+export const locationSearchSet = <K extends keyof HashParams>(name: K, value: HashParams[K]): LocationService =>
     withService("$location", ($location) => $location.search(name, value))
 
 /**

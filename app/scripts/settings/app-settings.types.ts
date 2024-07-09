@@ -6,6 +6,7 @@
 import { Labeled, LangString } from "@/i18n/types"
 import { Attribute } from "./config.types"
 import { RootScope } from "@/root-scope.types"
+import { HashParams } from "@/urlparams"
 
 export type AppSettings = {
     auth_module?: string | { module: string; options: Record<string, any> }
@@ -68,7 +69,7 @@ export type AppSettings = {
 export type SearchExample = {
     label: LangString
     hint?: LangString
-    params: Record<string, string | number>
+    params: HashParams
 }
 
 export type WordPictureDef = Array<"_" | { rel: string; css_class: string }>

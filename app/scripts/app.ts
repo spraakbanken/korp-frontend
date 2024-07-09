@@ -6,7 +6,6 @@ import {
     IComponentOptions,
     ILocaleService,
     ILocationProvider,
-    ILocationService,
     IQService,
     IScope,
     ITimeoutService,
@@ -28,6 +27,7 @@ import "@/components/frontpage"
 import "@/components/results"
 import "@/components/korp-error"
 import { JQueryExtended } from "./jquery.types"
+import { LocationService } from "./urlparams"
 
 // load all custom components
 let customComponents: Record<string, IComponentOptions> = {}
@@ -96,7 +96,7 @@ korpApp.run([
     "$uibModal",
     async function (
         $rootScope: RootScope,
-        $location: ILocationService,
+        $location: LocationService,
         $locale: ILocaleService,
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,

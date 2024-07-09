@@ -1,15 +1,15 @@
 /** @format */
 import _ from "lodash"
+import angular from "angular"
 import jStorage from "../lib/jstorage"
 import settings from "@/settings"
 import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
 import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
-import { html } from "@/util"
+import { getUrlHash, html } from "@/util"
 import korpLogo from "../img/korp.svg"
 import korpFail from "../img/korp_fail.svg"
-import angular from "angular"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
@@ -28,13 +28,10 @@ const createErrorScreen = () => {
 
 function initApp() {
     // rewriting old language codes to new ones
-    if (location.hash.includes("lang=")) {
-        const match = /lang\=(.*?)(&|$)/.exec(location.hash)
-        if (match) {
-            const lang = match[1]
-            if (settings["iso_languages"][lang]) {
-                location.hash = location.hash.replace(`lang=${lang}`, `lang=${settings["iso_languages"][lang]}`)
-            }
+    const lang = getUrlHash("lang")
+    if (lang) {
+        if (settings["iso_languages"][lang]) {
+            location.hash = location.hash.replace(`lang=${lang}`, `lang=${settings["iso_languages"][lang]}`)
         }
     }
 

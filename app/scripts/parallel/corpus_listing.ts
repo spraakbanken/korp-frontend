@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { CorpusListing } from "@/corpus_listing"
-import { locationSearchGet } from "@/util"
+import { getUrlHash, locationSearchGet } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
@@ -14,7 +14,7 @@ export class ParallelCorpusListing extends CorpusListing {
         super(corpora)
 
         // Cannot use Angular helpers (`locationSearchGet`) here, it's not initialized yet.
-        const activeLangs = new URLSearchParams(window.location.hash.slice(2)).get("parallel_corpora") || ""
+        const activeLangs = getUrlHash("parallel_corpora") || ""
         this.setActiveLangs(activeLangs.split(","))
     }
 

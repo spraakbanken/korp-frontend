@@ -2,6 +2,7 @@
 import $ from "jquery"
 import currentMode from "@/mode"
 import { locationSearchGet } from "@/util"
+import { HashParams } from "@/urlparams"
 
 declare global {
     interface Window {
@@ -11,7 +12,7 @@ declare global {
          * TODO Remove, currently used in tests
          * @deprecated
          */
-        locationSearch: (key: string) => string
+        locationSearch: <K extends keyof HashParams>(key: K) => HashParams[K]
     }
 }
 

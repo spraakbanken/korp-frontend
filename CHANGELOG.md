@@ -6,6 +6,7 @@
 
 - TypeScript typings for:
   - config/settings
+  - URL parameters
   - CQP queries
   - CorpusListing
   - `$rootScope`

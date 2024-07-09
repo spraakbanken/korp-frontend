@@ -1,5 +1,7 @@
 /** @format */
 
-const currentMode = new URLSearchParams(window.location.search).get("mode") || "default"
+import { getUrlParam } from "./util"
+
+const currentMode = getUrlParam("mode") || "default"
 
 export default currentMode
