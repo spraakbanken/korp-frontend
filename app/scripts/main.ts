@@ -6,17 +6,19 @@ import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
 import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
+import { html } from "@/util"
 import korpLogo from "../img/korp.svg"
+import korpFail from "../img/korp_fail.svg"
+import angular from "angular"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
-    splash.innerHTML = `<img class="splash" height="300" width="300" src="${korpLogo}" />`
+    splash.innerHTML = html`<img class="splash" height="300" width="300" src="${korpLogo}" />`
 }
 
 const createErrorScreen = () => {
-    const korpFail = require("../img/korp_fail.svg")
     const elem = document.getElementById("preload")
-    elem.innerHTML = `
+    elem.innerHTML = html`
         <div class="absolute top-1/3 text-center">
             <img class="block" height="300" width="300" src="${korpFail}" />
             Sorry, Korp doesn't seem to work right now
@@ -44,8 +46,8 @@ function initApp() {
 
     try {
         updateSearchHistory()
-    } catch (error1) {
-        console.error("ERROR setting corpora from location", error1)
+    } catch (error) {
+        console.error("ERROR setting corpora from location", error)
     }
 
     if (process.env.ENVIRONMENT == "staging") {
@@ -55,10 +57,11 @@ function initApp() {
     $("body").addClass(`mode-${currentMode}`)
 
     $("#search_history").change(function (event) {
-        const target = $(this).find(":selected")
-        if (_.includes(["http://", "https:/"], target.val().slice(0, 7))) {
-            location.href = target.val()
-        } else if (target.is(".clear")) {
+        const optionElement = $(this).find(":selected")
+        const value = optionElement.val() as string
+        if (_.includes(["http://", "https:/"], value.slice(0, 7))) {
+            location.href = value
+        } else if (optionElement.is(".clear")) {
             jStorage.set("searches", [])
             updateSearchHistory()
         }

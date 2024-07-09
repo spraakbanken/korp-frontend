@@ -62,7 +62,7 @@ require("angular-filter/index.js")
 
 require("./lib/jquery.tooltip.pack.js")
 
-require("./scripts/main.js")
+require("./scripts/main")
 require("./scripts/app.js")
 
 require("./scripts/controllers/comparison_controller.js")
