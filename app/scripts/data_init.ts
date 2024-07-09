@@ -136,7 +136,6 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
         }
 
         function transformAttributes<T extends keyof Config["attributes"]>(type: T) {
-            console.log(corpus.id, type, corpus)
             type AttrType = T extends "custom_attributes" ? CustomAttribute : Attribute
             const attrs = _.fromPairs(
                 corpus[type]?.map((name) => {
