@@ -12,6 +12,7 @@ import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangMap } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
+import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -328,7 +329,7 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
         i++
     }
     $("#download-links").off("change")
-    ;($ as any)("#download-links")
+    ;($("#download-links") as JQueryExtended)
         .localize()
         .click(false)
         .change(function (event) {
@@ -336,7 +337,7 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
             if (!params) {
                 return
             }
-            ;($ as any).generateFile(settings.download_cgi_script, params)
+            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script, params)
             const self = $(this)
             return setTimeout(() => self.val("init"), 1000)
         })

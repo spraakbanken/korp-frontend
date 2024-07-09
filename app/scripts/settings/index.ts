@@ -2,10 +2,17 @@
 import _ from "lodash"
 import settings from "korp_config"
 import { AppSettings } from "./app-settings.types"
+import { Settings } from "./settings.types"
 
 export default settings
 
-if (process.env.ENVIRONMENT != "production") (window as any).settings = settings
+declare global {
+    interface Window {
+        settings: Settings
+    }
+}
+
+if (process.env.ENVIRONMENT != "production") window.settings = settings
 
 settings.markup = {
     msd: require("@/../markup/msd.html"),

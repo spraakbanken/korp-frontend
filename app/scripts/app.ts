@@ -27,6 +27,7 @@ import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
 import "@/components/korp-error"
+import { JQueryExtended } from "./jquery.types"
 
 // load all custom components
 let customComponents: Record<string, IComponentOptions> = {}
@@ -137,7 +138,7 @@ korpApp.run([
             $rootScope["lang"] = lang
 
             // Trigger jQuery Localize
-            ;($("body") as any).localize()
+            ;($("body") as JQueryExtended).localize()
         })
 
         $(document).keyup(function (event) {
