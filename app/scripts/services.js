@@ -1,6 +1,5 @@
 /** @format */
 import _ from "lodash"
-import jStorage from "../lib/jstorage"
 import settings from "@/settings"
 import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
@@ -9,6 +8,7 @@ import { updateSearchHistory } from "@/history"
 import { normalizeStatsData } from "@/backend/stats-proxy"
 import { httpConfAddMethod, httpConfAddMethodAngular, unregescape } from "@/util"
 import { mergeCqpExprs, parse, stringify } from "./cqp_parser/cqp"
+import { localStorageGet, localStorageSet } from "@/local-storage"
 
 const korpApp = angular.module("korpApp")
 
@@ -363,7 +363,7 @@ korpApp.service(
             } else {
                 this.key = "saved_searches"
             }
-            this.savedSearches = jStorage.get(this.key) || []
+            this.savedSearches = localStorageGet(this.key) || []
         }
 
         saveSearch(name, cqp) {
@@ -373,12 +373,12 @@ korpApp.service(
                 corpora: settings.corpusListing.getSelectedCorpora(),
             }
             this.savedSearches.push(searchObj)
-            return jStorage.set(this.key, this.savedSearches)
+            return localStorageSet(this.key, this.savedSearches)
         }
 
         flush() {
             this.savedSearches.splice(0, 9e9, ...[].concat([]))
-            return jStorage.set(this.key, this.savedSearches)
+            return localStorageSet(this.key, this.savedSearches)
         }
     }
 )

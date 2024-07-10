@@ -14,11 +14,9 @@
 ### Changed
 
 - Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
+- Replaced jStorage library with native `localStorage`, and added TypeScript typings
 - In the `ParallelCorpusListing` class, the methods `getLinked` and `getEnabledByLang` have new parameter signatures
 - Removed the `mapper` template filter; change `x | mapper:f` to `f(x)`
-
-### Refactored
-
 - Removed the global `c` alias for `console`
 - Removed global `lang`, use `$rootScope["lang"]` instead (outside Angular: `getService("$rootScope")["lang"]`)
 - Removed global `loc_data`, use `$rootScope["loc_data"]` instead (outside Angular: `getService("$rootScope")["loc_data"]`)
