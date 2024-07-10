@@ -18,7 +18,6 @@
         "geokorp": "spraakbanken/geokorp#1.5.0",
         "jquery": "3.6.3",
         "js-yaml": "^4.1.0",
-        "jstorage": "andris9/jStorage#0.4.12",
         "leaflet": "^1.9.3",
         "leaflet-providers": "^1.13.0",
         "leaflet.markercluster": "^1.5.3",
