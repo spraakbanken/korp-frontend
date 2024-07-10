@@ -9,7 +9,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { getUrlHash, html } from "@/util"
 import korpLogo from "../img/korp.svg"
 import korpFail from "../img/korp_fail.svg"
-import { localStorageSet } from "@/local-storage"
+import { convertJstorage, localStorageSet } from "@/local-storage"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
@@ -74,6 +74,8 @@ function initApp() {
 createSplashScreen()
 ;(async () => {
     try {
+        // TODO This was added in July 2024, remove after a few months?
+        convertJstorage()
         // Check if user is logged in
         const initAuth = authenticationProxy.init()
         // Fetch everything that only needs to be check once
