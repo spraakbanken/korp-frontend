@@ -1,14 +1,14 @@
 /** @format */
 import _ from "lodash"
-import jStorage from "@/../lib/jstorage"
 import settings from "@/settings"
 import { loginBoxComponent } from "./login_box"
 import { loginStatusComponent } from "./login_status"
+import { localStorageGet, localStorageSet } from "@/local-storage"
 
 const state = {}
 
 const init = () => {
-    const creds = jStorage.get("creds")
+    const creds = localStorageGet("creds")
     if (creds) {
         state.loginObj = creds
     }
@@ -65,7 +65,7 @@ const login = (usr, pass, saveLogin) => {
                 auth,
             }
             if (saveLogin) {
-                jStorage.set("creds", state.loginObj)
+                localStorageSet("creds", state.loginObj)
             }
             return dfd.resolve(data)
         })
@@ -86,7 +86,7 @@ const hasCredential = (corpusId) => {
 
 const logout = () => {
     state.loginObj = {}
-    jStorage.deleteKey("creds")
+    localStorage.removeItem("creds")
 }
 
 const getCredentials = () => state.loginObj?.credentials || []

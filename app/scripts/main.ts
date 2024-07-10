@@ -1,7 +1,6 @@
 /** @format */
 import _ from "lodash"
 import angular from "angular"
-import jStorage from "../lib/jstorage"
 import settings from "@/settings"
 import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
@@ -10,6 +9,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { getUrlHash, html } from "@/util"
 import korpLogo from "../img/korp.svg"
 import korpFail from "../img/korp_fail.svg"
+import { convertJstorage, localStorageSet } from "@/local-storage"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
@@ -59,7 +59,7 @@ function initApp() {
         if (_.includes(["http://", "https:/"], value.slice(0, 7))) {
             location.href = value
         } else if (optionElement.is(".clear")) {
-            jStorage.set("searches", [])
+            localStorageSet("searches", [])
             updateSearchHistory()
         }
     })
@@ -74,6 +74,8 @@ function initApp() {
 createSplashScreen()
 ;(async () => {
     try {
+        // TODO This was added in July 2024, remove after a few months?
+        convertJstorage()
         // Check if user is logged in
         const initAuth = authenticationProxy.init()
         // Fetch everything that only needs to be check once

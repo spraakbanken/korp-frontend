@@ -1,5 +1,6 @@
 /** @format */
-import jStorage from "../lib/jstorage"
+
+import { localStorageGet, localStorageSet } from "@/local-storage"
 
 export function updateSearchHistory(value, href) {
     const filterParam = (url) => {
@@ -10,7 +11,7 @@ export function updateSearchHistory(value, href) {
     }
 
     $("#search_history").empty()
-    const searches = jStorage.get("searches") || []
+    const searches = localStorageGet("searches") || []
     const searchLocations = $.map(searches, (item) => filterParam(item.location))
     if (value != null && !searchLocations.includes(filterParam(href))) {
         searches.splice(0, 0, {
@@ -18,7 +19,7 @@ export function updateSearchHistory(value, href) {
             location: href,
         })
 
-        jStorage.set("searches", searches)
+        localStorageSet("searches", searches)
     }
     if (!searches.length) {
         return
