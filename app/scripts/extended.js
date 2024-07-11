@@ -313,15 +313,13 @@ export default _.merge(
                     }
                     s.commitDateInput = () => {
                         if (s.fromDateString) {
-                            let simpleFrom = s.fromDateString.length == 4
-                            s.fromDate = moment(s.fromDateString, simpleFrom ? "YYYY" : "YYYY-MM-DD").toDate()
+                            const dateString = s.fromDateString.length == 4 ? `${s.fromDateString}-01-01` : s.fromDateString
+                            s.fromDate = moment(dateString).toDate()
+                            s.fromTime = moment("000000", "HHmmss").toDate()
                         }
                         if (s.toDateString) {
-                            let simpleTo = s.toDateString.length == 4
-                            if (simpleTo) {
-                                var dateString = `${s.toDateString}-12-31`
-                            }
-                            s.toDate = moment(dateString || s.dateString).toDate()
+                            const dateString = s.toDateString.length == 4 ? `${s.toDateString}-12-31` : s.toDateString
+                            s.toDate = moment(dateString).toDate()
                             s.toTime = moment("235959", "HHmmss").toDate()
                         }
                     }
