@@ -36,6 +36,7 @@ require("./styles/tailwind.scss")
 require("./styles/styles.scss")
 require("./styles/textreader.css")
 
+require("components-jqueryui/ui/widgets/dialog.js") // Needed for popover
 require("components-jqueryui/ui/widget.js")
 
 require("jquerylocalize")
