@@ -1,5 +1,5 @@
 /** @format */
-import angular, { type IComponentController, type IScope } from "angular"
+import angular, { type ui, type IComponentController, type IScope } from "angular"
 import { html } from "@/util"
 import moment, { type Moment } from "moment"
 
@@ -20,7 +20,7 @@ angular.module("korpApp").component("datetimePicker", {
                         uib-datepicker
                         class="well well-sm"
                         ng-model="date"
-                        datepicker-options="$ctrl.datepickerOptions"
+                        datepicker-options="datepickerOptions"
                     ></div>
 
                     <div class="flex items-center justify-center">
@@ -51,17 +51,18 @@ angular.module("korpApp").component("datetimePicker", {
         function ($scope: DatetimePickerScope) {
             const $ctrl = this as DatetimePickerController
 
-            $ctrl.$onInit = () => {
-                // Sync incoming values to internal model
-                $scope.date = $ctrl.dateModel
-                $scope.time = $ctrl.timeModel
+            $scope.datepickerOptions = { startingDay: 1 }
 
-                $ctrl.datepickerOptions = {
-                    minDate: $ctrl.minDate,
-                    maxDate: $ctrl.maxDate,
-                    initDate: $ctrl.minDate,
-                    startingDay: 1,
+            $ctrl.$onChanges = (changes) => {
+                // Sync incoming values to internal model
+                if (changes.dateModel) $scope.date = changes.dateModel.currentValue
+                if (changes.timeModel) $scope.time = changes.timeModel.currentValue
+
+                if (changes.minDate) {
+                    $scope.datepickerOptions.minDate = changes.minDate.currentValue
+                    $scope.datepickerOptions.initDate = changes.minDate.currentValue
                 }
+                if (changes.maxDate) $scope.datepickerOptions.maxDate = changes.maxDate.currentValue
             }
 
             // Report changes from datepicker/timepicker upwards
@@ -100,5 +101,6 @@ type DatetimePickerScope = IScope & {
     date: Date
     time: Date
     combined: Moment
+    datepickerOptions: ui.bootstrap.IDatepickerConfig
     handleClick: (event: JQuery.ClickEvent) => void
 }

@@ -26,6 +26,7 @@
 ### Fixed
 
 - News were sometimes not shown immediately after fetch
+- In Extended search, the time interval component was ignoring the simple input fields [#377](https://github.com/spraakbanken/korp-frontend/issues/377)
 
 ## [9.6.0] - 2024-05-27
 
