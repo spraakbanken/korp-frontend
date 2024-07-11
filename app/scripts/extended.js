@@ -313,7 +313,8 @@ export default _.merge(
                     }
                     s.commitDateInput = () => {
                         if (s.fromDateString) {
-                            const dateString = s.fromDateString.length == 4 ? `${s.fromDateString}-01-01` : s.fromDateString
+                            const dateString =
+                                s.fromDateString.length == 4 ? `${s.fromDateString}-01-01` : s.fromDateString
                             s.fromDate = moment(dateString).toDate()
                             s.fromTime = moment("000000", "HHmmss").toDate()
                         }
@@ -361,6 +362,7 @@ export default _.merge(
                     s.updateTo = (m) => {
                         // We cannot just patch the list, we need to re-set it to trigger watcher.
                         // [fromdate, todate, fromtime, totime]
+                        m.set("second", 59)
                         s.model = [s.model[0], m.format("YYYYMMDD"), s.model[2], m.format("HHmmss")]
                     }
                 },
