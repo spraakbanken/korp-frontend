@@ -1,9 +1,11 @@
 /** @format */
+import { IComponentOptions, IController, ITimeoutService } from "angular"
 import statemachine from "@/statemachine"
-import * as authenticationProxy from "../auth"
 import { html } from "@/util"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { getUsername, isLoggedIn, login } from "@/components/auth/auth"
 
-export const loginStatusComponent = {
+export const loginStatusComponent: IComponentOptions = {
     template: html`
         <div class="link" id="log_out" ng-click="$ctrl.logout()" ng-if="$ctrl.loggedIn">
             <span>{{ 'log_out' | loc:$root.lang }}</span>
@@ -16,13 +18,13 @@ export const loginStatusComponent = {
     bindings: {},
     controller: [
         "$timeout",
-        function ($timeout) {
-            const $ctrl = this
+        function ($timeout: ITimeoutService) {
+            const $ctrl: LoginStatusController = this
 
-            $ctrl.loggedIn = authenticationProxy.isLoggedIn()
+            $ctrl.loggedIn = isLoggedIn()
 
             if ($ctrl.loggedIn) {
-                $ctrl.username = authenticationProxy.getUsername()
+                $ctrl.username = getUsername()
             }
 
             $ctrl.logout = function () {
@@ -33,7 +35,7 @@ export const loginStatusComponent = {
             statemachine.listen("login", () => {
                 $timeout(() => {
                     $ctrl.loggedIn = true
-                    $ctrl.username = authenticationProxy.getUsername()
+                    $ctrl.username = getUsername()
                 })
             })
 
@@ -43,8 +45,15 @@ export const loginStatusComponent = {
 
             $ctrl.doLogin = (loginNeededFor) => {
                 // TODO here we must get the URL so that the state can be restored that way
-                authenticationProxy.login()
+                login()
             }
         },
     ],
+}
+
+type LoginStatusController = IController & {
+    loggedIn: boolean
+    username: string
+    logout: () => void
+    doLogin: (loginNeededFor: CorpusTransformed[]) => void
 }

@@ -1,13 +1,15 @@
 /** @format */
 import _ from "lodash"
+import { IModule } from "angular"
 import settings from "@/settings"
+import { localStorageGet, localStorageSet } from "@/local-storage"
 import { loginBoxComponent } from "./login_box"
 import { loginStatusComponent } from "./login_status"
-import { localStorageGet, localStorageSet } from "@/local-storage"
+import { AuthState, LoginResponseData } from "./basic_auth.types"
 
-const state = {}
+const state: AuthState = {}
 
-const init = () => {
+export const init = () => {
     const creds = localStorageGet("creds")
     if (creds) {
         state.loginObj = creds
@@ -15,27 +17,20 @@ const init = () => {
     return !_.isEmpty(creds)
 }
 
-const initAngular = () => {
-    const korpApp = angular.module("korpApp")
-
+export const initAngular = (korpApp: IModule) => {
     korpApp.component("loginStatus", loginStatusComponent)
     korpApp.component("loginBox", loginBoxComponent)
 }
 
-const getAuthorizationHeader = () => {
-    if (!_.isEmpty(state.loginObj)) {
-        return { Authorization: `Basic ${state.loginObj.auth}` }
-    } else {
-        return {}
-    }
-}
+export const getAuthorizationHeader = () =>
+    !_.isEmpty(state.loginObj) ? { Authorization: `Basic ${state.loginObj.auth}` } : {}
 
-function toBase64(str) {
+function toBase64(str: string) {
     // copied from https://stackoverflow.com/a/43271130
-    function u_btoa(buffer) {
-        var binary = []
-        var bytes = new Uint8Array(buffer)
-        for (var i = 0, il = bytes.byteLength; i < il; i++) {
+    function u_btoa(buffer: Uint8Array | Buffer) {
+        const binary = []
+        const bytes = new Uint8Array(buffer)
+        for (let i = 0; i < bytes.byteLength; i++) {
             binary.push(String.fromCharCode(bytes[i]))
         }
         return window.btoa(binary.join(""))
@@ -43,17 +38,20 @@ function toBase64(str) {
     return u_btoa(new TextEncoder().encode(str))
 }
 
-const login = (usr, pass, saveLogin) => {
+export const login = (usr: string, pass: string, saveLogin: boolean): JQueryDeferred<LoginResponseData> => {
     const auth = toBase64(usr + ":" + pass)
 
     const dfd = $.Deferred()
-    $.ajax({
+
+    const ajaxSettings: JQuery.AjaxSettings = {
         url: settings["korp_backend_url"] + "/authenticate",
         type: "GET",
         beforeSend(req) {
             return req.setRequestHeader("Authorization", `Basic ${auth}`)
         },
-    })
+    }
+
+    ;($.ajax(ajaxSettings) as JQuery.jqXHR<LoginResponseData>)
         .done(function (data, status, xhr) {
             if (!data.corpora) {
                 dfd.reject()
@@ -77,32 +75,15 @@ const login = (usr, pass, saveLogin) => {
     return dfd
 }
 
-const hasCredential = (corpusId) => {
-    if (!state.loginObj?.credentials) {
-        return false
-    }
-    return state.loginObj.credentials.includes(corpusId.toUpperCase())
-}
+export const hasCredential = (corpusId: string): boolean => state.loginObj.credentials?.includes(corpusId.toUpperCase())
 
-const logout = () => {
-    state.loginObj = {}
+export const logout = (): void => {
+    state.loginObj = undefined
     localStorage.removeItem("creds")
 }
 
-const getCredentials = () => state.loginObj?.credentials || []
+export const getCredentials = (): string[] => state.loginObj?.credentials || []
 
-const getUsername = () => state.loginObj.name
+export const getUsername = () => state.loginObj.name
 
-const isLoggedIn = () => !_.isEmpty(state.loginObj)
-
-export {
-    init,
-    initAngular,
-    login,
-    logout,
-    getAuthorizationHeader,
-    hasCredential,
-    getCredentials,
-    getUsername,
-    isLoggedIn,
-}
+export const isLoggedIn = () => !_.isEmpty(state.loginObj)

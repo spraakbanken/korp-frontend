@@ -1,16 +1,17 @@
 /** @format */
-
+import { IComponentOptions, IController, ITimeoutService } from "angular"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { html } from "@/util"
 import { login } from "./basic_auth"
+import { AuthModuleOptions } from "./basic_auth.types"
 
 // TODO make it not closable when login is NEEDED
-export const loginBoxComponent = {
+export const loginBoxComponent: IComponentOptions = {
     template: html`
         <div class="modal-header login-modal-header">
             <span class="login-header">{{'log_in' | loc:$root.lang}}</span>
-            <span ng-click="$ctrl.clickX()" class="close-x">×</span>
+            <span ng-click="$ctrl.close()" class="close-x">×</span>
         </div>
         <div id="login_popup" class="modal-body">
             <form ng-submit="$ctrl.loginSubmit()">
@@ -46,15 +47,15 @@ export const loginBoxComponent = {
     },
     controller: [
         "$timeout",
-        function ($timeout) {
-            const $ctrl = this
+        function ($timeout: ITimeoutService) {
+            const $ctrl: LoginBoxController = this
 
-            const options = settings["auth_module"]?.["options"] || {}
+            const options: AuthModuleOptions = settings["auth_module"]?.["options"] || {}
 
             // default value of show_remember is true
-            $ctrl.showSave = options["show_remember"] == undefined ? true : options["show_remember"]
+            $ctrl.showSave = options.show_remember == undefined ? true : options.show_remember
             // default value of default_value_remember is false
-            $ctrl.saveLogin = $ctrl.showSave ? Boolean(options["default_value_remember"]) : true
+            $ctrl.saveLogin = $ctrl.showSave ? Boolean(options.default_value_remember) : true
 
             $ctrl.loading = false
 
@@ -65,7 +66,7 @@ export const loginBoxComponent = {
                     .done(function () {
                         // no send to statemachine
                         statemachine.send("LOGIN")
-                        $ctrl.closeModals()
+                        $ctrl.close()
                     })
                     .fail(function () {
                         $timeout(() => {
@@ -75,13 +76,19 @@ export const loginBoxComponent = {
                     })
             }
 
-            $ctrl.clickX = () => $ctrl.closeModals()
-
-            $ctrl.closeModals = function () {
+            $ctrl.close = function () {
                 $ctrl.loginErr = false
                 $ctrl.closeClick()
                 // and do what? send to parent?
             }
         },
     ],
+}
+
+type LoginBoxController = IController & {
+    showSave: boolean
+    saveLogin: boolean
+    loading: boolean
+    loginSubmit: () => void
+    close: () => void
 }

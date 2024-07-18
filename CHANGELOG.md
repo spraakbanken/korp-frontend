@@ -10,6 +10,7 @@
   - CQP queries
   - CorpusListing
   - `$rootScope`
+  - Auth module
 
 ### Changed
 

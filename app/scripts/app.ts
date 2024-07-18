@@ -51,7 +51,7 @@ korpApp.filter(
             input === "" ? "–" : input
 )
 
-authenticationProxy.initAngular()
+authenticationProxy.initAngular(korpApp)
 
 /**
  * angular-dynamic-locale updates translations in the builtin $locale service, which is used
