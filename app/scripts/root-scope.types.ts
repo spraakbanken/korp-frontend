@@ -1,7 +1,7 @@
 /** @format */
 import { IDeferred, IRootScopeService } from "angular"
 import { Settings } from "./settings/settings.types"
-import { LangLocMap } from "./i18n/types"
+import { LangLocMap, LocLangMap } from "@/i18n/types"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
@@ -22,5 +22,6 @@ export type RootScope = IRootScopeService & {
         resolvable?: boolean
         onClose?: () => void
         buttonText?: string
+        translations?: LocLangMap
     }) => void
 }

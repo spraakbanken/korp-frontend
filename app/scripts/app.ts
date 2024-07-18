@@ -28,6 +28,7 @@ import "@/components/results"
 import "@/components/korp-error"
 import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
+import { LocLangMap } from "@/i18n/types"
 
 // load all custom components
 let customComponents: Record<string, IComponentOptions> = {}
@@ -274,8 +275,11 @@ korpApp.run([
 
         // TODO the top bar could show even though the modal is open,
         // thus allowing switching modes or language when an error has occured.
-        s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null }) => {
-            type ModalScope = IScope & { closeModal: () => void }
+        s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null, translations = null }) => {
+            type ModalScope = IScope & {
+                translations?: LocLangMap
+                closeModal: () => void
+            }
             const s = $rootScope.$new(true) as ModalScope
 
             const useCustomButton = !_.isEmpty(buttonText)
@@ -299,6 +303,8 @@ korpApp.run([
                 backdrop: "static",
                 keyboard: false,
             })
+
+            s.translations = translations
 
             s.closeModal = () => {
                 if (onClose && resolvable) {
