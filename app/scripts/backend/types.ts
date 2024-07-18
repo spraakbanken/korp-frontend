@@ -28,8 +28,8 @@ export type ProgressResponse = {
 }
 
 /** Extends JQuery `jaxSettings` with stuff we use. */
-export type AjaxSettings<T = any> = JQuery.AjaxSettings<T> & {
-    progress?: (data: T, e: any) => void
+export type AjaxSettings<TContext = any> = JQuery.AjaxSettings<TContext> & {
+    progress?: (this: TContext, data: any, e: any) => void
 }
 
 export type ProgressReport = {

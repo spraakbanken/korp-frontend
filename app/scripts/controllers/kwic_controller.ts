@@ -1,14 +1,66 @@
 /** @format */
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import kwicProxyFactory from "@/backend/kwic-proxy"
+import kwicProxyFactory, { ApiKwic, KorpQueryParams, KorpQueryResponse, type KwicProxy } from "@/backend/kwic-proxy"
+import { RootScope } from "@/root-scope.types"
+import { LocationService } from "@/urlparams"
+import { KorpResponse, ProgressReport } from "@/backend/types"
 
-const korpApp = angular.module("korpApp")
+angular.module("korpApp").directive("kwicCtrl", () => ({ controller: KwicCtrl }))
 
-export class KwicCtrl {
+type KwicCtrlScope = IScope & {
+    $parent: {
+        tabset: any
+    }
+    active?: boolean
+    aborted?: boolean
+    buildQueryOptions: (cqp: string, isPaging: boolean) => KorpQueryParams
+    corpusHits?: Record<string, number>
+    countCorpora?: () => number | undefined
+    corpusOrder?: string[]
+    cqp?: string
+    error?: boolean
+    getProxy?: () => KwicProxy
+    /** Number of total search hits, updated when a search is completed. */
+    hits?: number
+    /** Number of search hits, may change while search is in progress. */
+    hitsInProgress?: number
+    hitsPerPage?: `${number}` | number
+    ignoreAbort?: boolean
+    initialSearch?: boolean
+    isActive?: () => boolean
+    is_reading?: boolean
+    isReadingMode?: () => boolean
+    kwic: ApiKwic[]
+    loading?: boolean
+    makeRequest?: (isPaging: boolean) => void
+    onentry: () => void
+    onexit: () => void
+    onProgress: (progressObj: ProgressReport, isPaging: boolean) => void
+    page?: number
+    pageChange?: (page: number) => void
+    progress?: number
+    proxy?: KwicProxy
+    randomSeed?: number
+    reading_mode?: boolean
+    readingChange?: () => void
+    renderCompleteResult?: (data: KorpResponse<KorpQueryResponse>, isPaging: boolean) => void
+    renderResult?: (data: KorpResponse<KorpQueryResponse>) => void
+    tabindex?: number
+    toggleReading?: () => void
+}
+
+export class KwicCtrl implements IController {
+    location: LocationService
+    scope: KwicCtrlScope
+    $rootScope: RootScope
+    utils: any
+
     static initClass() {
         this.$inject = ["$scope", "utils", "$location", "$rootScope", "$timeout"]
     }
+
     setupHash() {
         return this.utils.setupHash(this.scope, [
             {
@@ -31,13 +83,19 @@ export class KwicCtrl {
             if (!this.scope.initialSearch) {
                 this.scope.randomSeed = null
             } else {
-                this.scope.randomSeed = this.location.search()["random_seed"]
+                this.scope.randomSeed = Number(this.location.search()["random_seed"])
             }
             this.scope.initialSearch = false
             this.scope.makeRequest(false)
         })
     }
-    constructor(scope, utils, $location, $rootScope, $timeout) {
+    constructor(
+        scope: KwicCtrlScope,
+        utils: any,
+        $location: LocationService,
+        $rootScope: RootScope,
+        $timeout: ITimeoutService
+    ) {
         this.utils = utils
         this.scope = scope
         this.location = $location
@@ -46,10 +104,6 @@ export class KwicCtrl {
         const s = scope
 
         s.initialSearch = true
-        /** Number of total search hits, updated when a search is completed. */
-        s.hits = undefined
-        /** Number of search hits, may change while search is in progress. */
-        s.hitsProgress = undefined
 
         this.setupListeners()
 
@@ -99,7 +153,6 @@ export class KwicCtrl {
 
         s.buildQueryOptions = (cqp, isPaging) => {
             let avoidContext, preferredContext
-            const opts = {}
             const getSortParams = function () {
                 const { sort } = $location.search()
                 if (!sort) {
@@ -134,7 +187,7 @@ export class KwicCtrl {
                 s.proxy.queryData = null
             }
 
-            opts.ajaxParams = {
+            const params: KorpQueryParams = {
                 corpus: settings.corpusListing.stringifySelected(),
                 cqp: cqp || s.proxy.prevCQP,
                 query_data: s.proxy.queryData,
@@ -143,8 +196,8 @@ export class KwicCtrl {
                 incremental: true,
             }
 
-            _.extend(opts.ajaxParams, getSortParams())
-            return opts
+            Object.assign(params, getSortParams())
+            return params
         }
 
         s.onProgress = (progressObj, isPaging) => {
@@ -164,10 +217,10 @@ export class KwicCtrl {
 
             s.ignoreAbort = Boolean(s.proxy.hasPending())
 
-            const params = s.buildQueryOptions(s.cqp, isPaging)
+            const ajaxParams = s.buildQueryOptions(s.cqp, isPaging)
 
             const req = s.getProxy().makeRequest(
-                params,
+                { ajaxParams },
                 s.page,
                 (progressObj) => {
                     $timeout(() => s.onProgress(progressObj, isPaging))
@@ -211,6 +264,7 @@ export class KwicCtrl {
 
         s.renderCompleteResult = (data, isPaging) => {
             s.loading = false
+            if ("ERROR" in data) return
             if (!isPaging) {
                 s.hits = data.hits
                 s.hitsInProgress = data.hits
@@ -219,19 +273,18 @@ export class KwicCtrl {
         }
 
         s.renderResult = (data) => {
-            if (data.ERROR) {
+            if ("ERROR" in data) {
                 s.error = true
                 return
-            } else {
-                s.error = false
             }
+            s.error = false
 
             if (!data.kwic) {
                 data.kwic = []
             }
 
             if (s.isActive()) {
-                s.$root.jsonUrl = s.proxy.prevUrl
+                $rootScope.jsonUrl = s.proxy.prevUrl
             }
 
             s.corpusOrder = data.corpus_order
@@ -239,12 +292,12 @@ export class KwicCtrl {
         }
 
         s.onentry = () => {
-            s.$root.jsonUrl = s.proxy.prevUrl
+            $rootScope.jsonUrl = s.proxy.prevUrl
             s.active = true
         }
 
         s.onexit = () => {
-            s.$root.jsonUrl = null
+            $rootScope.jsonUrl = null
             s.active = false
         }
 
@@ -258,5 +311,3 @@ export class KwicCtrl {
     }
 }
 KwicCtrl.initClass()
-
-korpApp.directive("kwicCtrl", () => ({ controller: KwicCtrl }))

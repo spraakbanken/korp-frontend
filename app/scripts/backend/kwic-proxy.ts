@@ -105,10 +105,11 @@ export class KwicProxy extends BaseProxy {
                 self.prevUrl = self.makeUrlWithParams(this.url, data)
             },
 
-            success(data, status, jqxhr) {
+            success(data: KorpQueryResponse, status, jqxhr) {
                 self.queryData = data.query_data
                 self.cleanup()
-                if (data.incremental === false || !this.foundKwic) {
+                // TODO Should be `options.ajaxParams.incremental`?
+                if (data["incremental"] === false || !this.foundKwic) {
                     return kwicCallback(data)
                 }
             },
@@ -153,9 +154,10 @@ export type KorpQueryParams = {
     [cqpn: `cqp${number}`]: string
     expand_prequeries?: boolean
     incremental?: boolean
+    query_data?: string
 }
 
-type MakeRequestOptions = {
+export type MakeRequestOptions = {
     ajaxParams?: KorpQueryParams & {
         command?: string
     }
@@ -171,6 +173,8 @@ export type KorpQueryResponse = {
     hits: number
     /** Number of hits for each corpus */
     corpus_hits: Record<string, number>
+    /** Order of corpora in result */
+    corpus_order: string[]
     /** Execution time in seconds */
     time: number
     /** A hash of this query */

@@ -15,6 +15,7 @@ export type RootScope = IRootScopeService & {
     mapTabs: {}[]
     textTabs: {}[]
     waitForLogin: boolean
+    jsonUrl?: string
     lang: string
     loc_data: LangLocMap
     openErrorModal: (options: {
