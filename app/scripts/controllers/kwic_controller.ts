@@ -9,7 +9,7 @@ import { KorpResponse, ProgressReport } from "@/backend/types"
 
 angular.module("korpApp").directive("kwicCtrl", () => ({ controller: KwicCtrl }))
 
-type KwicCtrlScope = IScope & {
+export type KwicCtrlScope = IScope & {
     $parent: {
         tabset: any
     }
@@ -30,14 +30,13 @@ type KwicCtrlScope = IScope & {
     ignoreAbort?: boolean
     initialSearch?: boolean
     isActive?: () => boolean
-    is_reading?: boolean
     isReadingMode?: () => boolean
     kwic: ApiKwic[]
     loading?: boolean
-    makeRequest?: (isPaging: boolean) => void
+    makeRequest?: (isPaging?: boolean) => void
     onentry: () => void
     onexit: () => void
-    onProgress: (progressObj: ProgressReport, isPaging: boolean) => void
+    onProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
     page?: number
     pageChange?: (page: number) => void
     progress?: number
@@ -45,7 +44,7 @@ type KwicCtrlScope = IScope & {
     randomSeed?: number
     reading_mode?: boolean
     readingChange?: () => void
-    renderCompleteResult?: (data: KorpResponse<KorpQueryResponse>, isPaging: boolean) => void
+    renderCompleteResult?: (data: KorpResponse<KorpQueryResponse>, isPaging?: boolean) => void
     renderResult?: (data: KorpResponse<KorpQueryResponse>) => void
     tabindex?: number
     toggleReading?: () => void

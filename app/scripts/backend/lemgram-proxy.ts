@@ -1,10 +1,10 @@
 /** @format */
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressCallback } from "@/backend/types"
+import type { AjaxSettings, KorpResponse, ProgressReport } from "@/backend/types"
 import { Factory, httpConfAddMethod } from "@/util"
 
-export class LemgramProxy extends BaseProxy {
+export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
     prevParams?: KorpRelationsParams
     prevRequest?: AjaxSettings
     prevUrl?: string
@@ -12,7 +12,7 @@ export class LemgramProxy extends BaseProxy {
     makeRequest(
         word: string,
         type: string,
-        callback: ProgressCallback
+        callback: (data: ProgressReport<KorpRelationsResponse>) => void
     ): JQuery.jqXHR<KorpResponse<KorpRelationsResponse>> {
         this.resetRequest()
         const self = this

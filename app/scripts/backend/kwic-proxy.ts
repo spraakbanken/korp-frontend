@@ -2,10 +2,10 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse } from "@/backend/types"
+import type { AjaxSettings, KorpResponse, ProgressReport, ProgressResponse } from "@/backend/types"
 import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 
-export class KwicProxy extends BaseProxy {
+export class KwicProxy extends BaseProxy<KorpQueryResponse> {
     foundKwic: boolean
     prevCQP?: string
     prevParams: KorpQueryParams | null
@@ -22,10 +22,10 @@ export class KwicProxy extends BaseProxy {
     }
 
     makeRequest(
-        options: MakeRequestOptions,
+        options: KorpQueryRequestOptions,
         page: number,
-        progressCallback,
-        kwicCallback
+        progressCallback: (data: ProgressReport<KorpQueryResponse>) => void,
+        kwicCallback: (data: KorpResponse<KorpQueryResponse>) => void
     ): JQuery.jqXHR<KorpResponse<KorpQueryResponse>> {
         const self = this
         this.foundKwic = false
@@ -119,9 +119,9 @@ export class KwicProxy extends BaseProxy {
                 if (progressObj == null) return
 
                 progressCallback(progressObj)
-                if (progressObj["struct"].kwic) {
+                if ("kwic" in progressObj.struct) {
                     this.foundKwic = true
-                    return kwicCallback(progressObj["struct"])
+                    return kwicCallback(progressObj.struct as KorpQueryResponse)
                 }
             },
         }
@@ -157,7 +157,11 @@ export type KorpQueryParams = {
     query_data?: string
 }
 
-export type MakeRequestOptions = {
+export type KorpQueryRequestOptions = {
+    // TODO Should start,end,command really exist here as well as under ajaxParams?
+    command?: string
+    start?: number
+    end?: number
     ajaxParams?: KorpQueryParams & {
         command?: string
     }
