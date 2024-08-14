@@ -1,18 +1,61 @@
 /** @format */
 import _ from "lodash"
+import angular, { IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import currentMode from "@/mode"
-import statsProxyFactory from "@/backend/stats-proxy"
-const korpApp = angular.module("korpApp")
+import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
+import { LocationService } from "@/urlparams"
+import { RootScope } from "@/root-scope.types"
+import { ProgressReport } from "@/backend/types"
+import { Dataset } from "@/statistics_worker"
+import { SearchParams } from "@/statistics.types"
+import { SlickgridColumn } from "@/statistics"
 
-korpApp.directive("statsResultCtrl", () => ({
+type StatsResultCtrlScope = IScope & {
+    $parent: any
+    $root: RootScope
+    aborted: boolean
+    activate: () => void
+    columns: SlickgridColumn[]
+    countCorpora: () => number | null
+    data: Dataset
+    error: boolean
+    gridData: any
+    hasResult: boolean
+    ignoreAbort: boolean
+    inOrder: boolean
+    loading: boolean
+    no_hits: boolean
+    progress: number
+    proxy: StatsProxy
+    searchParams: SearchParams
+    showStatistics: boolean
+    tabindex: number
+    isActive: () => boolean
+    makeRequest: (cqp: string) => void
+    onentry: () => void
+    onexit: () => void
+    onProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
+    renderResult: (columns: SlickgridColumn[], data: Dataset) => void
+    resetView: () => void
+    resultError: (err: any) => void
+    shouldSearch: () => boolean
+}
+
+angular.module("korpApp").directive("statsResultCtrl", () => ({
     controller: [
         "$scope",
         "$location",
         "searches",
         "$rootScope",
         "$timeout",
-        ($scope, $location, searches, $rootScope, $timeout) => {
+        (
+            $scope: StatsResultCtrlScope,
+            $location: LocationService,
+            searches,
+            $rootScope: RootScope,
+            $timeout: ITimeoutService
+        ) => {
             const s = $scope
             s.loading = false
             s.error = false
@@ -23,7 +66,7 @@ korpApp.directive("statsResultCtrl", () => ({
 
             s.proxy = statsProxyFactory.create()
 
-            $rootScope.$on("make_request", (msg, cqp) => {
+            $rootScope.$on("make_request", (event, cqp: string) => {
                 s.makeRequest(cqp)
             })
 
@@ -89,26 +132,18 @@ korpApp.directive("statsResultCtrl", () => ({
                         $timeout(() => s.onProgress(progressObj))
                     })
                     .then(
-                        (...args) => {
+                        (result) => {
                             $timeout(() => {
-                                const [data, columns, searchParams] = args[0]
+                                const [data, columns, searchParams] = result
                                 s.loading = false
                                 s.data = data
                                 s.searchParams = searchParams
                                 s.renderResult(columns, data)
                             })
                         },
-                        function (textStatus, err) {
-                            const arguments_ = arguments
+                        (textStatus, err) => {
                             $timeout(() => {
-                                console.log("fail", arguments_)
-                                console.log(
-                                    "stats fail",
-                                    s.loading,
-                                    _.map(s.proxy.pendingRequests, (item) => item.readyState)
-                                )
                                 if (s.ignoreAbort) {
-                                    console.log("stats ignoreabort")
                                     return
                                 }
                                 s.loading = false
@@ -137,11 +172,6 @@ korpApp.directive("statsResultCtrl", () => ({
                 s.columns = columns
 
                 s.gridData = data
-                const resultError = data.ERROR
-                if (resultError != undefined && !resultError) {
-                    s.resultError(data)
-                    return
-                }
 
                 if (data[0].total_value[0] === 0) {
                     s.no_hits = true

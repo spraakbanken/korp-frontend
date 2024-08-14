@@ -3,7 +3,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { expandOperators } from "@/cqp_parser/cqp"
 import settings from "@/settings"
 import _ from "lodash"
-import { KorpResponse, ProgressReport, ProgressResponse, ResponseBase } from "@/backend/types"
+import { ProgressReport, ProgressResponse, ResponseBase } from "@/backend/types"
 
 /** The Proxy classes wrap API requests with pre-/postprocessing and progress reporting. */
 export default abstract class BaseProxy<R extends {} = {}> {
