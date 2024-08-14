@@ -72,4 +72,9 @@ export type SearchExample = {
     params: HashParams
 }
 
-export type WordPictureDef = Array<"_" | { rel: string; css_class: string }>
+export type WordPictureDef = (WordPictureDefItem | "_")[]
+export type WordPictureDefItem = {
+    rel: string
+    css_class?: string
+    field_reverse?: boolean
+}

@@ -1,19 +1,62 @@
 /** @format */
 import _ from "lodash"
+import angular, { IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
-import lemgramProxyFactory from "@/backend/lemgram-proxy"
+import lemgramProxyFactory, { ApiRelation, KorpRelationsResponse, LemgramProxy } from "@/backend/lemgram-proxy"
 import { isLemgram, lemgramToHtml, unregescape } from "@/util"
+import { RootScope } from "@/root-scope.types"
+import { LocationService } from "@/urlparams"
+import { KorpResponse, ProgressReport } from "@/backend/types"
+import { WordPictureDefItem } from "@/settings/app-settings.types"
 
-const korpApp = angular.module("korpApp")
+type WordpicCtrlScope = IScope & {
+    $parent: any
+    $root: RootScope
+    aborted: boolean
+    activate: () => void
+    countCorpora: () => number | null
+    data: unknown
+    drawTables: (tables: [string, string][], data: ApiRelation[]) => void
+    error: boolean
+    hasData: boolean
+    hitSettings: `${number}`[]
+    ignoreAbort: boolean
+    isActive: () => boolean
+    loading: boolean
+    makeRequest: () => void
+    noHits: boolean
+    onentry: () => void
+    onexit: () => void
+    onProgress: (progressObj: ProgressReport) => void
+    progress: number
+    proxy: LemgramProxy
+    renderResult: (data: KorpResponse<KorpRelationsResponse>, word: string) => void
+    renderTables: (query: string, data: ApiRelation[]) => void
+    renderWordTables: (query: string, data: ApiRelation[]) => void
+    resetView: () => void
+    settings: {
+        showNumberOfHits: `${number}`
+    }
+    tabindex: number
+    wordPic: boolean
+    newDynamicTab: any // TODO Defined in tabHash (services.js)
+    closeDynamicTab: any // TODO Defined in tabHash (services.js)
+}
 
-korpApp.directive("wordpicCtrl", () => ({
+angular.module("korpApp").directive("wordpicCtrl", () => ({
     controller: [
         "$scope",
         "$rootScope",
         "$location",
         "$timeout",
         "searches",
-        ($scope, $rootScope, $location, $timeout, searches) => {
+        (
+            $scope: WordpicCtrlScope,
+            $rootScope: RootScope,
+            $location: LocationService,
+            $timeout: ITimeoutService,
+            searches
+        ) => {
             const s = $scope
             s.tabindex = 3
             s.proxy = lemgramProxyFactory.create()
@@ -112,7 +155,7 @@ korpApp.directive("wordpicCtrl", () => ({
             s.renderResult = (data, query) => {
                 s.loading = false
                 s.progress = 100
-                if (data.ERROR != undefined) {
+                if ("ERROR" in data) {
                     s.hasData = false
                     s.error = true
                     return
@@ -134,7 +177,7 @@ korpApp.directive("wordpicCtrl", () => ({
 
             s.renderWordTables = (word, data) => {
                 const wordlist = $.map(data, function (item) {
-                    const output = []
+                    const output: [string, string][] = []
                     if (item.head.split("_")[0] === word) {
                         output.push([item.head, item.headpos.toLowerCase()])
                     }
@@ -173,22 +216,25 @@ korpApp.directive("wordpicCtrl", () => ({
             }
 
             s.drawTables = (tables, data) => {
-                const inArray = function (rel, orderList) {
+                const inArray = function (
+                    rel: WordPictureDefItem,
+                    orderList: (WordPictureDefItem | "_")[]
+                ): { i: number; type: "head" | "dep" } {
                     const i = _.findIndex(
                         orderList,
-                        (item) => (item.field_reverse || false) === (rel.field_reverse || false) && item.rel === rel.rel
+                        (item) =>
+                            item != "_" &&
+                            (item.field_reverse || false) === (rel.field_reverse || false) &&
+                            item.rel === rel.rel
                     )
                     const type = rel.field_reverse ? "head" : "dep"
-                    return {
-                        i,
-                        type,
-                    }
+                    return { i, type }
                 }
 
                 const tagsetTrans = _.invert(settings["word_picture_tagset"])
 
                 const res = _.map(tables, function ([token, wordClass]) {
-                    const getRelType = (item) => ({
+                    const getRelType = (item: ApiRelation): WordPictureDefItem => ({
                         rel: tagsetTrans[item.rel.toLowerCase()],
                         field_reverse: item.dep === token,
                     })
@@ -199,7 +245,9 @@ korpApp.directive("wordpicCtrl", () => ({
                     if (settings["word_picture_conf"][wordClass] == null) {
                         return
                     }
-                    let orderArrays = [[], [], []]
+
+                    // TODO Type this unruly thing.
+                    let orderArrays: any = [[], [], []]
                     $.each(data, (index, item) => {
                         $.each(settings["word_picture_conf"][wordClass] || [], (i, rel_type_list) => {
                             const list = orderArrays[i]
@@ -245,7 +293,7 @@ korpApp.directive("wordpicCtrl", () => ({
                                 const { rel } = table[0]
                                 const { show_rel } = table[0]
                                 const all_lemgrams = _.uniq(
-                                    _.map(_.map(table, show_rel), function (item) {
+                                    _.map(_.map(table, show_rel), function (item: string) {
                                         if (isLemgram(item)) {
                                             return item.slice(0, -1)
                                         } else {

@@ -69,13 +69,13 @@ type KorpRelationsParams = {
     incremental?: boolean
 }
 
-type KorpRelationsResponse = {
+export type KorpRelationsResponse = {
     relations: ApiRelation[]
     /** Execution time in seconds */
     time: number
 }
 
-type ApiRelation = {
+export type ApiRelation = {
     dep: string
     depextra: string
     deppos: string
@@ -85,6 +85,7 @@ type ApiRelation = {
     /** Lexicographer's mutual information score */
     mi: number
     rel: string
+    show_rel?: "head" | "dep" // This gets set later, in wordpicCtrl
     /** List of IDs, for getting the source sentences */
     source: string[]
 }
