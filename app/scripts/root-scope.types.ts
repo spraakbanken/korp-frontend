@@ -30,5 +30,5 @@ export type RootScope = IRootScopeService & {
 
 export type KwicTab = {
     queryParams: KorpQueryRequestOptions
-    readingMode: boolean
+    readingMode?: boolean
 }
