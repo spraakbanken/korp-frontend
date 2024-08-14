@@ -14,17 +14,17 @@ type ScopeBase = Omit<KwicCtrlScope, "makeRequest"> & IRepeatScope
 
 type ExampleCtrlScope = ScopeBase & {
     $parent: { $parent: any }
-    closeDynamicTab: () => void
     closeTab: (idx: number, e: Event) => void
     exampleReadingMode?: boolean
     hitsPictureData?: any
     hitspictureClick?: (page: number) => void
     kwicTab: KwicTab
     makeRequest: (isPaging?: boolean) => JQuery.jqXHR<KorpResponse<KorpQueryResponse>>
-    newDynamicTab: () => void
     onExampleProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
     setupReadingWatch: () => void
     superRenderResult: (data: KorpResponse<KorpQueryResponse>) => void
+    newDynamicTab: any // TODO Defined in tabHash (services.js)
+    closeDynamicTab: any // TODO Defined in tabHash (services.js)
 }
 
 class ExampleCtrl extends KwicCtrl {
