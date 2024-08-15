@@ -3,7 +3,7 @@ import _ from "lodash"
 import angular, { IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import lemgramProxyFactory, { ApiRelation, KorpRelationsResponse, LemgramProxy } from "@/backend/lemgram-proxy"
-import { isLemgram, lemgramToHtml, unregescape } from "@/util"
+import { isLemgram, lemgramToString, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { KorpResponse, ProgressReport } from "@/backend/types"
@@ -15,7 +15,7 @@ type WordpicCtrlScope = IScope & {
     aborted: boolean
     activate: () => void
     countCorpora: () => number | null
-    data: unknown
+    data: TableDrawData[]
     drawTables: (tables: [string, string][], data: ApiRelation[]) => void
     error: boolean
     hasData: boolean
@@ -41,6 +41,26 @@ type WordpicCtrlScope = IScope & {
     wordPic: boolean
     newDynamicTab: any // TODO Defined in tabHash (services.js)
     closeDynamicTab: any // TODO Defined in tabHash (services.js)
+}
+
+/** A relation item modified for showing. */
+type ShowableApiRelation = ApiRelation & {
+    /** Direction of relation */
+    show_rel: "head" | "dep"
+}
+
+type TableData = {
+    table: ApiRelation[] | { word: string }
+    rel?: string
+    show_rel?: string
+    all_lemgrams?: string[]
+}
+
+type TableDrawData = {
+    token: string
+    wordClass: string
+    wordClassShort: string
+    data: TableData[][]
 }
 
 angular.module("korpApp").directive("wordpicCtrl", () => ({
@@ -205,17 +225,13 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             }
 
             s.renderTables = (lemgram, data) => {
-                let wordClass
-                if (data[0].head === lemgram) {
-                    wordClass = data[0].headpos
-                } else {
-                    wordClass = data[0].deppos
-                }
+                const wordClass = data[0].head === lemgram ? data[0].headpos : data[0].deppos
                 s.drawTables([[lemgram, wordClass]], data)
                 s.loading = false
             }
 
             s.drawTables = (tables, data) => {
+                /** Find a given relation in the wordpic config structure. */
                 const inArray = function (
                     rel: WordPictureDefItem,
                     orderList: (WordPictureDefItem | "_")[]
@@ -233,12 +249,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
                 const tagsetTrans = _.invert(settings["word_picture_tagset"])
 
-                const res = _.map(tables, function ([token, wordClass]) {
-                    const getRelType = (item: ApiRelation): WordPictureDefItem => ({
-                        rel: tagsetTrans[item.rel.toLowerCase()],
-                        field_reverse: item.dep === token,
-                    })
-
+                const res: TableDrawData[] = _.map(tables, function ([token, wordClass]) {
                     const wordClassShort = wordClass.toLowerCase()
                     wordClass = _.invert(settings["word_picture_tagset"])[wordClassShort]
 
@@ -246,60 +257,60 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                         return
                     }
 
-                    // TODO Type this unruly thing.
-                    let orderArrays: any = [[], [], []]
-                    $.each(data, (index, item) => {
-                        $.each(settings["word_picture_conf"][wordClass] || [], (i, rel_type_list) => {
-                            const list = orderArrays[i]
-                            const rel = getRelType(item)
-
-                            if (!rel) {
-                                return
+                    // Sort the list of relations according to configuration.
+                    // Up to three sections. Each section is one or a few tables, each table has a number of rows.
+                    const sections: ShowableApiRelation[][][] = [[], [], []]
+                    data.forEach((item) => {
+                        settings["word_picture_conf"][wordClass].forEach((rel_type_list, i) => {
+                            const section = sections[i]
+                            const rel = {
+                                rel: tagsetTrans[item.rel.toLowerCase()],
+                                field_reverse: item.dep === token,
                             }
+
                             const ret = inArray(rel, rel_type_list)
                             if (ret.i === -1) {
                                 return
                             }
-                            if (!list[ret.i]) {
-                                list[ret.i] = []
+                            if (!section[ret.i]) {
+                                section[ret.i] = []
                             }
-                            item.show_rel = ret.type
-                            list[ret.i].push(item)
+                            const itemModified = {
+                                ...item,
+                                show_rel: ret.type,
+                            }
+                            section[ret.i].push(itemModified)
                         })
                     })
 
-                    $.each(orderArrays, function (i, unsortedList) {
-                        $.each(unsortedList, function (_, list) {
-                            if (list) {
-                                list.sort((first, second) => second.mi - first.mi)
-                            }
+                    // In this iteration, one element in each section is the search word, not a table of relations.
+                    const sectionsWithSearchWord: (ShowableApiRelation[] | { word: string })[][] = []
+                    sections.forEach((section, i) => {
+                        // Sort each table by MI
+                        section.forEach((table) => {
+                            if (table) table.sort((first, second) => second.mi - first.mi)
                         })
+                        sectionsWithSearchWord[i] = section
 
-                        if (settings["word_picture_conf"][wordClass][i] && unsortedList.length) {
-                            const toIndex = $.inArray("_", settings["word_picture_conf"][wordClass][i])
-                            if (isLemgram(token)) {
-                                unsortedList[toIndex] = { word: token.split("..")[0].replace(/_/g, " ") }
-                            } else {
-                                unsortedList[toIndex] = { word: lemgramToHtml(token) }
+                        if (settings["word_picture_conf"][wordClass][i] && section.length) {
+                            const toIndex = settings["word_picture_conf"][wordClass][i].indexOf("_")
+                            sectionsWithSearchWord[i][toIndex] = {
+                                word: isLemgram(token) ? lemgramToString(token) : token,
                             }
                         }
 
-                        unsortedList = _.filter(unsortedList, (item, index) => Boolean(item))
+                        sectionsWithSearchWord[i] = section.filter(Boolean)
                     })
 
-                    orderArrays = _.map(orderArrays, (section, i) =>
-                        _.map(section, function (table, j) {
-                            if (table && table[0]) {
-                                const { rel } = table[0]
-                                const { show_rel } = table[0]
+                    // Convert each table to an object and add info about the relation type
+                    const dataOut: TableData[][] = sectionsWithSearchWord.map((section) =>
+                        section.map((table) => {
+                            if (Array.isArray(table) && table[0]) {
+                                const { rel, show_rel } = table[0]
                                 const all_lemgrams = _.uniq(
-                                    _.map(_.map(table, show_rel), function (item: string) {
-                                        if (isLemgram(item)) {
-                                            return item.slice(0, -1)
-                                        } else {
-                                            return item
-                                        }
-                                    })
+                                    _.map(table, show_rel).map((item: string) =>
+                                        isLemgram(item) ? item.slice(0, -1) : item
+                                    )
                                 )
                                 return { table, rel, show_rel, all_lemgrams }
                             } else {
@@ -309,10 +320,10 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     )
 
                     return {
-                        token: token,
-                        wordClass: wordClass,
-                        wordClassShort: wordClassShort,
-                        data: orderArrays,
+                        token,
+                        wordClass,
+                        wordClassShort,
+                        data: dataOut,
                     }
                 })
 
@@ -326,23 +337,14 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             s.hitSettings = ["15"]
             s.settings = { showNumberOfHits: "15" }
 
-            const prepareScope = (data) => {
+            const prepareScope = (data: TableDrawData[]) => {
                 s.data = data
 
-                let max = 0
-                _.map(data, (form) =>
-                    _.map(form, function (categories) {
-                        if (categories instanceof Array) {
-                            return _.map(categories, (cols) =>
-                                _.map(cols, function (col) {
-                                    if (col.table && col.table.length > max) {
-                                        max = col.table.length
-                                    }
-                                })
-                            )
-                        }
-                    })
+                // Find length of longest table.
+                const lengths = data.map((section) =>
+                    section.data.map((col) => col.map((table) => (Array.isArray(table.table) ? table.table.length : 0)))
                 )
+                const max = Math.max(...lengths.flat(2))
 
                 s.hitSettings = []
                 if (max < 15) {

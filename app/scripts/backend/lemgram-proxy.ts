@@ -85,7 +85,6 @@ export type ApiRelation = {
     /** Lexicographer's mutual information score */
     mi: number
     rel: string
-    show_rel?: "head" | "dep" // This gets set later, in wordpicCtrl
     /** List of IDs, for getting the source sentences */
     source: string[]
 }
