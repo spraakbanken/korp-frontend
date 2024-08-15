@@ -13,7 +13,7 @@ export type Filter = {
     corpora: string[]
 }
 
-export type AttributeOption = {
+export type AttributeOption = Partial<Attribute> & {
     group: "word" | "word_attr" | "sentence_attr"
     value: string
     label: LangString
@@ -360,17 +360,12 @@ export class CorpusListing {
     }
 
     getStructAttributeGroups(lang: string, setOperator: "union" | "intersection"): AttributeOption[] {
-        let allAttrs
-        if (setOperator === "union") {
-            allAttrs = this.getStructAttrs(lang)
-        } else {
-            allAttrs = this.getStructAttrsIntersection(lang)
-        }
+        const allAttrs = setOperator === "union" ? this.getStructAttrs(lang) : this.getStructAttrsIntersection(lang)
 
         const common = this.commonAttributes
 
         let sentAttrs: AttributeOption[] = []
-        const object = _.extend({}, common, allAttrs)
+        const object = { ...common, ...allAttrs }
         for (let key in object) {
             const obj = object[key]
             if (obj["display_type"] !== "hidden") {

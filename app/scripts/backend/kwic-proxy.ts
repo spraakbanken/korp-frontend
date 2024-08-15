@@ -2,10 +2,10 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse } from "@/backend/types"
+import type { AjaxSettings, KorpResponse, ProgressReport, ProgressResponse } from "@/backend/types"
 import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 
-export class KwicProxy extends BaseProxy {
+export class KwicProxy extends BaseProxy<KorpQueryResponse> {
     foundKwic: boolean
     prevCQP?: string
     prevParams: KorpQueryParams | null
@@ -22,10 +22,10 @@ export class KwicProxy extends BaseProxy {
     }
 
     makeRequest(
-        options: MakeRequestOptions,
+        options: KorpQueryRequestOptions,
         page: number,
-        progressCallback,
-        kwicCallback
+        progressCallback: (data: ProgressReport<KorpQueryResponse>) => void,
+        kwicCallback: (data: KorpResponse<KorpQueryResponse>) => void
     ): JQuery.jqXHR<KorpResponse<KorpQueryResponse>> {
         const self = this
         this.foundKwic = false
@@ -105,10 +105,11 @@ export class KwicProxy extends BaseProxy {
                 self.prevUrl = self.makeUrlWithParams(this.url, data)
             },
 
-            success(data, status, jqxhr) {
+            success(data: KorpQueryResponse, status, jqxhr) {
                 self.queryData = data.query_data
                 self.cleanup()
-                if (data.incremental === false || !this.foundKwic) {
+                // TODO Should be `options.ajaxParams.incremental`?
+                if (data["incremental"] === false || !this.foundKwic) {
                     return kwicCallback(data)
                 }
             },
@@ -118,9 +119,9 @@ export class KwicProxy extends BaseProxy {
                 if (progressObj == null) return
 
                 progressCallback(progressObj)
-                if (progressObj["struct"].kwic) {
+                if ("kwic" in progressObj.struct) {
                     this.foundKwic = true
-                    return kwicCallback(progressObj["struct"])
+                    return kwicCallback(progressObj.struct as KorpQueryResponse)
                 }
             },
         }
@@ -153,9 +154,14 @@ export type KorpQueryParams = {
     [cqpn: `cqp${number}`]: string
     expand_prequeries?: boolean
     incremental?: boolean
+    query_data?: string
 }
 
-type MakeRequestOptions = {
+export type KorpQueryRequestOptions = {
+    // TODO Should start,end,command really exist here as well as under ajaxParams?
+    command?: string
+    start?: number
+    end?: number
     ajaxParams?: KorpQueryParams & {
         command?: string
     }
@@ -171,6 +177,8 @@ export type KorpQueryResponse = {
     hits: number
     /** Number of hits for each corpus */
     corpus_hits: Record<string, number>
+    /** Order of corpora in result */
+    corpus_order: string[]
     /** Execution time in seconds */
     time: number
     /** A hash of this query */

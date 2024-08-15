@@ -1,14 +1,20 @@
 /** @format */
 
-/** A Korp response is either successful or has error info. */
-export type KorpResponse<T> = (T | KorpErrorResponse) & {
+/** A Korp response is either successful or has error info */
+export type KorpResponse<R> = ResponseBase & (R | Error)
+
+/** All responses have time info. */
+export type ResponseBase = {
     /** Execution time in seconds */
     time?: number
 }
 
-export type KorpErrorResponse = {
+/** An error response has an error message. */
+export type Error = {
     ERROR: {
+        /** Name of exception */
         type: string
+        /** Error message, human-readable but technical */
         value: string
     }
 }
@@ -23,24 +29,21 @@ export type ProgressResponse = {
     progress_corpora?: string[]
     /** Repeated for each corpus (or sometimes batch of corpora?) Hits can be 0. These are returned a few at a time. */
     [progress_n: `progress${number}`]: string | { corpus: string; hits: number }
-    /** Other parts of the response, not related to progress tracking. */
-    [k: string]: any
 }
 
 /** Extends JQuery `jaxSettings` with stuff we use. */
-export type AjaxSettings<T = any> = JQuery.AjaxSettings<T> & {
-    progress?: (data: T, e: any) => void
+export type AjaxSettings<TContext = any> = JQuery.AjaxSettings<TContext> & {
+    progress?: (this: TContext, data: any, e: any) => void
 }
 
-export type ProgressReport = {
-    struct: ProgressResponse
+export type ProgressReport<R = {}> = {
+    /** Response data */
+    struct: ResponseBase & ProgressResponse & Partial<R>
     /** How many percent of the material has been searched. */
     stats: number
     /** How many search hits so far. */
     total_results: number
 }
-
-export type ProgressCallback = (ProgressReport) => void
 
 /** A string consisting of numbers. */
 export type NumericString = `${number}`

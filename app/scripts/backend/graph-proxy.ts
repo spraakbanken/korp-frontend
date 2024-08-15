@@ -6,7 +6,7 @@ import { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } fro
 import { AbsRelTuple } from "@/statistics.types"
 import { Factory, httpConfAddMethod } from "@/util"
 
-export class GraphProxy extends BaseProxy {
+export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
     granularity: Granularity
     prevParams: KorpCountTimeParams
     prevRequest: AjaxSettings

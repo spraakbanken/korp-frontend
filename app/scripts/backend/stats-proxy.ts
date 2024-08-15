@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressCallback } from "@/backend/types"
+import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressReport } from "@/backend/types"
 import { StatsNormalized, StatsColumn, StatisticsWorkerResult } from "@/statistics.types"
 import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 import { statisticsService } from "@/statistics"
@@ -25,7 +25,7 @@ export function normalizeStatsData(data: KorpStatsResponse): StatsNormalized {
     return { ...data, combined, corpora }
 }
 
-export class StatsProxy extends BaseProxy {
+export class StatsProxy extends BaseProxy<KorpStatsResponse> {
     prevParams: KorpStatsParams | null
     prevRequest: AjaxSettings | null
     prevUrl?: string
@@ -64,7 +64,10 @@ export class StatsProxy extends BaseProxy {
         return parameters
     }
 
-    makeRequest(cqp: string, callback: ProgressCallback): JQuery.Promise<StatisticsWorkerResult> {
+    makeRequest(
+        cqp: string,
+        callback: (data: ProgressReport<KorpStatsResponse>) => void
+    ): JQuery.Promise<StatisticsWorkerResult> {
         const self = this
         this.resetRequest()
         const reduceval = locationSearchGet("stats_reduce") || "word"

@@ -1,16 +1,45 @@
 /** @format */
 import _ from "lodash"
+import angular, { IScope } from "angular"
 import settings from "@/settings"
 import { stringifyFunc } from "@/stringify.js"
 import { locAttribute } from "@/i18n"
+import { RootScope } from "@/root-scope.types"
+import { SavedSearch } from "@/local-storage"
 
-const korpApp = angular.module("korpApp")
+type CompareCtrlScope = IScope & {
+    closeTab: (index: number, e: Event) => void
+    cmp1: SavedSearch
+    cmp2: SavedSearch
+    error: boolean
+    loading: boolean
+    max: number
+    promise: JQuery.Promise<CompareResult>
+    resultOrder: (item: Item) => number
+    reduce: string[]
+    rowClick: (row: Item, cmp_index: number) => void
+    stringify: ((x: string) => string)[]
+    tables: Tables
+    newDynamicTab: any // TODO Defined in tabHash (services.js)
+    closeDynamicTab: any // TODO Defined in tabHash (services.js)
+}
 
-korpApp.directive("compareCtrl", () => ({
+// TODO These probably belong to the "requestCompare" function of the "backend" service (services.js)
+type Item = {
+    key: string
+    loglike: number
+    abs: number
+    elems: string[]
+    tokenLists: string[][]
+}
+type CompareResult = [Tables, number, SavedSearch, SavedSearch, string[]]
+type Tables = { positive: Item[]; negative: Item[] }
+
+angular.module("korpApp").directive("compareCtrl", () => ({
     controller: [
         "$scope",
         "$rootScope",
-        ($scope, $rootScope) => {
+        ($scope: CompareCtrlScope, $rootScope: RootScope) => {
             const s = $scope
             const r = $rootScope
             s.loading = true
@@ -25,8 +54,8 @@ korpApp.directive("compareCtrl", () => ({
             }
 
             return s.promise.then(
-                function (...args) {
-                    const [tables, max, cmp1, cmp2, reduce] = args[0]
+                (result) => {
+                    const [tables, max, cmp1, cmp2, reduce] = result
                     s.loading = false
 
                     s.tables = tables
@@ -35,7 +64,7 @@ korpApp.directive("compareCtrl", () => ({
                     let cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora))
                     const attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs())
 
-                    let stringify = angular.identity
+                    let stringify = (x: string) => x
                     // currently we only support one attribute to reduce/group by, so simplify by only checking first item
                     const reduceAttrName = _.trimStart(reduce[0], "_.")
                     if (attributes[reduceAttrName]) {
@@ -135,7 +164,7 @@ korpApp.directive("compareCtrl", () => ({
                                 cqp: cmp.cqp,
                                 cqp2: cqp,
                                 corpus: cl.stringifySelected(),
-                                show_struct: _.keys(cl.getStructAttrs()),
+                                show_struct: _.keys(cl.getStructAttrs()).join(","),
                                 expand_prequeries: false,
                             },
                         }

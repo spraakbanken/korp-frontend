@@ -7,6 +7,8 @@ import { LangMap } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
 import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
+import { Attribute } from "./settings/config.types"
+import { AttributeOption } from "./corpus_listing"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -121,6 +123,9 @@ export class SelectionManager {
         return this.selected.length > 0
     }
 }
+
+export const getCqpAttribute = (option: AttributeOption): string =>
+    option.is_struct_attr ? `_.${option.value}` : option.value
 
 /**
  * Format a number of "relative hits" (hits per 1 million tokens), using exactly one decimal.

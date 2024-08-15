@@ -1,15 +1,45 @@
 /** @format */
+import angular, { IRepeatScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import { KwicCtrl } from "./kwic_controller"
+import { KwicCtrl, KwicCtrlScope } from "./kwic_controller"
+import { LocationService } from "@/urlparams"
+import { KwicTab, RootScope } from "@/root-scope.types"
+import { KorpResponse, ProgressReport } from "@/backend/types"
+import { KorpQueryResponse } from "@/backend/kwic-proxy"
 
 const korpApp = angular.module("korpApp")
 
+type ScopeBase = Omit<KwicCtrlScope, "makeRequest"> & IRepeatScope
+
+type ExampleCtrlScope = ScopeBase & {
+    $parent: { $parent: any }
+    closeTab: (idx: number, e: Event) => void
+    exampleReadingMode?: boolean
+    hitsPictureData?: any
+    hitspictureClick?: (page: number) => void
+    kwicTab: KwicTab
+    makeRequest: (isPaging?: boolean) => JQuery.jqXHR<KorpResponse<KorpQueryResponse>>
+    onExampleProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
+    setupReadingWatch: () => void
+    superRenderResult: (data: KorpResponse<KorpQueryResponse>) => void
+    newDynamicTab: any // TODO Defined in tabHash (services.js)
+    closeDynamicTab: any // TODO Defined in tabHash (services.js)
+}
+
 class ExampleCtrl extends KwicCtrl {
+    scope: ExampleCtrlScope
+
     static initClass() {
         this.$inject = ["$scope", "utils", "$location", "$rootScope", "$timeout"]
     }
-    constructor(scope, utils, $location, $rootScope, $timeout) {
+    constructor(
+        scope: ExampleCtrlScope,
+        utils: any,
+        $location: LocationService,
+        $rootScope: RootScope,
+        $timeout: ITimeoutService
+    ) {
         super(scope, utils, $location, $rootScope, $timeout)
         const s = this.scope
         const r = this.$rootScope
@@ -73,7 +103,7 @@ class ExampleCtrl extends KwicCtrl {
         }
 
         s.makeRequest = () => {
-            const items_per_page = parseInt($location.search().hpp || settings["hits_per_page_default"])
+            const items_per_page = Number($location.search().hpp || settings["hits_per_page_default"])
             const opts = s.kwicTab.queryParams
 
             // example tab cannot handle incremental = true
@@ -111,7 +141,7 @@ class ExampleCtrl extends KwicCtrl {
                 (progressObj) => $timeout(() => s.onExampleProgress(progressObj)),
                 (data) => {
                     $timeout(() => {
-                        s.renderResult(data, opts.cqp)
+                        s.renderResult(data)
                         s.renderCompleteResult(data)
                         s.loading = false
                     })

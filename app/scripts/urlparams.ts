@@ -6,7 +6,7 @@ import { ILocationService } from "angular"
 export type LocationService = Omit<ILocationService, "search"> & {
     search(): HashParams
     search(search: HashParams): LocationService
-    search<K extends keyof HashParams>(search: K, paramValue: HashParams[K]): LocationService
+    search<K extends keyof HashParams>(search: K, paramValue: HashParams[K] | any): LocationService
 }
 
 /** Supported parameters for the `?<key>=<value>` part of the URL. */
@@ -34,6 +34,7 @@ export type HashParams = {
     /** Current page number of the search result */
     page?: string
     parallel_corpora?: string
+    random_seed?: `${number}`
     /** Whether the reading mode is enabled */
     reading_mode?: boolean
     /**

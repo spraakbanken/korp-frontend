@@ -5,7 +5,7 @@ import BaseProxy from "@/backend/base-proxy"
 import type { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
 import { Factory, httpConfAddMethod } from "@/util"
 
-export class TimeProxy extends BaseProxy {
+export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
     makeRequest(): JQueryDeferred<TimeData> {
         const data: KorpTimespanParams = {
             granularity: "y",
