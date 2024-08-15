@@ -1,0 +1,73 @@
+/** @format */
+import { HashParams, LocationService } from "@/urlparams"
+import angular, { IScope } from "angular"
+
+export type UtilsService = {
+    /** Set up sync between a url param and a scope variable. */
+    setupHash: (scope: IScope, config: SetupHashConfigItem[]) => void
+}
+
+type SetupHashConfigItem<K extends keyof HashParams = keyof HashParams, T = any> = {
+    /** Name of url param */
+    key: K
+    /** Name of scope variable; defaults to `key` */
+    scope_name?: string
+    /** A function on the scope to pass value to, instead of setting `scope_name` */
+    scope_func?: string
+    /** Expression to watch for changes; defaults to `scope_name` */
+    expr?: string
+    /** Default value of the scope variable, corresponding to the url param being empty */
+    default?: HashParams[K]
+    /** Runs when the value is changed in scope or url */
+    post_change?: (val: HashParams[K]) => void
+    /** Parse url param value */
+    val_in?: (val: HashParams[K]) => T
+    /** Stringify scope variable value */
+    val_out?: (val: T) => HashParams[K]
+}
+
+angular.module("korpApp").factory("utils", [
+    "$location",
+    ($location: LocationService): UtilsService => ({
+        setupHash(scope, config) {
+            // Sync from url to scope
+            const onWatch = () =>
+                config.forEach((obj) => {
+                    let val = $location.search()[obj.key]
+                    if (val == null) {
+                        if ("default" in obj) {
+                            val = obj.default
+                        } else {
+                            if (obj.post_change) obj.post_change(val)
+                            return
+                        }
+                    }
+
+                    val = obj.val_in ? obj.val_in(val) : val
+
+                    if ("scope_name" in obj) {
+                        scope[obj.scope_name] = val
+                    } else if ("scope_func" in obj) {
+                        scope[obj.scope_func](val)
+                    } else {
+                        scope[obj.key] = val
+                    }
+                })
+
+            onWatch()
+            scope.$watch(() => $location.search(), onWatch)
+
+            // Sync from scope to url
+            config.forEach((obj) =>
+                scope.$watch(obj.expr || obj.scope_name || obj.key, (val: any) => {
+                    val = obj.val_out ? obj.val_out(val) : val
+                    if (val === obj.default) {
+                        val = null
+                    }
+                    $location.search(obj.key, val || null)
+                    if (obj.post_change) obj.post_change(val)
+                })
+            )
+        },
+    }),
+])

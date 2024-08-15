@@ -77,14 +77,14 @@ angular.module("korpApp").component("simpleSearch", {
     `,
     controller: [
         "$location",
-        "backend",
         "$rootScope",
         "$scope",
         "searches",
         "compareSearches",
+        "lexicons",
         "$uibModal",
         "$timeout",
-        function ($location, backend, $rootScope, $scope, searches, compareSearches, $uibModal, $timeout) {
+        function ($location, $rootScope, $scope, searches, compareSearches, lexicons, $uibModal, $timeout) {
             const ctrl = this
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
@@ -303,7 +303,7 @@ angular.module("korpApp").component("simpleSearch", {
                     }
 
                     if (sense || saldo) {
-                        backend.relatedWordSearch(unregescape(search.val)).then(function (data) {
+                        lexicons.relatedWordSearch(unregescape(search.val)).then(function (data) {
                             ctrl.relatedObj = data
                             if (data.length > 2 && data[0].label == "Excreting") {
                                 let [first, second, ...rest] = data

@@ -8,7 +8,7 @@ import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { KorpResponse, ProgressReport } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
-import { SearchesService } from "@/services"
+import { SearchesService } from "@/services/searches"
 
 type WordpicCtrlScope = IScope & {
     $parent: any

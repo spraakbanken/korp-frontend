@@ -7,7 +7,7 @@ import "@/components/newsdesk"
 import "@/components/search-examples"
 import settings from "@/settings"
 import { RootScope } from "@/root-scope.types"
-import { SearchesService } from "@/services"
+import { SearchesService } from "@/services/searches"
 
 export default angular.module("korpApp").component("frontpage", {
     template: html`

@@ -6,7 +6,7 @@ import { stringifyFunc } from "@/stringify.js"
 import { locAttribute } from "@/i18n"
 import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { CompareItem, CompareResult, CompareTables } from "@/services"
+import { CompareItem, CompareResult, CompareTables } from "@/services/backend"
 
 type CompareCtrlScope = IScope & {
     closeTab: (index: number, e: Event) => void
