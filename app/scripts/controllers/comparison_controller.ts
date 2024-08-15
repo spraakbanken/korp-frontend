@@ -6,6 +6,7 @@ import { stringifyFunc } from "@/stringify.js"
 import { locAttribute } from "@/i18n"
 import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
+import { CompareItem, CompareResult, CompareTables } from "@/services/backend"
 
 type CompareCtrlScope = IScope & {
     closeTab: (index: number, e: Event) => void
@@ -15,25 +16,14 @@ type CompareCtrlScope = IScope & {
     loading: boolean
     max: number
     promise: JQuery.Promise<CompareResult>
-    resultOrder: (item: Item) => number
+    resultOrder: (item: CompareItem) => number
     reduce: string[]
-    rowClick: (row: Item, cmp_index: number) => void
+    rowClick: (row: CompareItem, cmp_index: number) => void
     stringify: ((x: string) => string)[]
-    tables: Tables
+    tables: CompareTables
     newDynamicTab: any // TODO Defined in tabHash (services.js)
     closeDynamicTab: any // TODO Defined in tabHash (services.js)
 }
-
-// TODO These probably belong to the "requestCompare" function of the "backend" service (services.js)
-type Item = {
-    key: string
-    loglike: number
-    abs: number
-    elems: string[]
-    tokenLists: string[][]
-}
-type CompareResult = [Tables, number, SavedSearch, SavedSearch, string[]]
-type Tables = { positive: Item[]; negative: Item[] }
 
 angular.module("korpApp").directive("compareCtrl", () => ({
     controller: [

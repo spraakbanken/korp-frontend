@@ -10,7 +10,7 @@ interface Point {
     lat: number
     lng: number
 }
-interface MapResult {
+export interface MapResult {
     label: string
     cqp: string
     points: Point[]

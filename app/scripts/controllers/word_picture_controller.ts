@@ -8,6 +8,7 @@ import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { KorpResponse, ProgressReport } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
+import { SearchesService } from "@/services/searches"
 
 type WordpicCtrlScope = IScope & {
     $parent: any
@@ -75,7 +76,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             $rootScope: RootScope,
             $location: LocationService,
             $timeout: ITimeoutService,
-            searches
+            searches: SearchesService
         ) => {
             const s = $scope
             s.tabindex = 3

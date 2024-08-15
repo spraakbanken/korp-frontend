@@ -2,7 +2,7 @@
 import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import { html } from "@/util"
+import { html, valfilter } from "@/util"
 
 angular.module("korpApp").component("compareSearch", {
     template: html`
@@ -42,14 +42,13 @@ angular.module("korpApp").component("compareSearch", {
         </div>
     `,
     controller: [
-        "utils",
         "backend",
         "$rootScope",
         "compareSearches",
-        function (utils, backend, $rootScope, compareSearches) {
+        function (backend, $rootScope, compareSearches) {
             const $ctrl = this
 
-            $ctrl.valfilter = utils.valfilter
+            $ctrl.valfilter = valfilter
 
             let prev
             $ctrl.savedSearches = compareSearches.savedSearches

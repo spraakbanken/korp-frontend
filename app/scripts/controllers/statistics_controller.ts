@@ -10,6 +10,7 @@ import { ProgressReport } from "@/backend/types"
 import { Dataset } from "@/statistics_worker"
 import { SearchParams } from "@/statistics.types"
 import { SlickgridColumn } from "@/statistics"
+import { SearchesService } from "@/services/searches"
 
 type StatsResultCtrlScope = IScope & {
     $parent: any
@@ -52,7 +53,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
         (
             $scope: StatsResultCtrlScope,
             $location: LocationService,
-            searches,
+            searches: SearchesService,
             $rootScope: RootScope,
             $timeout: ITimeoutService
         ) => {

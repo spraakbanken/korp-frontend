@@ -2,7 +2,7 @@
 import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import { html } from "@/util"
+import { html, valfilter } from "@/util"
 const minusImage = require("../../../img/minus.png")
 import "@/components/extended/cqp-value"
 
@@ -57,11 +57,10 @@ angular.module("korpApp").component("extendedCqpTerm", {
     controller: [
         "$rootScope",
         "$timeout",
-        "utils",
-        function ($rootScope, $timeout, utils) {
+        function ($rootScope, $timeout) {
             const ctrl = this
 
-            ctrl.valfilter = utils.valfilter
+            ctrl.valfilter = valfilter
 
             ctrl.$onInit = () => {
                 if (angular.equals(ctrl.term, {})) {

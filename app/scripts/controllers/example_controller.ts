@@ -7,6 +7,7 @@ import { LocationService } from "@/urlparams"
 import { KwicTab, RootScope } from "@/root-scope.types"
 import { KorpResponse, ProgressReport } from "@/backend/types"
 import { KorpQueryResponse } from "@/backend/kwic-proxy"
+import { UtilsService } from "@/services/utils"
 
 const korpApp = angular.module("korpApp")
 
@@ -35,7 +36,7 @@ class ExampleCtrl extends KwicCtrl {
     }
     constructor(
         scope: ExampleCtrlScope,
-        utils: any,
+        utils: UtilsService,
         $location: LocationService,
         $rootScope: RootScope,
         $timeout: ITimeoutService
