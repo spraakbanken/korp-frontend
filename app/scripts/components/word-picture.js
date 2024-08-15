@@ -1,7 +1,7 @@
 /** @format */
 import angular from "angular"
 import settings from "@/settings"
-import { html, isLemgram, splitLemgram } from "@/util"
+import { html, isLemgram, lemgramToHtml, splitLemgram } from "@/util"
 import { loc } from "@/i18n"
 
 angular.module("korpApp").component("wordPicture", {
@@ -42,9 +42,15 @@ angular.module("korpApp").component("wordPicture", {
             </div>
             <div class="content_target">
                 <div class="tableContainer radialBkg" ng-repeat="word in $ctrl.data">
+                    <div
+                        class="header"
+                        ng-if="$ctrl.isLemgram(word.token)"
+                        ng-bind-html="$ctrl.lemgramToHtml(word.token) | trust"
+                    ></div>
                     <div class="header" ng-if="!$ctrl.isLemgram(word.token)">
-                        {{word.token}} (<span>{{word.wordClassShort | loc:$root.lang}}</span>)
+                        {{word.token}} ({{word.wordClassShort | loc:$root.lang}})
                     </div>
+
                     <div class="lemgram_section" ng-repeat="section in word.data" ng-init="parentIndex = $index">
                         <div class="lemgram_help">
                             <span
@@ -137,14 +143,9 @@ angular.module("korpApp").component("wordPicture", {
             }
 
             $ctrl.isLemgram = isLemgram
+            $ctrl.lemgramToHtml = lemgramToHtml
 
-            $ctrl.fromLemgram = function (maybeLemgram) {
-                if (isLemgram(maybeLemgram)) {
-                    return splitLemgram(maybeLemgram).form
-                } else {
-                    return maybeLemgram
-                }
-            }
+            $ctrl.fromLemgram = (word) => (isLemgram(word) ? splitLemgram(word).form : word)
 
             $ctrl.getResultHeader = (index, wordClass) => settings["word_picture_conf"][wordClass][index]
 

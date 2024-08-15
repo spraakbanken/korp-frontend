@@ -539,15 +539,11 @@ table {
 }
 
 .lemgram_help {
-  text-transform: capitalize;
   white-space: nowrap;
   margin-top: 10px;
   margin-bottom: 20px;
   > span {
     padding: 10px 10px;
-  }
-  .hit.lemgram {
-    text-transform: initial;
   }
 }
 
