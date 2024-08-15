@@ -11,6 +11,7 @@
   - CorpusListing
   - `$rootScope`
   - Auth module
+  - services (`backend`, `compare-searches`, `lexicons`, `searches`, `utils`)
 
 ### Changed
 
@@ -31,6 +32,7 @@
   - Simple input fields were being ignored [#377](https://github.com/spraakbanken/korp-frontend/issues/377)
   - Handle end seconds correctly [#378](https://github.com/spraakbanken/korp-frontend/issues/378)
   - Parsing of the simple input had been incomplete since way back
+- There was no word picture heading if lemgram
 
 ## [9.6.0] - 2024-05-27
 
