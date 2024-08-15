@@ -1,28 +1,8 @@
 /** @format */
 import _ from "lodash"
-import { regescape, unregescape } from "@/util"
 import { loc } from "./i18n"
 
 const korpApp = angular.module("korpApp")
-
-korpApp.directive("escaper", () => ({
-    link($scope) {
-        let escape, unescape
-        if ($scope.escape === false) {
-            escape = (val) => val
-            unescape = (val) => val
-        } else {
-            const doNotEscape = ["*=", "!*=", "regexp_contains", "not_regexp_contains"]
-            escape = (val) => (!doNotEscape.includes($scope.orObj.op) ? regescape(val) : val)
-            unescape = (val) => (!doNotEscape.includes($scope.orObj.op) ? unregescape(val) : val)
-        }
-
-        $scope.input = unescape($scope.model)
-        $scope.$watch("input", () => ($scope.model = escape($scope.input)))
-
-        $scope.$watch("orObj.op", () => ($scope.model = escape($scope.input)))
-    },
-}))
 
 korpApp.directive("searchSubmit", [
     "$rootElement",
