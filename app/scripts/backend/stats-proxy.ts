@@ -193,7 +193,7 @@ type KorpStatsParams = {
 }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count/get */
-type KorpStatsResponse = {
+export type KorpStatsResponse = {
     corpora: {
         [name: string]: StatsColumn | StatsColumn[]
     }

@@ -6,6 +6,7 @@ import kwicProxyFactory, { ApiKwic, KorpQueryParams, KorpQueryResponse, type Kwi
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { KorpResponse, ProgressReport } from "@/backend/types"
+import { UtilsService } from "@/services"
 
 angular.module("korpApp").directive("kwicCtrl", () => ({ controller: KwicCtrl }))
 
@@ -54,19 +55,15 @@ export class KwicCtrl implements IController {
     location: LocationService
     scope: KwicCtrlScope
     $rootScope: RootScope
-    utils: any
+    utils: UtilsService
 
     static initClass() {
         this.$inject = ["$scope", "utils", "$location", "$rootScope", "$timeout"]
     }
 
     setupHash() {
-        return this.utils.setupHash(this.scope, [
-            {
-                key: "page",
-                val_in: Number,
-            },
-        ])
+        // Sync url param for page number
+        return this.utils.setupHash(this.scope, [{ key: "page", val_in: Number }])
     }
 
     initPage() {
@@ -90,7 +87,7 @@ export class KwicCtrl implements IController {
     }
     constructor(
         scope: KwicCtrlScope,
-        utils: any,
+        utils: UtilsService,
         $location: LocationService,
         $rootScope: RootScope,
         $timeout: ITimeoutService

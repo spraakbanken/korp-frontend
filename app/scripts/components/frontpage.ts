@@ -7,6 +7,7 @@ import "@/components/newsdesk"
 import "@/components/search-examples"
 import settings from "@/settings"
 import { RootScope } from "@/root-scope.types"
+import { SearchesService } from "@/services"
 
 export default angular.module("korpApp").component("frontpage", {
     template: html`
@@ -34,7 +35,7 @@ export default angular.module("korpApp").component("frontpage", {
         "$rootScope",
         "$scope",
         "searches",
-        function ($rootScope: RootScope, $scope, searches) {
+        function ($rootScope: RootScope, $scope, searches: SearchesService) {
             const $ctrl = this
             $ctrl.showDescription = false
 

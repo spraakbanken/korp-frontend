@@ -18,9 +18,6 @@ korpApp.directive("tabHash", [
                 utils.setupHash(s, [
                     {
                         expr: "activeTab",
-                        val_out(val) {
-                            return val
-                        },
                         val_in(val) {
                             s.setSelected(parseInt(val))
                             return s.activeTab

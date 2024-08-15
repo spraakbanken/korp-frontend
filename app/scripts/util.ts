@@ -127,6 +127,10 @@ export class SelectionManager {
 export const getCqpAttribute = (option: AttributeOption): string =>
     option.is_struct_attr ? `_.${option.value}` : option.value
 
+/** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
+export const valfilter = (attrobj: AttributeOption): string =>
+    attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value
+
 /**
  * Format a number of "relative hits" (hits per 1 million tokens), using exactly one decimal.
  * @param x Number of relative hits

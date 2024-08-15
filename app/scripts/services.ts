@@ -1,39 +1,128 @@
 /** @format */
 import _ from "lodash"
+import angular, { IDeferred, IHttpService, IPromise, IQService, IScope } from "angular"
 import settings from "@/settings"
 import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
 import { parseMapData } from "./map_services"
 import { updateSearchHistory } from "@/history"
-import { normalizeStatsData } from "@/backend/stats-proxy"
+import { KorpStatsResponse, normalizeStatsData } from "@/backend/stats-proxy"
 import { httpConfAddMethod, httpConfAddMethodAngular, unregescape } from "@/util"
 import { mergeCqpExprs, parse, stringify } from "./cqp_parser/cqp"
-import { localStorageGet, localStorageSet } from "@/local-storage"
+import { localStorageGet, localStorageSet, SavedSearch } from "@/local-storage"
+import { HashParams, LocationService } from "@/urlparams"
+import { KorpResponse } from "./backend/types"
+import { RootScope } from "./root-scope.types"
 
 const korpApp = angular.module("korpApp")
 
+export type UtilsService = {
+    /** Set up sync between a url param and a scope variable. */
+    setupHash: (scope: IScope, config: SetupHashConfigItem[]) => void
+}
+
+type SetupHashConfigItem<K extends keyof HashParams = keyof HashParams, T = any> = {
+    /** Name of url param */
+    key: K
+    /** Name of scope variable; defaults to `key` */
+    scope_name?: string
+    /** A function on the scope to pass value to, instead of setting `scope_name` */
+    scope_func?: string
+    /** Expression to watch for changes; defaults to `scope_name` */
+    expr?: string
+    /** Default value of the scope variable, corresponding to the url param being empty */
+    default?: HashParams[K]
+    /** Runs when the value is changed in scope or url */
+    post_change?: (val: HashParams[K]) => void
+    /** Parse url param value */
+    val_in?: (val: HashParams[K]) => T
+    /** Stringify scope variable value */
+    val_out?: (val: T) => HashParams[K]
+}
+
+export type BackendService = {
+    requestCompare: (cmpObj1: SavedSearch, cmpObj2: SavedSearch, reduce: string[]) => IPromise<CompareResult>
+    relatedWordSearch: LexiconsService["relatedWordSearch"]
+    requestMapData: (
+        cqp: string,
+        cqpExprs: Record<string, string>,
+        within: { default_within: string; within: string },
+        attribute: any,
+        relative: boolean
+    ) => IPromise<any>
+    [f: string]: any // TODO Type out the functions
+}
+type KorpLoglikeResponse = {
+    /** Log-likelihood average. */
+    average: number
+    /** Log-likelihood values. */
+    loglike: Record<string, number>
+    /** Absolute frequency for the values in set 1. */
+    set1: Record<string, number>
+    /** Absolute frequency for the values in set 2. */
+    set2: Record<string, number>
+}
+export type CompareResult = [CompareTables, number, SavedSearch, SavedSearch, string[]]
+export type CompareTables = { positive: CompareItem[]; negative: CompareItem[] }
+type CompareItemRaw = {
+    value: string
+    loglike: number
+    abs: number
+}
+export type CompareItem = {
+    /** Value of given attribute without probability suffixes */
+    key: string
+    /** Log-likelihood value */
+    loglike: number
+    /** Absolute frequency */
+    abs: number
+    /** Values of given attribute, as found including probability suffixes */
+    elems: string[]
+    tokenLists: string[][]
+}
+
+export type SearchesService = {
+    activeSearch: {
+        /** "word", "lemgram" or "cqp" */
+        type: string
+        val: string
+    } | null
+    /** is resolved when parallel search controller is loaded */
+    langDef: IDeferred<never>
+    kwicSearch: (cqp: string) => void
+    getCqpExpr: () => string
+}
+
+export type LexiconsService = {
+    relatedWordSearch: (lemgram: string) => IPromise<LexiconsRelatedWordsResponse>
+    // TODO Type Karp API
+    getLemgrams: (wf: string, resources: string[] | string, corporaIDs: string[]) => IPromise<any>
+    getSenses: (wf: string) => IPromise<any>
+}
+export type LexiconsRelatedWordsResponse = LexiconsRelatedWordsItem[]
+export type LexiconsRelatedWordsItem = {
+    label: string
+    words: string[]
+}
+
 korpApp.factory("utils", [
     "$location",
-    ($location) => ({
-        /** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
-        valfilter: (attrobj) => (attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value),
-
+    ($location: LocationService): UtilsService => ({
         setupHash(scope, config) {
-            const onWatch = () => {
-                for (let obj of config) {
+            // Sync from url to scope
+            const onWatch = () =>
+                config.forEach((obj) => {
                     let val = $location.search()[obj.key]
                     if (val == null) {
                         if ("default" in obj) {
                             val = obj.default
                         } else {
-                            if (typeof obj.post_change === "function") {
-                                obj.post_change(val)
-                            }
-                            continue
+                            if (obj.post_change) obj.post_change(val)
+                            return
                         }
                     }
 
-                    val = (obj.val_in || _.identity)(val)
+                    val = obj.val_in ? obj.val_in(val) : val
 
                     if ("scope_name" in obj) {
                         scope[obj.scope_name] = val
@@ -42,31 +131,22 @@ korpApp.factory("utils", [
                     } else {
                         scope[obj.key] = val
                     }
-                }
-            }
-            onWatch()
-            scope.$watch(
-                () => $location.search(),
-                () => onWatch()
-            )
+                })
 
-            for (let obj of config) {
-                const watch = obj.expr || obj.scope_name || obj.key
-                scope.$watch(
-                    watch,
-                    ((obj, watch) =>
-                        function (val) {
-                            val = (obj.val_out || _.identity)(val)
-                            if (val === obj.default) {
-                                val = null
-                            }
-                            $location.search(obj.key, val || null)
-                            if (typeof obj.post_change === "function") {
-                                obj.post_change(val)
-                            }
-                        })(obj, watch)
-                )
-            }
+            onWatch()
+            scope.$watch(() => $location.search(), onWatch)
+
+            // Sync from scope to url
+            config.forEach((obj) =>
+                scope.$watch(obj.expr || obj.scope_name || obj.key, (val: any) => {
+                    val = obj.val_out ? obj.val_out(val) : val
+                    if (val === obj.default) {
+                        val = null
+                    }
+                    $location.search(obj.key, val || null)
+                    if (obj.post_change) obj.post_change(val)
+                })
+            )
         },
     }),
 ])
@@ -75,7 +155,7 @@ korpApp.factory("backend", [
     "$http",
     "$q",
     "lexicons",
-    ($http, $q, lexicons) => ({
+    ($http: IHttpService, $q: IQService, lexicons: LexiconsService): BackendService => ({
         requestCompare(cmpObj1, cmpObj2, reduce) {
             reduce = _.map(reduce, (item) => item.replace(/^_\./, ""))
             let cl = settings.corpusListing
@@ -93,7 +173,7 @@ korpApp.factory("backend", [
             })
             const top = _.map(rankedReduce, (item) => item + ":1").join(",")
 
-            const def = $q.defer()
+            const def: IDeferred<CompareResult> = $q.defer()
             const params = {
                 group_by: reduce.join(","),
                 set1_corpus: corpora1.join(",").toUpperCase(),
@@ -107,68 +187,50 @@ korpApp.factory("backend", [
 
             const conf = httpConfAddMethodAngular({
                 url: settings["korp_backend_url"] + "/loglike",
+                method: "GET",
                 params,
                 headers: {},
             })
 
             _.extend(conf.headers, authenticationProxy.getAuthorizationHeader())
 
-            const xhr = $http(conf)
+            const xhr = $http<KorpResponse<KorpLoglikeResponse>>(conf)
 
             xhr.then(function (response) {
-                let max
                 const { data } = response
 
-                if (data.ERROR) {
+                if ("ERROR" in data) {
                     def.reject()
                     return
                 }
 
-                const loglikeValues = data.loglike
-
-                const objs = _.map(loglikeValues, (value, key) => ({
+                const objs: CompareItemRaw[] = _.map(data.loglike, (value, key) => ({
                     value: key,
                     loglike: value,
+                    abs: value > 0 ? data.set2[key] : data.set1[key],
                 }))
 
-                const tables = _.groupBy(objs, function (obj) {
-                    if (obj.loglike > 0) {
-                        obj.abs = data.set2[obj.value]
-                        return "positive"
-                    } else {
-                        obj.abs = data.set1[obj.value]
-                        return "negative"
-                    }
-                })
+                const tables = _.groupBy(objs, (obj) => (obj.loglike > 0 ? "positive" : "negative"))
 
-                const groupAndSum = function (table, currentMax) {
+                let max = 0
+                const groupAndSum = function (table: CompareItemRaw[]) {
+                    // Merge items that are different only by probability suffix ":<number>"
                     const groups = _.groupBy(table, (obj) => obj.value.replace(/(:.+?)(\/|$| )/g, "$2"))
-
-                    const res = _.map(_.toPairs(groups), function ([key, value]) {
-                        const tokenLists = _.map(key.split("/"), (tokens) => tokens.split(" "))
-
-                        let loglike = 0
-                        let abs = 0
-                        const cqp = []
-                        const elems = []
-
-                        for (let val of value) {
-                            abs += val.abs
-                            loglike += val.loglike
-                            elems.push(val.value)
-                        }
-                        if (Math.abs(loglike) > currentMax) {
-                            currentMax = Math.abs(loglike)
-                        }
+                    const res = _.map(groups, (items, key): CompareItem => {
+                        // Add up similar items.
+                        const tokenLists = key.split("/").map((tokens) => tokens.split(" "))
+                        const loglike = _.sumBy(items, "loglike")
+                        const abs = _.sumBy(items, "abs")
+                        const elems = items.map((item) => item.value)
+                        max = Math.max(max, Math.abs(loglike))
                         return { key, loglike, abs, elems, tokenLists }
                     })
-
-                    return [res, currentMax]
+                    return res
                 }
-                ;[tables.positive, max] = groupAndSum(tables.positive, 0)
-                ;[tables.negative, max] = groupAndSum(tables.negative, max)
+                const positive = groupAndSum(tables.positive)
+                const negative = groupAndSum(tables.negative)
 
-                return def.resolve([tables, max, cmpObj1, cmpObj2, reduce], xhr)
+                return def.resolve([{ positive, negative }, max, cmpObj1, cmpObj2, reduce])
             })
 
             return def.promise
@@ -196,15 +258,16 @@ korpApp.factory("backend", [
 
             const conf = httpConfAddMethod({
                 url: settings["korp_backend_url"] + "/count",
+                method: "GET",
                 params,
                 headers: {},
             })
 
             _.extend(conf.headers, authenticationProxy.getAuthorizationHeader())
 
-            return $http(conf).then(
+            return $http<KorpStatsResponse>(conf).then(
                 function ({ data }) {
-                    const normalizedData = normalizeStatsData(data)
+                    const normalizedData = normalizeStatsData(data) as any // TODO Type correctly
                     let result = parseMapData(normalizedData, cqp, cqpExprs)
                     return { corpora: attribute.corpora, cqp, within, data: result, attribute }
                 },
@@ -239,6 +302,7 @@ korpApp.factory("backend", [
 
             const conf = httpConfAddMethod({
                 url: settings["korp_backend_url"] + "/query",
+                method: "GET",
                 params,
                 headers: {},
             })
@@ -268,63 +332,39 @@ korpApp.factory("backend", [
 korpApp.factory("searches", [
     "$location",
     "$rootScope",
-    "$http",
     "$q",
-    function ($location, $rootScope, $http, $q) {
-        class Searches {
-            constructor() {
-                /**
-                 * @typedef ActiveSearch
-                 * @property {string} type "word", "lemgram" or "cqp"
-                 * @property {string} val
-                 */
-                /** @type {ActiveSearch | null} */
-                this.activeSearch = null
-
-                // is resolved when parallel search controller is loaded
-                this.langDef = $q.defer()
-            }
+    function ($location: LocationService, $rootScope: RootScope, $q: IQService): SearchesService {
+        const searches: SearchesService = {
+            activeSearch: null,
+            langDef: $q.defer(),
 
             /** Tell result controllers (kwic/statistics/word picture) to send their requests. */
-            kwicSearch(cqp) {
+            kwicSearch(cqp: string) {
                 $rootScope.$emit("make_request", cqp, this.activeSearch)
-            }
-        }
+            },
 
-        const searches = new Searches()
-
-        searches.getCqpExpr = function () {
-            const search = searches.activeSearch
-            let cqpExpr = null
-            if (search) {
-                if (search.type === "word" || search.type === "lemgram") {
-                    cqpExpr = $rootScope.simpleCQP
-                } else {
-                    cqpExpr = search.val
-                }
-            }
-            return cqpExpr
+            getCqpExpr(): string {
+                if (!this.activeSearch) return null
+                if (this.activeSearch.type === "word" || this.activeSearch.type === "lemgram")
+                    return $rootScope.simpleCQP
+                return this.activeSearch.val
+            },
         }
 
         // Watch the `search` URL param
         $rootScope.$watch(
             () => $location.search().search,
-            (searchExpr) => {
+            (searchExpr: string) => {
                 if (!searchExpr) return
 
                 // The value is a string like <type>|<expr>
-                let [type, ...value] = (searchExpr && searchExpr.split("|")) || []
-                value = value.join("|")
+                const [type, ...valueSplit] = searchExpr.split("|")
+                let value = valueSplit.join("|")
 
                 // Store new query in search history
                 // For Extended search, `value` is empty (then the CQP is instead in the `cqp` URL param)
                 if (value) {
-                    let historyValue
-                    if (type === "lemgram") {
-                        historyValue = unregescape(value)
-                    } else {
-                        historyValue = value
-                    }
+                    const historyValue = type === "lemgram" ? unregescape(value) : value
                     updateSearchHistory(historyValue, $location.absUrl())
                 }
                 $q.all([searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(function () {
@@ -354,42 +394,40 @@ korpApp.factory("searches", [
     },
 ])
 
-korpApp.service(
-    "compareSearches",
-    class CompareSearches {
-        constructor() {
-            if (currentMode !== "default") {
-                this.key = `saved_searches_${currentMode}`
-            } else {
-                this.key = "saved_searches"
-            }
-            this.savedSearches = localStorageGet(this.key) || []
-        }
+export class CompareSearches {
+    key: "saved_searches" | `saved_searches_${string}`
+    savedSearches: SavedSearch[]
 
-        saveSearch(name, cqp) {
-            const searchObj = {
-                label: name || cqp,
-                cqp,
-                corpora: settings.corpusListing.getSelectedCorpora(),
-            }
-            this.savedSearches.push(searchObj)
-            return localStorageSet(this.key, this.savedSearches)
-        }
-
-        flush() {
-            this.savedSearches.splice(0, 9e9, ...[].concat([]))
-            return localStorageSet(this.key, this.savedSearches)
-        }
+    constructor() {
+        this.key = currentMode !== "default" ? `saved_searches_${currentMode}` : "saved_searches"
+        this.savedSearches = localStorageGet(this.key) || []
     }
-)
+
+    saveSearch(name: string, cqp: string): void {
+        const searchObj = {
+            label: name || cqp,
+            cqp,
+            corpora: settings.corpusListing.getSelectedCorpora(),
+        }
+        this.savedSearches.push(searchObj)
+        localStorageSet(this.key, this.savedSearches)
+    }
+
+    flush(): void {
+        this.savedSearches = []
+        localStorageSet(this.key, this.savedSearches)
+    }
+}
+
+korpApp.service("compareSearches", CompareSearches)
 
 korpApp.factory("lexicons", [
     "$q",
     "$http",
-    function ($q, $http) {
+    function ($q: IQService, $http: IHttpService): LexiconsService {
         const karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v4"
         return {
-            getLemgrams(wf, resources, corporaIDs) {
+            getLemgrams(wf: string, resources: string[] | string, corporaIDs: string[]) {
                 const deferred = $q.defer()
 
                 const args = {
@@ -403,7 +441,8 @@ korpApp.factory("lexicons", [
                     url: `${karpURL}/autocomplete`,
                     params: args,
                 })
-                    .then(function (response) {
+                    .then(function (response: any) {
+                        // TODO Type Karp API
                         let { data } = response
                         if (data === null) {
                             return deferred.resolve([])
@@ -422,9 +461,10 @@ korpApp.factory("lexicons", [
                             let lemgram = karpLemgrams.join(",")
                             const corpora = corporaIDs.join(",")
                             const headers = authenticationProxy.getAuthorizationHeader()
-                            return $http(
+                            return $http<any>(
                                 httpConfAddMethod({
                                     url: settings["korp_backend_url"] + "/lemgram_count",
+                                    method: "GET",
                                     params: {
                                         lemgram: lemgram,
                                         count: "lemgram",
@@ -451,8 +491,7 @@ korpApp.factory("lexicons", [
                     .catch((response) => deferred.resolve([]))
                 return deferred.promise
             },
-
-            getSenses(wf) {
+            getSenses(wf: string) {
                 const deferred = $q.defer()
 
                 const args = {
@@ -461,7 +500,7 @@ korpApp.factory("lexicons", [
                     mode: "external",
                 }
 
-                $http({
+                $http<any>({
                     method: "GET",
                     url: `${karpURL}/autocomplete`,
                     params: args,
@@ -489,7 +528,7 @@ korpApp.factory("lexicons", [
                                 size: 500,
                             }
 
-                            return $http({
+                            return $http<any>({
                                 method: "GET",
                                 url: `${karpURL}/minientry`,
                                 params: senseargs,
@@ -513,10 +552,9 @@ korpApp.factory("lexicons", [
                     .catch((response) => deferred.resolve([]))
                 return deferred.promise
             },
-
-            relatedWordSearch(lemgram) {
-                const def = $q.defer()
-                $http({
+            relatedWordSearch(lemgram: string) {
+                const def: IDeferred<LexiconsRelatedWordsResponse> = $q.defer()
+                $http<any>({
                     url: `${karpURL}/minientry`,
                     method: "GET",
                     params: {
@@ -530,7 +568,7 @@ korpApp.factory("lexicons", [
                     } else {
                         const senses = _.map(data.hits.hits, (entry) => entry._source.Sense[0].senseid)
 
-                        $http({
+                        $http<any>({
                             url: `${karpURL}/minientry`,
                             method: "GET",
                             params: {
@@ -542,7 +580,7 @@ korpApp.factory("lexicons", [
                             if (data.hits.total === 0) {
                                 def.resolve([])
                             } else {
-                                const eNodes = _.map(data.hits.hits, (entry) => ({
+                                const eNodes: LexiconsRelatedWordsResponse = _.map(data.hits.hits, (entry) => ({
                                     label: entry._source.Sense[0].senseid.replace("swefn--", ""),
                                     words: entry._source.Sense[0].LU,
                                 }))

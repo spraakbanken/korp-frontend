@@ -12,6 +12,7 @@ export type RootScope = IRootScopeService & {
     globalFilter: CqpQuery | null
     globalFilterDef: IDeferred<never>
     searchtabs: any
+    simpleCQP?: string
     kwicTabs: KwicTab[]
     compareTabs: {}[]
     graphTabs: {}[]
