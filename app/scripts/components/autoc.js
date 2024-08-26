@@ -4,6 +4,7 @@ import angular from "angular"
 import settings from "@/settings"
 import { html, lemgramToString, saldoToString } from "@/util"
 import { loc } from "@/i18n"
+import "@/directives/typeahead-click-open"
 
 angular.module("korpApp").component("autoc", {
     template: html`
