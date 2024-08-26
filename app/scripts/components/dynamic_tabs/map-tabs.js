@@ -2,6 +2,7 @@
 import angular from "angular"
 import { html } from "@/util"
 import "@/components/korp-error"
+import "@/directives/tab-spinner"
 
 angular.module("korpApp").directive("mapTabs", () => ({
     replace: true,

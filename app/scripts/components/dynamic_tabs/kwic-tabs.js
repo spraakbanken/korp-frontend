@@ -3,6 +3,7 @@ import angular from "angular"
 import { html } from "@/util"
 import "@/components/korp-error"
 import "@/components/kwic"
+import "@/directives/tab-spinner"
 
 // This is a directives because it needs `replace: true`, which is not supported in component
 angular.module("korpApp").directive("kwicTabs", () => ({

@@ -4,6 +4,7 @@ import { html } from "@/util"
 import "@/components/korp-error"
 import "@/controllers/comparison_controller"
 import "@/directives/meter"
+import "@/directives/tab-spinner"
 
 angular.module("korpApp").directive("compareTabs", () => ({
     replace: true,
