@@ -10,6 +10,7 @@ import "@/components/advanced-search"
 import "@/components/compare-search"
 import "@/directives/click-cover"
 import "@/directives/reduce-select"
+import "@/directives/tab-hash"
 
 angular.module("korpApp").component("searchtabs", {
     template: html`

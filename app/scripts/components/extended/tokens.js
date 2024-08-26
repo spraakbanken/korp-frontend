@@ -7,6 +7,7 @@ import { html } from "@/util"
 import "@/components/extended/token"
 import "@/components/extended/struct-token"
 import "@/components/extended/add-box"
+import "@/directives/scroll-to-start"
 
 angular.module("korpApp").component("extendedTokens", {
     template: html`

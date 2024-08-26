@@ -6,6 +6,7 @@ import { html, regescape, unregescape } from "@/util"
 import { loc, locAttribute } from "@/i18n"
 import "@/components/autoc"
 import "@/components/datetime-picker"
+import "@/directives/escaper"
 import "@/directives/popper"
 
 let customExtendedTemplates = {}

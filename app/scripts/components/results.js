@@ -11,6 +11,7 @@ import "@/components/kwic"
 import "@/components/statistics"
 import "@/components/sidebar"
 import "@/components/word-picture"
+import "@/directives/tab-hash"
 import "@/directives/tab-preloader"
 
 angular.module("korpApp").component("results", {
