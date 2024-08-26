@@ -3,52 +3,6 @@ import _ from "lodash"
 
 const korpApp = angular.module("korpApp")
 
-korpApp.directive("popper", [
-    "$rootElement",
-    ($rootElement) => ({
-        scope: {},
-        link(scope, elem, attrs) {
-            const popup = elem.next()
-            popup.appendTo("body").hide()
-            const closePopup = () => popup.hide()
-
-            if (attrs.noCloseOnClick == null) {
-                popup.on("click", function () {
-                    closePopup()
-                    return false
-                })
-            }
-
-            elem.on("click", function () {
-                const other = $(".popper_menu:visible").not(popup)
-                if (other.length) {
-                    other.hide()
-                }
-                if (popup.is(":visible")) {
-                    closePopup()
-                } else {
-                    popup.show()
-                }
-
-                const pos = {
-                    my: attrs.my || "right top",
-                    at: attrs.at || "bottom right",
-                    of: elem,
-                }
-                if (scope.offset) {
-                    pos.offset = scope.offset
-                }
-
-                popup.position(pos)
-
-                return false
-            })
-
-            return $rootElement.on("click", () => closePopup())
-        },
-    }),
-])
-
 korpApp.directive("tabSpinner", () => ({
     template: `\
 <i class="fa-solid fa-times-circle close_icon"></i>

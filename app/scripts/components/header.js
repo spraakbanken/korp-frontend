@@ -11,6 +11,7 @@ import currentMode from "@/mode"
 import { collatorSort, html } from "@/util"
 import "@/components/corpus_chooser/corpus-chooser"
 import "@/components/radio-list"
+import "@/directives/popper"
 
 angular.module("korpApp").component("header", {
     template: html`

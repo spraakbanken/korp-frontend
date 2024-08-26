@@ -2,6 +2,7 @@
 import angular, { type ui, type IComponentController, type IScope } from "angular"
 import { html } from "@/util"
 import moment, { type Moment } from "moment"
+import "@/directives/popper"
 
 angular.module("korpApp").component("datetimePicker", {
     template: html`

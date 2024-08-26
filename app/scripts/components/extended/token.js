@@ -2,6 +2,7 @@
 import angular from "angular"
 import { html } from "@/util"
 import "@/components/extended/and-token"
+import "@/directives/popper"
 
 angular.module("korpApp").component("extendedToken", {
     template: html`
