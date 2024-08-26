@@ -6,6 +6,7 @@ import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html, regescape, saldoToHtml, unregescape } from "@/util"
 import "@/components/autoc"
+import "@/directives/search-submit"
 
 angular.module("korpApp").component("simpleSearch", {
     template: html`

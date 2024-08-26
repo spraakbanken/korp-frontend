@@ -1,6 +1,7 @@
 /** @format */
 import angular from "angular"
 import { html } from "@/util"
+import "@/directives/search-submit"
 
 angular.module("korpApp").component("advancedSearch", {
     template: html` <div>

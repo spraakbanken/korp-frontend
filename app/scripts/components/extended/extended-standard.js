@@ -6,6 +6,7 @@ import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import "@/components/extended/tokens"
+import "@/directives/search-submit"
 
 angular.module("korpApp").component("extendedStandard", {
     template: html`
