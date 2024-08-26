@@ -1,50 +1,7 @@
 /** @format */
 import _ from "lodash"
-import { loc } from "./i18n"
 
 const korpApp = angular.module("korpApp")
-
-korpApp.directive("meter", () => ({
-    template: `\
-<div>
-        <div class="background" ng-bind-html="displayWd | trust"></div>
-        <div class="abs badge" uib-tooltip-html="tooltipHTML | trust">{{meter.abs}}</div>
-</div>\
-`,
-    replace: true,
-    scope: {
-        meter: "=",
-        max: "=",
-        stringify: "=",
-    },
-    link(scope, elem, attr) {
-        const zipped = _.zip(scope.meter.tokenLists, scope.stringify)
-        scope.displayWd = _.map(zipped, function (...args) {
-            const [tokens, stringify] = args[0]
-            return _.map(tokens, function (token) {
-                if (token === "|" || token === "") {
-                    return "&mdash;"
-                } else {
-                    return stringify(token)
-                }
-            }).join(" ")
-        }).join(";")
-
-        scope.loglike = Math.abs(scope.meter.loglike)
-
-        scope.tooltipHTML = `\
-            ${loc("statstable_absfreq")}: ${scope.meter.abs}
-            <br>
-            loglike: ${scope.loglike}\
-`
-
-        const w = 394
-        const part = scope.loglike / Math.abs(scope.max)
-
-        const bkg = elem.find(".background")
-        return bkg.width(Math.round(part * w))
-    },
-}))
 
 korpApp.directive("popper", [
     "$rootElement",
