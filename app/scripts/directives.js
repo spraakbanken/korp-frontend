@@ -3,28 +3,6 @@ import _ from "lodash"
 
 const korpApp = angular.module("korpApp")
 
-korpApp.directive("clickCover", () => ({
-    link(scope, elem, attr) {
-        const cover = $("<div class='click-cover'>").on("click", () => false)
-
-        const pos = elem.css("position") || "static"
-        return scope.$watch(
-            () => scope.$eval(attr.clickCover),
-            function (val) {
-                if (val) {
-                    elem.prepend(cover)
-                    elem.css("pointer-events", "none")
-                    return elem.css("position", "relative").addClass("covered")
-                } else {
-                    cover.remove()
-                    elem.css("pointer-events", "")
-                    return elem.css("position", pos).removeClass("covered")
-                }
-            }
-        )
-    },
-}))
-
 // This directive is only used by the autoc-component (autoc.js)
 // It is therefore made to work with magic variables such as $scope.$ctrl.typeaheadIsOpen
 korpApp.directive("typeaheadClickOpen", [

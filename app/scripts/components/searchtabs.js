@@ -8,6 +8,7 @@ import "@/components/extended/extended-standard"
 import "@/components/extended/extended-parallel"
 import "@/components/advanced-search"
 import "@/components/compare-search"
+import "@/directives/click-cover"
 
 angular.module("korpApp").component("searchtabs", {
     template: html`
