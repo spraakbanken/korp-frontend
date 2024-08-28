@@ -75,7 +75,8 @@ export const login = (usr: string, pass: string, saveLogin: boolean): JQueryDefe
     return dfd
 }
 
-export const hasCredential = (corpusId: string): boolean => state.loginObj.credentials?.includes(corpusId.toUpperCase())
+export const hasCredential = (corpusId: string): boolean =>
+    state.loginObj?.credentials?.includes(corpusId.toUpperCase())
 
 export const logout = (): void => {
     state.loginObj = undefined
