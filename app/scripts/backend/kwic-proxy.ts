@@ -49,7 +49,6 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
         }
 
         const command = options.ajaxParams.command || "query"
-        delete options.ajaxParams.command
 
         const data: KorpQueryParams = {
             default_context: settings.default_overview_context,
@@ -158,8 +157,7 @@ export type KorpQueryParams = {
 }
 
 export type KorpQueryRequestOptions = {
-    // TODO Should start,end,command really exist here as well as under ajaxParams?
-    command?: string
+    // TODO Should start,end really exist here as well as under ajaxParams?
     start?: number
     end?: number
     ajaxParams?: KorpQueryParams & {

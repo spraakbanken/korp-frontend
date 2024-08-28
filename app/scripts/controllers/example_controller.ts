@@ -131,7 +131,7 @@ class ExampleCtrl extends KwicCtrl {
             _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
             s.loading = true
-            if (opts.command == "relations_sentences") {
+            if (opts.ajaxParams.command == "relations_sentences") {
                 s.onExampleProgress = () => {}
             } else {
                 s.onExampleProgress = s.onProgress

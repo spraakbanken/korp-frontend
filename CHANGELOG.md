@@ -33,6 +33,7 @@
   - Handle end seconds correctly [#378](https://github.com/spraakbanken/korp-frontend/issues/378)
   - Parsing of the simple input had been incomplete since way back
 - There was no word picture heading if lemgram
+- Paging broken in word picture example search [#383](https://github.com/spraakbanken/korp-frontend/issues/383)
 
 ## [9.6.0] - 2024-05-27
 
