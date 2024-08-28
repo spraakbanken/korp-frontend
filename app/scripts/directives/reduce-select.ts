@@ -94,10 +94,10 @@ angular.module("korpApp").directive("reduceSelect", [
                 scope.hasStructAttrs = scope.items.some((item) => item.group == "sentence_attr")
 
                 for (const name of scope.selected || []) {
-                    scope.keyItems[name].selected = true
+                    if (name in scope.keyItems) scope.keyItems[name].selected = true
                 }
                 for (const name of scope.insensitive || []) {
-                    scope.keyItems[name].insensitive = true
+                    if (name in scope.keyItems) scope.keyItems[name].insensitive = true
                 }
 
                 // If no selection given, default to selecting the word option
