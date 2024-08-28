@@ -11,6 +11,7 @@ import { Dataset } from "@/statistics_worker"
 import { SearchParams } from "@/statistics.types"
 import { SlickgridColumn } from "@/statistics"
 import { SearchesService } from "@/services/searches"
+import "@/services/searches"
 
 type StatsResultCtrlScope = IScope & {
     $parent: any

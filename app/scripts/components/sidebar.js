@@ -7,6 +7,7 @@ import settings from "@/settings"
 import { stringify } from "@/stringify.js"
 import { html, regescape, splitLemgram, safeApply } from "@/util"
 import { loc, locAttribute } from "@/i18n"
+import "@/services/utils"
 import "@/components/deptree/deptree"
 
 let sidebarComponents = {}

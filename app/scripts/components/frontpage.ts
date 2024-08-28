@@ -1,13 +1,14 @@
 /** @format */
 import angular from "angular"
-import { html } from "@/util"
-import { isEnabled } from "@/news-service"
-import "@/components/corpus-updates"
-import "@/components/newsdesk"
-import "@/components/search-examples"
 import settings from "@/settings"
 import { RootScope } from "@/root-scope.types"
 import { SearchesService } from "@/services/searches"
+import { html } from "@/util"
+import { isEnabled } from "@/news-service"
+import "@/services/searches"
+import "@/components/corpus-updates"
+import "@/components/newsdesk"
+import "@/components/search-examples"
 
 export default angular.module("korpApp").component("frontpage", {
     template: html`

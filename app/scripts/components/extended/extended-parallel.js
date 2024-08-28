@@ -4,6 +4,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { html } from "@/util"
+import "@/services/searches"
 import "@/components/extended/tokens"
 
 angular.module("korpApp").component("extendedParallel", {

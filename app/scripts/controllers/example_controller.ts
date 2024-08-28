@@ -8,6 +8,7 @@ import { KwicTab, RootScope } from "@/root-scope.types"
 import { KorpResponse, ProgressReport } from "@/backend/types"
 import { KorpQueryResponse } from "@/backend/kwic-proxy"
 import { UtilsService } from "@/services/utils"
+import "@/services/utils"
 
 const korpApp = angular.module("korpApp")
 

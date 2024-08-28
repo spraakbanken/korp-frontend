@@ -9,6 +9,7 @@ import { LocationService } from "@/urlparams"
 import { KorpResponse, ProgressReport } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { SearchesService } from "@/services/searches"
+import "@/services/searches"
 
 type WordpicCtrlScope = IScope & {
     $parent: any

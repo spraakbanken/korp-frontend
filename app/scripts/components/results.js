@@ -1,6 +1,7 @@
 /** @format */
 import angular from "angular"
 import { html } from "@/util"
+import "@/services/searches"
 import "@/components/dynamic_tabs/compare-tabs"
 import "@/components/dynamic_tabs/graph-tabs"
 import "@/components/dynamic_tabs/kwic-tabs"

@@ -3,6 +3,7 @@ import _ from "lodash"
 import angular, { IScope, ITimeoutService } from "angular"
 import { UtilsService } from "@/services/utils"
 import { LocationService } from "@/urlparams"
+import "@/services/utils"
 
 type TabHashScope = IScope & {
     activeTab: number

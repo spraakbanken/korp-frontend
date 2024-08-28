@@ -2,6 +2,8 @@
 import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
+import "@/services/backend"
+import "@/services/compare-searches"
 import { html, valfilter } from "@/util"
 
 angular.module("korpApp").component("compareSearch", {

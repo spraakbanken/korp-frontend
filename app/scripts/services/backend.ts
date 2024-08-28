@@ -9,6 +9,7 @@ import { httpConfAddMethod, httpConfAddMethodAngular } from "@/util"
 import { KorpStatsResponse, normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map_services"
 import { KorpQueryResponse } from "@/backend/kwic-proxy"
+import "@/services/lexicons"
 
 export type BackendService = {
     requestCompare: (cmpObj1: SavedSearch, cmpObj2: SavedSearch, reduce: string[]) => IPromise<CompareResult>

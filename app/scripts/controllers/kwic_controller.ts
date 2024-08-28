@@ -7,6 +7,7 @@ import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { KorpResponse, ProgressReport } from "@/backend/types"
 import { UtilsService } from "@/services/utils"
+import "@/services/utils"
 
 angular.module("korpApp").directive("kwicCtrl", () => ({ controller: KwicCtrl }))
 

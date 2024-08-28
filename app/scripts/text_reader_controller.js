@@ -2,6 +2,7 @@
 import _ from "lodash"
 import statemachine from "./statemachine"
 import settings from "@/settings"
+import "@/services/backend"
 import "@/components/readingmode"
 
 const korpApp = angular.module("korpApp")
