@@ -24,6 +24,7 @@
 - Removed global `loc_data`, use `$rootScope["loc_data"]` instead (outside Angular: `getService("$rootScope")["loc_data"]`)
 - Removed globals `CSV` and `moment`, import the libraries instead
 - Converted the "radioList" JQuery widget to a component
+- Using Karp 7 backend instead of Karp 4 [#388](https://github.com/spraakbanken/korp-frontend/pull/388)
 
 ### Fixed
 
