@@ -167,7 +167,7 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.getLemgrams = function (input, morphologies, corporaIDs) {
                 const deferred = $q.defer()
-                const http = lexicons.getLemgrams(input, morphologies, corporaIDs, ctrl.variant === "affix")
+                const http = lexicons.getLemgrams(input, morphologies, corporaIDs)
                 http.then(function (data) {
                     data.forEach(function (item) {
                         if (ctrl.variant === "affix") {
