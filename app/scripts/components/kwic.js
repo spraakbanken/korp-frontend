@@ -46,8 +46,8 @@ angular.module("korpApp").component("kwic", {
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
             <span ng-if="$ctrl.hits" class="reading_btn link" ng-click="$ctrl.toggleReading()">
-                <span ng-if="!$ctrl.readingMode">{{'show_reading' | loc:$root.lang}}</span>
-                <span ng-if="$ctrl.readingMode">{{'show_kwic' | loc:$root.lang}}</span>
+                <span ng-if="!$ctrl.isReading">{{'show_reading' | loc:$root.lang}}</span>
+                <span ng-if="$ctrl.isReading">{{'show_kwic' | loc:$root.lang}}</span>
             </span>
             <div class="table_scrollarea">
                 <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0">
@@ -257,11 +257,9 @@ angular.module("korpApp").component("kwic", {
             $ctrl._settings = settings
 
             $ctrl.toggleReading = () => {
-                $ctrl.readingMode = !$ctrl.readingMode
+                // Emit event; parent should update isReading
                 $ctrl.contextChangeEvent()
             }
-
-            $ctrl.readingMode = $location.search().reading_mode
 
             $ctrl.download = {
                 options: [
@@ -655,7 +653,7 @@ angular.module("korpApp").component("kwic", {
 
             function selectNext() {
                 let next
-                if (!$ctrl.readingMode) {
+                if (!$ctrl.isReading) {
                     const i = getCurrentRow().index($element.find(".token_selected").get(0))
                     next = getCurrentRow().get(i + 1)
                     if (next == null) {
@@ -670,7 +668,7 @@ angular.module("korpApp").component("kwic", {
 
             function selectPrev() {
                 let prev
-                if (!$ctrl.readingMode) {
+                if (!$ctrl.isReading) {
                     const i = getCurrentRow().index($element.find(".token_selected").get(0))
                     if (i === 0) {
                         return
@@ -686,7 +684,7 @@ angular.module("korpApp").component("kwic", {
             function selectUp() {
                 let prevMatch
                 const current = selectionManager.selected
-                if (!$ctrl.readingMode) {
+                if (!$ctrl.isReading) {
                     prevMatch = getWordAt(
                         current.offset().left + current.width() / 2,
                         current.closest("tr").prevAll(":not(.corpus_info)").first()
@@ -715,7 +713,7 @@ angular.module("korpApp").component("kwic", {
             function selectDown() {
                 let nextMatch
                 const current = selectionManager.selected
-                if (!$ctrl.readingMode) {
+                if (!$ctrl.isReading) {
                     nextMatch = getWordAt(
                         current.offset().left + current.width() / 2,
                         current.closest("tr").nextAll(":not(.corpus_info)").first()

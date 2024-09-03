@@ -140,11 +140,7 @@ export class KwicCtrl implements IController {
         s.reading_mode = $location.search().reading_mode
         s.toggleReading = function () {
             s.reading_mode = !s.reading_mode
-            if (s.reading_mode) {
-                $location.search("reading_mode", true)
-            } else {
-                $location.search("reading_mode", undefined)
-            }
+            $location.search("reading_mode", s.reading_mode || undefined)
             s.readingChange()
         }
 
