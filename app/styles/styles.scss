@@ -654,53 +654,9 @@ table {
   padding: 0 4px;
 }
 
-
-.not_corpus_info {
-  .corpus_title,.empty_td {
-    display : none;
-  }
-}
 .corpus_info {
   background-color : white !important;
 }
-
-.reading_mode .corpus_title {
-  margin : 0;
-  font-size: 3em;
-  text-align : left;
-}
-
-.reading_mode .no_context .corpus_title {
-  left: 0;
-}
-
-.corpus_title_warn {
-  margin-right: -100px;
-  position: relative;
-  left: 10px;
-  font-variant: normal;
-  text-transform: none;
-  font-size: 0.8em;
-}
-
-.reading_mode .corpus_title_warn {
-  font-size: 12px;
-  display: block;
-}
-
-.webkit .reading_mode .no_context .corpus_title_warn {
-  margin-bottom: -40px;
-}
-
-.corpus_title_warn {
-  &:before {
-    content: "(";
-  }
-  &:after {
-    content: ")";
-  }
-}
-
 
 .right {
   vertical-align: text-top;
@@ -860,9 +816,6 @@ a {
   color: #999;
   font-style: italic;
   position: relative;
-  .left, .match, .right {
-    display : none;
-  }
 }
 
 #about_body {

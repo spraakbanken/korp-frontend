@@ -54,19 +54,19 @@ angular.module("korpApp").component("kwic", {
                     <tr
                         class="sentence"
                         ng-repeat="sentence in $ctrl.kwic"
-                        ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked, even : $even, odd : $odd}"
+                        ng-class="{corpus_info : sentence.newCorpus, linked_sentence : sentence.isLinked, even : $even, odd : $odd}"
                     >
-                        <td class="empty_td"></td>
-                        <td class="corpus_title text-gray-600 uppercase text-sm" colspan="3">
-                            <div>
+                        <td ng-if="::sentence.newCorpus" />
+                        <td ng-if="::sentence.newCorpus" colspan="2" class="text-gray-600 uppercase">
+                            <div class="w-0">
                                 {{sentence.newCorpus | locObj:$root.lang}}
-                                <span class="corpus_title_warn" ng-if="::sentence.noContext"
-                                    >{{'no_context_support' | loc:$root.lang}}</span
-                                >
+                                <span class="normal-case" ng-if="::sentence.noContext">
+                                    ({{'no_context_support' | loc:$root.lang}})
+                                </span>
                             </div>
                         </td>
-                        <td class="empty_td"></td>
-                        <td class="lnk" colspan="3" ng-if="::sentence.isLinked">
+
+                        <td ng-if="::sentence.isLinked" colspan="3" class="lnk">
                             <kwic-word
                                 ng-repeat="word in sentence.tokens"
                                 word="word"
@@ -74,7 +74,8 @@ angular.module("korpApp").component("kwic", {
                                 sentence-index="$parent.$index"
                             />
                         </td>
-                        <td class="left" ng-if="::!sentence.newCorpus">
+
+                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="left">
                             <kwic-word
                                 ng-repeat="word in $ctrl.selectLeft(sentence)"
                                 word="word"
@@ -82,7 +83,7 @@ angular.module("korpApp").component("kwic", {
                                 sentence-index="$parent.$index"
                             />
                         </td>
-                        <td class="match" ng-if="::!sentence.newCorpus">
+                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="match">
                             <kwic-word
                                 ng-repeat="word in $ctrl.selectMatch(sentence)"
                                 word="word"
@@ -90,7 +91,7 @@ angular.module("korpApp").component("kwic", {
                                 sentence-index="$parent.$index"
                             />
                         </td>
-                        <td class="right" ng-if="::!sentence.newCorpus">
+                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="right">
                             <kwic-word
                                 ng-repeat="word in $ctrl.selectRight(sentence)"
                                 word="word"
@@ -104,16 +105,16 @@ angular.module("korpApp").component("kwic", {
                     <p
                         class="sentence"
                         ng-repeat="sentence in $ctrl.kwic"
-                        ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}"
+                        ng-class="{corpus_info : sentence.newCorpus, linked_sentence : sentence.isLinked, even : $even, odd : $odd}"
                     >
-                        <span class="corpus_title" colspan="0"
-                            >{{sentence.newCorpus | locObj:$root.lang}}<span
-                                class="corpus_title_warn"
-                                ng-if="::sentence.noContext"
-                                >{{'no_context_support' | loc:$root.lang}}</span
-                            ></span
-                        >
+                        <span ng-if="sentence.newCorpus" class="corpus_title text-3xl">
+                            {{sentence.newCorpus | locObj:$root.lang}}
+                            <span class="corpus_title_warn block text-base" ng-if="::sentence.noContext">
+                                ({{'no_context_support' | loc:$root.lang}})
+                            </span>
+                        </span>
                         <kwic-word
+                            ng-if="!sentence.newCorpus"
                             ng-repeat="word in sentence.tokens"
                             word="word"
                             sentence="sentence"
@@ -688,7 +689,7 @@ angular.module("korpApp").component("kwic", {
                 if (!$ctrl.readingMode) {
                     prevMatch = getWordAt(
                         current.offset().left + current.width() / 2,
-                        current.closest("tr").prevAll(".not_corpus_info").first()
+                        current.closest("tr").prevAll(":not(.corpus_info)").first()
                     )
                     prevMatch.click()
                 } else {
@@ -697,8 +698,8 @@ angular.module("korpApp").component("kwic", {
                         .get()
                         .concat(
                             current
-                                .closest(".not_corpus_info")
-                                .prevAll(".not_corpus_info")
+                                .closest(":not(.corpus_info)")
+                                .prevAll(":not(.corpus_info)")
                                 .first()
                                 .find(".word")
                                 .get()
@@ -717,13 +718,13 @@ angular.module("korpApp").component("kwic", {
                 if (!$ctrl.readingMode) {
                     nextMatch = getWordAt(
                         current.offset().left + current.width() / 2,
-                        current.closest("tr").nextAll(".not_corpus_info").first()
+                        current.closest("tr").nextAll(":not(.corpus_info)").first()
                     )
                     nextMatch.click()
                 } else {
                     const searchwords = current
                         .nextAll(".word")
-                        .add(current.closest(".not_corpus_info").nextAll(".not_corpus_info").first().find(".word"))
+                        .add(current.closest(":not(.corpus_info)").nextAll(":not(.corpus_info)").first().find(".word"))
                     const def = current.parent().next().find(".word:first")
                     nextMatch = getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def).click()
                 }
