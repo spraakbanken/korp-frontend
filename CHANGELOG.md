@@ -36,6 +36,7 @@
 - There was no word picture heading if lemgram
 - Paging broken in word picture example search [#383](https://github.com/spraakbanken/korp-frontend/issues/383)
 - Incoherent style change to corpus heading when switching between KWIC and context view [#389](https://github.com/spraakbanken/korp-frontend/issues/389)
+- Context view broken in example search [#386](https://github.com/spraakbanken/korp-frontend/issues/386)
 
 ## [9.6.0] - 2024-05-27
 

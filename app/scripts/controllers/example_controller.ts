@@ -17,7 +17,6 @@ type ScopeBase = Omit<KwicCtrlScope, "makeRequest"> & IRepeatScope
 type ExampleCtrlScope = ScopeBase & {
     $parent: { $parent: any }
     closeTab: (idx: number, e: Event) => void
-    exampleReadingMode?: boolean
     hitsPictureData?: any
     hitspictureClick?: (page: number) => void
     kwicTab: KwicTab
@@ -61,7 +60,7 @@ class ExampleCtrl extends KwicCtrl {
         s.newDynamicTab()
 
         s.isReadingMode = () => {
-            return s.exampleReadingMode
+            return s.kwicTab.readingMode
         }
 
         s.hitspictureClick = function (pageNumber) {
@@ -73,10 +72,8 @@ class ExampleCtrl extends KwicCtrl {
             s.makeRequest()
         }
 
-        s.exampleReadingMode = s.kwicTab.readingMode
-
         s.toggleReading = function () {
-            s.exampleReadingMode = !s.exampleReadingMode
+            s.kwicTab.readingMode = !s.kwicTab.readingMode
             if (s.getProxy().pendingRequests.length) {
                 return $.when(...(s.getProxy().pendingRequests || [])).then(() => s.makeRequest())
             }

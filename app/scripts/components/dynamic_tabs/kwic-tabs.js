@@ -17,7 +17,7 @@ angular.module("korpApp").directive("kwicTabs", () => ({
             <div
                 class="results-kwic"
                 ng-if="!error"
-                ng-class="{reading_mode : exampleReadingMode, not_loading: !loading, loading : loading}"
+                ng-class="{reading_mode : kwicTab.readingMode, not_loading: !loading, loading : loading}"
             >
                 <kwic
                     aborted="aborted"
@@ -27,7 +27,7 @@ angular.module("korpApp").directive("kwicTabs", () => ({
                     hits="hits"
                     kwic-input="kwic"
                     corpus-hits="corpusHits"
-                    is-reading="reading_mode"
+                    is-reading="kwicTab.readingMode"
                     page="page"
                     page-event="pageChange"
                     context-change-event="toggleReading"
