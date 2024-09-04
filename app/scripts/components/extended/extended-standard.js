@@ -7,7 +7,7 @@ import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } fro
 import { html } from "@/util"
 import "@/services/compare-searches"
 import "@/components/extended/tokens"
-import "@/directives/search-submit"
+import "@/components/search-submit"
 
 angular.module("korpApp").component("extendedStandard", {
     template: html`

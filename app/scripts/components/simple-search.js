@@ -9,14 +9,14 @@ import "@/services/compare-searches"
 import "@/services/lexicons"
 import "@/services/searches"
 import "@/components/autoc"
-import "@/directives/search-submit"
+import "@/components/search-submit"
 
 angular.module("korpApp").component("simpleSearch", {
     template: html`
         <div id="korp-simple">
             <global-filters lang="lang"></global-filters>
             <div class="sm_flex justify-between">
-                <form class="simple_form">
+                <div>
                     <autoc
                         id="simple_text"
                         input="$ctrl.input"
@@ -49,7 +49,7 @@ angular.module("korpApp").component("simpleSearch", {
                         <input id="caseChk" type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
                         <label for="caseChk"> {{'case_insensitive' | loc:$root.lang}} </label>
                     </div>
-                </form>
+                </div>
                 <div id="similar_wrapper" ng-show="$ctrl.relatedObj">
                     <button
                         class="btn btn-sm btn-default"
