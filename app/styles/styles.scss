@@ -1787,22 +1787,16 @@ line.tick {
     vertical-align: top;
   }
   .meter {
+    display: block;
     cursor: pointer;
     position: relative;
     border: 1px solid rgba($primaryColor, 0);
     transition: all 200ms ease;
+    white-space : nowrap;
     &:hover {
       color : navy;
       border: 1px solid rgba(darken($primaryColor, 10%), 1);
     }
-  }
-  .badge {
-    position: absolute;
-    right : 0;
-    top : 4px;
-  }
-  .background {
-    padding: 5px 0;
   }
   .column_1 ul {
     background-color: lighten($primaryColor, 4%);
@@ -1823,9 +1817,8 @@ line.tick {
     margin-right : 25px;
     width : 400px;
     font-size : 1.1em;
-    li {
+    li:not(:last-child) {
       margin-bottom : 0.5em;
-      white-space : nowrap;
     }
   }
 }
@@ -1868,12 +1861,6 @@ line.tick {
 }
 .loading .close_icon {
   display : none;
-}
-
-
-.badge {
-  padding-right: 6px;
-  padding-left: 6px;
 }
 
 .tab-content {

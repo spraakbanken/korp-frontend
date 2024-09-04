@@ -19,7 +19,7 @@ type CompareCtrlScope = IScope & {
     resultOrder: (item: CompareItem) => number
     reduce: string[]
     rowClick: (row: CompareItem, cmp_index: number) => void
-    stringify: ((x: string) => string)[]
+    stringify: (x: string) => string
     tables: CompareTables
     newDynamicTab: any // TODO Defined in tabHash (services.js)
     closeDynamicTab: any // TODO Defined in tabHash (services.js)
@@ -65,7 +65,7 @@ angular.module("korpApp").directive("compareCtrl", () => ({
                                 locAttribute(attributes[reduceAttrName].translation, value, $rootScope.lang)
                         }
                     }
-                    s.stringify = [stringify]
+                    s.stringify = stringify
 
                     s.max = max
 
