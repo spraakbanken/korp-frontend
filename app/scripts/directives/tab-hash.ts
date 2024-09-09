@@ -24,17 +24,15 @@ angular.module("korpApp").directive("tabHash", [
             const contentScope = elem.find(".tab-content").scope() as any
 
             const watchHash = () =>
-                utils.setupHash(s, [
-                    {
-                        expr: "activeTab",
-                        val_in(val) {
-                            s.setSelected(Number(val))
-                            return s.activeTab
-                        },
-                        key: attr.tabHash,
-                        default: "0",
+                utils.setupHash(s, {
+                    expr: "activeTab",
+                    val_in(val) {
+                        s.setSelected(Number(val))
+                        return s.activeTab
                     },
-                ])
+                    key: attr.tabHash,
+                    default: "0",
+                })
 
             s.setSelected = function (index, ignoreCheck) {
                 if (!ignoreCheck && !(index in s.fixedTabs)) {

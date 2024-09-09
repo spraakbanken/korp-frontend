@@ -183,22 +183,20 @@ angular.module("korpApp").component("header", {
             $rootScope.show_modal = false
 
             let modal = null
-            utils.setupHash($rootScope, [
-                {
-                    key: "display",
-                    scope_name: "show_modal",
-                    post_change(val) {
-                        if (val) {
-                            showAbout()
-                        } else {
-                            if (modal != null) {
-                                modal.close()
-                            }
-                            modal = null
+            utils.setupHash($rootScope, {
+                key: "display",
+                scope_name: "show_modal",
+                post_change(val) {
+                    if (val) {
+                        showAbout()
+                    } else {
+                        if (modal != null) {
+                            modal.close()
                         }
-                    },
+                        modal = null
+                    }
                 },
-            ])
+            })
 
             const closeModals = function () {
                 $rootScope.show_modal = false

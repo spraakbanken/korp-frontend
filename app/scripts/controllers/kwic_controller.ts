@@ -64,7 +64,7 @@ export class KwicCtrl implements IController {
 
     setupHash() {
         // Sync url param for page number
-        return this.utils.setupHash(this.scope, [{ key: "page", val_in: Number }])
+        return this.utils.setupHash(this.scope, { key: "page", val_in: Number })
     }
 
     initPage() {
