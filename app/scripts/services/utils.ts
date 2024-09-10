@@ -15,7 +15,7 @@ type SetupHashConfigItem<K extends keyof HashParams = keyof HashParams, T = any>
     /** A function on the scope to pass value to, instead of setting `scope_name` */
     scope_func?: string
     /** Expression to watch for changes; defaults to `scope_name` */
-    expr?: string
+    expr?: string | (() => HashParams[K])
     /** Default value of the scope variable, corresponding to the url param being empty */
     default?: HashParams[K]
     /** Runs when the value is changed in scope or url */
@@ -56,7 +56,7 @@ angular.module("korpApp").factory("utils", [
             scope.$watch(() => $location.search(), onWatch)
 
             // Sync from scope to url
-            scope.$watch(config.expr || config.scope_name || config.key, (val: any) => {
+            scope.$watch((config.expr as any) || config.scope_name || config.key, (val: any) => {
                 val = config.val_out ? config.val_out(val) : val
                 if (val === config.default) {
                     val = null
