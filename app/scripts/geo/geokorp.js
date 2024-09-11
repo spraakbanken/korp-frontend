@@ -29,20 +29,6 @@ sbMap.directive("sbMap", [
             oldMap: "=?sbOldMap",
         },
         link(scope, element, attrs) {
-            var createCircleMarker,
-                createClusterIcon,
-                createFeatureLayer,
-                createMarkerCluster,
-                createMarkerIcon,
-                createMultiMarkerIcon,
-                map,
-                mergeMarkers,
-                mouseOut,
-                mouseOver,
-                openStreetMap,
-                shouldZooomToBounds,
-                updateMarkerSizes,
-                updateMarkers
             scope.useClustering = angular.isDefined(scope.useClustering) ? scope.useClustering : true
             scope.oldMap = angular.isDefined(scope.oldMap) ? scope.oldMap : false
             scope.showMap = false
@@ -57,8 +43,8 @@ sbMap.directive("sbMap", [
                 <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>
                 <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.rel | number:2}}</span></div>
             </div>`
-            map = angular.element(element.find(".map-container"))
-            scope.map = L.map(map[0], {
+            const container = angular.element(element.find(".map-container")).first()
+            scope.map = L.map(container, {
                 minZoom: 1,
                 maxZoom: 13,
             }).setView([51.505, -0.09], 13)
@@ -68,7 +54,7 @@ sbMap.directive("sbMap", [
                     return scope.map.invalidateSize()
                 }, 0)
             })
-            createCircleMarker = function (color, diameter, borderRadius) {
+            function createCircleMarker(color, diameter, borderRadius) {
                 return L.divIcon({
                     html: html`<div
                         class="geokorp-marker"
@@ -77,14 +63,12 @@ sbMap.directive("sbMap", [
                     iconSize: new L.Point(diameter, diameter),
                 })
             }
-            createMarkerIcon = function (color, cluster) {
+            function createMarkerIcon(color, cluster) {
                 // TODO use scope.maxRel, but scope.maxRel is not set when markers are created
                 // diameter = ((relSize / scope.maxRel) * 45) + 5
                 return createCircleMarker(color, 10, cluster ? 1 : 5)
             }
-            createMultiMarkerIcon = function (markerData) {
-                var idx, markerClass, row
-
+            function createMultiMarkerIcon(markerData) {
                 /** @type {[number, string][]} */
                 const elements = []
                 for (let i = 0; i < markerData.length; i++) {
@@ -145,12 +129,13 @@ sbMap.directive("sbMap", [
                 /** @type {string[]} */
                 const grid2 = []
                 for (let idx = 0; idx < grid.length; ++idx) {
-                    row = grid[idx]
+                    const row = grid[idx]
                     height += row.reduce((memo, val) => (val[0] > memo ? val[0] : memo), 0)
                     if (idx === gridCenter) {
                         width = grid[gridCenter].reduce((memo, val) => memo + val[0], 0)
-                        markerClass = "marker-middle"
-                    } else markerClass = idx > gridCenter ? "marker-top" : "marker-bottom"
+                    }
+                    const markerClass =
+                        idx === gridCenter ? "marker-middle" : idx > gridCenter ? "marker-top" : "marker-bottom"
                     grid2.push(
                         html`<div class="${markerClass}" style="text-align:center; line-height:0;">
                             ${row.map((elem) => elem[1]).join("")}
@@ -169,7 +154,7 @@ sbMap.directive("sbMap", [
              * @param clusterGroups {Record<string, {order: number}>}
              * @param restColor {string}
              */
-            createClusterIcon = function (clusterGroups, restColor) {
+            function createClusterIcon(clusterGroups, restColor) {
                 const groups = _.keys(clusterGroups)
                 groups.sort((group1, group2) => clusterGroups[group1].order - clusterGroups[group2].order)
                 if (groups.length > 4) {
@@ -209,19 +194,14 @@ sbMap.directive("sbMap", [
             // check if the cluster with split into several clusters / markers
             // on zooom
             // TODO: does not work in some cases
-            shouldZooomToBounds = function (cluster) {
-                var boundsZoom, childCluster, childClusters, i, len, newClusters, zoom
-                childClusters = cluster._childClusters.slice()
-                map = cluster._group._map
-                boundsZoom = map.getBoundsZoom(cluster._bounds)
-                zoom = cluster._zoom + 1
+            function shouldZooomToBounds(cluster) {
+                let childClusters = cluster._childClusters.slice()
+                const map = cluster._group._map
+                const boundsZoom = map.getBoundsZoom(cluster._bounds)
+                let zoom = cluster._zoom + 1
                 while (childClusters.length > 0 && boundsZoom > zoom) {
-                    zoom = zoom + 1
-                    newClusters = []
-                    for (i = 0, len = childClusters.length; i < len; i++) {
-                        childCluster = childClusters[i]
-                        newClusters = newClusters.concat(childCluster._childClusters)
-                    }
+                    zoom += 1
+                    const newClusters = childClusters.flatMap((childCluster) => childCluster._childClusters)
                     childClusters = newClusters
                 }
                 return childClusters.length > 1
@@ -230,9 +210,8 @@ sbMap.directive("sbMap", [
             // this is the max relative value of any cluster and can be used to
             // calculate marker sizes
             // TODO this needs to use the "rest" group when doing calcuations!!
-            updateMarkerSizes = function () {
-                var bounds
-                bounds = scope.map.getBounds()
+            function updateMarkerSizes() {
+                const bounds = scope.map.getBounds()
                 scope.maxRel = 0
                 if (scope.useClustering && scope.markerCluster) {
                     scope.map.eachLayer(function (layer) {
@@ -272,9 +251,8 @@ sbMap.directive("sbMap", [
             // TODO when scope.maxRel is set, we should redraw all non-cluster markers using this
 
             // create normal layer (and all listeners) to be used when clustering is not enabled
-            createFeatureLayer = function () {
-                var featureLayer
-                featureLayer = L.featureGroup()
+            function createFeatureLayer() {
+                const featureLayer = L.featureGroup()
                 featureLayer.on("click", function (e) {
                     if (e.layer.markerData instanceof Array) {
                         scope.selectedMarkers = e.layer.markerData
@@ -294,9 +272,8 @@ sbMap.directive("sbMap", [
                 return featureLayer
             }
             // create marker cluster layer and all listeners
-            createMarkerCluster = function (clusterGroups, restColor) {
-                var markerCluster
-                markerCluster = L.markerClusterGroup({
+            function createMarkerCluster(clusterGroups, restColor) {
+                const markerCluster = L.markerClusterGroup({
                     spiderfyOnMaxZoom: false,
                     showCoverageOnHover: false,
                     maxClusterRadius: 40,
@@ -330,7 +307,7 @@ sbMap.directive("sbMap", [
                 return markerCluster
             }
             // takes a list of markers and displays clickable (callback determined by directive user) info boxes
-            mouseOver = function (markerData) {
+            function mouseOver(markerData) {
                 return $timeout(function () {
                     return scope.$apply(function () {
                         var compiled,
@@ -394,7 +371,7 @@ sbMap.directive("sbMap", [
                     })
                 }, 0)
             }
-            mouseOut = function () {
+            function mouseOut() {
                 var hoverInfoElem
                 hoverInfoElem = angular.element(element.find(".hover-info-container"))
                 hoverInfoElem.css("opacity", "0")
@@ -407,7 +384,7 @@ sbMap.directive("sbMap", [
             })
             scope.$watchCollection("selectedGroups", () => updateMarkers())
             scope.$watch("useClustering", (newVal, oldVal) => newVal === !oldVal && updateMarkers())
-            updateMarkers = function () {
+            function updateMarkers() {
                 var clusterGroups,
                     color,
                     group,
@@ -498,7 +475,7 @@ sbMap.directive("sbMap", [
             }
             // merge lists of markers into one list with several hits in one marker
             // also calculate maxRel
-            mergeMarkers = function (markerLists) {
+            function mergeMarkers(markerLists) {
                 var val
                 scope.maxRel = 0
                 val = _.reduce(
@@ -530,8 +507,7 @@ sbMap.directive("sbMap", [
                 return _.values(val)
             }
             // Load map layer with leaflet-providers
-            openStreetMap = L.tileLayer.provider("OpenStreetMap")
-            openStreetMap.addTo(scope.map)
+            L.tileLayer.provider("OpenStreetMap").addTo(scope.map)
             scope.map.setView([scope.center.lat, scope.center.lng], scope.center.zoom)
             return (scope.showMap = true)
         },
