@@ -27,7 +27,7 @@ require("rickshaw/rickshaw.css")
 
 require("leaflet/dist/leaflet.css")
 require("leaflet.markercluster/dist/MarkerCluster.css")
-require("geokorp/dist/styles/geokorp.css")
+require("./scripts/geo/geokorp.css")
 require("components-jqueryui/themes/smoothness/jquery-ui.min.css")
 require("./styles/_bootstrap-custom.scss")
 

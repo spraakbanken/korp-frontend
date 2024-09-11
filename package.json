@@ -16,7 +16,6 @@
         "chart.js": "^4.4.3",
         "comma-separated-values": "3.6.4",
         "components-jqueryui": "1.12.1",
-        "geokorp": "spraakbanken/geokorp#1.5.0",
         "jquery": "3.6.3",
         "js-yaml": "^4.1.0",
         "leaflet": "^1.9.3",
