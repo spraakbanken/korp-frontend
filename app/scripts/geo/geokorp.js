@@ -1,10 +1,25 @@
 /** @format */
-import { html } from "@/util"
 import angular from "angular"
+import L, { Map } from "leaflet"
+import { html } from "@/util"
 
 const sbMap = angular.module("sbMap", [])
 
 sbMap.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))
+
+/**
+ * @typedef SbMapScope
+ * @prop {Map} map
+ * @prop {string[]} selectedGroups
+ * @prop {number} maxRel - Maximum frequency in current result
+ * @prop {Record<string, Marker>} markers
+ * @prop {string} restColor
+ */
+
+/**
+ * @typedef Marker
+ * @prop {string} color
+ */
 
 sbMap.directive("sbMap", [
     "$compile",
@@ -28,6 +43,10 @@ sbMap.directive("sbMap", [
             restColor: "=?sbRestColor", // free color to use for grouping etc
             oldMap: "=?sbOldMap",
         },
+        /**
+         * @param {SbMapScope} scope
+         * @returns
+         */
         link(scope, element, attrs) {
             scope.useClustering = angular.isDefined(scope.useClustering) ? scope.useClustering : true
             scope.oldMap = angular.isDefined(scope.oldMap) ? scope.oldMap : false
@@ -43,7 +62,7 @@ sbMap.directive("sbMap", [
                 <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>
                 <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.rel | number:2}}</span></div>
             </div>`
-            const container = angular.element(element.find(".map-container")).first()
+            const container = element.find(".map-container")[0]
             scope.map = L.map(container, {
                 minZoom: 1,
                 maxZoom: 13,
@@ -155,7 +174,7 @@ sbMap.directive("sbMap", [
              * @param restColor {string}
              */
             function createClusterIcon(clusterGroups, restColor) {
-                const groups = _.keys(clusterGroups)
+                const groups = Object.keys(clusterGroups)
                 groups.sort((group1, group2) => clusterGroups[group1].order - clusterGroups[group2].order)
                 if (groups.length > 4) {
                     groups.splice(3)
@@ -163,7 +182,7 @@ sbMap.directive("sbMap", [
                 }
                 return function (cluster) {
                     /** @type {Record<string, number>} */
-                    const sizes = groups.reduce((map, color) => ({ ...map, [color]: 0 }), {})
+                    const sizes = groups.reduce((sizes, color) => ({ ...sizes, [color]: 0 }), {})
                     cluster.getAllChildMarkers().forEach((childMarker) => {
                         let color = childMarker.markerData.color
                         if (!(color in sizes)) color = restColor
@@ -214,36 +233,17 @@ sbMap.directive("sbMap", [
                 const bounds = scope.map.getBounds()
                 scope.maxRel = 0
                 if (scope.useClustering && scope.markerCluster) {
-                    scope.map.eachLayer(function (layer) {
-                        var child, color, i, j, len, len1, ref, ref1, rel, results, sumRel, sumRels
+                    scope.map.eachLayer((layer) => {
                         if (layer.getChildCount) {
-                            sumRels = {}
-                            ref = layer.getAllChildMarkers()
-                            for (i = 0, len = ref.length; i < len; i++) {
-                                child = ref[i]
-                                color = child.markerData.color
-                                if (!sumRels[color]) {
-                                    sumRels[color] = 0
-                                }
-                                sumRels[color] = sumRels[color] + child.markerData.point.rel
+                            /** @type {Record<string, number>} */
+                            const sumRels = {}
+                            for (const child of layer.getAllChildMarkers()) {
+                                const color = child.markerData.color
+                                if (!sumRels[color]) sumRels[color] = 0
+                                sumRels[color] += child.markerData.point.rel
                             }
-                            ref1 = _.values(sumRels)
-                            results = []
-                            for (j = 0, len1 = ref1.length; j < len1; j++) {
-                                sumRel = ref1[j]
-                                if (sumRel > scope.maxRel) {
-                                    results.push((scope.maxRel = sumRel))
-                                } else {
-                                    results.push(void 0)
-                                }
-                            }
-                            return results
-                        } else if (layer.markerData) {
-                            rel = layer.markerData.point.rel
-                            if (rel > scope.maxRel) {
-                                return (scope.maxRel = rel)
-                            }
-                        }
+                            scope.maxRel = Math.max(scope.maxRel, ...Object.values(sumRels))
+                        } else if (layer.markerData?.point.rel > scope.maxRel) scope.maxRel = layer.markerData.point.rel
                     })
                     return scope.markerCluster.refreshClusters()
                 }
@@ -253,12 +253,9 @@ sbMap.directive("sbMap", [
             // create normal layer (and all listeners) to be used when clustering is not enabled
             function createFeatureLayer() {
                 const featureLayer = L.featureGroup()
-                featureLayer.on("click", function (e) {
-                    if (e.layer.markerData instanceof Array) {
-                        scope.selectedMarkers = e.layer.markerData
-                    } else {
-                        scope.selectedMarkers = [e.layer.markerData]
-                    }
+                featureLayer.on("click", (e) => {
+                    scope.selectedMarkers =
+                        e.layer.markerData instanceof Array ? e.layer.markerData : [e.layer.markerData]
                     return mouseOver(scope.selectedMarkers)
                 })
                 featureLayer.on("mouseover", (e) =>
@@ -271,7 +268,12 @@ sbMap.directive("sbMap", [
                 )
                 return featureLayer
             }
-            // create marker cluster layer and all listeners
+
+            /**
+             * create marker cluster layer and all listeners
+             * @param {Record<string, Marker>} clusterGroups
+             * @param {string} restColor
+             */
             function createMarkerCluster(clusterGroups, restColor) {
                 const markerCluster = L.markerClusterGroup({
                     spiderfyOnMaxZoom: false,
@@ -286,16 +288,14 @@ sbMap.directive("sbMap", [
                 markerCluster.on("clustermouseout", (e) =>
                     scope.selectedMarkers.length > 0 ? mouseOver(scope.selectedMarkers) : mouseOut()
                 )
-                markerCluster.on("clusterclick", function (e) {
-                    scope.selectedMarkers = _.map(e.layer.getAllChildMarkers(), function (layer) {
-                        return layer.markerData
-                    })
+                markerCluster.on("clusterclick", (e) => {
+                    scope.selectedMarkers = _.map(e.layer.getAllChildMarkers(), (layer) => layer.markerData)
                     mouseOver(scope.selectedMarkers)
                     if (shouldZooomToBounds(e.layer)) {
                         return e.layer.zoomToBounds()
                     }
                 })
-                markerCluster.on("click", function (e) {
+                markerCluster.on("click", (e) => {
                     scope.selectedMarkers = [e.layer.markerData]
                     return mouseOver(scope.selectedMarkers)
                 })
@@ -308,61 +308,41 @@ sbMap.directive("sbMap", [
             }
             // takes a list of markers and displays clickable (callback determined by directive user) info boxes
             function mouseOver(markerData) {
-                return $timeout(function () {
-                    return scope.$apply(function () {
-                        var compiled,
-                            content,
-                            hoverInfoElem,
-                            i,
-                            len,
-                            marker,
-                            markerDiv,
-                            msgScope,
-                            name,
-                            oldMap,
-                            selectedMarkers
-                        content = []
+                return $timeout(() => {
+                    return scope.$apply(() => {
                         // support for "old" map
-                        oldMap = false
-                        if (markerData[0].names) {
-                            oldMap = true
-                            selectedMarkers = (function () {
-                                var i, len, ref, results
-                                ref = _.keys(markerData[0].names)
-                                results = []
-                                for (i = 0, len = ref.length; i < len; i++) {
-                                    name = ref[i]
-                                    results.push({
-                                        color: markerData[0].color,
-                                        searchCqp: markerData[0].searchCqp,
-                                        point: {
-                                            name: name,
-                                            abs: markerData[0].names[name].abs_occurrences,
-                                            rel: markerData[0].names[name].rel_occurrences,
-                                        },
-                                    })
-                                }
-                                return results
-                            })()
+                        // TODO Usage was removed in 2020 (39b34962), remove support?
+                        const oldMap = !!markerData[0].names
+
+                        let selectedMarkers
+                        if (oldMap) {
+                            selectedMarkers = _.map(markerData[0].names).map((thing, name) => ({
+                                color: markerData[0].color,
+                                searchCqp: markerData[0].searchCqp,
+                                point: {
+                                    name,
+                                    abs: thing.abs_occurrences,
+                                    rel: thing.rel_occurrences,
+                                },
+                            }))
                         } else {
-                            markerData.sort(function (markerData1, markerData2) {
-                                return markerData2.point.rel - markerData1.point.rel
-                            })
+                            markerData.sort((a, b) => b.point.rel - a.point.rel)
                             selectedMarkers = markerData
                         }
-                        for (i = 0, len = selectedMarkers.length; i < len; i++) {
-                            marker = selectedMarkers[i]
-                            msgScope = $rootScope.$new(true)
+
+                        const content = selectedMarkers.map((marker) => {
+                            const msgScope = $rootScope.$new(true)
                             msgScope.showLabel = !oldMap
                             msgScope.point = marker.point
                             msgScope.label = marker.label
                             msgScope.color = marker.color
-                            compiled = $compile(scope.hoverTemplate)
-                            markerDiv = compiled(msgScope)
+                            const compiled = $compile(scope.hoverTemplate)
+                            const markerDiv = compiled(msgScope)
                             markerDiv.bind("click", () => scope.markerCallback(marker))
-                            content.push(markerDiv)
-                        }
-                        hoverInfoElem = angular.element(element.find(".hover-info-container"))
+                            return markerDiv
+                        })
+
+                        const hoverInfoElem = angular.element(element.find(".hover-info-container"))
                         hoverInfoElem.empty()
                         hoverInfoElem.append(content)
                         hoverInfoElem[0].scrollTop = 0
@@ -372,42 +352,21 @@ sbMap.directive("sbMap", [
                 }, 0)
             }
             function mouseOut() {
-                var hoverInfoElem
-                hoverInfoElem = angular.element(element.find(".hover-info-container"))
+                const hoverInfoElem = angular.element(element.find(".hover-info-container"))
                 hoverInfoElem.css("opacity", "0")
                 return hoverInfoElem.css("display", "none")
             }
             scope.showHoverInfo = false
-            scope.map.on("click", function (e) {
+            scope.map.on("click", (e) => {
                 scope.selectedMarkers = []
                 return mouseOut()
             })
+
             scope.$watchCollection("selectedGroups", () => updateMarkers())
             scope.$watch("useClustering", (newVal, oldVal) => newVal === !oldVal && updateMarkers())
+
             function updateMarkers() {
-                var clusterGroups,
-                    color,
-                    group,
-                    groupData,
-                    i,
-                    j,
-                    k,
-                    l,
-                    len,
-                    len1,
-                    len2,
-                    len3,
-                    marker,
-                    markerData,
-                    markerGroup,
-                    markerGroupId,
-                    marker_id,
-                    markers,
-                    ref,
-                    ref1,
-                    selectedGroups
-                selectedGroups = scope.selectedGroups
-                markers = scope.markers
+                const selectedGroups = scope.selectedGroups
                 if (scope.markerCluster) {
                     scope.map.removeLayer(scope.markerCluster)
                 }
@@ -415,14 +374,8 @@ sbMap.directive("sbMap", [
                     scope.map.removeLayer(scope.featureLayer)
                 }
                 if (scope.useClustering) {
-                    clusterGroups = {}
-                    for (i = 0, len = selectedGroups.length; i < len; i++) {
-                        group = selectedGroups[i]
-                        groupData = markers[group]
-                        clusterGroups[groupData.color] = {
-                            order: groupData.order,
-                        }
-                    }
+                    const selectedMarkers = selectedGroups.map((group) => scope.markers[group])
+                    const clusterGroups = _.groupBy(selectedMarkers, "color")
                     scope.markerCluster = createMarkerCluster(clusterGroups, scope.restColor)
                     scope.map.addLayer(scope.markerCluster)
                 } else {
@@ -430,18 +383,14 @@ sbMap.directive("sbMap", [
                     scope.map.addLayer(scope.featureLayer)
                 }
                 if (scope.useClustering || scope.oldMap) {
-                    for (j = 0, len1 = selectedGroups.length; j < len1; j++) {
-                        markerGroupId = selectedGroups[j]
-                        markerGroup = markers[markerGroupId]
-                        color = markerGroup.color
+                    for (const group of selectedGroups) {
+                        const markerGroup = scope.markers[group]
                         scope.maxRel = 0
-                        ref = _.keys(markerGroup.markers)
-                        for (k = 0, len2 = ref.length; k < len2; k++) {
-                            marker_id = ref[k]
-                            markerData = markerGroup.markers[marker_id]
-                            markerData.color = color
-                            marker = L.marker([markerData.lat, markerData.lng], {
-                                icon: createMarkerIcon(color, !scope.oldMap && selectedGroups.length !== 1),
+                        for (const markerId in markerGroup.markers) {
+                            const markerData = markerGroup.markers[markerId]
+                            markerData.color = markerGroup.color
+                            const marker = L.marker([markerData.lat, markerData.lng], {
+                                icon: createMarkerIcon(markerGroup.color, !scope.oldMap && selectedGroups.length !== 1),
                             })
                             marker.markerData = markerData
                             if (scope.useClustering) {
@@ -452,19 +401,10 @@ sbMap.directive("sbMap", [
                         }
                     }
                 } else {
-                    markers = (function () {
-                        var l, len3, results
-                        results = []
-                        for (l = 0, len3 = selectedGroups.length; l < len3; l++) {
-                            markerGroupId = selectedGroups[l]
-                            results.push(markers[markerGroupId])
-                        }
-                        return results
-                    })()
-                    ref1 = mergeMarkers(_.values(markers))
-                    for (l = 0, len3 = ref1.length; l < len3; l++) {
-                        markerData = ref1[l]
-                        marker = L.marker([markerData.lat, markerData.lng], {
+                    const markers = selectedGroups.map((group) => scope.markers[group])
+                    const markersMerged = mergeMarkers(markers)
+                    for (const markerData of markersMerged) {
+                        const marker = L.marker([markerData.lat, markerData.lng], {
                             icon: createMultiMarkerIcon(markerData.markerData),
                         })
                         marker.markerData = markerData.markerData
@@ -476,40 +416,29 @@ sbMap.directive("sbMap", [
             // merge lists of markers into one list with several hits in one marker
             // also calculate maxRel
             function mergeMarkers(markerLists) {
-                var val
                 scope.maxRel = 0
-                val = _.reduce(
-                    markerLists,
-                    function (memo, val) {
-                        var latLng, markerData, markerId, ref
-                        ref = val.markers
-                        for (markerId in ref) {
-                            markerData = ref[markerId]
-                            markerData.color = val.color
-                            latLng = markerData.lat + "," + markerData.lng
-                            if (markerData.point.rel > scope.maxRel) {
-                                scope.maxRel = markerData.point.rel
+                const val = markerLists.reduce((memo, parent) => {
+                    for (const child of Object.values(parent.markers)) {
+                        child.color = parent.color
+                        const latLng = child.lat + "," + child.lng
+                        if (child.point.rel > scope.maxRel) scope.maxRel = child.point.rel
+                        if (latLng in memo) memo[latLng].markerData.push(child)
+                        else
+                            memo[latLng] = {
+                                markerData: [child],
+                                lat: child.lat,
+                                lng: child.lng,
                             }
-                            if (latLng in memo) {
-                                memo[latLng].markerData.push(markerData)
-                            } else {
-                                memo[latLng] = {
-                                    markerData: [markerData],
-                                }
-                                memo[latLng].lat = markerData.lat
-                                memo[latLng].lng = markerData.lng
-                            }
-                        }
-                        return memo
-                    },
-                    {}
-                )
-                return _.values(val)
+                    }
+                    return memo
+                }, {})
+                return Object.values(val)
             }
+
             // Load map layer with leaflet-providers
             L.tileLayer.provider("OpenStreetMap").addTo(scope.map)
             scope.map.setView([scope.center.lat, scope.center.lng], scope.center.zoom)
-            return (scope.showMap = true)
+            scope.showMap = true
         },
     }),
 ])
