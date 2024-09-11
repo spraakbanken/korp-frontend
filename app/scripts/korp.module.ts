@@ -4,7 +4,6 @@ import "angular-ui-bootstrap"
 import "angular-spinner"
 import "angular-ui-sortable"
 import "@/geo/geokorp"
-import "@/geo/geokorp-templates"
 import "angular-dynamic-locale"
 import "angular-filter"
 

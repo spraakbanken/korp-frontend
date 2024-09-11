@@ -2,20 +2,21 @@
 import { html } from "@/util"
 import angular from "angular"
 
-const sbMap = angular.module("sbMap", ["sbMapTemplate"])
+const sbMap = angular.module("sbMap", [])
 
-sbMap.filter("trust", function ($sce) {
-    return function (input) {
-        return $sce.trustAsHtml(input)
-    }
-})
+sbMap.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))
 
 sbMap.directive("sbMap", [
     "$compile",
     "$timeout",
     "$rootScope",
     ($compile, $timeout, $rootScope) => ({
-        templateUrl: "template/sb_map.html",
+        template: html`<div class="map">
+            <div class="map-outer-container" ng-show="showMap">
+                <div class="map-container"></div>
+            </div>
+            <div class="hover-info-container" style="opacity:0;display:none;"></div>
+        </div>`,
         restrict: "E",
         scope: {
             markers: "=sbMarkers",
@@ -69,14 +70,10 @@ sbMap.directive("sbMap", [
             })
             createCircleMarker = function (color, diameter, borderRadius) {
                 return L.divIcon({
-                    html:
-                        '<div class="geokorp-marker" style="border-radius:' +
-                        borderRadius +
-                        "px;height:" +
-                        diameter +
-                        "px;background-color:" +
-                        color +
-                        '"></div>',
+                    html: html`<div
+                        class="geokorp-marker"
+                        style="border-radius:${borderRadius}px; height:${diameter}px; background-color:${color}"
+                    ></div>`,
                     iconSize: new L.Point(diameter, diameter),
                 })
             }
@@ -86,107 +83,48 @@ sbMap.directive("sbMap", [
                 return createCircleMarker(color, 10, cluster ? 1 : 5)
             }
             createMultiMarkerIcon = function (markerData) {
-                var center,
-                    circle,
-                    color,
-                    diameter,
-                    elements,
-                    grid,
-                    gridSize,
-                    height,
-                    i,
-                    id,
-                    idx,
-                    j,
-                    marker,
-                    markerClass,
-                    neg,
-                    ref,
-                    ref1,
-                    row,
-                    something,
-                    stop,
-                    width,
-                    x,
-                    xOp,
-                    y,
-                    yOp
-                elements = (function () {
-                    var i, len, results
-                    results = []
-                    for (i = 0, len = markerData.length; i < len; i++) {
-                        marker = markerData[i]
-                        color = marker.color
-                        diameter = (marker.point.rel / scope.maxRel) * 40 + 10
-                        results.push([
-                            diameter,
-                            '<div class="geokorp-multi-marker" style="border-radius:' +
-                                diameter +
-                                "px;height:" +
-                                diameter +
-                                "px;width:" +
-                                diameter +
-                                "px;background-color:" +
-                                color +
-                                '"></div>',
-                        ])
-                    }
-                    return results
-                })()
-                elements.sort(function (element1, element2) {
-                    return element1[0] - element2[0]
-                })
-                gridSize = Math.ceil(Math.sqrt(elements.length)) + 1
-                gridSize = gridSize % 2 === 0 ? gridSize + 1 : gridSize
-                center = Math.floor(gridSize / 2)
-                grid = (function () {
-                    var i, ref, results
-                    results = []
-                    for (x = i = 0, ref = gridSize - 1; 0 <= ref ? i <= ref : i >= ref; x = 0 <= ref ? ++i : --i) {
-                        results.push([])
-                    }
-                    return results
-                })()
-                id = function (x) {
-                    return x
+                var idx, markerClass, row
+
+                /** @type {[number, string][]} */
+                const elements = []
+                for (let i = 0; i < markerData.length; i++) {
+                    const marker = markerData[i]
+                    const diameter = (marker.point.rel / scope.maxRel) * 40 + 10
+                    elements.push([
+                        diameter,
+                        html`<div
+                            class="geokorp-multi-marker"
+                            style="border-radius:${diameter}px; height:${diameter}px; width:${diameter}px; background-color:${marker.color}"
+                        ></div>`,
+                    ])
                 }
-                neg = function (x) {
-                    return -x
-                }
-                for (idx = i = 0, ref = center; 0 <= ref ? i <= ref : i >= ref; idx = 0 <= ref ? ++i : --i) {
-                    x = -1
-                    y = -1
-                    xOp = neg
-                    yOp = neg
-                    stop = idx === 0 ? 0 : idx * 4 - 1
-                    for (
-                        something = j = 0, ref1 = stop;
-                        0 <= ref1 ? j <= ref1 : j >= ref1;
-                        something = 0 <= ref1 ? ++j : --j
-                    ) {
-                        if (x === -1) {
-                            x = center + idx
-                        } else {
-                            x = x + xOp(1)
-                        }
-                        if (y === -1) {
-                            y = center
-                        } else {
-                            y = y + yOp(1)
-                        }
-                        if (x === center - idx) {
-                            xOp = id
-                        }
-                        if (y === center - idx) {
-                            yOp = id
-                        }
-                        if (x === center + idx) {
-                            xOp = neg
-                        }
-                        if (y === center + idx) {
-                            yOp = neg
-                        }
-                        circle = elements.pop()
+
+                elements.sort((element1, element2) => element1[0] - element2[0])
+
+                const gridSizeRaw = Math.ceil(Math.sqrt(elements.length)) + 1
+                const gridSize = gridSizeRaw % 2 === 0 ? gridSizeRaw + 1 : gridSizeRaw
+                const center = Math.floor(gridSize / 2)
+
+                /** @type {([number, string][] | [])[]} */
+                let grid = []
+                for (let i = 0; i <= gridSize - 1; i++) grid.push([])
+
+                const id = (x) => x
+                const neg = (x) => -x
+                for (let idx = 0; idx <= center; idx++) {
+                    let x = -1
+                    let y = -1
+                    let xOp = neg
+                    let yOp = neg
+                    const stop = idx === 0 ? 0 : idx * 4 - 1
+                    for (let j = 0; j <= stop; ++j) {
+                        x = x === -1 ? center + idx : x + xOp(1)
+                        y = y === -1 ? center : y + yOp(1)
+                        if (x === center - idx) xOp = id
+                        if (y === center - idx) yOp = id
+                        if (x === center + idx) xOp = neg
+                        if (y === center + idx) yOp = neg
+                        const circle = elements.pop()
                         if (circle) {
                             grid[y][x] = circle
                         } else {
@@ -196,139 +134,76 @@ sbMap.directive("sbMap", [
                 }
                 // remove all empty arrays and elements
                 // TODO don't create empty stuff??
-                grid = _.filter(grid, function (row) {
-                    return row.length > 0
-                })
-                grid = _.map(grid, function (row) {
-                    return (row = _.filter(row, function (elem) {
-                        return elem
-                    }))
-                })
+                grid = grid.filter((row) => row.length > 0)
+                grid = grid.map((row) => row.filter((elem) => elem))
+
                 //# take largest element from each row and add to height
-                height = 0
-                width = 0
-                center = Math.floor(grid.length / 2)
-                grid = (function () {
-                    var k, len, results
-                    results = []
-                    for (idx = k = 0, len = grid.length; k < len; idx = ++k) {
-                        row = grid[idx]
-                        height =
-                            height +
-                            _.reduce(
-                                row,
-                                function (memo, val) {
-                                    if (val[0] > memo) {
-                                        return val[0]
-                                    } else {
-                                        return memo
-                                    }
-                                },
-                                0
-                            )
-                        if (idx < center) {
-                            markerClass = "marker-bottom"
-                        }
-                        if (idx === center) {
-                            width = _.reduce(
-                                grid[center],
-                                function (memo, val) {
-                                    return memo + val[0]
-                                },
-                                0
-                            )
-                            markerClass = "marker-middle"
-                        }
-                        if (idx > center) {
-                            markerClass = "marker-top"
-                        }
-                        results.push(
-                            '<div class="' +
-                                markerClass +
-                                '" style="text-align: center;line-height: 0;">' +
-                                _.map(row, function (elem) {
-                                    return elem[1]
-                                }).join("") +
-                                "</div>"
-                        )
-                    }
-                    return results
-                })()
+                let height = 0
+                let width = 0
+                const gridCenter = Math.floor(grid.length / 2)
+
+                /** @type {string[]} */
+                const grid2 = []
+                for (let idx = 0; idx < grid.length; ++idx) {
+                    row = grid[idx]
+                    height += row.reduce((memo, val) => (val[0] > memo ? val[0] : memo), 0)
+                    if (idx === gridCenter) {
+                        width = grid[gridCenter].reduce((memo, val) => memo + val[0], 0)
+                        markerClass = "marker-middle"
+                    } else markerClass = idx > gridCenter ? "marker-top" : "marker-bottom"
+                    grid2.push(
+                        html`<div class="${markerClass}" style="text-align:center; line-height:0;">
+                            ${row.map((elem) => elem[1]).join("")}
+                        </div>`
+                    )
+                }
                 return L.divIcon({
-                    html: grid.join(""),
+                    html: grid2.join(""),
                     iconSize: new L.Point(width, height),
                 })
             }
+
             // use the previously calculated "scope.maxRel" to decide the sizes of the bars
             // in the cluster icon that is returned (between 5px and 50px)
+            /**
+             * @param clusterGroups {Record<string, {order: number}>}
+             * @param restColor {string}
+             */
             createClusterIcon = function (clusterGroups, restColor) {
-                var allGroups, visibleGroups
-                allGroups = _.keys(clusterGroups)
-                visibleGroups = allGroups.sort(function (group1, group2) {
-                    return clusterGroups[group1].order - clusterGroups[group2].order
-                })
-                if (allGroups.length > 4) {
-                    visibleGroups = visibleGroups.splice(0, 3)
-                    visibleGroups.push(restColor)
+                const groups = _.keys(clusterGroups)
+                groups.sort((group1, group2) => clusterGroups[group1].order - clusterGroups[group2].order)
+                if (groups.length > 4) {
+                    groups.splice(3)
+                    groups.push(restColor)
                 }
                 return function (cluster) {
-                    var child,
-                        color,
-                        diameter,
-                        divWidth,
-                        elements,
-                        group,
-                        groupSize,
-                        i,
-                        j,
-                        k,
-                        len,
-                        len1,
-                        len2,
-                        ref,
-                        ref1,
-                        rel,
-                        sizes
-                    sizes = {}
-                    for (i = 0, len = visibleGroups.length; i < len; i++) {
-                        group = visibleGroups[i]
-                        sizes[group] = 0
-                    }
-                    ref = cluster.getAllChildMarkers()
-                    for (j = 0, len1 = ref.length; j < len1; j++) {
-                        child = ref[j]
-                        color = child.markerData.color
-                        if (!(color in sizes)) {
-                            color = restColor
-                        }
-                        rel = child.markerData.point.rel
-                        sizes[color] = sizes[color] + rel
-                    }
-                    if (allGroups.length === 1) {
-                        color = _.keys(sizes)[0]
-                        groupSize = sizes[color]
-                        diameter = (groupSize / scope.maxRel) * 45 + 5
+                    /** @type {Record<string, number>} */
+                    const sizes = groups.reduce((map, color) => ({ ...map, [color]: 0 }), {})
+                    cluster.getAllChildMarkers().forEach((childMarker) => {
+                        let color = childMarker.markerData.color
+                        if (!(color in sizes)) color = restColor
+                        sizes[color] += childMarker.markerData.point.rel
+                    })
+
+                    if (groups.length === 1) {
+                        const color = groups[0]
+                        const groupSize = sizes[color]
+                        const diameter = (groupSize / scope.maxRel) * 45 + 5
                         return createCircleMarker(color, diameter, diameter)
-                    } else {
-                        elements = ""
-                        ref1 = _.keys(sizes)
-                        for (k = 0, len2 = ref1.length; k < len2; k++) {
-                            color = ref1[k]
-                            groupSize = sizes[color]
-                            divWidth = (groupSize / scope.maxRel) * 45 + 5
-                            elements =
-                                elements +
-                                '<div class="cluster-geokorp-marker" style="height:' +
-                                divWidth +
-                                "px;background-color:" +
-                                color +
-                                '"></div>'
-                        }
-                        return L.divIcon({
-                            html: '<div class="cluster-geokorp-marker-group">' + elements + "</div>",
-                            iconSize: new L.Point(40, 50),
-                        })
                     }
+
+                    const elements = Object.keys(sizes).map((color) => {
+                        const groupSize = sizes[color]
+                        const divWidth = (groupSize / scope.maxRel) * 45 + 5
+                        return html`<div
+                            class="cluster-geokorp-marker"
+                            style="height:${divWidth}px; background-color:${color}"
+                        ></div>`
+                    })
+                    return L.divIcon({
+                        html: html`<div class="cluster-geokorp-marker-group">${elements.join("")}</div>`,
+                        iconSize: new L.Point(40, 50),
+                    })
                 }
             }
             // check if the cluster with split into several clusters / markers
@@ -408,20 +283,14 @@ sbMap.directive("sbMap", [
                     }
                     return mouseOver(scope.selectedMarkers)
                 })
-                featureLayer.on("mouseover", function (e) {
-                    if (e.layer.markerData instanceof Array) {
-                        return mouseOver(e.layer.markerData)
-                    } else {
-                        return mouseOver([e.layer.markerData])
-                    }
-                })
-                featureLayer.on("mouseout", function (e) {
-                    if (scope.selectedMarkers.length > 0) {
-                        return mouseOver(scope.selectedMarkers)
-                    } else {
-                        return mouseOut()
-                    }
-                })
+                featureLayer.on("mouseover", (e) =>
+                    e.layer.markerData instanceof Array
+                        ? mouseOver(e.layer.markerData)
+                        : mouseOver([e.layer.markerData])
+                )
+                featureLayer.on("mouseout", (e) =>
+                    scope.selectedMarkers.length > 0 ? mouseOver(scope.selectedMarkers) : mouseOut()
+                )
                 return featureLayer
             }
             // create marker cluster layer and all listeners
@@ -434,20 +303,12 @@ sbMap.directive("sbMap", [
                     zoomToBoundsOnClick: false,
                     iconCreateFunction: createClusterIcon(clusterGroups, restColor),
                 })
-                markerCluster.on("clustermouseover", function (e) {
-                    return mouseOver(
-                        _.map(e.layer.getAllChildMarkers(), function (layer) {
-                            return layer.markerData
-                        })
-                    )
-                })
-                markerCluster.on("clustermouseout", function (e) {
-                    if (scope.selectedMarkers.length > 0) {
-                        return mouseOver(scope.selectedMarkers)
-                    } else {
-                        return mouseOut()
-                    }
-                })
+                markerCluster.on("clustermouseover", (e) =>
+                    mouseOver(_.map(e.layer.getAllChildMarkers(), (layer) => layer.markerData))
+                )
+                markerCluster.on("clustermouseout", (e) =>
+                    scope.selectedMarkers.length > 0 ? mouseOver(scope.selectedMarkers) : mouseOut()
+                )
                 markerCluster.on("clusterclick", function (e) {
                     scope.selectedMarkers = _.map(e.layer.getAllChildMarkers(), function (layer) {
                         return layer.markerData
@@ -461,19 +322,11 @@ sbMap.directive("sbMap", [
                     scope.selectedMarkers = [e.layer.markerData]
                     return mouseOver(scope.selectedMarkers)
                 })
-                markerCluster.on("mouseover", function (e) {
-                    return mouseOver([e.layer.markerData])
-                })
-                markerCluster.on("mouseout", function (e) {
-                    if (scope.selectedMarkers.length > 0) {
-                        return mouseOver(scope.selectedMarkers)
-                    } else {
-                        return mouseOut()
-                    }
-                })
-                markerCluster.on("animationend", function (e) {
-                    return updateMarkerSizes()
-                })
+                markerCluster.on("mouseover", (e) => mouseOver([e.layer.markerData]))
+                markerCluster.on("mouseout", (e) =>
+                    scope.selectedMarkers.length > 0 ? mouseOver(scope.selectedMarkers) : mouseOut()
+                )
+                markerCluster.on("animationend", (e) => updateMarkerSizes())
                 return markerCluster
             }
             // takes a list of markers and displays clickable (callback determined by directive user) info boxes
@@ -529,11 +382,7 @@ sbMap.directive("sbMap", [
                             msgScope.color = marker.color
                             compiled = $compile(scope.hoverTemplate)
                             markerDiv = compiled(msgScope)
-                            ;(function (marker) {
-                                return markerDiv.bind("click", function () {
-                                    return scope.markerCallback(marker)
-                                })
-                            })(marker)
+                            markerDiv.bind("click", () => scope.markerCallback(marker))
                             content.push(markerDiv)
                         }
                         hoverInfoElem = angular.element(element.find(".hover-info-container"))
@@ -556,14 +405,8 @@ sbMap.directive("sbMap", [
                 scope.selectedMarkers = []
                 return mouseOut()
             })
-            scope.$watchCollection("selectedGroups", function (selectedGroups) {
-                return updateMarkers()
-            })
-            scope.$watch("useClustering", function (newVal, oldVal) {
-                if (newVal === !oldVal) {
-                    return updateMarkers()
-                }
-            })
+            scope.$watchCollection("selectedGroups", () => updateMarkers())
+            scope.$watch("useClustering", (newVal, oldVal) => newVal === !oldVal && updateMarkers())
             updateMarkers = function () {
                 var clusterGroups,
                     color,
