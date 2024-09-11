@@ -10,39 +10,37 @@ import "@/components/extended/extended-standard"
 import "@/components/extended/extended-parallel"
 import "@/components/advanced-search"
 import "@/components/compare-search"
-import "@/components/tab-hash"
 import "@/directives/click-cover"
 import "@/directives/reduce-select"
+import "@/directives/tab-hash"
 
 angular.module("korpApp").component("searchtabs", {
     template: html`
         <div click-cover="$ctrl.noCorporaSelected">
-            <tab-hash key="search_tab">
-                <uib-tabset class="tabbable search_tabs" active="activeTab">
-                    <uib-tab heading='{{"simple" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[0]">
-                        <simple-search></simple-search>
-                    </uib-tab>
-                    <uib-tab class="extended" heading='{{"detailed" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[1]">
-                        <div>
-                            <extended-standard ng-if="!$ctrl.parallelMode"></extended-standard>
-                            <extended-parallel ng-if="$ctrl.parallelMode"></extended-parallel>
-                        </div>
-                    </uib-tab>
-                    <uib-tab heading='{{"advanced" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[2]">
-                        <advanced-search></advanced-search>
-                    </uib-tab>
-                    <uib-tab ng-if="$ctrl.visibleTabs[3]">
-                        <uib-tab-heading>
-                            {{'compare' | loc:$root.lang}}
-                            <span class="badge" ng-if="$ctrl.savedSearches.length">{{$ctrl.savedSearches.length}}</span>
-                        </uib-tab-heading>
-                        <compare-search></compare-search>
-                    </uib-tab>
-                    <div class="flex justify-end items-center">
-                        <select class="hidden md_block shrink min-w-0 m-1" id="search_history"></select>
+            <uib-tabset class="tabbable search_tabs" tab-hash="search_tab" active="activeTab">
+                <uib-tab heading='{{"simple" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[0]">
+                    <simple-search></simple-search>
+                </uib-tab>
+                <uib-tab class="extended" heading='{{"detailed" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[1]">
+                    <div>
+                        <extended-standard ng-if="!$ctrl.parallelMode"></extended-standard>
+                        <extended-parallel ng-if="$ctrl.parallelMode"></extended-parallel>
                     </div>
-                </uib-tabset>
-            </tab-hash>
+                </uib-tab>
+                <uib-tab heading='{{"advanced" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[2]">
+                    <advanced-search></advanced-search>
+                </uib-tab>
+                <uib-tab ng-if="$ctrl.visibleTabs[3]">
+                    <uib-tab-heading>
+                        {{'compare' | loc:$root.lang}}
+                        <span class="badge" ng-if="$ctrl.savedSearches.length">{{$ctrl.savedSearches.length}}</span>
+                    </uib-tab-heading>
+                    <compare-search></compare-search>
+                </uib-tab>
+                <div class="flex justify-end items-center">
+                    <select class="hidden md_block shrink min-w-0 m-1" id="search_history"></select>
+                </div>
+            </uib-tabset>
             <div
                 class="flex items-baseline bg-blue-100 border border-blue-200 shadow-inner"
                 id="search_options"
