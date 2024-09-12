@@ -2,6 +2,7 @@
 import angular from "angular"
 import L, { Map } from "leaflet"
 import { html } from "@/util"
+import "./geokorp.scss"
 
 const sbMap = angular.module("sbMap", [])
 
