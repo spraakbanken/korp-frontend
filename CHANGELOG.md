@@ -12,6 +12,7 @@
   - `$rootScope`
   - Auth module
   - services (`backend`, `compare-searches`, `lexicons`, `searches`, `utils`)
+- Map code from `korp-geo` has moved into this codebase [#359](https://github.com/spraakbanken/korp-frontend/issues/359)
 
 ### Changed
 
