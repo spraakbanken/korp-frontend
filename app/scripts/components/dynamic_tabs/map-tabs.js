@@ -37,14 +37,12 @@ angular.module("korpApp").directive("mapTabs", () => ({
                         </div>
                     </div>
                     <sb-map
-                        sb-center="center"
-                        sb-markers="markerGroups"
-                        sb-show-time="showTime"
-                        sb-base-layer="mapSettings.baseLayer"
-                        sb-marker-callback="newKWICSearch"
-                        sb-selected-groups="selectedGroups"
-                        sb-rest-color="restColor"
-                        sb-use-clustering="useClustering"
+                        center="center"
+                        markers="markerGroups"
+                        marker-callback="newKWICSearch"
+                        selected-groups="selectedGroups"
+                        rest-color="restColor"
+                        use-clustering="useClustering"
                     ></sb-map>
                 </div>
             </div>
