@@ -2,11 +2,7 @@
 import angular from "angular"
 import L, { Map } from "leaflet"
 import { html } from "@/util"
-import "./geokorp.scss"
-
-const sbMap = angular.module("sbMap", [])
-
-sbMap.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))
+import "@/../styles/map.scss"
 
 /**
  * @typedef SbMapScope
@@ -22,7 +18,7 @@ sbMap.filter("trust", ($sce) => (input) => $sce.trustAsHtml(input))
  * @prop {string} color
  */
 
-sbMap.component("sbMap", {
+angular.module("korpApp").component("resultMap", {
     template: html`<div class="map">
         <div class="map-outer-container" ng-show="showMap">
             <div class="map-container"></div>

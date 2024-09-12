@@ -2,6 +2,7 @@
 import angular from "angular"
 import { html } from "@/util"
 import "@/components/korp-error"
+import "@/components/result-map"
 import "@/directives/tab-spinner"
 
 angular.module("korpApp").directive("mapTabs", () => ({
@@ -36,14 +37,14 @@ angular.module("korpApp").directive("mapTabs", () => ({
                             >
                         </div>
                     </div>
-                    <sb-map
+                    <result-map
                         center="center"
                         markers="markerGroups"
                         marker-callback="newKWICSearch"
                         selected-groups="selectedGroups"
                         rest-color="restColor"
                         use-clustering="useClustering"
-                    ></sb-map>
+                    ></result-map>
                 </div>
             </div>
         </uib-tab>
