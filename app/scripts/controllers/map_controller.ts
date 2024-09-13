@@ -22,28 +22,32 @@ type MapControllerScope = IScope & {
     newDynamicTab: any // TODO Defined in tabHash (services.js)
     closeDynamicTab: any // TODO Defined in tabHash (services.js)
     closeTab: (idx: number, e: Event) => void
-    newKWICSearch: (marker: Marker) => void
+    newKWICSearch: (marker: MarkerEvent) => void
     toggleMarkerGroup: (groupName: string) => void
     onentry: () => void
     onexit: () => void
 }
 
-type MarkerGroup = {
+export type MarkerGroup = {
     selected: boolean
     order: number
     color: string
     markers: Record<string, Marker>
 }
 
-type Marker = {
+export type Marker = MarkerEvent & {
     lat: number
     lng: number
     label: string
+}
+
+export type MarkerEvent = {
     point: Point
     queryData: MarkerQueryData
 }
 
-type MarkerQueryData = {
+/** Needed for making a sub-search */
+export type MarkerQueryData = {
     searchCqp: string
     subCqp: string
     label: string
@@ -152,7 +156,7 @@ angular.module("korpApp").directive("mapCtrl", [
                 }
 
                 /** Open the occurrences at a selected location */
-                $scope.newKWICSearch = (marker: Marker) => {
+                $scope.newKWICSearch = (marker: MarkerEvent) => {
                     const { point, queryData } = marker
                     const cl = settings.corpusListing.subsetFactory(queryData.corpora)
                     const numberOfTokens = queryData.subCqp.split("[").length - 1

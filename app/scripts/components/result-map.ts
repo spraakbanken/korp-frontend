@@ -1,22 +1,75 @@
 /** @format */
-import angular from "angular"
-import L, { Map } from "leaflet"
+import _ from "lodash"
+import angular, { ICompileService, IController, IRootElementService, IScope, ITimeoutService } from "angular"
+import L from "leaflet"
 import { html } from "@/util"
+import { RootScope } from "@/root-scope.types"
+import { MarkerEvent, MarkerGroup } from "@/controllers/map_controller"
 import "@/../styles/map.scss"
+import { AppSettings } from "@/settings/app-settings.types"
 
-/**
- * @typedef SbMapScope
- * @prop {Map} map
- * @prop {string[]} selectedGroups
- * @prop {number} maxRel - Maximum frequency in current result
- * @prop {Record<string, Marker>} markers
- * @prop {string} restColor
- */
+type ResultMapController = IController & {
+    center: AppSettings["map_center"]
+    markers: Record<string, MarkerGroup>
+    markerCallback: (marker: MarkerEvent) => void
+    selectedGroups: string[]
+    restColor: string
+    useClustering: boolean
+    /** @deprecated */
+    oldMap: boolean
+}
 
-/**
- * @typedef Marker
- * @prop {string} color
- */
+type ResultMapScope = IScope & {
+    showMap: boolean
+}
+
+type CustomMarker = L.Marker & {
+    markerData: MarkerData
+}
+
+type CustomMarkerMany = L.Marker & {
+    markerData: MarkerData[]
+}
+
+type MarkerData = MarkerEvent & {
+    label: string
+    color: string
+}
+
+type MergedMarker = {
+    markerData: MarkerData[]
+    lat: number
+    lng: number
+}
+
+type OldMapMarkerData = {
+    names: Record<string, OldMapCounts>
+    searchCqp: string
+}
+
+type OldMapCounts = { abs_occurrences: number; rel_occurrences: number }
+
+type MessageScope = IScope & {
+    showLabel?: boolean
+    point?: MarkerData["point"]
+    label?: string
+    color?: string
+}
+
+class MarkerClusterGroup extends L.MarkerClusterGroup {
+    getAllChildMarkers: () => CustomMarker[]
+}
+
+class MarkerCluster extends L.MarkerCluster {
+    getAllChildMarkers: () => CustomMarker[]
+}
+
+/** Determine if a given layer is a single marker */
+const isMarker = <T extends L.Layer>(layer: T | CustomMarker): layer is CustomMarker => "markerData" in layer
+
+/** Determine if a given layer is a cluster marker */
+const isMarkerCluster = <T extends L.Layer>(layer: T | MarkerClusterGroup): layer is MarkerClusterGroup =>
+    "getChildCount" in layer
 
 angular.module("korpApp").component("resultMap", {
     template: html`<div class="map">
@@ -41,17 +94,26 @@ angular.module("korpApp").component("resultMap", {
         "$scope",
         "$timeout",
         "$rootScope",
-        /**
-         * @param {SbMapScope} $scope
-         * @returns
-         */
-        function ($compile, $element, $scope, $timeout, $rootScope) {
-            const $ctrl = this
+        function (
+            $compile: ICompileService,
+            $element: IRootElementService,
+            $scope: ResultMapScope,
+            $timeout: ITimeoutService,
+            $rootScope: RootScope
+        ) {
+            const $ctrl = this as ResultMapController
+
+            $scope.showMap = false
+            let selectedMarkers: MarkerData[] = []
+            let featureLayer: L.FeatureGroup
+            let markerCluster: MarkerClusterGroup
+            /** Maximum frequency in current result */
+            let maxRel = 0
+
             const useClustering = () => (angular.isDefined($ctrl.useClustering) ? $ctrl.useClustering : true)
             const isOldMap = () => (angular.isDefined($ctrl.oldMap) ? $ctrl.oldMap : false)
-            $scope.showMap = false
-            $scope.selectedMarkers = []
-            $scope.hoverTemplate = html`<div class="hover-info">
+
+            const hoverTemplate = html`<div class="hover-info">
                 <div ng-if="showLabel" class="swatch" style="background-color: {{color}}"></div>
                 <div
                     ng-if="showLabel"
@@ -68,22 +130,22 @@ angular.module("korpApp").component("resultMap", {
             }
 
             const container = $element.find(".map-container")[0]
-            $scope.map = L.map(container, {
+            const map = L.map(container, {
                 minZoom: 1,
                 maxZoom: 13,
             }).setView([51.505, -0.09], 13)
 
             // Load map layer with leaflet-providers
-            L.tileLayer.provider("OpenStreetMap").addTo($scope.map)
+            L.tileLayer.provider("OpenStreetMap").addTo(map)
 
             $ctrl.$onInit = () => {
-                $scope.map.setView([$ctrl.center.lat, $ctrl.center.lng], $ctrl.center.zoom)
+                map.setView([$ctrl.center.lat, $ctrl.center.lng], $ctrl.center.zoom)
                 $scope.showMap = true
             }
 
-            $scope.$on("update_map", () => $timeout(() => $scope.map.invalidateSize()))
+            $scope.$on("update_map", () => $timeout(() => map.invalidateSize()))
 
-            function createCircleMarker(color, diameter, borderRadius) {
+            function createCircleMarker(color: string, diameter: number, borderRadius: number) {
                 return L.divIcon({
                     html: html`<div
                         class="geokorp-marker"
@@ -93,26 +155,29 @@ angular.module("korpApp").component("resultMap", {
                 })
             }
 
-            function createMarkerIcon(color, cluster) {
+            function createMarkerIcon(color: string, cluster: boolean) {
                 // TODO use scope.maxRel, but scope.maxRel is not set when markers are created
                 // diameter = ((relSize / scope.maxRel) * 45) + 5
                 return createCircleMarker(color, 10, cluster ? 1 : 5)
             }
 
-            function createMultiMarkerIcon(markerData) {
-                /** @type {[number, string][]} */
-                const elements = []
-                for (let i = 0; i < markerData.length; i++) {
-                    const marker = markerData[i]
-                    const diameter = (marker.point.rel / $scope.maxRel) * 40 + 10
-                    elements.push([
+            /**
+             * Organizes several markers at the same location in a 2D grid.
+             * Like:
+             *    o
+             *   oOo
+             */
+            function createMultiMarkerIcon(markerData: MarkerData[]) {
+                const elements = markerData.map((marker) => {
+                    const diameter = (marker.point.rel / maxRel) * 40 + 10
+                    return [
                         diameter,
                         html`<div
                             class="geokorp-multi-marker"
                             style="border-radius:${diameter}px; height:${diameter}px; width:${diameter}px; background-color:${marker.color}"
                         ></div>`,
-                    ])
-                }
+                    ] as [number, string]
+                })
 
                 elements.sort((a, b) => a[0] - b[0])
 
@@ -120,12 +185,11 @@ angular.module("korpApp").component("resultMap", {
                 const gridSize = gridSizeRaw % 2 === 0 ? gridSizeRaw + 1 : gridSizeRaw
                 const center = Math.floor(gridSize / 2)
 
-                /** @type {([number, string][] | [])[]} */
-                let grid = []
-                for (let i = 0; i <= gridSize - 1; i++) grid.push([])
+                const gridRaw: ([number, string][] | [])[] = []
+                for (let i = 0; i <= gridSize - 1; i++) gridRaw.push([])
 
-                const id = (x) => x
-                const neg = (x) => -x
+                const id = (x: number) => x
+                const neg = (x: number) => -x
                 for (let idx = 0; idx <= center; idx++) {
                     let x = -1
                     let y = -1
@@ -141,7 +205,7 @@ angular.module("korpApp").component("resultMap", {
                         if (y === center + idx) yOp = neg
                         const circle = elements.pop()
                         if (circle) {
-                            grid[y][x] = circle
+                            gridRaw[y][x] = circle
                         } else {
                             break
                         }
@@ -149,32 +213,26 @@ angular.module("korpApp").component("resultMap", {
                 }
                 // remove all empty arrays and elements
                 // TODO don't create empty stuff??
-                grid = grid.filter((row) => row.length > 0)
-                grid = grid.map((row) => row.filter((elem) => elem))
+                const grid = gridRaw.filter((row) => row.length > 0).map((row) => row.filter((elem) => elem))
 
                 //# take largest element from each row and add to height
                 let height = 0
                 let width = 0
                 const gridCenter = Math.floor(grid.length / 2)
 
-                /** @type {string[]} */
-                const grid2 = []
-                for (let idx = 0; idx < grid.length; ++idx) {
-                    const row = grid[idx]
+                const rows = grid.map((row, idx) => {
                     height += row.reduce((memo, val) => (val[0] > memo ? val[0] : memo), 0)
                     if (idx === gridCenter) {
                         width = grid[gridCenter].reduce((memo, val) => memo + val[0], 0)
                     }
                     const markerClass =
                         idx === gridCenter ? "marker-middle" : idx > gridCenter ? "marker-top" : "marker-bottom"
-                    grid2.push(
-                        html`<div class="${markerClass}" style="text-align:center; line-height:0;">
-                            ${row.map((elem) => elem[1]).join("")}
-                        </div>`
-                    )
-                }
+                    return html`<div class="${markerClass}" style="text-align:center; line-height:0;">
+                        ${row.map((elem) => elem[1]).join("")}
+                    </div>`
+                })
                 return L.divIcon({
-                    html: grid2.join(""),
+                    html: rows.join(""),
                     iconSize: new L.Point(width, height),
                 })
             }
@@ -182,20 +240,17 @@ angular.module("korpApp").component("resultMap", {
             /**
              * use the previously calculated "scope.maxRel" to decide the sizes of the bars
              * in the cluster icon that is returned (between 5px and 50px)
-             * @param clusterGroups {Record<string, {order: number}>}
-             * @param restColor {string}
              */
-            function createClusterIcon(clusterGroups, restColor) {
+            function createClusterIcon(clusterGroups: Record<string, MarkerGroup>, restColor: string) {
                 const groups = Object.keys(clusterGroups)
                 groups.sort((group1, group2) => clusterGroups[group1].order - clusterGroups[group2].order)
                 if (groups.length > 4) {
                     groups.splice(3)
                     groups.push(restColor)
                 }
-                return function (cluster) {
-                    /** @type {Record<string, number>} */
-                    const sizes = groups.reduce((sizes, color) => ({ ...sizes, [color]: 0 }), {})
-                    cluster.getAllChildMarkers().forEach((childMarker) => {
+                return function (cluster: MarkerClusterGroup) {
+                    const sizes = _.fromPairs(groups.map((color) => [color, 0]))
+                    cluster.getAllChildMarkers().forEach((childMarker: CustomMarker) => {
                         let color = childMarker.markerData.color
                         if (!(color in sizes)) color = restColor
                         sizes[color] += childMarker.markerData.point.rel
@@ -204,18 +259,18 @@ angular.module("korpApp").component("resultMap", {
                     if (groups.length === 1) {
                         const color = groups[0]
                         const groupSize = sizes[color]
-                        const diameter = (groupSize / $scope.maxRel) * 45 + 5
+                        const diameter = (groupSize / maxRel) * 45 + 5
                         return createCircleMarker(color, diameter, diameter)
                     }
 
-                    const elements = Object.keys(sizes).map((color) => {
-                        const groupSize = sizes[color]
-                        const divWidth = (groupSize / $scope.maxRel) * 45 + 5
-                        return html`<div
-                            class="cluster-geokorp-marker"
-                            style="height:${divWidth}px; background-color:${color}"
-                        ></div>`
-                    })
+                    const elements = _.map(
+                        sizes,
+                        (size, color) =>
+                            html`<div
+                                class="cluster-geokorp-marker"
+                                style="height:${(size / maxRel) * 45 + 5}px; background-color:${color}"
+                            ></div>`
+                    )
                     return L.divIcon({
                         html: html`<div class="cluster-geokorp-marker-group">${elements.join("")}</div>`,
                         iconSize: new L.Point(40, 50),
@@ -247,23 +302,20 @@ angular.module("korpApp").component("resultMap", {
              * TODO this needs to use the "rest" group when doing calcuations!!
              */
             function updateMarkerSizes() {
-                const bounds = $scope.map.getBounds()
-                $scope.maxRel = 0
-                if (useClustering() && $scope.markerCluster) {
-                    $scope.map.eachLayer((layer) => {
-                        if (layer.getChildCount) {
-                            /** @type {Record<string, number>} */
-                            const sumRels = {}
+                maxRel = 0
+                if (useClustering() && markerCluster) {
+                    map.eachLayer((layer) => {
+                        if (isMarkerCluster(layer)) {
+                            const sumRels: Record<string, number> = {}
                             for (const child of layer.getAllChildMarkers()) {
                                 const color = child.markerData.color
                                 if (!sumRels[color]) sumRels[color] = 0
                                 sumRels[color] += child.markerData.point.rel
                             }
-                            $scope.maxRel = Math.max($scope.maxRel, ...Object.values(sumRels))
-                        } else if (layer.markerData?.point.rel > $scope.maxRel)
-                            $scope.maxRel = layer.markerData.point.rel
+                            maxRel = Math.max(maxRel, ...Object.values(sumRels))
+                        } else if (isMarker(layer)) maxRel = Math.max(maxRel, layer.markerData.point.rel)
                     })
-                    return $scope.markerCluster.refreshClusters()
+                    return markerCluster.refreshClusters()
                 }
             }
             // TODO when scope.maxRel is set, we should redraw all non-cluster markers using this
@@ -274,54 +326,54 @@ angular.module("korpApp").component("resultMap", {
             function createFeatureLayer() {
                 const featureLayer = L.featureGroup()
                 featureLayer.on("click", (e) => {
-                    $scope.selectedMarkers =
-                        e.layer.markerData instanceof Array ? e.layer.markerData : [e.layer.markerData]
-                    return mouseOver($scope.selectedMarkers)
+                    const marker = e.propagatedFrom as CustomMarker | CustomMarkerMany
+                    selectedMarkers = marker.markerData instanceof Array ? marker.markerData : [marker.markerData]
+                    mouseOver(selectedMarkers)
                 })
-                featureLayer.on("mouseover", (e) =>
-                    e.layer.markerData instanceof Array
-                        ? mouseOver(e.layer.markerData)
-                        : mouseOver([e.layer.markerData])
-                )
-                featureLayer.on("mouseout", (e) =>
-                    $scope.selectedMarkers.length > 0 ? mouseOver($scope.selectedMarkers) : mouseOut()
+                featureLayer.on("mouseover", (e) => {
+                    const marker = e.propagatedFrom as CustomMarker | CustomMarkerMany
+                    marker.markerData instanceof Array ? mouseOver(marker.markerData) : mouseOver([marker.markerData])
+                })
+                featureLayer.on("mouseout", () =>
+                    selectedMarkers.length > 0 ? mouseOver(selectedMarkers) : mouseOut()
                 )
                 return featureLayer
             }
 
             /**
              * create marker cluster layer and all listeners
-             * @param {Record<string, Marker>} clusterGroups
-             * @param {string} restColor
              */
-            function createMarkerCluster(clusterGroups, restColor) {
+            function createMarkerCluster(
+                clusterGroups: Record<string, MarkerGroup>,
+                restColor: string
+            ): MarkerClusterGroup {
                 const markerCluster = L.markerClusterGroup({
                     spiderfyOnMaxZoom: false,
                     showCoverageOnHover: false,
                     maxClusterRadius: 40,
                     zoomToBoundsOnClick: false,
-                    iconCreateFunction: createClusterIcon(clusterGroups, restColor),
-                })
-                markerCluster.on("clustermouseover", (e) =>
-                    mouseOver(_.map(e.layer.getAllChildMarkers(), (layer) => layer.markerData))
+                    iconCreateFunction: createClusterIcon(clusterGroups, restColor) as any,
+                }) as MarkerClusterGroup
+                markerCluster.on("clustermouseover", (e: { propagatedFrom: MarkerCluster }) =>
+                    mouseOver(e.propagatedFrom.getAllChildMarkers().map((layer) => layer.markerData))
                 )
-                markerCluster.on("clustermouseout", (e) =>
-                    $scope.selectedMarkers.length > 0 ? mouseOver($scope.selectedMarkers) : mouseOut()
+                markerCluster.on("clustermouseout", () =>
+                    selectedMarkers.length > 0 ? mouseOver(selectedMarkers) : mouseOut()
                 )
-                markerCluster.on("clusterclick", (e) => {
-                    $scope.selectedMarkers = _.map(e.layer.getAllChildMarkers(), (layer) => layer.markerData)
-                    mouseOver($scope.selectedMarkers)
-                    if (shouldZooomToBounds(e.layer)) {
-                        return e.layer.zoomToBounds()
+                markerCluster.on("clusterclick", (e: { propagatedFrom: MarkerCluster }) => {
+                    selectedMarkers = e.propagatedFrom.getAllChildMarkers().map((layer) => layer.markerData)
+                    mouseOver(selectedMarkers)
+                    if (shouldZooomToBounds(e.propagatedFrom)) {
+                        return e.propagatedFrom.zoomToBounds()
                     }
                 })
-                markerCluster.on("click", (e) => {
-                    $scope.selectedMarkers = [e.layer.markerData]
-                    return mouseOver($scope.selectedMarkers)
+                markerCluster.on("click", (e: { propagatedFrom: CustomMarker }) => {
+                    selectedMarkers = [e.propagatedFrom.markerData]
+                    return mouseOver(selectedMarkers)
                 })
-                markerCluster.on("mouseover", (e) => mouseOver([e.layer.markerData]))
+                markerCluster.on("mouseover", (e) => mouseOver([e.propagatedFrom.markerData]))
                 markerCluster.on("mouseout", (e) =>
-                    $scope.selectedMarkers.length > 0 ? mouseOver($scope.selectedMarkers) : mouseOut()
+                    selectedMarkers.length > 0 ? mouseOver(selectedMarkers) : mouseOut()
                 )
                 markerCluster.on("animationend", (e) => updateMarkerSizes())
                 return markerCluster
@@ -330,23 +382,28 @@ angular.module("korpApp").component("resultMap", {
             /**
              * takes a list of markers and displays clickable (callback determined by directive user) info boxes
              */
-            function mouseOver(markerData) {
+            function mouseOver(markerData: MarkerData[]) {
                 return $timeout(() => {
                     return $scope.$apply(() => {
                         // support for "old" map
                         // TODO Usage was removed in 2020 (39b34962), remove support?
-                        const oldMap = !!markerData[0].names
+                        const oldMap = "names" in markerData[0]
 
-                        let selectedMarkers
+                        let selectedMarkers: MarkerData[]
                         if (oldMap) {
-                            selectedMarkers = _.map(markerData[0].names).map((thing, name) => ({
+                            const oldMarkerData: OldMapMarkerData = markerData[0] as any
+                            selectedMarkers = _.map(oldMarkerData.names, (thing, name) => ({
+                                label: "",
                                 color: markerData[0].color,
-                                searchCqp: markerData[0].searchCqp,
+                                // TODO Missing some of MarkerQueryData and Point, things that probably weren't used in old map?
+                                queryData: {
+                                    searchCqp: oldMarkerData.searchCqp,
+                                } as any,
                                 point: {
                                     name,
                                     abs: thing.abs_occurrences,
                                     rel: thing.rel_occurrences,
-                                },
+                                } as any,
                             }))
                         } else {
                             markerData.sort((a, b) => b.point.rel - a.point.rel)
@@ -354,15 +411,13 @@ angular.module("korpApp").component("resultMap", {
                         }
 
                         const content = selectedMarkers.map((marker) => {
-                            const msgScope = $rootScope.$new(true)
+                            const msgScope: MessageScope = $rootScope.$new(true)
                             msgScope.showLabel = !oldMap
                             msgScope.point = marker.point
                             msgScope.label = marker.label
                             msgScope.color = marker.color
-                            const compiled = $compile($scope.hoverTemplate)
-                            const markerDiv = compiled(msgScope)
-                            markerDiv.bind("click", () => $ctrl.markerCallback(marker))
-                            return markerDiv
+                            const markerDiv = $compile(hoverTemplate)(msgScope)
+                            return markerDiv.bind("click", () => $ctrl.markerCallback(marker))
                         })
 
                         const hoverInfoElem = $element.find(".hover-info-container")
@@ -381,83 +436,83 @@ angular.module("korpApp").component("resultMap", {
                 return hoverInfoElem.css("display", "none")
             }
 
-            $scope.showHoverInfo = false
-
-            $scope.map.on("click", (e) => {
-                $scope.selectedMarkers = []
+            map.on("click", (e) => {
+                selectedMarkers = []
                 return mouseOut()
             })
 
             function updateMarkers() {
                 const selectedGroups = $ctrl.selectedGroups
-                if ($scope.markerCluster) {
-                    $scope.map.removeLayer($scope.markerCluster)
+                if (markerCluster) {
+                    map.removeLayer(markerCluster)
                 }
-                if ($scope.featureLayer) {
-                    $scope.map.removeLayer($scope.featureLayer)
+                if (featureLayer) {
+                    map.removeLayer(featureLayer)
                 }
                 if (useClustering()) {
                     const selectedMarkers = selectedGroups.map((group) => $ctrl.markers[group])
-                    const clusterGroups = _.groupBy(selectedMarkers, "color")
-                    $scope.markerCluster = createMarkerCluster(clusterGroups, $ctrl.restColor)
-                    $scope.map.addLayer($scope.markerCluster)
+                    const clusterGroups = _.keyBy(selectedMarkers, "color")
+                    markerCluster = createMarkerCluster(clusterGroups, $ctrl.restColor)
+                    map.addLayer(markerCluster)
                 } else {
-                    $scope.featureLayer = createFeatureLayer()
-                    $scope.map.addLayer($scope.featureLayer)
+                    featureLayer = createFeatureLayer()
+                    map.addLayer(featureLayer)
                 }
                 if (useClustering() || isOldMap()) {
+                    const isCluster = !isOldMap() && selectedGroups.length !== 1
                     for (const group of selectedGroups) {
                         const markerGroup = $ctrl.markers[group]
-                        $scope.maxRel = 0
-                        for (const markerId in markerGroup.markers) {
-                            const markerData = markerGroup.markers[markerId]
-                            markerData.color = markerGroup.color
-                            const marker = L.marker([markerData.lat, markerData.lng], {
-                                icon: createMarkerIcon(markerGroup.color, !isOldMap() && selectedGroups.length !== 1),
-                            })
-                            marker.markerData = markerData
-                            if (useClustering()) {
-                                $scope.markerCluster.addLayer(marker)
-                            } else {
-                                $scope.featureLayer.addLayer(marker)
+                        maxRel = 0
+                        Object.values(markerGroup.markers).map((markerOrig) => {
+                            const icon = createMarkerIcon(markerGroup.color, isCluster)
+                            const marker = L.marker([markerOrig.lat, markerOrig.lng], { icon }) as CustomMarker
+                            marker.markerData = {
+                                label: markerOrig.label,
+                                color: markerGroup.color,
+                                point: markerOrig.point,
+                                queryData: markerOrig.queryData,
                             }
-                        }
+                            if (useClustering()) {
+                                markerCluster.addLayer(marker)
+                            } else {
+                                featureLayer.addLayer(marker)
+                            }
+                        })
                     }
                 } else {
                     const markers = selectedGroups.map((group) => $ctrl.markers[group])
                     const markersMerged = mergeMarkers(markers)
                     for (const markerData of markersMerged) {
-                        const marker = L.marker([markerData.lat, markerData.lng], {
-                            icon: createMultiMarkerIcon(markerData.markerData),
-                        })
+                        const icon = createMultiMarkerIcon(markerData.markerData)
+                        const marker = L.marker([markerData.lat, markerData.lng], { icon }) as CustomMarkerMany
                         marker.markerData = markerData.markerData
-                        $scope.featureLayer.addLayer(marker)
+                        featureLayer.addLayer(marker)
                     }
                 }
-                return updateMarkerSizes()
+                updateMarkerSizes()
             }
 
             /**
              * merge lists of markers into one list with several hits in one marker
              * also calculate maxRel
              */
-            function mergeMarkers(markerLists) {
-                $scope.maxRel = 0
+            function mergeMarkers(markerLists: MarkerGroup[]): MergedMarker[] {
+                maxRel = 0
                 const val = markerLists.reduce((memo, parent) => {
-                    for (const child of Object.values(parent.markers)) {
-                        child.color = parent.color
-                        const latLng = child.lat + "," + child.lng
-                        if (child.point.rel > $scope.maxRel) $scope.maxRel = child.point.rel
+                    for (const child1 of Object.values(parent.markers)) {
+                        const child: MarkerData = { ...child1, color: parent.color }
+                        const latLng = child1.lat + "," + child1.lng
+                        if (child.point.rel > maxRel) maxRel = child.point.rel
                         if (latLng in memo) memo[latLng].markerData.push(child)
                         else
                             memo[latLng] = {
                                 markerData: [child],
-                                lat: child.lat,
-                                lng: child.lng,
+                                lat: child1.lat,
+                                lng: child1.lng,
                             }
                     }
                     return memo
-                }, {})
+                }, {} as Record<string, MergedMarker>)
                 return Object.values(val)
             }
         },
