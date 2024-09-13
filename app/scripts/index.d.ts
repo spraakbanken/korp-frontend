@@ -14,3 +14,8 @@ declare module "*.png" {
     const content: any
     export default content
 }
+
+declare module "rickshaw" {
+    const Rickshaw: any
+    export default Rickshaw
+}

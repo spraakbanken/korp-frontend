@@ -6,6 +6,7 @@ import { getUrlHash, locationSearchGet } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
+import { WithinParameters } from "@/backend/types"
 
 export class ParallelCorpusListing extends CorpusListing {
     activeLangs: string[]
@@ -127,7 +128,7 @@ export class ParallelCorpusListing extends CorpusListing {
         return this.getAttributeQuery("context")
     }
 
-    getWithinParameters(): { default_within: string; within: string } {
+    getWithinParameters(): WithinParameters {
         const defaultWithin = locationSearchGet("within") || _.keys(settings["default_within"])[0]
         const within = this.getAttributeQuery("within")
         return { default_within: defaultWithin, within }

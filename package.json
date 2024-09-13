@@ -36,7 +36,6 @@
         "@types/jquery": "^3.5.29",
         "@types/js-yaml": "^4.0.9",
         "@types/lodash": "^4.14.118",
-        "@types/rickshaw": "^0.0.31",
         "autoprefixer": "^10.2.4",
         "chromedriver": "^122.0.4",
         "compression-webpack-plugin": "^10.0.0",

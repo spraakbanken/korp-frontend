@@ -7,6 +7,7 @@ import { locObj } from "@/i18n"
 import { Attribute } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { LangString } from "./i18n/types"
+import { WithinParameters } from "./backend/types"
 
 export type Filter = {
     settings: Attribute
@@ -252,7 +253,7 @@ export class CorpusListing {
         return _(output).compact().join()
     }
 
-    getWithinParameters(): { default_within: string; within: string } {
+    getWithinParameters(): WithinParameters {
         const defaultWithin = locationSearchGet("within") || _.keys(settings.default_within)[0]
 
         const output: string[] = []

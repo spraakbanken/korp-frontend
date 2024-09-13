@@ -58,3 +58,8 @@ export type Histogram = {
     /** Frequency of items at unknown time */
     ""?: number
 }
+
+export type WithinParameters = {
+    default_within: string
+    within: string
+}

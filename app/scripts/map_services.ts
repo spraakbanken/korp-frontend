@@ -2,7 +2,7 @@
 import _ from "lodash"
 import { StatsData, InnerData } from "./interfaces/stats"
 
-interface Point {
+export interface Point {
     abs: number
     rel: number
     name: string

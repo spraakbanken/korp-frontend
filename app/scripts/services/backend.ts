@@ -2,7 +2,7 @@
 import _ from "lodash"
 import angular, { IDeferred, IHttpService, IPromise, IQService } from "angular"
 import { getAuthorizationHeader } from "@/components/auth/auth"
-import { KorpResponse } from "@/backend/types"
+import { KorpResponse, WithinParameters } from "@/backend/types"
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
 import { httpConfAddMethod, httpConfAddMethodAngular } from "@/util"
@@ -16,7 +16,7 @@ export type BackendService = {
     requestMapData: (
         cqp: string,
         cqpExprs: Record<string, string>,
-        within: { default_within: string; within: string },
+        within: WithinParameters,
         attribute: MapAttribute,
         relative: boolean
     ) => IPromise<MapRequestResult | void>
@@ -55,7 +55,7 @@ export type CompareItem = {
 export type MapRequestResult = {
     corpora: string[]
     cqp: string
-    within: { default_within: string; within: string }
+    within: WithinParameters
     data: MapResult[]
     attribute: MapAttribute
 }
