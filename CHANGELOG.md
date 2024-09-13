@@ -27,6 +27,7 @@
 - Converted the "radioList" JQuery widget to a component
 - Using Karp 7 backend instead of Karp 4 [#388](https://github.com/spraakbanken/korp-frontend/pull/388)
 - For the `utils.setupHash()` function, the `config` argument is no longer an array. To sync multiple parameters, call it once for each.
+- Dopped support for old map usage (`sb-old-map="true"`)
 
 ### Fixed
 

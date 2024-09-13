@@ -15,8 +15,6 @@ type ResultMapController = IController & {
     selectedGroups: string[]
     restColor: string
     useClustering: boolean
-    /** @deprecated */
-    oldMap: boolean
 }
 
 type ResultMapScope = IScope & {
@@ -41,13 +39,6 @@ type MergedMarker = {
     lat: number
     lng: number
 }
-
-type OldMapMarkerData = {
-    names: Record<string, OldMapCounts>
-    searchCqp: string
-}
-
-type OldMapCounts = { abs_occurrences: number; rel_occurrences: number }
 
 type MessageScope = IScope & {
     showLabel?: boolean
@@ -85,8 +76,6 @@ angular.module("korpApp").component("resultMap", {
         selectedGroups: "<",
         restColor: "<", // free color to use for grouping etc
         useClustering: "<",
-        // TODO Usage was removed in 2020 (39b34962), remove support?
-        oldMap: "<",
     },
     controller: [
         "$compile",
@@ -111,7 +100,6 @@ angular.module("korpApp").component("resultMap", {
             let maxRel = 0
 
             const useClustering = () => (angular.isDefined($ctrl.useClustering) ? $ctrl.useClustering : true)
-            const isOldMap = () => (angular.isDefined($ctrl.oldMap) ? $ctrl.oldMap : false)
 
             const hoverTemplate = html`<div class="hover-info">
                 <div ng-if="showLabel" class="swatch" style="background-color: {{color}}"></div>
@@ -385,34 +373,12 @@ angular.module("korpApp").component("resultMap", {
             function mouseOver(markerData: MarkerData[]) {
                 return $timeout(() => {
                     return $scope.$apply(() => {
-                        // support for "old" map
-                        // TODO Usage was removed in 2020 (39b34962), remove support?
-                        const oldMap = "names" in markerData[0]
-
-                        let selectedMarkers: MarkerData[]
-                        if (oldMap) {
-                            const oldMarkerData: OldMapMarkerData = markerData[0] as any
-                            selectedMarkers = _.map(oldMarkerData.names, (thing, name) => ({
-                                label: "",
-                                color: markerData[0].color,
-                                // TODO Missing some of MarkerQueryData and Point, things that probably weren't used in old map?
-                                queryData: {
-                                    searchCqp: oldMarkerData.searchCqp,
-                                } as any,
-                                point: {
-                                    name,
-                                    abs: thing.abs_occurrences,
-                                    rel: thing.rel_occurrences,
-                                } as any,
-                            }))
-                        } else {
-                            markerData.sort((a, b) => b.point.rel - a.point.rel)
-                            selectedMarkers = markerData
-                        }
+                        markerData.sort((a, b) => b.point.rel - a.point.rel)
+                        const selectedMarkers = markerData
 
                         const content = selectedMarkers.map((marker) => {
                             const msgScope: MessageScope = $rootScope.$new(true)
-                            msgScope.showLabel = !oldMap
+                            msgScope.showLabel = true
                             msgScope.point = marker.point
                             msgScope.label = marker.label
                             msgScope.color = marker.color
@@ -442,7 +408,6 @@ angular.module("korpApp").component("resultMap", {
             })
 
             function updateMarkers() {
-                const selectedGroups = $ctrl.selectedGroups
                 if (markerCluster) {
                     map.removeLayer(markerCluster)
                 }
@@ -450,7 +415,7 @@ angular.module("korpApp").component("resultMap", {
                     map.removeLayer(featureLayer)
                 }
                 if (useClustering()) {
-                    const selectedMarkers = selectedGroups.map((group) => $ctrl.markers[group])
+                    const selectedMarkers = $ctrl.selectedGroups.map((group) => $ctrl.markers[group])
                     const clusterGroups = _.keyBy(selectedMarkers, "color")
                     markerCluster = createMarkerCluster(clusterGroups, $ctrl.restColor)
                     map.addLayer(markerCluster)
@@ -458,9 +423,9 @@ angular.module("korpApp").component("resultMap", {
                     featureLayer = createFeatureLayer()
                     map.addLayer(featureLayer)
                 }
-                if (useClustering() || isOldMap()) {
-                    const isCluster = !isOldMap() && selectedGroups.length !== 1
-                    for (const group of selectedGroups) {
+                if (useClustering()) {
+                    const isCluster = $ctrl.selectedGroups.length !== 1
+                    for (const group of $ctrl.selectedGroups) {
                         const markerGroup = $ctrl.markers[group]
                         maxRel = 0
                         Object.values(markerGroup.markers).map((markerOrig) => {
@@ -480,7 +445,7 @@ angular.module("korpApp").component("resultMap", {
                         })
                     }
                 } else {
-                    const markers = selectedGroups.map((group) => $ctrl.markers[group])
+                    const markers = $ctrl.selectedGroups.map((group) => $ctrl.markers[group])
                     const markersMerged = mergeMarkers(markers)
                     for (const markerData of markersMerged) {
                         const icon = createMultiMarkerIcon(markerData.markerData)
