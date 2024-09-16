@@ -129,8 +129,9 @@ angular.module("korpApp").component("header", {
         "$uibModal",
         "$rootScope",
         "$scope",
+        "$timeout",
         "utils",
-        function ($location, $uibModal, $rootScope, $scope, utils) {
+        function ($location, $uibModal, $rootScope, $scope, $timeout, utils) {
             const $ctrl = this
 
             $scope.lang = $rootScope.lang
@@ -160,16 +161,14 @@ angular.module("korpApp").component("header", {
             $rootScope.show_modal = false
 
             let modal = null
+
             utils.setupHash($rootScope, {
                 key: "display",
                 scope_name: "show_modal",
                 post_change(val) {
-                    if (val) {
-                        showAbout()
-                    } else {
-                        if (modal != null) {
-                            modal.close()
-                        }
+                    if (val) showAbout()
+                    else {
+                        modal?.close()
                         modal = null
                     }
                 },
@@ -181,18 +180,17 @@ angular.module("korpApp").component("header", {
 
             const modalScope = $rootScope.$new(true)
             modalScope.clickX = () => closeModals()
-            var showAbout = function () {
-                const params = {
-                    template: require("../../markup/about.html"),
-                    scope: modalScope,
-                    windowClass: "about",
-                }
-                modal = $uibModal.open(params)
 
-                modal.result.then(
-                    () => closeModals(),
-                    () => closeModals()
-                )
+            function showAbout() {
+                // $timeout is used to let localization happen before modal is shown (if loaded with "display=about")
+                $timeout(() => {
+                    modal = $uibModal.open({
+                        template: require("../../markup/about.html"),
+                        scope: modalScope,
+                        windowClass: "about",
+                    })
+                    modal.result.catch(() => closeModals())
+                })
             }
 
             const N_VISIBLE = settings["visible_modes"]
