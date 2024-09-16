@@ -41,6 +41,7 @@
 - Paging broken in word picture example search [#383](https://github.com/spraakbanken/korp-frontend/issues/383)
 - Incoherent style change to corpus heading when switching between KWIC and context view [#389](https://github.com/spraakbanken/korp-frontend/issues/389)
 - Context view broken in example search [#386](https://github.com/spraakbanken/korp-frontend/issues/386)
+- Can't navigate between tokens in KWIC using arrow keys [#368](https://github.com/spraakbanken/korp-frontend/issues/368)
 
 ## [9.6.0] - 2024-05-27
 

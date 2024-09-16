@@ -172,6 +172,11 @@ angular.module("korpApp").component("kwic", {
         "$location",
         "$element",
         "$timeout",
+        /**
+         * @param {import("angular").ILocationService} $location
+         * @param {JQLite} $element
+         * @param {import("angular").ITimeoutService} $timeout
+         */
         function ($location, $element, $timeout) {
             let $ctrl = this
 
@@ -645,111 +650,66 @@ angular.module("korpApp").component("kwic", {
                     }
 
                     if (next) {
-                        scrollToShowWord($(next))
+                        next.trigger("click")
+                        scrollToShowWord(next)
                         return false
                     }
                 })
             }
 
             function selectNext() {
-                let next
-                if (!$ctrl.isReading) {
-                    const i = getCurrentRow().index($element.find(".token_selected").get(0))
-                    next = getCurrentRow().get(i + 1)
-                    if (next == null) {
-                        return
-                    }
-                    $(next).click()
-                } else {
-                    next = $element.find(".token_selected").next().click()
-                }
-                return next
+                return stepWord(1)
             }
 
             function selectPrev() {
-                let prev
-                if (!$ctrl.isReading) {
-                    const i = getCurrentRow().index($element.find(".token_selected").get(0))
-                    if (i === 0) {
-                        return
-                    }
-                    prev = getCurrentRow().get(i - 1)
-                    $(prev).click()
-                } else {
-                    prev = $element.find(".token_selected").prev().click()
-                }
-                return prev
+                return stepWord(-1)
+            }
+
+            function stepWord(diff) {
+                const $words = $element.find(".word")
+                const $current = $element.find(".token_selected").first()
+                const currentIndex = $words.index($current)
+                const wouldWrap = (diff < 0 && currentIndex == 0) || (diff > 0 && currentIndex == $words.length - 1)
+                if (wouldWrap) return
+                const next = $words.get(currentIndex + diff)
+                return $(next)
             }
 
             function selectUp() {
-                let prevMatch
                 const current = selectionManager.selected
+                const $prevSentence = current.closest(".sentence").prev(":not(.corpus_info)")
+
                 if (!$ctrl.isReading) {
-                    prevMatch = getWordAt(
-                        current.offset().left + current.width() / 2,
-                        current.closest("tr").prevAll(":not(.corpus_info)").first()
-                    )
-                    prevMatch.click()
-                } else {
-                    const searchwords = current
-                        .prevAll(".word")
-                        .get()
-                        .concat(
-                            current
-                                .closest(":not(.corpus_info)")
-                                .prevAll(":not(.corpus_info)")
-                                .first()
-                                .find(".word")
-                                .get()
-                                .reverse()
-                        )
-                    const def = current.parent().prev().find(".word:last")
-                    prevMatch = getFirstAtCoor(current.offset().left + current.width() / 2, $(searchwords), def).click()
+                    return getWordAt(current.offset().left + current.width() / 2, $prevSentence)
                 }
 
-                return prevMatch
+                const searchwords = current.prevAll(".word").get().concat($prevSentence.find(".word").get().reverse())
+                const def = $prevSentence.find(".word:last")
+                return getFirstAtCoor(current.offset().left + current.width() / 2, $(searchwords), def)
             }
 
             function selectDown() {
-                let nextMatch
                 const current = selectionManager.selected
+                const $nextSentence = current.closest(".sentence").next(":not(.corpus_info)")
+
                 if (!$ctrl.isReading) {
-                    nextMatch = getWordAt(
-                        current.offset().left + current.width() / 2,
-                        current.closest("tr").nextAll(":not(.corpus_info)").first()
-                    )
-                    nextMatch.click()
-                } else {
-                    const searchwords = current
-                        .nextAll(".word")
-                        .add(current.closest(":not(.corpus_info)").nextAll(":not(.corpus_info)").first().find(".word"))
-                    const def = current.parent().next().find(".word:first")
-                    nextMatch = getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def).click()
+                    return getWordAt(current.offset().left + current.width() / 2, $nextSentence)
                 }
-                return nextMatch
+
+                const searchwords = current.nextAll(".word").add($nextSentence.find(".word"))
+                const def = $nextSentence.find(".word:last")
+                return getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def)
             }
 
-            function getCurrentRow() {
-                const tr = $element.find(".token_selected").closest("tr")
-                if ($element.find(".token_selected").parent().is("td")) {
-                    return tr.find("td > .word")
-                } else {
-                    return tr.find("div > .word")
-                }
-            }
-
-            function getFirstAtCoor(xCoor, wds, default_word) {
-                let output = null
-                wds.each(function (i, item) {
-                    const thisLeft = $(this).offset().left
-                    const thisRight = $(this).offset().left + $(this).width()
-                    if (xCoor > thisLeft && xCoor < thisRight) {
-                        output = $(this)
-                        return false
-                    }
-                })
-
-                return output || default_word
+            /**
+             * @param {number} x
+             * @param {JQLite} wds
+             * @param {JQLite} default_word
+             */
+            function getFirstAtCoor(x, wds, default_word) {
+                const isHit = (word) => x > $(word).offset().left && x < $(word).offset().left + $(word).width()
+                const hit = wds.get().find(isHit)
+                return hit ? $(hit) : default_word
             }
 
             function getWordAt(xCoor, $row) {
@@ -766,28 +726,29 @@ angular.module("korpApp").component("kwic", {
                 return output
             }
 
+            /**
+             * @param {JQLite} word
+             */
             function scrollToShowWord(word) {
-                if (!word.length) {
-                    return
-                }
+                if (!word.length) return
                 const offset = 200
-                const wordTop = word.offset().top
-                let newY = window.scrollY
-                if (wordTop > $(window).height() + window.scrollY) {
-                    newY += offset$r
-                } else if (wordTop < window.scrollY) {
-                    newY -= offset
+
+                if (word.offset().top + word.height() > window.scrollY + $(window).height()) {
+                    $("html, body")
+                        .stop(true, true)
+                        .animate({ scrollTop: window.scrollY + offset })
+                } else if (word.offset().top < window.scrollY) {
+                    $("html, body")
+                        .stop(true, true)
+                        .animate({ scrollTop: window.scrollY - offset })
                 }
-                $("html, body").stop(true, true).animate({ scrollTop: newY })
-                const wordLeft = word.offset().left
+
                 const area = $element.find(".table_scrollarea")
-                let newX = Number(area.scrollLeft())
-                if (wordLeft > area.offset().left + area.width()) {
-                    newX += offset
-                } else if (wordLeft < area.offset().left) {
-                    newX -= offset
+                if (word.offset().left + word.width() > area.offset().left + area.width()) {
+                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft() + offset })
+                } else if (word.offset().left < area.offset().left) {
+                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft() - offset })
                 }
-                area.stop(true, true).animate({ scrollLeft: newX })
             }
         },
     ],
