@@ -19,7 +19,7 @@
 - Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
 - Replaced jStorage library with native `localStorage`, and added TypeScript typings
 - In the `ParallelCorpusListing` class, the methods `getLinked` and `getEnabledByLang` have new parameter signatures
-- Replaced custom `popper` directive with `uib-popover` and `uib-dropdown` ()
+- Replaced custom `popper` directive with `uib-popover` and `uib-dropdown` ([docs](https://angular-ui.github.io/bootstrap/))
 - Removed the `mapper` template filter; change `x | mapper:f` to `f(x)`
 - Removed the global `c` alias for `console`
 - Removed global `lang`, use `$rootScope["lang"]` instead (outside Angular: `getService("$rootScope")["lang"]`)

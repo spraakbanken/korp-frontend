@@ -270,7 +270,9 @@ angular.module("korpApp").component("resultMap", {
              * check if the cluster with split into several clusters / markers on zooom
              * TODO: does not work in some cases
              */
-            function shouldZooomToBounds(cluster) {
+            function shouldZooomToBounds(cluster: any) {
+                // This code is a modification of MarkerCluster.zoomToBounds()
+                // See https://github.com/Leaflet/Leaflet.markercluster/blob/master/src/MarkerCluster.js
                 let childClusters = cluster._childClusters.slice()
                 const map = cluster._group._map
                 const boundsZoom = map.getBoundsZoom(cluster._bounds)
