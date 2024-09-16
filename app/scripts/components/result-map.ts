@@ -410,22 +410,15 @@ angular.module("korpApp").component("resultMap", {
             })
 
             function updateMarkers() {
-                if (markerCluster) {
-                    map.removeLayer(markerCluster)
-                }
-                if (featureLayer) {
-                    map.removeLayer(featureLayer)
-                }
+                if (markerCluster) map.removeLayer(markerCluster)
+                if (featureLayer) map.removeLayer(featureLayer)
+
                 if (useClustering()) {
                     const selectedMarkers = $ctrl.selectedGroups.map((group) => $ctrl.markers[group])
                     const clusterGroups = _.keyBy(selectedMarkers, "color")
                     markerCluster = createMarkerCluster(clusterGroups, $ctrl.restColor)
                     map.addLayer(markerCluster)
-                } else {
-                    featureLayer = createFeatureLayer()
-                    map.addLayer(featureLayer)
-                }
-                if (useClustering()) {
+
                     const isCluster = $ctrl.selectedGroups.length !== 1
                     for (const group of $ctrl.selectedGroups) {
                         const markerGroup = $ctrl.markers[group]
@@ -439,14 +432,13 @@ angular.module("korpApp").component("resultMap", {
                                 point: markerOrig.point,
                                 queryData: markerOrig.queryData,
                             }
-                            if (useClustering()) {
-                                markerCluster.addLayer(marker)
-                            } else {
-                                featureLayer.addLayer(marker)
-                            }
+                            markerCluster.addLayer(marker)
                         })
                     }
                 } else {
+                    featureLayer = createFeatureLayer()
+                    map.addLayer(featureLayer)
+
                     const markers = $ctrl.selectedGroups.map((group) => $ctrl.markers[group])
                     const markersMerged = mergeMarkers(markers)
                     for (const markerData of markersMerged) {
@@ -456,6 +448,7 @@ angular.module("korpApp").component("resultMap", {
                         featureLayer.addLayer(marker)
                     }
                 }
+
                 updateMarkerSizes()
             }
 
