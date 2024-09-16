@@ -93,10 +93,11 @@ angular.module("korpApp").directive("mapCtrl", [
 
                 $scope.toggleMarkerGroup = function (groupName: string) {
                     $scope.markerGroups[groupName].selected = !$scope.markerGroups[groupName].selected
+                    // It is important to replace the array, not modify it, to trigger a watcher in the result-map component.
                     if ($scope.selectedGroups.includes(groupName)) {
-                        $scope.selectedGroups.splice($scope.selectedGroups.indexOf(groupName), 1)
+                        $scope.selectedGroups = $scope.selectedGroups.filter((group) => group != groupName)
                     } else {
-                        $scope.selectedGroups.push(groupName)
+                        $scope.selectedGroups = [...$scope.selectedGroups, groupName]
                     }
                 }
 
