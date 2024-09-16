@@ -291,7 +291,7 @@ label.placeholder {
     text-align : left;
   }
 }
-.date_interval.popper_menu {
+.date_interval {
   width: auto;
   padding : 1em;
 }
@@ -931,15 +931,6 @@ a {
     .dropdown-toggle {
       background-color : transparent;
     }
-    &.menu_more {
-      margin-left: -3px;
-      a {
-        background: rgba(0,0,0,0);
-      }
-      i {
-        padding-left: 5px;
-      }
-    }
   }
 }
 
@@ -1205,9 +1196,6 @@ body.modal-open {
   }
 }
 
-.popover {
-  display : none;
-}
 .search_submit {
   display : inline;
   margin-right : 5px;
@@ -1824,10 +1812,31 @@ line.tick {
 }
 
 .popover {
+   // Override rules from Bootstrap
+  font-family: inherit;
+  font-size: inherit;
+  max-width: 90vw;
+
   border-radius: 2px;
+  max-height : 575px;
+
   .popover-content {
     padding : 5px;
+    overflow-y: auto;
   }
+
+  li {
+    &.selected a {
+      color : black;
+    }
+    a {
+      color: rgb(67 56 202 / var(--tw-text-opacity));
+    }
+    a:hover {
+      color: indianred;
+    }
+  }
+
   .btn_container {
     margin-top : 1em;
     text-align : right;
@@ -1909,6 +1918,7 @@ line.tick {
   border-radius: 2px;
   max-height : 575px;
   overflow-y: auto;
+
   li {
     &.selected a {
       color : black;
@@ -1920,7 +1930,6 @@ line.tick {
       color: indianred;
     }
   }
-  
 }
 
 /* ----------- Autocompletion ----------- */

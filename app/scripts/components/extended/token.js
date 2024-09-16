@@ -2,7 +2,6 @@
 import angular from "angular"
 import { html } from "@/util"
 import "@/components/extended/and-token"
-import "@/directives/popper"
 
 angular.module("korpApp").component("extendedToken", {
     template: html`
@@ -34,16 +33,25 @@ angular.module("korpApp").component("extendedToken", {
                         <i class="fa-solid fa-arrow-down"></i>
                         <span style="margin-left: 1px;position: relative;top: -1px;">{{"and" | loc:$root.lang}}</span>
                     </button>
-                    <button popper class="btn btn-xs btn-default token-cog-btn flex items-center">
+
+                    <button
+                        uib-popover-template="'tokenOptions.html'"
+                        popover-trigger="'outsideClick'"
+                        popover-placement="bottom-right"
+                        class="btn btn-xs btn-default token-cog-btn flex items-center"
+                    >
                         <i class="fa-solid fa-bars mr-1"></i><span>{{'options' | loc:$root.lang}}</span>
                     </button>
-                    <ul class="popper_menu dropdown-menu">
-                        <li>
-                            <a ng-click="$ctrl.toggleRepeat()">{{'repeat' | loc:$root.lang}}</a>
-                        </li>
-                        <li><a ng-click="$ctrl.toggleStart()">{{'sent_start' | loc:$root.lang}}</a></li>
-                        <li><a ng-click="$ctrl.toggleEnd()">{{'sent_end' | loc:$root.lang}}</a></li>
-                    </ul>
+
+                    <script type="text/ng-template" id="tokenOptions.html">
+                        <ul>
+                            <li>
+                                <a ng-click="$ctrl.toggleRepeat()">{{'repeat' | loc:$root.lang}}</a>
+                            </li>
+                            <li><a ng-click="$ctrl.toggleStart()">{{'sent_start' | loc:$root.lang}}</a></li>
+                            <li><a ng-click="$ctrl.toggleEnd()">{{'sent_end' | loc:$root.lang}}</a></li>
+                        </ul>
+                    </script>
 
                     <div class="repeat" ng-show="$ctrl.token.repeat">
                         <span>{{'repeat' | loc:$root.lang}}</span>

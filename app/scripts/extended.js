@@ -7,7 +7,6 @@ import { loc, locAttribute } from "@/i18n"
 import "@/components/autoc"
 import "@/components/datetime-picker"
 import "@/directives/escaper"
-import "@/directives/popper"
 
 let customExtendedTemplates = {}
 
@@ -178,17 +177,29 @@ export default _.merge(
             ],
         },
         default: {
-            template: _.template(`\
-            <input ng-model='input' class='arg_value' escaper 
+            template: _.template(html`
+                <input
+                    ng-model="input"
+                    class="arg_value"
+                    escaper
                     ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
-            <%= maybe_placeholder %>>
-            <span ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'
-                    class='val_mod' popper> Aa </span>
-            <ul class='mod_menu popper_menu dropdown-menu'>
-                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:$root.lang}}</a></li>
-                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:$root.lang}}</a></li>
-            </ul>
-        `),
+                    placeholder="<%= placeholder %>"
+                />
+
+                <span uib-dropdown>
+                    <span
+                        ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'
+                        class="val_mod"
+                        uib-dropdown-toggle
+                    >
+                        Aa
+                    </span>
+                    <ul class="mod_menu" uib-dropdown-menu>
+                        <li><a ng-click="makeSensitive()">{{'case_sensitive' | loc:$root.lang}}</a></li>
+                        <li><a ng-click="makeInsensitive()">{{'case_insensitive' | loc:$root.lang}}</a></li>
+                    </ul>
+                </span>
+            `),
             controller: [
                 "$scope",
                 function ($scope) {

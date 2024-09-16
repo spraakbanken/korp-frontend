@@ -12,7 +12,6 @@ import { collatorSort, html } from "@/util"
 import "@/services/utils"
 import "@/components/corpus_chooser/corpus-chooser"
 import "@/components/radio-list"
-import "@/directives/popper"
 
 angular.module("korpApp").component("header", {
     template: html`
@@ -22,16 +21,13 @@ angular.module("korpApp").component("header", {
                     <li class="visible" ng-repeat="mode in $ctrl.visible" ng-class="{selected: mode.selected}">
                         <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:lang}}</a>
                     </li>
-                    <li class="menu_more visible" ng-if="$ctrl.menu.length">
-                        <a
-                            class="dropdown-toggle"
-                            popper="popper"
-                            no-close-on-click="true"
-                            my="right+15% top+10"
-                            at="bottom right"
-                            >{{'more' | loc:$root.lang}}<i class="fa fa-angle-double-down"></i
-                        ></a>
-                        <ul class="dropdown-menu popper_menu">
+                    <li class="menu_more visible" ng-if="$ctrl.menu.length" uib-dropdown>
+                        <a uib-dropdown-toggle>
+                            {{'more' | loc:$root.lang}}
+                            <i class="fa fa-angle-double-down ml-1"></i>
+                        </a>
+
+                        <ul uib-dropdown-menu>
                             <li ng-repeat="mode in $ctrl.menu" ng-class="{selected: mode.selected}">
                                 <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:lang}}</a>
                             </li>
@@ -39,64 +35,45 @@ angular.module("korpApp").component("header", {
                     </li>
                 </ul>
 
-                <script type="text/ng-template" id="aboutTemplate.html">
-                    <ul class="my-0 py-1 text-right" ng-click="$root.isPopoverOpen = false">
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-200">
-                            <a
-                                class="block transiton duration-200 hover_text-blue-600"
-                                id="about"
-                                ng-click="$ctrl.citeClick()"
-                                >{{'about' | loc:$root.lang}}</a
-                            >
-                        </li>
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-500">
-                            <a
-                                class="block transiton duration-200 hover_text-blue-600"
-                                href="https://spraakbanken.gu.se/verktyg/korp/användarhandledning"
-                                target="_blank"
-                                >{{'docs' | loc:$root.lang}}</a
-                            >
-                        </li>
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-200" id="korplink">
-                            <a class="block transiton duration-200 hover_text-blue-600" href="/korp"
-                                >{{'korp' | loc:$root.lang}}</a
-                            >
-                        </li>
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-200" id="korplablink">
-                            <a class="block transiton duration-200 hover_text-blue-600" href="/korplabb"
-                                >{{'korp_lab' | loc:$root.lang}}</a
-                            >
-                        </li>
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-200">
-                            <a
-                                class="block transiton duration-200 hover_text-blue-600"
-                                href="https://spraakbanken.gu.se/sparv"
-                                target="_blank"
-                                >{{'import_chain' | loc:$root.lang}}</a
-                            >
-                        </li>
-                    </ul>
-                </script>
-
                 <div class="flex items-center gap-4">
                     <login-status></login-status>
 
                     <radio-list options="$ctrl.languages" ng-model="lang"> </radio-list>
 
-                    <a class="transiton duration-200 hover_text-blue-600" ng-click="$ctrl.citeClick()"
-                        >{{'about_cite_header' | loc:$root.lang}}</a
-                    ><button
-                        class="px-2 py-1 border border-gray-300 bg-gray-200 rounded text-gray-800"
-                        popover-class="cog_menu"
-                        popover-placement="bottom-right"
-                        uib-popover-template="'aboutTemplate.html'"
-                        type="button"
-                        popover-trigger="'outsideClick'"
-                        popover-is-open="$root.isPopoverOpen"
-                    >
-                        <span class="font-bold uppercase">{{'menu' | loc:$root.lang}}</span
-                        ><i class="fa fa-lg fa-bars ml-2 align-middle text-indigo-600"></i>
-                    </button>
+                    <a class="transiton duration-200 hover_text-blue-600" ng-click="$ctrl.citeClick()">
+                        {{'about_cite_header' | loc:$root.lang}}
+                    </a>
+
+                    <div uib-dropdown>
+                        <button
+                            uib-dropdown-toggle
+                            class="px-2 py-1 border border-gray-300 bg-gray-200 rounded text-gray-800"
+                        >
+                            <span class="font-bold uppercase"> {{'menu' | loc:$root.lang}} </span>
+                            <i class="fa fa-lg fa-bars ml-2 align-middle text-indigo-600"></i>
+                        </button>
+                        <ul uib-dropdown-menu class="dropdown-menu-right">
+                            <li>
+                                <a id="about" ng-click="$ctrl.citeClick()"> {{'about' | loc:$root.lang}} </a>
+                            </li>
+                            <li>
+                                <a href="https://spraakbanken.gu.se/verktyg/korp/användarhandledning" target="_blank">
+                                    {{'docs' | loc:$root.lang}}
+                                </a>
+                            </li>
+                            <li id="korplink">
+                                <a href="/korp"> {{'korp' | loc:$root.lang}} </a>
+                            </li>
+                            <li id="korplablink">
+                                <a href="/korplabb"> {{'korp_lab' | loc:$root.lang}} </a>
+                            </li>
+                            <li>
+                                <a href="https://spraakbanken.gu.se/sparv" target="_blank">
+                                    {{'import_chain' | loc:$root.lang}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <!-- TODO too many divs -->
             </div>

@@ -2,7 +2,6 @@
 import angular, { type ui, type IComponentController, type IScope } from "angular"
 import { html } from "@/util"
 import moment, { type Moment } from "moment"
-import "@/directives/popper"
 
 angular.module("korpApp").component("datetimePicker", {
     template: html`
@@ -12,30 +11,38 @@ angular.module("korpApp").component("datetimePicker", {
             </div>
 
             <div>
-                <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top">
+                <button
+                    uib-popover-template="'datepicker.html'"
+                    popover-trigger="'outsideClick'"
+                    popover-placement="bottom-left"
+                    class="btn btn-default btn-sm"
+                >
                     <i class="fa fa-calendar mr-1"></i>
                     {{ combined.format("YYYY-MM-DD HH:mm") }}
                 </button>
-                <div ng-click="handleClick($event)" class="date_interval popper_menu dropdown-menu">
-                    <div
-                        uib-datepicker
-                        class="well well-sm"
-                        ng-model="date"
-                        datepicker-options="datepickerOptions"
-                    ></div>
 
-                    <div class="flex items-center justify-center">
-                        <i class="fa-solid fa-2x fa-clock"></i>
+                <script type="text/ng-template" id="datepicker.html">
+                    <div ng-click="handleClick($event)" class="date_interval">
                         <div
-                            uib-timepicker
-                            class="timepicker"
-                            ng-model="time"
-                            hour-step="1"
-                            minute-step="1"
-                            show-meridian="false"
+                            uib-datepicker
+                            class="well well-sm"
+                            ng-model="$parent.date"
+                            datepicker-options="datepickerOptions"
                         ></div>
+
+                        <div class="flex items-center justify-center">
+                            <i class="fa-solid fa-2x fa-clock"></i>
+                            <div
+                                uib-timepicker
+                                class="timepicker"
+                                ng-model="$parent.time"
+                                hour-step="1"
+                                minute-step="1"
+                                show-meridian="false"
+                            ></div>
+                        </div>
                     </div>
-                </div>
+                </script>
             </div>
         </div>
     `,
