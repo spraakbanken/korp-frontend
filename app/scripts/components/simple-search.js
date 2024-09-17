@@ -5,14 +5,18 @@ import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html, regescape, saldoToHtml, unregescape } from "@/util"
+import "@/services/compare-searches"
+import "@/services/lexicons"
+import "@/services/searches"
 import "@/components/autoc"
+import "@/components/search-submit"
 
 angular.module("korpApp").component("simpleSearch", {
     template: html`
         <div id="korp-simple">
             <global-filters lang="lang"></global-filters>
             <div class="sm_flex justify-between">
-                <form class="simple_form">
+                <div>
                     <autoc
                         id="simple_text"
                         input="$ctrl.input"
@@ -45,7 +49,7 @@ angular.module("korpApp").component("simpleSearch", {
                         <input id="caseChk" type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
                         <label for="caseChk"> {{'case_insensitive' | loc:$root.lang}} </label>
                     </div>
-                </form>
+                </div>
                 <div id="similar_wrapper" ng-show="$ctrl.relatedObj">
                     <button
                         class="btn btn-sm btn-default"
@@ -77,14 +81,14 @@ angular.module("korpApp").component("simpleSearch", {
     `,
     controller: [
         "$location",
-        "backend",
         "$rootScope",
         "$scope",
         "searches",
         "compareSearches",
+        "lexicons",
         "$uibModal",
         "$timeout",
-        function ($location, backend, $rootScope, $scope, searches, compareSearches, $uibModal, $timeout) {
+        function ($location, $rootScope, $scope, searches, compareSearches, lexicons, $uibModal, $timeout) {
             const ctrl = this
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
@@ -303,7 +307,7 @@ angular.module("korpApp").component("simpleSearch", {
                     }
 
                     if (sense || saldo) {
-                        backend.relatedWordSearch(unregescape(search.val)).then(function (data) {
+                        lexicons.relatedWordSearch(unregescape(search.val)).then(function (data) {
                             ctrl.relatedObj = data
                             if (data.length > 2 && data[0].label == "Excreting") {
                                 let [first, second, ...rest] = data

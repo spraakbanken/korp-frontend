@@ -3,11 +3,16 @@ import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import { html } from "@/util"
+import "@/services/compare-searches"
+import "@/services/searches"
 import "@/components/simple-search"
 import "@/components/extended/extended-standard"
 import "@/components/extended/extended-parallel"
 import "@/components/advanced-search"
 import "@/components/compare-search"
+import "@/directives/click-cover"
+import "@/directives/reduce-select"
+import "@/directives/tab-hash"
 
 angular.module("korpApp").component("searchtabs", {
     template: html`

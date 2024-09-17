@@ -2,10 +2,10 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse } from "@/backend/types"
+import type { AjaxSettings, KorpResponse, ProgressReport, ProgressResponse } from "@/backend/types"
 import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 
-export class KwicProxy extends BaseProxy {
+export class KwicProxy extends BaseProxy<KorpQueryResponse> {
     foundKwic: boolean
     prevCQP?: string
     prevParams: KorpQueryParams | null
@@ -22,10 +22,10 @@ export class KwicProxy extends BaseProxy {
     }
 
     makeRequest(
-        options: MakeRequestOptions,
+        options: KorpQueryRequestOptions,
         page: number,
-        progressCallback,
-        kwicCallback
+        progressCallback: (data: ProgressReport<KorpQueryResponse>) => void,
+        kwicCallback: (data: KorpResponse<KorpQueryResponse>) => void
     ): JQuery.jqXHR<KorpResponse<KorpQueryResponse>> {
         const self = this
         this.foundKwic = false
@@ -41,18 +41,17 @@ export class KwicProxy extends BaseProxy {
         }
 
         function getPageInterval(): Interval {
-            const hpp: string | number = locationSearchGet("hpp")
-            const itemsPerPage = Number(hpp) || settings["hits_per_page_default"]
+            const hpp = locationSearchGet("hpp")
+            const itemsPerPage = Number(hpp) || settings.hits_per_page_default
             const start = (page || 0) * itemsPerPage
             const end = start + itemsPerPage - 1
             return { start, end }
         }
 
         const command = options.ajaxParams.command || "query"
-        delete options.ajaxParams.command
 
         const data: KorpQueryParams = {
-            default_context: settings["default_overview_context"],
+            default_context: settings.default_overview_context,
             ...getPageInterval(),
             ...options.ajaxParams,
         }
@@ -97,7 +96,7 @@ export class KwicProxy extends BaseProxy {
         this.prevRequest = data
         this.prevParams = data
         const ajaxSettings: AjaxSettings = {
-            url: settings["korp_backend_url"] + "/" + command,
+            url: settings.korp_backend_url + "/" + command,
             data: data,
             beforeSend(req, settings) {
                 self.prevRequest = settings
@@ -105,10 +104,11 @@ export class KwicProxy extends BaseProxy {
                 self.prevUrl = self.makeUrlWithParams(this.url, data)
             },
 
-            success(data, status, jqxhr) {
+            success(data: KorpQueryResponse, status, jqxhr) {
                 self.queryData = data.query_data
                 self.cleanup()
-                if (data.incremental === false || !this.foundKwic) {
+                // TODO Should be `options.ajaxParams.incremental`?
+                if (data["incremental"] === false || !this.foundKwic) {
                     return kwicCallback(data)
                 }
             },
@@ -118,9 +118,9 @@ export class KwicProxy extends BaseProxy {
                 if (progressObj == null) return
 
                 progressCallback(progressObj)
-                if (progressObj["struct"].kwic) {
+                if ("kwic" in progressObj.struct) {
                     this.foundKwic = true
-                    return kwicCallback(progressObj["struct"])
+                    return kwicCallback(progressObj.struct as KorpQueryResponse)
                 }
             },
         }
@@ -135,7 +135,7 @@ const kwicProxyFactory = new Factory(KwicProxy)
 export default kwicProxyFactory
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
-type KorpQueryParams = {
+export type KorpQueryParams = {
     corpus: string
     cqp: string
     start?: number
@@ -153,9 +153,13 @@ type KorpQueryParams = {
     [cqpn: `cqp${number}`]: string
     expand_prequeries?: boolean
     incremental?: boolean
+    query_data?: string
 }
 
-type MakeRequestOptions = {
+export type KorpQueryRequestOptions = {
+    // TODO Should start,end really exist here as well as under ajaxParams?
+    start?: number
+    end?: number
     ajaxParams?: KorpQueryParams & {
         command?: string
     }
@@ -164,13 +168,15 @@ type MakeRequestOptions = {
 type Interval = { start: number; end: number }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
-type KorpQueryResponse = {
+export type KorpQueryResponse = {
     /** Search hits */
     kwic: ApiKwic[]
     /** Total number of hits */
     hits: number
     /** Number of hits for each corpus */
     corpus_hits: Record<string, number>
+    /** Order of corpora in result */
+    corpus_order: string[]
     /** Execution time in seconds */
     time: number
     /** A hash of this query */
@@ -178,7 +184,7 @@ type KorpQueryResponse = {
 }
 
 /** Search hits */
-type ApiKwic = {
+export type ApiKwic = {
     /** An object for each token in the context, with attribute values for that token */
     tokens: Record<string, any>[]
     /** Attribute values for the context (e.g. sentence) */
@@ -186,7 +192,9 @@ type ApiKwic = {
     /** Specifies the position of the match in the context. If `in_order` is false, `match` will consist of a list of match objects, one per highlighted word */
     match: KwicMatch | KwicMatch[]
     /** Hits from aligned corpora if available, otherwise omitted */
-    aligned: Record<string, any[]>
+    aligned: {
+        [linkedCorpusId: `${string}-${string}`]: Record<string, any>[]
+    }
 }
 
 /** Specifies the position of a match in a context */

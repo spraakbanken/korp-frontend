@@ -1,28 +1,42 @@
 /** @format */
 import _ from "lodash"
-import angular, {
-    IControllerService,
-    IHttpService,
-    IRootScopeService,
-    type ILocationService,
-    type IRequestConfig,
-    type IScope,
-} from "angular"
+import angular, { IControllerService, IHttpService, type IRequestConfig, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangMap } from "./i18n/types"
+import { RootScope } from "./root-scope.types"
+import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
+import { HashParams, LocationService, UrlParams } from "./urlparams"
+import { Attribute } from "./settings/config.types"
+import { AttributeOption } from "./corpus_listing"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
+
+/** Create an object from a list of keys and a function for creating corresponding values. */
+export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
+    Object.fromEntries(keys.map((key) => [key, getValue(key)]))
 
 /** Mapping from service names to their TS types. */
 type ServiceTypes = {
     $controller: IControllerService
     $http: IHttpService
-    $location: ILocationService
-    $rootScope: IRootScopeService
+    $location: LocationService
+    $rootScope: RootScope
     // Add types here as needed.
 }
+
+/** Get a parameter from the `?<key>=<value>` part of the URL. */
+export const getUrlParam = <K extends keyof UrlParams>(key: K) =>
+    new URLSearchParams(window.location.search).get(key) as UrlParams[K]
+
+/**
+ * Get a parameter from the `#?<key>=<value>` part of the URL.
+ * It is preferred to use the Angular `$location` service to read and modify this.
+ * Use this only when outside Angular context.
+ */
+export const getUrlHash = <K extends keyof HashParams>(key: K) =>
+    new URLSearchParams(window.location.hash.slice(2)).get(key) as HashParams[K]
 
 /** Get an Angular service from outside the Angular context. */
 export const getService = <K extends keyof ServiceTypes>(name: K): ServiceTypes[K] =>
@@ -40,13 +54,14 @@ export const withService = <K extends keyof ServiceTypes, R>(name: K, fn: (servi
  * Get values from the URL search string via Angular.
  * Only use this in code outside Angular. Inside, use `$location.search()`.
  */
-export const locationSearchGet = (key: string) => withService("$location", ($location) => $location.search()[key])
+export const locationSearchGet = <K extends keyof HashParams>(key: K): HashParams[K] =>
+    withService("$location", ($location) => ($location.search() as HashParams)[key])
 
 /**
  * Set values in the URL search string via Angular.
  * Only use this in code outside Angular. Inside, use `$location.search()`.
  */
-export const locationSearchSet = (name: string, value: string | number | boolean | string[]): ILocationService =>
+export const locationSearchSet = <K extends keyof HashParams>(name: K, value: HashParams[K]): LocationService =>
     withService("$location", ($location) => $location.search(name, value))
 
 /**
@@ -109,13 +124,21 @@ export class SelectionManager {
     }
 }
 
+export const getCqpAttribute = (option: AttributeOption): string =>
+    option.is_struct_attr ? `_.${option.value}` : option.value
+
+/** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
+export const valfilter = (attrobj: AttributeOption): string =>
+    attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value
+
 /**
  * Format a number of "relative hits" (hits per 1 million tokens), using exactly one decimal.
  * @param x Number of relative hits
  * @param lang The locale to use.
  * @returns A string with the number nicely formatted.
  */
-export function formatRelativeHits(x: number | string, lang: string) {
+export function formatRelativeHits(x: number | string, lang?: string) {
+    lang = lang || getLang()
     return Number(x).toLocaleString(lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 }
 
@@ -126,7 +149,8 @@ export function formatRelativeHits(x: number | string, lang: string) {
  * @param lang The locale to use.
  * @returns A HTML snippet.
  */
-export function hitCountHtml(absolute: number, relative: number, lang: string) {
+export function hitCountHtml(absolute: number, relative: number, lang?: string) {
+    lang = lang || getLang()
     const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
     // TODO Remove outer span?
     // TODO Flexbox?
@@ -283,8 +307,8 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
     }
     $("#download-links").append("<option value='init' rel='localize[download_kwic]'></option>")
     i = 0
-    while (i < settings["download_formats"].length) {
-        const format = settings["download_formats"][i]
+    while (i < settings.download_formats.length) {
+        const format = settings.download_formats[i]
         // NOTE: Using attribute rel="localize[...]" to localize the
         // title attribute requires a small change to
         // lib/jquery.localize.js. Without that, we could use
@@ -303,24 +327,24 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
             query_params: xhr_settings.url,
             format,
             korp_url: window.location.href,
-            korp_server_url: settings["korp_backend_url"],
+            korp_server_url: settings.korp_backend_url,
             corpus_config: JSON.stringify(result_corpora_settings),
             corpus_config_info_keys: ["metadata", "licence", "homepage", "compiler"].join(","),
             urn_resolver: settings.urnResolver,
         }
         if ("downloadFormatParams" in settings) {
-            if ("*" in settings["download_format_params"]) {
-                $.extend(download_params, settings["download_format_params"]["*"])
+            if ("*" in settings.download_format_params) {
+                $.extend(download_params, settings.download_format_params["*"])
             }
-            if (format in settings["download_format_params"]) {
-                $.extend(download_params, settings["download_format_params"][format])
+            if (format in settings.download_format_params) {
+                $.extend(download_params, settings.download_format_params[format])
             }
         }
         option.appendTo("#download-links").data("params", download_params)
         i++
     }
     $("#download-links").off("change")
-    ;($ as any)("#download-links")
+    ;($("#download-links") as JQueryExtended)
         .localize()
         .click(false)
         .change(function (event) {
@@ -328,7 +352,7 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
             if (!params) {
                 return
             }
-            ;($ as any).generateFile(settings["download_cgi_script"], params)
+            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script, params)
             const self = $(this)
             return setTimeout(() => self.val("init"), 1000)
         })
@@ -401,7 +425,7 @@ export function httpConfAddMethodFetch(
     url: string,
     params: Record<string, string>
 ): { url: string; request?: RequestInit } {
-    if (calcUrlLength(url, params) > settings["backendURLMaxLength"]) {
+    if (calcUrlLength(url, params) > settings.backendURLMaxLength) {
         const body = new FormData()
         for (const key in params) {
             body.append(key, params[key])

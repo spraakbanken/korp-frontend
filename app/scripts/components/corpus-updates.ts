@@ -3,6 +3,7 @@ import angular, { IScope } from "angular"
 import moment from "moment"
 import settings from "@/settings"
 import { html } from "@/util"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
 
 export default angular.module("korpApp").component("corpusUpdates", {
     template: html`
@@ -44,7 +45,7 @@ export default angular.module("korpApp").component("corpusUpdates", {
             $scope.expanded = false
 
             $ctrl.$onInit = () => {
-                if (settings["frontpage"]?.["corpus_updates"]) {
+                if (settings.frontpage?.corpus_updates) {
                     const limitDate = moment().subtract(6, "months")
                     // Find most recently updated corpora
                     $scope.recentUpdates = settings.corpusListing.corpora
@@ -66,15 +67,8 @@ export default angular.module("korpApp").component("corpusUpdates", {
 
 type CorpusUpdatesScope = IScope & {
     LIMIT: number
-    recentUpdates: Corpus[] | null
-    recentUpdatesFiltered: Corpus[] | null
+    recentUpdates: CorpusTransformed[] | null
+    recentUpdatesFiltered: CorpusTransformed[] | null
     expanded: boolean
     toggleExpanded: (to?: boolean) => void
 }
-
-type Corpus = {
-    info: { Updated: string }
-    title: TranslatedString | string
-}
-
-type TranslatedString = { [lang: string]: string }

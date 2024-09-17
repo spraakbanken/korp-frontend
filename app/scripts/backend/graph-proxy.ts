@@ -6,7 +6,7 @@ import { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } fro
 import { AbsRelTuple } from "@/statistics.types"
 import { Factory, httpConfAddMethod } from "@/util"
 
-export class GraphProxy extends BaseProxy {
+export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
     granularity: Granularity
     prevParams: KorpCountTimeParams
     prevRequest: AjaxSettings
@@ -57,7 +57,7 @@ export class GraphProxy extends BaseProxy {
         const def = $.Deferred()
 
         const ajaxSettings: AjaxSettings = {
-            url: settings["korp_backend_url"] + "/count_time",
+            url: settings.korp_backend_url + "/count_time",
             dataType: "json",
             data: params,
 

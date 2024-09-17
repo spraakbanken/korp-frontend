@@ -25,7 +25,7 @@ angular.module("korpApp").component("corpusChooser", {
             >
                 <div ng-if="$ctrl.initialized">
                     <span ng-if-start="$ctrl.selectCount != 1">{{ $ctrl.selectCount }}</span>
-                    <span>{{ 'corpselector_of' | loc:$root.lang }}</span>
+                    <span>{{ 'corpselector_of' | loc }}</span>
                     <span>{{ $ctrl.totalCount }}</span>
                     <span ng-if-end>{{'corpselector_selectedmultiple' | loc:$root.lang }}</span>
 

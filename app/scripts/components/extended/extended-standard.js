@@ -5,7 +5,9 @@ import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html } from "@/util"
+import "@/services/compare-searches"
 import "@/components/extended/tokens"
+import "@/components/search-submit"
 
 angular.module("korpApp").component("extendedStandard", {
     template: html`
@@ -95,8 +97,8 @@ angular.module("korpApp").component("extendedStandard", {
                 try {
                     updateExtendedCQP()
                 } catch (e) {
-                    c.log("Failed to parse CQP", ctrl.cqp)
-                    c.log("Error", e)
+                    console.log("Failed to parse CQP", ctrl.cqp)
+                    console.log("Error", e)
                 }
 
                 ctrl.validateFreeOrder()

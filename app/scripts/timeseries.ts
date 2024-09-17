@@ -22,26 +22,24 @@ export function calculateYearTicks(min: number, max: number) {
 
 // Time data is fetched in data_init.js, to also provide data for search result trend diagram (?)
 /** Data size per year of all corpora. */
-export const getTimeDataPairs = (): [number, number][] => settings["time_data"][0]
+export const getTimeDataPairs = (): [number, number][] => settings.time_data[0]
 
 /** Data size of unknown year in all corpora. */
-export const getCountUndated = (): number => settings["time_data"][1]
+export const getCountUndated = (): number => settings.time_data[1]
 
 /** Get data size per year of all corpora. */
 export const getSeries = () => fromPairs(getTimeDataPairs()) as YearSeries
 
 /** Get data size per year of selected corpora. */
 export function getSeriesSelected() {
-    const corpora: { time?: YearSeries }[] = settings.corpusListing.selected
     // `pickBy` removes zeroes.
-    const series = corpora.map((corpus) => ("time" in corpus ? pickBy(corpus.time) : {}))
+    const series = settings.corpusListing.selected.map((corpus) => ("time" in corpus ? pickBy(corpus.time) : {}))
     return sumYearSeries(...series)
 }
 
 /** Get data size of unknown year in selected corpora */
 export function getCountUndatedSelected() {
-    const corpora: { non_time?: number }[] = settings.corpusListing.selected
-    return corpora.reduce((sum, corpus) => sum + (corpus["non_time"] || 0), 0)
+    return settings.corpusListing.selected.reduce((sum, corpus) => sum + (corpus["non_time"] || 0), 0)
 }
 
 /** Get first and last year in all available corpora. */

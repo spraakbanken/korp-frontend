@@ -1,6 +1,6 @@
 ## Introduction
 
-This is a user manual for the corpus search tool  [Korp](http://spraakbanken.gu.se/korp/). Before you continue reading
+This is a user manual for the word research platform [Korp](http://spraakbanken.gu.se/korp/). Before you continue reading
 we recommend that you visit the Korp page and do some test searches in order to get a rough picture of how the interface
 works.
 

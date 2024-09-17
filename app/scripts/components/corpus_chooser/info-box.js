@@ -11,9 +11,9 @@ angular.module("korpApp").component("ccInfoBox", {
             <h3 class="mt-0 mb-6">
                 <i class="fa-solid fa-file-text-o text-blue-700" ng-if="$ctrl.isCorpus"></i>
                 <i class="fa-solid fa-folder-open-o text-blue-700" ng-if="$ctrl.isFolder"></i>
-                {{ $ctrl.title | locObj:lang }}
+                {{ $ctrl.title | locObj:$root.lang }}
             </h3>
-            <div class="text-base my-3" ng-bind-html="$ctrl.description | locObj:lang | trust"></div>
+            <div class="text-base my-3" ng-bind-html="$ctrl.description | locObj:$root.lang | trust"></div>
             <div ng-if="$ctrl.link" class="my-3">
                 <a ng-href="{{$ctrl.link.url}}" target="_blank">
                     {{$ctrl.link.label}}

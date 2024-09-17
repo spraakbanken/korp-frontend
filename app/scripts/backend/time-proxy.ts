@@ -5,8 +5,8 @@ import BaseProxy from "@/backend/base-proxy"
 import type { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
 import { Factory, httpConfAddMethod } from "@/util"
 
-export class TimeProxy extends BaseProxy {
-    makeRequest() {
+export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
+    makeRequest(): JQueryDeferred<TimeData> {
         const data: KorpTimespanParams = {
             granularity: "y",
             corpus: settings.corpusListing.stringifyAll(),
@@ -14,7 +14,7 @@ export class TimeProxy extends BaseProxy {
 
         const dfd = $.Deferred()
         const ajaxSettings: AjaxSettings = {
-            url: settings["korp_backend_url"] + "/timespan",
+            url: settings.korp_backend_url + "/timespan",
             data,
         }
         const xhr = $.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpTimespanResponse>
@@ -110,3 +110,10 @@ type KorpTimespanResponse = KorpResponse<{
     /** Execution time in seconds */
     time: number
 }>
+
+/** Data returned after slight mangling. */
+export type TimeData = [
+    Record<string, Histogram>, // Same as KorpTimespanResponse.corpora
+    [number, number][], // Tokens per time period, as pairs ordered by time period
+    number // Tokens in undated material
+]

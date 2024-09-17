@@ -1,4 +1,6 @@
 /** @format */
+import moment from "moment"
+
 const korpApp = angular.module("korpApp")
 
 korpApp.controller("VideoCtrl", [

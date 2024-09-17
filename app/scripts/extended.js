@@ -1,10 +1,12 @@
 /** @format */
 import _ from "lodash"
+import moment from "moment"
 import settings from "@/settings"
 import { html, regescape, unregescape } from "@/util"
 import { loc, locAttribute } from "@/i18n"
 import "@/components/autoc"
 import "@/components/datetime-picker"
+import "@/directives/escaper"
 
 let customExtendedTemplates = {}
 
@@ -84,7 +86,7 @@ const selectController = (autocomplete) => [
                         $scope.input = _.includes(data, $scope.input) ? $scope.input : $scope.dataset[0][0]
                     }
                 },
-                () => c.log("struct_values error")
+                () => console.log("struct_values error")
             )
         }
 
@@ -175,17 +177,29 @@ export default _.merge(
             ],
         },
         default: {
-            template: _.template(`\
-            <input ng-model='input' class='arg_value' escaper 
+            template: _.template(html`
+                <input
+                    ng-model="input"
+                    class="arg_value"
+                    escaper
                     ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
-            <%= maybe_placeholder %>>
-            <span ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'
-                    class='val_mod' popper> Aa </span>
-            <ul class='mod_menu popper_menu dropdown-menu'>
-                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:$root.lang}}</a></li>
-                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:$root.lang}}</a></li>
-            </ul>
-        `),
+                    placeholder="<%= placeholder %>"
+                />
+
+                <span uib-dropdown>
+                    <span
+                        ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'
+                        class="val_mod"
+                        uib-dropdown-toggle
+                    >
+                        Aa
+                    </span>
+                    <ul class="mod_menu" uib-dropdown-menu>
+                        <li><a ng-click="makeSensitive()">{{'case_sensitive' | loc:$root.lang}}</a></li>
+                        <li><a ng-click="makeInsensitive()">{{'case_insensitive' | loc:$root.lang}}</a></li>
+                    </ul>
+                </span>
+            `),
             controller: [
                 "$scope",
                 function ($scope) {
@@ -312,15 +326,14 @@ export default _.merge(
                     }
                     s.commitDateInput = () => {
                         if (s.fromDateString) {
-                            let simpleFrom = s.fromDateString.length == 4
-                            s.fromDate = moment(s.fromDateString, simpleFrom ? "YYYY" : "YYYY-MM-DD").toDate()
+                            const dateString =
+                                s.fromDateString.length == 4 ? `${s.fromDateString}-01-01` : s.fromDateString
+                            s.fromDate = moment(dateString).toDate()
+                            s.fromTime = moment("000000", "HHmmss").toDate()
                         }
                         if (s.toDateString) {
-                            let simpleTo = s.toDateString.length == 4
-                            if (simpleTo) {
-                                var dateString = `${s.toDateString}-12-31`
-                            }
-                            s.toDate = moment(dateString || s.dateString).toDate()
+                            const dateString = s.toDateString.length == 4 ? `${s.toDateString}-12-31` : s.toDateString
+                            s.toDate = moment(dateString).toDate()
                             s.toTime = moment("235959", "HHmmss").toDate()
                         }
                     }
@@ -362,6 +375,7 @@ export default _.merge(
                     s.updateTo = (m) => {
                         // We cannot just patch the list, we need to re-set it to trigger watcher.
                         // [fromdate, todate, fromtime, totime]
+                        m.set("second", 59)
                         s.model = [s.model[0], m.format("YYYYMMDD"), s.model[2], m.format("HHmmss")]
                     }
                 },

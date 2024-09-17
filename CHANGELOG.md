@@ -1,5 +1,50 @@
 # Changelog
 
+## [Unreleased]
+
+## [9.7.0] - 2024-09-17
+
+### Added
+
+- TypeScript typings for:
+  - config/settings
+  - URL parameters
+  - CQP queries
+  - CorpusListing
+  - `$rootScope`
+  - Auth module
+  - services (`backend`, `compare-searches`, `lexicons`, `searches`, `utils`)
+- Map code from `korp-geo` has moved into this codebase [#359](https://github.com/spraakbanken/korp-frontend/issues/359)
+
+### Changed
+
+- Replaced Raphael library with Chart.js, used in the pie chart over corpus distribution in statistics
+- Replaced jStorage library with native `localStorage`, and added TypeScript typings
+- In the `ParallelCorpusListing` class, the methods `getLinked` and `getEnabledByLang` have new parameter signatures
+- Replaced custom `popper` directive with `uib-popover` and `uib-dropdown` ([docs](https://angular-ui.github.io/bootstrap/))
+- Removed the `mapper` template filter; change `x | mapper:f` to `f(x)`
+- Removed the global `c` alias for `console`
+- Removed global `lang`, use `$rootScope["lang"]` instead (outside Angular: `getService("$rootScope")["lang"]`)
+- Removed global `loc_data`, use `$rootScope["loc_data"]` instead (outside Angular: `getService("$rootScope")["loc_data"]`)
+- Removed globals `CSV` and `moment`, import the libraries instead
+- Converted the "radioList" JQuery widget to a component
+- Using Karp 7 backend instead of Karp 4 [#388](https://github.com/spraakbanken/korp-frontend/pull/388)
+- For the `utils.setupHash()` function, the `config` argument is no longer an array. To sync multiple parameters, call it once for each.
+- Dopped support for old map usage (`sb-old-map="true"`)
+
+### Fixed
+
+- News were sometimes not shown immediately after fetch
+- In the time interval component in Extended search:
+  - Simple input fields were being ignored [#377](https://github.com/spraakbanken/korp-frontend/issues/377)
+  - Handle end seconds correctly [#378](https://github.com/spraakbanken/korp-frontend/issues/378)
+  - Parsing of the simple input had been incomplete since way back
+- There was no word picture heading if lemgram
+- Paging broken in word picture example search [#383](https://github.com/spraakbanken/korp-frontend/issues/383)
+- Incoherent style change to corpus heading when switching between KWIC and context view [#389](https://github.com/spraakbanken/korp-frontend/issues/389)
+- Context view broken in example search [#386](https://github.com/spraakbanken/korp-frontend/issues/386)
+- Can't navigate between tokens in KWIC using arrow keys [#368](https://github.com/spraakbanken/korp-frontend/issues/368)
+
 ## [9.6.0] - 2024-05-27
 
 ### Added
@@ -212,6 +257,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.7.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.0
 [9.6.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.6.0
 [9.5.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.3
 [9.5.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.2

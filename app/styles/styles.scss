@@ -257,10 +257,6 @@ label.placeholder {
   opacity: 0.6;
 }
 
-#languages {
-  margin-top : -1px;
-}
-
 #query_table {
   white-space: nowrap;
   margin-bottom: 15px;
@@ -295,7 +291,7 @@ label.placeholder {
     text-align : left;
   }
 }
-.date_interval.popper_menu {
+.date_interval {
   width: auto;
   padding : 1em;
 }
@@ -543,15 +539,11 @@ table {
 }
 
 .lemgram_help {
-  text-transform: capitalize;
   white-space: nowrap;
   margin-top: 10px;
   margin-bottom: 20px;
   > span {
     padding: 10px 10px;
-  }
-  .hit.lemgram {
-    text-transform: initial;
   }
 }
 
@@ -662,53 +654,9 @@ table {
   padding: 0 4px;
 }
 
-
-.not_corpus_info {
-  .corpus_title,.empty_td {
-    display : none;
-  }
-}
 .corpus_info {
   background-color : white !important;
 }
-
-.reading_mode .corpus_title {
-  margin : 0;
-  font-size: 3em;
-  text-align : left;
-}
-
-.reading_mode .no_context .corpus_title {
-  left: 0;
-}
-
-.corpus_title_warn {
-  margin-right: -100px;
-  position: relative;
-  left: 10px;
-  font-variant: normal;
-  text-transform: none;
-  font-size: 0.8em;
-}
-
-.reading_mode .corpus_title_warn {
-  font-size: 12px;
-  display: block;
-}
-
-.webkit .reading_mode .no_context .corpus_title_warn {
-  margin-bottom: -40px;
-}
-
-.corpus_title_warn {
-  &:before {
-    content: "(";
-  }
-  &:after {
-    content: ")";
-  }
-}
-
 
 .right {
   vertical-align: text-top;
@@ -868,9 +816,6 @@ a {
   color: #999;
   font-style: italic;
   position: relative;
-  .left, .match, .right {
-    display : none;
-  }
 }
 
 #about_body {
@@ -985,15 +930,6 @@ a {
     }
     .dropdown-toggle {
       background-color : transparent;
-    }
-    &.menu_more {
-      margin-left: -3px;
-      a {
-        background: rgba(0,0,0,0);
-      }
-      i {
-        padding-left: 5px;
-      }
     }
   }
 }
@@ -1260,9 +1196,6 @@ body.modal-open {
   }
 }
 
-.popover {
-  display : none;
-}
 .search_submit {
   display : inline;
   margin-right : 5px;
@@ -1842,22 +1775,16 @@ line.tick {
     vertical-align: top;
   }
   .meter {
+    display: block;
     cursor: pointer;
     position: relative;
     border: 1px solid rgba($primaryColor, 0);
     transition: all 200ms ease;
+    white-space : nowrap;
     &:hover {
       color : navy;
       border: 1px solid rgba(darken($primaryColor, 10%), 1);
     }
-  }
-  .badge {
-    position: absolute;
-    right : 0;
-    top : 4px;
-  }
-  .background {
-    padding: 5px 0;
   }
   .column_1 ul {
     background-color: lighten($primaryColor, 4%);
@@ -1878,18 +1805,38 @@ line.tick {
     margin-right : 25px;
     width : 400px;
     font-size : 1.1em;
-    li {
+    li:not(:last-child) {
       margin-bottom : 0.5em;
-      white-space : nowrap;
     }
   }
 }
 
 .popover {
+   // Override rules from Bootstrap
+  font-family: inherit;
+  font-size: inherit;
+  max-width: 90vw;
+
   border-radius: 2px;
+  max-height : 575px;
+
   .popover-content {
     padding : 5px;
+    overflow-y: auto;
   }
+
+  li {
+    &.selected a {
+      color : black;
+    }
+    a {
+      color: rgb(67 56 202 / var(--tw-text-opacity));
+    }
+    a:hover {
+      color: indianred;
+    }
+  }
+
   .btn_container {
     margin-top : 1em;
     text-align : right;
@@ -1923,12 +1870,6 @@ line.tick {
 }
 .loading .close_icon {
   display : none;
-}
-
-
-.badge {
-  padding-right: 6px;
-  padding-left: 6px;
 }
 
 .tab-content {
@@ -1977,6 +1918,7 @@ line.tick {
   border-radius: 2px;
   max-height : 575px;
   overflow-y: auto;
+
   li {
     &.selected a {
       color : black;
@@ -1988,7 +1930,6 @@ line.tick {
       color: indianred;
     }
   }
-  
 }
 
 /* ----------- Autocompletion ----------- */

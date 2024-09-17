@@ -3,10 +3,10 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { expandOperators } from "@/cqp_parser/cqp"
 import settings from "@/settings"
 import _ from "lodash"
-import { ProgressReport, ProgressResponse } from "@/backend/types"
+import { ProgressReport, ProgressResponse, ResponseBase } from "@/backend/types"
 
 /** The Proxy classes wrap API requests with pre-/postprocessing and progress reporting. */
-export default abstract class BaseProxy {
+export default abstract class BaseProxy<R extends {} = {}> {
     prev: string
     chunkCache: string
     progress: number
@@ -103,9 +103,9 @@ export default abstract class BaseProxy {
         _.toPairs(header).forEach(([name, value]) => req.setRequestHeader(name, value))
     }
 
-    calcProgress(e: any): ProgressReport {
+    calcProgress(e: any): ProgressReport<R> {
         const newText = e.target.responseText.slice(this.prev.length)
-        let struct: ProgressResponse = {}
+        let struct: ResponseBase & ProgressResponse & Partial<R> = {}
 
         try {
             // try to parse a chunk from the progress object
@@ -118,14 +118,15 @@ export default abstract class BaseProxy {
             this.chunkCache += newText
         }
 
-        $.each(struct, (key: string, val) => {
+        Object.keys(struct).forEach((key) => {
             if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
-                const currentCorpus = val.corpus || val
+                const val = struct[key]
+                const currentCorpus = val["corpus"] || val
                 const sum = _(currentCorpus.split("|"))
                     .map((corpus) => Number(settings.corpora[corpus.toLowerCase()].info.Size))
                     .reduce((a, b) => a + b, 0)
                 this.progress += sum
-                this.total_results += val.hits !== null ? parseInt(val.hits) : null
+                this.total_results += val["hits"] !== null ? parseInt(val["hits"]) : null
             }
         })
 
@@ -138,7 +139,7 @@ export default abstract class BaseProxy {
                 }
 
                 return _(corpus.split("|"))
-                    .map((corpus) => parseInt(settings.corpora[corpus.toLowerCase()].info.Size))
+                    .map((corpus) => Number(settings.corpora[corpus.toLowerCase()].info.Size))
                     .reduce((a, b) => a + b, 0)
             })
             this.total = _.reduce(tmp, (val1, val2) => val1 + val2, 0)

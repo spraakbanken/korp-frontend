@@ -57,10 +57,10 @@ korpApp.directive("globalFilter", [
       <button uib-dropdown-toggle class="btn btn-sm btn-default mr-1 align-baseline">
         <span ng-if="attrValue.length == 0">
           <span>{{ "add_filter_value" | loc:$root.lang }}</span>
-          <span>{{filterLabel | locObj:lang}}</span>
+          <span>{{filterLabel | locObj:$root.lang}}</span>
         </span>
         <span ng-if="attrValue.length != 0">
-          <span style="text-transform: capitalize">{{filterLabel | locObj:lang}}:</span>
+          <span style="text-transform: capitalize">{{filterLabel | locObj:$root.lang}}:</span>
           <span ng-repeat="selected in attrValue">{{translateAttribute(selected) | replaceEmpty }} </span>
         </span>
       </button>
@@ -208,7 +208,7 @@ korpApp.factory("globalFilterService", [
             } else if (_.every(values, (val) => Number.isInteger(val))) {
                 return _.reduce(values, (a, b) => a + b, 0)
             } else {
-                c.error("Cannot merge objects a and b")
+                console.error("Cannot merge objects a and b")
             }
         }
 

@@ -1,6 +1,7 @@
 /** @format */
 import angular from "angular"
 import { html } from "@/util"
+import "@/services/searches"
 import "@/components/dynamic_tabs/compare-tabs"
 import "@/components/dynamic_tabs/graph-tabs"
 import "@/components/dynamic_tabs/kwic-tabs"
@@ -11,6 +12,8 @@ import "@/components/kwic"
 import "@/components/statistics"
 import "@/components/sidebar"
 import "@/components/word-picture"
+import "@/directives/tab-hash"
+import "@/directives/tab-preloader"
 
 angular.module("korpApp").component("results", {
     template: html`

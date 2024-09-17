@@ -156,6 +156,25 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/quickjs-emscripten/-/quickjs-emscripten-0.23.0.tgz#db4ecfd499a9765ab24002c3b696d02e6d32a12c"
   integrity sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==
 
+"@types/angular-dynamic-locale@^0.1.35":
+  version "0.1.35"
+  resolved "https://registry.yarnpkg.com/@types/angular-dynamic-locale/-/angular-dynamic-locale-0.1.35.tgz#55ad0c54d8c1bfce2c9604d12e6cace142f36bf4"
+  integrity sha512-MnO5qyU7HpSSHDUvpf+Em9smDLjREGCgt6SRlrf3YlhlVNHqKvEad8GL2riFkSe/NlDtNdUkudIvpGQCo2R9lw==
+  dependencies:
+    angular-dynamic-locale "*"
+
+"@types/angular-ui-bootstrap@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@types/angular-ui-bootstrap/-/angular-ui-bootstrap-1.0.7.tgz#53e26f12147049d7f03c536ffa981472c3b75c2d"
+  integrity sha512-pYtOQ6aqfmOg0pQHXfG4YHiMAyr56YSmobt2QwcIvsVxKeKkz8i/YuUVJ+WMoptaAmb25/HQrjT8bV28HtY1xA==
+  dependencies:
+    "@types/angular" "*"
+
+"@types/angular@*":
+  version "1.8.9"
+  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.8.9.tgz#d1ae3e87a67f72342d55ff26e611df83df0fb176"
+  integrity sha512-Z0HukqZkx0fotsV3QO00yqU9NzcQI+tMcrum+8MvfB4ePqCawZctF/gz6QiuII+T1ax+LitNoPx/eICTgnF4sg==
+
 "@types/angular@^1.8.4":
   version "1.8.4"
   resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.8.4.tgz#a2cc163e508389c51d4c4119ebff6b9395cec472"
@@ -236,6 +255,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/geojson@*":
+  version "7946.0.14"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.14.tgz#319b63ad6df705ee2a65a73ef042c8271e696613"
+  integrity sha512-WCfD5Ht3ZesJUsONdhvm84dmzWOiOzOAqOncN0++w0lBw1o8OuDNJF2McvvCef/yBqb/HYRahp1BYtODFQ8bRg==
+
 "@types/html-minifier-terser@^6.0.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@types/html-minifier-terser/-/html-minifier-terser-6.1.0.tgz#4fc33a00c1d0c16987b1a20cf92d20614c55ac35"
@@ -253,12 +277,26 @@
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-5.1.4.tgz#0de3f6ca753e10d1600ce1864ae42cfd47cf9924"
   integrity sha512-px7OMFO/ncXxixDe1zR13V1iycqWae0MxTaw62RpFlksUi5QuNWgQJFkTQjIOvrmutJbI7Fp2Y2N1F6D2R4G6w==
 
+"@types/jquery@*":
+  version "3.5.30"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.30.tgz#888d584cbf844d3df56834b69925085038fd80f7"
+  integrity sha512-nbWKkkyb919DOUxjmRVk8vwtDb0/k8FKncmUKFi+NY+QXqWltooxTrswvz4LspQwxvLdvzBN1TImr6cw3aQx2A==
+  dependencies:
+    "@types/sizzle" "*"
+
 "@types/jquery@^3.5.29":
   version "3.5.29"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.29.tgz#3c06a1f519cd5fc3a7a108971436c00685b5dcea"
   integrity sha512-oXQQC9X9MOPRrMhPHHOsXqeQDnWeCDT3PelUIg/Oy8FAbzSZtFHRjc7IpbfFVmpLtJ+UOoywpRsuO5Jxjybyeg==
   dependencies:
     "@types/sizzle" "*"
+
+"@types/jqueryui@^1.12.23":
+  version "1.12.23"
+  resolved "https://registry.yarnpkg.com/@types/jqueryui/-/jqueryui-1.12.23.tgz#06882d3fd91834f87c40320a0897b2d3fe17de35"
+  integrity sha512-pm1yVNVI29B9IGw41anCEzA5eR2r1pYc7flqD471ZT7B0yUXIY7YNe/zq7LGpihIGXNzWyG+Q4YQSzv2AF3fNA==
+  dependencies:
+    "@types/jquery" "*"
 
 "@types/js-yaml@^4.0.9":
   version "4.0.9"
@@ -269,6 +307,27 @@
   version "7.0.11"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
+
+"@types/leaflet-providers@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@types/leaflet-providers/-/leaflet-providers-1.2.4.tgz#284e8a197d4c2dbfeda436842e03b2adb502be16"
+  integrity sha512-4wYEpreixp+G5t510s202eQ5eubOmxHevIfCNrzUZbzp50XQsC9lSetX7MnPl3ANRJnUBbCWOzZ9EQFiH0Jm+g==
+  dependencies:
+    "@types/leaflet" "*"
+
+"@types/leaflet.markercluster@^1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@types/leaflet.markercluster/-/leaflet.markercluster-1.5.4.tgz#2ab43417cf3f6a42d0f1baf4e1c8f659cf1dc3a1"
+  integrity sha512-tfMP8J62+wfsVLDLGh5Zh1JZxijCaBmVsMAX78MkLPwvPitmZZtSin5aWOVRhZrCS+pEOZwNzexbfWXlY+7yjg==
+  dependencies:
+    "@types/leaflet" "*"
+
+"@types/leaflet@*", "@types/leaflet@^1.9.12":
+  version "1.9.12"
+  resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-1.9.12.tgz#a6626a0b3fba36fd34723d6e95b22e8024781ad6"
+  integrity sha512-BK7XS+NyRI291HIo0HCfE18Lp8oA30H1gpi1tf0mF3TgiCEzanQjOqNZ4x126SXzzi2oNSZhZ5axJp1k0iM6jg==
+  dependencies:
+    "@types/geojson" "*"
 
 "@types/lodash@^4.14.118":
   version "4.14.191"
@@ -305,20 +364,10 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.4.tgz#cd667bcfdd025213aafb7ca5915a932590acdcdc"
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
 
-"@types/raphael@^2.3.9":
-  version "2.3.9"
-  resolved "https://registry.yarnpkg.com/@types/raphael/-/raphael-2.3.9.tgz#d53bb8930431524f42987a8a19815c0d42a61eb5"
-  integrity sha512-K1dZwoLNvEN+mvleFU/t2swG9Z4SE5Vub7dA5wDYojH0bVTQ8ZAP+lNsl91t1njdu/B+roSEL4QXC67I7Hpiag==
-
 "@types/retry@0.12.0":
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.0.tgz#2b35eccfcee7d38cd72ad99232fbd58bffb3c84d"
   integrity sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==
-
-"@types/rickshaw@^0.0.31":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@types/rickshaw/-/rickshaw-0.0.31.tgz#023ed58a6b8a61ac8ada3f96cbd586852047fd83"
-  integrity sha512-wrcKrD9b6Z+1Ff3TRoMGVnmR9BdS0HLrRTm63sZTOb+J86XNlbRT60TCHxVJy4x3J2wllau9XEqk18k0OgjydA==
 
 "@types/selenium-webdriver@^3.0.0":
   version "3.0.20"
@@ -617,7 +666,7 @@ ajv@^8.0.0, ajv@^8.8.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-angular-dynamic-locale@0.1.38:
+angular-dynamic-locale@*, angular-dynamic-locale@0.1.38:
   version "0.1.38"
   resolved "https://registry.yarnpkg.com/angular-dynamic-locale/-/angular-dynamic-locale-0.1.38.tgz#9373d5531e6825d291fc92f9e3bcf551f1ec9b9f"
   integrity sha512-O+bWvCNkIhnedBCYPUgYzVrzXlaYwN8Ke4XpoXoGDu4zIyWNdaFAzMWsuB+dnOD7pKrp8pVkk+ShPSGVnj/3uQ==
@@ -1653,11 +1702,6 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
-eve-raphael@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/eve-raphael/-/eve-raphael-0.5.0.tgz#17c754b792beef3fa6684d79cf5a47c63c4cda30"
-  integrity sha512-jrxnPsCGqng1UZuEp9DecX/AuSyAszATSjf4oEcRxvfxa1Oux4KkIPKBAAWWnpdwfARtr+Q0o9aPYWjsROD7ug==
-
 eventemitter3@^4.0.0:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
@@ -1922,10 +1966,6 @@ function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
-
-geokorp@spraakbanken/geokorp#1.5.0:
-  version "1.5.0"
-  resolved "https://codeload.github.com/spraakbanken/geokorp/tar.gz/fa2e6b802d60723cbf5ebb10fb45f320c4b13893"
 
 get-caller-file@^1.0.1:
   version "1.0.3"
@@ -2629,10 +2669,6 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.4.0"
     verror "1.10.0"
-
-jstorage@andris9/jStorage#0.4.12:
-  version "0.0.0"
-  resolved "https://codeload.github.com/andris9/jStorage/tar.gz/5f4075a7e1736d5c7d65375288154a73ac895818"
 
 jszip@^3.1.3:
   version "3.10.1"
@@ -3459,13 +3495,6 @@ range-parser@^1.2.1, range-parser@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
-
-raphael@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/raphael/-/raphael-2.3.0.tgz#eabeb09dba861a1d4cee077eaafb8c53f3131f89"
-  integrity sha512-w2yIenZAQnp257XUWGni4bLMVxpUpcIl7qgxEgDIXtmSypYtlNxfXWpOBxs7LBTps5sDwhRnrToJrMUrivqNTQ==
-  dependencies:
-    eve-raphael "0.5.0"
 
 raw-body@2.5.1:
   version "2.5.1"

@@ -2,6 +2,7 @@
 import angular from "angular"
 import { html } from "@/util"
 import "@/components/trend-diagram"
+import "@/directives/tab-spinner"
 
 angular.module("korpApp").directive("graphTabs", () => ({
     replace: true,

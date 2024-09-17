@@ -20,6 +20,7 @@ export type StatsNormalized = {
     }
     combined: StatsColumn[]
     count: number
+    time: number
 }
 
 export type StatsColumn = {

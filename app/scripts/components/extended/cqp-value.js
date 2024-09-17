@@ -80,9 +80,9 @@ angular.module("korpApp").component("extendedCqpValue", {
                     } else {
                         let tmplObj
                         if (ctrl.attributeDefinition.value === "word") {
-                            tmplObj = { maybe_placeholder: "placeholder='<{{\"any\" | loc:$root.lang}}>'" }
+                            tmplObj = { placeholder: "<{{'any' | loc:$root.lang}}>" }
                         } else {
-                            tmplObj = { maybe_placeholder: "" }
+                            tmplObj = { placeholder: "" }
                         }
 
                         template = extendedComponents.default.template(tmplObj)

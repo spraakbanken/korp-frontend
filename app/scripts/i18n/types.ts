@@ -15,3 +15,7 @@ export type LangLocMap = LangMap<LocMap>
 
 /** UI strings keyed first by localization key and then by language. */
 export type LocLangMap = LocMap<LangMap>
+
+export type LangString = string | LangMap
+
+export type Labeled<T = string> = { label: LangString; value: T }

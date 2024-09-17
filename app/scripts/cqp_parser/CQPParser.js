@@ -1920,8 +1920,6 @@ function peg$parse(input, options) {
     return output
   }
 
-  var c = console
-
   peg$result = peg$startRuleFunction();
 
   if (options.peg$library) {

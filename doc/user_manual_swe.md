@@ -1,6 +1,6 @@
 ## Introduktion
 
-Detta är en användarhandledning för korpussökningsverktyget [Korp](https://spraakbanken.gu.se/korp/). Prova gärna att
+Detta är en användarhandledning för ordforskningsplattformen [Korp](https://spraakbanken.gu.se/korp/). Prova gärna att
 besöka sidan och göra ett par testsökningar innan du läser vidare, så att du får en bild av hur gränssnittet ser ut.
 
 Det finns även ett par övningsuppgifter som du kan ladda hem

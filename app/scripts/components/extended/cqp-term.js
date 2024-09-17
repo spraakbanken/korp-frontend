@@ -2,7 +2,7 @@
 import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import { html } from "@/util"
+import { html, valfilter } from "@/util"
 const minusImage = require("../../../img/minus.png")
 import "@/components/extended/cqp-value"
 
@@ -25,7 +25,7 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 <div class="arg_selects {{$ctrl.term.type}}">
                     <select
                         class="arg_type"
-                        ng-options="obj | mapper:$ctrl.valfilter as obj.label | locObj group by obj.group | loc for obj in $ctrl.types"
+                        ng-options="$ctrl.valfilter(obj) as obj.label | locObj group by obj.group | loc for obj in $ctrl.types"
                         ng-model="$ctrl.term.type"
                         ng-change="$ctrl.setDefault($ctrl.term)"
                     ></select>
@@ -57,11 +57,10 @@ angular.module("korpApp").component("extendedCqpTerm", {
     controller: [
         "$rootScope",
         "$timeout",
-        "utils",
-        function ($rootScope, $timeout, utils) {
+        function ($rootScope, $timeout) {
             const ctrl = this
 
-            ctrl.valfilter = utils.valfilter
+            ctrl.valfilter = valfilter
 
             ctrl.$onInit = () => {
                 if (angular.equals(ctrl.term, {})) {
@@ -106,7 +105,7 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 }
                 let confObj = ctrl.typeMapping && ctrl.typeMapping[type]
                 if (!confObj) {
-                    c.log("confObj missing", type, ctrl.typeMapping)
+                    console.log("confObj missing", type, ctrl.typeMapping)
                     return
                 }
 

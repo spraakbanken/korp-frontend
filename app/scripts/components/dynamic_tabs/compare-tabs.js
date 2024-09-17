@@ -2,6 +2,9 @@
 import angular from "angular"
 import { html } from "@/util"
 import "@/components/korp-error"
+import "@/components/loglike-meter"
+import "@/controllers/comparison_controller"
+import "@/directives/tab-spinner"
 
 angular.module("korpApp").directive("compareTabs", () => ({
     replace: true,
@@ -19,7 +22,12 @@ angular.module("korpApp").directive("compareTabs", () => ({
                     <h2>{{'compare_distinctive' | loc:$root.lang}} <em>{{cmp1.label}}</em></h2>
                     <ul class="negative">
                         <li ng-repeat="row in tables.negative | orderBy:resultOrder:true" ng-click="rowClick(row, 0)">
-                            <div class="meter" meter="row" max="max" stringify="stringify"></div>
+                            <loglike-meter
+                                item="row"
+                                max="max"
+                                stringify="stringify"
+                                class="w-full meter"
+                            ></loglike-meter>
                         </li>
                     </ul>
                 </div>
@@ -27,7 +35,12 @@ angular.module("korpApp").directive("compareTabs", () => ({
                     <h2>{{'compare_distinctive' | loc:$root.lang}} <em>{{cmp2.label}}</em></h2>
                     <ul class="positive">
                         <li ng-repeat="row in tables.positive | orderBy:resultOrder:true" ng-click="rowClick(row, 1)">
-                            <div class="meter" meter="row" max="max" stringify="stringify"></div>
+                            <loglike-meter
+                                item="row"
+                                max="max"
+                                stringify="stringify"
+                                class="w-full meter"
+                            ></loglike-meter>
                         </li>
                     </ul>
                 </div>

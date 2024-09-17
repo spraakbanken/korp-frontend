@@ -1,6 +1,8 @@
 /** @format */
 import angular from "angular"
 import _ from "lodash"
+import moment from "moment"
+import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
 import graphProxyFactory from "@/backend/graph-proxy"
 import { expandOperators } from "@/cqp_parser/cqp"
@@ -654,7 +656,7 @@ angular.module("korpApp").component("trendDiagram", {
                         try {
                             abs_y = series.abs_data[i].y
                         } catch (e) {
-                            c.log("i", i, x)
+                            console.log("i", i, x)
                         }
 
                         const rel = series.name + ":&nbsp;" + formattedY
@@ -761,7 +763,7 @@ angular.module("korpApp").component("trendDiagram", {
                     $timeout(() => renderGraph(Rickshaw, graphData, cqp, labelMapping, currentZoom, showTotal))
                 } catch (e) {
                     $timeout(() => {
-                        c.error("graph crash", e)
+                        console.error("graph crash", e)
                         $ctrl.localUpdateLoading(false)
                         $ctrl.error = true
                     })

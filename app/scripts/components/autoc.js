@@ -4,6 +4,8 @@ import angular from "angular"
 import settings from "@/settings"
 import { html, lemgramToString, saldoToString } from "@/util"
 import { loc } from "@/i18n"
+import "@/services/lexicons"
+import "@/directives/typeahead-click-open"
 
 angular.module("korpApp").component("autoc", {
     template: html`
@@ -165,7 +167,7 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.getLemgrams = function (input, morphologies, corporaIDs) {
                 const deferred = $q.defer()
-                const http = lexicons.getLemgrams(input, morphologies, corporaIDs, ctrl.variant === "affix")
+                const http = lexicons.getLemgrams(input, morphologies, corporaIDs)
                 http.then(function (data) {
                     data.forEach(function (item) {
                         if (ctrl.variant === "affix") {

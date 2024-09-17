@@ -9,7 +9,9 @@ import guLogo from "../../img/gu_logo_sv_head.svg"
 import settings from "@/settings"
 import currentMode from "@/mode"
 import { collatorSort, html } from "@/util"
+import "@/services/utils"
 import "@/components/corpus_chooser/corpus-chooser"
+import "@/components/radio-list"
 
 angular.module("korpApp").component("header", {
     template: html`
@@ -19,16 +21,13 @@ angular.module("korpApp").component("header", {
                     <li class="visible" ng-repeat="mode in $ctrl.visible" ng-class="{selected: mode.selected}">
                         <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:lang}}</a>
                     </li>
-                    <li class="menu_more visible" ng-if="$ctrl.menu.length">
-                        <a
-                            class="dropdown-toggle"
-                            popper="popper"
-                            no-close-on-click="true"
-                            my="right+15% top+10"
-                            at="bottom right"
-                            >{{'more' | loc:$root.lang}}<i class="fa fa-angle-double-down"></i
-                        ></a>
-                        <ul class="dropdown-menu popper_menu">
+                    <li class="menu_more visible" ng-if="$ctrl.menu.length" uib-dropdown>
+                        <a uib-dropdown-toggle>
+                            {{'more' | loc:$root.lang}}
+                            <i class="fa fa-angle-double-down ml-1"></i>
+                        </a>
+
+                        <ul uib-dropdown-menu>
                             <li ng-repeat="mode in $ctrl.menu" ng-class="{selected: mode.selected}">
                                 <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:lang}}</a>
                             </li>
@@ -36,70 +35,45 @@ angular.module("korpApp").component("header", {
                     </li>
                 </ul>
 
-                <script type="text/ng-template" id="aboutTemplate.html">
-                    <ul class="my-0 py-1 text-right" ng-click="$root.isPopoverOpen = false">
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-200">
-                            <a
-                                class="block transiton duration-200 hover_text-blue-600"
-                                id="about"
-                                ng-click="$ctrl.citeClick()"
-                                >{{'about' | loc:$root.lang}}</a
-                            >
-                        </li>
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-500">
-                            <a
-                                class="block transiton duration-200 hover_text-blue-600"
-                                href="https://spraakbanken.gu.se/verktyg/korp/användarhandledning"
-                                target="_blank"
-                                >{{'docs' | loc:$root.lang}}</a
-                            >
-                        </li>
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-200" id="korplink">
-                            <a class="block transiton duration-200 hover_text-blue-600" href="/korp"
-                                >{{'korp' | loc:$root.lang}}</a
-                            >
-                        </li>
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-200" id="korplablink">
-                            <a class="block transiton duration-200 hover_text-blue-600" href="/korplabb"
-                                >{{'korp_lab' | loc:$root.lang}}</a
-                            >
-                        </li>
-                        <li class="bg-white hover_bg-gray-200 p-1 transition duration-200">
-                            <a
-                                class="block transiton duration-200 hover_text-blue-600"
-                                href="https://spraakbanken.gu.se/sparv"
-                                target="_blank"
-                                >{{'import_chain' | loc:$root.lang}}</a
-                            >
-                        </li>
-                    </ul>
-                </script>
-
                 <div class="flex items-center gap-4">
                     <login-status></login-status>
-                    <div id="languages">
-                        <a
-                            ng-repeat="langObj in $ctrl.languages"
-                            data-mode="{{langObj.value}}"
-                            ng-click="lang = langObj.value"
-                            >{{langObj.label | locObj:lang}}</a
-                        >
-                    </div>
 
-                    <a class="transiton duration-200 hover_text-blue-600" ng-click="$ctrl.citeClick()"
-                        >{{'about_cite_header' | loc:$root.lang}}</a
-                    ><button
-                        class="px-2 py-1 border border-gray-300 bg-gray-200 rounded text-gray-800"
-                        popover-class="cog_menu"
-                        popover-placement="bottom-right"
-                        uib-popover-template="'aboutTemplate.html'"
-                        type="button"
-                        popover-trigger="'outsideClick'"
-                        popover-is-open="$root.isPopoverOpen"
-                    >
-                        <span class="font-bold uppercase">{{'menu' | loc:$root.lang}}</span
-                        ><i class="fa fa-lg fa-bars ml-2 align-middle text-indigo-600"></i>
-                    </button>
+                    <radio-list options="$ctrl.languages" ng-model="lang"> </radio-list>
+
+                    <a class="transiton duration-200 hover_text-blue-600" ng-click="$ctrl.citeClick()">
+                        {{'about_cite_header' | loc:$root.lang}}
+                    </a>
+
+                    <div uib-dropdown>
+                        <button
+                            uib-dropdown-toggle
+                            class="px-2 py-1 border border-gray-300 bg-gray-200 rounded text-gray-800"
+                        >
+                            <span class="font-bold uppercase"> {{'menu' | loc:$root.lang}} </span>
+                            <i class="fa fa-lg fa-bars ml-2 align-middle text-indigo-600"></i>
+                        </button>
+                        <ul uib-dropdown-menu class="dropdown-menu-right">
+                            <li>
+                                <a id="about" ng-click="$ctrl.citeClick()"> {{'about' | loc:$root.lang}} </a>
+                            </li>
+                            <li>
+                                <a href="https://spraakbanken.gu.se/verktyg/korp/användarhandledning" target="_blank">
+                                    {{'docs' | loc:$root.lang}}
+                                </a>
+                            </li>
+                            <li id="korplink">
+                                <a href="/korp"> {{'korp' | loc:$root.lang}} </a>
+                            </li>
+                            <li id="korplablink">
+                                <a href="/korplabb"> {{'korp_lab' | loc:$root.lang}} </a>
+                            </li>
+                            <li>
+                                <a href="https://spraakbanken.gu.se/sparv" target="_blank">
+                                    {{'import_chain' | loc:$root.lang}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <!-- TODO too many divs -->
             </div>
@@ -151,11 +125,16 @@ angular.module("korpApp").component("header", {
     `,
     bindings: {},
     controller: [
+        "$location",
         "$uibModal",
         "$rootScope",
+        "$scope",
+        "$timeout",
         "utils",
-        function ($uibModal, $rootScope, utils) {
+        function ($location, $uibModal, $rootScope, $scope, $timeout, utils) {
             const $ctrl = this
+
+            $scope.lang = $rootScope.lang
 
             $ctrl.logoClick = function () {
                 const [baseUrl, modeParam, langParam] = $ctrl.getUrlParts(currentMode)
@@ -167,6 +146,14 @@ angular.module("korpApp").component("header", {
 
             $ctrl.languages = settings["languages"]
 
+            $scope.$watch("lang", (newVal, oldVal) => {
+                // Watcher gets called with `undefined` on init.
+                if (!$scope.lang) return
+                $rootScope["lang"] = $scope.lang
+                // Set url param if different from default.
+                $location.search("lang", $scope.lang !== settings["default_language"] ? $scope.lang : null)
+            })
+
             $ctrl.citeClick = () => {
                 $rootScope.show_modal = "about"
             }
@@ -174,22 +161,18 @@ angular.module("korpApp").component("header", {
             $rootScope.show_modal = false
 
             let modal = null
-            utils.setupHash($rootScope, [
-                {
-                    key: "display",
-                    scope_name: "show_modal",
-                    post_change(val) {
-                        if (val) {
-                            showAbout()
-                        } else {
-                            if (modal != null) {
-                                modal.close()
-                            }
-                            modal = null
-                        }
-                    },
+
+            utils.setupHash($rootScope, {
+                key: "display",
+                scope_name: "show_modal",
+                post_change(val) {
+                    if (val) showAbout()
+                    else {
+                        modal?.close()
+                        modal = null
+                    }
                 },
-            ])
+            })
 
             const closeModals = function () {
                 $rootScope.show_modal = false
@@ -197,18 +180,17 @@ angular.module("korpApp").component("header", {
 
             const modalScope = $rootScope.$new(true)
             modalScope.clickX = () => closeModals()
-            var showAbout = function () {
-                const params = {
-                    template: require("../../markup/about.html"),
-                    scope: modalScope,
-                    windowClass: "about",
-                }
-                modal = $uibModal.open(params)
 
-                modal.result.then(
-                    () => closeModals(),
-                    () => closeModals()
-                )
+            function showAbout() {
+                // $timeout is used to let localization happen before modal is shown (if loaded with "display=about")
+                $timeout(() => {
+                    modal = $uibModal.open({
+                        template: require("../../markup/about.html"),
+                        scope: modalScope,
+                        windowClass: "about",
+                    })
+                    modal.result.catch(() => closeModals())
+                })
             }
 
             const N_VISIBLE = settings["visible_modes"]
@@ -221,6 +203,7 @@ angular.module("korpApp").component("header", {
             $ctrl.visible = $ctrl.modes.slice(0, N_VISIBLE)
 
             $rootScope.$watch("lang", () => {
+                $scope.lang = $rootScope.lang
                 $ctrl.menu = collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
 
                 const i = _.map($ctrl.menu, "mode").indexOf(currentMode)
@@ -238,14 +221,6 @@ angular.module("korpApp").component("header", {
                 const langParam = settings["default_language"] === $rootScope.lang ? "" : `#?lang=${$rootScope.lang}`
                 const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
                 return [location.pathname, modeParam, langParam]
-            }
-
-            for (let mode of $ctrl.modes) {
-                mode.selected = false
-                if (mode.mode === currentMode) {
-                    settings.mode = mode
-                    mode.selected = true
-                }
             }
         },
     ],

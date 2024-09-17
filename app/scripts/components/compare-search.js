@@ -2,7 +2,9 @@
 import angular from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import { html } from "@/util"
+import "@/services/backend"
+import "@/services/compare-searches"
+import { html, valfilter } from "@/util"
 
 angular.module("korpApp").component("compareSearch", {
     template: html`
@@ -33,7 +35,7 @@ angular.module("korpApp").component("compareSearch", {
                 {{'compare_reduce' | loc:$root.lang}}
                 <select
                     ng-model="$ctrl.reduce"
-                    ng-options="obj | mapper:$ctrl.valfilter as obj.label | locObj:$root.lang group by obj.group | loc for obj in $ctrl.currentAttrs"
+                    ng-options="$ctrl.valfilter(obj) as obj.label | locObj:$root.lang group by obj.group | loc for obj in $ctrl.currentAttrs"
                 ></select>
                 <button class="btn btn-sm btn-default search" ng-click="$ctrl.sendCompare()">
                     {{'compare_vb' | loc:$root.lang}}
@@ -42,14 +44,13 @@ angular.module("korpApp").component("compareSearch", {
         </div>
     `,
     controller: [
-        "utils",
         "backend",
         "$rootScope",
         "compareSearches",
-        function (utils, backend, $rootScope, compareSearches) {
+        function (backend, $rootScope, compareSearches) {
             const $ctrl = this
 
-            $ctrl.valfilter = utils.valfilter
+            $ctrl.valfilter = valfilter
 
             let prev
             $ctrl.savedSearches = compareSearches.savedSearches

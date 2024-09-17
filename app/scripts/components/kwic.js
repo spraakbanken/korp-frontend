@@ -4,6 +4,7 @@ import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import currentMode from "@/mode"
+import { makeDownload } from "@/kwic_download"
 import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
@@ -28,7 +29,7 @@ angular.module("korpApp").component("kwic", {
                                     ng-style='{width : corpus.relative + "%"}'
                                     ng-class="{odd : $index % 2 != 0, even : $index % 2 == 0}"
                                     ng-click="$ctrl.pageEvent(corpus.page)"
-                                    uib-tooltip="{{corpus.rtitle | locObj:lang}}: {{corpus.abs}}"
+                                    uib-tooltip="{{corpus.rtitle | locObj:$root.lang}}: {{corpus.abs}}"
                                     tooltip-placement='{{$last? "left":"top"}}'
                                     append-to-body="false"
                                 ></td>
@@ -45,27 +46,27 @@ angular.module("korpApp").component("kwic", {
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
             <span ng-if="$ctrl.hits" class="reading_btn link" ng-click="$ctrl.toggleReading()">
-                <span ng-if="!$ctrl.readingMode">{{'show_reading' | loc:$root.lang}}</span>
-                <span ng-if="$ctrl.readingMode">{{'show_kwic' | loc:$root.lang}}</span>
+                <span ng-if="!$ctrl.isReading">{{'show_reading' | loc:$root.lang}}</span>
+                <span ng-if="$ctrl.isReading">{{'show_kwic' | loc:$root.lang}}</span>
             </span>
             <div class="table_scrollarea">
                 <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0">
                     <tr
                         class="sentence"
                         ng-repeat="sentence in $ctrl.kwic"
-                        ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked, even : $even, odd : $odd}"
+                        ng-class="{corpus_info : sentence.newCorpus, linked_sentence : sentence.isLinked, even : $even, odd : $odd}"
                     >
-                        <td class="empty_td"></td>
-                        <td class="corpus_title text-gray-600 uppercase text-sm" colspan="3">
-                            <div>
-                                {{sentence.newCorpus | locObj:lang}}
-                                <span class="corpus_title_warn" ng-if="::sentence.noContext"
-                                    >{{'no_context_support' | loc:$root.lang}}</span
-                                >
+                        <td ng-if="::sentence.newCorpus" />
+                        <td ng-if="::sentence.newCorpus" colspan="2" class="text-gray-600 uppercase">
+                            <div class="w-0">
+                                {{sentence.newCorpus | locObj:$root.lang}}
+                                <span class="normal-case" ng-if="::sentence.noContext">
+                                    ({{'no_context_support' | loc:$root.lang}})
+                                </span>
                             </div>
                         </td>
-                        <td class="empty_td"></td>
-                        <td class="lnk" colspan="3" ng-if="::sentence.isLinked">
+
+                        <td ng-if="::sentence.isLinked" colspan="3" class="lnk">
                             <kwic-word
                                 ng-repeat="word in sentence.tokens"
                                 word="word"
@@ -73,7 +74,8 @@ angular.module("korpApp").component("kwic", {
                                 sentence-index="$parent.$index"
                             />
                         </td>
-                        <td class="left" ng-if="::!sentence.newCorpus">
+
+                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="left">
                             <kwic-word
                                 ng-repeat="word in $ctrl.selectLeft(sentence)"
                                 word="word"
@@ -81,7 +83,7 @@ angular.module("korpApp").component("kwic", {
                                 sentence-index="$parent.$index"
                             />
                         </td>
-                        <td class="match" ng-if="::!sentence.newCorpus">
+                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="match">
                             <kwic-word
                                 ng-repeat="word in $ctrl.selectMatch(sentence)"
                                 word="word"
@@ -89,7 +91,7 @@ angular.module("korpApp").component("kwic", {
                                 sentence-index="$parent.$index"
                             />
                         </td>
-                        <td class="right" ng-if="::!sentence.newCorpus">
+                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="right">
                             <kwic-word
                                 ng-repeat="word in $ctrl.selectRight(sentence)"
                                 word="word"
@@ -103,16 +105,16 @@ angular.module("korpApp").component("kwic", {
                     <p
                         class="sentence"
                         ng-repeat="sentence in $ctrl.kwic"
-                        ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}"
+                        ng-class="{corpus_info : sentence.newCorpus, linked_sentence : sentence.isLinked, even : $even, odd : $odd}"
                     >
-                        <span class="corpus_title" colspan="0"
-                            >{{sentence.newCorpus | locObj:lang}}<span
-                                class="corpus_title_warn"
-                                ng-if="::sentence.noContext"
-                                >{{'no_context_support' | loc:$root.lang}}</span
-                            ></span
-                        >
+                        <span ng-if="sentence.newCorpus" class="corpus_title text-3xl">
+                            {{sentence.newCorpus | locObj:$root.lang}}
+                            <span class="corpus_title_warn block text-base" ng-if="::sentence.noContext">
+                                ({{'no_context_support' | loc:$root.lang}})
+                            </span>
+                        </span>
                         <kwic-word
+                            ng-if="!sentence.newCorpus"
                             ng-repeat="word in sentence.tokens"
                             word="word"
                             sentence="sentence"
@@ -170,8 +172,12 @@ angular.module("korpApp").component("kwic", {
         "$location",
         "$element",
         "$timeout",
-        "kwicDownload",
-        function ($location, $element, $timeout, kwicDownload) {
+        /**
+         * @param {import("angular").ILocationService} $location
+         * @param {JQLite} $element
+         * @param {import("angular").ITimeoutService} $timeout
+         */
+        function ($location, $element, $timeout) {
             let $ctrl = this
 
             const selectionManager = new SelectionManager()
@@ -256,11 +262,9 @@ angular.module("korpApp").component("kwic", {
             $ctrl._settings = settings
 
             $ctrl.toggleReading = () => {
-                $ctrl.readingMode = !$ctrl.readingMode
+                // Emit event; parent should update isReading
                 $ctrl.contextChangeEvent()
             }
-
-            $ctrl.readingMode = $location.search().reading_mode
 
             $ctrl.download = {
                 options: [
@@ -278,12 +282,7 @@ angular.module("korpApp").component("kwic", {
                     if (value === "") {
                         return
                     }
-                    const [fileName, blobName] = kwicDownload.makeDownload(
-                        ...value.split("/"),
-                        $ctrl.kwic,
-                        $ctrl.prevParams,
-                        hits
-                    )
+                    const [fileName, blobName] = makeDownload(...value.split("/"), $ctrl.kwic, $ctrl.prevParams, hits)
                     $ctrl.download.fileName = fileName
                     $ctrl.download.blobName = blobName
                     $ctrl.download.selected = ""
@@ -651,111 +650,66 @@ angular.module("korpApp").component("kwic", {
                     }
 
                     if (next) {
-                        scrollToShowWord($(next))
+                        next.trigger("click")
+                        scrollToShowWord(next)
                         return false
                     }
                 })
             }
 
             function selectNext() {
-                let next
-                if (!$ctrl.readingMode) {
-                    const i = getCurrentRow().index($element.find(".token_selected").get(0))
-                    next = getCurrentRow().get(i + 1)
-                    if (next == null) {
-                        return
-                    }
-                    $(next).click()
-                } else {
-                    next = $element.find(".token_selected").next().click()
-                }
-                return next
+                return stepWord(1)
             }
 
             function selectPrev() {
-                let prev
-                if (!$ctrl.readingMode) {
-                    const i = getCurrentRow().index($element.find(".token_selected").get(0))
-                    if (i === 0) {
-                        return
-                    }
-                    prev = getCurrentRow().get(i - 1)
-                    $(prev).click()
-                } else {
-                    prev = $element.find(".token_selected").prev().click()
-                }
-                return prev
+                return stepWord(-1)
+            }
+
+            function stepWord(diff) {
+                const $words = $element.find(".word")
+                const $current = $element.find(".token_selected").first()
+                const currentIndex = $words.index($current)
+                const wouldWrap = (diff < 0 && currentIndex == 0) || (diff > 0 && currentIndex == $words.length - 1)
+                if (wouldWrap) return
+                const next = $words.get(currentIndex + diff)
+                return $(next)
             }
 
             function selectUp() {
-                let prevMatch
                 const current = selectionManager.selected
-                if (!$ctrl.readingMode) {
-                    prevMatch = getWordAt(
-                        current.offset().left + current.width() / 2,
-                        current.closest("tr").prevAll(".not_corpus_info").first()
-                    )
-                    prevMatch.click()
-                } else {
-                    const searchwords = current
-                        .prevAll(".word")
-                        .get()
-                        .concat(
-                            current
-                                .closest(".not_corpus_info")
-                                .prevAll(".not_corpus_info")
-                                .first()
-                                .find(".word")
-                                .get()
-                                .reverse()
-                        )
-                    const def = current.parent().prev().find(".word:last")
-                    prevMatch = getFirstAtCoor(current.offset().left + current.width() / 2, $(searchwords), def).click()
+                const $prevSentence = current.closest(".sentence").prev(":not(.corpus_info)")
+
+                if (!$ctrl.isReading) {
+                    return getWordAt(current.offset().left + current.width() / 2, $prevSentence)
                 }
 
-                return prevMatch
+                const searchwords = current.prevAll(".word").get().concat($prevSentence.find(".word").get().reverse())
+                const def = $prevSentence.find(".word:last")
+                return getFirstAtCoor(current.offset().left + current.width() / 2, $(searchwords), def)
             }
 
             function selectDown() {
-                let nextMatch
                 const current = selectionManager.selected
-                if (!$ctrl.readingMode) {
-                    nextMatch = getWordAt(
-                        current.offset().left + current.width() / 2,
-                        current.closest("tr").nextAll(".not_corpus_info").first()
-                    )
-                    nextMatch.click()
-                } else {
-                    const searchwords = current
-                        .nextAll(".word")
-                        .add(current.closest(".not_corpus_info").nextAll(".not_corpus_info").first().find(".word"))
-                    const def = current.parent().next().find(".word:first")
-                    nextMatch = getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def).click()
+                const $nextSentence = current.closest(".sentence").next(":not(.corpus_info)")
+
+                if (!$ctrl.isReading) {
+                    return getWordAt(current.offset().left + current.width() / 2, $nextSentence)
                 }
-                return nextMatch
+
+                const searchwords = current.nextAll(".word").add($nextSentence.find(".word"))
+                const def = $nextSentence.find(".word:last")
+                return getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def)
             }
 
-            function getCurrentRow() {
-                const tr = $element.find(".token_selected").closest("tr")
-                if ($element.find(".token_selected").parent().is("td")) {
-                    return tr.find("td > .word")
-                } else {
-                    return tr.find("div > .word")
-                }
-            }
-
-            function getFirstAtCoor(xCoor, wds, default_word) {
-                let output = null
-                wds.each(function (i, item) {
-                    const thisLeft = $(this).offset().left
-                    const thisRight = $(this).offset().left + $(this).width()
-                    if (xCoor > thisLeft && xCoor < thisRight) {
-                        output = $(this)
-                        return false
-                    }
-                })
-
-                return output || default_word
+            /**
+             * @param {number} x
+             * @param {JQLite} wds
+             * @param {JQLite} default_word
+             */
+            function getFirstAtCoor(x, wds, default_word) {
+                const isHit = (word) => x > $(word).offset().left && x < $(word).offset().left + $(word).width()
+                const hit = wds.get().find(isHit)
+                return hit ? $(hit) : default_word
             }
 
             function getWordAt(xCoor, $row) {
@@ -772,28 +726,29 @@ angular.module("korpApp").component("kwic", {
                 return output
             }
 
+            /**
+             * @param {JQLite} word
+             */
             function scrollToShowWord(word) {
-                if (!word.length) {
-                    return
-                }
+                if (!word.length) return
                 const offset = 200
-                const wordTop = word.offset().top
-                let newY = window.scrollY
-                if (wordTop > $(window).height() + window.scrollY) {
-                    newY += offset$r
-                } else if (wordTop < window.scrollY) {
-                    newY -= offset
+
+                if (word.offset().top + word.height() > window.scrollY + $(window).height()) {
+                    $("html, body")
+                        .stop(true, true)
+                        .animate({ scrollTop: window.scrollY + offset })
+                } else if (word.offset().top < window.scrollY) {
+                    $("html, body")
+                        .stop(true, true)
+                        .animate({ scrollTop: window.scrollY - offset })
                 }
-                $("html, body").stop(true, true).animate({ scrollTop: newY })
-                const wordLeft = word.offset().left
+
                 const area = $element.find(".table_scrollarea")
-                let newX = Number(area.scrollLeft())
-                if (wordLeft > area.offset().left + area.width()) {
-                    newX += offset
-                } else if (wordLeft < area.offset().left) {
-                    newX -= offset
+                if (word.offset().left + word.width() > area.offset().left + area.width()) {
+                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft() + offset })
+                } else if (word.offset().left < area.offset().left) {
+                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft() - offset })
                 }
-                area.stop(true, true).animate({ scrollLeft: newX })
             }
         },
     ],

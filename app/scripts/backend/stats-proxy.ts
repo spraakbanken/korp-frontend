@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressCallback } from "@/backend/types"
+import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressReport } from "@/backend/types"
 import { StatsNormalized, StatsColumn, StatisticsWorkerResult } from "@/statistics.types"
 import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 import { statisticsService } from "@/statistics"
@@ -25,7 +25,7 @@ export function normalizeStatsData(data: KorpStatsResponse): StatsNormalized {
     return { ...data, combined, corpora }
 }
 
-export class StatsProxy extends BaseProxy {
+export class StatsProxy extends BaseProxy<KorpStatsResponse> {
     prevParams: KorpStatsParams | null
     prevRequest: AjaxSettings | null
     prevUrl?: string
@@ -64,7 +64,10 @@ export class StatsProxy extends BaseProxy {
         return parameters
     }
 
-    makeRequest(cqp: string, callback: ProgressCallback): JQuery.Promise<StatisticsWorkerResult> {
+    makeRequest(
+        cqp: string,
+        callback: (data: ProgressReport<KorpStatsResponse>) => void
+    ): JQuery.Promise<StatisticsWorkerResult> {
         const self = this
         this.resetRequest()
         const reduceval = locationSearchGet("stats_reduce") || "word"
@@ -74,7 +77,7 @@ export class StatsProxy extends BaseProxy {
 
         const reduceValLabels = _.map(reduceVals, function (reduceVal) {
             if (reduceVal === "word") {
-                return settings["word_label"]
+                return settings.word_label
             }
             const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
                 reduceVal
@@ -109,7 +112,7 @@ export class StatsProxy extends BaseProxy {
         this.prevParams = data
         const def: JQuery.Deferred<StatisticsWorkerResult> = $.Deferred()
 
-        const url = settings["korp_backend_url"] + "/count"
+        const url = settings.korp_backend_url + "/count"
         const ajaxSettings: AjaxSettings<KorpResponse<KorpStatsResponse>> = {
             url,
             data,
@@ -190,7 +193,7 @@ type KorpStatsParams = {
 }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count/get */
-type KorpStatsResponse = {
+export type KorpStatsResponse = {
     corpora: {
         [name: string]: StatsColumn | StatsColumn[]
     }
