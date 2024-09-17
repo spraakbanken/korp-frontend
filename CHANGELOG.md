@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.7.0] - 2024-09-17
+
 ### Added
 
 - TypeScript typings for:
@@ -255,6 +257,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.7.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.0
 [9.6.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.6.0
 [9.5.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.3
 [9.5.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.2
