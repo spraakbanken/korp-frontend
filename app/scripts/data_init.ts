@@ -244,6 +244,8 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     // Start fetching locales asap. Await and read it later, in the Angular context.
     initLocales()
 
+    setDefaultConfigValues()
+
     // Fetch corpus configuration and metadata
     const config = await getConfig()
     const infos = await getInfoData(Object.keys(config.corpora))
@@ -256,8 +258,6 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
         require("./parallel/corpus_listing")
         require("./parallel/stats_proxy")
     }
-
-    setDefaultConfigValues()
 
     if (!settings.parallel) {
         settings.corpusListing = new CorpusListing(settings.corpora)
