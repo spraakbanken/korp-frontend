@@ -24,7 +24,7 @@ export const initCorpusStructure = (collection, initialCorpusSelection) => {
         let totalSentences = 0
 
         for (const folder of folders) {
-            totalCorporaIds = totalCorporaIds.concat(folder.corpora)
+            totalCorporaIds = totalCorporaIds.concat(folder.corpora || [])
             folder.corpora = _.map(folder.corpora, (corpusId) => collection[corpusId])
 
             const subFolders = []

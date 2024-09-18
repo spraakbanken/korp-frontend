@@ -10,6 +10,10 @@
 
 - Font is now a dependency, not checked-in files (and the font looks slightly different)
 
+### Fixed
+
+- In the corpus selector, an empty folder would add 1 to the parent folder's corpus count
+
 ## [9.7.1] - 2024-09-18
 
 ### Fixed
