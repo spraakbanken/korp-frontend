@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Font is now a dependency, not checked-in files (and the font looks slightly different)
+
 ## [9.7.1] - 2024-09-18
 
 ### Fixed

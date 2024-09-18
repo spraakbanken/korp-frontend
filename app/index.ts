@@ -3,6 +3,8 @@ import $ from "jquery"
 import currentMode from "@/mode"
 import { locationSearchGet } from "@/util"
 import { HashParams } from "@/urlparams"
+import "@fontsource/source-sans-pro/400.css"
+import "@fontsource/source-sans-pro/600.css"
 
 declare global {
     interface Window {

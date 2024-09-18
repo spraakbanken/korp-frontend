@@ -5,16 +5,6 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 
-@font-face {
-  font-family: "Source Sans Pro";
-  src: url(SourceSansPro-Regular.otf);
-}
-@font-face {
-  font-family: "Source Sans Pro";
-  src: url(SourceSansPro-Semibold.otf);
-  font-weight : bold;
-}
-
 * {
     box-sizing: border-box;
 }
