@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [9.7.1] - 2024-09-18
+
+### Fixed
+
+- Read default settings before using them (for instance, `backendURLMaxLength` is used in calls to `/corpus_info` etc)
+
 ## [9.7.0] - 2024-09-17
 
 ### Added
@@ -257,6 +263,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.7.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.1
 [9.7.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.0
 [9.6.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.6.0
 [9.5.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.5.3
