@@ -1,8 +1,12 @@
 /** @format */
 const webpack = require("webpack")
 const path = require("path")
+const Dotenv = require("dotenv")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+
+// Read .env into process.env
+Dotenv.config()
 
 function getKorpConfigDir() {
     fs = require("fs")

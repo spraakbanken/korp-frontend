@@ -85,6 +85,8 @@ Host and port can be changed by the environment variables:
 - `KORP_HOST=<host>`
 - `KORP_PORT=<port>`
 
+Environment variables can be entered in the `.env` file, which is git-ignored.
+
 It is also possible to serve the frontend from HTTPS using the environment variables:
 - `KORP_HTTPS=true`
 - `KORP_KEY=<path_to_key>-key.pem`
@@ -99,8 +101,6 @@ mkcert -install
 
 Now use `korp.spraakbanken.gu.se` as the value for `KORP_HOST`. It must also be added
 to `/etc/hosts`.
-
-One way to set the environment variables automatically is to use [direnv](https://direnv.net/):
 
 # Branches, releases and versions
 
