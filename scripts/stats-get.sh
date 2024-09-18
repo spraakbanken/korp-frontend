@@ -33,7 +33,7 @@ label "JavaScript lines of code" $WC_JS
 label "Ratio of TypeScript" $TS_RATIO%
 
 label "Size of repo (KB)"
-git ls-files | xargs du --apparent-size -c | tail -n1 | cut -f1
+git ls-files -z | xargs -0 du --apparent-size -c | tail -n1 | cut -f1
 
 label "Size of lib/ (KB)"
 du --apparent-size -s app/lib/ | cut -f1
