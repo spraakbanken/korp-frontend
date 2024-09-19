@@ -5,6 +5,7 @@
 ### Added
 
 - Support `.env`
+- Simplify time interval CQP covering whole days [#379](https://github.com/spraakbanken/korp-frontend/issues/379)
 
 ### Changed
 

@@ -14,63 +14,34 @@ export { parse }
  * Create CQP expression for a date interval condition.
  *
  * @param opKorp Operator to use if not using `expanded_format`
- * @param val An array like `[fromdate, todate, fromtime, totime]`
+ * @param range An array like `[fromdate, todate, fromtime, totime]`
  * @param expanded_format Whether to convert to standard CQP or keep Korp-specific operators
  */
-export function parseDateInterval(opKorp: OperatorKorp, val: DateRange, expanded_format?: boolean) {
-    let out: string
-    val = _.invokeMap(val, "toString")
-    if (!expanded_format) {
-        return `$date_interval ${opKorp} '${val.join(",")}'`
+export function parseDateInterval(opKorp: OperatorKorp, range: DateRange, expanded_format?: boolean) {
+    if (!expanded_format) return `$date_interval ${opKorp} '${range.join(",")}'`
+
+    const [fromdate, todate, fromtime, totime] = range
+    if (!fromdate || !todate) return ""
+
+    const isFromDateSame = `int(_.text_datefrom) = ${fromdate}`
+    const isFromDateInclusive = `int(_.text_datefrom) >= ${fromdate}`
+    const isFromDateExclusive = `int(_.text_datefrom) > ${fromdate}`
+    const isFromTimeInclusive = `(${isFromDateSame} & int(_.text_timefrom) >= ${fromtime})`
+
+    const isToDateSame = `int(_.text_dateto) = ${todate}`
+    const isToDateInclusive = `int(_.text_dateto) <= ${todate}`
+    const isToDateExclusive = `int(_.text_dateto) < ${todate}`
+    const isToTimeInclusive = `(${isToDateSame} & int(_.text_timeto) <= ${totime})`
+
+    if (String(fromdate) == String(todate)) {
+        const fromCond = fromtime == "000000" ? isFromDateSame : isFromTimeInclusive
+        const toCond = totime == "235959" ? isToDateSame : isToTimeInclusive
+        return `${fromCond} & ${toCond}`
     }
 
-    const [fromdate, todate, fromtime, totime] = val
-
-    const m_from = moment(fromdate, "YYYYMMDD")
-    const m_to = moment(todate, "YYYYMMDD")
-
-    const fieldMapping = {
-        text_datefrom: fromdate,
-        text_dateto: todate,
-        text_timefrom: fromtime,
-        text_timeto: totime,
-    }
-
-    function op(field: string, operator: string, valfield?: string) {
-        val = valfield ? fieldMapping[valfield] : fieldMapping[field]
-        return `int(_.${field}) ${operator} ${val}`
-    }
-
-    const days_diff = m_from.diff(m_to, "days")
-
-    if (days_diff === 0) {
-        // same day
-        out = `${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")} & ${op("text_dateto", "=")} & ${op(
-            "text_timeto",
-            "<="
-        )}`
-    } else if (days_diff === -1) {
-        // one day apart
-        out = `((${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")}) | ${op(
-            "text_datefrom",
-            "=",
-            "text_dateto"
-        )}) & (${op("text_dateto", "=", "text_datefrom")} | (${op("text_dateto", "=")} & ${op("text_timeto", "<=")}))`
-    } else {
-        out = `((${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")}) | (${op("text_datefrom", ">")} & ${op(
-            "text_datefrom",
-            "<=",
-            "text_dateto"
-        )})) & (${op("text_dateto", "<")} | (${op("text_dateto", "=")} & ${op("text_timeto", "<=")}))`
-    }
-
-    out = out.replace(/\s+/g, " ")
-
-    if (!fromdate || !todate) {
-        out = ""
-    }
-
-    return out
+    const fromCond = fromtime == "000000" ? isFromDateInclusive : `(${isFromTimeInclusive} | ${isFromDateExclusive})`
+    const toCond = totime == "235959" ? isToDateInclusive : `(${isToTimeInclusive} | ${isToDateExclusive})`
+    return `${fromCond} & ${toCond}`
 }
 
 /**
