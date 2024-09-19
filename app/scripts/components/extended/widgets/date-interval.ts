@@ -1,11 +1,26 @@
 /** @format */
 import _ from "lodash"
+import moment, { Moment } from "moment"
 import settings from "@/settings"
-import moment from "moment"
 import { html } from "@/util"
+import { Widget, WidgetScope } from "./common"
 import "@/components/datetime-picker"
 
-export const dateInterval = {
+type DateIntervalScope = WidgetScope<(string | number)[]> & {
+    minDate: Date
+    maxDate: Date
+    fromDate: Date
+    fromDateString: string
+    fromTime: Date
+    toDate: Date
+    toDateString: string
+    toTime: Date
+    commitDateInput: () => void
+    updateFrom: (m: Moment) => void
+    updateTo: (m: Moment) => void
+}
+
+export const dateInterval: Widget = {
     template: html`
         <div class="date_interval_arg_type">
             <h3>{{'simple' | loc:$root.lang}}</h3>
@@ -61,75 +76,64 @@ export const dateInterval = {
     `,
     controller: [
         "$scope",
-        function ($scope) {
-            let s = $scope
-            let cl = settings.corpusListing
-
-            let updateIntervals = function () {
-                let moments = cl.getMomentInterval()
+        function ($scope: DateIntervalScope) {
+            function updateIntervals() {
+                const moments = settings.corpusListing.getMomentInterval()
                 if (moments.length) {
-                    let [fromYear, toYear] = _.invokeMap(moments, "toDate")
-                    s.minDate = fromYear
-                    s.maxDate = toYear
+                    ;[$scope.minDate, $scope.maxDate] = moments.map((m) => m.toDate())
                 } else {
-                    let [from, to] = cl.getTimeInterval()
-                    s.minDate = moment(from.toString(), "YYYY").toDate()
-                    s.maxDate = moment(to.toString(), "YYYY").toDate()
+                    const [from, to] = settings.corpusListing.getTimeInterval()
+                    $scope.minDate = getYear(from)
+                    $scope.maxDate = getYear(to)
                 }
             }
-            s.commitDateInput = () => {
-                if (s.fromDateString) {
-                    const dateString = s.fromDateString.length == 4 ? `${s.fromDateString}-01-01` : s.fromDateString
-                    s.fromDate = moment(dateString).toDate()
-                    s.fromTime = moment("000000", "HHmmss").toDate()
+
+            $scope.commitDateInput = () => {
+                if ($scope.fromDateString) {
+                    const dateString =
+                        $scope.fromDateString.length == 4 ? `${$scope.fromDateString}-01-01` : $scope.fromDateString
+                    $scope.fromDate = moment(dateString).toDate()
+                    $scope.fromTime = moment("000000", "HHmmss").toDate()
                 }
-                if (s.toDateString) {
-                    const dateString = s.toDateString.length == 4 ? `${s.toDateString}-12-31` : s.toDateString
-                    s.toDate = moment(dateString).toDate()
-                    s.toTime = moment("235959", "HHmmss").toDate()
+                if ($scope.toDateString) {
+                    const dateString =
+                        $scope.toDateString.length == 4 ? `${$scope.toDateString}-12-31` : $scope.toDateString
+                    $scope.toDate = moment(dateString).toDate()
+                    $scope.toTime = moment("235959", "HHmmss").toDate()
                 }
             }
-            s.$on("corpuschooserchange", function () {
+
+            $scope.$on("corpuschooserchange", function () {
                 updateIntervals()
             })
 
             updateIntervals()
 
-            let getYear = function (val) {
-                return moment(val.toString(), "YYYYMMDD").toDate()
+            if (!$scope.model) {
+                $scope.fromDate = $scope.minDate
+                $scope.toDate = $scope.maxDate
+                ;[$scope.fromTime, $scope.toTime] = settings.corpusListing.getMomentInterval().map((m) => m.toDate())
+            } else if ($scope.model.length === 4) {
+                ;[$scope.fromDate, $scope.toDate] = $scope.model.slice(0, 3).map(getDate)
+                ;[$scope.fromTime, $scope.toTime] = $scope.model.slice(2).map(getTime)
             }
 
-            let getTime = function (val) {
-                return moment(val.toString(), "HHmmss").toDate()
-            }
-
-            if (!s.model) {
-                s.fromDate = s.minDate
-                s.toDate = s.maxDate
-                let [from, to] = _.invokeMap(cl.getMomentInterval(), "toDate")
-                s.fromTime = from
-                s.toTime = to
-            } else if (s.model.length === 4) {
-                let [fromYear, toYear] = _.map(s.model.slice(0, 3), getYear)
-                s.fromDate = fromYear
-                s.toDate = toYear
-                let [fromTime, toTime] = _.map(s.model.slice(2), getTime)
-                s.fromTime = fromTime
-                s.toTime = toTime
-            }
-
-            s.updateFrom = (m) => {
+            $scope.updateFrom = (m: Moment) => {
                 // We cannot just patch the list, we need to re-set it to trigger watcher.
                 // [fromdate, todate, fromtime, totime]
-                s.model = [m.format("YYYYMMDD"), s.model[1], m.format("HHmmss"), s.model[3]]
+                $scope.model = [m.format("YYYYMMDD"), $scope.model[1], m.format("HHmmss"), $scope.model[3]]
             }
 
-            s.updateTo = (m) => {
+            $scope.updateTo = (m: Moment) => {
                 // We cannot just patch the list, we need to re-set it to trigger watcher.
                 // [fromdate, todate, fromtime, totime]
                 m.set("second", 59)
-                s.model = [s.model[0], m.format("YYYYMMDD"), s.model[2], m.format("HHmmss")]
+                $scope.model = [$scope.model[0], m.format("YYYYMMDD"), $scope.model[2], m.format("HHmmss")]
             }
         },
     ],
 }
+
+const getDate = (date: string | number): Date => moment(date.toString(), "YYYYMMDD").toDate()
+const getTime = (date: string | number): Date => moment(date.toString(), "HHmmss").toDate()
+const getYear = (date: number): Date => moment(date.toString(), "YYYY").toDate()

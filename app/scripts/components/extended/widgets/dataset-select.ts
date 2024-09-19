@@ -1,7 +1,19 @@
 /** @format */
 import _ from "lodash"
 import { locAttribute } from "@/i18n"
-import { selectTemplate } from "./common"
+import { selectTemplate, WidgetScope, WidgetWithOptions } from "./common"
+import { RootScope } from "@/root-scope.types"
+import { LocMap } from "@/i18n/types"
+
+type DatasetSelectOptions = {
+    sort?: boolean
+}
+
+type DatasetSelectScope = WidgetScope & {
+    translation: LocMap
+    // It can be Record<string, string> or string[] on init, and is then reformatted to string[][]
+    dataset: Record<string, string> | string[] | string[][]
+}
 
 /**
  * Select-element.
@@ -9,14 +21,14 @@ import { selectTemplate } from "./common"
  * - dataset: an object or an array of values
  * - escape: boolean, will be used by the escaper-directive
  */
-export const datasetSelect = (options) => ({
+export const datasetSelect: WidgetWithOptions<DatasetSelectOptions> = (options) => ({
     template: selectTemplate,
     controller: [
         "$scope",
         "$rootScope",
-        function ($scope, $rootScope) {
-            let dataset
-            const original = $scope.dataset
+        function ($scope: DatasetSelectScope, $rootScope: RootScope) {
+            let dataset: [string, string][]
+            const original = $scope.dataset as Record<string, string> | string[]
 
             $rootScope.$watch("lang", (newVal, oldVal) => {
                 if (newVal != oldVal) {

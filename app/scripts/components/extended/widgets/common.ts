@@ -10,16 +10,26 @@ import { StructService, StructServiceOptions } from "@/backend/struct-service"
 import { RootScope } from "@/root-scope.types"
 import { LocMap } from "@/i18n/types"
 
-type WidgetScope<T = string> = IScope & {
-    $parent: any
+export type WidgetDefinition = Widget | WidgetWithOptions
+export type WidgetWithOptions<T extends {} = {}> = (options: T) => Widget
+export type Widget = {
+    template: string | ((vars: Record<string, any>) => string)
+    controller: IController
+}
+
+export type WidgetScope<T = string> = IScope & {
     orObj: Condition
     model: T
     input: string
-    loading: boolean
+}
+
+export type SelectWidgetScope = WidgetScope & {
+    $parent: any
+    dataset: string[][]
     type: string
     translation: LocMap
-    dataset: string[][]
     inputOnly: boolean
+    loading: boolean
     getRows: (input?: string) => string[][]
     typeaheadInputFormatter: (model: string) => string
 }
@@ -36,7 +46,7 @@ export const selectController = (autocomplete: boolean): IController => [
     "$scope",
     "$rootScope",
     "structService",
-    function ($scope: WidgetScope, $rootScope: RootScope, structService: StructService) {
+    function ($scope: SelectWidgetScope, $rootScope: RootScope, structService: StructService) {
         $rootScope.$on("corpuschooserchange", function (event, selected: string[]) {
             if (selected.length > 0) {
                 reloadValues()

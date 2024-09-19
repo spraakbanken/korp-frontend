@@ -1,13 +1,13 @@
 /** @format */
 import { html } from "@/util"
-import { selectController } from "./common"
+import { selectController, Widget } from "./common"
 
 /**
  * Autocomplete. Gets values from "struct_values"-command.
  * Use the following settings in the corpus:
  * - escape: boolean, will be used by the escaper-directive
  */
-export const structServiceAutocomplete = {
+export const structServiceAutocomplete: Widget = {
     template: html`<div>
         <input
             type="text"

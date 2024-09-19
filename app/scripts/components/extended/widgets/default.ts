@@ -1,7 +1,14 @@
 /** @format */
 import { html } from "@/util"
+import { Widget, WidgetScope } from "./common"
 
-export const defaultWidget = {
+type DefaultWidgetScope = WidgetScope & {
+    case: "sensitive" | "insensitive"
+    makeSensitive: () => void
+    makeInsensitive: () => void
+}
+
+export const defaultWidget: Widget = {
     template: ({ placeholder }) => html`
         <input
             ng-model="input"
@@ -27,7 +34,7 @@ export const defaultWidget = {
     `,
     controller: [
         "$scope",
-        function ($scope) {
+        function ($scope: DefaultWidgetScope) {
             if ($scope.orObj.flags && $scope.orObj.flags.c) {
                 $scope.case = "insensitive"
             } else {

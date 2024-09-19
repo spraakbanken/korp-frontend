@@ -1,8 +1,19 @@
 /** @format */
 import { html, regescape, unregescape } from "@/util"
+import { WidgetScope, WidgetWithOptions } from "./common"
 import "@/components/autoc"
 
-export const autocExtended = (options) => ({
+export type AutocExtendedOptions = {
+    type?: string
+    error_on_empty?: boolean
+}
+
+type AutocExtendedScope = WidgetScope & {
+    isRawInput: boolean
+    onChange: (output: string, isRawOutput: boolean) => void
+}
+
+export const autocExtended: WidgetWithOptions<AutocExtendedOptions> = (options) => ({
     template: html`<autoc
         input="input"
         is-raw-input="isRawInput"
@@ -13,7 +24,7 @@ export const autocExtended = (options) => ({
     ></autoc>`,
     controller: [
         "$scope",
-        function ($scope) {
+        function ($scope: AutocExtendedScope) {
             if ($scope.model) {
                 $scope.input = unregescape($scope.model)
                 $scope.isRawInput = false
