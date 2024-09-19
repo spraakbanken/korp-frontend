@@ -78,6 +78,6 @@ require("./scripts/controllers/map_controller")
 
 require("./scripts/text_reader_controller.js")
 require("./scripts/video_controllers.js")
-require("./scripts/struct_services.js")
+require("./scripts/backend/struct-service")
 require("./scripts/filter_directives.js")
 require("./scripts/matomo.js")

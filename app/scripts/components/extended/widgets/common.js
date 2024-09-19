@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import { locAttribute } from "@/i18n"
+import { loc, locAttribute } from "@/i18n"
 import { html } from "@/util"
 import "@/directives/escaper"
 
