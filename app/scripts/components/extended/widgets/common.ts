@@ -4,6 +4,25 @@ import settings from "@/settings"
 import { loc, locAttribute } from "@/i18n"
 import { html } from "@/util"
 import "@/directives/escaper"
+import { IController, IScope } from "angular"
+import { Condition } from "@/cqp_parser/cqp.types"
+import { StructService, StructServiceOptions } from "@/backend/struct-service"
+import { RootScope } from "@/root-scope.types"
+import { LocMap } from "@/i18n/types"
+
+type WidgetScope<T = string> = IScope & {
+    $parent: any
+    orObj: Condition
+    model: T
+    input: string
+    loading: boolean
+    type: string
+    translation: LocMap
+    dataset: string[][]
+    inputOnly: boolean
+    getRows: (input?: string) => string[][]
+    typeaheadInputFormatter: (model: string) => string
+}
 
 export const selectTemplate = html`<select
         ng-show="!inputOnly"
@@ -13,12 +32,12 @@ export const selectTemplate = html`<select
     ></select>
     <input ng-show="inputOnly" type="text" ng-model="input" />`
 
-export const selectController = (autocomplete) => [
+export const selectController = (autocomplete: boolean): IController => [
     "$scope",
     "$rootScope",
     "structService",
-    function ($scope, $rootScope, structService) {
-        $rootScope.$on("corpuschooserchange", function (event, selected) {
+    function ($scope: WidgetScope, $rootScope: RootScope, structService: StructService) {
+        $rootScope.$on("corpuschooserchange", function (event, selected: string[]) {
             if (selected.length > 0) {
                 reloadValues()
             }
@@ -26,7 +45,7 @@ export const selectController = (autocomplete) => [
 
         function reloadValues() {
             // TODO this exploits the API
-            const attributeDefinition = $scope.$parent.$ctrl.attributeDefinition
+            const attributeDefinition: { value: string } = $scope.$parent.$ctrl.attributeDefinition
             if (!attributeDefinition) {
                 return
             }
@@ -35,7 +54,7 @@ export const selectController = (autocomplete) => [
             const selectedCorpora = settings.corpusListing.selected
 
             // check which corpora support attributes
-            const corpora = []
+            const corpora: string[] = []
             for (let corpusSettings of selectedCorpora) {
                 if (attribute in corpusSettings["struct_attributes"] || attribute in corpusSettings.attributes) {
                     corpora.push(corpusSettings.id)
@@ -43,23 +62,20 @@ export const selectController = (autocomplete) => [
             }
 
             $scope.loading = true
-            const opts = { count: false, returnByCorpora: false }
+            const opts: StructServiceOptions = { count: false, returnByCorpora: false }
             if ($scope.type === "set") {
                 opts.split = true
             }
             structService.getStructValues(corpora, [attribute], opts).then(
-                function (data) {
+                function (data: string[]) {
                     $scope.loading = false
 
-                    const dataset = _.map(_.uniq(data), function (item) {
-                        if (item === "") {
-                            return [item, loc("empty")]
-                        }
-                        return [item, locAttribute($scope.translation, item)]
+                    const dataset = _.uniq(data).map((item) => {
+                        return item === "" ? [item, loc("empty")] : [item, locAttribute($scope.translation, item)]
                     })
                     $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
                     if (!autocomplete) {
-                        $scope.input = _.includes(data, $scope.input) ? $scope.input : $scope.dataset[0][0]
+                        $scope.input = data.includes($scope.input) ? $scope.input : $scope.dataset[0][0]
                     }
                 },
                 () => console.log("struct_values error")
@@ -78,13 +94,10 @@ export const selectController = (autocomplete) => [
             }
         })
 
-        $scope.getRows = function (input) {
-            if (input) {
-                return _.filter($scope.dataset, (tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
-            } else {
-                return $scope.dataset
-            }
-        }
+        $scope.getRows = (input) =>
+            input
+                ? $scope.dataset.filter((tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
+                : $scope.dataset
 
         $scope.typeaheadInputFormatter = (model) => locAttribute($scope.translation, model)
     },
