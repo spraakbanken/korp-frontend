@@ -1,7 +1,7 @@
 /** @format */
 import angular from "angular"
 import _ from "lodash"
-import extendedComponents from "@/extended.js"
+import extendedComponents from "./widgets"
 
 angular.module("korpApp").component("extendedCqpValue", {
     bindings: {
