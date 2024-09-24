@@ -18,6 +18,7 @@ type SearchSubmitScope = IScope & {
     togglePopover: (event: Event) => void
     popHide: () => void
     popShow: () => void
+    onKeyup: () => void
     onSubmit: () => void
     onSendClick: (event: Event) => void
     onPopoverClick: (event: Event) => void
@@ -36,7 +37,7 @@ angular.module("korpApp").component("searchSubmit", {
         <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">
             <div class="arrow"></div>
             <h3 class="popover-title">{{'compare_save_header' | loc:$root.lang}}</h3>
-            <form class="popover-content" ng-submit="onSubmit()">
+            <div class="popover-content" ng-keyup="onKeyup()">
                 <div>
                     <label>
                         {{'compare_name' | loc:$root.lang}}:
@@ -44,9 +45,11 @@ angular.module("korpApp").component("searchSubmit", {
                     </label>
                 </div>
                 <div class="btn_container">
-                    <button class="btn btn-primary btn-sm">{{'compare_save' | loc:$root.lang}}</button>
+                    <button class="btn btn-primary btn-sm" ng-click="onSubmit()">
+                        {{'compare_save' | loc:$root.lang}}
+                    </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>`,
     bindings: {
@@ -119,6 +122,10 @@ angular.module("korpApp").component("searchSubmit", {
                 popover.fadeOut("fast")
                 $rootElement.off("keydown", onEscape)
                 $rootElement.off("click", $scope.popHide)
+            }
+
+            $scope.onKeyup = ($event: KeyboardEvent) => {
+                if ($event.code == "Enter") $scope.onSubmit()
             }
 
             $scope.onSubmit = function () {

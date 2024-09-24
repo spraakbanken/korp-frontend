@@ -16,7 +16,7 @@ angular.module("korpApp").component("simpleSearch", {
         <div id="korp-simple">
             <global-filters lang="lang"></global-filters>
             <div class="sm_flex justify-between">
-                <div>
+                <form>
                     <autoc
                         id="simple_text"
                         input="$ctrl.input"
@@ -49,7 +49,7 @@ angular.module("korpApp").component("simpleSearch", {
                         <input id="caseChk" type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
                         <label for="caseChk"> {{'case_insensitive' | loc:$root.lang}} </label>
                     </div>
-                </div>
+                </form>
                 <div id="similar_wrapper" ng-show="$ctrl.relatedObj">
                     <button
                         class="btn btn-sm btn-default"
