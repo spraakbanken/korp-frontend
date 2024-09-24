@@ -18,14 +18,15 @@ type SearchSubmitScope = IScope & {
     togglePopover: (event: Event) => void
     popHide: () => void
     popShow: () => void
-    onKeyup: () => void
+    onWrapperKeydown: (event: KeyboardEvent) => void
+    onPopoverKeydown: (event: KeyboardEvent) => void
     onSubmit: () => void
     onSendClick: (event: Event) => void
     onPopoverClick: (event: Event) => void
 }
 
 angular.module("korpApp").component("searchSubmit", {
-    template: html`<div class="search_submit">
+    template: html`<div class="search_submit" ng-keydown="onWrapperKeydown($event)">
         <div class="btn-group">
             <button class="btn btn-primary" id="sendBtn" ng-click="onSendClick()" ng-disabled="disabled">
                 {{'search' | loc:$root.lang}}
@@ -37,7 +38,7 @@ angular.module("korpApp").component("searchSubmit", {
         <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">
             <div class="arrow"></div>
             <h3 class="popover-title">{{'compare_save_header' | loc:$root.lang}}</h3>
-            <div class="popover-content" ng-keyup="onKeyup()">
+            <div class="popover-content" ng-keydown="onPopoverKeydown($event)">
                 <div>
                     <label>
                         {{'compare_name' | loc:$root.lang}}:
@@ -96,13 +97,6 @@ angular.module("korpApp").component("searchSubmit", {
             }
             $scope.isPopoverVisible = false
 
-            const onEscape = (event: JQueryEventObject) => {
-                if (event.key != "Escape") {
-                    $scope.popHide()
-                    return false
-                }
-            }
-
             $scope.popShow = function () {
                 $scope.isPopoverVisible = true
                 const horizontal = ["top", "bottom"].includes($scope.pos)
@@ -113,19 +107,29 @@ angular.module("korpApp").component("searchSubmit", {
                     .focus()
                     .position({ my, at, of: $element.find(".opener") })
 
-                $rootElement.on("keydown", onEscape)
                 $rootElement.on("click", $scope.popHide)
             }
 
             $scope.popHide = function () {
                 $scope.isPopoverVisible = false
                 popover.fadeOut("fast")
-                $rootElement.off("keydown", onEscape)
                 $rootElement.off("click", $scope.popHide)
             }
 
-            $scope.onKeyup = ($event: KeyboardEvent) => {
-                if ($event.code == "Enter") $scope.onSubmit()
+            $scope.onWrapperKeydown = (event: KeyboardEvent) => {
+                if (event.key == "Escape") {
+                    $scope.popHide()
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+
+            $scope.onPopoverKeydown = (event: KeyboardEvent) => {
+                if (event.key == "Enter") {
+                    $scope.onSubmit()
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
             }
 
             $scope.onSubmit = function () {
