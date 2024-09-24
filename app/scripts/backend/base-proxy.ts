@@ -130,8 +130,6 @@ export default abstract class BaseProxy<R extends {} = {}> {
             }
         })
 
-        const stats = (this.progress / this.total) * 100
-
         if (this.total == null && struct.progress_corpora && struct.progress_corpora.length) {
             const tmp = $.map(struct["progress_corpora"], function (corpus) {
                 if (!corpus.length) {
@@ -144,6 +142,8 @@ export default abstract class BaseProxy<R extends {} = {}> {
             })
             this.total = _.reduce(tmp, (val1, val2) => val1 + val2, 0)
         }
+
+        const stats = (this.progress / this.total) * 100
 
         this.prev = e.target.responseText
         return {

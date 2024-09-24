@@ -215,12 +215,8 @@ export class KwicCtrl implements IController {
             const req = s.getProxy().makeRequest(
                 { ajaxParams },
                 s.page,
-                (progressObj) => {
-                    $timeout(() => s.onProgress(progressObj, isPaging))
-                },
-                (data) => {
-                    $timeout(() => s.renderResult(data))
-                }
+                (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
+                (data) => $timeout(() => s.renderResult(data))
             )
             req.done((data) => {
                 $timeout(() => {
@@ -256,6 +252,7 @@ export class KwicCtrl implements IController {
         }
 
         s.renderCompleteResult = (data, isPaging) => {
+            s.renderResult(data)
             s.loading = false
             if ("ERROR" in data) return
             if (!isPaging) {
