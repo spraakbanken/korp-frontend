@@ -9,6 +9,12 @@ import { loginStatusComponent } from "./login_status"
 import settings from "@/settings"
 import { IModule } from "angular"
 
+export type AuthModuleOptions = {
+    jwt_url: string
+    login_service: string
+    logout_service: string
+}
+
 type State = {
     credentials?: string[]
     otherCredentials?: string[]
@@ -27,12 +33,14 @@ type JwtPayload = {
 }
 
 const state: State = {
-    jwt: null,
-    username: null,
+    jwt: undefined,
+    username: undefined,
 }
 
+const authModule = settings.auth_module as { module: string; options: AuthModuleOptions }
+
 export const init = async () => {
-    const response = await fetch(settings.auth_module["options"]?.jwt_url, {
+    const response = await fetch(authModule.options.jwt_url, {
         headers: { accept: "text/plain" },
         credentials: "include",
     })
@@ -54,11 +62,11 @@ export const init = async () => {
     state.username = name || email
 
     state.credentials = Object.keys(scope.corpora || {})
-        .filter((id) => scope.corpora[id] > levels["READ"])
+        .filter((id) => (scope.corpora?.[id] || 0) > levels["READ"])
         .map((id) => id.toUpperCase())
 
     state.otherCredentials = Object.keys(scope.other || {})
-        .filter((id) => scope.other[id] > levels["READ"])
+        .filter((id) => (scope.other?.[id] || 0) > levels["READ"])
         .map((id) => id.toUpperCase())
 
     return true
@@ -73,14 +81,14 @@ export const login = () => {
     // if we already tried to login, don't redirect again, to avoid infinite loops
     // if (document.referrer == "") {
     // }
-    window.location.href = `${settings["auth_module"]["options"]["login_service"]}?redirect=${window.location.href}`
+    window.location.href = `${authModule.options.login_service}?redirect=${window.location.href}`
 }
 
 export const getAuthorizationHeader = () => (isLoggedIn() ? { Authorization: `Bearer ${state.jwt}` } : {})
 
 export const hasCredential = (corpusId) => getCredentials().includes(corpusId)
 
-export const logout = () => (window.location.href = settings["auth_module"]["options"]["logout_service"])
+export const logout = () => (window.location.href = authModule.options.logout_service)
 
 export const getCredentials = () => state.credentials || []
 

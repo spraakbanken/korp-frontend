@@ -17,11 +17,12 @@ function findAuthModule(): AuthModule | undefined {
     try {
         return require("custom/" + authModuleName)
     } catch (error) {
-        console.log("Auth module not available: ", authModule)
+        console.error("Auth module not available: ", authModule)
     }
 }
 
-const authModule = findAuthModule()
+// TODO Provide dummy auth module if not found? Or produce visible crash because it's a config error.
+const authModule = findAuthModule()!
 
 export async function init(): Promise<boolean> {
     const loggedIn = await authModule.init()

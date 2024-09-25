@@ -127,7 +127,7 @@ angular.module("korpApp").component("resultMap", {
             L.tileLayer.provider("OpenStreetMap").addTo(map)
 
             $ctrl.$onInit = () => {
-                map.setView([$ctrl.center.lat, $ctrl.center.lng], $ctrl.center.zoom)
+                if ($ctrl.center) map.setView([$ctrl.center.lat, $ctrl.center.lng], $ctrl.center.zoom)
                 $scope.showMap = true
             }
 

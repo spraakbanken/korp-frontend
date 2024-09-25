@@ -37,7 +37,7 @@ export type Corpus = {
     struct_attributes: string[]
     custom_attributes?: string[]
     reading_mode?: boolean
-    title?: LangString
+    title: LangString
     within: Labeled[]
 }
 

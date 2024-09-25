@@ -3,8 +3,10 @@
 import omit from "lodash/omit"
 
 /** Get object from local storage. */
-export const localStorageGet = <K extends keyof LocalStorage>(key: K): LocalStorage[K] | undefined =>
-    JSON.parse(localStorage.getItem(key))
+export const localStorageGet = <K extends keyof LocalStorage>(key: K): LocalStorage[K] | undefined => {
+    const json = localStorage.getItem(key)
+    return json ? JSON.parse(json) : undefined
+}
 
 /** Write object to local storage. To delete, use native `localStorage.removeItem(key)`. */
 export const localStorageSet = <K extends keyof LocalStorage>(key: K, value: LocalStorage[K]): void =>

@@ -9,7 +9,8 @@ angular.module("korpApp").directive("scrollToStart", function () {
     return {
         restrict: "A",
         link: function (scope, elm, attr: ScrollToStartAttrs) {
-            const pElm = elm[0].parentElement.parentElement
+            const pElm = elm[0].parentElement?.parentElement
+            if (!pElm) return
 
             let isStart: boolean
 

@@ -79,10 +79,12 @@ export const dateInterval: Widget = {
         function ($scope: DateIntervalScope) {
             function updateIntervals() {
                 const moments = settings.corpusListing.getMomentInterval()
-                if (moments.length) {
+                if (moments) {
                     ;[$scope.minDate, $scope.maxDate] = moments.map((m) => m.toDate())
                 } else {
-                    const [from, to] = settings.corpusListing.getTimeInterval()
+                    const interval = settings.corpusListing.getTimeInterval()
+                    if (!interval) return
+                    const [from, to] = interval
                     $scope.minDate = getYear(from)
                     $scope.maxDate = getYear(to)
                 }
@@ -112,7 +114,8 @@ export const dateInterval: Widget = {
             if (!$scope.model) {
                 $scope.fromDate = $scope.minDate
                 $scope.toDate = $scope.maxDate
-                ;[$scope.fromTime, $scope.toTime] = settings.corpusListing.getMomentInterval().map((m) => m.toDate())
+                const moments = settings.corpusListing.getMomentInterval()
+                if (moments) [$scope.fromTime, $scope.toTime] = moments.map((m) => m.toDate())
             } else if ($scope.model.length === 4) {
                 ;[$scope.fromDate, $scope.toDate] = $scope.model.slice(0, 3).map(getDate)
                 ;[$scope.fromTime, $scope.toTime] = $scope.model.slice(2).map(getTime)

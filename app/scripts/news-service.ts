@@ -9,7 +9,7 @@ export function isEnabled(): boolean {
 }
 
 export async function fetchNews(): Promise<NewsItem[]> {
-    const response = await fetch(settings.news_url)
+    const response = await fetch(settings.news_url!)
     const feedYaml: string = await response.text()
 
     const itemsRaw = Yaml.load(feedYaml) as NewsItemRaw[]

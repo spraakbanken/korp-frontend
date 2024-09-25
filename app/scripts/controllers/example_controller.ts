@@ -46,13 +46,13 @@ class ExampleCtrl extends KwicCtrl {
         const r = this.$rootScope
 
         // ugly, but because the kwic-tab-scope is parent of this scope it needs to be done
-        s.hits = null
-        s.hitsInProgress = null
+        s.hits = undefined
+        s.hitsInProgress = undefined
         s.page = 0
         s.error = false
         s.hitsPictureData = null
-        s.kwic = null
-        s.corpusHits = null
+        s.kwic = undefined
+        s.corpusHits = undefined
         s.aborted = false
 
         s.tabindex = s.$parent.$parent.$parent.tabset.tabs.length - 1 + s.$index
@@ -60,7 +60,7 @@ class ExampleCtrl extends KwicCtrl {
         s.newDynamicTab()
 
         s.isReadingMode = () => {
-            return s.kwicTab.readingMode
+            return s.kwicTab.readingMode || false
         }
 
         s.hitspictureClick = function (pageNumber) {
@@ -108,17 +108,15 @@ class ExampleCtrl extends KwicCtrl {
             // example tab cannot handle incremental = true
             opts.ajaxParams.incremental = false
 
-            opts.ajaxParams.start = s.page * items_per_page
+            opts.ajaxParams.start = (s.page || 0) * items_per_page
             opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1
 
-            let avoidContext, preferredContext
-            if (s.isReadingMode()) {
-                preferredContext = settings["default_reading_context"]
-                avoidContext = settings["default_overview_context"]
-            } else {
-                preferredContext = settings["default_overview_context"]
-                avoidContext = settings["default_reading_context"]
-            }
+            const preferredContext = s.isReadingMode()
+                ? settings["default_reading_context"]
+                : settings["default_overview_context"]
+            const avoidContext = s.isReadingMode()
+                ? settings["default_overview_context"]
+                : settings["default_reading_context"]
 
             const context = settings.corpusListing.getContextQueryStringFromCorpusId(
                 (opts.ajaxParams.corpus || "").split(","),
@@ -136,7 +134,7 @@ class ExampleCtrl extends KwicCtrl {
 
             const def = s.proxy.makeRequest(
                 opts,
-                null,
+                undefined,
                 (progressObj) => $timeout(() => s.onExampleProgress(progressObj)),
                 (data) => {
                     $timeout(() => {

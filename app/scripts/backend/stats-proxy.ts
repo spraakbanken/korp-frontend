@@ -38,8 +38,8 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
 
     makeParameters(reduceVals: string[], cqp: string, ignoreCase: boolean): KorpStatsParams {
         const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
-        const groupBy = []
-        const groupByStruct = []
+        const groupBy: string[] = []
+        const groupByStruct: string[] = []
         for (let reduceVal of reduceVals) {
             if (
                 structAttrs[reduceVal] &&

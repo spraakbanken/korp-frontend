@@ -53,7 +53,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
     if (expanded_format == null) {
         expanded_format = false
     }
-    const output = []
+    const output: string[] = []
     cqp_obj = prioSort(_.cloneDeep(cqp_obj))
 
     for (let token of cqp_obj) {
@@ -162,8 +162,7 @@ export function getTimeInterval(obj: CqpQuery): [Moment, Moment] | undefined {
     }
     const from = _.minBy(froms, (m) => m.toDate())
     const to = _.maxBy(tos, (m) => m.toDate())
-
-    return [from, to]
+    return from && to ? [from, to] : undefined
 }
 
 /**

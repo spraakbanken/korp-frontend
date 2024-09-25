@@ -66,8 +66,8 @@ export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
         if (!years.length) {
             return
         }
-        const minYear = _.min(years)
-        const maxYear = _.max(years)
+        const minYear = Math.min(...years)!
+        const maxYear = Math.max(...years)!
 
         if (_.isNaN(maxYear) || _.isNaN(minYear)) {
             console.log("expandTimestruct broken, years:", years)

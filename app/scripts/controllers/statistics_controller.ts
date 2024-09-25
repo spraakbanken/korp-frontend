@@ -85,7 +85,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             }
 
             s.onexit = () => {
-                s.$root.jsonUrl = null
+                s.$root.jsonUrl = undefined
             }
 
             s.isActive = () => {
@@ -108,6 +108,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             s.makeRequest = (cqp) => {
                 s.error = false
                 const grid = document.getElementById("myGrid")
+                if (!grid) throw new Error("myGrid element not found")
                 grid.innerHTML = ""
 
                 s.hasResult = false

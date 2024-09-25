@@ -16,14 +16,14 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
     constructor() {
         super()
         this.prevRequest = null
-        this.queryData = null
+        this.queryData = undefined
         this.prevParams = null
         this.foundKwic = false
     }
 
     makeRequest(
         options: KorpQueryRequestOptions,
-        page: number,
+        page: number | undefined,
         progressCallback: (data: ProgressReport<KorpQueryResponse>) => void,
         kwicCallback: (data: KorpResponse<KorpQueryResponse>) => void
     ): JQuery.jqXHR<KorpResponse<KorpQueryResponse>> {
@@ -31,8 +31,7 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
         this.foundKwic = false
         this.resetRequest()
         if (!kwicCallback) {
-            console.error("No callback for query result")
-            return
+            throw new Error("No callback for query result")
         }
         self.progress = 0
 
@@ -56,13 +55,13 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
             ...options.ajaxParams,
         }
 
-        const show = []
-        const show_struct = []
+        const show: string[] = []
+        const show_struct: string[] = []
 
         for (let corpus of settings.corpusListing.selected) {
             for (let key in corpus.within) {
                 // val = corpus.within[key]
-                show.push(_.last(key.split(" ")))
+                show.push(key.split(" ").pop()!)
             }
             for (let key in corpus.attributes) {
                 // val = corpus.attributes[key]
@@ -160,7 +159,7 @@ export type KorpQueryRequestOptions = {
     // TODO Should start,end really exist here as well as under ajaxParams?
     start?: number
     end?: number
-    ajaxParams?: KorpQueryParams & {
+    ajaxParams: KorpQueryParams & {
         command?: string
     }
 }
@@ -186,7 +185,7 @@ export type KorpQueryResponse = {
 /** Search hits */
 export type ApiKwic = {
     /** An object for each token in the context, with attribute values for that token */
-    tokens: Record<string, any>[]
+    tokens: Token[]
     /** Attribute values for the context (e.g. sentence) */
     structs: Record<string, any>
     /** Specifies the position of the match in the context. If `in_order` is false, `match` will consist of a list of match objects, one per highlighted word */
@@ -205,4 +204,9 @@ type KwicMatch = {
     end: number
     /** Global corpus position of the match */
     position: number
+}
+
+export type Token = {
+    word: string
+    [attr: string]: any
 }

@@ -17,7 +17,7 @@ type WordpicCtrlScope = IScope & {
     aborted: boolean
     activate: () => void
     countCorpora: () => number | null
-    data: TableDrawData[]
+    data?: TableDrawData[]
     drawTables: (tables: [string, string][], data: ApiRelation[]) => void
     error: boolean
     hasData: boolean
@@ -108,7 +108,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             s.resetView = () => {
                 s.hasData = false
-                s.data = null
+                s.data = undefined
                 s.aborted = false
                 s.noHits = false
                 s.error = false
@@ -118,7 +118,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             s.makeRequest = () => {
                 const search = searches.activeSearch
-                if (!s.wordPic || (search.type !== "lemgram" && search.val.includes(" "))) {
+                if (!s.wordPic || !search || (search.type !== "lemgram" && search.val.includes(" "))) {
                     s.resetView()
                     return
                 }
@@ -167,7 +167,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             }
 
             s.onexit = () => {
-                s.$root.jsonUrl = null
+                s.$root.jsonUrl = undefined
             }
 
             s.isActive = () => {
@@ -212,10 +212,10 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     let [word, pos] = args[0]
                     return word + pos
                 })
-                const tagsetTrans = _.invert(settings["word_picture_tagset"])
+                const tagsetTrans = _.invert(settings["word_picture_tagset"]!)
                 unique_words = _.filter(unique_words, function (...args) {
                     const [currentWd, pos] = args[0]
-                    return settings["word_picture_conf"][tagsetTrans[pos]] != null
+                    return settings["word_picture_conf"]![tagsetTrans[pos]] != null
                 })
                 if (!unique_words.length) {
                     s.loading = false
@@ -249,21 +249,24 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     return { i, type }
                 }
 
-                const tagsetTrans = _.invert(settings["word_picture_tagset"])
+                const tagsetTrans = _.invert(settings["word_picture_tagset"]!)
 
-                const res: TableDrawData[] = _.map(tables, function ([token, wordClass]) {
-                    const wordClassShort = wordClass.toLowerCase()
-                    wordClass = _.invert(settings["word_picture_tagset"])[wordClassShort]
+                const res: TableDrawData[] = []
 
-                    if (settings["word_picture_conf"][wordClass] == null) {
-                        return
+                for (const row of tables) {
+                    const token = row[0]
+                    const wordClassShort = row[1].toLowerCase()
+                    const wordClass = _.invert(settings["word_picture_tagset"]!)[wordClassShort]
+
+                    if (settings["word_picture_conf"]![wordClass] == null) {
+                        continue
                     }
 
                     // Sort the list of relations according to configuration.
                     // Up to three sections. Each section is one or a few tables, each table has a number of rows.
                     const sections: ShowableApiRelation[][][] = [[], [], []]
                     data.forEach((item) => {
-                        settings["word_picture_conf"][wordClass].forEach((rel_type_list, i) => {
+                        settings["word_picture_conf"]![wordClass].forEach((rel_type_list, i) => {
                             const section = sections[i]
                             const rel = {
                                 rel: tagsetTrans[item.rel.toLowerCase()],
@@ -294,8 +297,8 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                         })
                         sectionsWithSearchWord[i] = section
 
-                        if (settings["word_picture_conf"][wordClass][i] && section.length) {
-                            const toIndex = settings["word_picture_conf"][wordClass][i].indexOf("_")
+                        if (settings["word_picture_conf"]![wordClass][i] && section.length) {
+                            const toIndex = settings["word_picture_conf"]![wordClass][i].indexOf("_")
                             sectionsWithSearchWord[i][toIndex] = {
                                 word: isLemgram(token) ? lemgramToString(token) : token,
                             }
@@ -321,19 +324,19 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                         })
                     )
 
-                    return {
+                    res.push({
                         token,
                         wordClass,
                         wordClassShort,
                         data: dataOut,
-                    }
-                })
+                    })
+                }
 
                 prepareScope(res)
             }
 
             s.countCorpora = () => {
-                return s.proxy.prevParams && s.proxy.prevParams.corpus.split(",").length
+                return s.proxy.prevParams ? s.proxy.prevParams.corpus.split(",").length : null
             }
 
             s.hitSettings = ["15"]

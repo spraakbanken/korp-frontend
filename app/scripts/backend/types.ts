@@ -28,7 +28,7 @@ export type ProgressResponse = {
     /** Selected corpora in the order they will be searched. This is returned first. */
     progress_corpora?: string[]
     /** Repeated for each corpus (or sometimes batch of corpora?) Hits can be 0. These are returned a few at a time. */
-    [progress_n: `progress${number}`]: string | { corpus: string; hits: number }
+    [progress_n: `progress_${number}`]: string | { corpus: string; hits: number }
 }
 
 /** Extends JQuery `jaxSettings` with stuff we use. */
@@ -42,7 +42,7 @@ export type ProgressReport<R = {}> = {
     /** How many percent of the material has been searched. */
     stats: number
     /** How many search hits so far. */
-    total_results: number
+    total_results: number | null
 }
 
 /** A string consisting of numbers. */

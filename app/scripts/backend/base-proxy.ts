@@ -120,13 +120,15 @@ export default abstract class BaseProxy<R extends {} = {}> {
 
         Object.keys(struct).forEach((key) => {
             if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
-                const val = struct[key]
-                const currentCorpus = val["corpus"] || val
-                const sum = _(currentCorpus.split("|"))
+                const val = struct[key] as ProgressResponse["progress_0"]
+                const currentCorpus = typeof val == "string" ? val : val["corpus"]
+                const sum = currentCorpus
+                    .split("|")
                     .map((corpus) => Number(settings.corpora[corpus.toLowerCase()].info.Size))
                     .reduce((a, b) => a + b, 0)
                 this.progress += sum
-                this.total_results += val["hits"] !== null ? parseInt(val["hits"]) : null
+                if (typeof val != "string" && "hits" in val)
+                    this.total_results = (this.total_results || 0) + Number(val.hits)
             }
         })
 
@@ -143,7 +145,7 @@ export default abstract class BaseProxy<R extends {} = {}> {
             this.total = _.reduce(tmp, (val1, val2) => val1 + val2, 0)
         }
 
-        const stats = (this.progress / this.total) * 100
+        const stats = (this.progress / this.total!) * 100
 
         this.prev = e.target.responseText
         return {

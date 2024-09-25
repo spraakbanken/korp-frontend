@@ -24,6 +24,8 @@ type KorpLemgramCountResponse = {
     [lemgram: string]: number
 }
 
+type LemgramCount = { lemgram: string; count: number }
+
 angular.module("korpApp").factory("lexicons", [
     "$q",
     "$http",
@@ -66,9 +68,9 @@ angular.module("korpApp").factory("lexicons", [
                                 headers: getAuthorizationHeader(),
                             })
                         ).then(({ data }) => {
-                            delete data.time
-                            const allLemgrams = []
-                            for (let lemgram in data) {
+                            const keys = Object.keys(data).filter((key) => key != "time")
+                            const allLemgrams: LemgramCount[] = []
+                            for (const lemgram of keys) {
                                 const count = data[lemgram]
                                 allLemgrams.push({ lemgram: lemgram, count: count })
                             }

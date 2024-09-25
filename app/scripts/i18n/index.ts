@@ -30,7 +30,9 @@ export function loc(key: string, lang?: string) {
  * @param lang The code of the language to translate to. Defaults to the global current language.
  * @returns The translated string, or undefined if no translation is found.
  */
-export function locObj(map: LangString, lang?: string): string | undefined {
+export function locObj(map: undefined, lang?: string): undefined
+export function locObj(map: LangString, lang?: string): string
+export function locObj(map?: LangString, lang?: string) {
     if (!map) return undefined
     if (typeof map == "string") return map
 

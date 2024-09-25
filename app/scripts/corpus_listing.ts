@@ -290,7 +290,7 @@ export class CorpusListing {
         return withins
     }
 
-    getTimeInterval(): [number, number] {
+    getTimeInterval(): [number, number] | undefined {
         const all = _(this.selected)
             .map("time")
             .filter((item) => item != null)
@@ -300,10 +300,12 @@ export class CorpusListing {
             .sort((a, b) => a - b)
             .value()
 
-        return [_.first(all), _.last(all)]
+        const from = all[0]
+        const to = all.pop()
+        return from && to ? [from, to] : undefined
     }
 
-    getMomentInterval(): [Moment, Moment] {
+    getMomentInterval(): [Moment, Moment] | undefined {
         const infoGetter = (prop: "FirstDate" | "LastDate") => {
             return _(this.selected)
                 .map("info")
@@ -316,10 +318,9 @@ export class CorpusListing {
         const froms = infoGetter("FirstDate")
         const tos = infoGetter("LastDate")
 
-        const from = _.minBy(froms, (item) => item.unix()) || null
-        const to = _.maxBy(tos, (item) => item.unix()) || null
-
-        return [from, to]
+        const from = _.minBy(froms, (item) => item.unix())
+        const to = _.maxBy(tos, (item) => item.unix())
+        return from && to ? [from, to] : undefined
     }
 
     getTitleObj(corpus: string): LangString {
@@ -403,7 +404,7 @@ export class CorpusListing {
     // positional could be added here, but is tricky because parallel mode lang might be needed
     updateAttributes(): void {
         const common_keys = _.compact(_.flatten(_.map(this.selected, (corp) => _.keys(corp.common_attributes))))
-        this.commonAttributes = _.pick(settings["common_struct_types"], ...common_keys)
+        this.commonAttributes = _.pick(settings["common_struct_types"], ...common_keys) as Record<string, Attribute>
         this.structAttributes = this._getStructAttrs()
     }
 

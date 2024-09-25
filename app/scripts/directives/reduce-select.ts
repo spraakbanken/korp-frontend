@@ -11,7 +11,7 @@ type ReduceSelectScope = IScope & {
     hasStructAttrs: boolean
     selected: string[]
     insensitive: string[]
-    toggleSelected: (value: string, event?: MouseEvent) => void
+    toggleSelected: (value: string, event: MouseEvent) => void
     toggleWordInsensitive: (event: MouseEvent) => void
     onChange: () => void
     toggled: (open: boolean) => void

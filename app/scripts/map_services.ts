@@ -18,8 +18,8 @@ export interface MapResult {
 
 function getPointsFromObj(obj: InnerData): Point[] {
     let points: Point[] = []
-    for (let row of obj.rows) {
-        const value = _.values(row.value)[0][0]
+    for (const row of obj.rows || []) {
+        const value = _.values(row.value as any)[0][0]
         if (!value) {
             continue
         }

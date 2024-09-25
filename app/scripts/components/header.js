@@ -144,7 +144,7 @@ angular.module("korpApp").component("header", {
                 }
             }
 
-            $ctrl.languages = settings["languages"]
+            $ctrl.languages = settings.languages
 
             $scope.$watch("lang", (newVal, oldVal) => {
                 // Watcher gets called with `undefined` on init.

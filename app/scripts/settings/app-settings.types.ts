@@ -43,7 +43,7 @@ export type AppSettings = {
     /** codes for translation ISO-639-1 to 639-2 */
     iso_languages: Record<string, string>
     korp_backend_url: string
-    languages?: Labeled[]
+    languages: Labeled[]
     map_center?: { lat: number; lng: number; zoom: number }
     map_enabled?: boolean
     markup: Record<string, string>

@@ -87,7 +87,7 @@ export class ParallelCorpusListing extends CorpusListing {
         // get the languages that are enabled given a list of active languages
         const main = _.filter(this.selected, (corp) => corp.lang === activeLangs[0])
 
-        let output = []
+        let output: CorpusTransformed[][] = []
         for (var lang of activeLangs.slice(1)) {
             const other = _.filter(this.selected, (corp) => corp.lang === lang)
 
@@ -107,7 +107,7 @@ export class ParallelCorpusListing extends CorpusListing {
         // gets the within and context queries
 
         const struct = this.getLinksFromLangs(this.activeLangs)
-        const output = []
+        const output: string[][] = []
         $.each(struct, function (i, corps) {
             const mainId = corps[0].id.toUpperCase()
             const mainIsPivot = !!corps[0].pivot
@@ -148,7 +148,7 @@ export class ParallelCorpusListing extends CorpusListing {
                 .join(",")
         }
 
-        const output = []
+        const output: string[][] = []
         for (let i = 0; i < struct.length; i++) {
             const item = struct[i]
             var main = item[0]

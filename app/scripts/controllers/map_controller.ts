@@ -13,7 +13,7 @@ type MapControllerScope = IScope & {
     center: AppSettings["map_center"]
     error: boolean
     selectedGroups: string[]
-    markerGroups: Record<string, MarkerGroup>
+    markerGroups?: Record<string, MarkerGroup>
     loading: boolean
     numResults: number
     useClustering: boolean
@@ -78,7 +78,7 @@ angular.module("korpApp").directive("mapCtrl", [
                         $scope.$apply(($scope: MapControllerScope) => {
                             $scope.loading = false
                             $scope.numResults = 20
-                            $scope.markerGroups = result && getMarkerGroups(Rickshaw, result)
+                            $scope.markerGroups = result ? getMarkerGroups(Rickshaw, result) : undefined
                             $scope.selectedGroups = _.keys($scope.markerGroups)
                         })
                     },
@@ -92,6 +92,7 @@ angular.module("korpApp").directive("mapCtrl", [
                 )
 
                 $scope.toggleMarkerGroup = function (groupName: string) {
+                    if (!$scope.markerGroups) throw new Error("markerGroups not set")
                     $scope.markerGroups[groupName].selected = !$scope.markerGroups[groupName].selected
                     // It is important to replace the array, not modify it, to trigger a watcher in the result-map component.
                     if ($scope.selectedGroups.includes(groupName)) {

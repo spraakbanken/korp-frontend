@@ -41,9 +41,9 @@ angular.module("korpApp").factory("searches", [
             },
 
             getCqpExpr(): string {
-                if (!this.activeSearch) return null
+                if (!this.activeSearch) return ""
                 if (this.activeSearch.type === "word" || this.activeSearch.type === "lemgram")
-                    return $rootScope.simpleCQP
+                    return $rootScope.simpleCQP || ""
                 return this.activeSearch.val
             },
         }
@@ -67,7 +67,7 @@ angular.module("korpApp").factory("searches", [
                 $q.all([searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(function () {
                     if (type === "cqp") {
                         if (!value) {
-                            value = $location.search().cqp
+                            value = $location.search().cqp || ""
                         }
                     }
                     // Update stored search query

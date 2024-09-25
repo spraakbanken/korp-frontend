@@ -8,7 +8,7 @@ export type StatisticsWorkerMessage = {
     type: "korpStatistics"
     data: StatsNormalized
     reduceVals: string[]
-    groupStatistics?: string[]
+    groupStatistics: string[]
 }
 
 export type StatisticsWorkerResult = [Dataset, SlickgridColumn[], SearchParams]

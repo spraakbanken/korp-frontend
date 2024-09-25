@@ -40,7 +40,7 @@ angular.module("korpApp").component("corpusTimeGraph", {
             const datasetsUndated = [
                 {
                     label: loc("corpselector_selected"),
-                    data: {},
+                    data: {} as Record<number, number | undefined>,
                     backgroundColor: "#cd5c5c",
                 },
                 {

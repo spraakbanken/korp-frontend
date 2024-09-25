@@ -13,11 +13,13 @@ import { convertJstorage, localStorageSet } from "@/local-storage"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
+    if (!splash) throw new Error("preload element missing")
     splash.innerHTML = html`<img class="splash" height="300" width="300" src="${korpLogo}" />`
 }
 
 const createErrorScreen = () => {
     const elem = document.getElementById("preload")
+    if (!elem) throw new Error("preload element missing")
     elem.innerHTML = html`
         <div class="absolute top-1/3 text-center">
             <img class="block" height="300" width="300" src="${korpFail}" />
@@ -82,7 +84,7 @@ createSplashScreen()
         await fetchInitialData(initAuth)
         // Now wait for login to resolve
         await initAuth
-        document.getElementById("preload").remove()
+        document.getElementById("preload")?.remove()
         // startup Angular.js app
         initApp()
     } catch (error) {

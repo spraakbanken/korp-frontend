@@ -204,7 +204,7 @@ export function splitLemgram(lemgram: string): LemgramSplit {
     if (!isLemgram(lemgram)) {
         throw new Error(`Input to splitLemgram is not a lemgram: ${lemgram}`)
     }
-    const match = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d+)(:\d+)?$/)
+    const match = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d+)(:\d+)?$/)!
     return {
         morph: match[2],
         form: match[3],
@@ -228,10 +228,11 @@ const saldoRegexp = /(.*?)\.\.(\d\d?)(:\d+)?$/
  * Render a SALDO string as pretty HTML.
  * @param saldoId A SALDO string, e.g. "vara..2"
  * @param appendIndex Whether the numerical index should be included in output.
- * @returns An HTML string.
+ * @returns An HTML string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
  */
 export function saldoToHtml(saldoId: string, appendIndex?: boolean): string {
     const match = saldoId.match(saldoRegexp)
+    if (!match) return saldoId
     const concept = match[1].replace(/_/g, " ")
     const indexHtml = appendIndex && match[2] !== "1" ? `<sup>${match[2]}</sup>` : ""
     return `${concept}${indexHtml}`
@@ -240,10 +241,11 @@ export function saldoToHtml(saldoId: string, appendIndex?: boolean): string {
 /**
  * Render a SALDO string in pretty plain text.
  * @param saldoId A SALDO string, e.g. "vara..2"
- * @returns An plain-text string.
+ * @returns An plain-text string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
  */
 export function saldoToString(saldoId: string): string {
     const match = saldoId.match(saldoRegexp)
+    if (!match) return saldoId
     const concept = match[1].replace(/_/g, " ")
     const indexSup = parseInt(match[2]) > 1 ? numberToSuperscript(match[2]) : ""
     return `${concept}${indexSup}`
@@ -352,7 +354,7 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
             if (!params) {
                 return
             }
-            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script, params)
+            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script!, params)
             const self = $(this)
             return setTimeout(() => self.val("init"), 1000)
         })
@@ -380,7 +382,7 @@ export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig
     // The property to use for GET: AngularJS $http uses params for
     // GET and data for POST, whereas jQuery.ajax uses data for both
     const data = "params" in conf ? conf.params : conf.data
-    if (calcUrlLength(conf.url, data) > settings.backendURLMaxLength) {
+    if (calcUrlLength(conf.url!, data) > settings.backendURLMaxLength) {
         conf.method = "POST"
         conf.data = data
         if ("params" in conf) delete conf.params
@@ -396,7 +398,7 @@ export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig
  * @param {object} conf A $http or jQuery.ajax configuration object.
  * @returns The same object, possibly modified in-place
  */
-export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T): T {
+export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T & { url: string }): T {
     const fixedConf = httpConfAddMethod(conf)
 
     if (fixedConf.method == "POST") {

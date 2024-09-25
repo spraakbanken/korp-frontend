@@ -50,7 +50,7 @@ export default angular.module("korpApp").component("corpusUpdates", {
                     // Find most recently updated corpora
                     $scope.recentUpdates = settings.corpusListing.corpora
                         .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
-                        .sort((a, b) => b.info.Updated.localeCompare(a.info.Updated))
+                        .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
                     $scope.toggleExpanded(false)
                 }
             }
@@ -59,7 +59,7 @@ export default angular.module("korpApp").component("corpusUpdates", {
                 $scope.expanded = to !== undefined ? to : !$scope.expanded
                 $scope.recentUpdatesFiltered = $scope.expanded
                     ? $scope.recentUpdates
-                    : $scope.recentUpdates.slice(0, $scope.LIMIT)
+                    : $scope.recentUpdates!.slice(0, $scope.LIMIT)
             }
         },
     ],

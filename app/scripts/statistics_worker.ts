@@ -23,20 +23,13 @@ onmessage = function (e) {
     const reduceVals = message.reduceVals
     const groupStatistics = message.groupStatistics
 
-    const simplifyValue = function (values: string[], field: string): string[] {
+    const simplifyValue = function (values: string[] | string, field: string): string[] {
         if (groupStatistics.indexOf(field) != -1) {
-            const newValues: string[] = []
-            map(values, function (value) {
-                // TODO Can this pattern produce false positives? Will ":" not be used for something other than ranking or MWE indexing?
-                newValues.push(value.replace(/(:.+?)($| )/g, "$2"))
-            })
-            return newValues
+            // TODO Can this pattern produce false positives? Will ":" not be used for something other than ranking or MWE indexing?
+            return (values as string[]).map((value) => value.replace(/(:.+?)($| )/g, "$2"))
         } else {
             // for struct attributes only a value is sent, not list
-            if (!isArray(values)) {
-                values = [values]
-            }
-            return values
+            return isArray(values) ? values : [values]
         }
     }
 
@@ -84,7 +77,7 @@ onmessage = function (e) {
         let word = rowIds[i]
         let totalAbs = sumBy(totalAbsoluteGroups[word], "absolute")
         let totalRel = sumBy(totalAbsoluteGroups[word], "relative")
-        const statsValues = []
+        const statsValues: Record<string, string[]>[] = []
 
         for (var j = 0; j < totalAbsoluteGroups[word].length; j++) {
             var variant = totalAbsoluteGroups[word][j]

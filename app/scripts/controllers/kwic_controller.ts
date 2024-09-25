@@ -17,13 +17,13 @@ export type KwicCtrlScope = IScope & {
     }
     active?: boolean
     aborted?: boolean
-    buildQueryOptions: (cqp: string, isPaging: boolean) => KorpQueryParams
+    buildQueryOptions: (isPaging: boolean) => KorpQueryParams
     corpusHits?: Record<string, number>
-    countCorpora?: () => number | undefined
+    countCorpora?: () => number | null
     corpusOrder?: string[]
     cqp?: string
     error?: boolean
-    getProxy?: () => KwicProxy
+    getProxy: () => KwicProxy
     /** Number of total search hits, updated when a search is completed. */
     hits?: number
     /** Number of search hits, may change while search is in progress. */
@@ -31,25 +31,25 @@ export type KwicCtrlScope = IScope & {
     hitsPerPage?: `${number}` | number
     ignoreAbort?: boolean
     initialSearch?: boolean
-    isActive?: () => boolean
-    isReadingMode?: () => boolean
-    kwic: ApiKwic[]
+    isActive: () => boolean
+    isReadingMode: () => boolean
+    kwic?: ApiKwic[]
     loading?: boolean
-    makeRequest?: (isPaging?: boolean) => void
+    makeRequest: (isPaging?: boolean) => void
     onentry: () => void
     onexit: () => void
     onProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
     page?: number
-    pageChange?: (page: number) => void
+    pageChange: (page: number) => void
     progress?: number
-    proxy?: KwicProxy
+    proxy: KwicProxy
     randomSeed?: number
     reading_mode?: boolean
-    readingChange?: () => void
-    renderCompleteResult?: (data: KorpResponse<KorpQueryResponse>, isPaging?: boolean) => void
-    renderResult?: (data: KorpResponse<KorpQueryResponse>) => void
+    readingChange: () => void
+    renderCompleteResult: (data: KorpResponse<KorpQueryResponse>, isPaging?: boolean) => void
+    renderResult: (data: KorpResponse<KorpQueryResponse>) => void
     tabindex?: number
-    toggleReading?: () => void
+    toggleReading: () => void
 }
 
 export class KwicCtrl implements IController {
@@ -78,7 +78,7 @@ export class KwicCtrl implements IController {
 
             // reset randomSeed when doing a search, but not for the first request
             if (!this.scope.initialSearch) {
-                this.scope.randomSeed = null
+                this.scope.randomSeed = undefined
             } else {
                 this.scope.randomSeed = Number(this.location.search()["random_seed"])
             }
@@ -144,7 +144,7 @@ export class KwicCtrl implements IController {
             s.readingChange()
         }
 
-        s.buildQueryOptions = (cqp, isPaging) => {
+        s.buildQueryOptions = (isPaging) => {
             let avoidContext, preferredContext
             const getSortParams = function () {
                 const { sort } = $location.search()
@@ -177,12 +177,15 @@ export class KwicCtrl implements IController {
             const context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
 
             if (!isPaging) {
-                s.proxy.queryData = null
+                s.proxy.queryData = undefined
             }
+
+            const cqp = s.cqp || s.proxy.prevCQP
+            if (!cqp) throw new Error("cqp missing")
 
             const params: KorpQueryParams = {
                 corpus: settings.corpusListing.stringifySelected(),
-                cqp: cqp || s.proxy.prevCQP,
+                cqp,
                 query_data: s.proxy.queryData,
                 context,
                 default_context: preferredContext,
@@ -200,7 +203,7 @@ export class KwicCtrl implements IController {
             }
         }
 
-        s.makeRequest = (isPaging) => {
+        s.makeRequest = (isPaging = false) => {
             if (!isPaging) {
                 s.page = Number($location.search().page) || 0
             }
@@ -210,7 +213,7 @@ export class KwicCtrl implements IController {
 
             s.ignoreAbort = Boolean(s.proxy.hasPending())
 
-            const ajaxParams = s.buildQueryOptions(s.cqp, isPaging)
+            const ajaxParams = s.buildQueryOptions(isPaging)
 
             const req = s.getProxy().makeRequest(
                 { ajaxParams },
@@ -218,7 +221,7 @@ export class KwicCtrl implements IController {
                 (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
                 (data) => $timeout(() => s.renderResult(data))
             )
-            req.done((data) => {
+            req.done((data: KorpResponse<KorpQueryResponse>) => {
                 $timeout(() => {
                     s.loading = false
                     s.renderCompleteResult(data, isPaging)
@@ -248,7 +251,7 @@ export class KwicCtrl implements IController {
         }
 
         s.isReadingMode = () => {
-            return s.reading_mode
+            return s.reading_mode || false
         }
 
         s.renderCompleteResult = (data, isPaging) => {
@@ -287,7 +290,7 @@ export class KwicCtrl implements IController {
         }
 
         s.onexit = () => {
-            $rootScope.jsonUrl = null
+            $rootScope.jsonUrl = undefined
             s.active = false
         }
 

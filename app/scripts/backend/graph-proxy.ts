@@ -8,7 +8,7 @@ import { Factory, httpConfAddMethod } from "@/util"
 
 export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
     granularity: Granularity
-    prevParams: KorpCountTimeParams
+    prevParams: KorpCountTimeParams | null
     prevRequest: AjaxSettings
 
     constructor() {
@@ -18,13 +18,13 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
 
     expandSubCqps(subArray: string[]): Record<`subcqp${number}`, string> {
         const padding = _.fill(new Array(subArray.length.toString().length), "0")
-        const result = []
+        const result: Record<`subcqp${number}`, string> = {}
         for (let i = 0; i < subArray.length; i++) {
             const cqp = subArray[i]
             const p = padding.slice(i.toString().length).join("")
-            result.push([`subcqp${p}${i}`, cqp])
+            result[`subcqp${p}${i}`] = cqp
         }
-        return _.fromPairs(result)
+        return result
     }
 
     makeRequest(
