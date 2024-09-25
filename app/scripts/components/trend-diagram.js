@@ -8,28 +8,8 @@ import graphProxyFactory from "@/backend/graph-proxy"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { formatRelativeHits, hitCountHtml, html } from "@/util"
 import { loc } from "@/i18n"
-import * as trendUtil from "../trend_diagram/trend_util"
+import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS } from "@/trend-diagram/util"
 import "@/components/korp-error"
-
-const granularities = {
-    year: "y",
-    month: "m",
-    day: "d",
-    hour: "h",
-    minute: "n",
-    second: "s",
-}
-
-const zoomLevelToFormat = {
-    second: "YYYY-MM-DD hh:mm:ss",
-    minute: "YYYY-MM-DD hh:mm",
-    hour: "YYYY-MM-DD hh",
-    day: "YYYY-MM-DD",
-    month: "YYYY-MM",
-    year: "YYYY",
-}
-
-const validZoomLevels = Object.keys(granularities)
 
 angular.module("korpApp").component("trendDiagram", {
     template: html`
@@ -118,7 +98,7 @@ angular.module("korpApp").component("trendDiagram", {
                     return
                 }
 
-                const timecqp = trendUtil.getTimeCQP(time, zoom, validZoomLevels.indexOf(zoom) < 3)
+                const timecqp = getTimeCqp(time, zoom, LEVELS.indexOf(zoom) < 3)
                 const decodedCQP = decodeURIComponent(cqp)
                 const opts = {
                     ajaxParams: {
@@ -161,7 +141,7 @@ angular.module("korpApp").component("trendDiagram", {
                 const fmt = "YYYYMMDDHHmmss"
 
                 drawPreloader(from, to)
-                $ctrl.proxy.granularity = granularities[zoom]
+                $ctrl.proxy.granularity = GRANULARITIES[zoom]
                 makeRequest(
                     $ctrl.data.cqp,
                     $ctrl.data.subcqps,
@@ -183,7 +163,7 @@ angular.module("korpApp").component("trendDiagram", {
                 const oldZoom = $ctrl.zoom
 
                 const idealNumHits = 1000
-                let newZoom = _.minBy(validZoomLevels, function (zoom) {
+                let newZoom = _.minBy(LEVELS, function (zoom) {
                     const nPoints = to.diff(from, zoom)
                     return Math.abs(idealNumHits - nPoints)
                 })
@@ -232,7 +212,7 @@ angular.module("korpApp").component("trendDiagram", {
 
                 let output = []
                 for (let [x, y] of _.toPairs(data)) {
-                    const mom = trendUtil.parseDate($ctrl.zoom, x)
+                    const mom = parseDate($ctrl.zoom, x)
                     output.push({ x: mom, y })
                 }
 
@@ -347,7 +327,7 @@ angular.module("korpApp").component("trendDiagram", {
                     const header = [loc("stats_hit")]
 
                     for (let cell of series[0].data) {
-                        const stampformat = zoomLevelToFormat[cell.zoom]
+                        const stampformat = FORMATS[cell.zoom]
                         header.push(moment(cell.x * 1000).format(stampformat))
                     }
 
@@ -391,7 +371,7 @@ angular.module("korpApp").component("trendDiagram", {
                 for (let row of series) {
                     const new_time_row = { label: row.name }
                     for (let item of row.data) {
-                        const stampformat = zoomLevelToFormat[item.zoom]
+                        const stampformat = FORMATS[item.zoom]
                         const timestamp = moment(item.x * 1000).format(stampformat) // this needs to be fixed for other resolutions
                         time_table_columns_intermediate[timestamp] = {
                             name: timestamp,
@@ -643,7 +623,7 @@ angular.module("korpApp").component("trendDiagram", {
                     // formatter is only called once per per "hover detail creation"
                     graph,
                     xFormatter(x) {
-                        return `<span data-val='${x}'>${trendUtil.formatUnixDate($ctrl.zoom, x)}</span>`
+                        return `<span data-val='${x}'>${formatUnixDate($ctrl.zoom, x)}</span>`
                     },
 
                     yFormatter(y) {

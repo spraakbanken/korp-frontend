@@ -1,9 +1,48 @@
 /** @format */
+import { Granularity } from "@/backend/types"
 import moment from "moment"
 
-export function getTimeCQP(time, zoom, coarseGranularity) {
-    let timecqp
-    const m = moment(time * 1000)
+export type Level = "year" | "month" | "day" | "hour" | "minute" | "second"
+
+/**
+ * Mapping from long to short form of granularities.
+ * Moment uses the long form, and Korp API uses the short form.
+ */
+export const GRANULARITIES: Record<Level, Granularity> = {
+    year: "y",
+    month: "m",
+    day: "d",
+    hour: "h",
+    minute: "n",
+    second: "s",
+}
+
+/** Granularities by descending size order */
+export const LEVELS: Level[] = ["year", "month", "day", "hour", "minute", "second"]
+
+/** How to express dates of different granularities */
+export const FORMATS: Record<Level, string> = {
+    second: "YYYY-MM-DD hh:mm:ss",
+    minute: "YYYY-MM-DD hh:mm",
+    hour: "YYYY-MM-DD hh:00",
+    day: "YYYY-MM-DD",
+    month: "YYYY-MM",
+    year: "YYYY",
+}
+
+/** Timestamps come from backend in these shapes */
+const PARSE_FORMATS: Record<Level, string> = {
+    second: "YYYYMMDDHHmmss",
+    minute: "YYYYMMDDHHmm",
+    hour: "YYYYMMDDHH",
+    day: "YYYYMMDD",
+    month: "YYYYMM",
+    year: "YYYY",
+}
+
+export function getTimeCqp(timeUnix: number, zoom: Level, coarseGranularity?: boolean) {
+    let timecqp: string
+    const m = moment(timeUnix * 1000)
 
     const datefrom = moment(m).startOf(zoom).format("YYYYMMDD")
     const dateto = moment(m).endOf(zoom).format("YYYYMMDD")
@@ -34,38 +73,12 @@ export function getTimeCQP(time, zoom, coarseGranularity) {
     return timecqp
 }
 
-export function parseDate(zoom, time) {
-    switch (zoom) {
-        case "year":
-            return moment(time, "YYYY")
-        case "month":
-            return moment(time, "YYYYMM")
-        case "day":
-            return moment(time, "YYYYMMDD")
-        case "hour":
-            return moment(time, "YYYYMMDDHH")
-        case "minute":
-            return moment(time, "YYYYMMDDHHmm")
-        case "second":
-            return moment(time, "YYYYMMDDHHmmss")
-    }
+export function parseDate(zoom: Level, time: string) {
+    return moment(time, PARSE_FORMATS[zoom])
 }
 
-export function formatUnixDate(zoom, time) {
+export function formatUnixDate(zoom: Level, time: number) {
     // TODO this should respect locale and could present whole months as August 2020 instead of 2020-08
-    const m = moment.unix(String(time))
-    switch (zoom) {
-        case "year":
-            return m.format("YYYY")
-        case "month":
-            return m.format("YYYY-MM")
-        case "day":
-            return m.format("YYYY-MM-DD")
-        case "hour":
-            return m.format("YYYY-MM-DD HH:00")
-        case "minute":
-            return m.format("YYYY-MM-DD HH:mm")
-        case "second":
-            return m.format("YYYY-MM-DD HH:mm:ss")
-    }
+    const m = moment.unix(time)
+    return m.format(FORMATS[zoom])
 }
