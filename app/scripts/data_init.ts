@@ -204,10 +204,10 @@ function setInitialCorpora(): void {
             )
         }
     } else {
-        let expandedCorpora = []
+        let expandedCorpora: string[] = []
         for (let preItem of settings.preselected_corpora) {
             preItem = preItem.replace(/^__/g, "")
-            expandedCorpora = [].concat(expandedCorpora, treeUtil.getAllCorporaInFolders(settings.folders, preItem))
+            expandedCorpora.push(...treeUtil.getAllCorporaInFolders(settings.folders, preItem))
         }
         // folders expanded, save
         settings.preselected_corpora = expandedCorpora

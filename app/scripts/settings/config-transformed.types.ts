@@ -33,4 +33,8 @@ export type CorpusTransformed = Omit<
     time?: Record<number, number>
     non_time?: number
     morphology?: string
+    selected?: boolean
+    tokens?: number
+    sentences?: number
+    userHasAccess?: boolean
 }

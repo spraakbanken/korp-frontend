@@ -6,7 +6,13 @@ import settings from "@/settings"
 import * as authenticationProxy from "@/components/auth/auth"
 import { html } from "@/util"
 import { loc } from "@/i18n"
-import * as treeUtil from "./util"
+import {
+    filterCorporaOnCredentials,
+    getAllSelected,
+    initCorpusStructure,
+    recalcFolderStatus,
+    updateLimitedAccess,
+} from "./util"
 import "@/components/corpus_chooser/corpus-time-graph"
 import "@/components/corpus_chooser/info-box"
 import "@/components/corpus_chooser/tree"
@@ -149,7 +155,7 @@ angular.module("korpApp").component("corpusChooser", {
                     return prev
                 }, {})
 
-                $ctrl.root = treeUtil.initCorpusStructure(ccCorpora, corpusIds)
+                $ctrl.root = initCorpusStructure(ccCorpora, corpusIds)
 
                 $ctrl.totalCount = Object.values(ccCorpora).length
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
@@ -190,7 +196,7 @@ angular.module("korpApp").component("corpusChooser", {
             }
 
             $ctrl.onSelect = function () {
-                const currentCorpora = treeUtil.getAllSelected($ctrl.root)
+                const currentCorpora = getAllSelected($ctrl.root)
                 select(currentCorpora)
             }
 
@@ -208,13 +214,17 @@ angular.module("korpApp").component("corpusChooser", {
 
             $ctrl.updateLimitedAccess = function () {
                 if ($ctrl.root) {
-                    treeUtil.updateLimitedAccess($ctrl.root, $ctrl.credentials)
+                    updateLimitedAccess($ctrl.root, $ctrl.credentials)
                 }
             }
 
             function select(corporaIds, quiet = false) {
-                const selection = treeUtil.filterCorporaOnCredentials(settings.corpora, corporaIds, $ctrl.credentials)
-                treeUtil.recalcFolderStatus($ctrl.root)
+                const selection = filterCorporaOnCredentials(
+                    Object.values(settings.corpora),
+                    corporaIds,
+                    $ctrl.credentials
+                )
+                recalcFolderStatus($ctrl.root)
                 $ctrl.updateSelectedCount(selection)
                 // used when there is only one corpus selected to show name
                 if (selection.length == 1) {

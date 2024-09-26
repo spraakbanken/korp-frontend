@@ -1,6 +1,6 @@
 /** @format */
 import angular from "angular"
-import * as treeUtil from "./util"
+import { getAllCorpora } from "./util"
 import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
 import { collatorSort, html } from "@/util"
@@ -97,7 +97,7 @@ angular.module("korpApp").component("ccTree", {
                     return
                 }
 
-                const corporaIds = treeUtil.getAllCorpora(folder)
+                const corporaIds = getAllCorpora(folder)
                 if (selectOnly(e)) {
                     $ctrl.selectOnly(corporaIds)
                 } else {
