@@ -1,11 +1,41 @@
 /** @format */
 import _ from "lodash"
-import angular from "angular"
+import angular, { IController, IPromise, IQService } from "angular"
 import settings from "@/settings"
 import { html, lemgramToString, saldoToString } from "@/util"
 import { loc } from "@/i18n"
 import "@/services/lexicons"
 import "@/directives/typeahead-click-open"
+import { LemgramCount, LexiconsService } from "@/services/lexicons"
+
+type AutocController = IController & {
+    input: string
+    isRawInput: boolean
+    type: "lemgram" | "sense"
+    variant: string
+    disableLemgramAutocomplete: boolean
+    errorMessage: string
+    errorOnEmpty: boolean
+    onChange: (change: { output?: string; isRawOutput: boolean }) => void
+    isError: boolean
+    textInField: string
+    placeholder: string
+    typeaheadClose: () => void
+    lemgramify: (lemgram: string) => Lemgram | undefined
+    sensify: (saldo: string) => Saldo
+    placeholderToString: (placeholder: string) => string | undefined
+    textInput: () => void
+    selectedItem: (item: unknown, selected: LemgramOut | Sense) => void
+    getMorphologies: (corpora: string[]) => string[]
+    getRows: (input: string) => IPromise<LemgramOut[]> | IPromise<Sense[]> | undefined
+    getLemgrams: (input: string, morphologies: string[], corpora: string[]) => IPromise<LemgramOut[]>
+    getSenses: (input: string) => IPromise<Sense[]>
+}
+
+type Lemgram = { main: string; index: string; pos: string; namespace?: string }
+type LemgramOut = LemgramCount & { parts: Lemgram | undefined; variant: string }
+type Saldo = { main: string; index: string }
+type Sense = { sense: string; parts: Saldo; desc?: Saldo; variant: string }
 
 angular.module("korpApp").component("autoc", {
     template: html`
@@ -70,8 +100,8 @@ angular.module("korpApp").component("autoc", {
     controller: [
         "$q",
         "lexicons",
-        function ($q, lexicons) {
-            const ctrl = this
+        function ($q: IQService, lexicons: LexiconsService) {
+            const ctrl = this as AutocController
 
             ctrl.isError = false
 
@@ -89,11 +119,12 @@ angular.module("korpApp").component("autoc", {
                 }
             }
 
-            ctrl.lemgramify = function (lemgram) {
+            // TODO Check compatibility and merge with splitLemgram in @/util
+            ctrl.lemgramify = function (lemgram: string) {
                 const lemgramRegExp = /([^_.-]*--)?(.*)\.\.(\w+)\.(\d\d?)/
                 const match = lemgram.match(lemgramRegExp)
                 if (!match) {
-                    return false
+                    return
                 }
                 return {
                     main: match[2].replace(/_/g, " "),
@@ -103,7 +134,8 @@ angular.module("korpApp").component("autoc", {
                 }
             }
 
-            ctrl.sensify = function (sense) {
+            // TODO Check compatibility and use saldoRegexp in @/util
+            ctrl.sensify = function (sense: string) {
                 const senseParts = sense.split("..")
                 return {
                     main: senseParts[0].replace(/_/g, " "),
@@ -111,7 +143,7 @@ angular.module("korpApp").component("autoc", {
                 }
             }
 
-            ctrl.placeholderToString = _.memoize(function (placeholder) {
+            ctrl.placeholderToString = _.memoize(function (placeholder: string) {
                 if (!placeholder) {
                     return
                 }
@@ -126,22 +158,22 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.selectedItem = function (item, selected) {
                 if (ctrl.type === "lemgram") {
-                    ctrl.placeholder = selected.lemgram
+                    ctrl.placeholder = (selected as LemgramOut).lemgram
                 } else {
-                    ctrl.placeholder = selected.sense
+                    ctrl.placeholder = (selected as Sense).sense
                 }
                 ctrl.textInField = ""
                 ctrl.onChange({ output: ctrl.placeholder, isRawOutput: false })
                 ctrl.typeaheadClose()
             }
 
-            ctrl.getMorphologies = function (corporaIDs) {
-                const morphologies = []
+            ctrl.getMorphologies = function (corpora: string[]) {
+                const morphologies: string[] = []
                 if (ctrl.variant === "dalin") {
                     morphologies.push("dalinm")
                 } else {
-                    for (let corporaID of corporaIDs) {
-                        const morfs = settings.corpora[corporaID].morphology || ""
+                    for (let id of corpora) {
+                        const morfs = settings.corpora[id].morphology || ""
                         for (let morf of morfs.split("|")) {
                             if (morf !== "" && !morphologies.includes(morf)) {
                                 morphologies.push(morf)
@@ -155,52 +187,55 @@ angular.module("korpApp").component("autoc", {
                 return morphologies
             }
 
-            ctrl.getRows = function (input) {
+            ctrl.getRows = function (input: string) {
                 const corporaIDs = _.map(settings.corpusListing.selected, "id")
                 const morphologies = ctrl.getMorphologies(corporaIDs)
                 if (ctrl.type === "lemgram") {
                     return ctrl.getLemgrams(input, morphologies, corporaIDs)
                 } else if (ctrl.type === "sense") {
-                    return ctrl.getSenses(input, morphologies, corporaIDs)
+                    return ctrl.getSenses(input)
                 }
             }
 
-            ctrl.getLemgrams = function (input, morphologies, corporaIDs) {
-                const deferred = $q.defer()
-                const http = lexicons.getLemgrams(input, morphologies, corporaIDs)
+            ctrl.getLemgrams = function (input: string, morphologies: string[], corpora: string[]) {
+                const deferred = $q.defer<LemgramOut[]>()
+                const http = lexicons.getLemgrams(input, morphologies, corpora)
                 http.then(function (data) {
-                    data.forEach(function (item) {
-                        if (ctrl.variant === "affix") {
-                            item.count = -1
+                    const output: LemgramOut[] = data.map((item) => {
+                        if (ctrl.variant === "affix") item.count = -1
+                        return {
+                            ...item,
+                            parts: ctrl.lemgramify(item.lemgram),
+                            variant: ctrl.variant,
                         }
-                        item.parts = ctrl.lemgramify(item.lemgram)
-                        item.variant = ctrl.variant
                     })
-                    data.sort((a, b) => b.count - a.count)
-                    return deferred.resolve(data)
+                    output.sort((a, b) => b.count - a.count)
+                    return deferred.resolve(output)
                 })
                 return deferred.promise
             }
 
-            ctrl.getSenses = function (input, morphologies, corporaIDs) {
-                const deferred = $q.defer()
-                const http = lexicons.getSenses(input, morphologies.join("|"), corporaIDs)
+            ctrl.getSenses = function (input: string) {
+                const deferred = $q.defer<Sense[]>()
+                const http = lexicons.getSenses(input)
                 http.then(function (data) {
-                    data.forEach(function (item) {
-                        item.parts = ctrl.sensify(item.sense)
-                        if (item.desc) {
-                            item.desc = ctrl.sensify(item.desc)
+                    const output: Sense[] = data.map((item) => {
+                        const out = {
+                            sense: item.sense,
+                            parts: ctrl.sensify(item.sense),
+                            desc: item.desc ? ctrl.sensify(item.desc) : undefined,
+                            variant: ctrl.variant,
                         }
-                        item.variant = ctrl.variant
+                        return out
                     })
-                    data.sort(function (a, b) {
+                    output.sort(function (a, b) {
                         if (a.parts.main === b.parts.main) {
-                            return b.parts.index < a.parts.index
+                            return b.parts.index.localeCompare(a.parts.index)
                         } else {
                             return a.sense.length - b.sense.length
                         }
                     })
-                    return deferred.resolve(data)
+                    return deferred.resolve(output)
                 })
                 return deferred.promise
             }

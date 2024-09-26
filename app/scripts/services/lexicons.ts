@@ -9,8 +9,8 @@ import { Karp7QueryResponse, Karp7SaldoEntry, Karp7SwefnEntry } from "@/karp/kar
 export type LexiconsService = {
     relatedWordSearch: (lemgram: string) => IPromise<LexiconsRelatedWordsResponse>
     // TODO Type Karp API
-    getLemgrams: (wf: string, resources: string[], corporaIDs: string[]) => IPromise<any>
-    getSenses: (wf: string) => IPromise<any>
+    getLemgrams: (wf: string, resources: string[], corporaIDs: string[]) => IPromise<LemgramCount[]>
+    getSenses: (wf: string) => IPromise<SenseResult[]>
 }
 export type LexiconsRelatedWordsResponse = LexiconsRelatedWordsItem[]
 export type LexiconsRelatedWordsItem = {
@@ -24,7 +24,8 @@ type KorpLemgramCountResponse = {
     [lemgram: string]: number
 }
 
-type LemgramCount = { lemgram: string; count: number }
+export type LemgramCount = { lemgram: string; count: number }
+export type SenseResult = { sense: string; desc: string }
 
 angular.module("korpApp").factory("lexicons", [
     "$q",
@@ -39,7 +40,7 @@ angular.module("korpApp").factory("lexicons", [
 
         return {
             getLemgrams(wf: string, resources: string[], corporaIDs: string[]) {
-                const deferred = $q.defer()
+                const deferred = $q.defer<LemgramCount[]>()
 
                 $http<Karp7QueryResponse<string>>({
                     method: "GET",
@@ -87,7 +88,7 @@ angular.module("korpApp").factory("lexicons", [
             },
 
             getSenses(wf: string) {
-                const deferred = $q.defer()
+                const deferred = $q.defer<SenseResult[]>()
 
                 $http<Karp7QueryResponse<string>>({
                     method: "GET",

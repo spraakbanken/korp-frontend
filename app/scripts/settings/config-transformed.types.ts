@@ -32,4 +32,5 @@ export type CorpusTransformed = Omit<
     common_attributes?: Record<string, true>
     time?: Record<number, number>
     non_time?: number
+    morphology?: string
 }
