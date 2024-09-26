@@ -1,15 +1,81 @@
 /** @format */
-import angular from "angular"
+import angular, { IController, IRootElementService, ITimeoutService } from "angular"
 import _ from "lodash"
-import moment from "moment"
+import moment, { Moment } from "moment"
 import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
-import graphProxyFactory from "@/backend/graph-proxy"
+import graphProxyFactory, {
+    GraphProxy,
+    KorpCountTimeResponse,
+    KorpGraphStats,
+    KorpGraphStatsCqp,
+} from "@/backend/graph-proxy"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { formatRelativeHits, hitCountHtml, html } from "@/util"
 import { loc } from "@/i18n"
-import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS } from "@/trend-diagram/util"
+import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
 import "@/components/korp-error"
+import { GraphTab, RootScope } from "@/root-scope.types"
+import { Histogram, KorpResponse, ProgressReport } from "@/backend/types"
+import { JQueryExtended } from "@/jquery.types"
+import { CorpusListing } from "@/corpus_listing"
+
+type TrendDiagramController = IController & {
+    data: GraphTab
+    onProgress: (progress: number) => void
+    updateLoading: (loading: boolean) => void
+    graph?: Graph
+    time_grid: Slick.Grid<any>
+    hasEmptyIntervals?: boolean
+    zoom: Level
+    proxy: GraphProxy
+    $result: JQLite
+    mode: "line" | "bar" | "table"
+    error: boolean
+}
+
+type Series = {
+    data: SeriesPoint[]
+    abs_data: SeriesPoint[]
+    color: string
+    name: string
+    cqp: string
+    emptyIntervals?: SeriesPoint[][]
+}
+
+type Point = { x: Moment; y: number }
+
+type SeriesPoint = {
+    /** Unix timestamp */
+    x: number
+    y: number
+    zoom: Level
+}
+
+// Rickshaw graph
+type Graph = {
+    series: Series[]
+    [key: string]: any
+}
+
+type TableRow = {
+    label: string
+    [timestamp: `${number}${string}`]: [number, number]
+}
+
+const PALETTE = [
+    "#ca472f",
+    "#0b84a5",
+    "#f6c85f",
+    "#9dd866",
+    "#ffa056",
+    "#8dddd0",
+    "#df9eaa",
+    "#6f4e7c",
+    "#544e4d",
+    "#0e6e16",
+    "#975686",
+]
 
 angular.module("korpApp").component("trendDiagram", {
     template: html`
@@ -18,13 +84,15 @@ angular.module("korpApp").component("trendDiagram", {
             <div class="graph_header">
                 <div class="controls">
                     <div class="btn-group form_switch">
-                        <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'line'"
-                            >{{'line' | loc:$root.lang}}</label
-                        ><label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'bar'"
-                            >{{'bar' | loc:$root.lang}}</label
-                        ><label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'table'"
-                            >{{'table' | loc:$root.lang}}</label
-                        >
+                        <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'line'">
+                            {{'line' | loc:$root.lang}}
+                        </label>
+                        <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'bar'">
+                            {{'bar' | loc:$root.lang}}
+                        </label>
+                        <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'table'">
+                            {{'table' | loc:$root.lang}}
+                        </label>
                     </div>
                     <div class="non_time_div">
                         <span rel="localize[non_time_before]"></span><span class="non_time"></span
@@ -72,8 +140,8 @@ angular.module("korpApp").component("trendDiagram", {
         "$rootScope",
         "$timeout",
         "$element",
-        function ($rootScope, $timeout, $element) {
-            const $ctrl = this
+        function ($rootScope: RootScope, $timeout: ITimeoutService, $element: IRootElementService) {
+            const $ctrl = this as TrendDiagramController
             $ctrl.zoom = "year"
             $ctrl.proxy = graphProxyFactory.create()
             $ctrl.$result = $element.find(".graph_tab")
@@ -81,8 +149,12 @@ angular.module("korpApp").component("trendDiagram", {
             $ctrl.error = false
 
             $ctrl.$onInit = () => {
-                const [from, to] = $ctrl.data.corpusListing.getMomentInterval()
-                checkZoomLevel(from, to, true)
+                const interval = $ctrl.data.corpusListing.getMomentInterval()
+                if (!interval) {
+                    console.error("No interval")
+                    return
+                }
+                checkZoomLevel(interval[0], interval[1], true)
             }
 
             $ctrl.isGraph = () => ["line", "bar"].includes($ctrl.mode)
@@ -115,28 +187,18 @@ angular.module("korpApp").component("trendDiagram", {
                 $rootScope.kwicTabs.push({ queryParams: opts })
             }
 
-            $ctrl.localUpdateLoading = (loading) => {
+            $ctrl.localUpdateLoading = (loading: boolean) => {
                 $ctrl.updateLoading(loading)
                 $ctrl.loading = loading
             }
 
-            function drawPreloader(from, to) {
-                let left, width
-                if ($ctrl.graph) {
-                    left = $ctrl.graph.x(from.unix())
-                    width = $ctrl.graph.x(to.unix()) - left
-                } else {
-                    left = 0
-                    width = "100%"
-                }
-
-                $(".preloader", $ctrl.$result).css({
-                    left,
-                    width,
-                })
+            function drawPreloader(from: Moment, to: Moment): void {
+                const left = $ctrl.graph ? $ctrl.graph.x(from.unix()) : 0
+                const width = $ctrl.graph ? $ctrl.graph.x(to.unix()) - left : "100%"
+                $(".preloader", $ctrl.$result).css({ left, width })
             }
 
-            function setZoom(zoom, from, to) {
+            function setZoom(zoom: Level, from: Moment, to: Moment) {
                 $ctrl.zoom = zoom
                 const fmt = "YYYYMMDDHHmmss"
 
@@ -146,53 +208,56 @@ angular.module("korpApp").component("trendDiagram", {
                     $ctrl.data.cqp,
                     $ctrl.data.subcqps,
                     $ctrl.data.corpusListing,
-                    $ctrl.data.labelMapping,
                     $ctrl.data.showTotal,
-                    from.format(fmt),
-                    to.format(fmt)
+                    from.format(fmt) as `${number}`,
+                    to.format(fmt) as `${number}`
                 )
             }
 
-            function checkZoomLevel(from, to, forceSearch) {
-                if (from == null) {
-                    let domain = $ctrl.graph.renderer.domain()
-                    from = moment.unix(domain.x[0])
-                    to = moment.unix(domain.x[1])
+            function checkZoomLevelDefault() {
+                if (!$ctrl.graph) {
+                    console.error("No graph")
+                    return
                 }
+                const domain = $ctrl.graph.renderer.domain()
+                checkZoomLevel(moment.unix(domain.x[0]), moment.unix(domain.x[1]))
+            }
 
+            function checkZoomLevel(from: Moment, to: Moment, forceSearch?: boolean) {
                 const oldZoom = $ctrl.zoom
-
                 const idealNumHits = 1000
-                let newZoom = _.minBy(LEVELS, function (zoom) {
+                const newZoom = _.minBy(LEVELS, function (zoom) {
                     const nPoints = to.diff(from, zoom)
                     return Math.abs(idealNumHits - nPoints)
-                })
+                })!
 
                 if ((newZoom && oldZoom !== newZoom) || forceSearch) {
                     setZoom(newZoom, from, to)
                 }
             }
 
-            function fillMissingDate(data) {
-                const dateArray = _.map(data, "x")
+            function fillMissingDate(data: Point[]): Point[] {
+                const dateArray = data.map((point) => point.x)
                 const min = _.minBy(dateArray, (mom) => mom.toDate())
                 const max = _.maxBy(dateArray, (mom) => mom.toDate())
 
+                if (!min || !max) {
+                    return data
+                }
+
+                // Round range boundaries, e.g. [June 5, Sep 18] => [June 1, Sep 30]
                 min.startOf($ctrl.zoom)
                 max.endOf($ctrl.zoom)
 
                 const n_diff = moment(max).diff(min, $ctrl.zoom)
 
-                const momentMapping = _.fromPairs(
-                    _.map(data, (item) => {
-                        const mom = moment(item.x)
-                        mom.startOf($ctrl.zoom)
-                        return [mom.unix(), item.y]
-                    })
+                const momentMapping: Record<number, number> = _.fromPairs(
+                    data.map((point) => [moment(point.x).startOf($ctrl.zoom).unix(), point.y])
                 )
 
-                const newMoments = []
-                for (let i of _.range(0, n_diff + 1)) {
+                const newMoments: { x: Moment; y: number }[] = []
+                for (const i of _.range(0, n_diff + 1)) {
+                    // TODO Looks like this declaration should be outside the loop?
                     var lastYVal
                     const newMoment = moment(min).add(i, $ctrl.zoom)
 
@@ -204,31 +269,24 @@ angular.module("korpApp").component("trendDiagram", {
                     }
                 }
 
-                return [].concat(data, newMoments)
+                return [...data, ...newMoments]
             }
 
-            function getSeriesData(data, zoom) {
+            function getSeriesData(data: Histogram, zoom: Level): SeriesPoint[] {
                 delete data[""]
-
-                let output = []
-                for (let [x, y] of _.toPairs(data)) {
-                    const mom = parseDate($ctrl.zoom, x)
-                    output.push({ x: mom, y })
-                }
-
-                output = fillMissingDate(output)
-
-                for (let tuple of output) {
-                    tuple.x = tuple.x.unix()
-                    tuple.zoom = zoom
-                }
-
-                output = output.sort((a, b) => a.x - b.x)
-
+                const points: Point[] = _.map(data, (y, date) => ({ x: parseDate($ctrl.zoom, date), y: y! }))
+                const pointsFilled = fillMissingDate(points)
+                const output: SeriesPoint[] = pointsFilled.map((point) => ({
+                    x: point.x.unix(),
+                    y: point.y,
+                    zoom,
+                }))
+                output.sort((a, b) => a.x - b.x)
                 return output
             }
 
-            function getNonTime() {
+            /** Percentage of hits that are undated. */
+            function getNonTime(): number {
                 // TODO: move settings.corpusListing.selected to the subview
                 const non_time = _.reduce(
                     _.map(settings.corpusListing.selected, "non_time"),
@@ -236,12 +294,13 @@ angular.module("korpApp").component("trendDiagram", {
                     0
                 )
                 const sizelist = _.map(settings.corpusListing.selected, (item) => Number(item.info.Size))
-                const totalsize = _.reduce(sizelist, (a, b) => a + b)
+                const totalsize = _.reduce(sizelist, (a, b) => a + b, 0)
                 return (non_time / totalsize) * 100
             }
 
-            function getEmptyIntervals(data) {
-                const intervals = []
+            /** Find intervals within the full timespan where no material is dated. */
+            function getEmptyIntervals(data: SeriesPoint[]): SeriesPoint[][] {
+                const intervals: SeriesPoint[][] = []
                 let i = 0
 
                 while (i < data.length) {
@@ -267,21 +326,21 @@ angular.module("korpApp").component("trendDiagram", {
                 return intervals
             }
 
-            function drawIntervals(graph) {
-                const { emptyIntervals } = graph.series[0]
-                $ctrl.hasEmptyIntervals = emptyIntervals.length
-                let obj = graph.renderer.domain()
-                let [from, to] = obj.x
+            /** Adds divs with .empty_area to fill spaces in graph where there is no dated material */
+            function drawIntervals(graph: Graph): void {
+                const emptyIntervals = graph.series[0].emptyIntervals!
+                $ctrl.hasEmptyIntervals = !!emptyIntervals.length
+                const [from, to]: number[] = graph.renderer.domain().x
 
                 const unitSpan = moment.unix(to).diff(moment.unix(from), $ctrl.zoom)
                 const unitWidth = graph.width / unitSpan
 
                 $(".empty_area", $ctrl.$result).remove()
-                for (let list of emptyIntervals) {
-                    const max = _.maxBy(list, "x")
-                    const min = _.minBy(list, "x")
-                    from = graph.x(min.x)
-                    to = graph.x(max.x)
+                for (const list of emptyIntervals) {
+                    const max = _.maxBy(list, "x")!
+                    const min = _.minBy(list, "x")!
+                    const from = graph.x(min.x)
+                    const to = graph.x(max.x)
 
                     $("<div>", { class: "empty_area" })
                         .css({
@@ -292,7 +351,7 @@ angular.module("korpApp").component("trendDiagram", {
                 }
             }
 
-            function setBarMode() {
+            function setBarMode(): void {
                 /**
                  * This code enables the first series in the legend if there are none selected (except sum)
                  * It then disables the sum data series since that data does not make sense in bar mode
@@ -307,7 +366,7 @@ angular.module("korpApp").component("trendDiagram", {
                 }
             }
 
-            function setTableMode(series) {
+            function setTableMode(series: Series[]) {
                 $(".chart,.legend", $ctrl.$result).hide()
                 $(".time_table", $ctrl.$result.parent()).show()
                 const nRows = series.length || 2
@@ -331,10 +390,10 @@ angular.module("korpApp").component("trendDiagram", {
                         header.push(moment(cell.x * 1000).format(stampformat))
                     }
 
-                    const output = [header]
+                    const output: (string | number)[][] = [header]
 
                     for (let row of series) {
-                        const cells = [row.name === "&Sigma;" ? "Σ" : row.name]
+                        const cells: (string | number)[] = [row.name === "&Sigma;" ? "Σ" : row.name]
                         for (let cell of row.data) {
                             if (selVal === "relative") {
                                 cells.push(cell.y)
@@ -365,15 +424,15 @@ angular.module("korpApp").component("trendDiagram", {
                 })
             }
 
-            function renderTable(series) {
-                const time_table_data = []
-                const time_table_columns_intermediate = {}
-                for (let row of series) {
-                    const new_time_row = { label: row.name }
-                    for (let item of row.data) {
+            function renderTable(series: Series[]) {
+                const rows: TableRow[] = []
+                const columnsMap: Record<string, Slick.Column<any>> = {}
+                for (const seriesRow of series) {
+                    const tableRow: TableRow = { label: seriesRow.name }
+                    for (const item of seriesRow.data) {
                         const stampformat = FORMATS[item.zoom]
                         const timestamp = moment(item.x * 1000).format(stampformat) // this needs to be fixed for other resolutions
-                        time_table_columns_intermediate[timestamp] = {
+                        columnsMap[timestamp] = {
                             name: timestamp,
                             field: timestamp,
                             formatter(row, cell, value, columnDef, dataContext) {
@@ -382,14 +441,14 @@ angular.module("korpApp").component("trendDiagram", {
                                     : hitCountHtml(value[0], value[1], $rootScope.lang)
                             },
                         }
-                        const i = _.sortedIndexOf(_.map(row.abs_data, "x"), item.x)
+                        const i = _.sortedIndexOf(_.map(seriesRow.abs_data, "x"), item.x)
                         // [absolute, relative], like in statistics_worker.ts
-                        new_time_row[timestamp] = [row.abs_data[i].y, item.y]
+                        tableRow[timestamp] = [seriesRow.abs_data[i].y, item.y]
                     }
-                    time_table_data.push(new_time_row)
+                    rows.push(tableRow)
                 }
                 // Sort columns
-                const time_table_columns = [
+                const columns: Slick.Column<any>[] = [
                     {
                         name: "Hit",
                         field: "label",
@@ -398,11 +457,11 @@ angular.module("korpApp").component("trendDiagram", {
                         },
                     },
                 ]
-                for (let key of _.keys(time_table_columns_intermediate).sort()) {
-                    time_table_columns.push(time_table_columns_intermediate[key])
+                for (const key of _.keys(columnsMap).sort()) {
+                    columns.push(columnsMap[key])
                 }
 
-                const time_grid = new Slick.Grid($(".time_table", $ctrl.$result), time_table_data, time_table_columns, {
+                const time_grid = new Slick.Grid($(".time_table", $ctrl.$result), rows, columns, {
                     enableCellNavigation: false,
                     enableColumnReorder: false,
                     forceFitColumns: false,
@@ -411,47 +470,29 @@ angular.module("korpApp").component("trendDiagram", {
                 $ctrl.time_grid = time_grid
             }
 
-            function makeSeries(Rickshaw, data, cqp, labelMapping, zoom) {
-                let color, series
+            function makeSeries(Rickshaw: any, data: KorpCountTimeResponse, cqp: string, zoom: Level) {
+                const createTotalSeries = (stats: KorpGraphStats) => ({
+                    data: getSeriesData(stats.relative, zoom),
+                    color: "steelblue",
+                    name: "&Sigma;",
+                    cqp,
+                    abs_data: getSeriesData(stats.absolute, zoom),
+                })
 
-                if (_.isArray(data.combined)) {
-                    const palette = [
-                        "#ca472f",
-                        "#0b84a5",
-                        "#f6c85f",
-                        "#9dd866",
-                        "#ffa056",
-                        "#8dddd0",
-                        "#df9eaa",
-                        "#6f4e7c",
-                        "#544e4d",
-                        "#0e6e16",
-                        "#975686",
-                    ]
-                    let colorIdx = 0
-                    series = []
-                    for (let item of data.combined) {
-                        color = palette[colorIdx % palette.length]
-                        colorIdx += 1
-                        series.push({
-                            data: getSeriesData(item.relative, zoom),
-                            color,
-                            name: item.cqp ? $ctrl.data.labelMapping[item.cqp] : "&Sigma;",
-                            cqp: item.cqp || cqp,
-                            abs_data: getSeriesData(item.absolute, zoom),
-                        })
-                    }
-                } else {
-                    series = [
-                        {
-                            data: getSeriesData(data.combined.relative, zoom),
-                            color: "steelblue",
-                            name: "&Sigma;",
-                            cqp,
-                            abs_data: getSeriesData(data.combined.absolute, zoom),
-                        },
-                    ]
-                }
+                const createSubquerySeries = (stats: KorpGraphStatsCqp, i: number) => ({
+                    data: getSeriesData(stats.relative, zoom),
+                    color: PALETTE[i % PALETTE.length],
+                    name: $ctrl.data.labelMapping[stats.cqp],
+                    cqp: stats.cqp,
+                    abs_data: getSeriesData(stats.absolute, zoom),
+                })
+
+                const series: Series[] = _.isArray(data.combined)
+                    ? data.combined.map((item, i) =>
+                          "cqp" in item ? createSubquerySeries(item, i) : createTotalSeries(item)
+                      )
+                    : [createTotalSeries(data.combined)]
+
                 Rickshaw.Series.zeroFill(series)
 
                 const emptyIntervals = getEmptyIntervals(series[0].data)
@@ -465,11 +506,15 @@ angular.module("korpApp").component("trendDiagram", {
                 return series
             }
 
-            function spliceData(newSeries) {
+            function spliceData(newSeries: Series[]) {
+                if (!$ctrl.graph) {
+                    console.error("No graph")
+                    return
+                }
                 for (let seriesIndex = 0; seriesIndex < $ctrl.graph.series.length; seriesIndex++) {
                     const seriesObj = $ctrl.graph.series[seriesIndex]
                     const first = newSeries[seriesIndex].data[0].x
-                    const last = _.last(newSeries[seriesIndex].data).x
+                    const last = _.last(newSeries[seriesIndex].data)!.x
                     let startSplice = false
                     let from = 0
                     let n_elems = seriesObj.data.length + newSeries[seriesIndex].data.length
@@ -496,10 +541,11 @@ angular.module("korpApp").component("trendDiagram", {
             }
 
             function previewPanStop() {
+                if (!$ctrl.graph) {
+                    console.error("No graph")
+                    return
+                }
                 const visibleData = $ctrl.graph.stackData()
-
-                const count = _.countBy(visibleData[0], (coor) => coor.zoom)
-
                 const grouped = _.groupBy(visibleData[0], "zoom")
 
                 for (let zoomLevel in grouped) {
@@ -514,21 +560,27 @@ angular.module("korpApp").component("trendDiagram", {
                 }
             }
 
-            function renderGraph(Rickshaw, data, cqp, labelMapping, currentZoom, showTotal) {
-                let series
+            function renderGraph(
+                Rickshaw: any,
+                data: KorpResponse<KorpCountTimeResponse>,
+                cqp: string,
+                currentZoom: Level,
+                showTotal?: boolean
+            ) {
+                let series: Series[]
 
                 const done = () => {
                     $ctrl.localUpdateLoading(false)
                     $(window).trigger("resize")
                 }
 
-                if (data.ERROR) {
+                if ("ERROR" in data) {
                     $ctrl.error = true
                     return
                 }
 
                 if ($ctrl.graph) {
-                    series = makeSeries(Rickshaw, data, cqp, labelMapping, currentZoom)
+                    series = makeSeries(Rickshaw, data, cqp, currentZoom)
                     spliceData(series)
                     drawIntervals($ctrl.graph)
                     $ctrl.graph.render()
@@ -539,16 +591,16 @@ angular.module("korpApp").component("trendDiagram", {
                 const nontime = getNonTime()
 
                 if (nontime) {
-                    $(".non_time", $ctrl.$result)
+                    const nontimeEl = $(".non_time", $ctrl.$result)
                         .empty()
                         .text(nontime.toFixed(2) + "%")
-                        .parent()
-                        .localize()
+                        .parent() as JQueryExtended
+                    nontimeEl.localize()
                 } else {
                     $(".non_time_div", $ctrl.$result).hide()
                 }
 
-                series = makeSeries(Rickshaw, data, cqp, labelMapping, currentZoom)
+                series = makeSeries(Rickshaw, data, cqp, currentZoom)
 
                 const graph = new Rickshaw.Graph({
                     element: $(".chart", $ctrl.$result).empty().get(0),
@@ -702,15 +754,11 @@ angular.module("korpApp").component("trendDiagram", {
                 })
 
                 const old_render = xAxis.render
-                xAxis.render = _.throttle(
-                    () => {
-                        old_render.call(xAxis)
-                        drawIntervals(graph)
-                        checkZoomLevel()
-                    },
-
-                    20
-                )
+                xAxis.render = _.throttle(() => {
+                    old_render.call(xAxis)
+                    drawIntervals(graph)
+                    checkZoomLevelDefault()
+                }, 20)
 
                 xAxis.render()
 
@@ -723,11 +771,18 @@ angular.module("korpApp").component("trendDiagram", {
                 done()
             }
 
-            function onProgress(progressObj) {
-                $ctrl.onProgress(Math.round(progressObj["stats"]))
+            function onProgress(progressObj: ProgressReport) {
+                $ctrl.onProgress(Math.round(progressObj.stats))
             }
 
-            async function makeRequest(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
+            async function makeRequest(
+                cqp: string,
+                subcqps: string[],
+                corpora: CorpusListing,
+                showTotal: boolean,
+                from: `${number}`,
+                to: `${number}`
+            ) {
                 const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
                 $ctrl.localUpdateLoading(true)
                 $ctrl.error = false
@@ -740,7 +795,7 @@ angular.module("korpApp").component("trendDiagram", {
 
                 try {
                     const [Rickshaw, graphData] = await Promise.all([rickshawPromise, reqPromise])
-                    $timeout(() => renderGraph(Rickshaw, graphData, cqp, labelMapping, currentZoom, showTotal))
+                    $timeout(() => renderGraph(Rickshaw, graphData, cqp, currentZoom, showTotal))
                 } catch (e) {
                     $timeout(() => {
                         console.error("graph crash", e)

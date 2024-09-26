@@ -111,13 +111,16 @@ type KorpCountTimeParams = {
 }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count_time/get */
-type KorpCountTimeResponse = {
-    corpora: Record<string, KorpGraphStats | KorpGraphStats[]>
-    combined: KorpGraphStats | KorpGraphStats[]
+export type KorpCountTimeResponse = {
+    corpora: Record<string, KorpGraphStats | (KorpGraphStats | KorpGraphStatsCqp)[]>
+    combined: KorpGraphStats | (KorpGraphStats | KorpGraphStatsCqp)[]
 }
 
-type KorpGraphStats = {
+export type KorpGraphStats = {
     absolute: Histogram
     relative: Histogram
     sums: AbsRelTuple
 }
+
+/** Stats contains subquery if graph was created with multiple rows selected in the stats table. */
+export type KorpGraphStatsCqp = KorpGraphStats & { cqp: string }

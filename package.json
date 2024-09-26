@@ -10,6 +10,7 @@
         "@types/leaflet": "^1.9.12",
         "@types/leaflet-providers": "^1.2.4",
         "@types/leaflet.markercluster": "^1.5.4",
+        "@types/slickgrid": "^2.1.40",
         "angular": "1.8.3",
         "angular-dynamic-locale": "0.1.38",
         "angular-filter": "0.5.17",

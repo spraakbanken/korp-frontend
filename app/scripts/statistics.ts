@@ -14,7 +14,7 @@ const createStatisticsService = function () {
         reduceVals: string[],
         reduceValLabels: LangString[]
     ): SlickgridColumn[] {
-        const valueFormatter: SlickgridFormatter = function (row, cell, value, columnDef, dataContext) {
+        const valueFormatter: Slick.Formatter<any> = function (row, cell, value, columnDef, dataContext) {
             const [absolute, relative] = [...dataContext[columnDef.id + "_value"]]
             return hitCountHtml(absolute, relative)
         }
@@ -50,7 +50,7 @@ const createStatisticsService = function () {
             name: "",
             field: "hit_value",
             sortable: false,
-            formatter(row, cell, value, columnDef, dataContext) {
+            formatter(row, cell, value, columnDef, dataContext: any) {
                 return `<img id="circlediagrambutton__${dataContext.rowId}" src="${pieChartImg}" class="arcDiagramPicture"/>`
             },
             maxWidth: 25,
@@ -117,24 +117,6 @@ const createStatisticsService = function () {
 
 export const statisticsService = createStatisticsService()
 
-export type SlickgridColumn = {
-    id: string
-    field: string
-    formatter: SlickgridFormatter
-    name?: string
+export type SlickgridColumn = Slick.Column<any> & {
     translation?: LangString
-    sortable?: boolean
-    minWidth?: number
-    maxWidth?: number
-    cssClass?: string
-    headerCssClass?: string
 }
-
-type SlickgridFormatter = (
-    // There's currently no Korp code that uses these first three args
-    row: unknown,
-    cell: unknown,
-    value: unknown,
-    columnDef: SlickgridColumn,
-    dataContext: Row
-) => string
