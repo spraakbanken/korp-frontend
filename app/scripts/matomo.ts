@@ -5,9 +5,12 @@
 import settings from "@/settings"
 
 // Allow environment-specific (development/staging/production) settings or fallback to general settings
-const matomoSettings = { ...settings["matomo"], ...settings["matomo"]?.[process.env.ENVIRONMENT] }
+const matomoSettings = {
+    ...settings.matomo,
+    ...settings.matomo?.[process.env.ENVIRONMENT],
+}
 
-if (matomoSettings?.["url"] && matomoSettings?.["site"]) {
+if (matomoSettings.url && matomoSettings.site) {
     /** Matomo message queue */
     var _paq = (window._paq = window._paq || [])
     _paq.push(["trackPageView"])
@@ -24,6 +27,6 @@ if (matomoSettings?.["url"] && matomoSettings?.["site"]) {
         g.type = "text/javascript"
         g.async = true
         g.src = u + "matomo.js"
-        s.parentNode.insertBefore(g, s)
+        s.parentNode!.insertBefore(g, s)
     })()
 }
