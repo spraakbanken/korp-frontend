@@ -1,10 +1,29 @@
 /** @format */
-import angular from "angular"
-import { getAllCorpora } from "./util"
+import angular, { IController } from "angular"
+import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "./util"
 import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
 import { collatorSort, html } from "@/util"
 import "@/components/checkbox-ternary"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { RootScope } from "@/root-scope.types"
+
+type CcTreeController = IController & {
+    node: ChooserFolder
+    onSelect: () => void
+    onSelectOnly: (args: { corporaIds: string[] }) => void
+    onShowInfo: (args: { node: CorpusTransformed | ChooserFolderSub }) => void
+    indent: number
+    sortedFolders: ChooserFolderSub[]
+    sortedCorpora: CorpusTransformed[]
+    toggleFolderVisibility: (folder: ChooserFolderSub) => void
+    toggleFolderSelection: ($event: MouseEvent, folder: ChooserFolderSub) => void
+    showInfo: ($event: MouseEvent, folder: ChooserFolderSub) => void
+    onChildSelect: () => void
+    selectOnly: (ids: string[]) => void
+    onShowInfoLocal: (node: ChooserFolderSub | CorpusTransformed) => void
+    toggleCorpusSelection: ($event: MouseEvent, corpus: CorpusTransformed) => void
+}
 
 angular.module("korpApp").component("ccTree", {
     template: html`
@@ -76,11 +95,11 @@ angular.module("korpApp").component("ccTree", {
     controller: [
         "$rootScope",
         "$scope",
-        function ($rootScope, $scope) {
-            let $ctrl = this
+        function ($rootScope: RootScope) {
+            const $ctrl = this as CcTreeController
 
             $ctrl.$onInit = () => {
-                function sort(nodes) {
+                function sort<T extends ChooserFolderSub | CorpusTransformed>(nodes: T[]) {
                     return collatorSort(nodes, "title", $rootScope.lang)
                 }
                 $ctrl.sortedCorpora = sort($ctrl.node.corpora)
@@ -92,7 +111,7 @@ angular.module("korpApp").component("ccTree", {
             }
 
             $ctrl.toggleFolderSelection = (e, folder) => {
-                if (folder["limited_access"]) {
+                if (folder.limited_access) {
                     folder.extended = !folder.extended
                     return
                 }

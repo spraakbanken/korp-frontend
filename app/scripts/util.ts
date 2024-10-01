@@ -3,7 +3,7 @@ import _ from "lodash"
 import angular, { IControllerService, IHttpService, type IRequestConfig, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
-import { LangMap } from "./i18n/types"
+import { LangMap, LangString } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
 import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
@@ -467,7 +467,7 @@ export function httpConfAddMethodFetch(
  * @param lang The code of the language to translate to. Defaults to the global current language.
  * @returns A copy of the list, sorted.
  */
-export function collatorSort(elems: LangMap[], key: string | number, lang?: string) {
+export function collatorSort<K extends keyof any, T extends Record<K, LangString>>(elems: T[], key: K, lang?: string) {
     lang = lang || getLang()
     const comparator = new Intl.Collator(lang).compare
     return elems.slice().sort((a, b) => comparator(locObj(a[key], lang), locObj(b[key], lang)))

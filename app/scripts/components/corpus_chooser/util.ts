@@ -11,6 +11,7 @@ export type ChooserFolder = {
     tokens: number
     sentences: number
     subFolders: ChooserFolderSub[]
+    limited_access?: boolean
 }
 
 export type ChooserFolderSub = ChooserFolder & {
@@ -18,6 +19,7 @@ export type ChooserFolderSub = ChooserFolder & {
     title: LangString
     description?: LangString
     selected: "none" | "some" | "all"
+    extended?: boolean
 }
 
 export type ChooserFolderRoot = ChooserFolder & {
@@ -185,7 +187,7 @@ export const updateLimitedAccess = (node: ChooserFolder, credentials: string[] =
             limitedAccess = false
         }
     }
-    node["limited_access"] = limitedAccess
+    node.limited_access = limitedAccess
     return limitedAccess
 }
 

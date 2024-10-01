@@ -142,20 +142,15 @@ angular.module("korpApp").component("corpusChooser", {
 
             statemachine.listen("logout", function () {
                 $ctrl.credentials = []
-                const newCorpora: string[] = []
-                for (let corpus of settings.corpusListing.getSelectedCorpora()) {
-                    if (!settings.corpora[corpus]["limited_access"]) {
-                        newCorpora.push(corpus)
-                    } else {
-                        settings.corpora[corpus].selected = false
-                    }
-                }
-
-                if (_.isEmpty(newCorpora)) {
-                    newCorpora.push(...(settings.preselected_corpora || []))
-                }
-                settings.corpusListing.select(newCorpora)
-                $ctrl.updateSelectedCount(newCorpora)
+                // Unselect restricted corpora
+                for (const corpus of Object.values(settings.corpora))
+                    corpus.selected = corpus.selected && !corpus.limited_access
+                // Select those, or if none remain, fall back to default selection
+                const remaining = Object.keys(_.pickBy(settings.corpora, (corpus) => corpus.selected))
+                const toSelect = remaining.length ? remaining : settings.preselected_corpora || []
+                // Apply selection
+                settings.corpusListing.select(toSelect)
+                $ctrl.updateSelectedCount(toSelect)
                 $ctrl.updateLimitedAccess()
             })
 

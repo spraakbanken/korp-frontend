@@ -7,6 +7,7 @@ import { locObj } from "@/i18n"
 import { LangString } from "@/i18n/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { ChooserFolderSub } from "./util"
+import { RootScope } from "@/root-scope.types"
 
 type CcInfoBoxController = IController & {
     object: ChooserFolderSub | CorpusTransformed
@@ -67,7 +68,7 @@ angular.module("korpApp").component("ccInfoBox", {
     },
     controller: [
         "$rootScope",
-        function ($rootScope) {
+        function ($rootScope: RootScope) {
             let $ctrl = this as CcInfoBoxController
 
             const isFolder = (object: ChooserFolderSub | CorpusTransformed): object is ChooserFolderSub =>
