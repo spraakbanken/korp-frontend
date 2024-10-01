@@ -5,7 +5,7 @@ import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Folder } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
 
-type ChooserFolder = {
+export type ChooserFolder = {
     corpora: CorpusTransformed[]
     numberOfChildren: number
     tokens: number
@@ -13,16 +13,19 @@ type ChooserFolder = {
     subFolders: ChooserFolderSub[]
 }
 
-type ChooserFolderSub = ChooserFolder & {
+export type ChooserFolderSub = ChooserFolder & {
     id: string
     title: LangString
     description?: LangString
     selected: "none" | "some" | "all"
 }
 
-type ChooserFolderRoot = ChooserFolder & {
+export type ChooserFolderRoot = ChooserFolder & {
     isRoot: true
 }
+
+const isRoot = (folder: ChooserFolder): folder is ChooserFolderRoot => "isRoot" in folder
+const isSub = (folder: ChooserFolder): folder is ChooserFolderSub => !isRoot(folder)
 
 export const initCorpusStructure = (
     collection: Record<string, CorpusTransformed>,
@@ -210,9 +213,9 @@ export const filterCorporaOnCredentials = (
     return selection
 }
 
-export const recalcFolderStatus = (folder: ChooserFolderSub): void => {
+export const recalcFolderStatus = (folder: ChooserFolder): void => {
     folder.subFolders.forEach(recalcFolderStatus)
-    folder.selected = getFolderSelectStatus(folder)
+    if (isSub(folder)) folder.selected = getFolderSelectStatus(folder)
 }
 
 function getFolderSelectStatus(folder: Pick<ChooserFolderSub, "subFolders" | "corpora">): "none" | "some" | "all" {

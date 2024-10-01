@@ -127,6 +127,28 @@ export class SelectionManager {
 export const getCqpAttribute = (option: AttributeOption): string =>
     option.is_struct_attr ? `_.${option.value}` : option.value
 
+/** Format a number like 60723 => 61K */
+export function suffixedNumbers(num: number, lang: string) {
+    let out = ""
+    if (num < 1000) {
+        // 232
+        out = num.toString()
+    } else if (num >= 1000 && num < 1e6) {
+        // 232,21K
+        out = (num / 1000).toFixed(2).toString() + "K"
+    } else if (num >= 1e6 && num < 1e9) {
+        // 232,21M
+        out = (num / 1e6).toFixed(2).toString() + "M"
+    } else if (num >= 1e9 && num < 1e12) {
+        // 232,21G
+        out = (num / 1e9).toFixed(2).toString() + "G"
+    } else if (num >= 1e12) {
+        // 232,21T
+        out = (num / 1e12).toFixed(2).toString() + "T"
+    }
+    return out.replace(".", loc("util_decimalseparator", lang))
+}
+
 /** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
 export const valfilter = (attrobj: AttributeOption): string =>
     attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value
