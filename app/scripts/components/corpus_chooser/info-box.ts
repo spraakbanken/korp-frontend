@@ -1,9 +1,26 @@
 /** @format */
-import angular from "angular"
+import angular, { IController } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import { html } from "@/util"
 import { locObj } from "@/i18n"
+import { LangString } from "@/i18n/types"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { ChooserFolderSub } from "./util"
+
+type CcInfoBoxController = IController & {
+    object: ChooserFolderSub | CorpusTransformed
+    isCorpus: boolean
+    isFolder: boolean
+    title: LangString
+    description?: LangString
+    link?: { url: string; label: string }
+    numberOfChildren: number
+    langStats: { lang?: string; tokens: number; sentences: number }[]
+    context: boolean
+    limitedAccess: boolean
+    lastUpdated?: string
+}
 
 angular.module("korpApp").component("ccInfoBox", {
     template: html`
@@ -51,29 +68,32 @@ angular.module("korpApp").component("ccInfoBox", {
     controller: [
         "$rootScope",
         function ($rootScope) {
-            let $ctrl = this
+            let $ctrl = this as CcInfoBoxController
+
+            const isFolder = (object: ChooserFolderSub | CorpusTransformed): object is ChooserFolderSub =>
+                "numberOfChildren" in object
 
             $ctrl.$onChanges = () => {
                 $ctrl.title = $ctrl.object.title
                 $ctrl.description = $ctrl.object.description
 
-                $ctrl.numberOfChildren = $ctrl.object.numberOfChildren
-                $ctrl.isFolder = $ctrl.object.numberOfChildren > 0
-                $ctrl.isCorpus = !($ctrl.object.numberOfChildren > 0)
+                $ctrl.isFolder = isFolder($ctrl.object)
+                $ctrl.isCorpus = !$ctrl.isFolder
+                if (isFolder($ctrl.object)) $ctrl.numberOfChildren = $ctrl.object.numberOfChildren
 
                 $ctrl.langStats = []
                 $ctrl.link = undefined
 
-                if ($ctrl.isCorpus) {
-                    $ctrl.limitedAccess = $ctrl.object["limited_access"]
+                if (!isFolder($ctrl.object)) {
+                    $ctrl.limitedAccess = $ctrl.object["limited_access"] || false
                     $ctrl.context = _.keys($ctrl.object.context).length > 1
 
                     if ($ctrl.object["linked_to"]) {
                         for (const linkedCorpusId of $ctrl.object["linked_to"]) {
                             const linkedCorpus = settings.corpora[linkedCorpusId]
-                            const sentences = parseInt(linkedCorpus.info.Sentences) || 0
-                            const tokens = parseInt(linkedCorpus.info.Size) || 0
-                            const lang = linkedCorpus.lang
+                            const sentences = parseInt(linkedCorpus.info.Sentences!) || 0
+                            const tokens = parseInt(linkedCorpus.info.Size!) || 0
+                            const lang = linkedCorpus.lang!
                             $ctrl.langStats.push({ lang, tokens, sentences })
                         }
                     }
@@ -85,9 +105,9 @@ angular.module("korpApp").component("ccInfoBox", {
                 }
 
                 $ctrl.langStats.push({
-                    lang: $ctrl.object.lang,
-                    tokens: $ctrl.object.tokens,
-                    sentences: $ctrl.object.sentences,
+                    lang: !isFolder($ctrl.object) ? $ctrl.object.lang : undefined,
+                    tokens: $ctrl.object.tokens!,
+                    sentences: $ctrl.object.sentences!,
                 })
             }
 
