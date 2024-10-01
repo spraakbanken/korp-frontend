@@ -3,11 +3,10 @@ import _ from "lodash"
 import angular, { IControllerService, IHttpService, type IRequestConfig, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
-import { LangMap, LangString } from "./i18n/types"
+import { LangString } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
 import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
-import { Attribute } from "./settings/config.types"
 import { AttributeOption } from "./corpus_listing"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */

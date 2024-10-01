@@ -1,12 +1,17 @@
 /** @format */
 import isObject from "lodash/isObject"
 import settings from "@/settings"
-import { getService } from "@/util"
-import type { LangLocMap, LangString, LocLangMap, LocMap } from "@/i18n/types"
+import { getService, getUrlHash } from "@/util"
+import type { LangString, LocLangMap, LocMap } from "@/i18n/types"
 
 /** Get the current UI language. */
 export function getLang(): string {
-    return getService("$rootScope").lang || settings.default_language
+    // If called during bootstrap, the Root Scope service may not be ready
+    try {
+        return getService("$rootScope").lang || settings.default_language
+    } catch (e) {
+        return getUrlHash("lang") || settings.default_language
+    }
 }
 
 /**
