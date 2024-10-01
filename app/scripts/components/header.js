@@ -10,7 +10,7 @@ import settings from "@/settings"
 import currentMode from "@/mode"
 import { collatorSort, html } from "@/util"
 import "@/services/utils"
-import "@/components/corpus_chooser/corpus-chooser"
+import "@/components/corpus-chooser/corpus-chooser"
 import "@/components/radio-list"
 
 angular.module("korpApp").component("header", {

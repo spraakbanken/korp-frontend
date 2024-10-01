@@ -4,7 +4,7 @@ import memoize from "lodash/memoize"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
 import timeProxyFactory from "@/backend/time-proxy"
-import * as treeUtil from "./components/corpus_chooser/util"
+import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
 import { fromKeys, getUrlHash, httpConfAddMethodFetch } from "@/util"
@@ -207,7 +207,7 @@ function setInitialCorpora(): void {
         let expandedCorpora: string[] = []
         for (let preItem of settings.preselected_corpora) {
             preItem = preItem.replace(/^__/g, "")
-            expandedCorpora.push(...treeUtil.getAllCorporaInFolders(settings.folders, preItem))
+            expandedCorpora.push(...getAllCorporaInFolders(settings.folders, preItem))
         }
         // folders expanded, save
         settings.preselected_corpora = expandedCorpora
@@ -216,7 +216,7 @@ function setInitialCorpora(): void {
     const corpusParam = getUrlHash("corpus")
 
     const currentCorpora = corpusParam
-        ? _.flatten(_.map(corpusParam.split(","), (val) => treeUtil.getAllCorporaInFolders(settings.folders, val)))
+        ? _.flatten(_.map(corpusParam.split(","), (val) => getAllCorporaInFolders(settings.folders, val)))
         : settings.preselected_corpora
 
     settings.corpusListing.select(currentCorpora)

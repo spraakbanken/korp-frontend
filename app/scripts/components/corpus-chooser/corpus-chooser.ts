@@ -14,9 +14,9 @@ import {
     recalcFolderStatus,
     updateLimitedAccess,
 } from "./util"
-import "@/components/corpus_chooser/corpus-time-graph"
-import "@/components/corpus_chooser/info-box"
-import "@/components/corpus_chooser/tree"
+import "@/components/corpus-chooser/corpus-time-graph"
+import "@/components/corpus-chooser/info-box"
+import "@/components/corpus-chooser/tree"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
