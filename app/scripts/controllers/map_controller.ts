@@ -3,7 +3,7 @@ import _ from "lodash"
 import angular, { IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import { regescape } from "@/util"
-import { RootScope } from "@/root-scope.types"
+import { MapTab, RootScope } from "@/root-scope.types"
 import { AppSettings } from "@/settings/app-settings.types"
 import { MapRequestResult } from "@/services/backend"
 import { MapResult, Point } from "@/map_services"
@@ -17,7 +17,7 @@ type MapControllerScope = IScope & {
     loading: boolean
     numResults: number
     useClustering: boolean
-    promise: Promise<MapRequestResult | void>
+    promise: MapTab
     restColor: string
     newDynamicTab: any // TODO Defined in tabHash (services.js)
     closeDynamicTab: any // TODO Defined in tabHash (services.js)

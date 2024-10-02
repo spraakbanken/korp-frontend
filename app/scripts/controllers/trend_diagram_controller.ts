@@ -1,9 +1,10 @@
 /** @format */
-import { RootScope } from "@/root-scope.types"
+import { GraphTab, RootScope } from "@/root-scope.types"
 import angular, { IScope } from "angular"
 
 type GraphCtrlScope = IScope & {
     closeTab: (idx: number, e: Event) => void
+    data: GraphTab
     loading: boolean
     onProgress: (progress: number) => void
     progress: number

@@ -4,9 +4,9 @@ import angular, { IScope } from "angular"
 import settings from "@/settings"
 import { stringifyFunc } from "@/stringify.js"
 import { locAttribute } from "@/i18n"
-import { RootScope } from "@/root-scope.types"
+import { CompareTab, RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { CompareItem, CompareResult, CompareTables } from "@/services/backend"
+import { CompareItem, CompareTables } from "@/services/backend"
 
 type CompareCtrlScope = IScope & {
     closeTab: (index: number, e: Event) => void
@@ -15,7 +15,7 @@ type CompareCtrlScope = IScope & {
     error: boolean
     loading: boolean
     max: number
-    promise: JQuery.Promise<CompareResult>
+    promise: CompareTab
     resultOrder: (item: CompareItem) => number
     reduce: string[]
     rowClick: (row: CompareItem, cmp_index: number) => void

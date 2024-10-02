@@ -55,7 +55,7 @@ class ExampleCtrl extends KwicCtrl {
         s.corpusHits = undefined
         s.aborted = false
 
-        s.tabindex = s.$parent.$parent.$parent.tabset.tabs.length - 1 + s.$index
+        s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$index
 
         s.newDynamicTab()
 
@@ -157,7 +157,7 @@ class ExampleCtrl extends KwicCtrl {
         }
 
         s.isActive = () => {
-            return s.tabindex == s.$parent.$parent.$parent.tabset.active
+            return s.tabindex == s.$parent.$parent.tabset.active
         }
 
         if (s.kwicTab.queryParams) {
