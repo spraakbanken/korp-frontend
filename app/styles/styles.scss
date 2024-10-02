@@ -748,7 +748,7 @@ table {
   display: none;
 }
 
-#columns {
+#results {
   transition : width 300ms;
   width: 100%;
   will-change: width;
@@ -1223,7 +1223,7 @@ option[value^='? string:sentence ?'] {display : none;}
   opacity : 0.6;
 }
 
-#results-wrapper .nav-tabs li:nth-child(4) {
+#results .nav-tabs li:nth-child(4) {
   margin-left : 1em;
 }
 
