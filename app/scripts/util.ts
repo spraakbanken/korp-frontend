@@ -148,6 +148,10 @@ export function suffixedNumbers(num: number, lang: string) {
     return out.replace(".", loc("util_decimalseparator", lang))
 }
 
+/** FooBar -> foo-bar */
+export const kebabize = (str: string): string =>
+    [...str].map((x, i) => (x == x.toUpperCase() ? (i ? "-" : "") + x.toLowerCase() : x)).join("")
+
 /** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
 export const valfilter = (attrobj: AttributeOption): string =>
     attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value

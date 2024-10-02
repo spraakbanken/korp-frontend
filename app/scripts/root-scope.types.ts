@@ -44,3 +44,8 @@ export type GraphTab = {
     showTotal: boolean
     corpusListing: CorpusListing
 }
+
+export type TextTab = {
+    corpus: string
+    sentenceData: Record<string, string>
+}

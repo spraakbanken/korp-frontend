@@ -36,9 +36,14 @@ export type Corpus = {
     pos_attributes: string[]
     struct_attributes: string[]
     custom_attributes?: string[]
-    reading_mode?: boolean
+    reading_mode?: boolean | ReadingModeConfig
     title: LangString
     within: Labeled[]
+}
+
+export type ReadingModeConfig = {
+    component: string
+    group_element?: string
 }
 
 export type Folder = {

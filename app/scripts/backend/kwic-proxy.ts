@@ -208,5 +208,9 @@ type KwicMatch = {
 
 export type Token = {
     word: string
+    structs?: {
+        open?: Record<string, Record<string, string>>[]
+        close?: string[]
+    }
     [attr: string]: any
 }
