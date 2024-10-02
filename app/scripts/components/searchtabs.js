@@ -10,8 +10,8 @@ import "@/components/extended/extended-standard"
 import "@/components/extended/extended-parallel"
 import "@/components/advanced-search"
 import "@/components/compare-search"
+import "@/components/reduce-select"
 import "@/directives/click-cover"
-import "@/directives/reduce-select"
 import "@/directives/tab-hash"
 
 angular.module("korpApp").component("searchtabs", {
@@ -63,11 +63,9 @@ angular.module("korpApp").component("searchtabs", {
                     <span>{{'statistics' | loc:$root.lang}}:</span>
                     <reduce-select
                         class="ml-2 relative -top-px"
-                        reduce-items="$ctrl.statCurrentAttrs"
-                        reduce-selected="$ctrl.statSelectedAttrs"
-                        reduce-insensitive="$ctrl.statInsensitiveAttrs"
-                        reduce-lang="lang"
-                        style="width: 200px"
+                        items="$ctrl.statCurrentAttrs"
+                        selected="$ctrl.statSelectedAttrs"
+                        insensitive="$ctrl.statInsensitiveAttrs"
                         on-change="$ctrl.reduceOnChange"
                     ></reduce-select>
                 </div>
@@ -192,7 +190,10 @@ angular.module("korpApp").component("searchtabs", {
                 }
             })
 
-            $ctrl.reduceOnChange = () => {
+            $ctrl.reduceOnChange = ({ selected, insensitive }) => {
+                if (selected) $ctrl.statSelectedAttrs = selected
+                if (insensitive) $ctrl.statInsensitiveAttrs = insensitive
+
                 if ($ctrl.statSelectedAttrs && $ctrl.statSelectedAttrs.length > 0) {
                     if ($ctrl.statSelectedAttrs.length != 1 || !$ctrl.statSelectedAttrs.includes("word")) {
                         $location.search("stats_reduce", $ctrl.statSelectedAttrs.join(","))
