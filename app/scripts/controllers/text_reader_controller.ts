@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { ICompileService, IScope } from "angular"
+import angular, { ICompileService } from "angular"
 import statemachine from "../statemachine"
 import settings from "@/settings"
 import "@/services/backend"
@@ -10,14 +10,13 @@ import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { BackendService } from "@/services/backend"
 import { kebabize } from "@/util"
 import { ApiKwic, Token } from "@/backend/kwic-proxy"
+import { TabHashScope } from "@/directives/tab-hash"
 
-type TextReaderControllerScope = IScope & {
+type TextReaderControllerScope = TabHashScope & {
     loading: boolean
     inData: TextTab
     data: { corpus: string; document: TextReaderData; sentenceData: TextTab["sentenceData"] }
     corpusObj: CorpusTransformed
-    newDynamicTab: () => void
-    closeDynamicTab: () => void
     closeTab: (idx: number, e: Event) => void
     onentry: () => void
     onexit: () => void

@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IScope, ITimeoutService } from "angular"
+import angular, { ITimeoutService } from "angular"
 import settings from "@/settings"
 import currentMode from "@/mode"
 import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
@@ -12,9 +12,9 @@ import { SearchParams } from "@/statistics.types"
 import { SlickgridColumn } from "@/statistics"
 import { SearchesService } from "@/services/searches"
 import "@/services/searches"
+import { TabHashScope } from "@/directives/tab-hash"
 
-type StatsResultCtrlScope = IScope & {
-    $parent: any
+type StatsResultCtrlScope = TabHashScope & {
     $root: RootScope
     aborted: boolean
     activate: () => void
@@ -89,7 +89,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             }
 
             s.isActive = () => {
-                return s.tabindex == s.$parent.$parent.tabset.active
+                return s.tabindex == s.activeTab
             }
 
             s.resetView = () => {

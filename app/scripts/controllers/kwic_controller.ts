@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IController, IScope, ITimeoutService } from "angular"
+import angular, { IController, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import kwicProxyFactory, { ApiKwic, KorpQueryParams, KorpQueryResponse, type KwicProxy } from "@/backend/kwic-proxy"
@@ -8,13 +8,11 @@ import { LocationService } from "@/urlparams"
 import { KorpResponse, ProgressReport } from "@/backend/types"
 import { UtilsService } from "@/services/utils"
 import "@/services/utils"
+import { TabHashScope } from "@/directives/tab-hash"
 
 angular.module("korpApp").directive("kwicCtrl", () => ({ controller: KwicCtrl }))
 
-export type KwicCtrlScope = IScope & {
-    $parent: {
-        tabset: any
-    }
+export type KwicCtrlScope = TabHashScope & {
     active?: boolean
     aborted?: boolean
     buildQueryOptions: (isPaging: boolean) => KorpQueryParams
@@ -295,7 +293,7 @@ export class KwicCtrl implements IController {
         }
 
         s.isActive = () => {
-            return s.tabindex == s.$parent.tabset.active
+            return s.tabindex == s.activeTab
         }
 
         s.countCorpora = () => {

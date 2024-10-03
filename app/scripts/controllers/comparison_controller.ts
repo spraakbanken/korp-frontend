@@ -1,14 +1,15 @@
 /** @format */
 import _ from "lodash"
-import angular, { IScope } from "angular"
+import angular from "angular"
 import settings from "@/settings"
 import { stringifyFunc } from "@/stringify.js"
 import { locAttribute } from "@/i18n"
 import { CompareTab, RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
 import { CompareItem, CompareTables } from "@/services/backend"
+import { TabHashScope } from "@/directives/tab-hash"
 
-type CompareCtrlScope = IScope & {
+type CompareCtrlScope = TabHashScope & {
     closeTab: (index: number, e: Event) => void
     cmp1: SavedSearch
     cmp2: SavedSearch
@@ -21,8 +22,6 @@ type CompareCtrlScope = IScope & {
     rowClick: (row: CompareItem, cmp_index: number) => void
     stringify: (x: string) => string
     tables: CompareTables
-    newDynamicTab: any // TODO Defined in tabHash (services.js)
-    closeDynamicTab: any // TODO Defined in tabHash (services.js)
 }
 
 angular.module("korpApp").directive("compareCtrl", () => ({

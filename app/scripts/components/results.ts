@@ -133,12 +133,7 @@ angular.module("korpApp").component("results", {
                         <korp-error ng-if="error"></korp-error>
                     </uib-tab>
 
-                    <uib-tab
-                        example-ctrl="example-ctrl"
-                        ng-repeat="kwicTab in $root.kwicTabs"
-                        select="onentry()"
-                        deselect="onexit()"
-                    >
+                    <uib-tab example-ctrl ng-repeat="kwicTab in $root.kwicTabs" select="onentry()" deselect="onexit()">
                         <uib-tab-heading ng-class="{not_loading: progress == 100, loading : loading}">
                             KWIC
                             <span ng-click="closeTab($index, $event)" tab-spinner="tab-spinner"> </span>
@@ -182,7 +177,7 @@ angular.module("korpApp").component("results", {
                         ></trend-diagram>
                     </uib-tab>
 
-                    <uib-tab ng-repeat="promise in $root.compareTabs" compare-ctrl="compare-ctrl">
+                    <uib-tab ng-repeat="promise in $root.compareTabs" compare-ctrl>
                         <uib-tab-heading class="compare_tab" ng-class="{loading : loading}">
                             {{'compare_vb' | loc:$root.lang}}
                             <span tab-spinner="tab-spinner" ng-click="closeTab($index, $event)"> </span>
@@ -224,7 +219,7 @@ angular.module("korpApp").component("results", {
                         </div>
                     </uib-tab>
 
-                    <uib-tab ng-repeat="promise in $root.mapTabs" map-ctrl="map-ctrl" select="onentry()">
+                    <uib-tab ng-repeat="promise in $root.mapTabs" map-ctrl select="onentry()">
                         <uib-tab-heading class="map_tab" ng-class="{loading : loading}">
                             {{ 'map' | loc:$root.lang}}
                             <span tab-spinner="tab-spinner" ng-click="closeTab($index, $event)"> </span>
@@ -273,7 +268,7 @@ angular.module("korpApp").component("results", {
 
                     <uib-tab
                         ng-repeat="inData in $root.textTabs"
-                        text-reader-ctrl="text-reader-ctrl"
+                        text-reader-ctrl
                         select="onentry()"
                         deselect="onexit()"
                     >

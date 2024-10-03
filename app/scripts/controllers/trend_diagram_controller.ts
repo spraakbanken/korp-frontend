@@ -1,16 +1,15 @@
 /** @format */
+import angular from "angular"
+import { TabHashScope } from "@/directives/tab-hash"
 import { GraphTab, RootScope } from "@/root-scope.types"
-import angular, { IScope } from "angular"
 
-type GraphCtrlScope = IScope & {
+type GraphCtrlScope = TabHashScope & {
     closeTab: (idx: number, e: Event) => void
     data: GraphTab
     loading: boolean
     onProgress: (progress: number) => void
     progress: number
     updateLoading: (loading: boolean) => void
-    newDynamicTab: any // TODO Defined in tabHash (services.js)
-    closeDynamicTab: any // TODO Defined in tabHash (services.js)
 }
 
 angular.module("korpApp").directive("graphCtrl", () => ({

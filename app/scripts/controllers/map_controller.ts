@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IScope, ITimeoutService } from "angular"
+import angular, { ITimeoutService } from "angular"
 import settings from "@/settings"
 import { regescape } from "@/util"
 import { MapTab, RootScope } from "@/root-scope.types"
@@ -8,8 +8,9 @@ import { AppSettings } from "@/settings/app-settings.types"
 import { MapRequestResult } from "@/services/backend"
 import { MapResult, Point } from "@/map_services"
 import { WithinParameters } from "@/backend/types"
+import { TabHashScope } from "@/directives/tab-hash"
 
-type MapControllerScope = IScope & {
+type MapControllerScope = TabHashScope & {
     center: AppSettings["map_center"]
     error: boolean
     selectedGroups: string[]
@@ -19,8 +20,6 @@ type MapControllerScope = IScope & {
     useClustering: boolean
     promise: MapTab
     restColor: string
-    newDynamicTab: any // TODO Defined in tabHash (services.js)
-    closeDynamicTab: any // TODO Defined in tabHash (services.js)
     closeTab: (idx: number, e: Event) => void
     newKWICSearch: (marker: MarkerEvent) => void
     toggleMarkerGroup: (groupName: string) => void

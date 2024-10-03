@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IScope, ITimeoutService } from "angular"
+import angular, { ITimeoutService } from "angular"
 import settings from "@/settings"
 import lemgramProxyFactory, { ApiRelation, KorpRelationsResponse, LemgramProxy } from "@/backend/lemgram-proxy"
 import { isLemgram, lemgramToString, unregescape } from "@/util"
@@ -10,9 +10,9 @@ import { KorpResponse, ProgressReport } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { SearchesService } from "@/services/searches"
 import "@/services/searches"
+import { TabHashScope } from "@/directives/tab-hash"
 
-type WordpicCtrlScope = IScope & {
-    $parent: any
+type WordpicCtrlScope = TabHashScope & {
     $root: RootScope
     aborted: boolean
     activate: () => void
@@ -41,8 +41,6 @@ type WordpicCtrlScope = IScope & {
     }
     tabindex: number
     wordPic: boolean
-    newDynamicTab: any // TODO Defined in tabHash (services.js)
-    closeDynamicTab: any // TODO Defined in tabHash (services.js)
 }
 
 /** A relation item modified for showing. */
@@ -171,7 +169,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             }
 
             s.isActive = () => {
-                return s.tabindex == s.$parent.$parent.tabset.active
+                return s.tabindex == s.activeTab
             }
 
             s.renderResult = (data, query) => {

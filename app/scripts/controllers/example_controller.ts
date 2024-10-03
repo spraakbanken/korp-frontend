@@ -9,13 +9,14 @@ import { KorpResponse, ProgressReport } from "@/backend/types"
 import { KorpQueryResponse } from "@/backend/kwic-proxy"
 import { UtilsService } from "@/services/utils"
 import "@/services/utils"
+import { TabHashScope } from "@/directives/tab-hash"
 
 const korpApp = angular.module("korpApp")
 
-type ScopeBase = Omit<KwicCtrlScope, "makeRequest"> & IRepeatScope
+type ScopeBase = Omit<KwicCtrlScope, "makeRequest"> & IRepeatScope & TabHashScope
 
 type ExampleCtrlScope = ScopeBase & {
-    $parent: { $parent: any }
+    $parent: { $parent: TabHashScope }
     closeTab: (idx: number, e: Event) => void
     hitsPictureData?: any
     hitspictureClick?: (page: number) => void
@@ -24,8 +25,6 @@ type ExampleCtrlScope = ScopeBase & {
     onExampleProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
     setupReadingWatch: () => void
     superRenderResult: (data: KorpResponse<KorpQueryResponse>) => void
-    newDynamicTab: any // TODO Defined in tabHash (services.js)
-    closeDynamicTab: any // TODO Defined in tabHash (services.js)
 }
 
 class ExampleCtrl extends KwicCtrl {
@@ -157,7 +156,7 @@ class ExampleCtrl extends KwicCtrl {
         }
 
         s.isActive = () => {
-            return s.tabindex == s.$parent.$parent.tabset.active
+            return s.tabindex == s.activeTab
         }
 
         if (s.kwicTab.queryParams) {
