@@ -61,8 +61,9 @@ angular.module("korpApp").component("extendedParallel", {
         "$location",
         "$rootScope",
         "$timeout",
+        "matomo",
         "searches",
-        function ($location, $rootScope, $timeout, searches) {
+        function ($location, $rootScope, $timeout, matomo, searches) {
             const ctrl = this
 
             ctrl.initialized = false
@@ -152,6 +153,7 @@ angular.module("korpApp").component("extendedParallel", {
             }
 
             ctrl.onSubmit = function () {
+                matomo.send("trackEvent", "Search", "Submit search", "Extended")
                 // Unset and set query in next time step in order to trigger changes correctly in `searches`.
                 $location.search("search", null)
                 $location.replace()

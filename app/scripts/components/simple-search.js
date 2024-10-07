@@ -86,9 +86,10 @@ angular.module("korpApp").component("simpleSearch", {
         "searches",
         "compareSearches",
         "lexicons",
+        "matomo",
         "$uibModal",
         "$timeout",
-        function ($location, $rootScope, $scope, searches, compareSearches, lexicons, $uibModal, $timeout) {
+        function ($location, $rootScope, $scope, searches, compareSearches, lexicons, matomo, $uibModal, $timeout) {
             const ctrl = this
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
@@ -114,6 +115,7 @@ angular.module("korpApp").component("simpleSearch", {
 
             // triggers watch on searches.activeSearch
             ctrl.updateSearch = function () {
+                matomo.send("trackEvent", "Search", "Search simple")
                 $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
                 $location.search("prefix", ctrl.prefix ? true : null)
                 $location.search("mid_comp", ctrl.mid_comp ? true : null)

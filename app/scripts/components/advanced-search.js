@@ -51,10 +51,11 @@ angular.module("korpApp").component("advancedSearch", {
     bindings: {},
     controller: [
         "compareSearches",
+        "matomo",
         "$location",
         "$scope",
         "$timeout",
-        function (compareSearches, $location, $scope, $timeout) {
+        function (compareSearches, matomo, $location, $scope, $timeout) {
             const $ctrl = this
 
             $ctrl.cqp = "[]"
@@ -75,6 +76,7 @@ angular.module("korpApp").component("advancedSearch", {
             )
 
             $ctrl.onSearch = () => {
+                matomo.send("trackEvent", "Search", "Search advanced")
                 $location.search("search", null)
                 $location.search("page", null)
                 $location.search("within", null)

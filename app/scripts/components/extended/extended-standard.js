@@ -50,8 +50,9 @@ angular.module("korpApp").component("extendedStandard", {
         "$rootScope",
         "$scope",
         "compareSearches",
+        "matomo",
         "$timeout",
-        function ($location, $rootScope, $scope, compareSearches, $timeout) {
+        function ($location, $rootScope, $scope, compareSearches, matomo, $timeout) {
             const ctrl = this
 
             ctrl.lang = $rootScope.lang
@@ -85,6 +86,7 @@ angular.module("korpApp").component("extendedStandard", {
             })
 
             ctrl.onSearch = () => {
+                matomo.send("trackEvent", "Search", "Search extended")
                 triggerSearch()
             }
 

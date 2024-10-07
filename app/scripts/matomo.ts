@@ -3,6 +3,7 @@
  * @see: https://developer.matomo.org/guides/tracking-javascript-guide
  */
 import settings from "@/settings"
+import angular from "angular"
 
 // Allow environment-specific (development/staging/production) settings or fallback to general settings
 const matomoSettings = {
@@ -30,3 +31,16 @@ if (matomoSettings.url && matomoSettings.site) {
         s.parentNode!.insertBefore(g, s)
     })()
 }
+
+type MatomoService = {
+    /** Queue a Matomo command */
+    send: (cmd: string, ...args: string[]) => void
+}
+
+angular.module("korpApp").factory("matomo", [
+    (): MatomoService => ({
+        send(cmd, ...args) {
+            window._paq?.push([cmd, ...args])
+        },
+    }),
+])
