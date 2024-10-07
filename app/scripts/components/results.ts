@@ -8,6 +8,7 @@ import "@/components/loglike-meter"
 import "@/components/result-map"
 import "@/components/statistics"
 import "@/components/sidebar"
+import "@/components/tab-spinner"
 import "@/components/trend-diagram"
 import "@/components/word-picture"
 import "@/controllers/comparison_controller"
@@ -20,7 +21,6 @@ import "@/controllers/trend_diagram_controller"
 import "@/controllers/word_picture_controller"
 import "@/directives/tab-hash"
 import "@/directives/tab-preloader"
-import "@/directives/tab-spinner"
 import { SearchesService } from "@/services/searches"
 
 type ResultsController = IController & {
@@ -136,7 +136,7 @@ angular.module("korpApp").component("results", {
                     <uib-tab example-ctrl ng-repeat="kwicTab in $root.kwicTabs" select="onentry()" deselect="onexit()">
                         <uib-tab-heading ng-class="{not_loading: progress == 100, loading : loading}">
                             KWIC
-                            <span ng-click="closeTab($index, $event)" tab-spinner="tab-spinner"> </span>
+                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
                         </uib-tab-heading>
                         <korp-error ng-if="error"></korp-error>
                         <div
@@ -168,7 +168,7 @@ angular.module("korpApp").component("results", {
                         <uib-tab-heading ng-class="{not_loading: progress > 99}">
                             {{'graph' | loc:$root.lang}}
                             <div class="tab_progress" style="width:{{progress || 0}}%" ng-show="loading"></div>
-                            <span ng-click="closeTab($index, $event)" tab-spinner="tab-spinner"></span>
+                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
                         </uib-tab-heading>
                         <trend-diagram
                             data="data"
@@ -180,7 +180,7 @@ angular.module("korpApp").component("results", {
                     <uib-tab ng-repeat="promise in $root.compareTabs" compare-ctrl>
                         <uib-tab-heading class="compare_tab" ng-class="{loading : loading}">
                             {{'compare_vb' | loc:$root.lang}}
-                            <span tab-spinner="tab-spinner" ng-click="closeTab($index, $event)"> </span>
+                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
                         </uib-tab-heading>
                         <div class="compare_result" ng-class="{loading : loading}">
                             <korp-error ng-if="error"></korp-error>
@@ -222,7 +222,7 @@ angular.module("korpApp").component("results", {
                     <uib-tab ng-repeat="promise in $root.mapTabs" map-ctrl select="onentry()">
                         <uib-tab-heading class="map_tab" ng-class="{loading : loading}">
                             {{ 'map' | loc:$root.lang}}
-                            <span tab-spinner="tab-spinner" ng-click="closeTab($index, $event)"> </span>
+                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
                         </uib-tab-heading>
                         <div class="map_result" ng-class="{loading : loading}">
                             <korp-error ng-if="error"></korp-error>
@@ -274,7 +274,7 @@ angular.module("korpApp").component("results", {
                     >
                         <uib-tab-heading ng-class="{loading : loading}">
                             {{ 'text_tab_header' | loc:$root.lang}}
-                            <span tab-spinner="tab-spinner" ng-click="closeTab($index, $event)"> </span>
+                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
                         </uib-tab-heading>
                         <div>
                             <korp-error ng-if="error"></korp-error>
