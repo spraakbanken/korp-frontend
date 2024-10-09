@@ -30,3 +30,26 @@ if (matomoSettings.url && matomoSettings.site) {
         s.parentNode!.insertBefore(g, s)
     })()
 }
+
+/**
+ * Send a command to Matomo.
+ *
+ * Does nothing if Matomo is not configured.
+ */
+export function matomoSend<P extends keyof Matomo>(command: P, ...args: Parameters<Matomo[P]>) {
+    window._paq = window._paq || []
+    window._paq.push([command, ...args])
+}
+
+/**
+ * This type describes available Matomo commands.
+ *
+ * Extend as needed.
+ * Fully described on https://developer.matomo.org/api-reference/tracking-javascript
+ */
+export type Matomo = {
+    trackEvent: (category: string, action: string, name?: string, value?: number) => void
+    trackLink: (url: string, linkType: string) => void
+    trackPageView: (customTitle?: string) => void
+    trackSiteSearch: (keyword: string, category?: string, resultsCount?: number) => void
+}

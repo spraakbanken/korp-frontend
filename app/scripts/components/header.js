@@ -12,6 +12,7 @@ import { collatorSort, html } from "@/util"
 import "@/services/utils"
 import "@/components/corpus-chooser/corpus-chooser"
 import "@/components/radio-list"
+import { matomoSend } from "@/matomo"
 
 angular.module("korpApp").component("header", {
     template: html`
@@ -152,6 +153,9 @@ angular.module("korpApp").component("header", {
                 $rootScope["lang"] = $scope.lang
                 // Set url param if different from default.
                 $location.search("lang", $scope.lang !== settings["default_language"] ? $scope.lang : null)
+
+                if (!oldVal) matomoSend("trackEvent", "UI", "Locale init", $scope.lang)
+                else matomoSend("trackEvent", "UI", "Locale switch", $scope.lang)
             })
 
             $ctrl.citeClick = () => {

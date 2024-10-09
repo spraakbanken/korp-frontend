@@ -5,6 +5,7 @@ import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html } from "@/util"
+import { matomoSend } from "@/matomo"
 import "@/services/compare-searches"
 import "@/components/extended/tokens"
 import "@/components/search-submit"
@@ -85,6 +86,7 @@ angular.module("korpApp").component("extendedStandard", {
             })
 
             ctrl.onSearch = () => {
+                matomoSend("trackEvent", "Search", "Submit search", "Extended")
                 triggerSearch()
             }
 

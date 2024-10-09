@@ -1,6 +1,7 @@
 /** @format */
 import angular from "angular"
 import { html } from "@/util"
+import { matomoSend } from "@/matomo"
 import "@/services/compare-searches"
 import "@/components/search-submit"
 
@@ -80,6 +81,7 @@ angular.module("korpApp").component("advancedSearch", {
                 $location.search("within", null)
                 $location.search("in_order", $ctrl.freeOrder ? false : null)
                 $timeout(() => $location.search("search", `cqp|${$ctrl.cqp}`), 0)
+                matomoSend("trackEvent", "Search", "Submit search", "Advanced")
             }
 
             $ctrl.onSearchSave = (name) => {

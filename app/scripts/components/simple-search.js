@@ -5,6 +5,7 @@ import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html, regescape, saldoToHtml, unregescape } from "@/util"
+import { matomoSend } from "@/matomo"
 import "@/services/compare-searches"
 import "@/services/lexicons"
 import "@/services/searches"
@@ -132,6 +133,7 @@ angular.module("korpApp").component("simpleSearch", {
                     }
                     $location.search("page", null)
                 }, 0)
+                matomoSend("trackEvent", "Search", "Submit search", "Simple")
             }
 
             ctrl.getCQP = function () {

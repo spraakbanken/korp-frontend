@@ -4,6 +4,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { html } from "@/util"
+import { matomoSend } from "@/matomo"
 import "@/services/searches"
 import "@/components/extended/tokens"
 
@@ -159,6 +160,7 @@ angular.module("korpApp").component("extendedParallel", {
                     $location.search("search", `cqp|${onCQPChange()}`)
                     $location.search("page", null)
                 }, 0)
+                matomoSend("trackEvent", "Search", "Submit search", "Extended")
             }
 
             ctrl.keydown = function ($event) {

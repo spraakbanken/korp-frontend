@@ -6,6 +6,7 @@
 
 - Support `.env`
 - Simplify time interval CQP covering whole days [#379](https://github.com/spraakbanken/korp-frontend/issues/379)
+- Track some events with Matomo: search, language switch
 
 ### Changed
 
