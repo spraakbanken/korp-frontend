@@ -8,7 +8,7 @@ type GraphCtrlScope = TabHashScope & {
     data: GraphTab
     loading: boolean
     onProgress: (progress: number) => void
-    progress: number
+    progress?: number
     updateLoading: (loading: boolean) => void
 }
 
@@ -19,6 +19,7 @@ angular.module("korpApp").directive("graphCtrl", () => ({
         ($scope: GraphCtrlScope, $rootScope: RootScope) => {
             const s = $scope
             const r = $rootScope
+            s.progress = undefined
 
             s.newDynamicTab()
 

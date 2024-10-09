@@ -1356,26 +1356,6 @@ slider {
 
 }
 
-.tab_progress {
-  height: 2px;
-  background-color: darkblue;
-  max-width: 100%;
-  min-width: 3%;
-  position : absolute;
-  left : 0;
-  right : 0;
-  bottom : 0;
-}
-
-.not_loading .tab_progress {
-  display: none;
-}
-
-.not_loading .hits_picture {
-  left: 180px;
-  transition: width 400ms ease;
-}
-
 .pagination {
     height: auto;
     margin : 0;
@@ -1827,11 +1807,6 @@ line.tick {
     margin-top : 1em;
     text-align : right;
   }
-}
-
-.tab_preloaders {
-  display : inline-block;
-  vertical-align: middle;
 }
 
 .tab-content {
