@@ -152,7 +152,7 @@ angular.module("korpApp").factory("lexicons", [
                             url: `${karpURL}/query/swefn`,
                             method: "GET",
                             params: {
-                                q: "and(" + _.map(data.hits, (sense) => `equals|LUs|${sense}`).join("||") + ")",
+                                q: "or(" + _.map(data.hits, (sense) => `equals|LUs|${sense}`).join("||") + ")",
                                 path: "entry",
                             },
                         }).then(({ data }) => {

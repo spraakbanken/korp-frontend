@@ -18,6 +18,7 @@
 - Searching by pressing Enter in Simple search is broken [#394](https://github.com/spraakbanken/korp-frontend/issues/394)
 - Barcode (aka hitsPicture) sometimes missing from KWIC tab [#395](https://github.com/spraakbanken/korp-frontend/issues/395)
 - Error when loading with restricted corpora selected [#398](https://github.com/spraakbanken/korp-frontend/issues/398)
+- Related words lookup must use OR [#401](https://github.com/spraakbanken/korp-frontend/issues/401)
 
 ## [9.7.1] - 2024-09-18
 
