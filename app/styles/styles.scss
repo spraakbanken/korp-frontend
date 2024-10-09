@@ -1688,10 +1688,6 @@ line.tick {
   .tab-content {
     padding : 1em;
   }
-  .close_icon {
-    cursor: pointer;
-    padding-left: 5px;
-  }
   .nav.nav-tabs {
 
     @apply bg-gradient-to-r from-gray-200 to-white border-b border-gray-200;
@@ -1835,39 +1831,12 @@ line.tick {
 
 .tab_preloaders {
   display : inline-block;
-  margin-left: 10px;
   vertical-align: middle;
-  .preloader_spinner {
-    width : 9px;
-    display : inline;
-  }
-}
-
-
-
-
-.close_icon {
-  display : inline;
-}
-.tab_spinner {
-  display : none;
-  width : 13px;
-  margin-left: 10px;
-  vertical-align: middle;
-}
-.loading .tab_spinner {
-  display : inline-block;
-}
-.loading .close_icon {
-  display : none;
 }
 
 .tab-content {
   overflow: hidden;
 }
-
-
-
 
 
 /* Side notes for calling out things

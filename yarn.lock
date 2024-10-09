@@ -692,13 +692,6 @@ angular-filter@0.5.17:
   dependencies:
     angular "*"
 
-angular-spinner@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/angular-spinner/-/angular-spinner-1.0.1.tgz#0a159297951d1462e0615ba5e1a01fd46de2c1ca"
-  integrity sha512-gJvCOmpwFweWQ4+UHppsha8eScXMylV3QSm8PrI6WmA3/wQEaz81cvDdHgz0prcon4hmPLiccVherKpKASuu/A==
-  dependencies:
-    spin.js "2.3.2"
-
 angular-ui-bootstrap@2.5.6:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
@@ -4020,11 +4013,6 @@ spdy@^4.0.2:
     http-deceiver "^1.2.7"
     select-hose "^2.0.0"
     spdy-transport "^3.0.0"
-
-spin.js@2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/spin.js/-/spin.js-2.3.2.tgz#6caa56d520673450fd5cfbc6971e6d0772c37a1a"
-  integrity sha512-ryhCvKCRa6J5Fxa7Y+fnhE2a+e05JwfW5dxO82zPd0uDM9o+qp8p74BJUurjiqCqmDsWNvGOAxfqdD317XIedg==
 
 sprintf-js@^1.1.3:
   version "1.1.3"

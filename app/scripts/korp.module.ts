@@ -1,7 +1,6 @@
 /** @format */
 import angular from "angular"
 import "angular-ui-bootstrap"
-import "angular-spinner"
 import "angular-ui-sortable"
 import "angular-dynamic-locale"
 import "angular-filter"
@@ -32,7 +31,6 @@ const korpApp = angular.module("korpApp", [
     "ui.bootstrap.popover",
     "uib/template/popover/popover.html",
     "uib/template/popover/popover-template.html",
-    "angularSpinner",
     "ui.sortable",
     "tmh.dynamicLocale",
     "angular.filter",

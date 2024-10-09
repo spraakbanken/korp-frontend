@@ -10,6 +10,7 @@
 ### Changed
 
 - Font is now a dependency, not checked-in files (and the font looks slightly different)
+- New loading spinners in result tabs
 
 ### Fixed
 

@@ -5,6 +5,9 @@ module.exports = {
     content: ["./app/**/*.js", "./app/**/*.ts", "./app/**/*.html"],
     theme: {
         extend: {
+            animation: {
+                "spin-slow": "spin 2s linear infinite",
+            },
             colors: {
                 gray: {
                     100: "#f5f5f5",

@@ -12,11 +12,7 @@ angular.module("korpApp").directive("tabPreloader", () => ({
     replace: true,
     template: html`<div class="tab_preloaders">
         <div ng-if="!spinner" class="tab_progress" style="width:{{value || 0}}%"></div>
-        <span
-            ng-if="spinner"
-            class="preloader_spinner"
-            us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 7, top : -12}"
-        ></span>
+        <i ng-if="spinner" class="fa-solid fa-spinner motion-safe_animate-spin-slow"></i>
     </div>`,
 
     link() {},

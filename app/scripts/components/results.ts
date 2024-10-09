@@ -8,7 +8,6 @@ import "@/components/loglike-meter"
 import "@/components/result-map"
 import "@/components/statistics"
 import "@/components/sidebar"
-import "@/components/tab-spinner"
 import "@/components/trend-diagram"
 import "@/components/word-picture"
 import "@/controllers/comparison_controller"
@@ -38,7 +37,10 @@ angular.module("korpApp").component("results", {
             <div class="overflow-auto grow" id="left-column">
                 <uib-tabset class="tabbable result_tabs" tab-hash="result_tab" active="activeTab">
                     <uib-tab kwic-ctrl index="0" select="onentry()" deselect="onexit()">
-                        <uib-tab-heading ng-class="{not_loading: progress > 99, loading : loading}">
+                        <uib-tab-heading
+                            class="flex gap-2 items-center"
+                            ng-class="{not_loading: progress > 99, loading : loading}"
+                        >
                             KWIC
                             <tab-preloader
                                 ng-if="loading"
@@ -76,7 +78,10 @@ angular.module("korpApp").component("results", {
                         deselect="onexit()"
                         index="2"
                     >
-                        <uib-tab-heading ng-class="{not_loading: progress > 99, loading : loading}">
+                        <uib-tab-heading
+                            class="flex gap-2 items-center"
+                            ng-class="{not_loading: progress > 99, loading : loading}"
+                        >
                             {{'statistics' | loc:$root.lang}}
                             <tab-preloader
                                 ng-if="loading"
@@ -109,7 +114,10 @@ angular.module("korpApp").component("results", {
                         select="onentry()"
                         deselect="onexit()"
                     >
-                        <uib-tab-heading ng-class="{not_loading: progress > 99, loading : loading}">
+                        <uib-tab-heading
+                            class="flex gap-2 items-center"
+                            ng-class="{not_loading: progress > 99, loading : loading}"
+                        >
                             {{'word_picture' | loc:$root.lang}}
                             <tab-preloader
                                 ng-if="loading"
@@ -134,9 +142,13 @@ angular.module("korpApp").component("results", {
                     </uib-tab>
 
                     <uib-tab example-ctrl ng-repeat="kwicTab in $root.kwicTabs" select="onentry()" deselect="onexit()">
-                        <uib-tab-heading ng-class="{not_loading: progress == 100, loading : loading}">
+                        <uib-tab-heading
+                            class="flex gap-2 items-center"
+                            ng-class="{not_loading: progress == 100, loading : loading}"
+                        >
                             KWIC
-                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
+                            <i ng-if="loading" class="fa-solid fa-spinner motion-safe_animate-spin-slow"></i>
+                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
                         </uib-tab-heading>
                         <korp-error ng-if="error"></korp-error>
                         <div
@@ -165,10 +177,11 @@ angular.module("korpApp").component("results", {
                     </uib-tab>
 
                     <uib-tab ng-repeat="data in $root.graphTabs" graph-ctrl>
-                        <uib-tab-heading ng-class="{not_loading: progress > 99}">
+                        <uib-tab-heading class="flex gap-2 items-center" ng-class="{not_loading: progress > 99}">
                             {{'graph' | loc:$root.lang}}
                             <div class="tab_progress" style="width:{{progress || 0}}%" ng-show="loading"></div>
-                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
+                            <i ng-if="loading" class="fa-solid fa-spinner motion-safe_animate-spin-slow"></i>
+                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
                         </uib-tab-heading>
                         <trend-diagram
                             data="data"
@@ -178,9 +191,10 @@ angular.module("korpApp").component("results", {
                     </uib-tab>
 
                     <uib-tab ng-repeat="promise in $root.compareTabs" compare-ctrl>
-                        <uib-tab-heading class="compare_tab" ng-class="{loading : loading}">
+                        <uib-tab-heading class="compare_tab flex gap-2 items-center" ng-class="{loading : loading}">
                             {{'compare_vb' | loc:$root.lang}}
-                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
+                            <i ng-if="loading" class="fa-solid fa-spinner motion-safe_animate-spin-slow"></i>
+                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
                         </uib-tab-heading>
                         <div class="compare_result" ng-class="{loading : loading}">
                             <korp-error ng-if="error"></korp-error>
@@ -220,9 +234,10 @@ angular.module("korpApp").component("results", {
                     </uib-tab>
 
                     <uib-tab ng-repeat="promise in $root.mapTabs" map-ctrl select="onentry()">
-                        <uib-tab-heading class="map_tab" ng-class="{loading : loading}">
+                        <uib-tab-heading class="map_tab flex gap-2 items-center" ng-class="{loading : loading}">
                             {{ 'map' | loc:$root.lang}}
-                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
+                            <i ng-if="loading" class="fa-solid fa-spinner motion-safe_animate-spin-slow"></i>
+                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
                         </uib-tab-heading>
                         <div class="map_result" ng-class="{loading : loading}">
                             <korp-error ng-if="error"></korp-error>
@@ -272,9 +287,10 @@ angular.module("korpApp").component("results", {
                         select="onentry()"
                         deselect="onexit()"
                     >
-                        <uib-tab-heading ng-class="{loading : loading}">
+                        <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading : loading}">
                             {{ 'text_tab_header' | loc:$root.lang}}
-                            <tab-spinner ng-click="closeTab($index, $event)"></tab-spinner>
+                            <i ng-if="loading" class="fa-solid fa-spinner motion-safe_animate-spin-slow"></i>
+                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
                         </uib-tab-heading>
                         <div>
                             <korp-error ng-if="error"></korp-error>
