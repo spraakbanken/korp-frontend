@@ -67,6 +67,7 @@ require("./lib/jquery.tooltip.pack.js")
 
 require("./scripts/main")
 require("./scripts/app")
+require("./scripts/vue")
 
 require("./scripts/video_controllers.js")
 require("./scripts/backend/struct-service")

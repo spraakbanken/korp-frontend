@@ -4,6 +4,7 @@ const path = require("path")
 const Dotenv = require("dotenv")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const { VueLoaderPlugin } = require("vue-loader")
 
 // Read .env into process.env
 Dotenv.config()
@@ -37,6 +38,10 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.vue$/,
+                use: "vue-loader",
+            },
             {
                 test: /\.tsx?$/,
                 use: {
@@ -172,6 +177,7 @@ module.exports = {
             // Using our own variable instead of NODE_ENV, since NODE_ENV should really only be "development" or "production"
             ENVIRONMENT: "development", // Can be: "development", "staging" or "production"
         }),
+        new VueLoaderPlugin(),
     ],
     ignoreWarnings: [
         (e) => e.message.includes("Can't resolve 'custom"),

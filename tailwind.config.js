@@ -1,6 +1,6 @@
 /** @format */
 module.exports = {
-    content: ["./app/**/*.js", "./app/**/*.ts", "./app/**/*.html"],
+    content: ["./app/**/*.vue", "./app/**/*.js", "./app/**/*.ts", "./app/**/*.html"],
     theme: {
         extend: {
             animation: {
