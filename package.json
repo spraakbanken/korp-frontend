@@ -32,6 +32,7 @@
         "slickgrid": "3.0.3",
         "tailwindcss": "3.2.4",
         "vue": "^2",
+        "vue-loader": "^15",
         "xstate": "4.35.4"
     },
     "devDependencies": {
