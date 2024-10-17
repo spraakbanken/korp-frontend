@@ -31,6 +31,7 @@
         "rickshaw": "1.7.1",
         "slickgrid": "3.0.3",
         "tailwindcss": "3.2.4",
+        "vue": "^2",
         "xstate": "4.35.4"
     },
     "devDependencies": {
