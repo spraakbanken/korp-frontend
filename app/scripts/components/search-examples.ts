@@ -13,7 +13,7 @@ export default angular.module("korpApp").component("searchExamples", {
         <section ng-if="examples">
             <h2 class="text-xl font-bold">{{"example_queries" | loc:$root.lang}}</h2>
             <ul class="my-2 list-disc">
-                <li ng-repeat="example in examples" class="ml-6 mt-2 first_mt-0">
+                <li ng-repeat="example in examples" class="ml-6 mt-2 first:mt-0">
                     <a ng-click="$ctrl.setSearch(example.params)"> {{example.label | locObj:$root.lang}} </a>
                     <span ng-if="example.hint" class="italic">
                         – <span ng-bind-html="example.hint | locObj:$root.lang | trust" />

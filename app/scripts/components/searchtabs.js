@@ -38,7 +38,7 @@ angular.module("korpApp").component("searchtabs", {
                     <compare-search></compare-search>
                 </uib-tab>
                 <div class="flex justify-end items-center">
-                    <select class="hidden md_block shrink min-w-0 m-1" id="search_history"></select>
+                    <select class="hidden md:block shrink min-w-0 m-1" id="search_history"></select>
                 </div>
             </uib-tabset>
             <div

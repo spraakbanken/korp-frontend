@@ -16,7 +16,7 @@ angular.module("korpApp").component("simpleSearch", {
     template: html`
         <div id="korp-simple">
             <global-filters lang="lang"></global-filters>
-            <div class="sm_flex justify-between">
+            <div class="sm:flex justify-between">
                 <form>
                     <autoc
                         id="simple_text"

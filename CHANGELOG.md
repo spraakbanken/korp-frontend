@@ -12,6 +12,7 @@
 
 - Font is now a dependency, not checked-in files (and the font looks slightly different)
 - New loading spinners in result tabs
+- Undo override of Tailwind classname separator for Pug [#376](https://github.com/spraakbanken/korp-frontend/issues/376)
 
 ### Fixed
 

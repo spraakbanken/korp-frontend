@@ -1,7 +1,5 @@
 /** @format */
 module.exports = {
-    // pug doesn't support special characters in class names, so no colon.
-    separator: "_",
     content: ["./app/**/*.js", "./app/**/*.ts", "./app/**/*.html"],
     theme: {
         extend: {

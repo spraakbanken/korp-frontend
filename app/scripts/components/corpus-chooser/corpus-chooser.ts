@@ -63,7 +63,7 @@ angular.module("korpApp").component("corpusChooser", {
         <div class="scroll_checkboxes shrink-0" ng-class="{'cursor-pointer': $ctrl.initialized}">
             <div
                 ng-click="$ctrl.onShowChooser()"
-                class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover_bg-blue-50 rounded h-12"
+                class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover:bg-blue-50 rounded h-12"
             >
                 <div ng-if="$ctrl.initialized">
                     <span ng-if-start="$ctrl.selectCount != 1">{{ $ctrl.selectCount }}</span>

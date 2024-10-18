@@ -10,7 +10,7 @@ angular.module("korpApp").component("tabPreloader", {
             class="h-0.5 bg-current absolute bottom-0 left-0"
             style="width: {{$ctrl.progress || 0}}%"
         ></div>
-        <i class="fa-solid fa-spinner motion-safe_animate-spin-slow"></i>
+        <i class="fa-solid fa-spinner motion-safe:animate-spin-slow"></i>
     </div>`,
     bindings: {
         progress: "<",

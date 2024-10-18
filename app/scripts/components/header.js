@@ -41,7 +41,7 @@ angular.module("korpApp").component("header", {
 
                     <radio-list options="$ctrl.languages" ng-model="lang"> </radio-list>
 
-                    <a class="transiton duration-200 hover_text-blue-600" ng-click="$ctrl.citeClick()">
+                    <a class="transiton duration-200 hover:text-blue-600" ng-click="$ctrl.citeClick()">
                         {{'about_cite_header' | loc:$root.lang}}
                     </a>
 
@@ -105,12 +105,12 @@ angular.module("korpApp").component("header", {
                     </svg>
                 </div>
 
-                <div class="grow min-[1150px]_hidden"></div>
+                <div class="grow min-[1150px]:hidden"></div>
                 <corpus-chooser></corpus-chooser>
-                <div class="grow hidden min-[1150px]_block"></div>
+                <div class="grow hidden min-[1150px]:block"></div>
 
                 <a
-                    class="hidden min-[1150px]_flex h-20 shrink flex-col justify-end"
+                    class="hidden min-[1150px]:flex h-20 shrink flex-col justify-end"
                     href="https://spraakbanken.gu.se/"
                     target="_blank"
                 >
@@ -118,7 +118,7 @@ angular.module("korpApp").component("header", {
                     <img ng-if="$root.lang != 'swe'" src="${sbxLogoEn}" />
                 </a>
 
-                <a class="hidden xl_block shrink-0 h-32 -mt-2" href="https://gu.se/" target="_blank">
+                <a class="hidden xl:block shrink-0 h-32 -mt-2" href="https://gu.se/" target="_blank">
                     <img src="${guLogo}" class="h-full" />
                 </a>
             </div>
