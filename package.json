@@ -27,15 +27,15 @@
         "leaflet.markercluster": "^1.5.3",
         "lodash": "^4.17.21",
         "moment": "2.29.4",
-        "ngVue": "^2.2.1",
         "rickshaw": "1.7.1",
         "slickgrid": "3.0.3",
         "tailwindcss": "3.2.4",
-        "vue": "^2",
-        "vue-loader": "^15",
+        "vue": "^3.5.12",
+        "vue-loader": "^17.4.2",
         "xstate": "4.35.4"
     },
     "devDependencies": {
+        "@jaredmcateer/ngvue3": "^0.5.0",
         "@types/jasmine": "^5.1.4",
         "@types/jquery": "^3.5.29",
         "@types/js-yaml": "^4.0.9",
