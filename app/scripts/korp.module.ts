@@ -4,8 +4,9 @@ import "angular-ui-bootstrap"
 import "angular-ui-sortable"
 import "angular-dynamic-locale"
 import "angular-filter"
-import vue from "vue"
-import "ngVue"
+import { useNgVue } from "@jaredmcateer/ngvue3"
+
+const ngVue = useNgVue()
 
 const korpApp = angular.module("korpApp", [
     "ui.bootstrap.typeahead",
@@ -36,7 +37,7 @@ const korpApp = angular.module("korpApp", [
     "ui.sortable",
     "tmh.dynamicLocale",
     "angular.filter",
-    "ngVue",
+    ngVue,
 ])
 
 export default korpApp

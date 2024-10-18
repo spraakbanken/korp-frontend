@@ -1,10 +1,6 @@
 <!-- @format -->
-<script>
-import Vue from "vue"
-
-export default Vue.component("TabPreloader", {
-    props: ["progress"],
-})
+<script setup>
+defineProps(["progress"])
 </script>
 
 <template>
@@ -17,5 +13,3 @@ export default Vue.component("TabPreloader", {
         <i class="fa-solid fa-spinner motion-safe:animate-spin-slow"></i>
     </div>
 </template>
-
-<style></style>
