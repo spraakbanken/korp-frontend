@@ -25,7 +25,9 @@ export default angular.module("korpApp").component("frontpage", {
                 <search-examples ng-if="examples" class="w-80 grow"></search-examples>
             </div>
 
-            <corpus-updates class="w-80 grow"></corpus-updates>
+            <div class="w-80 grow">
+                <corpus-updates></corpus-updates>
+            </div>
 
             <newsdesk ng-if="newsdeskIsEnabled" class="w-80 grow"></newsdesk>
         </div>

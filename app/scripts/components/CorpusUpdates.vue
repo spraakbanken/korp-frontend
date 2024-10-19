@@ -1,6 +1,6 @@
 <!-- @format -->
 <script setup>
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import moment from "moment"
 import settings from "@/settings"
 import { loc, locObj } from "@/i18n"
@@ -17,23 +17,18 @@ import { rootScope } from "@/vue-services"
 const LIMIT = 5
 const lang = ref(rootScope.lang)
 const recentUpdates = ref()
-const recentUpdatesFiltered = ref()
 const expanded = ref(false)
+
+const recentUpdatesFiltered = computed(() => recentUpdates.value.slice(0, expanded.value ? undefined : LIMIT))
 
 rootScope.$watch("lang", (value) => (lang.value = value))
 
 if (settings.frontpage?.corpus_updates) {
-    const limitDate = moment().subtract(6, "months")
+    const limitDate = moment().subtract(12, "months")
     // Find most recently updated corpora
     recentUpdates.value = settings.corpusListing.corpora
         .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
         .sort((a, b) => b.info.Updated.localeCompare(a.info.Updated))
-    toggleExpanded(false)
-}
-
-function toggleExpanded(to) {
-    expanded.value = to != null ? to : !expanded.value
-    recentUpdatesFiltered.value = expanded.value ? recentUpdates.value : recentUpdates.value.slice(0, LIMIT)
 }
 </script>
 
@@ -49,10 +44,10 @@ function toggleExpanded(to) {
                 </div>
             </article>
             <div v-if="recentUpdates.length > LIMIT">
-                <a v-if="!expanded" @click="toggleExpanded()">
+                <a v-if="!expanded" @click="expanded = true">
                     <i class="fa fa-angle-double-down"></i> {{ loc("show_more", lang) }}
                 </a>
-                <a v-if="expanded" @click="toggleExpanded()">
+                <a v-if="expanded" @click="expanded = false">
                     <i class="fa fa-angle-double-up"></i> {{ loc("show_less", lang) }}
                 </a>
             </div>
