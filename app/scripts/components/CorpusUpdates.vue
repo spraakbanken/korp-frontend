@@ -4,6 +4,7 @@ import { ref } from "vue"
 import moment from "moment"
 import settings from "@/settings"
 import { loc, locObj } from "@/i18n"
+import { rootScope } from "@/vue-services"
 
 // type CorpusUpdatesScope = IScope & {
 //     LIMIT: number
@@ -13,12 +14,13 @@ import { loc, locObj } from "@/i18n"
 //     toggleExpanded: (to?: boolean) => void
 // }
 
-defineProps(["lang"])
-
 const LIMIT = 5
-let recentUpdates = ref()
-let recentUpdatesFiltered = ref()
-let expanded = ref(false)
+const lang = ref(rootScope.lang)
+const recentUpdates = ref()
+const recentUpdatesFiltered = ref()
+const expanded = ref(false)
+
+rootScope.$watch("lang", (value) => (lang.value = value))
 
 if (settings.frontpage?.corpus_updates) {
     const limitDate = moment().subtract(6, "months")
@@ -42,7 +44,8 @@ function toggleExpanded(to) {
             <article v-for="corpus in recentUpdatesFiltered">
                 <time :datetime="corpus.info.Updated" class="opacity-75 float-right">{{ corpus.info.Updated }}</time>
                 <div>
-                    <strong>{{ locObj(corpus.title, lang) }}</strong> {{ loc("front_corpus_updated", lang) }}.
+                    <strong>{{ locObj(corpus.title, lang) }}</strong>
+                    {{ loc("front_corpus_updated", lang) }}.
                 </div>
             </article>
             <div v-if="recentUpdates.length > LIMIT">
