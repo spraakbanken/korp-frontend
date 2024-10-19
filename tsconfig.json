@@ -1,4 +1,8 @@
 {
+    // Adding lang="ts" to a Vue component produced error "browser is not defined".
+    // The `browser` usage is in the spec files, so include only app code.
+    // Test code is abandoned for now.
+    "include": ["app/**/*"],
     "compilerOptions": {
         "outDir": "./dist/",
         "sourceMap": true,

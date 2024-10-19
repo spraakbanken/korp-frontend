@@ -5,6 +5,7 @@ const Dotenv = require("dotenv")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { VueLoaderPlugin } = require("vue-loader")
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 // Read .env into process.env
 Dotenv.config()
@@ -178,6 +179,7 @@ module.exports = {
             ENVIRONMENT: "development", // Can be: "development", "staging" or "production"
         }),
         new VueLoaderPlugin(),
+        new NodePolyfillPlugin(),
     ],
     ignoreWarnings: [
         (e) => e.message.includes("Can't resolve 'custom"),
