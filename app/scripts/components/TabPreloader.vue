@@ -1,6 +1,6 @@
 <!-- @format -->
-<script setup>
-defineProps(["progress"])
+<script setup lang="ts">
+defineProps<{ progress?: number | string }>()
 </script>
 
 <template>

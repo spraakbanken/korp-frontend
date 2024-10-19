@@ -5,6 +5,7 @@ const Dotenv = require("dotenv")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { VueLoaderPlugin } = require("vue-loader")
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 // Read .env into process.env
 Dotenv.config()
@@ -48,6 +49,7 @@ module.exports = {
                     loader: "ts-loader",
                     options: {
                         configFile: path.resolve(__dirname, "tsconfig.json"),
+                        appendTsSuffixTo: [/\.vue$/],
                     },
                 },
                 exclude: /node_modules/,
@@ -182,6 +184,7 @@ module.exports = {
             __VUE_OPTIONS_API__: "false", // Enable if needed by 3rd party deps
         }),
         new VueLoaderPlugin(),
+        new NodePolyfillPlugin(),
     ],
     ignoreWarnings: [
         (e) => e.message.includes("Can't resolve 'custom"),

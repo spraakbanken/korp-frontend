@@ -1,34 +1,27 @@
 <!-- @format -->
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from "vue"
 import moment from "moment"
 import settings from "@/settings"
 import { loc, locObj } from "@/i18n"
 import { rootScope } from "@/vue-services"
-
-// type CorpusUpdatesScope = IScope & {
-//     LIMIT: number
-//     recentUpdates: CorpusTransformed[] | null
-//     recentUpdatesFiltered: CorpusTransformed[] | null
-//     expanded: boolean
-//     toggleExpanded: (to?: boolean) => void
-// }
+import { CorpusTransformed } from "@/settings/config-transformed.types"
 
 const LIMIT = 5
-const lang = ref(rootScope.lang)
-const recentUpdates = ref()
+const lang = ref<string>(rootScope.lang)
+const recentUpdates = ref<CorpusTransformed[]>([])
 const expanded = ref(false)
 
 const recentUpdatesFiltered = computed(() => recentUpdates.value.slice(0, expanded.value ? undefined : LIMIT))
 
-rootScope.$watch("lang", (value) => (lang.value = value))
+rootScope.$watch("lang", (value: string) => (lang.value = value))
 
 if (settings.frontpage?.corpus_updates) {
-    const limitDate = moment().subtract(12, "months")
+    const limitDate = moment().subtract(6, "months")
     // Find most recently updated corpora
     recentUpdates.value = settings.corpusListing.corpora
         .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
-        .sort((a, b) => b.info.Updated.localeCompare(a.info.Updated))
+        .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
 }
 </script>
 
