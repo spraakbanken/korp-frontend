@@ -17,7 +17,7 @@ export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) =
     Object.fromEntries(keys.map((key) => [key, getValue(key)]))
 
 /** Mapping from service names to their TS types. */
-type ServiceTypes = {
+export type ServiceTypes = {
     $controller: IControllerService
     $http: IHttpService
     $location: LocationService
