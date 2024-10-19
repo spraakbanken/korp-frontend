@@ -6,7 +6,6 @@ import { SearchesService } from "@/services/searches"
 import { html } from "@/util"
 import { isEnabled } from "@/news-service"
 import "@/services/searches"
-import "@/components/corpus-updates"
 import "@/components/newsdesk"
 import "@/components/search-examples"
 
@@ -26,7 +25,7 @@ export default angular.module("korpApp").component("frontpage", {
                 <search-examples ng-if="examples" class="w-80 grow"></search-examples>
             </div>
 
-            <corpus-updates class="w-80 grow"></corpus-updates>
+            <corpus-updates class="w-80 grow" v-props-lang="$root.lang"></corpus-updates>
 
             <newsdesk ng-if="newsdeskIsEnabled" class="w-80 grow"></newsdesk>
         </div>
