@@ -49,7 +49,8 @@ angular.module("korpApp").factory("karp", [
             })
 
         return {
-            getLemgrams: (wordForm, morphologies) => query(morphologies, wfQuery(wordForm), "entry.lemgram"),
+            getLemgrams: (wordForm, morphologies) =>
+                query(morphologies, wfQuery(wordForm), "entry.lemgram", { size: 100 }),
 
             getSenseId: (lemgram) => query(["saldo"], `equals|lemgrams|${lemgram}`, "entry.senseID"),
 

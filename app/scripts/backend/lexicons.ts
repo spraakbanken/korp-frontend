@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IHttpService, IPromise, IQService } from "angular"
+import angular, { IHttpService, IPromise } from "angular"
 import settings from "@/settings"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import { httpConfAddMethod } from "@/util"
@@ -28,99 +28,45 @@ export type LemgramCount = { lemgram: string; count: number }
 export type SenseResult = { sense: string; desc: string }
 
 angular.module("korpApp").factory("lexicons", [
-    "$q",
     "$http",
     "karp",
-    function ($q: IQService, $http: IHttpService, karp: KarpService): LexiconsService {
+    function ($http: IHttpService, karp: KarpService): LexiconsService {
         return {
-            getLemgrams(wf: string, resources: string[], corporaIDs: string[]) {
-                // TODO Can we skip creating deferreds and return promises directly?
-                const deferred = $q.defer<LemgramCount[]>()
+            async getLemgrams(wf: string, resources: string[], corporaIDs: string[]) {
+                const lemgrams = await karp.getLemgrams(wf, resources).then(({ data }) => data.hits)
 
-                karp.getLemgrams(wf, resources)
-                    .then(({ data }) => {
-                        if (data.total === 0) {
-                            deferred.resolve([])
-                            return
-                        }
+                if (lemgrams.length == 0) return []
 
-                        const karpLemgrams = data.hits
-                        $http<KorpLemgramCountResponse>(
-                            httpConfAddMethod({
-                                url: settings["korp_backend_url"] + "/lemgram_count",
-                                method: "GET",
-                                params: {
-                                    lemgram: karpLemgrams.join(","),
-                                    count: "lemgram",
-                                    corpus: corporaIDs.join(","),
-                                },
-                                headers: getAuthorizationHeader(),
-                            })
-                        ).then(({ data }) => {
-                            const keys = Object.keys(data).filter((key) => key != "time")
-                            const allLemgrams: LemgramCount[] = []
-                            for (const lemgram of keys) {
-                                const count = data[lemgram]
-                                allLemgrams.push({ lemgram: lemgram, count: count })
-                            }
-                            for (let klemgram of karpLemgrams) {
-                                if (!data[klemgram]) {
-                                    allLemgrams.push({ lemgram: klemgram, count: 0 })
-                                }
-                            }
-                            deferred.resolve(allLemgrams)
-                        })
+                const counts = await $http<KorpLemgramCountResponse>(
+                    httpConfAddMethod({
+                        url: settings["korp_backend_url"] + "/lemgram_count",
+                        method: "GET",
+                        params: {
+                            lemgram: lemgrams.join(","),
+                            count: "lemgram",
+                            corpus: corporaIDs.join(","),
+                        },
+                        headers: getAuthorizationHeader(),
                     })
-                    .catch(() => deferred.resolve([]))
-                return deferred.promise
+                ).then(({ data }) => _.omit(data, "time"))
+
+                return lemgrams.map((lemgram) => ({ lemgram, count: counts[lemgram] || 0 }))
             },
 
-            getSenses(wf: string) {
-                const deferred = $q.defer<SenseResult[]>()
+            async getSenses(wf: string) {
+                const lemgrams = await karp.getLemgrams(wf, ["saldom"]).then(({ data }) => data.hits)
+                if (lemgrams.length == 0) return []
 
-                karp.getLemgrams(wf, ["saldom"])
-                    .then(({ data }) => {
-                        if (data.total === 0) {
-                            deferred.resolve([])
-                            return
-                        }
-
-                        const karpLemgrams = data.hits.slice(0, 100)
-                        if (karpLemgrams.length === 0) {
-                            deferred.resolve([])
-                            return
-                        }
-
-                        karp.getSenses(karpLemgrams)
-                            .then(function ({ data }) {
-                                const senses = _.map(data.hits, ({ senseID, primary }) => ({
-                                    sense: senseID,
-                                    desc: primary,
-                                }))
-                                deferred.resolve(senses)
-                            })
-                            .catch(() => deferred.resolve([]))
-                    })
-                    .catch(() => deferred.resolve([]))
-                return deferred.promise
+                const senses = await karp.getSenses(lemgrams).then(({ data }) => data.hits)
+                return senses.map(({ senseID, primary }) => ({ sense: senseID, desc: primary }))
             },
 
-            relatedWordSearch(lemgram: string) {
-                const def = $q.defer<LexiconsRelatedWordsResponse>()
-                karp.getSenseId(lemgram).then(({ data }) => {
-                    if (data.total === 0) {
-                        def.resolve([])
-                    } else {
-                        karp.getSwefnFrame(data.hits).then(({ data }) => {
-                            const eNodes = _.map(data.hits, (entry) => ({
-                                label: entry.swefnID,
-                                words: entry.LUs,
-                            }))
-                            def.resolve(eNodes)
-                        })
-                    }
-                })
-                return def.promise
+            async relatedWordSearch(lemgram: string) {
+                const senses = await karp.getSenseId(lemgram).then(({ data }) => data.hits)
+                if (senses.length == 0) return []
+
+                const frames = await karp.getSwefnFrame(senses).then(({ data }) => data.hits)
+                return frames.map((entry) => ({ label: entry.swefnID, words: entry.LUs }))
             },
         }
     },
