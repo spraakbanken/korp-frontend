@@ -6,7 +6,7 @@ import { getStringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
 import { CompareTab, RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { CompareItem, CompareTables } from "@/services/backend"
+import { CompareItem, CompareTables } from "@/backend/backend"
 import { TabHashScope } from "@/directives/tab-hash"
 
 type CompareCtrlScope = TabHashScope & {

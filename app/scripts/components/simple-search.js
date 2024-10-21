@@ -7,7 +7,7 @@ import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } fro
 import { html, regescape, saldoToHtml, unregescape } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/services/compare-searches"
-import "@/services/lexicons"
+import "@/backend/lexicons"
 import "@/services/searches"
 import "@/components/autoc"
 import "@/components/search-submit"

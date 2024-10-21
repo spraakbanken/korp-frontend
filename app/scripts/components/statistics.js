@@ -7,7 +7,7 @@ import { html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import { getCqp } from "../../config/statistics_config.js"
 import { expandOperators } from "@/cqp_parser/cqp"
-import "@/services/backend"
+import "@/backend/backend"
 import "@/services/searches"
 import "@/components/corpus-distribution-chart"
 

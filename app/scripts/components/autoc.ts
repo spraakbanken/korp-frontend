@@ -4,9 +4,8 @@ import angular, { IController, IPromise, IQService } from "angular"
 import settings from "@/settings"
 import { html, lemgramToString, saldoToString } from "@/util"
 import { loc } from "@/i18n"
-import "@/services/lexicons"
+import { LemgramCount, LexiconsService } from "@/backend/lexicons"
 import "@/directives/typeahead-click-open"
-import { LemgramCount, LexiconsService } from "@/services/lexicons"
 
 type AutocController = IController & {
     input: string

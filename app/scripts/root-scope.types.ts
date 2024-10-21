@@ -5,7 +5,7 @@ import { LangLocMap, LocLangMap } from "@/i18n/types"
 import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CqpQuery } from "./cqp_parser/cqp.types"
 import { CorpusListing } from "./corpus_listing"
-import { CompareResult, MapRequestResult } from "./services/backend"
+import { CompareResult, MapRequestResult } from "@/backend/backend"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
