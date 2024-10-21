@@ -4,8 +4,7 @@ import angular, { IHttpService, IPromise } from "angular"
 import settings from "@/settings"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import { httpConfAddMethod } from "@/util"
-import "@/karp/service"
-import { KarpService } from "@/karp/service"
+import { getLemgrams, getSenseId, getSenses, getSwefnFrame } from "@/karp"
 
 export type LexiconsService = {
     relatedWordSearch: (lemgram: string) => IPromise<LexiconsRelatedWordsResponse>
@@ -29,12 +28,10 @@ export type SenseResult = { sense: string; desc: string }
 
 angular.module("korpApp").factory("lexicons", [
     "$http",
-    "karp",
-    function ($http: IHttpService, karp: KarpService): LexiconsService {
+    function ($http: IHttpService): LexiconsService {
         return {
             async getLemgrams(wf: string, resources: string[], corporaIDs: string[]) {
-                const lemgrams = await karp.getLemgrams(wf, resources).then(({ data }) => data.hits)
-
+                const lemgrams = await getLemgrams(wf, resources).then((data) => data.hits)
                 if (lemgrams.length == 0) return []
 
                 const counts = await $http<KorpLemgramCountResponse>(
@@ -54,18 +51,18 @@ angular.module("korpApp").factory("lexicons", [
             },
 
             async getSenses(wf: string) {
-                const lemgrams = await karp.getLemgrams(wf, ["saldom"]).then(({ data }) => data.hits)
+                const lemgrams = await getLemgrams(wf, ["saldom"]).then((data) => data.hits)
                 if (lemgrams.length == 0) return []
 
-                const senses = await karp.getSenses(lemgrams).then(({ data }) => data.hits)
+                const senses = await getSenses(lemgrams).then((data) => data.hits)
                 return senses.map(({ senseID, primary }) => ({ sense: senseID, desc: primary }))
             },
 
             async relatedWordSearch(lemgram: string) {
-                const senses = await karp.getSenseId(lemgram).then(({ data }) => data.hits)
+                const senses = await getSenseId(lemgram).then((data) => data.hits)
                 if (senses.length == 0) return []
 
-                const frames = await karp.getSwefnFrame(senses).then(({ data }) => data.hits)
+                const frames = await getSwefnFrame(senses).then((data) => data.hits)
                 return frames.map((entry) => ({ label: entry.swefnID, words: entry.LUs }))
             },
         }
