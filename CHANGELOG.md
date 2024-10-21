@@ -13,6 +13,7 @@
 - Font is now a dependency, not checked-in files (and the font looks slightly different)
 - New loading spinners in result tabs
 - Undo override of Tailwind classname separator for Pug [#376](https://github.com/spraakbanken/korp-frontend/issues/376)
+- Extracted Karp backend usage into `app/scripts/karp/service.ts`
 - `stringifyFunc(key)` was renamed to `getStringifier(key)`
 - `stringify(key, x)` was removed, use `getStringifier(key)(x)` instead
 

@@ -1,14 +1,14 @@
 /** @format */
 import _ from "lodash"
-import angular, { IDeferred, IHttpService, IPromise, IQService } from "angular"
+import angular, { IHttpService, IPromise, IQService } from "angular"
 import settings from "@/settings"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import { httpConfAddMethod } from "@/util"
-import { Karp7QueryResponse, Karp7SaldoEntry, Karp7SwefnEntry } from "@/karp/karp7.types"
+import "@/karp/service"
+import { KarpService } from "@/karp/service"
 
 export type LexiconsService = {
     relatedWordSearch: (lemgram: string) => IPromise<LexiconsRelatedWordsResponse>
-    // TODO Type Karp API
     getLemgrams: (wf: string, resources: string[], corporaIDs: string[]) => IPromise<LemgramCount[]>
     getSenses: (wf: string) => IPromise<SenseResult[]>
 }
@@ -30,26 +30,14 @@ export type SenseResult = { sense: string; desc: string }
 angular.module("korpApp").factory("lexicons", [
     "$q",
     "$http",
-    function ($q: IQService, $http: IHttpService): LexiconsService {
-        const karpURL = "https://spraakbanken4.it.gu.se/karp/v7"
-        // query for saldom resource to find all entries that have wf as a non-compound word form
-        const wfQuery = (wf: string) =>
-            "inflectionTable(and(equals|writtenForm|" +
-            wf +
-            "||not(equals|msd|c||equals|msd|ci||equals|msd|cm||equals|msd|sms)))"
-
+    "karp",
+    function ($q: IQService, $http: IHttpService, karp: KarpService): LexiconsService {
         return {
             getLemgrams(wf: string, resources: string[], corporaIDs: string[]) {
+                // TODO Can we skip creating deferreds and return promises directly?
                 const deferred = $q.defer<LemgramCount[]>()
 
-                $http<Karp7QueryResponse<string>>({
-                    method: "GET",
-                    url: `${karpURL}/query/${resources.join(",")}`,
-                    params: {
-                        q: wfQuery(wf),
-                        path: "entry.lemgram",
-                    },
-                })
+                karp.getLemgrams(wf, resources)
                     .then(({ data }) => {
                         if (data.total === 0) {
                             deferred.resolve([])
@@ -90,14 +78,7 @@ angular.module("korpApp").factory("lexicons", [
             getSenses(wf: string) {
                 const deferred = $q.defer<SenseResult[]>()
 
-                $http<Karp7QueryResponse<string>>({
-                    method: "GET",
-                    url: `${karpURL}/query/saldom`,
-                    params: {
-                        q: wfQuery(wf),
-                        path: "entry.lemgram",
-                    },
-                })
+                karp.getLemgrams(wf, ["saldom"])
                     .then(({ data }) => {
                         if (data.total === 0) {
                             deferred.resolve([])
@@ -110,18 +91,7 @@ angular.module("korpApp").factory("lexicons", [
                             return
                         }
 
-                        $http<Karp7QueryResponse<Karp7SaldoEntry>>({
-                            method: "GET",
-                            url: `${karpURL}/query/saldo`,
-                            params: {
-                                q:
-                                    "or(" +
-                                    _.map(karpLemgrams, (lemgram) => `equals|lemgrams|${lemgram}`).join("||") +
-                                    ")",
-                                path: "entry",
-                                size: 500,
-                            },
-                        })
+                        karp.getSenses(karpLemgrams)
                             .then(function ({ data }) {
                                 const senses = _.map(data.hits, ({ senseID, primary }) => ({
                                     sense: senseID,
@@ -137,25 +107,11 @@ angular.module("korpApp").factory("lexicons", [
 
             relatedWordSearch(lemgram: string) {
                 const def = $q.defer<LexiconsRelatedWordsResponse>()
-                $http<Karp7QueryResponse<string>>({
-                    url: `${karpURL}/query/saldo`,
-                    method: "GET",
-                    params: {
-                        q: `equals|lemgrams|${lemgram}`,
-                        path: "entry.senseID",
-                    },
-                }).then(({ data }) => {
+                karp.getSenseId(lemgram).then(({ data }) => {
                     if (data.total === 0) {
                         def.resolve([])
                     } else {
-                        $http<Karp7QueryResponse<Karp7SwefnEntry>>({
-                            url: `${karpURL}/query/swefn`,
-                            method: "GET",
-                            params: {
-                                q: "or(" + _.map(data.hits, (sense) => `equals|LUs|${sense}`).join("||") + ")",
-                                path: "entry",
-                            },
-                        }).then(({ data }) => {
+                        karp.getSwefnFrame(data.hits).then(({ data }) => {
                             const eNodes = _.map(data.hits, (entry) => ({
                                 label: entry.swefnID,
                                 words: entry.LUs,
