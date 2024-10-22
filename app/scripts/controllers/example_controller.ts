@@ -6,10 +6,10 @@ import { KwicCtrl, KwicCtrlScope } from "./kwic_controller"
 import { LocationService } from "@/urlparams"
 import { KwicTab, RootScope } from "@/root-scope.types"
 import { KorpResponse, ProgressReport } from "@/backend/types"
-import { KorpQueryResponse } from "@/backend/kwic-proxy"
 import { UtilsService } from "@/services/utils"
 import "@/services/utils"
 import { TabHashScope } from "@/directives/tab-hash"
+import { QueryResponse } from "@/backend/client"
 
 const korpApp = angular.module("korpApp")
 
@@ -21,10 +21,10 @@ type ExampleCtrlScope = ScopeBase & {
     hitsPictureData?: any
     hitspictureClick?: (page: number) => void
     kwicTab: KwicTab
-    makeRequest: (isPaging?: boolean) => JQuery.jqXHR<KorpResponse<KorpQueryResponse>>
+    makeRequest: (isPaging?: boolean) => JQuery.jqXHR<KorpResponse<QueryResponse>>
     onExampleProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
     setupReadingWatch: () => void
-    superRenderResult: (data: KorpResponse<KorpQueryResponse>) => void
+    superRenderResult: (data: KorpResponse<QueryResponse>) => void
 }
 
 class ExampleCtrl extends KwicCtrl {

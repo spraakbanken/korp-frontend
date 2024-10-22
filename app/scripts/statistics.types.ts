@@ -1,6 +1,7 @@
 /** @format*/
 // TODO: Merge with @/interfaces/stats.ts
 
+import { StatsColumn } from "./backend/types"
 import { SlickgridColumn } from "./statistics"
 import { Dataset } from "./statistics_worker"
 
@@ -13,7 +14,7 @@ export type StatisticsWorkerMessage = {
 
 export type StatisticsWorkerResult = [Dataset, SlickgridColumn[], SearchParams]
 
-/** Like `KorpStatsResponse` but the stats are necessarily arrays. */
+/** Like `CountResponse` but the stats are necessarily arrays. */
 export type StatsNormalized = {
     corpora: {
         [name: string]: StatsColumn[]
@@ -21,18 +22,6 @@ export type StatsNormalized = {
     combined: StatsColumn[]
     count: number
     time: number
-}
-
-export type StatsColumn = {
-    sums: AbsRelTuple
-    rows: StatsRow[]
-}
-
-/** Frequency count as absolute and relative (to some total size). */
-export type AbsRelTuple = { absolute: number; relative: number }
-
-export type StatsRow = AbsRelTuple & {
-    value: Record<string, string | string[]>
 }
 
 export type SearchParams = {

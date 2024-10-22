@@ -6,7 +6,8 @@ import isArray from "lodash/isArray"
 import keys from "lodash/keys"
 
 import { RowsEntity } from "./interfaces/stats"
-import { StatisticsWorkerMessage, StatsNormalized, StatsRow } from "./statistics.types"
+import { StatisticsWorkerMessage, StatsNormalized } from "./statistics.types"
+import { StatsRow } from "./backend/types"
 
 /*
     This is optimized code for transforming the statistics data.

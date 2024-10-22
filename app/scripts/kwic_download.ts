@@ -3,8 +3,9 @@ import _ from "lodash"
 import moment from "moment"
 import CSV from "comma-separated-values/csv"
 import { locObj } from "@/i18n"
-import { type ApiKwic, type KorpQueryParams } from "@/backend/kwic-proxy"
 import { LangString } from "./i18n/types"
+import { ApiKwic } from "./backend/types"
+import { QueryParams } from "./backend/client"
 
 // This is what is returned by massageData in kwic.js
 type Row = ApiKwic | LinkedKwic | CorpusHeading
@@ -39,7 +40,7 @@ function createFile(dataType: string, fileType: string, content: string) {
     return [filename, blobURL]
 }
 
-function createSearchInfo(requestInfo: KorpQueryParams, totalHits: number) {
+function createSearchInfo(requestInfo: QueryParams, totalHits: number) {
     return [
         `## CQP query: ${requestInfo.cqp}`,
         `## context: ${requestInfo.default_context}`,
@@ -165,7 +166,7 @@ function transformDataToKWIC(data: Row[], searchInfo: string[]) {
     return res
 }
 
-function transformData(dataType: "annotations" | "kwic", data: Row[], requestInfo: KorpQueryParams, totalHits: number) {
+function transformData(dataType: "annotations" | "kwic", data: Row[], requestInfo: QueryParams, totalHits: number) {
     const searchInfo = createSearchInfo(requestInfo, totalHits)
     if (dataType === "annotations") {
         return transformDataToAnnotations(data as AnnotationsRow[], searchInfo)
@@ -189,7 +190,7 @@ export function makeDownload(
     dataType: "annotations" | "kwic",
     fileType: "csv" | "tsv",
     data: Row[],
-    requestInfo: KorpQueryParams,
+    requestInfo: QueryParams,
     totalHits: number
 ) {
     const table = transformData(dataType, data, requestInfo, totalHits)

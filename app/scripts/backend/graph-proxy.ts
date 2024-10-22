@@ -2,8 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
-import { AbsRelTuple } from "@/statistics.types"
+import { AbsRelTuple, AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
 import { Factory, httpConfAddMethod } from "@/util"
 
 export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {

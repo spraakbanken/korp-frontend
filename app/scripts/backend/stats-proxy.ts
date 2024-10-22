@@ -2,17 +2,18 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressReport } from "@/backend/types"
-import { StatsNormalized, StatsColumn, StatisticsWorkerResult } from "@/statistics.types"
+import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressReport, StatsColumn } from "@/backend/types"
+import { StatsNormalized, StatisticsWorkerResult } from "@/statistics.types"
 import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 import { statisticsService } from "@/statistics"
+import { CountParams, CountResponse } from "./client"
 
 /**
  * Stats in the response can be split by subqueries if the `subcqp#` param is used, but otherwise not.
  *
  * This function adds a split (converts non-arrays to single-element arrays) if not, so higher code can assume the same shape regardless.
  */
-export function normalizeStatsData(data: KorpStatsResponse): StatsNormalized {
+export function normalizeStatsData(data: CountResponse): StatsNormalized {
     const combined = !Array.isArray(data.combined) ? [data.combined] : data.combined
 
     const corpora: Record<string, StatsColumn[]> = {}
@@ -25,8 +26,8 @@ export function normalizeStatsData(data: KorpStatsResponse): StatsNormalized {
     return { ...data, combined, corpora }
 }
 
-export class StatsProxy extends BaseProxy<KorpStatsResponse> {
-    prevParams: KorpStatsParams | null
+export class StatsProxy extends BaseProxy<CountResponse> {
+    prevParams: CountParams | null
     prevRequest: AjaxSettings | null
     prevUrl?: string
 
@@ -36,7 +37,7 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
         this.prevParams = null
     }
 
-    makeParameters(reduceVals: string[], cqp: string, ignoreCase: boolean): KorpStatsParams {
+    makeParameters(reduceVals: string[], cqp: string, ignoreCase: boolean): CountParams {
         const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
         const groupBy: string[] = []
         const groupByStruct: string[] = []
@@ -66,7 +67,7 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
 
     makeRequest(
         cqp: string,
-        callback: (data: ProgressReport<KorpStatsResponse>) => void
+        callback: (data: ProgressReport<CountResponse>) => void
     ): JQuery.Promise<StatisticsWorkerResult> {
         const self = this
         this.resetRequest()
@@ -113,7 +114,7 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
         const def: JQuery.Deferred<StatisticsWorkerResult> = $.Deferred()
 
         const url = settings.korp_backend_url + "/count"
-        const ajaxSettings: AjaxSettings<KorpResponse<KorpStatsResponse>> = {
+        const ajaxSettings: AjaxSettings<KorpResponse<CountResponse>> = {
             url,
             data,
             beforeSend(req, settings) {
@@ -137,7 +138,7 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
                 }
             },
 
-            success: (data: KorpResponse<KorpStatsResponse>) => {
+            success: (data: KorpResponse<CountResponse>) => {
                 self.cleanup()
                 if ("ERROR" in data) {
                     console.log("gettings stats failed with error", data.ERROR)
@@ -156,7 +157,7 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
                 )
             },
         }
-        this.pendingRequests.push($.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpStatsResponse>)
+        this.pendingRequests.push($.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<CountResponse>)
 
         return def.promise()
     }
@@ -164,42 +165,3 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
 
 const statsProxyFactory = new Factory(StatsProxy)
 export default statsProxyFactory
-
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count/get */
-type KorpStatsParams = {
-    /** Corpus names, separated by comma */
-    corpus: string
-    /** CQP query */
-    cqp: string
-    /** Positional attribute by which the hits should be grouped. Defaults to "word" if neither `group_by` nor `group_by_struct` is defined */
-    group_by?: string
-    /** Structural attribute by which the hits should be grouped. The value for the first token of the hit will be used */
-    group_by_struct?: string
-    /** Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'. */
-    default_within?: string
-    /** Like default_within, but for specific corpora, overriding the default. Specified using the format 'corpus:attribute' */
-    within?: string
-    ignore_case?: string
-    relative_to_struct?: string
-    split?: string
-    top?: string
-    [cqpn: `cqp${number}`]: string
-    expand_prequeries?: boolean
-    [subcqpn: `subcqp${number}`]: string
-    start?: number
-    end?: number
-    /** Incrementally return progress updates when the calculation for each corpus is finished */
-    incremental?: boolean
-}
-
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count/get */
-export type KorpStatsResponse = {
-    corpora: {
-        [name: string]: StatsColumn | StatsColumn[]
-    }
-    combined: StatsColumn | StatsColumn[]
-    /** Total number of different values */
-    count: number
-    /** Execution time in seconds */
-    time: number
-}

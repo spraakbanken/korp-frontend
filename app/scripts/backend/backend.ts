@@ -1,24 +1,11 @@
 /** @format */
 import _ from "lodash"
-import { getAuthorizationHeader } from "@/components/auth/auth"
 import { KorpResponse, WithinParameters } from "@/backend/types"
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
-import { httpConfAddMethodFetch } from "@/util"
-import { KorpStatsResponse, normalizeStatsData } from "@/backend/stats-proxy"
+import { normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map_services"
-import { KorpQueryResponse } from "@/backend/kwic-proxy"
-
-type KorpLoglikeResponse = {
-    /** Log-likelihood average. */
-    average: number
-    /** Log-likelihood values. */
-    loglike: Record<string, number>
-    /** Absolute frequency for the values in set 1. */
-    set1: Record<string, number>
-    /** Absolute frequency for the values in set 2. */
-    set2: Record<string, number>
-}
+import { count, loglike, query, QueryResponse } from "./client"
 
 export type CompareResult = [CompareTables, number, SavedSearch, SavedSearch, string[]]
 
@@ -52,16 +39,6 @@ export type MapRequestResult = {
 
 type MapAttribute = { label: string; corpora: string[] }
 
-async function korpRequest<T extends Record<string, any> = {}, P extends Record<string, any> = {}>(
-    endpoint: string,
-    params: P
-): Promise<KorpResponse<T>> {
-    const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/" + endpoint, params)
-    request.headers = { ...request.headers, ...getAuthorizationHeader() }
-    const response = await fetch(url, request)
-    return (await response.json()) as KorpResponse<T>
-}
-
 /** Note: since this is using native Promise, we must use it with something like $q or $scope.$apply for AngularJS to react when they resolve. */
 export async function requestCompare(
     cmpObj1: SavedSearch,
@@ -80,7 +57,7 @@ export async function requestCompare(
     const rankedReduce = _.filter(reduce, (item) => cl.getCurrentAttributes(cl.getReduceLang())[item]?.ranked)
     const top = rankedReduce.map((item) => item + ":1").join(",")
 
-    const params = {
+    const data = await loglike({
         group_by: reduce.join(","),
         set1_corpus: corpora1.join(",").toUpperCase(),
         set1_cqp: cmpObj1.cqp,
@@ -89,9 +66,7 @@ export async function requestCompare(
         max: "50",
         split,
         top,
-    }
-
-    const data = await korpRequest<KorpLoglikeResponse>("loglike", params)
+    })
 
     if ("ERROR" in data) {
         // TODO Create a KorpBackendError which could be displayed nicely
@@ -137,19 +112,16 @@ export async function requestMapData(
     const cqpSubExprs = {}
     _.map(_.keys(cqpExprs), (subCqp, idx) => (cqpSubExprs[`subcqp${idx}`] = subCqp))
 
-    const params = {
+    const data = await count({
         group_by_struct: attribute.label,
         cqp,
         corpus: attribute.corpora.join(","),
         incremental: true,
         split: attribute.label,
         relative_to_struct: relative ? attribute.label : undefined,
-    }
-    _.extend(params, settings.corpusListing.getWithinParameters())
-
-    _.extend(params, cqpSubExprs)
-
-    const data = await korpRequest<KorpStatsResponse>("count", params)
+        ...settings.corpusListing.getWithinParameters(),
+        ...cqpSubExprs,
+    })
 
     if ("ERROR" in data) {
         // TODO Create a KorpBackendError which could be displayed nicely
@@ -161,10 +133,7 @@ export async function requestMapData(
     return { corpora: attribute.corpora, cqp, within, data: result, attribute }
 }
 
-export async function getDataForReadingMode(
-    inputCorpus: string,
-    textId: string
-): Promise<KorpResponse<KorpQueryResponse>> {
+export async function getDataForReadingMode(inputCorpus: string, textId: string): Promise<KorpResponse<QueryResponse>> {
     const corpus = inputCorpus.toUpperCase()
     const corpusSettings = settings.corpusListing.get(inputCorpus)
 
@@ -187,5 +156,5 @@ export async function getDataForReadingMode(
         end: 0,
     }
 
-    return korpRequest<KorpQueryResponse>("query", params)
+    return query(params)
 }
