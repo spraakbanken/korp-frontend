@@ -172,8 +172,7 @@ angular.module("korpApp").component("statistics", {
         "$scope",
         "$uibModal",
         "searches",
-        "backend",
-        function ($rootScope, $scope, $uibModal, searches, backend) {
+        function ($rootScope, $scope, $uibModal, searches) {
             const $ctrl = this
 
             $ctrl.noRowsError = false
@@ -412,7 +411,7 @@ angular.module("korpApp").component("statistics", {
                 const selectedAttribute = selectedAttributes[0]
 
                 const within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
-                const request = backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
+                const request = requestMapData(cqpExpr, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
                 $rootScope.mapTabs.push(request)
             }
 

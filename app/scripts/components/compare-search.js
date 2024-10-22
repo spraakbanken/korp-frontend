@@ -5,6 +5,7 @@ import settings from "@/settings"
 import "@/backend/backend"
 import "@/services/compare-searches"
 import { html, valfilter } from "@/util"
+import { requestCompare } from "@/backend/backend"
 
 angular.module("korpApp").component("compareSearch", {
     template: html`
@@ -44,10 +45,10 @@ angular.module("korpApp").component("compareSearch", {
         </div>
     `,
     controller: [
-        "backend",
+        "$q",
         "$rootScope",
         "compareSearches",
-        function (backend, $rootScope, compareSearches) {
+        function ($q, $rootScope, compareSearches) {
             const $ctrl = this
 
             $ctrl.valfilter = valfilter
@@ -77,7 +78,7 @@ angular.module("korpApp").component("compareSearch", {
             $ctrl.reduce = "word"
 
             $ctrl.sendCompare = () =>
-                $rootScope.compareTabs.push(backend.requestCompare($ctrl.cmp1, $ctrl.cmp2, [$ctrl.reduce]))
+                $rootScope.compareTabs.push($q.resolve(requestCompare($ctrl.cmp1, $ctrl.cmp2, [$ctrl.reduce])))
 
             $ctrl.deleteCompares = () => compareSearches.flush()
         },

@@ -7,10 +7,10 @@ import "@/backend/backend"
 import "@/components/readingmode"
 import { RootScope, TextTab } from "@/root-scope.types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { BackendService } from "@/backend/backend"
 import { kebabize } from "@/util"
 import { ApiKwic, Token } from "@/backend/kwic-proxy"
 import { TabHashScope } from "@/directives/tab-hash"
+import { getDataForReadingMode } from "@/backend/backend"
 
 type TextReaderControllerScope = TabHashScope & {
     loading: boolean
@@ -48,13 +48,11 @@ type TokenTreeLeaf = {
 }
 
 angular.module("korpApp").directive("textReaderCtrl", [
-    "$timeout",
-    ($timeout) => ({
+    () => ({
         controller: [
             "$scope",
             "$rootScope",
-            "backend",
-            ($scope: TextReaderControllerScope, $rootScope: RootScope, backend: BackendService) => {
+            ($scope: TextReaderControllerScope, $rootScope: RootScope) => {
                 $scope.loading = true
                 $scope.newDynamicTab()
 
@@ -67,14 +65,16 @@ angular.module("korpApp").directive("textReaderCtrl", [
                 const corpus = $scope.inData.corpus
                 $scope.corpusObj = settings.corpora[corpus]
                 const textId = $scope.inData.sentenceData["text__id"]
-                backend.getDataForReadingMode(corpus, textId).then(function (data) {
+                getDataForReadingMode(corpus, textId).then(function (data) {
                     if (!data || "ERROR" in data) {
-                        $timeout(() => ($scope.loading = false))
+                        $scope.$apply(($scope: TextReaderControllerScope) => ($scope.loading = false))
                         return
                     }
                     const document = prepareData(data.kwic[0], $scope.corpusObj)
-                    $scope.data = { corpus, document, sentenceData: $scope.inData.sentenceData }
-                    $timeout(() => ($scope.loading = false))
+                    $scope.$apply(($scope: TextReaderControllerScope) => {
+                        $scope.data = { corpus, document, sentenceData: $scope.inData.sentenceData }
+                        $scope.loading = false
+                    })
                 })
 
                 $scope.onentry = function () {

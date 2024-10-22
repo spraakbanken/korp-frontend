@@ -451,7 +451,7 @@ export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IReques
 export function httpConfAddMethodFetch(
     url: string,
     params: Record<string, string>
-): { url: string; request?: RequestInit } {
+): { url: string; request: RequestInit } {
     if (calcUrlLength(url, params) > settings.backendURLMaxLength) {
         const body = new FormData()
         for (const key in params) {
@@ -459,7 +459,7 @@ export function httpConfAddMethodFetch(
         }
         return { url, request: { method: "POST", body } }
     } else {
-        return { url: url + "?" + new URLSearchParams(params) }
+        return { url: url + "?" + new URLSearchParams(params), request: {} }
     }
 }
 
