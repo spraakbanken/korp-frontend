@@ -2,7 +2,7 @@
 import _ from "lodash"
 import angular from "angular"
 import settings from "@/settings"
-import { stringifyFunc } from "@/stringify.js"
+import { getStringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
 import { CompareTab, RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
@@ -57,11 +57,11 @@ angular.module("korpApp").directive("compareCtrl", () => ({
                     // currently we only support one attribute to reduce/group by, so simplify by only checking first item
                     const reduceAttrName = _.trimStart(reduce[0], "_.")
                     if (attributes[reduceAttrName]) {
-                        if (attributes[reduceAttrName].stringify) {
-                            stringify = stringifyFunc(reduceAttrName)
-                        } else if (attributes[reduceAttrName].translation) {
-                            stringify = (value) =>
-                                locAttribute(attributes[reduceAttrName].translation!, value, $rootScope.lang)
+                        const attribute = attributes[reduceAttrName]
+                        if (attribute.stringify) {
+                            stringify = getStringifier(attribute.stringify)
+                        } else if (attribute.translation) {
+                            stringify = (value) => locAttribute(attribute.translation!, value, $rootScope.lang)
                         }
                     }
                     s.stringify = stringify

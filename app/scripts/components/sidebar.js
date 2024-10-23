@@ -4,7 +4,7 @@ import _ from "lodash"
 import "../../styles/sidebar.scss"
 import statemachine from "../statemachine"
 import settings from "@/settings"
-import { stringify } from "@/stringify.js"
+import { getStringifier } from "@/stringify"
 import { html, regescape, splitLemgram, safeApply } from "@/util"
 import { loc, locAttribute } from "@/i18n"
 import "@/services/utils"
@@ -294,8 +294,7 @@ angular.module("korpApp").component("sidebar", {
                         const lis = []
                         for (let x of itr) {
                             if (x.length) {
-                                const stringifyKey = attrs.stringify
-                                val = stringify(stringifyKey, x)
+                                val = getStringifier(attrs.stringify)(x)
 
                                 if (attrs.translation != null) {
                                     val = locAttribute(attrs.translation, val, $ctrl.lang)
@@ -328,7 +327,7 @@ angular.module("korpApp").component("sidebar", {
 
                     let str_value = value
                     if (attrs.stringify) {
-                        str_value = stringify(attrs.stringify, value)
+                        str_value = getStringifier(attrs.stringify)(value)
                     } else if (attrs.translation) {
                         str_value = locAttribute(attrs.translation, value, $ctrl.lang)
                     }
