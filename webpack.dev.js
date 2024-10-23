@@ -1,4 +1,5 @@
 /** @format */
+const webpack = require("webpack")
 const { merge } = require("webpack-merge")
 const common = require("./webpack.common.js")
 
@@ -31,4 +32,11 @@ module.exports = merge(common, {
         runtimeChunk: "single",
     },
     mode: "development",
+    plugins: [
+        // See https://vuejs.org/api/compile-time-flags.html
+        new webpack.DefinePlugin({
+            __VUE_PROD_DEVTOOLS__: "true",
+            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: "true",
+        }),
+    ],
 })

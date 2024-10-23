@@ -1,4 +1,5 @@
 /** @format */
+const webpack = require("webpack")
 const { merge } = require("webpack-merge")
 const common = require("./webpack.common.js")
 const CompressionPlugin = require("compression-webpack-plugin")
@@ -12,6 +13,11 @@ module.exports = merge(common, {
             // creates a report.html in the dist folder.
             analyzerMode: "static",
             openAnalyzer: false,
+        }),
+        new webpack.DefinePlugin({
+            // See https://vuejs.org/api/compile-time-flags.html
+            __VUE_PROD_DEVTOOLS__: "false",
+            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: "false",
         }),
     ],
     optimization: {

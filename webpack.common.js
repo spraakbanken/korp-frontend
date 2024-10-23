@@ -177,6 +177,10 @@ module.exports = {
             // Using our own variable instead of NODE_ENV, since NODE_ENV should really only be "development" or "production"
             ENVIRONMENT: "development", // Can be: "development", "staging" or "production"
         }),
+        new webpack.DefinePlugin({
+            // See https://vuejs.org/api/compile-time-flags.html
+            __VUE_OPTIONS_API__: "false", // Enable if needed by 3rd party deps
+        }),
         new VueLoaderPlugin(),
     ],
     ignoreWarnings: [
