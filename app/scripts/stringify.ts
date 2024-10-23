@@ -11,6 +11,6 @@ try {
     console.log("No module for stringify functions available")
 }
 
-export const getStringifier = (key?: string): Stringifier {
+export function getStringifier(key?: string): Stringifier {
     return key && stringifiers[key] ? stringifiers[key] : String
 }
