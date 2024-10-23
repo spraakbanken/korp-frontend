@@ -145,7 +145,7 @@ export default abstract class BaseProxy<R extends {} = {}> {
             this.total = _.reduce(tmp, (val1, val2) => val1 + val2, 0)
         }
 
-        const stats = (this.progress / this.total!) * 100
+        const stats = this.total ? (this.progress / this.total) * 100 : 0
 
         this.prev = e.target.responseText
         return {
