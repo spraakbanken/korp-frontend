@@ -1,9 +1,20 @@
 /** @format */
-import angular from "angular"
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import { html } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/services/compare-searches"
 import "@/components/search-submit"
+import { LocationService } from "@/urlparams"
+import { CompareSearches } from "@/services/compare-searches"
+
+type AdvancedSearchController = IController & {
+    cqp: string
+    freeOrder: boolean
+    onSearch: () => void
+    onSearchSave: (name: string) => void
+}
+
+type AdvancedSearchScope = IScope & {}
 
 angular.module("korpApp").component("advancedSearch", {
     template: html` <div>
@@ -55,14 +66,19 @@ angular.module("korpApp").component("advancedSearch", {
         "$location",
         "$scope",
         "$timeout",
-        function (compareSearches, $location, $scope, $timeout) {
-            const $ctrl = this
+        function (
+            compareSearches: CompareSearches,
+            $location: LocationService,
+            $scope: AdvancedSearchScope,
+            $timeout: ITimeoutService
+        ) {
+            const $ctrl = this as AdvancedSearchController
 
             $ctrl.cqp = "[]"
             $ctrl.freeOrder = $location.search().in_order != null
 
             /** Read advanced CQP from `search` URL param. */
-            function readSearchParam() {
+            function readSearchParam(): void {
                 const search = $location.search().search
                 if (search?.slice(0, 4) == "cqp|") {
                     $ctrl.cqp = search.slice(4)
