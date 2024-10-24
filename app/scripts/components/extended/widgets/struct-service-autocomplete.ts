@@ -3,7 +3,7 @@ import { html } from "@/util"
 import { selectController, Widget } from "./common"
 
 /**
- * Autocomplete. Gets values from "struct_values"-command.
+ * Autocomplete. Gets values from "attr_values"-command.
  * Use the following settings in the corpus:
  * - escape: boolean, will be used by the escaper-directive
  */

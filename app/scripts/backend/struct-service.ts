@@ -43,7 +43,7 @@ angular.module("korpApp").factory("structService", [
     "$http",
     "$q",
     ($http: IHttpService, $q: IQService): StructService => ({
-        // Memoize the function so that the backend /struct_values is called
+        // Memoize the function so that the backend /attr_values is called
         // only once for each combination of corpora, attributes and options
         getStructValues: _.memoize(
             function (corpora, attributes, options = {}) {
@@ -61,7 +61,7 @@ angular.module("korpApp").factory("structService", [
                 if (split) params.split = _.last(attributes)
 
                 const conf = httpConfAddMethod({
-                    url: settings["korp_backend_url"] + "/struct_values",
+                    url: settings["korp_backend_url"] + "/attr_values",
                     method: "GET",
                     params,
                     headers: getAuthorizationHeader(),
