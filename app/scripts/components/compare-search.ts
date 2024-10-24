@@ -1,11 +1,28 @@
 /** @format */
-import angular from "angular"
+import angular, { IController, IQService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import "@/backend/backend"
 import "@/services/compare-searches"
 import { html, valfilter } from "@/util"
 import { requestCompare } from "@/backend/backend"
+import { RootScope } from "@/root-scope.types"
+import { CompareSearches } from "@/services/compare-searches"
+import { SavedSearch } from "@/local-storage"
+import { AttributeOption } from "@/corpus_listing"
+
+type CompareSearchController = IController & {
+    valfilter: (attrobj: AttributeOption) => string
+    savedSearches: SavedSearch[]
+    $doCheck: () => void
+    cmp1: SavedSearch
+    cmp2: SavedSearch
+    updateAttributes: () => void
+    currentAttrs: AttributeOption[]
+    reduce: string
+    sendCompare: () => void
+    deleteCompares: () => void
+}
 
 angular.module("korpApp").component("compareSearch", {
     template: html`
@@ -48,12 +65,12 @@ angular.module("korpApp").component("compareSearch", {
         "$q",
         "$rootScope",
         "compareSearches",
-        function ($q, $rootScope, compareSearches) {
-            const $ctrl = this
+        function ($q: IQService, $rootScope: RootScope, compareSearches: CompareSearches) {
+            const $ctrl = this as CompareSearchController
 
             $ctrl.valfilter = valfilter
 
-            let prev
+            let prev: SavedSearch[]
             $ctrl.savedSearches = compareSearches.savedSearches
             $ctrl.$doCheck = () => {
                 if (!_.isEqual(prev, compareSearches.savedSearches)) {
@@ -67,11 +84,9 @@ angular.module("korpApp").component("compareSearch", {
 
             $ctrl.updateAttributes = () => {
                 if ($ctrl.cmp1 && $ctrl.cmp2) {
-                    const listing = settings.corpusListing.subsetFactory(
-                        _.uniq([].concat($ctrl.cmp1.corpora, $ctrl.cmp2.corpora))
-                    )
+                    const listing = settings.corpusListing.subsetFactory([...$ctrl.cmp1.corpora, ...$ctrl.cmp2.corpora])
                     const allAttrs = listing.getAttributeGroups()
-                    $ctrl.currentAttrs = _.filter(allAttrs, (item) => !item["hide_compare"])
+                    $ctrl.currentAttrs = allAttrs.filter((item) => !item["hide_compare"])
                 }
             }
 

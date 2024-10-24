@@ -341,7 +341,7 @@ export class CorpusListing {
         return this._wordGroup
     }
 
-    getWordAttributeGroups(lang: string, setOperator: "union" | "intersection"): AttributeOption[] {
+    getWordAttributeGroups(lang: string | undefined, setOperator: "union" | "intersection"): AttributeOption[] {
         const allAttrs =
             setOperator === "union" ? this.getCurrentAttributes(lang) : this.getCurrentAttributesIntersection()
 
@@ -361,7 +361,7 @@ export class CorpusListing {
         return attributes[attribute]
     }
 
-    getStructAttributeGroups(lang: string, setOperator: "union" | "intersection"): AttributeOption[] {
+    getStructAttributeGroups(lang: string | undefined, setOperator: "union" | "intersection"): AttributeOption[] {
         const allAttrs = setOperator === "union" ? this.getStructAttrs(lang) : this.getStructAttrsIntersection(lang)
 
         const common = this.commonAttributes
@@ -380,7 +380,7 @@ export class CorpusListing {
         return sentAttrs
     }
 
-    getAttributeGroups(lang: string): AttributeOption[] {
+    getAttributeGroups(lang?: string): AttributeOption[] {
         const word = this.getWordGroup()
         const attrs = this.getWordAttributeGroups(lang, "union")
         const sentAttrs = this.getStructAttributeGroups(lang, "union")
