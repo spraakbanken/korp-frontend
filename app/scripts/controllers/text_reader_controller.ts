@@ -15,23 +15,33 @@ import { getDataForReadingMode } from "@/backend/backend"
 type TextReaderControllerScope = TabHashScope & {
     loading: boolean
     inData: TextTab
-    data: { corpus: string; document: TextReaderData; sentenceData: TextTab["sentenceData"] }
+    data: TextReaderDataContainer
     corpusObj: CorpusTransformed
     closeTab: (idx: number, e: Event) => void
     onentry: () => void
     onexit: () => void
 }
 
-type TextReaderData = Omit<ApiKwic, "tokens"> & {
+export type TextReaderDataContainer = {
+    corpus: string
+    document: TextReaderData
+    sentenceData: TextTab["sentenceData"]
+}
+
+export type TextReaderWordHandler = (token: TextReaderToken) => void
+
+export type TextReaderTokenContainer = {
     tokens: TextReaderToken[]
 }
 
+type TextReaderData = Omit<ApiKwic, "tokens"> & TextReaderTokenContainer
+
 type TextReaderScope = TextReaderControllerScope & {
     selectedToken?: TextReaderToken
-    wordClick: (token: TextReaderToken) => void
+    wordClick: TextReaderWordHandler
 }
 
-type TextReaderToken = TokenTreeParent | TokenTreeLeaf
+export type TextReaderToken = TokenTreeParent | TokenTreeLeaf
 
 // TODO The token types need examination, I'm not quite sure yet what the _prepareData function really does
 
