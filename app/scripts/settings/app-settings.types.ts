@@ -57,6 +57,8 @@ export type AppSettings = {
     news_url?: string
     reduce_word_attribute_selector: "union" | "intersection"
     reduce_struct_attribute_selector: "union" | "intersection"
+    statistics?: boolean
+    statistics_case_insensitive_default?: boolean
     statistics_search_default: boolean
     urnResolver?: string
     visible_modes: number

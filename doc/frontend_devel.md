@@ -155,6 +155,8 @@ settings that affect the frontend.
 - __news_url__ - See [News widget](#news-widget)
 - __reduce_word_attribute_selector__ - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora *word* attributes or only the attributes common to selected corpora. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
 - __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
+- __statistics__ - Boolean. Enable statistics search. Default: `true`
+- __statistics_case_insensitive_default__ - Boolean. Decides if the "Reduce by" option should be case-insensitive by default.
 - __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:

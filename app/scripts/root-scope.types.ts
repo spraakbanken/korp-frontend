@@ -31,6 +31,7 @@ export type RootScope = IRootScopeService & {
         buttonText?: string
         translations?: LocLangMap
     }) => void
+    $on: (name: "corpuschooserchange", handler: (event: any, selected: string[]) => void) => void
 }
 
 export type CompareTab = IPromise<CompareResult>

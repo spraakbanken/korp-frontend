@@ -1,8 +1,9 @@
 /** @format */
-import angular from "angular"
+import angular, { IController } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import { html } from "@/util"
+import { loc } from "@/i18n"
 import "@/services/compare-searches"
 import "@/services/searches"
 import "@/components/simple-search"
@@ -13,24 +14,54 @@ import "@/components/compare-search"
 import "@/components/reduce-select"
 import "@/directives/click-cover"
 import "@/directives/tab-hash"
+import { ParallelCorpusListing } from "@/parallel/corpus_listing"
+import { CompareSearches } from "@/services/compare-searches"
+import { RootScope } from "@/root-scope.types"
+import { SearchesService } from "@/services/searches"
+import { LocationService } from "@/urlparams"
+import { SavedSearch } from "@/local-storage"
+import { AttributeOption } from "@/corpus_listing"
+
+type SearchtabsController = IController & {
+    parallelMode: boolean
+    getHppFormat: (val: number) => string
+    getSortFormat: (val: string) => string
+    hitsPerPage: number
+    isCompareSelected: boolean
+    isStatisticsAvailable: boolean
+    isWordPictureAvailable: boolean
+    kwicSort: string
+    kwicSortValues: string[]
+    noCorporaSelected: boolean
+    savedSearches: SavedSearch[]
+    word_pic: boolean
+    reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
+    showStatistics: boolean
+    showStatisticsChange: () => void
+    statCurrentAttrs: AttributeOption[]
+    statSelectedAttrs: string[]
+    statInsensitiveAttrs: string[]
+    updateHitsPerPage: () => void
+    updateSort: () => void
+}
 
 angular.module("korpApp").component("searchtabs", {
     template: html`
         <div click-cover="$ctrl.noCorporaSelected">
             <uib-tabset class="tabbable search_tabs" tab-hash="search_tab" active="activeTab">
-                <uib-tab heading='{{"simple" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[0]">
+                <uib-tab heading='{{"simple" | loc:$root.lang}}' ng-if="!$ctrl.parallelMode">
                     <simple-search></simple-search>
                 </uib-tab>
-                <uib-tab class="extended" heading='{{"detailed" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[1]">
+                <uib-tab class="extended" heading='{{"detailed" | loc:$root.lang}}'>
                     <div>
                         <extended-standard ng-if="!$ctrl.parallelMode"></extended-standard>
                         <extended-parallel ng-if="$ctrl.parallelMode"></extended-parallel>
                     </div>
                 </uib-tab>
-                <uib-tab heading='{{"advanced" | loc:$root.lang}}' ng-if="$ctrl.visibleTabs[2]">
+                <uib-tab heading='{{"advanced" | loc:$root.lang}}' ng-if="!$ctrl.parallelMode">
                     <advanced-search></advanced-search>
                 </uib-tab>
-                <uib-tab ng-if="$ctrl.visibleTabs[3]">
+                <uib-tab ng-if="!$ctrl.parallelMode">
                     <uib-tab-heading>
                         {{'compare' | loc:$root.lang}}
                         <span class="badge" ng-if="$ctrl.savedSearches.length">{{$ctrl.savedSearches.length}}</span>
@@ -59,7 +90,7 @@ angular.module("korpApp").component("searchtabs", {
                         ng-options="$ctrl.getSortFormat(val) for val in $ctrl.kwicSortValues track by val"
                     ></select>
                 </div>
-                <div class="flex items-center" ng-show="$ctrl.showStats()">
+                <div class="flex items-center" ng-show="$ctrl.isStatisticsAvailable">
                     <span>{{'statistics' | loc:$root.lang}}:</span>
                     <reduce-select
                         class="ml-2 relative -top-px"
@@ -69,7 +100,7 @@ angular.module("korpApp").component("searchtabs", {
                         on-change="$ctrl.reduceOnChange"
                     ></reduce-select>
                 </div>
-                <div ng-show="$ctrl.settings.statistics !== false">
+                <div ng-show="$ctrl.isStatisticsAvailable">
                     <input
                         id="show_stats"
                         type="checkbox"
@@ -78,7 +109,7 @@ angular.module("korpApp").component("searchtabs", {
                         class="mr-1"
                     /><label for="show_stats">{{'show_stats' | loc:$root.lang}}</label>
                 </div>
-                <div ng-show="$ctrl.settings['word_picture'] !== false">
+                <div ng-show="$ctrl.isWordPictureAvailable">
                     <input
                         id="word_pic"
                         type="checkbox"
@@ -92,21 +123,24 @@ angular.module("korpApp").component("searchtabs", {
     `,
     controller: [
         "$location",
-        "$filter",
         "searches",
         "$rootScope",
         "compareSearches",
-        function ($location, $filter, searches, $rootScope, compareSearches) {
-            const $ctrl = this
+        function (
+            $location: LocationService,
+            searches: SearchesService,
+            $rootScope: RootScope,
+            compareSearches: CompareSearches
+        ) {
+            const $ctrl = this as SearchtabsController
 
-            $ctrl.parallelMode = settings["parallel"]
+            $ctrl.parallelMode = !!settings["parallel"]
             if ($ctrl.parallelMode) {
                 // resolve globalFilterDef since globalFilter-directive is not used
                 $rootScope.globalFilterDef.resolve()
-                $ctrl.visibleTabs = [false, true, false, false]
-                settings.corpusListing.setActiveLangs([settings["start_lang"]])
+                const corpusListing = settings.corpusListing as ParallelCorpusListing
+                corpusListing.setActiveLangs([settings["start_lang"]])
             } else {
-                $ctrl.visibleTabs = [true, true, true, true]
                 // only used in parallel mode
                 searches.langDef.resolve()
             }
@@ -120,16 +154,16 @@ angular.module("korpApp").component("searchtabs", {
 
             $ctrl.savedSearches = compareSearches.savedSearches
 
-            const setupWatchWordPic = function () {
+            function setupWatchWordPic() {
                 $rootScope.$watch(
                     () => $location.search().word_pic,
-                    (val) => ($ctrl.word_pic = Boolean(val))
+                    (val) => ($ctrl.word_pic = !!val)
                 )
-                $ctrl.wordPicChange = () => $location.search("word_pic", Boolean($ctrl.word_pic) || null)
+                $ctrl.wordPicChange = () => $location.search("word_pic", $ctrl.word_pic || null)
             }
 
-            const setupWatchStats = function () {
-                const defaultVal = settings["statistics_search_default"]
+            function setupWatchStats() {
+                const defaultVal = settings.statistics_search_default
                 // incoming values
                 const hide = $location.search().hide_stats
                 const show = $location.search().show_stats
@@ -172,10 +206,10 @@ angular.module("korpApp").component("searchtabs", {
             setupWatchWordPic()
             setupWatchStats()
 
-            $ctrl.settings = settings
-            $ctrl.showStats = () => settings.statistics !== false
+            $ctrl.isWordPictureAvailable = settings.word_picture !== false
+            $ctrl.isStatisticsAvailable = settings.statistics !== false
 
-            if (!$location.search().stats_reduce && settings.statisticsCaseInsensitiveDefault) {
+            if (!$location.search().stats_reduce && settings.statistics_case_insensitive_default) {
                 $location.search("stats_reduce_insensitive", "word")
             }
 
@@ -195,11 +229,8 @@ angular.module("korpApp").component("searchtabs", {
                 if (insensitive) $ctrl.statInsensitiveAttrs = insensitive
 
                 if ($ctrl.statSelectedAttrs && $ctrl.statSelectedAttrs.length > 0) {
-                    if ($ctrl.statSelectedAttrs.length != 1 || !$ctrl.statSelectedAttrs.includes("word")) {
-                        $location.search("stats_reduce", $ctrl.statSelectedAttrs.join(","))
-                    } else {
-                        $location.search("stats_reduce", null)
-                    }
+                    const isModified = $ctrl.statSelectedAttrs.length != 1 || !$ctrl.statSelectedAttrs.includes("word")
+                    $location.search("stats_reduce", isModified ? $ctrl.statSelectedAttrs.join(",") : null)
                 }
 
                 if ($ctrl.statInsensitiveAttrs && $ctrl.statInsensitiveAttrs.length > 0) {
@@ -210,29 +241,21 @@ angular.module("korpApp").component("searchtabs", {
             }
 
             const setupHitsPerPage = function () {
-                $ctrl.getHppFormat = function (val) {
-                    if (val === $ctrl.hitsPerPage) {
-                        return $filter("loc")("hits_per_page", $rootScope.lang) + ": " + val
-                    } else {
-                        return val
-                    }
-                }
+                /** Include the label in the currently selected option */
+                $ctrl.getHppFormat = (hpp) =>
+                    hpp === $ctrl.hitsPerPage ? loc("hits_per_page", $rootScope.lang) + ": " + hpp : String(hpp)
 
-                $ctrl.hitsPerPageValues = settings["hits_per_page_values"]
-                $ctrl.hitsPerPage = $location.search().hpp || settings["hits_per_page_default"]
+                $ctrl.hitsPerPageValues = settings.hits_per_page_values
+                $ctrl.hitsPerPage = $location.search().hpp || settings.hits_per_page_default
 
                 $rootScope.$watch(
                     () => $location.search().hpp,
-                    (val) => ($ctrl.hitsPerPage = val || settings["hits_per_page_default"])
+                    (val) => ($ctrl.hitsPerPage = val || settings.hits_per_page_default)
                 )
             }
 
             $ctrl.updateHitsPerPage = () => {
-                if ($ctrl.hitsPerPage === settings["hits_per_page_default"]) {
-                    $location.search("hpp", null)
-                } else {
-                    $location.search("hpp", $ctrl.hitsPerPage)
-                }
+                $location.search("hpp", $ctrl.hitsPerPage !== settings.hits_per_page_default ? $ctrl.hitsPerPage : null)
             }
 
             const setupKwicSort = function () {
@@ -247,15 +270,9 @@ angular.module("korpApp").component("searchtabs", {
 
                 $ctrl.getSortFormat = function (val) {
                     const mappedVal = kwicSortValueMap[val]
-                    if (val === $ctrl.kwicSort) {
-                        return (
-                            $filter("loc")("sort_default", $rootScope.lang) +
-                            ": " +
-                            $filter("loc")(mappedVal, $rootScope.lang)
-                        )
-                    } else {
-                        return $filter("loc")(mappedVal, $rootScope.lang)
-                    }
+                    return val === $ctrl.kwicSort
+                        ? loc("sort_default", $rootScope.lang) + ": " + loc(mappedVal, $rootScope.lang)
+                        : loc(mappedVal, $rootScope.lang)
                 }
 
                 $ctrl.kwicSort = $location.search().sort || ""
@@ -267,11 +284,7 @@ angular.module("korpApp").component("searchtabs", {
             }
 
             $ctrl.updateSort = () => {
-                if ($ctrl.kwicSort === "") {
-                    $location.search("sort", null)
-                } else {
-                    $location.search("sort", $ctrl.kwicSort)
-                }
+                $location.search("sort", $ctrl.kwicSort !== "" ? $ctrl.kwicSort : null)
             }
 
             setupHitsPerPage()

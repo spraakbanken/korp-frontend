@@ -26,7 +26,7 @@ export type HashParams = {
     /** Opposite of `show_stats`, used if the `statistics_search_default` setting is enabled */
     hide_stats?: boolean
     /** Hits per page */
-    hpp?: `${number}`
+    hpp?: number
     /** Whether tokens in current query should match in order; default is true */
     in_order?: "false"
     /** UI language as three-letter code */
@@ -46,7 +46,7 @@ export type HashParams = {
      */
     search?: `${string}|${string}` | "cqp"
     /** Current search mode */
-    search_tab?: `${number}`
+    search_tab?: number
     /** Whether a statistics query should be made when searching */
     show_stats?: boolean
     /** Search result order */
