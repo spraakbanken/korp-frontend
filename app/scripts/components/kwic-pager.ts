@@ -1,6 +1,15 @@
 /** @format */
-import angular from "angular"
+import angular, { IController } from "angular"
 import { html } from "@/util"
+
+type KwicPagerController = IController & {
+    totalHits: number
+    currentPage: number
+    localPageChange: (event?: Event) => void
+    onPageInput: ($event: KeyboardEvent) => void
+    pageChange: (data: { page: number }) => void
+    hitsPerPage: number
+}
 
 angular.module("korpApp").component("kwicPager", {
     template: html`
@@ -36,13 +45,12 @@ angular.module("korpApp").component("kwicPager", {
         pageChange: "&",
         hitsPerPage: "<",
     },
-    controller: function KwicPagerCtrl() {
-        const ctrl = this
+    controller: function () {
+        const ctrl = this as KwicPagerController
 
         ctrl.$onChanges = function () {
             ctrl.numPages = Math.ceil(ctrl.totalHits / ctrl.hitsPerPage)
-            const parsedPage = parseInt(ctrl.currentPage)
-            ctrl.page = parsedPage ? parsedPage + 1 : 1 // pager starts on 1
+            ctrl.page = ctrl.currentPage + 1 // pager starts on 1
         }
 
         ctrl.onPageInput = function ($event) {
