@@ -7,11 +7,12 @@ import { httpConfAddMethod } from "@/util"
 import { KorpResponse } from "./types"
 
 export type StructService = {
+    /** Returns list if `options.returnByCorpora` is set to false, otherwise record of lists. */
     getStructValues: (
         corpora: string[],
         attributes: string[],
         options?: StructServiceOptions
-    ) => IPromise<Record<string, string[]> | string[]>
+    ) => IPromise<Record<string, AttrValues> | AttrValues>
 }
 
 export type StructServiceOptions = {
@@ -20,6 +21,7 @@ export type StructServiceOptions = {
     split?: boolean
 }
 
+/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Misc/paths/~1attr_values/get */
 export type StructServiceParameters = {
     corpus: string
     struct: string
@@ -27,10 +29,15 @@ export type StructServiceParameters = {
     split?: string
 }
 
+/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Misc/paths/~1attr_values/get */
 export type StructServiceResponse = {
-    corpora: { [corpus: string]: { [attribute: string]: string[] } }
-    combined: { [attribute: string]: string[] }
+    corpora: { [corpus: string]: AttrValues }
+    combined: AttrValues
 }
+
+export type AttrValues = RecursiveRecord<string[] | Record<string, number>>
+
+export type RecursiveRecord<T> = T | { [k: string]: RecursiveRecord<T> }
 
 angular.module("korpApp").factory("structService", [
     "$http",

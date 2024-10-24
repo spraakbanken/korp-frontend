@@ -11,6 +11,7 @@ import "@/backend/lexicons"
 import "@/services/searches"
 import "@/components/autoc"
 import "@/components/search-submit"
+import "@/global-filter/global-filters"
 
 angular.module("korpApp").component("simpleSearch", {
     template: html`

@@ -14,7 +14,7 @@ export type Condition = {
     type: string
     op: OperatorKorp
     val: string | DateRange
-    flags: Record<string, true>
+    flags?: Record<string, true>
 }
 
 /** Should be `[fromdate, todate, fromtime, totime]` */

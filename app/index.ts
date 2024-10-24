@@ -70,5 +70,4 @@ require("./scripts/app")
 
 require("./scripts/video_controllers.js")
 require("./scripts/backend/struct-service")
-require("./scripts/filter_directives.js")
 require("./scripts/matomo")

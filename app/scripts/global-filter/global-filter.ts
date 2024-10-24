@@ -1,0 +1,120 @@
+/** @format */
+import angular, { IController, IScope } from "angular"
+import _ from "lodash"
+import { locAttribute } from "@/i18n"
+import { html } from "@/util"
+import "./global-filter-service"
+import { Filter } from "@/corpus_listing"
+import { LangString } from "@/i18n/types"
+
+type GlobalFilterController = IController & {
+    attr: string
+    attrDef: Filter
+    attrValue: string[]
+    possibleValues: [string, number][]
+    lang: string
+}
+
+type GlobalFilterScope = IScope & {
+    filterLabel: LangString
+    selected: string[]
+    dropdownToggle: (open?: boolean) => void
+    toggleSelected: (value: string, event: Event) => void
+    isSelected: (value: string) => boolean
+    isSelectedList: (value: string) => boolean
+    translateAttribute: (value: string) => string
+}
+
+angular.module("korpApp").component("globalFilter", {
+    template: html` <span uib-dropdown auto-close="outsideClick" on-toggle="dropdownToggle(open)">
+        <button uib-dropdown-toggle class="btn btn-sm btn-default mr-1 align-baseline">
+            <span ng-if="$ctrl.attrValue.length == 0">
+                <span>{{ "add_filter_value" | loc:$root.lang }}</span>
+                <span>{{filterLabel | locObj:$root.lang}}</span>
+            </span>
+            <span ng-if="$ctrl.attrValue.length != 0">
+                <span style="text-transform: capitalize">{{filterLabel | locObj:$root.lang}}:</span>
+                <span ng-repeat="selected in $ctrl.attrValue">{{translateAttribute(selected) | replaceEmpty }} </span>
+            </span>
+        </button>
+        <div uib-dropdown-menu class="korp-uib-dropdown-menu p-0 mt-3 ml-2">
+            <ul class="p-0 m-0">
+                <li
+                    ng-repeat="value in $ctrl.possibleValues"
+                    ng-class="{'bg-blue-100': isSelected(value[0])}"
+                    class="attribute p-1"
+                    ng-click="toggleSelected(value[0], $event)"
+                    ng-if="isSelectedList(value[0])"
+                >
+                    <span ng-if="isSelected(value[0])">✔</span>
+                    <span>{{translateAttribute(value[0]) | replaceEmpty }}</span>
+                    <span class="text-xs">{{value[1]}}</span>
+                </li>
+                <li
+                    ng-repeat="value in $ctrl.possibleValues"
+                    ng-class="{'bg-blue-100': isSelected(value[0])}"
+                    class="attribute p-1"
+                    ng-click="toggleSelected(value[0], $event)"
+                    ng-if="!isSelectedList(value[0]) && value[1] > 0"
+                >
+                    <span ng-if="isSelected(value[0])">✔</span>
+                    <span>{{translateAttribute(value[0]) | replaceEmpty }}</span>
+                    <span class="text-xs">{{value[1]}}</span>
+                </li>
+                <li
+                    ng-repeat="value in $ctrl.possibleValues"
+                    class="attribute disabled opacity-50 p-1"
+                    ng-if="!isSelectedList(value[0]) && value[1] == 0"
+                >
+                    <span>{{translateAttribute(value[0]) | replaceEmpty }}</span>
+                    <span class="text-xs">{{value[1]}}</span>
+                </li>
+            </ul>
+        </div>
+    </span>`,
+    bindings: {
+        attr: "<",
+        attrDef: "<",
+        attrValue: "<",
+        possibleValues: "<",
+        lang: "<",
+    },
+    controller: [
+        "$scope",
+        "globalFilterService",
+        function ($scope: GlobalFilterScope, globalFilterService) {
+            const $ctrl = this as GlobalFilterController
+            // if scope.possibleValues.length > 20
+            //     # TODO enable autocomplete
+
+            $ctrl.$onInit = () => {
+                $scope.filterLabel = $ctrl.attrDef.settings.label
+                $scope.selected = _.clone($ctrl.attrValue)
+            }
+
+            $scope.dropdownToggle = (open?: boolean) => {
+                if (!open) {
+                    $scope.selected = []
+                    return $ctrl.attrValue.map((value) => $scope.selected.push(value))
+                }
+            }
+
+            $scope.toggleSelected = function (value, event) {
+                if ($scope.isSelected(value)) {
+                    _.pull($ctrl.attrValue, value)
+                } else {
+                    $ctrl.attrValue.push(value)
+                }
+                event.stopPropagation()
+                globalFilterService.valueChange($ctrl.attr)
+            }
+
+            $scope.isSelected = (value: string) => $ctrl.attrValue.includes(value)
+
+            $scope.isSelectedList = (value: string) => $scope.selected.includes(value)
+
+            $scope.translateAttribute = (value: string) =>
+                locAttribute($ctrl.attrDef.settings.translation, value, $ctrl.lang)
+        },
+    ],
+})

@@ -9,6 +9,7 @@ import { matomoSend } from "@/matomo"
 import "@/services/compare-searches"
 import "@/components/extended/tokens"
 import "@/components/search-submit"
+import "@/global-filter/global-filters"
 
 angular.module("korpApp").component("extendedStandard", {
     template: html`
