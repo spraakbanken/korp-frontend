@@ -26,6 +26,8 @@ export type Config = {
 }
 
 export type Corpus = {
+    /** Attributes to use in global filters */
+    attribute_filters: string[]
     context: Labeled[]
     description: LangString
     hide?: boolean

@@ -74,7 +74,7 @@ export const selectController = (autocomplete: boolean): IController => [
             $scope.loading = true
             const opts: StructServiceOptions = { count: false, returnByCorpora: false }
             if ($scope.type === "set") {
-                opts.split = true
+                opts.split = [attribute]
             }
             structService.getStructValues(corpora, [attribute], opts).then(
                 function (data: string[]) {

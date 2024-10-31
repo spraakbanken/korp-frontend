@@ -16,6 +16,7 @@
 - Extracted Karp backend usage into `app/scripts/karp.ts`
 - `stringifyFunc(key)` was renamed to `getStringifier(key)`
 - `stringify(key, x)` was removed, use `getStringifier(key)(x)` instead
+- For `getStructValues()` of `structService`, the `split` option now takes a list of attribute names, not a bool
 
 ### Fixed
 
@@ -24,6 +25,7 @@
 - Barcode (aka hitsPicture) sometimes missing from KWIC tab [#395](https://github.com/spraakbanken/korp-frontend/issues/395)
 - Error when loading with restricted corpora selected [#398](https://github.com/spraakbanken/korp-frontend/issues/398)
 - Related words lookup must use OR [#401](https://github.com/spraakbanken/korp-frontend/issues/401)
+- Add support for annotations of the type 'set' in attribute filters [#116](https://github.com/spraakbanken/korp-frontend/issues/116)
 
 ## [9.7.1] - 2024-09-18
 

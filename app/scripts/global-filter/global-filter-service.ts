@@ -99,9 +99,7 @@ angular.module("korpApp").factory("globalFilterService", [
             const corpora = getSupportedCorpora()
 
             const opts: StructServiceOptions = {}
-            if (dataObj.attributes[_.last(dataObj.defaultFilters)!].settings.type === "set") {
-                opts.split = true
-            }
+            opts.split = dataObj.defaultFilters.filter((name) => dataObj.attributes[name].settings.type === "set")
 
             type R = Record<string, RecursiveRecord<Record<string, number>>>
             const data = (await structService.getStructValues(corpora, dataObj.defaultFilters, opts)) as R

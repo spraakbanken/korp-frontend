@@ -18,7 +18,8 @@ export type StructService = {
 export type StructServiceOptions = {
     count?: boolean
     returnByCorpora?: boolean
-    split?: boolean
+    /** Attributes that should be split (used for sets) */
+    split?: string[]
 }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Misc/paths/~1attr_values/get */
@@ -58,7 +59,7 @@ angular.module("korpApp").factory("structService", [
                     count,
                 }
 
-                if (split) params.split = _.last(attributes)
+                if (split) params.split = split.join(",")
 
                 const conf = httpConfAddMethod({
                     url: settings["korp_backend_url"] + "/attr_values",
