@@ -52,15 +52,19 @@ angular.module("korpApp").component("searchtabs", {
                 <uib-tab heading='{{"simple" | loc:$root.lang}}' ng-if="!$ctrl.parallelMode">
                     <simple-search></simple-search>
                 </uib-tab>
-                <uib-tab class="extended" heading='{{"detailed" | loc:$root.lang}}'>
+
+                <!-- Without ng-if="$ctrl" this tab will be rendered before the others, messing up tab numbers which should correspond to "search_tab" state -->
+                <uib-tab class="extended" heading='{{"detailed" | loc:$root.lang}}' ng-if="$ctrl">
                     <div>
                         <extended-standard ng-if="!$ctrl.parallelMode"></extended-standard>
                         <extended-parallel ng-if="$ctrl.parallelMode"></extended-parallel>
                     </div>
                 </uib-tab>
+
                 <uib-tab heading='{{"advanced" | loc:$root.lang}}' ng-if="!$ctrl.parallelMode">
                     <advanced-search></advanced-search>
                 </uib-tab>
+
                 <uib-tab ng-if="!$ctrl.parallelMode">
                     <uib-tab-heading>
                         {{'compare' | loc:$root.lang}}
@@ -68,10 +72,12 @@ angular.module("korpApp").component("searchtabs", {
                     </uib-tab-heading>
                     <compare-search></compare-search>
                 </uib-tab>
+
                 <div class="flex justify-end items-center">
                     <select class="hidden md:block shrink min-w-0 m-1" id="search_history"></select>
                 </div>
             </uib-tabset>
+
             <div
                 class="flex items-baseline bg-blue-100 border border-blue-200 shadow-inner"
                 id="search_options"
