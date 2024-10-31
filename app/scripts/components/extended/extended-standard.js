@@ -14,10 +14,9 @@ import "@/global-filter/global-filters"
 angular.module("korpApp").component("extendedStandard", {
     template: html`
         <div>
-            <global-filters lang="$ctrl.lang"></global-filters>
+            <global-filters></global-filters>
             <extended-tokens
                 cqp="$ctrl.cqp"
-                lang="$ctrl.lang"
                 cqp-change="$ctrl.cqpChange(cqp)"
                 update-repeat-error="$ctrl.updateRepeatError(error)"
             ></extended-tokens>
@@ -56,7 +55,6 @@ angular.module("korpApp").component("extendedStandard", {
         function ($location, $rootScope, $scope, compareSearches, $timeout) {
             const ctrl = this
 
-            ctrl.lang = $rootScope.lang
             $scope.freeOrder = $location.search().in_order != null
             ctrl.orderError = false
 

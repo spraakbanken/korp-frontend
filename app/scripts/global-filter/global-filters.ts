@@ -24,15 +24,12 @@ angular.module("korpApp").component("globalFilters", {
                     attr-def="dataObj.attributes[filterKey]"
                     attr-value="dataObj.filterValues[filterKey].value"
                     possible-values="dataObj.filterValues[filterKey].possibleValues"
-                    lang="$ctrl.lang"
                 ></global-filter>
                 <span ng-if="!$last">{{"and" | loc:$root.lang}}</span>
             </span>
         </div>
     </div>`,
-    bindings: {
-        lang: "<",
-    },
+    bindings: {},
     controller: [
         "$scope",
         "globalFilterService",

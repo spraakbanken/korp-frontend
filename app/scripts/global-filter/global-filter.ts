@@ -6,6 +6,7 @@ import { html } from "@/util"
 import "./global-filter-service"
 import { Filter } from "@/corpus_listing"
 import { LangString } from "@/i18n/types"
+import { RootScope } from "@/root-scope.types"
 
 type GlobalFilterController = IController & {
     attr: string
@@ -77,12 +78,12 @@ angular.module("korpApp").component("globalFilter", {
         attrDef: "<",
         attrValue: "<",
         possibleValues: "<",
-        lang: "<",
     },
     controller: [
+        "$rootScope",
         "$scope",
         "globalFilterService",
-        function ($scope: GlobalFilterScope, globalFilterService) {
+        function ($rootScope: RootScope, $scope: GlobalFilterScope, globalFilterService) {
             const $ctrl = this as GlobalFilterController
             // if scope.possibleValues.length > 20
             //     # TODO enable autocomplete
@@ -114,7 +115,7 @@ angular.module("korpApp").component("globalFilter", {
             $scope.isSelectedList = (value: string) => $scope.selected.includes(value)
 
             $scope.translateAttribute = (value: string) =>
-                locAttribute($ctrl.attrDef.settings.translation, value, $ctrl.lang)
+                locAttribute($ctrl.attrDef.settings.translation, value, $rootScope.lang)
         },
     ],
 })
