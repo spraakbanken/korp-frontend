@@ -118,7 +118,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
 
                 s.hasResult = true
 
-                if (currentMode === "parallel") {
+                if (settings.parallel) {
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 

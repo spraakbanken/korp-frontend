@@ -140,7 +140,7 @@ angular.module("korpApp").component("searchtabs", {
         ) {
             const $ctrl = this as SearchtabsController
 
-            $ctrl.parallelMode = !!settings["parallel"]
+            $ctrl.parallelMode = !!settings.parallel
             if ($ctrl.parallelMode) {
                 // resolve globalFilterDef since globalFilter-directive is not used
                 $rootScope.globalFilterDef.resolve()

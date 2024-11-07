@@ -26,6 +26,7 @@
 - Error when loading with restricted corpora selected [#398](https://github.com/spraakbanken/korp-frontend/issues/398)
 - Related words lookup must use OR [#401](https://github.com/spraakbanken/korp-frontend/issues/401)
 - Add support for annotations of the type 'set' in attribute filters [#116](https://github.com/spraakbanken/korp-frontend/issues/116)
+- Parallel mode is consistently checked against the `parallel` config setting, and not the mode name
 
 ## [9.7.1] - 2024-09-18
 

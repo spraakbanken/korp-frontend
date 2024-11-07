@@ -204,7 +204,7 @@ angular.module("korpApp").component("kwic", {
                         })
                     }
 
-                    if (currentMode === "parallel" && !$ctrl.isReading) {
+                    if (settings.parallel && !$ctrl.isReading) {
                         $timeout(() => alignParallelSentences())
                     }
                     if ($ctrl.kwic.length == 0) {
@@ -271,8 +271,8 @@ angular.module("korpApp").component("kwic", {
                     { value: "", label: "download_kwic" },
                     { value: "kwic/csv", label: "download_kwic_csv" },
                     { value: "kwic/tsv", label: "download_kwic_tsv" },
-                    { value: "annotations/csv", label: "download_annotations_csv", disabled: settings["parallel"] },
-                    { value: "annotations/tsv", label: "download_annotations_tsv", disabled: settings["parallel"] },
+                    { value: "annotations/csv", label: "download_annotations_csv", disabled: settings.parallel },
+                    { value: "annotations/tsv", label: "download_annotations_tsv", disabled: settings.parallel },
                 ],
                 selected: "",
                 init: (value, hits) => {
@@ -323,7 +323,7 @@ angular.module("korpApp").component("kwic", {
                 for (let i = 0; i < hitArray.length; i++) {
                     var corpus, linkCorpusId, mainCorpusId, matches
                     const hitContext = hitArray[i]
-                    if (currentMode === "parallel") {
+                    if (settings.parallel) {
                         mainCorpusId = hitContext.corpus.split("|")[0].toLowerCase()
                         linkCorpusId = hitContext.corpus.split("|")[1].toLowerCase()
                     } else {
@@ -469,7 +469,7 @@ angular.module("korpApp").component("kwic", {
                     })
                 }
 
-                if (currentMode === "parallel") {
+                if (settings.parallel) {
                     selectWordParallel(word, scope, sent)
                 } else {
                     selectWord(word, scope)
