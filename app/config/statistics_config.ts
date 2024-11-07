@@ -3,8 +3,13 @@ import _ from "lodash"
 import settings from "@/settings"
 import { lemgramToHtml, regescape, saldoToHtml } from "@/util"
 import { locAttribute } from "@/i18n"
+import { Token } from "@/backend/kwic-proxy"
+import { Attribute } from "@/settings/config.types"
+import { JQueryStaticExtended } from "@/jquery.types"
 
-let customFunctions = {}
+type Stringifier = (tokens: string[], ignoreCase?: boolean) => string
+
+let customFunctions: Record<string, Stringifier> = {}
 
 try {
     customFunctions = require("custom/statistics.js").default
@@ -12,14 +17,14 @@ try {
     console.log("No module for statistics functions available")
 }
 
-export function getCqp(hitValues, ignoreCase) {
+export function getCqp(hitValues: Token[], ignoreCase: boolean): string {
     const positionalAttributes = ["word", ...Object.keys(settings.corpusListing.getCurrentAttributes())]
     let hasPositionalAttributes = false
 
-    var tokens = []
+    var tokens: string[] = []
     for (var i = 0; i < hitValues.length; i++) {
         var token = hitValues[i]
-        var andExpr = []
+        var andExpr: string[] = []
         for (var attribute in token) {
             if (token.hasOwnProperty(attribute)) {
                 var values = token[attribute]
@@ -39,11 +44,11 @@ export function getCqp(hitValues, ignoreCase) {
     return `<match> ${tokens.join(" ")} </match>`
 }
 
-function reduceCqp(type, tokens, ignoreCase) {
+function reduceCqp(type: string, tokens: string[], ignoreCase: boolean): string {
     let attrs = settings.corpusListing.getCurrentAttributes()
     if (attrs[type] && attrs[type].stats_cqp) {
         // A stats_cqp function should call regescape for the value as appropriate
-        return customFunctions[attrs[type].stats_cqp](tokens, ignoreCase)
+        return customFunctions[attrs[type].stats_cqp!](tokens, ignoreCase)
     }
     tokens = _.map(tokens, (val) => regescape(val))
     switch (type) {
@@ -55,11 +60,11 @@ function reduceCqp(type, tokens, ignoreCase) {
         case "sense":
         case "transformer-neighbour":
             if (tokens[0] === "") return "ambiguity(" + type + ") = 0"
-            else var res
+            let res: string
             if (tokens.length > 1) {
                 var key = tokens[0].split(":")[0]
 
-                var variants = []
+                const variants: string[][] = []
                 _.map(tokens, function (val) {
                     const parts = val.split(":")
                     if (variants.length == 0) {
@@ -68,15 +73,12 @@ function reduceCqp(type, tokens, ignoreCase) {
                     for (var idx = 1; idx < parts.length; idx++) variants[idx - 1].push(parts[idx])
                 })
 
-                variants = _.map(variants, function (variant) {
-                    return ":(" + variant.join("|") + ")"
-                })
-
-                res = key + variants.join("")
+                const variantsJoined = variants.map((variant) => ":(" + variant.join("|") + ")")
+                res = key + variantsJoined.join("")
             } else {
                 res = tokens[0]
             }
-            return type + " contains '" + res + "'"
+            return `${type} contains '${res}'`
         case "word":
             let s = 'word="' + tokens[0] + '"'
             if (ignoreCase) s = s + " %c"
@@ -101,11 +103,11 @@ function reduceCqp(type, tokens, ignoreCase) {
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-export function reduceStringify(type, values, structAttributes) {
+export function reduceStringify(type: string, values: string[], structAttributes: Attribute): string {
     let attrs = settings.corpusListing.getCurrentAttributes()
 
     if (attrs[type] && attrs[type].stats_stringify) {
-        return customFunctions[attrs[type].stats_stringify](values)
+        return customFunctions[attrs[type].stats_stringify!](values)
     }
 
     switch (type) {
@@ -123,15 +125,16 @@ export function reduceStringify(type, values, structAttributes) {
         case "lex":
         case "lemma":
         case "sense":
+            let stringify: (value: string, appendIndex?: boolean) => string
             if (type == "saldo" || type == "sense") {
-                var stringify = saldoToHtml
+                stringify = saldoToHtml
             } else if (type == "lemma") {
                 stringify = (lemma) => lemma.replace(/_/g, " ")
             } else {
                 stringify = lemgramToHtml
             }
 
-            var html = _.map(values, function (token) {
+            const html = _.map(values, function (token) {
                 if (token === "") return "–"
                 return stringify(token.replace(/:.*/g, ""), true)
             })
@@ -148,7 +151,7 @@ export function reduceStringify(type, values, structAttributes) {
             return output
         case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
             var output = _.map(values, function (token) {
-                return $("<span>").text(token).outerHTML()
+                return ($("<span>").text(token) as any).outerHTML()
             }).join(" ")
             return output
         default:

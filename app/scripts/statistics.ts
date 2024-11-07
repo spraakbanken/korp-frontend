@@ -33,7 +33,7 @@ const createStatisticsService = function () {
                 sortable: true,
                 formatter(row, cell, value, columnDef, dataContext) {
                     if (dataContext["rowId"] !== 0) {
-                        const formattedValue = reduceStringify(reduceVal, dataContext[reduceVal!], attrObj[reduceVal!])
+                        const formattedValue = reduceStringify(reduceVal!, dataContext[reduceVal!], attrObj[reduceVal!])
                         dataContext["formattedValue"][reduceVal] = formattedValue
                         return `<span class="statistics-link" data-row=${dataContext["rowId"]}>${formattedValue}</span>`
                     } else {
