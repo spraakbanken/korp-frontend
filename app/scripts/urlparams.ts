@@ -21,6 +21,8 @@ export type HashParams = {
     corpus?: string
     /** CQP query for Extended search, possibly with frontend-specific operators */
     cqp?: string
+    /** Modal to show */
+    display?: "about"
     /** Conditions entered for search filters, as Base64-encoded JSON */
     global_filter?: string
     /** Opposite of `show_stats`, used if the `statistics_search_default` setting is enabled */

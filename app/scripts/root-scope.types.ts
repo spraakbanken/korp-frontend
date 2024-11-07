@@ -15,6 +15,7 @@ export type RootScope = IRootScopeService & {
     globalFilterDef: IDeferred<never>
     searchtabs: any
     simpleCQP?: string
+    show_modal: "about" | false
     compareTabs: CompareTab[]
     graphTabs: GraphTab[]
     kwicTabs: KwicTab[]

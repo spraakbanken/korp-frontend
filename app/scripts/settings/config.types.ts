@@ -19,6 +19,7 @@ export type Config = {
     modes: {
         mode: string
         label: LangString
+        labOnly?: boolean
     }[]
     order?: number
     parallel?: boolean

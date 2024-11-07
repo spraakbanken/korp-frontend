@@ -1,5 +1,5 @@
 /** @format */
-import angular from "angular"
+import angular, { IController, IScope, ITimeoutService, ui } from "angular"
 import _ from "lodash"
 import korpLogo from "../../img/korp_slogan.svg"
 import korpLogoEn from "../../img/korp_slogan_en.svg"
@@ -13,6 +13,26 @@ import "@/services/utils"
 import "@/components/corpus-chooser/corpus-chooser"
 import "@/components/radio-list"
 import { matomoSend } from "@/matomo"
+import { LocationService } from "@/urlparams"
+import { RootScope } from "@/root-scope.types"
+import { UtilsService } from "@/services/utils"
+import { Labeled } from "@/i18n/types"
+import { Config } from "@/settings/config.types"
+
+type HeaderController = IController & {
+    citeClick: () => void
+    getUrl: (modeId: string) => string
+    getUrlParts: (modeId: string) => string[]
+    languages: Labeled[]
+    logoClick: () => void
+    menu: Config["modes"]
+    modes: Config["modes"]
+    visible: Config["modes"]
+}
+
+type HeaderScope = IScope & {
+    lang: string
+}
 
 angular.module("korpApp").component("header", {
     template: html`
@@ -132,14 +152,21 @@ angular.module("korpApp").component("header", {
         "$scope",
         "$timeout",
         "utils",
-        function ($location, $uibModal, $rootScope, $scope, $timeout, utils) {
-            const $ctrl = this
+        function (
+            $location: LocationService,
+            $uibModal: ui.bootstrap.IModalService,
+            $rootScope: RootScope,
+            $scope: HeaderScope,
+            $timeout: ITimeoutService,
+            utils: UtilsService
+        ) {
+            const $ctrl = this as HeaderController
 
             $scope.lang = $rootScope.lang
 
             $ctrl.logoClick = function () {
                 const [baseUrl, modeParam, langParam] = $ctrl.getUrlParts(currentMode)
-                window.location = baseUrl + modeParam + langParam
+                window.location.href = baseUrl + modeParam + langParam
                 if (langParam.length > 0) {
                     window.location.reload()
                 }
@@ -164,7 +191,7 @@ angular.module("korpApp").component("header", {
 
             $rootScope.show_modal = false
 
-            let modal = null
+            let modal: ui.bootstrap.IModalInstanceService | null = null
 
             utils.setupHash($rootScope, {
                 key: "display",
@@ -182,7 +209,11 @@ angular.module("korpApp").component("header", {
                 $rootScope.show_modal = false
             }
 
-            const modalScope = $rootScope.$new(true)
+            type ModalScope = IScope & {
+                clickX: () => void
+            }
+
+            const modalScope = $rootScope.$new(true) as ModalScope
             modalScope.clickX = () => closeModals()
 
             function showAbout() {
@@ -200,8 +231,8 @@ angular.module("korpApp").component("header", {
             const N_VISIBLE = settings["visible_modes"]
 
             $ctrl.modes = _.filter(settings["modes"])
-            if (process.env.ENVIRONMENT != "staging") {
-                $ctrl.modes = _.filter(settings["modes"], (item) => item.labOnly !== true)
+            if (process.env.ENVIRONMENT == "production") {
+                $ctrl.modes = _.filter(settings["modes"], (item) => !item.labOnly)
             }
 
             $ctrl.visible = $ctrl.modes.slice(0, N_VISIBLE)
