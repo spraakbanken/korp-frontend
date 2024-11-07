@@ -34,16 +34,22 @@ angular.module("korpApp").component("kwicWord", {
                 $scope.word = $ctrl.word
                 $scope.sentence = $ctrl.sentence
                 $scope.sentenceIndex = $ctrl.sentenceIndex
-
-                // Produce applicable class names depending on token data.
-                $scope.class = {
-                    reading_match: $ctrl.word._match,
-                    punct: $ctrl.word._punct,
-                    match_sentence: $ctrl.word._matchSentence,
-                    link_selected: $ctrl.word._link_selected,
-                    open_sentence: "_open_sentence" in $ctrl.word,
-                }
             }
+
+            $scope.$watch(
+                "word",
+                (word: Token) => {
+                    // Produce applicable class names depending on token data.
+                    $scope.class = {
+                        reading_match: word._match,
+                        punct: word._punct,
+                        match_sentence: word._matchSentence,
+                        link_selected: word._link_selected,
+                        open_sentence: "_open_sentence" in word,
+                    }
+                },
+                true
+            )
         },
     ],
 })
