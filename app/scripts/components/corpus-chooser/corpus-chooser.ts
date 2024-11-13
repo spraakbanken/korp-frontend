@@ -184,7 +184,17 @@ angular.module("korpApp").component("corpusChooser", {
                 $ctrl.totalCount = $ctrl.root.numberOfChildren
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
                 $ctrl.updateLimitedAccess()
-                select(corpusIds)
+                select(corpusIds, true)
+
+                // Sync when corpus selection is modified elsewhere.
+                $rootScope.$watch(
+                    () => $location.search().corpus,
+                    (corpusIdsComma) => {
+                        const corpusIds = corpusIdsComma ? corpusIdsComma.split(",") : []
+                        select(corpusIds)
+                    }
+                )
+                $rootScope.$on("corpuschooserchange", (e, selected) => select(selected))
             })
 
             $ctrl.updateSelectedCount = (selection) => {
@@ -223,12 +233,17 @@ angular.module("korpApp").component("corpusChooser", {
                 }
             }
 
-            function select(corporaIds: string[], quiet = false) {
+            function select(corporaIds: string[], force?: boolean) {
+                // Exit if no actual change
+                const selectedIds = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
+                if (!force && _.isEqual(corporaIds, selectedIds)) return
+
                 const selection = filterCorporaOnCredentials(
                     Object.values(settings.corpora),
                     corporaIds,
                     $ctrl.credentials
                 )
+
                 recalcFolderStatus($ctrl.root)
                 $ctrl.updateSelectedCount(selection)
                 // used when there is only one corpus selected to show name
@@ -237,19 +252,9 @@ angular.module("korpApp").component("corpusChooser", {
                 }
 
                 settings.corpusListing.select(selection)
+                $rootScope.$broadcast("corpuschooserchange", selection)
                 $location.search("corpus", selection.join(","))
             }
-
-            // Sync when corpus selection is modified elsewhere.
-            $rootScope.$watch(
-                () => $location.search().corpus,
-                (corpusIdsComma) => {
-                    const corpusIds = corpusIdsComma ? corpusIdsComma.split(",") : []
-                    const selectedIds = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
-                    if (!_.isEqual(corpusIds, selectedIds)) $rootScope.$broadcast("corpuschooserchange", corpusIds)
-                }
-            )
-            $rootScope.$on("corpuschooserchange", (e, selected) => select(selected, true))
 
             $ctrl.onShowInfo = (node: ChooserFolderSub | CorpusTransformed) => {
                 $ctrl.showInfoBox = node.id != $ctrl.infoNode?.id

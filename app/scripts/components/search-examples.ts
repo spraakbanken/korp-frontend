@@ -42,11 +42,6 @@ export default angular.module("korpApp").component("searchExamples", {
             }
 
             $ctrl.setSearch = (params: HashParams) => {
-                if (params.corpus) {
-                    const corpora = params.corpus.split(",")
-                    settings.corpusListing.select(corpora)
-                    $rootScope.$broadcast("corpuschooserchange", corpora)
-                }
                 if (params.cqp) {
                     statemachine.send("SEARCH_CQP", { cqp: params.cqp })
                 }
