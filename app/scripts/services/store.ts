@@ -17,7 +17,6 @@ export type State = {
 
 export type SubscribeCallback = (partialState: Partial<State>) => void
 export type WatchCallback<P extends keyof State> = (valueNew: State[P]) => void
-type WatchTracker<P extends keyof State> = { name: P; callback: WatchCallback<P> }
 
 const initState = (): State => ({
     selectedCorpusIds: [],
@@ -29,7 +28,6 @@ angular.module("korpApp").factory("store", [
     function ($rootScope: RootScope, $timeout: ITimeoutService): StoreService {
         $rootScope.store = initState()
         const subscribers: SubscribeCallback[] = []
-        const watchTrackers: WatchTracker<keyof State>[] = []
 
         /** Call all subscribers and affected watchers */
         function notify(names: (keyof State)[]): void {
@@ -38,9 +36,6 @@ angular.module("korpApp").factory("store", [
             // In next tick
             $timeout(() => {
                 subscribers.forEach((callback) => callback(partialState))
-                watchTrackers
-                    .filter((tracker) => names.includes(tracker.name))
-                    .forEach((tracker) => tracker.callback($rootScope.store[tracker.name]))
             })
         }
 
@@ -57,7 +52,7 @@ angular.module("korpApp").factory("store", [
             notify(namesChanged)
         }
 
-        // Placing function bodies here means less repeated typing.
+        // Placing function bodies here means less repeated typing
         return {
             get(name) {
                 return $rootScope.store[name]
@@ -74,7 +69,10 @@ angular.module("korpApp").factory("store", [
             },
 
             watch(name, callback) {
-                watchTrackers.push({ name, callback })
+                // Call the given callback only if the named variable is changed.
+                subscribers.push((partialState) => {
+                    if (name in partialState) callback(partialState[name]!)
+                })
             },
         }
     },
