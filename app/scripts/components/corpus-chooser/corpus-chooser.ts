@@ -236,17 +236,20 @@ angular.module("korpApp").component("corpusChooser", {
                     $ctrl.firstCorpus = settings.corpora[selection[0]].title
                 }
 
-                if (!quiet) {
-                    settings.corpusListing.select(selection)
-                    $rootScope.$broadcast("corpuschooserchange", selection)
-                    $location.search("corpus", selection.join(","))
-                }
+                settings.corpusListing.select(selection)
+                $location.search("corpus", selection.join(","))
             }
 
             // Sync when corpus selection is modified elsewhere.
-            $rootScope.$on("corpuschooserchange", (e, selected) => {
-                select(selected, true)
-            })
+            $rootScope.$watch(
+                () => $location.search().corpus,
+                (corpusIdsComma) => {
+                    const corpusIds = corpusIdsComma ? corpusIdsComma.split(",") : []
+                    const selectedIds = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
+                    if (!_.isEqual(corpusIds, selectedIds)) $rootScope.$broadcast("corpuschooserchange", corpusIds)
+                }
+            )
+            $rootScope.$on("corpuschooserchange", (e, selected) => select(selected, true))
 
             $ctrl.onShowInfo = (node: ChooserFolderSub | CorpusTransformed) => {
                 $ctrl.showInfoBox = node.id != $ctrl.infoNode?.id

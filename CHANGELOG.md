@@ -27,6 +27,7 @@
 - Related words lookup must use OR [#401](https://github.com/spraakbanken/korp-frontend/issues/401)
 - Add support for annotations of the type 'set' in attribute filters [#116](https://github.com/spraakbanken/korp-frontend/issues/116)
 - Parallel mode is consistently checked against the `parallel` config setting, and not the mode name
+- Search history fails to select corpus [#405](https://github.com/spraakbanken/korp-frontend/issues/405)
 
 ## [9.7.1] - 2024-09-18
 
