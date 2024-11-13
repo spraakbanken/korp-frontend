@@ -2,14 +2,13 @@
 import _ from "lodash"
 import angular from "angular"
 import settings from "@/settings"
-import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
 import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
 import { getUrlHash, html } from "@/util"
 import korpLogo from "../img/korp.svg"
 import korpFail from "../img/korp_fail.svg"
-import { convertJstorage, localStorageSet } from "@/local-storage"
+import { convertJstorage } from "@/local-storage"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
@@ -43,28 +42,11 @@ function initApp() {
         console.error(error)
     }
 
-    try {
-        updateSearchHistory()
-    } catch (error) {
-        console.error("ERROR setting corpora from location", error)
-    }
-
     if (process.env.ENVIRONMENT == "staging") {
         $("body").addClass("lab")
     }
 
     $("body").addClass(`mode-${currentMode}`)
-
-    $("#search_history").change(function (event) {
-        const optionElement = $(this).find(":selected")
-        const value = optionElement.val() as string
-        if (_.includes(["http://", "https:/"], value.slice(0, 7))) {
-            location.href = value
-        } else if (optionElement.is(".clear")) {
-            localStorageSet("searches", [])
-            updateSearchHistory()
-        }
-    })
 
     // this is to hide all ugly markup before Angular is fully loaded
     $("#main").css("display", "block")

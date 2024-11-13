@@ -385,6 +385,12 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
         })
 }
 
+/** Split a string by the first occurence of a given separator */
+export const splitFirst = (sep: string, s: string): [string, string] => {
+    const pos = s.indexOf(sep)
+    return [s.slice(0, pos), s.slice(pos + sep.length)]
+}
+
 /** Escape special characters in a string so it can be safely inserted in a regular expression. */
 export const regescape = (s: string): string => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
 

@@ -17,6 +17,7 @@
 - `stringifyFunc(key)` was renamed to `getStringifier(key)`
 - `stringify(key, x)` was removed, use `getStringifier(key)(x)` instead
 - For `getStructValues()` of `structService`, the `split` option now takes a list of attribute names, not a bool
+- Search history is stored as parameters only, not full urls #118
 
 ### Fixed
 
@@ -28,6 +29,7 @@
 - Add support for annotations of the type 'set' in attribute filters [#116](https://github.com/spraakbanken/korp-frontend/issues/116)
 - Parallel mode is consistently checked against the `parallel` config setting, and not the mode name
 - Search history fails to select corpus [#405](https://github.com/spraakbanken/korp-frontend/issues/405)
+- Search history fails to distinguish options with same label [#406](https://github.com/spraakbanken/korp-frontend/issues/406)
 
 ## [9.7.1] - 2024-09-18
 

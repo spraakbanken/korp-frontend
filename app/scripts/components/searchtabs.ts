@@ -11,6 +11,7 @@ import "@/components/extended/extended-standard"
 import "@/components/extended/extended-parallel"
 import "@/components/advanced-search"
 import "@/components/compare-search"
+import "@/components/search-history"
 import "@/components/reduce-select"
 import "@/directives/click-cover"
 import "@/directives/tab-hash"
@@ -74,7 +75,7 @@ angular.module("korpApp").component("searchtabs", {
                 </uib-tab>
 
                 <div class="flex justify-end items-center">
-                    <select class="hidden md:block shrink min-w-0 m-1" id="search_history"></select>
+                    <search-history class="hidden md:block shrink min-w-0 m-1"></search-history>
                 </div>
             </uib-tabset>
 

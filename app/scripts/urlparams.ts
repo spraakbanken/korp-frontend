@@ -31,11 +31,17 @@ export type HashParams = {
     hpp?: number
     /** Whether tokens in current query should match in order; default is true */
     in_order?: "false"
+    /** In simple search, match case-insensitive */
+    isCaseInsensitive?: true
     /** UI language as three-letter code */
     lang?: string
+    /** In simple search, match anywhere in a word */
+    mid_comp?: true
     /** Current page number of the search result */
     page?: string
     parallel_corpora?: string
+    /** In simple search, match beginning of word */
+    prefix?: true
     random_seed?: `${number}`
     /** Whether the reading mode is enabled */
     reading_mode?: boolean
@@ -57,8 +63,40 @@ export type HashParams = {
     stats_reduce?: string
     /** Attributes on which to aggregate counts, case-insensitively, in statistics query */
     stats_reduce_insensitive?: string
+    /** In simple search, match end of word */
+    suffix?: true
     /** Chunk size to evaluate search query within, e.g. "sentence" or "paragraph" */
     within?: string
     /** Whether a word picture query should be made when searching */
     word_pic?: boolean
 }
+
+export type SearchParams = Pick<HashParams, SearchParamNames>
+
+/** Parameters that define a search result set */
+export type SearchParamNames =
+    | "corpus"
+    | "cqp"
+    | "global_filter"
+    | "in_order"
+    | "parallel_corpora"
+    | "search"
+    | "within"
+    | "prefix"
+    | "mid_comp"
+    | "suffix"
+    | "isCaseInsensitive"
+
+export const getSearchParamNames = (): SearchParamNames[] => [
+    "corpus",
+    "cqp",
+    "global_filter",
+    "in_order",
+    "parallel_corpora",
+    "search",
+    "within",
+    "prefix",
+    "mid_comp",
+    "suffix",
+    "isCaseInsensitive",
+]
