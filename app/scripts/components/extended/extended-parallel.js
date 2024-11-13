@@ -6,6 +6,7 @@ import { expandOperators } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/services/searches"
+import "@/services/store"
 import "@/components/extended/tokens"
 
 angular.module("korpApp").component("extendedParallel", {
@@ -63,7 +64,8 @@ angular.module("korpApp").component("extendedParallel", {
         "$rootScope",
         "$timeout",
         "searches",
-        function ($location, $rootScope, $timeout, searches) {
+        "store",
+        function ($location, $rootScope, $timeout, searches, store) {
             const ctrl = this
 
             ctrl.initialized = false
@@ -72,7 +74,7 @@ angular.module("korpApp").component("extendedParallel", {
                 ctrl.onLangChange()
                 ctrl.initialized = true
 
-                $rootScope.$on("corpuschooserchange", () => ctrl.onLangChange(false))
+                store.watch("selectedCorpusIds", () => ctrl.onLangChange())
             }
 
             ctrl.negates = []
@@ -140,15 +142,10 @@ angular.module("korpApp").component("extendedParallel", {
                 return output
             }
 
-            ctrl.onLangChange = function (broadcast = true) {
+            ctrl.onLangChange = function () {
                 var currentLangList = _.map(ctrl.langs, "lang")
                 settings.corpusListing.setActiveLangs(currentLangList)
                 $location.search("parallel_corpora", currentLangList.join(","))
-
-                // hacky fix to make attributes update when switching languages
-                if (ctrl.initialized && broadcast) {
-                    $rootScope.$broadcast("corpuschooserchange", [""])
-                }
                 searches.langDef.resolve()
             }
 

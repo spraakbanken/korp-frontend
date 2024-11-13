@@ -2,6 +2,7 @@
 import angular from "angular"
 import settings from "@/settings"
 import { html } from "@/util"
+import "@/services/store"
 
 angular.module("korpApp").component("extendedStructToken", {
     template: html`
@@ -55,7 +56,8 @@ angular.module("korpApp").component("extendedStructToken", {
     },
     controller: [
         "$scope",
-        function ($scope) {
+        "store",
+        function ($scope, store) {
             const ctrl = this
 
             ctrl.$onInit = () => {
@@ -70,7 +72,7 @@ angular.module("korpApp").component("extendedStructToken", {
                     ctrl.change()
                 }
 
-                $scope.$on("corpuschooserchange", onCorpusChange)
+                store.watch("selectedCorpusIds", onCorpusChange)
             }
 
             const onCorpusChange = () => {

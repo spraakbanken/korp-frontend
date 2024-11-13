@@ -26,9 +26,11 @@ import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
 import "@/components/korp-error"
+import "@/services/store"
 import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
+import { StoreService } from "./services/store"
 
 // load all custom components
 let customComponents: Record<string, IComponentOptions> = {}
@@ -95,6 +97,7 @@ korpApp.run([
     "$q",
     "$timeout",
     "$uibModal",
+    "store",
     async function (
         $rootScope: RootScope,
         $location: LocationService,
@@ -103,7 +106,8 @@ korpApp.run([
         tmhDynamicLocaleCache: ICacheObject,
         $q: IQService,
         $timeout: ITimeoutService,
-        $uibModal: ui.bootstrap.IModalService
+        $uibModal: ui.bootstrap.IModalService,
+        store: StoreService
     ) {
         const s = $rootScope
         s._settings = settings
@@ -265,6 +269,20 @@ korpApp.run([
                     },
                 })
             } else {
+                // Sync corpus selection between location and store
+                store.watch("selectedCorpusIds", (corpusIds) => {
+                    settings.corpusListing.select(corpusIds)
+                    $location.search("corpus", corpusIds.join(","))
+                })
+                $rootScope.$watch(
+                    () => $location.search().corpus,
+                    (corpusIdsComma) => {
+                        const corpusIds = corpusIdsComma ? corpusIdsComma.split(",") : []
+                        settings.corpusListing.select(corpusIds)
+                        store.set("selectedCorpusIds", corpusIds)
+                    }
+                )
+
                 // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
                 settings.corpusListing.select(selectedIds)
                 $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", selectedIds), 0)

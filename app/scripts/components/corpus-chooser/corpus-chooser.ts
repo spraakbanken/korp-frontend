@@ -17,10 +17,12 @@ import {
 import "@/components/corpus-chooser/corpus-time-graph"
 import "@/components/corpus-chooser/info-box"
 import "@/components/corpus-chooser/tree"
+import "@/services/store"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { LangString } from "@/i18n/types"
+import { StoreService } from "@/services/store"
 
 type CorpusChooserController = IController & {
     credentials: string[]
@@ -131,8 +133,8 @@ angular.module("korpApp").component("corpusChooser", {
     bindings: {},
     controller: [
         "$rootScope",
-        "$location",
-        function ($rootScope: RootScope, $location: LocationService) {
+        "store",
+        function ($rootScope: RootScope, store: StoreService) {
             const $ctrl = this as CorpusChooserController
 
             statemachine.listen("login", function () {
@@ -187,14 +189,7 @@ angular.module("korpApp").component("corpusChooser", {
                 select(corpusIds, true)
 
                 // Sync when corpus selection is modified elsewhere.
-                $rootScope.$watch(
-                    () => $location.search().corpus,
-                    (corpusIdsComma) => {
-                        const corpusIds = corpusIdsComma ? corpusIdsComma.split(",") : []
-                        select(corpusIds)
-                    }
-                )
-                $rootScope.$on("corpuschooserchange", (e, selected) => select(selected))
+                store.watch("selectedCorpusIds", updateSelection)
             })
 
             $ctrl.updateSelectedCount = (selection) => {
@@ -233,14 +228,21 @@ angular.module("korpApp").component("corpusChooser", {
                 }
             }
 
+            /** Apply a selection made locally */
             function select(corporaIds: string[], force?: boolean) {
                 // Exit if no actual change
                 const selectedIds = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
                 if (!force && _.isEqual(corporaIds, selectedIds)) return
 
+                const selection = updateSelection(corporaIds)
+                store.set("selectedCorpusIds", selection)
+            }
+
+            /** Filter requested corpus selection and update internal state */
+            function updateSelection(corpusIds: string[]): string[] {
                 const selection = filterCorporaOnCredentials(
                     Object.values(settings.corpora),
-                    corporaIds,
+                    corpusIds,
                     $ctrl.credentials
                 )
 
@@ -251,9 +253,7 @@ angular.module("korpApp").component("corpusChooser", {
                     $ctrl.firstCorpus = settings.corpora[selection[0]].title
                 }
 
-                settings.corpusListing.select(selection)
-                $rootScope.$broadcast("corpuschooserchange", selection)
-                $location.search("corpus", selection.join(","))
+                return selection
             }
 
             $ctrl.onShowInfo = (node: ChooserFolderSub | CorpusTransformed) => {

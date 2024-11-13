@@ -5,6 +5,8 @@ import settings from "@/settings"
 import { html } from "@/util"
 import { Widget, WidgetScope } from "./common"
 import "@/components/datetime-picker"
+import { StoreService } from "@/services/store"
+import "@/services/store"
 
 type DateIntervalScope = WidgetScope<(string | number)[]> & {
     minDate: Date
@@ -76,7 +78,8 @@ export const dateInterval: Widget = {
     `,
     controller: [
         "$scope",
-        function ($scope: DateIntervalScope) {
+        "store",
+        function ($scope: DateIntervalScope, store: StoreService) {
             function updateIntervals() {
                 const moments = settings.corpusListing.getMomentInterval()
                 if (moments) {
@@ -105,7 +108,7 @@ export const dateInterval: Widget = {
                 }
             }
 
-            $scope.$on("corpuschooserchange", function () {
+            store.watch("selectedCorpusIds", () => {
                 updateIntervals()
             })
 

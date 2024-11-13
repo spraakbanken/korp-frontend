@@ -5,6 +5,7 @@ import settings from "@/settings"
 import { html, valfilter } from "@/util"
 const minusImage = require("../../../img/minus.png")
 import "@/components/extended/cqp-value"
+import "@/services/store"
 
 /**
  * TODO
@@ -55,9 +56,11 @@ angular.module("korpApp").component("extendedCqpTerm", {
         change: "&",
     },
     controller: [
+        "$location",
         "$rootScope",
         "$timeout",
-        function ($rootScope, $timeout) {
+        "store",
+        function ($location, $rootScope, $timeout, store) {
             const ctrl = this
 
             ctrl.valfilter = valfilter
@@ -69,9 +72,13 @@ angular.module("korpApp").component("extendedCqpTerm", {
                     ctrl.term.val = ""
                     ctrl.change()
                 }
-                $rootScope.$on("corpuschooserchange", (e, selected) => $timeout(() => onCorpusChange(e, selected), 0))
+                store.watch("selectedCorpusIds", () => $timeout(() => onCorpusChange(), 0))
+                $rootScope.$watch(
+                    () => $location.search().parallel_corpora,
+                    () => $timeout(() => onCorpusChange())
+                )
 
-                onCorpusChange(null, settings.corpusListing.selected)
+                onCorpusChange()
             }
 
             ctrl.localChange = (term) => {
@@ -79,7 +86,8 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 ctrl.change()
             }
 
-            const onCorpusChange = function (event, selected) {
+            function onCorpusChange() {
+                const selected = store.get("selectedCorpusIds")
                 // TODO: respect the setting 'wordAttributeSelector' and similar
                 if (!(selected && selected.length)) {
                     return

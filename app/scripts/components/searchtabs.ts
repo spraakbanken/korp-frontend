@@ -6,6 +6,7 @@ import { html } from "@/util"
 import { loc } from "@/i18n"
 import "@/services/compare-searches"
 import "@/services/searches"
+import "@/services/store"
 import "@/components/simple-search"
 import "@/components/extended/extended-standard"
 import "@/components/extended/extended-parallel"
@@ -22,6 +23,7 @@ import { SearchesService } from "@/services/searches"
 import { LocationService } from "@/urlparams"
 import { SavedSearch } from "@/local-storage"
 import { AttributeOption } from "@/corpus_listing"
+import { StoreService } from "@/services/store"
 
 type SearchtabsController = IController & {
     parallelMode: boolean
@@ -130,14 +132,16 @@ angular.module("korpApp").component("searchtabs", {
     `,
     controller: [
         "$location",
-        "searches",
         "$rootScope",
         "compareSearches",
+        "searches",
+        "store",
         function (
             $location: LocationService,
-            searches: SearchesService,
             $rootScope: RootScope,
-            compareSearches: CompareSearches
+            compareSearches: CompareSearches,
+            searches: SearchesService,
+            store: StoreService
         ) {
             const $ctrl = this as SearchtabsController
 
@@ -220,7 +224,7 @@ angular.module("korpApp").component("searchtabs", {
                 $location.search("stats_reduce_insensitive", "word")
             }
 
-            $rootScope.$on("corpuschooserchange", function (event, selected) {
+            store.watch("selectedCorpusIds", (selected) => {
                 $ctrl.noCorporaSelected = !selected.length
                 const allAttrs = settings.corpusListing.getStatsAttributeGroups(settings.corpusListing.getReduceLang())
                 $ctrl.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])

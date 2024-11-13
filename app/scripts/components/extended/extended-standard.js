@@ -7,6 +7,7 @@ import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } fro
 import { html } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/services/compare-searches"
+import "@/services/store"
 import "@/components/extended/tokens"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
@@ -50,9 +51,10 @@ angular.module("korpApp").component("extendedStandard", {
         "$location",
         "$rootScope",
         "$scope",
-        "compareSearches",
         "$timeout",
-        function ($location, $rootScope, $scope, compareSearches, $timeout) {
+        "compareSearches",
+        "store",
+        function ($location, $rootScope, $scope, $timeout, compareSearches, store) {
             const ctrl = this
 
             $scope.freeOrder = $location.search().in_order != null
@@ -153,7 +155,7 @@ angular.module("korpApp").component("extendedStandard", {
                 return output
             }
 
-            $rootScope.$on("corpuschooserchange", function () {
+            store.watch("selectedCorpusIds", () => {
                 ctrl.withins = ctrl.getWithins()
                 ctrl.within = ctrl.withins[0] && ctrl.withins[0].value
             })

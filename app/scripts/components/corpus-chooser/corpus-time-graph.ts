@@ -13,12 +13,15 @@ import {
 } from "@/timeseries"
 import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
+import { StoreService } from "@/services/store"
+import "@/services/store"
 
 angular.module("korpApp").component("corpusTimeGraph", {
     template: html`<canvas id="time-graph-chart" height="80"></canvas>`,
     controller: [
         "$rootScope",
-        function ($rootScope: RootScope) {
+        "store",
+        function ($rootScope: RootScope, store: StoreService) {
             const { min, max } = getSpan()
 
             const datasetsDated = [
@@ -128,7 +131,7 @@ angular.module("korpApp").component("corpusTimeGraph", {
                 },
             })
 
-            $rootScope.$on("corpuschooserchange", () => {
+            store.watch("selectedCorpusIds", () => {
                 updateSelectedData()
                 // `'none'` to disable animations. Animations would be nice, but they look weird when new data has different min/max year.
                 // TODO Do animations look better if data is given as array including empty years, not a record?

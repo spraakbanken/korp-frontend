@@ -12,6 +12,8 @@ import { LocationService } from "@/urlparams"
 import { RecursiveRecord, StructService, StructServiceOptions } from "@/backend/struct-service"
 import { DataObject, GlobalFilterService, UpdateScope } from "./types"
 import { CqpQuery, Condition } from "@/cqp_parser/cqp.types"
+import { StoreService } from "@/services/store"
+import "@/services/store"
 
 type StoredFilterValues = Record<string, string[]>
 
@@ -26,11 +28,13 @@ angular.module("korpApp").factory("globalFilterService", [
     "$rootScope",
     "$location",
     "$q",
+    "store",
     "structService",
     function (
         $rootScope: RootScope,
         $location: LocationService,
         $q: IQService,
+        store: StoreService,
         structService: StructService
     ): GlobalFilterService {
         const scopes: UpdateScope[] = []
@@ -252,7 +256,7 @@ angular.module("korpApp").factory("globalFilterService", [
         }
 
         /** Update available filters when changing corpus selection. */
-        $rootScope.$on("corpuschooserchange", () => {
+        store.watch("selectedCorpusIds", () => {
             if (settings.corpusListing.selected.length === 0) {
                 dataObj.showDirective = false
             } else {

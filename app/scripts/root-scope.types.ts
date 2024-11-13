@@ -6,6 +6,7 @@ import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CqpQuery } from "./cqp_parser/cqp.types"
 import { CorpusListing } from "./corpus_listing"
 import { CompareResult, MapRequestResult } from "@/backend/backend"
+import { State } from "./services/store"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
@@ -25,6 +26,7 @@ export type RootScope = IRootScopeService & {
     jsonUrl?: string
     lang: string
     loc_data: LangLocMap
+    store: State
     openErrorModal: (options: {
         content: string
         resolvable?: boolean
@@ -32,7 +34,6 @@ export type RootScope = IRootScopeService & {
         buttonText?: string
         translations?: LocLangMap
     }) => void
-    $on: (name: "corpuschooserchange", handler: (event: any, selected: string[]) => void) => void
 }
 
 export type CompareTab = IPromise<CompareResult>

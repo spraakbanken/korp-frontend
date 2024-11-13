@@ -7,8 +7,9 @@ import "@/directives/escaper"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
 import { StructService, StructServiceOptions } from "@/backend/struct-service"
-import { RootScope } from "@/root-scope.types"
 import { LocMap } from "@/i18n/types"
+import { StoreService } from "@/services/store"
+import "@/services/store"
 
 export type WidgetDefinition = Widget | WidgetWithOptions
 export type WidgetWithOptions<T extends {} = {}> = (options: T) => Widget
@@ -44,10 +45,10 @@ export const selectTemplate = html`<select
 
 export const selectController = (autocomplete: boolean): IController => [
     "$scope",
-    "$rootScope",
+    "store",
     "structService",
-    function ($scope: SelectWidgetScope, $rootScope: RootScope, structService: StructService) {
-        $rootScope.$on("corpuschooserchange", function (event, selected: string[]) {
+    function ($scope: SelectWidgetScope, store: StoreService, structService: StructService) {
+        store.watch("selectedCorpusIds", (selected: string[]) => {
             if (selected.length > 0) {
                 reloadValues()
             }
