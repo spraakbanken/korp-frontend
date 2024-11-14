@@ -46,7 +46,8 @@ angular.module("korpApp").factory("searches", [
 
             /** Tell result controllers (kwic/statistics/word picture) to send their requests. */
             kwicSearch(cqp: string) {
-                $rootScope.$emit("make_request", cqp, this.activeSearch)
+                // Wait until next tick in case corpus selection or other search-related parameters are being updated too
+                $timeout(() => $rootScope.$emit("make_request", cqp, this.activeSearch))
             },
 
             getCqpExpr(): string {
