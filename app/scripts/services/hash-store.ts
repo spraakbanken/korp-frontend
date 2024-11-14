@@ -17,7 +17,6 @@ function hashStoreFactory($rootScope: RootScope, $location: LocationService, sto
             options: {
                 toUrl?: (storeValue: State[SP]) => HashParams[UP]
                 fromUrl?: (urlValue: HashParams[UP]) => State[SP]
-                // TODO Remove this and replace its usage with store.watch()
                 onChange?: (storeValue: State[SP]) => void
             }
         ) {
@@ -25,24 +24,21 @@ function hashStoreFactory($rootScope: RootScope, $location: LocationService, sto
             const fromUrl = options.fromUrl || ((x) => x as unknown as State[SP])
             const { onChange } = options
 
-            // Sync once from URL to store
-            const storeValue = fromUrl($location.search()[urlName])
-            store.set(storeName, storeValue)
-            onChange?.(storeValue)
-
             // Sync continually from store to URL
+            // This watcher only triggers if !isEqual(new, old)
             store.watch(storeName, (storeValue) => {
                 $location.search(urlName, toUrl(storeValue))
                 onChange?.(storeValue)
             })
 
             // Sync continually from URL to store
+            // This watcher triggers if new !== old
+            // The store setter will only do something if !isEqual(new, old)
             $rootScope.$watch(
                 () => $location.search()[urlName],
-                (urlValue) => {
-                    const storeValue = fromUrl(urlValue)
-                    store.set(storeName, storeValue)
-                    onChange?.(storeValue)
+                (urlValue, oldValue) => {
+                    if (urlValue === oldValue) return // Skip initial run
+                    store.set(storeName, fromUrl($location.search()[urlName]))
                 }
             )
         },
