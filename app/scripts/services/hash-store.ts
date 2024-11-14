@@ -5,25 +5,13 @@ import { RootScope } from "@/root-scope.types"
 import { State, StoreService } from "@/services/store"
 import { HashParams, LocationService } from "@/urlparams"
 
-export type HashStoreService = {
-    setupSync: <SP extends keyof State, UP extends keyof HashParams>(
-        storeName: SP,
-        urlName: UP,
-        options: {
-            toUrl?: (storeValue: State[SP]) => HashParams[UP]
-            fromUrl?: (urlValue: HashParams[UP]) => State[SP]
-            onChange?: (storeValue: State[SP]) => void
-        }
-    ) => void
-}
+export type HashStoreService = ReturnType<typeof hashStoreFactory>
 
-angular.module("korpApp").factory("hashStore", [
-    "$rootScope",
-    "$location",
-    "store",
-    function ($rootScope: RootScope, $location: LocationService, store: StoreService): HashStoreService {
-        // Looks like the typing has to be repeated in order to make SP/UP available in the body
-        function setupSync<SP extends keyof State, UP extends keyof HashParams>(
+angular.module("korpApp").factory("hashStore", ["$rootScope", "$location", "store", hashStoreFactory])
+
+function hashStoreFactory($rootScope: RootScope, $location: LocationService, store: StoreService) {
+    return {
+        setupSync<SP extends keyof State, UP extends keyof HashParams>(
             storeName: SP,
             urlName: UP,
             options: {
@@ -52,10 +40,6 @@ angular.module("korpApp").factory("hashStore", [
 
             // Sync continually from URL to store
             $rootScope.$watch(() => $location.search()[urlName], syncFromUrl)
-        }
-
-        return {
-            setupSync,
-        }
-    },
-])
+        },
+    }
+}
