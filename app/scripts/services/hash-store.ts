@@ -34,18 +34,24 @@ angular.module("korpApp").factory("hashStore", [
         ) {
             const toUrl = options.toUrl || ((x) => x as unknown as HashParams[UP])
             const fromUrl = options.fromUrl || ((x) => x as unknown as State[SP])
+
+            /** Sync URL value once to store */
+            function syncFromUrl(urlValue: HashParams[UP]) {
+                const storeValue = fromUrl(urlValue)
+                store.set(storeName, storeValue)
+                options.onChange?.(storeValue)
+            }
+
+            syncFromUrl($location.search()[urlName])
+
+            // Sync continually from store to URL
             store.watch(storeName, (storeValue) => {
                 $location.search(urlName, toUrl(storeValue))
                 options.onChange?.(storeValue)
             })
-            $rootScope.$watch(
-                () => $location.search()[urlName],
-                (urlValue) => {
-                    const storeValue = fromUrl(urlValue)
-                    store.set(storeName, storeValue)
-                    options.onChange?.(storeValue)
-                }
-            )
+
+            // Sync continually from URL to store
+            $rootScope.$watch(() => $location.search()[urlName], syncFromUrl)
         }
 
         return {
