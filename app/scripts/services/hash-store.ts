@@ -17,29 +17,34 @@ function hashStoreFactory($rootScope: RootScope, $location: LocationService, sto
             options: {
                 toUrl?: (storeValue: State[SP]) => HashParams[UP]
                 fromUrl?: (urlValue: HashParams[UP]) => State[SP]
+                // TODO Remove this and replace its usage with store.watch()
                 onChange?: (storeValue: State[SP]) => void
             }
         ) {
             const toUrl = options.toUrl || ((x) => x as unknown as HashParams[UP])
             const fromUrl = options.fromUrl || ((x) => x as unknown as State[SP])
+            const { onChange } = options
 
-            /** Sync URL value once to store */
-            function syncFromUrl(urlValue: HashParams[UP]) {
-                const storeValue = fromUrl(urlValue)
-                store.set(storeName, storeValue)
-                options.onChange?.(storeValue)
-            }
-
-            syncFromUrl($location.search()[urlName])
+            // Sync once from URL to store
+            const storeValue = fromUrl($location.search()[urlName])
+            store.set(storeName, storeValue)
+            onChange?.(storeValue)
 
             // Sync continually from store to URL
             store.watch(storeName, (storeValue) => {
                 $location.search(urlName, toUrl(storeValue))
-                options.onChange?.(storeValue)
+                onChange?.(storeValue)
             })
 
             // Sync continually from URL to store
-            $rootScope.$watch(() => $location.search()[urlName], syncFromUrl)
+            $rootScope.$watch(
+                () => $location.search()[urlName],
+                (urlValue) => {
+                    const storeValue = fromUrl(urlValue)
+                    store.set(storeName, storeValue)
+                    onChange?.(storeValue)
+                }
+            )
         },
     }
 }

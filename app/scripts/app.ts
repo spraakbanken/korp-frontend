@@ -269,7 +269,11 @@ korpApp.run([
                     },
                 })
             } else {
-                // Sync corpus selection between location and store
+                // This corpus selection is valid
+                // It may be different from what was in url, so replace that
+                $location.search("corpus", selectedIds.join(","))
+
+                // Then start syncing corpus selection between location, store and CorpusListing
                 hashStore.setupSync("selectedCorpusIds", "corpus", {
                     toUrl: (ids) => ids.join(","),
                     fromUrl: (idsJoined) => (idsJoined ? idsJoined.split(",") : []),
@@ -277,7 +281,6 @@ korpApp.run([
                 })
 
                 // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
-                settings.corpusListing.select(selectedIds)
                 $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", selectedIds), 0)
             }
         }
