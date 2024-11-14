@@ -26,11 +26,11 @@ import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
 import "@/components/korp-error"
-import "@/services/store"
+import "@/services/hash-store"
 import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
-import { StoreService } from "./services/store"
+import { HashStoreService } from "@/services/hash-store"
 
 // load all custom components
 let customComponents: Record<string, IComponentOptions> = {}
@@ -92,22 +92,22 @@ korpApp.run([
     "$rootScope",
     "$location",
     "$locale",
-    "tmhDynamicLocale",
-    "tmhDynamicLocaleCache",
     "$q",
     "$timeout",
     "$uibModal",
-    "store",
+    "hashStore",
+    "tmhDynamicLocale",
+    "tmhDynamicLocaleCache",
     async function (
         $rootScope: RootScope,
         $location: LocationService,
         $locale: ILocaleService,
-        tmhDynamicLocale: tmh.tmh.IDynamicLocale,
-        tmhDynamicLocaleCache: ICacheObject,
         $q: IQService,
         $timeout: ITimeoutService,
         $uibModal: ui.bootstrap.IModalService,
-        store: StoreService
+        hashStore: HashStoreService,
+        tmhDynamicLocale: tmh.tmh.IDynamicLocale,
+        tmhDynamicLocaleCache: ICacheObject
     ) {
         const s = $rootScope
         s._settings = settings
@@ -270,18 +270,11 @@ korpApp.run([
                 })
             } else {
                 // Sync corpus selection between location and store
-                store.watch("selectedCorpusIds", (corpusIds) => {
-                    settings.corpusListing.select(corpusIds)
-                    $location.search("corpus", corpusIds.join(","))
+                hashStore.setupSync("selectedCorpusIds", "corpus", {
+                    toUrl: (ids) => ids.join(","),
+                    fromUrl: (idsJoined) => (idsJoined ? idsJoined.split(",") : []),
+                    onChange: (ids) => settings.corpusListing.select(ids),
                 })
-                $rootScope.$watch(
-                    () => $location.search().corpus,
-                    (corpusIdsComma) => {
-                        const corpusIds = corpusIdsComma ? corpusIdsComma.split(",") : []
-                        settings.corpusListing.select(corpusIds)
-                        store.set("selectedCorpusIds", corpusIds)
-                    }
-                )
 
                 // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
                 settings.corpusListing.select(selectedIds)
