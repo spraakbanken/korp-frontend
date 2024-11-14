@@ -81,6 +81,7 @@ export type SearchParamNames =
     | "in_order"
     | "parallel_corpora"
     | "search"
+    | "search_tab"
     | "within"
     | "prefix"
     | "mid_comp"
@@ -94,6 +95,7 @@ export const getSearchParamNames = (): SearchParamNames[] => [
     "in_order",
     "parallel_corpora",
     "search",
+    "search_tab",
     "within",
     "prefix",
     "mid_comp",
