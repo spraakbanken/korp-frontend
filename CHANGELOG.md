@@ -30,6 +30,7 @@
 - Parallel mode is consistently checked against the `parallel` config setting, and not the mode name
 - Search history fails to select corpus [#405](https://github.com/spraakbanken/korp-frontend/issues/405)
 - Search history fails to distinguish options with same label [#406](https://github.com/spraakbanken/korp-frontend/issues/406)
+- The "X of Y corpora selected" phrase is not properly translated [#408](https://github.com/spraakbanken/korp-frontend/issues/408)
 
 ## [9.7.1] - 2024-09-18
 
