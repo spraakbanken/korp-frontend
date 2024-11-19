@@ -34,20 +34,29 @@ angular.module("korpApp").factory("searchHistory", [
     },
 ])
 
-function getSearchHistory(): SearchParams[] {
+/** A string identifying the Korp instance within the origin */
+const APP_PATH = location.pathname + location.search
+
+function getSearchHistory(appPath: string = APP_PATH): SearchParams[] {
     // TODO This was added in November 2024, remove after a few months?
     convertSearchHistoryStorage()
-    return localStorageGet("searches") || []
+    const searchesAll = localStorageGet("searches") || {}
+    return searchesAll[appPath] || []
 }
 
-function addToSearchHistory(params: Partial<HashParams>): void {
+/** Get, modify and store search history, if the search is unique */
+function addToSearchHistory(params: Partial<HashParams>, appPath: string = APP_PATH): void {
+    const searchesAll = localStorageGet("searches") || {}
+    addNewSearch(searchesAll, appPath, params)
+    localStorageSet("searches", searchesAll)
+}
+
+/** Extract search-related params and add the object to the list in-place, if not already present. */
+function addNewSearch(searches: Record<string, SearchParams[]>, appPath: string, params: Partial<HashParams>): void {
+    searches[appPath] ??= []
     const searchParams = pick(params, getSearchParamNames())
-    const searches = localStorageGet("searches") || []
-    // Exit early if this search already exists
-    if (searches.some((item) => isEqual(item, searchParams))) return
-    // Add new search to start of list
-    searches.unshift(searchParams)
-    localStorageSet("searches", searches)
+    // Add to start of list, unless already in list
+    if (searches[appPath].every((item) => !isEqual(item, searchParams))) searches[appPath].unshift(searchParams)
 }
 
 function clearSearchHistory(): void {
@@ -58,15 +67,21 @@ function clearSearchHistory(): void {
 function convertSearchHistoryStorage(): void {
     try {
         const searches = localStorageGet("searches") as any[] | undefined
-        if (typeof searches?.[0] == "object" && searches[0]["location"]) {
-            // Clear and re-add
-            clearSearchHistory()
-            searches.forEach((search) => {
-                const querystring = search.location.split("?")[1]
-                const params = Object.fromEntries(new URLSearchParams(querystring))
-                addToSearchHistory(params)
-            })
-        }
+        // Exit if it doesn't match old format
+        if (typeof searches?.[0] != "object" || !searches[0]["location"]) return
+        // Clear and re-add
+        clearSearchHistory()
+        const searchesNew: Record<string, SearchParams[]> = {}
+        searches.forEach((search) => {
+            // Get app path and params from stored location
+            const url = new URL(search.location)
+            const appPath = url.pathname + url.search
+            const params = Object.fromEntries(new URLSearchParams(url.hash.slice(1)))
+            // Add to new storage
+            addNewSearch(searchesNew, appPath, params)
+        })
+        // Store new format
+        localStorageSet("searches", searchesNew)
     } catch (error) {
         console.error("Could not convert old search history, discarding. Error was:")
         console.error(error)

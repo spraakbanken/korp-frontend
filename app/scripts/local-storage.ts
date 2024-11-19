@@ -39,7 +39,9 @@ export type LocalStorage = {
     /** Credentials, if authenticated. */
     creds?: Creds
     /** Recent search queries, most recent first */
-    searches?: SearchParams[]
+    searches?: {
+        [mode: string]: SearchParams[]
+    }
     /** Search queries saved for comparison in the default Korp mode. */
     saved_searches?: SavedSearch[]
     /** Search queries saved for comparison in the given Korp mode. */
