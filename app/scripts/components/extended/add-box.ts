@@ -1,6 +1,16 @@
 /** @format */
-import angular from "angular"
+import angular, { IController } from "angular"
 import { html } from "@/util"
+
+type AddBoxController = IController & {
+    addToken: () => void
+    addStructToken: (event: { start: boolean }) => void
+    showStuffSelectButtons: boolean
+    addTokenLocal: () => void
+    showSelectButtons: () => void
+    addStructTokenLocal: (start: boolean) => void
+    reset: () => void
+}
 
 angular.module("korpApp").component("addBox", {
     template: html`
@@ -57,8 +67,8 @@ angular.module("korpApp").component("addBox", {
         addToken: "&",
         addStructToken: "&",
     },
-    controller: function AddBoxCtrl() {
-        const ctrl = this
+    controller: function () {
+        const ctrl = this as AddBoxController
 
         ctrl.showStuffSelectButtons = false
 

@@ -1,7 +1,15 @@
 /** @format */
-import angular from "angular"
+import angular, { IController, IScope } from "angular"
 import settings from "@/settings"
 import { html } from "@/util"
+import { CqpToken } from "@/cqp_parser/cqp.types"
+
+type ExtendedStructTokenController = IController & {
+    token: CqpToken
+    remove: () => void
+    change: () => void
+    tagTypes: Record<string, string>
+}
 
 angular.module("korpApp").component("extendedStructToken", {
     template: html`
@@ -55,27 +63,21 @@ angular.module("korpApp").component("extendedStructToken", {
     },
     controller: [
         "$scope",
-        function ($scope) {
-            const ctrl = this
+        function ($scope: IScope) {
+            const ctrl = this as ExtendedStructTokenController
 
             ctrl.$onInit = () => {
                 onCorpusChange()
                 if (!ctrl.token.struct) {
                     const structs = Object.keys(ctrl.tagTypes)
-                    if (structs.includes("sentence")) {
-                        ctrl.token.struct = "sentence"
-                    } else {
-                        ctrl.token.struct = structs[0]
-                    }
+                    ctrl.token.struct = structs.includes("sentence") ? "sentence" : structs[0]
                     ctrl.change()
                 }
 
                 $scope.$on("corpuschooserchange", onCorpusChange)
             }
 
-            const onCorpusChange = () => {
-                ctrl.tagTypes = settings.corpusListing.getCommonWithins()
-            }
+            const onCorpusChange = () => (ctrl.tagTypes = settings.corpusListing.getCommonWithins())
         },
     ],
 })
