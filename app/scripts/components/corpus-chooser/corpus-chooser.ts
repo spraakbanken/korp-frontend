@@ -234,10 +234,6 @@ angular.module("korpApp").component("corpusChooser", {
             }
 
             function select(corporaIds: string[], force?: boolean) {
-                // Exit if no actual change
-                const selectedIds = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
-                if (!force && _.isEqual(corporaIds, selectedIds)) return
-
                 const selection = filterCorporaOnCredentials(
                     Object.values(settings.corpora),
                     corporaIds,
@@ -251,7 +247,14 @@ angular.module("korpApp").component("corpusChooser", {
                     $ctrl.firstCorpus = settings.corpora[selection[0]].title
                 }
 
+                // In parallel mode, the select function may also add hidden corpora.
+                const selectedBefore = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
                 settings.corpusListing.select(selection)
+                const selectedAfter = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
+
+                // Exit if no actual change
+                if (!force && _.isEqual(selectedBefore, selectedAfter)) return
+
                 $rootScope.$broadcast("corpuschooserchange", selection)
                 $location.search("corpus", selection.join(","))
             }
