@@ -2,12 +2,12 @@
 export type CqpQuery = CqpToken[]
 
 export type CqpToken = {
-    and_block: Condition[][]
+    and_block?: Condition[][]
     bound?: Record<"lbound" | "rbound", true>
     /** `[min]` or `[min, max]` */
     repeat?: [number] | [number, number]
     struct?: string
-    start?: number
+    start?: boolean
 }
 
 export type Condition = {

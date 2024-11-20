@@ -1,5 +1,5 @@
 /** @format */
-import angular from "angular"
+import angular, { IController } from "angular"
 import "components-jqueryui/ui/widgets/sortable.js"
 import "angular-ui-sortable/src/sortable"
 import { parse, stringify } from "@/cqp_parser/cqp"
@@ -8,6 +8,23 @@ import "@/components/extended/token"
 import "@/components/extended/struct-token"
 import "@/components/extended/add-box"
 import "@/directives/scroll-to-start"
+import { CqpQuery, CqpToken } from "@/cqp_parser/cqp.types"
+
+type ExtendedTokensController = IController & {
+    cqp: string
+    data: CqpQuery
+    repeatError: boolean
+    parallellLang: string
+    prev: string
+    showCloseButton: boolean
+    addToken: () => void
+    change: () => void
+    cqpChange: (event: { cqp: string }) => void
+    removeToken: (i: number) => () => void
+    toggleStart: (idx: number) => () => void
+    toggleEnd: (idx: number) => () => void
+    updateRepeatError: (event: { error: boolean }) => void
+}
 
 angular.module("korpApp").component("extendedTokens", {
     template: html`
@@ -44,7 +61,7 @@ angular.module("korpApp").component("extendedTokens", {
     },
     controller: [
         function () {
-            const ctrl = this
+            const ctrl = this as ExtendedTokensController
 
             ctrl.repeatError = false
 
@@ -77,7 +94,7 @@ angular.module("korpApp").component("extendedTokens", {
             ctrl.data = parse(ctrl.cqp || "[]")
 
             ctrl.addToken = function () {
-                const token = { and_block: [[{ type: "word", op: "=", val: "" }]] }
+                const token: CqpToken = { and_block: [[{ type: "word", op: "=", val: "" }]] }
                 ctrl.data.push(token)
                 ctrl.change()
             }
@@ -91,7 +108,7 @@ angular.module("korpApp").component("extendedTokens", {
 
             ctrl.scrollToStart = false
             ctrl.addStructToken = function (start = true, idx = -1) {
-                const token = { struct: null, start }
+                const token: CqpToken = { struct: undefined, start }
                 if (idx != -1) {
                     ctrl.data.splice(idx, 0, token)
                 } else if (start) {

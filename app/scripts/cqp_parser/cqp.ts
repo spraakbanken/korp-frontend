@@ -68,7 +68,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
         }
 
         const outer_and_array: string[][] = []
-        for (let and_array of token.and_block) {
+        for (let and_array of token.and_block || []) {
             const or_array: string[] = []
             for (let { type, op, val, flags } of and_array) {
                 var out
@@ -147,7 +147,7 @@ export function getTimeInterval(obj: CqpQuery): [Moment, Moment] | undefined {
     let froms: Moment[] = []
     let tos: Moment[] = []
     for (let token of obj) {
-        for (let or_block of token.and_block) {
+        for (let or_block of token.and_block || []) {
             for (let item of or_block) {
                 if (item.type === "date_interval") {
                     froms.push(moment(`${item.val[0]}${item.val[2]}`, "YYYYMMDDhhmmss"))
@@ -191,7 +191,7 @@ export function mergeCqpExprs(cqpObj1: CqpQuery, cqpObj2: CqpQuery) {
         const token = cqpObj2[i]
         for (let j = 0; j < cqpObj1.length; j++) {
             if (cqpObj1[j].and_block) {
-                cqpObj1[j].and_block = cqpObj1[j].and_block.concat(token.and_block)
+                cqpObj1[j].and_block = cqpObj1[j].and_block!.concat(token.and_block || [])
                 break
             }
         }

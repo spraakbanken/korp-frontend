@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController, ITimeoutService } from "angular"
-import _, { set } from "lodash"
+import _ from "lodash"
 import settings from "@/settings"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { html } from "@/util"
