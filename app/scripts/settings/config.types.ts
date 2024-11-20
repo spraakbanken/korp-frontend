@@ -33,8 +33,10 @@ export type Corpus = {
     description: LangString
     hide?: boolean
     id: string
+    /** Must be present in parallel corpus */
     lang?: string
     limited_access?: boolean
+    linked_to?: string[]
     pivot?: boolean
     pos_attributes: string[]
     struct_attributes: string[]
@@ -43,6 +45,8 @@ export type Corpus = {
     title: LangString
     within: Labeled[]
 }
+
+export type CorpusParallel = Corpus & Required<Pick<Corpus, "lang" | "linked_to">>
 
 export type ReadingModeConfig = {
     component: string

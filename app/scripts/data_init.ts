@@ -10,7 +10,7 @@ import { ParallelCorpusListing } from "./parallel/corpus_listing"
 import { fromKeys, getUrlHash, httpConfAddMethodFetch } from "@/util"
 import { Labeled, LangLocMap, LocMap } from "./i18n/types"
 import { CorpusInfoResponse } from "./settings/corpus-info.types"
-import { Attribute, Config, Corpus, CustomAttribute } from "./settings/config.types"
+import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
 
 // Using memoize, this will only fetch once and then return the same promise when called again.
@@ -262,7 +262,9 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     if (!settings.parallel) {
         settings.corpusListing = new CorpusListing(settings.corpora)
     } else {
-        settings.corpusListing = new ParallelCorpusListing(settings.corpora)
+        settings.corpusListing = new ParallelCorpusListing(
+            settings.corpora as Record<string, CorpusTransformed<CorpusParallel>>
+        )
     }
 
     // if the previous config calls didn't yield any corpora, don't ask for time
