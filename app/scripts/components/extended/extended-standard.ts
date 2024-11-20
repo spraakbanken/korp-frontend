@@ -1,5 +1,5 @@
 /** @format */
-import angular from "angular"
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
@@ -10,6 +10,28 @@ import "@/services/compare-searches"
 import "@/components/extended/tokens"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
+import { LocationService } from "@/urlparams"
+import { RootScope } from "@/root-scope.types"
+import { CompareSearches } from "@/services/compare-searches"
+
+type ExtendedStandardController = IController & {
+    cqp: string
+    repeatError: boolean
+    orderError: boolean
+    within: string
+    withins: string[]
+    onSearch: () => void
+    onSearchSave: (name: string) => void
+    cqpChange: (cqp: string) => void
+    updateRepeatError: (error: boolean) => void
+    /** Trigger error if the "free order" option is incompatible with the query */
+    validateFreeOrder: () => void
+    getWithins: () => { value: string }[]
+}
+
+type ExtendedStandardScope = IScope & {
+    freeOrder: boolean
+}
 
 angular.module("korpApp").component("extendedStandard", {
     template: html`
@@ -42,7 +64,7 @@ angular.module("korpApp").component("extendedStandard", {
             <select
                 class="within_select"
                 ng-model="$ctrl.within"
-                ng-options="item.value as ('within_' + item.value | loc:$root.lang) for item in $ctrl.withins"
+                ng-options="item as ('within_' + item | loc:$root.lang) for item in $ctrl.withins"
             ></select>
         </div>
     `,
@@ -52,11 +74,20 @@ angular.module("korpApp").component("extendedStandard", {
         "$scope",
         "compareSearches",
         "$timeout",
-        function ($location, $rootScope, $scope, compareSearches, $timeout) {
-            const ctrl = this
+        function (
+            $location: LocationService,
+            $rootScope: RootScope,
+            $scope: ExtendedStandardScope,
+            compareSearches: CompareSearches,
+            $timeout: ITimeoutService
+        ) {
+            const ctrl = this as ExtendedStandardController
 
             $scope.freeOrder = $location.search().in_order != null
             ctrl.orderError = false
+            ctrl.withins = []
+            const defaultWithin = Object.keys(settings.default_within || {})[0]
+            ctrl.within = $location.search().within || defaultWithin
 
             // TODO this is *too* weird
             function triggerSearch() {
@@ -64,12 +95,9 @@ angular.module("korpApp").component("extendedStandard", {
                 $location.search("search", null)
                 $location.search("page", null)
                 $location.search("in_order", $scope.freeOrder ? false : null)
+                $location.search("within", ctrl.within != defaultWithin ? ctrl.within : undefined)
                 $timeout(function () {
                     $location.search("search", "cqp")
-                    if (!_.keys(settings["default_within"]).includes(ctrl.within)) {
-                        var within = ctrl.within
-                    }
-                    $location.search("within", within)
                 }, 0)
             }
 
@@ -89,11 +117,15 @@ angular.module("korpApp").component("extendedStandard", {
                 triggerSearch()
             }
 
-            ctrl.onSearchSave = (name) => {
+            ctrl.onSearchSave = (name: string) => {
+                if (!$rootScope.extendedCQP) {
+                    console.error("No extendedCQP to save")
+                    return
+                }
                 compareSearches.saveSearch(name, $rootScope.extendedCQP)
             }
 
-            ctrl.cqpChange = (cqp) => {
+            ctrl.cqpChange = (cqp: string) => {
                 ctrl.cqp = cqp
                 try {
                     updateExtendedCQP()
@@ -111,7 +143,6 @@ angular.module("korpApp").component("extendedStandard", {
                 ctrl.validateFreeOrder()
             })
 
-            /** Trigger error if the "free order" option is incompatible with the query */
             ctrl.validateFreeOrder = () => {
                 try {
                     const cqpObjs = parse(ctrl.cqp || "[]")
@@ -124,7 +155,7 @@ angular.module("korpApp").component("extendedStandard", {
                 }
             }
 
-            ctrl.cqp = $location.search().cqp
+            ctrl.cqp = $location.search().cqp || ""
 
             ctrl.repeatError = false
             ctrl.updateRepeatError = (error) => {
@@ -145,17 +176,11 @@ angular.module("korpApp").component("extendedStandard", {
                 }
             })
 
-            ctrl.withins = []
-
-            ctrl.getWithins = function () {
-                const union = settings.corpusListing.getWithinKeys()
-                const output = _.map(union, (item) => ({ value: item }))
-                return output
-            }
-
             $rootScope.$on("corpuschooserchange", function () {
-                ctrl.withins = ctrl.getWithins()
-                ctrl.within = ctrl.withins[0] && ctrl.withins[0].value
+                ctrl.withins = settings.corpusListing.getWithinKeys()
+                if (!ctrl.withins.includes(ctrl.within)) {
+                    ctrl.within = ctrl.withins[0]
+                }
             })
         },
     ],
