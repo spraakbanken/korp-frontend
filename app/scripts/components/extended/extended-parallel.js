@@ -144,11 +144,6 @@ angular.module("korpApp").component("extendedParallel", {
                 var currentLangList = _.map(ctrl.langs, "lang")
                 settings.corpusListing.setActiveLangs(currentLangList)
                 $location.search("parallel_corpora", currentLangList.join(","))
-
-                // hacky fix to make attributes update when switching languages
-                if (ctrl.initialized && broadcast) {
-                    $rootScope.$broadcast("corpuschooserchange", [""])
-                }
                 searches.langDef.resolve()
             }
 

@@ -55,9 +55,10 @@ angular.module("korpApp").component("extendedCqpTerm", {
         change: "&",
     },
     controller: [
+        "$location",
         "$rootScope",
         "$timeout",
-        function ($rootScope, $timeout) {
+        function ($location, $rootScope, $timeout) {
             const ctrl = this
 
             ctrl.valfilter = valfilter
@@ -69,9 +70,13 @@ angular.module("korpApp").component("extendedCqpTerm", {
                     ctrl.term.val = ""
                     ctrl.change()
                 }
-                $rootScope.$on("corpuschooserchange", (e, selected) => $timeout(() => onCorpusChange(e, selected), 0))
+                $rootScope.$on("corpuschooserchange", () => $timeout(onCorpusChange))
+                $rootScope.$watch(
+                    () => $location.search().parallel_corpora,
+                    () => $timeout(onCorpusChange)
+                )
 
-                onCorpusChange(null, settings.corpusListing.selected)
+                onCorpusChange()
             }
 
             ctrl.localChange = (term) => {
@@ -79,11 +84,10 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 ctrl.change()
             }
 
-            const onCorpusChange = function (event, selected) {
+            function onCorpusChange() {
                 // TODO: respect the setting 'wordAttributeSelector' and similar
-                if (!(selected && selected.length)) {
-                    return
-                }
+                if (!settings.corpusListing.selected.length) return
+
                 const allAttrs = settings.corpusListing.getAttributeGroups(ctrl.parallellLang)
                 ctrl.types = _.filter(allAttrs, (item) => !item["hide_extended"])
                 ctrl.typeMapping = _.fromPairs(
