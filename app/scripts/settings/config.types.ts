@@ -65,7 +65,7 @@ export type Attribute = {
     dataset?: Record<string, string>
     display_type?: "hidden"
     escape?: boolean
-    extended_component?: string
+    extended_component?: string | { name: string; options: Record<string, any> }
     extended_template?: string
     external_search?: string
     group_by?: "group_by" | "group_by_struct"

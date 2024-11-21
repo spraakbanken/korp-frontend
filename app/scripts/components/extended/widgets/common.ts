@@ -13,7 +13,7 @@ import { LocMap } from "@/i18n/types"
 export type WidgetDefinition = Widget | WidgetWithOptions
 export type WidgetWithOptions<T extends {} = {}> = (options: T) => Widget
 export type Widget = {
-    template: string | ((vars: Record<string, any>) => string)
+    template: string
     controller: IController
 }
 

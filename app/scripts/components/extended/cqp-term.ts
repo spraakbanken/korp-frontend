@@ -28,7 +28,7 @@ type ExtendedCqpTermController = IController & {
     typeMapping: Record<string, AttributeOption>
     opts: [string, OperatorKorp][] | undefined
     valfilter: typeof valfilter
-    localChange: (term: Condition) => void
+    localChange: (term: Partial<Condition>) => void
     setDefault: () => void
 }
 

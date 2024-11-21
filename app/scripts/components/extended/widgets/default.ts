@@ -1,6 +1,7 @@
 /** @format */
 import { html } from "@/util"
-import { Widget, WidgetScope } from "./common"
+import { IController } from "angular"
+import { WidgetScope } from "./common"
 
 type DefaultWidgetScope = WidgetScope & {
     case: "sensitive" | "insensitive"
@@ -8,7 +9,12 @@ type DefaultWidgetScope = WidgetScope & {
     makeInsensitive: () => void
 }
 
-export const defaultWidget: Widget = {
+export type DefaultWidget = {
+    template: (vars: Record<string, any>) => string
+    controller: IController
+}
+
+export const defaultWidget: DefaultWidget = {
     template: ({ placeholder }) => html`
         <input
             ng-model="input"
