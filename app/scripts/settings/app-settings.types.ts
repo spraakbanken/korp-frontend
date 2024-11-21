@@ -7,6 +7,7 @@ import { Labeled, LangString } from "@/i18n/types"
 import { Attribute } from "./config.types"
 import { RootScope } from "@/root-scope.types"
 import { HashParams } from "@/urlparams"
+import { OperatorKorp } from "@/cqp_parser/cqp.types"
 
 export type AppSettings = {
     auth_module?: string | { module: string; options: Record<string, any> }
@@ -20,7 +21,7 @@ export type AppSettings = {
         label: LangString
     }
     cqp_prio: string[]
-    default_options?: Record<string, string>
+    default_options?: Record<string, OperatorKorp>
     default_language: string
     default_overview_context: string
     default_reading_context: string

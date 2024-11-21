@@ -3,6 +3,7 @@
  * @format
  */
 
+import { OperatorKorp } from "@/cqp_parser/cqp.types"
 import { Labeled, LangString } from "@/i18n/types"
 
 export type Config = {
@@ -73,10 +74,12 @@ export type Attribute = {
     hide_sidebar?: boolean
     hide_statistics?: boolean
     internal_search?: boolean
+    is?: string
     is_struct_attr?: boolean
     label: LangString
     name: string
-    opts?: Record<string, string> | false
+    /** Available operators, default is to copy the `default_options` setting */
+    opts?: Record<string, OperatorKorp> | false
     order?: number
     pattern?: string
     ranked?: boolean

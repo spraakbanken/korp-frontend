@@ -1,10 +1,14 @@
 /** @format */
-import angular from "angular"
+import angular, { IController, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import { html, valfilter } from "@/util"
 const minusImage = require("../../../img/minus.png")
 import "@/components/extended/cqp-value"
+import { LocationService } from "@/urlparams"
+import { RootScope } from "@/root-scope.types"
+import { Condition, OperatorKorp } from "@/cqp_parser/cqp.types"
+import { AttributeOption } from "@/corpus_listing"
 
 /**
  * TODO
@@ -14,6 +18,19 @@ import "@/components/extended/cqp-value"
  * This means that the operator is optional and probably should move to the contents of the extended components
  * that are added by cqp-value
  */
+
+type ExtendedCqpTermController = IController & {
+    term: Condition
+    parallellLang: string
+    removeOr: () => void
+    change: () => void
+    types: AttributeOption[]
+    typeMapping: Record<string, AttributeOption>
+    opts: [string, OperatorKorp][] | undefined
+    valfilter: typeof valfilter
+    localChange: (term: Condition) => void
+    setDefault: () => void
+}
 
 angular.module("korpApp").component("extendedCqpTerm", {
     template: html`
@@ -58,8 +75,8 @@ angular.module("korpApp").component("extendedCqpTerm", {
         "$location",
         "$rootScope",
         "$timeout",
-        function ($location, $rootScope, $timeout) {
-            const ctrl = this
+        function ($location: LocationService, $rootScope: RootScope, $timeout: ITimeoutService) {
+            const ctrl = this as ExtendedCqpTermController
 
             ctrl.valfilter = valfilter
 
@@ -82,49 +99,48 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 // TODO: respect the setting 'wordAttributeSelector' and similar
                 if (!settings.corpusListing.selected.length) return
 
-                const allAttrs = settings.corpusListing.getAttributeGroups(ctrl.parallellLang)
-                ctrl.types = _.filter(allAttrs, (item) => !item["hide_extended"])
+                // Get available attribute options
+                ctrl.types = settings.corpusListing
+                    .getAttributeGroups(ctrl.parallellLang)
+                    .filter((item) => !item["hide_extended"])
+
+                // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
                 ctrl.typeMapping = _.fromPairs(
-                    _.map(ctrl.types, function (item) {
-                        if (item["is_struct_attr"]) {
-                            return [`_.${item.value}`, item]
-                        } else {
-                            return [item.value, item]
-                        }
-                    })
+                    ctrl.types.map((item) => [item["is_struct_attr"] ? `_.${item.value}` : item.value, item])
                 )
-                ctrl.opts = ctrl.getOpts(ctrl.term.type)
+
+                // Reset attribute if the selected one is no longer available
+                if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
+
+                ctrl.opts = getOpts()
             }
 
+            const getOpts = () => getOptsMemo(ctrl.term.type)
+
             // returning new array each time kills angular, hence the memoizing
-            ctrl.getOpts = _.memoize(function (type) {
-                if (!(type in (ctrl.typeMapping || {}))) {
-                    return
-                }
-                let confObj = ctrl.typeMapping && ctrl.typeMapping[type]
-                if (!confObj) {
-                    console.log("confObj missing", type, ctrl.typeMapping)
+            const getOptsMemo = _.memoize((type: string): [string, OperatorKorp][] | undefined => {
+                if (!(type in ctrl.typeMapping)) return
+
+                const option = ctrl.typeMapping[type]
+                if (!option) {
+                    console.error(`Attribute option missing for "${type}"`, ctrl.typeMapping)
                     return
                 }
 
-                confObj = _.extend({}, (confObj && confObj.opts) || settings["default_options"])
+                const ops: Record<string, OperatorKorp> = { ...(option?.opts || settings["default_options"]) }
 
-                if (confObj.type === "set") {
-                    confObj.is = "contains"
-                }
-                return _.toPairs(confObj)
+                // For multi-value attributes, use the "contains" CQP operator for equality
+                if (option.type === "set") ops.is = "contains"
+
+                return _.toPairs(ops)
             })
 
             ctrl.setDefault = function () {
                 // assign the first value from the opts
-                const opts = ctrl.getOpts(ctrl.term.type)
-                ctrl.opts = opts
+                ctrl.opts = getOpts()
 
-                if (!opts) {
-                    ctrl.term.op = "is"
-                } else {
-                    ctrl.term.op = _.values(opts)[0][1]
-                }
+                // TODO Correct? Was "is" before
+                ctrl.term.op = ctrl.opts?.[0]?.[1] || "="
 
                 ctrl.term.val = ""
                 ctrl.change()
