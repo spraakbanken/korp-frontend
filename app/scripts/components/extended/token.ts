@@ -1,7 +1,27 @@
 /** @format */
-import angular from "angular"
+import angular, { IController } from "angular"
+import { clamp } from "lodash"
 import { html } from "@/util"
 import "@/components/extended/and-token"
+import { CqpToken, Condition } from "@/cqp_parser/cqp.types"
+
+type ExtendedTokenController = IController & {
+    showClose: boolean
+    token: CqpToken & Required<Pick<CqpToken, "and_block">>
+    parallellLang: string
+    repeatError: boolean
+    remove: () => void
+    change: () => void
+    toggleStart: () => void
+    toggleEnd: () => void
+    addAnd: () => void
+    removeAnd: (i: number) => () => void
+    toggleRepeat: () => void
+    repeatChange: (i: 0 | 1) => void
+}
+
+const createDefaultCondition = (): Condition => ({ type: "word", op: "=", val: "" })
+const MAX = 99
 
 angular.module("korpApp").component("extendedToken", {
     template: html`
@@ -57,12 +77,20 @@ angular.module("korpApp").component("extendedToken", {
                         <span>{{'repeat' | loc:$root.lang}}</span>
                         <input
                             type="number"
+                            min="0"
+                            max="{{ $ctrl.max }}"
                             ng-model="$ctrl.token.repeat[0]"
-                            ng-change="$ctrl.repeatChange(0)"
+                            ng-change="$ctrl.onMinChange()"
                             ng-class="{'input-error': $ctrl.repeatError}"
                         />
                         <span>{{'to' | loc:$root.lang}}</span>
-                        <input type="number" ng-model="$ctrl.token.repeat[1]" ng-change="$ctrl.repeatChange(1)" />
+                        <input
+                            type="number"
+                            min="1"
+                            max="{{ $ctrl.max }}"
+                            ng-model="$ctrl.token.repeat[1]"
+                            ng-change="$ctrl.onMaxChange()"
+                        />
                         <span>{{'times' | loc:$root.lang}}</span>
                     </div>
 
@@ -83,24 +111,26 @@ angular.module("korpApp").component("extendedToken", {
     },
     controller: [
         function () {
-            const ctrl = this
+            const ctrl = this as ExtendedTokenController
+            ctrl.max = MAX
 
             ctrl.addAnd = () => {
-                ctrl.token["and_block"].push([{}])
+                ctrl.token.and_block.push([createDefaultCondition()])
                 ctrl.change()
             }
 
             ctrl.removeAnd = (i) => () => {
-                if (ctrl.token["and_block"].length == 1) {
+                if (ctrl.token.and_block.length == 1) {
                     ctrl.remove()
                 } else {
-                    ctrl.token["and_block"].splice(i, 1)
+                    ctrl.token.and_block.splice(i, 1)
                     ctrl.change()
                 }
             }
 
             ctrl.toggleRepeat = function () {
                 if (!ctrl.token.repeat) {
+                    // Default is min 1, max 1
                     ctrl.token.repeat = [1, 1]
                 } else {
                     delete ctrl.token.repeat
@@ -108,28 +138,26 @@ angular.module("korpApp").component("extendedToken", {
                 ctrl.change()
             }
 
-            ctrl.repeatChange = function (repeatIdx) {
-                if (ctrl.token.repeat[repeatIdx] === null) {
-                    ctrl.token.repeat[repeatIdx] = token.repeat[repeatIdx === 0 ? 1 : 0]
-                } else if (ctrl.token.repeat[repeatIdx] === -1) {
-                    ctrl.token.repeat[repeatIdx] = 0
-                } else if (ctrl.token.repeat[repeatIdx] < 0) {
-                    ctrl.token.repeat[repeatIdx] = 1
-                } else if (ctrl.token.repeat[repeatIdx] > 100) {
-                    ctrl.token.repeat[repeatIdx] = 100
-                }
-
-                if (ctrl.token.repeat[1] < ctrl.token.repeat[0] && repeatIdx === 0) {
+            ctrl.onMinChange = () => {
+                if (!ctrl.token.repeat) return
+                // Keep within bounds (null results in 0)
+                ctrl.token.repeat[0] = clamp(ctrl.token.repeat[0], 0, MAX)
+                // Update max, if set, to be at least min
+                if (ctrl.token.repeat[1] && ctrl.token.repeat[1] < ctrl.token.repeat[0])
                     ctrl.token.repeat[1] = ctrl.token.repeat[0]
-                }
 
-                if (ctrl.token.repeat[1] < ctrl.token.repeat[0] && repeatIdx === 1) {
-                    ctrl.token.repeat[0] = ctrl.token.repeat[1]
-                }
+                ctrl.change()
+            }
 
-                if (ctrl.token.repeat[1] < 1) {
-                    ctrl.token.repeat[1] = 1
-                }
+            ctrl.onMaxChange = () => {
+                if (!ctrl.token.repeat) return
+                // If input is erased, ng-model sets it to null
+                // A max value of null means "repeat exactly min times"
+                if (ctrl.token.repeat[1] == null) return
+                // Keep within bounds
+                ctrl.token.repeat[1] = clamp(ctrl.token.repeat[1], 1, MAX)
+                // Update min to be at most min
+                ctrl.token.repeat[0] = Math.min(ctrl.token.repeat[0], ctrl.token.repeat[1])
 
                 ctrl.change()
             }

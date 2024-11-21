@@ -64,12 +64,6 @@ angular.module("korpApp").component("extendedCqpTerm", {
             ctrl.valfilter = valfilter
 
             ctrl.$onInit = () => {
-                if (angular.equals(ctrl.term, {})) {
-                    ctrl.term.type = "word"
-                    ctrl.term.op = "="
-                    ctrl.term.val = ""
-                    ctrl.change()
-                }
                 $rootScope.$on("corpuschooserchange", () => $timeout(onCorpusChange))
                 $rootScope.$watch(
                     () => $location.search().parallel_corpora,
