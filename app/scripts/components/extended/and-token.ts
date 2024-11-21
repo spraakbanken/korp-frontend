@@ -1,7 +1,19 @@
 /** @format */
-import angular from "angular"
+import angular, { IController } from "angular"
 import { html } from "@/util"
 import "@/components/extended/cqp-term"
+import { Condition } from "@/cqp_parser/cqp.types"
+import { createDefaultCondition } from "./util"
+
+type ExtendedAndTokenController = IController & {
+    and: Condition[]
+    first: boolean
+    parallellLang: string
+    change: () => void
+    remove: () => void
+    removeOr: (idx: number) => void
+    addOr: () => void
+}
 
 angular.module("korpApp").component("extendedAndToken", {
     template: html`
@@ -12,7 +24,7 @@ angular.module("korpApp").component("extendedAndToken", {
                 <div class="or_arg_outer" ng-repeat="or in $ctrl.and">
                     <extended-cqp-term
                         term="or"
-                        remove-or="$ctrl.removeOr($index)()"
+                        remove-or="$ctrl.removeOr($index)"
                         change="$ctrl.change()"
                         parallell-lang="$ctrl.parallellLang"
                     ></extended-cqp-term>
@@ -34,22 +46,15 @@ angular.module("korpApp").component("extendedAndToken", {
     },
     controller: [
         function () {
-            const ctrl = this
+            const ctrl = this as ExtendedAndTokenController
 
-            ctrl.removeOr = function (idx) {
-                return () => {
-                    if (ctrl.and.length == 1) {
-                        ctrl.remove()
-                    } else {
-                        ctrl.and.splice(idx, 1)
-                        ctrl.change()
-                    }
-                }
+            ctrl.removeOr = (idx) => {
+                ctrl.and.splice(idx, 1)
+                if (!ctrl.and.length) ctrl.remove()
+                else ctrl.change()
             }
 
-            ctrl.addOr = function () {
-                ctrl.and.push({})
-            }
+            ctrl.addOr = () => ctrl.and.push(createDefaultCondition())
         },
     ],
 })

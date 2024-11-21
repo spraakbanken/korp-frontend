@@ -4,6 +4,7 @@ import { clamp } from "lodash"
 import { html } from "@/util"
 import "@/components/extended/and-token"
 import { CqpToken, Condition } from "@/cqp_parser/cqp.types"
+import { createDefaultCondition } from "./util"
 
 type ExtendedTokenController = IController & {
     showClose: boolean
@@ -15,12 +16,11 @@ type ExtendedTokenController = IController & {
     toggleStart: () => void
     toggleEnd: () => void
     addAnd: () => void
-    removeAnd: (i: number) => () => void
+    removeAnd: (i: number) => void
     toggleRepeat: () => void
     repeatChange: (i: 0 | 1) => void
 }
 
-const createDefaultCondition = (): Condition => ({ type: "word", op: "=", val: "" })
 const MAX = 99
 
 angular.module("korpApp").component("extendedToken", {
@@ -40,7 +40,7 @@ angular.module("korpApp").component("extendedToken", {
                     <extended-and-token
                         and="and"
                         first="$first"
-                        remove="$ctrl.removeAnd($index)()"
+                        remove="$ctrl.removeAnd($index)"
                         change="$ctrl.change()"
                         parallell-lang="$ctrl.parallellLang"
                     ></extended-and-token>
@@ -119,13 +119,10 @@ angular.module("korpApp").component("extendedToken", {
                 ctrl.change()
             }
 
-            ctrl.removeAnd = (i) => () => {
-                if (ctrl.token.and_block.length == 1) {
-                    ctrl.remove()
-                } else {
-                    ctrl.token.and_block.splice(i, 1)
-                    ctrl.change()
-                }
+            ctrl.removeAnd = (i) => {
+                ctrl.token.and_block.splice(i, 1)
+                if (!ctrl.token.and_block.length) ctrl.remove()
+                else ctrl.change()
             }
 
             ctrl.toggleRepeat = function () {
