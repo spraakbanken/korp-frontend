@@ -184,6 +184,7 @@ export type KorpQueryResponse = {
 
 /** Search hits */
 export type ApiKwic = {
+    corpus: string
     /** An object for each token in the context, with attribute values for that token */
     tokens: Token[]
     /** Attribute values for the context (e.g. sentence) */
@@ -192,7 +193,7 @@ export type ApiKwic = {
     match: KwicMatch | KwicMatch[]
     /** Hits from aligned corpora if available, otherwise omitted */
     aligned: {
-        [linkedCorpusId: `${string}-${string}`]: Record<string, any>[]
+        [linkedCorpusId: `${string}-${string}`]: Token[]
     }
 }
 
@@ -209,7 +210,11 @@ type KwicMatch = {
 export type Token = {
     word: string
     structs?: {
-        open?: Record<string, Record<string, string>>[]
+        open?: {
+            [element: string]: {
+                [attr: string]: string
+            }
+        }[]
         close?: string[]
     }
     [attr: string]: any

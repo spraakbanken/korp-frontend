@@ -3,28 +3,11 @@ import _ from "lodash"
 import moment from "moment"
 import CSV from "comma-separated-values/csv"
 import { locObj } from "@/i18n"
+import { CorpusHeading, isCorpusHeading, isKwic, Row } from "./components/kwic"
 import { type ApiKwic, type KorpQueryParams } from "@/backend/kwic-proxy"
-import { LangString } from "./i18n/types"
 
-// This is what is returned by massageData in kwic.js
-type Row = ApiKwic | LinkedKwic | CorpusHeading
 // The annotations option is not available for parallel
 type AnnotationsRow = ApiKwic | CorpusHeading
-
-type LinkedKwic = {
-    tokens: ApiKwic["tokens"]
-    isLinked: true
-    corpus: string
-}
-
-type CorpusHeading = {
-    newCorpus: LangString
-    noContext?: boolean
-}
-
-const isKwic = (row: Row): row is ApiKwic => "tokens" in row && !isLinkedKwic(row)
-const isLinkedKwic = (row: Row): row is LinkedKwic => "isLinked" in row
-const isCorpusHeading = (row: Row): row is CorpusHeading => "newCorpus" in row
 
 type TableRow = (string | number)[]
 

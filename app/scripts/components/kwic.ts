@@ -1,13 +1,79 @@
 /** @format */
-import angular from "angular"
+import angular, { IController, ITimeoutService } from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
-import currentMode from "@/mode"
 import { makeDownload } from "@/kwic_download"
 import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
+import { LocationService } from "@/urlparams"
+import { ApiKwic, Token } from "@/backend/kwic-proxy"
+import { LangString } from "@/i18n/types"
+import { KwicWordScope } from "@/components/kwic-word"
+
+export type Row = ApiKwic | LinkedKwic | CorpusHeading
+
+/** Row from a secondary language in parallel mode. */
+export type LinkedKwic = {
+    tokens: ApiKwic["tokens"]
+    isLinked: true
+    corpus: string
+}
+
+/** A row introducing the next corpus in the hit listing. */
+export type CorpusHeading = {
+    newCorpus: LangString
+    noContext?: boolean
+}
+
+export const isKwic = (row: Row): row is ApiKwic => "tokens" in row && !isLinkedKwic(row)
+export const isLinkedKwic = (row: Row): row is LinkedKwic => "isLinked" in row
+export const isCorpusHeading = (row: Row): row is CorpusHeading => "newCorpus" in row
+
+type KwicController = IController & {
+    // Bindings
+    aborted: boolean
+    loading: boolean
+    active: boolean
+    hitsInProgress: number
+    hits: number
+    isReading: boolean
+    page: number
+    pageEvent: (page: number) => void
+    contextChangeEvent: () => void
+    hitsPerPage: number
+    prevParams: any
+    prevRequest: any
+    corpusOrder: string[]
+    /** Current page of results. */
+    kwicInput: ApiKwic[]
+    corpusHits: any
+    // Locals
+    kwic: Row[]
+    useContext: boolean
+    hitsPictureData: HitsPictureItem[]
+    _settings: any
+    toggleReading: () => void
+    download: {
+        options: { value: string; label: string; disabled?: boolean }[]
+        selected: string
+        init: (value: string, hits: number) => void
+        blobName?: string
+        fileName?: string
+    }
+    selectLeft: (sentence: any) => any[]
+    selectMatch: (sentence: any) => any[]
+    selectRight: (sentence: any) => any[]
+    parallelSelected: Token[]
+}
+
+type HitsPictureItem = {
+    page: number
+    relative: number
+    abs: number
+    rtitle: string
+}
 
 angular.module("korpApp").component("kwic", {
     template: html`
@@ -164,21 +230,15 @@ angular.module("korpApp").component("kwic", {
         prevParams: "<",
         prevRequest: "<",
         corpusOrder: "<",
-        /** Current page of results. */
         kwicInput: "<",
         corpusHits: "<",
     },
     controller: [
-        "$location",
         "$element",
+        "$location",
         "$timeout",
-        /**
-         * @param {import("angular").ILocationService} $location
-         * @param {JQLite} $element
-         * @param {import("angular").ITimeoutService} $timeout
-         */
-        function ($location, $element, $timeout) {
-            let $ctrl = this
+        function ($element: JQLite, $location: LocationService, $timeout: ITimeoutService) {
+            let $ctrl = this as KwicController
 
             const selectionManager = new SelectionManager()
 
@@ -204,6 +264,7 @@ angular.module("korpApp").component("kwic", {
                         })
                     }
 
+                    // TODO Do this when shown the first time (e.g. not if loading with stats tab active)
                     if (settings.parallel && !$ctrl.isReading) {
                         $timeout(() => alignParallelSentences())
                     }
@@ -212,13 +273,19 @@ angular.module("korpApp").component("kwic", {
                         statemachine.send("DESELECT_WORD")
                     }
                 }
+
                 if ("corpusHits" in changeObj && $ctrl.corpusHits) {
-                    let items = _.map($ctrl.corpusOrder, (obj) => ({
-                        rid: obj,
-                        rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
-                        relative: $ctrl.corpusHits[obj] / $ctrl.hits,
-                        abs: $ctrl.corpusHits[obj],
-                    })).filter((item) => item.abs > 0)
+                    const items = _.map(
+                        $ctrl.corpusOrder,
+                        (obj) =>
+                            <HitsPictureItem>{
+                                rid: obj,
+                                rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
+                                relative: $ctrl.corpusHits[obj] / $ctrl.hits,
+                                abs: $ctrl.corpusHits[obj],
+                                page: -1, // this is properly set below
+                            }
+                    ).filter((item) => item.abs > 0)
 
                     // calculate which is the first page of hits for each item
                     let index = 0
@@ -282,12 +349,15 @@ angular.module("korpApp").component("kwic", {
                     if (value === "") {
                         return
                     }
-                    const [fileName, blobName] = makeDownload(...value.split("/"), $ctrl.kwic, $ctrl.prevParams, hits)
+                    const [dataType, fileType] = value.split("/") as ["annotations" | "kwic", "csv" | "tsv"]
+                    const [fileName, blobName] = makeDownload(dataType, fileType, $ctrl.kwic, $ctrl.prevParams, hits)
                     $ctrl.download.fileName = fileName
                     $ctrl.download.blobName = blobName
                     $ctrl.download.selected = ""
-                    $timeout(() => $element[0].getElementsByClassName("kwicDownloadLink")[0].click(), 0)
+                    $timeout(() => ($element[0].getElementsByClassName("kwicDownloadLink")[0] as HTMLElement).click())
                 },
+                blobName: undefined,
+                fileName: undefined,
             }
 
             $ctrl.selectLeft = function (sentence) {
@@ -314,80 +384,71 @@ angular.module("korpApp").component("kwic", {
                 return sentence.tokens.slice(from, len)
             }
 
-            function massageData(hitArray) {
+            function massageData(hitArray: ApiKwic[]): Row[] {
                 const punctArray = [",", ".", ";", ":", "!", "?", "..."]
 
                 let prevCorpus = ""
-                const output = []
+                const output: Row[] = []
 
-                for (let i = 0; i < hitArray.length; i++) {
-                    var corpus, linkCorpusId, mainCorpusId, matches
-                    const hitContext = hitArray[i]
-                    if (settings.parallel) {
-                        mainCorpusId = hitContext.corpus.split("|")[0].toLowerCase()
-                        linkCorpusId = hitContext.corpus.split("|")[1].toLowerCase()
-                    } else {
-                        mainCorpusId = hitContext.corpus.toLowerCase()
-                    }
+                for (const hitContext of hitArray) {
+                    const mainCorpusId = settings.parallel
+                        ? hitContext.corpus.split("|")[0].toLowerCase()
+                        : hitContext.corpus.toLowerCase()
 
-                    const id = linkCorpusId || mainCorpusId
+                    const id = (settings.parallel && hitContext.corpus.split("|")[1].toLowerCase()) || mainCorpusId
 
                     const [matchSentenceStart, matchSentenceEnd] = findMatchSentence(hitContext)
+                    const isMatchSentence = (i: number) =>
+                        matchSentenceStart && matchSentenceEnd && matchSentenceStart <= i && i <= matchSentenceEnd
 
-                    if (!(hitContext.match instanceof Array)) {
-                        matches = [{ start: hitContext.match.start, end: hitContext.match.end }]
-                    } else {
-                        matches = hitContext.match
-                    }
+                    // When using `in_order=false`, there are multiple matches
+                    // Otherwise, cast single match to array for consistency
+                    const matches = !(hitContext.match instanceof Array) ? [hitContext.match] : hitContext.match
+                    const isMatch = (i: number) => matches.some(({ start, end }) => start <= i && i < end)
 
-                    const currentStruct = {}
-                    for (let i in _.range(0, hitContext.tokens.length)) {
-                        const wd = hitContext.tokens[i]
+                    // Copy struct attributes to tokens
+                    /** Currently open structural elements (e.g. `<ne>`) */
+                    const currentStruct: Record<string, Record<string, string>> = {}
+                    for (const [i, wd] of hitContext.tokens.entries()) {
                         wd.position = i
 
-                        for (let { start, end } of matches) {
-                            if (start <= i && i < end) {
-                                _.extend(wd, { _match: true })
-                            }
-                        }
+                        if (isMatch(i)) wd._match = true
+                        if (isMatchSentence(i)) wd._matchSentence = true
+                        if (punctArray.includes(wd.word)) wd._punct = true
 
-                        if (matchSentenceStart <= i && i <= matchSentenceEnd) {
-                            _.extend(wd, { _matchSentence: true })
-                        }
-                        if (punctArray.includes(wd.word)) {
-                            _.extend(wd, { _punct: true })
-                        }
+                        wd.structs ??= {}
 
-                        wd.structs = wd.structs || {}
-
-                        for (let structItem of wd.structs.open || []) {
+                        // For each new structural element this token opens, add it to currentStruct
+                        for (const structItem of wd.structs.open || []) {
+                            // structItem is an object with a single key
                             const structKey = _.keys(structItem)[0]
-                            if (structKey == "sentence") {
-                                wd._open_sentence = true
-                            }
+                            if (structKey == "sentence") wd._open_sentence = true
 
+                            // Store structural attributes with a qualified name e.g. "ne_type"
+                            // Also set a dummy value for the struct itself, e.g. `"ne": ""`
                             currentStruct[structKey] = {}
                             const attrs = _.toPairs(structItem[structKey]).map(([key, val]) => [
                                 structKey + "_" + key,
                                 val,
                             ])
-                            for (let [key, val] of _.concat([[structKey, ""]], attrs)) {
+                            for (const [key, val] of [[structKey, ""], ...attrs]) {
                                 if (key in settings.corpora[id].attributes) {
                                     currentStruct[structKey][key] = val
                                 }
                             }
                         }
 
-                        const attrs = _.reduce(_.values(currentStruct), (val, ack) => _.merge(val, ack), {})
-                        _.extend(wd, attrs)
+                        // Copy structural attributes to token
+                        // The keys of currentStruct are included in the names of each attribute
+                        Object.values(currentStruct).forEach((attrs) => Object.assign(wd, attrs))
 
-                        for (let structItem of wd.structs.close || []) {
-                            delete currentStruct[structItem]
-                        }
+                        // For each struct this token closes, remove it from currentStruct
+                        for (let structItem of wd.structs.close || []) delete currentStruct[structItem]
                     }
 
+                    // At the start of each new corpus, add a row with the corpus title
                     if (prevCorpus !== id) {
-                        corpus = settings.corpora[id]
+                        const corpus = settings.corpora[id]
                         const newSent = {
                             newCorpus: corpus.title,
                             noContext: _.keys(corpus.context).length === 1,
@@ -425,8 +486,11 @@ angular.module("korpApp").component("kwic", {
                 return output
             }
 
-            function findMatchSentence(hitContext) {
-                const span = []
+            /** Find span of sentence containing the match */
+            // This is used in reading mode (when free order is not used) to highlight the sentence.
+            function findMatchSentence(hitContext: ApiKwic): [number?, number?] {
+                if (Array.isArray(hitContext.match)) return []
+                const span: [number?, number?] = []
                 const { start, end } = hitContext.match
                 let decr = start
                 let incr = end
@@ -452,147 +516,132 @@ angular.module("korpApp").component("kwic", {
                 return span
             }
 
-            function onWordClick(event) {
+            function onWordClick(event: KeyboardEvent) {
+                // A kwicWord component was clicked
                 event.stopPropagation()
-                const scope = $(event.target).scope()
-                const obj = scope.word
-                const sent = scope.sentence
-                const word = $(event.target)
+                const element = event.target as HTMLElement
+                const scope: KwicWordScope = $(element).scope()
+                const word = $(element)
 
                 if ($ctrl.active) {
                     statemachine.send("SELECT_WORD", {
-                        sentenceData: sent.structs,
-                        wordData: obj,
-                        corpus: sent.corpus.toLowerCase(),
-                        tokens: sent.tokens,
+                        sentenceData: scope.sentence.structs,
+                        wordData: scope.word,
+                        corpus: scope.sentence.corpus.toLowerCase(),
+                        tokens: scope.sentence.tokens,
                         inReadingMode: false,
                     })
                 }
 
                 if (settings.parallel) {
-                    selectWordParallel(word, scope, sent)
+                    selectWordParallel(word)
                 } else {
-                    selectWord(word, scope)
+                    selectWord(word)
                 }
             }
 
-            function selectWord(word, scope) {
-                const obj = scope.word
-                let aux = null
-                if (obj.dephead != null) {
-                    const i = Number(obj.dephead)
-
-                    const paragraph = word.closest(".sentence").find(".word")
-                    let sent_start = 0
-                    const querySentStart = ".open_sentence"
-                    if (word.is(querySentStart)) {
-                        sent_start = paragraph.index(word)
-                    } else {
-                        const l = paragraph.filter((__, item) => $(item).is(word) || $(item).is(querySentStart))
-                        sent_start = paragraph.index(l.eq(l.index(word) - 1))
-                    }
-                    aux = $(paragraph.get(sent_start + i - 1))
-                }
+            function selectWord(word: JQLite): void {
+                const aux = getDepheadToken(word)
                 selectionManager.select(word, aux)
             }
 
+            /** Find the related (dephead) token of a given token */
+            function getDepheadToken(word: JQLite): JQLite | undefined {
+                const scope: KwicWordScope = word.scope()
+                if (scope.word.dephead == null) return
+                // The row can contain multiple sentences,
+                // and the dephead value is a token index within the sentence,
+                // so add it to the index of the first token of the same sentence
+                const paragraph = word.closest(".sentence").find(".word")
+                let sent_start = 0
+                const querySentStart = ".open_sentence"
+                if (word.is(querySentStart)) {
+                    sent_start = paragraph.index(word)
+                } else {
+                    const l = paragraph.filter((__, item) => $(item).is(word) || $(item).is(querySentStart))
+                    sent_start = paragraph.index(l.eq(l.index(word) - 1))
+                }
+                const dephead = Number(scope.word.dephead)
+                const el = paragraph.get(sent_start + dephead - 1)
+                if (el) return $(el)
+            }
+
             /** Select a given token, follow links to different languages and give linked tokens a secondary highlighting. */
-            function selectWordParallel(word, scope, sentence) {
+            function selectWordParallel(word: JQLite) {
+                const scope: KwicWordScope = word.scope()
+                const sentence = scope.sentence
+
                 // Select the given word.
-                selectWord(word, scope)
+                selectWord(word)
 
                 // Clear any previous linked-token highlighting.
                 clearLinks()
 
-                var obj = scope.word
-                if (!obj.linkref) return
-                var corpus = settings.corpora[sentence.corpus]
-                var [mainCorpus, lang] = corpus.id.split("-")
+                if (!scope.word.linkref) return
+                const [mainCorpus, lang] = settings.corpora[sentence.corpus].id.split("-")
 
-                function findRef(ref, sentence) {
-                    var out = null
-                    _.each(sentence, function (word) {
-                        if (word.linkref == ref.toString()) {
-                            out = word
-                            return false
-                        }
-                    })
-                    return out
-                }
+                const findRef = (ref: `${number}`, sentence: Token[]): Token | undefined =>
+                    sentence.find((word) => word.linkref == ref)
 
-                if (sentence.isLinked) {
+                if (isLinkedKwic(sentence)) {
                     // a secondary language was clicked
-                    var sent_index = scope.sentenceIndex
-                    var data = getActiveData()
-
                     // Find main sentence, as nearest previous non-linked sentence.
-                    var mainSent = null
-                    while (data[sent_index]) {
-                        var sent = data[sent_index]
-                        if (!sent.isLinked) {
-                            mainSent = sent
-                            break
-                        }
-                        sent_index--
-                    }
-
-                    var linkNum = Number(obj.linkref)
+                    const mainSent = $ctrl.kwic.slice(0, scope.sentenceIndex).reverse().find(isKwic) as ApiKwic
+                    const linkref = Number(scope.word.linkref)
 
                     // Find linked tokens in main sentence and highlight them.
-                    _.each(mainSent.tokens, function (token) {
-                        var refs = _.map(_.compact(token["wordlink-" + lang].split("|")), Number)
-                        if (_.includes(refs, linkNum)) {
+                    mainSent!.tokens.forEach((token) => {
+                        const refs = _.map(_.compact(token["wordlink-" + lang].split("|")), Number)
+                        if (_.includes(refs, linkref)) {
                             token._link_selected = true
                             $ctrl.parallelSelected.push(token)
                         }
                     })
                 } else {
+                    // A token in the primary language was clicked
                     // Collect references to linked tokens from wordlink-(lang) values
-                    var links = _.pickBy(obj, function (val, key) {
-                        return _.startsWith(key, "wordlink")
-                    })
-                    // Follow each link and highlight linked tokens
-                    _.each(links, function (val, key) {
-                        var lang = key.split("-")[1]
-                        _.each(_.compact(val.split("|")), function (num) {
-                            const link = findRef(num, sentence.aligned[mainCorpus + "-" + lang])
-                            if (!link) return
+                    const linkKeys = Object.keys(scope.word).filter((key) => key.indexOf("wordlink-") === 0)
+                    for (const key of linkKeys) {
+                        // Follow each link and highlight linked tokens
+                        const lang = key.split("-")[1]
+                        // The value is a pipe-separated list of token indices
+                        const refs = (scope.word[key] as string).split("|").filter(Boolean).map(Number)
+                        for (const ref of refs) {
+                            const linkedSentence: Token[] = sentence.aligned[mainCorpus + "-" + lang]
+                            const link = linkedSentence.find((token) => token.linkref == ref)
+                            if (!link) {
+                                console.error(`Could not find token with linkref "${ref}"`)
+                                return
+                            }
                             link._link_selected = true
                             $ctrl.parallelSelected.push(link)
-                        })
-                    })
+                        }
+                    }
                 }
             }
 
-            function getActiveData() {
-                return $ctrl.kwic
-            }
-
             function clearLinks() {
-                _.each($ctrl.parallelSelected, function (word) {
-                    delete word._link_selected
-                })
+                _.each($ctrl.parallelSelected, (word) => delete word._link_selected)
                 $ctrl.parallelSelected = []
             }
 
             function centerScrollbar() {
                 const m = $element.find(".match:first")
-                if (!m.length) {
-                    return
-                }
+                if (!m.length) return
+
                 const area = $element.find(".table_scrollarea").scrollLeft(0)
-                const match = m.first().position().left + m.width() / 2
+                const match = m.first().position().left + m.width()! / 2
                 const sidebarWidth = $("#sidebar").outerWidth() || 0
-                area.stop(true, true).scrollLeft(match - ($("body").innerWidth() - sidebarWidth) / 2)
+                area.stop(true, true).scrollLeft(match - ($("body").innerWidth()! - sidebarWidth) / 2)
             }
 
             /** Add offsets to align each linked sentence with its main one */
             function alignParallelSentences() {
                 /** A helper to get horizontal coordinates relative to a container. */
-                function getBounds($elements, $container) {
-                    const container = $container.get(0).getBoundingClientRect()
-                    const left = $elements.get(0).getBoundingClientRect().left - container.left
-                    const right = $elements.get(-1).getBoundingClientRect().right - container.left
+                function getBounds($elements: JQLite, $container: JQLite) {
+                    const container = $container.get(0)!.getBoundingClientRect()
+                    const left = $elements.get(0)!.getBoundingClientRect().left - container.left
+                    const right = $elements.get(-1)!.getBoundingClientRect().right - container.left
                     const width = right - left
                     const center = left + width / 2
                     const space = container.width - width
@@ -612,112 +661,97 @@ angular.module("korpApp").component("kwic", {
             }
 
             function addKeydownHandler() {
-                $(document).keydown((event) => {
-                    let next
-                    const isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey
-                    if (isSpecialKeyDown || $("input, textarea, select").is(":focus")) {
-                        // TODO || !$element.is(":visible")) {
-                        return
+                // Keep it on document to capture page navigation even if no token is selected
+                $(document).on("keydown", (event) => {
+                    // Only capture simple key presses
+                    if (event.shiftKey || event.ctrlKey || event.metaKey) return
+                    // Do not interfere with text input
+                    if ($("input, textarea, select").is(":focus")) return
+                    // Only act when KWIC is showing
+                    if (!$element.is(":visible")) return
+
+                    // Go to prev/next page
+                    if (event.key == "n") {
+                        $ctrl.pageEvent($ctrl.page + 1)
+                        // Return false to prevent default behavior
+                        return false
+                    }
+                    if (event.key == "f") {
+                        if ($ctrl.page === 0) return
+                        $ctrl.pageEvent($ctrl.page - 1)
+                        return false
                     }
 
-                    switch (event.which) {
-                        case 78: // n
-                            $ctrl.pageEvent($ctrl.page + 1)
-                            return false
-                        case 70: // f
-                            if ($ctrl.page === 0) {
-                                return
-                            }
-                            $ctrl.pageEvent($ctrl.page - 1)
-                            return false
+                    // Navigate selected word
+                    if (!selectionManager.hasSelected()) return
+                    const getNextToken = (): JQLite | undefined => {
+                        if (event.key == "ArrowUp") return selectUp()
+                        if (event.key == "ArrowDown") return selectDown()
+                        if (event.key == "ArrowLeft") return selectPrev()
+                        if (event.key == "ArrowRight") return selectNext()
                     }
-                    if (!selectionManager.hasSelected()) {
-                        return
-                    }
-                    switch (event.which) {
-                        case 38: // up
-                            next = selectUp()
-                            break
-                        case 39: // right
-                            next = selectNext()
-                            break
-                        case 37: // left
-                            next = selectPrev()
-                            break
-                        case 40: // down
-                            next = selectDown()
-                            break
-                    }
-
+                    const next = getNextToken()
                     if (next) {
                         next.trigger("click")
                         scrollToShowWord(next)
+                        // Return false to prevent default behavior
                         return false
                     }
                 })
             }
 
-            function selectNext() {
-                return stepWord(1)
-            }
+            const selectNext = () => stepWord(1)
+            const selectPrev = () => stepWord(-1)
 
-            function selectPrev() {
-                return stepWord(-1)
-            }
-
-            function stepWord(diff) {
+            function stepWord(diff: number): JQLite | undefined {
                 const $words = $element.find(".word")
                 const $current = $element.find(".token_selected").first()
                 const currentIndex = $words.index($current)
                 const wouldWrap = (diff < 0 && currentIndex == 0) || (diff > 0 && currentIndex == $words.length - 1)
                 if (wouldWrap) return
                 const next = $words.get(currentIndex + diff)
-                return $(next)
+                return next && $(next)
             }
 
             function selectUp() {
-                const current = selectionManager.selected
-                const $prevSentence = current.closest(".sentence").prev(":not(.corpus_info)")
-
-                if (!$ctrl.isReading) {
-                    return getWordAt(current.offset().left + current.width() / 2, $prevSentence)
-                }
-
-                const searchwords = current.prevAll(".word").get().concat($prevSentence.find(".word").get().reverse())
-                const def = $prevSentence.find(".word:last")
-                return getFirstAtCoor(current.offset().left + current.width() / 2, $(searchwords), def)
+                const $prevSentence = selectionManager.selected.closest(".sentence").prev(":not(.corpus_info)")
+                const searchwords = selectionManager.selected
+                    .prevAll(".word")
+                    .get()
+                    .concat($prevSentence.find(".word").get().reverse())
+                return selectUpOrDown($prevSentence, $(searchwords))
             }
 
             function selectDown() {
-                const current = selectionManager.selected
-                const $nextSentence = current.closest(".sentence").next(":not(.corpus_info)")
-
-                if (!$ctrl.isReading) {
-                    return getWordAt(current.offset().left + current.width() / 2, $nextSentence)
-                }
-
-                const searchwords = current.nextAll(".word").add($nextSentence.find(".word"))
-                const def = $nextSentence.find(".word:last")
-                return getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def)
+                const $nextSentence = selectionManager.selected.closest(".sentence").next(":not(.corpus_info)")
+                const $searchwords = selectionManager.selected.nextAll(".word").add($nextSentence.find(".word"))
+                return selectUpOrDown($nextSentence, $searchwords)
             }
 
-            /**
-             * @param {number} x
-             * @param {JQLite} wds
-             * @param {JQLite} default_word
-             */
-            function getFirstAtCoor(x, wds, default_word) {
-                const isHit = (word) => x > $(word).offset().left && x < $(word).offset().left + $(word).width()
-                const hit = wds.get().find(isHit)
-                return hit ? $(hit) : default_word
+            function selectUpOrDown($neighborSentence: JQLite, $searchwords: JQLite): JQLite {
+                const fallback = $neighborSentence.find(".word:last")
+                const currentX = selectionManager.selected.offset()!.left + selectionManager.selected.width()! / 2
+                return $ctrl.isReading
+                    ? getFirstAtCoor(currentX, $searchwords, fallback)
+                    : getWordAt(currentX, $neighborSentence)
             }
 
-            function getWordAt(xCoor, $row) {
+            function getFirstAtCoor(x: number, words: JQLite, fallback: JQLite) {
+                /** Check if the x coordinate is within the word */
+                // Allow a margin of 2 in order to match something when coordinate is between two words
+                const isHit = (word: HTMLElement) =>
+                    x > $(word).offset()!.left - 2 && x < $(word).offset()!.left + $(word).width()! + 2
+                // Find the first word that x is within
+                const hit = words.get().find(isHit)
+                return hit ? $(hit) : fallback
+            }
+
+            function getWordAt(xCoor: number, $row: JQLite) {
                 let output = $()
                 $row.find(".word").each(function () {
                     output = $(this)
-                    const thisLeft = $(this).offset().left
-                    const thisRight = $(this).offset().left + $(this).width()
+                    const thisLeft = $(this).offset()!.left
+                    const thisRight = $(this).offset()!.left + $(this).width()!
                     if ((xCoor > thisLeft && xCoor < thisRight) || thisLeft > xCoor) {
                         return false
                     }
@@ -726,28 +760,25 @@ angular.module("korpApp").component("kwic", {
                 return output
             }
 
-            /**
-             * @param {JQLite} word
-             */
-            function scrollToShowWord(word) {
+            function scrollToShowWord(word: JQLite) {
                 if (!word.length) return
                 const offset = 200
 
-                if (word.offset().top + word.height() > window.scrollY + $(window).height()) {
+                if (word.offset()!.top + word.height()! > window.scrollY + $(window).height()!) {
                     $("html, body")
                         .stop(true, true)
                         .animate({ scrollTop: window.scrollY + offset })
-                } else if (word.offset().top < window.scrollY) {
+                } else if (word.offset()!.top < window.scrollY) {
                     $("html, body")
                         .stop(true, true)
                         .animate({ scrollTop: window.scrollY - offset })
                 }
 
                 const area = $element.find(".table_scrollarea")
-                if (word.offset().left + word.width() > area.offset().left + area.width()) {
-                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft() + offset })
-                } else if (word.offset().left < area.offset().left) {
-                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft() - offset })
+                if (word.offset()!.left + word.width()! > area.offset()!.left + area.width()!) {
+                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft()! + offset })
+                } else if (word.offset()!.left < area.offset()!.left) {
+                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft()! - offset })
                 }
             }
         },

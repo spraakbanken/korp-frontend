@@ -8,7 +8,8 @@ type KwicWordController = IController & {
     sentence: ApiKwic
     sentenceIndex: number
 }
-type KwicWordScope = IScope & {
+
+export type KwicWordScope = IScope & {
     word: Token
     sentence: ApiKwic
     sentenceIndex: number

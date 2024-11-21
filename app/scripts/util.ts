@@ -94,7 +94,7 @@ export class SelectionManager {
         this.aux = $()
     }
 
-    select(word: JQuery<HTMLElement>, aux: JQuery<HTMLElement>): void {
+    select(word: JQuery<HTMLElement>, aux?: JQuery<HTMLElement>): void {
         if (word == null || !word.length) {
             return
         }
