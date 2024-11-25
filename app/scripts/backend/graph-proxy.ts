@@ -16,9 +16,9 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
         this.prevParams = null
     }
 
-    expandSubCqps(subArray: string[]): Record<`subcqp${number}`, string> {
+    expandSubCqps(subArray: string[]): Record<`subcqp${string}`, string> {
         const padding = _.fill(new Array(subArray.length.toString().length), "0")
-        const result: Record<`subcqp${number}`, string> = {}
+        const result: Record<`subcqp${string}`, string> = {}
         for (let i = 0; i < subArray.length; i++) {
             const cqp = subArray[i]
             const p = padding.slice(i.toString().length).join("")
@@ -98,7 +98,7 @@ type KorpCountTimeParams = {
     cqp: string
     default_within?: string
     with?: string
-    [subcqpn: `subcqp${number}`]: string
+    [subcqpn: `subcqp${string}`]: string
     granularity?: Granularity
     from?: NumericString
     to?: NumericString

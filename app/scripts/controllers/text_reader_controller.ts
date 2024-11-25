@@ -138,7 +138,8 @@ function prepareData(
     kwic: ApiKwic,
     settings: CorpusTransformed
 ): Omit<ApiKwic, "tokens"> & { tokens: TextReaderToken[] } {
-    const tokens: TextReaderToken[] = _prepareData(kwic.tokens, 0, settings["reading_mode"]!["group_element"], false)
+    const groupElement = typeof settings.reading_mode == "object" ? settings.reading_mode.group_element : undefined
+    const tokens: TextReaderToken[] = _prepareData(kwic.tokens, 0, groupElement, false)
     return { ...kwic, tokens }
 }
 
@@ -146,7 +147,12 @@ function prepareData(
 if groupElement is set to anything, result will be a list of tokens for each
 sentence or whatever groupElement is set to
 */
-function _prepareData(tokens: Token[], start: number, groupElement: string, inGroup: boolean): TextReaderToken[] {
+function _prepareData(
+    tokens: Token[],
+    start: number,
+    groupElement: string | undefined,
+    inGroup: boolean
+): TextReaderToken[] {
     const open: Record<string, Record<string, string>> = {}
     const newTokens: TextReaderToken[] = []
 
@@ -195,7 +201,7 @@ function _prepareData(tokens: Token[], start: number, groupElement: string, inGr
             for (let field in open) {
                 for (let subField in open[field]) {
                     if (open[field][subField]) {
-                        token[subField] = open[field][subField]
+                        ;(token as Token)[subField] = open[field][subField]
                     }
                 }
             }

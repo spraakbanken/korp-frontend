@@ -25,6 +25,7 @@ export type Config = {
     order?: number
     parallel?: boolean
     preselected_corpora?: string[]
+    start_lang?: string
 }
 
 export type Corpus = {
@@ -63,6 +64,8 @@ export type Folder = {
 
 export type Attribute = {
     dataset?: Record<string, string>
+    /** Handled by CorpusListing */
+    disabled?: true
     display_type?: "hidden"
     escape?: boolean
     extended_component?: MaybeWithOptions

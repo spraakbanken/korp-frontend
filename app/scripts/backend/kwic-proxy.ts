@@ -106,8 +106,7 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
             success(data: KorpQueryResponse, status, jqxhr) {
                 self.queryData = data.query_data
                 self.cleanup()
-                // TODO Should be `options.ajaxParams.incremental`?
-                if (data["incremental"] === false || !this.foundKwic) {
+                if (options.ajaxParams.incremental === false || !this.foundKwic) {
                     return kwicCallback(data)
                 }
             },

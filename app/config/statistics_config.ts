@@ -161,7 +161,7 @@ export function reduceStringify(type: string, values: string[], structAttributes
             } else {
                 // structural attributes
                 var mapped = _.map(values, function (value) {
-                    if (structAttributes["set"] && value === "") {
+                    if (structAttributes.type == "set" && value === "") {
                         return "–"
                     } else if (value === "") {
                         return "-"

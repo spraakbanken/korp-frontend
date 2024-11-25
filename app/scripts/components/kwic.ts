@@ -67,6 +67,7 @@ type KwicController = IController & {
     selectMatch: (sentence: any) => any[]
     selectRight: (sentence: any) => any[]
     parallelSelected: Token[]
+    onKwicClick(event: Event): void
 }
 
 type HitsPictureItem = {
@@ -309,13 +310,15 @@ angular.module("korpApp").component("kwic", {
             }
 
             $ctrl.onKwicClick = (event) => {
-                if (event.target.classList.contains("word")) {
+                if (!event.target) return
+                const target = event.target as HTMLElement
+                if (target.classList.contains("word")) {
                     onWordClick(event)
                 } else {
                     if (
-                        event.target.id === "frontendDownloadLinks" ||
-                        event.target.classList.contains("kwicDownloadLink") ||
-                        event.target.classList.contains("hits_picture_corp")
+                        target.id === "frontendDownloadLinks" ||
+                        target.classList.contains("kwicDownloadLink") ||
+                        target.classList.contains("hits_picture_corp")
                     ) {
                         return
                     }
@@ -517,7 +520,7 @@ angular.module("korpApp").component("kwic", {
                 return span
             }
 
-            function onWordClick(event: KeyboardEvent) {
+            function onWordClick(event: Event) {
                 // A kwicWord component was clicked
                 event.stopPropagation()
                 const element = event.target as HTMLElement
@@ -608,7 +611,7 @@ angular.module("korpApp").component("kwic", {
                         // The value is a pipe-separated list of token indices
                         const refs = (scope.word[key] as string).split("|").filter(Boolean).map(Number)
                         for (const ref of refs) {
-                            const linkedSentence: Token[] = sentence.aligned[mainCorpus + "-" + lang]
+                            const linkedSentence: Token[] = sentence.aligned[`${mainCorpus}-${lang}`]
                             const link = linkedSentence.find((token) => token.linkref == ref)
                             if (!link) {
                                 console.error(`Could not find token with linkref "${ref}"`)

@@ -106,10 +106,10 @@ angular.module("korpApp").component("extendedParallel", {
             if (langs) {
                 ctrl.langs = langs.split(",").map((lang) => ({
                     lang,
-                    cqp: $location.search()["cqp_" + lang] || "[]",
+                    cqp: $location.search()[`cqp_${lang}`] || "[]",
                 }))
             } else {
-                ctrl.langs = [{ lang: settings["start_lang"], cqp: "[]" }]
+                ctrl.langs = [{ lang: settings.start_lang!, cqp: "[]" }]
             }
 
             ctrl.cqpChange = (idx) => (cqp) => {
@@ -126,7 +126,7 @@ angular.module("korpApp").component("extendedParallel", {
             const onCQPChange = () => {
                 const currentLangList = _.map(ctrl.langs, "lang")
                 var struct = corpusListing.getLinksFromLangs(currentLangList)
-                function getLangMapping(excludeLangs) {
+                function getLangMapping(excludeLangs: string[]) {
                     return _(struct)
                         .flatten()
                         .filter(function (item) {
@@ -156,8 +156,7 @@ angular.module("korpApp").component("extendedParallel", {
 
                 _.each(ctrl.langs, function (langobj, i) {
                     if (!_.isEmpty(langobj.lang)) {
-                        const paramName = ("cqp_" + langobj.lang) as `cqp_${string}`
-                        $location.search(paramName, langobj.cqp)
+                        $location.search(`cqp_${langobj.lang}`, langobj.cqp)
                     }
                 })
                 $rootScope.extendedCQP = output
@@ -200,12 +199,12 @@ angular.module("korpApp").component("extendedParallel", {
 
             ctrl.getEnabledLangs = function (i) {
                 if (i === 0) {
-                    ctrl.langs[0].lang ??= settings["start_lang"]
-                    return enabledLangsHelper(settings["start_lang"])
+                    ctrl.langs[0].lang ??= settings.start_lang!
+                    return enabledLangsHelper(settings.start_lang!)
                 }
                 var currentLangList = _.map(ctrl.langs, "lang")
                 if (i != undefined) delete currentLangList[i]
-                const firstlang = ctrl.langs[0]?.lang || settings["start_lang"]
+                const firstlang = ctrl.langs[0]?.lang || settings.start_lang!
                 var other = enabledLangsHelper(firstlang)
                 var langResult = _.difference(other, currentLangList)
                 if (i != undefined && ctrl.langs[i] && !ctrl.langs[i].lang) {
@@ -220,8 +219,7 @@ angular.module("korpApp").component("extendedParallel", {
             }
             ctrl.removeLangRow = function () {
                 const lang = ctrl.langs.pop()!
-                const paramName = ("cqp_" + lang.lang) as `cqp_${string}`
-                $location.search(paramName, null)
+                $location.search(`cqp_${lang.lang}`, null)
                 ctrl.onLangChange()
             }
         },

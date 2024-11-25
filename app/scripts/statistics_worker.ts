@@ -61,7 +61,7 @@ onmessage = function (e) {
     const corporaFreqs: Record<string, Record<string, StatsRow[]>> = {}
     for (const id of corporaKeys) {
         const obj = data.corpora[id]
-        totalRow[id + "_value"] = [obj[0].sums.absolute, obj[0].sums.relative]
+        totalRow[`${id}_value`] = [obj[0].sums.absolute, obj[0].sums.relative]
         corporaFreqs[id] = groupBy(obj[0].rows, (item) => simplifyHitString(item))
     }
 
@@ -91,13 +91,9 @@ onmessage = function (e) {
                 } else {
                     reduceMap[reduceVal] = terms
                     map(terms, function (term, idx) {
-                        if (!statsValues[idx]) {
-                            statsValues[idx] = {}
-                        }
-                        if (!statsValues[idx][reduceVal]) {
-                            statsValues[idx][reduceVal] = []
-                        }
-                        if (statsValues[idx][reduceVal].indexOf(term) == -1) {
+                        statsValues[idx] ??= {}
+                        statsValues[idx][reduceVal] ??= []
+                        if (!statsValues[idx][reduceVal].includes(term)) {
                             statsValues[idx][reduceVal].push(term)
                         }
                     })
@@ -105,7 +101,7 @@ onmessage = function (e) {
             })
         }
 
-        let row = {
+        const row: SingleRow = {
             rowId: i + 1,
             total_value: [totalAbs, totalRel] as AbsRelSeq,
             formattedValue: {},
@@ -113,13 +109,14 @@ onmessage = function (e) {
         }
 
         map(corporaKeys, function (corpus) {
-            let abs = sumBy(corporaFreqs[corpus][word], "absolute")
-            let rel = sumBy(corporaFreqs[corpus][word], "relative")
-
-            row[corpus + "_value"] = [abs, rel]
+            const abs = sumBy(corporaFreqs[corpus][word], "absolute")
+            const rel = sumBy(corporaFreqs[corpus][word], "relative")
+            row[`${corpus}_value`] = [abs, rel]
         })
 
-        for (let reduce of reduceVals) {
+        for (const reduce of reduceVals) {
+            // TODO Put these under a prop so they can be typed?
+            // @ts-ignore
             row[reduce] = reduceMap[reduce]
         }
 
@@ -140,7 +137,7 @@ export type TotalRow = RowBase & {
 }
 
 export type SingleRow = RowBase & {
-    formattedValue: {}
+    formattedValue: Record<string, string>
     statsValues: Record<number, Record<string, string[]>>
 }
 

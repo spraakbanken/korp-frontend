@@ -41,6 +41,7 @@ export type AppSettings = {
     hits_per_page_values: number[]
     hits_per_page_default: number
     initialization_checks?: (rootScope: RootScope) => Promise<boolean>
+    input_case_insensitive_default?: boolean
     /** codes for translation ISO-639-1 to 639-2 */
     iso_languages: Record<string, string>
     korp_backend_url: string

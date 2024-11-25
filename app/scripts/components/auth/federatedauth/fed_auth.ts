@@ -86,7 +86,7 @@ export const login = () => {
 
 export const getAuthorizationHeader = () => (isLoggedIn() ? { Authorization: `Bearer ${state.jwt}` } : {})
 
-export const hasCredential = (corpusId) => getCredentials().includes(corpusId)
+export const hasCredential = (corpusId: string) => getCredentials().includes(corpusId)
 
 export const logout = () => (window.location.href = authModule.options.logout_service)
 

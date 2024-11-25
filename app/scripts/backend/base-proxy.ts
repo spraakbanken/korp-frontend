@@ -105,7 +105,8 @@ export default abstract class BaseProxy<R extends {} = {}> {
 
     calcProgress(e: any): ProgressReport<R> {
         const newText = e.target.responseText.slice(this.prev.length)
-        let struct: ResponseBase & ProgressResponse & Partial<R> = {}
+        type PartialResponse = ResponseBase & ProgressResponse & Partial<R>
+        let struct: PartialResponse = {}
 
         try {
             // try to parse a chunk from the progress object
@@ -118,7 +119,7 @@ export default abstract class BaseProxy<R extends {} = {}> {
             this.chunkCache += newText
         }
 
-        Object.keys(struct).forEach((key) => {
+        Object.keys(struct).forEach((key: string & keyof PartialResponse) => {
             if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
                 const val = struct[key] as ProgressResponse["progress_0"]
                 const currentCorpus = typeof val == "string" ? val : val["corpus"]

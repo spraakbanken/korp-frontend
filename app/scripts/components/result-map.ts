@@ -279,7 +279,7 @@ angular.module("korpApp").component("resultMap", {
                 let zoom = cluster._zoom + 1
                 while (childClusters.length > 0 && boundsZoom > zoom) {
                     zoom += 1
-                    const newClusters = childClusters.flatMap((childCluster) => childCluster._childClusters)
+                    const newClusters = childClusters.flatMap((childCluster: any) => childCluster._childClusters)
                     childClusters = newClusters
                 }
                 return childClusters.length > 1

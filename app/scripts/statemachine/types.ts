@@ -1,5 +1,6 @@
 /** @format */
 import { Token } from "@/backend/kwic-proxy"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
 
 export type SelectWordEvent = {
     /** Structural attributes */
@@ -11,4 +12,16 @@ export type SelectWordEvent = {
     /** All tokens in the context, e.g. the full sentence */
     tokens: Token[]
     inReadingMode: boolean
+}
+
+export type LemgramSearchEvent = {
+    value: string
+}
+
+export type CqpSearchEvent = {
+    cqp: string
+}
+
+export type LoginNeededEvent = {
+    loginNeededFor: CorpusTransformed[]
 }

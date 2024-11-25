@@ -9,6 +9,9 @@ import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
+import { ApiKwic, KorpQueryResponse } from "./backend/kwic-proxy"
+import { CorpusTransformed } from "./settings/config-transformed.types"
+import { isCorpusHeading, LinkedKwic, Row } from "./components/kwic"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -302,14 +305,17 @@ export function saldoToString(saldoId: string): string {
  * @returns A string of superscript numbers.
  */
 function numberToSuperscript(number: string | number): string {
-    return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[n]).join("")
+    return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
 }
 
 // Add download links for other formats, defined in
 // settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
-export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data): void {
+export function setDownloadLinks(
+    xhr_settings: JQuery.AjaxSettings,
+    result_data: { kwic: Row[]; corpus_order: string[] }
+): void {
     // If some of the required parameters are null, return without
     // adding the download links.
     if (
@@ -329,7 +335,8 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
     // Get the number (index) of the corpus of the query result hit
     // number hit_num in the corpus order information of the query
     // result.
-    const get_corpus_num = (hit_num) => result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus)
+    const get_corpus_num = (hit_num: number) =>
+        result_data.corpus_order.indexOf((result_data.kwic[hit_num] as ApiKwic | LinkedKwic).corpus)
 
     console.log("setDownloadLinks data:", result_data)
     $("#download-links").empty()
@@ -340,7 +347,7 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
     )
     // Settings of the corpora in the result, to be passed to the
     // download script
-    const result_corpora_settings = {}
+    const result_corpora_settings: Record<string, CorpusTransformed> = {}
     let i = 0
     while (i < result_corpora.length) {
         const corpus_ids = result_corpora[i].toLowerCase().split("|")
@@ -439,7 +446,8 @@ export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig
         if ("params" in conf) delete conf.params
     } else {
         conf.method = "GET"
-        conf["params" in conf ? "params" : "data"] = data
+        if ("params" in conf) conf.params = data
+        else conf.data = data
     }
     return conf
 }

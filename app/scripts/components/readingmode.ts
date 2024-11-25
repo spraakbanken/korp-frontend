@@ -49,7 +49,7 @@ angular.module("korpApp").component("standardReadingMode", {
                         document.querySelector(".word.selected")?.classList.remove("selected")
                         element.classList.add("selected")
                         const idx = element.dataset.idx
-                        const token = ctrl.data.document.tokens[idx]
+                        const token = ctrl.data.document.tokens[Number(idx)]
                         ctrl.wordClick(token)
                     }
                 })

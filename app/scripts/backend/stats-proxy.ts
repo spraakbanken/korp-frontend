@@ -166,7 +166,7 @@ const statsProxyFactory = new Factory(StatsProxy)
 export default statsProxyFactory
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count/get */
-type KorpStatsParams = {
+export type KorpStatsParams = {
     /** Corpus names, separated by comma */
     corpus: string
     /** CQP query */

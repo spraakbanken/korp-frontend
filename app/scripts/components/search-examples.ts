@@ -7,6 +7,7 @@ import settings from "@/settings"
 import { SearchExample } from "@/settings/app-settings.types"
 import { RootScope } from "@/root-scope.types"
 import { HashParams, LocationService } from "@/urlparams"
+import { CqpSearchEvent } from "@/statemachine/types"
 
 export default angular.module("korpApp").component("searchExamples", {
     template: html`
@@ -43,7 +44,7 @@ export default angular.module("korpApp").component("searchExamples", {
 
             $ctrl.setSearch = (params: HashParams) => {
                 if (params.cqp) {
-                    statemachine.send("SEARCH_CQP", { cqp: params.cqp })
+                    statemachine.send("SEARCH_CQP", { cqp: params.cqp } as CqpSearchEvent)
                 }
                 $location.search(params)
             }
