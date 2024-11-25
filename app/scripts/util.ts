@@ -8,6 +8,7 @@ import { RootScope } from "./root-scope.types"
 import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
+import { NameAndMaybeOptions } from "./settings/config.types"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -155,6 +156,27 @@ export const kebabize = (str: string): string =>
 /** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
 export const valfilter = (attrobj: AttributeOption): string =>
     attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value
+
+/**
+ * Get an object from a registry with optional options.
+ *
+ * The definition is a name, or a name and options.
+ * If the object is a function, the options are passed to it.
+ */
+export function getFromNameAndMaybeOptions<T, O extends {}>(
+    registry: Record<string, T | ((options: O) => T)>,
+    definition: NameAndMaybeOptions<O>,
+    defaultOptions: O
+): T | undefined {
+    const name = typeof definition === "string" ? definition : definition.name
+    if (!(name in registry)) return
+    const widget = registry[name]
+    if (_.isFunction(widget)) {
+        const options = typeof definition == "object" ? definition.options : defaultOptions
+        return widget(options)
+    }
+    return widget
+}
 
 /**
  * Format a number of "relative hits" (hits per 1 million tokens), using exactly one decimal.

@@ -65,7 +65,7 @@ export type Attribute = {
     dataset?: Record<string, string>
     display_type?: "hidden"
     escape?: boolean
-    extended_component?: string | { name: string; options: Record<string, any> }
+    extended_component?: NameAndMaybeOptions
     extended_template?: string
     external_search?: string
     group_by?: "group_by" | "group_by_struct"
@@ -83,7 +83,7 @@ export type Attribute = {
     order?: number
     pattern?: string
     ranked?: boolean
-    sidebar_component?: string | { name: string; options: Record<string, any> }
+    sidebar_component?: NameAndMaybeOptions
     sidebar_info_url?: string
     sidebar_hide_label?: boolean
     stats_cqp?: string
@@ -98,5 +98,7 @@ export type CustomAttribute = {
     label: LangString
     name: string
     pattern?: string
-    sidebar_component?: string | { name: string; options: Record<string, any> }
+    sidebar_component?: NameAndMaybeOptions
 }
+
+export type NameAndMaybeOptions<O extends {} = Record<string, any>> = string | { name: string; options: O }

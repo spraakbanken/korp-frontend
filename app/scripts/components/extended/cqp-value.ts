@@ -6,6 +6,7 @@ import { Condition, DateRange } from "@/cqp_parser/cqp.types"
 import extendedComponents from "./widgets"
 import { Widget, WidgetScope } from "./widgets/common"
 import { defaultWidget } from "./widgets/default"
+import { getFromNameAndMaybeOptions } from "@/util"
 
 type ExtendedCqpValueController = IController & {
     change: (event: { term: Partial<Condition> }) => void
@@ -65,14 +66,8 @@ angular.module("korpApp").component("extendedCqpValue", {
             function getWidget(): Widget {
                 // Use the `extended_component` option if present
                 if (ctrl.attributeDefinition["extended_component"]) {
-                    const component = ctrl.attributeDefinition["extended_component"]
-                    const name = typeof component === "string" ? component : component.name
-                    const widget = extendedComponents[name]
-                    if (_.isFunction(widget)) {
-                        const options = typeof component == "object" ? component.options : {}
-                        return widget(options)
-                    }
-                    return widget
+                    const definition = ctrl.attributeDefinition["extended_component"]
+                    return getFromNameAndMaybeOptions(extendedComponents, definition, {})!
                 }
 
                 const controller = defaultWidget.controller

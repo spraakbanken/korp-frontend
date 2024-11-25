@@ -11,6 +11,7 @@ import { LocationService } from "@/urlparams"
 import { ApiKwic, Token } from "@/backend/kwic-proxy"
 import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
+import { SelectWordEvent } from "@/statemachine/types"
 
 export type Row = ApiKwic | LinkedKwic | CorpusHeading
 
@@ -530,7 +531,7 @@ angular.module("korpApp").component("kwic", {
                         corpus: scope.sentence.corpus.toLowerCase(),
                         tokens: scope.sentence.tokens,
                         inReadingMode: false,
-                    })
+                    } as SelectWordEvent)
                 }
 
                 if (settings.parallel) {
