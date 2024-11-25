@@ -10,8 +10,6 @@ import { StructService, StructServiceOptions } from "@/backend/struct-service"
 import { RootScope } from "@/root-scope.types"
 import { LocMap } from "@/i18n/types"
 
-export type WidgetDefinition = Widget | WidgetWithOptions
-export type WidgetWithOptions<T extends {} = {}> = (options: T) => Widget
 export type Widget = {
     template: string
     controller: IController

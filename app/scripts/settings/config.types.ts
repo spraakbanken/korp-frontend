@@ -65,7 +65,7 @@ export type Attribute = {
     dataset?: Record<string, string>
     display_type?: "hidden"
     escape?: boolean
-    extended_component?: NameAndMaybeOptions
+    extended_component?: MaybeWithOptions
     extended_template?: string
     external_search?: string
     group_by?: "group_by" | "group_by_struct"
@@ -83,7 +83,7 @@ export type Attribute = {
     order?: number
     pattern?: string
     ranked?: boolean
-    sidebar_component?: NameAndMaybeOptions
+    sidebar_component?: MaybeWithOptions
     sidebar_info_url?: string
     sidebar_hide_label?: boolean
     stats_cqp?: string
@@ -98,7 +98,14 @@ export type CustomAttribute = {
     label: LangString
     name: string
     pattern?: string
-    sidebar_component?: NameAndMaybeOptions
+    sidebar_component?: MaybeWithOptions
 }
 
-export type NameAndMaybeOptions<O extends {} = Record<string, any>> = string | { name: string; options: O }
+/** A value that names some object and possibly supplies options for that object. */
+export type MaybeWithOptions<O extends {} = Record<string, any>> = string | { name: string; options: O }
+
+/** An object that possibly requires options for instantiation. */
+export type MaybeConfigurable<T, O extends {} = {}> = T | Configurable<T, O>
+
+/** An object that requires options for instantiation. */
+export type Configurable<T, O extends {} = {}> = (options: O) => T

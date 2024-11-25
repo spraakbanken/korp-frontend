@@ -5,7 +5,7 @@ import "../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { getStringifier } from "@/stringify"
-import { html, regescape, splitLemgram, safeApply, getFromNameAndMaybeOptions } from "@/util"
+import { html, regescape, splitLemgram, safeApply, getConfigurable } from "@/util"
 import { loc, locAttribute, locObj } from "@/i18n"
 import "@/services/utils"
 import "@/components/deptree/deptree"
@@ -13,11 +13,10 @@ import { RootScope } from "@/root-scope.types"
 import { SelectWordEvent } from "@/statemachine/types"
 import { Token } from "@/backend/kwic-proxy"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { Attribute, CustomAttribute } from "@/settings/config.types"
+import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config.types"
 import { JQueryExtended } from "@/jquery.types"
 
-export type SidebarComponentDefinition = SidebarComponent | SidebarComponentWithOptions
-export type SidebarComponentWithOptions<T extends {} = {}> = (options: T) => SidebarComponent
+export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
 export type SidebarComponent = {
     template: string
     controller: IController
@@ -286,7 +285,7 @@ angular.module("korpApp").component("sidebar", {
                         : $("<p></p>")
 
                 if (attrs["sidebar_component"]) {
-                    const component = getFromNameAndMaybeOptions(sidebarComponents, attrs["sidebar_component"], {})!
+                    const component = getConfigurable(sidebarComponents, attrs["sidebar_component"])!
                     const { template, controller } = component!
                     const scope = $rootScope.$new()
                     const locals = { $scope: scope }

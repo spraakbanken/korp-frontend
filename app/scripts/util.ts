@@ -8,7 +8,7 @@ import { RootScope } from "./root-scope.types"
 import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
-import { NameAndMaybeOptions } from "./settings/config.types"
+import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -163,16 +163,14 @@ export const valfilter = (attrobj: AttributeOption): string =>
  * The definition is a name, or a name and options.
  * If the object is a function, the options are passed to it.
  */
-export function getFromNameAndMaybeOptions<T, O extends {}>(
-    registry: Record<string, T | ((options: O) => T)>,
-    definition: NameAndMaybeOptions<O>,
-    defaultOptions: O
+export function getConfigurable<T>(
+    registry: Record<string, MaybeConfigurable<T>>,
+    definition: MaybeWithOptions
 ): T | undefined {
     const name = typeof definition === "string" ? definition : definition.name
-    if (!(name in registry)) return
     const widget = registry[name]
     if (_.isFunction(widget)) {
-        const options = typeof definition == "object" ? definition.options : defaultOptions
+        const options = typeof definition == "object" ? definition.options : {}
         return widget(options)
     }
     return widget
