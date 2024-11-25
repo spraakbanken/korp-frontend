@@ -2,7 +2,7 @@
 import angular from "angular"
 import _ from "lodash"
 import "../../styles/sidebar.scss"
-import statemachine from "../statemachine"
+import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { getStringifier } from "@/stringify"
 import { html, regescape, splitLemgram, safeApply } from "@/util"

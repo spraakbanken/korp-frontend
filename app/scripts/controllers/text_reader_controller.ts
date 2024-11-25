@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import angular, { ICompileService } from "angular"
-import statemachine from "../statemachine"
+import statemachine from "@/statemachine"
 import settings from "@/settings"
 import "@/backend/backend"
 import "@/components/readingmode"
