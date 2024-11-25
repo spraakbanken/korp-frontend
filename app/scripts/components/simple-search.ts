@@ -152,7 +152,7 @@ angular.module("korpApp").component("simpleSearch", {
                 $location.search("isCaseInsensitive", "")
             }
 
-            // triggers watch on searches.activeSearch
+            // triggers watch on activeSearch, via the Searches service
             ctrl.updateSearch = function () {
                 $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
                 $location.search("prefix", ctrl.prefix ? true : null)
@@ -161,7 +161,7 @@ angular.module("korpApp").component("simpleSearch", {
                 $location.search("isCaseInsensitive", ctrl.isCaseInsensitive ? true : null)
                 $location.search("within", null)
 
-                // Unset and set query in next time step in order to trigger changes correctly in `searches`.
+                // Unset and set query in next time step in order to trigger changes correctly in the Searches service.
                 $location.search("search", null)
                 $location.replace()
                 $timeout(function () {
@@ -285,12 +285,8 @@ angular.module("korpApp").component("simpleSearch", {
                 })
             }
 
-            // TODO Bad pattern: adding a service to root scope in order to watch a prop on it
-            // TODO Maybe Searches should keep `activeSearch` directly in root scope
-            // @ts-ignore
-            $rootScope.searches = searches
-            $rootScope.$watch("searches.activeSearch", () => {
-                const search = searches.activeSearch
+            $rootScope.$watch("activeSearch", () => {
+                const search = $rootScope.activeSearch
                 if (!search) return
 
                 if (search.type === "word" || search.type === "lemgram") {
@@ -339,7 +335,7 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             ctrl.doSearch = function () {
-                const search = searches.activeSearch
+                const search = $rootScope.activeSearch
                 ctrl.relatedObj = undefined
                 const cqp = ctrl.getCQP()
                 searches.kwicSearch(cqp)

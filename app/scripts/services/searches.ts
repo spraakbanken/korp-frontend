@@ -7,11 +7,6 @@ import angular, { IDeferred, IQService, ITimeoutService } from "angular"
 import "@/services/search-history"
 
 export type SearchesService = {
-    activeSearch: {
-        /** "word", "lemgram" or "cqp" */
-        type: string
-        val: string
-    } | null
     /** is resolved when parallel search controller is loaded */
     langDef: IDeferred<never>
     kwicSearch: (cqp: string) => void
@@ -41,19 +36,18 @@ angular.module("korpApp").factory("searches", [
         searchHistory: SearchHistoryService
     ): SearchesService {
         const searches: SearchesService = {
-            activeSearch: null,
             langDef: $q.defer(),
 
             /** Tell result controllers (kwic/statistics/word picture) to send their requests. */
             kwicSearch(cqp: string) {
-                $rootScope.$emit("make_request", cqp, this.activeSearch)
+                $rootScope.$emit("make_request", cqp, $rootScope.activeSearch)
             },
 
             getCqpExpr(): string {
-                if (!this.activeSearch) return ""
-                if (this.activeSearch.type === "word" || this.activeSearch.type === "lemgram")
+                if (!$rootScope.activeSearch) return ""
+                if ($rootScope.activeSearch.type === "word" || $rootScope.activeSearch.type === "lemgram")
                     return $rootScope.simpleCQP || ""
-                return this.activeSearch.val
+                return $rootScope.activeSearch.val
             },
 
             triggerSearch(): void {
@@ -87,7 +81,7 @@ angular.module("korpApp").factory("searches", [
                     }
                     // Update stored search query
                     if (["cqp", "word", "lemgram"].includes(type)) {
-                        searches.activeSearch = { type, val: value }
+                        $rootScope.activeSearch = { type, val: value }
                     }
 
                     // For Extended/Advanced search, merge with global filters and trigger API requests

@@ -1,7 +1,6 @@
 /** @format */
 import angular, { IController } from "angular"
 import { html } from "@/util"
-import "@/services/searches"
 import "@/components/korp-error"
 import "@/components/kwic"
 import "@/components/loglike-meter"
@@ -20,7 +19,7 @@ import "@/controllers/text_reader_controller"
 import "@/controllers/trend_diagram_controller"
 import "@/controllers/word_picture_controller"
 import "@/directives/tab-hash"
-import { SearchesService } from "@/services/searches"
+import { RootScope } from "@/root-scope.types"
 
 type ResultsController = IController & {
     onSidebarShow: () => void
@@ -298,12 +297,12 @@ angular.module("korpApp").component("results", {
     `,
     bindings: {},
     controller: [
-        "searches",
-        function (searches: SearchesService) {
+        "$rootScope",
+        function ($rootScope: RootScope) {
             const $ctrl = this as ResultsController
             $ctrl.onSidebarShow = () => ($ctrl.sidebarVisible = true)
             $ctrl.onSidebarHide = () => ($ctrl.sidebarVisible = false)
-            $ctrl.hasResult = () => !!searches.activeSearch
+            $ctrl.hasResult = () => !!$rootScope.activeSearch
         },
     ],
 })

@@ -2,10 +2,8 @@
 import angular from "angular"
 import settings from "@/settings"
 import { RootScope } from "@/root-scope.types"
-import { SearchesService } from "@/services/searches"
 import { html } from "@/util"
 import { isEnabled } from "@/news-service"
-import "@/services/searches"
 import "@/components/corpus-updates"
 import "@/components/newsdesk"
 import "@/components/search-examples"
@@ -35,8 +33,7 @@ export default angular.module("korpApp").component("frontpage", {
     controller: [
         "$rootScope",
         "$scope",
-        "searches",
-        function ($rootScope: RootScope, $scope, searches: SearchesService) {
+        function ($rootScope: RootScope, $scope) {
             const $ctrl = this
             $ctrl.showDescription = false
 
@@ -47,7 +44,7 @@ export default angular.module("korpApp").component("frontpage", {
             $scope.examples = settings.frontpage?.examples
 
             $ctrl.hasResult = () =>
-                searches.activeSearch ||
+                $rootScope.activeSearch ||
                 $rootScope.compareTabs.length ||
                 $rootScope.graphTabs.length ||
                 $rootScope.mapTabs.length

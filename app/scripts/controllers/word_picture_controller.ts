@@ -8,8 +8,6 @@ import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { KorpResponse, ProgressReport } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
-import { SearchesService } from "@/services/searches"
-import "@/services/searches"
 import { TabHashScope } from "@/directives/tab-hash"
 
 type WordpicCtrlScope = TabHashScope & {
@@ -69,14 +67,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
         "$rootScope",
         "$location",
         "$timeout",
-        "searches",
-        (
-            $scope: WordpicCtrlScope,
-            $rootScope: RootScope,
-            $location: LocationService,
-            $timeout: ITimeoutService,
-            searches: SearchesService
-        ) => {
+        ($scope: WordpicCtrlScope, $rootScope: RootScope, $location: LocationService, $timeout: ITimeoutService) => {
             const s = $scope
             s.tabindex = 3
             s.proxy = lemgramProxyFactory.create()
@@ -115,7 +106,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["stats"]))
 
             s.makeRequest = () => {
-                const search = searches.activeSearch
+                const search = $rootScope.activeSearch
                 if (!s.wordPic || !search || (search.type !== "lemgram" && search.val.includes(" "))) {
                     s.resetView()
                     return

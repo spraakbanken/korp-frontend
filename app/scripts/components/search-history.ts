@@ -7,6 +7,7 @@ import { LocationService, SearchParams } from "@/urlparams"
 import { html, splitFirst, unregescape } from "@/util"
 import angular, { IScope } from "angular"
 import "@/services/search-history"
+import "@/services/searches"
 
 type HistoryScope = IScope & {
     getOptions: () => Option[]
