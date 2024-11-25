@@ -1,5 +1,5 @@
 /** @format */
-import angular from "angular"
+import angular, { IController, IScope, ITimeoutService, ui } from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
@@ -12,6 +12,35 @@ import "@/services/searches"
 import "@/components/autoc"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
+import { LocationService } from "@/urlparams"
+import { RootScope } from "@/root-scope.types"
+import { CompareSearches } from "@/services/compare-searches"
+import { LexiconsRelatedWordsResponse, LexiconsService } from "@/backend/lexicons"
+import { SearchesService } from "@/services/searches"
+
+type SimpleSearchController = IController & {
+    input: string
+    isRawInput: boolean
+    disableLemgramAutocomplete: boolean
+    freeOrder: boolean
+    freeOrderEnabled: boolean
+    prefix: boolean
+    mid_comp: boolean
+    suffix: boolean
+    isCaseInsensitive: boolean
+    currentText?: string
+    lemgram?: string
+    relatedObj?: { data: LexiconsRelatedWordsResponse; attribute: string }
+    relatedDefault: number
+    updateSearch: () => void
+    getCQP: () => string
+    onSearchSave: (name: string) => void
+    stringifyRelated: (wd: string) => string
+    showAllRelated: () => void
+    updateFreeOrderEnabled: () => void
+    doSearch: () => void
+    onChange: (output: string, isRawOutput: boolean) => void
+}
 
 angular.module("korpApp").component("simpleSearch", {
     template: html`
@@ -56,23 +85,23 @@ angular.module("korpApp").component("simpleSearch", {
                     <button
                         class="btn btn-sm btn-default"
                         ng-click="$ctrl.showAllRelated()"
-                        ng-if="$ctrl.relatedObj.length != 0"
+                        ng-if="$ctrl.relatedObj.data.length != 0"
                     >
                         <span class="btn_header">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
-                            ng-repeat="wd in $ctrl.relatedObj[0].words | limitTo:$ctrl.relatedDefault"
+                            ng-repeat="wd in $ctrl.relatedObj.data[0].words | limitTo:$ctrl.relatedDefault"
                         >
                             {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
                         ><br /><span
-                            ng-repeat="wd in $ctrl.relatedObj[0].words.slice($ctrl.relatedDefault) | limitTo:$ctrl.relatedDefault"
+                            ng-repeat="wd in $ctrl.relatedObj.data[0].words.slice($ctrl.relatedDefault) | limitTo:$ctrl.relatedDefault"
                         >
                             {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
                         ><span
-                            ng-if="$ctrl.relatedObj[0].words.length > $ctrl.relatedDefault || $ctrl.relatedObj.length > 1"
+                            ng-if="$ctrl.relatedObj.data[0].words.length > $ctrl.relatedDefault || $ctrl.relatedObj.data.length > 1"
                         >
                             ...</span
                         >
                     </button>
-                    <div class="btn btn-sm btn-default" ng-if="$ctrl.relatedObj.length == 0">
+                    <div class="btn btn-sm btn-default" ng-if="$ctrl.relatedObj.data.length == 0">
                         <span class="btn_header">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
                             >{{'no_related_words' | loc:$root.lang}}</span
                         >
@@ -85,13 +114,22 @@ angular.module("korpApp").component("simpleSearch", {
         "$location",
         "$rootScope",
         "$scope",
-        "searches",
+        "$timeout",
+        "$uibModal",
         "compareSearches",
         "lexicons",
-        "$uibModal",
-        "$timeout",
-        function ($location, $rootScope, $scope, searches, compareSearches, lexicons, $uibModal, $timeout) {
-            const ctrl = this
+        "searches",
+        function (
+            $location: LocationService,
+            $rootScope: RootScope,
+            $scope: IScope,
+            $timeout: ITimeoutService,
+            $uibModal: ui.bootstrap.IModalService,
+            compareSearches: CompareSearches,
+            lexicons: LexiconsService,
+            searches: SearchesService
+        ) {
+            const ctrl = this as SimpleSearchController
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
 
@@ -138,14 +176,14 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             ctrl.getCQP = function () {
-                let suffix, val
+                let val = ""
                 const currentText = (ctrl.currentText || "").trim()
 
                 if (currentText) {
-                    suffix = ctrl.isCaseInsensitive ? " %c" : ""
+                    const suffix = ctrl.isCaseInsensitive ? " %c" : ""
                     const wordArray = currentText.split(" ")
                     const tokenArray = _.map(wordArray, (token) => {
-                        const orParts = []
+                        const orParts: string[] = []
 
                         if (ctrl.mid_comp) {
                             orParts.push(`.*${token}.*`)
@@ -201,22 +239,28 @@ angular.module("korpApp").component("simpleSearch", {
             ctrl.relatedDefault = 3
 
             ctrl.showAllRelated = () => {
-                const scope = $rootScope.$new()
+                type ShowAllRelatedScope = IScope & {
+                    stringifyRelatedHeader: (wd: string) => string
+                    clickX: () => void
+                    stringifyRelated: (wd: string) => string
+                    relatedObj: any
+                    clickRelated: (wd: string, attribute: string) => void
+                }
+                const scope = $rootScope.$new() as ShowAllRelatedScope
                 scope.stringifyRelatedHeader = (wd) => wd.replace(/_/g, " ")
                 scope.clickX = () => modalInstance.dismiss()
                 scope.stringifyRelated = ctrl.stringifyRelated
                 scope.relatedObj = ctrl.relatedObj
                 scope.clickRelated = function (wd, attribute) {
-                    let cqp
                     if (modalInstance != null) {
                         modalInstance.close()
                     }
                     $rootScope.searchtabs()[1].tab.select()
-                    if (attribute === "saldo") {
-                        cqp = `[saldo contains \"${regescape(wd)}\"]`
-                    } else {
-                        cqp = `[sense rank_contains \"${regescape(wd)}\"]`
-                    }
+                    const cqp =
+                        attribute === "saldo"
+                            ? `[saldo contains \"${regescape(wd)}\"]`
+                            : `[sense rank_contains \"${regescape(wd)}\"]`
+
                     statemachine.send("SEARCH_CQP", { cqp })
                 }
                 const modalInstance = $uibModal.open({
@@ -226,7 +270,7 @@ angular.module("korpApp").component("simpleSearch", {
                             <span ng-click="clickX()" class="close-x">×</span>
                         </div>
                         <div class="modal-body">
-                            <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="https://spraakbanken.gu.se/karp/#?mode=swefn&lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
+                            <div ng-repeat="obj in relatedObj.data" class="col"><a target="_blank" ng-href="https://spraakbanken.gu.se/karp/#?mode=swefn&lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
                               <div class="list_wrapper">
                                   <ul>
                                     <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd, relatedObj.attribute)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
@@ -241,11 +285,14 @@ angular.module("korpApp").component("simpleSearch", {
                 })
             }
 
+            // TODO Bad pattern: adding a service to root scope in order to watch a prop on it
+            // TODO Maybe Searches should keep `activeSearch` directly in root scope
+            // @ts-ignore
             $rootScope.searches = searches
-            $rootScope.$watch("searches.activeSearch", function (search) {
-                if (!search) {
-                    return
-                }
+            $rootScope.$watch("searches.activeSearch", () => {
+                const search = searches.activeSearch
+                if (!search) return
+
                 if (search.type === "word" || search.type === "lemgram") {
                     if (search.type === "word") {
                         ctrl.input = search.val
@@ -277,10 +324,10 @@ angular.module("korpApp").component("simpleSearch", {
             ctrl.onChange = (output, isRawOutput) => {
                 if (isRawOutput) {
                     ctrl.currentText = output
-                    ctrl.lemgram = null
+                    ctrl.lemgram = undefined
                 } else {
                     ctrl.lemgram = regescape(output)
-                    ctrl.currentText = null
+                    ctrl.currentText = undefined
                 }
 
                 ctrl.updateFreeOrderEnabled()
@@ -293,30 +340,25 @@ angular.module("korpApp").component("simpleSearch", {
 
             ctrl.doSearch = function () {
                 const search = searches.activeSearch
-                ctrl.relatedObj = null
+                ctrl.relatedObj = undefined
                 const cqp = ctrl.getCQP()
                 searches.kwicSearch(cqp)
 
-                if (search.type === "lemgram") {
-                    let sense = false
-                    let saldo = false
-                    for (let corpus of settings.corpusListing.selected) {
-                        if ("sense" in corpus.attributes) {
-                            sense = true
-                        }
-                        if ("saldo" in corpus.attributes) {
-                            saldo = true
-                        }
-                    }
+                if (search?.type === "lemgram") {
+                    const attrExists = (name: string) =>
+                        settings.corpusListing.selected.some((corpus) => name in corpus.attributes)
+                    const sense = attrExists("sense")
+                    const saldo = attrExists("saldo")
 
                     if (sense || saldo) {
-                        lexicons.relatedWordSearch(unregescape(search.val)).then(function (data) {
-                            ctrl.relatedObj = data
-                            if (data.length > 2 && data[0].label == "Excreting") {
-                                let [first, second, ...rest] = data
-                                ctrl.relatedObj.data = [second, first, ...rest]
+                        lexicons.relatedWordSearch(unregescape(search.val)).then((data) => {
+                            // Lower some nasty words
+                            if (data.length >= 2 && data[0].label == "Excreting") {
+                                // Swap the first two elements
+                                const [first, second, ...rest] = data
+                                data = [second, first, ...rest]
                             }
-                            ctrl.relatedObj.attribute = sense ? "sense" : "saldo"
+                            $timeout(() => (ctrl.relatedObj = { data, attribute: sense ? "sense" : "saldo" }))
                         })
                     }
                 }
