@@ -31,7 +31,7 @@ const createStatisticsService = function () {
         const minWidth = 100
         const columns: SlickgridColumn[] = []
         const cl = settings.corpusListing.subsetFactory(corporaKeys)
-        const attrObj = cl.getStructAttrs()
+        const structAttrs = cl.getStructAttrs()
         for (let [reduceVal, reduceValLabel] of _.zip(reduceVals, reduceValLabels)) {
             if (reduceVal == null || reduceValLabel == null) break
             columns.push({
@@ -42,8 +42,12 @@ const createStatisticsService = function () {
                 formatter: (row, cell, value, columnDef, dataContext: Row) => {
                     const isTotalRow = (row: Row): row is TotalRow => row.rowId === 0
                     if (!isTotalRow(dataContext)) {
-                        // @ts-ignore TODO Put reduceVal under a prop so it can be typed?
-                        const formattedValue = reduceStringify(reduceVal!, dataContext[reduceVal!], attrObj[reduceVal!])
+                        const formattedValue = reduceStringify(
+                            reduceVal!,
+                            // @ts-ignore TODO Put reduceVal under a prop so it can be typed?
+                            dataContext[reduceVal!],
+                            structAttrs[reduceVal!]
+                        )
                         dataContext.formattedValue[reduceVal!] = formattedValue
                         return `<span class="statistics-link" data-row=${dataContext["rowId"]}>${formattedValue}</span>`
                     } else {

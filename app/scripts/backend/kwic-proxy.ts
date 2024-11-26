@@ -2,11 +2,10 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressReport, ProgressResponse } from "@/backend/types"
+import type { AjaxSettings, KorpResponse, ProgressReport } from "@/backend/types"
 import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 
 export class KwicProxy extends BaseProxy<KorpQueryResponse> {
-    foundKwic: boolean
     prevCQP?: string
     prevParams: KorpQueryParams | null
     prevRequest: JQuery.AjaxSettings | null
@@ -18,7 +17,6 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
         this.prevRequest = null
         this.queryData = undefined
         this.prevParams = null
-        this.foundKwic = false
     }
 
     makeRequest(
@@ -28,7 +26,6 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
         kwicCallback: (data: KorpResponse<KorpQueryResponse>) => void
     ): JQuery.jqXHR<KorpResponse<KorpQueryResponse>> {
         const self = this
-        this.foundKwic = false
         this.resetRequest()
         if (!kwicCallback) {
             throw new Error("No callback for query result")
@@ -106,19 +103,20 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
             success(data: KorpQueryResponse, status, jqxhr) {
                 self.queryData = data.query_data
                 self.cleanup()
-                if (options.ajaxParams.incremental === false || !this.foundKwic) {
-                    return kwicCallback(data)
-                }
+                // Run the callback to show results, if not already done by the progress handler
+                if (!this.foundKwic) kwicCallback(data)
             },
 
-            progress(data, e) {
+            progress(jqxhr, e: ProgressEvent) {
+                // Calculate progress, used for progress bars
                 const progressObj = self.calcProgress(e)
-                if (progressObj == null) return
-
                 progressCallback(progressObj)
+
+                // Show current page of results if they are available
+                // The request may continue to count hits in the background
                 if ("kwic" in progressObj.struct) {
                     this.foundKwic = true
-                    return kwicCallback(progressObj.struct as KorpQueryResponse)
+                    kwicCallback(progressObj.struct as KorpQueryResponse)
                 }
             },
         }

@@ -61,27 +61,25 @@ export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
         return output
     }
 
-    expandTimeStruct(struct: Histogram) {
-        const years = _.map(_.toPairs(_.omit(struct, "")), (item) => Number(item[0]))
-        if (!years.length) {
-            return
-        }
-        const minYear = Math.min(...years)!
-        const maxYear = Math.max(...years)!
+    /** Add each missing year with the previous year's value */
+    expandTimeStruct(struct: Histogram): void {
+        const years = Object.keys(struct)
+            .filter((key) => key !== "")
+            .map(Number)
+        if (!years.length) return
+
+        const minYear = Math.min(...years)
+        const maxYear = Math.max(...years)
 
         if (_.isNaN(maxYear) || _.isNaN(minYear)) {
             console.log("expandTimestruct broken, years:", years)
             return
         }
 
-        let prevVal = null
-        for (const y of _.range(minYear, maxYear + 1)) {
-            const thisVal = struct[`${y}`]
-            if (typeof thisVal == "undefined") {
-                struct[`${y}`] = prevVal || 0
-            } else {
-                prevVal = thisVal
-            }
+        let prevCount = struct[`${minYear}`]
+        for (const year of _.range(minYear, maxYear)) {
+            if (struct[`${year}`] == undefined) struct[`${year}`] = prevCount
+            else prevCount = struct[`${year}`]
         }
     }
 }
