@@ -1,14 +1,14 @@
 /** @format */
-import angular, { IAttributes } from "angular"
+import angular, { IAttributes, IScope } from "angular"
 
-type ScrollToStartAttrs = IAttributes & {
-    scrollToStart: string
+type ScrollToStartAttrs<A extends string> = IAttributes & {
+    scrollToStart: A
 }
 
 angular.module("korpApp").directive("scrollToStart", function () {
     return {
         restrict: "A",
-        link: function (scope, elm, attr: ScrollToStartAttrs) {
+        link: function (scope: IScope, elm: JQLite, attr: ScrollToStartAttrs<keyof IScope>) {
             const pElm = elm[0].parentElement?.parentElement
             if (!pElm) return
 

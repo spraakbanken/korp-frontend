@@ -7,12 +7,12 @@ type SearchSubmitController = IController & {
     onSearch: () => void
     onSearchSave: (params: { name: string }) => void
     disabled: boolean
-    pos: string
+    pos: Position
 }
 
 type SearchSubmitScope = IScope & {
     disabled: boolean
-    pos: string
+    pos: Position
     name: string
     isPopoverVisible: boolean
     togglePopover: (event: Event) => void
@@ -24,6 +24,8 @@ type SearchSubmitScope = IScope & {
     onSendClick: (event: Event) => void
     onPopoverClick: (event: Event) => void
 }
+
+type Position = "top" | "bottom" | "right" | "left"
 
 angular.module("korpApp").component("searchSubmit", {
     template: html`<div class="search_submit" ng-keydown="onWrapperKeydown($event)">
@@ -72,7 +74,7 @@ angular.module("korpApp").component("searchSubmit", {
             }
 
             const popover = $element.find(".popover")
-            const opposites = {
+            const opposites: Record<Position, Position> = {
                 bottom: "top",
                 top: "bottom",
                 right: "left",

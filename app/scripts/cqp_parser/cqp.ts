@@ -3,7 +3,7 @@ import _ from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"
 import { parse as parse_ } from "./CQPParser"
-import type { Condition, CqpQuery, DateRange, OperatorKorp } from "./cqp.types"
+import type { Condition, CqpQuery, DateRange, Operator, OperatorKorp, Value } from "./cqp.types"
 
 /** Parse CQP string to syntax tree. */
 // Rename to be able to add typing.
@@ -44,6 +44,31 @@ export function parseDateInterval(opKorp: OperatorKorp, range: DateRange, expand
     return `${fromCond} & ${toCond}`
 }
 
+/** Helps parsing a frontend-type operator to a standard operator and a modified value. */
+const operatorMap: Readonly<Record<OperatorKorp, (val: Value) => [Value, Operator]>> = {
+    "=": (val) => [val, "="],
+    "!=": (val) => [val, "!="],
+    contains: (val) => [val, "contains"],
+    "not contains": (val) => [val, "not contains"],
+    "^=": (val) => [val + ".*", "="],
+    "_=": (val) => [`.*${val}.*`, "="],
+    "&=": (val) => [`.*${val}`, "="],
+    "*=": (val) => [val, "="],
+    "!*=": (val) => [val, "!="],
+    rank_contains: (val) => [val + ":.*", "contains"],
+    not_rank_contains: (val) => [val + ":.*", "not contains"],
+    highest_rank: (val) => [`\\|${val}:.*`, "="],
+    not_highest_rank: (val) => [`\\|${val}:.*`, "!="],
+    regexp_contains: (val) => [val, "contains"],
+    not_regexp_contains: (val) => [val, "not contains"],
+    starts_with_contains: (val) => [`${val}.*`, "contains"],
+    not_starts_with_contains: (val) => [`${val}.*`, "not contains"],
+    incontains_contains: (val) => [`.*?${val}.*`, "contains"],
+    not_incontains_contains: (val) => [`.*${val}.*`, "not contains"],
+    ends_with_contains: (val) => [`.*${val}`, "contains"],
+    not_ends_with_contains: (val) => [`.*${val}`, "not contains"],
+}
+
 /**
  * Serialize syntax tree to CQP string.
  * @param cqp_obj Syntax tree
@@ -73,25 +98,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
             for (let { type, op, val, flags } of and_array) {
                 var out
                 if (expanded_format) {
-                    ;[val, op] = ({
-                        "^=": [val + ".*", "="],
-                        "_=": [`.*${val}.*`, "="],
-                        "&=": [`.*${val}`, "="],
-                        "*=": [val, "="],
-                        "!*=": [val, "!="],
-                        rank_contains: [val + ":.*", "contains"],
-                        not_rank_contains: [val + ":.*", "not contains"],
-                        highest_rank: [`\\|${val}:.*`, "="],
-                        not_highest_rank: [`\\|${val}:.*`, "!="],
-                        regexp_contains: [val, "contains"],
-                        not_regexp_contains: [val, "not contains"],
-                        starts_with_contains: [`${val}.*`, "contains"],
-                        not_starts_with_contains: [`${val}.*`, "not contains"],
-                        incontains_contains: [`.*?${val}.*`, "contains"],
-                        not_incontains_contains: [`.*${val}.*`, "not contains"],
-                        ends_with_contains: [`.*${val}`, "contains"],
-                        not_ends_with_contains: [`.*${val}`, "not contains"],
-                    }[op] || [val, op]) as [string | DateRange, OperatorKorp]
+                    ;[val, op] = operatorMap[op](val)
                 }
 
                 let flagstr = ""

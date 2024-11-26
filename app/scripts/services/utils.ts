@@ -45,10 +45,13 @@ angular.module("korpApp").factory("utils", [
                 val = config.val_in ? config.val_in(val) : val
 
                 if (config.scope_name) {
+                    // @ts-ignore
                     scope[config.scope_name] = val
                 } else if (config.scope_func) {
+                    // @ts-ignore
                     scope[config.scope_func](val)
                 } else {
+                    // @ts-ignore
                     scope[config.key] = val
                 }
             }

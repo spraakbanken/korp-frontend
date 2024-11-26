@@ -75,10 +75,10 @@ export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
         }
 
         let prevVal = null
-        for (let y of _.range(minYear, maxYear + 1)) {
-            let thisVal = struct[y]
+        for (const y of _.range(minYear, maxYear + 1)) {
+            const thisVal = struct[`${y}`]
             if (typeof thisVal == "undefined") {
-                struct[y] = prevVal
+                struct[`${y}`] = prevVal || 0
             } else {
                 prevVal = thisVal
             }
