@@ -509,6 +509,7 @@ angular.module("korpApp").component("trendDiagram", {
                 return series
             }
 
+            /** Replace a part of the graph with new data (of a higher/lower resolution) */
             function spliceData(newSeries: Series[]) {
                 if (!$ctrl.graph) {
                     console.error("No graph")
@@ -518,25 +519,32 @@ angular.module("korpApp").component("trendDiagram", {
                     const seriesObj = $ctrl.graph.series[seriesIndex]
                     const first = newSeries[seriesIndex].data[0].x
                     const last = _.last(newSeries[seriesIndex].data)!.x
+
+                    // Walk through old data, match timestamps with new data and find out what part to replace
                     let startSplice = false
                     let from = 0
+                    // Default to replacing everything in case counting fails?
                     let n_elems = seriesObj.data.length + newSeries[seriesIndex].data.length
                     let j = 0
                     for (let i = 0; i < seriesObj.data.length; i++) {
                         const { x } = seriesObj.data[i]
                         if (x >= first && !startSplice) {
+                            // Overlapping range starts here
                             startSplice = true
                             from = i
                         }
                         if (startSplice) {
+                            // Count number of elements to replace
+                            j++
+                            // Stop counting at end of new data
                             if (x >= last) {
-                                n_elems = j! + 1
+                                n_elems = j
                                 break
                             }
-                            j!++
                         }
                     }
 
+                    // Replace overlap with new data
                     seriesObj.data.splice(from, n_elems, ...newSeries[seriesIndex].data)
                     seriesObj.abs_data.splice(from, n_elems, ...newSeries[seriesIndex].abs_data)
                 }
