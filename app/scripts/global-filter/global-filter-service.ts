@@ -9,7 +9,7 @@ import settings from "@/settings"
 import { regescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
-import { RecursiveRecord, StructService, StructServiceOptions } from "@/backend/struct-service"
+import { RecursiveRecord, StructService } from "@/backend/struct-service"
 import { DataObject, GlobalFilterService, UpdateScope } from "./types"
 import { CqpQuery, Condition } from "@/cqp_parser/cqp.types"
 
@@ -49,7 +49,7 @@ angular.module("korpApp").factory("globalFilterService", [
         }
 
         /** Drilldown of values available for each attr. N-dimensional map where N = number of attrs. */
-        let currentData: RecursiveRecord<Record<string, number>> = {}
+        let currentData: RecursiveRecord<number> = {}
 
         /** Populate `filterValues` from `defaultFilters`. */
         function initFilters() {
@@ -73,49 +73,12 @@ angular.module("korpApp").factory("globalFilterService", [
             return _.intersection(...(corporaPerFilter || []))
         }
 
-        /** Merge values of some attribute from different corpora */
-        function mergeObjects(...values: any[] | object[] | number[]): any[] | object | number | undefined {
-            if (_.every(values, (val) => Array.isArray(val))) {
-                return _.union(...(values || []))
-            } else if (_.every(values, (val) => !Array.isArray(val) && typeof val === "object")) {
-                const newObj = {}
-                const allKeys = _.union(...(_.map(values, (val) => _.keys(val)) || []))
-                for (let k of allKeys) {
-                    const allValsForKey = _.map(values, (val) => val[k])
-                    const newValues = _.filter(allValsForKey, (val) => !_.isEmpty(val) || Number.isInteger(val))
-                    newObj[k] = mergeObjects(...(newValues || []))
-                }
-                return newObj
-            } else if (_.every(values, (val) => Number.isInteger(val))) {
-                return _.reduce(values, (a, b) => a + b, 0)
-            } else {
-                console.error("Cannot merge objects a and b")
-            }
-        }
-
-        // get data for selected attributes from backend, merges values from different corpora
-        // and flattens data structure?
+        /** Fetch token counts keyed in multiple dimensions by the values of attributes */
         async function getData(): Promise<void> {
             const corpora = getSupportedCorpora()
-
-            const opts: StructServiceOptions = {}
-            opts.split = dataObj.defaultFilters.filter((name) => dataObj.attributes[name].settings.type === "set")
-
-            type R = Record<string, RecursiveRecord<Record<string, number>>>
-            const data = (await structService.getStructValues(corpora, dataObj.defaultFilters, opts)) as R
-
-            currentData = {}
-            for (let corpus of corpora) {
-                const object = data[corpus.toUpperCase()]
-                for (let k in object) {
-                    const v = object[k]
-                    if (!(k in currentData)) {
-                        currentData[k] = v
-                    } else {
-                        currentData[k] = mergeObjects(currentData[k], v) as any
-                    }
-                }
-            }
+            const attrs = dataObj.defaultFilters
+            const multiAttrs = attrs.filter((attr) => dataObj.attributes[attr].settings.type === "set")
+            currentData = await structService.countAttrValues(corpora, attrs, multiAttrs)
             updateData()
         }
 
@@ -123,7 +86,7 @@ angular.module("korpApp").factory("globalFilterService", [
         function updateData() {
             function collectAndSum(
                 filters: string[],
-                elements: RecursiveRecord<Record<string, number>>,
+                elements: RecursiveRecord<number>,
                 parentSelected: boolean
             ): [number, boolean] {
                 const filter = filters[0]

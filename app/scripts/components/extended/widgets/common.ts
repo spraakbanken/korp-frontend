@@ -6,7 +6,7 @@ import { html } from "@/util"
 import "@/directives/escaper"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
-import { StructService, StructServiceOptions } from "@/backend/struct-service"
+import { StructService } from "@/backend/struct-service"
 import { RootScope } from "@/root-scope.types"
 import { LocMap } from "@/i18n/types"
 
@@ -46,6 +46,7 @@ export const selectController = (autocomplete: boolean): IController => [
     "structService",
     function ($scope: SelectWidgetScope, $rootScope: RootScope, structService: StructService) {
         $rootScope.$on("corpuschooserchange", function (event, selected: string[]) {
+            // TODO Destroy if new corpus selection doesn't support the attribute?
             if (selected.length > 0) {
                 reloadValues()
             }
@@ -70,11 +71,8 @@ export const selectController = (autocomplete: boolean): IController => [
             }
 
             $scope.loading = true
-            const opts: StructServiceOptions = { count: false, returnByCorpora: false }
-            if ($scope.type === "set") {
-                opts.split = [attribute]
-            }
-            structService.getStructValues(corpora, [attribute], opts).then(
+            const split = $scope.type === "set"
+            structService.getAttrValues(corpora, attribute, split).then(
                 function (data: string[]) {
                     $scope.loading = false
 

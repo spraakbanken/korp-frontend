@@ -16,7 +16,9 @@
 - Extracted Karp backend usage into `app/scripts/karp.ts`
 - `stringifyFunc(key)` was renamed to `getStringifier(key)`
 - `stringify(key, x)` was removed, use `getStringifier(key)(x)` instead
-- For `getStructValues()` of `structService`, the `split` option now takes a list of attribute names, not a bool
+- `getStructValues()` of `structService` is refactored into two different functions, matching the two present use-cases:
+  - `getAttrValues()` for getting a flat list without counts
+  - `countAttrValues()` for getting a deep structure with counts
 - Search history is stored as parameters only, not full urls #118
 
 ### Fixed
