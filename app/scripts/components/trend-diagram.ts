@@ -249,27 +249,29 @@ angular.module("korpApp").component("trendDiagram", {
                 min.startOf($ctrl.zoom)
                 max.endOf($ctrl.zoom)
 
+                // Number of time units between min and max
                 const n_diff = moment(max).diff(min, $ctrl.zoom)
 
+                // Create a mapping from unix timestamps to counts
                 const momentMapping: Record<number, number> = _.fromPairs(
                     data.map((point) => [moment(point.x).startOf($ctrl.zoom).unix(), point.y])
                 )
 
+                // Step through the range and fill in missing timestamps
+                /** Copied counts for unseen timestamps in the range */
                 const newMoments: Point[] = []
+                let lastYVal: number = 0
                 for (const i of _.range(0, n_diff + 1)) {
-                    // TODO Looks like this declaration should be outside the loop?
-                    var lastYVal
                     const newMoment = moment(min).add(i, $ctrl.zoom)
-
-                    const maybeCurrent = momentMapping[newMoment.unix()]
-                    if (typeof maybeCurrent !== "undefined") {
-                        lastYVal = maybeCurrent
-                    } else {
-                        // @ts-ignore TODO lastYVal may be undefined
-                        newMoments.push({ x: newMoment, y: lastYVal })
-                    }
+                    const count = momentMapping[newMoment.unix()]
+                    // If this timestamp has been counted, don't fill this timestamp but remember the count
+                    // Distinguish between null (no text at timestamp) and undefined (timestamp has not been counted)
+                    if (count !== undefined) lastYVal = count
+                    // If there's no count here, fill this timestamp with the last seen count
+                    else newMoments.push({ x: newMoment, y: lastYVal })
                 }
 
+                // Merge actual counts with filled ones
                 return [...data, ...newMoments]
             }
 
