@@ -1,7 +1,7 @@
 /** @format */
 import {
     TextReaderDataContainer,
-    TextReaderTokenContainer,
+    ReaderTokenContainer,
     TextReaderWordHandler,
 } from "@/controllers/text_reader_controller"
 import angular, { IController, IRootElementService } from "angular"
@@ -21,7 +21,7 @@ angular.module("korpApp").component("standardReadingMode", {
         function ($element: IRootElementService) {
             const ctrl = this as StandardReadingModeController
 
-            function standardInnerElem(document: TextReaderTokenContainer) {
+            function standardInnerElem(document: ReaderTokenContainer) {
                 const doc: string[] = []
                 for (let idx = 0; idx < document.tokens.length; idx++) {
                     let token = document.tokens[idx]
@@ -50,7 +50,8 @@ angular.module("korpApp").component("standardReadingMode", {
                         element.classList.add("selected")
                         const idx = element.dataset.idx
                         const token = ctrl.data.document.tokens[Number(idx)]
-                        ctrl.wordClick(token)
+                        // Handle click unless data is grouped with the `reading_mode.group_element` setting
+                        if (!("tokens" in token)) ctrl.wordClick(token)
                     }
                 })
             }
