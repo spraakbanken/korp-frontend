@@ -19,8 +19,7 @@ onmessage = function (e) {
 
     const message: StatisticsWorkerMessage = e.data
     const data: StatsNormalized = message.data
-    const { combined, corpora, count } = data
-    const reduceVals = message.reduceVals
+    const { combined } = data
     const groupStatistics = message.groupStatistics
 
     const simplifyValue = function (values: string[] | string, field: string): string[] {
@@ -48,6 +47,7 @@ onmessage = function (e) {
         return newFields.join("/")
     }
 
+    // Group data by simplified values, e.g. "foo:12" and "foo:34" under "foo"
     // TODO: why first element of combined?
     const totalAbsoluteGroups = groupBy(combined[0].rows, (item) => simplifyHitString(item))
 
@@ -80,8 +80,10 @@ onmessage = function (e) {
         const statsValues: Record<string, string[]>[] = []
 
         for (var j = 0; j < totalAbsoluteGroups[word].length; j++) {
-            var variant = totalAbsoluteGroups[word][j]
-            map(variant.value, function (terms, reduceVal) {
+            // Walk through original values, e.g. "foo:12" and "foo:34"
+            const originalValues = totalAbsoluteGroups[word][j].value
+            map(originalValues, function (terms, reduceVal) {
+                // Array if positional attr, single string if structural attr
                 if (!isArray(terms)) {
                     if (!statsValues[0]) {
                         statsValues[0] = {}
@@ -89,6 +91,7 @@ onmessage = function (e) {
                     statsValues[0][reduceVal] = [terms]
                     reduceMap[reduceVal] = [terms]
                 } else {
+                    // The array has one value per word in match
                     reduceMap[reduceVal] = terms
                     map(terms, function (term, idx) {
                         statsValues[idx] ??= {}
@@ -114,12 +117,6 @@ onmessage = function (e) {
             row[`${corpus}_value`] = [abs, rel]
         })
 
-        for (const reduce of reduceVals) {
-            // TODO Put these under a prop so they can be typed?
-            // @ts-ignore
-            row[reduce] = reduceMap[reduce]
-        }
-
         dataset[i + 1] = row
     }
 
@@ -138,7 +135,8 @@ export type TotalRow = RowBase & {
 
 export type SingleRow = RowBase & {
     formattedValue: Record<string, string>
-    statsValues: Record<number, Record<string, string[]>>
+    /** For each match token, a record of non-simplified attr values, e.g. ["foo:12", "foo:34"] */
+    statsValues: Record<string, string[]>[]
 }
 
 export type RowBase = {

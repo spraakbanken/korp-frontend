@@ -42,12 +42,9 @@ const createStatisticsService = function () {
                 formatter: (row, cell, value, columnDef, dataContext: Row) => {
                     const isTotalRow = (row: Row): row is TotalRow => row.rowId === 0
                     if (!isTotalRow(dataContext)) {
-                        const formattedValue = reduceStringify(
-                            reduceVal!,
-                            // @ts-ignore TODO Put reduceVal under a prop so it can be typed?
-                            dataContext[reduceVal!],
-                            structAttrs[reduceVal!]
-                        )
+                        // Get the attribute value of all matching words
+                        const types = dataContext.statsValues.flatMap((type) => type[reduceVal!][0])
+                        const formattedValue = reduceStringify(reduceVal!, types, structAttrs[reduceVal!])
                         dataContext.formattedValue[reduceVal!] = formattedValue
                         return `<span class="statistics-link" data-row=${dataContext["rowId"]}>${formattedValue}</span>`
                     } else {
@@ -121,7 +118,6 @@ const createStatisticsService = function () {
         statsWorker.postMessage({
             type: "korpStatistics",
             data,
-            reduceVals,
             groupStatistics: settings.group_statistics,
         } as StatisticsWorkerMessage)
     }
