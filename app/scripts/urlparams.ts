@@ -60,7 +60,7 @@ export type HashParams = {
     /** Whether a statistics query should be made when searching */
     show_stats?: boolean
     /** Search result order */
-    sort?: "" | "keyword" | "left" | "right" | "random"
+    sort?: SortMethod
     /** Attributes on which to aggregate counts in statistics query */
     stats_reduce?: string
     /** Attributes on which to aggregate counts, case-insensitively, in statistics query */
@@ -72,6 +72,8 @@ export type HashParams = {
     /** Whether a word picture query should be made when searching */
     word_pic?: boolean
 }
+
+export type SortMethod = "" | "keyword" | "left" | "right" | "random"
 
 export type SearchParams = Pick<HashParams, SearchParamNames>
 

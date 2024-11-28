@@ -50,7 +50,8 @@ export const loginBoxComponent: IComponentOptions = {
         function ($timeout: ITimeoutService) {
             const $ctrl: LoginBoxController = this
 
-            const options: AuthModuleOptions = settings["auth_module"]?.["options"] || {}
+            const options: AuthModuleOptions =
+                typeof settings.auth_module == "object" ? settings.auth_module.options : {}
 
             // default value of show_remember is true
             $ctrl.showSave = options.show_remember == undefined ? true : options.show_remember

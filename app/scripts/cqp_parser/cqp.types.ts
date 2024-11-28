@@ -13,9 +13,11 @@ export type CqpToken = {
 export type Condition = {
     type: string
     op: OperatorKorp
-    val: string | DateRange
+    val: Value
     flags?: Record<string, true>
 }
+
+export type Value = string | DateRange
 
 /** Should be `[fromdate, todate, fromtime, totime]` */
 export type DateRange = (string | number)[]

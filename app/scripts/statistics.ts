@@ -4,9 +4,17 @@ import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config"
 import type { StatsNormalized, StatisticsWorkerMessage, StatisticsWorkerResult, SearchParams } from "./statistics.types"
 import { hitCountHtml } from "@/util"
-import { Row } from "./statistics_worker"
 import { LangString } from "./i18n/types"
+import { Row, TotalRow } from "./statistics_worker"
 const pieChartImg = require("../img/stats2.png")
+
+type SlickGridFormatter<T extends Slick.SlickData = any> = (
+    row: number,
+    cell: number,
+    value: any,
+    columnDef: Slick.Column<T>,
+    dataContext: T
+) => string
 
 const createStatisticsService = function () {
     const createColumns = function (
@@ -14,8 +22,8 @@ const createStatisticsService = function () {
         reduceVals: string[],
         reduceValLabels: LangString[]
     ): SlickgridColumn[] {
-        const valueFormatter: Slick.Formatter<any> = function (row, cell, value, columnDef, dataContext) {
-            const [absolute, relative] = [...dataContext[columnDef.id + "_value"]]
+        const valueFormatter: SlickGridFormatter<Row> = function (row, cell, value, columnDef, dataContext) {
+            const [absolute, relative] = [...dataContext[`${columnDef.id}_value`]]
             return hitCountHtml(absolute, relative)
         }
 
@@ -23,7 +31,7 @@ const createStatisticsService = function () {
         const minWidth = 100
         const columns: SlickgridColumn[] = []
         const cl = settings.corpusListing.subsetFactory(corporaKeys)
-        const attrObj = cl.getStructAttrs()
+        const structAttrs = cl.getStructAttrs()
         for (let [reduceVal, reduceValLabel] of _.zip(reduceVals, reduceValLabels)) {
             if (reduceVal == null || reduceValLabel == null) break
             columns.push({
@@ -31,10 +39,13 @@ const createStatisticsService = function () {
                 translation: reduceValLabel,
                 field: "hit_value",
                 sortable: true,
-                formatter(row, cell, value, columnDef, dataContext) {
-                    if (dataContext["rowId"] !== 0) {
-                        const formattedValue = reduceStringify(reduceVal!, dataContext[reduceVal!], attrObj[reduceVal!])
-                        dataContext["formattedValue"][reduceVal] = formattedValue
+                formatter: (row, cell, value, columnDef, dataContext: Row) => {
+                    const isTotalRow = (row: Row): row is TotalRow => row.rowId === 0
+                    if (!isTotalRow(dataContext)) {
+                        // Get the attribute value of all matching words
+                        const types = dataContext.statsValues.flatMap((type) => type[reduceVal!][0])
+                        const formattedValue = reduceStringify(reduceVal!, types, structAttrs[reduceVal!])
+                        dataContext.formattedValue[reduceVal!] = formattedValue
                         return `<span class="statistics-link" data-row=${dataContext["rowId"]}>${formattedValue}</span>`
                     } else {
                         return "&Sigma;"
@@ -107,7 +118,6 @@ const createStatisticsService = function () {
         statsWorker.postMessage({
             type: "korpStatistics",
             data,
-            reduceVals,
             groupStatistics: settings.group_statistics,
         } as StatisticsWorkerMessage)
     }

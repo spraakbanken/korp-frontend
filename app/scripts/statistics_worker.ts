@@ -19,8 +19,7 @@ onmessage = function (e) {
 
     const message: StatisticsWorkerMessage = e.data
     const data: StatsNormalized = message.data
-    const { combined, corpora, count } = data
-    const reduceVals = message.reduceVals
+    const { combined } = data
     const groupStatistics = message.groupStatistics
 
     const simplifyValue = function (values: string[] | string, field: string): string[] {
@@ -48,6 +47,7 @@ onmessage = function (e) {
         return newFields.join("/")
     }
 
+    // Group data by simplified values, e.g. "foo:12" and "foo:34" under "foo"
     // TODO: why first element of combined?
     const totalAbsoluteGroups = groupBy(combined[0].rows, (item) => simplifyHitString(item))
 
@@ -61,7 +61,7 @@ onmessage = function (e) {
     const corporaFreqs: Record<string, Record<string, StatsRow[]>> = {}
     for (const id of corporaKeys) {
         const obj = data.corpora[id]
-        totalRow[id + "_value"] = [obj[0].sums.absolute, obj[0].sums.relative]
+        totalRow[`${id}_value`] = [obj[0].sums.absolute, obj[0].sums.relative]
         corporaFreqs[id] = groupBy(obj[0].rows, (item) => simplifyHitString(item))
     }
 
@@ -80,8 +80,10 @@ onmessage = function (e) {
         const statsValues: Record<string, string[]>[] = []
 
         for (var j = 0; j < totalAbsoluteGroups[word].length; j++) {
-            var variant = totalAbsoluteGroups[word][j]
-            map(variant.value, function (terms, reduceVal) {
+            // Walk through original values, e.g. "foo:12" and "foo:34"
+            const originalValues = totalAbsoluteGroups[word][j].value
+            map(originalValues, function (terms, reduceVal) {
+                // Array if positional attr, single string if structural attr
                 if (!isArray(terms)) {
                     if (!statsValues[0]) {
                         statsValues[0] = {}
@@ -89,15 +91,12 @@ onmessage = function (e) {
                     statsValues[0][reduceVal] = [terms]
                     reduceMap[reduceVal] = [terms]
                 } else {
+                    // The array has one value per word in match
                     reduceMap[reduceVal] = terms
                     map(terms, function (term, idx) {
-                        if (!statsValues[idx]) {
-                            statsValues[idx] = {}
-                        }
-                        if (!statsValues[idx][reduceVal]) {
-                            statsValues[idx][reduceVal] = []
-                        }
-                        if (statsValues[idx][reduceVal].indexOf(term) == -1) {
+                        statsValues[idx] ??= {}
+                        statsValues[idx][reduceVal] ??= []
+                        if (!statsValues[idx][reduceVal].includes(term)) {
                             statsValues[idx][reduceVal].push(term)
                         }
                     })
@@ -105,7 +104,7 @@ onmessage = function (e) {
             })
         }
 
-        let row = {
+        const row: SingleRow = {
             rowId: i + 1,
             total_value: [totalAbs, totalRel] as AbsRelSeq,
             formattedValue: {},
@@ -113,15 +112,10 @@ onmessage = function (e) {
         }
 
         map(corporaKeys, function (corpus) {
-            let abs = sumBy(corporaFreqs[corpus][word], "absolute")
-            let rel = sumBy(corporaFreqs[corpus][word], "relative")
-
-            row[corpus + "_value"] = [abs, rel]
+            const abs = sumBy(corporaFreqs[corpus][word], "absolute")
+            const rel = sumBy(corporaFreqs[corpus][word], "relative")
+            row[`${corpus}_value`] = [abs, rel]
         })
-
-        for (let reduce of reduceVals) {
-            row[reduce] = reduceMap[reduce]
-        }
 
         dataset[i + 1] = row
     }
@@ -140,8 +134,9 @@ export type TotalRow = RowBase & {
 }
 
 export type SingleRow = RowBase & {
-    formattedValue: {}
-    statsValues: Record<number, Record<string, string[]>>
+    formattedValue: Record<string, string>
+    /** For each match token, a record of non-simplified attr values, e.g. ["foo:12", "foo:34"] */
+    statsValues: Record<string, string[]>[]
 }
 
 export type RowBase = {

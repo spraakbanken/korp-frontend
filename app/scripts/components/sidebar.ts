@@ -10,7 +10,7 @@ import { loc, locAttribute, locObj } from "@/i18n"
 import "@/services/utils"
 import "@/components/deptree/deptree"
 import { RootScope } from "@/root-scope.types"
-import { SelectWordEvent } from "@/statemachine/types"
+import { CqpSearchEvent, SelectWordEvent } from "@/statemachine/types"
 import { Token } from "@/backend/kwic-proxy"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config.types"
@@ -352,7 +352,7 @@ angular.module("korpApp").component("sidebar", {
                             inner.addClass("link").click(function () {
                                 const cqpVal = $(this).data("key")
                                 const cqp = `[${key} contains "${regescape(cqpVal)}"]`
-                                statemachine.send("SEARCH_CQP", { cqp })
+                                statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
                             })
                         }
 

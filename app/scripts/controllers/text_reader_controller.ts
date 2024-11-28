@@ -28,33 +28,25 @@ export type TextReaderDataContainer = {
     sentenceData: TextTab["sentenceData"]
 }
 
-export type TextReaderWordHandler = (token: TextReaderToken) => void
+export type TextReaderWordHandler = (token: ReaderToken) => void
 
-export type TextReaderTokenContainer = {
-    tokens: TextReaderToken[]
+export type ReaderTokenContainer = { tokens: Group<ReaderToken>[] | ReaderToken[] }
+
+type Group<T> = { attrs: Record<string, string>; tokens: T[] }
+
+type ReaderToken = {
+    /** Original token content, plus struct attrs renamed to `(struct)_(attr)` */
+    attrs: Attrs
+    currentSentence: Attrs[]
 }
 
-type TextReaderData = Omit<ApiKwic, "tokens"> & TextReaderTokenContainer
+type Attrs = Record<string, string>
+
+type TextReaderData = Omit<ApiKwic, "tokens"> & ReaderTokenContainer
 
 type TextReaderScope = TextReaderControllerScope & {
-    selectedToken?: TextReaderToken
+    selectedToken?: ReaderToken
     wordClick: TextReaderWordHandler
-}
-
-export type TextReaderToken = TokenTreeParent | TokenTreeLeaf
-
-// TODO The token types need examination, I'm not quite sure yet what the _prepareData function really does
-
-type TokenTreeParent = {
-    tokens: TextReaderToken[]
-    attrs: Record<string, string>
-    head?: string
-    tail?: string
-}
-
-type TokenTreeLeaf = {
-    attrs: { head: string; tail: string; close: string[]; [attr: string]: any }
-    currentSentence: unknown
 }
 
 angular.module("korpApp").directive("textReaderCtrl", [
@@ -134,110 +126,84 @@ angular.module("korpApp").directive("textReader", [
     },
 ])
 
-function prepareData(
-    kwic: ApiKwic,
-    settings: CorpusTransformed
-): Omit<ApiKwic, "tokens"> & { tokens: TextReaderToken[] } {
-    const tokens: TextReaderToken[] = _prepareData(kwic.tokens, 0, settings["reading_mode"]!["group_element"], false)
+function prepareData(kwic: ApiKwic, settings: CorpusTransformed): TextReaderData {
+    const groupElement = typeof settings.reading_mode == "object" ? settings.reading_mode.group_element : undefined
+
+    if (groupElement) {
+        const groups = groupTokens(kwic.tokens, groupElement)
+        const tokens = groups.map((group) => ({ ...group, tokens: convertTokens(group.tokens) }))
+        return { ...kwic, tokens }
+    }
+
+    const tokens = convertTokens(kwic.tokens)
     return { ...kwic, tokens }
 }
 
 /**
-if groupElement is set to anything, result will be a list of tokens for each
-sentence or whatever groupElement is set to
-*/
-function _prepareData(tokens: Token[], start: number, groupElement: string, inGroup: boolean): TextReaderToken[] {
-    const open: Record<string, Record<string, string>> = {}
-    const newTokens: TextReaderToken[] = []
-
-    // TODO: sentence is hard-coded, not good?
-    let currentSentence: (Token | TextReaderToken)[] = []
-    for (let i = start; i < tokens.length; i++) {
-        let token: Token | TextReaderToken = tokens[i]
-        // first check if we should do recursive call
-        let done = false
-        if ("structs" in token && token.structs?.open) {
-            token["open"] = []
-            for (let fieldObj of token.structs.open) {
-                const keyName = _.keys(fieldObj)[0]
-
-                if (!inGroup && keyName === groupElement) {
-                    done = true
-                    const innerTokens = _prepareData(tokens, i, groupElement, true)
-                    i = i + innerTokens.length - 1
-                    token = {
-                        tokens: innerTokens,
-                        attrs: {},
-                    }
-                    for (let subField in fieldObj[keyName]) {
-                        token.attrs[subField] = fieldObj[keyName][subField]
-                    }
-                }
-            }
+ * Partition a token sequence into groups corresponding to structs of the `groupElement` type.
+ * The `groupElement` structs are assumed to cover the whole document, i.e. no tokens in between.
+ */
+function groupTokens(tokens: Token[], groupElement: string): Group<Token>[] {
+    const groups: Group<Token>[] = []
+    for (const token of tokens) {
+        // Start a new group if this tokens opens a new struct of the groupElement type
+        if (token.structs?.open) {
+            const struct = token.structs.open.find((open) => open[groupElement])
+            if (!struct) continue
+            // Copy attrs to group
+            const attrs = { ...struct[groupElement] }
+            groups.push({ attrs, tokens: [] })
         }
-
-        token.head = "_head" in token ? escapeWhitespace(token._head) : ""
-        token.tail = "_tail" in token ? escapeWhitespace(token._tail) : ""
-        currentSentence.push(token)
-
-        // if no call was made, do the other thing
-        if (!done) {
-            if ("structs" in token && token.structs && "open" in token.structs && token.structs.open) {
-                for (let fieldObj of token.structs.open) {
-                    const keyName = _.keys(fieldObj)[0]
-                    open[keyName] = {}
-                    for (let subField in fieldObj[keyName]) {
-                        open[keyName][keyName + "_" + subField] = fieldObj[keyName][subField]
-                    }
-                }
-            }
-
-            for (let field in open) {
-                for (let subField in open[field]) {
-                    if (open[field][subField]) {
-                        token[subField] = open[field][subField]
-                    }
-                }
-            }
-
-            const actualCurrentSentence = currentSentence
-
-            if ("structs" in token && token.structs && "close" in token.structs && token.structs?.close) {
-                token["close"] = []
-                for (let field of token.structs.close) {
-                    if (field === groupElement) {
-                        delete token.structs
-                        newTokens.push({
-                            attrs: token as Token & { head: string; tail: string; close: string[] },
-                            currentSentence: actualCurrentSentence,
-                        })
-                        return newTokens
-                    } else {
-                        if (field === "sentence") {
-                            currentSentence = []
-                        }
-                        token["close"].push(field)
-                        delete open[field]
-                    }
-                }
-            }
-
-            token = {
-                attrs: _.omit(
-                    token as (Token | TokenTreeParent) & { head: string; tail: string; close: string[] },
-                    "structs"
-                ),
-                currentSentence: actualCurrentSentence,
-            }
-        }
-        newTokens.push(token as TextReaderToken)
+        // Add token to current group
+        groups[groups.length - 1].tokens.push(token)
     }
-
-    return newTokens
+    return groups
 }
 
-const escapeWhitespace = (str?: any): string =>
-    String(str || "")
-        .replace(/\\s/g, " ")
-        .replace(/\\n/g, "\n")
-        .replace(/\\t/g, "\t")
+function convertTokens(tokens: Token[]): ReaderToken[] {
+    const out: ReaderToken[] = []
+    let currentSentence: Record<string, string>[] = []
+    /** Attributes per currently open struct */
+    const open: Record<string, Record<string, string>> = {}
+
+    for (const token of tokens) {
+        // Store new struct attrs and track current sentence
+        for (const openStruct of token.structs?.open || []) {
+            const name = Object.keys(openStruct)[0]
+            open[name] = openStruct[name]
+            if (name === "sentence") currentSentence = []
+        }
+
+        // Convert and push token
+        const attrs = convertToken(token, open)
+        currentSentence.push(attrs)
+        out.push({ attrs, currentSentence })
+
+        // Clear closed struct attrs
+        for (const name of token.structs?.close || []) {
+            delete open[name]
+        }
+    }
+
+    return out
+}
+
+function convertToken(token: Token, open: Record<string, Record<string, string>>): Record<string, string> {
+    // Add attrs of all open structs
+    const structAttrs: Record<string, string> = {}
+    for (const name in open) {
+        for (const attr in open[name]) {
+            if (open[name][attr]) structAttrs[name + "_" + attr] = open[name][attr]
+        }
+    }
+
+    return {
+        ..._.omit(token, "structs"),
+        ...structAttrs,
+        head: parseWhitespace(token._head),
+        tail: parseWhitespace(token._tail),
+    }
+}
+
+const parseWhitespace = (str?: string): string =>
+    str?.replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t") || ""

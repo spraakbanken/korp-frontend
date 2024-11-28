@@ -249,26 +249,29 @@ angular.module("korpApp").component("trendDiagram", {
                 min.startOf($ctrl.zoom)
                 max.endOf($ctrl.zoom)
 
+                // Number of time units between min and max
                 const n_diff = moment(max).diff(min, $ctrl.zoom)
 
+                // Create a mapping from unix timestamps to counts
                 const momentMapping: Record<number, number> = _.fromPairs(
                     data.map((point) => [moment(point.x).startOf($ctrl.zoom).unix(), point.y])
                 )
 
-                const newMoments: { x: Moment; y: number }[] = []
+                // Step through the range and fill in missing timestamps
+                /** Copied counts for unseen timestamps in the range */
+                const newMoments: Point[] = []
+                let lastYVal: number = 0
                 for (const i of _.range(0, n_diff + 1)) {
-                    // TODO Looks like this declaration should be outside the loop?
-                    var lastYVal
                     const newMoment = moment(min).add(i, $ctrl.zoom)
-
-                    const maybeCurrent = momentMapping[newMoment.unix()]
-                    if (typeof maybeCurrent !== "undefined") {
-                        lastYVal = maybeCurrent
-                    } else {
-                        newMoments.push({ x: newMoment, y: lastYVal })
-                    }
+                    const count = momentMapping[newMoment.unix()]
+                    // If this timestamp has been counted, don't fill this timestamp but remember the count
+                    // Distinguish between null (no text at timestamp) and undefined (timestamp has not been counted)
+                    if (count !== undefined) lastYVal = count
+                    // If there's no count here, fill this timestamp with the last seen count
+                    else newMoments.push({ x: newMoment, y: lastYVal })
                 }
 
+                // Merge actual counts with filled ones
                 return [...data, ...newMoments]
             }
 
@@ -431,7 +434,7 @@ angular.module("korpApp").component("trendDiagram", {
                     const tableRow: TableRow = { label: seriesRow.name }
                     for (const item of seriesRow.data) {
                         const stampformat = FORMATS[item.zoom]
-                        const timestamp = moment(item.x * 1000).format(stampformat) // this needs to be fixed for other resolutions
+                        const timestamp = moment(item.x * 1000).format(stampformat) as `${number}${string}` // this needs to be fixed for other resolutions
                         columnsMap[timestamp] = {
                             name: timestamp,
                             field: timestamp,
@@ -506,6 +509,7 @@ angular.module("korpApp").component("trendDiagram", {
                 return series
             }
 
+            /** Replace a part of the graph with new data (of a higher/lower resolution) */
             function spliceData(newSeries: Series[]) {
                 if (!$ctrl.graph) {
                     console.error("No graph")
@@ -515,26 +519,32 @@ angular.module("korpApp").component("trendDiagram", {
                     const seriesObj = $ctrl.graph.series[seriesIndex]
                     const first = newSeries[seriesIndex].data[0].x
                     const last = _.last(newSeries[seriesIndex].data)!.x
+
+                    // Walk through old data, match timestamps with new data and find out what part to replace
                     let startSplice = false
                     let from = 0
+                    // Default to replacing everything in case counting fails?
                     let n_elems = seriesObj.data.length + newSeries[seriesIndex].data.length
+                    let j = 0
                     for (let i = 0; i < seriesObj.data.length; i++) {
-                        var j
                         const { x } = seriesObj.data[i]
                         if (x >= first && !startSplice) {
+                            // Overlapping range starts here
                             startSplice = true
                             from = i
-                            j = 0
                         }
                         if (startSplice) {
+                            // Count number of elements to replace
+                            j++
+                            // Stop counting at end of new data
                             if (x >= last) {
-                                n_elems = j + 1
+                                n_elems = j
                                 break
                             }
-                            j++
                         }
                     }
 
+                    // Replace overlap with new data
                     seriesObj.data.splice(from, n_elems, ...newSeries[seriesIndex].data)
                     seriesObj.abs_data.splice(from, n_elems, ...newSeries[seriesIndex].abs_data)
                 }
@@ -674,15 +684,15 @@ angular.module("korpApp").component("trendDiagram", {
                     // xFormatter and yFormatter are called once for every data series per "hover detail creation"
                     // formatter is only called once per per "hover detail creation"
                     graph,
-                    xFormatter(x) {
+                    xFormatter(x: number) {
                         return `<span data-val='${x}'>${formatUnixDate($ctrl.zoom, x)}</span>`
                     },
 
-                    yFormatter(y) {
+                    yFormatter(y: number) {
                         const val = formatRelativeHits(y, $rootScope.lang)
                         return `<br><span rel='localize[rel_hits_short]'>${loc("rel_hits_short")}</span> ` + val
                     },
-                    formatter(series, x, y, formattedX, formattedY, d) {
+                    formatter(series: Series, x: number, y: number, formattedX: string, formattedY: string) {
                         let abs_y
                         const i = _.sortedIndexOf(_.map(series.data, "x"), x)
                         try {
@@ -695,7 +705,7 @@ angular.module("korpApp").component("trendDiagram", {
                         return `<span data-cqp="${encodeURIComponent(series.cqp)}">
                                 ${rel}
                                 <br>
-                                ${loc("abs_hits_short")}: ${abs_y.toLocaleString($rootScope.lang)}
+                                ${loc("abs_hits_short")}: ${abs_y?.toLocaleString($rootScope.lang)}
                             </span>`
                     },
                 })
@@ -706,7 +716,7 @@ angular.module("korpApp").component("trendDiagram", {
                 // TODO: fix decade again
                 // timeunit = if last - first > 100 then "decade" else @zoom
 
-                const toDate = (sec) => moment(sec * 1000).toDate()
+                const toDate = (sec: number) => moment(sec * 1000).toDate()
 
                 const time = new Rickshaw.Fixtures.Time()
                 // Fix time.ceil for decades: Rickshaw.Fixtures.Time.ceil
@@ -714,7 +724,7 @@ angular.module("korpApp").component("trendDiagram", {
                 // (The root cause may be Rickshaw's approximate handling of
                 // leap years: 1900 was not a leap year.)
                 const old_ceil = time.ceil
-                time.ceil = (time, unit) => {
+                time.ceil = (time: number, unit: any) => {
                     if (unit.name === "decade") {
                         const out = Math.ceil(time / unit.seconds) * unit.seconds
                         const mom = moment(out * 1000)

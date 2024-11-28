@@ -13,7 +13,7 @@ export type BratDispatcher = {
 }
 
 export type BratVisualizer = {
-    new (dispatcher: BratDispatcher, to_div: string)
+    new (dispatcher: BratDispatcher, to_div: string): BratVisualizer
     collectionLoaded: (collData: any) => void
     renderData: (docData: any) => void
 }

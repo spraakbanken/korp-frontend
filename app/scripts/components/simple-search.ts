@@ -17,6 +17,7 @@ import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
 import { LexiconsRelatedWordsResponse, LexiconsService } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
+import { CqpSearchEvent, LemgramSearchEvent } from "@/statemachine/types"
 
 type SimpleSearchController = IController & {
     input: string
@@ -133,7 +134,7 @@ angular.module("korpApp").component("simpleSearch", {
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
 
-            statemachine.listen("lemgram_search", (event) => {
+            statemachine.listen("lemgram_search", (event: LemgramSearchEvent) => {
                 ctrl.input = event.value
                 ctrl.isRawInput = false
                 ctrl.onChange(event.value, false)
@@ -148,7 +149,7 @@ angular.module("korpApp").component("simpleSearch", {
             ctrl.suffix = false
             ctrl.isCaseInsensitive = false
 
-            if (settings["input_case_insensitive_default"]) {
+            if (settings.input_case_insensitive_default) {
                 $location.search("isCaseInsensitive", "")
             }
 
@@ -261,7 +262,7 @@ angular.module("korpApp").component("simpleSearch", {
                             ? `[saldo contains \"${regescape(wd)}\"]`
                             : `[sense rank_contains \"${regescape(wd)}\"]`
 
-                    statemachine.send("SEARCH_CQP", { cqp })
+                    statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
                 }
                 const modalInstance = $uibModal.open({
                     template: `\

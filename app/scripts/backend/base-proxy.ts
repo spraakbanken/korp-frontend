@@ -103,13 +103,16 @@ export default abstract class BaseProxy<R extends {} = {}> {
         _.toPairs(header).forEach(([name, value]) => req.setRequestHeader(name, value))
     }
 
-    calcProgress(e: any): ProgressReport<R> {
-        const newText = e.target.responseText.slice(this.prev.length)
-        let struct: ResponseBase & ProgressResponse & Partial<R> = {}
+    calcProgress(e: ProgressEvent): ProgressReport<R> {
+        const xhr = e.target as XMLHttpRequest
+        const newText = xhr.responseText.slice(this.prev.length)
+        type PartialResponse = ResponseBase & ProgressResponse & Partial<R>
+        let struct: PartialResponse = {}
 
         try {
             // try to parse a chunk from the progress object
             // combined with previous chunks that were not parseable
+            // TODO Just use xhr.responseText, skip chunkCache and prev
             struct = this.parseJSON(this.chunkCache + newText)
             // if parse succceeds, we don't care about the content of previous progress events anymore
             this.chunkCache = ""
@@ -118,7 +121,7 @@ export default abstract class BaseProxy<R extends {} = {}> {
             this.chunkCache += newText
         }
 
-        Object.keys(struct).forEach((key) => {
+        Object.keys(struct).forEach((key: string & keyof PartialResponse) => {
             if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
                 const val = struct[key] as ProgressResponse["progress_0"]
                 const currentCorpus = typeof val == "string" ? val : val["corpus"]
@@ -147,7 +150,7 @@ export default abstract class BaseProxy<R extends {} = {}> {
 
         const stats = this.total ? (this.progress / this.total) * 100 : 0
 
-        this.prev = e.target.responseText
+        this.prev = xhr.responseText
         return {
             struct,
             stats,

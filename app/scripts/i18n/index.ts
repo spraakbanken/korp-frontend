@@ -64,7 +64,9 @@ export function locObj(map?: LangString, lang?: string) {
  */
 export function locAttribute(translations: LocMap | LocLangMap | undefined, key: string, lang?: string): string {
     lang = lang || getLang()
-    if (translations && translations[key])
-        return isObject(translations[key]) ? translations[key][lang] : translations[key]
+    if (translations?.[key]) {
+        const translation = translations[key]
+        return isObject(translation) ? translation[lang] : translation
+    }
     return key
 }

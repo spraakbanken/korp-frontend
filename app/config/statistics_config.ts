@@ -103,7 +103,7 @@ function reduceCqp(type: string, tokens: string[], ignoreCase: boolean): string 
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-export function reduceStringify(type: string, values: string[], structAttributes: Attribute): string {
+export function reduceStringify(type: string, values: string[], structAttr: Attribute): string {
     let attrs = settings.corpusListing.getCurrentAttributes()
 
     if (attrs[type] && attrs[type].stats_stringify) {
@@ -161,12 +161,10 @@ export function reduceStringify(type: string, values: string[], structAttributes
             } else {
                 // structural attributes
                 var mapped = _.map(values, function (value) {
-                    if (structAttributes["set"] && value === "") {
-                        return "–"
-                    } else if (value === "") {
+                    if (value === "") {
                         return "-"
-                    } else if (structAttributes.translation) {
-                        return locAttribute(structAttributes.translation, value)
+                    } else if (structAttr.translation) {
+                        return locAttribute(structAttr.translation, value)
                     } else {
                         return value
                     }

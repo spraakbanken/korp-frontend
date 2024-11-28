@@ -5,7 +5,7 @@ import { KorpResponse, WithinParameters } from "@/backend/types"
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
 import { httpConfAddMethodFetch } from "@/util"
-import { KorpStatsResponse, normalizeStatsData } from "@/backend/stats-proxy"
+import { KorpStatsParams, KorpStatsResponse, normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map_services"
 import { KorpQueryResponse } from "@/backend/kwic-proxy"
 
@@ -134,20 +134,17 @@ export async function requestMapData(
     attribute: MapAttribute,
     relative: boolean
 ): Promise<MapRequestResult> {
-    const cqpSubExprs = {}
-    _.map(_.keys(cqpExprs), (subCqp, idx) => (cqpSubExprs[`subcqp${idx}`] = subCqp))
-
-    const params = {
+    const params: KorpStatsParams = {
         group_by_struct: attribute.label,
         cqp,
         corpus: attribute.corpora.join(","),
         incremental: true,
         split: attribute.label,
         relative_to_struct: relative ? attribute.label : undefined,
+        ...settings.corpusListing.getWithinParameters(),
     }
-    _.extend(params, settings.corpusListing.getWithinParameters())
 
-    _.extend(params, cqpSubExprs)
+    Object.keys(cqpExprs).map((cqp, i) => (params[`subcqp${i}`] = cqp))
 
     const data = await korpRequest<KorpStatsResponse>("count", params)
 

@@ -19,7 +19,7 @@ import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { CompareSearches } from "@/services/compare-searches"
 import { RootScope } from "@/root-scope.types"
 import { SearchesService } from "@/services/searches"
-import { LocationService } from "@/urlparams"
+import { LocationService, SortMethod } from "@/urlparams"
 import { SavedSearch } from "@/local-storage"
 import { AttributeOption } from "@/corpus_listing"
 
@@ -146,7 +146,7 @@ angular.module("korpApp").component("searchtabs", {
                 // resolve globalFilterDef since globalFilter-directive is not used
                 $rootScope.globalFilterDef.resolve()
                 const corpusListing = settings.corpusListing as ParallelCorpusListing
-                corpusListing.setActiveLangs([settings["start_lang"]])
+                corpusListing.setActiveLangs([settings.start_lang!])
             } else {
                 // only used in parallel mode
                 searches.langDef.resolve()
@@ -266,7 +266,7 @@ angular.module("korpApp").component("searchtabs", {
             }
 
             const setupKwicSort = function () {
-                const kwicSortValueMap = {
+                const kwicSortValueMap: Record<SortMethod, string> = {
                     "": "appearance_context",
                     keyword: "word_context",
                     left: "left_context",
@@ -275,7 +275,7 @@ angular.module("korpApp").component("searchtabs", {
                 }
                 $ctrl.kwicSortValues = _.keys(kwicSortValueMap)
 
-                $ctrl.getSortFormat = function (val) {
+                $ctrl.getSortFormat = function (val: SortMethod) {
                     const mappedVal = kwicSortValueMap[val]
                     return val === $ctrl.kwicSort
                         ? loc("sort_default", $rootScope.lang) + ": " + loc(mappedVal, $rootScope.lang)
