@@ -49,11 +49,7 @@ const { locationSearchGet, getService } = require("@/util");
 		this.find("[rel^=localize]").each(function(i, elem) {
 			var elem = $(elem);
 			var key = elem.attr("rel").match(/localize\[(.*?)\]/)[1];
-			var value = valueForKey(key, data) || key;
-			var prefix = valueForKey($(this).data("locPrefix"), data) || "";
-			var suffix = valueForKey($(this).data("locSuffix"), data) || "";
-			if(prefix) prefix += ": "; 
-			value = prefix + value + suffix;
+			var value = valueForKey(key, data) ?? key;
 			
 			if (elem.is('input')) {
 				elem.val(value);
