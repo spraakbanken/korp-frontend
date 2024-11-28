@@ -20,6 +20,7 @@
   - `getAttrValues()` for getting a flat list without counts
   - `countAttrValues()` for getting a deep structure with counts
 - Search history is stored as parameters only, not full urls #118
+- Enabled the `noImplicitAny` TypeScript flag for added strictness, and fixed/refactored various parts as a consequence
 
 ### Fixed
 
