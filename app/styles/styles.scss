@@ -1852,6 +1852,8 @@ line.tick {
   border-radius: 2px;
   max-height : 575px;
   overflow-y: auto;
+  width: max-content; // avoid wrapping lines
+  max-width: 40em; // readable width
 
   li {
     &.selected a {

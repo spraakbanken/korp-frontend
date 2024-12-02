@@ -35,6 +35,7 @@
 - Search history fails to distinguish options with same label [#406](https://github.com/spraakbanken/korp-frontend/issues/406)
 - The "X of Y corpora selected" phrase is not properly translated [#408](https://github.com/spraakbanken/korp-frontend/issues/408)
 - Empty localization strings sometimes render as localization key [#410](https://github.com/spraakbanken/korp-frontend/issues/410)
+- Wider filter lists [#412](https://github.com/spraakbanken/korp-frontend/issues/412)
 
 ## [9.7.1] - 2024-09-18
 

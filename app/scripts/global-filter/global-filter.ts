@@ -40,6 +40,7 @@ angular.module("korpApp").component("globalFilter", {
         </button>
         <div uib-dropdown-menu class="korp-uib-dropdown-menu p-0 mt-3 ml-2">
             <ul class="p-0 m-0">
+                <!-- Selected values -->
                 <li
                     ng-repeat="value in $ctrl.possibleValues"
                     ng-class="{'bg-blue-100': isSelected(value[0])}"
@@ -51,6 +52,8 @@ angular.module("korpApp").component("globalFilter", {
                     <span>{{translateAttribute(value[0]) | replaceEmpty }}</span>
                     <span class="text-xs">{{value[1]}}</span>
                 </li>
+
+                <!-- Unselected values -->
                 <li
                     ng-repeat="value in $ctrl.possibleValues"
                     ng-class="{'bg-blue-100': isSelected(value[0])}"
@@ -62,6 +65,8 @@ angular.module("korpApp").component("globalFilter", {
                     <span>{{translateAttribute(value[0]) | replaceEmpty }}</span>
                     <span class="text-xs">{{value[1]}}</span>
                 </li>
+
+                <!-- Values with 0 hits, disabled -->
                 <li
                     ng-repeat="value in $ctrl.possibleValues"
                     class="attribute disabled opacity-50 p-1"
