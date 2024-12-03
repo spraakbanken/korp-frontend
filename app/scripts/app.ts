@@ -29,6 +29,7 @@ import "@/components/korp-error"
 import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
+import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 
 // load all custom components
 let customComponents: Record<string, IComponentOptions> = {}
@@ -179,20 +180,7 @@ korpApp.run([
 
         async function initializeCorpusSelection(selectedIds: string[]): Promise<void> {
             // Resolve any folder ids to the contained corpus ids
-            const corpusIds: string[] = []
-            for (const id of selectedIds) {
-                // If it is a corpus, copy the id
-                if (settings.corpora[id]) {
-                    corpusIds.push(id)
-                }
-                // If it is not a corpus, but a folder
-                else if (settings.folders[id]) {
-                    // Resolve contained corpora
-                    corpusIds.push(...collectCorpusIdsInFolder(settings.folders[id]))
-                }
-            }
-            // Replace the possibly mixed list with the list of corpus-only ids
-            selectedIds = corpusIds
+            selectedIds = selectedIds.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
 
             let loginNeededFor: CorpusTransformed[] = []
 

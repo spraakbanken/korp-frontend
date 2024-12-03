@@ -7,7 +7,7 @@ import timeProxyFactory from "@/backend/time-proxy"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
-import { fromKeys, getUrlHash, httpConfAddMethodFetch } from "@/util"
+import { fromKeys, httpConfAddMethodFetch } from "@/util"
 import { Labeled, LangLocMap, LocMap } from "./i18n/types"
 import { CorpusInfoResponse } from "./settings/corpus-info.types"
 import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
@@ -212,14 +212,6 @@ function setInitialCorpora(): void {
         // folders expanded, save
         settings.preselected_corpora = expandedCorpora
     }
-
-    const corpusParam = getUrlHash("corpus")
-
-    const currentCorpora = corpusParam
-        ? _.flatten(_.map(corpusParam.split(","), (val) => getAllCorporaInFolders(settings.folders, val)))
-        : settings.preselected_corpora
-
-    settings.corpusListing.select(currentCorpora)
 }
 
 /**

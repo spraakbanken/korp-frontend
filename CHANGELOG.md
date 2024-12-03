@@ -25,6 +25,7 @@
 ### Fixed
 
 - In the corpus selector, an empty folder would add 1 to the parent folder's corpus count
+- Linking to corpus subfolder [#397](https://github.com/spraakbanken/korp-frontend/issues/397)
 - Searching by pressing Enter in Simple search is broken [#394](https://github.com/spraakbanken/korp-frontend/issues/394)
 - Barcode (aka hitsPicture) sometimes missing from KWIC tab [#395](https://github.com/spraakbanken/korp-frontend/issues/395)
 - Error when loading with restricted corpora selected [#398](https://github.com/spraakbanken/korp-frontend/issues/398)
