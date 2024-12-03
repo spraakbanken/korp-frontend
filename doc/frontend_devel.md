@@ -828,15 +828,15 @@ If the commit depends on new functions in the backend, add a note of which backe
 
 ### Code format
 
-The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before committing (`yarn run prettier app/scripts/my_file.js`).
+The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before committing (`yarn run format`).
 
-We use [Babel](https://babeljs.io/) to transform modern Javascript to something that works in all browsers. A non-exhaustive list of features available is: https://babeljs.io/docs/en/learn .
+TypeScript is used to provide typing and to transpile new language features for older browsers.
 
 Use modern features where it looks good. Always use `const` or `let` instead of `var`.
 
 Identifiers should be in camel case (although our old Korp code may still have some identifiers that uses snake case).
 
-Aim to write code that is easily understood, and supplement with comments as needed. Update comments as a part of a pull request when something changes so that the comments are no longer valid.
+Aim to write code that is easily understood, and supplement with comments as needed. Keep comments up to date while making code changes.
 
 Files should be named using snake case: `my_file.js`.
 
