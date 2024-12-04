@@ -110,7 +110,7 @@ angular.module("korpApp").component("reduceSelect", {
                 }
 
                 // Only after initialization
-                if ($ctrl.items && $ctrl.selected && $ctrl.insensitive) validate()
+                if ($ctrl.items && $ctrl.selected && $ctrl.insensitive) updateSelected()
             }
 
             /** Report any changes upwards */
@@ -120,11 +120,14 @@ angular.module("korpApp").component("reduceSelect", {
                 const selected = $ctrl.items.filter((item) => item.selected).map((item) => item.value)
                 const insensitive = $ctrl.items.filter((item) => item.insensitive).map((item) => item.value)
 
-                $ctrl.onChange({
+                const changes = {
                     // Only set values that have changed
                     selected: !_.isEqual(selected, $ctrl.selected) ? selected : undefined,
                     insensitive: !_.isEqual(insensitive, $ctrl.insensitive) ? insensitive : undefined,
-                })
+                }
+
+                // Only notify if something changed
+                if (changes.selected || changes.insensitive) $ctrl.onChange(changes)
             }
 
             /** Fix state inconsistencies */

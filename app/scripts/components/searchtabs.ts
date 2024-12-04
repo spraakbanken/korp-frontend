@@ -226,9 +226,7 @@ angular.module("korpApp").component("searchtabs", {
                 $ctrl.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
                 $ctrl.statSelectedAttrs = ($location.search().stats_reduce || "word").split(",")
                 const insensitiveAttrs = $location.search().stats_reduce_insensitive
-                if (insensitiveAttrs) {
-                    $ctrl.statInsensitiveAttrs = insensitiveAttrs.split(",")
-                }
+                $ctrl.statInsensitiveAttrs = insensitiveAttrs?.split(",") || []
             })
 
             $ctrl.reduceOnChange = ({ selected, insensitive }) => {
