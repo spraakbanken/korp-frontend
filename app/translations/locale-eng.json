@@ -79,6 +79,7 @@
     "show_deptree": "Show Dependency Tree",
     "dep_tree": "Dependency Tree",
     "download": "Download as",
+    "toggle_select": "select",
 
     "is": "is",
     "equal": "equal",

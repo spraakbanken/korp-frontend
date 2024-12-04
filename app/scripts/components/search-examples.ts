@@ -5,7 +5,6 @@ import statemachine from "@/statemachine"
 import { html } from "@/util"
 import settings from "@/settings"
 import { SearchExample } from "@/settings/app-settings.types"
-import { RootScope } from "@/root-scope.types"
 import { HashParams, LocationService } from "@/urlparams"
 import { CqpSearchEvent } from "@/statemachine/types"
 
@@ -25,10 +24,9 @@ export default angular.module("korpApp").component("searchExamples", {
     `,
     bindings: {},
     controller: [
-        "$rootScope",
         "$scope",
         "$location",
-        function ($rootScope: RootScope, $scope: SearchExamplesScope, $location: LocationService) {
+        function ($scope: SearchExamplesScope, $location: LocationService) {
             const $ctrl = this
 
             $scope.examples = undefined

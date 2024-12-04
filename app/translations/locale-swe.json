@@ -79,6 +79,7 @@
     "show_deptree": "Visa dependensträd",
     "dep_tree": "Dependensträd",
     "download": "Ladda ner som",
+    "toggle_select": "välj",
 
     "case_insensitive": "skiftlägesoberoende",
     "case_sensitive": "skiftlägesberoende",
