@@ -6,6 +6,7 @@ import type { StatsNormalized, StatisticsWorkerMessage, StatisticsWorkerResult, 
 import { hitCountHtml } from "@/util"
 import { LangString } from "./i18n/types"
 import { Row, TotalRow } from "./statistics_worker"
+import { getLang, locObj } from "./i18n"
 const pieChartImg = require("../img/stats2.png")
 
 type SlickGridFormatter<T extends Slick.SlickData = any> = (
@@ -18,7 +19,7 @@ type SlickGridFormatter<T extends Slick.SlickData = any> = (
 
 const createStatisticsService = function () {
     const createColumns = function (
-        corpora: Record<string, any>,
+        corpora: string[],
         reduceVals: string[],
         reduceValLabels: LangString[]
     ): SlickgridColumn[] {
@@ -27,10 +28,14 @@ const createStatisticsService = function () {
             return hitCountHtml(absolute, relative)
         }
 
-        const corporaKeys = _.keys(corpora)
+        // This sorting will not react to language change, but that's quite alright, we like columns staying in place.
+        const lang = getLang()
+        const getCorpusTitle = (id: string): string => locObj(settings.corpora[id.toLowerCase()].title, lang)
+        corpora.sort((a, b) => getCorpusTitle(a).localeCompare(getCorpusTitle(b), lang))
+
         const minWidth = 100
         const columns: SlickgridColumn[] = []
-        const cl = settings.corpusListing.subsetFactory(corporaKeys)
+        const cl = settings.corpusListing.subsetFactory(corpora)
         const structAttrs = cl.getStructAttrs()
         for (let [reduceVal, reduceValLabel] of _.zip(reduceVals, reduceValLabels)) {
             if (reduceVal == null || reduceValLabel == null) break
@@ -78,16 +83,16 @@ const createStatisticsService = function () {
             headerCssClass: "localized-header",
         })
 
-        $.each(corporaKeys.sort(), (i, corpus) => {
-            return columns.push({
-                id: corpus,
-                translation: settings.corpora[corpus.toLowerCase()].title,
-                field: corpus + "_value",
-                sortable: true,
-                formatter: valueFormatter,
-                minWidth,
-            })
-        })
+        const corpusColumns = corpora.map((id) => ({
+            id,
+            translation: settings.corpora[id.toLowerCase()].title,
+            field: id + "_value",
+            sortable: true,
+            formatter: valueFormatter,
+            minWidth,
+        }))
+        columns.push(...corpusColumns)
+
         return columns
     }
 
@@ -100,7 +105,7 @@ const createStatisticsService = function () {
         ignoreCase: boolean,
         prevNonExpandedCQP: string
     ) {
-        const columns = createColumns(data.corpora, reduceVals, reduceValLabels)
+        const columns = createColumns(Object.keys(data.corpora), reduceVals, reduceValLabels)
 
         const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
         statsWorker.onmessage = function (e: MessageEvent<StatisticsWorkerResult>) {
