@@ -549,13 +549,9 @@ angular.module("korpApp").component("statistics", {
 
                 let output = []
                 for (var row of $ctrl.data) {
-                    let outputRow = $ctrl.searchParams.reduceVals.map((reduceVal) => {
-                        if (row.rowId === 0) {
-                            return "Σ"
-                        } else {
-                            return row[reduceVal].join(",")
-                        }
-                    })
+                    let outputRow = $ctrl.searchParams.reduceVals.map((reduceVal) =>
+                        row.rowId === 0 ? "Σ" : row.statsValues.flatMap((type) => type[reduceVal][0])
+                    )
                     outputRow.push(fmt(row.total[selVal]))
                     for (let corp of $ctrl.searchParams.corpora) {
                         val = row.count[corp][selVal]
