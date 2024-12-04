@@ -39,6 +39,7 @@
 - Empty localization strings sometimes render as localization key [#410](https://github.com/spraakbanken/korp-frontend/issues/410)
 - Wider filter lists [#412](https://github.com/spraakbanken/korp-frontend/issues/412)
 - Alphabetic sorting of statistics columns [#37](https://github.com/spraakbanken/korp-frontend/issues/37)
+- Show intersection in attributes instead of union in comparison view [#56](https://github.com/spraakbanken/korp-frontend/issues/56)
 
 ## [9.7.1] - 2024-09-18
 

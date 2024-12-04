@@ -101,7 +101,7 @@ angular.module("korpApp").component("extendedCqpTerm", {
 
                 // Get available attribute options
                 ctrl.types = settings.corpusListing
-                    .getAttributeGroups(ctrl.parallellLang)
+                    .getAttributeGroups("union", ctrl.parallellLang)
                     .filter((item) => !item["hide_extended"])
 
                 // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
