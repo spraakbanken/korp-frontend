@@ -53,7 +53,8 @@ onmessage = function (e) {
 
     const totalRow: TotalRow = {
         id: "row_total",
-        total_value: [combined[0].sums.absolute, combined[0].sums.relative],
+        count: {},
+        total: [combined[0].sums.absolute, combined[0].sums.relative],
         rowId: 0,
     }
 
@@ -61,7 +62,7 @@ onmessage = function (e) {
     const corporaFreqs: Record<string, Record<string, StatsRow[]>> = {}
     for (const id of corporaKeys) {
         const obj = data.corpora[id]
-        totalRow[`${id}_value`] = [obj[0].sums.absolute, obj[0].sums.relative]
+        totalRow.count[id] = [obj[0].sums.absolute, obj[0].sums.relative]
         corporaFreqs[id] = groupBy(obj[0].rows, (item) => simplifyHitString(item))
     }
 
@@ -106,7 +107,8 @@ onmessage = function (e) {
 
         const row: SingleRow = {
             rowId: i + 1,
-            total_value: [totalAbs, totalRel] as AbsRelSeq,
+            count: {},
+            total: [totalAbs, totalRel] as AbsRelSeq,
             formattedValue: {},
             statsValues,
         }
@@ -114,14 +116,14 @@ onmessage = function (e) {
         map(corporaKeys, function (corpus) {
             const abs = sumBy(corporaFreqs[corpus][word], "absolute")
             const rel = sumBy(corporaFreqs[corpus][word], "relative")
-            row[`${corpus}_value`] = [abs, rel]
+            row.count[corpus] = [abs, rel]
         })
 
         dataset[i + 1] = row
     }
 
     dataset.sort(function (a, b) {
-        return b.total_value[0] - a.total_value[0]
+        return b.total[0] - a.total[0]
     })
     const ctx: Worker = self as any
     ctx.postMessage(dataset)
@@ -141,8 +143,9 @@ export type SingleRow = RowBase & {
 
 export type RowBase = {
     rowId: number
-    total_value: AbsRelSeq
-    [name: `${string}_value`]: AbsRelSeq
+    /** Frequency counts keyed by uppercase corpus id */
+    count: Record<string, AbsRelSeq>
+    total: AbsRelSeq
 }
 
 export type Dataset = Row[]

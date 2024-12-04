@@ -192,13 +192,13 @@ export function formatRelativeHits(x: number | string, lang?: string) {
 
 /**
  * Format as `<relative> (<absolute>)` plus surrounding HTML.
- * @param absolute Number of absolute hits
- * @param relative Number of relative hits (hits per 1 million tokens)
+ * @param absrel Tuple with numbers of 0) absolute hits and 1) relative hits (hits per 1 million tokens)
  * @param lang The locale to use.
  * @returns A HTML snippet.
  */
-export function hitCountHtml(absolute: number, relative: number, lang?: string) {
+export function hitCountHtml(absrel: [number, number], lang?: string) {
     lang = lang || getLang()
+    const [absolute, relative] = absrel
     const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
     // TODO Remove outer span?
     // TODO Flexbox?

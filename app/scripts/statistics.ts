@@ -23,11 +23,6 @@ const createStatisticsService = function () {
         reduceVals: string[],
         reduceValLabels: LangString[]
     ): SlickgridColumn[] {
-        const valueFormatter: SlickGridFormatter<Row> = function (row, cell, value, columnDef, dataContext) {
-            const [absolute, relative] = [...dataContext[`${columnDef.id}_value`]]
-            return hitCountHtml(absolute, relative)
-        }
-
         // This sorting will not react to language change, but that's quite alright, we like columns staying in place.
         const lang = getLang()
         const getCorpusTitle = (id: string): string => locObj(settings.corpora[id.toLowerCase()].title, lang)
@@ -76,22 +71,23 @@ const createStatisticsService = function () {
         columns.push({
             id: "total",
             name: "stats_total",
-            field: "total_value",
+            field: "total",
             sortable: true,
-            formatter: valueFormatter,
+            formatter: (row, cell, value) => hitCountHtml(value, lang),
             minWidth,
             headerCssClass: "localized-header",
         })
 
-        const corpusColumns = corpora.map((id) => ({
-            id,
-            translation: settings.corpora[id.toLowerCase()].title,
-            field: id + "_value",
-            sortable: true,
-            formatter: valueFormatter,
-            minWidth,
-        }))
-        columns.push(...corpusColumns)
+        corpora.forEach((id) =>
+            columns.push({
+                id,
+                translation: settings.corpora[id.toLowerCase()].title,
+                field: "count",
+                sortable: true,
+                formatter: (row, cell, value, columnDef) => hitCountHtml(value[columnDef.id!], lang),
+                minWidth,
+            })
+        )
 
         return columns
     }

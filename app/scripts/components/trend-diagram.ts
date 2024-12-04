@@ -439,9 +439,7 @@ angular.module("korpApp").component("trendDiagram", {
                             name: timestamp,
                             field: timestamp,
                             formatter(row, cell, value, columnDef, dataContext) {
-                                return typeof value[0] === "undefined"
-                                    ? ""
-                                    : hitCountHtml(value[0], value[1], $rootScope.lang)
+                                return typeof value[0] === "undefined" ? "" : hitCountHtml(value, $rootScope.lang)
                             },
                         }
                         const i = _.sortedIndexOf(_.map(seriesRow.abs_data, "x"), item.x)

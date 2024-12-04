@@ -176,7 +176,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
 
                 s.gridData = data
 
-                if (data[0].total_value[0] === 0) {
+                if (data[0].total[0] === 0) {
                     s.no_hits = true
                     return
                 }

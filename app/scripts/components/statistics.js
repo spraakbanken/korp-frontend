@@ -340,10 +340,7 @@ angular.module("korpApp").component("statistics", {
                     }
 
                     // Find which corpora had any hits (uppercase ids)
-                    // TODO Move [CORPUSID]_value to {count: {[corpusid]: ...}} or similar
-                    const corpora = Object.keys(rowData)
-                        .filter((key) => key.endsWith("_value") && key != "total_value" && rowData[key][0] > 0)
-                        .map((key) => key.split("_")[0])
+                    const corpora = Object.keys(rowData.count).filter((id) => rowData.count[id][0] > 0)
 
                     const opts = {}
                     opts.ajaxParams = {
@@ -462,7 +459,7 @@ angular.module("korpApp").component("statistics", {
 
                 $scope.rowData = $ctrl.searchParams.corpora.map((corpus) => ({
                     title: locObj(settings.corpora[corpus.toLowerCase()]["title"]),
-                    values: row[corpus + "_value"], // [absolute, relative]
+                    values: row.count[corpus], // [absolute, relative]
                 }))
 
                 const modal = $uibModal.open({
@@ -559,9 +556,9 @@ angular.module("korpApp").component("statistics", {
                             return row[reduceVal].join(",")
                         }
                     })
-                    outputRow.push(fmt(row.total_value[selVal]))
+                    outputRow.push(fmt(row.total[selVal]))
                     for (let corp of $ctrl.searchParams.corpora) {
-                        val = row[corp + "_value"][selVal]
+                        val = row.count[corp][selVal]
                         if (val) {
                             outputRow.push(fmt(val))
                         } else {
