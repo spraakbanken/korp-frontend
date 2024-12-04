@@ -8,6 +8,7 @@
 - Simplify time interval CQP covering whole days [#379](https://github.com/spraakbanken/korp-frontend/issues/379)
 - Track some events with Matomo: search, language switch
 - Select button in Corpus Updates section [#367](https://github.com/spraakbanken/korp-frontend/issues/367)
+- KWICs opened from the statistics should only query relevant corpora [#89](https://github.com/spraakbanken/korp-frontend/issues/89)
 
 ### Changed
 

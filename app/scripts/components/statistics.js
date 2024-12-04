@@ -339,11 +339,17 @@ angular.module("korpApp").component("statistics", {
                         cqp2 = getCqp(rowData.statsValues, $ctrl.searchParams.ignoreCase)
                     }
 
+                    // Find which corpora had any hits (uppercase ids)
+                    // TODO Move [CORPUSID]_value to {count: {[corpusid]: ...}} or similar
+                    const corpora = Object.keys(rowData)
+                        .filter((key) => key.endsWith("_value") && key != "total_value" && rowData[key][0] > 0)
+                        .map((key) => key.split("_")[0])
+
                     const opts = {}
                     opts.ajaxParams = {
                         start: 0,
                         end: 24,
-                        corpus: $ctrl.searchParams.originalCorpora,
+                        corpus: corpora.join(","),
                         cqp: $ctrl.prevParams.cqp,
                         cqp2,
                         expand_prequeries: false,
