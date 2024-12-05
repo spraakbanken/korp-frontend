@@ -51,7 +51,12 @@ angular.module("korpApp").component("reduceSelect", {
                     ng-class="keyItems['word'].selected ? 'selected':''"
                     class="attribute"
                 >
-                    <input type="checkbox" class="reduce-check" ng-checked="keyItems['word'].selected" />
+                    <input
+                        type="checkbox"
+                        class="reduce-check"
+                        ng-checked="keyItems['word'].selected"
+                        ng-disabled="keyItems['word'].selected && $ctrl.selected.length == 1"
+                    />
                     <span class="reduce-label">{{keyItems['word'].label | locObj:$root.lang }}</span>
                     <span
                         ng-class="keyItems['word'].insensitive ? 'selected':''"
