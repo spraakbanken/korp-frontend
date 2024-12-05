@@ -132,7 +132,7 @@ export async function requestMapData(
     cqpExprs: Record<string, string>,
     within: WithinParameters,
     attribute: MapAttribute,
-    relative: boolean
+    relative?: boolean
 ): Promise<MapRequestResult> {
     const params: KorpStatsParams = {
         group_by_struct: attribute.label,

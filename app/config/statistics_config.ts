@@ -17,7 +17,7 @@ try {
     console.log("No module for statistics functions available")
 }
 
-export function getCqp(hitValues: Token[], ignoreCase: boolean): string {
+export function getCqp(hitValues: Record<string, string[]>[], ignoreCase: boolean): string {
     const positionalAttributes = ["word", ...Object.keys(settings.corpusListing.getCurrentAttributes())]
     let hasPositionalAttributes = false
 
@@ -103,7 +103,7 @@ function reduceCqp(type: string, tokens: string[], ignoreCase: boolean): string 
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-export function reduceStringify(type: string, values: string[], structAttr: Attribute): string {
+export function reduceStringify(type: string, values: string[], structAttr?: Attribute): string {
     let attrs = settings.corpusListing.getCurrentAttributes()
 
     if (attrs[type] && attrs[type].stats_stringify) {
@@ -163,7 +163,7 @@ export function reduceStringify(type: string, values: string[], structAttr: Attr
                 var mapped = _.map(values, function (value) {
                     if (value === "") {
                         return "-"
-                    } else if (structAttr.translation) {
+                    } else if (structAttr?.translation) {
                         return locAttribute(structAttr.translation, value)
                     } else {
                         return value

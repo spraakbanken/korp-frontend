@@ -6,7 +6,15 @@ import isArray from "lodash/isArray"
 import keys from "lodash/keys"
 
 import { RowsEntity } from "./interfaces/stats"
-import { StatisticsWorkerMessage, StatsNormalized, StatsRow } from "./statistics.types"
+import {
+    AbsRelSeq,
+    Dataset,
+    SingleRow,
+    TotalRow,
+    StatisticsWorkerMessage,
+    StatsNormalized,
+    StatsRow,
+} from "./statistics.types"
 
 /*
     This is optimized code for transforming the statistics data.
@@ -128,26 +136,3 @@ onmessage = function (e) {
     const ctx: Worker = self as any
     ctx.postMessage(dataset)
 }
-
-export type Row = TotalRow | SingleRow
-
-export type TotalRow = RowBase & {
-    id: "row_total"
-}
-
-export type SingleRow = RowBase & {
-    formattedValue: Record<string, string>
-    /** For each match token, a record of non-simplified attr values, e.g. ["foo:12", "foo:34"] */
-    statsValues: Record<string, string[]>[]
-}
-
-export type RowBase = {
-    rowId: number
-    /** Frequency counts keyed by uppercase corpus id */
-    count: Record<string, AbsRelSeq>
-    total: AbsRelSeq
-}
-
-export type Dataset = Row[]
-
-export type AbsRelSeq = [number, number]

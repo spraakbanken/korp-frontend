@@ -87,7 +87,6 @@ angular.module("korpApp").component("results", {
                             columns="columns"
                             data="data"
                             error="error"
-                            grid-data="gridData"
                             has-result="hasResult"
                             in-order="inOrder"
                             loading="loading"

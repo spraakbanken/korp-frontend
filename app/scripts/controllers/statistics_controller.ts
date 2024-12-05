@@ -2,14 +2,11 @@
 import _ from "lodash"
 import angular, { ITimeoutService } from "angular"
 import settings from "@/settings"
-import currentMode from "@/mode"
 import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { ProgressReport } from "@/backend/types"
-import { Dataset } from "@/statistics_worker"
-import { SearchParams } from "@/statistics.types"
-import { SlickgridColumn } from "@/statistics"
+import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
 import { SearchesService } from "@/services/searches"
 import "@/services/searches"
 import { TabHashScope } from "@/directives/tab-hash"
@@ -22,7 +19,6 @@ type StatsResultCtrlScope = TabHashScope & {
     countCorpora: () => number | null
     data: Dataset
     error: boolean
-    gridData: any
     hasResult: boolean
     ignoreAbort: boolean
     inOrder: boolean
@@ -64,7 +60,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             s.progress = 0
 
             s.tabindex = 2
-            s.gridData = null
 
             s.proxy = statsProxyFactory.create()
 
@@ -173,8 +168,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 }
 
                 s.columns = columns
-
-                s.gridData = data
 
                 if (data[0].total[0] === 0) {
                     s.no_hits = true

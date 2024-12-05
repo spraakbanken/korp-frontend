@@ -2,20 +2,20 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config"
-import type { StatsNormalized, StatisticsWorkerMessage, StatisticsWorkerResult, SearchParams } from "./statistics.types"
+import {
+    Dataset,
+    isTotalRow,
+    Row,
+    StatsNormalized,
+    StatisticsWorkerMessage,
+    StatisticsWorkerResult,
+    SearchParams,
+    SlickgridColumn,
+} from "./statistics.types"
 import { hitCountHtml } from "@/util"
 import { LangString } from "./i18n/types"
-import { Row, TotalRow } from "./statistics_worker"
 import { getLang, locObj } from "./i18n"
 const pieChartImg = require("../img/stats2.png")
-
-type SlickGridFormatter<T extends Slick.SlickData = any> = (
-    row: number,
-    cell: number,
-    value: any,
-    columnDef: Slick.Column<T>,
-    dataContext: T
-) => string
 
 const createStatisticsService = function () {
     const createColumns = function (
@@ -30,8 +30,6 @@ const createStatisticsService = function () {
 
         const minWidth = 100
         const columns: SlickgridColumn[] = []
-        const cl = settings.corpusListing.subsetFactory(corpora)
-        const structAttrs = cl.getStructAttrs()
         for (let [reduceVal, reduceValLabel] of _.zip(reduceVals, reduceValLabels)) {
             if (reduceVal == null || reduceValLabel == null) break
             columns.push({
@@ -39,17 +37,10 @@ const createStatisticsService = function () {
                 translation: reduceValLabel,
                 field: "hit_value",
                 sortable: true,
-                formatter: (row, cell, value, columnDef, dataContext: Row) => {
-                    const isTotalRow = (row: Row): row is TotalRow => row.rowId === 0
-                    if (!isTotalRow(dataContext)) {
-                        // Get the attribute value of all matching words
-                        const types = dataContext.statsValues.flatMap((type) => type[reduceVal!][0])
-                        const formattedValue = reduceStringify(reduceVal!, types, structAttrs[reduceVal!])
-                        dataContext.formattedValue[reduceVal!] = formattedValue
-                        return `<span class="statistics-link" data-row=${dataContext["rowId"]}>${formattedValue}</span>`
-                    } else {
-                        return "&Sigma;"
-                    }
+                formatter: (row, cell, value, columnDef, data: Row) => {
+                    if (isTotalRow(data)) return "&Sigma;"
+                    const output = data.formattedValue[reduceVal!]
+                    return `<span class="statistics-link" data-row=${data.rowId}>${output}</span>`
                 },
                 minWidth,
                 cssClass: "parameter-column",
@@ -101,10 +92,23 @@ const createStatisticsService = function () {
         ignoreCase: boolean,
         prevNonExpandedCQP: string
     ) {
-        const columns = createColumns(Object.keys(data.corpora), reduceVals, reduceValLabels)
+        const corpora = Object.keys(data.corpora)
+        const columns = createColumns(corpora, reduceVals, reduceValLabels)
 
         const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
-        statsWorker.onmessage = function (e: MessageEvent<StatisticsWorkerResult>) {
+        statsWorker.onmessage = function (e: MessageEvent<Dataset>) {
+            // Format the values of the attributes we are reducing by
+            const cl = settings.corpusListing.subsetFactory(corpora)
+            const structAttrs = cl.getStructAttrs()
+            for (const row of e.data) {
+                if (isTotalRow(row)) continue
+                for (const type of row.statsValues) {
+                    for (const attr in type) {
+                        row.formattedValue[attr] = reduceStringify(attr, type[attr], structAttrs[attr])
+                    }
+                }
+            }
+
             const searchParams: SearchParams = {
                 reduceVals,
                 ignoreCase,
@@ -112,7 +116,8 @@ const createStatisticsService = function () {
                 corpora: _.keys(data.corpora),
                 prevNonExpandedCQP,
             }
-            let result = [e.data, columns, searchParams]
+            const result = [e.data, columns, searchParams]
+
             def.resolve(result as StatisticsWorkerResult)
         }
 
@@ -127,7 +132,3 @@ const createStatisticsService = function () {
 }
 
 export const statisticsService = createStatisticsService()
-
-export type SlickgridColumn = Slick.Column<any> & {
-    translation?: LangString
-}

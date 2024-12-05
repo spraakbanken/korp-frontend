@@ -9,6 +9,7 @@
 - Track some events with Matomo: search, language switch
 - Select button in Corpus Updates section [#367](https://github.com/spraakbanken/korp-frontend/issues/367)
 - KWICs opened from the statistics should only query relevant corpora [#89](https://github.com/spraakbanken/korp-frontend/issues/89)
+- Alphabetic sorting of statistics columns [#37](https://github.com/spraakbanken/korp-frontend/issues/37)
 
 ### Changed
 
@@ -40,8 +41,8 @@
 - The "X of Y corpora selected" phrase is not properly translated [#408](https://github.com/spraakbanken/korp-frontend/issues/408)
 - Empty localization strings sometimes render as localization key [#410](https://github.com/spraakbanken/korp-frontend/issues/410)
 - Wider filter lists [#412](https://github.com/spraakbanken/korp-frontend/issues/412)
-- Alphabetic sorting of statistics columns [#37](https://github.com/spraakbanken/korp-frontend/issues/37)
 - Show intersection in attributes instead of union in comparison view [#56](https://github.com/spraakbanken/korp-frontend/issues/56)
+- Alphabetic sorting of statistics rows
 
 ## [9.7.1] - 2024-09-18
 
@@ -230,7 +231,7 @@
 - On repetition error (all tokens repeat from 0), restore red outline for input
 - Use `<match>` to constraint CQP subqueries (from statistics rows etc)
 
-## [9.5.0] - 2023-01-22
+## [9.5.0] - 2024-01-22
 
 ### Added
 
