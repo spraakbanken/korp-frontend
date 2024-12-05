@@ -405,7 +405,8 @@ angular.module("korpApp").component("sidebar", {
                     .find(".sidebar_url")
                     .css("white-space", "nowrap")
                     .each(function () {
-                        const totalWidth = $(this).parent().width() || 0
+                        // TODO This happens before sidebar is actually showing, so parent width is 0 the first time
+                        const totalWidth = $(this).parent().width() || 240
                         // Drop the scheme part ("https://")
                         let text = $(this)
                             .text()
