@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.7.2] - 2024-12-09
+
 ### Added
 
 - Support `.env`
@@ -306,6 +308,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.7.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.2
 [9.7.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.1
 [9.7.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.0
 [9.6.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.6.0
