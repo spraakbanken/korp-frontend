@@ -103,10 +103,9 @@ const createStatisticsService = function () {
             const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
             for (const row of e.data) {
                 if (isTotalRow(row)) continue
-                for (const type of row.statsValues) {
-                    for (const attr in type) {
-                        row.formattedValue[attr] = stringifiers[attr](type[attr])
-                    }
+                for (const attr of reduceVals) {
+                    const words = row.statsValues.map((word) => word[attr][0])
+                    row.formattedValue[attr] = stringifiers[attr](words)
                 }
             }
 
