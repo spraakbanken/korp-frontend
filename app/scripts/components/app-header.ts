@@ -34,7 +34,7 @@ type HeaderScope = IScope & {
     lang: string
 }
 
-angular.module("korpApp").component("header", {
+angular.module("korpApp").component("appHeader", {
     template: html`
         <div id="header">
             <div class="flex items-center justify-between px-3 py-2" id="top_bar">
