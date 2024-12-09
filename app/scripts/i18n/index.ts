@@ -1,12 +1,17 @@
 /** @format */
 import isObject from "lodash/isObject"
 import settings from "@/settings"
-import { getService } from "@/util"
-import type { LangLocMap, LangString, LocLangMap, LocMap } from "@/i18n/types"
+import { getService, getUrlHash } from "@/util"
+import type { LangString, LocLangMap, LocMap } from "@/i18n/types"
 
 /** Get the current UI language. */
 export function getLang(): string {
-    return getService("$rootScope").lang || settings.default_language
+    // If called during bootstrap, the Root Scope service may not be ready
+    try {
+        return getService("$rootScope").lang || settings.default_language
+    } catch (e) {
+        return getUrlHash("lang") || settings.default_language
+    }
 }
 
 /**
@@ -30,7 +35,9 @@ export function loc(key: string, lang?: string) {
  * @param lang The code of the language to translate to. Defaults to the global current language.
  * @returns The translated string, or undefined if no translation is found.
  */
-export function locObj(map: LangString, lang?: string): string | undefined {
+export function locObj(map: undefined, lang?: string): undefined
+export function locObj(map: LangString, lang?: string): string
+export function locObj(map?: LangString, lang?: string) {
     if (!map) return undefined
     if (typeof map == "string") return map
 
@@ -55,9 +62,11 @@ export function locObj(map: LangString, lang?: string): string | undefined {
  * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
  * @returns {string} The translated string, undefined if no translation is found, or the value of `key` if `translations` is unusable.
  */
-export function locAttribute(translations: LocMap | LocLangMap, key: string, lang?: string): string {
+export function locAttribute(translations: LocMap | LocLangMap | undefined, key: string, lang?: string): string {
     lang = lang || getLang()
-    if (translations && translations[key])
-        return isObject(translations[key]) ? translations[key][lang] : translations[key]
+    if (translations?.[key]) {
+        const translation = translations[key]
+        return isObject(translation) ? translation[lang] : translation
+    }
     return key
 }

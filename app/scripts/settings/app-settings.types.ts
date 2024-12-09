@@ -7,6 +7,7 @@ import { Labeled, LangString } from "@/i18n/types"
 import { Attribute } from "./config.types"
 import { RootScope } from "@/root-scope.types"
 import { HashParams } from "@/urlparams"
+import { OperatorKorp } from "@/cqp_parser/cqp.types"
 
 export type AppSettings = {
     auth_module?: string | { module: string; options: Record<string, any> }
@@ -20,7 +21,7 @@ export type AppSettings = {
         label: LangString
     }
     cqp_prio: string[]
-    default_options?: Record<string, string>
+    default_options?: Record<string, OperatorKorp>
     default_language: string
     default_overview_context: string
     default_reading_context: string
@@ -40,10 +41,11 @@ export type AppSettings = {
     hits_per_page_values: number[]
     hits_per_page_default: number
     initialization_checks?: (rootScope: RootScope) => Promise<boolean>
+    input_case_insensitive_default?: boolean
     /** codes for translation ISO-639-1 to 639-2 */
     iso_languages: Record<string, string>
     korp_backend_url: string
-    languages?: Labeled[]
+    languages: Labeled[]
     map_center?: { lat: number; lng: number; zoom: number }
     map_enabled?: boolean
     markup: Record<string, string>
@@ -57,6 +59,8 @@ export type AppSettings = {
     news_url?: string
     reduce_word_attribute_selector: "union" | "intersection"
     reduce_struct_attribute_selector: "union" | "intersection"
+    statistics?: boolean
+    statistics_case_insensitive_default?: boolean
     statistics_search_default: boolean
     urnResolver?: string
     visible_modes: number

@@ -5,16 +5,6 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 
-@font-face {
-  font-family: "Source Sans Pro";
-  src: url(SourceSansPro-Regular.otf);
-}
-@font-face {
-  font-family: "Source Sans Pro";
-  src: url(SourceSansPro-Semibold.otf);
-  font-weight : bold;
-}
-
 * {
     box-sizing: border-box;
 }
@@ -758,7 +748,7 @@ table {
   display: none;
 }
 
-#columns {
+#results {
   transition : width 300ms;
   width: 100%;
   will-change: width;
@@ -1233,7 +1223,7 @@ option[value^='? string:sentence ?'] {display : none;}
   opacity : 0.6;
 }
 
-#results-wrapper .nav-tabs li:nth-child(4) {
+#results .nav-tabs li:nth-child(4) {
   margin-left : 1em;
 }
 
@@ -1364,26 +1354,6 @@ slider {
       margin-top: 10px;
   }
 
-}
-
-.tab_progress {
-  height: 2px;
-  background-color: darkblue;
-  max-width: 100%;
-  min-width: 3%;
-  position : absolute;
-  left : 0;
-  right : 0;
-  bottom : 0;
-}
-
-.not_loading .tab_progress {
-  display: none;
-}
-
-.not_loading .hits_picture {
-  left: 180px;
-  transition: width 400ms ease;
 }
 
 .pagination {
@@ -1698,10 +1668,6 @@ line.tick {
   .tab-content {
     padding : 1em;
   }
-  .close_icon {
-    cursor: pointer;
-    padding-left: 5px;
-  }
   .nav.nav-tabs {
 
     @apply bg-gradient-to-r from-gray-200 to-white border-b border-gray-200;
@@ -1843,41 +1809,9 @@ line.tick {
   }
 }
 
-.tab_preloaders {
-  display : inline-block;
-  margin-left: 10px;
-  vertical-align: middle;
-  .preloader_spinner {
-    width : 9px;
-    display : inline;
-  }
-}
-
-
-
-
-.close_icon {
-  display : inline;
-}
-.tab_spinner {
-  display : none;
-  width : 13px;
-  margin-left: 10px;
-  vertical-align: middle;
-}
-.loading .tab_spinner {
-  display : inline-block;
-}
-.loading .close_icon {
-  display : none;
-}
-
 .tab-content {
   overflow: hidden;
 }
-
-
-
 
 
 /* Side notes for calling out things
@@ -1918,6 +1852,8 @@ line.tick {
   border-radius: 2px;
   max-height : 575px;
   overflow-y: auto;
+  width: max-content; // avoid wrapping lines
+  max-width: 40em; // readable width
 
   li {
     &.selected a {
@@ -1990,6 +1926,9 @@ li.active a span .num-to-find {
       background: rgb(242, 247, 255);
     }
     .attribute {
+      display: flex;
+      overflow-x: hidden;
+      white-space: nowrap;
       cursor: pointer;
       &:hover {
         background-color : lighten(#999, 30%);
@@ -2001,7 +1940,7 @@ li.active a span .num-to-find {
       margin-right: 4px;
     }
     .reduce-label {
-      position: absolute;
+      flex-grow: 1;
     }
     ul {
       margin: 0;

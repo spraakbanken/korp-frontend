@@ -1,28 +1,27 @@
 /** @format */
 import _ from "lodash"
-import angular, { IScope } from "angular"
+import angular from "angular"
 import settings from "@/settings"
-import { stringifyFunc } from "@/stringify.js"
+import { getStringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
-import { RootScope } from "@/root-scope.types"
+import { CompareTab, RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { CompareItem, CompareResult, CompareTables } from "@/services/backend"
+import { CompareItem, CompareTables } from "@/backend/backend"
+import { TabHashScope } from "@/directives/tab-hash"
 
-type CompareCtrlScope = IScope & {
+type CompareCtrlScope = TabHashScope & {
     closeTab: (index: number, e: Event) => void
     cmp1: SavedSearch
     cmp2: SavedSearch
     error: boolean
     loading: boolean
     max: number
-    promise: JQuery.Promise<CompareResult>
+    promise: CompareTab
     resultOrder: (item: CompareItem) => number
     reduce: string[]
     rowClick: (row: CompareItem, cmp_index: number) => void
     stringify: (x: string) => string
     tables: CompareTables
-    newDynamicTab: any // TODO Defined in tabHash (services.js)
-    closeDynamicTab: any // TODO Defined in tabHash (services.js)
 }
 
 angular.module("korpApp").directive("compareCtrl", () => ({
@@ -51,18 +50,18 @@ angular.module("korpApp").directive("compareCtrl", () => ({
                     s.tables = tables
                     s.reduce = reduce
 
-                    let cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora))
+                    let cl = settings.corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
                     const attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs())
 
                     let stringify = (x: string) => x
                     // currently we only support one attribute to reduce/group by, so simplify by only checking first item
                     const reduceAttrName = _.trimStart(reduce[0], "_.")
                     if (attributes[reduceAttrName]) {
-                        if (attributes[reduceAttrName].stringify) {
-                            stringify = stringifyFunc(reduceAttrName)
-                        } else if (attributes[reduceAttrName].translation) {
-                            stringify = (value) =>
-                                locAttribute(attributes[reduceAttrName].translation, value, $rootScope.lang)
+                        const attribute = attributes[reduceAttrName]
+                        if (attribute.stringify) {
+                            stringify = getStringifier(attribute.stringify)
+                        } else if (attribute.translation) {
+                            stringify = (value) => locAttribute(attribute.translation!, value, $rootScope.lang)
                         }
                     }
                     s.stringify = stringify
@@ -85,16 +84,16 @@ angular.module("korpApp").directive("compareCtrl", () => ({
                         const tokenLength = splitTokens[0][0].length
 
                         // transform result from grouping on attribute to grouping on token place
-                        var tokens = _.map(_.range(0, tokenLength), function (tokenIdx) {
-                            tokens = _.map(reduce, (reduceAttr, attrIdx) =>
+                        var tokens = _.map(_.range(0, tokenLength), (tokenIdx) =>
+                            _.map(reduce, (reduceAttr, attrIdx) =>
                                 _.uniq(_.map(splitTokens, (res) => res[attrIdx][tokenIdx]))
                             )
-                            return tokens
-                        })
+                        )
 
                         const cqps = _.map(tokens, function (token) {
                             const cqpAnd = _.map(_.range(0, token.length), function (attrI) {
-                                let type, val
+                                let type: string | undefined
+                                let val: string
                                 let attrKey = reduce[attrI]
                                 const attrVal = token[attrI]
 
@@ -113,7 +112,7 @@ angular.module("korpApp").directive("compareCtrl", () => ({
                                 const op = type === "set" ? "contains" : "="
 
                                 if (type === "set" && attrVal.length > 1) {
-                                    let variants = []
+                                    const variants: string[][] = []
                                     _.map(attrVal, function (val) {
                                         const parts = val.split(":")
                                         if (variants.length === 0) {
@@ -127,8 +126,8 @@ angular.module("korpApp").directive("compareCtrl", () => ({
                                     })
 
                                     const key = attrVal[0].split(":")[0]
-                                    variants = _.map(variants, (variant) => `:(${variant.join("|")})`)
-                                    val = key + variants.join("")
+                                    const variants2 = _.map(variants, (variant) => `:(${variant.join("|")})`)
+                                    val = key + variants2.join("")
                                 } else {
                                     val = attrVal[0]
                                 }

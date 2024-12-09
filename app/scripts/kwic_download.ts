@@ -3,28 +3,11 @@ import _ from "lodash"
 import moment from "moment"
 import CSV from "comma-separated-values/csv"
 import { locObj } from "@/i18n"
+import { CorpusHeading, isCorpusHeading, isKwic, Row } from "./components/kwic"
 import { type ApiKwic, type KorpQueryParams } from "@/backend/kwic-proxy"
-import { LangString } from "./i18n/types"
 
-// This is what is returned by massageData in kwic.js
-type Row = ApiKwic | LinkedKwic | CorpusHeading
 // The annotations option is not available for parallel
 type AnnotationsRow = ApiKwic | CorpusHeading
-
-type LinkedKwic = {
-    tokens: ApiKwic["tokens"]
-    isLinked: true
-    corpus: string
-}
-
-type CorpusHeading = {
-    newCorpus: LangString
-    noContext?: boolean
-}
-
-const isKwic = (row: Row): row is ApiKwic => "tokens" in row && !isLinkedKwic(row)
-const isLinkedKwic = (row: Row): row is LinkedKwic => "isLinked" in row
-const isCorpusHeading = (row: Row): row is CorpusHeading => "newCorpus" in row
 
 type TableRow = (string | number)[]
 
@@ -52,7 +35,7 @@ function createSearchInfo(requestInfo: KorpQueryParams, totalHits: number) {
 }
 
 function transformDataToAnnotations(data: AnnotationsRow[], searchInfo: string[]) {
-    const firstTokensRow: ApiKwic = data.find((row) => isKwic(row)) as ApiKwic | undefined
+    const firstTokensRow = data.find((row) => isKwic(row)) as ApiKwic | undefined
     if (!firstTokensRow) return undefined
 
     const headers = Object.keys(firstTokensRow.tokens[0]).filter(
@@ -65,7 +48,7 @@ function transformDataToAnnotations(data: AnnotationsRow[], searchInfo: string[]
     res.push(["match"].concat(headers))
     for (const row of data) {
         if (isKwic(row)) {
-            const textAttributes = []
+            const textAttributes: string[] = []
             for (let attrName in row.structs) {
                 const attrValue = row.structs[attrName]
                 textAttributes.push(attrName + ': "' + attrValue + '"')
@@ -97,43 +80,42 @@ function transformDataToAnnotations(data: AnnotationsRow[], searchInfo: string[]
 }
 
 function transformDataToKWIC(data: Row[], searchInfo: string[]) {
-    let corpus: string
+    let corpus: string = ""
     const structHeaders: string[] = []
     let res: TableRow[] = []
     for (const row of data) {
         if (isCorpusHeading(row)) {
             corpus = locObj(row.newCorpus)
         } else if (isKwic(row)) {
-            var attrName, token
-            const leftContext = []
-            const match = []
-            const rightContext = []
+            const leftContext: string[] = []
+            const match: string[] = []
+            const rightContext: string[] = []
 
             if (row.match instanceof Array) {
                 // the user has searched "not-in-order" and we cannot have a left, match and right context for the download
                 // put all data in leftContext
-                for (token of row.tokens) {
+                for (const token of row.tokens) {
                     leftContext.push(token.word)
                 }
             } else {
-                for (token of row.tokens.slice(0, row.match.start)) {
+                for (const token of row.tokens.slice(0, row.match.start)) {
                     leftContext.push(token.word)
                 }
-                for (token of row.tokens.slice(row.match.start, row.match.end)) {
+                for (const token of row.tokens.slice(row.match.start, row.match.end)) {
                     match.push(token.word)
                 }
-                for (token of row.tokens.slice(row.match.end, row.tokens.length)) {
+                for (const token of row.tokens.slice(row.match.end, row.tokens.length)) {
                     rightContext.push(token.word)
                 }
             }
 
-            const structs = []
-            for (attrName in row.structs) {
+            const structs: string[] = []
+            for (const attrName in row.structs) {
                 if (!structHeaders.includes(attrName)) {
                     structHeaders.push(attrName)
                 }
             }
-            for (attrName of structHeaders) {
+            for (const attrName of structHeaders) {
                 if (attrName in row.structs) {
                     structs.push(row.structs[attrName])
                 } else {
@@ -177,13 +159,7 @@ function transformData(dataType: "annotations" | "kwic", data: Row[], requestInf
 }
 
 function makeContent(fileType: "csv" | "tsv", transformedData: TableRow[]): string {
-    let dataDelimiter
-    if (fileType === "csv") {
-        dataDelimiter = ","
-    }
-    if (fileType === "tsv") {
-        dataDelimiter = "\t"
-    }
+    const dataDelimiter = fileType == "csv" ? "," : "\t"
 
     const csv = new CSV(transformedData, {
         delimiter: dataDelimiter,
@@ -200,6 +176,7 @@ export function makeDownload(
     totalHits: number
 ) {
     const table = transformData(dataType, data, requestInfo, totalHits)
+    if (!table) throw new Error("Could not transform data to table")
     const csv = makeContent(fileType, table)
     return createFile(dataType, fileType, csv)
 }

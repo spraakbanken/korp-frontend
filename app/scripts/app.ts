@@ -29,6 +29,7 @@ import "@/components/korp-error"
 import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
+import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 
 // load all custom components
 let customComponents: Record<string, IComponentOptions> = {}
@@ -126,7 +127,7 @@ korpApp.run([
         s.$on("$localeChangeSuccess", () => {
             // The fresh info in $locale only has the 2-letter code, not the 3-letter code that we use
             // Find the configured 3-letter UI language matching the new 2-letter locale
-            const lang = settings["languages"]
+            const lang = settings.languages
                 .map((language) => language.value)
                 .find((lang3) => tmhDynamicLocaleCache.get<ILocaleService>(lang3)?.id == $locale.id)
 
@@ -179,20 +180,7 @@ korpApp.run([
 
         async function initializeCorpusSelection(selectedIds: string[]): Promise<void> {
             // Resolve any folder ids to the contained corpus ids
-            const corpusIds: string[] = []
-            for (const id of selectedIds) {
-                // If it is a corpus, copy the id
-                if (settings.corpora[id]) {
-                    corpusIds.push(id)
-                }
-                // If it is not a corpus, but a folder
-                else if (settings.folders[id]) {
-                    // Resolve contained corpora
-                    corpusIds.push(...collectCorpusIdsInFolder(settings.folders[id]))
-                }
-            }
-            // Replace the possibly mixed list with the list of corpus-only ids
-            selectedIds = corpusIds
+            selectedIds = selectedIds.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
 
             let loginNeededFor: CorpusTransformed[] = []
 
@@ -237,11 +225,9 @@ korpApp.run([
                                 <div>{{'access_partly_denied_continue' | loc:$root.lang}}</div>`,
                             onClose: () => {
                                 const neededIds = loginNeededFor.map((corpus) => corpus.id)
-                                let newIds = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
-                                if (newIds.length == 0) {
-                                    newIds = settings["preselected_corpora"]
-                                }
-                                initializeCorpusSelection(newIds)
+                                const filtered = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
+                                const selected = filtered.length ? filtered : settings["preselected_corpora"] || []
+                                initializeCorpusSelection(selected)
                             },
                         })
                     }
@@ -262,7 +248,7 @@ korpApp.run([
                     content: `{{'corpus_not_available' | loc:$root.lang}}`,
                     onClose: () => {
                         const validIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
-                        const newIds = validIds.length >= 0 ? validIds : settings["preselected_corpora"]
+                        const newIds = validIds.length ? validIds : settings["preselected_corpora"] || []
                         initializeCorpusSelection(newIds)
                     },
                 })
@@ -275,7 +261,7 @@ korpApp.run([
 
         // TODO the top bar could show even though the modal is open,
         // thus allowing switching modes or language when an error has occured.
-        s.openErrorModal = ({ content, resolvable = true, onClose = null, buttonText = null, translations = null }) => {
+        s.openErrorModal = ({ content, resolvable = true, onClose, buttonText, translations }) => {
             type ModalScope = IScope & {
                 translations?: LocLangMap
                 closeModal: () => void
@@ -315,7 +301,7 @@ korpApp.run([
         }
 
         function getCorporaFromHash(): string[] {
-            const corpus: string = $location.search().corpus
+            const corpus = $location.search().corpus
             return corpus ? corpus.split(",") : settings["preselected_corpora"] || []
         }
 

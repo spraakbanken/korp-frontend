@@ -1,10 +1,13 @@
 /** @format */
 
 import omit from "lodash/omit"
+import { SearchParams } from "./urlparams"
 
 /** Get object from local storage. */
-export const localStorageGet = <K extends keyof LocalStorage>(key: K): LocalStorage[K] | undefined =>
-    JSON.parse(localStorage.getItem(key))
+export const localStorageGet = <K extends keyof LocalStorage>(key: K): LocalStorage[K] | undefined => {
+    const json = localStorage.getItem(key)
+    return json ? JSON.parse(json) : undefined
+}
 
 /** Write object to local storage. To delete, use native `localStorage.removeItem(key)`. */
 export const localStorageSet = <K extends keyof LocalStorage>(key: K, value: LocalStorage[K]): void =>
@@ -35,8 +38,10 @@ export function convertJstorage(): void {
 export type LocalStorage = {
     /** Credentials, if authenticated. */
     creds?: Creds
-    /** Recent search queries */
-    searches?: RecentSearch[]
+    /** Recent search queries, most recent first */
+    searches?: {
+        [mode: string]: SearchParams[]
+    }
     /** Search queries saved for comparison in the default Korp mode. */
     saved_searches?: SavedSearch[]
     /** Search queries saved for comparison in the given Korp mode. */

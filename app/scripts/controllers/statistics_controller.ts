@@ -1,20 +1,17 @@
 /** @format */
 import _ from "lodash"
-import angular, { IScope, ITimeoutService } from "angular"
+import angular, { ITimeoutService } from "angular"
 import settings from "@/settings"
-import currentMode from "@/mode"
 import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { ProgressReport } from "@/backend/types"
-import { Dataset } from "@/statistics_worker"
-import { SearchParams } from "@/statistics.types"
-import { SlickgridColumn } from "@/statistics"
+import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
 import { SearchesService } from "@/services/searches"
 import "@/services/searches"
+import { TabHashScope } from "@/directives/tab-hash"
 
-type StatsResultCtrlScope = IScope & {
-    $parent: any
+type StatsResultCtrlScope = TabHashScope & {
     $root: RootScope
     aborted: boolean
     activate: () => void
@@ -22,7 +19,6 @@ type StatsResultCtrlScope = IScope & {
     countCorpora: () => number | null
     data: Dataset
     error: boolean
-    gridData: any
     hasResult: boolean
     ignoreAbort: boolean
     inOrder: boolean
@@ -64,7 +60,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             s.progress = 0
 
             s.tabindex = 2
-            s.gridData = null
 
             s.proxy = statsProxyFactory.create()
 
@@ -85,11 +80,11 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             }
 
             s.onexit = () => {
-                s.$root.jsonUrl = null
+                s.$root.jsonUrl = undefined
             }
 
             s.isActive = () => {
-                return s.tabindex == s.$parent.$parent.tabset.active
+                return s.tabindex == s.activeTab
             }
 
             s.resetView = () => {
@@ -108,6 +103,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             s.makeRequest = (cqp) => {
                 s.error = false
                 const grid = document.getElementById("myGrid")
+                if (!grid) throw new Error("myGrid element not found")
                 grid.innerHTML = ""
 
                 s.hasResult = false
@@ -117,7 +113,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
 
                 s.hasResult = true
 
-                if (currentMode === "parallel") {
+                if (settings.parallel) {
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 
@@ -173,9 +169,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
 
                 s.columns = columns
 
-                s.gridData = data
-
-                if (data[0].total_value[0] === 0) {
+                if (data[0].total[0] === 0) {
                     s.no_hits = true
                     return
                 }

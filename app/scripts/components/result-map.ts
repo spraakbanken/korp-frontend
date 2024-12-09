@@ -127,7 +127,7 @@ angular.module("korpApp").component("resultMap", {
             L.tileLayer.provider("OpenStreetMap").addTo(map)
 
             $ctrl.$onInit = () => {
-                map.setView([$ctrl.center.lat, $ctrl.center.lng], $ctrl.center.zoom)
+                if ($ctrl.center) map.setView([$ctrl.center.lat, $ctrl.center.lng], $ctrl.center.zoom)
                 $scope.showMap = true
             }
 
@@ -279,7 +279,7 @@ angular.module("korpApp").component("resultMap", {
                 let zoom = cluster._zoom + 1
                 while (childClusters.length > 0 && boundsZoom > zoom) {
                     zoom += 1
-                    const newClusters = childClusters.flatMap((childCluster) => childCluster._childClusters)
+                    const newClusters = childClusters.flatMap((childCluster: any) => childCluster._childClusters)
                     childClusters = newClusters
                 }
                 return childClusters.length > 1

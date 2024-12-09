@@ -4,6 +4,7 @@ import moment from "moment"
 import settings from "@/settings"
 import { html } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { RootScope } from "@/root-scope.types"
 
 export default angular.module("korpApp").component("corpusUpdates", {
     template: html`
@@ -17,6 +18,9 @@ export default angular.module("korpApp").component("corpusUpdates", {
                     <div>
                         <strong>{{corpus.title | locObj:$root.lang}}</strong>
                         {{"front_corpus_updated" | loc:$root.lang}}.
+                        <button class="btn btn-xs btn-default" ng-click="selectCorpus(corpus.id)">
+                            {{"toggle_select" | loc:$root.lang}}
+                        </button>
                     </div>
                 </article>
 
@@ -35,8 +39,9 @@ export default angular.module("korpApp").component("corpusUpdates", {
     `,
     bindings: {},
     controller: [
+        "$rootScope",
         "$scope",
-        function ($scope: CorpusUpdatesScope) {
+        function ($rootScope: RootScope, $scope: CorpusUpdatesScope) {
             const $ctrl = this
 
             $scope.LIMIT = 5
@@ -50,7 +55,7 @@ export default angular.module("korpApp").component("corpusUpdates", {
                     // Find most recently updated corpora
                     $scope.recentUpdates = settings.corpusListing.corpora
                         .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
-                        .sort((a, b) => b.info.Updated.localeCompare(a.info.Updated))
+                        .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
                     $scope.toggleExpanded(false)
                 }
             }
@@ -59,7 +64,12 @@ export default angular.module("korpApp").component("corpusUpdates", {
                 $scope.expanded = to !== undefined ? to : !$scope.expanded
                 $scope.recentUpdatesFiltered = $scope.expanded
                     ? $scope.recentUpdates
-                    : $scope.recentUpdates.slice(0, $scope.LIMIT)
+                    : $scope.recentUpdates!.slice(0, $scope.LIMIT)
+            }
+
+            $scope.selectCorpus = (corpusId: string) => {
+                settings.corpusListing.select([corpusId])
+                $rootScope.$broadcast("corpuschooserchange", [corpusId])
             }
         },
     ],
@@ -71,4 +81,5 @@ type CorpusUpdatesScope = IScope & {
     recentUpdatesFiltered: CorpusTransformed[] | null
     expanded: boolean
     toggleExpanded: (to?: boolean) => void
+    selectCorpus: (corpusId: string) => void
 }

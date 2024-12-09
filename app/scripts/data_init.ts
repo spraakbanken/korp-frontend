@@ -4,13 +4,13 @@ import memoize from "lodash/memoize"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
 import timeProxyFactory from "@/backend/time-proxy"
-import * as treeUtil from "./components/corpus_chooser/util"
+import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
-import { fromKeys, getUrlHash, httpConfAddMethodFetch } from "@/util"
+import { fromKeys, httpConfAddMethodFetch } from "@/util"
 import { Labeled, LangLocMap, LocMap } from "./i18n/types"
 import { CorpusInfoResponse } from "./settings/corpus-info.types"
-import { Attribute, Config, Corpus, CustomAttribute } from "./settings/config.types"
+import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
 
 // Using memoize, this will only fetch once and then return the same promise when called again.
@@ -135,21 +135,21 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
             corpus.title = corpus.id
         }
 
-        function transformAttributes<T extends keyof Config["attributes"]>(type: T) {
-            type AttrType = T extends "custom_attributes" ? CustomAttribute : Attribute
-            const attrs = _.fromPairs(
-                corpus[type]?.map((name) => {
-                    const attr = config.attributes[type][name] as AttrType
-                    return [attr.name, attr]
-                }) || []
-            )
-            const order = corpus[type]?.map((name) => config.attributes[type][name].name) || []
-            return { attrs, order }
+        function transformAttributes2<T extends Attribute | CustomAttribute>(
+            attrsKey: keyof Config["attributes"]
+        ): [Record<string, T>, string[]] {
+            const names = corpus[attrsKey]
+            const attrs = config.attributes[attrsKey] as Record<string, T>
+            if (!names || !attrs) return [{}, []]
+            const defs1 = _.pick(attrs, names)
+            const defs = _.keyBy(defs1, "name")
+            const order = names.map((name) => attrs[name].name)
+            return [defs, order]
         }
 
-        const { attrs: attributes, order: _attributes_order } = transformAttributes("pos_attributes")
-        const { attrs: struct_attributes, order: _struct_attributes_order } = transformAttributes("struct_attributes")
-        const { attrs: custom_attributes, order: _custom_attributes_order } = transformAttributes("custom_attributes")
+        const [attributes, _attributes_order] = transformAttributes2("pos_attributes")
+        const [struct_attributes, _struct_attributes_order] = transformAttributes2("struct_attributes")
+        const [custom_attributes, _custom_attributes_order] = transformAttributes2<CustomAttribute>("custom_attributes")
 
         return {
             ..._.omit(corpus, "pos_attributes"),
@@ -182,7 +182,7 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
         ..._.omit(config, "pos_attributes", "corpora"),
         corpora: _.mapValues(config.corpora, transformCorpus),
         modes,
-        mode: modes.find((mode) => mode.selected),
+        mode: modes.find((mode) => mode.selected)!,
     }
 }
 
@@ -204,22 +204,14 @@ function setInitialCorpora(): void {
             )
         }
     } else {
-        let expandedCorpora = []
+        let expandedCorpora: string[] = []
         for (let preItem of settings.preselected_corpora) {
             preItem = preItem.replace(/^__/g, "")
-            expandedCorpora = [].concat(expandedCorpora, treeUtil.getAllCorporaInFolders(settings.folders, preItem))
+            expandedCorpora.push(...getAllCorporaInFolders(settings.folders, preItem))
         }
         // folders expanded, save
         settings.preselected_corpora = expandedCorpora
     }
-
-    const corpusParam = getUrlHash("corpus")
-
-    const currentCorpora = corpusParam
-        ? _.flatten(_.map(corpusParam.split(","), (val) => treeUtil.getAllCorporaInFolders(settings.folders, val)))
-        : settings.preselected_corpora
-
-    settings.corpusListing.select(currentCorpora)
 }
 
 /**
@@ -262,7 +254,9 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     if (!settings.parallel) {
         settings.corpusListing = new CorpusListing(settings.corpora)
     } else {
-        settings.corpusListing = new ParallelCorpusListing(settings.corpora)
+        settings.corpusListing = new ParallelCorpusListing(
+            settings.corpora as Record<string, CorpusTransformed<CorpusParallel>>
+        )
     }
 
     // if the previous config calls didn't yield any corpora, don't ask for time

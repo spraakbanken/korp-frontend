@@ -4,24 +4,27 @@ import settings from "@/settings"
 import { AuthModule } from "./auth.types"
 
 function findAuthModule(): AuthModule | undefined {
-    const authModuleName = settings["auth_module"]?.["module"] || settings["auth_module"]
-    if (authModuleName == "federated_auth") {
+    const name = typeof settings.auth_module == "object" ? settings.auth_module.module : settings.auth_module
+
+    if (name == "federated_auth") {
         return require("./federatedauth/fed_auth")
     }
-    if (authModuleName == "basic_auth" || authModuleName == undefined) {
+
+    if (name == "basic_auth" || !name) {
         // load the default athentication
         return require("./basic_auth")
     }
 
     // must be a custom auth module
     try {
-        return require("custom/" + authModuleName)
+        return require("custom/" + name)
     } catch (error) {
-        console.log("Auth module not available: ", authModule)
+        console.error("Auth module not available: ", authModule)
     }
 }
 
-const authModule = findAuthModule()
+// TODO Provide dummy auth module if not found? Or produce visible crash because it's a config error.
+const authModule = findAuthModule()!
 
 export async function init(): Promise<boolean> {
     const loggedIn = await authModule.init()

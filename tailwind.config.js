@@ -1,10 +1,11 @@
 /** @format */
 module.exports = {
-    // pug doesn't support special characters in class names, so no colon.
-    separator: "_",
     content: ["./app/**/*.js", "./app/**/*.ts", "./app/**/*.html"],
     theme: {
         extend: {
+            animation: {
+                "spin-slow": "spin 2s linear infinite",
+            },
             colors: {
                 gray: {
                     100: "#f5f5f5",

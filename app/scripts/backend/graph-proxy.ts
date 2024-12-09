@@ -8,7 +8,7 @@ import { Factory, httpConfAddMethod } from "@/util"
 
 export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
     granularity: Granularity
-    prevParams: KorpCountTimeParams
+    prevParams: KorpCountTimeParams | null
     prevRequest: AjaxSettings
 
     constructor() {
@@ -16,15 +16,15 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
         this.prevParams = null
     }
 
-    expandSubCqps(subArray: string[]): Record<`subcqp${number}`, string> {
+    expandSubCqps(subArray: string[]): Record<`subcqp${string}`, string> {
         const padding = _.fill(new Array(subArray.length.toString().length), "0")
-        const result = []
+        const result: Record<`subcqp${string}`, string> = {}
         for (let i = 0; i < subArray.length; i++) {
             const cqp = subArray[i]
             const p = padding.slice(i.toString().length).join("")
-            result.push([`subcqp${p}${i}`, cqp])
+            result[`subcqp${p}${i}`] = cqp
         }
-        return _.fromPairs(result)
+        return result
     }
 
     makeRequest(
@@ -98,7 +98,7 @@ type KorpCountTimeParams = {
     cqp: string
     default_within?: string
     with?: string
-    [subcqpn: `subcqp${number}`]: string
+    [subcqpn: `subcqp${string}`]: string
     granularity?: Granularity
     from?: NumericString
     to?: NumericString
@@ -111,13 +111,16 @@ type KorpCountTimeParams = {
 }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count_time/get */
-type KorpCountTimeResponse = {
-    corpora: Record<string, KorpGraphStats | KorpGraphStats[]>
-    combined: KorpGraphStats | KorpGraphStats[]
+export type KorpCountTimeResponse = {
+    corpora: Record<string, KorpGraphStats | (KorpGraphStats | KorpGraphStatsCqp)[]>
+    combined: KorpGraphStats | (KorpGraphStats | KorpGraphStatsCqp)[]
 }
 
-type KorpGraphStats = {
+export type KorpGraphStats = {
     absolute: Histogram
     relative: Histogram
     sums: AbsRelTuple
 }
+
+/** Stats contains subquery if graph was created with multiple rows selected in the stats table. */
+export type KorpGraphStatsCqp = KorpGraphStats & { cqp: string }

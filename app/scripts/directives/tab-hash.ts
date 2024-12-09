@@ -5,7 +5,13 @@ import { UtilsService } from "@/services/utils"
 import { LocationService } from "@/urlparams"
 import "@/services/utils"
 
-type TabHashScope = IScope & {
+type UiBootstrapTabsetScope = IScope & {
+    tabset: {
+        tabs: any[]
+    }
+}
+
+export type TabHashScope = UiBootstrapTabsetScope & {
     activeTab: number
     fixedTabs: Record<number, any>
     maxTab: number

@@ -1,26 +1,25 @@
 /** @format */
 import _ from "lodash"
-import angular, { IScope, ITimeoutService } from "angular"
+import angular, { ITimeoutService } from "angular"
 import settings from "@/settings"
 import { regescape } from "@/util"
-import { RootScope } from "@/root-scope.types"
+import { MapTab, RootScope } from "@/root-scope.types"
 import { AppSettings } from "@/settings/app-settings.types"
-import { MapRequestResult } from "@/services/backend"
+import { MapRequestResult } from "@/backend/backend"
 import { MapResult, Point } from "@/map_services"
 import { WithinParameters } from "@/backend/types"
+import { TabHashScope } from "@/directives/tab-hash"
 
-type MapControllerScope = IScope & {
+type MapControllerScope = TabHashScope & {
     center: AppSettings["map_center"]
     error: boolean
     selectedGroups: string[]
-    markerGroups: Record<string, MarkerGroup>
+    markerGroups?: Record<string, MarkerGroup>
     loading: boolean
     numResults: number
     useClustering: boolean
-    promise: Promise<MapRequestResult | void>
+    promise: MapTab
     restColor: string
-    newDynamicTab: any // TODO Defined in tabHash (services.js)
-    closeDynamicTab: any // TODO Defined in tabHash (services.js)
     closeTab: (idx: number, e: Event) => void
     newKWICSearch: (marker: MarkerEvent) => void
     toggleMarkerGroup: (groupName: string) => void
@@ -78,7 +77,7 @@ angular.module("korpApp").directive("mapCtrl", [
                         $scope.$apply(($scope: MapControllerScope) => {
                             $scope.loading = false
                             $scope.numResults = 20
-                            $scope.markerGroups = result && getMarkerGroups(Rickshaw, result)
+                            $scope.markerGroups = result ? getMarkerGroups(Rickshaw, result) : undefined
                             $scope.selectedGroups = _.keys($scope.markerGroups)
                         })
                     },
@@ -92,6 +91,7 @@ angular.module("korpApp").directive("mapCtrl", [
                 )
 
                 $scope.toggleMarkerGroup = function (groupName: string) {
+                    if (!$scope.markerGroups) throw new Error("markerGroups not set")
                     $scope.markerGroups[groupName].selected = !$scope.markerGroups[groupName].selected
                     // It is important to replace the array, not modify it, to trigger a watcher in the result-map component.
                     if ($scope.selectedGroups.includes(groupName)) {

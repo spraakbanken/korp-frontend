@@ -3,6 +3,8 @@ import $ from "jquery"
 import currentMode from "@/mode"
 import { locationSearchGet } from "@/util"
 import { HashParams } from "@/urlparams"
+import "@fontsource/source-sans-pro/400.css"
+import "@fontsource/source-sans-pro/600.css"
 
 declare global {
     interface Window {
@@ -66,17 +68,6 @@ require("./lib/jquery.tooltip.pack.js")
 require("./scripts/main")
 require("./scripts/app")
 
-require("./scripts/controllers/comparison_controller")
-require("./scripts/controllers/kwic_controller")
-require("./scripts/controllers/example_controller")
-require("./scripts/controllers/statistics_controller")
-require("./scripts/controllers/trend_diagram_controller")
-require("./scripts/controllers/word_picture_controller")
-require("./scripts/controllers/map_controller")
-
-require("./scripts/text_reader_controller.js")
 require("./scripts/video_controllers.js")
-require("./scripts/extended.js")
-require("./scripts/struct_services.js")
-require("./scripts/filter_directives.js")
-require("./scripts/matomo.js")
+require("./scripts/backend/struct-service")
+require("./scripts/matomo")

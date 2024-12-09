@@ -138,6 +138,7 @@ settings that affect the frontend.
 - __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
 - __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
+- __input_case_insensitive_default__ - Boolean. Decides if the simple search input should be case-insensitive by default.
 - __iso_languages__ - A map of two-letter ISO language codes to three-letter. Only used for fixing old links. Default: See `settings.js`
 - __map_center__ - See [Map](#map)
 - __map_enabled__ - Boolean. See [Map](#map)
@@ -155,6 +156,8 @@ settings that affect the frontend.
 - __news_url__ - See [News widget](#news-widget)
 - __reduce_word_attribute_selector__ - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora *word* attributes or only the attributes common to selected corpora. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
 - __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
+- __statistics__ - Boolean. Enable statistics search. Default: `true`
+- __statistics_case_insensitive_default__ - Boolean. Decides if the "Reduce by" option should be case-insensitive by default.
 - __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
@@ -825,15 +828,15 @@ If the commit depends on new functions in the backend, add a note of which backe
 
 ### Code format
 
-The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before committing (`yarn run prettier app/scripts/my_file.js`).
+The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before committing (`yarn run format`).
 
-We use [Babel](https://babeljs.io/) to transform modern Javascript to something that works in all browsers. A non-exhaustive list of features available is: https://babeljs.io/docs/en/learn .
+TypeScript is used to provide typing and to transpile new language features for older browsers.
 
 Use modern features where it looks good. Always use `const` or `let` instead of `var`.
 
 Identifiers should be in camel case (although our old Korp code may still have some identifiers that uses snake case).
 
-Aim to write code that is easily understood, and supplement with comments as needed. Update comments as a part of a pull request when something changes so that the comments are no longer valid.
+Aim to write code that is easily understood, and supplement with comments as needed. Keep comments up to date while making code changes.
 
 Files should be named using snake case: `my_file.js`.
 

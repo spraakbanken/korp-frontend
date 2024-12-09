@@ -3,7 +3,7 @@ import _ from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"
 import { parse as parse_ } from "./CQPParser"
-import type { Condition, CqpQuery, DateRange, OperatorKorp } from "./cqp.types"
+import type { Condition, CqpQuery, DateRange, Operator, OperatorKorp, Value } from "./cqp.types"
 
 /** Parse CQP string to syntax tree. */
 // Rename to be able to add typing.
@@ -14,63 +14,59 @@ export { parse }
  * Create CQP expression for a date interval condition.
  *
  * @param opKorp Operator to use if not using `expanded_format`
- * @param val An array like `[fromdate, todate, fromtime, totime]`
+ * @param range An array like `[fromdate, todate, fromtime, totime]`
  * @param expanded_format Whether to convert to standard CQP or keep Korp-specific operators
  */
-export function parseDateInterval(opKorp: OperatorKorp, val: DateRange, expanded_format?: boolean) {
-    let out: string
-    val = _.invokeMap(val, "toString")
-    if (!expanded_format) {
-        return `$date_interval ${opKorp} '${val.join(",")}'`
+export function parseDateInterval(opKorp: OperatorKorp, range: DateRange, expanded_format?: boolean) {
+    if (!expanded_format) return `$date_interval ${opKorp} '${range.join(",")}'`
+
+    const [fromdate, todate, fromtime, totime] = range
+    if (!fromdate || !todate) return ""
+
+    const isFromDateSame = `int(_.text_datefrom) = ${fromdate}`
+    const isFromDateInclusive = `int(_.text_datefrom) >= ${fromdate}`
+    const isFromDateExclusive = `int(_.text_datefrom) > ${fromdate}`
+    const isFromTimeInclusive = `(${isFromDateSame} & int(_.text_timefrom) >= ${fromtime})`
+
+    const isToDateSame = `int(_.text_dateto) = ${todate}`
+    const isToDateInclusive = `int(_.text_dateto) <= ${todate}`
+    const isToDateExclusive = `int(_.text_dateto) < ${todate}`
+    const isToTimeInclusive = `(${isToDateSame} & int(_.text_timeto) <= ${totime})`
+
+    if (String(fromdate) == String(todate)) {
+        const fromCond = fromtime == "000000" ? isFromDateSame : isFromTimeInclusive
+        const toCond = totime == "235959" ? isToDateSame : isToTimeInclusive
+        return `${fromCond} & ${toCond}`
     }
 
-    const [fromdate, todate, fromtime, totime] = val
+    const fromCond = fromtime == "000000" ? isFromDateInclusive : `(${isFromTimeInclusive} | ${isFromDateExclusive})`
+    const toCond = totime == "235959" ? isToDateInclusive : `(${isToTimeInclusive} | ${isToDateExclusive})`
+    return `${fromCond} & ${toCond}`
+}
 
-    const m_from = moment(fromdate, "YYYYMMDD")
-    const m_to = moment(todate, "YYYYMMDD")
-
-    const fieldMapping = {
-        text_datefrom: fromdate,
-        text_dateto: todate,
-        text_timefrom: fromtime,
-        text_timeto: totime,
-    }
-
-    function op(field: string, operator: string, valfield?: string) {
-        val = valfield ? fieldMapping[valfield] : fieldMapping[field]
-        return `int(_.${field}) ${operator} ${val}`
-    }
-
-    const days_diff = m_from.diff(m_to, "days")
-
-    if (days_diff === 0) {
-        // same day
-        out = `${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")} & ${op("text_dateto", "=")} & ${op(
-            "text_timeto",
-            "<="
-        )}`
-    } else if (days_diff === -1) {
-        // one day apart
-        out = `((${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")}) | ${op(
-            "text_datefrom",
-            "=",
-            "text_dateto"
-        )}) & (${op("text_dateto", "=", "text_datefrom")} | (${op("text_dateto", "=")} & ${op("text_timeto", "<=")}))`
-    } else {
-        out = `((${op("text_datefrom", "=")} & ${op("text_timefrom", ">=")}) | (${op("text_datefrom", ">")} & ${op(
-            "text_datefrom",
-            "<=",
-            "text_dateto"
-        )})) & (${op("text_dateto", "<")} | (${op("text_dateto", "=")} & ${op("text_timeto", "<=")}))`
-    }
-
-    out = out.replace(/\s+/g, " ")
-
-    if (!fromdate || !todate) {
-        out = ""
-    }
-
-    return out
+/** Helps parsing a frontend-type operator to a standard operator and a modified value. */
+const operatorMap: Readonly<Record<OperatorKorp, (val: Value) => [Value, Operator]>> = {
+    "=": (val) => [val, "="],
+    "!=": (val) => [val, "!="],
+    contains: (val) => [val, "contains"],
+    "not contains": (val) => [val, "not contains"],
+    "^=": (val) => [val + ".*", "="],
+    "_=": (val) => [`.*${val}.*`, "="],
+    "&=": (val) => [`.*${val}`, "="],
+    "*=": (val) => [val, "="],
+    "!*=": (val) => [val, "!="],
+    rank_contains: (val) => [val + ":.*", "contains"],
+    not_rank_contains: (val) => [val + ":.*", "not contains"],
+    highest_rank: (val) => [`\\|${val}:.*`, "="],
+    not_highest_rank: (val) => [`\\|${val}:.*`, "!="],
+    regexp_contains: (val) => [val, "contains"],
+    not_regexp_contains: (val) => [val, "not contains"],
+    starts_with_contains: (val) => [`${val}.*`, "contains"],
+    not_starts_with_contains: (val) => [`${val}.*`, "not contains"],
+    incontains_contains: (val) => [`.*?${val}.*`, "contains"],
+    not_incontains_contains: (val) => [`.*${val}.*`, "not contains"],
+    ends_with_contains: (val) => [`.*${val}`, "contains"],
+    not_ends_with_contains: (val) => [`.*${val}`, "not contains"],
 }
 
 /**
@@ -82,7 +78,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
     if (expanded_format == null) {
         expanded_format = false
     }
-    const output = []
+    const output: string[] = []
     cqp_obj = prioSort(_.cloneDeep(cqp_obj))
 
     for (let token of cqp_obj) {
@@ -97,30 +93,12 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
         }
 
         const outer_and_array: string[][] = []
-        for (let and_array of token.and_block) {
+        for (let and_array of token.and_block || []) {
             const or_array: string[] = []
             for (let { type, op, val, flags } of and_array) {
                 var out
                 if (expanded_format) {
-                    ;[val, op] = ({
-                        "^=": [val + ".*", "="],
-                        "_=": [`.*${val}.*`, "="],
-                        "&=": [`.*${val}`, "="],
-                        "*=": [val, "="],
-                        "!*=": [val, "!="],
-                        rank_contains: [val + ":.*", "contains"],
-                        not_rank_contains: [val + ":.*", "not contains"],
-                        highest_rank: [`\\|${val}:.*`, "="],
-                        not_highest_rank: [`\\|${val}:.*`, "!="],
-                        regexp_contains: [val, "contains"],
-                        not_regexp_contains: [val, "not contains"],
-                        starts_with_contains: [`${val}.*`, "contains"],
-                        not_starts_with_contains: [`${val}.*`, "not contains"],
-                        incontains_contains: [`.*?${val}.*`, "contains"],
-                        not_incontains_contains: [`.*${val}.*`, "not contains"],
-                        ends_with_contains: [`.*${val}`, "contains"],
-                        not_ends_with_contains: [`.*${val}`, "not contains"],
-                    }[op] || [val, op]) as [string | DateRange, OperatorKorp]
+                    ;[val, op] = operatorMap[op](val)
                 }
 
                 let flagstr = ""
@@ -176,7 +154,7 @@ export function getTimeInterval(obj: CqpQuery): [Moment, Moment] | undefined {
     let froms: Moment[] = []
     let tos: Moment[] = []
     for (let token of obj) {
-        for (let or_block of token.and_block) {
+        for (let or_block of token.and_block || []) {
             for (let item of or_block) {
                 if (item.type === "date_interval") {
                     froms.push(moment(`${item.val[0]}${item.val[2]}`, "YYYYMMDDhhmmss"))
@@ -191,8 +169,7 @@ export function getTimeInterval(obj: CqpQuery): [Moment, Moment] | undefined {
     }
     const from = _.minBy(froms, (m) => m.toDate())
     const to = _.maxBy(tos, (m) => m.toDate())
-
-    return [from, to]
+    return from && to ? [from, to] : undefined
 }
 
 /**
@@ -221,7 +198,7 @@ export function mergeCqpExprs(cqpObj1: CqpQuery, cqpObj2: CqpQuery) {
         const token = cqpObj2[i]
         for (let j = 0; j < cqpObj1.length; j++) {
             if (cqpObj1[j].and_block) {
-                cqpObj1[j].and_block = cqpObj1[j].and_block.concat(token.and_block)
+                cqpObj1[j].and_block = cqpObj1[j].and_block!.concat(token.and_block || [])
                 break
             }
         }

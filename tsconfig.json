@@ -2,7 +2,9 @@
     "compilerOptions": {
         "outDir": "./dist/",
         "sourceMap": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "skipLibCheck": true,
         "module": "esnext",
         "moduleResolution": "node",
         "target": "es6",

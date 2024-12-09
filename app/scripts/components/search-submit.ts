@@ -7,24 +7,28 @@ type SearchSubmitController = IController & {
     onSearch: () => void
     onSearchSave: (params: { name: string }) => void
     disabled: boolean
-    pos: string
+    pos: Position
 }
 
 type SearchSubmitScope = IScope & {
     disabled: boolean
-    pos: string
+    pos: Position
     name: string
     isPopoverVisible: boolean
     togglePopover: (event: Event) => void
     popHide: () => void
     popShow: () => void
+    onWrapperKeydown: (event: KeyboardEvent) => void
+    onPopoverKeydown: (event: KeyboardEvent) => void
     onSubmit: () => void
     onSendClick: (event: Event) => void
     onPopoverClick: (event: Event) => void
 }
 
+type Position = "top" | "bottom" | "right" | "left"
+
 angular.module("korpApp").component("searchSubmit", {
-    template: html`<div class="search_submit">
+    template: html`<div class="search_submit" ng-keydown="onWrapperKeydown($event)">
         <div class="btn-group">
             <button class="btn btn-primary" id="sendBtn" ng-click="onSendClick()" ng-disabled="disabled">
                 {{'search' | loc:$root.lang}}
@@ -36,7 +40,7 @@ angular.module("korpApp").component("searchSubmit", {
         <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">
             <div class="arrow"></div>
             <h3 class="popover-title">{{'compare_save_header' | loc:$root.lang}}</h3>
-            <form class="popover-content" ng-submit="onSubmit()">
+            <div class="popover-content" ng-keydown="onPopoverKeydown($event)">
                 <div>
                     <label>
                         {{'compare_name' | loc:$root.lang}}:
@@ -44,9 +48,11 @@ angular.module("korpApp").component("searchSubmit", {
                     </label>
                 </div>
                 <div class="btn_container">
-                    <button class="btn btn-primary btn-sm">{{'compare_save' | loc:$root.lang}}</button>
+                    <button class="btn btn-primary btn-sm" ng-click="onSubmit()">
+                        {{'compare_save' | loc:$root.lang}}
+                    </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>`,
     bindings: {
@@ -68,7 +74,7 @@ angular.module("korpApp").component("searchSubmit", {
             }
 
             const popover = $element.find(".popover")
-            const opposites = {
+            const opposites: Record<Position, Position> = {
                 bottom: "top",
                 top: "bottom",
                 right: "left",
@@ -93,13 +99,6 @@ angular.module("korpApp").component("searchSubmit", {
             }
             $scope.isPopoverVisible = false
 
-            const onEscape = (event: JQueryEventObject) => {
-                if (event.key != "Escape") {
-                    $scope.popHide()
-                    return false
-                }
-            }
-
             $scope.popShow = function () {
                 $scope.isPopoverVisible = true
                 const horizontal = ["top", "bottom"].includes($scope.pos)
@@ -110,15 +109,29 @@ angular.module("korpApp").component("searchSubmit", {
                     .focus()
                     .position({ my, at, of: $element.find(".opener") })
 
-                $rootElement.on("keydown", onEscape)
                 $rootElement.on("click", $scope.popHide)
             }
 
             $scope.popHide = function () {
                 $scope.isPopoverVisible = false
                 popover.fadeOut("fast")
-                $rootElement.off("keydown", onEscape)
                 $rootElement.off("click", $scope.popHide)
+            }
+
+            $scope.onWrapperKeydown = (event: KeyboardEvent) => {
+                if (event.key == "Escape") {
+                    $scope.popHide()
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+
+            $scope.onPopoverKeydown = (event: KeyboardEvent) => {
+                if (event.key == "Enter") {
+                    $scope.onSubmit()
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
             }
 
             $scope.onSubmit = function () {

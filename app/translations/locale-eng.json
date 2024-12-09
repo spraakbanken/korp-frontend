@@ -48,6 +48,7 @@
     "warning_header": "Please note",
     "warning_body": "The dependency relations illustrated herein are the result of automated parsing.",
     "fail_text": "An error has occurred.",
+    "fail_alt": "Silhouette of a knocked-out raven",
     "corpus": "Corpus",
     "search_for": "Search for ",
     "show_more": "Show more",
@@ -78,6 +79,7 @@
     "show_deptree": "Show Dependency Tree",
     "dep_tree": "Dependency Tree",
     "download": "Download as",
+    "toggle_select": "select",
 
     "is": "is",
     "equal": "equal",

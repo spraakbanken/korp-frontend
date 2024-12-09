@@ -89,8 +89,8 @@ angular.module("korpApp").component("datetimePicker", {
             })
 
             $scope.handleClick = function (event) {
-                event.originalEvent.preventDefault()
-                event.originalEvent.stopPropagation()
+                event.originalEvent?.preventDefault()
+                event.originalEvent?.stopPropagation()
             }
         },
     ],

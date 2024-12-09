@@ -15,7 +15,7 @@ export interface RowsEntity {
     absolute: number
 }
 export interface Value {
-    word?: string[] | null
+    [attr: string]: string[] | string
 }
 export interface Sums {
     relative: number

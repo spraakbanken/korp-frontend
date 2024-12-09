@@ -3,12 +3,15 @@ import _ from "lodash"
 import angular, { IControllerService, IHttpService, type IRequestConfig, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
-import { LangMap } from "./i18n/types"
+import { LangString } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
 import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
-import { Attribute } from "./settings/config.types"
 import { AttributeOption } from "./corpus_listing"
+import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
+import { ApiKwic, KorpQueryResponse } from "./backend/kwic-proxy"
+import { CorpusTransformed } from "./settings/config-transformed.types"
+import { isCorpusHeading, LinkedKwic, Row } from "./components/kwic"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -95,7 +98,7 @@ export class SelectionManager {
         this.aux = $()
     }
 
-    select(word: JQuery<HTMLElement>, aux: JQuery<HTMLElement>): void {
+    select(word: JQuery<HTMLElement>, aux?: JQuery<HTMLElement>): void {
         if (word == null || !word.length) {
             return
         }
@@ -127,9 +130,54 @@ export class SelectionManager {
 export const getCqpAttribute = (option: AttributeOption): string =>
     option.is_struct_attr ? `_.${option.value}` : option.value
 
+/** Format a number like 60723 => 61K */
+export function suffixedNumbers(num: number, lang: string) {
+    let out = ""
+    if (num < 1000) {
+        // 232
+        out = num.toString()
+    } else if (num >= 1000 && num < 1e6) {
+        // 232,21K
+        out = (num / 1000).toFixed(2).toString() + "K"
+    } else if (num >= 1e6 && num < 1e9) {
+        // 232,21M
+        out = (num / 1e6).toFixed(2).toString() + "M"
+    } else if (num >= 1e9 && num < 1e12) {
+        // 232,21G
+        out = (num / 1e9).toFixed(2).toString() + "G"
+    } else if (num >= 1e12) {
+        // 232,21T
+        out = (num / 1e12).toFixed(2).toString() + "T"
+    }
+    return out.replace(".", loc("util_decimalseparator", lang))
+}
+
+/** FooBar -> foo-bar */
+export const kebabize = (str: string): string =>
+    [...str].map((x, i) => (x == x.toUpperCase() ? (i ? "-" : "") + x.toLowerCase() : x)).join("")
+
 /** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
 export const valfilter = (attrobj: AttributeOption): string =>
     attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value
+
+/**
+ * Get an object from a registry with optional options.
+ *
+ * The definition is a name, or a name and options.
+ * If the object is a function, the options are passed to it.
+ */
+export function getConfigurable<T>(
+    registry: Record<string, MaybeConfigurable<T>>,
+    definition: MaybeWithOptions
+): T | undefined {
+    const name = typeof definition === "string" ? definition : definition.name
+    const widget = registry[name]
+    if (_.isFunction(widget)) {
+        const options = typeof definition == "object" ? definition.options : {}
+        return widget(options)
+    }
+    return widget
+}
 
 /**
  * Format a number of "relative hits" (hits per 1 million tokens), using exactly one decimal.
@@ -144,13 +192,13 @@ export function formatRelativeHits(x: number | string, lang?: string) {
 
 /**
  * Format as `<relative> (<absolute>)` plus surrounding HTML.
- * @param absolute Number of absolute hits
- * @param relative Number of relative hits (hits per 1 million tokens)
+ * @param absrel Tuple with numbers of 0) absolute hits and 1) relative hits (hits per 1 million tokens)
  * @param lang The locale to use.
  * @returns A HTML snippet.
  */
-export function hitCountHtml(absolute: number, relative: number, lang?: string) {
+export function hitCountHtml(absrel: [number, number], lang?: string) {
     lang = lang || getLang()
+    const [absolute, relative] = absrel
     const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
     // TODO Remove outer span?
     // TODO Flexbox?
@@ -204,7 +252,7 @@ export function splitLemgram(lemgram: string): LemgramSplit {
     if (!isLemgram(lemgram)) {
         throw new Error(`Input to splitLemgram is not a lemgram: ${lemgram}`)
     }
-    const match = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d+)(:\d+)?$/)
+    const match = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d+)(:\d+)?$/)!
     return {
         morph: match[2],
         form: match[3],
@@ -228,10 +276,11 @@ const saldoRegexp = /(.*?)\.\.(\d\d?)(:\d+)?$/
  * Render a SALDO string as pretty HTML.
  * @param saldoId A SALDO string, e.g. "vara..2"
  * @param appendIndex Whether the numerical index should be included in output.
- * @returns An HTML string.
+ * @returns An HTML string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
  */
 export function saldoToHtml(saldoId: string, appendIndex?: boolean): string {
     const match = saldoId.match(saldoRegexp)
+    if (!match) return saldoId
     const concept = match[1].replace(/_/g, " ")
     const indexHtml = appendIndex && match[2] !== "1" ? `<sup>${match[2]}</sup>` : ""
     return `${concept}${indexHtml}`
@@ -240,10 +289,11 @@ export function saldoToHtml(saldoId: string, appendIndex?: boolean): string {
 /**
  * Render a SALDO string in pretty plain text.
  * @param saldoId A SALDO string, e.g. "vara..2"
- * @returns An plain-text string.
+ * @returns An plain-text string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
  */
 export function saldoToString(saldoId: string): string {
     const match = saldoId.match(saldoRegexp)
+    if (!match) return saldoId
     const concept = match[1].replace(/_/g, " ")
     const indexSup = parseInt(match[2]) > 1 ? numberToSuperscript(match[2]) : ""
     return `${concept}${indexSup}`
@@ -255,14 +305,17 @@ export function saldoToString(saldoId: string): string {
  * @returns A string of superscript numbers.
  */
 function numberToSuperscript(number: string | number): string {
-    return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[n]).join("")
+    return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
 }
 
 // Add download links for other formats, defined in
 // settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
-export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data): void {
+export function setDownloadLinks(
+    xhr_settings: JQuery.AjaxSettings,
+    result_data: { kwic: Row[]; corpus_order: string[] }
+): void {
     // If some of the required parameters are null, return without
     // adding the download links.
     if (
@@ -282,7 +335,8 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
     // Get the number (index) of the corpus of the query result hit
     // number hit_num in the corpus order information of the query
     // result.
-    const get_corpus_num = (hit_num) => result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus)
+    const get_corpus_num = (hit_num: number) =>
+        result_data.corpus_order.indexOf((result_data.kwic[hit_num] as ApiKwic | LinkedKwic).corpus)
 
     console.log("setDownloadLinks data:", result_data)
     $("#download-links").empty()
@@ -293,7 +347,7 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
     )
     // Settings of the corpora in the result, to be passed to the
     // download script
-    const result_corpora_settings = {}
+    const result_corpora_settings: Record<string, CorpusTransformed> = {}
     let i = 0
     while (i < result_corpora.length) {
         const corpus_ids = result_corpora[i].toLowerCase().split("|")
@@ -352,10 +406,16 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
             if (!params) {
                 return
             }
-            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script, params)
+            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script!, params)
             const self = $(this)
             return setTimeout(() => self.val("init"), 1000)
         })
+}
+
+/** Split a string by the first occurence of a given separator */
+export const splitFirst = (sep: string, s: string): [string, string] => {
+    const pos = s.indexOf(sep)
+    return [s.slice(0, pos), s.slice(pos + sep.length)]
 }
 
 /** Escape special characters in a string so it can be safely inserted in a regular expression. */
@@ -380,13 +440,14 @@ export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig
     // The property to use for GET: AngularJS $http uses params for
     // GET and data for POST, whereas jQuery.ajax uses data for both
     const data = "params" in conf ? conf.params : conf.data
-    if (calcUrlLength(conf.url, data) > settings.backendURLMaxLength) {
+    if (calcUrlLength(conf.url!, data) > settings.backendURLMaxLength) {
         conf.method = "POST"
         conf.data = data
         if ("params" in conf) delete conf.params
     } else {
         conf.method = "GET"
-        conf["params" in conf ? "params" : "data"] = data
+        if ("params" in conf) conf.params = data
+        else conf.data = data
     }
     return conf
 }
@@ -396,7 +457,7 @@ export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig
  * @param {object} conf A $http or jQuery.ajax configuration object.
  * @returns The same object, possibly modified in-place
  */
-export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T): T {
+export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T & { url: string }): T {
     const fixedConf = httpConfAddMethod(conf)
 
     if (fixedConf.method == "POST") {
@@ -424,7 +485,7 @@ export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IReques
 export function httpConfAddMethodFetch(
     url: string,
     params: Record<string, string>
-): { url: string; request?: RequestInit } {
+): { url: string; request: RequestInit } {
     if (calcUrlLength(url, params) > settings.backendURLMaxLength) {
         const body = new FormData()
         for (const key in params) {
@@ -432,7 +493,7 @@ export function httpConfAddMethodFetch(
         }
         return { url, request: { method: "POST", body } }
     } else {
-        return { url: url + "?" + new URLSearchParams(params) }
+        return { url: url + "?" + new URLSearchParams(params), request: {} }
     }
 }
 
@@ -443,7 +504,7 @@ export function httpConfAddMethodFetch(
  * @param lang The code of the language to translate to. Defaults to the global current language.
  * @returns A copy of the list, sorted.
  */
-export function collatorSort(elems: LangMap[], key: string | number, lang?: string) {
+export function collatorSort<K extends keyof any, T extends Record<K, LangString>>(elems: T[], key: K, lang?: string) {
     lang = lang || getLang()
     const comparator = new Intl.Collator(lang).compare
     return elems.slice().sort((a, b) => comparator(locObj(a[key], lang), locObj(b[key], lang)))

@@ -2,11 +2,10 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressReport, ProgressResponse } from "@/backend/types"
+import type { AjaxSettings, KorpResponse, ProgressReport } from "@/backend/types"
 import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 
 export class KwicProxy extends BaseProxy<KorpQueryResponse> {
-    foundKwic: boolean
     prevCQP?: string
     prevParams: KorpQueryParams | null
     prevRequest: JQuery.AjaxSettings | null
@@ -16,23 +15,20 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
     constructor() {
         super()
         this.prevRequest = null
-        this.queryData = null
+        this.queryData = undefined
         this.prevParams = null
-        this.foundKwic = false
     }
 
     makeRequest(
         options: KorpQueryRequestOptions,
-        page: number,
+        page: number | undefined,
         progressCallback: (data: ProgressReport<KorpQueryResponse>) => void,
         kwicCallback: (data: KorpResponse<KorpQueryResponse>) => void
     ): JQuery.jqXHR<KorpResponse<KorpQueryResponse>> {
         const self = this
-        this.foundKwic = false
         this.resetRequest()
         if (!kwicCallback) {
-            console.error("No callback for query result")
-            return
+            throw new Error("No callback for query result")
         }
         self.progress = 0
 
@@ -56,13 +52,13 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
             ...options.ajaxParams,
         }
 
-        const show = []
-        const show_struct = []
+        const show: string[] = []
+        const show_struct: string[] = []
 
         for (let corpus of settings.corpusListing.selected) {
             for (let key in corpus.within) {
                 // val = corpus.within[key]
-                show.push(_.last(key.split(" ")))
+                show.push(key.split(" ").pop()!)
             }
             for (let key in corpus.attributes) {
                 // val = corpus.attributes[key]
@@ -107,20 +103,20 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
             success(data: KorpQueryResponse, status, jqxhr) {
                 self.queryData = data.query_data
                 self.cleanup()
-                // TODO Should be `options.ajaxParams.incremental`?
-                if (data["incremental"] === false || !this.foundKwic) {
-                    return kwicCallback(data)
-                }
+                // Run the callback to show results, if not already done by the progress handler
+                if (!this.foundKwic) kwicCallback(data)
             },
 
-            progress(data, e) {
+            progress(jqxhr, e: ProgressEvent) {
+                // Calculate progress, used for progress bars
                 const progressObj = self.calcProgress(e)
-                if (progressObj == null) return
-
                 progressCallback(progressObj)
+
+                // Show current page of results if they are available
+                // The request may continue to count hits in the background
                 if ("kwic" in progressObj.struct) {
                     this.foundKwic = true
-                    return kwicCallback(progressObj.struct as KorpQueryResponse)
+                    kwicCallback(progressObj.struct as KorpQueryResponse)
                 }
             },
         }
@@ -160,7 +156,7 @@ export type KorpQueryRequestOptions = {
     // TODO Should start,end really exist here as well as under ajaxParams?
     start?: number
     end?: number
-    ajaxParams?: KorpQueryParams & {
+    ajaxParams: KorpQueryParams & {
         command?: string
     }
 }
@@ -185,15 +181,16 @@ export type KorpQueryResponse = {
 
 /** Search hits */
 export type ApiKwic = {
+    corpus: string
     /** An object for each token in the context, with attribute values for that token */
-    tokens: Record<string, any>[]
+    tokens: Token[]
     /** Attribute values for the context (e.g. sentence) */
     structs: Record<string, any>
     /** Specifies the position of the match in the context. If `in_order` is false, `match` will consist of a list of match objects, one per highlighted word */
     match: KwicMatch | KwicMatch[]
     /** Hits from aligned corpora if available, otherwise omitted */
     aligned: {
-        [linkedCorpusId: `${string}-${string}`]: Record<string, any>[]
+        [linkedCorpusId: `${string}-${string}`]: Token[]
     }
 }
 
@@ -205,4 +202,17 @@ type KwicMatch = {
     end: number
     /** Global corpus position of the match */
     position: number
+}
+
+export type Token = {
+    word: string
+    structs?: {
+        open?: {
+            [element: string]: {
+                [attr: string]: string
+            }
+        }[]
+        close?: string[]
+    }
+    [attr: string]: any
 }

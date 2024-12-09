@@ -28,6 +28,11 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
+"@fontsource/source-sans-pro@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/source-sans-pro/-/source-sans-pro-5.1.0.tgz#17f39585dcfe9726effae887d1200b2fa8b8861a"
+  integrity sha512-GJijHmnPKwA1G8MqUVOZzbIW8jLBFsJGugAb5/IikvTHHmLp+pJy+g8EhyWbfR8pI04i/EStzW0AzOv0KQEhzg==
+
 "@fortawesome/fontawesome-free@6.2.1":
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-6.2.1.tgz#344baf6ff9eaad7a73cff067d8c56bfc11ae5304"
@@ -394,6 +399,13 @@
   resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.8.tgz#518609aefb797da19bf222feb199e8f653ff7627"
   integrity sha512-0vWLNK2D5MT9dg0iOo8GlKguPAU02QjmZitPEsXRuJXU/OGIOt9vT9Fc26wtYuavLxtO45v9PGleoL9Z0k1LHg==
 
+"@types/slickgrid@^2.1.40":
+  version "2.1.40"
+  resolved "https://registry.yarnpkg.com/@types/slickgrid/-/slickgrid-2.1.40.tgz#07f8aa7d3745aa5d0f64cc666bb877562c8eaa59"
+  integrity sha512-+HWaipRr4bw0cy4eS8PCWxo+Fi66aL+mh36unRLAWtatAvMnxpldTKfpe9T7zdNtgN+rq+/faux3JzFR1mj/dg==
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/sockjs@^0.3.33":
   version "0.3.33"
   resolved "https://registry.yarnpkg.com/@types/sockjs/-/sockjs-0.3.33.tgz#570d3a0b99ac995360e3136fd6045113b1bd236f"
@@ -679,13 +691,6 @@ angular-filter@0.5.17:
   integrity sha512-jWZuok808roBwEiNZ2IiBzKD7gf4vWTDzbp9RhhZO9usQxTiywsZ3O94X75MOHBtOzM/rxbI78sHw3Y2sz40QQ==
   dependencies:
     angular "*"
-
-angular-spinner@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/angular-spinner/-/angular-spinner-1.0.1.tgz#0a159297951d1462e0615ba5e1a01fd46de2c1ca"
-  integrity sha512-gJvCOmpwFweWQ4+UHppsha8eScXMylV3QSm8PrI6WmA3/wQEaz81cvDdHgz0prcon4hmPLiccVherKpKASuu/A==
-  dependencies:
-    spin.js "2.3.2"
 
 angular-ui-bootstrap@2.5.6:
   version "2.5.6"
@@ -1014,9 +1019,9 @@ camelcase@^5.0.0:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001426, caniuse-lite@^1.0.30001449:
-  version "1.0.30001616"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001616.tgz"
-  integrity sha512-RHVYKov7IcdNjVHJFNY/78RdG4oGVjbayxv8u5IO74Wv7Hlq4PnJE6mo/OjFijjVFNy5ijnCt6H3IIo4t+wfEw==
+  version "1.0.30001669"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001669.tgz"
+  integrity sha512-DlWzFDJqstqtIVx1zeSpIMLjunf5SmwOw0N2Ck/QSQdS8PLS4+9HrLaYei4w8BIAL7IB/UEDu889d8vhCTPA0w==
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -1548,6 +1553,11 @@ dot-case@^3.0.4:
   dependencies:
     no-case "^3.0.4"
     tslib "^2.0.3"
+
+dotenv@^16.4.5:
+  version "16.4.5"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
 duplexer@^0.1.2:
   version "0.1.2"
@@ -4003,11 +4013,6 @@ spdy@^4.0.2:
     http-deceiver "^1.2.7"
     select-hose "^2.0.0"
     spdy-transport "^3.0.0"
-
-spin.js@2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/spin.js/-/spin.js-2.3.2.tgz#6caa56d520673450fd5cfbc6971e6d0772c37a1a"
-  integrity sha512-ryhCvKCRa6J5Fxa7Y+fnhE2a+e05JwfW5dxO82zPd0uDM9o+qp8p74BJUurjiqCqmDsWNvGOAxfqdD317XIedg==
 
 sprintf-js@^1.1.3:
   version "1.1.3"

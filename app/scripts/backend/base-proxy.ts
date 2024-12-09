@@ -103,13 +103,16 @@ export default abstract class BaseProxy<R extends {} = {}> {
         _.toPairs(header).forEach(([name, value]) => req.setRequestHeader(name, value))
     }
 
-    calcProgress(e: any): ProgressReport<R> {
-        const newText = e.target.responseText.slice(this.prev.length)
-        let struct: ResponseBase & ProgressResponse & Partial<R> = {}
+    calcProgress(e: ProgressEvent): ProgressReport<R> {
+        const xhr = e.target as XMLHttpRequest
+        const newText = xhr.responseText.slice(this.prev.length)
+        type PartialResponse = ResponseBase & ProgressResponse & Partial<R>
+        let struct: PartialResponse = {}
 
         try {
             // try to parse a chunk from the progress object
             // combined with previous chunks that were not parseable
+            // TODO Just use xhr.responseText, skip chunkCache and prev
             struct = this.parseJSON(this.chunkCache + newText)
             // if parse succceeds, we don't care about the content of previous progress events anymore
             this.chunkCache = ""
@@ -118,19 +121,19 @@ export default abstract class BaseProxy<R extends {} = {}> {
             this.chunkCache += newText
         }
 
-        Object.keys(struct).forEach((key) => {
+        Object.keys(struct).forEach((key: string & keyof PartialResponse) => {
             if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
-                const val = struct[key]
-                const currentCorpus = val["corpus"] || val
-                const sum = _(currentCorpus.split("|"))
+                const val = struct[key] as ProgressResponse["progress_0"]
+                const currentCorpus = typeof val == "string" ? val : val["corpus"]
+                const sum = currentCorpus
+                    .split("|")
                     .map((corpus) => Number(settings.corpora[corpus.toLowerCase()].info.Size))
                     .reduce((a, b) => a + b, 0)
                 this.progress += sum
-                this.total_results += val["hits"] !== null ? parseInt(val["hits"]) : null
+                if (typeof val != "string" && "hits" in val)
+                    this.total_results = (this.total_results || 0) + Number(val.hits)
             }
         })
-
-        const stats = (this.progress / this.total) * 100
 
         if (this.total == null && struct.progress_corpora && struct.progress_corpora.length) {
             const tmp = $.map(struct["progress_corpora"], function (corpus) {
@@ -145,7 +148,9 @@ export default abstract class BaseProxy<R extends {} = {}> {
             this.total = _.reduce(tmp, (val1, val2) => val1 + val2, 0)
         }
 
-        this.prev = e.target.responseText
+        const stats = this.total ? (this.progress / this.total) * 100 : 0
+
+        this.prev = xhr.responseText
         return {
             struct,
             stats,

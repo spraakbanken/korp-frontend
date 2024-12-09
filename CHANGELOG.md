@@ -2,6 +2,51 @@
 
 ## [Unreleased]
 
+## [9.7.2] - 2024-12-09
+
+### Added
+
+- Support `.env`
+- Simplify time interval CQP covering whole days [#379](https://github.com/spraakbanken/korp-frontend/issues/379)
+- Track some events with Matomo: search, language switch
+- Select button in Corpus Updates section [#367](https://github.com/spraakbanken/korp-frontend/issues/367)
+- KWICs opened from the statistics should only query relevant corpora [#89](https://github.com/spraakbanken/korp-frontend/issues/89)
+- Alphabetic sorting of statistics columns [#37](https://github.com/spraakbanken/korp-frontend/issues/37)
+
+### Changed
+
+- Font is now a dependency, not checked-in files (and the font looks slightly different)
+- New loading spinners in result tabs
+- Undo override of Tailwind classname separator for Pug [#376](https://github.com/spraakbanken/korp-frontend/issues/376)
+- Extracted Karp backend usage into `app/scripts/karp.ts`
+- `stringifyFunc(key)` was renamed to `getStringifier(key)`
+- `stringify(key, x)` was removed, use `getStringifier(key)(x)` instead
+- `getStructValues()` of `structService` is refactored into two different functions, matching the two present use-cases:
+  - `getAttrValues()` for getting a flat list without counts
+  - `countAttrValues()` for getting a deep structure with counts
+- Search history is stored as parameters only, not full urls #118
+- Enabled the `noImplicitAny` TypeScript flag for added strictness, and fixed/refactored various parts as a consequence
+- The `hitCountHtml` util function now takes the numbers as a tuple
+- `reduceStringify()` now returns the stringifier, so it can be called only once per attribute
+
+### Fixed
+
+- In the corpus selector, an empty folder would add 1 to the parent folder's corpus count
+- Linking to corpus subfolder [#397](https://github.com/spraakbanken/korp-frontend/issues/397)
+- Searching by pressing Enter in Simple search is broken [#394](https://github.com/spraakbanken/korp-frontend/issues/394)
+- Barcode (aka hitsPicture) sometimes missing from KWIC tab [#395](https://github.com/spraakbanken/korp-frontend/issues/395)
+- Error when loading with restricted corpora selected [#398](https://github.com/spraakbanken/korp-frontend/issues/398)
+- Related words lookup must use OR [#401](https://github.com/spraakbanken/korp-frontend/issues/401)
+- Add support for annotations of the type 'set' in attribute filters [#116](https://github.com/spraakbanken/korp-frontend/issues/116)
+- Parallel mode is consistently checked against the `parallel` config setting, and not the mode name
+- Search history fails to select corpus [#405](https://github.com/spraakbanken/korp-frontend/issues/405)
+- Search history fails to distinguish options with same label [#406](https://github.com/spraakbanken/korp-frontend/issues/406)
+- The "X of Y corpora selected" phrase is not properly translated [#408](https://github.com/spraakbanken/korp-frontend/issues/408)
+- Empty localization strings sometimes render as localization key [#410](https://github.com/spraakbanken/korp-frontend/issues/410)
+- Wider filter lists [#412](https://github.com/spraakbanken/korp-frontend/issues/412)
+- Show intersection in attributes instead of union in comparison view [#56](https://github.com/spraakbanken/korp-frontend/issues/56)
+- Alphabetic sorting of statistics rows
+
 ## [9.7.1] - 2024-09-18
 
 ### Fixed
@@ -189,7 +234,7 @@
 - On repetition error (all tokens repeat from 0), restore red outline for input
 - Use `<match>` to constraint CQP subqueries (from statistics rows etc)
 
-## [9.5.0] - 2023-01-22
+## [9.5.0] - 2024-01-22
 
 ### Added
 
@@ -263,6 +308,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.7.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.2
 [9.7.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.1
 [9.7.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.0
 [9.6.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.6.0

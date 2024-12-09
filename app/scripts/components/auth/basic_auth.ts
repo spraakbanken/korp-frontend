@@ -28,7 +28,7 @@ export const getAuthorizationHeader = () =>
 function toBase64(str: string) {
     // copied from https://stackoverflow.com/a/43271130
     function u_btoa(buffer: Uint8Array | Buffer) {
-        const binary = []
+        const binary: string[] = []
         const bytes = new Uint8Array(buffer)
         for (let i = 0; i < bytes.byteLength; i++) {
             binary.push(String.fromCharCode(bytes[i]))
@@ -76,7 +76,7 @@ export const login = (usr: string, pass: string, saveLogin: boolean): JQueryDefe
 }
 
 export const hasCredential = (corpusId: string): boolean =>
-    state.loginObj?.credentials?.includes(corpusId.toUpperCase())
+    state.loginObj?.credentials?.includes(corpusId.toUpperCase()) || false
 
 export const logout = (): void => {
     state.loginObj = undefined
@@ -85,6 +85,6 @@ export const logout = (): void => {
 
 export const getCredentials = (): string[] => state.loginObj?.credentials || []
 
-export const getUsername = () => state.loginObj.name
+export const getUsername = () => state.loginObj?.name
 
 export const isLoggedIn = () => !_.isEmpty(state.loginObj)

@@ -38,8 +38,8 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
 
     makeParameters(reduceVals: string[], cqp: string, ignoreCase: boolean): KorpStatsParams {
         const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
-        const groupBy = []
-        const groupByStruct = []
+        const groupBy: string[] = []
+        const groupByStruct: string[] = []
         for (let reduceVal of reduceVals) {
             if (
                 structAttrs[reduceVal] &&
@@ -166,7 +166,7 @@ const statsProxyFactory = new Factory(StatsProxy)
 export default statsProxyFactory
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count/get */
-type KorpStatsParams = {
+export type KorpStatsParams = {
     /** Corpus names, separated by comma */
     corpus: string
     /** CQP query */

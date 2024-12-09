@@ -6,7 +6,15 @@ import isArray from "lodash/isArray"
 import keys from "lodash/keys"
 
 import { RowsEntity } from "./interfaces/stats"
-import { StatisticsWorkerMessage, StatsNormalized, StatsRow } from "./statistics.types"
+import {
+    AbsRelSeq,
+    Dataset,
+    SingleRow,
+    TotalRow,
+    StatisticsWorkerMessage,
+    StatsNormalized,
+    StatsRow,
+} from "./statistics.types"
 
 /*
     This is optimized code for transforming the statistics data.
@@ -19,24 +27,16 @@ onmessage = function (e) {
 
     const message: StatisticsWorkerMessage = e.data
     const data: StatsNormalized = message.data
-    const { combined, corpora, count } = data
-    const reduceVals = message.reduceVals
+    const { combined } = data
     const groupStatistics = message.groupStatistics
 
-    const simplifyValue = function (values: string[], field: string): string[] {
+    const simplifyValue = function (values: string[] | string, field: string): string[] {
         if (groupStatistics.indexOf(field) != -1) {
-            const newValues: string[] = []
-            map(values, function (value) {
-                // TODO Can this pattern produce false positives? Will ":" not be used for something other than ranking or MWE indexing?
-                newValues.push(value.replace(/(:.+?)($| )/g, "$2"))
-            })
-            return newValues
+            // TODO Can this pattern produce false positives? Will ":" not be used for something other than ranking or MWE indexing?
+            return (values as string[]).map((value) => value.replace(/(:.+?)($| )/g, "$2"))
         } else {
             // for struct attributes only a value is sent, not list
-            if (!isArray(values)) {
-                values = [values]
-            }
-            return values
+            return isArray(values) ? values : [values]
         }
     }
 
@@ -55,12 +55,14 @@ onmessage = function (e) {
         return newFields.join("/")
     }
 
+    // Group data by simplified values, e.g. "foo:12" and "foo:34" under "foo"
     // TODO: why first element of combined?
     const totalAbsoluteGroups = groupBy(combined[0].rows, (item) => simplifyHitString(item))
 
     const totalRow: TotalRow = {
         id: "row_total",
-        total_value: [combined[0].sums.absolute, combined[0].sums.relative],
+        count: {},
+        total: [combined[0].sums.absolute, combined[0].sums.relative],
         rowId: 0,
     }
 
@@ -68,7 +70,7 @@ onmessage = function (e) {
     const corporaFreqs: Record<string, Record<string, StatsRow[]>> = {}
     for (const id of corporaKeys) {
         const obj = data.corpora[id]
-        totalRow[id + "_value"] = [obj[0].sums.absolute, obj[0].sums.relative]
+        totalRow.count[id] = [obj[0].sums.absolute, obj[0].sums.relative]
         corporaFreqs[id] = groupBy(obj[0].rows, (item) => simplifyHitString(item))
     }
 
@@ -84,11 +86,13 @@ onmessage = function (e) {
         let word = rowIds[i]
         let totalAbs = sumBy(totalAbsoluteGroups[word], "absolute")
         let totalRel = sumBy(totalAbsoluteGroups[word], "relative")
-        const statsValues = []
+        const statsValues: Record<string, string[]>[] = []
 
         for (var j = 0; j < totalAbsoluteGroups[word].length; j++) {
-            var variant = totalAbsoluteGroups[word][j]
-            map(variant.value, function (terms, reduceVal) {
+            // Walk through original values, e.g. "foo:12" and "foo:34"
+            const originalValues = totalAbsoluteGroups[word][j].value
+            map(originalValues, function (terms, reduceVal) {
+                // Array if positional attr, single string if structural attr
                 if (!isArray(terms)) {
                     if (!statsValues[0]) {
                         statsValues[0] = {}
@@ -96,15 +100,12 @@ onmessage = function (e) {
                     statsValues[0][reduceVal] = [terms]
                     reduceMap[reduceVal] = [terms]
                 } else {
+                    // The array has one value per word in match
                     reduceMap[reduceVal] = terms
                     map(terms, function (term, idx) {
-                        if (!statsValues[idx]) {
-                            statsValues[idx] = {}
-                        }
-                        if (!statsValues[idx][reduceVal]) {
-                            statsValues[idx][reduceVal] = []
-                        }
-                        if (statsValues[idx][reduceVal].indexOf(term) == -1) {
+                        statsValues[idx] ??= {}
+                        statsValues[idx][reduceVal] ??= []
+                        if (!statsValues[idx][reduceVal].includes(term)) {
                             statsValues[idx][reduceVal].push(term)
                         }
                     })
@@ -112,51 +113,26 @@ onmessage = function (e) {
             })
         }
 
-        let row = {
+        const row: SingleRow = {
             rowId: i + 1,
-            total_value: [totalAbs, totalRel] as AbsRelSeq,
+            count: {},
+            total: [totalAbs, totalRel] as AbsRelSeq,
             formattedValue: {},
             statsValues,
         }
 
         map(corporaKeys, function (corpus) {
-            let abs = sumBy(corporaFreqs[corpus][word], "absolute")
-            let rel = sumBy(corporaFreqs[corpus][word], "relative")
-
-            row[corpus + "_value"] = [abs, rel]
+            const abs = sumBy(corporaFreqs[corpus][word], "absolute")
+            const rel = sumBy(corporaFreqs[corpus][word], "relative")
+            row.count[corpus] = [abs, rel]
         })
-
-        for (let reduce of reduceVals) {
-            row[reduce] = reduceMap[reduce]
-        }
 
         dataset[i + 1] = row
     }
 
     dataset.sort(function (a, b) {
-        return b.total_value[0] - a.total_value[0]
+        return b.total[0] - a.total[0]
     })
     const ctx: Worker = self as any
     ctx.postMessage(dataset)
 }
-
-export type Row = TotalRow | SingleRow
-
-export type TotalRow = RowBase & {
-    id: "row_total"
-}
-
-export type SingleRow = RowBase & {
-    formattedValue: {}
-    statsValues: Record<number, Record<string, string[]>>
-}
-
-export type RowBase = {
-    rowId: number
-    total_value: AbsRelSeq
-    [name: `${string}_value`]: AbsRelSeq
-}
-
-export type Dataset = Row[]
-
-export type AbsRelSeq = [number, number]

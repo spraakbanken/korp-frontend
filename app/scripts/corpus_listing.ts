@@ -20,6 +20,9 @@ export type AttributeOption = Partial<Attribute> & {
     label: LangString
 }
 
+/** How to join attribute lists of different corpora */
+export type SetOperator = "union" | "intersection"
+
 export class CorpusListing {
     corpora: CorpusTransformed[]
     selected: CorpusTransformed[]
@@ -290,7 +293,7 @@ export class CorpusListing {
         return withins
     }
 
-    getTimeInterval(): [number, number] {
+    getTimeInterval(): [number, number] | undefined {
         const all = _(this.selected)
             .map("time")
             .filter((item) => item != null)
@@ -300,10 +303,12 @@ export class CorpusListing {
             .sort((a, b) => a - b)
             .value()
 
-        return [_.first(all), _.last(all)]
+        const from = all[0]
+        const to = all.pop()
+        return from && to ? [from, to] : undefined
     }
 
-    getMomentInterval(): [Moment, Moment] {
+    getMomentInterval(): [Moment, Moment] | undefined {
         const infoGetter = (prop: "FirstDate" | "LastDate") => {
             return _(this.selected)
                 .map("info")
@@ -316,10 +321,9 @@ export class CorpusListing {
         const froms = infoGetter("FirstDate")
         const tos = infoGetter("LastDate")
 
-        const from = _.minBy(froms, (item) => item.unix()) || null
-        const to = _.maxBy(tos, (item) => item.unix()) || null
-
-        return [from, to]
+        const from = _.minBy(froms, (item) => item.unix())
+        const to = _.maxBy(tos, (item) => item.unix())
+        return from && to ? [from, to] : undefined
     }
 
     getTitleObj(corpus: string): LangString {
@@ -340,7 +344,7 @@ export class CorpusListing {
         return this._wordGroup
     }
 
-    getWordAttributeGroups(lang: string, setOperator: "union" | "intersection"): AttributeOption[] {
+    getWordAttributeGroups(setOperator: SetOperator, lang?: string): AttributeOption[] {
         const allAttrs =
             setOperator === "union" ? this.getCurrentAttributes(lang) : this.getCurrentAttributesIntersection()
 
@@ -355,12 +359,12 @@ export class CorpusListing {
         return attrs
     }
 
-    getWordAttribute(attribute: string, lang: string): Attribute {
+    getWordAttribute(attribute: string, lang?: string): Attribute {
         const attributes = this.getCurrentAttributes(lang)
         return attributes[attribute]
     }
 
-    getStructAttributeGroups(lang: string, setOperator: "union" | "intersection"): AttributeOption[] {
+    getStructAttributeGroups(setOperator: SetOperator, lang?: string): AttributeOption[] {
         const allAttrs = setOperator === "union" ? this.getStructAttrs(lang) : this.getStructAttrsIntersection(lang)
 
         const common = this.commonAttributes
@@ -379,10 +383,10 @@ export class CorpusListing {
         return sentAttrs
     }
 
-    getAttributeGroups(lang: string): AttributeOption[] {
+    getAttributeGroups(setOperator: SetOperator = "union", lang?: string): AttributeOption[] {
         const word = this.getWordGroup()
-        const attrs = this.getWordAttributeGroups(lang, "union")
-        const sentAttrs = this.getStructAttributeGroups(lang, "union")
+        const attrs = this.getWordAttributeGroups(setOperator, lang)
+        const sentAttrs = this.getStructAttributeGroups(setOperator, lang)
         return [word].concat(attrs, sentAttrs)
     }
 
@@ -390,10 +394,10 @@ export class CorpusListing {
         const word = this.getWordGroup()
 
         const wordOp = settings["reduce_word_attribute_selector"] || "union"
-        const attrs = this.getWordAttributeGroups(lang, wordOp)
+        const attrs = this.getWordAttributeGroups(wordOp, lang)
 
         const structOp = settings["reduce_struct_attribute_selector"] || "union"
-        const sentAttrs = this.getStructAttributeGroups(lang, structOp)
+        const sentAttrs = this.getStructAttributeGroups(structOp, lang)
 
         return [word].concat(attrs, sentAttrs)
     }
@@ -403,7 +407,7 @@ export class CorpusListing {
     // positional could be added here, but is tricky because parallel mode lang might be needed
     updateAttributes(): void {
         const common_keys = _.compact(_.flatten(_.map(this.selected, (corp) => _.keys(corp.common_attributes))))
-        this.commonAttributes = _.pick(settings["common_struct_types"], ...common_keys)
+        this.commonAttributes = _.pick(settings["common_struct_types"], ...common_keys) as Record<string, Attribute>
         this.structAttributes = this._getStructAttrs()
     }
 

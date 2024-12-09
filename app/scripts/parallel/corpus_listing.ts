@@ -4,14 +4,17 @@ import settings from "@/settings"
 import { CorpusListing } from "@/corpus_listing"
 import { getUrlHash, locationSearchGet } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { Attribute } from "@/settings/config.types"
+import { Attribute, CorpusParallel } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
 import { WithinParameters } from "@/backend/types"
 
 export class ParallelCorpusListing extends CorpusListing {
+    corpora: CorpusTransformed<CorpusParallel>[]
+    selected: CorpusTransformed<CorpusParallel>[]
+    struct: Record<string, CorpusTransformed<CorpusParallel>>
     activeLangs: string[]
 
-    constructor(corpora: Record<string, CorpusTransformed>) {
+    constructor(corpora: Record<string, CorpusTransformed<CorpusParallel>>) {
         super(corpora)
 
         // Cannot use Angular helpers (`locationSearchGet`) here, it's not initialized yet.
@@ -69,25 +72,27 @@ export class ParallelCorpusListing extends CorpusListing {
         return this._mapping_intersection(attrs)
     }
 
-    getLinked(corp: CorpusTransformed, only_selected?: boolean) {
+    getLinked(corp: CorpusTransformed<CorpusParallel>, only_selected?: boolean) {
         const target = only_selected ? this.selected : Object.values(this.struct)
-        let output: CorpusTransformed[] = target.filter((item) => (corp["linked_to"] || []).includes(item.id))
+        let output: CorpusTransformed<CorpusParallel>[] = target.filter((item) =>
+            (corp["linked_to"] || []).includes(item.id)
+        )
         return [corp].concat(output)
     }
 
-    getEnabledByLang(lang: string): CorpusTransformed[][] {
+    getEnabledByLang(lang: string): CorpusTransformed<CorpusParallel>[][] {
         const corps = _.filter(this.selected, (item) => item["lang"] === lang)
         return corps.map((item) => this.getLinked(item, true))
     }
 
-    getLinksFromLangs(activeLangs: string[]): CorpusTransformed[][] {
+    getLinksFromLangs(activeLangs: string[]): CorpusTransformed<CorpusParallel>[][] {
         if (activeLangs.length === 1) {
             return this.getEnabledByLang(activeLangs[0])
         }
         // get the languages that are enabled given a list of active languages
         const main = _.filter(this.selected, (corp) => corp.lang === activeLangs[0])
 
-        let output = []
+        let output: CorpusTransformed<CorpusParallel>[][] = []
         for (var lang of activeLangs.slice(1)) {
             const other = _.filter(this.selected, (corp) => corp.lang === lang)
 
@@ -107,7 +112,7 @@ export class ParallelCorpusListing extends CorpusListing {
         // gets the within and context queries
 
         const struct = this.getLinksFromLangs(this.activeLangs)
-        const output = []
+        const output: string[][] = []
         $.each(struct, function (i, corps) {
             const mainId = corps[0].id.toUpperCase()
             const mainIsPivot = !!corps[0].pivot
@@ -148,7 +153,7 @@ export class ParallelCorpusListing extends CorpusListing {
                 .join(",")
         }
 
-        const output = []
+        const output: string[][] = []
         for (let i = 0; i < struct.length; i++) {
             const item = struct[i]
             var main = item[0]
