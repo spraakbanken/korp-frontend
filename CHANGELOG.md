@@ -25,6 +25,7 @@
 - Search history is stored as parameters only, not full urls #118
 - Enabled the `noImplicitAny` TypeScript flag for added strictness, and fixed/refactored various parts as a consequence
 - The `hitCountHtml` util function now takes the numbers as a tuple
+- `reduceStringify()` now returns the stringifier, so it can be called only once per attribute
 
 ### Fixed
 

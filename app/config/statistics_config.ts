@@ -3,9 +3,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import { lemgramToHtml, regescape, saldoToHtml } from "@/util"
 import { locAttribute } from "@/i18n"
-import { Token } from "@/backend/kwic-proxy"
 import { Attribute } from "@/settings/config.types"
-import { JQueryStaticExtended } from "@/jquery.types"
 
 type Stringifier = (tokens: string[], ignoreCase?: boolean) => string
 
@@ -103,22 +101,19 @@ function reduceCqp(type: string, tokens: string[], ignoreCase: boolean): string 
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-export function reduceStringify(type: string, values: string[], structAttr?: Attribute): string {
+export function reduceStringify(type: string, structAttr?: Attribute): (values: string[]) => string {
     let attrs = settings.corpusListing.getCurrentAttributes()
 
     if (attrs[type] && attrs[type].stats_stringify) {
-        return customFunctions[attrs[type].stats_stringify!](values)
+        return customFunctions[attrs[type].stats_stringify!]
     }
 
     switch (type) {
         case "word":
         case "msd":
-            return values.join(" ")
+            return (values) => values.join(" ")
         case "pos":
-            var output = _.map(values, function (token) {
-                return locAttribute(attrs["pos"].translation, token)
-            }).join(" ")
-            return output
+            return (values) => values.map((token) => locAttribute(attrs["pos"].translation, token)).join(" ")
         case "saldo":
         case "prefix":
         case "suffix":
@@ -134,42 +129,31 @@ export function reduceStringify(type: string, values: string[], structAttr?: Att
                 stringify = lemgramToHtml
             }
 
-            const html = _.map(values, function (token) {
-                if (token === "") return "–"
-                return stringify(token.replace(/:.*/g, ""), true)
-            })
-
-            return html.join(" ")
+            return (values) =>
+                values.map((token) => (token === "" ? "–" : stringify(token.replace(/:.*/g, ""), true))).join(" ")
 
         case "transformer-neighbour":
-            return values.map((value) => value.replace(/:.*/g, "")).join(" ")
+            return (values) => values.map((value) => value.replace(/:.*/g, "")).join(" ")
 
         case "deprel":
-            var output = _.map(values, function (token) {
-                return locAttribute(attrs["deprel"].translation, token)
-            }).join(" ")
-            return output
+            return (values) => values.map((token) => locAttribute(attrs["deprel"].translation, token)).join(" ")
         case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
-            var output = _.map(values, function (token) {
-                return ($("<span>").text(token) as any).outerHTML()
-            }).join(" ")
-            return output
+            return (values) => values.map((token) => ($("<span>").text(token) as any).outerHTML()).join(" ")
         default:
             if (attrs[type]) {
                 // word attributes
-                return values.join(" ")
+                return (values) => values.join(" ")
             } else {
                 // structural attributes
-                var mapped = _.map(values, function (value) {
+                function stringify(value: string) {
                     if (value === "") {
                         return "-"
                     } else if (structAttr?.translation) {
                         return locAttribute(structAttr.translation, value)
-                    } else {
-                        return value
                     }
-                })
-                return mapped.join(" ")
+                    return value
+                }
+                return (values) => values.map(stringify).join(" ")
             }
     }
 }

@@ -12,7 +12,7 @@ import {
     SearchParams,
     SlickgridColumn,
 } from "./statistics.types"
-import { hitCountHtml } from "@/util"
+import { fromKeys, hitCountHtml } from "@/util"
 import { LangString } from "./i18n/types"
 import { getLang, locObj } from "./i18n"
 const pieChartImg = require("../img/stats2.png")
@@ -100,11 +100,12 @@ const createStatisticsService = function () {
             // Format the values of the attributes we are reducing by
             const cl = settings.corpusListing.subsetFactory(corpora)
             const structAttrs = cl.getStructAttrs()
+            const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
             for (const row of e.data) {
                 if (isTotalRow(row)) continue
                 for (const type of row.statsValues) {
                     for (const attr in type) {
-                        row.formattedValue[attr] = reduceStringify(attr, type[attr], structAttrs[attr])
+                        row.formattedValue[attr] = stringifiers[attr](type[attr])
                     }
                 }
             }
