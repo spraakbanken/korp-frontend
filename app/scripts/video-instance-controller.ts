@@ -1,47 +1,21 @@
 /** @format */
+import angular, { ICompileService, IScope, ITimeoutService, ui } from "angular"
 import moment from "moment"
 
-const korpApp = angular.module("korpApp")
+type VideoInstanceControllerScope = IScope & {
+    fileName: string
+    sentence: string
+    startTime: string
+    endTime: string
+    init: () => void
+    goToStartTime: () => void
+    continuePlay: () => void
+    isPaused: boolean
+    pauseAfterEndTime: boolean
+    ok: () => void
+}
 
-korpApp.controller("VideoCtrl", [
-    "$scope",
-    "$uibModal",
-    function ($scope, $uibModal) {
-        $scope.videos = []
-
-        $scope.open = function () {
-            let modalInstance
-            modalInstance = $uibModal.open({
-                animation: false,
-                template: require("../markup/sidebar_video.html"),
-                controller: "VideoInstanceCtrl",
-                size: "modal-lg",
-                windowClass: "video-modal-bootstrap",
-                resolve: {
-                    items() {
-                        return $scope.videos
-                    },
-                    startTime() {
-                        return $scope.startTime
-                    },
-                    endTime() {
-                        return $scope.endTime
-                    },
-                    fileName() {
-                        return $scope.fileName
-                    },
-                    sentence() {
-                        return $scope.sentence
-                    },
-                },
-            })
-        }
-
-        $scope.startTime = 0
-    },
-])
-
-korpApp.controller("VideoInstanceCtrl", [
+angular.module("korpApp").controller("VideoInstanceCtrl", [
     "$scope",
     "$compile",
     "$timeout",
@@ -51,11 +25,22 @@ korpApp.controller("VideoInstanceCtrl", [
     "endTime",
     "fileName",
     "sentence",
-    function ($scope, $compile, $timeout, $uibModalInstance, items, startTime, endTime, fileName, sentence) {
+    function (
+        $scope: VideoInstanceControllerScope,
+        $compile: ICompileService,
+        $timeout: ITimeoutService,
+        $uibModalInstance: ui.bootstrap.IModalInstanceService,
+        items: { url: string; type: string }[],
+        startTime: number,
+        endTime: number,
+        fileName: string,
+        sentence: string
+    ) {
         $scope.fileName = fileName
         $scope.sentence = sentence
 
-        const transformSeconds = function (seconds) {
+        /** Format time as hh:mm:ss if hours > 0, else mm:ss */
+        const transformSeconds = function (seconds: number) {
             let sHours
             const d = moment.duration(seconds, "seconds")
             const hours = Math.floor(d.asHours())
@@ -98,7 +83,7 @@ korpApp.controller("VideoInstanceCtrl", [
                 videoElem.append(srcElem)
             }
 
-            const video = videoElem[0]
+            const video = videoElem[0] as HTMLVideoElement
 
             video.addEventListener("durationchange", function () {
                 video.currentTime = startTime

@@ -9,6 +9,7 @@ import { html, regescape, splitLemgram, safeApply, getConfigurable } from "@/uti
 import { loc, locAttribute, locObj } from "@/i18n"
 import "@/services/utils"
 import "@/components/deptree/deptree"
+import "@/video-controller" // May be used by custom code
 import { RootScope } from "@/root-scope.types"
 import { CqpSearchEvent, SelectWordEvent } from "@/statemachine/types"
 import { Token } from "@/backend/kwic-proxy"

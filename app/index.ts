@@ -68,6 +68,5 @@ require("./lib/jquery.tooltip.pack.js")
 require("./scripts/main")
 require("./scripts/app")
 
-require("./scripts/video_controllers.js")
 require("./scripts/backend/struct-service")
 require("./scripts/matomo")
