@@ -17,7 +17,7 @@ import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
 import { LexiconsRelatedWordsResponse, LexiconsService } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
-import { CqpSearchEvent, LemgramSearchEvent } from "@/statemachine/types"
+import { CqpSearchEvent } from "@/statemachine/types"
 
 type SimpleSearchController = IController & {
     input: string
@@ -134,7 +134,7 @@ angular.module("korpApp").component("simpleSearch", {
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
 
-            statemachine.listen("lemgram_search", (event: LemgramSearchEvent) => {
+            statemachine.listen("lemgram_search", (event) => {
                 ctrl.input = event.value
                 ctrl.isRawInput = false
                 ctrl.onChange(event.value, false)

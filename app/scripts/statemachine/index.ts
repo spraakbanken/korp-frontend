@@ -1,26 +1,28 @@
 /** @format */
 import { interpret, createMachine } from "xstate"
+import { EventMap, EventName } from "./types"
 
-const listenerMap: Record<string, ((...args: any[]) => void)[]> = {}
+type Listener<K extends EventName> = (event: EventMap[K]) => void
 
-function listen(eventName: string, fn: (...args: any[]) => void) {
-    listenerMap[eventName] = listenerMap[eventName] ? [...listenerMap[eventName], fn] : [fn]
+const listenerMap: { [K in EventName]?: Listener<K>[] } = {}
+
+function listen<K extends EventName>(eventName: K, fn: Listener<K>) {
+    listenerMap[eventName] ??= []
+    listenerMap[eventName]?.push(fn)
 }
 
-function broadcast(eventName: string, ...payload: any[]) {
-    if (!listenerMap[eventName]) {
-        console.error("No listener for event name", eventName)
-        return
-    }
-    listenerMap[eventName].forEach((fn) => fn(...payload))
+function broadcast<K extends EventName>(eventName: K, event: EventMap[K]) {
+    listenerMap[eventName]?.forEach((fn) => fn(event))
 }
 
+// XState can be made more aware of event types by using its VSCode extension, but it doesn't seem necessary.
 const machine = createMachine(
     {
         id: "main",
         context: {},
         initial: "sidebar",
         type: "parallel",
+        predictableActionArguments: true,
         states: {
             login: {
                 initial: "blank",
@@ -104,13 +106,13 @@ const machine = createMachine(
     {
         actions: {
             log: (context, event) => console.log("log action:", event),
-            select_word: (context, event) => broadcast("select_word", event),
-            deselect_word: () => broadcast("select_word"),
-            lemgram_search: (context, event) => broadcast("lemgram_search", event),
-            cqp_search: (context, event) => broadcast("cqp_search", event),
-            logged_in: () => broadcast("login"),
-            logged_out: () => broadcast("logout"),
-            login_needed: (context, event) => broadcast("login_needed", event),
+            select_word: (context, event: any) => broadcast("select_word", event),
+            deselect_word: () => broadcast("select_word", null),
+            lemgram_search: (context, event: any) => broadcast("lemgram_search", event),
+            cqp_search: (context, event: any) => broadcast("cqp_search", event),
+            logged_in: () => broadcast("login", null),
+            logged_out: () => broadcast("logout", null),
+            login_needed: (context, event: any) => broadcast("login_needed", event),
         },
     }
 )

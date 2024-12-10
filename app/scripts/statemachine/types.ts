@@ -2,6 +2,18 @@
 import { Token } from "@/backend/kwic-proxy"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 
+/** Mapping from event names to the type of the associated payload. */
+export type EventMap = {
+    select_word: SelectWordEvent | null
+    lemgram_search: LemgramSearchEvent
+    cqp_search: CqpSearchEvent
+    login_needed: LoginNeededEvent
+    login: null
+    logout: null
+}
+
+export type EventName = keyof EventMap
+
 export type SelectWordEvent = {
     /** Structural attributes */
     sentenceData: Record<string, any>

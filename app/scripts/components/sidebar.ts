@@ -1,5 +1,5 @@
 /** @format */
-import angular, { ICompileService, IController, IControllerService, IFilterService, IOnChangesObject } from "angular"
+import angular, { ICompileService, IController, IControllerService } from "angular"
 import _ from "lodash"
 import "../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
@@ -37,7 +37,7 @@ type SidebarController = IController & {
     onShow: () => void
     onHide: () => void
     // Locals
-    data: SelectWordEvent
+    data: SelectWordEvent | null
     corpusObj: CorpusTransformed
     sentenceData: Record<string, string>
     inReadingMode: boolean
@@ -113,7 +113,7 @@ angular.module("korpApp").component("sidebar", {
         function ($element: JQLite, $rootScope: RootScope, $compile: ICompileService, $controller: IControllerService) {
             let $ctrl = this as SidebarController
 
-            statemachine.listen("select_word", function (data: SelectWordEvent) {
+            statemachine.listen("select_word", function (data) {
                 safeApply($rootScope, () => {
                     $ctrl.data = data
                     if (data == null) {

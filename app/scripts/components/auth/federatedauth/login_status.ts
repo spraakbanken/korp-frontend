@@ -4,7 +4,6 @@ import statemachine from "@/statemachine"
 import { html } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { getUsername, isLoggedIn, login } from "@/components/auth/auth"
-import { LoginNeededEvent } from "@/statemachine/types"
 
 export const loginStatusComponent: IComponentOptions = {
     template: html`
@@ -40,7 +39,7 @@ export const loginStatusComponent: IComponentOptions = {
                 })
             })
 
-            statemachine.listen("login_needed", function (event: LoginNeededEvent) {
+            statemachine.listen("login_needed", function (event) {
                 $ctrl.doLogin(event.loginNeededFor)
             })
 

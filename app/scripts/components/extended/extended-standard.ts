@@ -13,7 +13,6 @@ import "@/global-filter/global-filters"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
-import { CqpSearchEvent } from "@/statemachine/types"
 
 type ExtendedStandardController = IController & {
     cqp: string
@@ -102,7 +101,7 @@ angular.module("korpApp").component("extendedStandard", {
                 }, 0)
             }
 
-            statemachine.listen("cqp_search", (event: CqpSearchEvent) => {
+            statemachine.listen("cqp_search", (event) => {
                 $rootScope.searchtabs()[1].tab.select()
                 ctrl.cqp = event.cqp
                 // sometimes $scope.$apply is needed and sometimes it throws errors
