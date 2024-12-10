@@ -1,22 +1,21 @@
 /** @format */
 import { interpret, createMachine } from "xstate"
-import * as authenticationProxy from "@/components/auth/auth"
 
-const listenerMap = {}
-function listen(eventName, fn) {
+const listenerMap: Record<string, ((...args: any[]) => void)[]> = {}
+
+function listen(eventName: string, fn: (...args: any[]) => void) {
     listenerMap[eventName] = listenerMap[eventName] ? [...listenerMap[eventName], fn] : [fn]
 }
-function broadcast(eventName, ...payload) {
+
+function broadcast(eventName: string, ...payload: any[]) {
     if (!listenerMap[eventName]) {
         console.error("No listener for event name", eventName)
         return
     }
-    for (let fn of listenerMap[eventName]) {
-        fn(...payload)
-    }
+    listenerMap[eventName].forEach((fn) => fn(...payload))
 }
 
-let machine = createMachine(
+const machine = createMachine(
     {
         id: "main",
         context: {},
@@ -91,7 +90,6 @@ let machine = createMachine(
                         },
                     },
                     visible: {
-                        onentry: {},
                         on: {
                             SELECT_WORD: { actions: "select_word" },
                         },
@@ -104,48 +102,23 @@ let machine = createMachine(
         },
     },
     {
-        guards: {
-            key_s(context, event) {
-                return event.which == 115
-            },
-        },
         actions: {
             log: (context, event) => console.log("log action:", event),
             select_word: (context, event) => broadcast("select_word", event),
-            deselect_word: (context, event) => broadcast("select_word", null),
+            deselect_word: () => broadcast("select_word"),
             lemgram_search: (context, event) => broadcast("lemgram_search", event),
             cqp_search: (context, event) => broadcast("cqp_search", event),
-            logged_in: (context, event) => {
-                broadcast("login", event)
-            },
-            logged_out: () => {
-                authenticationProxy.logout()
-                broadcast("logout")
-            },
+            logged_in: () => broadcast("login"),
+            logged_out: () => broadcast("logout"),
             login_needed: (context, event) => broadcast("login_needed", event),
         },
     }
 )
 
-let currentContext = machine.context
 const service = interpret(machine)
 service.start()
-
-window.document.addEventListener("keypress", (event) => {
-    // TODO: esc not firing, for some reason.
-    // console.log("event.which", event.which)
-    service.send(event)
-})
-
-service.onTransition((state) => {
-    // console.log("onTransition", state.value, state.context)
-    currentContext = state.context
-})
 
 export default {
     send: service.send,
     listen,
-    get context() {
-        return currentContext
-    },
 }
