@@ -8,7 +8,7 @@ import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 export class KwicProxy extends BaseProxy<KorpQueryResponse> {
     prevCQP?: string
     prevParams: KorpQueryParams | null
-    prevRequest: JQuery.AjaxSettings | null
+    prevRequest: AjaxSettings | null // Used for download
     prevUrl?: string
     queryData?: string
 
@@ -89,7 +89,6 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
             data.in_order = false
         }
 
-        this.prevRequest = data
         this.prevParams = data
         const ajaxSettings: AjaxSettings = {
             url: settings.korp_backend_url + "/" + command,
@@ -130,16 +129,24 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
 const kwicProxyFactory = new Factory(KwicProxy)
 export default kwicProxyFactory
 
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
+/**
+ * The `query` and `relations_sentences` endpoints are combined here.
+ * @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get
+ * @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture/paths/~1relations_sentences/get
+ */
 export type KorpQueryParams = {
-    corpus: string
-    cqp: string
+    /* Required for `query` */
+    corpus?: string
+    /* Required for `query` */
+    cqp?: string
     start?: number
     end?: number
     default_context?: string
     context?: string
     show?: string
     show_struct?: string
+    /** Required for `relations_sentences` */
+    source?: string
     default_within?: string
     within?: string
     in_order?: boolean
@@ -157,7 +164,7 @@ export type KorpQueryRequestOptions = {
     start?: number
     end?: number
     ajaxParams: KorpQueryParams & {
-        command?: string
+        command?: "query" | "relations_sentences"
     }
 }
 

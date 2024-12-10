@@ -297,7 +297,7 @@ export class KwicCtrl implements IController {
         }
 
         s.countCorpora = () => {
-            return s.proxy.prevParams && s.proxy.prevParams.corpus.split(",").length
+            return s.proxy.prevParams?.corpus ? s.proxy.prevParams.corpus.split(",").length : null
         }
     }
 }

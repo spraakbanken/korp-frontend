@@ -117,8 +117,9 @@ class ExampleCtrl extends KwicCtrl {
                 ? settings["default_overview_context"]
                 : settings["default_reading_context"]
 
+            const corpora = opts.ajaxParams.corpus ? opts.ajaxParams.corpus.split(",") : []
             const context = settings.corpusListing.getContextQueryStringFromCorpusId(
-                (opts.ajaxParams.corpus || "").split(","),
+                corpora,
                 preferredContext,
                 avoidContext
             )

@@ -42,19 +42,19 @@ type WordpicCtrlScope = TabHashScope & {
 }
 
 /** A relation item modified for showing. */
-type ShowableApiRelation = ApiRelation & {
+export type ShowableApiRelation = ApiRelation & {
     /** Direction of relation */
     show_rel: "head" | "dep"
 }
 
-type TableData = {
+export type TableData = {
     table: ApiRelation[] | { word: string }
     rel?: string
     show_rel?: string
     all_lemgrams?: string[]
 }
 
-type TableDrawData = {
+export type TableDrawData = {
     token: string
     wordClass: string
     wordClassShort: string
