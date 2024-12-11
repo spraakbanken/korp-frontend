@@ -5,7 +5,7 @@ import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
-import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
+import { AjaxSettings, JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
@@ -421,52 +421,55 @@ export const regescape = (s: string): string => s.replace(/[.|?|+|*||'|()^$\\]/g
 /** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
 export const unregescape = (s: string): string => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
 
-/** Return the length of baseUrl with params added. */
-const calcUrlLength = (baseUrl: string, params: any): number =>
-    baseUrl.length + new URLSearchParams(params).toString().length + 1
-
 /**
- * Add HTTP method to the HTTP configuration object conf for jQuery.ajax or AngularJS $http call:
- * if the result URL would be longer than settings.backendURLMaxLength, use POST, otherwise GET.
- * @param conf A $http or jQuery.ajax configuration object.
- *   For $http, the request parameters should be in `params` (moved to `data` for POST),
- *   and for jQuery.ajax, they should be in `data`.
- * @returns The same object, possibly modified in-place
+ * Select GET or POST depending on url length, modifies conf in-place.
  */
-export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T): T {
-    // The property to use for GET: AngularJS $http uses params for
-    // GET and data for POST, whereas jQuery.ajax uses data for both
-    const data = "params" in conf ? conf.params : conf.data
-    if (calcUrlLength(conf.url!, data) > settings.backendURLMaxLength) {
-        conf.method = "POST"
-        conf.data = data
-        if ("params" in conf) delete conf.params
-    } else {
-        conf.method = "GET"
-        if ("params" in conf) conf.params = data
-        else conf.data = data
+export function httpConfAddMethod(conf: IRequestConfig & { url: string }): IRequestConfig {
+    // $http uses `data` for POST but `params` for GET.
+    conf.method = selectHttpMethod(conf.url, conf.params)
+    if (conf.method == "POST") {
+        conf.data = conf.params
+        delete conf.params
     }
     return conf
 }
 
 /**
- * Like `httpConfAddMethod`, but for use with native `fetch()`.
- * @param conf A $http or jQuery.ajax configuration object.
- * @returns The same object, possibly modified in-place
+ * Select GET or POST depending on url length, modifies conf in-place.
  */
-export function httpConfAddMethodFetch(
-    url: string,
-    params: Record<string, any>
-): { url: string; request: RequestInit } {
-    if (calcUrlLength(url, params) > settings.backendURLMaxLength) {
-        const body = new FormData()
-        for (const key in params) {
-            body.append(key, params[key])
-        }
-        return { url, request: { method: "POST", body } }
-    } else {
-        return { url: url + "?" + new URLSearchParams(params), request: {} }
+export function ajaxConfAddMethod<T extends AjaxSettings>(conf: T): T {
+    // $.ajax uses `data` for both GET and POST.
+    conf.method = selectHttpMethod(conf.url!, conf.data || {})
+    return conf
+}
+
+/**
+ * Like `httpConfAddMethod`, but for use with native `fetch()`.
+ */
+export function fetchConfAddMethod(url: string, params: Record<string, any>): { url: string; request: RequestInit } {
+    if (selectHttpMethod(url, params) == "POST") {
+        return { url, request: { method: "POST", body: toFormData(params) } }
     }
+    return { url: buildUrl(url, params), request: {} }
+}
+
+/** Check url length */
+function selectHttpMethod(url: string, params: Record<string, any>): "GET" | "POST" {
+    return buildUrl(url, params).length > settings.backendURLMaxLength ? "POST" : "GET"
+}
+
+/** Convert object to FormData */
+function toFormData(obj: Record<string, any>): FormData {
+    const formData = new FormData()
+    Object.entries(obj).forEach(([key, value]) => formData.append(key, value))
+    return formData
+}
+
+/** Append search params to url */
+export function buildUrl(base: string, params: Record<string, any>): string {
+    const url = new URL(base)
+    Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value))
+    return url.toString()
 }
 
 /**

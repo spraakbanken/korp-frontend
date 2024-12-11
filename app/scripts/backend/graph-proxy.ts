@@ -3,7 +3,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
 import { AbsRelTuple, Granularity, Histogram, Response, NumericString } from "@/backend/types"
-import { Factory, httpConfAddMethod } from "@/util"
+import { ajaxConfAddMethod, Factory } from "@/util"
 import { AjaxSettings } from "@/jquery.types"
 
 export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
@@ -55,7 +55,7 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
         this.prevParams = params
         const def = $.Deferred()
 
-        const ajaxSettings: AjaxSettings = {
+        const ajaxSettings = {
             url: settings.korp_backend_url + "/count_time",
             dataType: "json",
             data: params,
@@ -79,9 +79,9 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
                 def.resolve(data)
                 self.cleanup()
             },
-        }
+        } satisfies AjaxSettings
 
-        $.ajax(httpConfAddMethod(ajaxSettings))
+        $.ajax(ajaxConfAddMethod(ajaxSettings))
 
         return def.promise()
     }

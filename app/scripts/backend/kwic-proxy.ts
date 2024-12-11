@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
+import { locationSearchGet, Factory, ajaxConfAddMethod } from "@/util"
 import { ProgressReport, Response } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
 import { AjaxSettings } from "@/jquery.types"
@@ -90,7 +90,7 @@ export class KwicProxy extends BaseProxy<QueryResponse> {
         }
 
         this.prevParams = data
-        const ajaxSettings: AjaxSettings = {
+        const ajaxSettings = {
             url: settings.korp_backend_url + "/" + command,
             data: data,
             beforeSend(req, settings) {
@@ -117,9 +117,9 @@ export class KwicProxy extends BaseProxy<QueryResponse> {
                     kwicCallback(progressObj.struct as QueryResponse)
                 }
             },
-        }
+        } satisfies AjaxSettings
 
-        const def = $.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<Response<QueryResponse>>
+        const def = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<Response<QueryResponse>>
         this.pendingRequests.push(def)
         return def
     }

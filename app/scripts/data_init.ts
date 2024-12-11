@@ -7,7 +7,7 @@ import timeProxyFactory from "@/backend/time-proxy"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
-import { fromKeys, httpConfAddMethodFetch } from "@/util"
+import { fromKeys, fetchConfAddMethod } from "@/util"
 import { Labeled, LangLocMap, LocMap } from "./i18n/types"
 import { CorpusInfoResponse } from "./settings/corpus-info.types"
 import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
@@ -47,7 +47,7 @@ type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_
  */
 async function getInfoData(corpusIds: string[]): Promise<InfoData> {
     const params = { corpus: corpusIds.map((id) => id.toUpperCase()).join(",") }
-    const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/corpus_info", params)
+    const { url, request } = fetchConfAddMethod(settings.korp_backend_url + "/corpus_info", params)
     const response = await fetch(url, request)
     const data = (await response.json()) as CorpusInfoResponse
 

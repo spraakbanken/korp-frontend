@@ -4,7 +4,10 @@
 
 ### Changed
 
-- Removed `httpConfAddMethodAngular`
+- The `httpConfAddMethod*` util functions were refactored:
+  - The `$.ajax` case of `httpConfAddMethod` was extracted into `ajaxConfAddMethod`
+  - `httpConfAddMethodFetch` was renamed to `fetchConfAddMethod`
+  - `httpConfAddMethodAngular` was removed
 
 ## [9.7.2] - 2024-12-09
 

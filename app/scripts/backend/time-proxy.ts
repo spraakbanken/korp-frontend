@@ -3,7 +3,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
 import type { Granularity, Histogram, Response, NumericString } from "@/backend/types"
-import { Factory, httpConfAddMethod } from "@/util"
+import { ajaxConfAddMethod, Factory } from "@/util"
 import { AjaxSettings } from "@/jquery.types"
 
 export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
@@ -14,11 +14,11 @@ export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
         }
 
         const dfd = $.Deferred()
-        const ajaxSettings: AjaxSettings = {
+        const ajaxSettings = {
             url: settings.korp_backend_url + "/timespan",
             data,
-        }
-        const xhr = $.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpTimespanResponse>
+        } satisfies AjaxSettings
+        const xhr = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpTimespanResponse>
 
         xhr.done((data) => {
             if ("ERROR" in data) {

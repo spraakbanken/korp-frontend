@@ -4,7 +4,7 @@ import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
 import type { Response, ProgressResponse, ProgressReport } from "@/backend/types"
 import { StatisticsWorkerResult } from "@/statistics.types"
-import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
+import { locationSearchGet, Factory, ajaxConfAddMethod } from "@/util"
 import { statisticsService } from "@/statistics"
 import { AjaxSettings } from "@/jquery.types"
 import { CountParams, CountResponse, StatsColumn, StatsNormalized } from "./types/count"
@@ -113,7 +113,7 @@ export class StatsProxy extends BaseProxy<CountResponse> {
         const def: JQuery.Deferred<StatisticsWorkerResult> = $.Deferred()
 
         const url = settings.korp_backend_url + "/count"
-        const ajaxSettings: AjaxSettings<Response<CountResponse>> = {
+        const ajaxSettings = {
             url,
             data,
             beforeSend(req, settings) {
@@ -154,8 +154,8 @@ export class StatsProxy extends BaseProxy<CountResponse> {
                     cqp
                 )
             },
-        }
-        this.pendingRequests.push($.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<CountResponse>)
+        } satisfies AjaxSettings
+        this.pendingRequests.push($.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<CountResponse>)
 
         return def.promise()
     }
