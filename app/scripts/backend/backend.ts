@@ -1,26 +1,13 @@
 /** @format */
 import _ from "lodash"
-import { getAuthorizationHeader } from "@/components/auth/auth"
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
-import { httpConfAddMethodFetch } from "@/util"
 import { normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map_services"
 import { korpRequest } from "./common"
 import { Response, WithinParameters } from "./types"
 import { QueryResponse } from "./types/query"
-import { CountParams, CountResponse } from "./types/count"
-
-type KorpLoglikeResponse = {
-    /** Log-likelihood average. */
-    average: number
-    /** Log-likelihood values. */
-    loglike: Record<string, number>
-    /** Absolute frequency for the values in set 1. */
-    set1: Record<string, number>
-    /** Absolute frequency for the values in set 2. */
-    set2: Record<string, number>
-}
+import { CountParams } from "./types/count"
 
 export type CompareResult = [CompareTables, number, SavedSearch, SavedSearch, string[]]
 
@@ -54,17 +41,6 @@ export type MapRequestResult = {
 
 type MapAttribute = { label: string; corpora: string[] }
 
-// TODO Remove in favor of `korpRequest`
-async function korpRequestAny<T extends Record<string, any> = {}, P extends Record<string, any> = {}>(
-    endpoint: string,
-    params: P
-): Promise<Response<T>> {
-    const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/" + endpoint, params)
-    request.headers = { ...request.headers, ...getAuthorizationHeader() }
-    const response = await fetch(url, request)
-    return (await response.json()) as Response<T>
-}
-
 /** Note: since this is using native Promise, we must use it with something like $q or $scope.$apply for AngularJS to react when they resolve. */
 export async function requestCompare(
     cmpObj1: SavedSearch,
@@ -89,12 +65,12 @@ export async function requestCompare(
         set1_cqp: cmpObj1.cqp,
         set2_corpus: corpora2.join(",").toUpperCase(),
         set2_cqp: cmpObj2.cqp,
-        max: "50",
+        max: 50,
         split,
         top,
     }
 
-    const data = await korpRequestAny<KorpLoglikeResponse>("loglike", params)
+    const data = await korpRequest("loglike", params)
 
     if ("ERROR" in data) {
         // TODO Create a KorpBackendError which could be displayed nicely
