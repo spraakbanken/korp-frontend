@@ -1,7 +1,7 @@
 /** @format */
 
 /** A Korp response is either successful or has error info */
-export type KorpResponse<R> = ResponseBase & (R | Error)
+export type Response<R> = ResponseBase & (R | Error)
 
 /** All responses have time info. */
 export type ResponseBase = {
@@ -31,11 +31,6 @@ export type ProgressResponse = {
     [progress_n: `progress_${number}`]: string | { corpus: string; hits: number }
 }
 
-/** Extends JQuery `jaxSettings` with stuff we use. */
-export type AjaxSettings<TContext = any> = JQuery.AjaxSettings<TContext> & {
-    progress?: (this: TContext, data: any, e: any) => void
-}
-
 export type ProgressReport<R = {}> = {
     /** Response data */
     struct: ResponseBase & ProgressResponse & Partial<R>
@@ -62,4 +57,43 @@ export type Histogram = {
 export type WithinParameters = {
     default_within: string
     within: string
+}
+
+/** Search hit */
+export type ApiKwic = {
+    corpus: string
+    /** An object for each token in the context, with attribute values for that token */
+    tokens: Token[]
+    /** Attribute values for the context (e.g. sentence) */
+    structs: Record<string, any>
+    /** Specifies the position of the match in the context. If `in_order` is false, `match` will consist of a list of match objects, one per highlighted word */
+    match: KwicMatch | KwicMatch[]
+    /** Hits from aligned corpora if available, otherwise omitted */
+    aligned: {
+        [linkedCorpusId: `${string}-${string}`]: Token[]
+    }
+}
+
+/** Specifies the position of a match in a context */
+type KwicMatch = {
+    /** Start position of the match within the context */
+    start: number
+    /** End position of the match within the context */
+    end: number
+    /** Global corpus position of the match */
+    position: number
+}
+
+export type Token = {
+    word: string
+    /** Start/end tags */
+    structs?: {
+        open?: {
+            [element: string]: {
+                [attr: string]: string
+            }
+        }[]
+        close?: string[]
+    }
+    [attr: string]: any
 }

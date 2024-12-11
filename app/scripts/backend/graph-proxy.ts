@@ -2,9 +2,10 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
+import { Granularity, Histogram, Response, NumericString } from "@/backend/types"
 import { AbsRelTuple } from "@/statistics.types"
 import { Factory, httpConfAddMethod } from "@/util"
+import { AjaxSettings } from "@/jquery.types"
 
 export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
     granularity: Granularity
@@ -33,7 +34,7 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
         corpora: string,
         from: NumericString,
         to: NumericString
-    ): JQuery.Promise<KorpResponse<KorpCountTimeResponse>> {
+    ): JQuery.Promise<Response<KorpCountTimeResponse>> {
         this.resetRequest()
         const self = this
         const params: KorpCountTimeParams = {
@@ -77,7 +78,7 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
             error(jqXHR, textStatus, errorThrown) {
                 def.reject(textStatus)
             },
-            success(data: KorpResponse<KorpCountTimeResponse>) {
+            success(data: Response<KorpCountTimeResponse>) {
                 def.resolve(data)
                 self.cleanup()
             },

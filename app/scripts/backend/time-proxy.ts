@@ -2,8 +2,9 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
+import type { Granularity, Histogram, Response, NumericString } from "@/backend/types"
 import { Factory, httpConfAddMethod } from "@/util"
+import { AjaxSettings } from "@/jquery.types"
 
 export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
     makeRequest(): JQueryDeferred<TimeData> {
@@ -100,7 +101,7 @@ type KorpTimespanParams = {
 }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1timespan/get */
-type KorpTimespanResponse = KorpResponse<{
+type KorpTimespanResponse = Response<{
     /** An object with corpus names as keys and time statistics objects as values */
     corpora: Record<string, Histogram>
     /** Number of tokens per time period */

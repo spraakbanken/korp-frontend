@@ -1,13 +1,14 @@
 /** @format */
 import _ from "lodash"
 import { getAuthorizationHeader } from "@/components/auth/auth"
-import { KorpResponse, WithinParameters } from "@/backend/types"
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
 import { httpConfAddMethodFetch } from "@/util"
 import { KorpStatsParams, KorpStatsResponse, normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map_services"
-import { KorpQueryResponse } from "@/backend/kwic-proxy"
+import { korpRequest } from "./common"
+import { Response, WithinParameters } from "./types"
+import { QueryResponse } from "./types/query"
 
 type KorpLoglikeResponse = {
     /** Log-likelihood average. */
@@ -52,14 +53,15 @@ export type MapRequestResult = {
 
 type MapAttribute = { label: string; corpora: string[] }
 
-async function korpRequest<T extends Record<string, any> = {}, P extends Record<string, any> = {}>(
+// TODO Remove in favor of `korpRequest`
+async function korpRequestAny<T extends Record<string, any> = {}, P extends Record<string, any> = {}>(
     endpoint: string,
     params: P
-): Promise<KorpResponse<T>> {
+): Promise<Response<T>> {
     const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/" + endpoint, params)
     request.headers = { ...request.headers, ...getAuthorizationHeader() }
     const response = await fetch(url, request)
-    return (await response.json()) as KorpResponse<T>
+    return (await response.json()) as Response<T>
 }
 
 /** Note: since this is using native Promise, we must use it with something like $q or $scope.$apply for AngularJS to react when they resolve. */
@@ -91,7 +93,7 @@ export async function requestCompare(
         top,
     }
 
-    const data = await korpRequest<KorpLoglikeResponse>("loglike", params)
+    const data = await korpRequestAny<KorpLoglikeResponse>("loglike", params)
 
     if ("ERROR" in data) {
         // TODO Create a KorpBackendError which could be displayed nicely
@@ -146,7 +148,7 @@ export async function requestMapData(
 
     Object.keys(cqpExprs).map((cqp, i) => (params[`subcqp${i}`] = cqp))
 
-    const data = await korpRequest<KorpStatsResponse>("count", params)
+    const data = await korpRequestAny<KorpStatsResponse>("count", params)
 
     if ("ERROR" in data) {
         // TODO Create a KorpBackendError which could be displayed nicely
@@ -158,10 +160,7 @@ export async function requestMapData(
     return { corpora: attribute.corpora, cqp, within, data: result, attribute }
 }
 
-export async function getDataForReadingMode(
-    inputCorpus: string,
-    textId: string
-): Promise<KorpResponse<KorpQueryResponse>> {
+export async function getDataForReadingMode(inputCorpus: string, textId: string): Promise<Response<QueryResponse>> {
     const corpus = inputCorpus.toUpperCase()
     const corpusSettings = settings.corpusListing.get(inputCorpus)
 
@@ -184,5 +183,5 @@ export async function getDataForReadingMode(
         end: 0,
     }
 
-    return korpRequest<KorpQueryResponse>("query", params)
+    return korpRequest("query", params)
 }

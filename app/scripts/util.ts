@@ -9,9 +9,9 @@ import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
-import { ApiKwic, KorpQueryResponse } from "./backend/kwic-proxy"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { isCorpusHeading, LinkedKwic, Row } from "./components/kwic"
+import { LinkedKwic, Row } from "./components/kwic"
+import { ApiKwic } from "./backend/types"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -484,7 +484,7 @@ export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IReques
  */
 export function httpConfAddMethodFetch(
     url: string,
-    params: Record<string, string>
+    params: Record<string, any>
 ): { url: string; request: RequestInit } {
     if (calcUrlLength(url, params) > settings.backendURLMaxLength) {
         const body = new FormData()

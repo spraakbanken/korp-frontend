@@ -2,10 +2,11 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressResponse, ProgressReport } from "@/backend/types"
+import type { Response, ProgressResponse, ProgressReport } from "@/backend/types"
 import { StatsNormalized, StatsColumn, StatisticsWorkerResult } from "@/statistics.types"
 import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 import { statisticsService } from "@/statistics"
+import { AjaxSettings } from "@/jquery.types"
 
 /**
  * Stats in the response can be split by subqueries if the `subcqp#` param is used, but otherwise not.
@@ -113,7 +114,7 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
         const def: JQuery.Deferred<StatisticsWorkerResult> = $.Deferred()
 
         const url = settings.korp_backend_url + "/count"
-        const ajaxSettings: AjaxSettings<KorpResponse<KorpStatsResponse>> = {
+        const ajaxSettings: AjaxSettings<Response<KorpStatsResponse>> = {
             url,
             data,
             beforeSend(req, settings) {
@@ -137,7 +138,7 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
                 }
             },
 
-            success: (data: KorpResponse<KorpStatsResponse>) => {
+            success: (data: Response<KorpStatsResponse>) => {
                 self.cleanup()
                 if ("ERROR" in data) {
                     console.log("gettings stats failed with error", data.ERROR)

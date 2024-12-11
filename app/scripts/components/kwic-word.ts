@@ -1,7 +1,7 @@
 /** @format */
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
-import { ApiKwic, Token } from "@/backend/kwic-proxy"
+import { ApiKwic, Token } from "@/backend/types"
 
 type KwicWordController = IController & {
     word: Token

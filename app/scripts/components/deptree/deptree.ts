@@ -3,9 +3,9 @@ import angular, { IController, IScope, ITimeoutService, ui } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
 import { locObj } from "@/i18n"
-import { Token } from "@/backend/kwic-proxy"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { drawBratTree } from "./deptree-util"
+import { Token } from "@/backend/types"
 
 type DeptreeController = IController & {
     tokens: Token[]

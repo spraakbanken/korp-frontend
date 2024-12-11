@@ -4,7 +4,7 @@ import angular, { IHttpService, IPromise } from "angular"
 import settings from "@/settings"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import { httpConfAddMethod } from "@/util"
-import { KorpResponse } from "./types"
+import { Response } from "./types"
 
 export type StructService = {
     /** Find which unique values occur and count them. */
@@ -70,7 +70,7 @@ angular.module("korpApp").factory("structService", [
 
             const conf = httpConfAddMethod({ url, method: "GET", params, headers })
 
-            const { data } = await $http<KorpResponse<R>>(conf)
+            const { data } = await $http<Response<R>>(conf)
             if ("ERROR" in data) throw new Error(data.ERROR.value)
             return data
         }
