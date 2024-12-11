@@ -2,8 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { Granularity, Histogram, Response, NumericString } from "@/backend/types"
-import { AbsRelTuple } from "@/statistics.types"
+import { AbsRelTuple, Granularity, Histogram, Response, NumericString } from "@/backend/types"
 import { Factory, httpConfAddMethod } from "@/util"
 import { AjaxSettings } from "@/jquery.types"
 

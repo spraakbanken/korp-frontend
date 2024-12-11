@@ -2,11 +2,11 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config"
+import { StatsNormalized } from "@/backend/types/count"
 import {
     Dataset,
     isTotalRow,
     Row,
-    StatsNormalized,
     StatisticsWorkerMessage,
     StatisticsWorkerResult,
     SearchParams,

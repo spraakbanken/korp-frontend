@@ -4,11 +4,12 @@ import { getAuthorizationHeader } from "@/components/auth/auth"
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
 import { httpConfAddMethodFetch } from "@/util"
-import { KorpStatsParams, KorpStatsResponse, normalizeStatsData } from "@/backend/stats-proxy"
+import { normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map_services"
 import { korpRequest } from "./common"
 import { Response, WithinParameters } from "./types"
 import { QueryResponse } from "./types/query"
+import { CountParams, CountResponse } from "./types/count"
 
 type KorpLoglikeResponse = {
     /** Log-likelihood average. */
@@ -136,7 +137,7 @@ export async function requestMapData(
     attribute: MapAttribute,
     relative?: boolean
 ): Promise<MapRequestResult> {
-    const params: KorpStatsParams = {
+    const params: CountParams = {
         group_by_struct: attribute.label,
         cqp,
         corpus: attribute.corpora.join(","),
@@ -148,7 +149,7 @@ export async function requestMapData(
 
     Object.keys(cqpExprs).map((cqp, i) => (params[`subcqp${i}`] = cqp))
 
-    const data = await korpRequestAny<KorpStatsResponse>("count", params)
+    const data = await korpRequest("count", params)
 
     if ("ERROR" in data) {
         // TODO Create a KorpBackendError which could be displayed nicely

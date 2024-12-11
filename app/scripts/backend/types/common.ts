@@ -40,6 +40,9 @@ export type ProgressReport<R = {}> = {
     total_results: number | null
 }
 
+/** Frequency count as absolute and relative (to some total size). */
+export type AbsRelTuple = { absolute: number; relative: number }
+
 /** A string consisting of numbers. */
 export type NumericString = `${number}`
 
