@@ -1,5 +1,5 @@
 /** @format */
-import angular, { ICompileService, IController, IControllerService } from "angular"
+import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
 import _ from "lodash"
 import "../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
@@ -75,6 +75,11 @@ type SidebarController = IController & {
     applyEllipse: () => void
 }
 
+type SidebarScope = IScope & {
+    posData: JQLite | null
+    structData: JQLite | null
+}
+
 angular.module("korpApp").component("sidebar", {
     template: html`
         <div class="sticky top-2 flex flex-col gap-4" ng-show="$ctrl.corpusObj">
@@ -89,11 +94,11 @@ angular.module("korpApp").component("sidebar", {
                 <span ng-click="$ctrl.openReadingMode()" class="link"> {{'read_in_korp' | loc:$root.lang}} </span>
             </div>
 
-            <sidebar-section title="{{'sentence_attr' | loc:$root.lang}}">
+            <sidebar-section ng-show="structData" title="{{'sentence_attr' | loc:$root.lang}}">
                 <div id="selected_sentence"></div>
             </sidebar-section>
 
-            <sidebar-section title="{{'word_attr' | loc:$root.lang}}">
+            <sidebar-section ng-show="posData" title="{{'word_attr' | loc:$root.lang}}">
                 <div id="selected_word"></div>
             </sidebar-section>
 
@@ -114,12 +119,22 @@ angular.module("korpApp").component("sidebar", {
         lang: "<",
     },
     controller: [
-        "$element",
-        "$rootScope",
         "$compile",
         "$controller",
-        function ($element: JQLite, $rootScope: RootScope, $compile: ICompileService, $controller: IControllerService) {
+        "$element",
+        "$rootScope",
+        "$scope",
+        function (
+            $compile: ICompileService,
+            $controller: IControllerService,
+            $element: JQLite,
+            $rootScope: RootScope,
+            $scope: SidebarScope
+        ) {
             let $ctrl = this as SidebarController
+
+            $scope.posData = null
+            $scope.structData = null
 
             statemachine.listen("select_word", function (data) {
                 safeApply($rootScope, () => {
@@ -157,7 +172,6 @@ angular.module("korpApp").component("sidebar", {
             }
 
             $ctrl.updateContent = ({ sentenceData, wordData, corpus, tokens, inReadingMode }) => {
-                $("#selected_sentence").add("#selected_word").empty()
                 // TODO: this is pretty broken
                 const corpusObj = settings.corpora[corpus] || settings.corpusListing.get(corpus)
                 $ctrl.corpusObj = corpusObj
@@ -178,9 +192,9 @@ angular.module("korpApp").component("sidebar", {
                     customContentStruct.push(...struct)
                 }
 
-                let posData: JQLite = $()
+                $scope.posData = null
                 if (!$.isEmptyObject(corpusObj.attributes)) {
-                    posData = $ctrl.renderCorpusContent(
+                    $scope.posData = $ctrl.renderCorpusContent(
                         "pos",
                         wordData,
                         sentenceData,
@@ -191,9 +205,9 @@ angular.module("korpApp").component("sidebar", {
                     )
                 }
 
-                let structData: JQLite = $()
+                $scope.structData = null
                 if (!$.isEmptyObject(corpusObj["struct_attributes"])) {
-                    structData = $ctrl.renderCorpusContent(
+                    $scope.structData = $ctrl.renderCorpusContent(
                         "struct",
                         wordData,
                         sentenceData,
@@ -203,9 +217,6 @@ angular.module("korpApp").component("sidebar", {
                         customContentStruct
                     )
                 }
-
-                $("#selected_word").append(posData)
-                $("#selected_sentence").append(structData)
                 ;($element as JQueryExtended).localize()
                 $ctrl.applyEllipse()
             }
@@ -425,6 +436,20 @@ angular.module("korpApp").component("sidebar", {
                         }
                     })
             }
+
+            $scope.$watch("posData", () => {
+                $element
+                    .find("#selected_word")
+                    .empty()
+                    .append($scope.posData || "")
+            })
+
+            $scope.$watch("structData", () => {
+                $element
+                    .find("#selected_sentence")
+                    .empty()
+                    .append($scope.structData || "")
+            })
         },
     ],
 })
