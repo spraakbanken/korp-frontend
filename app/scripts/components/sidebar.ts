@@ -9,6 +9,7 @@ import { html, regescape, splitLemgram, safeApply, getConfigurable } from "@/uti
 import { loc, locAttribute, locObj } from "@/i18n"
 import "@/services/utils"
 import "@/components/deptree/deptree"
+import "@/components/sidebar-section"
 import "@/video-controller" // May be used by custom code
 import { RootScope } from "@/root-scope.types"
 import { CqpSearchEvent, SelectWordEvent } from "@/statemachine/types"
@@ -76,18 +77,25 @@ type SidebarController = IController & {
 
 angular.module("korpApp").component("sidebar", {
     template: html`
-        <div class="sticky top-10 border border-gray-300 p-2 rounded-sm" ng-show="$ctrl.corpusObj">
+        <div class="sticky top-2 flex flex-col gap-4" ng-show="$ctrl.corpusObj">
             <div>
-                <h4 class="font-normal uppercase text-gray-800 mt-4 mb-1 text-sm tracking-tight">
+                <h4 class="font-normal uppercase text-gray-800 mt-0 mb-1 text-sm tracking-tight">
                     {{'corpus' | loc:$root.lang}}
                 </h4>
                 <div class="text-lg">{{$ctrl.corpusObj.title| locObj:$root.lang}}</div>
             </div>
+
             <div class="openReadingMode" ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj['reading_mode']">
                 <span ng-click="$ctrl.openReadingMode()" class="link"> {{'read_in_korp' | loc:$root.lang}} </span>
             </div>
-            <div id="selected_sentence"></div>
-            <div id="selected_word"></div>
+
+            <sidebar-section title="{{'sentence_attr' | loc:$root.lang}}">
+                <div id="selected_sentence"></div>
+            </sidebar-section>
+
+            <sidebar-section title="{{'word_attr' | loc:$root.lang}}">
+                <div id="selected_word"></div>
+            </sidebar-section>
 
             <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.openDepTree()" class="link show_deptree">
                 {{'show_deptree' | loc:$root.lang}}
@@ -196,15 +204,8 @@ angular.module("korpApp").component("sidebar", {
                     )
                 }
 
-                const $headingWord = $(
-                    '<h4 class="font-normal uppercase text-gray-800 mt-8 mb-1 text-sm" tracking-tight>'
-                ) as JQueryExtended
-                $("#selected_word").append($headingWord.localeKey("word_attr")).append(posData)
-
-                const $headingSentence = $(
-                    '<h4 class="font-normal uppercase text-gray-800 mt-8 mb-1 text-sm" tracking-tight>'
-                ) as JQueryExtended
-                $("#selected_sentence").append($headingSentence.localeKey("sentence_attr")).append(structData)
+                $("#selected_word").append(posData)
+                $("#selected_sentence").append(structData)
                 ;($element as JQueryExtended).localize()
                 $ctrl.applyEllipse()
             }
