@@ -90,10 +90,6 @@ label {
   margin-bottom : 0;
 }
 
-.ui-widget {
-  font-family: inherit;
-}
-
 sup {
   line-height: 0px;
 }
@@ -1656,6 +1652,9 @@ line.tick {
 
 .ui-widget-header {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+}
+.ui-state-default {
+  background : #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
 }
 .ui-state-hover {
   background : #e6e6e6 url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
