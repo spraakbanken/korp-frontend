@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Removed `httpConfAddMethodAngular`
+
 ## [9.7.2] - 2024-12-09
 
 ### Added

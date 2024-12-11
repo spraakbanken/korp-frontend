@@ -450,31 +450,6 @@ export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig
 }
 
 /**
- * Like `httpConfAddMethod`, but for use with $http, to ensure data is sent as form data and not JSON.
- * @param {object} conf A $http or jQuery.ajax configuration object.
- * @returns The same object, possibly modified in-place
- */
-export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T & { url: string }): T {
-    const fixedConf = httpConfAddMethod(conf)
-
-    if (fixedConf.method == "POST") {
-        const formDataParams = new FormData()
-        for (var key in fixedConf.data) {
-            formDataParams.append(key, fixedConf.data[key])
-        }
-        fixedConf.data = formDataParams
-
-        if (!fixedConf.headers) {
-            fixedConf.headers = {}
-        }
-        // will be set correct automatically by Angular
-        fixedConf.headers["Content-Type"] = undefined
-    }
-
-    return fixedConf
-}
-
-/**
  * Like `httpConfAddMethod`, but for use with native `fetch()`.
  * @param conf A $http or jQuery.ajax configuration object.
  * @returns The same object, possibly modified in-place
