@@ -9,7 +9,6 @@ import { Factory, httpConfAddMethod } from "@/util"
 export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
     granularity: Granularity
     prevParams: KorpCountTimeParams | null
-    prevRequest: AjaxSettings
 
     constructor() {
         super()
@@ -61,8 +60,7 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
             dataType: "json",
             data: params,
 
-            beforeSend: (req, settings) => {
-                this.prevRequest = settings
+            beforeSend: (req) => {
                 this.addAuthorizationHeader(req)
             },
 

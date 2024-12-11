@@ -27,12 +27,10 @@ export function normalizeStatsData(data: KorpStatsResponse): StatsNormalized {
 
 export class StatsProxy extends BaseProxy<KorpStatsResponse> {
     prevParams: KorpStatsParams | null
-    prevRequest: AjaxSettings | null
     prevUrl?: string
 
     constructor() {
         super()
-        this.prevRequest = null
         this.prevParams = null
     }
 
@@ -117,9 +115,8 @@ export class StatsProxy extends BaseProxy<KorpStatsResponse> {
             url,
             data,
             beforeSend(req, settings) {
-                self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(url, data)
+                self.prevUrl = settings.url
             },
 
             error(jqXHR, textStatus, errorThrown) {

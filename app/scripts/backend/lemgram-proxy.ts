@@ -6,7 +6,6 @@ import { Factory, httpConfAddMethod } from "@/util"
 
 export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
     prevParams?: KorpRelationsParams
-    prevRequest?: AjaxSettings
     prevUrl?: string
 
     makeRequest(
@@ -31,7 +30,6 @@ export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
             data: params,
 
             success() {
-                self.prevRequest = params
                 self.cleanup()
             },
 
@@ -44,9 +42,8 @@ export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
             },
 
             beforeSend(req, settings) {
-                self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, params)
+                self.prevUrl = settings.url
             },
         }
 

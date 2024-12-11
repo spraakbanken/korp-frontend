@@ -312,15 +312,10 @@ function numberToSuperscript(number: string | number): string {
 // settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
-export function setDownloadLinks(
-    xhr_settings: JQuery.AjaxSettings,
-    result_data: { kwic: Row[]; corpus_order: string[] }
-): void {
+export function setDownloadLinks(query_url: string, result_data: { kwic: Row[]; corpus_order: string[] }): void {
     // If some of the required parameters are null, return without
     // adding the download links.
-    if (
-        !(xhr_settings != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)
-    ) {
+    if (!(query_url != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
         console.log("failed to do setDownloadLinks")
         return
     }
@@ -377,8 +372,10 @@ export function setDownloadLinks(
     class="download_link">${format.toUpperCase()}</option>\
 `)
 
+        const query_params = JSON.stringify(Object.fromEntries(new URL(query_url).searchParams))
+
         const download_params = {
-            query_params: xhr_settings.url,
+            query_params,
             format,
             korp_url: window.location.href,
             korp_server_url: settings.korp_backend_url,

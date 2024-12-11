@@ -8,13 +8,11 @@ import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
 export class KwicProxy extends BaseProxy<KorpQueryResponse> {
     prevCQP?: string
     prevParams: KorpQueryParams | null
-    prevRequest: AjaxSettings | null // Used for download
-    prevUrl?: string
+    prevUrl?: string // Used for download
     queryData?: string
 
     constructor() {
         super()
-        this.prevRequest = null
         this.queryData = undefined
         this.prevParams = null
     }
@@ -94,9 +92,8 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
             url: settings.korp_backend_url + "/" + command,
             data: data,
             beforeSend(req, settings) {
-                self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, data)
+                self.prevUrl = settings.url
             },
 
             success(data: KorpQueryResponse, status, jqxhr) {

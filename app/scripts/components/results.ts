@@ -60,7 +60,7 @@ angular.module("korpApp").component("results", {
                                 context-change-event="toggleReading"
                                 hits-per-page="hitsPerPage"
                                 prev-params="proxy.prevParams"
-                                prev-request="proxy.prevRequest"
+                                prev-url="proxy.prevUrl"
                                 corpus-order="corpusOrder"
                             ></kwic>
                         </div>
@@ -153,7 +153,7 @@ angular.module("korpApp").component("results", {
                                 context-change-event="toggleReading"
                                 hits-per-page="hitsPerPage"
                                 prev-params="proxy.prevParams"
-                                prev-request="proxy.prevRequest"
+                                prev-url="proxy.prevUrl"
                                 corpus-order="corpusOrder"
                             ></kwic>
                         </div>
