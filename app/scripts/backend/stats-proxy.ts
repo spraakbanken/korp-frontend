@@ -29,12 +29,10 @@ export function normalizeStatsData(data: CountResponse): StatsNormalized {
 
 export class StatsProxy extends BaseProxy<CountResponse> {
     prevParams: CountParams | null
-    prevRequest: AjaxSettings | null
     prevUrl?: string
 
     constructor() {
         super()
-        this.prevRequest = null
         this.prevParams = null
     }
 
@@ -119,9 +117,8 @@ export class StatsProxy extends BaseProxy<CountResponse> {
             url,
             data,
             beforeSend(req, settings) {
-                self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(url, data)
+                self.prevUrl = settings.url
             },
 
             error(jqXHR, textStatus, errorThrown) {
