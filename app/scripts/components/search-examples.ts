@@ -44,7 +44,8 @@ export default angular.module("korpApp").component("searchExamples", {
                 if (params.cqp) {
                     statemachine.send("SEARCH_CQP", { cqp: params.cqp } as CqpSearchEvent)
                 }
-                $location.search(params)
+                // Do not use `$location.search(params)` because it will remove existing params (like `corpus`)
+                Object.keys(params).forEach((key: keyof HashParams) => $location.search(key, params[key]))
             }
         },
     ],
