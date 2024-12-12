@@ -12,6 +12,7 @@ import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { LinkedKwic, Row } from "./components/kwic"
 import { ApiKwic } from "./backend/types"
+import { AxiosRequestConfig } from "axios"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -451,6 +452,16 @@ export function fetchConfAddMethod(url: string, params: Record<string, any>): { 
         return { url, request: { method: "POST", body: toFormData(params) } }
     }
     return { url: buildUrl(url, params), request: {} }
+}
+
+export function axiosConfAddMethod(conf: AxiosRequestConfig & { url: string }): AxiosRequestConfig {
+    // Like $http, Axios uses `data` for POST but `params` for GET.
+    conf.method = selectHttpMethod(conf.url, conf.params || {})
+    if (conf.method == "POST") {
+        conf.data = toFormData(conf.params || {})
+        delete conf.params
+    }
+    return conf
 }
 
 /** Check url length */
