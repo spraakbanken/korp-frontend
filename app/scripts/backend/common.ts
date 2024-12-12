@@ -2,7 +2,7 @@
 import { fetchConfAddMethod } from "@/util"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import settings from "@/settings"
-import { API, Response } from "./types"
+import { API, ErrorMessage, Response } from "./types"
 import { omitBy } from "lodash"
 
 export async function korpRequest<K extends keyof API>(
@@ -17,7 +17,8 @@ export async function korpRequest<K extends keyof API>(
     const data = (await response.json()) as Response<API[K]["response"]>
 
     if ("ERROR" in data) {
-        throw new KorpBackendError(data.ERROR.type, data.ERROR.value)
+        const { type, value } = data.ERROR as ErrorMessage
+        throw new KorpBackendError(type, value)
     }
 
     return data

@@ -15,7 +15,7 @@ import "@/global-filter/global-filters"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
-import { LexiconsRelatedWordsResponse, LexiconsService } from "@/backend/lexicons"
+import { LexiconsRelatedWords, relatedWordSearch } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
 import { CqpSearchEvent } from "@/statemachine/types"
 
@@ -31,7 +31,7 @@ type SimpleSearchController = IController & {
     isCaseInsensitive: boolean
     currentText?: string
     lemgram?: string
-    relatedObj?: { data: LexiconsRelatedWordsResponse; attribute: string }
+    relatedObj?: { data: LexiconsRelatedWords[]; attribute: string }
     relatedDefault: number
     updateSearch: () => void
     getCQP: () => string
@@ -118,7 +118,6 @@ angular.module("korpApp").component("simpleSearch", {
         "$timeout",
         "$uibModal",
         "compareSearches",
-        "lexicons",
         "searches",
         function (
             $location: LocationService,
@@ -127,7 +126,6 @@ angular.module("korpApp").component("simpleSearch", {
             $timeout: ITimeoutService,
             $uibModal: ui.bootstrap.IModalService,
             compareSearches: CompareSearches,
-            lexicons: LexiconsService,
             searches: SearchesService
         ) {
             const ctrl = this as SimpleSearchController
@@ -348,7 +346,7 @@ angular.module("korpApp").component("simpleSearch", {
                     const saldo = attrExists("saldo")
 
                     if (sense || saldo) {
-                        lexicons.relatedWordSearch(unregescape(search.val)).then((data) => {
+                        relatedWordSearch(unregescape(search.val)).then((data) => {
                             // Lower some nasty words
                             if (data.length >= 2 && data[0].label == "Excreting") {
                                 // Swap the first two elements

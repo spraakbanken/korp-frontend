@@ -5,7 +5,7 @@ import settings from "@/settings"
 import { normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map_services"
 import { korpRequest } from "./common"
-import { Response, WithinParameters } from "./types"
+import { WithinParameters } from "./types"
 import { QueryResponse } from "./types/query"
 import { CountParams } from "./types/count"
 
