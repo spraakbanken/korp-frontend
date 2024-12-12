@@ -1,5 +1,6 @@
 /** @format */
 
+import { AttrValuesParams, AttrValuesResponseDeep, AttrValuesResponseFlat } from "./attr-values"
 import { CorpusConfigParams, CorpusConfigResponse } from "./corpus-config"
 import { CorpusInfoParams, CorpusInfoResponse } from "./corpus-info"
 import { CountParams, CountResponse } from "./count"
@@ -10,6 +11,11 @@ export * from "./common"
 
 /** Maps a Korp backend endpoint name to the expected parameters and response */
 export type API = {
+    attr_values: {
+        params: AttrValuesParams
+        // Depth of data structure depends on amount of attributes in the `attr` param
+        response: AttrValuesResponseFlat | AttrValuesResponseDeep
+    }
     corpus_config: {
         params: CorpusConfigParams
         response: CorpusConfigResponse

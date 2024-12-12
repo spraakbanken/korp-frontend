@@ -6,7 +6,7 @@ import { html } from "@/util"
 import "@/directives/escaper"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
-import { StructService } from "@/backend/struct-service"
+import { getAttrValues } from "@/backend/attr-values"
 import { RootScope } from "@/root-scope.types"
 import { LocMap } from "@/i18n/types"
 
@@ -43,8 +43,7 @@ export const selectTemplate = html`<select
 export const selectController = (autocomplete: boolean): IController => [
     "$scope",
     "$rootScope",
-    "structService",
-    function ($scope: SelectWidgetScope, $rootScope: RootScope, structService: StructService) {
+    function ($scope: SelectWidgetScope, $rootScope: RootScope) {
         $rootScope.$on("corpuschooserchange", function (event, selected: string[]) {
             // TODO Destroy if new corpus selection doesn't support the attribute?
             if (selected.length > 0) {
@@ -52,7 +51,7 @@ export const selectController = (autocomplete: boolean): IController => [
             }
         })
 
-        function reloadValues() {
+        async function reloadValues() {
             // TODO this exploits the API
             const attributeDefinition: { value: string } = $scope.$parent.$ctrl.attributeDefinition
             if (!attributeDefinition) {
@@ -72,20 +71,18 @@ export const selectController = (autocomplete: boolean): IController => [
 
             $scope.loading = true
             const split = $scope.type === "set"
-            structService.getAttrValues(corpora, attribute, split).then(
-                function (data: string[]) {
-                    $scope.loading = false
+            const data = await getAttrValues(corpora, attribute, split)
+            $scope.$apply(() => {
+                $scope.loading = false
 
-                    const dataset = _.uniq(data).map((item) => {
-                        return item === "" ? [item, loc("empty")] : [item, locAttribute($scope.translation, item)]
-                    })
-                    $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
-                    if (!autocomplete) {
-                        $scope.input = data.includes($scope.input) ? $scope.input : $scope.dataset[0][0]
-                    }
-                },
-                () => console.log("attr_values error")
-            )
+                const dataset = _.uniq(data).map((item) => {
+                    return item === "" ? [item, loc("empty")] : [item, locAttribute($scope.translation, item)]
+                })
+                $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                if (!autocomplete) {
+                    $scope.input = data.includes($scope.input) ? $scope.input : $scope.dataset[0][0]
+                }
+            })
         }
 
         // Load values initially

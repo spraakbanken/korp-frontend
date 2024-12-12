@@ -9,9 +9,10 @@ import settings from "@/settings"
 import { regescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
-import { RecursiveRecord, StructService } from "@/backend/struct-service"
+import { countAttrValues } from "@/backend/attr-values"
 import { DataObject, GlobalFilterService, UpdateScope } from "./types"
 import { CqpQuery, Condition } from "@/cqp_parser/cqp.types"
+import { RecursiveRecord } from "@/backend/types/attr-values"
 
 type StoredFilterValues = Record<string, string[]>
 
@@ -26,13 +27,7 @@ angular.module("korpApp").factory("globalFilterService", [
     "$rootScope",
     "$location",
     "$q",
-    "structService",
-    function (
-        $rootScope: RootScope,
-        $location: LocationService,
-        $q: IQService,
-        structService: StructService
-    ): GlobalFilterService {
+    function ($rootScope: RootScope, $location: LocationService, $q: IQService): GlobalFilterService {
         const scopes: UpdateScope[] = []
 
         const notify = () => listenerDef.promise.then(() => scopes.map((scope) => scope.update(dataObj)))
@@ -78,7 +73,7 @@ angular.module("korpApp").factory("globalFilterService", [
             const corpora = getSupportedCorpora()
             const attrs = dataObj.defaultFilters
             const multiAttrs = attrs.filter((attr) => dataObj.attributes[attr].settings.type === "set")
-            currentData = await structService.countAttrValues(corpora, attrs, multiAttrs)
+            currentData = await countAttrValues(corpora, attrs, multiAttrs)
             updateData()
         }
 
