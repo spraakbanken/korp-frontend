@@ -2,7 +2,7 @@
 import { axiosConfAddMethod } from "@/util"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import settings from "@/settings"
-import { API, Response, ResponseBase } from "./types"
+import { API, ErrorMessage, Response, ResponseBase } from "./types"
 import axios from "axios"
 
 export async function korpRequest<K extends keyof API>(
@@ -18,7 +18,8 @@ export async function korpRequest<K extends keyof API>(
     const data = response.data
 
     if ("ERROR" in data) {
-        throw new KorpBackendError(data.ERROR.type, data.ERROR.value)
+        const { type, value } = data.ERROR as ErrorMessage
+        throw new KorpBackendError(type, value)
     }
 
     return data

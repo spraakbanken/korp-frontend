@@ -4,6 +4,7 @@ import { AttrValuesParams, AttrValuesResponseDeep, AttrValuesResponseFlat } from
 import { CorpusConfigParams, CorpusConfigResponse } from "./corpus-config"
 import { CorpusInfoParams, CorpusInfoResponse } from "./corpus-info"
 import { CountParams, CountResponse } from "./count"
+import { LemgramCountParams, LemgramCountResponse } from "./lemgram-count"
 import { LoglikeParams, LoglikeResponse } from "./loglike"
 import { QueryParams, QueryResponse } from "./query"
 
@@ -27,6 +28,10 @@ export type API = {
     count: {
         params: CountParams
         response: CountResponse
+    }
+    lemgram_count: {
+        params: LemgramCountParams
+        response: LemgramCountResponse
     }
     loglike: {
         params: LoglikeParams

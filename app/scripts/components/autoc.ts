@@ -1,10 +1,10 @@
 /** @format */
 import _ from "lodash"
-import angular, { IController, IPromise, IQService } from "angular"
+import angular, { IController, IPromise } from "angular"
 import settings from "@/settings"
 import { html, lemgramToString, saldoToString } from "@/util"
 import { loc } from "@/i18n"
-import { LemgramCount, LexiconsService } from "@/backend/lexicons"
+import { getLemgrams, getSenses, LemgramCount } from "@/backend/lexicons"
 import "@/directives/typeahead-click-open"
 
 type AutocController = IController & {
@@ -97,9 +97,7 @@ angular.module("korpApp").component("autoc", {
         onChange: "&",
     },
     controller: [
-        "$q",
-        "lexicons",
-        function ($q: IQService, lexicons: LexiconsService) {
+        function () {
             const ctrl = this as AutocController
 
             ctrl.isError = false
@@ -196,47 +194,39 @@ angular.module("korpApp").component("autoc", {
                 }
             }
 
-            ctrl.getLemgrams = function (input: string, morphologies: string[], corpora: string[]) {
-                const deferred = $q.defer<LemgramOut[]>()
-                const http = lexicons.getLemgrams(input, morphologies, corpora)
-                http.then(function (data) {
-                    const output: LemgramOut[] = data.map((item) => {
-                        if (ctrl.variant === "affix") item.count = -1
-                        return {
-                            ...item,
-                            parts: ctrl.lemgramify(item.lemgram),
-                            variant: ctrl.variant,
-                        }
-                    })
-                    output.sort((a, b) => b.count - a.count)
-                    return deferred.resolve(output)
+            ctrl.getLemgrams = async (input: string, morphologies: string[], corpora: string[]) => {
+                const data = await getLemgrams(input, morphologies, corpora)
+                const output: LemgramOut[] = data.map((item) => {
+                    if (ctrl.variant === "affix") item.count = -1
+                    return {
+                        ...item,
+                        parts: ctrl.lemgramify(item.lemgram),
+                        variant: ctrl.variant,
+                    }
                 })
-                return deferred.promise
+                output.sort((a, b) => b.count - a.count)
+                return output
             }
 
-            ctrl.getSenses = function (input: string) {
-                const deferred = $q.defer<Sense[]>()
-                const http = lexicons.getSenses(input)
-                http.then(function (data) {
-                    const output: Sense[] = data.map((item) => {
-                        const out = {
-                            sense: item.sense,
-                            parts: ctrl.sensify(item.sense),
-                            desc: item.desc ? ctrl.sensify(item.desc) : undefined,
-                            variant: ctrl.variant,
-                        }
-                        return out
-                    })
-                    output.sort(function (a, b) {
-                        if (a.parts.main === b.parts.main) {
-                            return b.parts.index.localeCompare(a.parts.index)
-                        } else {
-                            return a.sense.length - b.sense.length
-                        }
-                    })
-                    return deferred.resolve(output)
+            ctrl.getSenses = async (input: string) => {
+                const data = await getSenses(input)
+                const output: Sense[] = data.map((item) => {
+                    const out = {
+                        sense: item.sense,
+                        parts: ctrl.sensify(item.sense),
+                        desc: item.desc ? ctrl.sensify(item.desc) : undefined,
+                        variant: ctrl.variant,
+                    }
+                    return out
                 })
-                return deferred.promise
+                output.sort(function (a, b) {
+                    if (a.parts.main === b.parts.main) {
+                        return b.parts.index.localeCompare(a.parts.index)
+                    } else {
+                        return a.sense.length - b.sense.length
+                    }
+                })
+                return output
             }
         },
     ],
