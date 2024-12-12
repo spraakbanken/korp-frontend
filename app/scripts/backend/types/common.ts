@@ -1,7 +1,7 @@
 /** @format */
 
 /** A Korp response is either successful or has error info */
-export type Response<R> = ResponseBase & (R | Error)
+export type Response<R> = ResponseBase & (R | ErrorResponse)
 
 /** All responses have time info. */
 export type ResponseBase = {
@@ -10,13 +10,15 @@ export type ResponseBase = {
 }
 
 /** An error response has an error message. */
-export type Error = {
-    ERROR: {
-        /** Name of exception */
-        type: string
-        /** Error message, human-readable but technical */
-        value: string
-    }
+export type ErrorResponse = {
+    ERROR: ErrorMessage
+}
+
+export type ErrorMessage = {
+    /** Name of exception */
+    type: string
+    /** Error message, human-readable but technical */
+    value: string
 }
 
 /**

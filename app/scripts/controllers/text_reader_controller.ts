@@ -11,6 +11,7 @@ import { kebabize } from "@/util"
 import { TabHashScope } from "@/directives/tab-hash"
 import { getDataForReadingMode } from "@/backend/backend"
 import { ApiKwic, Token } from "@/backend/types"
+import { KorpBackendError } from "@/backend/common"
 
 type TextReaderControllerScope = TabHashScope & {
     loading: boolean
@@ -67,17 +68,18 @@ angular.module("korpApp").directive("textReaderCtrl", [
                 const corpus = $scope.inData.corpus
                 $scope.corpusObj = settings.corpora[corpus]
                 const textId = $scope.inData.sentenceData["text__id"]
-                getDataForReadingMode(corpus, textId).then(function (data) {
-                    if (!data || "ERROR" in data) {
-                        $scope.$apply(($scope: TextReaderControllerScope) => ($scope.loading = false))
-                        return
-                    }
-                    const document = prepareData(data.kwic[0], $scope.corpusObj)
-                    $scope.$apply(($scope: TextReaderControllerScope) => {
-                        $scope.data = { corpus, document, sentenceData: $scope.inData.sentenceData }
-                        $scope.loading = false
+                getDataForReadingMode(corpus, textId)
+                    .then(function (data) {
+                        const document = prepareData(data.kwic[0], $scope.corpusObj)
+                        $scope.$apply(($scope: TextReaderControllerScope) => {
+                            $scope.data = { corpus, document, sentenceData: $scope.inData.sentenceData }
+                            $scope.loading = false
+                        })
                     })
-                })
+                    .catch((err) => {
+                        $scope.$apply(($scope: TextReaderControllerScope) => ($scope.loading = false))
+                        throw err
+                    })
 
                 $scope.onentry = function () {
                     $scope.$broadcast("on-entry")
