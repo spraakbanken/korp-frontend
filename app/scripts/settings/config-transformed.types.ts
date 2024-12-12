@@ -5,7 +5,7 @@
 
 import { LangString } from "@/i18n/types"
 import { Attribute, Config, Corpus, CustomAttribute, Folder } from "./config.types"
-import { CorpusInfoInfo } from "./corpus-info.types"
+import { CorpusInfoInfo } from "@/backend/types/corpus-info"
 
 export type ConfigTransformed = Omit<Config, "attributes" | "corpora" | "label"> & {
     corpora: Record<string, CorpusTransformed>
