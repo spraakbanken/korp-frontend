@@ -15,7 +15,7 @@ export type AppSettings = {
     backendURLMaxLength: number
     common_struct_types?: Record<string, Attribute>
     config_dependent_on_authentication?: boolean
-    corpus_config_url?: () => Promise<string>
+    get_corpus_ids?: () => Promise<string[]>
     corpus_info_link?: {
         url_template: string
         label: LangString

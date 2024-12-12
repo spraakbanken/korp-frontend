@@ -4,6 +4,7 @@
 
 ### Changed
 
+- The `corpus_config_url` setting is replaced by `get_corpus_ids`, see [doc/frontend_devel.md](./doc/frontend_devel.md)
 - The `httpConfAddMethod*` util functions were refactored:
   - The `$.ajax` case of `httpConfAddMethod` was extracted into `ajaxConfAddMethod`
   - `httpConfAddMethodFetch` was renamed to `fetchConfAddMethod`
