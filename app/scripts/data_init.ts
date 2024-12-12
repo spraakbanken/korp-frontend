@@ -50,9 +50,6 @@ async function getInfoData(corpusIds: string[]): Promise<InfoData> {
 
     const params = { corpus: corpusIds.map((id) => id.toUpperCase()).join(",") }
     const data = await korpRequest("corpus_info", params)
-    if ("ERROR" in data) {
-        throw new Error(data.ERROR.value)
-    }
 
     return fromKeys(corpusIds, (corpusId) => ({
         info: data.corpora[corpusId.toUpperCase()].info,
@@ -107,10 +104,6 @@ async function getConfig(): Promise<Config> {
         mode: currentMode,
         corpus: corpusIds?.join(",") || undefined,
     })
-
-    if ("ERROR" in config) {
-        throw Error(config.ERROR.value)
-    }
 
     return config
 }

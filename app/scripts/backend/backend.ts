@@ -72,11 +72,6 @@ export async function requestCompare(
 
     const data = await korpRequest("loglike", params)
 
-    if ("ERROR" in data) {
-        // TODO Create a KorpBackendError which could be displayed nicely
-        throw new Error(data.ERROR.value)
-    }
-
     const objs: CompareItemRaw[] = _.map(data.loglike, (value, key) => ({
         value: key,
         loglike: value,
@@ -127,17 +122,12 @@ export async function requestMapData(
 
     const data = await korpRequest("count", params)
 
-    if ("ERROR" in data) {
-        // TODO Create a KorpBackendError which could be displayed nicely
-        throw new Error(data.ERROR.value)
-    }
-
     const normalizedData = normalizeStatsData(data) as any // TODO Type correctly
     let result = parseMapData(normalizedData, cqp, cqpExprs)
     return { corpora: attribute.corpora, cqp, within, data: result, attribute }
 }
 
-export async function getDataForReadingMode(inputCorpus: string, textId: string): Promise<Response<QueryResponse>> {
+export async function getDataForReadingMode(inputCorpus: string, textId: string): Promise<QueryResponse> {
     const corpus = inputCorpus.toUpperCase()
     const corpusSettings = settings.corpusListing.get(inputCorpus)
 
