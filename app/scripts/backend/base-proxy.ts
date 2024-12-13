@@ -12,7 +12,9 @@ export default abstract class BaseProxy<R extends {} = {}> {
     progress: number
     total: number | null
     total_results: number | null
+    // TODO When Axios is used in all (abortable) subclasses, remove `pendingRequests`
     pendingRequests: JQuery.jqXHR[]
+    abortControllers: AbortController[] = []
 
     constructor() {
         this.prev = ""
@@ -43,15 +45,20 @@ export default abstract class BaseProxy<R extends {} = {}> {
 
     abort(): void {
         this.pendingRequests.forEach((req) => req.abort())
+        this.abortControllers.forEach((controller) => controller.abort())
         this.cleanup()
     }
 
     cleanup(): void {
+        this.abortControllers = []
         this.prev = ""
     }
 
     hasPending(): boolean {
-        return _.some(_.map(this.pendingRequests, (req) => req.readyState !== 4 && req.readyState !== 0))
+        return (
+            _.some(_.map(this.pendingRequests, (req) => req.readyState !== 4 && req.readyState !== 0)) ||
+            this.abortControllers.length > 0
+        )
     }
 
     /** Try to parse partial JSON data (of an in-progress HTTP response). */

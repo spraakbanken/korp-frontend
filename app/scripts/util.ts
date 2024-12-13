@@ -454,7 +454,7 @@ export function fetchConfAddMethod(url: string, params: Record<string, any>): { 
     return { url: buildUrl(url, params), request: {} }
 }
 
-export function axiosConfAddMethod(conf: AxiosRequestConfig & { url: string }): AxiosRequestConfig {
+export function axiosConfAddMethod(conf: AxiosRequestConfig & { url: string }): AxiosRequestConfig & { url: string } {
     // Like $http, Axios uses `data` for POST but `params` for GET.
     conf.method = selectHttpMethod(conf.url, conf.params || {})
     if (conf.method == "POST") {

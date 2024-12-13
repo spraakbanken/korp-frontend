@@ -41,4 +41,9 @@ export type API = {
         params: QueryParams
         response: QueryResponse
     }
+    relations_sentences: {
+        // The params actually differ slightly, but they are merged in QueryParams
+        params: QueryParams
+        response: QueryResponse
+    }
 }

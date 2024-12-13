@@ -281,6 +281,7 @@ angular.module("korpApp").component("results", {
                     </uib-tab>
                 </uib-tabset>
 
+                <!-- TODO Url may be too long. Store endpoint+params instead, and then make a request using axiosConfAddMethod() instead of just <a href> -->
                 <a id="json-link" ng-href="{{$root.jsonUrl}}" ng-show="$root.jsonUrl" target="_blank">
                     <img src="img/json.png" />
                 </a>

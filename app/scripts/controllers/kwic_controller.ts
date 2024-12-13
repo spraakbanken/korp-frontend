@@ -1,6 +1,7 @@
 /** @format */
 import angular, { IController, ITimeoutService } from "angular"
 import _ from "lodash"
+import { CanceledError } from "axios"
 import settings from "@/settings"
 import kwicProxyFactory, { type KwicProxy } from "@/backend/kwic-proxy"
 import { ApiKwic, Response, ProgressReport } from "@/backend/types"
@@ -209,8 +210,9 @@ export class KwicCtrl implements IController {
 
             s.loading = true
             s.aborted = false
-
-            s.ignoreAbort = Boolean(s.proxy.hasPending())
+            // If this request aborts a previous request, flag to abort it silently
+            // TODO Aborting the new request should not also be silent
+            s.ignoreAbort = s.proxy.hasPending()
 
             const ajaxParams = s.buildQueryOptions(isPaging)
 
@@ -220,27 +222,21 @@ export class KwicCtrl implements IController {
                 (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
                 (data) => $timeout(() => s.renderResult(data))
             )
-            req.done((data: Response<QueryResponse>) => {
+
+            req.then((data: QueryResponse) => {
                 $timeout(() => {
                     s.loading = false
                     s.renderCompleteResult(data, isPaging)
                 })
             })
 
-            req.fail((jqXHR, status, errorThrown) => {
-                $timeout(() => {
-                    console.log("kwic fail")
-                    if (s.ignoreAbort) {
-                        console.log("stats ignoreabort")
-                        return
-                    }
+            req.catch((err) => {
+                // If next request is already started, do nothing for this previous one
+                if (s.ignoreAbort) return
+                s.$applyAsync(() => {
                     s.loading = false
-
-                    if (status === "abort") {
-                        s.aborted = true
-                    } else {
-                        s.error = true
-                    }
+                    if (err instanceof CanceledError) s.aborted = true
+                    else s.error = true
                 })
             })
         }

@@ -2,10 +2,10 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { locationSearchGet, Factory, ajaxConfAddMethod } from "@/util"
+import { locationSearchGet, Factory, buildUrl } from "@/util"
 import { ProgressReport, Response } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
-import { AjaxSettings } from "@/jquery.types"
+import { korpEndpointUrl, korpRequest } from "./common"
 
 export class KwicProxy extends BaseProxy<QueryResponse> {
     prevCQP?: string
@@ -19,12 +19,12 @@ export class KwicProxy extends BaseProxy<QueryResponse> {
         this.prevParams = null
     }
 
-    makeRequest(
+    async makeRequest(
         options: KorpQueryRequestOptions,
         page: number | undefined,
         progressCallback: (data: ProgressReport<QueryResponse>) => void,
         kwicCallback: (data: Response<QueryResponse>) => void
-    ): JQuery.jqXHR<Response<QueryResponse>> {
+    ): Promise<QueryResponse> {
         const self = this
         this.resetRequest()
         if (!kwicCallback) {
@@ -90,38 +90,34 @@ export class KwicProxy extends BaseProxy<QueryResponse> {
         }
 
         this.prevParams = data
-        const ajaxSettings = {
-            url: settings.korp_backend_url + "/" + command,
-            data: data,
-            beforeSend(req, settings) {
-                self.addAuthorizationHeader(req)
-                self.prevUrl = settings.url
-            },
+        this.prevUrl = buildUrl(korpEndpointUrl("query"), data)
 
-            success(data: QueryResponse, status, jqxhr) {
-                self.queryData = data.query_data
-                self.cleanup()
-                // Run the callback to show results, if not already done by the progress handler
-                if (!this.foundKwic) kwicCallback(data)
-            },
+        const abortController = new AbortController()
+        this.abortControllers.push(abortController)
+        let foundKwic = false
 
-            progress(jqxhr, e: ProgressEvent) {
+        const request = korpRequest(command, data, {
+            abortSignal: abortController.signal,
+            onProgress(e) {
                 // Calculate progress, used for progress bars
-                const progressObj = self.calcProgress(e)
+                const progressObj = self.calcProgress(e.event!)
                 progressCallback(progressObj)
 
                 // Show current page of results if they are available
                 // The request may continue to count hits in the background
                 if ("kwic" in progressObj.struct) {
-                    this.foundKwic = true
+                    foundKwic = true
                     kwicCallback(progressObj.struct as QueryResponse)
                 }
             },
-        } satisfies AjaxSettings
+        })
 
-        const def = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<Response<QueryResponse>>
-        this.pendingRequests.push(def)
-        return def
+        const result = await request
+        self.queryData = result.query_data
+        self.cleanup()
+        // Run the callback to show results, if not already done by the progress handler
+        if (!foundKwic) kwicCallback(result)
+        return result
     }
 }
 

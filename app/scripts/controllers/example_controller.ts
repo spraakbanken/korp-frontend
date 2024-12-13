@@ -21,7 +21,7 @@ type ExampleCtrlScope = ScopeBase & {
     hitsPictureData?: any
     hitspictureClick?: (page: number) => void
     kwicTab: KwicTab
-    makeRequest: (isPaging?: boolean) => JQuery.jqXHR<Response<QueryResponse>>
+    makeRequest: (isPaging?: boolean) => Promise<QueryResponse>
     onExampleProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
     setupReadingWatch: () => void
     superRenderResult: (data: Response<QueryResponse>) => void
@@ -145,7 +145,7 @@ class ExampleCtrl extends KwicCtrl {
                 }
             )
 
-            def.fail(() => {
+            def.catch(() => {
                 $timeout(() => {
                     // TODO it could be abort
                     s.error = true
