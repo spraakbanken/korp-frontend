@@ -8,7 +8,6 @@ import { loc, locObj } from "@/i18n"
 import { getCqp } from "../../config/statistics_config"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { requestMapData } from "@/backend/backend"
-import { KorpStatsParams } from "@/backend/stats-proxy"
 import "@/backend/backend"
 import "@/services/searches"
 import "@/components/corpus-distribution-chart"
@@ -16,6 +15,7 @@ import { SearchesService } from "@/services/searches"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, SlickgridColumn } from "@/statistics.types"
+import { CountParams } from "@/backend/types/count"
 
 type StatisticsScope = IScope & {
     rowData: { title: string; values: AbsRelSeq }[]
@@ -33,7 +33,7 @@ type StatisticsController = IController & {
     inOrder: boolean
     loading: boolean
     noHits: boolean
-    prevParams: KorpStatsParams
+    prevParams: CountParams
     searchParams: SearchParams
     showStatistics: boolean
     sortColumn?: string

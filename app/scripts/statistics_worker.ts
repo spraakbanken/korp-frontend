@@ -6,15 +6,8 @@ import isArray from "lodash/isArray"
 import keys from "lodash/keys"
 
 import { RowsEntity } from "./interfaces/stats"
-import {
-    AbsRelSeq,
-    Dataset,
-    SingleRow,
-    TotalRow,
-    StatisticsWorkerMessage,
-    StatsNormalized,
-    StatsRow,
-} from "./statistics.types"
+import { StatsNormalized, StatsRow } from "./backend/types/count"
+import { AbsRelSeq, Dataset, SingleRow, TotalRow, StatisticsWorkerMessage } from "./statistics.types"
 
 /*
     This is optimized code for transforming the statistics data.

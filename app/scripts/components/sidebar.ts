@@ -13,10 +13,10 @@ import "@/components/sidebar-section"
 import "@/video-controller" // May be used by custom code
 import { RootScope } from "@/root-scope.types"
 import { CqpSearchEvent, SelectWordEvent } from "@/statemachine/types"
-import { Token } from "@/backend/kwic-proxy"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config.types"
 import { JQueryExtended } from "@/jquery.types"
+import { Token } from "@/backend/types"
 
 export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
 export type SidebarComponent = {

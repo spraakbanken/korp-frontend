@@ -2,19 +2,19 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressReport } from "@/backend/types"
-import { locationSearchGet, httpConfAddMethod, Factory } from "@/util"
+import { locationSearchGet, Factory, ajaxConfAddMethod } from "@/util"
+import { ProgressReport, Response } from "./types"
+import { QueryParams, QueryResponse } from "./types/query"
+import { AjaxSettings } from "@/jquery.types"
 
-export class KwicProxy extends BaseProxy<KorpQueryResponse> {
+export class KwicProxy extends BaseProxy<QueryResponse> {
     prevCQP?: string
-    prevParams: KorpQueryParams | null
-    prevRequest: AjaxSettings | null // Used for download
-    prevUrl?: string
+    prevParams: QueryParams | null
+    prevUrl?: string // Used for download
     queryData?: string
 
     constructor() {
         super()
-        this.prevRequest = null
         this.queryData = undefined
         this.prevParams = null
     }
@@ -22,9 +22,9 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
     makeRequest(
         options: KorpQueryRequestOptions,
         page: number | undefined,
-        progressCallback: (data: ProgressReport<KorpQueryResponse>) => void,
-        kwicCallback: (data: KorpResponse<KorpQueryResponse>) => void
-    ): JQuery.jqXHR<KorpResponse<KorpQueryResponse>> {
+        progressCallback: (data: ProgressReport<QueryResponse>) => void,
+        kwicCallback: (data: Response<QueryResponse>) => void
+    ): JQuery.jqXHR<Response<QueryResponse>> {
         const self = this
         this.resetRequest()
         if (!kwicCallback) {
@@ -36,7 +36,7 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
             _.extend(options.ajaxParams, settings.corpusListing.getWithinParameters())
         }
 
-        function getPageInterval(): Interval {
+        function getPageInterval(): { start: number; end: number } {
             const hpp = locationSearchGet("hpp")
             const itemsPerPage = Number(hpp) || settings.hits_per_page_default
             const start = (page || 0) * itemsPerPage
@@ -46,7 +46,7 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
 
         const command = options.ajaxParams.command || "query"
 
-        const data: KorpQueryParams = {
+        const data: QueryParams = {
             default_context: settings.default_overview_context,
             ...getPageInterval(),
             ...options.ajaxParams,
@@ -90,16 +90,15 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
         }
 
         this.prevParams = data
-        const ajaxSettings: AjaxSettings = {
+        const ajaxSettings = {
             url: settings.korp_backend_url + "/" + command,
             data: data,
             beforeSend(req, settings) {
-                self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, data)
+                self.prevUrl = settings.url
             },
 
-            success(data: KorpQueryResponse, status, jqxhr) {
+            success(data: QueryResponse, status, jqxhr) {
                 self.queryData = data.query_data
                 self.cleanup()
                 // Run the callback to show results, if not already done by the progress handler
@@ -115,12 +114,12 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
                 // The request may continue to count hits in the background
                 if ("kwic" in progressObj.struct) {
                     this.foundKwic = true
-                    kwicCallback(progressObj.struct as KorpQueryResponse)
+                    kwicCallback(progressObj.struct as QueryResponse)
                 }
             },
-        }
+        } satisfies AjaxSettings
 
-        const def = $.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpResponse<KorpQueryResponse>>
+        const def = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<Response<QueryResponse>>
         this.pendingRequests.push(def)
         return def
     }
@@ -129,97 +128,11 @@ export class KwicProxy extends BaseProxy<KorpQueryResponse> {
 const kwicProxyFactory = new Factory(KwicProxy)
 export default kwicProxyFactory
 
-/**
- * The `query` and `relations_sentences` endpoints are combined here.
- * @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get
- * @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture/paths/~1relations_sentences/get
- */
-export type KorpQueryParams = {
-    /* Required for `query` */
-    corpus?: string
-    /* Required for `query` */
-    cqp?: string
-    start?: number
-    end?: number
-    default_context?: string
-    context?: string
-    show?: string
-    show_struct?: string
-    /** Required for `relations_sentences` */
-    source?: string
-    default_within?: string
-    within?: string
-    in_order?: boolean
-    sort?: string
-    random_seed?: number
-    cut?: number
-    [cqpn: `cqp${number}`]: string
-    expand_prequeries?: boolean
-    incremental?: boolean
-    query_data?: string
-}
-
 export type KorpQueryRequestOptions = {
     // TODO Should start,end really exist here as well as under ajaxParams?
     start?: number
     end?: number
-    ajaxParams: KorpQueryParams & {
+    ajaxParams: QueryParams & {
         command?: "query" | "relations_sentences"
     }
-}
-
-type Interval = { start: number; end: number }
-
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
-export type KorpQueryResponse = {
-    /** Search hits */
-    kwic: ApiKwic[]
-    /** Total number of hits */
-    hits: number
-    /** Number of hits for each corpus */
-    corpus_hits: Record<string, number>
-    /** Order of corpora in result */
-    corpus_order: string[]
-    /** Execution time in seconds */
-    time: number
-    /** A hash of this query */
-    query_data: string
-}
-
-/** Search hits */
-export type ApiKwic = {
-    corpus: string
-    /** An object for each token in the context, with attribute values for that token */
-    tokens: Token[]
-    /** Attribute values for the context (e.g. sentence) */
-    structs: Record<string, any>
-    /** Specifies the position of the match in the context. If `in_order` is false, `match` will consist of a list of match objects, one per highlighted word */
-    match: KwicMatch | KwicMatch[]
-    /** Hits from aligned corpora if available, otherwise omitted */
-    aligned: {
-        [linkedCorpusId: `${string}-${string}`]: Token[]
-    }
-}
-
-/** Specifies the position of a match in a context */
-type KwicMatch = {
-    /** Start position of the match within the context */
-    start: number
-    /** End position of the match within the context */
-    end: number
-    /** Global corpus position of the match */
-    position: number
-}
-
-export type Token = {
-    word: string
-    structs?: {
-        open?: {
-            [element: string]: {
-                [attr: string]: string
-            }
-        }[]
-        close?: string[]
-    }
-    [attr: string]: any
 }

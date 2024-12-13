@@ -1,4 +1,6 @@
 /** @format */
+import { buildUrl } from "./util"
+
 const karpURL = "https://spraakbanken4.it.gu.se/karp/v7"
 
 export type KarpResponse<T> = {
@@ -30,7 +32,7 @@ const equals = (field: string, values: string[]) =>
 /** Query lexicons in the Karp API */
 async function query<T>(lexicons: string[], q: string, path: string, params?: object) {
     const url = `${karpURL}/query/${lexicons.join(",")}`
-    const response = await fetch(url + "?" + new URLSearchParams({ q, path, ...params }))
+    const response = await fetch(buildUrl(url, { q, path, ...params }))
     return (await response.json()) as KarpResponse<T>
 }
 

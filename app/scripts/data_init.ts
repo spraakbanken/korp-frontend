@@ -7,11 +7,11 @@ import timeProxyFactory from "@/backend/time-proxy"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
-import { fromKeys, httpConfAddMethodFetch } from "@/util"
+import { fromKeys } from "@/util"
 import { Labeled, LangLocMap, LocMap } from "./i18n/types"
-import { CorpusInfoResponse } from "./settings/corpus-info.types"
 import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
+import { korpRequest } from "./backend/common"
 
 // Using memoize, this will only fetch once and then return the same promise when called again.
 // TODO it would be better only to load additional languages when there is a language change
@@ -46,10 +46,13 @@ type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_
  * Fetch CWB corpus info (Size, Updated etc).
  */
 async function getInfoData(corpusIds: string[]): Promise<InfoData> {
+    if (!corpusIds.length) return {}
+
     const params = { corpus: corpusIds.map((id) => id.toUpperCase()).join(",") }
-    const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/corpus_info", params)
-    const response = await fetch(url, request)
-    const data = (await response.json()) as CorpusInfoResponse
+    const data = await korpRequest("corpus_info", params)
+    if ("ERROR" in data) {
+        throw new Error(data.ERROR.value)
+    }
 
     return fromKeys(corpusIds, (corpusId) => ({
         info: data.corpora[corpusId.toUpperCase()].info,
@@ -97,27 +100,19 @@ async function getConfig(): Promise<Config> {
         return corpusConfig
     } catch {}
 
-    let configUrl: string
-    // The corpora to include can be defined elsewhere can in a mode
-    if (settings.corpus_config_url) {
-        configUrl = await settings.corpus_config_url()
-    } else {
-        const labParam = process.env.ENVIRONMENT == "staging" ? "&include_lab" : ""
-        configUrl = `${settings.korp_backend_url}/corpus_config?mode=${currentMode}${labParam}`
-    }
-    let response: Response
-    try {
-        response = await fetch(configUrl)
-    } catch (error) {
-        throw Error("Config request failed")
+    // The corpora to include are normally given by the mode config, but allow defining it elsewhere (used by Mink)
+    const corpusIds = settings.get_corpus_ids ? await settings.get_corpus_ids() : undefined
+
+    const config = await korpRequest("corpus_config", {
+        mode: currentMode,
+        corpus: corpusIds?.join(",") || undefined,
+    })
+
+    if ("ERROR" in config) {
+        throw Error(config.ERROR.value)
     }
 
-    if (!response.ok) {
-        console.error("Something wrong with corpus config", response.statusText)
-        throw Error("Something wrong with corpus config")
-    }
-
-    return (await response.json()) as Config
+    return config
 }
 
 /**

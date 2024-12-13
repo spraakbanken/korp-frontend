@@ -8,9 +8,9 @@ import "@/components/readingmode"
 import { RootScope, TextTab } from "@/root-scope.types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { kebabize } from "@/util"
-import { ApiKwic, Token } from "@/backend/kwic-proxy"
 import { TabHashScope } from "@/directives/tab-hash"
 import { getDataForReadingMode } from "@/backend/backend"
+import { ApiKwic, Token } from "@/backend/types"
 
 type TextReaderControllerScope = TabHashScope & {
     loading: boolean

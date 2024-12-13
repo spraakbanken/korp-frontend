@@ -1,19 +1,19 @@
 /** @format */
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { AjaxSettings, KorpResponse, ProgressReport } from "@/backend/types"
-import { Factory, httpConfAddMethod } from "@/util"
+import type { Response, ProgressReport } from "@/backend/types"
+import { ajaxConfAddMethod, Factory } from "@/util"
+import { AjaxSettings } from "@/jquery.types"
 
 export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
     prevParams?: KorpRelationsParams
-    prevRequest?: AjaxSettings
     prevUrl?: string
 
     makeRequest(
         word: string,
         type: string,
         callback: (data: ProgressReport<KorpRelationsResponse>) => void
-    ): JQuery.jqXHR<KorpResponse<KorpRelationsResponse>> {
+    ): JQuery.jqXHR<Response<KorpRelationsResponse>> {
         this.resetRequest()
         const self = this
 
@@ -26,12 +26,11 @@ export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
         }
         this.prevParams = params
 
-        const ajaxSettings: AjaxSettings = {
+        const ajaxSettings = {
             url: settings.korp_backend_url + "/relations",
             data: params,
 
             success() {
-                self.prevRequest = params
                 self.cleanup()
             },
 
@@ -44,13 +43,12 @@ export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
             },
 
             beforeSend(req, settings) {
-                self.prevRequest = settings
                 self.addAuthorizationHeader(req)
-                self.prevUrl = self.makeUrlWithParams(this.url, params)
+                self.prevUrl = settings.url
             },
-        }
+        } satisfies AjaxSettings
 
-        const def = $.ajax(httpConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpResponse<KorpRelationsResponse>>
+        const def = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<Response<KorpRelationsResponse>>
         this.pendingRequests.push(def)
         return def
     }

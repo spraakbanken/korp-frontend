@@ -2,10 +2,11 @@
 import angular, { IController, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import kwicProxyFactory, { ApiKwic, KorpQueryParams, KorpQueryResponse, type KwicProxy } from "@/backend/kwic-proxy"
+import kwicProxyFactory, { type KwicProxy } from "@/backend/kwic-proxy"
+import { ApiKwic, Response, ProgressReport } from "@/backend/types"
+import { QueryParams, QueryResponse } from "@/backend/types/query"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
-import { KorpResponse, ProgressReport } from "@/backend/types"
 import { UtilsService } from "@/services/utils"
 import "@/services/utils"
 import { TabHashScope } from "@/directives/tab-hash"
@@ -15,7 +16,7 @@ angular.module("korpApp").directive("kwicCtrl", () => ({ controller: KwicCtrl })
 export type KwicCtrlScope = TabHashScope & {
     active?: boolean
     aborted?: boolean
-    buildQueryOptions: (isPaging: boolean) => KorpQueryParams
+    buildQueryOptions: (isPaging: boolean) => QueryParams
     corpusHits?: Record<string, number>
     countCorpora?: () => number | null
     corpusOrder?: string[]
@@ -44,8 +45,8 @@ export type KwicCtrlScope = TabHashScope & {
     randomSeed?: number
     reading_mode?: boolean
     readingChange: () => void
-    renderCompleteResult: (data: KorpResponse<KorpQueryResponse>, isPaging?: boolean) => void
-    renderResult: (data: KorpResponse<KorpQueryResponse>) => void
+    renderCompleteResult: (data: Response<QueryResponse>, isPaging?: boolean) => void
+    renderResult: (data: Response<QueryResponse>) => void
     tabindex?: number
     toggleReading: () => void
 }
@@ -181,7 +182,7 @@ export class KwicCtrl implements IController {
             const cqp = s.cqp || s.proxy.prevCQP
             if (!cqp) throw new Error("cqp missing")
 
-            const params: KorpQueryParams = {
+            const params: QueryParams = {
                 corpus: settings.corpusListing.stringifySelected(),
                 cqp,
                 query_data: s.proxy.queryData,
@@ -219,7 +220,7 @@ export class KwicCtrl implements IController {
                 (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
                 (data) => $timeout(() => s.renderResult(data))
             )
-            req.done((data: KorpResponse<KorpQueryResponse>) => {
+            req.done((data: Response<QueryResponse>) => {
                 $timeout(() => {
                     s.loading = false
                     s.renderCompleteResult(data, isPaging)

@@ -6,6 +6,14 @@
 
 - Sidebar: Collapse and expand attribute sections [#199](https://github.com/spraakbanken/korp-frontend/issues/199)
 
+### Changed
+
+- The `corpus_config_url` setting is replaced by `get_corpus_ids`, see [doc/frontend_devel.md](./doc/frontend_devel.md)
+- The `httpConfAddMethod*` util functions were refactored:
+  - The `$.ajax` case of `httpConfAddMethod` was extracted into `ajaxConfAddMethod`
+  - `httpConfAddMethodFetch` was renamed to `fetchConfAddMethod`
+  - `httpConfAddMethodAngular` was removed
+
 ## [9.7.2] - 2024-12-09
 
 ### Added

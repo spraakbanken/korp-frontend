@@ -1,5 +1,5 @@
 /** @format */
-import { Token } from "@/backend/kwic-proxy"
+import { Token } from "@/backend/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 
 /** Mapping from event names to the type of the associated payload. */

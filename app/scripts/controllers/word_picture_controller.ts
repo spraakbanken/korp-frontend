@@ -6,7 +6,7 @@ import lemgramProxyFactory, { ApiRelation, KorpRelationsResponse, LemgramProxy }
 import { isLemgram, lemgramToString, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
-import { KorpResponse, ProgressReport } from "@/backend/types"
+import { ProgressReport, Response } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { TabHashScope } from "@/directives/tab-hash"
 
@@ -30,7 +30,7 @@ type WordpicCtrlScope = TabHashScope & {
     onProgress: (progressObj: ProgressReport) => void
     progress: number
     proxy: LemgramProxy
-    renderResult: (data: KorpResponse<KorpRelationsResponse>, word: string) => void
+    renderResult: (data: Response<KorpRelationsResponse>, word: string) => void
     renderTables: (query: string, data: ApiRelation[]) => void
     renderWordTables: (query: string, data: ApiRelation[]) => void
     resetView: () => void

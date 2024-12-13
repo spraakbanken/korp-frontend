@@ -2,14 +2,13 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
-import { AbsRelTuple } from "@/statistics.types"
-import { Factory, httpConfAddMethod } from "@/util"
+import { AbsRelTuple, Granularity, Histogram, Response, NumericString } from "@/backend/types"
+import { ajaxConfAddMethod, Factory } from "@/util"
+import { AjaxSettings } from "@/jquery.types"
 
 export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
     granularity: Granularity
     prevParams: KorpCountTimeParams | null
-    prevRequest: AjaxSettings
 
     constructor() {
         super()
@@ -33,7 +32,7 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
         corpora: string,
         from: NumericString,
         to: NumericString
-    ): JQuery.Promise<KorpResponse<KorpCountTimeResponse>> {
+    ): JQuery.Promise<Response<KorpCountTimeResponse>> {
         this.resetRequest()
         const self = this
         const params: KorpCountTimeParams = {
@@ -56,13 +55,12 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
         this.prevParams = params
         const def = $.Deferred()
 
-        const ajaxSettings: AjaxSettings = {
+        const ajaxSettings = {
             url: settings.korp_backend_url + "/count_time",
             dataType: "json",
             data: params,
 
-            beforeSend: (req, settings) => {
-                this.prevRequest = settings
+            beforeSend: (req) => {
                 this.addAuthorizationHeader(req)
             },
 
@@ -77,13 +75,13 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
             error(jqXHR, textStatus, errorThrown) {
                 def.reject(textStatus)
             },
-            success(data: KorpResponse<KorpCountTimeResponse>) {
+            success(data: Response<KorpCountTimeResponse>) {
                 def.resolve(data)
                 self.cleanup()
             },
-        }
+        } satisfies AjaxSettings
 
-        $.ajax(httpConfAddMethod(ajaxSettings))
+        $.ajax(ajaxConfAddMethod(ajaxSettings))
 
         return def.promise()
     }

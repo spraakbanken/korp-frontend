@@ -16,7 +16,7 @@ import { loc } from "@/i18n"
 import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
 import "@/components/korp-error"
 import { GraphTab, RootScope } from "@/root-scope.types"
-import { Histogram, KorpResponse, ProgressReport } from "@/backend/types"
+import { Histogram, Response, ProgressReport } from "@/backend/types"
 import { JQueryExtended } from "@/jquery.types"
 import { CorpusListing } from "@/corpus_listing"
 
@@ -570,7 +570,7 @@ angular.module("korpApp").component("trendDiagram", {
 
             function renderGraph(
                 Rickshaw: any,
-                data: KorpResponse<KorpCountTimeResponse>,
+                data: Response<KorpCountTimeResponse>,
                 cqp: string,
                 currentZoom: Level,
                 showTotal?: boolean
