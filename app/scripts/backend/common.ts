@@ -1,9 +1,10 @@
 /** @format */
-import { selectHttpMethod } from "@/util"
+import axios from "axios"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import settings from "@/settings"
-import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response as KResponse } from "./types"
-import { omitBy, pickBy } from "lodash"
+import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response } from "./types"
+import { pickBy } from "lodash"
+import { selectHttpMethod } from "@/util"
 
 type RequestOptions<K extends keyof API> = {
     /** Abort signal to cancel the request */
@@ -17,24 +18,22 @@ export async function korpRequest<K extends keyof API>(
     params: API[K]["params"],
     options: RequestOptions<K> = {}
 ): Promise<API[K]["response"]> {
-    // Skip params with `null` or `undefined`
-    params = omitBy(params, (value) => value == null) as API[K]["params"]
-    // Switch to POST if the URL would be to long
-    const { url, request } = selectHttpMethod(settings.korp_backend_url + "/" + endpoint, params)
-    request.headers = { ...request.headers, ...getAuthorizationHeader() }
-    if (options.abortSignal) request.signal = options.abortSignal
-
-    // Send request
-    const response = await fetch(url, request)
-
-    // If progress handler given, parse response data as it comes in
-    const json = await readIncrementally(response, (json) => {
-        if (options.onProgress) {
-            const progress = calcProgress<K>(json)
-            if (progress) options.onProgress(progress)
-        }
+    const conf = selectHttpMethod({
+        url: settings.korp_backend_url + "/" + endpoint,
+        params,
+        headers: getAuthorizationHeader(),
+        signal: options.abortSignal,
+        onDownloadProgress: (event) => {
+            const xhr = event.event?.target as XMLHttpRequest | undefined
+            if (xhr && options.onProgress) {
+                const progress = calcProgress<K>(xhr.responseText)
+                if (progress) options.onProgress(progress)
+            }
+        },
     })
-    const data: KResponse<API[K]["response"]> = JSON.parse(json)
+
+    const response = await axios.request<Response<API[K]["response"]>>(conf)
+    const data = response.data
 
     if ("ERROR" in data) {
         const { type, value } = data.ERROR as ErrorMessage
@@ -42,19 +41,6 @@ export async function korpRequest<K extends keyof API>(
     }
 
     return data
-}
-
-/** Read and handle a HTTP response body as it comes in */
-async function readIncrementally(response: Response, handle: (content: string) => void): Promise<string> {
-    const reader = response.body!.getReader()
-    let content = ""
-    while (true) {
-        const { done, value } = await reader.read()
-        content += new TextDecoder("utf-8").decode(value)
-        handle(content)
-        if (done) break
-    }
-    return content
 }
 
 export class KorpBackendError extends Error {
@@ -65,7 +51,7 @@ export class KorpBackendError extends Error {
 }
 
 export function calcProgress<K extends keyof API>(partialJson: string): ProgressReport<K> | undefined {
-    const data = parsePartialJson<ProgressResponse & KResponse<API[K]["response"]>>(partialJson)
+    const data = parsePartialJson<ProgressResponse & Response<API[K]["response"]>>(partialJson)
     if (!data) return
 
     /** Look up sizes of corpora and sum them */

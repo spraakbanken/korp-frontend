@@ -12,6 +12,7 @@ import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { LinkedKwic, Row } from "./components/kwic"
 import { ApiKwic } from "./backend/types"
+import { AxiosRequestConfig } from "axios"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -421,14 +422,15 @@ export const regescape = (s: string): string => s.replace(/[.|?|+|*||'|()^$\\]/g
 /** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
 export const unregescape = (s: string): string => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
 
-/**
- * Select GET or POST depending on url length.
- */
-export function selectHttpMethod(url: string, params: Record<string, any>): { url: string; request: RequestInit } {
-    const urlFull = buildUrl(url, params)
-    return urlFull.length > settings.backendURLMaxLength
-        ? { url, request: { method: "POST", body: toFormData(params) } }
-        : { url: urlFull, request: {} }
+/** Select GET or POST depending on url length. Modifies conf in place. */
+export function selectHttpMethod(conf: AxiosRequestConfig & { url: string }): AxiosRequestConfig {
+    const urlFull = buildUrl(conf.url, conf.params || {})
+    conf.method = urlFull.length > settings.backendURLMaxLength ? "POST" : "GET"
+    if (conf.method == "POST") {
+        conf.data = toFormData(conf.params || {})
+        delete conf.params
+    }
+    return conf
 }
 
 /** Convert object to FormData */

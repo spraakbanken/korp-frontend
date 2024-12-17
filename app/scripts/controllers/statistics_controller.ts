@@ -124,8 +124,8 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                         })
                     )
                     .catch((error) => {
-                        // AbortError is expected if a new search is made before the previous one is finished
-                        if ((error.name = "AbortError")) return
+                        // CanceledError is expected if a new search is made before the previous one is finished
+                        if ((error.name = "CanceledError")) return
                         console.error(error)
                         // TODO Show error
                         $timeout(() => {
