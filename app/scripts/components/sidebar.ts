@@ -319,9 +319,9 @@ angular.module("korpApp").component("sidebar", {
                 // If attrs["sidebar_info_url"], add an info symbol
                 // linking to the value of the property (URL)
                 const info_link = attrs["sidebar_info_url"]
-                    ? `<a href='${attrs["sidebar_info_url"]}' target='_blank'>
-                                 <span class='sidebar_info ui-icon ui-icon-info'></span>
-                             </a>`
+                    ? html`<a href="${attrs["sidebar_info_url"]}" target="_blank">
+                          <i class="fa-solid fa-info-circle"></i>
+                      </a>`
                     : ""
 
                 output.data("attrs", attrs)

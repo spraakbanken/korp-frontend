@@ -105,25 +105,25 @@ angular.module("korpApp").component("wordPicture", {
                             >
                         </div>
                         <div
-                            class="lemgram_result"
+                            class="lemgram_result float-left py-1 px-2"
                             ng-repeat="table in section"
                             ng-if="$ctrl.renderTable(table.table)"
                             ng-class="$ctrl.getTableClass(word.wordClass, parentIndex, $index)"
                         >
-                            <table>
+                            <table class="m-0 p-0">
                                 <tbody>
                                     <tr
                                         ng-repeat="row in $ctrl.minimize(table.table)"
                                         ng-init="data = $ctrl.parseLemgram(row, table.all_lemgrams)"
                                     >
-                                        <td><span class="enumerate"></span></td>
+                                        <td class="text-right"><span class="enumerate"></span></td>
                                         <td>
                                             {{ data.label }}<sup ng-if="data.showIdx">{{data.idx}}</sup>
                                             <span ng-if="$ctrl.showWordClass">({{data.pos | loc:$root.lang}})</span>
                                         </td>
-                                        <td title="mi: {{row.mi | number:2}}">{{row.freq}}</td>
-                                        <td ng-click="$ctrl.onClickExample(row)">
-                                            <span class="word-pic-kwic-example ui-icon ui-icon-document"></span>
+                                        <td title="mi: {{row.mi | number:2}}" class="text-right">{{row.freq}}</td>
+                                        <td ng-click="$ctrl.onClickExample(row)" class="cursor">
+                                            <i class="fa-solid fa-magnifying-glass fa-xs ml-2"></i>
                                         </td>
                                     </tr>
                                 </tbody>
