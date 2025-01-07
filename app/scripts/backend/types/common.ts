@@ -27,9 +27,9 @@ export type ErrorMessage = {
  * It is suitable for reading piece by piece in order to display progress feedback to the user.
  */
 export type ProgressResponse = {
-    /** Selected corpora in the order they will be searched. This is returned first. */
+    /** Corpora in the current result page. This is returned first. In parallel mode, a corpus is named as "<main>|<secondary>" */
     progress_corpora?: string[]
-    /** Repeated for each corpus (or sometimes batch of corpora?) Hits can be 0. These are returned a few at a time. */
+    /** Repeated for each corpus. Hits can be 0. These are returned a few at a time. The value type (string or object with `hits`) depends on the API endpoint, e.g. `/query` returns objects */
     [progress_n: `progress_${number}`]: string | { corpus: string; hits: number }
 }
 
@@ -39,7 +39,7 @@ export type ProgressReport<R = {}> = {
     /** How many percent of the material has been searched. */
     stats: number
     /** How many search hits so far. */
-    total_results: number | null
+    totalResults: number | null
 }
 
 /** Frequency count as absolute and relative (to some total size). */

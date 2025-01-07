@@ -30,7 +30,6 @@ export class KwicProxy extends BaseProxy<QueryResponse> {
         if (!kwicCallback) {
             throw new Error("No callback for query result")
         }
-        self.progress = 0
 
         if (!options.ajaxParams.within) {
             _.extend(options.ajaxParams, settings.corpusListing.getWithinParameters())

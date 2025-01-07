@@ -196,9 +196,9 @@ export class KwicCtrl implements IController {
         }
 
         s.onProgress = (progressObj, isPaging) => {
-            s.progress = Math.round(progressObj["stats"])
-            if (!isPaging && progressObj["total_results"] !== null) {
-                s.hitsInProgress = progressObj["total_results"]
+            s.progress = Math.round(progressObj.stats)
+            if (!isPaging && progressObj.totalResults !== null) {
+                s.hitsInProgress = progressObj.totalResults
             }
         }
 
