@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config"
-import { StatsNormalized } from "@/backend/types/count"
+import { StatsNormalized } from "./backend/stats-proxy"
 import {
     Dataset,
     isTotalRow,

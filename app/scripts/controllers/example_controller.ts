@@ -22,7 +22,7 @@ type ExampleCtrlScope = ScopeBase & {
     hitspictureClick?: (page: number) => void
     kwicTab: KwicTab
     makeRequest: (isPaging?: boolean) => JQuery.jqXHR<Response<QueryResponse>>
-    onExampleProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
+    onExampleProgress: (progressObj: ProgressReport<"query">, isPaging?: boolean) => void
     setupReadingWatch: () => void
     superRenderResult: (data: Response<QueryResponse>) => void
 }

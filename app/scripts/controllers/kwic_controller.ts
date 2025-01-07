@@ -37,7 +37,7 @@ export type KwicCtrlScope = TabHashScope & {
     makeRequest: (isPaging?: boolean) => void
     onentry: () => void
     onexit: () => void
-    onProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
+    onProgress: (progressObj: ProgressReport<"query">, isPaging?: boolean) => void
     page?: number
     pageChange: (page: number) => void
     progress?: number

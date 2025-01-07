@@ -2,13 +2,14 @@
 import _ from "lodash"
 import angular, { ITimeoutService } from "angular"
 import settings from "@/settings"
-import lemgramProxyFactory, { ApiRelation, KorpRelationsResponse, LemgramProxy } from "@/backend/lemgram-proxy"
+import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
 import { isLemgram, lemgramToString, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { ProgressReport, Response } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { TabHashScope } from "@/directives/tab-hash"
+import { ApiRelation, RelationsResponse } from "@/backend/types/relations"
 
 type WordpicCtrlScope = TabHashScope & {
     $root: RootScope
@@ -27,10 +28,10 @@ type WordpicCtrlScope = TabHashScope & {
     noHits: boolean
     onentry: () => void
     onexit: () => void
-    onProgress: (progressObj: ProgressReport) => void
+    onProgress: (progressObj: ProgressReport<"relations">) => void
     progress: number
     proxy: LemgramProxy
-    renderResult: (data: Response<KorpRelationsResponse>, word: string) => void
+    renderResult: (data: Response<RelationsResponse>, word: string) => void
     renderTables: (query: string, data: ApiRelation[]) => void
     renderWordTables: (query: string, data: ApiRelation[]) => void
     resetView: () => void

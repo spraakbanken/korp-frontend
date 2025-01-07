@@ -4,12 +4,7 @@ import _ from "lodash"
 import moment, { Moment } from "moment"
 import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
-import graphProxyFactory, {
-    GraphProxy,
-    KorpCountTimeResponse,
-    KorpGraphStats,
-    KorpGraphStatsCqp,
-} from "@/backend/graph-proxy"
+import graphProxyFactory, { GraphProxy } from "@/backend/graph-proxy"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { formatRelativeHits, hitCountHtml, html } from "@/util"
 import { loc } from "@/i18n"
@@ -19,6 +14,7 @@ import { GraphTab, RootScope } from "@/root-scope.types"
 import { Histogram, Response, ProgressReport } from "@/backend/types"
 import { JQueryExtended } from "@/jquery.types"
 import { CorpusListing } from "@/corpus_listing"
+import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
 
 type TrendDiagramController = IController & {
     data: GraphTab
@@ -471,8 +467,8 @@ angular.module("korpApp").component("trendDiagram", {
                 $ctrl.time_grid = time_grid
             }
 
-            function makeSeries(Rickshaw: any, data: KorpCountTimeResponse, cqp: string, zoom: Level) {
-                const createTotalSeries = (stats: KorpGraphStats) => ({
+            function makeSeries(Rickshaw: any, data: CountTimeResponse, cqp: string, zoom: Level) {
+                const createTotalSeries = (stats: GraphStats) => ({
                     data: getSeriesData(stats.relative, zoom),
                     color: "steelblue",
                     name: "&Sigma;",
@@ -480,7 +476,7 @@ angular.module("korpApp").component("trendDiagram", {
                     abs_data: getSeriesData(stats.absolute, zoom),
                 })
 
-                const createSubquerySeries = (stats: KorpGraphStatsCqp, i: number) => ({
+                const createSubquerySeries = (stats: GraphStatsCqp, i: number) => ({
                     data: getSeriesData(stats.relative, zoom),
                     color: PALETTE[i % PALETTE.length],
                     name: $ctrl.data.labelMapping[stats.cqp],
@@ -570,7 +566,7 @@ angular.module("korpApp").component("trendDiagram", {
 
             function renderGraph(
                 Rickshaw: any,
-                data: Response<KorpCountTimeResponse>,
+                data: Response<CountTimeResponse>,
                 cqp: string,
                 currentZoom: Level,
                 showTotal?: boolean
@@ -779,7 +775,7 @@ angular.module("korpApp").component("trendDiagram", {
                 done()
             }
 
-            function onProgress(progressObj: ProgressReport) {
+            function onProgress(progressObj: ProgressReport<"count_time">) {
                 $ctrl.onProgress(Math.round(progressObj.stats))
             }
 

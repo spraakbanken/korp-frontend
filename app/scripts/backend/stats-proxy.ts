@@ -7,7 +7,17 @@ import { StatisticsWorkerResult } from "@/statistics.types"
 import { locationSearchGet, Factory, ajaxConfAddMethod } from "@/util"
 import { statisticsService } from "@/statistics"
 import { AjaxSettings } from "@/jquery.types"
-import { CountParams, CountResponse, StatsColumn, StatsNormalized } from "./types/count"
+import { CountParams, CountResponse, StatsColumn } from "./types/count"
+
+/** Like `CountResponse` but the stats are necessarily arrays. */
+export type StatsNormalized = {
+    corpora: {
+        [name: string]: StatsColumn[]
+    }
+    combined: StatsColumn[]
+    count: number
+    time: number
+}
 
 /**
  * Stats in the response can be split by subqueries if the `subcqp#` param is used, but otherwise not.
@@ -27,7 +37,7 @@ export function normalizeStatsData(data: CountResponse): StatsNormalized {
     return { ...data, combined, corpora }
 }
 
-export class StatsProxy extends BaseProxy<CountResponse> {
+export class StatsProxy extends BaseProxy<"count"> {
     prevParams: CountParams | null
     prevUrl?: string
 
@@ -66,7 +76,7 @@ export class StatsProxy extends BaseProxy<CountResponse> {
 
     makeRequest(
         cqp: string,
-        callback: (data: ProgressReport<CountResponse>) => void
+        callback: (data: ProgressReport<"count">) => void
     ): JQuery.Promise<StatisticsWorkerResult> {
         const self = this
         this.resetRequest()

@@ -2,13 +2,21 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { Granularity, Histogram, Response, NumericString } from "@/backend/types"
+import type { Histogram } from "@/backend/types"
 import { ajaxConfAddMethod, Factory } from "@/util"
 import { AjaxSettings } from "@/jquery.types"
+import { TimespanParams, TimespanResponse } from "./types/timespan"
 
-export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
+/** Data returned after slight mangling. */
+type TimeData = [
+    Record<string, Histogram>, // Same as KorpTimespanResponse.corpora
+    [number, number][], // Tokens per time period, as pairs ordered by time period
+    number // Tokens in undated material
+]
+
+export class TimeProxy extends BaseProxy<"timespan"> {
     makeRequest(): JQueryDeferred<TimeData> {
-        const data: KorpTimespanParams = {
+        const data: TimespanParams = {
             granularity: "y",
             corpus: settings.corpusListing.stringifyAll(),
         }
@@ -18,7 +26,7 @@ export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
             url: settings.korp_backend_url + "/timespan",
             data,
         } satisfies AjaxSettings
-        const xhr = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<KorpTimespanResponse>
+        const xhr = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<TimespanResponse>
 
         xhr.done((data) => {
             if ("ERROR" in data) {
@@ -87,32 +95,3 @@ export class TimeProxy extends BaseProxy<KorpTimespanResponse> {
 
 const timeProxyFactory = new Factory(TimeProxy)
 export default timeProxyFactory
-
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1timespan/get */
-type KorpTimespanParams = {
-    corpus: string
-    granularity?: Granularity
-    from?: NumericString
-    to?: NumericString
-    strategy?: 1 | 2 | 3
-    per_corpus?: boolean
-    combined?: boolean
-    incremental?: boolean
-}
-
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1timespan/get */
-type KorpTimespanResponse = Response<{
-    /** An object with corpus names as keys and time statistics objects as values */
-    corpora: Record<string, Histogram>
-    /** Number of tokens per time period */
-    combined: Histogram
-    /** Execution time in seconds */
-    time: number
-}>
-
-/** Data returned after slight mangling. */
-export type TimeData = [
-    Record<string, Histogram>, // Same as KorpTimespanResponse.corpora
-    [number, number][], // Tokens per time period, as pairs ordered by time period
-    number // Tokens in undated material
-]

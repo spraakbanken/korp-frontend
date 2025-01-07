@@ -40,16 +40,6 @@ export type CountResponse = {
     time: number
 }
 
-/** Like `CountResponse` but the stats are necessarily arrays. */
-export type StatsNormalized = {
-    corpora: {
-        [name: string]: StatsColumn[]
-    }
-    combined: StatsColumn[]
-    count: number
-    time: number
-}
-
 export type StatsColumn = {
     sums: AbsRelTuple
     rows: StatsRow[]

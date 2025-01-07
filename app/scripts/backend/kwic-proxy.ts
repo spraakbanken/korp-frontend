@@ -7,7 +7,7 @@ import { ProgressReport, Response } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
 import { AjaxSettings } from "@/jquery.types"
 
-export class KwicProxy extends BaseProxy<QueryResponse> {
+export class KwicProxy extends BaseProxy<"query"> {
     prevCQP?: string
     prevParams: QueryParams | null
     prevUrl?: string // Used for download
@@ -22,7 +22,7 @@ export class KwicProxy extends BaseProxy<QueryResponse> {
     makeRequest(
         options: KorpQueryRequestOptions,
         page: number | undefined,
-        progressCallback: (data: ProgressReport<QueryResponse>) => void,
+        progressCallback: (data: ProgressReport<"query">) => void,
         kwicCallback: (data: Response<QueryResponse>) => void
     ): JQuery.jqXHR<Response<QueryResponse>> {
         const self = this

@@ -1,6 +1,6 @@
 /** @format*/
 // TODO: Merge with @/interfaces/stats.ts
-import { StatsNormalized } from "./backend/types/count"
+import { StatsNormalized } from "./backend/stats-proxy"
 import { LangString } from "./i18n/types"
 
 export type StatisticsWorkerMessage = {

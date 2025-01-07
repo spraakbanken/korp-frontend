@@ -6,7 +6,8 @@ import isArray from "lodash/isArray"
 import keys from "lodash/keys"
 
 import { RowsEntity } from "./interfaces/stats"
-import { StatsNormalized, StatsRow } from "./backend/types/count"
+import { StatsNormalized } from "./backend/stats-proxy"
+import { StatsRow } from "./backend/types/count"
 import { AbsRelSeq, Dataset, SingleRow, TotalRow, StatisticsWorkerMessage } from "./statistics.types"
 
 /*

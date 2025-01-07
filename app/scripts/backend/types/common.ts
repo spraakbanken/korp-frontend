@@ -1,5 +1,7 @@
 /** @format */
 
+import { API } from "."
+
 /** A Korp response is either successful or has error info */
 export type Response<R> = ResponseBase & (R | ErrorResponse)
 
@@ -33,9 +35,9 @@ export type ProgressResponse = {
     [progress_n: `progress_${number}`]: string | { corpus: string; hits: number }
 }
 
-export type ProgressReport<R = {}> = {
+export type ProgressReport<K extends keyof API> = {
     /** Response data */
-    struct: ResponseBase & ProgressResponse & Partial<R>
+    struct: ResponseBase & ProgressResponse & Partial<API[K]["response"]>
     /** How many percent of the material has been searched. */
     stats: number
     /** How many search hits so far. */

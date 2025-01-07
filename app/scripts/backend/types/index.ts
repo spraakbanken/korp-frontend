@@ -4,9 +4,12 @@ import { AttrValuesParams, AttrValuesResponseDeep, AttrValuesResponseFlat } from
 import { CorpusConfigParams, CorpusConfigResponse } from "./corpus-config"
 import { CorpusInfoParams, CorpusInfoResponse } from "./corpus-info"
 import { CountParams, CountResponse } from "./count"
+import { CountTimeParams, CountTimeResponse } from "./count-time"
 import { LemgramCountParams, LemgramCountResponse } from "./lemgram-count"
 import { LoglikeParams, LoglikeResponse } from "./loglike"
 import { QueryParams, QueryResponse } from "./query"
+import { RelationsParams, RelationsResponse } from "./relations"
+import { TimespanParams, TimespanResponse } from "./timespan"
 
 export * from "./common"
 
@@ -29,6 +32,10 @@ export type API = {
         params: CountParams
         response: CountResponse
     }
+    count_time: {
+        params: CountTimeParams
+        response: CountTimeResponse
+    }
     lemgram_count: {
         params: LemgramCountParams
         response: LemgramCountResponse
@@ -40,5 +47,13 @@ export type API = {
     query: {
         params: QueryParams
         response: QueryResponse
+    }
+    relations: {
+        params: RelationsParams
+        response: RelationsResponse
+    }
+    timespan: {
+        params: TimespanParams
+        response: TimespanResponse
     }
 }

@@ -4,16 +4,17 @@ import BaseProxy from "@/backend/base-proxy"
 import type { Response, ProgressReport } from "@/backend/types"
 import { ajaxConfAddMethod, Factory } from "@/util"
 import { AjaxSettings } from "@/jquery.types"
+import { RelationsParams, RelationsResponse } from "./types/relations"
 
-export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
-    prevParams?: KorpRelationsParams
+export class LemgramProxy extends BaseProxy<"relations"> {
+    prevParams?: RelationsParams
     prevUrl?: string
 
     makeRequest(
         word: string,
         type: string,
-        callback: (data: ProgressReport<KorpRelationsResponse>) => void
-    ): JQuery.jqXHR<Response<KorpRelationsResponse>> {
+        callback: (data: ProgressReport<"relations">) => void
+    ): JQuery.jqXHR<Response<RelationsResponse>> {
         this.resetRequest()
         const self = this
 
@@ -48,7 +49,7 @@ export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
             },
         } satisfies AjaxSettings
 
-        const def = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<Response<KorpRelationsResponse>>
+        const def = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<Response<RelationsResponse>>
         this.pendingRequests.push(def)
         return def
     }
@@ -56,33 +57,3 @@ export class LemgramProxy extends BaseProxy<KorpRelationsResponse> {
 
 const lemgramProxyFactory = new Factory(LemgramProxy)
 export default lemgramProxyFactory
-
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture */
-type KorpRelationsParams = {
-    corpus: string
-    word: string
-    type?: string
-    min?: number
-    max?: number
-    incremental?: boolean
-}
-
-export type KorpRelationsResponse = {
-    relations: ApiRelation[]
-    /** Execution time in seconds */
-    time: number
-}
-
-export type ApiRelation = {
-    dep: string
-    depextra: string
-    deppos: string
-    freq: number
-    head: string
-    headpos: string
-    /** Lexicographer's mutual information score */
-    mi: number
-    rel: string
-    /** List of IDs, for getting the source sentences */
-    source: string[]
-}

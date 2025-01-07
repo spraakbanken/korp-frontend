@@ -6,7 +6,7 @@ import { loc } from "@/i18n"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDef, WordPictureDefItem } from "@/settings/app-settings.types"
 import { ShowableApiRelation, TableData, TableDrawData } from "@/controllers/word_picture_controller"
-import { ApiRelation } from "@/backend/lemgram-proxy"
+import { ApiRelation } from "@/backend/types/relations"
 
 type WordPictureController = IController & {
     // Bindings

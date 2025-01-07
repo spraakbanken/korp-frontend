@@ -3,10 +3,10 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { expandOperators } from "@/cqp_parser/cqp"
 import settings from "@/settings"
 import _ from "lodash"
-import { ProgressReport, ProgressResponse, ResponseBase } from "@/backend/types"
+import { API, ProgressReport, ProgressResponse, ResponseBase } from "@/backend/types"
 
 /** The Proxy classes wrap API requests with pre-/postprocessing and progress reporting. */
-export default abstract class BaseProxy<R extends {} = {}> {
+export default abstract class BaseProxy<K extends keyof API> {
     pendingRequests: JQuery.jqXHR[]
 
     constructor() {
@@ -59,9 +59,9 @@ export default abstract class BaseProxy<R extends {} = {}> {
         _.toPairs(header).forEach(([name, value]) => req.setRequestHeader(name, value))
     }
 
-    calcProgress(e: ProgressEvent): ProgressReport<R> {
+    calcProgress(e: ProgressEvent): ProgressReport<K> {
         const xhr = e.target as XMLHttpRequest
-        type PartialResponse = ResponseBase & ProgressResponse & Partial<R>
+        type PartialResponse = ResponseBase & ProgressResponse & Partial<API[K]["response"]>
         let struct: PartialResponse = {}
 
         try {

@@ -11,7 +11,6 @@ import { kebabize } from "@/util"
 import { TabHashScope } from "@/directives/tab-hash"
 import { getDataForReadingMode } from "@/backend/backend"
 import { ApiKwic, Token } from "@/backend/types"
-import { KorpBackendError } from "@/backend/common"
 
 type TextReaderControllerScope = TabHashScope & {
     loading: boolean
