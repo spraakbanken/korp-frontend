@@ -78,7 +78,6 @@ export class GraphProxy extends BaseProxy<"count_time"> {
             },
             success(data: Response<CountTimeResponse>) {
                 def.resolve(data)
-                self.cleanup()
             },
         } satisfies AjaxSettings
 

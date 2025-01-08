@@ -98,7 +98,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 s.aborted = false
             }
 
-            s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["stats"]))
+            s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["percent"]))
 
             s.makeRequest = (cqp) => {
                 s.error = false

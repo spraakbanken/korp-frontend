@@ -147,7 +147,6 @@ export class StatsProxy extends BaseProxy<"count"> {
             },
 
             success: (data: Response<CountResponse>) => {
-                self.cleanup()
                 if ("ERROR" in data) {
                     console.log("gettings stats failed with error", data.ERROR)
                     def.reject(data)

@@ -104,7 +104,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 s.error = false
             }
 
-            s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["stats"]))
+            s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["percent"]))
 
             s.makeRequest = () => {
                 const search = $rootScope.activeSearch

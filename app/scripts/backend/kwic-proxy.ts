@@ -99,7 +99,6 @@ export class KwicProxy extends BaseProxy<"query"> {
 
             success(data: QueryResponse, status, jqxhr) {
                 self.queryData = data.query_data
-                self.cleanup()
                 // Run the callback to show results, if not already done by the progress handler
                 if (!this.foundKwic) kwicCallback(data)
             },
@@ -111,9 +110,9 @@ export class KwicProxy extends BaseProxy<"query"> {
 
                 // Show current page of results if they are available
                 // The request may continue to count hits in the background
-                if ("kwic" in progressObj.struct) {
+                if ("kwic" in progressObj.data) {
                     this.foundKwic = true
-                    kwicCallback(progressObj.struct as QueryResponse)
+                    kwicCallback(progressObj.data as QueryResponse)
                 }
             },
         } satisfies AjaxSettings

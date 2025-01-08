@@ -31,10 +31,6 @@ export class LemgramProxy extends BaseProxy<"relations"> {
             url: settings.korp_backend_url + "/relations",
             data: params,
 
-            success() {
-                self.cleanup()
-            },
-
             progress(data, e) {
                 const progressObj = self.calcProgress(e)
                 if (progressObj == null) {

@@ -776,7 +776,7 @@ angular.module("korpApp").component("trendDiagram", {
             }
 
             function onProgress(progressObj: ProgressReport<"count_time">) {
-                $ctrl.onProgress(Math.round(progressObj.stats))
+                $ctrl.onProgress(Math.round(progressObj.percent))
             }
 
             async function makeRequest(

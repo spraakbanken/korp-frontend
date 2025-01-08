@@ -32,16 +32,16 @@ export type ProgressResponse = {
     /** Corpora in the current result page. This is returned first. In parallel mode, a corpus is named as "<main>|<secondary>" */
     progress_corpora?: string[]
     /** Repeated for each corpus. Hits can be 0. These are returned a few at a time. The value type (string or object with `hits`) depends on the API endpoint, e.g. `/query` returns objects */
-    [progress_n: `progress_${number}`]: string | { corpus: string; hits: number }
+    [progress_n: `progress_${number}`]: string | { corpus: string; hits?: number }
 }
 
 export type ProgressReport<K extends keyof API> = {
     /** Response data */
-    struct: ResponseBase & ProgressResponse & Partial<API[K]["response"]>
+    data: ResponseBase & ProgressResponse & Partial<API[K]["response"]>
     /** How many percent of the material has been searched. */
-    stats: number
+    percent: number
     /** How many search hits so far. */
-    totalResults: number | null
+    hits: number | null
 }
 
 /** Frequency count as absolute and relative (to some total size). */

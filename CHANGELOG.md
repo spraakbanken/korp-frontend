@@ -15,6 +15,7 @@
   - The `$.ajax` case of `httpConfAddMethod` was extracted into `ajaxConfAddMethod`
   - `httpConfAddMethodFetch` was renamed to `fetchConfAddMethod`
   - `httpConfAddMethodAngular` was removed
+- The members of the `ProgressReport` type returned by `calcProgress()` have been renamed from `{struct, stats, total_results}` to `{data, percent, hits}`
 
 ## [9.7.2] - 2024-12-09
 
