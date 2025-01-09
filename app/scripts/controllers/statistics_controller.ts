@@ -116,30 +116,28 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                     .makeRequest(cqp, (progressObj) => {
                         $timeout(() => s.onProgress(progressObj))
                     })
-                    .then(
-                        (result) => {
-                            $timeout(() => {
-                                const [data, columns, searchParams] = result
-                                s.loading = false
-                                s.data = data
-                                s.searchParams = searchParams
-                                s.renderResult(columns, data)
-                            })
-                        },
-                        (textStatus, err) => {
-                            $timeout(() => {
-                                if (s.ignoreAbort) {
-                                    return
-                                }
-                                s.loading = false
-                                if (textStatus === "abort") {
-                                    s.aborted = true
-                                } else {
-                                    s.resultError(err)
-                                }
-                            })
-                        }
-                    )
+                    .then((result) => {
+                        $timeout(() => {
+                            const [data, columns, searchParams] = result
+                            s.loading = false
+                            s.data = data
+                            s.searchParams = searchParams
+                            s.renderResult(columns, data)
+                        })
+                    })
+                    .catch((/*textStatus, */ err) => {
+                        $timeout(() => {
+                            if (s.ignoreAbort) {
+                                return
+                            }
+                            s.loading = false
+                            // if (textStatus === "abort") {
+                            //     s.aborted = true
+                            // } else {
+                            s.resultError(err)
+                            // }
+                        })
+                    })
             }
 
             s.resultError = (data) => {

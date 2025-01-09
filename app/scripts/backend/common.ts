@@ -2,11 +2,11 @@
 import { fetchConfAddMethod } from "@/util"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import settings from "@/settings"
-import { API, ErrorMessage, ProgressReport, ProgressResponse, Response, ResponseBase } from "./types"
+import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response, ResponseBase } from "./types"
 import { omitBy, pickBy } from "lodash"
 
 type RequestOptions<K extends keyof API> = {
-    onProgress?: (e: ProgressReport<K>) => void
+    onProgress?: ProgressHandler<K>
 }
 
 export async function korpRequest<K extends keyof API>(
@@ -27,8 +27,8 @@ export async function korpRequest<K extends keyof API>(
         // Iterate while fetching
         while (true) {
             const { done, value } = await reader.read()
-            console.log(done, value) // TODO remove
-            json += value
+            const text = new TextDecoder("utf-8").decode(value)
+            json += text
             const progress = calcProgress(json)
             options.onProgress(progress)
             if (done) break

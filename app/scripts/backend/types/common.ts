@@ -44,6 +44,8 @@ export type ProgressReport<K extends keyof API> = {
     hits: number | null
 }
 
+export type ProgressHandler<K extends keyof API> = (report: ProgressReport<K>) => void
+
 /** Frequency count as absolute and relative (to some total size). */
 export type AbsRelTuple = { absolute: number; relative: number }
 

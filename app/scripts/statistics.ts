@@ -83,49 +83,50 @@ const createStatisticsService = function () {
         return columns
     }
 
-    const processData = function (
-        def: JQuery.Deferred<StatisticsWorkerResult>,
+    function processData(
         originalCorpora: string,
         data: StatsNormalized,
         reduceVals: string[],
         reduceValLabels: LangString[],
         ignoreCase: boolean,
         prevNonExpandedCQP: string
-    ) {
+    ): Promise<StatisticsWorkerResult> {
         const corpora = Object.keys(data.corpora)
         const columns = createColumns(corpora, reduceVals, reduceValLabels)
 
-        const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
-        statsWorker.onmessage = function (e: MessageEvent<Dataset>) {
-            // Format the values of the attributes we are reducing by
-            const cl = settings.corpusListing.subsetFactory(corpora)
-            const structAttrs = cl.getStructAttrs()
-            const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
-            for (const row of e.data) {
-                if (isTotalRow(row)) continue
-                for (const attr of reduceVals) {
-                    const words = row.statsValues.map((word) => word[attr][0])
-                    row.formattedValue[attr] = stringifiers[attr](words)
+        return new Promise((resolve) => {
+            const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
+            statsWorker.onmessage = function (e: MessageEvent<Dataset>) {
+                // Format the values of the attributes we are reducing by
+                const cl = settings.corpusListing.subsetFactory(corpora)
+                const structAttrs = cl.getStructAttrs()
+                const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
+                for (const row of e.data) {
+                    if (isTotalRow(row)) continue
+                    for (const attr of reduceVals) {
+                        const words = row.statsValues.map((word) => word[attr][0])
+                        row.formattedValue[attr] = stringifiers[attr](words)
+                    }
                 }
+
+                const searchParams: SearchParams = {
+                    reduceVals,
+                    ignoreCase,
+                    originalCorpora,
+                    corpora: _.keys(data.corpora),
+                    prevNonExpandedCQP,
+                }
+                const result = [e.data, columns, searchParams]
+
+                resolve(result as StatisticsWorkerResult)
             }
 
-            const searchParams: SearchParams = {
-                reduceVals,
-                ignoreCase,
-                originalCorpora,
-                corpora: _.keys(data.corpora),
-                prevNonExpandedCQP,
-            }
-            const result = [e.data, columns, searchParams]
-
-            def.resolve(result as StatisticsWorkerResult)
-        }
-
-        statsWorker.postMessage({
-            type: "korpStatistics",
-            data,
-            groupStatistics: settings.group_statistics,
-        } as StatisticsWorkerMessage)
+            statsWorker.postMessage({
+                type: "korpStatistics",
+                data,
+                groupStatistics: settings.group_statistics,
+            } as StatisticsWorkerMessage)
+        })
     }
 
     return { processData }

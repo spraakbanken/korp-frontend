@@ -2,12 +2,12 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { Response, ProgressResponse, ProgressReport } from "@/backend/types"
+import type { ProgressHandler } from "@/backend/types"
 import { StatisticsWorkerResult } from "@/statistics.types"
-import { locationSearchGet, Factory, ajaxConfAddMethod } from "@/util"
+import { locationSearchGet, Factory } from "@/util"
 import { statisticsService } from "@/statistics"
-import { AjaxSettings } from "@/jquery.types"
 import { CountParams, CountResponse, StatsColumn } from "./types/count"
+import { korpRequest } from "./common"
 
 /** Like `CountResponse` but the stats are necessarily arrays. */
 export type StatsNormalized = {
@@ -73,11 +73,7 @@ export class StatsProxy extends BaseProxy<"count"> {
         return parameters
     }
 
-    makeRequest(
-        cqp: string,
-        callback: (data: ProgressReport<"count">) => void
-    ): JQuery.Promise<StatisticsWorkerResult> {
-        const self = this
+    async makeRequest(cqp: string, onProgress: ProgressHandler<"count">): Promise<StatisticsWorkerResult> {
         this.resetRequest()
         const reduceval = locationSearchGet("stats_reduce") || "word"
         const reduceVals = reduceval.split(",")
@@ -98,13 +94,13 @@ export class StatsProxy extends BaseProxy<"count"> {
             }
         })
 
-        const data = this.makeParameters(reduceVals, cqp, ignoreCase)
+        const params = this.makeParameters(reduceVals, cqp, ignoreCase)
         // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
         const originalCorpora: string = settings.corpusListing.stringifySelected(false)
 
         const wordAttrs = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())
         const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
-        data.split = _.filter(reduceVals, (reduceVal) => {
+        params.split = _.filter(reduceVals, (reduceVal) => {
             return (
                 (wordAttrs[reduceVal] && wordAttrs[reduceVal].type == "set") ||
                 (structAttrs[reduceVal] && structAttrs[reduceVal].type == "set")
@@ -116,55 +112,22 @@ export class StatsProxy extends BaseProxy<"count"> {
                 return wordAttrs[reduceVal].ranked
             }
         })
-        data.top = _.map(rankedReduceVals, (reduceVal) => reduceVal + ":1").join(",")
+        params.top = _.map(rankedReduceVals, (reduceVal) => reduceVal + ":1").join(",")
 
-        this.prevParams = data
-        const def: JQuery.Deferred<StatisticsWorkerResult> = $.Deferred()
+        this.prevParams = params
 
-        const url = settings.korp_backend_url + "/count"
-        const ajaxSettings = {
-            url,
-            data,
-            beforeSend(req, settings) {
-                self.addAuthorizationHeader(req)
-            },
+        const data = await korpRequest("count", params, { onProgress: onProgress })
+        // TODO pendingRequests, abort
 
-            error(jqXHR, textStatus, errorThrown) {
-                console.log(`gettings stats error, status: ${textStatus}`)
-                return def.reject(textStatus, errorThrown)
-            },
-
-            progress(data: ProgressResponse, e) {
-                const progressObj = self.calcProgress(e)
-                if (progressObj == null) {
-                    return
-                }
-                if (typeof callback === "function") {
-                    callback(progressObj)
-                }
-            },
-
-            success: (data: Response<CountResponse>) => {
-                if ("ERROR" in data) {
-                    console.log("gettings stats failed with error", data.ERROR)
-                    def.reject(data)
-                    return
-                }
-                const normalizedData = normalizeStatsData(data)
-                statisticsService.processData(
-                    def,
-                    originalCorpora,
-                    normalizedData,
-                    reduceVals,
-                    reduceValLabels,
-                    ignoreCase,
-                    cqp
-                )
-            },
-        } satisfies AjaxSettings
-        this.pendingRequests.push($.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<CountResponse>)
-
-        return def.promise()
+        const normalizedData = normalizeStatsData(data)
+        return statisticsService.processData(
+            originalCorpora,
+            normalizedData,
+            reduceVals,
+            reduceValLabels,
+            ignoreCase,
+            cqp
+        )
     }
 }
 
