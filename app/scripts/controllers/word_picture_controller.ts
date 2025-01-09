@@ -123,6 +123,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     s.resetView()
                 }
 
+                s.progress = 0
                 s.loading = true
                 const def = s.proxy.makeRequest(word, type, (progressObj) => $timeout(() => s.onProgress(progressObj)))
 

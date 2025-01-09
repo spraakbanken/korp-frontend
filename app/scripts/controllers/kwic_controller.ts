@@ -203,6 +203,7 @@ export class KwicCtrl implements IController {
                 s.page = Number($location.search().page) || 0
             }
 
+            s.progress = 0
             s.loading = true
             s.aborted = false
 
