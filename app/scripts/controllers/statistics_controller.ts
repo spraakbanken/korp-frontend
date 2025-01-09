@@ -20,7 +20,6 @@ type StatsResultCtrlScope = TabHashScope & {
     data: Dataset
     error: boolean
     hasResult: boolean
-    ignoreAbort: boolean
     inOrder: boolean
     loading: boolean
     no_hits: boolean
@@ -64,6 +63,8 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
 
             s.$on("abort_requests", () => {
                 s.proxy.abort()
+                s.aborted = true
+                s.loading = false
             })
 
             s.onentry = () => {
@@ -104,12 +105,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 
-                if (s.proxy.hasPending()) {
-                    s.ignoreAbort = true
-                } else {
-                    s.ignoreAbort = false
-                    s.resetView()
-                }
+                s.resetView()
 
                 s.loading = true
                 s.proxy
@@ -125,17 +121,12 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                             s.renderResult(columns, data)
                         })
                     })
-                    .catch((/*textStatus, */ err) => {
+                    .catch((err) => {
                         $timeout(() => {
-                            if (s.ignoreAbort) {
-                                return
-                            }
-                            s.loading = false
-                            // if (textStatus === "abort") {
-                            //     s.aborted = true
-                            // } else {
+                            // AbortError is expected if a new search is made before the previous one is finished
+                            if (err.name == "AbortError") return
+                            // Show other rejections as errors
                             s.resultError(err)
-                            // }
                         })
                     })
             }

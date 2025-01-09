@@ -1,13 +1,13 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import BaseProxy from "@/backend/base-proxy"
 import type { ProgressHandler } from "@/backend/types"
 import { StatisticsWorkerResult } from "@/statistics.types"
 import { locationSearchGet, Factory } from "@/util"
 import { statisticsService } from "@/statistics"
 import { CountParams, CountResponse, StatsColumn } from "./types/count"
 import { korpRequest } from "./common"
+import { expandOperators } from "@/cqp_parser/cqp"
 
 /** Like `CountResponse` but the stats are necessarily arrays. */
 export type StatsNormalized = {
@@ -37,12 +37,18 @@ export function normalizeStatsData(data: CountResponse): StatsNormalized {
     return { ...data, combined, corpora }
 }
 
-export class StatsProxy extends BaseProxy<"count"> {
-    prevParams: CountParams | null
+export class StatsProxy {
+    abortController: AbortController
+    prevParams: CountParams | null = null
 
-    constructor() {
-        super()
-        this.prevParams = null
+    /** Abort any running request */
+    abort() {
+        this.abortController?.abort()
+    }
+
+    resetAbortController(): AbortSignal {
+        this.abortController = new AbortController()
+        return this.abortController.signal
     }
 
     makeParameters(reduceVals: string[], cqp: string, ignoreCase: boolean): CountParams {
@@ -59,10 +65,17 @@ export class StatsProxy extends BaseProxy<"count"> {
                 groupBy.push(reduceVal)
             }
         }
+
+        try {
+            cqp = expandOperators(cqp)
+        } catch {
+            console.error("StatsProxy failed to expand operators in CQP query, falling back to original query")
+        }
+
         const parameters = {
             group_by: groupBy.join(","),
             group_by_struct: groupByStruct.join(","),
-            cqp: this.expandCQP(cqp),
+            cqp,
             corpus: settings.corpusListing.stringifySelected(true),
             incremental: true,
         }
@@ -74,7 +87,9 @@ export class StatsProxy extends BaseProxy<"count"> {
     }
 
     async makeRequest(cqp: string, onProgress: ProgressHandler<"count">): Promise<StatisticsWorkerResult> {
-        this.resetRequest()
+        this.abort()
+        const abortSignal = this.resetAbortController()
+
         const reduceval = locationSearchGet("stats_reduce") || "word"
         const reduceVals = reduceval.split(",")
 
@@ -115,9 +130,7 @@ export class StatsProxy extends BaseProxy<"count"> {
         params.top = _.map(rankedReduceVals, (reduceVal) => reduceVal + ":1").join(",")
 
         this.prevParams = params
-
-        const data = await korpRequest("count", params, { onProgress: onProgress })
-        // TODO pendingRequests, abort
+        const data = await korpRequest("count", params, { abortSignal, onProgress })
 
         const normalizedData = normalizeStatsData(data)
         return statisticsService.processData(

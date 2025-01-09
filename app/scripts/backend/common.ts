@@ -6,6 +6,9 @@ import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, R
 import { omitBy, pickBy } from "lodash"
 
 type RequestOptions<K extends keyof API> = {
+    /** Abort signal to cancel the request */
+    abortSignal?: AbortSignal
+    /** Callback to visualize progress and paged data */
     onProgress?: ProgressHandler<K>
 }
 
@@ -14,27 +17,37 @@ export async function korpRequest<K extends keyof API>(
     params: API[K]["params"],
     options: RequestOptions<K> = {}
 ): Promise<API[K]["response"]> {
+    // Skip params with `null` or `undefined`
     params = omitBy(params, (value) => value == null) as API[K]["params"]
+    // Switch to POST if the URL would be to long
     const { url, request } = fetchConfAddMethod(settings.korp_backend_url + "/" + endpoint, params)
     request.headers = { ...request.headers, ...getAuthorizationHeader() }
+    if (options.abortSignal) request.signal = options.abortSignal
 
+    // Send request
     const response = await fetch(url, request)
 
     let data: Response<API[K]["response"]>
+    // If progress handler given, parse response data as it comes in
     if (options.onProgress && response.body) {
         const reader = response.body.getReader()
         let json = ""
         // Iterate while fetching
         while (true) {
+            // Read next chunk
             const { done, value } = await reader.read()
             const text = new TextDecoder("utf-8").decode(value)
+            // Append to previous chunks and try to parse it to get progress info
             json += text
             const progress = calcProgress(json)
+            // Call the given progress handler
             options.onProgress(progress)
+            // Exit loop if request has finished
             if (done) break
         }
         data = JSON.parse(json)
     } else {
+        // If no progress handler, just await and parse the whole response
         data = await response.json()
     }
 
