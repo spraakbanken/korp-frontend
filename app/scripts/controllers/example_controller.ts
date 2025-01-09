@@ -5,7 +5,7 @@ import settings from "@/settings"
 import { KwicCtrl, KwicCtrlScope } from "./kwic_controller"
 import { LocationService } from "@/urlparams"
 import { KwicTab, RootScope } from "@/root-scope.types"
-import { Response, ProgressReport } from "@/backend/types"
+import { Response } from "@/backend/types"
 import { QueryResponse } from "@/backend/types/query"
 import { UtilsService } from "@/services/utils"
 import "@/services/utils"
@@ -20,8 +20,7 @@ type ExampleCtrlScope = ScopeBase & {
     hitsPictureData?: any
     hitspictureClick?: (page: number) => void
     kwicTab: KwicTab
-    makeRequest: (isPaging?: boolean) => JQuery.jqXHR<Response<QueryResponse>>
-    onExampleProgress: (progressObj: ProgressReport<"query">, isPaging?: boolean) => void
+    makeRequest: (isPaging?: boolean) => Promise<void>
     setupReadingWatch: () => void
     superRenderResult: (data: Response<QueryResponse>) => void
 }
@@ -97,7 +96,7 @@ class ExampleCtrl extends KwicCtrl {
             s.setupReadingWatch()
         }
 
-        s.makeRequest = () => {
+        s.makeRequest = async () => {
             const items_per_page = Number($location.search().hpp || settings["hits_per_page_default"])
             const opts = s.kwicTab.queryParams
 
@@ -123,40 +122,27 @@ class ExampleCtrl extends KwicCtrl {
             _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
             s.loading = true
-            if (opts.ajaxParams.command == "relations_sentences") {
-                s.onExampleProgress = () => {}
-            } else {
-                s.onExampleProgress = s.onProgress
-            }
-
-            const def = s.proxy.makeRequest(
-                opts,
-                undefined,
-                (progressObj) => $timeout(() => s.onExampleProgress(progressObj)),
-                (data) => {
-                    $timeout(() => {
-                        s.renderResult(data)
-                        s.renderCompleteResult(data)
-                        s.loading = false
-                    })
-                }
-            )
-
-            def.fail(() => {
+            const data = await s.proxy.makeRequest(opts, undefined).catch((error) => {
+                // AbortError is expected if a new search is made before the previous one is finished
+                if (error.name == "AbortError") return
                 $timeout(() => {
-                    // TODO it could be abort
                     s.error = true
-                    s.loading = false
                 })
             })
+            $timeout(() => {
+                s.loading = false
+            })
 
-            return def
+            if (data) {
+                $timeout(() => {
+                    s.renderResult(data)
+                    s.renderCompleteResult(data)
+                })
+            }
         }
 
         if (s.kwicTab.queryParams) {
-            s.makeRequest().then(() => {
-                // s.onentry()
-            })
+            s.makeRequest()
         }
     }
 

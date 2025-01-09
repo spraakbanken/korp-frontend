@@ -8,6 +8,7 @@ import { statisticsService } from "@/statistics"
 import { CountParams, CountResponse, StatsColumn } from "./types/count"
 import { korpRequest } from "./common"
 import { expandOperators } from "@/cqp_parser/cqp"
+import BaseProxy from "./base-proxy"
 
 /** Like `CountResponse` but the stats are necessarily arrays. */
 export type StatsNormalized = {
@@ -37,19 +38,8 @@ export function normalizeStatsData(data: CountResponse): StatsNormalized {
     return { ...data, combined, corpora }
 }
 
-export class StatsProxy {
-    abortController: AbortController
+export class StatsProxy extends BaseProxy<"count"> {
     prevParams: CountParams | null = null
-
-    /** Abort any running request */
-    abort() {
-        this.abortController?.abort()
-    }
-
-    resetAbortController(): AbortSignal {
-        this.abortController = new AbortController()
-        return this.abortController.signal
-    }
 
     makeParameters(reduceVals: string[], cqp: string, ignoreCase: boolean): CountParams {
         const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
@@ -87,8 +77,8 @@ export class StatsProxy {
     }
 
     async makeRequest(cqp: string, onProgress: ProgressHandler<"count">): Promise<StatisticsWorkerResult> {
-        this.abort()
-        const abortSignal = this.resetAbortController()
+        this.resetRequest()
+        const abortSignal = this.abortController.signal
 
         const reduceval = locationSearchGet("stats_reduce") || "word"
         const reduceVals = reduceval.split(",")

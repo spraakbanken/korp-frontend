@@ -7,11 +7,8 @@ import { calcProgress } from "./common"
 
 /** The Proxy classes wrap API requests with pre-/postprocessing and progress reporting. */
 export default abstract class BaseProxy<K extends keyof API> {
-    pendingRequests: JQuery.jqXHR[]
-
-    constructor() {
-        this.pendingRequests = []
-    }
+    abortController: AbortController
+    pendingRequests: JQuery.jqXHR[] = []
 
     expandCQP(cqp: string): string {
         try {
@@ -24,9 +21,12 @@ export default abstract class BaseProxy<K extends keyof API> {
 
     resetRequest(): void {
         this.abort()
+        this.abortController = new AbortController()
     }
 
+    /** Abort any running request */
     abort(): void {
+        this.abortController?.abort()
         this.pendingRequests.forEach((req) => req.abort())
     }
 

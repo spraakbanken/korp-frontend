@@ -52,6 +52,11 @@ export type API = {
         params: RelationsParams
         response: RelationsResponse
     }
+    relations_sentences: {
+        // TODO Create correct types for `RelationSentences*`
+        params: QueryParams
+        response: QueryResponse
+    }
     timespan: {
         params: TimespanParams
         response: TimespanResponse

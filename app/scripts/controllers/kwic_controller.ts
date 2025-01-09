@@ -28,7 +28,6 @@ export type KwicCtrlScope = TabHashScope & {
     /** Number of search hits, may change while search is in progress. */
     hitsInProgress?: number
     hitsPerPage?: `${number}` | number
-    ignoreAbort?: boolean
     initialSearch?: boolean
     isReadingMode: () => boolean
     kwic?: ApiKwic[]
@@ -114,6 +113,8 @@ export class KwicCtrl implements IController {
 
         s.$on("abort_requests", () => {
             s.proxy.abort()
+            s.aborted = true
+            s.loading = false
         })
 
         s.readingChange = function () {
@@ -207,39 +208,28 @@ export class KwicCtrl implements IController {
             s.loading = true
             s.aborted = false
 
-            s.ignoreAbort = Boolean(s.proxy.hasPending())
-
             const ajaxParams = s.buildQueryOptions(isPaging)
 
-            const req = s.getProxy().makeRequest(
-                { ajaxParams },
-                s.page,
-                (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
-                (data) => $timeout(() => s.renderResult(data))
-            )
-            req.done((data: Response<QueryResponse>) => {
-                $timeout(() => {
-                    s.loading = false
-                    s.renderCompleteResult(data, isPaging)
+            s.getProxy()
+                .makeRequest(
+                    { ajaxParams },
+                    s.page,
+                    (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
+                    (data) => $timeout(() => s.renderResult(data))
+                )
+                .then((data) => {
+                    $timeout(() => {
+                        s.loading = false
+                        s.renderCompleteResult(data, isPaging)
+                    })
                 })
-            })
-
-            req.fail((jqXHR, status, errorThrown) => {
-                $timeout(() => {
-                    console.log("kwic fail")
-                    if (s.ignoreAbort) {
-                        console.log("stats ignoreabort")
-                        return
-                    }
-                    s.loading = false
-
-                    if (status === "abort") {
-                        s.aborted = true
-                    } else {
+                .catch((error) => {
+                    // AbortError is expected if a new search is made before the previous one is finished
+                    if (error.name == "AbortError") return
+                    $timeout(() => {
                         s.error = true
-                    }
+                    })
                 })
-            })
         }
 
         s.getProxy = () => {

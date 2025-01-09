@@ -122,7 +122,7 @@ angular.module("korpApp").component("wordPicture", {
                                             <span ng-if="$ctrl.showWordClass">({{data.pos | loc:$root.lang}})</span>
                                         </td>
                                         <td title="mi: {{row.mi | number:2}}" class="text-right">{{row.freq}}</td>
-                                        <td ng-click="$ctrl.onClickExample(row)" class="cursor">
+                                        <td ng-click="$ctrl.onClickExample(row)" class="cursor-pointer">
                                             <i class="fa-solid fa-magnifying-glass fa-xs ml-2"></i>
                                         </td>
                                     </tr>
