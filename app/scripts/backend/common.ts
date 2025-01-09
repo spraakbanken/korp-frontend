@@ -2,7 +2,7 @@
 import { fetchConfAddMethod } from "@/util"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import settings from "@/settings"
-import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response, ResponseBase } from "./types"
+import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response as KResponse } from "./types"
 import { omitBy, pickBy } from "lodash"
 
 type RequestOptions<K extends keyof API> = {
@@ -27,24 +27,13 @@ export async function korpRequest<K extends keyof API>(
     // Send request
     const response = await fetch(url, request)
 
-    let data: Response<API[K]["response"]>
+    let data: KResponse<API[K]["response"]>
     // If progress handler given, parse response data as it comes in
     if (options.onProgress && response.body) {
-        const reader = response.body.getReader()
-        let json = ""
-        // Iterate while fetching
-        while (true) {
-            // Read next chunk
-            const { done, value } = await reader.read()
-            const text = new TextDecoder("utf-8").decode(value)
-            // Append to previous chunks and try to parse it to get progress info
-            json += text
-            const progress = calcProgress(json)
-            // Call the given progress handler
-            options.onProgress(progress)
-            // Exit loop if request has finished
-            if (done) break
-        }
+        const json = await readIncrementally(response, (json) => {
+            const progress = calcProgress<K>(json)
+            if (progress) options.onProgress!(progress)
+        })
         data = JSON.parse(json)
     } else {
         // If no progress handler, just await and parse the whole response
@@ -59,6 +48,19 @@ export async function korpRequest<K extends keyof API>(
     return data
 }
 
+/** Read and handle a JSON HTTP response as it comes in */
+async function readIncrementally(response: Response, handle: (data: string) => void): Promise<string> {
+    const reader = response.body!.getReader()
+    let content = ""
+    while (true) {
+        const { done, value } = await reader.read()
+        content += new TextDecoder("utf-8").decode(value)
+        handle(content)
+        if (done) break
+    }
+    return content
+}
+
 export class KorpBackendError extends Error {
     constructor(public readonly type: string, public readonly value: string) {
         super(`${type}: ${value}`)
@@ -66,15 +68,9 @@ export class KorpBackendError extends Error {
     }
 }
 
-export function calcProgress<K extends keyof API>(partialJson: string): ProgressReport<K> {
-    type PartialResponse = ResponseBase & ProgressResponse & Partial<API[K]["response"]>
-
-    let data: PartialResponse = {}
-    try {
-        data = parsePartialJson(partialJson)
-    } catch (error) {
-        data = {}
-    }
+export function calcProgress<K extends keyof API>(partialJson: string): ProgressReport<K> | undefined {
+    const data = parsePartialJson<ProgressResponse & KResponse<API[K]["response"]>>(partialJson)
+    if (!data) return
 
     /** Look up sizes of corpora and sum them */
     const getCorpusSize = (corpora: string[]) =>
@@ -105,12 +101,10 @@ export function calcProgress<K extends keyof API>(partialJson: string): Progress
     return { data, percent, hits }
 }
 
-/** Try to parse partial JSON data (of an in-progress HTTP response). */
-function parsePartialJson<T = any>(data: string): T {
-    // If it ends with comma + space, replace that with a closing curly.
-    const reEndsWithComma = /,\s*$/
-    if (data.match(reEndsWithComma)) {
-        data = data.replace(reEndsWithComma, "}")
-    }
-    return JSON.parse(data)
+/** Try to parse partial JSON data (of an in-progress HTTP response). Quite likely to throw `SyntaxError`. */
+export function parsePartialJson<T = any>(json: string): Partial<T> | undefined {
+    try {
+        // If it ends with comma + space, replace that with a closing curly.
+        return JSON.parse(json.replace(/,\s*$/, "}"))
+    } catch {}
 }

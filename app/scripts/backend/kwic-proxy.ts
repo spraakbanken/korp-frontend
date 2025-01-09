@@ -106,6 +106,7 @@ export class KwicProxy extends BaseProxy<"query"> {
             progress(jqxhr, e: ProgressEvent) {
                 // Calculate progress, used for progress bars
                 const progressObj = self.calcProgress(e)
+                if (!progressObj) return
                 progressCallback(progressObj)
 
                 // Show current page of results if they are available

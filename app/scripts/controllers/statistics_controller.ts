@@ -86,6 +86,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 s.progress = 0
             }
 
+            // TODO The tab progress bar shows as full at beginning of request
             s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["percent"]))
 
             s.makeRequest = (cqp) => {

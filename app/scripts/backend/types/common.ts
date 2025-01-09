@@ -37,7 +37,7 @@ export type ProgressResponse = {
 
 export type ProgressReport<K extends keyof API> = {
     /** Response data */
-    data: ResponseBase & ProgressResponse & Partial<API[K]["response"]>
+    data: Partial<Response<API[K]["response"]>>
     /** How many percent of the material has been searched. */
     percent: number
     /** How many search hits so far. */
