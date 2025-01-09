@@ -79,6 +79,7 @@
     "show_deptree": "Show Dependency Tree",
     "dep_tree": "Dependency Tree",
     "download": "Download as",
+    "download_response": "Save API response (JSON)",
     "toggle_select": "select",
 
     "is": "is",

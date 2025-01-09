@@ -17,6 +17,10 @@
   - `httpConfAddMethodAngular` was removed
 - The members of the `ProgressReport` type returned by `calcProgress()` have been renamed from `{struct, stats, total_results}` to `{data, percent, hits}`
 
+### Fixed
+
+- The response JSON download button now handles POST and logged-in requests, and has been moved into each corresponding result tab [#417](https://github.com/spraakbanken/korp-frontend/issues/417)
+
 ## [9.7.2] - 2024-12-09
 
 ### Added

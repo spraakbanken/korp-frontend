@@ -30,7 +30,6 @@ export type KwicCtrlScope = TabHashScope & {
     hitsPerPage?: `${number}` | number
     ignoreAbort?: boolean
     initialSearch?: boolean
-    isActive: () => boolean
     isReadingMode: () => boolean
     kwic?: ApiKwic[]
     loading?: boolean
@@ -47,7 +46,6 @@ export type KwicCtrlScope = TabHashScope & {
     readingChange: () => void
     renderCompleteResult: (data: Response<QueryResponse>, isPaging?: boolean) => void
     renderResult: (data: Response<QueryResponse>) => void
-    tabindex?: number
     toggleReading: () => void
 }
 
@@ -104,8 +102,6 @@ export class KwicCtrl implements IController {
         this.setupListeners()
 
         s.proxy = kwicProxyFactory.create()
-
-        s.tabindex = 0
 
         this.initPage()
 
@@ -275,26 +271,16 @@ export class KwicCtrl implements IController {
                 data.kwic = []
             }
 
-            if (s.isActive()) {
-                $rootScope.jsonUrl = s.proxy.prevUrl
-            }
-
             s.corpusOrder = data.corpus_order
             s.kwic = data.kwic
         }
 
         s.onentry = () => {
-            $rootScope.jsonUrl = s.proxy.prevUrl
             s.active = true
         }
 
         s.onexit = () => {
-            $rootScope.jsonUrl = undefined
             s.active = false
-        }
-
-        s.isActive = () => {
-            return s.tabindex == s.activeTab
         }
 
         s.countCorpora = () => {

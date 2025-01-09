@@ -39,7 +39,6 @@ export function normalizeStatsData(data: CountResponse): StatsNormalized {
 
 export class StatsProxy extends BaseProxy<"count"> {
     prevParams: CountParams | null
-    prevUrl?: string
 
     constructor() {
         super()
@@ -128,7 +127,6 @@ export class StatsProxy extends BaseProxy<"count"> {
             data,
             beforeSend(req, settings) {
                 self.addAuthorizationHeader(req)
-                self.prevUrl = settings.url
             },
 
             error(jqXHR, textStatus, errorThrown) {

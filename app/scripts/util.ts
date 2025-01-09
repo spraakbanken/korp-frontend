@@ -472,6 +472,17 @@ export function buildUrl(base: string, params: Record<string, any>): string {
     return url.toString()
 }
 
+/** Trigger a download in the browser. */
+export function downloadFile(data: string, filename: string, type: string) {
+    const blob = new Blob([data], { type })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+}
+
 /**
  * Sort elements alphabetically by a given attribute.
  * @param elems A list of objects.

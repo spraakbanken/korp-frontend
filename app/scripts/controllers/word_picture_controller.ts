@@ -22,12 +22,9 @@ type WordpicCtrlScope = TabHashScope & {
     hasData: boolean
     hitSettings: `${number}`[]
     ignoreAbort: boolean
-    isActive: () => boolean
     loading: boolean
     makeRequest: () => void
     noHits: boolean
-    onentry: () => void
-    onexit: () => void
     onProgress: (progressObj: ProgressReport<"relations">) => void
     progress: number
     proxy: LemgramProxy
@@ -38,7 +35,6 @@ type WordpicCtrlScope = TabHashScope & {
     settings: {
         showNumberOfHits: `${number}`
     }
-    tabindex: number
     wordPic: boolean
 }
 
@@ -70,7 +66,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
         "$timeout",
         ($scope: WordpicCtrlScope, $rootScope: RootScope, $location: LocationService, $timeout: ITimeoutService) => {
             const s = $scope
-            s.tabindex = 3
             s.proxy = lemgramProxyFactory.create()
 
             s.error = false
@@ -150,20 +145,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 })
             }
 
-            s.onentry = () => {
-                if (s.hasData) {
-                    s.$root.jsonUrl = s.proxy.prevUrl
-                }
-            }
-
-            s.onexit = () => {
-                s.$root.jsonUrl = undefined
-            }
-
-            s.isActive = () => {
-                return s.tabindex == s.activeTab
-            }
-
             s.renderResult = (data, query) => {
                 s.loading = false
                 s.progress = 100
@@ -171,10 +152,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     s.hasData = false
                     s.error = true
                     return
-                }
-
-                if (s.isActive()) {
-                    s.$root.jsonUrl = s.proxy.prevUrl
                 }
 
                 s.hasData = true

@@ -16,7 +16,6 @@ const korpApp = angular.module("korpApp")
 type ScopeBase = Omit<KwicCtrlScope, "makeRequest"> & IRepeatScope & TabHashScope
 
 type ExampleCtrlScope = ScopeBase & {
-    $parent: { $parent: TabHashScope }
     closeTab: (idx: number, e: Event) => void
     hitsPictureData?: any
     hitspictureClick?: (page: number) => void
@@ -53,8 +52,6 @@ class ExampleCtrl extends KwicCtrl {
         s.kwic = undefined
         s.corpusHits = undefined
         s.aborted = false
-
-        s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$index
 
         s.newDynamicTab()
 
@@ -154,10 +151,6 @@ class ExampleCtrl extends KwicCtrl {
             })
 
             return def
-        }
-
-        s.isActive = () => {
-            return s.tabindex == s.activeTab
         }
 
         if (s.kwicTab.queryParams) {

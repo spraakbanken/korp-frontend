@@ -28,11 +28,8 @@ type StatsResultCtrlScope = TabHashScope & {
     proxy: StatsProxy
     searchParams: SearchParams
     showStatistics: boolean
-    tabindex: number
-    isActive: () => boolean
     makeRequest: (cqp: string) => void
     onentry: () => void
-    onexit: () => void
     onProgress: (progressObj: ProgressReport<"count">, isPaging?: boolean) => void
     renderResult: (columns: SlickgridColumn[], data: Dataset) => void
     resetView: () => void
@@ -59,8 +56,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             s.error = false
             s.progress = 0
 
-            s.tabindex = 2
-
             s.proxy = statsProxyFactory.create()
 
             $rootScope.$on("make_request", (event, cqp: string) => {
@@ -72,19 +67,10 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             })
 
             s.onentry = () => {
-                s.$root.jsonUrl = s.proxy.prevUrl
                 // workaround for bug in slickgrid
                 // slickgrid should add this automatically, but doesn't
                 $("#myGrid").css("position", "relative")
                 $(window).trigger("resize")
-            }
-
-            s.onexit = () => {
-                s.$root.jsonUrl = undefined
-            }
-
-            s.isActive = () => {
-                return s.tabindex == s.activeTab
             }
 
             s.resetView = () => {
@@ -163,10 +149,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             }
 
             s.renderResult = (columns, data) => {
-                if (s.isActive()) {
-                    s.$root.jsonUrl = s.proxy.prevUrl
-                }
-
                 s.columns = columns
 
                 if (data[0].total[0] === 0) {

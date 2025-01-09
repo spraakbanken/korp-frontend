@@ -79,6 +79,7 @@
     "show_deptree": "Visa dependensträd",
     "dep_tree": "Dependensträd",
     "download": "Ladda ner som",
+    "download_response": "Spara API-svar (JSON)",
     "toggle_select": "välj",
 
     "case_insensitive": "skiftlägesoberoende",

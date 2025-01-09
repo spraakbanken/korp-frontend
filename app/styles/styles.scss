@@ -703,16 +703,6 @@ table {
   background-color: #FFDDD8;
 }
 
-#json-link {
-  float: right;
-  // Clear floats so that the JSON link is right-justified and not
-  // placed to the left of the download links.
-  clear: both;
-  img {
-    border: 0px;
-  }
-}
-
 #download-links {
   float: right;
 }

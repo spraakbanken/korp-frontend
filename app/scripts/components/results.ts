@@ -1,6 +1,7 @@
 /** @format */
 import angular, { IController } from "angular"
 import { html } from "@/util"
+import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/kwic"
 import "@/components/loglike-meter"
@@ -63,16 +64,11 @@ angular.module("korpApp").component("results", {
                                 prev-url="proxy.prevUrl"
                                 corpus-order="corpusOrder"
                             ></kwic>
+                            <json-button endpoint="'query'" params="proxy.prevParams"></json-button>
                         </div>
                     </uib-tab>
 
-                    <uib-tab
-                        stats-result-ctrl
-                        ng-if="$root._settings.statistics != false"
-                        select="onentry()"
-                        deselect="onexit()"
-                        index="2"
-                    >
+                    <uib-tab stats-result-ctrl ng-if="$root._settings.statistics != false" select="onentry()" index="2">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             {{'statistics' | loc:$root.lang}}
                             <tab-preloader
@@ -95,15 +91,14 @@ angular.module("korpApp").component("results", {
                             search-params="searchParams"
                             show-statistics="showStatistics"
                         ></statistics>
+                        <json-button
+                            ng-if="showStatistics && hasResult"
+                            endpoint="'count'"
+                            params="proxy.prevParams"
+                        ></json-button>
                     </uib-tab>
 
-                    <uib-tab
-                        ng-if="$root._settings['word_picture'] != false"
-                        wordpic-ctrl
-                        index="3"
-                        select="onentry()"
-                        deselect="onexit()"
-                    >
+                    <uib-tab ng-if="$root._settings['word_picture'] != false" wordpic-ctrl index="3">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             {{'word_picture' | loc:$root.lang}}
                             <tab-preloader
@@ -125,6 +120,11 @@ angular.module("korpApp").component("results", {
                             ></word-picture>
                         </div>
                         <korp-error ng-if="error"></korp-error>
+                        <json-button
+                            ng-if="wordPic && hasData"
+                            endpoint="'relations'"
+                            params="proxy.prevParams"
+                        ></json-button>
                     </uib-tab>
 
                     <uib-tab example-ctrl ng-repeat="kwicTab in $root.kwicTabs" select="onentry()" deselect="onexit()">
@@ -280,10 +280,6 @@ angular.module("korpApp").component("results", {
                         </div>
                     </uib-tab>
                 </uib-tabset>
-
-                <a id="json-link" ng-href="{{$root.jsonUrl}}" ng-show="$root.jsonUrl" target="_blank">
-                    <img src="img/json.png" />
-                </a>
             </div>
 
             <sidebar

@@ -8,7 +8,6 @@ import { RelationsParams, RelationsResponse } from "./types/relations"
 
 export class LemgramProxy extends BaseProxy<"relations"> {
     prevParams?: RelationsParams
-    prevUrl?: string
 
     makeRequest(
         word: string,
@@ -41,7 +40,6 @@ export class LemgramProxy extends BaseProxy<"relations"> {
 
             beforeSend(req, settings) {
                 self.addAuthorizationHeader(req)
-                self.prevUrl = settings.url
             },
         } satisfies AjaxSettings
 
