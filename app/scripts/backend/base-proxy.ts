@@ -39,5 +39,5 @@ export default abstract class BaseProxy<K extends keyof API> {
         _.toPairs(header).forEach(([name, value]) => req.setRequestHeader(name, value))
     }
 
-    calcProgress = (e: ProgressEvent) => calcProgress<K>(e)
+    calcProgress = (e: ProgressEvent) => calcProgress<K>((e.target as XMLHttpRequest).responseText)
 }

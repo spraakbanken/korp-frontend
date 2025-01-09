@@ -5,16 +5,38 @@ import settings from "@/settings"
 import { API, ErrorMessage, ProgressReport, ProgressResponse, Response, ResponseBase } from "./types"
 import { omitBy, pickBy } from "lodash"
 
+type RequestOptions<K extends keyof API> = {
+    onProgress?: (e: ProgressReport<K>) => void
+}
+
 export async function korpRequest<K extends keyof API>(
     endpoint: K,
-    params: API[K]["params"]
+    params: API[K]["params"],
+    options: RequestOptions<K> = {}
 ): Promise<API[K]["response"]> {
     params = omitBy(params, (value) => value == null) as API[K]["params"]
     const { url, request } = fetchConfAddMethod(settings.korp_backend_url + "/" + endpoint, params)
     request.headers = { ...request.headers, ...getAuthorizationHeader() }
 
     const response = await fetch(url, request)
-    const data = (await response.json()) as Response<API[K]["response"]>
+
+    let data: Response<API[K]["response"]>
+    if (options.onProgress && response.body) {
+        const reader = response.body.getReader()
+        let json = ""
+        // Iterate while fetching
+        while (true) {
+            const { done, value } = await reader.read()
+            console.log(done, value) // TODO remove
+            json += value
+            const progress = calcProgress(json)
+            options.onProgress(progress)
+            if (done) break
+        }
+        data = JSON.parse(json)
+    } else {
+        data = await response.json()
+    }
 
     if ("ERROR" in data) {
         const { type, value } = data.ERROR as ErrorMessage
@@ -31,13 +53,12 @@ export class KorpBackendError extends Error {
     }
 }
 
-export function calcProgress<K extends keyof API>(e: ProgressEvent): ProgressReport<K> {
-    const xhr = e.target as XMLHttpRequest
+export function calcProgress<K extends keyof API>(partialJson: string): ProgressReport<K> {
     type PartialResponse = ResponseBase & ProgressResponse & Partial<API[K]["response"]>
 
     let data: PartialResponse = {}
     try {
-        data = parsePartialJson(xhr.responseText)
+        data = parsePartialJson(partialJson)
     } catch (error) {
         data = {}
     }
