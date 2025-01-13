@@ -25,8 +25,8 @@ export async function korpRequest<K extends keyof API>(
 }
 
 export class KorpBackendError extends Error {
-    constructor(public readonly message: string, public readonly details: string) {
-        super(message)
+    constructor(public readonly type: string, public readonly value: string) {
+        super(`${type}: ${value}`)
         this.name = "KorpBackendError"
     }
 }

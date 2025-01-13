@@ -16,13 +16,14 @@ const createSplashScreen = () => {
     splash.innerHTML = html`<img class="splash" height="300" width="300" src="${korpLogo}" />`
 }
 
-const createErrorScreen = () => {
+const createErrorScreen = (msg?: string) => {
     const elem = document.getElementById("preload")
     if (!elem) throw new Error("preload element missing")
+    msg ??= "Sorry, Korp doesn't seem to work right now"
     elem.innerHTML = html`
-        <div class="absolute top-1/3 text-center">
-            <img class="block" height="300" width="300" src="${korpFail}" />
-            Sorry, Korp doesn't seem to work right now
+        <div class="absolute top-1/3 text-center max-w-screen-sm">
+            <img class="block mx-auto" height="300" width="300" src="${korpFail}" />
+            ${msg}
         </div>
     `
 }
@@ -70,7 +71,7 @@ createSplashScreen()
         // startup Angular.js app
         initApp()
     } catch (error) {
-        console.log(error)
-        createErrorScreen()
+        console.error(`Main error: ${error}`)
+        createErrorScreen(error)
     }
 })()
