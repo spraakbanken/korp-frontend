@@ -3,9 +3,9 @@ import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
 import type { Histogram } from "@/backend/types"
-import { ajaxConfAddMethod, Factory } from "@/util"
-import { AjaxSettings } from "@/jquery.types"
-import { TimespanParams, TimespanResponse } from "./types/timespan"
+import { Factory } from "@/util"
+import { TimespanParams } from "./types/timespan"
+import { korpRequest } from "./common"
 
 /** Data returned after slight mangling. */
 type TimeData = [
@@ -15,46 +15,21 @@ type TimeData = [
 ]
 
 export class TimeProxy extends BaseProxy<"timespan"> {
-    makeRequest(): JQueryDeferred<TimeData> {
-        const data: TimespanParams = {
+    async makeRequest(): Promise<TimeData> {
+        const params: TimespanParams = {
             granularity: "y",
             corpus: settings.corpusListing.stringifyAll(),
         }
 
-        const dfd = $.Deferred()
-        const ajaxSettings = {
-            url: settings.korp_backend_url + "/timespan",
-            data,
-        } satisfies AjaxSettings
-        const xhr = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<TimespanResponse>
+        const data = await korpRequest("timespan", params)
 
-        xhr.done((data) => {
-            if ("ERROR" in data) {
-                console.error("timespan error", data.ERROR)
-                dfd.reject(data.ERROR)
-                return
-            }
+        const rest = data.combined[""] || 0
+        delete data.combined[""]
 
-            const rest = data.combined[""]
-            delete data.combined[""]
+        this.expandTimeStruct(data.combined)
+        const combined = this.compilePlotArray(data.combined)
 
-            this.expandTimeStruct(data.combined)
-            const combined = this.compilePlotArray(data.combined)
-
-            if (_.keys(data).length < 2) {
-                dfd.reject()
-                return
-            }
-
-            return dfd.resolve([data.corpora, combined, rest])
-        })
-
-        xhr.fail(function () {
-            console.log("timeProxy.makeRequest failed", arguments)
-            return dfd.reject()
-        })
-
-        return dfd
+        return [data.corpora, combined, rest]
     }
 
     compilePlotArray(dataStruct: Histogram) {

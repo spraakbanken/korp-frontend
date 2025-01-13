@@ -14,11 +14,11 @@ export type TimespanParams = {
     incremental?: boolean
 }
 
-export type TimespanResponse = Response<{
+export type TimespanResponse = {
     /** An object with corpus names as keys and time statistics objects as values */
     corpora: Record<string, Histogram>
     /** Number of tokens per time period */
     combined: Histogram
     /** Execution time in seconds */
     time: number
-}>
+}
