@@ -1,21 +1,21 @@
 /** @format */
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import type { Response, ProgressReport } from "@/backend/types"
-import { ajaxConfAddMethod, Factory } from "@/util"
-import { AjaxSettings } from "@/jquery.types"
+import type { ProgressHandler } from "@/backend/types"
+import { Factory } from "@/util"
 import { RelationsParams, RelationsResponse } from "./types/relations"
+import { korpRequest } from "./common"
 
 export class LemgramProxy extends BaseProxy<"relations"> {
     prevParams?: RelationsParams
 
-    makeRequest(
+    async makeRequest(
         word: string,
         type: string,
-        callback: (data: ProgressReport<"relations">) => void
-    ): JQuery.jqXHR<Response<RelationsResponse>> {
+        onProgress: ProgressHandler<"relations">
+    ): Promise<RelationsResponse> {
         this.resetRequest()
-        const self = this
+        const abortSignal = this.abortController.signal
 
         const params = {
             word,
@@ -26,26 +26,7 @@ export class LemgramProxy extends BaseProxy<"relations"> {
         }
         this.prevParams = params
 
-        const ajaxSettings = {
-            url: settings.korp_backend_url + "/relations",
-            data: params,
-
-            progress(data, e) {
-                const progressObj = self.calcProgress(e)
-                if (progressObj == null) {
-                    return
-                }
-                return callback(progressObj)
-            },
-
-            beforeSend(req, settings) {
-                self.addAuthorizationHeader(req)
-            },
-        } satisfies AjaxSettings
-
-        const def = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<Response<RelationsResponse>>
-        this.pendingRequests.push(def)
-        return def
+        return korpRequest("relations", params, { abortSignal, onProgress })
     }
 }
 

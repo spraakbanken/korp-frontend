@@ -83,6 +83,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             s.$on("abort_requests", () => {
                 s.proxy.abort()
+                s.aborted = true
             })
 
             s.activate = function () {
@@ -125,25 +126,20 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
                 s.progress = 0
                 s.loading = true
-                const def = s.proxy.makeRequest(word, type, (progressObj) => $timeout(() => s.onProgress(progressObj)))
-
-                def.done((data) => {
-                    $timeout(() => s.renderResult(data, word))
-                })
-                def.fail((jqXHR, status, errorThrown) => {
-                    $timeout(() => {
-                        console.log("def fail", status)
-                        if (s.ignoreAbort) {
-                            return
-                        }
-                        s.loading = false
-                        if (status === "abort") {
-                            s.aborted = true
-                        } else {
-                            s.error = true
-                        }
+                s.proxy
+                    .makeRequest(word, type, (progressObj) => $timeout(() => s.onProgress(progressObj)))
+                    .then((data) => {
+                        $timeout(() => {
+                            s.loading = false
+                            s.renderResult(data, word)
+                        })
                     })
-                })
+                    .catch((error) => {
+                        // AbortError is expected if a new search is made before the previous one is finished
+                        if (error.name == "AbortError") return
+                        // Show other rejections as errors
+                        $timeout(() => (s.error = true))
+                    })
             }
 
             s.renderResult = (data, query) => {
