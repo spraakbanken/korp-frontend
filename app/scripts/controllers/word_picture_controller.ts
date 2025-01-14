@@ -21,14 +21,13 @@ type WordpicCtrlScope = TabHashScope & {
     error: boolean
     hasData: boolean
     hitSettings: `${number}`[]
-    ignoreAbort: boolean
     loading: boolean
     makeRequest: () => void
     noHits: boolean
     onProgress: (progressObj: ProgressReport<"relations">) => void
     progress: number
     proxy: LemgramProxy
-    renderResult: (data: Response<RelationsResponse>, word: string) => void
+    renderResult: (data: RelationsResponse, word: string) => void
     renderTables: (query: string, data: ApiRelation[]) => void
     renderWordTables: (query: string, data: ApiRelation[]) => void
     resetView: () => void
@@ -83,7 +82,10 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             s.$on("abort_requests", () => {
                 s.proxy.abort()
-                s.aborted = true
+                if (s.loading) {
+                    s.aborted = true
+                    s.loading = false
+                }
             })
 
             s.activate = function () {
@@ -117,40 +119,35 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     return
                 }
 
-                if (s.proxy.hasPending()) {
-                    s.ignoreAbort = true
-                } else {
-                    s.ignoreAbort = false
-                    s.resetView()
-                }
+                // Abort any running request
+                if (s.loading) s.proxy.abort()
 
                 s.progress = 0
                 s.loading = true
                 s.proxy
                     .makeRequest(word, type, (progressObj) => $timeout(() => s.onProgress(progressObj)))
-                    .then((data) => {
+                    .then((data) =>
                         $timeout(() => {
                             s.loading = false
                             s.renderResult(data, word)
                         })
-                    })
+                    )
                     .catch((error) => {
                         // AbortError is expected if a new search is made before the previous one is finished
-                        if (error.name == "AbortError") return
-                        // Show other rejections as errors
-                        $timeout(() => (s.error = true))
+                        if (error.name != "AbortError") {
+                            console.error(error)
+                            // TODO Show error
+                            $timeout(() => {
+                                s.error = true
+                                s.loading = false
+                            })
+                        }
                     })
             }
 
             s.renderResult = (data, query) => {
                 s.loading = false
                 s.progress = 100
-                if ("ERROR" in data) {
-                    s.hasData = false
-                    s.error = true
-                    return
-                }
-
                 s.hasData = true
                 if (!data.relations) {
                     s.noHits = true

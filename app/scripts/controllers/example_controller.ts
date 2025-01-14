@@ -69,9 +69,7 @@ class ExampleCtrl extends KwicCtrl {
 
         s.toggleReading = function () {
             s.kwicTab.readingMode = !s.kwicTab.readingMode
-            if (s.getProxy().pendingRequests.length) {
-                return $.when(...(s.getProxy().pendingRequests || [])).then(() => s.makeRequest())
-            }
+            s.makeRequest()
         }
 
         s.closeTab = function (idx, e) {
@@ -121,24 +119,27 @@ class ExampleCtrl extends KwicCtrl {
             )
             _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
-            s.loading = true
-            const data = await s.proxy.makeRequest(opts, undefined).catch((error) => {
-                // AbortError is expected if a new search is made before the previous one is finished
-                if (error.name == "AbortError") return
-                $timeout(() => {
-                    s.error = true
-                })
-            })
-            $timeout(() => {
-                s.loading = false
-            })
+            // Abort any running request
+            if (s.loading) s.proxy.abort()
 
-            if (data) {
-                $timeout(() => {
-                    s.renderResult(data)
-                    s.renderCompleteResult(data)
+            s.loading = true
+            s.proxy
+                .makeRequest(opts, undefined)
+                .then((data) =>
+                    $timeout(() => {
+                        s.renderResult(data)
+                        s.renderCompleteResult(data)
+                    })
+                )
+                .catch((error) => {
+                    // AbortError is expected if a new search is made before the previous one is finished
+                    if (error.name != "AbortError") {
+                        console.error(error)
+                        // TODO Show error
+                        $timeout(() => (s.error = true))
+                    }
                 })
-            }
+                .finally(() => $timeout(() => (s.loading = false)))
         }
 
         if (s.kwicTab.queryParams) {

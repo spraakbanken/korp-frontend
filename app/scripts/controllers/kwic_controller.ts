@@ -43,8 +43,8 @@ export type KwicCtrlScope = TabHashScope & {
     randomSeed?: number
     reading_mode?: boolean
     readingChange: () => void
-    renderCompleteResult: (data: Response<QueryResponse>, isPaging?: boolean) => void
-    renderResult: (data: Response<QueryResponse>) => void
+    renderCompleteResult: (data: QueryResponse, isPaging?: boolean) => void
+    renderResult: (data: QueryResponse) => void
     toggleReading: () => void
 }
 
@@ -113,24 +113,14 @@ export class KwicCtrl implements IController {
 
         s.$on("abort_requests", () => {
             s.proxy.abort()
-            s.aborted = true
-            s.loading = false
+            if (s.loading) {
+                s.aborted = true
+                s.loading = false
+            }
         })
 
         s.readingChange = function () {
-            if (s.getProxy().pendingRequests.length) {
-                // If the requests passed to $.when contain rejected
-                // (aborted) requests, .then is not executed, so
-                // filter those out
-                // TODO: Remove at least rejected requests from
-                // pendingRequests somewhere
-                const nonRejectedRequests = (s.getProxy().pendingRequests || []).filter(
-                    (req) => req.state() != "rejected"
-                )
-                return $.when(...nonRejectedRequests).then(function () {
-                    return s.makeRequest(false)
-                })
-            }
+            s.makeRequest(false)
         }
 
         s.reading_mode = $location.search().reading_mode
@@ -204,9 +194,13 @@ export class KwicCtrl implements IController {
                 s.page = Number($location.search().page) || 0
             }
 
+            // Abort any running request
+            if (s.loading) s.proxy.abort()
+
             s.progress = 0
             s.loading = true
             s.aborted = false
+            s.error = false
 
             const ajaxParams = s.buildQueryOptions(isPaging)
 
@@ -215,20 +209,23 @@ export class KwicCtrl implements IController {
                     { ajaxParams },
                     s.page,
                     (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
-                    (data) => $timeout(() => s.renderResult(data))
+                    (data) =>
+                        $timeout(() => {
+                            s.renderResult(data)
+                            s.loading = false
+                        })
                 )
-                .then((data) => {
-                    $timeout(() => {
-                        s.loading = false
-                        s.renderCompleteResult(data, isPaging)
-                    })
-                })
+                .then((data) => $timeout(() => s.renderCompleteResult(data, isPaging)))
                 .catch((error) => {
                     // AbortError is expected if a new search is made before the previous one is finished
-                    if (error.name == "AbortError") return
-                    $timeout(() => {
-                        s.error = true
-                    })
+                    if (error.name != "AbortError") {
+                        console.error(error)
+                        // TODO Show error
+                        $timeout(() => {
+                            s.error = true
+                            s.loading = false
+                        })
+                    }
                 })
         }
 
@@ -242,8 +239,6 @@ export class KwicCtrl implements IController {
 
         s.renderCompleteResult = (data, isPaging) => {
             s.renderResult(data)
-            s.loading = false
-            if ("ERROR" in data) return
             if (!isPaging) {
                 s.hits = data.hits
                 s.hitsInProgress = data.hits
@@ -252,12 +247,6 @@ export class KwicCtrl implements IController {
         }
 
         s.renderResult = (data) => {
-            if ("ERROR" in data) {
-                s.error = true
-                return
-            }
-            s.error = false
-
             if (!data.kwic) {
                 data.kwic = []
             }

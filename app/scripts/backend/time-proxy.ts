@@ -14,7 +14,7 @@ type TimeData = [
     number // Tokens in undated material
 ]
 
-export class TimeProxy extends BaseProxy<"timespan"> {
+export class TimeProxy extends BaseProxy {
     async makeRequest(): Promise<TimeData> {
         const params: TimespanParams = {
             granularity: "y",

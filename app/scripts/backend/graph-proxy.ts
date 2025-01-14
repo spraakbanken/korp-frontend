@@ -6,7 +6,7 @@ import { Factory } from "@/util"
 import { CountTimeParams, CountTimeResponse } from "./types/count-time"
 import { korpRequest } from "./common"
 
-export class GraphProxy extends BaseProxy<"count_time"> {
+export class GraphProxy extends BaseProxy {
     granularity: Granularity
     prevParams: CountTimeParams | null
 

@@ -6,7 +6,7 @@ import { Factory } from "@/util"
 import { RelationsParams, RelationsResponse } from "./types/relations"
 import { korpRequest } from "./common"
 
-export class LemgramProxy extends BaseProxy<"relations"> {
+export class LemgramProxy extends BaseProxy {
     prevParams?: RelationsParams
 
     async makeRequest(

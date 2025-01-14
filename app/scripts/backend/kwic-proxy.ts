@@ -7,7 +7,7 @@ import { ProgressReport } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
 import { korpRequest } from "./common"
 
-export class KwicProxy extends BaseProxy<"query"> {
+export class KwicProxy extends BaseProxy {
     prevCQP?: string
     prevParams: QueryParams | null
     prevUrl?: string // Used for download

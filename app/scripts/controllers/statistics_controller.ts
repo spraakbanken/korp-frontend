@@ -63,8 +63,10 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
 
             s.$on("abort_requests", () => {
                 s.proxy.abort()
-                s.aborted = true
-                s.loading = false
+                if (s.loading) {
+                    s.aborted = true
+                    s.loading = false
+                }
             })
 
             s.onentry = () => {
@@ -86,7 +88,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 s.progress = 0
             }
 
-            // TODO The tab progress bar shows as full at beginning of request
             s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["percent"]))
 
             s.makeRequest = (cqp) => {
@@ -106,14 +107,14 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 
+                // Abort any running request
+                if (s.loading) s.proxy.abort()
                 s.resetView()
 
                 s.loading = true
                 s.proxy
-                    .makeRequest(cqp, (progressObj) => {
-                        $timeout(() => s.onProgress(progressObj))
-                    })
-                    .then((result) => {
+                    .makeRequest(cqp, (progressObj) => $timeout(() => s.onProgress(progressObj)))
+                    .then((result) =>
                         $timeout(() => {
                             const [data, columns, searchParams] = result
                             s.loading = false
@@ -121,22 +122,17 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                             s.searchParams = searchParams
                             s.renderResult(columns, data)
                         })
+                    )
+                    .catch((error) => {
+                        // AbortError is expected if a new search is made before the previous one is finished
+                        if (error.name != "AbortError") {
+                            $timeout(() => {
+                                s.resetView()
+                                s.error = true
+                                s.loading = false
+                            })
+                        }
                     })
-                    .catch((err) => {
-                        $timeout(() => {
-                            // AbortError is expected if a new search is made before the previous one is finished
-                            if (err.name == "AbortError") return
-                            // Show other rejections as errors
-                            s.resultError(err)
-                        })
-                    })
-            }
-
-            s.resultError = (data) => {
-                console.error("json fetch error: ", data)
-                s.loading = false
-                s.resetView()
-                s.error = true
             }
 
             s.renderResult = (columns, data) => {

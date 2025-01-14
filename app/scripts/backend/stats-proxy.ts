@@ -7,7 +7,6 @@ import { locationSearchGet, Factory } from "@/util"
 import { statisticsService } from "@/statistics"
 import { CountParams, CountResponse, StatsColumn } from "./types/count"
 import { korpRequest } from "./common"
-import { expandOperators } from "@/cqp_parser/cqp"
 import BaseProxy from "./base-proxy"
 
 /** Like `CountResponse` but the stats are necessarily arrays. */
@@ -38,7 +37,7 @@ export function normalizeStatsData(data: CountResponse): StatsNormalized {
     return { ...data, combined, corpora }
 }
 
-export class StatsProxy extends BaseProxy<"count"> {
+export class StatsProxy extends BaseProxy {
     prevParams: CountParams | null = null
 
     makeParameters(reduceVals: string[], cqp: string, ignoreCase: boolean): CountParams {
@@ -56,16 +55,10 @@ export class StatsProxy extends BaseProxy<"count"> {
             }
         }
 
-        try {
-            cqp = expandOperators(cqp)
-        } catch {
-            console.error("StatsProxy failed to expand operators in CQP query, falling back to original query")
-        }
-
         const parameters = {
             group_by: groupBy.join(","),
             group_by_struct: groupByStruct.join(","),
-            cqp,
+            cqp: this.expandCQP(cqp),
             corpus: settings.corpusListing.stringifySelected(true),
             incremental: true,
         }
