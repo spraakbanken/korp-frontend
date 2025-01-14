@@ -12,9 +12,10 @@
 - The `structService` service is replaced by non-AngularJS async functions in `@/backend/attr-values`
 - The `lexicons` service is replaced by non-AngularJS async functions in `@/backend/lexicons`
 - The `httpConfAddMethod*` util functions were refactored:
-  - The `$.ajax` case of `httpConfAddMethod` was extracted into `ajaxConfAddMethod`
+  - The `$.ajax` case of `httpConfAddMethod` was removed
   - `httpConfAddMethodFetch` was renamed to `fetchConfAddMethod`
   - `httpConfAddMethodAngular` was removed
+- Utilities for `JQuery.ajax` usage are removed (`.progress` handler, `AjaxSettings` type)
 - The members of the `ProgressReport` type returned by `calcProgress()` have been renamed from `{struct, stats, total_results}` to `{data, percent, hits}`
 - The `makeRequest` methods of the `*Proxy` classes now return native `Promise`
 

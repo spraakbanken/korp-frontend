@@ -5,7 +5,7 @@ import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
-import { AjaxSettings, JQueryExtended, JQueryStaticExtended } from "./jquery.types"
+import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
@@ -431,15 +431,6 @@ export function httpConfAddMethod(conf: IRequestConfig & { url: string }): IRequ
         conf.data = conf.params
         delete conf.params
     }
-    return conf
-}
-
-/**
- * Select GET or POST depending on url length, modifies conf in-place.
- */
-export function ajaxConfAddMethod<T extends AjaxSettings>(conf: T): T {
-    // $.ajax uses `data` for both GET and POST.
-    conf.method = selectHttpMethod(conf.url!, conf.data || {})
     return conf
 }
 

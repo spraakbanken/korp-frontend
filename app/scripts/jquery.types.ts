@@ -12,9 +12,3 @@ export type JQueryStaticExtended = JQueryStatic & {
     // Defined in jq_extensions
     generateFile: (url: string, params: Record<any, any>) => {}
 }
-
-export type AjaxSettings<P = Record<string, any>> = JQuery.AjaxSettings & {
-    data?: P
-    // Defined in jq_extensions
-    progress?: (this: any, data: any, e: any) => void
-}
