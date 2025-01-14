@@ -422,31 +422,13 @@ export const regescape = (s: string): string => s.replace(/[.|?|+|*||'|()^$\\]/g
 export const unregescape = (s: string): string => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
 
 /**
- * Select GET or POST depending on url length, modifies conf in-place.
+ * Select GET or POST depending on url length.
  */
-export function httpConfAddMethod(conf: IRequestConfig & { url: string }): IRequestConfig {
-    // $http uses `data` for POST but `params` for GET.
-    conf.method = selectHttpMethod(conf.url, conf.params)
-    if (conf.method == "POST") {
-        conf.data = conf.params
-        delete conf.params
-    }
-    return conf
-}
-
-/**
- * Like `httpConfAddMethod`, but for use with native `fetch()`.
- */
-export function fetchConfAddMethod(url: string, params: Record<string, any>): { url: string; request: RequestInit } {
-    if (selectHttpMethod(url, params) == "POST") {
-        return { url, request: { method: "POST", body: toFormData(params) } }
-    }
-    return { url: buildUrl(url, params), request: {} }
-}
-
-/** Check url length */
-function selectHttpMethod(url: string, params: Record<string, any>): "GET" | "POST" {
-    return buildUrl(url, params).length > settings.backendURLMaxLength ? "POST" : "GET"
+export function selectHttpMethod(url: string, params: Record<string, any>): { url: string; request: RequestInit } {
+    const urlFull = buildUrl(url, params)
+    return urlFull.length > settings.backendURLMaxLength
+        ? { url, request: { method: "POST", body: toFormData(params) } }
+        : { url: urlFull, request: {} }
 }
 
 /** Convert object to FormData */
