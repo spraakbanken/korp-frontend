@@ -20,7 +20,7 @@ type ExampleCtrlScope = ScopeBase & {
     hitsPictureData?: any
     hitspictureClick?: (page: number) => void
     kwicTab: KwicTab
-    makeRequest: (isPaging?: boolean) => Promise<void>
+    makeRequest: (isPaging?: boolean) => void
     setupReadingWatch: () => void
     superRenderResult: (data: Response<QueryResponse>) => void
 }
@@ -94,7 +94,7 @@ class ExampleCtrl extends KwicCtrl {
             s.setupReadingWatch()
         }
 
-        s.makeRequest = async () => {
+        s.makeRequest = () => {
             const items_per_page = Number($location.search().hpp || settings["hits_per_page_default"])
             const opts = s.kwicTab.queryParams
 

@@ -94,13 +94,22 @@ const createStatisticsService = function () {
         const corpora = Object.keys(data.corpora)
         const columns = createColumns(corpora, reduceVals, reduceValLabels)
 
+        // Get stringifiers for formatting attribute values
+        const structAttrs = settings.corpusListing.subsetFactory(corpora).getStructAttrs()
+        const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
+
+        const searchParams: SearchParams = {
+            reduceVals,
+            ignoreCase,
+            originalCorpora,
+            corpora: _.keys(data.corpora),
+            prevNonExpandedCQP,
+        }
+
         return new Promise((resolve) => {
             const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
             statsWorker.onmessage = function (e: MessageEvent<Dataset>) {
                 // Format the values of the attributes we are reducing by
-                const cl = settings.corpusListing.subsetFactory(corpora)
-                const structAttrs = cl.getStructAttrs()
-                const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
                 for (const row of e.data) {
                     if (isTotalRow(row)) continue
                     for (const attr of reduceVals) {
@@ -109,23 +118,14 @@ const createStatisticsService = function () {
                     }
                 }
 
-                const searchParams: SearchParams = {
-                    reduceVals,
-                    ignoreCase,
-                    originalCorpora,
-                    corpora: _.keys(data.corpora),
-                    prevNonExpandedCQP,
-                }
-                const result = [e.data, columns, searchParams]
-
-                resolve(result as StatisticsWorkerResult)
+                resolve([e.data, columns, searchParams])
             }
 
             statsWorker.postMessage({
                 type: "korpStatistics",
                 data,
                 groupStatistics: settings.group_statistics,
-            } as StatisticsWorkerMessage)
+            } satisfies StatisticsWorkerMessage)
         })
     }
 

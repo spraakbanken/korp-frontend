@@ -16,6 +16,7 @@
   - `httpConfAddMethodFetch` was renamed to `fetchConfAddMethod`
   - `httpConfAddMethodAngular` was removed
 - The members of the `ProgressReport` type returned by `calcProgress()` have been renamed from `{struct, stats, total_results}` to `{data, percent, hits}`
+- The `makeRequest` methods of the `*Proxy` classes now return native `Promise`
 
 ### Fixed
 
