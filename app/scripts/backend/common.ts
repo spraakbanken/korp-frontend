@@ -27,18 +27,14 @@ export async function korpRequest<K extends keyof API>(
     // Send request
     const response = await fetch(url, request)
 
-    let data: KResponse<API[K]["response"]>
     // If progress handler given, parse response data as it comes in
-    if (options.onProgress && response.body) {
-        const json = await readIncrementally(response, (json) => {
+    const json = await readIncrementally(response, (json) => {
+        if (options.onProgress) {
             const progress = calcProgress<K>(json)
-            if (progress) options.onProgress!(progress)
-        })
-        data = JSON.parse(json)
-    } else {
-        // If no progress handler, just await and parse the whole response
-        data = await response.json()
-    }
+            if (progress) options.onProgress(progress)
+        }
+    })
+    const data: KResponse<API[K]["response"]> = JSON.parse(json)
 
     if ("ERROR" in data) {
         const { type, value } = data.ERROR as ErrorMessage
@@ -48,8 +44,8 @@ export async function korpRequest<K extends keyof API>(
     return data
 }
 
-/** Read and handle a JSON HTTP response as it comes in */
-async function readIncrementally(response: Response, handle: (data: string) => void): Promise<string> {
+/** Read and handle a HTTP response body as it comes in */
+async function readIncrementally(response: Response, handle: (content: string) => void): Promise<string> {
     const reader = response.body!.getReader()
     let content = ""
     while (true) {
