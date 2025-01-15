@@ -773,18 +773,7 @@ my_parameter: my value
 
 Will make `settings["my_parameter"]` available in the app.
 
-Use `snake_case` when defining new attribute in `config.yml`. Add a default  value for the new attribute in `app/scripts/settings.js`, if needed.
-
-When using the settings object, use the following format: `settings["my_parameter"]`, instead of `settings.my_parameter`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
-
-### Map
-
-Some of the code for the map is located in this repository:
-
-https://github.com/spraakbanken/korp-geo
-
-[github-frontend]: https://github.com/spraakbanken/korp-frontend/
-[github-frontend-sb]: https://github.com/spraakbanken/korp-frontend-sb/
+Use `snake_case` when defining new attributes in `config.yml`. Add a default value for the new attribute in `app/scripts/settings.js`, if needed.
 
 ### CQP Parser
 
@@ -838,6 +827,8 @@ Use modern features where it looks good. Always use `const` or `let` instead of 
 
 Identifiers should be in camel case (although our old Korp code may still have some identifiers that uses snake case).
 
+When using the settings object, use `settings["my_parameter"]` instead of `settings.my_parameter`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
+
 Aim to write code that is easily understood, and supplement with comments as needed. Keep comments up to date while making code changes.
 
 Files should be named using snake case: `my_file.js`.
@@ -861,28 +852,24 @@ Avoid using directives and controllers.
 
 #### Angular.js dependency injection
 
-This is how it looks everywhere in the Angular.js code:
+Angular will automatically pass the services demanded by controllers, see https://docs.angularjs.org/guide/di
+
+Do this (inline array annotation):
 
 ```js
 controller: [
   "$scope",
-  "$rootScope",
-  "backend",
-  ($scope, $rootScope, backend) => {
-    ...
-  }
+  function ($scope) { ... }
 ]
 ```
 
-The variables of the controller is created automatically by Angular.js and "injected". When reading documenation online you can find the alternative:
+Do not do (implicit annotation):
 
 ```js
-controller: ($scope, $rootScope, backend) => {
-  ...
-}
+controller: function ($scope) { ... }
 ```
 
-But this doesn't work in Korp (anymore). Due to minification done by Webpack when building the frontend (`yarn build`). It probably works with `yarn start`, so beware.
+This will fail when building the frontend (`yarn build`), due to minification by Webpack. It probably works with `yarn start`, so beware.
 
 ### Documentation
 
