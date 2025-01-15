@@ -38,6 +38,7 @@ angular.module("korpApp").component("searchHistory", {
     template: html`<select
         ng-model="value"
         ng-options="option.label for option in getOptions() track by option.id"
+        class="w-40"
     ></select>`,
     controller: [
         "$location",
