@@ -2,12 +2,12 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { locationSearchGet, Factory, ajaxConfAddMethod } from "@/util"
-import { ProgressReport, Response } from "./types"
+import { locationSearchGet, Factory } from "@/util"
+import { ProgressReport } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
-import { AjaxSettings } from "@/jquery.types"
+import { korpRequest } from "./common"
 
-export class KwicProxy extends BaseProxy<"query"> {
+export class KwicProxy extends BaseProxy {
     prevCQP?: string
     prevParams: QueryParams | null
     prevUrl?: string // Used for download
@@ -19,17 +19,14 @@ export class KwicProxy extends BaseProxy<"query"> {
         this.prevParams = null
     }
 
-    makeRequest(
+    async makeRequest(
         options: KorpQueryRequestOptions,
         page: number | undefined,
-        progressCallback: (data: ProgressReport<"query">) => void,
-        kwicCallback: (data: Response<QueryResponse>) => void
-    ): JQuery.jqXHR<Response<QueryResponse>> {
-        const self = this
+        progressCallback?: (data: ProgressReport<"query">) => void,
+        kwicCallback?: (data: QueryResponse) => void
+    ): Promise<QueryResponse> {
         this.resetRequest()
-        if (!kwicCallback) {
-            throw new Error("No callback for query result")
-        }
+        const abortSignal = this.abortController.signal
 
         if (!options.ajaxParams.within) {
             _.extend(options.ajaxParams, settings.corpusListing.getWithinParameters())
@@ -45,7 +42,7 @@ export class KwicProxy extends BaseProxy<"query"> {
 
         const command = options.ajaxParams.command || "query"
 
-        const data: QueryParams = {
+        const params: QueryParams = {
             default_context: settings.default_overview_context,
             ...getPageInterval(),
             ...options.ajaxParams,
@@ -76,50 +73,38 @@ export class KwicProxy extends BaseProxy<"query"> {
             }
         }
 
-        if (data.cqp) {
-            data.cqp = this.expandCQP(data.cqp)
+        if (params.cqp) {
+            params.cqp = this.expandCQP(params.cqp)
         }
-        this.prevCQP = data.cqp
+        this.prevCQP = params.cqp
 
-        data.show = _.uniq(["sentence"].concat(show)).join(",")
-        data.show_struct = _.uniq(show_struct).join(",")
+        params.show = _.uniq(["sentence"].concat(show)).join(",")
+        params.show_struct = _.uniq(show_struct).join(",")
 
         if (locationSearchGet("in_order") != null) {
-            data.in_order = false
+            params.in_order = false
         }
 
-        this.prevParams = data
-        const ajaxSettings = {
-            url: settings.korp_backend_url + "/" + command,
-            data: data,
-            beforeSend(req, settings) {
-                self.addAuthorizationHeader(req)
-                self.prevUrl = settings.url
-            },
+        this.prevParams = params
 
-            success(data: QueryResponse, status, jqxhr) {
-                self.queryData = data.query_data
-                // Run the callback to show results, if not already done by the progress handler
-                if (!this.foundKwic) kwicCallback(data)
-            },
+        // If the result callback is called in the progress handler, do not do it again at finish.
+        const kwicCallbackOnce = _.once(kwicCallback || (() => {}))
 
-            progress(jqxhr, e: ProgressEvent) {
-                // Calculate progress, used for progress bars
-                const progressObj = self.calcProgress(e)
-                progressCallback(progressObj)
+        function onProgress(progress: ProgressReport<"query">) {
+            if (!progress) return
+            progressCallback?.(progress)
 
-                // Show current page of results if they are available
-                // The request may continue to count hits in the background
-                if ("kwic" in progressObj.data) {
-                    this.foundKwic = true
-                    kwicCallback(progressObj.data as QueryResponse)
-                }
-            },
-        } satisfies AjaxSettings
+            // Show current page of results if they are available
+            // The request may continue to count hits in the background
+            if ("kwic" in progress.data) {
+                kwicCallbackOnce(progress.data as QueryResponse)
+            }
+        }
 
-        const def = $.ajax(ajaxConfAddMethod(ajaxSettings)) as JQuery.jqXHR<Response<QueryResponse>>
-        this.pendingRequests.push(def)
-        return def
+        const data = await korpRequest(command, params, { abortSignal, onProgress })
+        this.queryData = data.query_data
+        kwicCallbackOnce(data)
+        return data
     }
 }
 

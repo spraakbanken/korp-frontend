@@ -1,13 +1,12 @@
 /** @format */
 import _ from "lodash"
-import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { Granularity, Response, NumericString } from "@/backend/types"
-import { ajaxConfAddMethod, Factory } from "@/util"
-import { AjaxSettings } from "@/jquery.types"
+import { Granularity, NumericString, ProgressHandler } from "@/backend/types"
+import { Factory } from "@/util"
 import { CountTimeParams, CountTimeResponse } from "./types/count-time"
+import { korpRequest } from "./common"
 
-export class GraphProxy extends BaseProxy<"count_time"> {
+export class GraphProxy extends BaseProxy {
     granularity: Granularity
     prevParams: CountTimeParams | null
 
@@ -27,15 +26,17 @@ export class GraphProxy extends BaseProxy<"count_time"> {
         return result
     }
 
-    makeRequest(
+    async makeRequest(
         cqp: string,
         subcqps: string[],
         corpora: string,
         from: NumericString,
-        to: NumericString
-    ): JQuery.Promise<Response<CountTimeResponse>> {
+        to: NumericString,
+        onProgress: ProgressHandler<"count_time">
+    ): Promise<CountTimeResponse> {
         this.resetRequest()
-        const self = this
+        const abortSignal = this.abortController.signal
+
         const params: CountTimeParams = {
             cqp: this.expandCQP(cqp),
             corpus: corpora,
@@ -54,36 +55,8 @@ export class GraphProxy extends BaseProxy<"count_time"> {
         // TODO: fix this for struct attrs
         _.extend(params, this.expandSubCqps(subcqps))
         this.prevParams = params
-        const def = $.Deferred()
 
-        const ajaxSettings = {
-            url: settings.korp_backend_url + "/count_time",
-            dataType: "json",
-            data: params,
-
-            beforeSend: (req) => {
-                this.addAuthorizationHeader(req)
-            },
-
-            progress: (data, e) => {
-                const progressObj = this.calcProgress(e)
-                if (progressObj == null) {
-                    return
-                }
-                def.notify(progressObj)
-            },
-
-            error(jqXHR, textStatus, errorThrown) {
-                def.reject(textStatus)
-            },
-            success(data: Response<CountTimeResponse>) {
-                def.resolve(data)
-            },
-        } satisfies AjaxSettings
-
-        $.ajax(ajaxConfAddMethod(ajaxSettings))
-
-        return def.promise()
+        return await korpRequest("count_time", params, { abortSignal, onProgress })
     }
 }
 

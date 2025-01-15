@@ -38,45 +38,20 @@ function toBase64(str: string) {
     return u_btoa(new TextEncoder().encode(str))
 }
 
-export const login = (usr: string, pass: string, saveLogin: boolean): JQueryDeferred<LoginResponseData> => {
-    const auth = toBase64(usr + ":" + pass)
+export async function login(name: string, pass: string, saveLogin: boolean): Promise<LoginResponseData> {
+    const auth = toBase64(name + ":" + pass)
 
-    const dfd = $.Deferred()
+    const url = `${settings.korp_backend_url}/authenticate`
+    const headers = { Authorization: `Basic ${auth}` }
+    const response = await fetch(url, { headers })
+    const data = await response.json()
 
-    const ajaxSettings: JQuery.AjaxSettings = {
-        url: settings["korp_backend_url"] + "/authenticate",
-        type: "GET",
-        beforeSend(req) {
-            return req.setRequestHeader("Authorization", `Basic ${auth}`)
-        },
-    }
+    if (!data.corpora) throw new Error("No corpora in auth response")
 
-    ;($.ajax(ajaxSettings) as JQuery.jqXHR<LoginResponseData>)
-        .done(function (data, status, xhr) {
-            if (!data.corpora) {
-                dfd.reject()
-                return
-            }
-            state.loginObj = {
-                name: usr,
-                credentials: data.corpora,
-                auth,
-            }
-            if (saveLogin) {
-                localStorageSet("creds", state.loginObj)
-            }
-            return dfd.resolve(data)
-        })
-        .fail(function (xhr, status, error) {
-            console.log("auth fail", arguments)
-            return dfd.reject()
-        })
-
-    return dfd
+    state.loginObj = { name, credentials: data.corpora, auth }
+    if (saveLogin) localStorageSet("creds", state.loginObj)
+    return data
 }
-
-export const hasCredential = (corpusId: string): boolean =>
-    state.loginObj?.credentials?.includes(corpusId.toUpperCase()) || false
 
 export const logout = (): void => {
     state.loginObj = undefined

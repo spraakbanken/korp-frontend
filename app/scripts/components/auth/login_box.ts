@@ -60,21 +60,22 @@ export const loginBoxComponent: IComponentOptions = {
 
             $ctrl.loading = false
 
-            $ctrl.loginSubmit = function () {
+            $ctrl.loginSubmit = async () => {
                 $ctrl.loginErr = false
                 $ctrl.loading = true
-                login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
-                    .done(function () {
-                        // no send to statemachine
-                        statemachine.send("LOGIN")
-                        $ctrl.close()
+
+                try {
+                    await login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
+                    // no send to statemachine
+                    statemachine.send("LOGIN")
+                    $ctrl.close()
+                } catch (error) {
+                    console.error("Auth fail", error)
+                    $timeout(() => {
+                        $ctrl.loginErr = true
+                        $ctrl.loading = false
                     })
-                    .fail(function () {
-                        $timeout(() => {
-                            $ctrl.loginErr = true
-                            $ctrl.loading = false
-                        })
-                    })
+                }
             }
 
             $ctrl.close = function () {

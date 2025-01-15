@@ -6,7 +6,6 @@ import { LangString } from "./i18n/types"
 export type StatisticsWorkerMessage = {
     type: "korpStatistics"
     data: StatsNormalized
-    reduceVals: string[]
     groupStatistics: string[]
 }
 

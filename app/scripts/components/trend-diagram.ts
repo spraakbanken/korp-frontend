@@ -11,7 +11,7 @@ import { loc } from "@/i18n"
 import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
 import "@/components/korp-error"
 import { GraphTab, RootScope } from "@/root-scope.types"
-import { Histogram, Response, ProgressReport } from "@/backend/types"
+import { Histogram, Response } from "@/backend/types"
 import { JQueryExtended } from "@/jquery.types"
 import { CorpusListing } from "@/corpus_listing"
 import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
@@ -775,10 +775,6 @@ angular.module("korpApp").component("trendDiagram", {
                 done()
             }
 
-            function onProgress(progressObj: ProgressReport<"count_time">) {
-                $ctrl.onProgress(Math.round(progressObj.percent))
-            }
-
             async function makeRequest(
                 cqp: string,
                 subcqps: string[],
@@ -791,11 +787,14 @@ angular.module("korpApp").component("trendDiagram", {
                 $ctrl.localUpdateLoading(true)
                 $ctrl.error = false
                 const currentZoom = $ctrl.zoom
-                let reqPromise = $ctrl.proxy
-                    .makeRequest(cqp, subcqps, corpora.stringifySelected(), from, to)
-                    .progress((data) => {
-                        $timeout(() => onProgress(data))
-                    })
+                const reqPromise = $ctrl.proxy.makeRequest(
+                    cqp,
+                    subcqps,
+                    corpora.stringifySelected(),
+                    from,
+                    to,
+                    (progress) => $timeout(() => $ctrl.onProgress(progress.percent))
+                )
 
                 try {
                     const [Rickshaw, graphData] = await Promise.all([rickshawPromise, reqPromise])

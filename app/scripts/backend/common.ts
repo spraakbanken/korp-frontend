@@ -1,20 +1,40 @@
 /** @format */
-import { fetchConfAddMethod } from "@/util"
+import { selectHttpMethod } from "@/util"
 import { getAuthorizationHeader } from "@/components/auth/auth"
 import settings from "@/settings"
-import { API, ErrorMessage, ProgressReport, ProgressResponse, Response, ResponseBase } from "./types"
+import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response as KResponse } from "./types"
 import { omitBy, pickBy } from "lodash"
+
+type RequestOptions<K extends keyof API> = {
+    /** Abort signal to cancel the request */
+    abortSignal?: AbortSignal
+    /** Callback to visualize progress and paged data */
+    onProgress?: ProgressHandler<K>
+}
 
 export async function korpRequest<K extends keyof API>(
     endpoint: K,
-    params: API[K]["params"]
+    params: API[K]["params"],
+    options: RequestOptions<K> = {}
 ): Promise<API[K]["response"]> {
+    // Skip params with `null` or `undefined`
     params = omitBy(params, (value) => value == null) as API[K]["params"]
-    const { url, request } = fetchConfAddMethod(settings.korp_backend_url + "/" + endpoint, params)
+    // Switch to POST if the URL would be to long
+    const { url, request } = selectHttpMethod(settings.korp_backend_url + "/" + endpoint, params)
     request.headers = { ...request.headers, ...getAuthorizationHeader() }
+    if (options.abortSignal) request.signal = options.abortSignal
 
+    // Send request
     const response = await fetch(url, request)
-    const data = (await response.json()) as Response<API[K]["response"]>
+
+    // If progress handler given, parse response data as it comes in
+    const json = await readIncrementally(response, (json) => {
+        if (options.onProgress) {
+            const progress = calcProgress<K>(json)
+            if (progress) options.onProgress(progress)
+        }
+    })
+    const data: KResponse<API[K]["response"]> = JSON.parse(json)
 
     if ("ERROR" in data) {
         const { type, value } = data.ERROR as ErrorMessage
@@ -24,6 +44,19 @@ export async function korpRequest<K extends keyof API>(
     return data
 }
 
+/** Read and handle a HTTP response body as it comes in */
+async function readIncrementally(response: Response, handle: (content: string) => void): Promise<string> {
+    const reader = response.body!.getReader()
+    let content = ""
+    while (true) {
+        const { done, value } = await reader.read()
+        content += new TextDecoder("utf-8").decode(value)
+        handle(content)
+        if (done) break
+    }
+    return content
+}
+
 export class KorpBackendError extends Error {
     constructor(public readonly type: string, public readonly value: string) {
         super(`${type}: ${value}`)
@@ -31,16 +64,9 @@ export class KorpBackendError extends Error {
     }
 }
 
-export function calcProgress<K extends keyof API>(e: ProgressEvent): ProgressReport<K> {
-    const xhr = e.target as XMLHttpRequest
-    type PartialResponse = ResponseBase & ProgressResponse & Partial<API[K]["response"]>
-
-    let data: PartialResponse = {}
-    try {
-        data = parsePartialJson(xhr.responseText)
-    } catch (error) {
-        data = {}
-    }
+export function calcProgress<K extends keyof API>(partialJson: string): ProgressReport<K> | undefined {
+    const data = parsePartialJson<ProgressResponse & KResponse<API[K]["response"]>>(partialJson)
+    if (!data) return
 
     /** Look up sizes of corpora and sum them */
     const getCorpusSize = (corpora: string[]) =>
@@ -71,12 +97,10 @@ export function calcProgress<K extends keyof API>(e: ProgressEvent): ProgressRep
     return { data, percent, hits }
 }
 
-/** Try to parse partial JSON data (of an in-progress HTTP response). */
-function parsePartialJson<T = any>(data: string): T {
-    // If it ends with comma + space, replace that with a closing curly.
-    const reEndsWithComma = /,\s*$/
-    if (data.match(reEndsWithComma)) {
-        data = data.replace(reEndsWithComma, "}")
-    }
-    return JSON.parse(data)
+/** Try to parse partial JSON data (of an in-progress HTTP response). Quite likely to throw `SyntaxError`. */
+export function parsePartialJson<T = any>(json: string): Partial<T> | undefined {
+    try {
+        // If it ends with comma + space, replace that with a closing curly.
+        return JSON.parse(json.replace(/,\s*$/, "}"))
+    } catch {}
 }

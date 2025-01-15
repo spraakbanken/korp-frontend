@@ -20,7 +20,6 @@ type StatsResultCtrlScope = TabHashScope & {
     data: Dataset
     error: boolean
     hasResult: boolean
-    ignoreAbort: boolean
     inOrder: boolean
     loading: boolean
     no_hits: boolean
@@ -64,6 +63,10 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
 
             s.$on("abort_requests", () => {
                 s.proxy.abort()
+                if (s.loading) {
+                    s.aborted = true
+                    s.loading = false
+                }
             })
 
             s.onentry = () => {
@@ -104,49 +107,33 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 
-                if (s.proxy.hasPending()) {
-                    s.ignoreAbort = true
-                } else {
-                    s.ignoreAbort = false
-                    s.resetView()
-                }
+                // Abort any running request
+                if (s.loading) s.proxy.abort()
+                s.resetView()
 
                 s.loading = true
                 s.proxy
-                    .makeRequest(cqp, (progressObj) => {
-                        $timeout(() => s.onProgress(progressObj))
-                    })
-                    .then(
-                        (result) => {
-                            $timeout(() => {
-                                const [data, columns, searchParams] = result
-                                s.loading = false
-                                s.data = data
-                                s.searchParams = searchParams
-                                s.renderResult(columns, data)
-                            })
-                        },
-                        (textStatus, err) => {
-                            $timeout(() => {
-                                if (s.ignoreAbort) {
-                                    return
-                                }
-                                s.loading = false
-                                if (textStatus === "abort") {
-                                    s.aborted = true
-                                } else {
-                                    s.resultError(err)
-                                }
-                            })
-                        }
+                    .makeRequest(cqp, (progressObj) => $timeout(() => s.onProgress(progressObj)))
+                    .then((result) =>
+                        $timeout(() => {
+                            const [data, columns, searchParams] = result
+                            s.loading = false
+                            s.data = data
+                            s.searchParams = searchParams
+                            s.renderResult(columns, data)
+                        })
                     )
-            }
-
-            s.resultError = (data) => {
-                console.error("json fetch error: ", data)
-                s.loading = false
-                s.resetView()
-                s.error = true
+                    .catch((error) => {
+                        // AbortError is expected if a new search is made before the previous one is finished
+                        if ((error.name = "AbortError")) return
+                        console.error(error)
+                        // TODO Show error
+                        $timeout(() => {
+                            s.resetView()
+                            s.error = true
+                            s.loading = false
+                        })
+                    })
             }
 
             s.renderResult = (columns, data) => {

@@ -37,12 +37,14 @@ export type ProgressResponse = {
 
 export type ProgressReport<K extends keyof API> = {
     /** Response data */
-    data: ResponseBase & ProgressResponse & Partial<API[K]["response"]>
+    data: Partial<Response<API[K]["response"]>>
     /** How many percent of the material has been searched. */
     percent: number
     /** How many search hits so far. */
     hits: number | null
 }
+
+export type ProgressHandler<K extends keyof API = keyof API> = (report: ProgressReport<K>) => void
 
 /** Frequency count as absolute and relative (to some total size). */
 export type AbsRelTuple = { absolute: number; relative: number }
