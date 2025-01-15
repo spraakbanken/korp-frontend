@@ -6,7 +6,7 @@ import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
 import { isLemgram, lemgramToString, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
-import { ProgressReport, Response } from "@/backend/types"
+import { ProgressReport } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { TabHashScope } from "@/directives/tab-hash"
 import { ApiRelation, RelationsResponse } from "@/backend/types/relations"
@@ -18,7 +18,7 @@ type WordpicCtrlScope = TabHashScope & {
     countCorpora: () => number | null
     data?: TableDrawData[]
     drawTables: (tables: [string, string][], data: ApiRelation[]) => void
-    error: boolean
+    error?: string
     hasData: boolean
     hitSettings: `${number}`[]
     loading: boolean
@@ -67,7 +67,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             const s = $scope
             s.proxy = lemgramProxyFactory.create()
 
-            s.error = false
             s.loading = false
             s.progress = 0
             s.wordPic = $location.search().word_pic != null
@@ -99,7 +98,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 s.data = undefined
                 s.aborted = false
                 s.noHits = false
-                s.error = false
+                s.error = undefined
             }
 
             s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["percent"]))
@@ -138,7 +137,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                         console.error(error)
                         // TODO Show error
                         $timeout(() => {
-                            s.error = true
+                            s.error = error
                             s.loading = false
                         })
                     })

@@ -5,6 +5,7 @@
 ### Added
 
 - Sidebar: Collapse and expand attribute sections [#199](https://github.com/spraakbanken/korp-frontend/issues/199)
+- Error messages from backend show up in the GUI [#97](https://github.com/spraakbanken/korp-frontend/issues/97)
 
 ### Changed
 

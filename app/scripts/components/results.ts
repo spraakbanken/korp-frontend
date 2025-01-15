@@ -45,7 +45,7 @@ angular.module("korpApp").component("results", {
                             ></tab-preloader>
                         </uib-tab-heading>
                         <div class="results-kwic" ng-class="{reading_mode : reading_mode, loading: loading}">
-                            <korp-error ng-if="error"></korp-error>
+                            <korp-error ng-if="error" message="{{error}}"></korp-error>
                             <kwic
                                 ng-if="!error"
                                 aborted="aborted"
@@ -76,7 +76,7 @@ angular.module("korpApp").component("results", {
                                 progress="countCorpora() > 1 ? progress : undefined"
                             ></tab-preloader>
                         </uib-tab-heading>
-                        <korp-error ng-if="error"></korp-error>
+                        <korp-error ng-if="error" message="{{error}}"></korp-error>
                         <statistics
                             aborted="aborted"
                             activate="activate"
@@ -119,7 +119,7 @@ angular.module("korpApp").component("results", {
                                 no-hits="noHits"
                             ></word-picture>
                         </div>
-                        <korp-error ng-if="error"></korp-error>
+                        <korp-error ng-if="error" message="{{error}}"></korp-error>
                         <json-button
                             ng-if="wordPic && hasData"
                             endpoint="'relations'"
@@ -133,7 +133,7 @@ angular.module("korpApp").component("results", {
                             <tab-preloader ng-if="loading"></tab-preloader>
                             <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
                         </uib-tab-heading>
-                        <korp-error ng-if="error"></korp-error>
+                        <korp-error ng-if="error" message="{{error}}"></korp-error>
                         <div
                             class="results-kwic"
                             ng-if="!error"
@@ -179,7 +179,7 @@ angular.module("korpApp").component("results", {
                             <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
                         </uib-tab-heading>
                         <div class="compare_result" ng-class="{loading : loading}">
-                            <korp-error ng-if="error"></korp-error>
+                            <korp-error ng-if="error" message="{{error}}"></korp-error>
                             <div class="column column_1" ng-if="!error">
                                 <h2>{{'compare_distinctive' | loc:$root.lang}} <em>{{cmp1.label}}</em></h2>
                                 <ul class="negative">
@@ -222,7 +222,7 @@ angular.module("korpApp").component("results", {
                             <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
                         </uib-tab-heading>
                         <div class="map_result" ng-class="{loading : loading}">
-                            <korp-error ng-if="error"></korp-error>
+                            <korp-error ng-if="error" message="{{error}}"></korp-error>
                             <div ng-if="!loading && numResults != 0">
                                 <div class="rickshaw_legend" id="mapHeader">
                                     <div
@@ -275,7 +275,7 @@ angular.module("korpApp").component("results", {
                             <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
                         </uib-tab-heading>
                         <div>
-                            <korp-error ng-if="error"></korp-error>
+                            <korp-error ng-if="error" message="{{error}}"></korp-error>
                             <div ng-if="!loading" text-reader="text-reader"></div>
                         </div>
                     </uib-tab>

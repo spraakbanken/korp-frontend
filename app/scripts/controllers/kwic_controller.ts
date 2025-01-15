@@ -21,7 +21,7 @@ export type KwicCtrlScope = TabHashScope & {
     countCorpora?: () => number | null
     corpusOrder?: string[]
     cqp?: string
-    error?: boolean
+    error?: string
     getProxy: () => KwicProxy
     /** Number of total search hits, updated when a search is completed. */
     hits?: number
@@ -200,7 +200,7 @@ export class KwicCtrl implements IController {
             s.progress = 0
             s.loading = true
             s.aborted = false
-            s.error = false
+            s.error = undefined
 
             const ajaxParams = s.buildQueryOptions(isPaging)
 
@@ -222,7 +222,7 @@ export class KwicCtrl implements IController {
                     console.error(error)
                     // TODO Show error
                     $timeout(() => {
-                        s.error = true
+                        s.error = error
                         s.loading = false
                     })
                 })

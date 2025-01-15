@@ -27,7 +27,7 @@ type TrendDiagramController = IController & {
     proxy: GraphProxy
     $result: JQLite
     mode: "line" | "bar" | "table"
-    error: boolean
+    error?: string
 }
 
 type Series = {
@@ -75,7 +75,7 @@ const PALETTE = [
 
 angular.module("korpApp").component("trendDiagram", {
     template: html`
-        <korp-error ng-show="$ctrl.error"></korp-error>
+        <korp-error ng-if="$ctrl.error" message="{{$ctrl.error}}"></korp-error>
         <div class="graph_tab" ng-show="!$ctrl.error">
             <div class="graph_header">
                 <div class="controls">
@@ -142,7 +142,6 @@ angular.module("korpApp").component("trendDiagram", {
             $ctrl.proxy = graphProxyFactory.create()
             $ctrl.$result = $element.find(".graph_tab")
             $ctrl.mode = "line"
-            $ctrl.error = false
 
             $ctrl.$onInit = () => {
                 const interval = $ctrl.data.corpusListing.getMomentInterval()
@@ -566,7 +565,7 @@ angular.module("korpApp").component("trendDiagram", {
 
             function renderGraph(
                 Rickshaw: any,
-                data: Response<CountTimeResponse>,
+                data: CountTimeResponse,
                 cqp: string,
                 currentZoom: Level,
                 showTotal?: boolean
@@ -576,11 +575,6 @@ angular.module("korpApp").component("trendDiagram", {
                 const done = () => {
                     $ctrl.localUpdateLoading(false)
                     $(window).trigger("resize")
-                }
-
-                if ("ERROR" in data) {
-                    $ctrl.error = true
-                    return
                 }
 
                 if ($ctrl.graph) {
@@ -785,7 +779,7 @@ angular.module("korpApp").component("trendDiagram", {
             ) {
                 const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
                 $ctrl.localUpdateLoading(true)
-                $ctrl.error = false
+                $ctrl.error = undefined
                 const currentZoom = $ctrl.zoom
                 const reqPromise = $ctrl.proxy.makeRequest(
                     cqp,
@@ -799,11 +793,11 @@ angular.module("korpApp").component("trendDiagram", {
                 try {
                     const [Rickshaw, graphData] = await Promise.all([rickshawPromise, reqPromise])
                     $timeout(() => renderGraph(Rickshaw, graphData, cqp, currentZoom, showTotal))
-                } catch (e) {
+                } catch (error) {
                     $timeout(() => {
-                        console.error("graph crash", e)
+                        console.error(error)
+                        $ctrl.error = error
                         $ctrl.localUpdateLoading(false)
-                        $ctrl.error = true
                     })
                 }
             }

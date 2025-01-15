@@ -13,7 +13,7 @@ type CompareCtrlScope = TabHashScope & {
     closeTab: (index: number, e: Event) => void
     cmp1: SavedSearch
     cmp2: SavedSearch
-    error: boolean
+    error?: string
     loading: boolean
     max: number
     promise: CompareTab
@@ -160,9 +160,10 @@ angular.module("korpApp").directive("compareCtrl", () => ({
                         return $rootScope.kwicTabs.push({ queryParams: opts })
                     }
                 },
-                function () {
+                function (error) {
                     s.loading = false
-                    s.error = true
+                    s.error = error
+                    s.$digest()
                 }
             )
         },

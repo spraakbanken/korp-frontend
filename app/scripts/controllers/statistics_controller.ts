@@ -18,7 +18,7 @@ type StatsResultCtrlScope = TabHashScope & {
     columns: SlickgridColumn[]
     countCorpora: () => number | null
     data: Dataset
-    error: boolean
+    error?: string
     hasResult: boolean
     inOrder: boolean
     loading: boolean
@@ -52,7 +52,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
         ) => {
             const s = $scope
             s.loading = false
-            s.error = false
             s.progress = 0
 
             s.proxy = statsProxyFactory.create()
@@ -91,7 +90,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["percent"]))
 
             s.makeRequest = (cqp) => {
-                s.error = false
+                s.error = undefined
                 const grid = document.getElementById("myGrid")
                 if (!grid) throw new Error("myGrid element not found")
                 grid.innerHTML = ""
@@ -130,7 +129,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                         // TODO Show error
                         $timeout(() => {
                             s.resetView()
-                            s.error = true
+                            s.error = error
                             s.loading = false
                         })
                     })

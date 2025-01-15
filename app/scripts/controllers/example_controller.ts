@@ -46,7 +46,7 @@ class ExampleCtrl extends KwicCtrl {
         s.hits = undefined
         s.hitsInProgress = undefined
         s.page = 0
-        s.error = false
+        s.error = undefined
         s.hitsPictureData = null
         s.kwic = undefined
         s.corpusHits = undefined
@@ -136,7 +136,7 @@ class ExampleCtrl extends KwicCtrl {
                     if (error.name == "AbortError") return
                     console.error(error)
                     // TODO Show error
-                    $timeout(() => (s.error = true))
+                    $timeout(() => (s.error = error))
                 })
                 .finally(() => $timeout(() => (s.loading = false)))
         }
