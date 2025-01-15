@@ -445,7 +445,10 @@ angular.module("korpApp").component("statistics", {
                 $ctrl.noRowsError = false
 
                 // TODO this is wrong, it should use the previous search
-                const cqpExpr = expandOperators(searches.getCqpExpr())
+                let cqp = searches.getCqpExpr()
+                try {
+                    cqp = expandOperators(cqp)
+                } catch {}
 
                 const cqpExprs: Record<string, string> = {}
                 for (let rowIx of selectedRows) {
@@ -465,7 +468,7 @@ angular.module("korpApp").component("statistics", {
                 const selectedAttribute = selectedAttributes[0]
 
                 const within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
-                const request = requestMapData(cqpExpr, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
+                const request = requestMapData(cqp, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
                 $rootScope.mapTabs.push(request)
             }
 
