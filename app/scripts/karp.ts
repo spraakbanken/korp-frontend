@@ -37,11 +37,11 @@ async function query<T>(lexicons: string[], q: string, path: string, params?: ob
 }
 
 export const getLemgrams = (wordForm: string, morphologies: string[]) =>
-    query<string>(morphologies, wfQuery(wordForm), "entry.lemgram", { size: 100 })
+    query<string>(morphologies, wfQuery(wordForm), "entry.lemgram", { size: 10_000 })
 
 export const getSenseId = (lemgram: string) => query<string>(["saldo"], `equals|lemgrams|${lemgram}`, "entry.senseID")
 
 export const getSenses = (lemgrams: string[]) =>
-    query<SaldoEntry>(["saldo"], equals("lemgrams", lemgrams), "entry", { size: 500 })
+    query<SaldoEntry>(["saldo"], equals("lemgrams", lemgrams), "entry", { size: 10_000 })
 
 export const getSwefnFrame = (senses: string[]) => query<SwefnEntry>(["swefn"], equals("LUs", senses), "entry")
