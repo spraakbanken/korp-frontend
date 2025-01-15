@@ -82,6 +82,7 @@
     "download": "Download as",
     "download_response": "Save API response (JSON)",
     "toggle_select": "select",
+    "modal_close": "Close",
 
     "is": "is",
     "equal": "equal",

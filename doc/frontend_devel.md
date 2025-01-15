@@ -842,6 +842,13 @@ Aim to write code that is easily understood, and supplement with comments as nee
 
 Files should be named using snake case: `my_file.js`.
 
+### Error handling
+
+- Throw a specific error when something fails (e.g. `KorpBackendError` if an API request fails)
+- Catch errors where they can be handled, as low as possible in the call hierarchy (e.g. log and continue, or show a message)
+
+Unhandled errors are caught and shown by `window` listeners and the `$exceptionHandler` service.
+
 ### Dependencies
 
 Do not add new dependencies to `package.json`, unless it cannot absolutely be avoided, and the new dependency is a widely used library in active development.

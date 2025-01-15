@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IControllerService, IHttpService, type IRequestConfig, type IScope } from "angular"
+import angular, { IControllerService, IHttpService, ui, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
@@ -26,6 +26,7 @@ type ServiceTypes = {
     $http: IHttpService
     $location: LocationService
     $rootScope: RootScope
+    $uibModal: ui.bootstrap.IModalService
     // Add types here as needed.
 }
 
@@ -306,6 +307,17 @@ export function saldoToString(saldoId: string): string {
  */
 function numberToSuperscript(number: string | number): string {
     return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
+}
+
+/** Show a basic modal with vanilla JS */
+export function simpleModal(html: string) {
+    const dialog = document.createElement("dialog")
+    dialog.classList.add("bg-white", "p-4", "rounded-lg", "shadow-lg", "border")
+    const button = '<button class="block mx-auto btn btn-primary mt-4">OK</button>'
+    dialog.innerHTML = html + button
+    document.body.appendChild(dialog)
+    dialog.showModal()
+    dialog.querySelector("button")!.addEventListener("click", () => dialog.close())
 }
 
 // Add download links for other formats, defined in

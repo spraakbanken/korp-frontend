@@ -82,6 +82,7 @@
     "download": "Ladda ner som",
     "download_response": "Spara API-svar (JSON)",
     "toggle_select": "välj",
+    "modal_close": "Stäng",
 
     "case_insensitive": "skiftlägesoberoende",
     "case_sensitive": "skiftlägesberoende",
