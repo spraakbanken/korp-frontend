@@ -30,6 +30,7 @@ const createSearchOption = (params: SearchParams): SearchOption => ({
 
 const getLabel = (params: SearchParams): string => {
     if (!params.search) return "–"
+    if (params.search == "cqp") return params.cqp || "–"
     const [type, value] = splitFirst("|", params.search)
     return type === "lemgram" ? unregescape(value) : value
 }

@@ -77,20 +77,23 @@ export type SortMethod = "" | "keyword" | "left" | "right" | "random"
 
 export type SearchParams = Pick<HashParams, SearchParamNames>
 
-/** Parameters that define a search result set */
-export type SearchParamNames =
+export type SearchParamNames = Extract<
+    keyof HashParams,
     | "corpus"
     | "cqp"
     | "global_filter"
     | "in_order"
     | "parallel_corpora"
     | "search"
+    | "search_tab"
     | "within"
     | "prefix"
     | "mid_comp"
     | "suffix"
     | "isCaseInsensitive"
+>
 
+/** Parameters that define a search result set */
 export const getSearchParamNames = (): SearchParamNames[] => [
     "corpus",
     "cqp",
@@ -98,6 +101,7 @@ export const getSearchParamNames = (): SearchParamNames[] => [
     "in_order",
     "parallel_corpora",
     "search",
+    "search_tab",
     "within",
     "prefix",
     "mid_comp",
