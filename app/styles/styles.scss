@@ -787,8 +787,7 @@ a {
     z-index: 0;
     position: absolute;
     top : 245px;
-    right : 0;
-    background : url("../img/feather.svg") no-repeat;
+    right : 0;    
     background-size: contain;
     height: 430px;
     width : 230px;
@@ -1114,6 +1113,7 @@ h2, h3 {
 
 .modal-header {
   display : block;
+
   & > * {
     display: inline-block;
     width : 49%;
@@ -1125,6 +1125,9 @@ h2, h3 {
     &:hover {
       color : darkgrey;
     }
+  }
+  h1 {
+    font-size:36px;
   }
 }
 
