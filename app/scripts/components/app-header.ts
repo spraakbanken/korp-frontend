@@ -1,11 +1,11 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService, ui } from "angular"
 import _ from "lodash"
-import korpLogo from "../../img/korp_slogan.svg"
-import korpLogoEn from "../../img/korp_slogan_en.svg"
+import korpLogo from "../../img/korp.svg"
+import korpLogoEn from "../../img/korp.svg"
 import sbxLogo from "../../img/sprakbanken_text_slogan.svg"
-import sbxLogoEn from "../../img/sprakbanken_text_slogan_en.svg"
-import guLogo from "../../img/gu_logo_sv_head.svg"
+import sbxLogoEn from "../../img/sam_merki_texti.png"
+import guLogo from "../../img/clarin_is.png"
 import settings from "@/settings"
 import currentMode from "@/mode"
 import { collatorSort, html } from "@/util"
@@ -57,7 +57,7 @@ angular.module("korpApp").component("appHeader", {
                 </ul>
 
                 <div class="flex items-center gap-4">
-                    <login-status></login-status>
+                    
 
                     <radio-list options="$ctrl.languages" ng-model="lang"> </radio-list>
 
@@ -78,21 +78,15 @@ angular.module("korpApp").component("appHeader", {
                                 <a id="about" ng-click="$ctrl.citeClick()"> {{'about' | loc:$root.lang}} </a>
                             </li>
                             <li>
-                                <a href="https://spraakbanken.gu.se/verktyg/korp/användarhandledning" target="_blank">
+                                <a href="https://malheildir.arnastofnun.is/userguide/main.html" target="_blank">
                                     {{'docs' | loc:$root.lang}}
                                 </a>
                             </li>
                             <li id="korplink">
                                 <a href="/korp"> {{'korp' | loc:$root.lang}} </a>
                             </li>
-                            <li id="korplablink">
-                                <a href="/korplabb"> {{'korp_lab' | loc:$root.lang}} </a>
-                            </li>
-                            <li>
-                                <a href="https://spraakbanken.gu.se/sparv" target="_blank">
-                                    {{'import_chain' | loc:$root.lang}}
-                                </a>
-                            </li>
+                            
+                            
                         </ul>
                     </div>
                 </div>
