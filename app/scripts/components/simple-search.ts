@@ -40,7 +40,7 @@ type SimpleSearchController = IController & {
     showAllRelated: () => void
     updateFreeOrderEnabled: () => void
     doSearch: () => void
-    onChange: (output: string, isRawOutput: boolean) => void
+    onChange: (value: string, isPlain: boolean) => void
 }
 
 angular.module("korpApp").component("simpleSearch", {
@@ -292,11 +292,11 @@ angular.module("korpApp").component("simpleSearch", {
                     if (search.type === "word") {
                         ctrl.input = search.val
                         ctrl.isRawInput = true
-                        ctrl.currentText = search.val
+                        ctrl.onChange(search.val, true)
                     } else {
                         ctrl.input = unregescape(search.val)
                         ctrl.isRawInput = false
-                        ctrl.lemgram = search.val
+                        ctrl.onChange(ctrl.input, false)
                     }
                     $rootScope.simpleCQP = expandOperators(ctrl.getCQP())
                     ctrl.updateFreeOrderEnabled()
@@ -316,15 +316,9 @@ angular.module("korpApp").component("simpleSearch", {
                 }
             )
 
-            ctrl.onChange = (output, isRawOutput) => {
-                if (isRawOutput) {
-                    ctrl.currentText = output
-                    ctrl.lemgram = undefined
-                } else {
-                    ctrl.lemgram = regescape(output)
-                    ctrl.currentText = undefined
-                }
-
+            ctrl.onChange = (value, isPlain) => {
+                ctrl.currentText = isPlain ? value : undefined
+                ctrl.lemgram = !isPlain ? regescape(value) : undefined
                 ctrl.updateFreeOrderEnabled()
             }
 
