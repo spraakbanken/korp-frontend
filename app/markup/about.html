@@ -1,56 +1,44 @@
 <div class="modal-header">
-    <h2>Korp version 9.7.2</h2>
+    <h1>{{'about_corpora' | loc:lang}}</h1>
     <span ng-click="clickX()" class="close-x">×</span>
 
 </div>
 <div id="about_body" class="modal-body" >
-    <p ng-bind-html="'about_body' | loc:lang | trust" ></p>
-    
-    <b ng-bind-html="'about_cite_header' | loc:lang | trust"></b>
-    <p ng-bind-html="'about_cite' | loc:lang | trust"></p>
+  <p ng-bind-html="'about_intro' | loc:lang | trust"></p>
+  <h3><b>{{'the_igc' | loc:lang}}<b></h3>
+  <p ng-bind-html="'about_gwc' | loc:lang | trust"></p>
+  <p ng-bind-html="'about_gwc_cite' | loc:lang | trust"></p>
+  <p class=cite ng-bind-html="'about_gwc_cite2' | loc:lang | trust"></p>
+  <p ng-bind-html="'about_gwc2' | loc:lang | trust"></p>
 
-    <div>
-        <b>{{'about_man' | loc:lang}}</b>
-        <ul>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/lars">Lars Borin</a></li>
-            <li>
-                <a target="_blank"  href="https://spraakbanken.gu.se/om/personal/markus">Markus Forsberg</a></li>
-        </ul>
-        <b>{{'about_dev' | loc:lang}}</b>
-        <ul>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/maria">Maria Öhrman</a>
-            </li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/martin">Martin Hammarstedt</a>
-            </li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/anne">Anne Schumacher</a>
-            </li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/arild">Arild Matsson</a>
-            </li>
-        </ul>
-        <b>{{'about_contributors' | loc:lang}}</b>
-        <ul>
-            <li>Dan Rosén</li>
-            <li>Johan Roxendal</li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/jonatan">Jonatan Uppström</a>
-            </li>
-            <li>Jyrki Niemi</li>
-            <li>Malin Ahlberg</li>
-            <li>Olof Olsson</li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/peter">Peter Ljunglöf</a>
-            </li>
-            <li>Roland Schäfer</li>
-        </ul>
+  <h3><b>{{'mim' | loc:lang}}</b></h3>
+  <p ng-bind-html="'about_mim' | loc:lang | trust"></p>
+  <p ng-bind-html="'about_mim_cite' | loc:lang | trust"></p>
+  <p class=cite ng-bind-html="'about_mim_cite2' | loc:lang | trust"></p>
 
-        <span>
-            {{'about_logo' | loc:lang}}
-            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/staffan">Staffan Melin</a></span>.
+  <h3><b>{{'otb' | loc:lang}}</b></h3>
+  <p ng-bind-html="'about_otb' | loc:lang | trust"></p>
+  <p ng-bind-html="'about_otb_cite' | loc:lang | trust"></p>
+  <p class=cite ng-bind-html="'about_otb_cite2' | loc:lang | trust"></p>
 
-    </div>
+  <h3><b>{{'the_sagas' | loc:lang}}</b></h3>
+  <p ng-bind-html="'about_fornritin' | loc:lang | trust"></p>
+  <p ng-bind-html="'about_fornritin_cite' | loc:lang | trust"></p>
+  <p class=cite ng-bind-html="'about_fornritin_cite2' | loc:lang | trust"></p>
+
+  <h3><b>{{'parice' | loc:lang}}</b></h3>
+  <p ng-bind-html="'about_parallel' | loc:lang | trust"></p>
+  <p ng-bind-html="'about_parallel_cite' | loc:lang | trust"></p>
+  <p class=cite ng-bind-html="'about_parallel_cite2' | loc:lang | trust"></p>
+
+
+  <p><hr><p>
+
+  <b ng-bind-html="'about_korp_header' | loc:lang | trust"></b>
+  <p>
+      <span ng-bind-html="'about_body' | loc:lang | trust"></span>
+      <a target='_blank' href='http://spraakbanken.gu.se'>
+          <img style='max-width: 100px; vertical-align: middle' src='../img/korp.svg'>
+      </a>
+  </p>
 </div>
