@@ -209,13 +209,14 @@ export class KwicCtrl implements IController {
                     { ajaxParams },
                     s.page,
                     (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
-                    (data) =>
-                        $timeout(() => {
-                            s.renderResult(data)
-                            s.loading = false
-                        })
+                    (data) => $timeout(() => s.renderResult(data))
                 )
-                .then((data) => $timeout(() => s.renderCompleteResult(data, isPaging)))
+                .then((data) =>
+                    $timeout(() => {
+                        s.loading = false
+                        s.renderCompleteResult(data, isPaging)
+                    })
+                )
                 .catch((error) => {
                     // AbortError is expected if a new search is made before the previous one is finished
                     if (error.name == "AbortError") return
