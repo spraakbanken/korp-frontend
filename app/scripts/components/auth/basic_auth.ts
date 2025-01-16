@@ -53,6 +53,9 @@ export async function login(name: string, pass: string, saveLogin: boolean): Pro
     return data
 }
 
+export const hasCredential = (corpusId: string): boolean =>
+    state.loginObj?.credentials?.includes(corpusId.toUpperCase()) || false
+
 export const logout = (): void => {
     state.loginObj = undefined
     localStorage.removeItem("creds")
