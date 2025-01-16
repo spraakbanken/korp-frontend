@@ -282,6 +282,8 @@ angular.module("korpApp").component("simpleSearch", {
                     size: "lg",
                     windowClass: "related",
                 })
+                // Ignore rejection from dismissing the modal
+                modalInstance.result.catch(() => {})
             }
 
             $rootScope.$watch("activeSearch", () => {

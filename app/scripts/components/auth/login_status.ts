@@ -51,8 +51,8 @@ export const loginStatusComponent: IComponentOptions = {
                     scope: $scope,
                     size: "sm",
                 })
-
-                modal.result.then(() => modal.close())
+                // Ignore rejection from dismissing the modal
+                modal.result.catch(() => {})
             }
         },
     ],

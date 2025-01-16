@@ -312,9 +312,11 @@ korpApp.run([
                 </div>`,
                 scope: s,
                 size: "md",
-                backdrop: "static",
+                // Prevent backdrop click if not resolvable
+                backdrop: resolvable || "static",
                 keyboard: false,
             })
+            modal.result.catch(() => onClose?.())
 
             s.translations = translations
 

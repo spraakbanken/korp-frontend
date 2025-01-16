@@ -43,6 +43,8 @@ angular.module("korpApp").controller("VideoCtrl", [
                     },
                 },
             })
+            // Ignore rejection from dismissing the modal
+            modalInstance.result.catch(() => {})
         }
 
         $scope.startTime = 0

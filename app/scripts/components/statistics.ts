@@ -525,7 +525,7 @@ angular.module("korpApp").component("statistics", {
                     scope: $scope,
                     windowClass: "!text-base",
                 })
-                // Ignore rejection from closing the modal
+                // Ignore rejection from dismissing the modal
                 modal.result.catch(() => {})
             }
 
