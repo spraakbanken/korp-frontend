@@ -62,22 +62,25 @@ angular.module("korpApp").component("simpleSearch", {
                         on-search-save="$ctrl.onSearchSave(name)"
                     ></search-submit>
                     <div class="opts">
-                        <input
-                            id="freeOrderChk"
-                            type="checkbox"
-                            ng-model="$ctrl.freeOrder"
-                            ng-disabled="!$ctrl.freeOrderEnabled"
-                        />
-                        <label for="freeOrderChk"> {{'free_order_chk' | loc:$root.lang}}</label>
+                      
+                      <div class="">
                         <span> {{'and' | loc:$root.lang}} </span>
                         <span> {{'and_include' | loc:$root.lang}} </span>
+                      </div>
+                      <div>                        
                         <input id="prefixChk" type="checkbox" ng-model="$ctrl.prefix" />
                         <label for="prefixChk"> {{'prefix_chk' | loc:$root.lang}}</label>
+                      </div>
+                      <div>
                         <input id="midChk" type="checkbox" ng-model="$ctrl.mid_comp" />
-                        <label for="midChk"> {{'compound_middle' | loc:$root.lang}} </label>
+                        <label for="midChk"> {{'compound_middle' | loc:$root.lang}}</label>
+                      </div>
+                      <div>
                         <input id="suffixChk" type="checkbox" ng-model="$ctrl.suffix" />
                         <label for="suffixChk"> {{'suffix_chk' | loc:$root.lang}} </label>
                         <span> {{'and' | loc:$root.lang}} </span>
+                      </div>
+                        
                         <input id="caseChk" type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
                         <label for="caseChk"> {{'case_insensitive' | loc:$root.lang}} </label>
                     </div>
