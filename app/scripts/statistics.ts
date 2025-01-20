@@ -2,11 +2,11 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config"
+import { StatsNormalized } from "./backend/stats-proxy"
 import {
     Dataset,
     isTotalRow,
     Row,
-    StatsNormalized,
     StatisticsWorkerMessage,
     StatisticsWorkerResult,
     SearchParams,
@@ -83,49 +83,50 @@ const createStatisticsService = function () {
         return columns
     }
 
-    const processData = function (
-        def: JQuery.Deferred<StatisticsWorkerResult>,
+    function processData(
         originalCorpora: string,
         data: StatsNormalized,
         reduceVals: string[],
         reduceValLabels: LangString[],
         ignoreCase: boolean,
         prevNonExpandedCQP: string
-    ) {
+    ): Promise<StatisticsWorkerResult> {
         const corpora = Object.keys(data.corpora)
         const columns = createColumns(corpora, reduceVals, reduceValLabels)
 
-        const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
-        statsWorker.onmessage = function (e: MessageEvent<Dataset>) {
-            // Format the values of the attributes we are reducing by
-            const cl = settings.corpusListing.subsetFactory(corpora)
-            const structAttrs = cl.getStructAttrs()
-            const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
-            for (const row of e.data) {
-                if (isTotalRow(row)) continue
-                for (const attr of reduceVals) {
-                    const words = row.statsValues.map((word) => word[attr][0])
-                    row.formattedValue[attr] = stringifiers[attr](words)
-                }
-            }
+        // Get stringifiers for formatting attribute values
+        const structAttrs = settings.corpusListing.subsetFactory(corpora).getStructAttrs()
+        const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
 
-            const searchParams: SearchParams = {
-                reduceVals,
-                ignoreCase,
-                originalCorpora,
-                corpora: _.keys(data.corpora),
-                prevNonExpandedCQP,
-            }
-            const result = [e.data, columns, searchParams]
-
-            def.resolve(result as StatisticsWorkerResult)
+        const searchParams: SearchParams = {
+            reduceVals,
+            ignoreCase,
+            originalCorpora,
+            corpora: _.keys(data.corpora),
+            prevNonExpandedCQP,
         }
 
-        statsWorker.postMessage({
-            type: "korpStatistics",
-            data,
-            groupStatistics: settings.group_statistics,
-        } as StatisticsWorkerMessage)
+        return new Promise((resolve) => {
+            const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
+            statsWorker.onmessage = function (e: MessageEvent<Dataset>) {
+                // Format the values of the attributes we are reducing by
+                for (const row of e.data) {
+                    if (isTotalRow(row)) continue
+                    for (const attr of reduceVals) {
+                        const words = row.statsValues.map((word) => word[attr][0])
+                        row.formattedValue[attr] = stringifiers[attr](words)
+                    }
+                }
+
+                resolve([e.data, columns, searchParams])
+            }
+
+            statsWorker.postMessage({
+                type: "korpStatistics",
+                data,
+                groupStatistics: settings.group_statistics,
+            } satisfies StatisticsWorkerMessage)
+        })
     }
 
     return { processData }

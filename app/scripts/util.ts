@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IControllerService, IHttpService, type IRequestConfig, type IScope } from "angular"
+import angular, { IControllerService, IHttpService, ui, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
@@ -9,9 +9,9 @@ import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
-import { ApiKwic, KorpQueryResponse } from "./backend/kwic-proxy"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { isCorpusHeading, LinkedKwic, Row } from "./components/kwic"
+import { LinkedKwic, Row } from "./components/kwic"
+import { ApiKwic } from "./backend/types"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -26,6 +26,7 @@ type ServiceTypes = {
     $http: IHttpService
     $location: LocationService
     $rootScope: RootScope
+    $uibModal: ui.bootstrap.IModalService
     // Add types here as needed.
 }
 
@@ -308,19 +309,25 @@ function numberToSuperscript(number: string | number): string {
     return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
 }
 
+/** Show a basic modal with vanilla JS */
+export function simpleModal(html: string) {
+    const dialog = document.createElement("dialog")
+    dialog.classList.add("bg-white", "p-4", "rounded-lg", "shadow-lg", "border")
+    const button = '<button class="block mx-auto btn btn-primary mt-4">OK</button>'
+    dialog.innerHTML = html + button
+    document.body.appendChild(dialog)
+    dialog.showModal()
+    dialog.querySelector("button")!.addEventListener("click", () => dialog.close())
+}
+
 // Add download links for other formats, defined in
 // settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
-export function setDownloadLinks(
-    xhr_settings: JQuery.AjaxSettings,
-    result_data: { kwic: Row[]; corpus_order: string[] }
-): void {
+export function setDownloadLinks(query_url: string, result_data: { kwic: Row[]; corpus_order: string[] }): void {
     // If some of the required parameters are null, return without
     // adding the download links.
-    if (
-        !(xhr_settings != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)
-    ) {
+    if (!(query_url != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
         console.log("failed to do setDownloadLinks")
         return
     }
@@ -377,8 +384,10 @@ export function setDownloadLinks(
     class="download_link">${format.toUpperCase()}</option>\
 `)
 
+        const query_params = JSON.stringify(Object.fromEntries(new URL(query_url).searchParams))
+
         const download_params = {
-            query_params: xhr_settings.url,
+            query_params,
             format,
             korp_url: window.location.href,
             korp_server_url: settings.korp_backend_url,
@@ -424,77 +433,39 @@ export const regescape = (s: string): string => s.replace(/[.|?|+|*||'|()^$\\]/g
 /** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
 export const unregescape = (s: string): string => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
 
-/** Return the length of baseUrl with params added. */
-const calcUrlLength = (baseUrl: string, params: any): number =>
-    baseUrl.length + new URLSearchParams(params).toString().length + 1
-
 /**
- * Add HTTP method to the HTTP configuration object conf for jQuery.ajax or AngularJS $http call:
- * if the result URL would be longer than settings.backendURLMaxLength, use POST, otherwise GET.
- * @param conf A $http or jQuery.ajax configuration object.
- *   For $http, the request parameters should be in `params` (moved to `data` for POST),
- *   and for jQuery.ajax, they should be in `data`.
- * @returns The same object, possibly modified in-place
+ * Select GET or POST depending on url length.
  */
-export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T): T {
-    // The property to use for GET: AngularJS $http uses params for
-    // GET and data for POST, whereas jQuery.ajax uses data for both
-    const data = "params" in conf ? conf.params : conf.data
-    if (calcUrlLength(conf.url!, data) > settings.backendURLMaxLength) {
-        conf.method = "POST"
-        conf.data = data
-        if ("params" in conf) delete conf.params
-    } else {
-        conf.method = "GET"
-        if ("params" in conf) conf.params = data
-        else conf.data = data
-    }
-    return conf
+export function selectHttpMethod(url: string, params: Record<string, any>): { url: string; request: RequestInit } {
+    const urlFull = buildUrl(url, params)
+    return urlFull.length > settings.backendURLMaxLength
+        ? { url, request: { method: "POST", body: toFormData(params) } }
+        : { url: urlFull, request: {} }
 }
 
-/**
- * Like `httpConfAddMethod`, but for use with $http, to ensure data is sent as form data and not JSON.
- * @param {object} conf A $http or jQuery.ajax configuration object.
- * @returns The same object, possibly modified in-place
- */
-export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T & { url: string }): T {
-    const fixedConf = httpConfAddMethod(conf)
-
-    if (fixedConf.method == "POST") {
-        const formDataParams = new FormData()
-        for (var key in fixedConf.data) {
-            formDataParams.append(key, fixedConf.data[key])
-        }
-        fixedConf.data = formDataParams
-
-        if (!fixedConf.headers) {
-            fixedConf.headers = {}
-        }
-        // will be set correct automatically by Angular
-        fixedConf.headers["Content-Type"] = undefined
-    }
-
-    return fixedConf
+/** Convert object to FormData */
+function toFormData(obj: Record<string, any>): FormData {
+    const formData = new FormData()
+    Object.entries(obj).forEach(([key, value]) => formData.append(key, value))
+    return formData
 }
 
-/**
- * Like `httpConfAddMethod`, but for use with native `fetch()`.
- * @param conf A $http or jQuery.ajax configuration object.
- * @returns The same object, possibly modified in-place
- */
-export function httpConfAddMethodFetch(
-    url: string,
-    params: Record<string, string>
-): { url: string; request: RequestInit } {
-    if (calcUrlLength(url, params) > settings.backendURLMaxLength) {
-        const body = new FormData()
-        for (const key in params) {
-            body.append(key, params[key])
-        }
-        return { url, request: { method: "POST", body } }
-    } else {
-        return { url: url + "?" + new URLSearchParams(params), request: {} }
-    }
+/** Append search params to url */
+export function buildUrl(base: string, params: Record<string, any>): string {
+    const url = new URL(base)
+    Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value))
+    return url.toString()
+}
+
+/** Trigger a download in the browser. */
+export function downloadFile(data: string, filename: string, type: string) {
+    const blob = new Blob([data], { type })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
 }
 
 /**

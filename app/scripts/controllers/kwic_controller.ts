@@ -2,10 +2,11 @@
 import angular, { IController, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import kwicProxyFactory, { ApiKwic, KorpQueryParams, KorpQueryResponse, type KwicProxy } from "@/backend/kwic-proxy"
+import kwicProxyFactory, { type KwicProxy } from "@/backend/kwic-proxy"
+import { ApiKwic, Response, ProgressReport } from "@/backend/types"
+import { QueryParams, QueryResponse } from "@/backend/types/query"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
-import { KorpResponse, ProgressReport } from "@/backend/types"
 import { UtilsService } from "@/services/utils"
 import "@/services/utils"
 import { TabHashScope } from "@/directives/tab-hash"
@@ -15,28 +16,26 @@ angular.module("korpApp").directive("kwicCtrl", () => ({ controller: KwicCtrl })
 export type KwicCtrlScope = TabHashScope & {
     active?: boolean
     aborted?: boolean
-    buildQueryOptions: (isPaging: boolean) => KorpQueryParams
+    buildQueryOptions: (isPaging: boolean) => QueryParams
     corpusHits?: Record<string, number>
     countCorpora?: () => number | null
     corpusOrder?: string[]
     cqp?: string
-    error?: boolean
+    error?: string
     getProxy: () => KwicProxy
     /** Number of total search hits, updated when a search is completed. */
     hits?: number
     /** Number of search hits, may change while search is in progress. */
     hitsInProgress?: number
     hitsPerPage?: `${number}` | number
-    ignoreAbort?: boolean
     initialSearch?: boolean
-    isActive: () => boolean
     isReadingMode: () => boolean
     kwic?: ApiKwic[]
     loading?: boolean
     makeRequest: (isPaging?: boolean) => void
     onentry: () => void
     onexit: () => void
-    onProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
+    onProgress: (progressObj: ProgressReport<"query">, isPaging?: boolean) => void
     page?: number
     pageChange: (page: number) => void
     progress?: number
@@ -44,9 +43,8 @@ export type KwicCtrlScope = TabHashScope & {
     randomSeed?: number
     reading_mode?: boolean
     readingChange: () => void
-    renderCompleteResult: (data: KorpResponse<KorpQueryResponse>, isPaging?: boolean) => void
-    renderResult: (data: KorpResponse<KorpQueryResponse>) => void
-    tabindex?: number
+    renderCompleteResult: (data: QueryResponse, isPaging?: boolean) => void
+    renderResult: (data: QueryResponse) => void
     toggleReading: () => void
 }
 
@@ -104,8 +102,6 @@ export class KwicCtrl implements IController {
 
         s.proxy = kwicProxyFactory.create()
 
-        s.tabindex = 0
-
         this.initPage()
 
         s.pageChange = function (page) {
@@ -117,22 +113,14 @@ export class KwicCtrl implements IController {
 
         s.$on("abort_requests", () => {
             s.proxy.abort()
+            if (s.loading) {
+                s.aborted = true
+                s.loading = false
+            }
         })
 
         s.readingChange = function () {
-            if (s.getProxy().pendingRequests.length) {
-                // If the requests passed to $.when contain rejected
-                // (aborted) requests, .then is not executed, so
-                // filter those out
-                // TODO: Remove at least rejected requests from
-                // pendingRequests somewhere
-                const nonRejectedRequests = (s.getProxy().pendingRequests || []).filter(
-                    (req) => req.state() != "rejected"
-                )
-                return $.when(...nonRejectedRequests).then(function () {
-                    return s.makeRequest(false)
-                })
-            }
+            s.makeRequest(false)
         }
 
         s.reading_mode = $location.search().reading_mode
@@ -181,7 +169,7 @@ export class KwicCtrl implements IController {
             const cqp = s.cqp || s.proxy.prevCQP
             if (!cqp) throw new Error("cqp missing")
 
-            const params: KorpQueryParams = {
+            const params: QueryParams = {
                 corpus: settings.corpusListing.stringifySelected(),
                 cqp,
                 query_data: s.proxy.queryData,
@@ -195,9 +183,9 @@ export class KwicCtrl implements IController {
         }
 
         s.onProgress = (progressObj, isPaging) => {
-            s.progress = Math.round(progressObj["stats"])
-            if (!isPaging && progressObj["total_results"] !== null) {
-                s.hitsInProgress = progressObj["total_results"]
+            s.progress = Math.round(progressObj.percent)
+            if (!isPaging && progressObj.hits !== null) {
+                s.hitsInProgress = progressObj.hits
             }
         }
 
@@ -206,42 +194,39 @@ export class KwicCtrl implements IController {
                 s.page = Number($location.search().page) || 0
             }
 
+            // Abort any running request
+            if (s.loading) s.proxy.abort()
+
+            s.progress = 0
             s.loading = true
             s.aborted = false
-
-            s.ignoreAbort = Boolean(s.proxy.hasPending())
+            s.error = undefined
 
             const ajaxParams = s.buildQueryOptions(isPaging)
 
-            const req = s.getProxy().makeRequest(
-                { ajaxParams },
-                s.page,
-                (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
-                (data) => $timeout(() => s.renderResult(data))
-            )
-            req.done((data: KorpResponse<KorpQueryResponse>) => {
-                $timeout(() => {
-                    s.loading = false
-                    s.renderCompleteResult(data, isPaging)
+            s.getProxy()
+                .makeRequest(
+                    { ajaxParams },
+                    s.page,
+                    (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
+                    (data) => $timeout(() => s.renderResult(data))
+                )
+                .then((data) =>
+                    $timeout(() => {
+                        s.loading = false
+                        s.renderCompleteResult(data, isPaging)
+                    })
+                )
+                .catch((error) => {
+                    // AbortError is expected if a new search is made before the previous one is finished
+                    if (error.name == "AbortError") return
+                    console.error(error)
+                    // TODO Show error
+                    $timeout(() => {
+                        s.error = error
+                        s.loading = false
+                    })
                 })
-            })
-
-            req.fail((jqXHR, status, errorThrown) => {
-                $timeout(() => {
-                    console.log("kwic fail")
-                    if (s.ignoreAbort) {
-                        console.log("stats ignoreabort")
-                        return
-                    }
-                    s.loading = false
-
-                    if (status === "abort") {
-                        s.aborted = true
-                    } else {
-                        s.error = true
-                    }
-                })
-            })
         }
 
         s.getProxy = () => {
@@ -254,8 +239,6 @@ export class KwicCtrl implements IController {
 
         s.renderCompleteResult = (data, isPaging) => {
             s.renderResult(data)
-            s.loading = false
-            if ("ERROR" in data) return
             if (!isPaging) {
                 s.hits = data.hits
                 s.hitsInProgress = data.hits
@@ -264,18 +247,8 @@ export class KwicCtrl implements IController {
         }
 
         s.renderResult = (data) => {
-            if ("ERROR" in data) {
-                s.error = true
-                return
-            }
-            s.error = false
-
             if (!data.kwic) {
                 data.kwic = []
-            }
-
-            if (s.isActive()) {
-                $rootScope.jsonUrl = s.proxy.prevUrl
             }
 
             s.corpusOrder = data.corpus_order
@@ -283,21 +256,15 @@ export class KwicCtrl implements IController {
         }
 
         s.onentry = () => {
-            $rootScope.jsonUrl = s.proxy.prevUrl
             s.active = true
         }
 
         s.onexit = () => {
-            $rootScope.jsonUrl = undefined
             s.active = false
         }
 
-        s.isActive = () => {
-            return s.tabindex == s.activeTab
-        }
-
         s.countCorpora = () => {
-            return s.proxy.prevParams && s.proxy.prevParams.corpus.split(",").length
+            return s.proxy.prevParams?.corpus ? s.proxy.prevParams.corpus.split(",").length : null
         }
     }
 }

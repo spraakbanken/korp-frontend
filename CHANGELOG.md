@@ -2,6 +2,34 @@
 
 ## [Unreleased]
 
+## [9.8.0] - 2025-01-20
+
+### Added
+
+- Sidebar: Collapse and expand attribute sections [#199](https://github.com/spraakbanken/korp-frontend/issues/199)
+- Error messages from backend show up in the GUI [#97](https://github.com/spraakbanken/korp-frontend/issues/97)
+- Catch unhandled errors and show in dialog [#419](https://github.com/spraakbanken/korp-frontend/issues/419)
+- Save searches from extended mode [#118](https://github.com/spraakbanken/korp-frontend/issues/118)
+
+### Changed
+
+- The `corpus_config_url` setting is replaced by `get_corpus_ids`, see [doc/frontend_devel.md](./doc/frontend_devel.md)
+- The `structService` service is replaced by non-AngularJS async functions in `@/backend/attr-values`
+- The `lexicons` service is replaced by non-AngularJS async functions in `@/backend/lexicons`
+- Util function `httpConfAddMethodFetch` was renamed to `selectHttpMethod`
+- Util functions `httpConfAddMethod` and `httpConfAddMethodAngular` were removed
+- Utilities for `JQuery.ajax` usage are removed (`.progress` handler, `AjaxSettings` type)
+- The members of the `ProgressReport` type returned by `calcProgress()` have been renamed from `{struct, stats, total_results}` to `{data, percent, hits}`
+- The `makeRequest` methods of the `*Proxy` classes now return native `Promise`
+
+### Fixed
+
+- No map for advanced CQP expressions that CQPParser does not recognize [#212](https://github.com/spraakbanken/korp-frontend/issues/212)
+- Missing lemgrams in autocomplete [#416](https://github.com/spraakbanken/korp-frontend/issues/416)
+- The response JSON download button now handles POST and logged-in requests, and has been moved into each corresponding result tab [#417](https://github.com/spraakbanken/korp-frontend/issues/417)
+- Limit search history selector width [#415](https://github.com/spraakbanken/korp-frontend/issues/415)
+- Search not triggered when choosing simple lemgram search from search history [#152](https://github.com/spraakbanken/korp-frontend/issues/152)
+
 ## [9.7.2] - 2024-12-09
 
 ### Added
@@ -308,6 +336,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.8.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.0
 [9.7.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.2
 [9.7.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.1
 [9.7.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.0

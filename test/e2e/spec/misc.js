@@ -48,32 +48,6 @@ describe("page", function () {
     })
 })
 
-describe("json button", function () {
-    let elm = null
-
-    beforeEach(async () => {
-        // browser.ignoreSynchronization = true
-        const wd = cycleSearch()
-        await browser.get(browser.params.url + `#?corpus=suc2&cqp=%5B%5D&search=word%7C${wd}&page=7&show_stats`)
-    })
-
-    it("should display the correct url", async function () {
-        const elm = element(by.css("#json-link"))
-        await waitFor(elm)
-        await expect(elm.getAttribute("href")).toContain("query?")
-    })
-
-    it("should switch url when changing tab", async function () {
-        const elem = element(by.css(".result_tabs > ul > li:nth-child(2)"))
-        // waitFor(elem)
-        await elem.click()
-
-        elm = element(by.css("#json-link"))
-        await waitFor(elm)
-        await expect(elm.getAttribute("href")).toContain("count?")
-    })
-})
-
 describe("kwic download menu", () =>
     // would love to test that download is really performed but it's hard to test side effects...
     it("should show the csv download option", async () => {

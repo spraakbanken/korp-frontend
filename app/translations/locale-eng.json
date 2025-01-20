@@ -49,6 +49,7 @@
     "warning_body": "The dependency relations illustrated herein are the result of automated parsing.",
     "fail_text": "An error has occurred.",
     "fail_alt": "Silhouette of a knocked-out raven",
+    "fail_contact": "If you have questions, or you want to report a bug, please contact sb-info@svenska.gu.se.",
     "corpus": "Corpus",
     "search_for": "Search for ",
     "show_more": "Show more",
@@ -79,7 +80,9 @@
     "show_deptree": "Show Dependency Tree",
     "dep_tree": "Dependency Tree",
     "download": "Download as",
+    "download_response": "Save API response (JSON)",
     "toggle_select": "select",
+    "modal_close": "Close",
 
     "is": "is",
     "equal": "equal",

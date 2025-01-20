@@ -32,6 +32,8 @@ export async function init(): Promise<boolean> {
     return loggedIn
 }
 
+statemachine.listen("logout", () => authModule.logout())
+
 export const initAngular = authModule.initAngular
 export const login = authModule.login
 export const logout = authModule.logout

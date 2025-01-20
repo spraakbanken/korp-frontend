@@ -30,6 +30,7 @@ const createSearchOption = (params: SearchParams): SearchOption => ({
 
 const getLabel = (params: SearchParams): string => {
     if (!params.search) return "–"
+    if (params.search == "cqp") return params.cqp || "–"
     const [type, value] = splitFirst("|", params.search)
     return type === "lemgram" ? unregescape(value) : value
 }
@@ -38,6 +39,7 @@ angular.module("korpApp").component("searchHistory", {
     template: html`<select
         ng-model="value"
         ng-options="option.label for option in getOptions() track by option.id"
+        class="w-40"
     ></select>`,
     controller: [
         "$location",

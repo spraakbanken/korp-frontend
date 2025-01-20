@@ -109,7 +109,6 @@ settings that affect the frontend.
     that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
     for more information about how to define attributes.
 - __config_dependent_on_authentication__ - Boolean. If true, backend config will not be fetched until login check has finished.
-- __corpus_config_url__ - Async function returning a url string. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
 - __corpus_info_link__ - Object. Use this to render a link for each corpus in the corpus chooser.
   - __url_template__ - String or translation object. A URL containing a token "%s", which will be replaced with the corpus id.
   - __label__ - String or translation object. The label is the the same for all corpora.
@@ -134,6 +133,7 @@ settings that affect the frontend.
     - __label__: String or translation object.
     - __params__: Object. This is translated to URL search params when the link is clicked.
     - __hint__: String or translation object. Can contain HTML.
+- __get_corpus_ids__ - Async function returning a list of strings. The corpus ids are passed as the `corpus=` param to the `<korp_backend_url>/corpus_config?mode=<mode>` call, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
 - __group_statistics__ - List of attribute names. Attributes that either have a rank or a numbering used for multi-word units. For example, removing `:2` from `ta_bort..vbm.1:2`, to get the lemgram of this word: `ta_bort..vbm.1`.
 - __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
@@ -228,11 +228,13 @@ If no mode is given, mode is `default`.
 
 It then looks for mode-specific code in `<configDir>/modes/<mode>_mode.js`. Mode code may overwrite values from `config.yml` by altering the `settings` object imported from `@/settings`.
 
-It then looks for settings for this specific mode, the **corpus config**. If it exists at `<configDir>/modes/<mode>_corpus_config.json`, it will be loaded from there. Otherwise, it retrieves it from the url given by the `corpus_config_url` option, which defaults to:
+It then looks for settings for this specific mode, the **corpus config**. If it exists at `<configDir>/modes/<mode>_corpus_config.json`, it will be loaded from there. Otherwise, it retrieves it from the backend:
 
 ```
 https://<korp_backend_url>/corpus_config?mode=<mode>
 ```
+
+Normally, the mode param is enough for the backend to know what corpora to include. Alternatively, it is possible to specify corpus ids in the `corpus=` param, by assigning a function to the `get_corpus_ids` setting (in `<mode>_mode.js`). The function can be async and should return a list of corpus ids.
 
 See the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API for more information.
 
@@ -771,18 +773,7 @@ my_parameter: my value
 
 Will make `settings["my_parameter"]` available in the app.
 
-Use `snake_case` when defining new attribute in `config.yml`. Add a default  value for the new attribute in `app/scripts/settings.js`, if needed.
-
-When using the settings object, use the following format: `settings["my_parameter"]`, instead of `settings.my_parameter`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
-
-### Map
-
-Some of the code for the map is located in this repository:
-
-https://github.com/spraakbanken/korp-geo
-
-[github-frontend]: https://github.com/spraakbanken/korp-frontend/
-[github-frontend-sb]: https://github.com/spraakbanken/korp-frontend-sb/
+Use `snake_case` when defining new attributes in `config.yml`. Add a default value for the new attribute in `app/scripts/settings.js`, if needed.
 
 ### CQP Parser
 
@@ -836,9 +827,18 @@ Use modern features where it looks good. Always use `const` or `let` instead of 
 
 Identifiers should be in camel case (although our old Korp code may still have some identifiers that uses snake case).
 
+When using the settings object, use `settings["my_parameter"]` instead of `settings.my_parameter`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
+
 Aim to write code that is easily understood, and supplement with comments as needed. Keep comments up to date while making code changes.
 
 Files should be named using snake case: `my_file.js`.
+
+### Error handling
+
+- Throw a specific error when something fails (e.g. `KorpBackendError` if an API request fails)
+- Catch errors where they can be handled, as low as possible in the call hierarchy (e.g. log and continue, or show a message)
+
+Unhandled errors are caught and shown by `window` listeners and the `$exceptionHandler` service.
 
 ### Dependencies
 
@@ -852,28 +852,24 @@ Avoid using directives and controllers.
 
 #### Angular.js dependency injection
 
-This is how it looks everywhere in the Angular.js code:
+Angular will automatically pass the services demanded by controllers, see https://docs.angularjs.org/guide/di
+
+Do this (inline array annotation):
 
 ```js
 controller: [
   "$scope",
-  "$rootScope",
-  "backend",
-  ($scope, $rootScope, backend) => {
-    ...
-  }
+  function ($scope) { ... }
 ]
 ```
 
-The variables of the controller is created automatically by Angular.js and "injected". When reading documenation online you can find the alternative:
+Do not do (implicit annotation):
 
 ```js
-controller: ($scope, $rootScope, backend) => {
-  ...
-}
+controller: function ($scope) { ... }
 ```
 
-But this doesn't work in Korp (anymore). Due to minification done by Webpack when building the frontend (`yarn build`). It probably works with `yarn start`, so beware.
+This will fail when building the frontend (`yarn build`), due to minification by Webpack. It probably works with `yarn start`, so beware.
 
 ### Documentation
 

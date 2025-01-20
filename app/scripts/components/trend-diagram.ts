@@ -4,21 +4,17 @@ import _ from "lodash"
 import moment, { Moment } from "moment"
 import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
-import graphProxyFactory, {
-    GraphProxy,
-    KorpCountTimeResponse,
-    KorpGraphStats,
-    KorpGraphStatsCqp,
-} from "@/backend/graph-proxy"
+import graphProxyFactory, { GraphProxy } from "@/backend/graph-proxy"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { formatRelativeHits, hitCountHtml, html } from "@/util"
 import { loc } from "@/i18n"
 import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
 import "@/components/korp-error"
 import { GraphTab, RootScope } from "@/root-scope.types"
-import { Histogram, KorpResponse, ProgressReport } from "@/backend/types"
+import { Histogram, Response } from "@/backend/types"
 import { JQueryExtended } from "@/jquery.types"
 import { CorpusListing } from "@/corpus_listing"
+import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
 
 type TrendDiagramController = IController & {
     data: GraphTab
@@ -31,7 +27,7 @@ type TrendDiagramController = IController & {
     proxy: GraphProxy
     $result: JQLite
     mode: "line" | "bar" | "table"
-    error: boolean
+    error?: string
 }
 
 type Series = {
@@ -79,7 +75,7 @@ const PALETTE = [
 
 angular.module("korpApp").component("trendDiagram", {
     template: html`
-        <korp-error ng-show="$ctrl.error"></korp-error>
+        <korp-error ng-if="$ctrl.error" message="{{$ctrl.error}}"></korp-error>
         <div class="graph_tab" ng-show="!$ctrl.error">
             <div class="graph_header">
                 <div class="controls">
@@ -146,7 +142,6 @@ angular.module("korpApp").component("trendDiagram", {
             $ctrl.proxy = graphProxyFactory.create()
             $ctrl.$result = $element.find(".graph_tab")
             $ctrl.mode = "line"
-            $ctrl.error = false
 
             $ctrl.$onInit = () => {
                 const interval = $ctrl.data.corpusListing.getMomentInterval()
@@ -471,8 +466,8 @@ angular.module("korpApp").component("trendDiagram", {
                 $ctrl.time_grid = time_grid
             }
 
-            function makeSeries(Rickshaw: any, data: KorpCountTimeResponse, cqp: string, zoom: Level) {
-                const createTotalSeries = (stats: KorpGraphStats) => ({
+            function makeSeries(Rickshaw: any, data: CountTimeResponse, cqp: string, zoom: Level) {
+                const createTotalSeries = (stats: GraphStats) => ({
                     data: getSeriesData(stats.relative, zoom),
                     color: "steelblue",
                     name: "&Sigma;",
@@ -480,7 +475,7 @@ angular.module("korpApp").component("trendDiagram", {
                     abs_data: getSeriesData(stats.absolute, zoom),
                 })
 
-                const createSubquerySeries = (stats: KorpGraphStatsCqp, i: number) => ({
+                const createSubquerySeries = (stats: GraphStatsCqp, i: number) => ({
                     data: getSeriesData(stats.relative, zoom),
                     color: PALETTE[i % PALETTE.length],
                     name: $ctrl.data.labelMapping[stats.cqp],
@@ -570,7 +565,7 @@ angular.module("korpApp").component("trendDiagram", {
 
             function renderGraph(
                 Rickshaw: any,
-                data: KorpResponse<KorpCountTimeResponse>,
+                data: CountTimeResponse,
                 cqp: string,
                 currentZoom: Level,
                 showTotal?: boolean
@@ -580,11 +575,6 @@ angular.module("korpApp").component("trendDiagram", {
                 const done = () => {
                     $ctrl.localUpdateLoading(false)
                     $(window).trigger("resize")
-                }
-
-                if ("ERROR" in data) {
-                    $ctrl.error = true
-                    return
                 }
 
                 if ($ctrl.graph) {
@@ -779,10 +769,6 @@ angular.module("korpApp").component("trendDiagram", {
                 done()
             }
 
-            function onProgress(progressObj: ProgressReport) {
-                $ctrl.onProgress(Math.round(progressObj.stats))
-            }
-
             async function makeRequest(
                 cqp: string,
                 subcqps: string[],
@@ -793,22 +779,25 @@ angular.module("korpApp").component("trendDiagram", {
             ) {
                 const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
                 $ctrl.localUpdateLoading(true)
-                $ctrl.error = false
+                $ctrl.error = undefined
                 const currentZoom = $ctrl.zoom
-                let reqPromise = $ctrl.proxy
-                    .makeRequest(cqp, subcqps, corpora.stringifySelected(), from, to)
-                    .progress((data) => {
-                        $timeout(() => onProgress(data))
-                    })
+                const reqPromise = $ctrl.proxy.makeRequest(
+                    cqp,
+                    subcqps,
+                    corpora.stringifySelected(),
+                    from,
+                    to,
+                    (progress) => $timeout(() => $ctrl.onProgress(progress.percent))
+                )
 
                 try {
                     const [Rickshaw, graphData] = await Promise.all([rickshawPromise, reqPromise])
                     $timeout(() => renderGraph(Rickshaw, graphData, cqp, currentZoom, showTotal))
-                } catch (e) {
+                } catch (error) {
                     $timeout(() => {
-                        console.error("graph crash", e)
+                        console.error(error)
+                        $ctrl.error = error
                         $ctrl.localUpdateLoading(false)
-                        $ctrl.error = true
                     })
                 }
             }

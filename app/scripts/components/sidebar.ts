@@ -1,5 +1,5 @@
 /** @format */
-import angular, { ICompileService, IController, IControllerService, IFilterService, IOnChangesObject } from "angular"
+import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
 import _ from "lodash"
 import "../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
@@ -9,12 +9,14 @@ import { html, regescape, splitLemgram, safeApply, getConfigurable } from "@/uti
 import { loc, locAttribute, locObj } from "@/i18n"
 import "@/services/utils"
 import "@/components/deptree/deptree"
+import "@/components/sidebar-section"
+import "@/video-controller" // May be used by custom code
 import { RootScope } from "@/root-scope.types"
 import { CqpSearchEvent, SelectWordEvent } from "@/statemachine/types"
-import { Token } from "@/backend/kwic-proxy"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config.types"
 import { JQueryExtended } from "@/jquery.types"
+import { Token } from "@/backend/types"
 
 export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
 export type SidebarComponent = {
@@ -36,7 +38,7 @@ type SidebarController = IController & {
     onShow: () => void
     onHide: () => void
     // Locals
-    data: SelectWordEvent
+    data: SelectWordEvent | null
     corpusObj: CorpusTransformed
     sentenceData: Record<string, string>
     inReadingMode: boolean
@@ -73,20 +75,32 @@ type SidebarController = IController & {
     applyEllipse: () => void
 }
 
+type SidebarScope = IScope & {
+    posData: JQLite | null
+    structData: JQLite | null
+}
+
 angular.module("korpApp").component("sidebar", {
     template: html`
-        <div class="sticky top-10 border border-gray-300 p-2 rounded-sm" ng-show="$ctrl.corpusObj">
+        <div class="sticky top-2 flex flex-col gap-4" ng-show="$ctrl.corpusObj">
             <div>
-                <h4 class="font-normal uppercase text-gray-800 mt-4 mb-1 text-sm tracking-tight">
+                <h4 class="font-normal uppercase text-gray-800 mt-0 mb-1 text-sm tracking-tight">
                     {{'corpus' | loc:$root.lang}}
                 </h4>
                 <div class="text-lg">{{$ctrl.corpusObj.title| locObj:$root.lang}}</div>
             </div>
+
             <div class="openReadingMode" ng-show="!$ctrl.inReadingMode && $ctrl.corpusObj['reading_mode']">
                 <span ng-click="$ctrl.openReadingMode()" class="link"> {{'read_in_korp' | loc:$root.lang}} </span>
             </div>
-            <div id="selected_sentence"></div>
-            <div id="selected_word"></div>
+
+            <sidebar-section ng-show="structData" title="{{'sentence_attr' | loc:$root.lang}}">
+                <div id="selected_sentence"></div>
+            </sidebar-section>
+
+            <sidebar-section ng-show="posData" title="{{'word_attr' | loc:$root.lang}}">
+                <div id="selected_word"></div>
+            </sidebar-section>
 
             <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.openDepTree()" class="link show_deptree">
                 {{'show_deptree' | loc:$root.lang}}
@@ -105,14 +119,24 @@ angular.module("korpApp").component("sidebar", {
         lang: "<",
     },
     controller: [
-        "$element",
-        "$rootScope",
         "$compile",
         "$controller",
-        function ($element: JQLite, $rootScope: RootScope, $compile: ICompileService, $controller: IControllerService) {
+        "$element",
+        "$rootScope",
+        "$scope",
+        function (
+            $compile: ICompileService,
+            $controller: IControllerService,
+            $element: JQLite,
+            $rootScope: RootScope,
+            $scope: SidebarScope
+        ) {
             let $ctrl = this as SidebarController
 
-            statemachine.listen("select_word", function (data: SelectWordEvent) {
+            $scope.posData = null
+            $scope.structData = null
+
+            statemachine.listen("select_word", function (data) {
                 safeApply($rootScope, () => {
                     $ctrl.data = data
                     if (data == null) {
@@ -148,7 +172,6 @@ angular.module("korpApp").component("sidebar", {
             }
 
             $ctrl.updateContent = ({ sentenceData, wordData, corpus, tokens, inReadingMode }) => {
-                $("#selected_sentence").add("#selected_word").empty()
                 // TODO: this is pretty broken
                 const corpusObj = settings.corpora[corpus] || settings.corpusListing.get(corpus)
                 $ctrl.corpusObj = corpusObj
@@ -169,9 +192,9 @@ angular.module("korpApp").component("sidebar", {
                     customContentStruct.push(...struct)
                 }
 
-                let posData: JQLite = $()
+                $scope.posData = null
                 if (!$.isEmptyObject(corpusObj.attributes)) {
-                    posData = $ctrl.renderCorpusContent(
+                    $scope.posData = $ctrl.renderCorpusContent(
                         "pos",
                         wordData,
                         sentenceData,
@@ -182,9 +205,9 @@ angular.module("korpApp").component("sidebar", {
                     )
                 }
 
-                let structData: JQLite = $()
+                $scope.structData = null
                 if (!$.isEmptyObject(corpusObj["struct_attributes"])) {
-                    structData = $ctrl.renderCorpusContent(
+                    $scope.structData = $ctrl.renderCorpusContent(
                         "struct",
                         wordData,
                         sentenceData,
@@ -194,16 +217,6 @@ angular.module("korpApp").component("sidebar", {
                         customContentStruct
                     )
                 }
-
-                const $headingWord = $(
-                    '<h4 class="font-normal uppercase text-gray-800 mt-8 mb-1 text-sm" tracking-tight>'
-                ) as JQueryExtended
-                $("#selected_word").append($headingWord.localeKey("word_attr")).append(posData)
-
-                const $headingSentence = $(
-                    '<h4 class="font-normal uppercase text-gray-800 mt-8 mb-1 text-sm" tracking-tight>'
-                ) as JQueryExtended
-                $("#selected_sentence").append($headingSentence.localeKey("sentence_attr")).append(structData)
                 ;($element as JQueryExtended).localize()
                 $ctrl.applyEllipse()
             }
@@ -306,9 +319,9 @@ angular.module("korpApp").component("sidebar", {
                 // If attrs["sidebar_info_url"], add an info symbol
                 // linking to the value of the property (URL)
                 const info_link = attrs["sidebar_info_url"]
-                    ? `<a href='${attrs["sidebar_info_url"]}' target='_blank'>
-                                 <span class='sidebar_info ui-icon ui-icon-info'></span>
-                             </a>`
+                    ? html`<a href="${attrs["sidebar_info_url"]}" target="_blank">
+                          <i class="fa-solid fa-info-circle"></i>
+                      </a>`
                     : ""
 
                 output.data("attrs", attrs)
@@ -423,6 +436,20 @@ angular.module("korpApp").component("sidebar", {
                         }
                     })
             }
+
+            $scope.$watch("posData", () => {
+                $element
+                    .find("#selected_word")
+                    .empty()
+                    .append($scope.posData || "")
+            })
+
+            $scope.$watch("structData", () => {
+                $element
+                    .find("#selected_sentence")
+                    .empty()
+                    .append($scope.structData || "")
+            })
         },
     ],
 })

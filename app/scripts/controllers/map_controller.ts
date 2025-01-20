@@ -12,7 +12,7 @@ import { TabHashScope } from "@/directives/tab-hash"
 
 type MapControllerScope = TabHashScope & {
     center: AppSettings["map_center"]
-    error: boolean
+    error?: string
     selectedGroups: string[]
     markerGroups?: Record<string, MarkerGroup>
     loading: boolean
@@ -81,11 +81,11 @@ angular.module("korpApp").directive("mapCtrl", [
                             $scope.selectedGroups = _.keys($scope.markerGroups)
                         })
                     },
-                    (err) => {
-                        console.error("Map data parsing failed:", err)
+                    (error) => {
+                        console.error("Map data parsing failed:", error)
                         $scope.$apply(($scope: MapControllerScope) => {
                             $scope.loading = false
-                            $scope.error = true
+                            $scope.error = error
                         })
                     }
                 )

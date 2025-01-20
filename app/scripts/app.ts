@@ -19,9 +19,9 @@ import { initLocales } from "@/data_init"
 import { RootScope } from "@/root-scope.types"
 import { Folder } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { html } from "@/util"
+import { getService, html } from "@/util"
 import { loc, locObj } from "@/i18n"
-import "@/components/header"
+import "@/components/app-header"
 import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
@@ -30,6 +30,32 @@ import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
+
+// Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
+korpApp.factory("$exceptionHandler", [
+    function () {
+        return (exception: Error) => {
+            // Cannot inject services normally here, because it creates circular dependencies
+            const $uibModal = getService("$uibModal")
+            const $rootScope = getService("$rootScope")
+
+            const scope = $rootScope.$new() as IScope & { message: string }
+            scope.message = String(exception)
+
+            const modal = $uibModal.open({
+                template: html`<div class="modal-body">
+                        <korp-error message="{{message}}"></korp-error>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" ng-click="$close()">{{'modal_close' | loc:$root.lang}}</button>
+                    </div>`,
+                scope: scope,
+            })
+            // Dismissing the modal rejects the `result` promise. Catch it to avoid a "Possibly unhandled rejection" error.
+            modal.result.catch(() => {})
+        }
+    },
+])
 
 // load all custom components
 let customComponents: Record<string, IComponentOptions> = {}
@@ -286,9 +312,11 @@ korpApp.run([
                 </div>`,
                 scope: s,
                 size: "md",
-                backdrop: "static",
+                // Prevent backdrop click if not resolvable
+                backdrop: resolvable || "static",
                 keyboard: false,
             })
+            modal.result.catch(() => onClose?.())
 
             s.translations = translations
 

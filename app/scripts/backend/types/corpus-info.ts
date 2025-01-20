@@ -1,9 +1,10 @@
 /** @format */
+/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_info/get */
 
-/**
- * Response from the `/corpus_info` API.
- * See https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_info/get
- */
+export type CorpusInfoParams = {
+    corpus: string
+}
+
 export type CorpusInfoResponse = {
     corpora: Record<string, CorpusInfo>
     total_sentences: number

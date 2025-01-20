@@ -2,13 +2,14 @@
 import _ from "lodash"
 import angular, { ITimeoutService } from "angular"
 import settings from "@/settings"
-import lemgramProxyFactory, { ApiRelation, KorpRelationsResponse, LemgramProxy } from "@/backend/lemgram-proxy"
+import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
 import { isLemgram, lemgramToString, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
-import { KorpResponse, ProgressReport } from "@/backend/types"
+import { ProgressReport } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { TabHashScope } from "@/directives/tab-hash"
+import { ApiRelation, RelationsResponse } from "@/backend/types/relations"
 
 type WordpicCtrlScope = TabHashScope & {
     $root: RootScope
@@ -17,44 +18,39 @@ type WordpicCtrlScope = TabHashScope & {
     countCorpora: () => number | null
     data?: TableDrawData[]
     drawTables: (tables: [string, string][], data: ApiRelation[]) => void
-    error: boolean
+    error?: string
     hasData: boolean
     hitSettings: `${number}`[]
-    ignoreAbort: boolean
-    isActive: () => boolean
     loading: boolean
     makeRequest: () => void
     noHits: boolean
-    onentry: () => void
-    onexit: () => void
-    onProgress: (progressObj: ProgressReport) => void
+    onProgress: (progressObj: ProgressReport<"relations">) => void
     progress: number
     proxy: LemgramProxy
-    renderResult: (data: KorpResponse<KorpRelationsResponse>, word: string) => void
+    renderResult: (data: RelationsResponse, word: string) => void
     renderTables: (query: string, data: ApiRelation[]) => void
     renderWordTables: (query: string, data: ApiRelation[]) => void
     resetView: () => void
     settings: {
         showNumberOfHits: `${number}`
     }
-    tabindex: number
     wordPic: boolean
 }
 
 /** A relation item modified for showing. */
-type ShowableApiRelation = ApiRelation & {
+export type ShowableApiRelation = ApiRelation & {
     /** Direction of relation */
     show_rel: "head" | "dep"
 }
 
-type TableData = {
+export type TableData = {
     table: ApiRelation[] | { word: string }
     rel?: string
     show_rel?: string
     all_lemgrams?: string[]
 }
 
-type TableDrawData = {
+export type TableDrawData = {
     token: string
     wordClass: string
     wordClassShort: string
@@ -69,10 +65,8 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
         "$timeout",
         ($scope: WordpicCtrlScope, $rootScope: RootScope, $location: LocationService, $timeout: ITimeoutService) => {
             const s = $scope
-            s.tabindex = 3
             s.proxy = lemgramProxyFactory.create()
 
-            s.error = false
             s.loading = false
             s.progress = 0
             s.wordPic = $location.search().word_pic != null
@@ -87,6 +81,10 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             s.$on("abort_requests", () => {
                 s.proxy.abort()
+                if (s.loading) {
+                    s.aborted = true
+                    s.loading = false
+                }
             })
 
             s.activate = function () {
@@ -100,10 +98,10 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 s.data = undefined
                 s.aborted = false
                 s.noHits = false
-                s.error = false
+                s.error = undefined
             }
 
-            s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["stats"]))
+            s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["percent"]))
 
             s.makeRequest = () => {
                 const search = $rootScope.activeSearch
@@ -120,62 +118,34 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     return
                 }
 
-                if (s.proxy.hasPending()) {
-                    s.ignoreAbort = true
-                } else {
-                    s.ignoreAbort = false
-                    s.resetView()
-                }
+                // Abort any running request
+                if (s.loading) s.proxy.abort()
 
+                s.progress = 0
                 s.loading = true
-                const def = s.proxy.makeRequest(word, type, (progressObj) => $timeout(() => s.onProgress(progressObj)))
-
-                def.done((data) => {
-                    $timeout(() => s.renderResult(data, word))
-                })
-                def.fail((jqXHR, status, errorThrown) => {
-                    $timeout(() => {
-                        console.log("def fail", status)
-                        if (s.ignoreAbort) {
-                            return
-                        }
-                        s.loading = false
-                        if (status === "abort") {
-                            s.aborted = true
-                        } else {
-                            s.error = true
-                        }
+                s.proxy
+                    .makeRequest(word, type, (progressObj) => $timeout(() => s.onProgress(progressObj)))
+                    .then((data) =>
+                        $timeout(() => {
+                            s.loading = false
+                            s.renderResult(data, word)
+                        })
+                    )
+                    .catch((error) => {
+                        // AbortError is expected if a new search is made before the previous one is finished
+                        if (error.name == "AbortError") return
+                        console.error(error)
+                        // TODO Show error
+                        $timeout(() => {
+                            s.error = error
+                            s.loading = false
+                        })
                     })
-                })
-            }
-
-            s.onentry = () => {
-                if (s.hasData) {
-                    s.$root.jsonUrl = s.proxy.prevUrl
-                }
-            }
-
-            s.onexit = () => {
-                s.$root.jsonUrl = undefined
-            }
-
-            s.isActive = () => {
-                return s.tabindex == s.activeTab
             }
 
             s.renderResult = (data, query) => {
                 s.loading = false
                 s.progress = 100
-                if ("ERROR" in data) {
-                    s.hasData = false
-                    s.error = true
-                    return
-                }
-
-                if (s.isActive()) {
-                    s.$root.jsonUrl = s.proxy.prevUrl
-                }
-
                 s.hasData = true
                 if (!data.relations) {
                     s.noHits = true

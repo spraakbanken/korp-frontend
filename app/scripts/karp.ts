@@ -1,4 +1,6 @@
 /** @format */
+import { buildUrl } from "./util"
+
 const karpURL = "https://spraakbanken4.it.gu.se/karp/v7"
 
 export type KarpResponse<T> = {
@@ -30,16 +32,16 @@ const equals = (field: string, values: string[]) =>
 /** Query lexicons in the Karp API */
 async function query<T>(lexicons: string[], q: string, path: string, params?: object) {
     const url = `${karpURL}/query/${lexicons.join(",")}`
-    const response = await fetch(url + "?" + new URLSearchParams({ q, path, ...params }))
+    const response = await fetch(buildUrl(url, { q, path, ...params }))
     return (await response.json()) as KarpResponse<T>
 }
 
 export const getLemgrams = (wordForm: string, morphologies: string[]) =>
-    query<string>(morphologies, wfQuery(wordForm), "entry.lemgram", { size: 100 })
+    query<string>(morphologies, wfQuery(wordForm), "entry.lemgram", { size: 10_000 })
 
 export const getSenseId = (lemgram: string) => query<string>(["saldo"], `equals|lemgrams|${lemgram}`, "entry.senseID")
 
 export const getSenses = (lemgrams: string[]) =>
-    query<SaldoEntry>(["saldo"], equals("lemgrams", lemgrams), "entry", { size: 500 })
+    query<SaldoEntry>(["saldo"], equals("lemgrams", lemgrams), "entry", { size: 10_000 })
 
 export const getSwefnFrame = (senses: string[]) => query<SwefnEntry>(["swefn"], equals("LUs", senses), "entry")

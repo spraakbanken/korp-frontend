@@ -1,27 +1,28 @@
 /** @format */
 import { interpret, createMachine } from "xstate"
-import * as authenticationProxy from "@/components/auth/auth"
+import { EventMap, EventName } from "./types"
 
-const listenerMap = {}
-function listen(eventName, fn) {
-    listenerMap[eventName] = listenerMap[eventName] ? [...listenerMap[eventName], fn] : [fn]
-}
-function broadcast(eventName, ...payload) {
-    if (!listenerMap[eventName]) {
-        console.error("No listener for event name", eventName)
-        return
-    }
-    for (let fn of listenerMap[eventName]) {
-        fn(...payload)
-    }
+type Listener<K extends EventName> = (event: EventMap[K]) => void
+
+const listenerMap: { [K in EventName]?: Listener<K>[] } = {}
+
+function listen<K extends EventName>(eventName: K, fn: Listener<K>) {
+    listenerMap[eventName] ??= []
+    listenerMap[eventName]?.push(fn)
 }
 
-let machine = createMachine(
+function broadcast<K extends EventName>(eventName: K, event: EventMap[K]) {
+    listenerMap[eventName]?.forEach((fn) => fn(event))
+}
+
+// XState can be made more aware of event types by using its VSCode extension, but it doesn't seem necessary.
+const machine = createMachine(
     {
         id: "main",
         context: {},
         initial: "sidebar",
         type: "parallel",
+        predictableActionArguments: true,
         states: {
             login: {
                 initial: "blank",
@@ -91,7 +92,6 @@ let machine = createMachine(
                         },
                     },
                     visible: {
-                        onentry: {},
                         on: {
                             SELECT_WORD: { actions: "select_word" },
                         },
@@ -104,48 +104,23 @@ let machine = createMachine(
         },
     },
     {
-        guards: {
-            key_s(context, event) {
-                return event.which == 115
-            },
-        },
         actions: {
             log: (context, event) => console.log("log action:", event),
-            select_word: (context, event) => broadcast("select_word", event),
-            deselect_word: (context, event) => broadcast("select_word", null),
-            lemgram_search: (context, event) => broadcast("lemgram_search", event),
-            cqp_search: (context, event) => broadcast("cqp_search", event),
-            logged_in: (context, event) => {
-                broadcast("login", event)
-            },
-            logged_out: () => {
-                authenticationProxy.logout()
-                broadcast("logout")
-            },
-            login_needed: (context, event) => broadcast("login_needed", event),
+            select_word: (context, event: any) => broadcast("select_word", event),
+            deselect_word: () => broadcast("select_word", null),
+            lemgram_search: (context, event: any) => broadcast("lemgram_search", event),
+            cqp_search: (context, event: any) => broadcast("cqp_search", event),
+            logged_in: () => broadcast("login", null),
+            logged_out: () => broadcast("logout", null),
+            login_needed: (context, event: any) => broadcast("login_needed", event),
         },
     }
 )
 
-let currentContext = machine.context
 const service = interpret(machine)
 service.start()
-
-window.document.addEventListener("keypress", (event) => {
-    // TODO: esc not firing, for some reason.
-    // console.log("event.which", event.which)
-    service.send(event)
-})
-
-service.onTransition((state) => {
-    // console.log("onTransition", state.value, state.context)
-    currentContext = state.context
-})
 
 export default {
     send: service.send,
     listen,
-    get context() {
-        return currentContext
-    },
 }

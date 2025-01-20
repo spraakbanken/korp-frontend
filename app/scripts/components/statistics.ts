@@ -8,7 +8,6 @@ import { loc, locObj } from "@/i18n"
 import { getCqp } from "../../config/statistics_config"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { requestMapData } from "@/backend/backend"
-import { KorpStatsParams } from "@/backend/stats-proxy"
 import "@/backend/backend"
 import "@/services/searches"
 import "@/components/corpus-distribution-chart"
@@ -16,6 +15,7 @@ import { SearchesService } from "@/services/searches"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, SlickgridColumn } from "@/statistics.types"
+import { CountParams } from "@/backend/types/count"
 
 type StatisticsScope = IScope & {
     rowData: { title: string; values: AbsRelSeq }[]
@@ -33,7 +33,7 @@ type StatisticsController = IController & {
     inOrder: boolean
     loading: boolean
     noHits: boolean
-    prevParams: KorpStatsParams
+    prevParams: CountParams
     searchParams: SearchParams
     showStatistics: boolean
     sortColumn?: string
@@ -445,7 +445,10 @@ angular.module("korpApp").component("statistics", {
                 $ctrl.noRowsError = false
 
                 // TODO this is wrong, it should use the previous search
-                const cqpExpr = expandOperators(searches.getCqpExpr())
+                let cqp = searches.getCqpExpr()
+                try {
+                    cqp = expandOperators(cqp)
+                } catch {}
 
                 const cqpExprs: Record<string, string> = {}
                 for (let rowIx of selectedRows) {
@@ -465,7 +468,7 @@ angular.module("korpApp").component("statistics", {
                 const selectedAttribute = selectedAttributes[0]
 
                 const within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
-                const request = requestMapData(cqpExpr, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
+                const request = requestMapData(cqp, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
                 $rootScope.mapTabs.push(request)
             }
 
@@ -522,7 +525,7 @@ angular.module("korpApp").component("statistics", {
                     scope: $scope,
                     windowClass: "!text-base",
                 })
-                // Ignore rejection from closing the modal
+                // Ignore rejection from dismissing the modal
                 modal.result.catch(() => {})
             }
 

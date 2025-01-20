@@ -1,6 +1,6 @@
 /** @format */
 
-import { Token } from "@/backend/kwic-proxy"
+import { Token } from "@/backend/types"
 import type { BratEntity, BratRelation, BratType, BratVisualizer } from "./deptree_deps"
 
 type HoverFunction = (data: Record<string, string>) => void

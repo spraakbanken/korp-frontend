@@ -67,18 +67,19 @@ angular.module("korpApp").factory("searches", [
                 // The value is a string like <type>|<expr>
                 const [type, ...valueSplit] = searchExpr.split("|")
                 let value = valueSplit.join("|")
-
-                // Store new query in search history
-                // For Extended search, `value` is empty (then the CQP is instead in the `cqp` URL param)
-                if (value) {
-                    searchHistory.addItem($location.search())
-                }
                 $q.all([searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(function () {
+                    // For Extended search, the CQP is instead in the `cqp` URL param
                     if (type === "cqp") {
                         if (!value) {
                             value = $location.search().cqp || ""
                         }
                     }
+
+                    // Store new query in search history
+                    if (value) {
+                        searchHistory.addItem($location.search())
+                    }
+
                     // Update stored search query
                     if (["cqp", "word", "lemgram"].includes(type)) {
                         $rootScope.activeSearch = { type, val: value }

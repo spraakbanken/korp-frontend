@@ -5,8 +5,8 @@ import settings from "@/settings"
 import { KwicCtrl, KwicCtrlScope } from "./kwic_controller"
 import { LocationService } from "@/urlparams"
 import { KwicTab, RootScope } from "@/root-scope.types"
-import { KorpResponse, ProgressReport } from "@/backend/types"
-import { KorpQueryResponse } from "@/backend/kwic-proxy"
+import { Response } from "@/backend/types"
+import { QueryResponse } from "@/backend/types/query"
 import { UtilsService } from "@/services/utils"
 import "@/services/utils"
 import { TabHashScope } from "@/directives/tab-hash"
@@ -16,15 +16,13 @@ const korpApp = angular.module("korpApp")
 type ScopeBase = Omit<KwicCtrlScope, "makeRequest"> & IRepeatScope & TabHashScope
 
 type ExampleCtrlScope = ScopeBase & {
-    $parent: { $parent: TabHashScope }
     closeTab: (idx: number, e: Event) => void
     hitsPictureData?: any
     hitspictureClick?: (page: number) => void
     kwicTab: KwicTab
-    makeRequest: (isPaging?: boolean) => JQuery.jqXHR<KorpResponse<KorpQueryResponse>>
-    onExampleProgress: (progressObj: ProgressReport, isPaging?: boolean) => void
+    makeRequest: (isPaging?: boolean) => void
     setupReadingWatch: () => void
-    superRenderResult: (data: KorpResponse<KorpQueryResponse>) => void
+    superRenderResult: (data: Response<QueryResponse>) => void
 }
 
 class ExampleCtrl extends KwicCtrl {
@@ -48,13 +46,11 @@ class ExampleCtrl extends KwicCtrl {
         s.hits = undefined
         s.hitsInProgress = undefined
         s.page = 0
-        s.error = false
+        s.error = undefined
         s.hitsPictureData = null
         s.kwic = undefined
         s.corpusHits = undefined
         s.aborted = false
-
-        s.tabindex = s.$parent.$parent.tabset.tabs.length - 1 + s.$index
 
         s.newDynamicTab()
 
@@ -73,9 +69,7 @@ class ExampleCtrl extends KwicCtrl {
 
         s.toggleReading = function () {
             s.kwicTab.readingMode = !s.kwicTab.readingMode
-            if (s.getProxy().pendingRequests.length) {
-                return $.when(...(s.getProxy().pendingRequests || [])).then(() => s.makeRequest())
-            }
+            s.makeRequest()
         }
 
         s.closeTab = function (idx, e) {
@@ -117,52 +111,38 @@ class ExampleCtrl extends KwicCtrl {
                 ? settings["default_overview_context"]
                 : settings["default_reading_context"]
 
+            const corpora = opts.ajaxParams.corpus ? opts.ajaxParams.corpus.split(",") : []
             const context = settings.corpusListing.getContextQueryStringFromCorpusId(
-                (opts.ajaxParams.corpus || "").split(","),
+                corpora,
                 preferredContext,
                 avoidContext
             )
             _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
-            s.loading = true
-            if (opts.ajaxParams.command == "relations_sentences") {
-                s.onExampleProgress = () => {}
-            } else {
-                s.onExampleProgress = s.onProgress
-            }
+            // Abort any running request
+            if (s.loading) s.proxy.abort()
 
-            const def = s.proxy.makeRequest(
-                opts,
-                undefined,
-                (progressObj) => $timeout(() => s.onExampleProgress(progressObj)),
-                (data) => {
+            s.loading = true
+            s.proxy
+                .makeRequest(opts, undefined)
+                .then((data) =>
                     $timeout(() => {
                         s.renderResult(data)
                         s.renderCompleteResult(data)
-                        s.loading = false
                     })
-                }
-            )
-
-            def.fail(() => {
-                $timeout(() => {
-                    // TODO it could be abort
-                    s.error = true
-                    s.loading = false
+                )
+                .catch((error) => {
+                    // AbortError is expected if a new search is made before the previous one is finished
+                    if (error.name == "AbortError") return
+                    console.error(error)
+                    // TODO Show error
+                    $timeout(() => (s.error = error))
                 })
-            })
-
-            return def
-        }
-
-        s.isActive = () => {
-            return s.tabindex == s.activeTab
+                .finally(() => $timeout(() => (s.loading = false)))
         }
 
         if (s.kwicTab.queryParams) {
-            s.makeRequest().then(() => {
-                // s.onentry()
-            })
+            s.makeRequest()
         }
     }
 

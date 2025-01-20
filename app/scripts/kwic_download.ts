@@ -4,7 +4,8 @@ import moment from "moment"
 import CSV from "comma-separated-values/csv"
 import { locObj } from "@/i18n"
 import { CorpusHeading, isCorpusHeading, isKwic, Row } from "./components/kwic"
-import { type ApiKwic, type KorpQueryParams } from "@/backend/kwic-proxy"
+import { ApiKwic } from "./backend/types"
+import { QueryParams } from "./backend/types/query"
 
 // The annotations option is not available for parallel
 type AnnotationsRow = ApiKwic | CorpusHeading
@@ -22,7 +23,7 @@ function createFile(dataType: string, fileType: string, content: string) {
     return [filename, blobURL]
 }
 
-function createSearchInfo(requestInfo: KorpQueryParams, totalHits: number) {
+function createSearchInfo(requestInfo: QueryParams, totalHits: number) {
     return [
         `## CQP query: ${requestInfo.cqp}`,
         `## context: ${requestInfo.default_context}`,
@@ -148,7 +149,7 @@ function transformDataToKWIC(data: Row[], searchInfo: string[]) {
     return res
 }
 
-function transformData(dataType: "annotations" | "kwic", data: Row[], requestInfo: KorpQueryParams, totalHits: number) {
+function transformData(dataType: "annotations" | "kwic", data: Row[], requestInfo: QueryParams, totalHits: number) {
     const searchInfo = createSearchInfo(requestInfo, totalHits)
     if (dataType === "annotations") {
         return transformDataToAnnotations(data as AnnotationsRow[], searchInfo)
@@ -172,7 +173,7 @@ export function makeDownload(
     dataType: "annotations" | "kwic",
     fileType: "csv" | "tsv",
     data: Row[],
-    requestInfo: KorpQueryParams,
+    requestInfo: QueryParams,
     totalHits: number
 ) {
     const table = transformData(dataType, data, requestInfo, totalHits)

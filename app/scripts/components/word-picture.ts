@@ -1,8 +1,50 @@
 /** @format */
-import angular from "angular"
+import angular, { IController } from "angular"
 import settings from "@/settings"
 import { html, isLemgram, lemgramToHtml, splitLemgram } from "@/util"
 import { loc } from "@/i18n"
+import { RootScope } from "@/root-scope.types"
+import { WordPictureDef, WordPictureDefItem } from "@/settings/app-settings.types"
+import { ShowableApiRelation, TableData, TableDrawData } from "@/controllers/word_picture_controller"
+import { ApiRelation } from "@/backend/types/relations"
+
+type WordPictureController = IController & {
+    // Bindings
+    wordPic: boolean
+    activate: () => void
+    loading: boolean
+    hasData: boolean
+    aborted: boolean
+    hitSettings: string[]
+    settings: {
+        showNumberOfHits: `${number}`
+    }
+    data: TableDrawData[]
+    noHits: boolean
+
+    // Locals
+    showWordClass: boolean
+    localeString: (lang: string, hitSetting: string) => string
+    renderResultHeader: (section: TableData[], index: number) => ApiRelation[] | { word: string }
+    getHeaderLabel: (header: WordPictureDefItem, section: TableData[], idx: number) => string
+    getHeaderClasses: (header: WordPictureDefItem | "_", token: string) => string
+    isLemgram: (word: string) => boolean
+    lemgramToHtml: (word: string) => string
+    fromLemgram: (word: string) => string
+    getResultHeader: (index: number, wordClass: string) => WordPictureDef
+    renderTable: (obj: ApiRelation[] | { word: string }) => boolean
+    getTableClass: (wordClass: string, parentIdx: number, idx: number) => string | undefined
+    minimize: (table: ShowableApiRelation[]) => ShowableApiRelation[]
+    parseLemgram: (row: ShowableApiRelation) => ParsedLemgram
+    onClickExample: (row: ShowableApiRelation) => void
+}
+
+type ParsedLemgram = {
+    label: string
+    pos: string
+    idx: string
+    showIdx: boolean
+}
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
@@ -56,32 +98,32 @@ angular.module("korpApp").component("wordPicture", {
                             <span
                                 ng-repeat="header in $ctrl.getResultHeader(parentIndex, word.wordClass)"
                                 ng-class="$ctrl.getHeaderClasses(header, word.token)"
-                                ng-if="$ctrl.renderResultHeader(parentIndex, section, word.wordClass, $index)"
+                                ng-if="$ctrl.renderResultHeader(section, $index)"
                                 ><span ng-if="header != '_'"
                                     >{{$ctrl.getHeaderLabel(header, section, $index) | loc:$root.lang}}</span
                                 ><span ng-if="header == '_'"><b>{{$ctrl.fromLemgram(word.token)}}</b></span></span
                             >
                         </div>
                         <div
-                            class="lemgram_result"
+                            class="lemgram_result float-left py-1 px-2"
                             ng-repeat="table in section"
                             ng-if="$ctrl.renderTable(table.table)"
                             ng-class="$ctrl.getTableClass(word.wordClass, parentIndex, $index)"
                         >
-                            <table>
+                            <table class="m-0 p-0">
                                 <tbody>
                                     <tr
                                         ng-repeat="row in $ctrl.minimize(table.table)"
                                         ng-init="data = $ctrl.parseLemgram(row, table.all_lemgrams)"
                                     >
-                                        <td><span class="enumerate"></span></td>
+                                        <td class="text-right"><span class="enumerate"></span></td>
                                         <td>
                                             {{ data.label }}<sup ng-if="data.showIdx">{{data.idx}}</sup>
                                             <span ng-if="$ctrl.showWordClass">({{data.pos | loc:$root.lang}})</span>
                                         </td>
-                                        <td title="mi: {{row.mi | number:2}}">{{row.freq}}</td>
-                                        <td ng-click="$ctrl.onClickExample($event, row)">
-                                            <span class="word-pic-kwic-example ui-icon ui-icon-document"></span>
+                                        <td title="mi: {{row.mi | number:2}}" class="text-right">{{row.freq}}</td>
+                                        <td ng-click="$ctrl.onClickExample(row)" class="cursor-pointer">
+                                            <i class="fa-solid fa-magnifying-glass fa-xs ml-2"></i>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -105,8 +147,8 @@ angular.module("korpApp").component("wordPicture", {
     },
     controller: [
         "$rootScope",
-        function ($rootScope) {
-            const $ctrl = this
+        function ($rootScope: RootScope) {
+            const $ctrl = this as WordPictureController
 
             $ctrl.showWordClass = false
 
@@ -118,8 +160,8 @@ angular.module("korpApp").component("wordPicture", {
                 }
             }
 
-            $ctrl.renderResultHeader = function (parentIndex, section, wordClass, index) {
-                return section[index] && section[index].table
+            $ctrl.renderResultHeader = function (section, index) {
+                return section[index]?.table
             }
 
             $ctrl.getHeaderLabel = function (header, section, idx) {
@@ -147,14 +189,16 @@ angular.module("korpApp").component("wordPicture", {
 
             $ctrl.fromLemgram = (word) => (isLemgram(word) ? splitLemgram(word).form : word)
 
-            $ctrl.getResultHeader = (index, wordClass) => settings["word_picture_conf"][wordClass][index]
+            $ctrl.getResultHeader = (index, wordClass) => settings.word_picture_conf![wordClass][index]
 
             $ctrl.renderTable = (obj) => obj instanceof Array
 
-            $ctrl.getTableClass = (wordClass, parentIdx, idx) =>
-                settings["word_picture_conf"][wordClass][parentIdx][idx].css_class
+            $ctrl.getTableClass = (wordClass, parentIdx, idx) => {
+                const def = $ctrl.getResultHeader(parentIdx, wordClass)[idx]
+                return def != "_" ? def.css_class : undefined
+            }
 
-            $ctrl.minimize = (table) => table.slice(0, $ctrl.settings.showNumberOfHits)
+            $ctrl.minimize = (table) => table.slice(0, Number($ctrl.settings.showNumberOfHits))
 
             $ctrl.parseLemgram = function (row) {
                 const set = row[row.show_rel].split("|")
@@ -185,19 +229,17 @@ angular.module("korpApp").component("wordPicture", {
                 }
             }
 
-            $ctrl.onClickExample = function (event, row) {
-                const data = row
-
-                const opts = {}
-                opts.ajaxParams = {
-                    start: 0,
-                    end: 24,
-                    command: "relations_sentences",
-                    source: data.source.join(","),
-                    corpus: data.corpus,
-                }
-
-                $rootScope.kwicTabs.push({ queryParams: opts })
+            $ctrl.onClickExample = function (row) {
+                $rootScope.kwicTabs.push({
+                    queryParams: {
+                        ajaxParams: {
+                            command: "relations_sentences",
+                            source: row.source.join(","),
+                            start: 0,
+                            end: 24,
+                        },
+                    },
+                })
             }
         },
     ],

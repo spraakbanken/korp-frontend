@@ -15,9 +15,9 @@ import "@/global-filter/global-filters"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
-import { LexiconsRelatedWordsResponse, LexiconsService } from "@/backend/lexicons"
+import { LexiconsRelatedWords, relatedWordSearch } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
-import { CqpSearchEvent, LemgramSearchEvent } from "@/statemachine/types"
+import { CqpSearchEvent } from "@/statemachine/types"
 
 type SimpleSearchController = IController & {
     input: string
@@ -31,7 +31,7 @@ type SimpleSearchController = IController & {
     isCaseInsensitive: boolean
     currentText?: string
     lemgram?: string
-    relatedObj?: { data: LexiconsRelatedWordsResponse; attribute: string }
+    relatedObj?: { data: LexiconsRelatedWords[]; attribute: string }
     relatedDefault: number
     updateSearch: () => void
     getCQP: () => string
@@ -40,7 +40,7 @@ type SimpleSearchController = IController & {
     showAllRelated: () => void
     updateFreeOrderEnabled: () => void
     doSearch: () => void
-    onChange: (output: string, isRawOutput: boolean) => void
+    onChange: (value: string, isPlain: boolean) => void
 }
 
 angular.module("korpApp").component("simpleSearch", {
@@ -118,7 +118,6 @@ angular.module("korpApp").component("simpleSearch", {
         "$timeout",
         "$uibModal",
         "compareSearches",
-        "lexicons",
         "searches",
         function (
             $location: LocationService,
@@ -127,14 +126,13 @@ angular.module("korpApp").component("simpleSearch", {
             $timeout: ITimeoutService,
             $uibModal: ui.bootstrap.IModalService,
             compareSearches: CompareSearches,
-            lexicons: LexiconsService,
             searches: SearchesService
         ) {
             const ctrl = this as SimpleSearchController
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
 
-            statemachine.listen("lemgram_search", (event: LemgramSearchEvent) => {
+            statemachine.listen("lemgram_search", (event) => {
                 ctrl.input = event.value
                 ctrl.isRawInput = false
                 ctrl.onChange(event.value, false)
@@ -284,6 +282,8 @@ angular.module("korpApp").component("simpleSearch", {
                     size: "lg",
                     windowClass: "related",
                 })
+                // Ignore rejection from dismissing the modal
+                modalInstance.result.catch(() => {})
             }
 
             $rootScope.$watch("activeSearch", () => {
@@ -294,11 +294,11 @@ angular.module("korpApp").component("simpleSearch", {
                     if (search.type === "word") {
                         ctrl.input = search.val
                         ctrl.isRawInput = true
-                        ctrl.currentText = search.val
+                        ctrl.onChange(search.val, true)
                     } else {
                         ctrl.input = unregescape(search.val)
                         ctrl.isRawInput = false
-                        ctrl.lemgram = search.val
+                        ctrl.onChange(ctrl.input, false)
                     }
                     $rootScope.simpleCQP = expandOperators(ctrl.getCQP())
                     ctrl.updateFreeOrderEnabled()
@@ -318,15 +318,9 @@ angular.module("korpApp").component("simpleSearch", {
                 }
             )
 
-            ctrl.onChange = (output, isRawOutput) => {
-                if (isRawOutput) {
-                    ctrl.currentText = output
-                    ctrl.lemgram = undefined
-                } else {
-                    ctrl.lemgram = regescape(output)
-                    ctrl.currentText = undefined
-                }
-
+            ctrl.onChange = (value, isPlain) => {
+                ctrl.currentText = isPlain ? value : undefined
+                ctrl.lemgram = !isPlain ? regescape(value) : undefined
                 ctrl.updateFreeOrderEnabled()
             }
 
@@ -348,7 +342,7 @@ angular.module("korpApp").component("simpleSearch", {
                     const saldo = attrExists("saldo")
 
                     if (sense || saldo) {
-                        lexicons.relatedWordSearch(unregescape(search.val)).then((data) => {
+                        relatedWordSearch(unregescape(search.val)).then((data) => {
                             // Lower some nasty words
                             if (data.length >= 2 && data[0].label == "Excreting") {
                                 // Swap the first two elements

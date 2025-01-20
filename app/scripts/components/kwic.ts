@@ -8,10 +8,10 @@ import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
 import { LocationService } from "@/urlparams"
-import { ApiKwic, Token } from "@/backend/kwic-proxy"
 import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
+import { ApiKwic, Token } from "@/backend/types"
 
 export type Row = ApiKwic | LinkedKwic | CorpusHeading
 
@@ -45,7 +45,7 @@ type KwicController = IController & {
     contextChangeEvent: () => void
     hitsPerPage: number
     prevParams: any
-    prevRequest: any
+    prevUrl?: string
     corpusOrder: string[]
     /** Current page of results. */
     kwicInput: ApiKwic[]
@@ -230,7 +230,7 @@ angular.module("korpApp").component("kwic", {
         contextChangeEvent: "<",
         hitsPerPage: "<",
         prevParams: "<",
-        prevRequest: "<",
+        prevUrl: "<",
         corpusOrder: "<",
         kwicInput: "<",
         corpusHits: "<",
@@ -259,8 +259,8 @@ angular.module("korpApp").component("kwic", {
                         })
                     }
 
-                    if (settings["enable_backend_kwic_download"]) {
-                        setDownloadLinks($ctrl.prevRequest, {
+                    if (settings["enable_backend_kwic_download"] && $ctrl.prevUrl) {
+                        setDownloadLinks($ctrl.prevUrl, {
                             kwic: $ctrl.kwic,
                             corpus_order: $ctrl.corpusOrder,
                         })
@@ -388,6 +388,7 @@ angular.module("korpApp").component("kwic", {
                 return sentence.tokens.slice(from, len)
             }
 
+            // TODO Create new tokens instead of modifying the existing ones
             function massageData(hitArray: ApiKwic[]): Row[] {
                 const punctArray = [",", ".", ";", ":", "!", "?", "..."]
 

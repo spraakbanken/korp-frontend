@@ -1,24 +1,13 @@
 /** @format */
 import _ from "lodash"
-import { getAuthorizationHeader } from "@/components/auth/auth"
-import { KorpResponse, WithinParameters } from "@/backend/types"
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
-import { httpConfAddMethodFetch } from "@/util"
-import { KorpStatsParams, KorpStatsResponse, normalizeStatsData } from "@/backend/stats-proxy"
+import { normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map_services"
-import { KorpQueryResponse } from "@/backend/kwic-proxy"
-
-type KorpLoglikeResponse = {
-    /** Log-likelihood average. */
-    average: number
-    /** Log-likelihood values. */
-    loglike: Record<string, number>
-    /** Absolute frequency for the values in set 1. */
-    set1: Record<string, number>
-    /** Absolute frequency for the values in set 2. */
-    set2: Record<string, number>
-}
+import { korpRequest } from "./common"
+import { WithinParameters } from "./types"
+import { QueryResponse } from "./types/query"
+import { CountParams } from "./types/count"
 
 export type CompareResult = [CompareTables, number, SavedSearch, SavedSearch, string[]]
 
@@ -52,16 +41,6 @@ export type MapRequestResult = {
 
 type MapAttribute = { label: string; corpora: string[] }
 
-async function korpRequest<T extends Record<string, any> = {}, P extends Record<string, any> = {}>(
-    endpoint: string,
-    params: P
-): Promise<KorpResponse<T>> {
-    const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/" + endpoint, params)
-    request.headers = { ...request.headers, ...getAuthorizationHeader() }
-    const response = await fetch(url, request)
-    return (await response.json()) as KorpResponse<T>
-}
-
 /** Note: since this is using native Promise, we must use it with something like $q or $scope.$apply for AngularJS to react when they resolve. */
 export async function requestCompare(
     cmpObj1: SavedSearch,
@@ -86,17 +65,12 @@ export async function requestCompare(
         set1_cqp: cmpObj1.cqp,
         set2_corpus: corpora2.join(",").toUpperCase(),
         set2_cqp: cmpObj2.cqp,
-        max: "50",
+        max: 50,
         split,
         top,
     }
 
-    const data = await korpRequest<KorpLoglikeResponse>("loglike", params)
-
-    if ("ERROR" in data) {
-        // TODO Create a KorpBackendError which could be displayed nicely
-        throw new Error(data.ERROR.value)
-    }
+    const data = await korpRequest("loglike", params)
 
     const objs: CompareItemRaw[] = _.map(data.loglike, (value, key) => ({
         value: key,
@@ -134,7 +108,7 @@ export async function requestMapData(
     attribute: MapAttribute,
     relative?: boolean
 ): Promise<MapRequestResult> {
-    const params: KorpStatsParams = {
+    const params: CountParams = {
         group_by_struct: attribute.label,
         cqp,
         corpus: attribute.corpora.join(","),
@@ -146,22 +120,14 @@ export async function requestMapData(
 
     Object.keys(cqpExprs).map((cqp, i) => (params[`subcqp${i}`] = cqp))
 
-    const data = await korpRequest<KorpStatsResponse>("count", params)
-
-    if ("ERROR" in data) {
-        // TODO Create a KorpBackendError which could be displayed nicely
-        throw new Error(data.ERROR.value)
-    }
+    const data = await korpRequest("count", params)
 
     const normalizedData = normalizeStatsData(data) as any // TODO Type correctly
     let result = parseMapData(normalizedData, cqp, cqpExprs)
     return { corpora: attribute.corpora, cqp, within, data: result, attribute }
 }
 
-export async function getDataForReadingMode(
-    inputCorpus: string,
-    textId: string
-): Promise<KorpResponse<KorpQueryResponse>> {
+export async function getDataForReadingMode(inputCorpus: string, textId: string): Promise<QueryResponse> {
     const corpus = inputCorpus.toUpperCase()
     const corpusSettings = settings.corpusListing.get(inputCorpus)
 
@@ -184,5 +150,5 @@ export async function getDataForReadingMode(
         end: 0,
     }
 
-    return korpRequest<KorpQueryResponse>("query", params)
+    return korpRequest("query", params)
 }
