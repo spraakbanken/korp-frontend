@@ -1,10 +1,6 @@
 /** @format */
 import { html } from "@/util"
-import angular, { IController } from "angular"
-
-type SidebarSectionController = IController & {
-    title: string
-}
+import angular from "angular"
 
 angular.module("korpApp").component("sidebarSection", {
     template: html`
@@ -17,7 +13,5 @@ angular.module("korpApp").component("sidebarSection", {
         title: "@",
     },
     transclude: true,
-    controller: function () {
-        const $ctrl = this as SidebarSectionController
-    },
+    controller: function () {},
 })

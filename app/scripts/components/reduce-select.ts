@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IController, IScope, ITimeoutService } from "angular"
+import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import { AttributeOption } from "@/corpus_listing"
 

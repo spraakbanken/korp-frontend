@@ -112,22 +112,15 @@ angular.module("korpApp").directive("compareCtrl", () => ({
                                 const op = type === "set" ? "contains" : "="
 
                                 if (type === "set" && attrVal.length > 1) {
-                                    const variants: string[][] = []
-                                    _.map(attrVal, function (val) {
-                                        const parts = val.split(":")
-                                        if (variants.length === 0) {
-                                            for (let idx of _.range(0, parts.length - 1)) {
-                                                variants.push([])
-                                            }
-                                        }
-                                        for (let idx of _.range(1, parts.length)) {
-                                            variants[idx - 1].push(parts[idx])
-                                        }
-                                    })
-
+                                    // Assemble variants for each position in the token
+                                    const transpose = <T>(matrix: T[][]) => _.zip(...matrix) as T[][]
+                                    const variantsByValue = attrVal.map((val) => val.split(":").slice(1))
+                                    const variantsByPosition = transpose(variantsByValue).map(_.uniq)
+                                    const variantsStrs = variantsByPosition.map(
+                                        (variants) => `:(${variants.join("|")})`
+                                    )
                                     const key = attrVal[0].split(":")[0]
-                                    const variants2 = _.map(variants, (variant) => `:(${variant.join("|")})`)
-                                    val = key + variants2.join("")
+                                    val = key + variantsStrs.join("")
                                 } else {
                                     val = attrVal[0]
                                 }

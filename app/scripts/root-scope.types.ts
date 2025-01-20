@@ -1,7 +1,6 @@
 /** @format */
 import { IDeferred, IPromise, IRootScopeService } from "angular"
-import { Settings } from "./settings/settings.types"
-import { LangLocMap, LocLangMap } from "@/i18n/types"
+import { LangLocMap } from "@/i18n/types"
 import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CqpQuery } from "./cqp_parser/cqp.types"
 import { CorpusListing } from "./corpus_listing"
@@ -17,7 +16,6 @@ export type RootScope = IRootScopeService & {
     extendedCQP: string | null
     globalFilter: CqpQuery | null
     globalFilterDef: IDeferred<never>
-    searchtabs: any
     simpleCQP?: string
     show_modal: "about" | false
     compareTabs: CompareTab[]

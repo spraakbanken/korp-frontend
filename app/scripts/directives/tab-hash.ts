@@ -11,7 +11,7 @@ type UiBootstrapTabsetScope = IScope & {
     }
 }
 
-export type TabHashScope = UiBootstrapTabsetScope & {
+export type TabHashScope = IScope & {
     activeTab: number
     fixedTabs: Record<number, any>
     maxTab: number
@@ -27,7 +27,7 @@ angular.module("korpApp").directive("tabHash", [
     (utils: UtilsService, $location: LocationService, $timeout: ITimeoutService) => ({
         link(scope, elem, attr) {
             const s = scope as TabHashScope
-            const contentScope = elem.find(".tab-content").scope() as any
+            const contentScope = elem.find(".tab-content").scope() as UiBootstrapTabsetScope
 
             const watchHash = () =>
                 utils.setupHash(s, {

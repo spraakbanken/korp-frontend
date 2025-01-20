@@ -3,7 +3,7 @@ import angular, { IController } from "angular"
 import { clamp } from "lodash"
 import { html } from "@/util"
 import "@/components/extended/and-token"
-import { CqpToken, Condition } from "@/cqp_parser/cqp.types"
+import { CqpToken } from "@/cqp_parser/cqp.types"
 import { createDefaultCondition } from "./util"
 
 type ExtendedTokenController = IController & {

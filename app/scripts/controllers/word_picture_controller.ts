@@ -173,7 +173,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 })
                 const tagsetTrans = _.invert(settings["word_picture_tagset"]!)
                 unique_words = _.filter(unique_words, function (...args) {
-                    const [currentWd, pos] = args[0]
+                    const [, pos] = args[0]
                     return settings["word_picture_conf"]![tagsetTrans[pos]] != null
                 })
                 if (!unique_words.length) {

@@ -587,9 +587,6 @@ angular.module("korpApp").component("kwic", {
                 if (!scope.word.linkref) return
                 const [mainCorpus, lang] = settings.corpora[sentence.corpus].id.split("-")
 
-                const findRef = (ref: `${number}`, sentence: Token[]): Token | undefined =>
-                    sentence.find((word) => word.linkref == ref)
-
                 if (isLinkedKwic(sentence)) {
                     // a secondary language was clicked
                     // Find main sentence, as nearest previous non-linked sentence.

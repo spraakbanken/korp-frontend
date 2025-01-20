@@ -136,7 +136,7 @@ korpApp.run([
         s.extendedCQP = null
 
         /** This deferred is used to signal that the filter feature is ready. */
-        s.globalFilterDef = $q.defer()
+        s.globalFilterDef = $q.defer<never>()
 
         // Listen to url changes like #?lang=swe
         s.$on("$locationChangeSuccess", () => {

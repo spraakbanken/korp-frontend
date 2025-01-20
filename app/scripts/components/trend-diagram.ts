@@ -11,7 +11,7 @@ import { loc } from "@/i18n"
 import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
 import "@/components/korp-error"
 import { GraphTab, RootScope } from "@/root-scope.types"
-import { Histogram, Response } from "@/backend/types"
+import { Histogram } from "@/backend/types"
 import { JQueryExtended } from "@/jquery.types"
 import { CorpusListing } from "@/corpus_listing"
 import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
@@ -654,16 +654,6 @@ angular.module("korpApp").component("trendDiagram", {
                     }
                 })
 
-                const legend = new Rickshaw.Graph.Legend({
-                    element: $(".legend", $ctrl.$result).get(0),
-                    graph,
-                })
-
-                const shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
-                    graph,
-                    legend,
-                })
-
                 if (!showTotal && $(".legend .line", $ctrl.$result).length > 1) {
                     $(".legend .line:last .action", $ctrl.$result).click()
                 }
@@ -703,8 +693,6 @@ angular.module("korpApp").component("trendDiagram", {
 
                 // TODO: fix decade again
                 // timeunit = if last - first > 100 then "decade" else @zoom
-
-                const toDate = (sec: number) => moment(sec * 1000).toDate()
 
                 const time = new Rickshaw.Fixtures.Time()
                 // Fix time.ceil for decades: Rickshaw.Fixtures.Time.ceil

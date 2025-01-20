@@ -1,7 +1,7 @@
 /** @format */
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1timespan/get */
 
-import { Granularity, Histogram, NumericString, Response } from "./common"
+import { Granularity, Histogram, NumericString } from "./common"
 
 export type TimespanParams = {
     corpus: string

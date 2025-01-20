@@ -10,8 +10,7 @@ import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { LinkedKwic, Row } from "./components/kwic"
-import { ApiKwic } from "./backend/types"
+import { Row } from "./components/kwic"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
