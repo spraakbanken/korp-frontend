@@ -56,7 +56,7 @@ angular.module("korpApp").factory("utils", [
                 }
             }
             onWatch()
-            scope.$watch(() => $location.search(), onWatch)
+            scope.$watch(() => $location.search()[config.key], onWatch)
 
             // Sync from scope to url
             scope.$watch(config.expr || config.scope_name || config.key, (val: any) => {

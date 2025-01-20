@@ -140,9 +140,6 @@ korpApp.run([
         /** This deferred is used to signal that the filter feature is ready. */
         s.globalFilterDef = $q.defer()
 
-        type BootstrapTabsetScope = IScope & { tabset: { tabs: any } }
-        s.searchtabs = () => ($(".search_tabs > ul").scope() as BootstrapTabsetScope).tabset.tabs
-
         // Listen to url changes like #?lang=swe
         s.$on("$locationChangeSuccess", () => {
             // Update current locale. This is async and triggers the "$localeChangeSuccess" event.
