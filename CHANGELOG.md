@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Removed `$rootScope.searchtabs()`
+
+### Fixed
+
+- Simple search options were not properly synced from URL params
+
 ## [9.8.0] - 2025-01-20
 
 ### Added
