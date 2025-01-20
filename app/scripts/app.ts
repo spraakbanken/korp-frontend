@@ -133,7 +133,6 @@ korpApp.run([
         $uibModal: ui.bootstrap.IModalService
     ) {
         const s = $rootScope
-        s._settings = settings
 
         s.extendedCQP = null
 

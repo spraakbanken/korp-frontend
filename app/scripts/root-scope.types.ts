@@ -9,7 +9,6 @@ import { CompareResult, MapRequestResult } from "@/backend/backend"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
-    _settings: Settings
     activeSearch: {
         /** "word", "lemgram" or "cqp" */
         type: string

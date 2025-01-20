@@ -4,7 +4,8 @@
 
 ### Changed
 
-- Removed `$rootScope.searchtabs()`
+- Removed `$rootScope.searchtabs()`, use `$location.search()` to get/set `search_tab` instead
+- Removed `$rootScope._settings`, use `import settings from "@/settings"` instead
 
 ### Fixed
 

@@ -1,6 +1,7 @@
 /** @format */
-import angular, { IController } from "angular"
+import angular, { IScope } from "angular"
 import { html } from "@/util"
+import settings from "@/settings"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/kwic"
@@ -22,7 +23,10 @@ import "@/controllers/word_picture_controller"
 import "@/directives/tab-hash"
 import { RootScope } from "@/root-scope.types"
 
-type ResultsController = IController & {
+type ResultsScope = IScope & {
+    showSidebar: boolean
+    showStatisticsTab: boolean
+    showWordpicTab: boolean
     onSidebarShow: () => void
     onSidebarHide: () => void
     hasResult: () => boolean
@@ -33,7 +37,7 @@ type ResultsController = IController & {
 // But we're converting directives to components in preparation for exiting AngularJS.
 angular.module("korpApp").component("results", {
     template: html`
-        <div ng-show="$ctrl.hasResult()" class="flex" id="results" ng-class="{sidebar_visible : $ctrl.sidebarVisible}">
+        <div ng-show="hasResult()" class="flex" id="results" ng-class="{sidebar_visible: showSidebar}">
             <div class="overflow-auto grow" id="left-column">
                 <uib-tabset class="tabbable result_tabs" tab-hash="result_tab" active="activeTab">
                     <uib-tab kwic-ctrl index="0" select="onentry()" deselect="onexit()">
@@ -68,7 +72,7 @@ angular.module("korpApp").component("results", {
                         </div>
                     </uib-tab>
 
-                    <uib-tab stats-result-ctrl ng-if="$root._settings.statistics != false" select="onentry()" index="2">
+                    <uib-tab stats-result-ctrl ng-if="showStatisticsTab" select="onentry()" index="2">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             {{'statistics' | loc:$root.lang}}
                             <tab-preloader
@@ -98,7 +102,7 @@ angular.module("korpApp").component("results", {
                         ></json-button>
                     </uib-tab>
 
-                    <uib-tab ng-if="$root._settings['word_picture'] != false" wordpic-ctrl index="3">
+                    <uib-tab ng-if="showWordpicTab" wordpic-ctrl index="3">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             {{'word_picture' | loc:$root.lang}}
                             <tab-preloader
@@ -284,20 +288,24 @@ angular.module("korpApp").component("results", {
 
             <sidebar
                 class="sidebar shrink-0 ml-2"
-                on-show="$ctrl.onSidebarShow()"
-                on-hide="$ctrl.onSidebarHide()"
+                on-show="onSidebarShow()"
+                on-hide="onSidebarHide()"
                 lang="$root.lang"
             ></sidebar>
         </div>
     `,
     bindings: {},
     controller: [
+        "$scope",
         "$rootScope",
-        function ($rootScope: RootScope) {
-            const $ctrl = this as ResultsController
-            $ctrl.onSidebarShow = () => ($ctrl.sidebarVisible = true)
-            $ctrl.onSidebarHide = () => ($ctrl.sidebarVisible = false)
-            $ctrl.hasResult = () => !!$rootScope.activeSearch
+        function ($scope: ResultsScope, $rootScope: RootScope) {
+            $scope.showSidebar = false
+            $scope.showStatisticsTab = settings["statistics"] != false
+            $scope.showWordpicTab = settings["word_picture"] != false
+
+            $scope.onSidebarShow = () => ($scope.showSidebar = true)
+            $scope.onSidebarHide = () => ($scope.showSidebar = false)
+            $scope.hasResult = () => !!$rootScope.activeSearch
         },
     ],
 })
