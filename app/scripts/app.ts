@@ -17,7 +17,6 @@ import statemachine from "@/statemachine"
 import * as authenticationProxy from "@/components/auth/auth"
 import { initLocales } from "@/data_init"
 import { RootScope } from "@/root-scope.types"
-import { Folder } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { getService, html } from "@/util"
 import { loc, locObj } from "@/i18n"
@@ -183,22 +182,6 @@ korpApp.run([
         )
 
         s.waitForLogin = false
-
-        /** Recursively collect the corpus ids found in a corpus folder */
-        function collectCorpusIdsInFolder(folder: Folder): string[] {
-            if (!folder) return []
-
-            // Collect direct child corpora
-            const ids = folder.corpora || []
-
-            // Recurse into subfolders and add
-            const subfolders = folder.subfolders || {}
-            for (const subfolder of Object.values(subfolders)) {
-                ids.push(...collectCorpusIdsInFolder(subfolder))
-            }
-
-            return ids
-        }
 
         async function initializeCorpusSelection(selectedIds: string[]): Promise<void> {
             // Resolve any folder ids to the contained corpus ids
