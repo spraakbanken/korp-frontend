@@ -221,7 +221,7 @@ korpApp.run([
                 // custom initialization code called
             } else if (_.isEmpty(settings.corpora)) {
                 // no corpora
-                s.openErrorModal({
+                openErrorModal({
                     content: "<korp-error></korp-error>",
                     resolvable: false,
                 })
@@ -233,7 +233,7 @@ korpApp.run([
                 if (authenticationProxy.isLoggedIn()) {
                     // access partly or fully denied to selected corpora
                     if (settings.corpusListing.corpora.length == loginNeededFor.length) {
-                        s.openErrorModal({
+                        openErrorModal({
                             content: "{{'access_denied' | loc:$root.lang}}",
                             buttonText: "go_to_start",
                             onClose: () => {
@@ -241,7 +241,7 @@ korpApp.run([
                             },
                         })
                     } else {
-                        s.openErrorModal({
+                        openErrorModal({
                             content: html`<div>{{'access_partly_denied' | loc:$root.lang}}:</div>
                                 <div>${loginNeededHTML()}</div>
                                 <div>{{'access_partly_denied_continue' | loc:$root.lang}}</div>`,
@@ -255,7 +255,7 @@ korpApp.run([
                     }
                 } else {
                     // login needed before access can be checked
-                    s.openErrorModal({
+                    openErrorModal({
                         content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:$root.lang}}:</span
                             >${loginNeededHTML()}`,
                         onClose: () => {
@@ -266,7 +266,7 @@ korpApp.run([
                 }
             } else if (!selectedIds.every((r) => allCorpusIds.includes(r))) {
                 // some corpora missing
-                s.openErrorModal({
+                openErrorModal({
                     content: `{{'corpus_not_available' | loc:$root.lang}}`,
                     onClose: () => {
                         const validIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
@@ -283,7 +283,14 @@ korpApp.run([
 
         // TODO the top bar could show even though the modal is open,
         // thus allowing switching modes or language when an error has occured.
-        s.openErrorModal = ({ content, resolvable = true, onClose, buttonText, translations }) => {
+        type ErrorModalOptions = {
+            content: string
+            resolvable?: boolean
+            onClose?: () => void
+            buttonText?: string
+            translations?: LocLangMap
+        }
+        function openErrorModal({ content, resolvable = true, onClose, buttonText, translations }: ErrorModalOptions) {
             type ModalScope = IScope & {
                 translations?: LocLangMap
                 closeModal: () => void

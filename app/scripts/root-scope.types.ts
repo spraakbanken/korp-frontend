@@ -28,13 +28,6 @@ export type RootScope = IRootScopeService & {
     waitForLogin: boolean
     lang: string
     loc_data: LangLocMap
-    openErrorModal: (options: {
-        content: string
-        resolvable?: boolean
-        onClose?: () => void
-        buttonText?: string
-        translations?: LocLangMap
-    }) => void
     $on: (name: "corpuschooserchange", handler: (event: any, selected: string[]) => void) => void
 }
 

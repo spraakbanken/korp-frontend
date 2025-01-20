@@ -6,6 +6,7 @@
 
 - Removed `$rootScope.searchtabs()`, use `$location.search()` to get/set `search_tab` instead
 - Removed `$rootScope._settings`, use `import settings from "@/settings"` instead
+- Removed `$rootScope.openErrorModal()`, use `$uibModal` directly instead
 
 ### Fixed
 
