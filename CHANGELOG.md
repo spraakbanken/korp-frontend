@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.8.0] - 2025-01-20
+
 ### Added
 
 - Sidebar: Collapse and expand attribute sections [#199](https://github.com/spraakbanken/korp-frontend/issues/199)
@@ -334,6 +336,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.8.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.0
 [9.7.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.2
 [9.7.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.1
 [9.7.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.0
