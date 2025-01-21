@@ -18,7 +18,6 @@ export type KwicCtrlScope = TabHashScope & {
     aborted?: boolean
     buildQueryOptions: (isPaging: boolean) => QueryParams
     corpusHits?: Record<string, number>
-    countCorpora?: () => number | null
     corpusOrder?: string[]
     cqp?: string
     error?: string
@@ -261,10 +260,6 @@ export class KwicCtrl implements IController {
 
         s.onexit = () => {
             s.active = false
-        }
-
-        s.countCorpora = () => {
-            return s.proxy.prevParams?.corpus ? s.proxy.prevParams.corpus.split(",").length : null
         }
     }
 }

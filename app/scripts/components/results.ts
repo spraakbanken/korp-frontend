@@ -43,10 +43,7 @@ angular.module("korpApp").component("results", {
                     <uib-tab kwic-ctrl index="0" select="onentry()" deselect="onexit()">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             KWIC
-                            <tab-preloader
-                                ng-if="loading"
-                                progress="countCorpora() > 1 ? progress : undefined"
-                            ></tab-preloader>
+                            <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
                         <div class="results-kwic" ng-class="{reading_mode : reading_mode, loading: loading}">
                             <korp-error ng-if="error" message="{{error}}"></korp-error>
@@ -75,10 +72,7 @@ angular.module("korpApp").component("results", {
                     <uib-tab stats-result-ctrl ng-if="showStatisticsTab" select="onentry()" index="2">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             {{'statistics' | loc:$root.lang}}
-                            <tab-preloader
-                                ng-if="loading"
-                                progress="countCorpora() > 1 ? progress : undefined"
-                            ></tab-preloader>
+                            <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
                         <korp-error ng-if="error" message="{{error}}"></korp-error>
                         <statistics
@@ -105,10 +99,7 @@ angular.module("korpApp").component("results", {
                     <uib-tab ng-if="showWordpicTab" wordpic-ctrl index="3">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             {{'word_picture' | loc:$root.lang}}
-                            <tab-preloader
-                                ng-if="loading"
-                                progress="countCorpora() > 1 ? progress : undefined"
-                            ></tab-preloader>
+                            <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
                         <div ng-if="!error">
                             <word-picture
