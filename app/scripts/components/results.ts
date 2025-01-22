@@ -39,7 +39,7 @@ angular.module("korpApp").component("results", {
     template: html`
         <div ng-show="hasResult()" class="flex" id="results" ng-class="{sidebar_visible: showSidebar}">
             <div class="overflow-auto grow" id="left-column">
-                <uib-tabset class="tabbable result_tabs" tab-hash="result_tab" active="activeTab">
+                <uib-tabset class="tabbable result_tabs" tab-hash="result_tab" active="activeTabz">
                     <uib-tab kwic-ctrl index="0" select="onentry()" deselect="onexit()">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             KWIC

@@ -7,15 +7,15 @@ import "@/services/utils"
 
 type UiBootstrapTabsetScope = IScope & {
     tabset: {
-        tabs: any[]
+        tabs: { index: number }[]
     }
 }
 
 export type TabHashScope = IScope & {
+    /** Created by <uib-tabset>. */
     activeTab: number
-    fixedTabs: Record<number, any>
+    /** Max tab index. Not necessarily same as tab count, as there may be skipped indices. */
     maxTab: number
-    setSelected: (index: number, ignoreCheck?: boolean) => void
     newDynamicTab: () => void
     closeDynamicTab: () => void
 }
@@ -25,58 +25,38 @@ angular.module("korpApp").directive("tabHash", [
     "$location",
     "$timeout",
     (utils: UtilsService, $location: LocationService, $timeout: ITimeoutService) => ({
-        link(scope, elem, attr) {
-            const s = scope as TabHashScope
-            const contentScope = elem.find(".tab-content").scope() as UiBootstrapTabsetScope
+        link(scope: TabHashScope, elem, attr) {
+            const tabset = (elem.find(".tab-content").scope() as UiBootstrapTabsetScope).tabset
 
-            const watchHash = () =>
-                utils.setupHash(s, {
-                    expr: "activeTab",
-                    val_in(val) {
-                        s.setSelected(Number(val))
-                        return s.activeTab
-                    },
-                    key: attr.tabHash,
-                    default: "0",
-                })
+            const getMaxTab = () => Math.max(...tabset.tabs.map((tab) => tab.index))
 
-            s.setSelected = function (index, ignoreCheck) {
-                if (!ignoreCheck && !(index in s.fixedTabs)) {
-                    index = s.maxTab
-                }
-                s.activeTab = index
-            }
-
-            const initTab = parseInt($location.search()[attr.tabHash]) || 0
             $timeout(function () {
-                s.fixedTabs = {}
-                s.maxTab = -1
-                for (let tab of contentScope.tabset.tabs) {
-                    s.fixedTabs[tab.index] = tab
-                    if (tab.index > s.maxTab) {
-                        s.maxTab = tab.index
-                    }
-                }
-                s.setSelected(initTab)
-                watchHash()
-            }, 0)
+                scope.maxTab = getMaxTab()
+                // Get active tab from url, or default to first tab
+                scope.activeTab = parseInt($location.search()[attr.tabHash]) || 0
+            })
 
-            s.newDynamicTab = function () {
+            // Set up sync between url and scope
+            utils.setupHash(scope, {
+                key: attr.tabHash,
+                scope_name: "activeTab",
+                val_in: Number,
+                default: 0,
+            })
+
+            /** Increment max tab index and select last. */
+            scope.newDynamicTab = function () {
                 $timeout(function () {
-                    s.setSelected(s.maxTab + 1, true)
-                    s.maxTab += 1
-                }, 0)
+                    scope.maxTab += 1
+                    scope.activeTab = scope.maxTab
+                })
             }
 
-            s.closeDynamicTab = function () {
+            /** Recalculate max tab index. */
+            scope.closeDynamicTab = function () {
                 $timeout(function () {
-                    s.maxTab = -1
-                    for (let tab of contentScope.tabset.tabs) {
-                        if (tab.index > s.maxTab) {
-                            s.maxTab = tab.index
-                        }
-                    }
-                }, 0)
+                    scope.maxTab = getMaxTab()
+                })
             }
         },
     }),
