@@ -33,6 +33,7 @@
         "xstate": "4.35.4"
     },
     "devDependencies": {
+        "@playwright/test": "^1.49.1",
         "@types/jquery": "^3.5.29",
         "@types/js-yaml": "^4.0.9",
         "@types/lodash": "^4.14.118",
@@ -66,6 +67,7 @@
         "dev": "webpack-dev-server --config webpack.dev.js",
         "build": "ENVIRONMENT=production webpack --config webpack.prod.js",
         "build:labb": "ENVIRONMENT=staging webpack --config webpack.prod.js",
+        "test": "yarn playwright test",
         "format": "prettier . --write --ignore-path .gitignore"
     }
 }
