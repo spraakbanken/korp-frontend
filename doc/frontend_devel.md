@@ -877,4 +877,12 @@ Update this document if needed.
 
 ### Testing
 
-Previous test code has been flaky and underprioritized, and is now removed. To examine or restore it, filter the git log for changes to the `test/` folder.
+End-to-end (e2e) testing is done using [Playwright](https://playwright.dev/).
+
+Test specs are in `test/e2e/`. They assume Språkbanken's setup (Korp frontend+backend and Karp backend).
+
+- Install browsers (may require root access): `yarn playwright install --with-deps`
+- Run with GUI during development: `yarn playwright test --ui`
+- Run against live site: `KORP_LIVE=https://spraakbanken.gu.se/korplabb/ yarn playwright test --ui`
+
+These tests are run as a part of the GitHub Actions workflow, see `.github/workflows/` and [GitHub Actions docs](https://docs.github.com/en/actions).

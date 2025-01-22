@@ -5,12 +5,16 @@ import { defineConfig, devices } from "@playwright/test"
 import dotenv from "dotenv"
 dotenv.config()
 
-// Use same url as dev server
-// TODO Add a way to test against live site
-const host = process.env.KORP_HOST || "localhost"
-const port = process.env.KORP_PORT || 9111
-const protocol = process.env.KORP_HTTPS ? "https" : "http"
-const url = `${protocol}://${host}:${port}`
+function getUrl() {
+    // Set KORP_LIVE to a working frontend URL to test against production
+    if (process.env.KORP_LIVE) return process.env.KORP_LIVE
+
+    // Otherwise, use same url as dev server
+    const host = process.env.KORP_HOST || "localhost"
+    const port = process.env.KORP_PORT || 9111
+    const protocol = process.env.KORP_HTTPS ? "https" : "http"
+    return process.env.TEST_URL || `${protocol}://${host}:${port}`
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -30,19 +34,21 @@ export default defineConfig({
     // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions
     use: {
         // Base URL to use in actions like `await page.goto('/')`
-        baseURL: url,
+        baseURL: getUrl(),
         // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
         trace: "on-first-retry",
     },
 
     // Ensure local dev server is running
-    webServer: {
-        command: "yarn dev",
-        url,
-        reuseExistingServer: !process.env.CI,
-        // Certificate for dev server is probably self-signed
-        ignoreHTTPSErrors: true,
-    },
+    webServer: process.env.KORP_LIVE
+        ? undefined
+        : {
+              command: "yarn dev",
+              url: getUrl(),
+              reuseExistingServer: !process.env.CI,
+              // Certificate for dev server is probably self-signed
+              ignoreHTTPSErrors: true,
+          },
 
     /* Configure projects for major browsers */
     projects: [

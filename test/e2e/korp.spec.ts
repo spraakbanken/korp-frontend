@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { describe } from "node:test";
 
 test("has description", async ({ page }) => {
-  await page.goto("https://spraakbanken.gu.se/korp/");
+  await page.goto("./");
   await expect(page).toHaveTitle(/Korp/);
   await expect(page.locator("#content")).toContainText(
     "Språkbankens ordforskningsplattform"
@@ -10,7 +10,7 @@ test("has description", async ({ page }) => {
 });
 
 test("select corpus", async ({ page }) => {
-  await page.goto("https://spraakbanken.gu.se/korplabb/");
+  await page.goto("./");
   await page.locator("corpus-chooser").click();
   await page.getByText("Avmarkera").click();
   await page.getByText("SUC 3.0").click();
@@ -36,9 +36,7 @@ function korpUrl(options?: {
   if (options?.search) params.set("search", options.search);
   if (options?.cqp) params.set("cqp", options.cqp);
   if (options?.search_tab) params.set("search_tab", String(options.search_tab));
-
-  const url = new URL("https://spraakbanken.gu.se/korplabb/");
-  return `${url}#?${params.toString()}`;
+  return `./#?${params.toString()}`;
 }
 
 describe("simple search", () => {
