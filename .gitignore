@@ -11,3 +11,9 @@ run_config.json
 *.pem
 config.yml
 .env
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
