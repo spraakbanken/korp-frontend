@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Assignment typo in if condition causes error when aborting statistics request [#425](https://github.com/spraakbanken/korp-frontend/issues/425)
+- Simple search options were not properly synced from URL params
+
 ## [9.8.0] - 2025-01-20
 
 ### Added
