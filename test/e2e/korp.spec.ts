@@ -23,25 +23,28 @@ test("select corpus", async ({ page }) => {
 })
 
 describe("simple search", () => {
-    test("related words should appear", async ({ page }) => {
-        await page.goto("./#?lang=eng&corpus=vivill&search=lemgram|framtid\\.\\.nn\\.1")
-        await page.getByText("Related words").click()
-        await expect(page.getByRole("dialog")).toContainText(/utsikt/)
-    })
-
     test("lemgram suggestions", async ({ page }) => {
         await page.goto("./#?lang=eng&corpus=suc3")
+
+        // Type and select a lemgram
         await page.getByRole("textbox").fill("framtid")
         await page.getByRole("listbox").getByText("framtid").first().click()
+        expect(await page.getByRole("textbox").getAttribute("placeholder")).toContain("framtid")
 
-        // Change, do not select
-        await page.getByRole("textbox").fill("fritid")
-        await page.getByRole("listbox").getByText("fritid").isVisible()
+        // Change, do not select, search
+        await page.getByRole("textbox").fill("jämlikhet")
+        await expect(page.getByRole("listbox").getByText("jämlikhet")).toBeVisible()
         await page.getByRole("button", { name: "Search" }).click()
 
         // Change again
         await page.getByRole("textbox").fill("frihet")
-        await page.getByRole("listbox").getByText("fritid").isVisible()
+        await expect(page.getByRole("listbox").getByText("frihet")).toBeVisible()
+    })
+
+    test("related words should appear", async ({ page }) => {
+        await page.goto("./#?lang=eng&corpus=vivill&search=lemgram|framtid\\.\\.nn\\.1")
+        await page.getByText("Related words").click()
+        await expect(page.getByRole("dialog")).toContainText(/utsikt/)
     })
 })
 
@@ -60,4 +63,25 @@ describe("extended search", () => {
             await expect(page.getByText("Choose a value")).not.toBeVisible()
         })
     )
+
+    test(`reset case sensitive`, async ({ page }) => {
+        // Do case-insensitive search
+        await page.goto(
+            `./#?lang=eng&corpus=vivill&search_tab=1&show_stats&search=cqp&cqp=[word = "framtid" %25c]&result_tab=2`
+        )
+
+        // Check advanced query
+        await page.getByRole("link", { name: "Advanced" }).click()
+        await expect(page.locator("pre").filter({ hasText: "%c" })).toBeVisible()
+        await page.getByRole("link", { name: "Extended" }).click()
+
+        // Switch attribute
+        await page.selectOption("select.arg_type", "lemgram")
+        await page.getByRole("textbox").fill("framtid")
+        await page.getByRole("listbox").getByText("framtid").first().click()
+
+        // Check advanced query
+        await page.getByRole("link", { name: "Advanced" }).click()
+        await expect(page.locator("pre").filter({ hasText: "%c" })).not.toBeVisible()
+    })
 })
