@@ -180,7 +180,7 @@ angular.module("korpApp").component("statistics", {
                 <div ng-if="!$ctrl.loading" style="margin-bottom: 5px">
                     {{'total_rows' | loc:$root.lang}} {{$ctrl.totalNumberOfRows}}
                 </div>
-                <div id="myGrid"></div>
+                <div id="myGrid" role="grid"></div>
                 <div id="exportStatsSection">
                     <br /><br />
                     <select id="kindOfData">
