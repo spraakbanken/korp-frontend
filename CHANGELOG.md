@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [9.8.1] - 2025-01-23
+
+### Fixed
+
+- Assignment typo in if condition causes error when aborting statistics request [#425](https://github.com/spraakbanken/korp-frontend/issues/425)
+- Simple search options were not properly synced from URL params
+
 ## [9.8.0] - 2025-01-20
 
 ### Added
@@ -336,6 +343,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.8.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.1
 [9.8.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.0
 [9.7.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.2
 [9.7.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.1

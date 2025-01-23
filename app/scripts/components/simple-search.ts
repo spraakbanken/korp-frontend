@@ -306,17 +306,15 @@ angular.module("korpApp").component("simpleSearch", {
                 }
             })
 
-            // Reach to changes in URL params
-            $scope.$watch(
-                () => $location.search(),
-                (search) => {
-                    ctrl.freeOrder = search.in_order != null
-                    ctrl.prefix = search.prefix != null
-                    ctrl.mid_comp = search.mid_comp != null
-                    ctrl.suffix = search.suffix != null
-                    ctrl.isCaseInsensitive = search.isCaseInsensitive != null
-                }
-            )
+            // React to changes in URL params
+            $scope.$on("$locationChangeSuccess", () => {
+                const search = $location.search()
+                ctrl.freeOrder = search.in_order != null
+                ctrl.prefix = search.prefix != null
+                ctrl.mid_comp = search.mid_comp != null
+                ctrl.suffix = search.suffix != null
+                ctrl.isCaseInsensitive = search.isCaseInsensitive != null
+            })
 
             ctrl.onChange = (value, isPlain) => {
                 ctrl.currentText = isPlain ? value : undefined
