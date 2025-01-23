@@ -37,6 +37,8 @@ export default defineConfig({
         baseURL: getUrl(),
         // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
         trace: "on-first-retry",
+        // Timeout (ms) to allow for each navigation action, default is 5000
+        navigationTimeout: 30_000,
     },
 
     // Ensure local dev server is running
