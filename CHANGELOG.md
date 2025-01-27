@@ -8,6 +8,7 @@
 - Removed `$rootScope._settings`, use `import settings from "@/settings"` instead
 - Removed `$rootScope.openErrorModal()`, use `$uibModal` directly instead
 - Result tab progress bars grow smoothly and are shown even when only one corpus is selected
+- Removed old test code
 
 ## [9.8.1] - 2025-01-23
 

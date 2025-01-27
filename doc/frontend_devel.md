@@ -877,4 +877,4 @@ Update this document if needed.
 
 ### Testing
 
-The state of the frontend testing is quite bad. It is good to add e2e tests in `test/e2e/spec`, but not a demand. The tests are dependent on Språkbanken's frontend setup, Korp backend and Karp backend (auto completion feature).
+Previous test code has been flaky and underprioritized, and is now removed. To examine or restore it, filter the git log for changes to the `test/` folder.

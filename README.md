@@ -20,8 +20,6 @@ Install `yarn`: `https://yarnpkg.com`
 - install all dependencies: `yarn`
 - run development server: `yarn start`
 - build a dist-version: `yarn build`
-- run dist-version: `yarn start:dist`
-- run tests: `yarn test` or `yarn test:karma` or `yarn test:e2e` (tests currently depend on Språkbankens setup).
 
 Declare dependencies using `yarn add pkg`or `yarn add --dev pkg` for dev dependencies.
 
