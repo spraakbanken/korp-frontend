@@ -40,7 +40,7 @@ angular.module("korpApp").component("appHeader", {
             <div class="flex items-center justify-between px-3 py-2" id="top_bar">
                 <ul id="mode_switch">
                     <li class="visible" ng-repeat="mode in $ctrl.visible" ng-class="{selected: mode.selected}">
-                        <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:lang}}</a>
+                        <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:$oot.lang}}</a>
                     </li>
                     <li class="menu_more visible" ng-if="$ctrl.menu.length" uib-dropdown>
                         <a uib-dropdown-toggle>
@@ -50,7 +50,7 @@ angular.module("korpApp").component("appHeader", {
 
                         <ul uib-dropdown-menu>
                             <li ng-repeat="mode in $ctrl.menu" ng-class="{selected: mode.selected}">
-                                <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:lang}}</a>
+                                <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:$root.lang}}</a>
                             </li>
                         </ul>
                     </li>
@@ -235,17 +235,18 @@ angular.module("korpApp").component("appHeader", {
                 $ctrl.modes = _.filter(settings["modes"], (item) => !item.labOnly)
             }
 
+            // Split modes into visible and menu
             $ctrl.visible = $ctrl.modes.slice(0, N_VISIBLE)
+            $ctrl.menu = $ctrl.modes.slice(N_VISIBLE)
+
+            // If current mode is in menu, promote it to visible
+            const modesInMenu = _.remove($ctrl.menu, (item) => item.mode == currentMode)
+            $ctrl.visible.push(...modesInMenu)
 
             $rootScope.$watch("lang", () => {
                 $scope.lang = $rootScope.lang
-                $ctrl.menu = collatorSort($ctrl.modes.slice(N_VISIBLE), "label", $rootScope.lang)
-
-                const i = _.map($ctrl.menu, "mode").indexOf(currentMode)
-                if (i !== -1) {
-                    $ctrl.visible.push($ctrl.menu[i])
-                    $ctrl.menu.splice(i, 1)
-                }
+                // Re-sort menu but not visible options
+                $ctrl.menu = collatorSort($ctrl.menu, "label", $rootScope.lang)
             })
 
             $ctrl.getUrl = function (modeId) {

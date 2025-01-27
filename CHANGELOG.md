@@ -10,6 +10,10 @@
 - Result tab progress bars grow smoothly and are shown even when only one corpus is selected
 - Removed old test code
 
+### Fixed
+
+- Error when loading a non-`visible_modes` mode [#426](https://github.com/spraakbanken/korp-frontend/issues/426)
+
 ## [9.8.1] - 2025-01-23
 
 ### Fixed
