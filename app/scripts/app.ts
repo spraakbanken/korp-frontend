@@ -34,6 +34,9 @@ import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 korpApp.factory("$exceptionHandler", [
     function () {
         return (exception: Error) => {
+            // Also log it to make the stack trace available
+            console.error(exception)
+
             // Cannot inject services normally here, because it creates circular dependencies
             const $uibModal = getService("$uibModal")
             const $rootScope = getService("$rootScope")
