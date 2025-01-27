@@ -2,7 +2,7 @@
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
 import _ from "lodash"
 import { AttributeOption } from "@/corpus_listing"
-import { Condition, DateRange } from "@/cqp_parser/cqp.types"
+import { Condition } from "@/cqp_parser/cqp.types"
 import extendedComponents from "./widgets"
 import { Widget, WidgetScope } from "./widgets/common"
 import { defaultWidget } from "./widgets/default"
@@ -12,11 +12,6 @@ type ExtendedCqpValueController = IController & {
     change: (event: { term: Partial<Condition> }) => void
     attributeDefinition: AttributeOption
     term: Condition
-}
-
-type ChildScope = IScope & {
-    model?: Condition["val"]
-    orObj?: Condition
 }
 
 angular.module("korpApp").component("extendedCqpValue", {

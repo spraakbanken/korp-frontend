@@ -49,7 +49,7 @@ innehåller verktyg för att bygga ihop mer komplicerade frågor.
 ![Enkel sökning på lemgram](images/lemgram.png)
 
 I en enkel sökning kan man söka på antingen ett ord, flera ord, eller ett *lemgram*. Ett lemgram är ett ords eller ett flerordsuttrycks samtliga böjningsformer, och gör det
-möjligt att i en och samma sökning söka efter både "katt", "katter", "katterna" och så vidare.
+möjligt att i en och samma sökning söka efter både "katt", "katter", "katterna" och så vidare. Läs mer på [Vad är ett lemgram?](https://spraakbanken.gu.se/faq/vad-ar-ett-lemgram)
 
 För att göra en vanlig ordsökning skriver man ordet eller orden i sökfältet och trycker på Sök-knappen eller Enter-tangenten på tangentbordet. Om man i stället för
 att direkt trycka på Sök väntar lite efter att man har skrivit ett komplett ord, så kommer det upp en lista under sökfältet över lemgram i vilka det inmatade ordet är en ordform.
@@ -120,11 +120,11 @@ i högra hörnet. För att lägga till ett *och* samt en ny *eller*-grupp trycke
 
 **Upprepning, meningsbörjan och meningsslut**
 
-Längst ner i högra hörnet på varje token finns det en knapp med ett kugghjul. Klickar man på denna får man upp en liten meny
-med ytterligare kriterier. Det första av dessa, *Upprepa*, låter en uppge att aktuellt token får upprepas ett visst antal gånger.
+Längst ner i högra hörnet på varje token finns det en menyknapp. Klickar man på denna får man upp en liten meny
+med ytterligare kriterier. Det första av dessa, *Upprepa*, låter en ange att aktuellt token får upprepas ett visst antal gånger.
 Ett token med till exempel *Vilket ord som helst* och *Upprepa 1 till 3 gånger* tillåter en "lucka" i ens sökuttryck på minst ett och max tre token.
-De två andra kriterierna är *Meningsbörjan* och *Meningsslut*, som anger att aktuellt token ska vara antingen först eller sist
-i meningen. Tänk på att skiljetecken också räknas som token, vilket innebär att att sista tokenet i en mening oftast är en punkt och inte ett ord.
+De två andra kriterierna är *Meningsbörjan* och *Meningsslut*, som lägger till gränskriterier före eller efter tokenet.
+Tänk på att skiljetecken också räknas som token, vilket innebär att att sista tokenet i en mening oftast är en punkt och inte ett ord.
 
 **Sök över meningsgränser**
 

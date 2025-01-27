@@ -24,6 +24,7 @@ export type LinkedKwic = {
 
 /** A row introducing the next corpus in the hit listing. */
 export type CorpusHeading = {
+    corpus: string
     newCorpus: LangString
     noContext?: boolean
 }
@@ -259,8 +260,8 @@ angular.module("korpApp").component("kwic", {
                         })
                     }
 
-                    if (settings["enable_backend_kwic_download"] && $ctrl.prevUrl) {
-                        setDownloadLinks($ctrl.prevUrl, {
+                    if (settings["enable_backend_kwic_download"] && $ctrl.prevParams) {
+                        setDownloadLinks($ctrl.prevParams, {
                             kwic: $ctrl.kwic,
                             corpus_order: $ctrl.corpusOrder,
                         })
@@ -455,6 +456,7 @@ angular.module("korpApp").component("kwic", {
                     if (prevCorpus !== id) {
                         const corpus = settings.corpora[id]
                         const newSent = {
+                            corpus: id,
                             newCorpus: corpus.title,
                             noContext: _.keys(corpus.context).length === 1,
                         }
@@ -584,9 +586,6 @@ angular.module("korpApp").component("kwic", {
 
                 if (!scope.word.linkref) return
                 const [mainCorpus, lang] = settings.corpora[sentence.corpus].id.split("-")
-
-                const findRef = (ref: `${number}`, sentence: Token[]): Token | undefined =>
-                    sentence.find((word) => word.linkref == ref)
 
                 if (isLinkedKwic(sentence)) {
                     // a secondary language was clicked

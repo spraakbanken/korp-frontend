@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   build:
-    # This job doesn't run the tests because they are a bit unstable.
     runs-on: ubuntu-latest
 
     defaults:

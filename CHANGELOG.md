@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [9.8.2] - 2025-01-27
+
+### Changed
+
+- Removed `$rootScope.searchtabs()`, use `$location.search()` to get/set `search_tab` instead
+- Removed `$rootScope._settings`, use `import settings from "@/settings"` instead
+- Removed `$rootScope.openErrorModal()`, use `$uibModal` directly instead
+- Result tab progress bars grow smoothly and are shown even when only one corpus is selected
+- Removed old test code
+
+### Fixed
+
+- Error when loading a non-`visible_modes` mode [#426](https://github.com/spraakbanken/korp-frontend/issues/426)
+
 ## [9.8.1] - 2025-01-23
 
 ### Fixed
@@ -343,6 +357,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.8.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.2
 [9.8.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.1
 [9.8.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.0
 [9.7.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.2

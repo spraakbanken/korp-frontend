@@ -6,7 +6,6 @@ import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
 import { isLemgram, lemgramToString, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
-import { ProgressReport } from "@/backend/types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { TabHashScope } from "@/directives/tab-hash"
 import { ApiRelation, RelationsResponse } from "@/backend/types/relations"
@@ -15,7 +14,6 @@ type WordpicCtrlScope = TabHashScope & {
     $root: RootScope
     aborted: boolean
     activate: () => void
-    countCorpora: () => number | null
     data?: TableDrawData[]
     drawTables: (tables: [string, string][], data: ApiRelation[]) => void
     error?: string
@@ -24,7 +22,6 @@ type WordpicCtrlScope = TabHashScope & {
     loading: boolean
     makeRequest: () => void
     noHits: boolean
-    onProgress: (progressObj: ProgressReport<"relations">) => void
     progress: number
     proxy: LemgramProxy
     renderResult: (data: RelationsResponse, word: string) => void
@@ -101,8 +98,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 s.error = undefined
             }
 
-            s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["percent"]))
-
             s.makeRequest = () => {
                 const search = $rootScope.activeSearch
                 if (!s.wordPic || !search || (search.type !== "lemgram" && search.val.includes(" "))) {
@@ -124,7 +119,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 s.progress = 0
                 s.loading = true
                 s.proxy
-                    .makeRequest(word, type, (progressObj) => $timeout(() => s.onProgress(progressObj)))
+                    .makeRequest(word, type, (progressObj) => $timeout(() => (s.progress = progressObj.percent)))
                     .then((data) =>
                         $timeout(() => {
                             s.loading = false
@@ -173,7 +168,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 })
                 const tagsetTrans = _.invert(settings["word_picture_tagset"]!)
                 unique_words = _.filter(unique_words, function (...args) {
-                    const [currentWd, pos] = args[0]
+                    const [, pos] = args[0]
                     return settings["word_picture_conf"]![tagsetTrans[pos]] != null
                 })
                 if (!unique_words.length) {
@@ -292,10 +287,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 }
 
                 prepareScope(res)
-            }
-
-            s.countCorpora = () => {
-                return s.proxy.prevParams ? s.proxy.prevParams.corpus.split(",").length : null
             }
 
             s.hitSettings = ["15"]

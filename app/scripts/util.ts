@@ -10,8 +10,7 @@ import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { LinkedKwic, Row } from "./components/kwic"
-import { ApiKwic } from "./backend/types"
+import { Row } from "./components/kwic"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -324,10 +323,10 @@ export function simpleModal(html: string) {
 // settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
-export function setDownloadLinks(query_url: string, result_data: { kwic: Row[]; corpus_order: string[] }): void {
+export function setDownloadLinks(params: string, result_data: { kwic: Row[]; corpus_order: string[] }): void {
     // If some of the required parameters are null, return without
     // adding the download links.
-    if (!(query_url != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
+    if (!(params != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
         console.log("failed to do setDownloadLinks")
         return
     }
@@ -343,7 +342,7 @@ export function setDownloadLinks(query_url: string, result_data: { kwic: Row[]; 
     // number hit_num in the corpus order information of the query
     // result.
     const get_corpus_num = (hit_num: number) =>
-        result_data.corpus_order.indexOf((result_data.kwic[hit_num] as ApiKwic | LinkedKwic).corpus)
+        result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus.toUpperCase())
 
     console.log("setDownloadLinks data:", result_data)
     $("#download-links").empty()
@@ -384,7 +383,7 @@ export function setDownloadLinks(query_url: string, result_data: { kwic: Row[]; 
     class="download_link">${format.toUpperCase()}</option>\
 `)
 
-        const query_params = JSON.stringify(Object.fromEntries(new URL(query_url).searchParams))
+        const query_params = JSON.stringify(Object.fromEntries(new URLSearchParams(params)))
 
         const download_params = {
             query_params,
@@ -395,7 +394,7 @@ export function setDownloadLinks(query_url: string, result_data: { kwic: Row[]; 
             corpus_config_info_keys: ["metadata", "licence", "homepage", "compiler"].join(","),
             urn_resolver: settings.urnResolver,
         }
-        if ("downloadFormatParams" in settings) {
+        if ("download_format_params" in settings) {
             if ("*" in settings.download_format_params) {
                 $.extend(download_params, settings.download_format_params["*"])
             }

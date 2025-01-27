@@ -5,7 +5,6 @@ import settings from "@/settings"
 import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
-import { ProgressReport } from "@/backend/types"
 import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
 import { SearchesService } from "@/services/searches"
 import "@/services/searches"
@@ -16,7 +15,6 @@ type StatsResultCtrlScope = TabHashScope & {
     aborted: boolean
     activate: () => void
     columns: SlickgridColumn[]
-    countCorpora: () => number | null
     data: Dataset
     error?: string
     hasResult: boolean
@@ -29,7 +27,6 @@ type StatsResultCtrlScope = TabHashScope & {
     showStatistics: boolean
     makeRequest: (cqp: string) => void
     onentry: () => void
-    onProgress: (progressObj: ProgressReport<"count">, isPaging?: boolean) => void
     renderResult: (columns: SlickgridColumn[], data: Dataset) => void
     resetView: () => void
     resultError: (err: any) => void
@@ -87,8 +84,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 s.progress = 0
             }
 
-            s.onProgress = (progressObj) => (s.progress = Math.round(progressObj["percent"]))
-
             s.makeRequest = (cqp) => {
                 s.error = undefined
                 const grid = document.getElementById("myGrid")
@@ -112,7 +107,7 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
 
                 s.loading = true
                 s.proxy
-                    .makeRequest(cqp, (progressObj) => $timeout(() => s.onProgress(progressObj)))
+                    .makeRequest(cqp, (progressObj) => $timeout(() => (s.progress = progressObj.percent)))
                     .then((result) =>
                         $timeout(() => {
                             const [data, columns, searchParams] = result
@@ -174,10 +169,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 const cqp = searches.getCqpExpr()
                 s.showStatistics = true
                 s.makeRequest(cqp)
-            }
-
-            s.countCorpora = () => {
-                return s.proxy.prevParams && s.proxy.prevParams.corpus.split(",").length
             }
         },
     ],

@@ -111,13 +111,12 @@ To add *and* including a new *or* group press on the +-button in the bottom left
 
 **Repetition, sentence start and sentence end**
 
-In the bottom right corner of every token box you can find a cogwheel button which provides further search criteria.
+In the bottom right corner of every token box you can find a menu button which provides further search criteria.
 The first one, *Repeat* lets you repeat the current token as many times as specified. By specifying a token with
 *Any word* and *Repeat 1 to 3 times* you can define a gap in your search query consisting of at least one and at max
 three tokens.
-The other two criteria in this menu are *Sentence start* and *Sentence end* which define that the current token must be
-first or last in the sentence. Remember that punctuation also counts as a token which means that the last token in a
-sentence most often is a full stop instead of a word.
+The other two criteria in this menu are *Sentence start* and *Sentence end* which add boundary criteria before or after the token.
+Note that punctuation also counts as a token which means that the last token in a sentence most often is a full stop, not a word.
 
 **Search across sentence boundaries**
 

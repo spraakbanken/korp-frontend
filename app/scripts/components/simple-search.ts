@@ -254,13 +254,13 @@ angular.module("korpApp").component("simpleSearch", {
                     if (modalInstance != null) {
                         modalInstance.close()
                     }
-                    $rootScope.searchtabs()[1].tab.select()
                     const cqp =
                         attribute === "saldo"
                             ? `[saldo contains \"${regescape(wd)}\"]`
                             : `[sense rank_contains \"${regescape(wd)}\"]`
 
                     statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
+                    $location.search("search_tab", 1)
                 }
                 const modalInstance = $uibModal.open({
                     template: `\

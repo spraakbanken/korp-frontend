@@ -1,8 +1,6 @@
 /** @format */
 import $ from "jquery"
 import currentMode from "@/mode"
-import { locationSearchGet } from "@/util"
-import { HashParams } from "@/urlparams"
 import "@fontsource/source-sans-pro/400.css"
 import "@fontsource/source-sans-pro/600.css"
 
@@ -10,17 +8,11 @@ declare global {
     interface Window {
         jQuery: JQueryStatic
         $: JQueryStatic
-        /**
-         * TODO Remove, currently used in tests
-         * @deprecated
-         */
-        locationSearch: <K extends keyof HashParams>(key: K) => HashParams[K]
     }
 }
 
 window.jQuery = $
 window.$ = $
-window.locationSearch = locationSearchGet
 
 require("slickgrid/slick.grid.css")
 require("./styles/ui_mods.css")
