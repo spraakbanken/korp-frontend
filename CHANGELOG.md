@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.8.2] - 2025-01-27
+
 ### Changed
 
 - Removed `$rootScope.searchtabs()`, use `$location.search()` to get/set `search_tab` instead
@@ -355,6 +357,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.8.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.2
 [9.8.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.1
 [9.8.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.0
 [9.7.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.7.2
