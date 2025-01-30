@@ -4,13 +4,13 @@ import _ from "lodash"
 import { locAttribute } from "@/i18n"
 import { html } from "@/util"
 import "./global-filter-service"
-import { Filter } from "@/corpus_listing"
 import { LangString } from "@/i18n/types"
 import { RootScope } from "@/root-scope.types"
+import { Attribute } from "@/settings/config.types"
 
 type GlobalFilterController = IController & {
     attr: string
-    attrDef: Filter
+    attrDef: Attribute
     attrValue: string[]
     possibleValues: [string, number][]
     lang: string
@@ -94,7 +94,7 @@ angular.module("korpApp").component("globalFilter", {
             //     # TODO enable autocomplete
 
             $ctrl.$onInit = () => {
-                $scope.filterLabel = $ctrl.attrDef.settings.label
+                $scope.filterLabel = $ctrl.attrDef.label
                 $scope.selected = _.clone($ctrl.attrValue)
             }
 
@@ -120,7 +120,7 @@ angular.module("korpApp").component("globalFilter", {
             $scope.isSelectedList = (value: string) => $scope.selected.includes(value)
 
             $scope.translateAttribute = (value: string) =>
-                locAttribute($ctrl.attrDef.settings.translation, value, $rootScope.lang)
+                locAttribute($ctrl.attrDef.translation, value, $rootScope.lang)
         },
     ],
 })

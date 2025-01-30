@@ -13,6 +13,7 @@ import { countAttrValues } from "@/backend/attr-values"
 import { DataObject, GlobalFilterService, UpdateScope } from "./types"
 import { CqpQuery, Condition } from "@/cqp_parser/cqp.types"
 import { RecursiveRecord } from "@/backend/types/attr-values"
+import { Filter } from "@/corpus_listing"
 
 type StoredFilterValues = Record<string, string[]>
 
@@ -36,42 +37,44 @@ angular.module("korpApp").factory("globalFilterService", [
         var listenerDef = $q.defer<never>()
 
         /** Model of filter data. */
-        const dataObj: DataObject = {
-            filterValues: {},
-            attributes: {},
-        }
+        const dataObj: DataObject = {}
 
         /** Drilldown of values available for each attr. N-dimensional map where N = number of attrs. */
         let currentData: RecursiveRecord<number> = {}
 
-        /** Populate `filterValues` */
-        function initFilters() {
-            // delete any filter values that are not in the selected filters
-            for (const filter in dataObj.filterValues) {
-                if (!(filter in dataObj.attributes)) {
-                    delete dataObj.filterValues[filter]
+        function initFilters(filters: Record<string, Filter>) {
+            // Remove filters that are no more applicable
+            for (const attr in dataObj) {
+                if (!filters[attr]) {
+                    delete dataObj[attr]
                 }
             }
 
-            // create object for every filter that is selected but not yet created
-            for (const filter in dataObj.attributes) {
-                if (!(filter in dataObj.filterValues)) {
-                    dataObj.filterValues[filter] = { value: [], possibleValues: [] }
+            for (const attr in filters) {
+                // Replace settings of existing filters but keep their values
+                if (dataObj[attr]) Object.assign(dataObj[attr], filters)
+                else {
+                    // Add new filters
+                    dataObj[attr] = {
+                        value: [], // Selection empty by default
+                        possibleValues: [], // Filled in updateData
+                        ...filters[attr],
+                    }
                 }
             }
         }
 
         function getSupportedCorpora() {
-            const corporaPerFilter = _.map(dataObj.attributes, (filter) => filter.corpora)
+            const corporaPerFilter = Object.values(dataObj).map((filter) => filter.corpora)
             return _.intersection(...(corporaPerFilter || []))
         }
 
         /** Fetch token counts keyed in multiple dimensions by the values of attributes */
         async function getData(): Promise<void> {
             const corpora = getSupportedCorpora()
-            const attrs = Object.keys(dataObj.attributes)
-            const multiAttrs = attrs.filter((attr) => dataObj.attributes[attr].settings.type === "set")
-            currentData = await countAttrValues(corpora, attrs, multiAttrs)
+            const attrs = Object.keys(dataObj)
+            const multiAttrs = attrs.filter((attr) => dataObj[attr].settings.type === "set")
+            currentData = corpora.length && attrs.length ? await countAttrValues(corpora, attrs, multiAttrs) : {}
             updateData()
         }
 
@@ -83,15 +86,13 @@ angular.module("korpApp").factory("globalFilterService", [
                 parentSelected: boolean
             ): [number, boolean] {
                 const filter = filters[0]
-                const { possibleValues } = dataObj.filterValues[filter]
-                const currentValues = dataObj.filterValues[filter].value
                 let sum = 0
                 const values: string[] = []
                 let include = false
                 for (let value in elements) {
                     var childCount: number
                     const child = elements[value]
-                    const selected = currentValues.includes(value) || _.isEmpty(currentValues)
+                    const selected = !dataObj[filter].value.length || dataObj[filter].value.includes(value)
 
                     // filter of any parent values that do not support the child values
                     include = include || selected
@@ -103,11 +104,9 @@ angular.module("korpApp").factory("globalFilterService", [
                         ;[childCount, include] = collectAndSum(_.tail(filters), child, parentSelected && selected)
                     }
 
-                    if (include && parentSelected) {
-                        possibleValues.push([value, childCount])
-                    } else {
-                        possibleValues.push([value, 0])
-                    }
+                    const countDisplay = include && parentSelected ? childCount : 0
+                    dataObj[filter].possibleValues.push([value, countDisplay])
+
                     if (selected && include) {
                         sum += childCount
                     }
@@ -119,29 +118,23 @@ angular.module("korpApp").factory("globalFilterService", [
             }
 
             // reset all filters
-            for (const attr in dataObj.attributes) {
-                dataObj.filterValues[attr].possibleValues = []
-            }
+            for (const attr in dataObj) dataObj[attr].possibleValues = []
 
             // recursively decide the counts of all values
-            collectAndSum(Object.keys(dataObj.attributes), currentData, true)
+            collectAndSum(Object.keys(dataObj), currentData, true)
 
             // merge duplicate child values
-            for (const filter in dataObj.attributes) {
-                const possibleValuesTmp: Record<string, number> = {}
-                for (const [value, count] of dataObj.filterValues[filter].possibleValues) {
-                    if (!(value in possibleValuesTmp)) {
-                        possibleValuesTmp[value] = 0
-                    }
-                    possibleValuesTmp[value] += count
+            for (const attr in dataObj) {
+                // Sum the counts of duplicate values
+                const options: Record<string, number> = {}
+                for (const [value, count] of dataObj[attr].possibleValues) {
+                    options[value] ??= 0
+                    options[value] += count
                 }
-                dataObj.filterValues[filter].possibleValues = []
-                for (let k in possibleValuesTmp) {
-                    const v = possibleValuesTmp[k]
-                    dataObj.filterValues[filter].possibleValues.push([k, v])
-                }
-
-                dataObj.filterValues[filter].possibleValues.sort((a, b) => a[0].localeCompare(b[0], $rootScope.lang))
+                // Cast back to list and sort alphabetically
+                dataObj[attr].possibleValues = Object.entries(options).sort((a, b) =>
+                    a[0].localeCompare(b[0], $rootScope.lang)
+                )
             }
         }
 
@@ -150,41 +143,23 @@ angular.module("korpApp").factory("globalFilterService", [
             if (!globalFilter) {
                 return
             }
-            if (!dataObj.filterValues) {
-                return
-            }
             const parsedFilter: StoredFilterValues = JSON.parse(atob(globalFilter))
 
-            // Set values from param, if corresponding filter is available.
-            for (const attrKey in parsedFilter) {
-                const attrValues = parsedFilter[attrKey]
-                if (attrKey in dataObj.attributes) {
-                    dataObj.filterValues[attrKey].value = attrValues
-                }
-            }
-
-            // Set other available filters to empty.
-            for (const attrKey in dataObj.filterValues) {
-                if (!(attrKey in parsedFilter)) {
-                    dataObj.filterValues[attrKey].value = []
-                }
+            // Copy values from param, reset filters not in param
+            for (const attr in dataObj) {
+                dataObj[attr].value = parsedFilter[attr] || []
             }
         }
 
         /** Build a CQP token object of AND-combined conditions from active filters. */
         function makeCqp(): CqpQuery {
-            const andArray: Condition[][] = []
-            for (const attrKey in dataObj.filterValues) {
-                const attrValues = dataObj.filterValues[attrKey]
-                const attrType = dataObj.attributes[attrKey].settings.type
-                andArray.push(
-                    attrValues.value.map((attrValue) => ({
-                        type: `_.${attrKey}`,
-                        op: attrType === "set" ? "contains" : "=",
-                        val: regescape(attrValue),
-                    }))
-                )
-            }
+            const andArray: Condition[][] = Object.entries(dataObj).map(([attr, filter]) =>
+                filter.value.map((value) => ({
+                    type: `_.${attr}`,
+                    op: filter.settings.type === "set" ? "contains" : "=",
+                    val: regescape(value),
+                }))
+            )
 
             return [{ and_block: andArray }]
         }
@@ -192,12 +167,9 @@ angular.module("korpApp").factory("globalFilterService", [
         /** Set url param from local data, as base64-encoded json. */
         function updateLocation() {
             const rep: StoredFilterValues = {}
-            for (const attrKey in dataObj.filterValues) {
-                const attrValues = dataObj.filterValues[attrKey]
-                if (!_.isEmpty(attrValues.value)) {
-                    rep[attrKey] = attrValues.value
-                }
-            }
+            Object.entries(dataObj).forEach(([attr, filter]) => {
+                if (filter.value.length) rep[attr] = filter.value
+            })
             if (!_.isEmpty(rep)) {
                 $location.search("global_filter", btoa(JSON.stringify(rep)))
                 $rootScope.globalFilter = makeCqp()
@@ -210,25 +182,12 @@ angular.module("korpApp").factory("globalFilterService", [
         /** Update available filters when changing corpus selection. */
         $rootScope.$on("corpuschooserchange", () => {
             if (settings.corpusListing.selected.length > 0) {
-                const filterAttributes = settings.corpusListing.getDefaultFilters()
-
-                // Disable the filters feature if none are applicable to all selected corpora.
-                if (_.isEmpty(filterAttributes)) {
-                    $location.search("global_filter", null)
-                    $rootScope.globalFilter = null
-                    // Unset any active filters.
-                    dataObj.attributes = {}
-                    dataObj.filterValues = {}
-                } else {
-                    dataObj.attributes = filterAttributes
-
-                    initFilters()
-
-                    setFromLocation($location.search().global_filter)
-                    getData()
-                    updateLocation()
-                    notify()
-                }
+                const filters = settings.corpusListing.getDefaultFilters()
+                initFilters(filters)
+                setFromLocation($location.search().global_filter)
+                getData()
+                updateLocation()
+                notify()
             }
             // Flag that the filter feature is ready.
             $rootScope.globalFilterDef.resolve()

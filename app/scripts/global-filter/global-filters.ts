@@ -19,12 +19,12 @@ angular.module("korpApp").component("globalFilters", {
     template: html`<div ng-if="show" class="mb-4">
         <span class="font-bold"> {{ 'global_filter' | loc:$root.lang}}:</span>
         <div class="inline-block">
-            <span ng-repeat="(name, attr) in dataObj.attributes">
+            <span ng-repeat="(attr, filter) in dataObj">
                 <global-filter
-                    attr="filterKey"
-                    attr-def="attr"
-                    attr-value="dataObj.filterValues[name].value"
-                    possible-values="dataObj.filterValues[name].possibleValues"
+                    attr="attr"
+                    attr-def="filter.settings"
+                    attr-value="filter.value"
+                    possible-values="filter.possibleValues"
                 ></global-filter>
                 <span ng-if="!$last">{{"and" | loc:$root.lang}}</span>
             </span>
@@ -39,15 +39,12 @@ angular.module("korpApp").component("globalFilters", {
 
             $ctrl.$onInit = () => {
                 globalFilterService.registerScope($scope)
-                $scope.dataObj = {
-                    filterValues: {},
-                    attributes: {},
-                }
+                $scope.dataObj = {}
             }
 
             $scope.update = (dataObj) => {
                 $scope.dataObj = dataObj
-                $scope.show = Object.keys(dataObj.attributes).length > 0
+                $scope.show = Object.keys(dataObj).length > 0
             }
         },
     ],

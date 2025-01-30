@@ -7,12 +7,7 @@ export type GlobalFilterService = {
     valueChange: () => void
 }
 
-export type DataObject = {
-    /** Filter settings for each attribute */
-    attributes: Record<string, Filter>
-    /** Selected values for each filter. */
-    filterValues: Record<string, FilterValuesItem>
-}
+export type DataObject = Record<string, Filter & FilterValuesItem>
 
 export type FilterValuesItem = {
     value: string[]
