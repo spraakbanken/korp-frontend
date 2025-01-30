@@ -3,17 +3,20 @@
  *   and then merged with the tokens of the query when sending it to the backend.
  * @format
  */
-import angular, { IQService } from "angular"
+import angular, { ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import { regescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { countAttrValues } from "@/backend/attr-values"
-import { DataObject, GlobalFilterService, UpdateScope } from "./types"
 import { CqpQuery, Condition } from "@/cqp_parser/cqp.types"
 import { RecursiveRecord } from "@/backend/types/attr-values"
 import { Attribute } from "@/settings/config.types"
+
+export type GlobalFilterService = {
+    valueChange: () => void
+}
 
 type StoredFilterValues = Record<string, string[]>
 
@@ -25,42 +28,25 @@ type StoredFilterValues = Record<string, string[]>
 // diretives calls registerScope to register for updates
 // service calls scope.update() when changes occur
 angular.module("korpApp").factory("globalFilterService", [
-    "$rootScope",
     "$location",
-    "$q",
-    function ($rootScope: RootScope, $location: LocationService, $q: IQService): GlobalFilterService {
-        const scopes: UpdateScope[] = []
-
-        const notify = () => listenerDef.promise.then(() => scopes.map((scope) => scope.update(dataObj)))
-
-        // deferred for waiting for all directives to register
-        // TODO Move dataObj to root scope and let the component watch it
-        var listenerDef = $q.defer<never>()
-
-        /** Model of filter data. */
-        const dataObj: DataObject = {}
-
+    "$rootScope",
+    "$timeout",
+    function ($location: LocationService, $rootScope: RootScope, $timeout: ITimeoutService): GlobalFilterService {
         /** Drilldown of values available for each attr. N-dimensional map where N = number of attrs. */
         let currentData: RecursiveRecord<number> = {}
 
         function initFilters(filters: Record<string, Attribute>) {
             // Remove filters that are no more applicable
-            for (const attr in dataObj) {
-                if (!filters[attr]) {
-                    delete dataObj[attr]
-                }
+            for (const attr in $rootScope.globalFilterData) {
+                if (!filters[attr]) delete $rootScope.globalFilterData[attr]
             }
 
+            // Add new filters
             for (const attr in filters) {
-                // Replace settings of existing filters but keep their values
-                if (dataObj[attr]) Object.assign(dataObj[attr], filters)
-                else {
-                    // Add new filters
-                    dataObj[attr] = {
-                        value: [], // Selection empty by default
-                        options: [], // Filled in updateData
-                        attribute: filters[attr],
-                    }
+                $rootScope.globalFilterData[attr] ??= {
+                    attribute: filters[attr],
+                    value: [], // Selection empty by default
+                    options: [], // Filled in updateData
                 }
             }
         }
@@ -68,27 +54,28 @@ angular.module("korpApp").factory("globalFilterService", [
         /** Fetch token counts keyed in multiple dimensions by the values of attributes */
         async function getData(): Promise<void> {
             const corpora = settings.corpusListing.getSelectedCorpora()
-            const attrs = Object.keys(dataObj)
-            const multiAttrs = attrs.filter((attr) => dataObj[attr].attribute.type === "set")
+            const attrs = Object.keys($rootScope.globalFilterData)
+            const multiAttrs = attrs.filter((attr) => $rootScope.globalFilterData[attr].attribute.type === "set")
             currentData = corpora.length && attrs.length ? await countAttrValues(corpora, attrs, multiAttrs) : {}
-            updateData()
+            $timeout(() => updateData())
         }
 
         // when user selects an attribute, update all possible filter values and counts
         function updateData() {
             function collectAndSum(
-                filters: string[],
+                attrs: string[],
                 elements: RecursiveRecord<number>,
                 parentSelected: boolean
             ): [number, boolean] {
-                const filter = filters[0]
+                const attr = attrs[0]
+                const filter = $rootScope.globalFilterData[attr]
                 let sum = 0
                 const values: string[] = []
                 let include = false
                 for (let value in elements) {
                     var childCount: number
                     const child = elements[value]
-                    const selected = !dataObj[filter].value.length || dataObj[filter].value.includes(value)
+                    const selected = !filter.value.length || filter.value.includes(value)
 
                     // filter of any parent values that do not support the child values
                     include = include || selected
@@ -97,11 +84,11 @@ angular.module("korpApp").factory("globalFilterService", [
                         childCount = child
                         include = true
                     } else {
-                        ;[childCount, include] = collectAndSum(_.tail(filters), child, parentSelected && selected)
+                        ;[childCount, include] = collectAndSum(_.tail(attrs), child, parentSelected && selected)
                     }
 
                     const countDisplay = include && parentSelected ? childCount : 0
-                    dataObj[filter].options.push([value, countDisplay])
+                    filter.options.push([value, countDisplay])
 
                     if (selected && include) {
                         sum += childCount
@@ -114,23 +101,21 @@ angular.module("korpApp").factory("globalFilterService", [
             }
 
             // reset all filters
-            for (const attr in dataObj) dataObj[attr].options = []
+            for (const filter of Object.values($rootScope.globalFilterData)) filter.options = []
 
             // recursively decide the counts of all values
-            collectAndSum(Object.keys(dataObj), currentData, true)
+            collectAndSum(Object.keys($rootScope.globalFilterData), currentData, true)
 
             // merge duplicate child values
-            for (const attr in dataObj) {
+            for (const filter of Object.values($rootScope.globalFilterData)) {
                 // Sum the counts of duplicate values
                 const options: Record<string, number> = {}
-                for (const [value, count] of dataObj[attr].options) {
+                for (const [value, count] of filter.options) {
                     options[value] ??= 0
                     options[value] += count
                 }
                 // Cast back to list and sort alphabetically
-                dataObj[attr].options = Object.entries(options).sort((a, b) =>
-                    a[0].localeCompare(b[0], $rootScope.lang)
-                )
+                filter.options = Object.entries(options).sort((a, b) => a[0].localeCompare(b[0], $rootScope.lang))
             }
         }
 
@@ -142,14 +127,14 @@ angular.module("korpApp").factory("globalFilterService", [
             const parsedFilter: StoredFilterValues = JSON.parse(atob(globalFilter))
 
             // Copy values from param, reset filters not in param
-            for (const attr in dataObj) {
-                dataObj[attr].value = parsedFilter[attr] || []
+            for (const attr in $rootScope.globalFilterData) {
+                $rootScope.globalFilterData[attr].value = parsedFilter[attr] || []
             }
         }
 
         /** Build a CQP token object of AND-combined conditions from active filters. */
         function makeCqp(): CqpQuery {
-            const andArray: Condition[][] = Object.entries(dataObj).map(([attr, filter]) =>
+            const andArray: Condition[][] = Object.entries($rootScope.globalFilterData).map(([attr, filter]) =>
                 filter.value.map((value) => ({
                     type: `_.${attr}`,
                     op: filter.attribute.type === "set" ? "contains" : "=",
@@ -163,7 +148,7 @@ angular.module("korpApp").factory("globalFilterService", [
         /** Set url param from local data, as base64-encoded json. */
         function updateLocation() {
             const rep: StoredFilterValues = {}
-            Object.entries(dataObj).forEach(([attr, filter]) => {
+            Object.entries($rootScope.globalFilterData).forEach(([attr, filter]) => {
                 if (filter.value.length) rep[attr] = filter.value
             })
             if (!_.isEmpty(rep)) {
@@ -183,7 +168,6 @@ angular.module("korpApp").factory("globalFilterService", [
                 setFromLocation($location.search().global_filter)
                 getData()
                 updateLocation()
-                notify()
             }
             // Flag that the filter feature is ready.
             $rootScope.globalFilterDef.resolve()
@@ -196,13 +180,6 @@ angular.module("korpApp").factory("globalFilterService", [
         )
 
         return {
-            registerScope(scope) {
-                scopes.push(scope)
-                // TODO this will not work with parallel mode since only one directive is used :(
-                if (scopes.length === 2) {
-                    listenerDef.resolve()
-                }
-            },
             valueChange() {
                 updateLocation()
                 updateData()

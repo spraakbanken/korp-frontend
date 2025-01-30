@@ -7,13 +7,13 @@ import "./global-filter-service"
 import { LangString } from "@/i18n/types"
 import { RootScope } from "@/root-scope.types"
 import { Attribute } from "@/settings/config.types"
+import { GlobalFilterService } from "./global-filter-service"
 
 type GlobalFilterController = IController & {
     attr: string
     attrDef: Attribute
     attrValue: string[]
     options: [string, number][]
-    lang: string
 }
 
 type GlobalFilterScope = IScope & {
@@ -88,7 +88,7 @@ angular.module("korpApp").component("globalFilter", {
         "$rootScope",
         "$scope",
         "globalFilterService",
-        function ($rootScope: RootScope, $scope: GlobalFilterScope, globalFilterService) {
+        function ($rootScope: RootScope, $scope: GlobalFilterScope, globalFilterService: GlobalFilterService) {
             const $ctrl = this as GlobalFilterController
             // if scope.options.length > 20
             //     # TODO enable autocomplete
@@ -112,7 +112,7 @@ angular.module("korpApp").component("globalFilter", {
                     $ctrl.attrValue.push(value)
                 }
                 event.stopPropagation()
-                globalFilterService.valueChange($ctrl.attr)
+                globalFilterService.valueChange()
             }
 
             $scope.isSelected = (value: string) => $ctrl.attrValue.includes(value)

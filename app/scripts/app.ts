@@ -137,6 +137,7 @@ korpApp.run([
         const s = $rootScope
 
         s.extendedCQP = null
+        s.globalFilterData = {}
 
         /** This deferred is used to signal that the filter feature is ready. */
         s.globalFilterDef = $q.defer<never>()

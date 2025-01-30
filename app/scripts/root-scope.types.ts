@@ -5,6 +5,7 @@ import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CqpQuery } from "./cqp_parser/cqp.types"
 import { CorpusListing } from "./corpus_listing"
 import { CompareResult, MapRequestResult } from "@/backend/backend"
+import { Attribute } from "./settings/config.types"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
@@ -14,6 +15,8 @@ export type RootScope = IRootScopeService & {
         val: string
     } | null
     extendedCQP: string | null
+    /** Filter data by attribute name */
+    globalFilterData: Record<string, FilterData>
     globalFilter: CqpQuery | null
     globalFilterDef: IDeferred<never>
     simpleCQP?: string
@@ -27,6 +30,14 @@ export type RootScope = IRootScopeService & {
     lang: string
     loc_data: LangLocMap
     $on: (name: "corpuschooserchange", handler: (event: any, selected: string[]) => void) => void
+}
+
+export type FilterData = {
+    attribute: Attribute
+    /** Selected values */
+    value: string[]
+    /** Sorted list of options with counts */
+    options: [string, number][]
 }
 
 export type CompareTab = IPromise<CompareResult>
