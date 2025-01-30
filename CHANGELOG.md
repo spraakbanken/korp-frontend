@@ -14,6 +14,7 @@
 
 ### Fixed
 
+- Deselect unavailable global filter values after changing corpus selection
 - Error when loading a non-`visible_modes` mode [#426](https://github.com/spraakbanken/korp-frontend/issues/426)
 
 ## [9.8.1] - 2025-01-23

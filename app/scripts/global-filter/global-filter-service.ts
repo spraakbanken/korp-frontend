@@ -57,7 +57,10 @@ angular.module("korpApp").factory("globalFilterService", [
             const attrs = Object.keys($rootScope.globalFilterData)
             const multiAttrs = attrs.filter((attr) => $rootScope.globalFilterData[attr].attribute.type === "set")
             currentData = corpora.length && attrs.length ? await countAttrValues(corpora, attrs, multiAttrs) : {}
-            $timeout(() => updateData())
+            $timeout(() => {
+                updateData()
+                filterSelection()
+            })
         }
 
         // when user selects an attribute, update all possible filter values and counts
@@ -116,6 +119,13 @@ angular.module("korpApp").factory("globalFilterService", [
                 }
                 // Cast back to list and sort alphabetically
                 filter.options = Object.entries(options).sort((a, b) => a[0].localeCompare(b[0], $rootScope.lang))
+            }
+        }
+
+        /** Deselect values that are not in the options */
+        function filterSelection() {
+            for (const filter of Object.values($rootScope.globalFilterData)) {
+                filter.value = filter.value.filter((value) => filter.options.some(([v]) => v === value))
             }
         }
 
