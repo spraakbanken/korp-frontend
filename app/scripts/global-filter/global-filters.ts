@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IScope } from "angular"
+import angular, { IController, IScope } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
 import "./global-filter-service"
@@ -8,6 +8,7 @@ import { RootScope } from "@/root-scope.types"
 import { GlobalFilterService } from "./global-filter-service"
 
 type GlobalFiltersScope = IScope & {
+    setSelected: (attr: string, selected: string[]) => void
     show: boolean
 }
 
@@ -21,6 +22,7 @@ angular.module("korpApp").component("globalFilters", {
                     attr-def="filter.attribute"
                     attr-value="filter.value"
                     options="filter.options"
+                    on-change="setSelected(attr, selected)"
                 ></global-filter>
                 <span ng-if="!$last">{{"and" | loc:$root.lang}}</span>
             </span>
@@ -32,6 +34,15 @@ angular.module("korpApp").component("globalFilters", {
         "$scope",
         "globalFilterService",
         function ($rootScope: RootScope, $scope: GlobalFiltersScope, globalFilterService: GlobalFilterService) {
+            const $ctrl = this as IController
+            $ctrl.$onInit = () => {
+                globalFilterService.initialize()
+            }
+
+            $scope.setSelected = (attr, selected) => {
+                $rootScope.globalFilterData[attr].value = selected
+            }
+
             $rootScope.$watch(
                 "globalFilterData",
                 () => {

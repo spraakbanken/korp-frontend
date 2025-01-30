@@ -7,13 +7,12 @@ import "./global-filter-service"
 import { LangString } from "@/i18n/types"
 import { RootScope } from "@/root-scope.types"
 import { Attribute } from "@/settings/config.types"
-import { GlobalFilterService } from "./global-filter-service"
 
 type GlobalFilterController = IController & {
-    attr: string
     attrDef: Attribute
     attrValue: string[]
     options: [string, number][]
+    onChange: (args: { selected: string[] }) => void
 }
 
 type GlobalFilterScope = IScope & {
@@ -79,16 +78,15 @@ angular.module("korpApp").component("globalFilter", {
         </div>
     </span>`,
     bindings: {
-        attr: "<",
         attrDef: "<",
         attrValue: "<",
         options: "<",
+        onChange: "&",
     },
     controller: [
         "$rootScope",
         "$scope",
-        "globalFilterService",
-        function ($rootScope: RootScope, $scope: GlobalFilterScope, globalFilterService: GlobalFilterService) {
+        function ($rootScope: RootScope, $scope: GlobalFilterScope) {
             const $ctrl = this as GlobalFilterController
             // if scope.options.length > 20
             //     # TODO enable autocomplete
@@ -107,12 +105,11 @@ angular.module("korpApp").component("globalFilter", {
 
             $scope.toggleSelected = function (value, event) {
                 if ($scope.isSelected(value)) {
-                    _.pull($ctrl.attrValue, value)
+                    $ctrl.onChange({ selected: $ctrl.attrValue.filter((v) => v !== value) })
                 } else {
-                    $ctrl.attrValue.push(value)
+                    $ctrl.onChange({ selected: [...$ctrl.attrValue, value] })
                 }
                 event.stopPropagation()
-                globalFilterService.valueChange()
             }
 
             $scope.isSelected = (value: string) => $ctrl.attrValue.includes(value)

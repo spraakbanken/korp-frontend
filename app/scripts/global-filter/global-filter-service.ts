@@ -15,7 +15,7 @@ import { RecursiveRecord } from "@/backend/types/attr-values"
 import { Attribute } from "@/settings/config.types"
 
 export type GlobalFilterService = {
-    valueChange: () => void
+    initialize: () => void
 }
 
 type StoredFilterValues = Record<string, string[]>
@@ -160,30 +160,43 @@ angular.module("korpApp").factory("globalFilterService", [
             }
         }
 
-        /** Update available filters when changing corpus selection. */
-        $rootScope.$on("corpuschooserchange", () => {
-            if (settings.corpusListing.selected.length > 0) {
-                const filters = settings.corpusListing.getDefaultFilters()
-                initFilters(filters)
-                setFromLocation($location.search().global_filter)
-                getData()
-                updateLocation()
-            }
-            // Flag that the filter feature is ready.
-            $rootScope.globalFilterDef.resolve()
-        })
+        function initialize() {
+            /** Update available filters when changing corpus selection. */
+            $rootScope.$on("corpuschooserchange", () => {
+                if (settings.corpusListing.selected.length > 0) {
+                    const filters = settings.corpusListing.getDefaultFilters()
+                    initFilters(filters)
+                    setFromLocation($location.search().global_filter)
+                    getData()
+                    updateLocation()
+                }
+                // Flag that the filter feature is ready.
+                $rootScope.globalFilterDef.resolve()
+            })
 
-        /** Set up sync from url params to local data. */
-        $rootScope.$watch(
-            () => $location.search().global_filter,
-            (filter) => setFromLocation(filter)
-        )
+            /** Set up sync from url params to local data. */
+            $rootScope.$watch(
+                () => $location.search().global_filter,
+                (filter) => setFromLocation(filter)
+            )
+
+            $rootScope.$watch(
+                "globalFilterData",
+                (filterData: RootScope["globalFilterData"], filterDataOld?: RootScope["globalFilterData"]) => {
+                    // Only watch selection changes
+                    const values = _.mapValues(filterData, (filter) => filter.value)
+                    const valuesOld = _.mapValues(filterDataOld, (filter) => filter.value)
+                    if (!_.isEqual(values, valuesOld)) {
+                        updateLocation()
+                        getData()
+                    }
+                },
+                true
+            )
+        }
 
         return {
-            valueChange() {
-                updateLocation()
-                updateData()
-            },
+            initialize,
         }
     },
 ])
