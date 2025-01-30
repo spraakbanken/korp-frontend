@@ -1,5 +1,5 @@
 /** @format */
-import { Filter } from "@/corpus_listing"
+import { Attribute } from "@/settings/config.types"
 import { IScope } from "angular"
 
 export type GlobalFilterService = {
@@ -7,11 +7,12 @@ export type GlobalFilterService = {
     valueChange: () => void
 }
 
-export type DataObject = Record<string, Filter & FilterValuesItem>
+export type DataObject = Record<string, FilterValuesItem>
 
 export type FilterValuesItem = {
+    attribute: Attribute
     value: string[]
-    possibleValues: [string, number][]
+    options: [string, number][]
 }
 
 export type UpdateScope = IScope & {

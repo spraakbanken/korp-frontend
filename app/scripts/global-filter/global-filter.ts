@@ -12,7 +12,7 @@ type GlobalFilterController = IController & {
     attr: string
     attrDef: Attribute
     attrValue: string[]
-    possibleValues: [string, number][]
+    options: [string, number][]
     lang: string
 }
 
@@ -42,7 +42,7 @@ angular.module("korpApp").component("globalFilter", {
             <ul class="p-0 m-0">
                 <!-- Selected values -->
                 <li
-                    ng-repeat="value in $ctrl.possibleValues"
+                    ng-repeat="value in $ctrl.options"
                     ng-class="{'bg-blue-100': isSelected(value[0])}"
                     class="attribute p-1"
                     ng-click="toggleSelected(value[0], $event)"
@@ -55,7 +55,7 @@ angular.module("korpApp").component("globalFilter", {
 
                 <!-- Unselected values -->
                 <li
-                    ng-repeat="value in $ctrl.possibleValues"
+                    ng-repeat="value in $ctrl.options"
                     ng-class="{'bg-blue-100': isSelected(value[0])}"
                     class="attribute p-1"
                     ng-click="toggleSelected(value[0], $event)"
@@ -68,7 +68,7 @@ angular.module("korpApp").component("globalFilter", {
 
                 <!-- Values with 0 hits, disabled -->
                 <li
-                    ng-repeat="value in $ctrl.possibleValues"
+                    ng-repeat="value in $ctrl.options"
                     class="attribute disabled opacity-50 p-1"
                     ng-if="!isSelectedList(value[0]) && value[1] == 0"
                 >
@@ -82,7 +82,7 @@ angular.module("korpApp").component("globalFilter", {
         attr: "<",
         attrDef: "<",
         attrValue: "<",
-        possibleValues: "<",
+        options: "<",
     },
     controller: [
         "$rootScope",
@@ -90,7 +90,7 @@ angular.module("korpApp").component("globalFilter", {
         "globalFilterService",
         function ($rootScope: RootScope, $scope: GlobalFilterScope, globalFilterService) {
             const $ctrl = this as GlobalFilterController
-            // if scope.possibleValues.length > 20
+            // if scope.options.length > 20
             //     # TODO enable autocomplete
 
             $ctrl.$onInit = () => {

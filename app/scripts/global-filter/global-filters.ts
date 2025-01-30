@@ -22,9 +22,9 @@ angular.module("korpApp").component("globalFilters", {
             <span ng-repeat="(attr, filter) in dataObj">
                 <global-filter
                     attr="attr"
-                    attr-def="filter.settings"
+                    attr-def="filter.attribute"
                     attr-value="filter.value"
-                    possible-values="filter.possibleValues"
+                    options="filter.options"
                 ></global-filter>
                 <span ng-if="!$last">{{"and" | loc:$root.lang}}</span>
             </span>

@@ -13,7 +13,7 @@ import { countAttrValues } from "@/backend/attr-values"
 import { DataObject, GlobalFilterService, UpdateScope } from "./types"
 import { CqpQuery, Condition } from "@/cqp_parser/cqp.types"
 import { RecursiveRecord } from "@/backend/types/attr-values"
-import { Filter } from "@/corpus_listing"
+import { Attribute } from "@/settings/config.types"
 
 type StoredFilterValues = Record<string, string[]>
 
@@ -34,6 +34,7 @@ angular.module("korpApp").factory("globalFilterService", [
         const notify = () => listenerDef.promise.then(() => scopes.map((scope) => scope.update(dataObj)))
 
         // deferred for waiting for all directives to register
+        // TODO Move dataObj to root scope and let the component watch it
         var listenerDef = $q.defer<never>()
 
         /** Model of filter data. */
@@ -42,7 +43,7 @@ angular.module("korpApp").factory("globalFilterService", [
         /** Drilldown of values available for each attr. N-dimensional map where N = number of attrs. */
         let currentData: RecursiveRecord<number> = {}
 
-        function initFilters(filters: Record<string, Filter>) {
+        function initFilters(filters: Record<string, Attribute>) {
             // Remove filters that are no more applicable
             for (const attr in dataObj) {
                 if (!filters[attr]) {
@@ -57,23 +58,18 @@ angular.module("korpApp").factory("globalFilterService", [
                     // Add new filters
                     dataObj[attr] = {
                         value: [], // Selection empty by default
-                        possibleValues: [], // Filled in updateData
-                        ...filters[attr],
+                        options: [], // Filled in updateData
+                        attribute: filters[attr],
                     }
                 }
             }
         }
 
-        function getSupportedCorpora() {
-            const corporaPerFilter = Object.values(dataObj).map((filter) => filter.corpora)
-            return _.intersection(...(corporaPerFilter || []))
-        }
-
         /** Fetch token counts keyed in multiple dimensions by the values of attributes */
         async function getData(): Promise<void> {
-            const corpora = getSupportedCorpora()
+            const corpora = settings.corpusListing.getSelectedCorpora()
             const attrs = Object.keys(dataObj)
-            const multiAttrs = attrs.filter((attr) => dataObj[attr].settings.type === "set")
+            const multiAttrs = attrs.filter((attr) => dataObj[attr].attribute.type === "set")
             currentData = corpora.length && attrs.length ? await countAttrValues(corpora, attrs, multiAttrs) : {}
             updateData()
         }
@@ -105,7 +101,7 @@ angular.module("korpApp").factory("globalFilterService", [
                     }
 
                     const countDisplay = include && parentSelected ? childCount : 0
-                    dataObj[filter].possibleValues.push([value, countDisplay])
+                    dataObj[filter].options.push([value, countDisplay])
 
                     if (selected && include) {
                         sum += childCount
@@ -118,7 +114,7 @@ angular.module("korpApp").factory("globalFilterService", [
             }
 
             // reset all filters
-            for (const attr in dataObj) dataObj[attr].possibleValues = []
+            for (const attr in dataObj) dataObj[attr].options = []
 
             // recursively decide the counts of all values
             collectAndSum(Object.keys(dataObj), currentData, true)
@@ -127,12 +123,12 @@ angular.module("korpApp").factory("globalFilterService", [
             for (const attr in dataObj) {
                 // Sum the counts of duplicate values
                 const options: Record<string, number> = {}
-                for (const [value, count] of dataObj[attr].possibleValues) {
+                for (const [value, count] of dataObj[attr].options) {
                     options[value] ??= 0
                     options[value] += count
                 }
                 // Cast back to list and sort alphabetically
-                dataObj[attr].possibleValues = Object.entries(options).sort((a, b) =>
+                dataObj[attr].options = Object.entries(options).sort((a, b) =>
                     a[0].localeCompare(b[0], $rootScope.lang)
                 )
             }
@@ -156,7 +152,7 @@ angular.module("korpApp").factory("globalFilterService", [
             const andArray: Condition[][] = Object.entries(dataObj).map(([attr, filter]) =>
                 filter.value.map((value) => ({
                     type: `_.${attr}`,
-                    op: filter.settings.type === "set" ? "contains" : "=",
+                    op: filter.attribute.type === "set" ? "contains" : "=",
                     val: regescape(value),
                 }))
             )
