@@ -12,18 +12,19 @@ type GlobalFiltersController = IController & {
 
 type GlobalFiltersScope = UpdateScope & {
     dataObj: DataObject
+    show: boolean
 }
 
 angular.module("korpApp").component("globalFilters", {
-    template: html`<div ng-if="dataObj.showDirective" class="mb-4">
+    template: html`<div ng-if="show" class="mb-4">
         <span class="font-bold"> {{ 'global_filter' | loc:$root.lang}}:</span>
         <div class="inline-block">
-            <span ng-repeat="filterKey in dataObj.defaultFilters">
+            <span ng-repeat="(name, attr) in dataObj.attributes">
                 <global-filter
                     attr="filterKey"
-                    attr-def="dataObj.attributes[filterKey]"
-                    attr-value="dataObj.filterValues[filterKey].value"
-                    possible-values="dataObj.filterValues[filterKey].possibleValues"
+                    attr-def="attr"
+                    attr-value="dataObj.filterValues[name].value"
+                    possible-values="dataObj.filterValues[name].possibleValues"
                 ></global-filter>
                 <span ng-if="!$last">{{"and" | loc:$root.lang}}</span>
             </span>
@@ -40,13 +41,14 @@ angular.module("korpApp").component("globalFilters", {
                 globalFilterService.registerScope($scope)
                 $scope.dataObj = {
                     filterValues: {},
-                    defaultFilters: [],
                     attributes: {},
-                    showDirective: false,
                 }
             }
 
-            $scope.update = (dataObj) => ($scope.dataObj = dataObj)
+            $scope.update = (dataObj) => {
+                $scope.dataObj = dataObj
+                $scope.show = Object.keys(dataObj.attributes).length > 0
+            }
         },
     ],
 })

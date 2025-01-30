@@ -8,10 +8,6 @@ export type GlobalFilterService = {
 }
 
 export type DataObject = {
-    /** Whether to show the filter controls. */
-    showDirective: boolean
-    /** Names of attributes to use filters for */
-    defaultFilters: string[]
     /** Filter settings for each attribute */
     attributes: Record<string, Filter>
     /** Selected values for each filter. */

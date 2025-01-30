@@ -38,25 +38,23 @@ angular.module("korpApp").factory("globalFilterService", [
         /** Model of filter data. */
         const dataObj: DataObject = {
             filterValues: {},
-            defaultFilters: [],
             attributes: {},
-            showDirective: false,
         }
 
         /** Drilldown of values available for each attr. N-dimensional map where N = number of attrs. */
         let currentData: RecursiveRecord<number> = {}
 
-        /** Populate `filterValues` from `defaultFilters`. */
+        /** Populate `filterValues` */
         function initFilters() {
             // delete any filter values that are not in the selected filters
             for (const filter in dataObj.filterValues) {
-                if (!dataObj.defaultFilters.includes(filter)) {
+                if (!(filter in dataObj.attributes)) {
                     delete dataObj.filterValues[filter]
                 }
             }
 
             // create object for every filter that is selected but not yet created
-            for (const filter of dataObj.defaultFilters) {
+            for (const filter in dataObj.attributes) {
                 if (!(filter in dataObj.filterValues)) {
                     dataObj.filterValues[filter] = { value: [], possibleValues: [] }
                 }
@@ -64,14 +62,14 @@ angular.module("korpApp").factory("globalFilterService", [
         }
 
         function getSupportedCorpora() {
-            const corporaPerFilter = _.map(dataObj.defaultFilters, (filter) => dataObj.attributes[filter].corpora)
+            const corporaPerFilter = _.map(dataObj.attributes, (filter) => filter.corpora)
             return _.intersection(...(corporaPerFilter || []))
         }
 
         /** Fetch token counts keyed in multiple dimensions by the values of attributes */
         async function getData(): Promise<void> {
             const corpora = getSupportedCorpora()
-            const attrs = dataObj.defaultFilters
+            const attrs = Object.keys(dataObj.attributes)
             const multiAttrs = attrs.filter((attr) => dataObj.attributes[attr].settings.type === "set")
             currentData = await countAttrValues(corpora, attrs, multiAttrs)
             updateData()
@@ -121,15 +119,15 @@ angular.module("korpApp").factory("globalFilterService", [
             }
 
             // reset all filters
-            for (const filter of dataObj.defaultFilters) {
-                dataObj.filterValues[filter].possibleValues = []
+            for (const attr in dataObj.attributes) {
+                dataObj.filterValues[attr].possibleValues = []
             }
 
             // recursively decide the counts of all values
-            collectAndSum(dataObj.defaultFilters, currentData, true)
+            collectAndSum(Object.keys(dataObj.attributes), currentData, true)
 
             // merge duplicate child values
-            for (const filter of dataObj.defaultFilters) {
+            for (const filter in dataObj.attributes) {
                 const possibleValuesTmp: Record<string, number> = {}
                 for (const [value, count] of dataObj.filterValues[filter].possibleValues) {
                     if (!(value in possibleValuesTmp)) {
@@ -160,7 +158,7 @@ angular.module("korpApp").factory("globalFilterService", [
             // Set values from param, if corresponding filter is available.
             for (const attrKey in parsedFilter) {
                 const attrValues = parsedFilter[attrKey]
-                if (dataObj.defaultFilters.includes(attrKey)) {
+                if (attrKey in dataObj.attributes) {
                     dataObj.filterValues[attrKey].value = attrValues
                 }
             }
@@ -211,23 +209,17 @@ angular.module("korpApp").factory("globalFilterService", [
 
         /** Update available filters when changing corpus selection. */
         $rootScope.$on("corpuschooserchange", () => {
-            if (settings.corpusListing.selected.length === 0) {
-                dataObj.showDirective = false
-            } else {
+            if (settings.corpusListing.selected.length > 0) {
                 const filterAttributes = settings.corpusListing.getDefaultFilters()
 
                 // Disable the filters feature if none are applicable to all selected corpora.
                 if (_.isEmpty(filterAttributes)) {
-                    dataObj.showDirective = false
                     $location.search("global_filter", null)
                     $rootScope.globalFilter = null
                     // Unset any active filters.
-                    for (let filter of dataObj.defaultFilters) {
-                        dataObj.filterValues[filter].value = []
-                    }
+                    dataObj.attributes = {}
+                    dataObj.filterValues = {}
                 } else {
-                    dataObj.showDirective = true
-                    dataObj.defaultFilters = Object.keys(filterAttributes)
                     dataObj.attributes = filterAttributes
 
                     initFilters()
