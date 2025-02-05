@@ -152,7 +152,7 @@ export class CorpusListing {
     // End TODO
 
     /** Compile list of filters applicable to all selected corpora. */
-    getDefaultFilters() {
+    getDefaultFilters(): Record<string, Attribute> {
         // Collect filters common to all selected corpora
         const attrs = _.intersection(...this.selected.map((corpus) => corpus["attribute_filters"] || []))
         return _.pick(this.structAttributes, ...attrs)
