@@ -1,6 +1,4 @@
 /**
- * @file "Global filters" are similar to token conditions (like `word = "rock"`), but are managed separately in the GUI
- *   and then merged with the tokens of the query when sending it to the backend.
  * @format
  */
 import angular, { ITimeoutService } from "angular"
@@ -18,15 +16,15 @@ export type GlobalFilterService = {
     initialize: () => void
 }
 
+/** Shape of data stored in URL */
 type StoredFilterValues = Record<string, string[]>
 
-// Data service for the global filter in korp
-// Directive is duplicated in simple and extended search
-// so this directive holds all state concering the users input
-// and what possible filters and values are available
-
-// diretives calls registerScope to register for updates
-// service calls scope.update() when changes occur
+/**
+ * "Global filters" are text-level CQP conditions for selected attributes, that are managed separately in the GUI and
+ * then merged with the tokens of the query when sending it to the backend. This service manages the state of the
+ * filters, which lives in the root scope. The GUI component is duplicated in simple and extended search, and it
+ * manages user-selected values.
+ */
 angular.module("korpApp").factory("globalFilterService", [
     "$location",
     "$rootScope",
