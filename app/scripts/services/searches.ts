@@ -69,9 +69,12 @@ angular.module("korpApp").factory("searches", [
                 let value = valueSplit.join("|")
                 $q.all([searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(function () {
                     // For Extended search, the CQP is instead in the `cqp` URL param
-                    if (type === "cqp") {
-                        if (!value) {
-                            value = $location.search().cqp || ""
+                    if (type === "cqp" && !value) {
+                        value = $location.search().cqp || ""
+                        // Merge with global filters
+                        // (For Simple search, the equivalent is handled in the simple-search component)
+                        if ($rootScope.globalFilter) {
+                            value = stringify(mergeCqpExprs(parse(value || "[]"), $rootScope.globalFilter))
                         }
                     }
 
@@ -79,18 +82,23 @@ angular.module("korpApp").factory("searches", [
                     if (value) {
                         searchHistory.addItem($location.search())
                     }
+                    // TODO Is `value` ever empty? Document and remove this.
+                    else {
+                        console.warn("searches.ts: value is empty")
+                    }
 
                     // Update stored search query
                     if (["cqp", "word", "lemgram"].includes(type)) {
                         $rootScope.activeSearch = { type, val: value }
                     }
+                    // TODO Can `type` be something else? Document and remove this.
+                    else {
+                        console.warn(`searches.ts: type is ${type}`)
+                    }
 
-                    // For Extended/Advanced search, merge with global filters and trigger API requests
+                    // Trigger API requests
                     // (For Simple search, the equivalent is handled in the simple-search component)
                     if (type === "cqp") {
-                        if ($rootScope.globalFilter) {
-                            value = stringify(mergeCqpExprs(parse(value || "[]"), $rootScope.globalFilter))
-                        }
                         searches.kwicSearch(value)
                     }
                 })

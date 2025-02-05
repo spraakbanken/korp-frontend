@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Filter constraints are added to CQP when searching in advanced [#193](https://github.com/spraakbanken/korp-frontend/issues/193)
+
 ## [9.8.2] - 2025-01-27
 
 ### Changed
