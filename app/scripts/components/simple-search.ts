@@ -18,6 +18,7 @@ import { CompareSearches } from "@/services/compare-searches"
 import { LexiconsRelatedWords, relatedWordSearch } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
 import { CqpSearchEvent } from "@/statemachine/types"
+import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 
 type SimpleSearchController = IController & {
     input: string
@@ -175,58 +176,36 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             ctrl.getCQP = function () {
-                let val = ""
+                const query: CqpQuery = []
                 const currentText = (ctrl.currentText || "").trim()
 
                 if (currentText) {
-                    const suffix = ctrl.isCaseInsensitive ? " %c" : ""
-                    const wordArray = currentText.split(" ")
-                    const tokenArray = _.map(wordArray, (token) => {
-                        const orParts: string[] = []
-
-                        if (ctrl.mid_comp) {
-                            orParts.push(`.*${token}.*`)
-                        } else {
-                            if (ctrl.prefix) {
-                                orParts.push(token + ".*")
-                            }
-                            if (ctrl.suffix) {
-                                orParts.push(".*" + token)
-                            }
-                            if (!ctrl.prefix && !ctrl.suffix) {
-                                orParts.push(regescape(token))
-                            }
+                    currentText.split(/\s+/).forEach((word) => {
+                        let value = regescape(word)
+                        if (ctrl.prefix || ctrl.mid_comp) value = `${value}.*`
+                        if (ctrl.suffix || ctrl.mid_comp) value = `.*${value}`
+                        const condition: Condition = {
+                            type: "word",
+                            op: "=",
+                            val: value,
+                            flags: ctrl.isCaseInsensitive ? { c: true } : {},
                         }
-
-                        const res = _.map(orParts, (orPart) => `word = "${orPart}"${suffix}`)
-                        return `[${res.join(" | ")}]`
+                        query.push({ and_block: [[condition]] })
                     })
-                    val = tokenArray.join(" ")
                 } else if (ctrl.lemgram) {
-                    const lemgram = ctrl.lemgram
-                    val = `[lex contains "${lemgram}"`
-
+                    const conditions: Condition[] = [{ type: "lex", op: "contains", val: ctrl.lemgram }]
                     // The complemgram attribute is a set of strings like: <part1>+<part2>+<...>:<probability>
-                    if (ctrl.prefix) {
-                        // Must match first part
-                        val += ` | complemgram contains "${lemgram}\\+.*"`
+                    if (ctrl.prefix || ctrl.mid_comp) {
+                        conditions.push({ type: "complemgram", op: "contains", val: `${ctrl.lemgram}\\+.*` })
                     }
-                    if (ctrl.mid_comp) {
-                        // Can be anywhere in the string, as long as it's surrounded by start, end or the "+" separator.
-                        val += ` | complemgram contains "(.*\\+)?${lemgram}(\\+|:).*"`
+                    if (ctrl.suffix || ctrl.mid_comp) {
+                        conditions.push({ type: "complemgram", op: "contains", val: `.*\\+${ctrl.lemgram}:.*` })
                     }
-                    if (ctrl.suffix) {
-                        // Must match last part
-                        val += ` | complemgram contains ".*\\+${lemgram}:.*"`
-                    }
-                    val += "]"
+                    query.push({ and_block: [conditions] })
                 }
 
-                if ($rootScope.globalFilter) {
-                    val = stringify(mergeCqpExprs(parse(val || "[]"), $rootScope.globalFilter))
-                }
-
-                return val
+                if ($rootScope.globalFilter) mergeCqpExprs(query, $rootScope.globalFilter)
+                return stringify(query)
             }
 
             ctrl.onSearchSave = (name) => {
