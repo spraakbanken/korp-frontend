@@ -79,22 +79,10 @@ angular.module("korpApp").factory("searches", [
                     }
 
                     // Store new query in search history
-                    if (value) {
-                        searchHistory.addItem($location.search())
-                    }
-                    // TODO Is `value` ever empty? Document and remove this.
-                    else {
-                        console.warn("searches.ts: value is empty")
-                    }
+                    searchHistory.addItem($location.search())
 
                     // Update stored search query
-                    if (["cqp", "word", "lemgram"].includes(type)) {
-                        $rootScope.activeSearch = { type, val: value }
-                    }
-                    // TODO Can `type` be something else? Document and remove this.
-                    else {
-                        console.warn(`searches.ts: type is ${type}`)
-                    }
+                    $rootScope.activeSearch = { type, val: value }
 
                     // Trigger API requests
                     // (For Simple search, the equivalent is handled in the simple-search component)
