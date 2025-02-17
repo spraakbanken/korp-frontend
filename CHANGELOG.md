@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [9.8.3] - 2024-02-17
+
+### Fixed
+
+- Filter constraints are added to CQP when searching in advanced [#193](https://github.com/spraakbanken/korp-frontend/issues/193)
+- Remove language suffix in parallel corpus info link [#424](https://github.com/spraakbanken/korp-frontend/issues/424)
+- Focus newly created tab [#430](https://github.com/spraakbanken/korp-frontend/issues/430)
+- Translations for "pos_*" not found [#352](https://github.com/spraakbanken/korp-frontend/issues/352)
+
 ## [9.8.2] - 2025-01-27
 
 ### Changed
@@ -14,6 +23,7 @@
 
 ### Fixed
 
+- Deselect unavailable global filter values after changing corpus selection
 - Error when loading a non-`visible_modes` mode [#426](https://github.com/spraakbanken/korp-frontend/issues/426)
 
 ## [9.8.1] - 2025-01-23
@@ -357,6 +367,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.8.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.3
 [9.8.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.2
 [9.8.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.1
 [9.8.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.0

@@ -9,11 +9,6 @@ import { CorpusTransformed } from "./settings/config-transformed.types"
 import { LangString } from "./i18n/types"
 import { WithinParameters } from "./backend/types"
 
-export type Filter = {
-    settings: Attribute
-    corpora: string[]
-}
-
 export type AttributeOption = Partial<Attribute> & {
     group: "word" | "word_attr" | "sentence_attr"
     value: string
@@ -123,16 +118,11 @@ export class CorpusListing {
 
     _getStructAttrs(): Record<string, Attribute> {
         const attrs = this.mapSelectedCorpora(function (corpus) {
-            for (let key in corpus["struct_attributes"]) {
-                const value = corpus["struct_attributes"][key]
-                value["is_struct_attr"] = true
-            }
-
+            // Set the is_struct_attr flag for all struct attributes
+            Object.values(corpus["struct_attributes"]).forEach((attr) => (attr["is_struct_attr"] = true))
             // if a position attribute is declared as structural, include here
-            const pos_attrs = _.pickBy(corpus.attributes, (val, key) => {
-                return val["is_struct_attr"]
-            })
-            return _.extend({}, pos_attrs, corpus["struct_attributes"])
+            const posAttrs = _.pickBy(corpus.attributes, (val, key) => val["is_struct_attr"])
+            return { ...posAttrs, ...corpus["struct_attributes"] }
         })
         const rest = this._invalidateAttrs(attrs)
 
@@ -162,31 +152,10 @@ export class CorpusListing {
     // End TODO
 
     /** Compile list of filters applicable to all selected corpora. */
-    getDefaultFilters() {
-        const attrs: Record<string, Filter> = {}
-
-        // Collect filters of all selected corpora
-        for (let corpus of this.selected) {
-            for (let filter of corpus["attribute_filters"] || []) {
-                if (!(filter in attrs)) {
-                    attrs[filter] = {
-                        settings: corpus["struct_attributes"][filter],
-                        corpora: [corpus.id],
-                    }
-                } else {
-                    attrs[filter].corpora.push(corpus.id)
-                }
-            }
-        }
-
-        // Drop filters which do not apply to all selected corpora
-        const corpusCount = this.selected.length
-        for (let attr of Object.keys(attrs)) {
-            if (attrs[attr].corpora.length !== corpusCount) {
-                delete attrs[attr]
-            }
-        }
-        return attrs
+    getDefaultFilters(): Record<string, Attribute> {
+        // Collect filters common to all selected corpora
+        const attrs = _.intersection(...this.selected.map((corpus) => corpus["attribute_filters"] || []))
+        return _.pick(this.structAttributes, ...attrs)
     }
 
     _invalidateAttrs(attrs: Record<string, Attribute>[]) {

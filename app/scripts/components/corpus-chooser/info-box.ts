@@ -121,7 +121,9 @@ angular.module("korpApp").component("ccInfoBox", {
                     console.error(`Invalid setting "corpus_info_link"`, settings["corpus_info_link"])
                     return
                 }
-                const url = urlTemplate.replace("%s", $ctrl.object.id)
+                // Parallel corpora have an id like "<main_id>-<lang>"
+                const id = settings["parallel"] ? $ctrl.object.id.split("-")[0] : $ctrl.object.id
+                const url = urlTemplate.replace("%s", id)
                 return { url, label }
             }
         },

@@ -4,16 +4,15 @@ import _ from "lodash"
 import { locAttribute } from "@/i18n"
 import { html } from "@/util"
 import "./global-filter-service"
-import { Filter } from "@/corpus_listing"
 import { LangString } from "@/i18n/types"
 import { RootScope } from "@/root-scope.types"
+import { Attribute } from "@/settings/config.types"
 
 type GlobalFilterController = IController & {
-    attr: string
-    attrDef: Filter
+    attrDef: Attribute
     attrValue: string[]
-    possibleValues: [string, number][]
-    lang: string
+    options: [string, number][]
+    onChange: (args: { selected: string[] }) => void
 }
 
 type GlobalFilterScope = IScope & {
@@ -42,7 +41,7 @@ angular.module("korpApp").component("globalFilter", {
             <ul class="p-0 m-0">
                 <!-- Selected values -->
                 <li
-                    ng-repeat="value in $ctrl.possibleValues"
+                    ng-repeat="value in $ctrl.options"
                     ng-class="{'bg-blue-100': isSelected(value[0])}"
                     class="attribute p-1"
                     ng-click="toggleSelected(value[0], $event)"
@@ -55,7 +54,7 @@ angular.module("korpApp").component("globalFilter", {
 
                 <!-- Unselected values -->
                 <li
-                    ng-repeat="value in $ctrl.possibleValues"
+                    ng-repeat="value in $ctrl.options"
                     ng-class="{'bg-blue-100': isSelected(value[0])}"
                     class="attribute p-1"
                     ng-click="toggleSelected(value[0], $event)"
@@ -68,7 +67,7 @@ angular.module("korpApp").component("globalFilter", {
 
                 <!-- Values with 0 hits, disabled -->
                 <li
-                    ng-repeat="value in $ctrl.possibleValues"
+                    ng-repeat="value in $ctrl.options"
                     class="attribute disabled opacity-50 p-1"
                     ng-if="!isSelectedList(value[0]) && value[1] == 0"
                 >
@@ -79,22 +78,21 @@ angular.module("korpApp").component("globalFilter", {
         </div>
     </span>`,
     bindings: {
-        attr: "<",
         attrDef: "<",
         attrValue: "<",
-        possibleValues: "<",
+        options: "<",
+        onChange: "&",
     },
     controller: [
         "$rootScope",
         "$scope",
-        "globalFilterService",
-        function ($rootScope: RootScope, $scope: GlobalFilterScope, globalFilterService) {
+        function ($rootScope: RootScope, $scope: GlobalFilterScope) {
             const $ctrl = this as GlobalFilterController
-            // if scope.possibleValues.length > 20
+            // if scope.options.length > 20
             //     # TODO enable autocomplete
 
             $ctrl.$onInit = () => {
-                $scope.filterLabel = $ctrl.attrDef.settings.label
+                $scope.filterLabel = $ctrl.attrDef.label
                 $scope.selected = _.clone($ctrl.attrValue)
             }
 
@@ -107,12 +105,11 @@ angular.module("korpApp").component("globalFilter", {
 
             $scope.toggleSelected = function (value, event) {
                 if ($scope.isSelected(value)) {
-                    _.pull($ctrl.attrValue, value)
+                    $ctrl.onChange({ selected: $ctrl.attrValue.filter((v) => v !== value) })
                 } else {
-                    $ctrl.attrValue.push(value)
+                    $ctrl.onChange({ selected: [...$ctrl.attrValue, value] })
                 }
                 event.stopPropagation()
-                globalFilterService.valueChange($ctrl.attr)
             }
 
             $scope.isSelected = (value: string) => $ctrl.attrValue.includes(value)
@@ -120,7 +117,7 @@ angular.module("korpApp").component("globalFilter", {
             $scope.isSelectedList = (value: string) => $scope.selected.includes(value)
 
             $scope.translateAttribute = (value: string) =>
-                locAttribute($ctrl.attrDef.settings.translation, value, $rootScope.lang)
+                locAttribute($ctrl.attrDef.translation, value, $rootScope.lang)
         },
     ],
 })
