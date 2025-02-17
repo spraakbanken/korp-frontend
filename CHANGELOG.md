@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.8.3] - 2024-02-17
+
 ### Fixed
 
 - Filter constraints are added to CQP when searching in advanced [#193](https://github.com/spraakbanken/korp-frontend/issues/193)
@@ -365,6 +367,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.8.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.3
 [9.8.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.2
 [9.8.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.1
 [9.8.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.0
