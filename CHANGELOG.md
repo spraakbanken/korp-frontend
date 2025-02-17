@@ -7,6 +7,7 @@
 - Filter constraints are added to CQP when searching in advanced [#193](https://github.com/spraakbanken/korp-frontend/issues/193)
 - Remove language suffix in parallel corpus info link [#424](https://github.com/spraakbanken/korp-frontend/issues/424)
 - Focus newly created tab [#430](https://github.com/spraakbanken/korp-frontend/issues/430)
+- Translations for "pos_*" not found [#352](https://github.com/spraakbanken/korp-frontend/issues/352)
 
 ## [9.8.2] - 2025-01-27
 
