@@ -72,7 +72,7 @@ angular.module("korpApp").component("searchHistory", {
                 if (isSearchOption($scope.value)) {
                     $location.search($scope.value.params)
                     // The Searches watcher stupidly only watches the `search` param, so trigger it explicitly
-                    searches.triggerSearch()
+                    searches.load()
                 } else if ($scope.value.id == "_clear") {
                     searchHistory.clear()
                     resetValue()

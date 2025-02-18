@@ -310,7 +310,7 @@ angular.module("korpApp").component("simpleSearch", {
                 const search = $rootScope.activeSearch
                 ctrl.relatedObj = undefined
                 const cqp = ctrl.getCQP()
-                searches.kwicSearch(cqp)
+                searches.start(cqp)
 
                 if (search?.type === "lemgram") {
                     const attrExists = (name: string) =>

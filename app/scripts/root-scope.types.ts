@@ -18,7 +18,10 @@ export type RootScope = IRootScopeService & {
     /** Filter data by attribute name */
     globalFilterData: Record<string, FilterData>
     globalFilter: CqpQuery | null
+    /** This deferred is used to signal that the filter feature is ready */
     globalFilterDef: IDeferred<never>
+    /** This deferred is resolved when parallel search controller is loaded */
+    langDef: IDeferred<never>
     simpleCQP?: string
     show_modal: "about" | false
     compareTabs: CompareTab[]

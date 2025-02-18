@@ -79,6 +79,7 @@ angular.module("korpApp").component("results", {
                             aborted="aborted"
                             activate="activate"
                             columns="columns"
+                            cqp="cqp"
                             data="data"
                             error="error"
                             has-result="hasResult"

@@ -15,6 +15,7 @@ type StatsResultCtrlScope = TabHashScope & {
     aborted: boolean
     activate: () => void
     columns: SlickgridColumn[]
+    cqp: string
     data: Dataset
     error?: string
     hasResult: boolean
@@ -166,9 +167,12 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 } else {
                     $location.search("show_stats", true)
                 }
-                const cqp = searches.getCqpExpr()
+                s.cqp =
+                    (["word", "lemgram"].includes($rootScope.activeSearch?.type || "") && $rootScope.simpleCQP) ||
+                    $rootScope.activeSearch?.val ||
+                    ""
                 s.showStatistics = true
-                s.makeRequest(cqp)
+                s.makeRequest(s.cqp)
             }
         },
     ],

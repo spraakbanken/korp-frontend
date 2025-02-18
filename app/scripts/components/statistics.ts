@@ -25,6 +25,7 @@ type StatisticsController = IController & {
     aborted: boolean
     activate: () => void
     columns: SlickgridColumn[]
+    cqp: string
     data: Dataset
     doSort: boolean
     error: boolean
@@ -444,8 +445,7 @@ angular.module("korpApp").component("statistics", {
                 }
                 $ctrl.noRowsError = false
 
-                // TODO this is wrong, it should use the previous search
-                let cqp = searches.getCqpExpr()
+                let cqp = $ctrl.cqp
                 try {
                     cqp = expandOperators(cqp)
                 } catch {}
