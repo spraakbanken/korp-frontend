@@ -280,7 +280,7 @@ Till höger kan du välja att istället visa och sortera efter Lexicographer's M
 Det är ett värde som mäter frekvensen av ett givet ordpar i förhållande till frekvenserna av varje ord i paret.
 På så vis reduceras ord som samförekommer ofta bara för att de är vanliga i allmänhet, såsom "vara" och "ha".
 
-Genom att klicka på den lilla ikonen intill varje ord kan man få fram en ny KWIC-flik med alla de meningar i vilka vald relation förekommer.
+Genom att klicka på ett ord i tabellen kan man få fram en ny KWIC-flik med alla de meningar i vilka vald relation förekommer.
 
 ## Jämförelser
 

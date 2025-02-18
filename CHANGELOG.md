@@ -2,9 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+
+- Choose to show word picture by frequency or LMI [#433](https://github.com/spraakbanken/korp-frontend/issues/433)
+
 ### Changed
 
-- Sort word picture by absolute frequency by default [#433](https://github.com/spraakbanken/korp-frontend/issues/433)
+- More space in word picture tables [#102](https://github.com/spraakbanken/korp-frontend/issues/102)
 
 ## [9.8.3] - 2024-02-17
 

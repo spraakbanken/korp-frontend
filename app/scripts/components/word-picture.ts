@@ -111,7 +111,7 @@ angular.module("korpApp").component("wordPicture", {
                             >
                         </div>
                         <div
-                            class="lemgram_result float-left py-1 px-2"
+                            class="lemgram_result float-left p-1"
                             ng-repeat="table in section"
                             ng-if="$ctrl.renderTable(table.table)"
                             ng-class="$ctrl.getTableClass(word.wordClass, parentIndex, $index)"
@@ -122,8 +122,11 @@ angular.module("korpApp").component("wordPicture", {
                                         ng-repeat="row in $ctrl.minimize(table.table)"
                                         ng-init="data = $ctrl.parseLemgram(row)"
                                     >
-                                        <td class="text-right"><span class="enumerate"></span></td>
-                                        <td>
+                                        <td class="px-1 text-right"><span class="enumerate"></span></td>
+                                        <td
+                                            ng-click="$ctrl.onClickExample(row)"
+                                            class="px-1 pr-2 cursor-pointer hover:underline"
+                                        >
                                             <span ng-if="data.label">
                                                 {{ data.label }}<sup ng-if="data.idx > 1">{{data.idx}}</sup>
                                                 <span ng-if="$ctrl.showWordClass && data.pos">
@@ -135,19 +138,16 @@ angular.module("korpApp").component("wordPicture", {
                                         <td
                                             ng-if="$root.wordpicSortProp == 'freq'"
                                             title="{{'stat_lmi' | loc:$root.lang}}: {{row.mi | number:2}}"
-                                            class="text-right"
+                                            class="px-1 text-right"
                                         >
                                             {{row.freq}}
                                         </td>
                                         <td
                                             ng-if="$root.wordpicSortProp == 'mi'"
                                             title="{{'stat_frequency' | loc:$root.lang}}: {{row.freq}}"
-                                            class="text-right"
+                                            class="px-1 text-right"
                                         >
                                             {{row.mi | number:2}}
-                                        </td>
-                                        <td ng-click="$ctrl.onClickExample(row)" class="cursor-pointer">
-                                            <i class="fa-solid fa-magnifying-glass fa-xs ml-2"></i>
                                         </td>
                                     </tr>
                                 </tbody>

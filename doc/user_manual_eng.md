@@ -274,7 +274,7 @@ To the right, there is an option to show and sort by a Lexicographer's Mutual In
 The LMI measures the frequency of a certain word pair in relation to the frequencies of each single word.
 Thus it disfavors words that have a high co-occurrence merely by being common in general, such as "be" and "have".
 
-By clicking on the small icon next to each word, you can bring up a new KWIC tab with all the sentences in which the selected relation occurs.
+Clicking a word in the table brings up a new drilldown KWIC tab with the selected word pair and relation.
 
 
 ## Comparisons
