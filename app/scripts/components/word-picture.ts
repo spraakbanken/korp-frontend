@@ -68,7 +68,7 @@ angular.module("korpApp").component("wordPicture", {
         <div ng-if="$ctrl.wordPic && $ctrl.noHits" class="korp-warning">{{"no_stats_results" | loc:$root.lang}}</div>
 
         <div ng-if="$ctrl.wordPic && $ctrl.hasData && !$ctrl.noHits">
-            <div id="wordPicSettings">
+            <div class="float-right flex flex-col gap-2">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" /><label for="wordclassChk"
                         >{{'show_wordclass' | loc:$root.lang}}</label
@@ -79,6 +79,13 @@ angular.module("korpApp").component("wordPicture", {
                         <option ng-repeat="hitSetting in $ctrl.hitSettings" value="{{hitSetting}}">
                             {{ $ctrl.localeString($root.lang, hitSetting) }}
                         </option>
+                    </select>
+                </div>
+                <div>
+                    <label for="wordpic-sort">{{'sort_by' | loc:$root.lang}}</label>
+                    <select id="wordpic-sort" ng-model="$root.wordpicSortProp">
+                        <option value="freq">{{'stat_frequency' | loc:$root.lang}}</option>
+                        <option value="mi">{{'stat_lmi' | loc:$root.lang}}</option>
                     </select>
                 </div>
             </div>
@@ -121,7 +128,20 @@ angular.module("korpApp").component("wordPicture", {
                                             {{ data.label }}<sup ng-if="data.showIdx">{{data.idx}}</sup>
                                             <span ng-if="$ctrl.showWordClass">({{data.pos | loc:$root.lang}})</span>
                                         </td>
-                                        <td title="mi: {{row.mi | number:2}}" class="text-right">{{row.freq}}</td>
+                                        <td
+                                            ng-if="$root.wordpicSortProp == 'freq'"
+                                            title="{{'stat_lmi' | loc:$root.lang}}: {{row.mi | number:2}}"
+                                            class="text-right"
+                                        >
+                                            {{row.freq}}
+                                        </td>
+                                        <td
+                                            ng-if="$root.wordpicSortProp == 'mi'"
+                                            title="{{'stat_frequency' | loc:$root.lang}}: {{row.freq}}"
+                                            class="text-right"
+                                        >
+                                            {{row.mi | number:2}}
+                                        </td>
                                         <td ng-click="$ctrl.onClickExample(row)" class="cursor-pointer">
                                             <i class="fa-solid fa-magnifying-glass fa-xs ml-2"></i>
                                         </td>

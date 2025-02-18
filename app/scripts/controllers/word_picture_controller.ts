@@ -72,6 +72,8 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 (val) => (s.wordPic = Boolean(val))
             )
 
+            $rootScope.$watch("wordpicSortProp", sort)
+
             $rootScope.$on("make_request", () => {
                 s.makeRequest()
             })
@@ -245,10 +247,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     // In this iteration, one element in each section is the search word, not a table of relations.
                     const sectionsWithSearchWord: (ShowableApiRelation[] | { word: string })[][] = []
                     sections.forEach((section, i) => {
-                        // Sort each table by MI
-                        section.forEach((table) => {
-                            if (table) table.sort((first, second) => second.mi - first.mi)
-                        })
                         sectionsWithSearchWord[i] = section
 
                         if (settings["word_picture_conf"]![wordClass][i] && section.length) {
@@ -294,6 +292,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             const prepareScope = (data: TableDrawData[]) => {
                 s.data = data
+                sort($rootScope.wordpicSortProp)
 
                 // Find length of longest table.
                 const lengths = data.map((section) =>
@@ -320,6 +319,18 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 }
 
                 s.hitSettings.push("1000")
+            }
+
+            function sort(sortProp: "freq" | "mi") {
+                s.data?.forEach((section) =>
+                    section.data.forEach((table) =>
+                        table.forEach((col) => {
+                            if (Array.isArray(col.table)) {
+                                col.table.sort((a, b) => b[sortProp] - a[sortProp])
+                            }
+                        })
+                    )
+                )
             }
         },
     ],

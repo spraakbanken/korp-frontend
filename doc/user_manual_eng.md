@@ -268,8 +268,7 @@ syntactic relations to in the material, grouped by relation. For a verb, for exa
 ![Word picture in Korp](images/ordbild.png)
 
 By default, a maximum of 15 words are displayed for each relation, but to the right on the page there is an option to display more.
-The number next to each word indicates how many times the given relation is found in the selected material. The lists
-are ordered by a Lexicographer's Mutual Information value.
+The number next to each word indicates how many times the given relation is found in the selected material.
 
 By clicking on the small icon next to each word, you can bring up a new KWIC tab with all the sentences in which the selected relation occurs.
 

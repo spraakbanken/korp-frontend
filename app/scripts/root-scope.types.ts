@@ -27,6 +27,7 @@ export type RootScope = IRootScopeService & {
     mapTabs: MapTab[]
     textTabs: TextTab[]
     waitForLogin: boolean
+    wordpicSortProp: "freq" | "mi"
     lang: string
     loc_data: LangLocMap
     $on: (name: "corpuschooserchange", handler: (event: any, selected: string[]) => void) => void

@@ -97,6 +97,10 @@
     "word_pic_show_some": "Visa upp till",
     "word_pic_hits": "träffar",
 
+    "sort_by": "Sortera på",
+    "stat_frequency": "frekvens",
+    "stat_lmi": "LMI",
+
     "show_map": "Visa karta",
     "map_no_data": "Valt material saknar geografisk data.",
     "map_relative": "Relativ",

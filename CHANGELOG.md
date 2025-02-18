@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Sort word picture by absolute frequency by default [#433](https://github.com/spraakbanken/korp-frontend/issues/433)
+
 ## [9.8.3] - 2024-02-17
 
 ### Fixed
