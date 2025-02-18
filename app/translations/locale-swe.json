@@ -102,8 +102,9 @@
     "word_pic_hits": "träffar",
 
     "sort_by": "Sortera på",
-    "stat_frequency": "frekvens",
+    "stat_frequency": "absolut frekvens",
     "stat_lmi": "LMI",
+    "stat_lmi_help": "Lexicographer's Mutual Information, ett ordpars frekvens kompenserad för varje ords egen frekvens",
 
     "show_map": "Visa karta",
     "map_no_data": "Valt material saknar geografisk data.",

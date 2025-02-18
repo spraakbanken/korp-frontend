@@ -5,7 +5,7 @@
 ### Added
 
 - Choose to show word picture by frequency or LMI [#433](https://github.com/spraakbanken/korp-frontend/issues/433)
-- Word picture help text
+- Word picture help texts
 
 ### Changed
 

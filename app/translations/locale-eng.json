@@ -111,8 +111,9 @@
     "word_pic_hits": "hits",
 
     "sort_by": "Sort by",
-    "stat_frequency": "frequency",
+    "stat_frequency": "absolute frequency",
     "stat_lmi": "LMI",
+    "stat_lmi_help": "Lexicographer's Mutual Information, a frequency measure compensated for the frequency of each word by itself",
 
     "search_aborted": "The search was aborted",
 

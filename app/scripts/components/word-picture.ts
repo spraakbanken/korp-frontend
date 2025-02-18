@@ -86,11 +86,21 @@ angular.module("korpApp").component("wordPicture", {
                     </select>
                 </div>
                 <div>
-                    <label for="wordpic-sort">{{'sort_by' | loc:$root.lang}}</label>
-                    <select id="wordpic-sort" ng-model="$root.wordpicSortProp">
-                        <option value="freq">{{'stat_frequency' | loc:$root.lang}}</option>
-                        <option value="mi">{{'stat_lmi' | loc:$root.lang}}</option>
-                    </select>
+                    <label for="wordpic-sort">{{'sort_by' | loc:$root.lang}}:</label>
+                    <div>
+                        <input type="radio" id="wordpic-sort-freq" value="freq" ng-model="$root.wordpicSortProp" />
+                        <label for="wordpic-sort-freq">{{'stat_frequency' | loc:$root.lang}}</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="wordpic-sort-mi" value="mi" ng-model="$root.wordpicSortProp" />
+                        <label for="wordpic-sort-mi">
+                            {{'stat_lmi' | loc:$root.lang}}
+                            <i
+                                class="fa fa-info-circle text-gray-400"
+                                uib-tooltip="{{'stat_lmi_help' | loc:$root.lang}}"
+                            ></i>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="content_target">
