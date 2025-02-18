@@ -126,7 +126,9 @@ angular.module("korpApp").component("wordPicture", {
                                         <td class="text-right"><span class="enumerate"></span></td>
                                         <td>
                                             {{ data.label }}<sup ng-if="data.showIdx">{{data.idx}}</sup>
-                                            <span ng-if="$ctrl.showWordClass">({{data.pos | loc:$root.lang}})</span>
+                                            <span ng-if="$ctrl.showWordClass && data.pos">
+                                                ({{data.pos | loc:$root.lang}})
+                                            </span>
                                         </td>
                                         <td
                                             ng-if="$root.wordpicSortProp == 'freq'"
@@ -227,7 +229,7 @@ angular.module("korpApp").component("wordPicture", {
                 let infixIndex = ""
                 let concept = lemgram
                 infixIndex = ""
-                let type = "-"
+                let type = ""
 
                 const prefix = row.depextra
 
