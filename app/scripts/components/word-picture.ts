@@ -41,9 +41,8 @@ type WordPictureController = IController & {
 
 type ParsedLemgram = {
     label: string
-    pos: string
-    idx: string
-    showIdx: boolean
+    pos?: string
+    idx?: string
 }
 
 angular.module("korpApp").component("wordPicture", {
@@ -121,14 +120,17 @@ angular.module("korpApp").component("wordPicture", {
                                 <tbody>
                                     <tr
                                         ng-repeat="row in $ctrl.minimize(table.table)"
-                                        ng-init="data = $ctrl.parseLemgram(row, table.all_lemgrams)"
+                                        ng-init="data = $ctrl.parseLemgram(row)"
                                     >
                                         <td class="text-right"><span class="enumerate"></span></td>
                                         <td>
-                                            {{ data.label }}<sup ng-if="data.showIdx">{{data.idx}}</sup>
-                                            <span ng-if="$ctrl.showWordClass && data.pos">
-                                                ({{data.pos | loc:$root.lang}})
+                                            <span ng-if="data.label">
+                                                {{ data.label }}<sup ng-if="data.idx > 1">{{data.idx}}</sup>
+                                                <span ng-if="$ctrl.showWordClass && data.pos">
+                                                    ({{data.pos | loc:$root.lang}})
+                                                </span>
                                             </span>
+                                            <span ng-if="!data.label" class="opacity-50">&empty;</span>
                                         </td>
                                         <td
                                             ng-if="$root.wordpicSortProp == 'freq'"
@@ -225,29 +227,20 @@ angular.module("korpApp").component("wordPicture", {
             $ctrl.parseLemgram = function (row) {
                 const set = row[row.show_rel].split("|")
                 const lemgram = set[0]
-
-                let infixIndex = ""
-                let concept = lemgram
-                infixIndex = ""
-                let type = ""
-
-                const prefix = row.depextra
+                const prefix = row.depextra ? `${row.depextra} ` : ""
 
                 if (isLemgram(lemgram)) {
                     const match = splitLemgram(lemgram)
-                    infixIndex = match.index
-                    if (row.dep) {
-                        concept = match.form.replace(/_/g, " ")
-                    } else {
-                        concept = "-"
+                    const concept = row.dep ? match.form.replace(/_/g, " ") : "-"
+                    return {
+                        label: prefix + concept,
+                        pos: match.pos.slice(0, 2),
+                        idx: match.index,
                     }
-                    type = match.pos.slice(0, 2)
                 }
+
                 return {
-                    label: prefix + " " + concept,
-                    pos: type,
-                    idx: infixIndex,
-                    showIdx: !(infixIndex === "" || infixIndex === "1"),
+                    label: prefix + lemgram,
                 }
             }
 

@@ -44,7 +44,6 @@ export type TableData = {
     table: ApiRelation[] | { word: string }
     rel?: string
     show_rel?: string
-    all_lemgrams?: string[]
 }
 
 export type TableDrawData = {
@@ -264,12 +263,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                         section.map((table) => {
                             if (Array.isArray(table) && table[0]) {
                                 const { rel, show_rel } = table[0]
-                                const all_lemgrams = _.uniq(
-                                    _.map(table, show_rel).map((item: string) =>
-                                        isLemgram(item) ? item.slice(0, -1) : item
-                                    )
-                                )
-                                return { table, rel, show_rel, all_lemgrams }
+                                return { table, rel, show_rel }
                             } else {
                                 return { table }
                             }
