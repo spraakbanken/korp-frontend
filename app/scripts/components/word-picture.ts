@@ -7,6 +7,7 @@ import { RootScope } from "@/root-scope.types"
 import { WordPictureDef, WordPictureDefItem } from "@/settings/app-settings.types"
 import { ShowableApiRelation, TableData, TableDrawData } from "@/controllers/word_picture_controller"
 import { ApiRelation } from "@/backend/types/relations"
+import "@/components/help-box"
 
 type WordPictureController = IController & {
     // Bindings
@@ -47,6 +48,11 @@ type ParsedLemgram = {
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
+        <help-box
+            text="'word_pic_description' | loc:$root.lang"
+            extended-text="'word_pic_result_description' | loc:$root.lang"
+        ></help-box>
+
         <div class="wordpic_disabled" ng-if="!$ctrl.wordPic">
             {{'word_pic_warn' | loc:$root.lang}}
             <div>
@@ -69,9 +75,8 @@ angular.module("korpApp").component("wordPicture", {
         <div ng-if="$ctrl.wordPic && $ctrl.hasData && !$ctrl.noHits">
             <div class="float-right flex flex-col gap-2">
                 <div>
-                    <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" /><label for="wordclassChk"
-                        >{{'show_wordclass' | loc:$root.lang}}</label
-                    >
+                    <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" />
+                    <label for="wordclassChk">{{'show_wordclass' | loc:$root.lang}}</label>
                 </div>
                 <div>
                     <select id="numberHitsSelect" ng-model="$ctrl.settings.showNumberOfHits">
