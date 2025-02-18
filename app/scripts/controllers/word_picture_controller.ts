@@ -9,19 +9,17 @@ import { LocationService } from "@/urlparams"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { TabHashScope } from "@/directives/tab-hash"
 import { ApiRelation, RelationsResponse } from "@/backend/types/relations"
+import { loc } from "@/i18n"
 
 type WordpicCtrlScope = TabHashScope & {
     $root: RootScope
-    aborted: boolean
     activate: () => void
     data?: TableDrawData[]
     drawTables: (tables: [string, string][], data: ApiRelation[]) => void
     error?: string
-    hasData: boolean
     hitSettings: `${number}`[]
     loading: boolean
     makeRequest: () => void
-    noHits: boolean
     progress: number
     proxy: LemgramProxy
     renderResult: (data: RelationsResponse, word: string) => void
@@ -31,6 +29,7 @@ type WordpicCtrlScope = TabHashScope & {
     settings: {
         showNumberOfHits: `${number}`
     }
+    warning?: string
     wordPic: boolean
 }
 
@@ -60,9 +59,11 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
         "$location",
         "$timeout",
         ($scope: WordpicCtrlScope, $rootScope: RootScope, $location: LocationService, $timeout: ITimeoutService) => {
+            /** Mapping from pos tag to identifiers used in word_picture_conf */
+            const tagset = _.invert(settings["word_picture_tagset"] || {})
+
             const s = $scope
             s.proxy = lemgramProxyFactory.create()
-
             s.loading = false
             s.progress = 0
             s.wordPic = $location.search().word_pic != null
@@ -73,6 +74,10 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             $rootScope.$watch("wordpicSortProp", sort)
 
+            $rootScope.$watch("globalFilter", () => {
+                if ($rootScope.globalFilter) s.warning = loc("word_pic_global_filter", $rootScope.lang)
+            })
+
             $rootScope.$on("make_request", () => {
                 s.makeRequest()
             })
@@ -80,7 +85,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             s.$on("abort_requests", () => {
                 s.proxy.abort()
                 if (s.loading) {
-                    s.aborted = true
+                    s.warning = loc("search_aborted", $rootScope.lang)
                     s.loading = false
                 }
             })
@@ -92,10 +97,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             }
 
             s.resetView = () => {
-                s.hasData = false
                 s.data = undefined
-                s.aborted = false
-                s.noHits = false
                 s.error = undefined
             }
 
@@ -103,14 +105,15 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 const search = $rootScope.activeSearch
                 if (!s.wordPic || !search || (search.type !== "lemgram" && search.val.includes(" "))) {
                     s.resetView()
+                    s.warning = loc("word_pic_bad_search", $rootScope.lang)
                     return
                 }
                 const word = search.type === "lemgram" ? unregescape(search.val) : search.val
                 const type = search.type
 
-                // if a global filter is set, do not generate a word picture
                 if ($rootScope.globalFilter) {
-                    s.hasData = false
+                    s.resetView()
+                    s.warning = loc("word_pic_global_filter", $rootScope.lang)
                     return
                 }
 
@@ -119,6 +122,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
                 s.progress = 0
                 s.loading = true
+                s.warning = undefined
                 s.proxy
                     .makeRequest(word, type, (progressObj) => $timeout(() => (s.progress = progressObj.percent)))
                     .then((data) =>
@@ -142,9 +146,8 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             s.renderResult = (data, query) => {
                 s.loading = false
                 s.progress = 100
-                s.hasData = true
                 if (!data.relations) {
-                    s.noHits = true
+                    s.warning = loc("no_stats_results", $rootScope.lang)
                 } else if (isLemgram(query)) {
                     s.renderTables(query, data.relations)
                 } else {
@@ -167,10 +170,9 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     let [word, pos] = args[0]
                     return word + pos
                 })
-                const tagsetTrans = _.invert(settings["word_picture_tagset"]!)
                 unique_words = _.filter(unique_words, function (...args) {
                     const [, pos] = args[0]
-                    return settings["word_picture_conf"]![tagsetTrans[pos]] != null
+                    return settings["word_picture_conf"]![tagset[pos]] != null
                 })
                 if (!unique_words.length) {
                     s.loading = false
@@ -204,14 +206,12 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     return { i, type }
                 }
 
-                const tagsetTrans = _.invert(settings["word_picture_tagset"]!)
-
                 const res: TableDrawData[] = []
 
                 for (const row of tables) {
                     const token = row[0]
                     const wordClassShort = row[1].toLowerCase()
-                    const wordClass = _.invert(settings["word_picture_tagset"]!)[wordClassShort]
+                    const wordClass = tagset[wordClassShort]
 
                     if (settings["word_picture_conf"]![wordClass] == null) {
                         continue
@@ -224,7 +224,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                         settings["word_picture_conf"]![wordClass].forEach((rel_type_list, i) => {
                             const section = sections[i]
                             const rel = {
-                                rel: tagsetTrans[item.rel.toLowerCase()],
+                                rel: tagset[item.rel.toLowerCase()],
                                 field_reverse: item.dep === token,
                             }
 
@@ -287,6 +287,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             const prepareScope = (data: TableDrawData[]) => {
                 s.data = data
                 sort($rootScope.wordpicSortProp)
+                console.log(s.data)
 
                 // Find length of longest table.
                 const lengths = data.map((section) =>

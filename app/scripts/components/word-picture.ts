@@ -14,14 +14,12 @@ type WordPictureController = IController & {
     wordPic: boolean
     activate: () => void
     loading: boolean
-    hasData: boolean
-    aborted: boolean
     hitSettings: string[]
     settings: {
         showNumberOfHits: `${number}`
     }
     data: TableDrawData[]
-    noHits: boolean
+    warning?: string
 
     // Locals
     showWordClass: boolean
@@ -53,7 +51,7 @@ angular.module("korpApp").component("wordPicture", {
             extended-text="'word_pic_result_description' | loc:$root.lang"
         ></help-box>
 
-        <div class="wordpic_disabled" ng-if="!$ctrl.wordPic">
+        <div ng-if="!$ctrl.wordPic">
             {{'word_pic_warn' | loc:$root.lang}}
             <div>
                 <button class="btn btn-sm btn-default activate_word_pic" ng-click="$ctrl.activate()">
@@ -62,17 +60,9 @@ angular.module("korpApp").component("wordPicture", {
             </div>
         </div>
 
-        <div ng-if="$ctrl.wordPic && !$ctrl.hasData && !$ctrl.loading && !$ctrl.aborted" class="korp-warning">
-            {{'word_pic_bad_search' | loc:$root.lang}}
-        </div>
+        <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
 
-        <div ng-if="$ctrl.wordPic && $ctrl.aborted && !$ctrl.loading" class="korp-warning">
-            {{'search_aborted' | loc:$root.lang}}
-        </div>
-
-        <div ng-if="$ctrl.wordPic && $ctrl.noHits" class="korp-warning">{{"no_stats_results" | loc:$root.lang}}</div>
-
-        <div ng-if="$ctrl.wordPic && $ctrl.hasData && !$ctrl.noHits">
+        <div ng-if="$ctrl.wordPic && $ctrl.data.length">
             <div class="float-right flex flex-col gap-2">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" />
@@ -177,12 +167,10 @@ angular.module("korpApp").component("wordPicture", {
         wordPic: "<",
         activate: "<",
         loading: "<",
-        hasData: "<",
-        aborted: "<",
         hitSettings: "<",
         settings: "<",
         data: "<",
-        noHits: "<",
+        warning: "<",
     },
     controller: [
         "$rootScope",

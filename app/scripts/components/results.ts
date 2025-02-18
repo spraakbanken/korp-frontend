@@ -107,11 +107,9 @@ angular.module("korpApp").component("results", {
                                 word-pic="wordPic"
                                 activate="activate"
                                 loading="loading"
-                                has-data="hasData"
-                                aborted="aborted"
                                 hit-settings="hitSettings"
                                 settings="settings"
-                                no-hits="noHits"
+                                warning="warning"
                             ></word-picture>
                         </div>
                         <korp-error ng-if="error" message="{{error}}"></korp-error>
