@@ -11,6 +11,10 @@
 
 - More space in word picture tables [#102](https://github.com/spraakbanken/korp-frontend/issues/102)
 
+### Fixed
+
+- Error when opening corpus chooser in mode with no corpus time data [#434](https://github.com/spraakbanken/korp-frontend/issues/434)
+
 ## [9.8.3] - 2024-02-17
 
 ### Fixed
