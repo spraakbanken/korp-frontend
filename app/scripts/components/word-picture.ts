@@ -60,7 +60,7 @@ angular.module("korpApp").component("wordPicture", {
             </div>
         </div>
 
-        <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
+        <div ng-if="$ctrl.wordPic && $ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
 
         <div ng-if="$ctrl.wordPic && $ctrl.data.length">
             <div class="float-right flex flex-col gap-2">

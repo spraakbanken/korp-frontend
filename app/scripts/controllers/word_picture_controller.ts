@@ -103,7 +103,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             s.makeRequest = () => {
                 const search = $rootScope.activeSearch
-                if (!s.wordPic || !search || (search.type !== "lemgram" && search.val.includes(" "))) {
+                if (!search || (search.type !== "lemgram" && search.val.includes(" "))) {
                     s.resetView()
                     s.warning = loc("word_pic_bad_search", $rootScope.lang)
                     return
@@ -148,6 +148,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 s.progress = 100
                 if (!data.relations) {
                     s.warning = loc("no_stats_results", $rootScope.lang)
+                    s.resetView()
                 } else if (isLemgram(query)) {
                     s.renderTables(query, data.relations)
                 } else {
@@ -287,7 +288,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             const prepareScope = (data: TableDrawData[]) => {
                 s.data = data
                 sort($rootScope.wordpicSortProp)
-                console.log(s.data)
 
                 // Find length of longest table.
                 const lengths = data.map((section) =>
