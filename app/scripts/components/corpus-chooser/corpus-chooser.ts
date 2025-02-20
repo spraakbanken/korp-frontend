@@ -95,12 +95,12 @@ angular.module("korpApp").component("corpusChooser", {
                 <div class="popupchecks shrink-0 p-4 h-full">
                     <div class="flex">
                         <corpus-time-graph ng-if="$ctrl.showTimeGraph"></corpus-time-graph>
-                        <div class="p-2">
-                            <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
+                        <div class="p-2 flex flex-wrap gap-2 items-stretch">
+                            <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-40 shrink">
                                 <span class="fa-solid fa-check"></span>
                                 <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>
                             </button>
-                            <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-full">
+                            <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-40 shrink">
                                 <span class="fa-solid fa-times"></span>
                                 <span>{{ 'corpselector_buttonselectnone' | loc:$root.lang }}</span>
                             </button>
@@ -156,7 +156,7 @@ angular.module("korpApp").component("corpusChooser", {
 
             $ctrl.initialized = false
             $ctrl.showChooser = false
-            $ctrl.showTimeGraph = settings.has_timespan || false
+            $ctrl.showTimeGraph = !!settings.has_timespan && !!settings.time_data[0].length
 
             $ctrl.onShowChooser = () => {
                 // don't open the chooser unless the info-call is done
