@@ -19,7 +19,7 @@ type CorpusTimeGraphScope = IScope & {
 }
 
 angular.module("korpApp").component("corpusTimeGraph", {
-    template: html`<canvas ng-if="!isEmpty" id="time-graph-chart" height="80"></canvas>`,
+    template: html`<canvas ng-show="!isEmpty" id="time-graph-chart" height="80"></canvas>`,
     controller: [
         "$scope",
         "$rootScope",
