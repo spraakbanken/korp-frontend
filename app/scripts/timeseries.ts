@@ -43,8 +43,9 @@ export function getCountUndatedSelected() {
 }
 
 /** Get first and last year in all available corpora. */
-export function getSpan() {
+export function getSpan(): { min: number; max: number } | undefined {
     const timeData = getTimeDataPairs()
+    if (!timeData.length) return undefined
     return { min: timeData[0][0], max: timeData[timeData.length - 1][0] }
 }
 
