@@ -1,5 +1,5 @@
 /** @format */
-import angular from "angular"
+import angular, { IScope } from "angular"
 import range from "lodash/range"
 import { Chart } from "chart.js/auto"
 import { loc } from "@/i18n"
@@ -14,12 +14,22 @@ import {
 import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
 
+type CorpusTimeGraphScope = IScope & {
+    isEmpty: boolean
+}
+
 angular.module("korpApp").component("corpusTimeGraph", {
-    template: html`<canvas id="time-graph-chart" height="80"></canvas>`,
+    template: html`<canvas ng-show="!isEmpty" id="time-graph-chart" height="80"></canvas>`,
     controller: [
+        "$scope",
         "$rootScope",
-        function ($rootScope: RootScope) {
-            const { min, max } = getSpan()
+        function ($scope: CorpusTimeGraphScope, $rootScope: RootScope) {
+            // Abort and render empty if there is no time data in the current mode's corpora.
+            const span = getSpan()
+            if (!span) return
+            $scope.isEmpty = false
+
+            const { min, max } = span
 
             const datasetsDated = [
                 {
