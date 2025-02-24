@@ -11,11 +11,13 @@
 
 - More space in word picture tables [#102](https://github.com/spraakbanken/korp-frontend/issues/102)
 
+## [9.8.4] - 2025-02-20
+
 ### Fixed
 
 - Error when opening corpus chooser in mode with no corpus time data [#434](https://github.com/spraakbanken/korp-frontend/issues/434)
 
-## [9.8.3] - 2024-02-17
+## [9.8.3] - 2025-02-17
 
 ### Fixed
 
@@ -380,6 +382,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.8.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.4
 [9.8.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.3
 [9.8.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.2
 [9.8.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.1
