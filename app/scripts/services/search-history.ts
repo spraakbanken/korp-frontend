@@ -1,8 +1,10 @@
 /** @format */
 import angular from "angular"
-import { isEqual, pick } from "lodash"
+import { pick } from "lodash"
 import { localStorageGet, localStorageSet } from "@/local-storage"
-import { getSearchParamNames, HashParams, SearchParams } from "@/urlparams"
+import { getSearchParamNames, HashParams, LocationService, SearchParams } from "@/urlparams"
+import { RootScope } from "@/root-scope.types"
+import { paramsString } from "@/util"
 
 export type SearchHistoryService = {
     getItems: () => SearchParams[]
@@ -14,12 +16,14 @@ export type SearchHistoryService = {
 export type Listener = () => void
 
 angular.module("korpApp").factory("searchHistory", [
-    function (): SearchHistoryService {
+    "$location",
+    "$rootScope",
+    function ($location: LocationService, $rootScope: RootScope): SearchHistoryService {
         const listeners: Listener[] = []
 
         const notify = (): void => listeners.forEach((callback) => callback())
 
-        return {
+        const service: SearchHistoryService = {
             getItems: getSearchHistory,
             addItem: (params) => {
                 addToSearchHistory(params)
@@ -31,6 +35,13 @@ angular.module("korpApp").factory("searchHistory", [
             },
             listen: (listener) => listeners.push(listener),
         }
+
+        // When a new search is made, capture it from the URL
+        $rootScope.$watch("activeSearch", () => {
+            service.addItem($location.search())
+        })
+
+        return service
     },
 ])
 
@@ -56,7 +67,8 @@ function addNewSearch(searches: Record<string, SearchParams[]>, appPath: string,
     searches[appPath] ??= []
     const searchParams = pick(params, getSearchParamNames())
     // Add to start of list, unless already in list
-    if (searches[appPath].every((item) => !isEqual(item, searchParams))) searches[appPath].unshift(searchParams)
+    const isNew = searches[appPath].every((item) => paramsString(item) != paramsString(searchParams))
+    if (isNew) searches[appPath].unshift(searchParams)
 }
 
 function clearSearchHistory(): void {

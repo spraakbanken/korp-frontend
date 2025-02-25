@@ -1,7 +1,6 @@
 /** @format */
 import { mergeCqpExprs, parse, stringify } from "@/cqp_parser/cqp"
 import { RootScope } from "@/root-scope.types"
-import { SearchHistoryService } from "@/services/search-history"
 import { LocationService } from "@/urlparams"
 import angular, { IDeferred, IQService, ITimeoutService } from "angular"
 import "@/services/search-history"
@@ -27,13 +26,11 @@ angular.module("korpApp").factory("searches", [
     "$q",
     "$rootScope",
     "$timeout",
-    "searchHistory",
     function (
         $location: LocationService,
         $q: IQService,
         $rootScope: RootScope,
-        $timeout: ITimeoutService,
-        searchHistory: SearchHistoryService
+        $timeout: ITimeoutService
     ): SearchesService {
         const searches: SearchesService = {
             langDef: $q.defer(),
@@ -76,15 +73,6 @@ angular.module("korpApp").factory("searches", [
                         if ($rootScope.globalFilter) {
                             value = stringify(mergeCqpExprs(parse(value || "[]"), $rootScope.globalFilter))
                         }
-                    }
-
-                    // Store new query in search history
-                    if (value) {
-                        searchHistory.addItem($location.search())
-                    }
-                    // TODO Is `value` ever empty? Document and remove this.
-                    else {
-                        console.warn("searches.ts: value is empty")
                     }
 
                     // Update stored search query

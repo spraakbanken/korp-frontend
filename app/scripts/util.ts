@@ -456,6 +456,10 @@ export function buildUrl(base: string, params: Record<string, any>): string {
     return url.toString()
 }
 
+/** URL search params as a string value for comparison. */
+export const paramsString = (params: URLSearchParams | Record<string, any>) =>
+    JSON.stringify([...new URLSearchParams(params).entries()].sort())
+
 /** Trigger a download in the browser. */
 export function downloadFile(data: string, filename: string, type: string) {
     const blob = new Blob([data], { type })
