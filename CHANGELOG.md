@@ -11,6 +11,10 @@
 
 - More space in word picture tables [#102](https://github.com/spraakbanken/korp-frontend/issues/102)
 
+### Fixed
+
+- Selecting a search history item used to reset params that were not part of the search
+
 ## [9.8.4] - 2025-02-20
 
 ### Fixed
