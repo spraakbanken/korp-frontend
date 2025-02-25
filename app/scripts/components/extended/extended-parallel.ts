@@ -5,12 +5,10 @@ import settings from "@/settings"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import { matomoSend } from "@/matomo"
-import "@/services/searches"
 import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
-import { SearchesService } from "@/services/searches"
 
 type ExtendedParallelController = IController & {
     langs: { lang: string; cqp: string }[]
@@ -80,13 +78,7 @@ angular.module("korpApp").component("extendedParallel", {
         "$location",
         "$rootScope",
         "$timeout",
-        "searches",
-        function (
-            $location: LocationService,
-            $rootScope: RootScope,
-            $timeout: ITimeoutService,
-            searches: SearchesService
-        ) {
+        function ($location: LocationService, $rootScope: RootScope, $timeout: ITimeoutService) {
             const ctrl = this as ExtendedParallelController
 
             const corpusListing = settings.corpusListing as ParallelCorpusListing
@@ -167,7 +159,7 @@ angular.module("korpApp").component("extendedParallel", {
                 var currentLangList = _.map(ctrl.langs, "lang")
                 corpusListing.setActiveLangs(currentLangList)
                 $location.search("parallel_corpora", currentLangList.join(","))
-                searches.langDef.resolve()
+                $rootScope.langDef.resolve()
             }
 
             ctrl.onSubmit = function () {

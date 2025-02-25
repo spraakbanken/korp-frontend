@@ -138,8 +138,8 @@ korpApp.run([
 
         s.extendedCQP = null
         s.globalFilterData = {}
-        /** This deferred is used to signal that the filter feature is ready. */
         s.globalFilterDef = $q.defer<never>()
+        s.langDef = $q.defer<never>()
         $rootScope.wordpicSortProp = "freq"
 
         // Listen to url changes like #?lang=swe

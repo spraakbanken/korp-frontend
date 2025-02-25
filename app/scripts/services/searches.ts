@@ -6,8 +6,6 @@ import angular, { IDeferred, IQService, ITimeoutService } from "angular"
 import "@/services/search-history"
 
 export type SearchesService = {
-    /** is resolved when parallel search controller is loaded */
-    langDef: IDeferred<never>
     kwicSearch: (cqp: string) => void
     getCqpExpr: () => string
     triggerSearch: () => void
@@ -33,8 +31,6 @@ angular.module("korpApp").factory("searches", [
         $timeout: ITimeoutService
     ): SearchesService {
         const searches: SearchesService = {
-            langDef: $q.defer(),
-
             /** Tell result controllers (kwic/statistics/word picture) to send their requests. */
             kwicSearch(cqp: string) {
                 $rootScope.$emit("make_request", cqp, $rootScope.activeSearch)
@@ -64,7 +60,7 @@ angular.module("korpApp").factory("searches", [
                 // The value is a string like <type>|<expr>
                 const [type, ...valueSplit] = searchExpr.split("|")
                 let value = valueSplit.join("|")
-                $q.all([searches.langDef.promise, $rootScope.globalFilterDef.promise]).then(function () {
+                $q.all([$rootScope.langDef.promise, $rootScope.globalFilterDef.promise]).then(function () {
                     // For Extended search, the CQP is instead in the `cqp` URL param
                     if (type === "cqp" && !value) {
                         value = $location.search().cqp || ""

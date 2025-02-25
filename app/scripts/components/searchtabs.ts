@@ -5,7 +5,6 @@ import settings from "@/settings"
 import { html } from "@/util"
 import { loc } from "@/i18n"
 import "@/services/compare-searches"
-import "@/services/searches"
 import "@/components/simple-search"
 import "@/components/extended/extended-standard"
 import "@/components/extended/extended-parallel"
@@ -18,7 +17,6 @@ import "@/directives/tab-hash"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { CompareSearches } from "@/services/compare-searches"
 import { RootScope } from "@/root-scope.types"
-import { SearchesService } from "@/services/searches"
 import { LocationService, SortMethod } from "@/urlparams"
 import { SavedSearch } from "@/local-storage"
 import { AttributeOption } from "@/corpus_listing"
@@ -130,15 +128,9 @@ angular.module("korpApp").component("searchtabs", {
     `,
     controller: [
         "$location",
-        "searches",
         "$rootScope",
         "compareSearches",
-        function (
-            $location: LocationService,
-            searches: SearchesService,
-            $rootScope: RootScope,
-            compareSearches: CompareSearches
-        ) {
+        function ($location: LocationService, $rootScope: RootScope, compareSearches: CompareSearches) {
             const $ctrl = this as SearchtabsController
 
             $ctrl.parallelMode = !!settings.parallel
@@ -149,7 +141,7 @@ angular.module("korpApp").component("searchtabs", {
                 corpusListing.setActiveLangs([settings.start_lang!])
             } else {
                 // only used in parallel mode
-                searches.langDef.resolve()
+                $rootScope.langDef.resolve()
             }
 
             $ctrl.isCompareSelected = false
