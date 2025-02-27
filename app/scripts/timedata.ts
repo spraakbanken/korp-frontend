@@ -14,7 +14,7 @@ export const getTimeData: () => Promise<[[number, number][], number] | undefined
 
     // this adds data to the corpora in settings
     for (const [id, struct] of Object.entries(dataByCorpus)) {
-        const corpus = settings.corpora[id.toLowerCase()]
+        const corpus = settings.corpusListing.get(id.toLowerCase())
         timeProxy.expandTimeStruct(struct)
         corpus.non_time = struct[""]
         corpus.time = omit(struct, "")
@@ -24,7 +24,13 @@ export const getTimeData: () => Promise<[[number, number][], number] | undefined
             corpus.common_attributes.date_interval = true
         }
     }
+
+    // Update list of common attributes
+    settings.corpusListing.updateAttributes()
+
+    // Store time data for non-async use
     timeData = [combined, rest]
+
     return [combined, rest]
 })
 
