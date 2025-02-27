@@ -9,11 +9,6 @@ import { ConfigTransformed } from "./config-transformed.types"
 
 export type Settings = AppSettings &
     ConfigTransformed & {
-        // Populated in data_init.js fetchInitialData() using the `/timespan` API
-        time_data: [
-            [number, number][], // Token count per year
-            number // Undated tokens
-        ]
         // Set in data_init.js fetchInitialData()
         corpusListing: CorpusListing
     }

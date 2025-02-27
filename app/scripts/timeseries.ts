@@ -5,6 +5,39 @@ import fromPairs from "lodash/fromPairs"
 import pickBy from "lodash/pickBy"
 import range from "lodash/range"
 import settings from "@/settings"
+import timeProxyFactory from "./backend/time-proxy"
+
+/** Fetch and process time data for all corpora in the mode. */
+export const getTimeData: () => Promise<[[number, number][], number] | undefined> = _.memoize(async () => {
+    if (!settings.has_timespan) return undefined
+
+    const timeProxy = timeProxyFactory.create()
+    const [dataByCorpus, combined, rest] = await timeProxy.makeRequest()
+
+    if (combined.length == 0) return [[], 0]
+
+    // this adds data to the corpora in settings
+    for (const [id, struct] of Object.entries(dataByCorpus)) {
+        const corpus = settings.corpora[id.toLowerCase()]
+        timeProxy.expandTimeStruct(struct)
+        corpus.non_time = struct[""]
+        corpus.time = _.omit(struct, "")
+        // Enable the special date interval search attribute for corpora that have some timestamped data
+        if (Object.keys(corpus.time).length > 1) {
+            corpus.common_attributes ??= {}
+            corpus.common_attributes.date_interval = true
+        }
+    }
+    timeData = [combined, rest]
+    return [combined, rest]
+})
+
+/** Time data, if available.
+ *
+ * This gets set in `getTimeData()` and is then used in some other functions in this module.
+ * Make sure to await `getTimeData()` before using any other of these functions.
+ */
+let timeData: [[number, number][], number] | undefined
 
 /**
  * Find some even points within a range of years.
@@ -20,12 +53,11 @@ export function calculateYearTicks(min: number, max: number) {
     return range(round(min), round(max + 1), step)
 }
 
-// Time data is fetched in data_init.js, to also provide data for search result trend diagram (?)
 /** Data size per year of all corpora. */
-export const getTimeDataPairs = (): [number, number][] => settings.time_data[0]
+export const getTimeDataPairs = (): [number, number][] => timeData![0]
 
 /** Data size of unknown year in all corpora. */
-export const getCountUndated = (): number => settings.time_data[1]
+export const getCountUndated = (): number => timeData![1]
 
 /** Get data size per year of all corpora. */
 export const getSeries = () => fromPairs(getTimeDataPairs()) as YearSeries
