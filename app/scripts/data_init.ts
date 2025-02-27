@@ -59,34 +59,26 @@ async function getInfoData(corpusIds: string[]): Promise<InfoData> {
     }))
 }
 
+/** Fetch and process time data for all corpora in the mode. */
 async function getTimeData(): Promise<[[number, number][], number]> {
     const timeProxy = timeProxyFactory.create()
-    const args = await timeProxy.makeRequest()
+    const [dataByCorpus, combined, rest] = await timeProxy.makeRequest()
 
-    let [dataByCorpus, all_timestruct, rest] = args
-
-    if (all_timestruct.length == 0) {
-        return [[], 0]
-    }
+    if (combined.length == 0) return [[], 0]
 
     // this adds data to the corpora in settings
-    for (let corpus in dataByCorpus) {
-        let struct = dataByCorpus[corpus]
-        if (corpus !== "time") {
-            const cor = settings.corpora[corpus.toLowerCase()]
-            timeProxy.expandTimeStruct(struct)
-            cor.non_time = struct[""]
-            struct = _.omit(struct, "")
-            cor.time = struct
-            if (_.keys(struct).length > 1) {
-                if (cor.common_attributes == null) {
-                    cor.common_attributes = {}
-                }
-                cor.common_attributes.date_interval = true
-            }
+    for (const [id, struct] of Object.entries(dataByCorpus)) {
+        const corpus = settings.corpora[id.toLowerCase()]
+        timeProxy.expandTimeStruct(struct)
+        corpus.non_time = struct[""]
+        corpus.time = _.omit(struct, "")
+        // Enable the special date interval search attribute for corpora that have some timestamped data
+        if (Object.keys(corpus.time).length > 1) {
+            corpus.common_attributes ??= {}
+            corpus.common_attributes.date_interval = true
         }
     }
-    return [all_timestruct, rest]
+    return [combined, rest]
 }
 
 async function getConfig(): Promise<Config> {

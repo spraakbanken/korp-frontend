@@ -35,9 +35,7 @@ export class TimeProxy extends BaseProxy {
     compilePlotArray(dataStruct: Histogram) {
         let output: [number, number][] = []
         $.each(dataStruct, function (key, val) {
-            if (!key || !val) {
-                return
-            }
+            if (!key || !val) return
             return output.push([parseInt(key), val])
         })
 
