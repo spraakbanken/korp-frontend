@@ -21,7 +21,7 @@ import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { LangString } from "@/i18n/types"
-import { getTimeData } from "@/timeseries"
+import { getTimeData } from "@/timedata"
 
 type CorpusChooserController = IController & {
     credentials: string[]
