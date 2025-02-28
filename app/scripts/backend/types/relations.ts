@@ -8,6 +8,7 @@ export type RelationsParams = {
     min?: number
     max?: number
     incremental?: boolean
+    sort?: "freq" | "mi"
 }
 
 export type RelationsResponse = {

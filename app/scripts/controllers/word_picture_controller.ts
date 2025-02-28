@@ -72,15 +72,13 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 (val) => (s.wordPic = Boolean(val))
             )
 
-            $rootScope.$watch("wordpicSortProp", sort)
-
             $rootScope.$watch("globalFilter", () => {
                 if ($rootScope.globalFilter) s.warning = loc("word_pic_global_filter", $rootScope.lang)
             })
 
-            $rootScope.$on("make_request", () => {
-                s.makeRequest()
-            })
+            $rootScope.$on("make_request", () => s.makeRequest())
+
+            $rootScope.$watch("wordpicSortProp", () => s.makeRequest())
 
             s.$on("abort_requests", () => {
                 s.proxy.abort()
@@ -124,7 +122,9 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 s.loading = true
                 s.warning = undefined
                 s.proxy
-                    .makeRequest(word, type, (progressObj) => $timeout(() => (s.progress = progressObj.percent)))
+                    .makeRequest(word, type, $rootScope.wordpicSortProp, (progressObj) =>
+                        $timeout(() => (s.progress = progressObj.percent))
+                    )
                     .then((data) =>
                         $timeout(() => {
                             s.loading = false
@@ -287,7 +287,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             const prepareScope = (data: TableDrawData[]) => {
                 s.data = data
-                sort($rootScope.wordpicSortProp)
 
                 // Find length of longest table.
                 const lengths = data.map((section) =>
@@ -314,18 +313,6 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 }
 
                 s.hitSettings.push("1000")
-            }
-
-            function sort(sortProp: "freq" | "mi") {
-                s.data?.forEach((section) =>
-                    section.data.forEach((table) =>
-                        table.forEach((col) => {
-                            if (Array.isArray(col.table)) {
-                                col.table.sort((a, b) => b[sortProp] - a[sortProp])
-                            }
-                        })
-                    )
-                )
             }
         },
     ],

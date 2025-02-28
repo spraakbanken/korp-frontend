@@ -35,6 +35,7 @@ type WordPictureController = IController & {
     getTableClass: (wordClass: string, parentIdx: number, idx: number) => string | undefined
     minimize: (table: ShowableApiRelation[]) => ShowableApiRelation[]
     parseLemgram: (row: ShowableApiRelation) => ParsedLemgram
+    sortProp: RootScope["wordpicSortProp"]
     onClickExample: (row: ShowableApiRelation) => void
 }
 
@@ -141,14 +142,14 @@ angular.module("korpApp").component("wordPicture", {
                                             <span ng-if="!data.label" class="opacity-50">&empty;</span>
                                         </td>
                                         <td
-                                            ng-if="$root.wordpicSortProp == 'freq'"
+                                            ng-if="$ctrl.sortProp == 'freq'"
                                             title="{{'stat_lmi' | loc:$root.lang}}: {{row.mi | number:2}}"
                                             class="px-1 text-right"
                                         >
                                             {{row.freq}}
                                         </td>
                                         <td
-                                            ng-if="$root.wordpicSortProp == 'mi'"
+                                            ng-if="$ctrl.sortProp == 'mi'"
                                             title="{{'stat_frequency' | loc:$root.lang}}: {{row.freq}}"
                                             class="px-1 text-right"
                                         >
@@ -178,6 +179,14 @@ angular.module("korpApp").component("wordPicture", {
             const $ctrl = this as WordPictureController
 
             $ctrl.showWordClass = false
+            $ctrl.sortProp = $rootScope.wordpicSortProp
+
+            $ctrl.$onChanges = (changes) => {
+                // Update local sortProp value after new data is received
+                if ("data" in changes) {
+                    $ctrl.sortProp = $rootScope.wordpicSortProp
+                }
+            }
 
             $ctrl.localeString = function (lang, hitSetting) {
                 if (hitSetting === "1000") {

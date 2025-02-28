@@ -12,6 +12,7 @@ export class LemgramProxy extends BaseProxy {
     async makeRequest(
         word: string,
         type: string,
+        sort: RelationsParams["sort"],
         onProgress: ProgressHandler<"relations">
     ): Promise<RelationsResponse> {
         this.resetRequest()
@@ -22,6 +23,7 @@ export class LemgramProxy extends BaseProxy {
             corpus: settings.corpusListing.stringifySelected(),
             incremental: true,
             type,
+            sort,
             max: 1000,
         }
         this.prevParams = params

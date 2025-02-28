@@ -5,6 +5,7 @@ import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CqpQuery } from "./cqp_parser/cqp.types"
 import { CorpusListing } from "./corpus_listing"
 import { CompareResult, MapRequestResult } from "@/backend/backend"
+import { RelationsParams } from "@/backend/types/relations"
 import { Attribute } from "./settings/config.types"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
@@ -30,7 +31,7 @@ export type RootScope = IRootScopeService & {
     mapTabs: MapTab[]
     textTabs: TextTab[]
     waitForLogin: boolean
-    wordpicSortProp: "freq" | "mi"
+    wordpicSortProp: RelationsParams["sort"]
     lang: string
     loc_data: LangLocMap
     $on: (name: "corpuschooserchange", handler: (event: any, selected: string[]) => void) => void
