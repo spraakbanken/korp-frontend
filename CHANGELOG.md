@@ -10,6 +10,8 @@
 ### Changed
 
 - Load corpus timespan data in parallel when loading app [#437](https://github.com/spraakbanken/korp-frontend/issues/437)
+  - Instead of `settings.time_data`, use `import { timeData } from "./timedata"`
+  - Await `getTimeData()` before using `timeData` or `corpus.time`/`corpus.non_time`. The function is memoized, so repeated calls will not affect performance
 - More space in word picture tables [#102](https://github.com/spraakbanken/korp-frontend/issues/102)
 
 ### Fixed
