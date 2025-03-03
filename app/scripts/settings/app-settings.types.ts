@@ -21,7 +21,7 @@ export type AppSettings = {
         label: LangString
     }
     cqp_prio: string[]
-    default_options?: Record<string, OperatorKorp>
+    default_options: Record<string, OperatorKorp>
     default_language: string
     default_overview_context: string
     default_reading_context: string

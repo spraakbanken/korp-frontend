@@ -27,7 +27,7 @@ type ExtendedCqpTermController = IController & {
     change: () => void
     types: AttributeOption[]
     typeMapping: Record<string, AttributeOption>
-    opts: [string, OperatorKorp][] | undefined
+    opts: [string, OperatorKorp][]
     valfilter: typeof valfilter
     localChange: (term: Partial<Condition>) => void
     setDefault: () => void
@@ -121,35 +121,34 @@ angular.module("korpApp").component("extendedCqpTerm", {
                     if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
 
                     ctrl.opts = getOpts()
+
+                    // Reset option if the selected one is no longer available
+                    if (!ctrl.opts.find((pair) => pair[1] === ctrl.term.op)) ctrl.setDefault()
                 })
             }
 
-            const getOpts = () => getOptsMemo(ctrl.term.type)
+            function getOpts(): [string, OperatorKorp][] {
+                const option = ctrl.typeMapping[ctrl.term.type]
 
-            // returning new array each time kills angular, hence the memoizing
-            const getOptsMemo = _.memoize((type: string): [string, OperatorKorp][] | undefined => {
-                if (!(type in ctrl.typeMapping)) return
-
-                const option = ctrl.typeMapping[type]
                 if (!option) {
-                    console.error(`Attribute option missing for "${type}"`, ctrl.typeMapping)
-                    return
+                    console.error(`Attribute option missing for "${ctrl.term.type}"`, ctrl.typeMapping)
+                    return Object.entries(settings["default_options"])
                 }
 
-                const ops: Record<string, OperatorKorp> = { ...(option?.opts || settings["default_options"]) }
+                // Clone to avoid modifying original
+                const ops = { ...(option.opts || settings["default_options"]) }
 
                 // For multi-value attributes, use the "contains" CQP operator for equality
                 if (option.type === "set") ops.is = "contains"
 
-                return _.toPairs(ops)
-            })
+                // Return as tuples
+                return Object.entries(ops)
+            }
 
             ctrl.setDefault = function () {
                 // assign the first value from the opts
                 ctrl.opts = getOpts()
-
-                // TODO Correct? Was "is" before
-                ctrl.term.op = ctrl.opts?.[0]?.[1] || "="
+                ctrl.term.op = ctrl.opts[0]?.[1] || "="
 
                 ctrl.term.val = ""
                 ctrl.change()

@@ -30,6 +30,7 @@ export function setDefaultConfigValues() {
         // some safety margin
         backendURLMaxLength: 8100,
         default_language: "eng",
+        default_options: { is: "=", is_not: "!=" },
         // codes for translation ISO-639-1 to 639-2
         iso_languages: {
             en: "eng",
