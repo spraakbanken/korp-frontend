@@ -3,7 +3,6 @@ import _ from "lodash"
 import memoize from "lodash/memoize"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import timeProxyFactory from "@/backend/time-proxy"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
@@ -57,28 +56,6 @@ async function getInfoData(corpusIds: string[]): Promise<InfoData> {
             (name) => name.indexOf("__") !== -1
         ),
     }))
-}
-
-/** Fetch and process time data for all corpora in the mode. */
-async function getTimeData(): Promise<[[number, number][], number]> {
-    const timeProxy = timeProxyFactory.create()
-    const [dataByCorpus, combined, rest] = await timeProxy.makeRequest()
-
-    if (combined.length == 0) return [[], 0]
-
-    // this adds data to the corpora in settings
-    for (const [id, struct] of Object.entries(dataByCorpus)) {
-        const corpus = settings.corpora[id.toLowerCase()]
-        timeProxy.expandTimeStruct(struct)
-        corpus.non_time = struct[""]
-        corpus.time = _.omit(struct, "")
-        // Enable the special date interval search attribute for corpora that have some timestamped data
-        if (Object.keys(corpus.time).length > 1) {
-            corpus.common_attributes ??= {}
-            corpus.common_attributes.date_interval = true
-        }
-    }
-    return [combined, rest]
 }
 
 async function getConfig(): Promise<Config> {
@@ -239,12 +216,7 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
         )
     }
 
-    // if the previous config calls didn't yield any corpora, don't ask for time
     if (!_.isEmpty(settings.corpora)) {
         setInitialCorpora()
-
-        if (settings.has_timespan) {
-            settings.time_data = await getTimeData()
-        }
     }
 }

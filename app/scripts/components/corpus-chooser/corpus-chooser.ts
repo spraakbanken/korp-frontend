@@ -21,6 +21,7 @@ import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { LangString } from "@/i18n/types"
+import { getTimeData } from "@/timedata"
 
 type CorpusChooserController = IController & {
     credentials: string[]
@@ -156,7 +157,11 @@ angular.module("korpApp").component("corpusChooser", {
 
             $ctrl.initialized = false
             $ctrl.showChooser = false
-            $ctrl.showTimeGraph = !!settings.has_timespan && !!settings.time_data[0].length
+
+            // Load time data before showing time graph
+            getTimeData().then((data) => {
+                $ctrl.showTimeGraph = Boolean(data && data[0].length)
+            })
 
             $ctrl.onShowChooser = () => {
                 // don't open the chooser unless the info-call is done

@@ -9,6 +9,7 @@ import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { Condition, OperatorKorp } from "@/cqp_parser/cqp.types"
 import { AttributeOption } from "@/corpus_listing"
+import { getTimeData } from "@/timedata"
 
 /**
  * TODO
@@ -81,13 +82,15 @@ angular.module("korpApp").component("extendedCqpTerm", {
             ctrl.valfilter = valfilter
 
             ctrl.$onInit = () => {
-                $rootScope.$on("corpuschooserchange", () => $timeout(onCorpusChange))
+                $rootScope.$on("corpuschooserchange", () => updateAttributes())
                 $rootScope.$watch(
                     () => $location.search().parallel_corpora,
-                    () => $timeout(onCorpusChange)
+                    () => updateAttributes()
                 )
+                // React on the date interval attribute becoming available
+                getTimeData().then(() => updateAttributes())
 
-                onCorpusChange()
+                updateAttributes()
             }
 
             ctrl.localChange = (term) => {
@@ -95,24 +98,30 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 ctrl.change()
             }
 
-            function onCorpusChange() {
+            /** Update list of available attributes */
+            async function updateAttributes() {
                 // TODO: respect the setting 'wordAttributeSelector' and similar
                 if (!settings.corpusListing.selected.length) return
 
-                // Get available attribute options
-                ctrl.types = settings.corpusListing
-                    .getAttributeGroups("union", ctrl.parallellLang)
-                    .filter((item) => !item["hide_extended"])
+                // The date interval attribute is not available until time data is ready
+                if (ctrl.term.type == "date_interval") await getTimeData()
 
-                // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
-                ctrl.typeMapping = _.fromPairs(
-                    ctrl.types.map((item) => [item["is_struct_attr"] ? `_.${item.value}` : item.value, item])
-                )
+                $timeout(() => {
+                    // Get available attribute options
+                    ctrl.types = settings.corpusListing
+                        .getAttributeGroups("union", ctrl.parallellLang)
+                        .filter((item) => !item["hide_extended"])
 
-                // Reset attribute if the selected one is no longer available
-                if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
+                    // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
+                    ctrl.typeMapping = _.fromPairs(
+                        ctrl.types.map((item) => [item["is_struct_attr"] ? `_.${item.value}` : item.value, item])
+                    )
 
-                ctrl.opts = getOpts()
+                    // Reset attribute if the selected one is no longer available
+                    if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
+
+                    ctrl.opts = getOpts()
+                })
             }
 
             const getOpts = () => getOptsMemo(ctrl.term.type)
