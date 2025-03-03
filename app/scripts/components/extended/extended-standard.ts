@@ -162,9 +162,9 @@ angular.module("korpApp").component("extendedStandard", {
             }
 
             const updateExtendedCQP = function () {
-                let val2 = expandOperators(ctrl.cqp)
+                let val2 = expandOperators(ctrl.cqp || "[]")
                 if ($rootScope.globalFilter) {
-                    val2 = stringify(mergeCqpExprs(parse(val2 || "[]"), $rootScope.globalFilter))
+                    val2 = stringify(mergeCqpExprs(parse(val2), $rootScope.globalFilter))
                 }
                 $rootScope.extendedCQP = val2
             }
