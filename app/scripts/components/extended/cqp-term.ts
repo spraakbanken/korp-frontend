@@ -82,13 +82,13 @@ angular.module("korpApp").component("extendedCqpTerm", {
             ctrl.valfilter = valfilter
 
             ctrl.$onInit = () => {
-                $rootScope.$on("corpuschooserchange", () => $timeout(updateAttributes))
+                $rootScope.$on("corpuschooserchange", () => updateAttributes())
                 $rootScope.$watch(
                     () => $location.search().parallel_corpora,
-                    () => $timeout(updateAttributes)
+                    () => updateAttributes()
                 )
                 // React on the date interval attribute becoming available
-                getTimeData().then(() => $timeout(updateAttributes))
+                getTimeData().then(() => updateAttributes())
 
                 updateAttributes()
             }
@@ -106,20 +106,22 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 // The date interval attribute is not available until time data is ready
                 if (ctrl.term.type == "date_interval") await getTimeData()
 
-                // Get available attribute options
-                ctrl.types = settings.corpusListing
-                    .getAttributeGroups("union", ctrl.parallellLang)
-                    .filter((item) => !item["hide_extended"])
+                $timeout(() => {
+                    // Get available attribute options
+                    ctrl.types = settings.corpusListing
+                        .getAttributeGroups("union", ctrl.parallellLang)
+                        .filter((item) => !item["hide_extended"])
 
-                // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
-                ctrl.typeMapping = _.fromPairs(
-                    ctrl.types.map((item) => [item["is_struct_attr"] ? `_.${item.value}` : item.value, item])
-                )
+                    // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
+                    ctrl.typeMapping = _.fromPairs(
+                        ctrl.types.map((item) => [item["is_struct_attr"] ? `_.${item.value}` : item.value, item])
+                    )
 
-                // Reset attribute if the selected one is no longer available
-                if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
+                    // Reset attribute if the selected one is no longer available
+                    if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
 
-                ctrl.opts = getOpts()
+                    ctrl.opts = getOpts()
+                })
             }
 
             const getOpts = () => getOptsMemo(ctrl.term.type)
