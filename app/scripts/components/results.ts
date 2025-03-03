@@ -294,7 +294,7 @@ angular.module("korpApp").component("results", {
 
             $scope.onSidebarShow = () => ($scope.showSidebar = true)
             $scope.onSidebarHide = () => ($scope.showSidebar = false)
-            $scope.hasResult = () => !!$rootScope.activeSearch
+            $scope.hasResult = () => !!$rootScope.activeSearch || !!$rootScope.compareTabs.length
         },
     ],
 })
