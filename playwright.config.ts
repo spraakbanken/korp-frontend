@@ -39,6 +39,7 @@ export default defineConfig({
         trace: "on-first-retry",
         // Timeout (ms) to allow for each navigation action, default is 5000
         navigationTimeout: 30_000,
+        actionTimeout: 30_000,
     },
 
     // Ensure local dev server is running

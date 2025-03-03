@@ -23,6 +23,34 @@ test("select corpus", async ({ page }) => {
 })
 
 describe("simple search", () => {
+    test("simple word search with results", async ({ page }) => {
+        await page.goto("./#?lang=eng&corpus=attasidor")
+        await page.getByRole("textbox").fill("katt")
+
+        await page.getByRole("button", { name: "Search" }).click()
+        await expect(page.getByRole("table")).toContainText("katt")
+
+        // Search is stored in URL
+        await page.reload()
+        await expect(page.getByRole("table")).toContainText("katt")
+    })
+
+    test("simple lemgram search with results", async ({ page }) => {
+        await page.goto("./#?lang=eng&corpus=attasidor")
+        await page.getByRole("textbox").fill("katt")
+
+        // Select lemgram
+        await page.getByRole("listbox").getByText("katt").first().click()
+        expect(await page.getByRole("textbox").getAttribute("placeholder")).toContain("katt")
+
+        await page.getByRole("button", { name: "Search" }).click()
+        await expect(page.getByRole("table")).toContainText("katter")
+
+        // Search is stored in URL
+        await page.reload()
+        await expect(page.getByRole("table")).toContainText("katter")
+    })
+
     test("lemgram suggestions", async ({ page }) => {
         await page.goto("./#?lang=eng&corpus=suc3")
 
@@ -49,6 +77,18 @@ describe("simple search", () => {
 })
 
 describe("extended search", () => {
+    test("extended search with results", async ({ page }) => {
+        await page.goto("./#?lang=eng&corpus=attasidor&search_tab=1")
+        await page.selectOption(".arg_type", "Swedish FrameNet")
+        await page.getByRole("textbox").fill("Animals")
+
+        await page.getByRole("button", { name: "Search" }).click()
+        await expect(page.getByRole("table")).toContainText("björn")
+
+        // Search is stored in URL
+        await page.reload()
+        await expect(page.getByRole("table")).toContainText("björn")
+    })
     ;[{ attr: "lemgram" }, { attr: "compounds" }].forEach(({ attr }) =>
         test(`warn about unselected ${attr}`, async ({ page }) => {
             await page.goto(`./#?lang=eng&corpus=suc3&search_tab=1`)
@@ -83,5 +123,18 @@ describe("extended search", () => {
         // Check advanced query
         await page.getByRole("link", { name: "Advanced" }).click()
         await expect(page.locator("pre").filter({ hasText: "%c" })).not.toBeVisible()
+    })
+})
+
+describe("advanced search", () => {
+    test("advanced search with results", async ({ page }) => {
+        await page.goto("./#?lang=eng&corpus=attasidor&search_tab=2")
+        await page.getByRole("textbox").fill('[swefn contains "Animals"]')
+        await page.getByRole("button", { name: "Search" }).click()
+        await expect(page.getByRole("table")).toContainText("björn")
+
+        // Search is stored in URL
+        await page.reload()
+        await expect(page.getByRole("table")).toContainText("björn")
     })
 })
