@@ -13,6 +13,7 @@ import "@/global-filter/global-filters"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
+import { SearchesService } from "@/services/searches"
 
 type ExtendedStandardController = IController & {
     cqp: string
@@ -72,14 +73,16 @@ angular.module("korpApp").component("extendedStandard", {
         "$location",
         "$rootScope",
         "$scope",
-        "compareSearches",
         "$timeout",
+        "compareSearches",
+        "searches",
         function (
             $location: LocationService,
             $rootScope: RootScope,
             $scope: ExtendedStandardScope,
+            $timeout: ITimeoutService,
             compareSearches: CompareSearches,
-            $timeout: ITimeoutService
+            searches: SearchesService
         ) {
             const ctrl = this as ExtendedStandardController
 
@@ -91,14 +94,11 @@ angular.module("korpApp").component("extendedStandard", {
 
             // TODO this is *too* weird
             function triggerSearch() {
-                // Unset and set query in next time step in order to trigger changes correctly in `searches`.
-                $location.search("search", null)
                 $location.search("page", null)
                 $location.search("in_order", $scope.freeOrder ? false : null)
                 $location.search("within", ctrl.within != defaultWithin ? ctrl.within : undefined)
-                $timeout(function () {
-                    $location.search("search", "cqp")
-                }, 0)
+                $location.search("search", "cqp")
+                searches.doSearch()
             }
 
             statemachine.listen("cqp_search", (event) => {

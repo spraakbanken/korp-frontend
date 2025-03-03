@@ -152,7 +152,17 @@ angular.module("korpApp").component("simpleSearch", {
                 $location.search("isCaseInsensitive", "")
             }
 
-            // triggers watch on activeSearch, via the Searches service
+            // React to changes in URL params
+            function readSearchParams() {
+                const search = $location.search()
+                ctrl.freeOrder = search.in_order != null
+                ctrl.prefix = search.prefix != null
+                ctrl.mid_comp = search.mid_comp != null
+                ctrl.suffix = search.suffix != null
+                ctrl.isCaseInsensitive = search.isCaseInsensitive != null
+            }
+            readSearchParams()
+
             ctrl.updateSearch = function () {
                 $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
                 $location.search("prefix", ctrl.prefix ? true : null)
@@ -160,19 +170,14 @@ angular.module("korpApp").component("simpleSearch", {
                 $location.search("suffix", ctrl.suffix ? true : null)
                 $location.search("isCaseInsensitive", ctrl.isCaseInsensitive ? true : null)
                 $location.search("within", null)
-
-                // Unset and set query in next time step in order to trigger changes correctly in the Searches service.
-                $location.search("search", null)
                 $location.replace()
-                $timeout(function () {
-                    if (ctrl.currentText) {
-                        $location.search("search", `word|${ctrl.currentText}`)
-                    } else if (ctrl.lemgram) {
-                        $location.search("search", `lemgram|${ctrl.lemgram}`)
-                    }
-                    $location.search("page", null)
-                }, 0)
+
+                if (ctrl.currentText) $location.search("search", `word|${ctrl.currentText}`)
+                else if (ctrl.lemgram) $location.search("search", `lemgram|${ctrl.lemgram}`)
+                $location.search("page", null)
+
                 matomoSend("trackEvent", "Search", "Submit search", "Simple")
+                searches.doSearch()
             }
 
             ctrl.getCQP = function () {
@@ -286,14 +291,7 @@ angular.module("korpApp").component("simpleSearch", {
             })
 
             // React to changes in URL params
-            $scope.$on("$locationChangeSuccess", () => {
-                const search = $location.search()
-                ctrl.freeOrder = search.in_order != null
-                ctrl.prefix = search.prefix != null
-                ctrl.mid_comp = search.mid_comp != null
-                ctrl.suffix = search.suffix != null
-                ctrl.isCaseInsensitive = search.isCaseInsensitive != null
-            })
+            $scope.$on("$locationChangeSuccess", () => readSearchParams())
 
             ctrl.onChange = (value, isPlain) => {
                 ctrl.currentText = isPlain ? value : undefined

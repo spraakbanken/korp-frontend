@@ -9,13 +9,13 @@ import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
+import { SearchesService } from "@/services/searches"
 
 type ExtendedParallelController = IController & {
     langs: { lang: string; cqp: string }[]
     negates: boolean[]
     initialized: boolean
     cqpChange: (idx: number) => (cqp: string) => void
-    negChange: () => void
     onLangChange: () => void
     getEnabledLangs: (i?: number) => string[]
     addLangRow: () => void
@@ -39,13 +39,7 @@ angular.module("korpApp").component("extendedParallel", {
                     for="negate_chk{{$index}}"
                     >{{"not_containing" | loc:$root.lang}}</label
                 >
-                <input
-                    type="checkbox"
-                    id="negate_chk{{$index}}"
-                    ng-show="!$first"
-                    ng-model="$ctrl.negates[$index]"
-                    ng-change="$ctrl.negChange()"
-                />
+                <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="$ctrl.negates[$index]" />
                 <extended-tokens
                     cqp="l.cqp"
                     cqp-change="$ctrl.cqpChange($index)(cqp)"
@@ -78,7 +72,13 @@ angular.module("korpApp").component("extendedParallel", {
         "$location",
         "$rootScope",
         "$timeout",
-        function ($location: LocationService, $rootScope: RootScope, $timeout: ITimeoutService) {
+        "searches",
+        function (
+            $location: LocationService,
+            $rootScope: RootScope,
+            $timeout: ITimeoutService,
+            searches: SearchesService
+        ) {
             const ctrl = this as ExtendedParallelController
 
             const corpusListing = settings.corpusListing as ParallelCorpusListing
@@ -109,10 +109,6 @@ angular.module("korpApp").component("extendedParallel", {
                     ctrl.langs[idx].cqp = cqp
                     onCQPChange()
                 }
-            }
-
-            ctrl.negChange = function () {
-                $location.search("search", null)
             }
 
             const onCQPChange = () => {
@@ -163,14 +159,11 @@ angular.module("korpApp").component("extendedParallel", {
             }
 
             ctrl.onSubmit = function () {
-                // Unset and set query in next time step in order to trigger changes correctly in `searches`.
-                $location.search("search", null)
                 $location.replace()
-                $timeout(function () {
-                    $location.search("search", `cqp|${onCQPChange()}`)
-                    $location.search("page", null)
-                }, 0)
+                $location.search("search", `cqp|${onCQPChange()}`)
+                $location.search("page", null)
                 matomoSend("trackEvent", "Search", "Submit search", "Extended")
+                searches.doSearch()
             }
 
             ctrl.keydown = function ($event: KeyboardEvent) {

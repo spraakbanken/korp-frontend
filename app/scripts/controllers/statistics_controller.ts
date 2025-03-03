@@ -166,9 +166,11 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 } else {
                     $location.search("show_stats", true)
                 }
-                const cqp = searches.getCqpExpr()
-                s.showStatistics = true
-                s.makeRequest(cqp)
+                const cqp = $rootScope.getActiveCqp()
+                if (cqp) {
+                    s.showStatistics = true
+                    s.makeRequest(cqp)
+                }
             }
         },
     ],

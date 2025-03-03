@@ -74,8 +74,8 @@ angular.module("korpApp").component("searchHistory", {
                     const params = $scope.value.params
                     getSearchParamNames().forEach((key) => $location.search(key, params[key] ?? null))
 
-                    // The Searches watcher stupidly only watches the `search` param, so trigger it explicitly
-                    searches.triggerSearch()
+                    // Wait for param changes like corpus selection to propagate to app state
+                    $scope.$applyAsync(() => searches.doSearch())
                 } else if ($scope.value.id == "_clear") {
                     searchHistory.clear()
                     resetValue()

@@ -7,6 +7,7 @@ import settings from "@/settings"
 import { SearchExample } from "@/settings/app-settings.types"
 import { HashParams, LocationService } from "@/urlparams"
 import { CqpSearchEvent } from "@/statemachine/types"
+import { SearchesService } from "@/services/searches"
 
 export default angular.module("korpApp").component("searchExamples", {
     template: html`
@@ -26,7 +27,8 @@ export default angular.module("korpApp").component("searchExamples", {
     controller: [
         "$scope",
         "$location",
-        function ($scope: SearchExamplesScope, $location: LocationService) {
+        "searches",
+        function ($scope: SearchExamplesScope, $location: LocationService, searches: SearchesService) {
             const $ctrl = this
 
             $scope.examples = undefined
@@ -46,6 +48,7 @@ export default angular.module("korpApp").component("searchExamples", {
                 }
                 // Do not use `$location.search(params)` because it will remove existing params (like `corpus`)
                 Object.keys(params).forEach((key: keyof HashParams) => $location.search(key, params[key]))
+                searches.doSearch()
             }
         },
     ],

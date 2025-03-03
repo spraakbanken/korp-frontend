@@ -6,7 +6,6 @@ import {
     IComponentOptions,
     ILocaleService,
     ILocationProvider,
-    IQService,
     IScope,
     ITimeoutService,
     ui,
@@ -18,7 +17,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { initLocales } from "@/data_init"
 import { RootScope } from "@/root-scope.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { getService, html } from "@/util"
+import { deferOk, getService, html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
 import "@/components/searchtabs"
@@ -121,7 +120,6 @@ korpApp.run([
     "$locale",
     "tmhDynamicLocale",
     "tmhDynamicLocaleCache",
-    "$q",
     "$timeout",
     "$uibModal",
     async function (
@@ -130,7 +128,6 @@ korpApp.run([
         $locale: ILocaleService,
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,
-        $q: IQService,
         $timeout: ITimeoutService,
         $uibModal: ui.bootstrap.IModalService
     ) {
@@ -138,9 +135,17 @@ korpApp.run([
 
         s.extendedCQP = null
         s.globalFilterData = {}
-        s.globalFilterDef = $q.defer<never>()
-        s.langDef = $q.defer<never>()
+        $rootScope.globalFilterDef = deferOk()
+        $rootScope.langDef = deferOk()
         $rootScope.wordpicSortProp = "freq"
+
+        /** Get CQP corresponding to the current search, if any. */
+        $rootScope.getActiveCqp = () => {
+            if (!$rootScope.activeSearch) return undefined
+            // Simple search puts CQP in `simpleCQP`. Extended/advanced puts it in `activeSearch.val`.
+            const isSimple = ["word", "lemgram"].includes($rootScope.activeSearch.type)
+            return isSimple ? $rootScope.simpleCQP : $rootScope.activeSearch.val
+        }
 
         // Listen to url changes like #?lang=swe
         s.$on("$locationChangeSuccess", () => {
