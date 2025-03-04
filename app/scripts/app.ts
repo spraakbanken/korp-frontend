@@ -347,4 +347,4 @@ korpApp.filter("prettyNumber", [
     "$rootScope",
     ($rootScope) => (input: string, lang: string) => Number(input).toLocaleString(lang || $rootScope.lang),
 ])
-korpApp.filter("maxLength", () => (val: string) => val.length > 39 ? val.slice(0, 36) + "…" : val)
+korpApp.filter("maxLength", () => (val: unknown) => String(val).length > 39 ? String(val).slice(0, 36) + "…" : val)
