@@ -267,10 +267,8 @@ syntactic relations to in the material, grouped by relation. For a verb, for exa
 
 ![Word picture in Korp](images/ordbild.png)
 
-By default, a maximum of 15 words are displayed for each relation, but to the right on the page there is an option to display more.
-
 The number next to each word indicates how many times the given relation is found in the selected material.
-To the right, there is an option to show and sort by a Lexicographer's Mutual Information (LMI) statistic instead of the absolute frequency.
+Alternatively, you can choose to show and sort by a Lexicographer's Mutual Information (LMI) statistic instead of the absolute frequency.
 The LMI measures the frequency of a certain word pair in relation to the frequencies of each single word.
 Thus it disfavors words that have a high co-occurrence merely by being common in general, such as "be" and "have".
 

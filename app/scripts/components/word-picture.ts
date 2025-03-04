@@ -63,7 +63,7 @@ angular.module("korpApp").component("wordPicture", {
         <div ng-if="$ctrl.wordPic && $ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
 
         <div ng-if="$ctrl.wordPic && $ctrl.data.length">
-            <div class="float-right flex flex-col gap-2">
+            <div class="my-4 flex flex-wrap items-baseline gap-4">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" />
                     <label for="wordclassChk">{{'show_wordclass' | loc:$root.lang}}</label>
@@ -75,7 +75,7 @@ angular.module("korpApp").component("wordPicture", {
                         </option>
                     </select>
                 </div>
-                <div>
+                <div class="flex flex-wrap gap-2">
                     <label for="wordpic-sort">{{'sort_by' | loc:$root.lang}}:</label>
                     <div>
                         <input type="radio" id="wordpic-sort-freq" value="freq" ng-model="$root.wordpicSortProp" />

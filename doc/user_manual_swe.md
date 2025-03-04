@@ -273,10 +273,8 @@ verbet, och för ett substantiv visas utmärkande attribut, och verb som substan
 
 ![Ordbilden i Korp](images/ordbild.png)
 
-Som standard visas max 15 ord för varje relation, men till höger på sidan finns det inställningsmöjligheter för att visa fler.
-
 Siffran intill varje ord uppger hur många gånger just den relationen finns i det valda materialet.
-Till höger kan du välja att istället visa och sortera efter Lexicographer's Mutual Information (LMI).
+Alternativt kan du välja att visa och sortera efter Lexicographer's Mutual Information (LMI).
 Det är ett värde som mäter frekvensen av ett givet ordpar i förhållande till frekvenserna av varje ord i paret.
 På så vis reduceras ord som samförekommer ofta bara för att de är vanliga i allmänhet, såsom "vara" och "ha".
 
