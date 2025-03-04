@@ -96,6 +96,11 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             }
 
             s.makeRequest = () => {
+                if (!s.wordPic) {
+                    s.resetView()
+                    return
+                }
+
                 const search = $rootScope.activeSearch
                 if (!search || (search.type !== "lemgram" && search.val.includes(" "))) {
                     s.resetView()
