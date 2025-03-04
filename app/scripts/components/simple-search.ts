@@ -69,11 +69,11 @@ angular.module("korpApp").component("simpleSearch", {
                             ng-model="$ctrl.freeOrder"
                             ng-disabled="!$ctrl.freeOrderEnabled"
                         />
-                        <label for="freeOrderChk"> {{'free_order_chk' | loc:$root.lang}}</label>
+                        <label for="freeOrderChk"> {{'free_order_chk' | loc:$root.lang}} </label>
                         <span> {{'and' | loc:$root.lang}} </span>
                         <span> {{'and_include' | loc:$root.lang}} </span>
                         <input id="prefixChk" type="checkbox" ng-model="$ctrl.prefix" />
-                        <label for="prefixChk"> {{'prefix_chk' | loc:$root.lang}}</label>
+                        <label for="prefixChk"> {{'prefix_chk' | loc:$root.lang}} </label>
                         <input id="midChk" type="checkbox" ng-model="$ctrl.mid_comp" />
                         <label for="midChk"> {{'compound_middle' | loc:$root.lang}} </label>
                         <input id="suffixChk" type="checkbox" ng-model="$ctrl.suffix" />

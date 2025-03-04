@@ -66,7 +66,7 @@ angular.module("korpApp").component("wordPicture", {
             <div class="my-4 flex flex-wrap items-baseline gap-4">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" />
-                    <label for="wordclassChk">{{'show_wordclass' | loc:$root.lang}}</label>
+                    <label for="wordclassChk"> {{'show_wordclass' | loc:$root.lang}}</label>
                 </div>
                 <div>
                     <select id="numberHitsSelect" ng-model="$ctrl.limit">
@@ -79,14 +79,14 @@ angular.module("korpApp").component("wordPicture", {
                     <label for="wordpic-sort">{{'sort_by' | loc:$root.lang}}:</label>
                     <div>
                         <input type="radio" id="wordpic-sort-freq" value="freq" ng-model="$root.wordpicSortProp" />
-                        <label for="wordpic-sort-freq">{{'stat_frequency' | loc:$root.lang}}</label>
+                        <label for="wordpic-sort-freq"> {{'stat_frequency' | loc:$root.lang}}</label>
                     </div>
                     <div>
                         <input type="radio" id="wordpic-sort-mi" value="mi" ng-model="$root.wordpicSortProp" />
                         <label for="wordpic-sort-mi">
                             {{'stat_lmi' | loc:$root.lang}}
                             <i
-                                class="fa fa-info-circle text-gray-400"
+                                class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
                                 uib-tooltip="{{'stat_lmi_help' | loc:$root.lang}}"
                             ></i>
                         </label>

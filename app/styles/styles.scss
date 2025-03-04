@@ -9,8 +9,9 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
     box-sizing: border-box;
 }
 input[type=checkbox], input[type=radio] {
-  position: relative;
-  top: 2px;
+  display: table-cell;
+  vertical-align: middle;
+  margin-bottom: 2px;
 }
 
 $primaryColor: rgb(221, 233, 255);
