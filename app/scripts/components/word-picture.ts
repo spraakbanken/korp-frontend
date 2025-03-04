@@ -14,16 +14,13 @@ type WordPictureController = IController & {
     wordPic: boolean
     activate: () => void
     loading: boolean
-    hitSettings: string[]
-    settings: {
-        showNumberOfHits: `${number}`
-    }
+    limitOptions: number[]
     data: TableDrawData[]
     warning?: string
 
     // Locals
+    limit: string // Number as string to work with <select ng-model>
     showWordClass: boolean
-    localeString: (lang: string, hitSetting: string) => string
     renderResultHeader: (section: TableData[], index: number) => ApiRelation[] | { word: string }
     getHeaderLabel: (header: WordPictureDefItem, section: TableData[], idx: number) => string
     getHeaderClasses: (header: WordPictureDefItem | "_", token: string) => string
@@ -44,6 +41,8 @@ type ParsedLemgram = {
     pos?: string
     idx?: string
 }
+
+const LIMITS: readonly number[] = [15, 50, 100, 500, 1000]
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
@@ -70,9 +69,9 @@ angular.module("korpApp").component("wordPicture", {
                     <label for="wordclassChk">{{'show_wordclass' | loc:$root.lang}}</label>
                 </div>
                 <div>
-                    <select id="numberHitsSelect" ng-model="$ctrl.settings.showNumberOfHits">
-                        <option ng-repeat="hitSetting in $ctrl.hitSettings" value="{{hitSetting}}">
-                            {{ $ctrl.localeString($root.lang, hitSetting) }}
+                    <select id="numberHitsSelect" ng-model="$ctrl.limit">
+                        <option ng-repeat="option in $ctrl.limitOptions" value="{{option}}">
+                            {{'word_pic_show_some' | loc:$root.lang}} {{option}} {{'word_pic_hits' | loc:$root.lang}}
                         </option>
                     </select>
                 </div>
@@ -168,8 +167,6 @@ angular.module("korpApp").component("wordPicture", {
         wordPic: "<",
         activate: "<",
         loading: "<",
-        hitSettings: "<",
-        settings: "<",
         data: "<",
         warning: "<",
     },
@@ -178,21 +175,30 @@ angular.module("korpApp").component("wordPicture", {
         function ($rootScope: RootScope) {
             const $ctrl = this as WordPictureController
 
+            $ctrl.limitOptions = [...LIMITS]
+            $ctrl.limit = String(LIMITS[0])
             $ctrl.showWordClass = false
             $ctrl.sortProp = $rootScope.wordpicSortProp
 
             $ctrl.$onChanges = (changes) => {
                 // Update local sortProp value after new data is received
-                if ("data" in changes) {
+                if ("data" in changes && changes.data.currentValue) {
                     $ctrl.sortProp = $rootScope.wordpicSortProp
-                }
-            }
 
-            $ctrl.localeString = function (lang, hitSetting) {
-                if (hitSetting === "1000") {
-                    return loc("word_pic_show_all", lang)
-                } else {
-                    return loc("word_pic_show_some", lang) + " " + hitSetting + " " + loc("word_pic_hits", lang)
+                    // Find options for the limit setting
+                    // Find length of longest column
+                    const max = Math.max(
+                        ...$ctrl.data.flatMap((word) =>
+                            word.data.flatMap((table) =>
+                                table.flatMap((col) => (Array.isArray(col.table) ? col.table.length : 0))
+                            )
+                        )
+                    )
+                    // Include options up to the first that is higher than the longest column
+                    const endIndex = LIMITS.findIndex((limit) => limit >= max)
+                    $ctrl.limitOptions = LIMITS.slice(0, endIndex + 1)
+                    // Clamp previously selected value
+                    if (Number($ctrl.limit) > LIMITS[endIndex]) $ctrl.limit = String(LIMITS[endIndex])
                 }
             }
 
@@ -234,7 +240,7 @@ angular.module("korpApp").component("wordPicture", {
                 return def != "_" ? def.css_class : undefined
             }
 
-            $ctrl.minimize = (table) => table.slice(0, Number($ctrl.settings.showNumberOfHits))
+            $ctrl.minimize = (table) => table.slice(0, Number($ctrl.limit) || LIMITS[0])
 
             $ctrl.parseLemgram = function (row) {
                 const set = row[row.show_rel].split("|")

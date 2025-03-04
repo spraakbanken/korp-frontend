@@ -17,7 +17,6 @@ type WordpicCtrlScope = TabHashScope & {
     data?: TableDrawData[]
     drawTables: (tables: [string, string][], data: ApiRelation[]) => void
     error?: string
-    hitSettings: `${number}`[]
     loading: boolean
     makeRequest: () => void
     progress: number
@@ -26,9 +25,6 @@ type WordpicCtrlScope = TabHashScope & {
     renderTables: (query: string, data: ApiRelation[]) => void
     renderWordTables: (query: string, data: ApiRelation[]) => void
     resetView: () => void
-    settings: {
-        showNumberOfHits: `${number}`
-    }
     warning?: string
     wordPic: boolean
 }
@@ -279,40 +275,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     })
                 }
 
-                prepareScope(res)
-            }
-
-            s.hitSettings = ["15"]
-            s.settings = { showNumberOfHits: "15" }
-
-            const prepareScope = (data: TableDrawData[]) => {
-                s.data = data
-
-                // Find length of longest table.
-                const lengths = data.map((section) =>
-                    section.data.map((col) => col.map((table) => (Array.isArray(table.table) ? table.table.length : 0)))
-                )
-                const max = Math.max(...lengths.flat(2))
-
-                s.hitSettings = []
-                if (max < 15) {
-                    s.settings = { showNumberOfHits: "1000" }
-                } else {
-                    s.hitSettings.push("15")
-                    s.settings = { showNumberOfHits: "15" }
-                }
-
-                if (max > 50) {
-                    s.hitSettings.push("50")
-                }
-                if (max > 100) {
-                    s.hitSettings.push("100")
-                }
-                if (max > 500) {
-                    s.hitSettings.push("500")
-                }
-
-                s.hitSettings.push("1000")
+                s.data = res
             }
         },
     ],
