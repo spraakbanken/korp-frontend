@@ -150,8 +150,7 @@ angular.module("korpApp").component("corpusChooser", {
                 const remaining = Object.keys(_.pickBy(settings.corpora, (corpus) => corpus.selected))
                 const toSelect = remaining.length ? remaining : settings.preselected_corpora || []
                 // Apply selection
-                settings.corpusListing.select(toSelect)
-                $ctrl.updateSelectedCount(toSelect)
+                select(toSelect)
                 $ctrl.updateLimitedAccess()
             })
 
