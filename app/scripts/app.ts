@@ -137,7 +137,7 @@ korpApp.run([
         s.globalFilterData = {}
         $rootScope.globalFilterDef = deferOk()
         $rootScope.langDef = deferOk()
-        $rootScope.wordpicSortProp = "freq"
+        $rootScope.wordpicSortProp = "mi"
 
         /** Get CQP corresponding to the current search, if any. */
         $rootScope.getActiveCqp = () => {

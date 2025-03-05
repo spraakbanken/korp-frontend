@@ -273,9 +273,9 @@ verbet, och för ett substantiv visas utmärkande attribut, och verb som substan
 
 ![Ordbilden i Korp](images/ordbild.png)
 
-Siffran intill varje ord uppger hur många gånger just den relationen finns i det valda materialet.
-Alternativt kan du välja att visa och sortera efter Lexicographer's Mutual Information (LMI).
-Det är ett värde som mäter frekvensen av ett givet ordpar i förhållande till frekvenserna av varje ord i paret.
+Intill varje relaterat ord finns ett mått på sambandet till sökordet inom det valda materialet.
+Du kan välja att visa och sortera på absolut frekvens (antal) eller Lexicographer's Mutual Information (LMI).
+LMI är ett värde som mäter frekvensen av ett givet ordpar i förhållande till frekvenserna av varje ord i paret.
 På så vis reduceras ord som samförekommer ofta bara för att de är vanliga i allmänhet, såsom "vara" och "ha".
 
 Genom att klicka på ett ord i tabellen kan man få fram en ny KWIC-flik med alla de meningar i vilka vald relation förekommer.

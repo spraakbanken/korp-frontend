@@ -111,7 +111,7 @@
     "word_pic_show_some": "Show up to",
     "word_pic_hits": "hits",
 
-    "sort_by": "Sort by",
+    "sort_by": "Measure and sort by",
     "stat_frequency": "absolute frequency",
     "stat_lmi": "LMI",
     "stat_lmi_help": "Lexicographer's Mutual Information, a frequency measure compensated for the frequency of each word by itself",

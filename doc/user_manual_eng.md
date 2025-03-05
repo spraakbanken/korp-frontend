@@ -267,8 +267,8 @@ syntactic relations to in the material, grouped by relation. For a verb, for exa
 
 ![Word picture in Korp](images/ordbild.png)
 
-The number next to each word indicates how many times the given relation is found in the selected material.
-Alternatively, you can choose to show and sort by a Lexicographer's Mutual Information (LMI) statistic instead of the absolute frequency.
+Next to each related word is a measure of its association to the search word within the selected material.
+You can choose to measure and sort by absolute frequency (count) or Lexicographer's Mutual Information (LMI).
 The LMI measures the frequency of a certain word pair in relation to the frequencies of each single word.
 Thus it disfavors words that have a high co-occurrence merely by being common in general, such as "be" and "have".
 
