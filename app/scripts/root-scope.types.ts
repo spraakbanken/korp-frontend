@@ -32,7 +32,6 @@ export type RootScope = IRootScopeService & {
     kwicTabs: KwicTab[]
     mapTabs: MapTab[]
     textTabs: TextTab[]
-    waitForLogin: boolean
     wordpicSortProp: RelationsParams["sort"]
     lang: string
     loc_data: LangLocMap

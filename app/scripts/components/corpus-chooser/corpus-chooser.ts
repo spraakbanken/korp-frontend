@@ -164,9 +164,8 @@ angular.module("korpApp").component("corpusChooser", {
 
             $ctrl.onShowChooser = () => {
                 // don't open the chooser unless the info-call is done
-                if ($ctrl.initialized) {
-                    $ctrl.showChooser = !$ctrl.showChooser
-                }
+                if (!$ctrl.initialized) return
+                $ctrl.showChooser = !$ctrl.showChooser
             }
 
             $ctrl.closeChooser = () => {
@@ -238,6 +237,7 @@ angular.module("korpApp").component("corpusChooser", {
             }
 
             function select(corporaIds: string[], force?: boolean) {
+                if (!$ctrl.initialized) return
                 const selection = filterCorporaOnCredentials(
                     Object.values(settings.corpora),
                     corporaIds,

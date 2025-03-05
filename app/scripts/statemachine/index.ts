@@ -48,6 +48,7 @@ const machine = createMachine(
                     login_needed: {
                         on: {
                             LOGIN: { target: "logged_in", actions: "logged_in" },
+                            LOGOUT: { target: "logged_out", actions: "logged_out" },
                         },
                     },
                 },
