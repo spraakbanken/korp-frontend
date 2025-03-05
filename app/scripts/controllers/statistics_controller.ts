@@ -15,20 +15,17 @@ type StatsResultCtrlScope = TabHashScope & {
     columns: SlickgridColumn[]
     data: Dataset
     error?: string
-    hasResult: boolean
-    inOrder: boolean
     loading: boolean
-    no_hits: boolean
     progress: number
     proxy: StatsProxy
     searchParams: SearchParams
     showStatistics: boolean
+    warning?: string
     makeRequest: (cqp: string) => void
     onentry: () => void
     renderResult: (columns: SlickgridColumn[], data: Dataset) => void
     resetView: () => void
     resultError: (err: any) => void
-    shouldSearch: () => boolean
 }
 
 angular.module("korpApp").directive("statsResultCtrl", () => ({
@@ -62,6 +59,9 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
             })
 
             s.onentry = () => {
+                // Enable statistics when opening tab
+                if (!s.showStatistics) s.activate()
+
                 // workaround for bug in slickgrid
                 // slickgrid should add this automatically, but doesn't
                 $("#myGrid").css("position", "relative")
@@ -75,31 +75,33 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                     download: null,
                     href: null,
                 })
-                s.no_hits = false
+                s.warning = undefined
+                s.error = undefined
                 s.aborted = false
                 s.progress = 0
+                s.loading = false
             }
 
             s.makeRequest = (cqp) => {
-                s.error = undefined
-                const grid = document.getElementById("myGrid")
-                if (!grid) throw new Error("myGrid element not found")
-                grid.innerHTML = ""
-
-                s.hasResult = false
-                if (!s.shouldSearch()) {
-                    return
-                }
-
-                s.hasResult = true
-
-                if (settings.parallel) {
-                    cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
-                }
+                if (!s.showStatistics) return
 
                 // Abort any running request
                 if (s.loading) s.proxy.abort()
                 s.resetView()
+
+                const inOrder = $location.search().in_order == null
+                if (!inOrder) {
+                    s.warning = "stats_not_in_order_warn"
+                    return
+                }
+
+                const grid = document.getElementById("myGrid")
+                if (!grid) throw new Error("myGrid element not found")
+                grid.innerHTML = ""
+
+                if (settings.parallel) {
+                    cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
+                }
 
                 s.loading = true
                 s.proxy
@@ -121,7 +123,6 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                         $timeout(() => {
                             s.resetView()
                             s.error = error
-                            s.loading = false
                         })
                     })
             }
@@ -130,41 +131,17 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 s.columns = columns
 
                 if (data[0].total[0] === 0) {
-                    s.no_hits = true
+                    s.warning = "no_stats_results"
                     return
                 }
 
                 s.loading = false
             }
 
-            if (settings["statistics_search_default"]) {
-                s.$watch(
-                    () => $location.search().hide_stats,
-                    (val) => (s.showStatistics = val == null)
-                )
-            } else {
-                s.$watch(
-                    () => $location.search().show_stats,
-                    (val) => (s.showStatistics = val != null)
-                )
-            }
-
-            s.$watch(
-                () => $location.search().in_order,
-                (val) => (s.inOrder = val == null)
-            )
-
-            s.shouldSearch = () => s.showStatistics && s.inOrder
-
             $scope.activate = function () {
-                if (settings["statistics_search_default"]) {
-                    $location.search("hide_stats", null)
-                } else {
-                    $location.search("show_stats", true)
-                }
+                s.showStatistics = true
                 const cqp = $rootScope.getActiveCqp()
                 if (cqp) {
-                    s.showStatistics = true
                     s.makeRequest(cqp)
                 }
             }

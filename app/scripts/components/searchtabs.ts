@@ -28,15 +28,11 @@ type SearchtabsController = IController & {
     hitsPerPage: number
     isCompareSelected: boolean
     isStatisticsAvailable: boolean
-    isWordPictureAvailable: boolean
     kwicSort: string
     kwicSortValues: string[]
     noCorporaSelected: boolean
     savedSearches: SavedSearch[]
-    word_pic: boolean
     reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
-    showStatistics: boolean
-    showStatisticsChange: () => void
     statCurrentAttrs: AttributeOption[]
     statSelectedAttrs: string[]
     statInsensitiveAttrs: string[]
@@ -105,24 +101,6 @@ angular.module("korpApp").component("searchtabs", {
                         on-change="$ctrl.reduceOnChange"
                     ></reduce-select>
                 </div>
-                <div ng-show="$ctrl.isStatisticsAvailable">
-                    <input
-                        id="show_stats"
-                        type="checkbox"
-                        ng-model="$ctrl.showStatistics"
-                        ng-change="$ctrl.showStatisticsChange()"
-                        class="mr-1"
-                    /><label for="show_stats">{{'show_stats' | loc:$root.lang}}</label>
-                </div>
-                <div ng-show="$ctrl.isWordPictureAvailable">
-                    <input
-                        id="word_pic"
-                        type="checkbox"
-                        ng-model="$ctrl.word_pic"
-                        ng-change="$ctrl.wordPicChange()"
-                        class="mr-1"
-                    /><label for="word_pic">{{'show_word_pic' | loc:$root.lang}}</label>
-                </div>
             </div>
         </div>
     `,
@@ -152,60 +130,6 @@ angular.module("korpApp").component("searchtabs", {
             )
 
             $ctrl.savedSearches = compareSearches.savedSearches
-
-            function setupWatchWordPic() {
-                $rootScope.$watch(
-                    () => $location.search().word_pic,
-                    (val) => ($ctrl.word_pic = !!val)
-                )
-                $ctrl.wordPicChange = () => $location.search("word_pic", $ctrl.word_pic || null)
-            }
-
-            function setupWatchStats() {
-                const defaultVal = settings.statistics_search_default
-                // incoming values
-                const hide = $location.search().hide_stats
-                const show = $location.search().show_stats
-
-                if (hide != null) {
-                    $ctrl.showStatistics = false
-                    if (!defaultVal) {
-                        $location.search("hide_stats", null)
-                    }
-                } else if (show != null) {
-                    $ctrl.showStatistics = true
-                    if (defaultVal) {
-                        $location.search("show_stats", null)
-                    }
-                } else {
-                    $ctrl.showStatistics = defaultVal
-                }
-
-                if (defaultVal) {
-                    $rootScope.$watch(
-                        () => $location.search().hide_stats,
-                        (val) => ($ctrl.showStatistics = val == null)
-                    )
-                } else {
-                    $rootScope.$watch(
-                        () => $location.search().show_stats,
-                        (val) => ($ctrl.showStatistics = val != null)
-                    )
-                }
-
-                $ctrl.showStatisticsChange = () => {
-                    if (defaultVal) {
-                        $location.search("hide_stats", $ctrl.showStatistics ? null : true)
-                    } else {
-                        $location.search("show_stats", $ctrl.showStatistics ? true : null)
-                    }
-                }
-            }
-
-            setupWatchWordPic()
-            setupWatchStats()
-
-            $ctrl.isWordPictureAvailable = settings.word_picture !== false
             $ctrl.isStatisticsAvailable = settings.statistics !== false
 
             if (!$location.search().stats_reduce && settings.statistics_case_insensitive_default) {

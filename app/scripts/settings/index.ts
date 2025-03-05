@@ -40,7 +40,6 @@ export function setDefaultConfigValues() {
             no: "nor",
         },
         cqp_prio: ["deprel", "pos", "msd", "suffix", "prefix", "lemma", "lex", "word"],
-        statistics_search_default: true,
         word_label: { swe: "ord", eng: "word" },
         visible_modes: 6,
         has_timespan: true,

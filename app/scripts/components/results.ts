@@ -77,26 +77,22 @@ angular.module("korpApp").component("results", {
                         <korp-error ng-if="error" message="{{error}}"></korp-error>
                         <statistics
                             aborted="aborted"
-                            activate="activate"
                             columns="columns"
                             data="data"
                             error="error"
-                            has-result="hasResult"
-                            in-order="inOrder"
                             loading="loading"
-                            no-hits="no_hits"
                             prev-params="proxy.prevParams"
                             search-params="searchParams"
-                            show-statistics="showStatistics"
+                            warning="warning"
                         ></statistics>
                         <json-button
-                            ng-if="showStatistics && hasResult"
+                            ng-if="!warning && !error"
                             endpoint="'count'"
                             params="proxy.prevParams"
                         ></json-button>
                     </uib-tab>
 
-                    <uib-tab ng-if="showWordpicTab" wordpic-ctrl index="3">
+                    <uib-tab ng-if="showWordpicTab" wordpic-ctrl select="onentry()" index="3">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             {{'word_picture' | loc:$root.lang}}
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
@@ -104,7 +100,6 @@ angular.module("korpApp").component("results", {
                         <div ng-if="!error">
                             <word-picture
                                 data="data"
-                                word-pic="wordPic"
                                 activate="activate"
                                 loading="loading"
                                 hit-settings="hitSettings"
@@ -114,7 +109,7 @@ angular.module("korpApp").component("results", {
                         </div>
                         <korp-error ng-if="error" message="{{error}}"></korp-error>
                         <json-button
-                            ng-if="wordPic && hasData"
+                            ng-if="!warning && !error"
                             endpoint="'relations'"
                             params="proxy.prevParams"
                         ></json-button>

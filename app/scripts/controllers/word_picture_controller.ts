@@ -5,7 +5,6 @@ import settings from "@/settings"
 import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
 import { isLemgram, lemgramToString, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
-import { LocationService } from "@/urlparams"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { TabHashScope } from "@/directives/tab-hash"
 import { ApiRelation, RelationsResponse } from "@/backend/types/relations"
@@ -19,6 +18,7 @@ type WordpicCtrlScope = TabHashScope & {
     error?: string
     loading: boolean
     makeRequest: () => void
+    onentry: () => void
     progress: number
     proxy: LemgramProxy
     renderResult: (data: RelationsResponse, word: string) => void
@@ -52,9 +52,8 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
     controller: [
         "$scope",
         "$rootScope",
-        "$location",
         "$timeout",
-        ($scope: WordpicCtrlScope, $rootScope: RootScope, $location: LocationService, $timeout: ITimeoutService) => {
+        ($scope: WordpicCtrlScope, $rootScope: RootScope, $timeout: ITimeoutService) => {
             /** Mapping from pos tag to identifiers used in word_picture_conf */
             const tagset = _.invert(settings["word_picture_tagset"] || {})
 
@@ -62,11 +61,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             s.proxy = lemgramProxyFactory.create()
             s.loading = false
             s.progress = 0
-            s.wordPic = $location.search().word_pic != null
-            s.$watch(
-                () => $location.search().word_pic,
-                (val) => (s.wordPic = Boolean(val))
-            )
+            s.wordPic = false
 
             $rootScope.$watch("globalFilter", () => {
                 if ($rootScope.globalFilter) s.warning = loc("word_pic_global_filter", $rootScope.lang)
@@ -84,8 +79,12 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 }
             })
 
+            s.onentry = () => {
+                // Enable word picture when opening tab
+                if (!s.wordPic) s.activate()
+            }
+
             s.activate = function () {
-                $location.search("word_pic", true)
                 s.wordPic = true
                 s.makeRequest()
             }

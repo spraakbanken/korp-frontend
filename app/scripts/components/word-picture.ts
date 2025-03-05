@@ -2,7 +2,6 @@
 import angular, { IController } from "angular"
 import settings from "@/settings"
 import { html, isLemgram, lemgramToHtml, splitLemgram } from "@/util"
-import { loc } from "@/i18n"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDef, WordPictureDefItem } from "@/settings/app-settings.types"
 import { ShowableApiRelation, TableData, TableDrawData } from "@/controllers/word_picture_controller"
@@ -11,8 +10,6 @@ import "@/components/help-box"
 
 type WordPictureController = IController & {
     // Bindings
-    wordPic: boolean
-    activate: () => void
     loading: boolean
     limitOptions: number[]
     data: TableDrawData[]
@@ -46,18 +43,9 @@ const LIMITS: readonly number[] = [15, 50, 100, 500, 1000]
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
-        <div ng-if="!$ctrl.wordPic">
-            {{'word_pic_warn' | loc:$root.lang}}
-            <div>
-                <button class="btn btn-sm btn-default activate_word_pic" ng-click="$ctrl.activate()">
-                    {{'word_pic_warn_btn' | loc:$root.lang}}
-                </button>
-            </div>
-        </div>
+        <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
 
-        <div ng-if="$ctrl.wordPic && $ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
-
-        <div ng-if="$ctrl.wordPic && $ctrl.data.length">
+        <div ng-if="$ctrl.data.length">
             <div class="mb-4 flex flex-wrap items-baseline gap-4">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" />
@@ -164,8 +152,6 @@ angular.module("korpApp").component("wordPicture", {
         </help-box>
     `,
     bindings: {
-        wordPic: "<",
-        activate: "<",
         loading: "<",
         data: "<",
         warning: "<",

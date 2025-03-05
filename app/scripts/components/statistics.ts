@@ -21,21 +21,17 @@ type StatisticsScope = IScope & {
 
 type StatisticsController = IController & {
     aborted: boolean
-    activate: () => void
     columns: SlickgridColumn[]
     data: Dataset
     doSort: boolean
     error: boolean
     grid: Slick.Grid<Row>
-    hasResult: boolean
-    inOrder: boolean
     loading: boolean
-    noHits: boolean
     prevParams: CountParams
     searchParams: SearchParams
-    showStatistics: boolean
     sortColumn?: string
     totalNumberOfRows: number
+    warning?: string
     onStatsClick: (event: MouseEvent) => void
     onGraphClick: () => void
     resizeGrid: (resizeColumns: boolean) => void
@@ -59,31 +55,13 @@ type MapAttributeOption = {
 angular.module("korpApp").component("statistics", {
     template: html`
         <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
-            <div ng-if="!$ctrl.inOrder && !$ctrl.hasResult">{{'stats_not_in_order_warn' | loc:$root.lang}}</div>
-            <div ng-if="!$ctrl.showStatistics">
-                {{'stats_warn' | loc:$root.lang}}
-                <div>
-                    <button class="btn btn-sm btn-default activate_word_pic" ng-click="$ctrl.activate()">
-                        {{'word_pic_warn_btn' | loc:$root.lang}}
-                    </button>
-                </div>
-            </div>
-            <div ng-if="$ctrl.showStatistics && !$ctrl.hasResult && $ctrl.inOrder">
-                <div>
-                    <button class="btn btn-sm btn-default activate_word_pic" ng-click="$ctrl.activate()">
-                        {{'update_btn' | loc:$root.lang}}
-                    </button>
-                </div>
-            </div>
+            <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning | loc:$root.lang}}</div>
 
-            <div ng-if="$ctrl.showStatistics && $ctrl.noHits" class="korp-warning">
-                {{"no_stats_results" | loc:$root.lang}}
-            </div>
-            <div ng-if="$ctrl.showStatistics && $ctrl.aborted && !$ctrl.loading" class="korp-warning">
+            <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">
                 {{'search_aborted' | loc:$root.lang}}
             </div>
 
-            <div ng-show="$ctrl.showStatistics && $ctrl.hasResult && !$ctrl.noHits && !$ctrl.aborted">
+            <div ng-show="!$ctrl.warning && !$ctrl.aborted">
                 <div class="stats_header">
                     <button
                         class="btn btn-sm btn-default show-graph-btn"
@@ -199,17 +177,13 @@ angular.module("korpApp").component("statistics", {
     `,
     bindings: {
         aborted: "<",
-        activate: "<",
         columns: "<",
         data: "<",
         error: "<",
-        hasResult: "<",
-        inOrder: "<",
         loading: "<",
-        noHits: "<",
         prevParams: "<",
         searchParams: "<",
-        showStatistics: "<",
+        warning: "<",
     },
     controller: [
         "$rootScope",

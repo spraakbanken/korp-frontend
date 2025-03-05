@@ -27,8 +27,6 @@ export type HashParams = {
     display?: "about"
     /** Conditions entered for search filters, as Base64-encoded JSON */
     global_filter?: string
-    /** Opposite of `show_stats`, used if the `statistics_search_default` setting is enabled */
-    hide_stats?: boolean
     /** Hits per page */
     hpp?: number
     /** Whether tokens in current query should match in order; default is true */
@@ -57,8 +55,6 @@ export type HashParams = {
     search?: `${string}|${string}` | "cqp"
     /** Current search mode */
     search_tab?: number
-    /** Whether a statistics query should be made when searching */
-    show_stats?: boolean
     /** Search result order */
     sort?: SortMethod
     /** Attributes on which to aggregate counts in statistics query */
@@ -69,8 +65,6 @@ export type HashParams = {
     suffix?: true
     /** Chunk size to evaluate search query within, e.g. "sentence" or "paragraph" */
     within?: string
-    /** Whether a word picture query should be made when searching */
-    word_pic?: boolean
 }
 
 export type SortMethod = "" | "keyword" | "left" | "right" | "random"
