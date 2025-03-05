@@ -6,8 +6,6 @@ import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
-import { SearchesService } from "@/services/searches"
-import "@/services/searches"
 import { TabHashScope } from "@/directives/tab-hash"
 
 type StatsResultCtrlScope = TabHashScope & {
@@ -37,13 +35,11 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
     controller: [
         "$scope",
         "$location",
-        "searches",
         "$rootScope",
         "$timeout",
         (
             $scope: StatsResultCtrlScope,
             $location: LocationService,
-            searches: SearchesService,
             $rootScope: RootScope,
             $timeout: ITimeoutService
         ) => {

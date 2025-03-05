@@ -9,9 +9,7 @@ import { getCqp } from "../../config/statistics_config"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { requestMapData } from "@/backend/backend"
 import "@/backend/backend"
-import "@/services/searches"
 import "@/components/corpus-distribution-chart"
-import { SearchesService } from "@/services/searches"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, SlickgridColumn } from "@/statistics.types"
@@ -217,13 +215,7 @@ angular.module("korpApp").component("statistics", {
         "$rootScope",
         "$scope",
         "$uibModal",
-        "searches",
-        function (
-            $rootScope: RootScope,
-            $scope: StatisticsScope,
-            $uibModal: ui.bootstrap.IModalService,
-            searches: SearchesService
-        ) {
+        function ($rootScope: RootScope, $scope: StatisticsScope, $uibModal: ui.bootstrap.IModalService) {
             const $ctrl = this as StatisticsController
 
             $ctrl.noRowsError = false
