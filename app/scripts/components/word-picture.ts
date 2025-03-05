@@ -46,11 +46,6 @@ const LIMITS: readonly number[] = [15, 50, 100, 500, 1000]
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
-        <help-box
-            text="'word_pic_description' | loc:$root.lang"
-            extended-text="'word_pic_result_description' | loc:$root.lang"
-        ></help-box>
-
         <div ng-if="!$ctrl.wordPic">
             {{'word_pic_warn' | loc:$root.lang}}
             <div>
@@ -63,7 +58,7 @@ angular.module("korpApp").component("wordPicture", {
         <div ng-if="$ctrl.wordPic && $ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
 
         <div ng-if="$ctrl.wordPic && $ctrl.data.length">
-            <div class="my-4 flex flex-wrap items-baseline gap-4">
+            <div class="mb-4 flex flex-wrap items-baseline gap-4">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" />
                     <label for="wordclassChk"> {{'show_wordclass' | loc:$root.lang}}</label>
@@ -162,6 +157,11 @@ angular.module("korpApp").component("wordPicture", {
                 </div>
             </div>
         </div>
+
+        <help-box>
+            <p>{{'word_pic_description' | loc:$root.lang}}</p>
+            <p>{{'word_pic_result_description' | loc:$root.lang}}</p>
+        </help-box>
     `,
     bindings: {
         wordPic: "<",
