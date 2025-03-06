@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IController, ITimeoutService } from "angular"
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
@@ -7,7 +7,7 @@ import { makeDownload } from "@/kwic_download"
 import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
-import { LocationService } from "@/urlparams"
+import { LocationService, SortMethod } from "@/urlparams"
 import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
@@ -71,6 +71,15 @@ type KwicController = IController & {
     onKwicClick(event: Event): void
 }
 
+type KwicScope = IScope & {
+    hpp: string
+    hppOptions: string[]
+    updateHpp: () => void
+    sort: SortMethod
+    sortOptions: Record<SortMethod, string>
+    updateSort: () => void
+}
+
 type HitsPictureItem = {
     page: number
     relative: number
@@ -80,6 +89,27 @@ type HitsPictureItem = {
 
 angular.module("korpApp").component("kwic", {
     template: html`
+        <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
+            <div class="flex items-center gap-1">
+                <label for="kwic-hpp">{{ "hits_per_page" | loc:$root.lang }}:</label>
+                <select
+                    id="kwic-hpp"
+                    ng-change="updateHpp()"
+                    ng-model="hpp"
+                    ng-options="x for x in hppOptions"
+                ></select>
+            </div>
+            <div class="flex items-center gap-1">
+                <label for="kwic-sort">{{ "sort_default" | loc:$root.lang }}:</label>
+                <select
+                    id="kwic-sort"
+                    ng-change="updateSort()"
+                    ng-model="sort"
+                    ng-options="k as v | loc:$root.lang for (k, v) in sortOptions"
+                ></select>
+            </div>
+        </div>
+
         <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">{{'search_aborted' | loc:$root.lang}}</div>
 
         <div ng-if="!$ctrl.aborted || $ctrl.loading" ng-click="$ctrl.onKwicClick($event)">
@@ -239,9 +269,21 @@ angular.module("korpApp").component("kwic", {
     controller: [
         "$element",
         "$location",
+        "$scope",
         "$timeout",
-        function ($element: JQLite, $location: LocationService, $timeout: ITimeoutService) {
+        function ($element: JQLite, $location: LocationService, $scope: KwicScope, $timeout: ITimeoutService) {
             let $ctrl = this as KwicController
+
+            $scope.sortOptions = {
+                "": "appearance_context",
+                keyword: "word_context",
+                left: "left_context",
+                right: "right_context",
+                random: "random_context",
+            }
+            $scope.sort = $location.search().sort || ""
+            $scope.hppOptions = settings["hits_per_page_values"].map(String)
+            $scope.hpp = String($location.search().hpp || settings["hits_per_page_default"])
 
             const selectionManager = new SelectionManager()
 
@@ -329,6 +371,25 @@ angular.module("korpApp").component("kwic", {
                     selectionManager.deselect()
                     statemachine.send("DESELECT_WORD")
                 }
+            }
+
+            $scope.$watch(
+                () => $location.search().hpp,
+                (val) => ($scope.hpp = String(val || settings["hits_per_page_default"]))
+            )
+
+            $scope.$watch(
+                () => $location.search().sort,
+                (val) => ($scope.sort = val || "")
+            )
+
+            $scope.updateHpp = () => {
+                const hpp = Number($scope.hpp)
+                $location.search("hpp", hpp !== settings["hits_per_page_default"] ? hpp : null)
+            }
+
+            $scope.updateSort = () => {
+                $location.search("sort", $scope.sort !== "" ? $scope.sort : null)
             }
 
             $ctrl._settings = settings

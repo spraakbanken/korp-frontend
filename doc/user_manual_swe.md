@@ -171,15 +171,6 @@ För att läsa mer om frågespråket, se:
 - [Att söka i Korp med CQP och Regexp – en introduktion (pdf)](https://www.gu.se/sites/default/files/2021-03/Att%20so%CC%88ka%20i%20Korp%20med%20CQP%20och%20Regexp.pdf) (Klas Hjortstam, 2018)
 - [CQP Interface and Query Language Manual (pdf)](https://cwb.sourceforge.io/files/CQP_Manual.pdf) (Stephanie Evert & The CWB Development Team, 2022)
 
-### Visningsalternativ
-
-Oberoende av vilken version av sökgränssnittet man använder så finns det en rad med *visningsalternativ*, placerade längst ner i en rand
-under sökfälten. Här kan man ställa in olika visningsalternativ för sökresultatet.
-Man välja antalet träffar per sida i KWIC:en, samt sorteringsordning.
-Sorteringen kan ske antingen efter höger- eller vänsterkontext, på själva träffen i sig, eller slumpvis. Sorteringen sker
-enbart inom varje korpus. Med standardvalet "förekomst" kommer träffarna visas i den ordning
-de förekommer i korpusen, vilket i många fall är en delvis slumpvis ordning av upphovsrättsliga skäl.
-
 ## Sökresultat
 
 Resultatvyn, som visas först efter att en sökning har utförts, är uppdelad i tre olika avdelningar: *KWIC*, *Statistik* och *Ordbild*.
@@ -188,6 +179,11 @@ Resultatvyn, som visas först efter att en sökning har utförts, är uppdelad i
 
 KWIC, som står för "keyword in context", visar det sökta ordet eller orden i sin kontext, vanligtvis en mening. Sökresultaten, om de är många, är
 uppdelade på ett antal sidor, och för att bläddra mellan sidorna använder man tangenterna *f* respektive *n* på tangentbordet.
+
+Bland alternativen kan man välja antalet träffar per sida, samt sorteringsordning.
+Sorteringen kan ske antingen efter höger- eller vänsterkontext, på själva träffen i sig, eller slumpvis.
+Sorteringen sker enbart inom varje korpus.
+Med standardvalet "förekomst" kommer träffarna visas i den ordning de förekommer i korpusen, vilket i många fall är en delvis slumpvis ordning av upphovsrättsliga skäl.
 
 Förutsatt att man har sökt i mer än en korpus, kommer det till höger om texten som anger hur många träffar sökningen gav finnas en färgad remsa. Denna
 visar med alternerande färger storleksförhållandet mellan träffmängden i de olika korpusarna, och genom att föra musen över dem ser man vilken

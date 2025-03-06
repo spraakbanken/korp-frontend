@@ -219,20 +219,6 @@ label.placeholder {
   color: #999999;
 }
 
-#search_options {
-  border-top: none;
-  padding: 8px;
-  background-image: none;
-  margin-bottom: 8px;
-  select {
-    margin-right: 5px;
-    background-color: rgba(255,255,255,0.5);
-    padding-left: 2px;
-  }
-  > div {
-    margin-right: 10px;
-  }
-}
 .click-cover {
   position: absolute;
   top: 0;

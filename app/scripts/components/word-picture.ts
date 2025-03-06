@@ -46,7 +46,7 @@ angular.module("korpApp").component("wordPicture", {
         <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
 
         <div ng-if="$ctrl.data.length">
-            <div class="mb-4 flex flex-wrap items-baseline gap-4">
+            <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
                 <div>
                     <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" />
                     <label for="wordclassChk"> {{'show_wordclass' | loc:$root.lang}}</label>

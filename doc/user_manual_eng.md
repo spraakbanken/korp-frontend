@@ -166,24 +166,19 @@ To read more about the query language, see:
 - [Att söka i Korp med CQP och Regexp – en introduktion (PDF)](https://www.gu.se/sites/default/files/2021-03/Att%20so%CC%88ka%20i%20Korp%20med%20CQP%20och%20Regexp.pdf) (Klas Hjortstam, 2018)
 - [CQP Interface and Query Language Manual (PDF)](https://cwb.sourceforge.io/files/CQP_Manual.pdf) (Stephanie Evert & The CWB Development Team, 2022)
 
-### Display options
-
-Regardless of which version of the search interface you use, there is a row of *display options*, located in a strip
-below the search fields. Here you can set different display options for the search result.
-You can choose the number of hits per page in the KWIC, as well as sorting order.
-Sorting can be done either by right or left context, on the hit itself, or randomly. The sorting takes place
-only within each corpus. With the default choice "occurrence" the hits will be displayed in the order
-they appear in the corpus (which may be a partially random order for copyright reasons).
-
 ## Search results
 
 The results view, which appears only after a search has been performed, is divided into three different sections: *KWIC*, *Statistics*, and *Word picture*.
 
 ### KWIC
 
-
 KWIC, which stands for "keyword in context", displays the searched word or words in their context, usually a sentence. The search results, if there are many, are
 divided into a number of pages, and to page back and forth between the pages you use the *f* and *n* keys on the keyboard.
+
+You can choose the number of hits per page, as well as sorting order.
+Sorting can be done either by right or left context, on the hit itself, or randomly.
+The sorting takes place only within each corpus.
+With the default choice "not sorted", the hits will be displayed in the order they appear in the corpus (which may be a partially random order for copyright reasons).
 
 Provided you have searched in more than one corpus, there will be a colored strip to the right of the number of hits the search yielded. This
 shows the ratio between the number of hits in the different corpora, and by moving the mouse over them, you can see which
