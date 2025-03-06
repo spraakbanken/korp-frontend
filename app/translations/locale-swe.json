@@ -404,9 +404,12 @@
     "read_in_korp": "Läs i Korp",
     "add_token": "Lägg till token",
 
-    "free_order_chk": "i fri följd",
+    "free_order_chk": "fri följd",
+    "free_order_chk_help": "Sökorden får förekomma i obestämd ordning, och inte nödvändigtvis i följd.",
     "prefix_chk": "förled",
+    "prefix_chk_help": "Tillåt ord som börjar med sökorden.",
     "suffix_chk": "efterled",
+    "suffix_chk_help": "Tillåt ord som slutar med sökorden.",
     "text_tab_header": "Läsläge",
 
     "not_compound_middle": "inte mellanled",

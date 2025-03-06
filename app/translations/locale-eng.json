@@ -405,9 +405,12 @@
     "read_in_korp": "Read this text in Korp",
     "add_token": "Add token",
 
-    "free_order_chk": "in free order",
+    "free_order_chk": "free order",
+    "free_order_chk_help": "The search words can occur in any order, and not necessarily in sequence.",
     "prefix_chk": "initial part",
+    "prefix_chk_help": "Allow words that begin with the search words.",
     "suffix_chk": "final part",
+    "suffix_chk_help": "Allow words that end with the search words.",
     "text_tab_header": "Reading mode",
 
     "not_compound_middle": "not medial part",
