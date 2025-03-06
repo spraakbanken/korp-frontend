@@ -27,7 +27,6 @@ type SimpleSearchController = IController & {
     freeOrder: boolean
     freeOrderEnabled: boolean
     prefix: boolean
-    mid_comp: boolean
     suffix: boolean
     isCaseInsensitive: boolean
     currentText?: string
@@ -74,8 +73,6 @@ angular.module("korpApp").component("simpleSearch", {
                         <span> {{'and_include' | loc:$root.lang}} </span>
                         <input id="prefixChk" type="checkbox" ng-model="$ctrl.prefix" />
                         <label for="prefixChk"> {{'prefix_chk' | loc:$root.lang}} </label>
-                        <input id="midChk" type="checkbox" ng-model="$ctrl.mid_comp" />
-                        <label for="midChk"> {{'compound_middle' | loc:$root.lang}} </label>
                         <input id="suffixChk" type="checkbox" ng-model="$ctrl.suffix" />
                         <label for="suffixChk"> {{'suffix_chk' | loc:$root.lang}} </label>
                         <span> {{'and' | loc:$root.lang}} </span>
@@ -144,7 +141,6 @@ angular.module("korpApp").component("simpleSearch", {
             /** Whether the "free order" option is applicable. */
             ctrl.freeOrderEnabled = false
             ctrl.prefix = false
-            ctrl.mid_comp = false
             ctrl.suffix = false
             ctrl.isCaseInsensitive = false
 
@@ -156,9 +152,8 @@ angular.module("korpApp").component("simpleSearch", {
             function readSearchParams() {
                 const search = $location.search()
                 ctrl.freeOrder = search.in_order != null
-                ctrl.prefix = search.prefix != null
-                ctrl.mid_comp = search.mid_comp != null
-                ctrl.suffix = search.suffix != null
+                ctrl.prefix = search.prefix != null || search.mid_comp != null
+                ctrl.suffix = search.suffix != null || search.mid_comp != null
                 ctrl.isCaseInsensitive = search.isCaseInsensitive != null
             }
             readSearchParams()
@@ -166,7 +161,6 @@ angular.module("korpApp").component("simpleSearch", {
             ctrl.updateSearch = function () {
                 $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
                 $location.search("prefix", ctrl.prefix ? true : null)
-                $location.search("mid_comp", ctrl.mid_comp ? true : null)
                 $location.search("suffix", ctrl.suffix ? true : null)
                 $location.search("isCaseInsensitive", ctrl.isCaseInsensitive ? true : null)
                 $location.search("within", null)
@@ -187,8 +181,8 @@ angular.module("korpApp").component("simpleSearch", {
                 if (currentText) {
                     currentText.split(/\s+/).forEach((word) => {
                         let value = regescape(word)
-                        if (ctrl.prefix || ctrl.mid_comp) value = `${value}.*`
-                        if (ctrl.suffix || ctrl.mid_comp) value = `.*${value}`
+                        if (ctrl.prefix) value = `${value}.*`
+                        if (ctrl.suffix) value = `.*${value}`
                         const condition: Condition = {
                             type: "word",
                             op: "=",
@@ -200,10 +194,10 @@ angular.module("korpApp").component("simpleSearch", {
                 } else if (ctrl.lemgram) {
                     const conditions: Condition[] = [{ type: "lex", op: "contains", val: ctrl.lemgram }]
                     // The complemgram attribute is a set of strings like: <part1>+<part2>+<...>:<probability>
-                    if (ctrl.prefix || ctrl.mid_comp) {
+                    if (ctrl.prefix) {
                         conditions.push({ type: "complemgram", op: "contains", val: `${ctrl.lemgram}\\+.*` })
                     }
-                    if (ctrl.suffix || ctrl.mid_comp) {
+                    if (ctrl.suffix) {
                         conditions.push({ type: "complemgram", op: "contains", val: `.*\\+${ctrl.lemgram}:.*` })
                     }
                     query.push({ and_block: [conditions] })

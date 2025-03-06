@@ -63,9 +63,8 @@ order does not matter, and they do not need to be next to each other.
 
 **Part of a word**
 
-The checkboxes *initial part*, *medial part* and *final part* extend the search to words that include the given word at
-the corresponding location. With *medial part* selected, matches can include the given word at any location, including
-the start and the end.
+The checkboxes *initial part* and *final part* extend the search to words that include the given word at
+the corresponding location.
 
 In the case of a lemgram search, a compound analysis is used to determine matches.
 

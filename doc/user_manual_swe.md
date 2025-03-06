@@ -66,13 +66,12 @@ förekommer i exakt den ordning man angivit, och direkt efter varandra.
 Genom att kryssa i rutan *i fri följd* söks det i stället efter meningar som innehåller samtliga
 sökord, i valfri ordning och inte nödvändigtvis intill varandra.
 
-**Förled, mellanled och efterled**
+**Förled och efterled**
 
-Kryssrutorna *förled*, *mellanled* och *efterled* utökar ens sökning till att även inkludera ord där det sökta ordet
+Kryssrutorna *förled* och *efterled* utökar ens sökning till att även inkludera ord där det sökta ordet
 eller orden förekommer som del av ett annat ord.
 
-Vid vanlig ordsökning betyder detta helt enkelt att man söker på ord som innehåller den givna teckensekvensen i början,
-var som helst eller i slutet.
+Vid vanlig ordsökning betyder detta helt enkelt att man söker på ord som innehåller den givna teckensekvensen i början eller i slutet.
 
 Vid lemgramsökning används i stället en sammansättningsanalys som varje ord genomgått.
 
