@@ -8,6 +8,7 @@ type ReduceSelectScope = IScope & {
     keyItems: Record<string, Item>
     hasWordAttrs: boolean
     hasStructAttrs: boolean
+    onDropdownToggle: (open: boolean) => void
     toggleSelected: (value: string, event: MouseEvent) => void
     toggleWordInsensitive: (event: MouseEvent) => void
     toggled: (open: boolean) => void
@@ -112,9 +113,6 @@ angular.module("korpApp").component("reduceSelect", {
                 for (const name of $ctrl.insensitive || []) {
                     if (name in scope.keyItems) scope.keyItems[name].insensitive = true
                 }
-
-                // Only after initialization
-                if ($ctrl.items && $ctrl.selected && $ctrl.insensitive) updateSelected()
             }
 
             /** Report any changes upwards */
@@ -159,7 +157,6 @@ angular.module("korpApp").component("reduceSelect", {
                 } else {
                     item.selected = !item.selected
                 }
-                updateSelected()
             }
 
             scope.toggleWordInsensitive = function (event) {
@@ -168,15 +165,15 @@ angular.module("korpApp").component("reduceSelect", {
                 if (!scope.keyItems["word"].selected) {
                     scope.keyItems["word"].selected = true
                 }
-                updateSelected()
             }
 
             scope.toggled = function (open) {
                 // if no element is selected when closing popop, select word
                 if (!open && !$ctrl.selected.length) {
                     scope.keyItems["word"].selected = true
-                    updateSelected()
                 }
+
+                updateSelected()
             }
         },
     ],

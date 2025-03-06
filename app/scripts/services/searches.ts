@@ -50,7 +50,9 @@ angular.module("korpApp").factory("searches", [
                 }
 
                 // Update stored search query
-                $rootScope.activeSearch = { type, val: value }
+                $rootScope.$applyAsync(() => {
+                    $rootScope.activeSearch = { type, val: value }
+                })
 
                 // Trigger API requests
                 // (For Simple search, the equivalent is handled in the simple-search component)

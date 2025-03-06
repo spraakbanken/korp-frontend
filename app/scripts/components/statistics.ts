@@ -17,6 +17,7 @@ import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, Slickgrid
 import { CountParams } from "@/backend/types/count"
 import { LocationService } from "@/urlparams"
 import { AttributeOption } from "@/corpus_listing"
+import { SearchesService } from "@/services/searches"
 
 type StatisticsScope = IScope & {
     reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
@@ -209,11 +210,13 @@ angular.module("korpApp").component("statistics", {
         "$rootScope",
         "$scope",
         "$uibModal",
+        "searches",
         function (
             $location: LocationService,
             $rootScope: RootScope,
             $scope: StatisticsScope,
-            $uibModal: ui.bootstrap.IModalService
+            $uibModal: ui.bootstrap.IModalService,
+            searches: SearchesService
         ) {
             const $ctrl = this as StatisticsController
 
@@ -386,7 +389,11 @@ angular.module("korpApp").component("statistics", {
                 } else if ($scope.statInsensitiveAttrs) {
                     $location.search("stats_reduce_insensitive", null)
                 }
+
+                debouncedSearch()
             }
+
+            const debouncedSearch = _.debounce(searches.doSearch, 500)
 
             $ctrl.onStatsClick = (event) => {
                 const target = event.target as HTMLElement

@@ -12,6 +12,7 @@ import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
+import { SearchesService } from "@/services/searches"
 
 export type Row = ApiKwic | LinkedKwic | CorpusHeading
 
@@ -271,7 +272,14 @@ angular.module("korpApp").component("kwic", {
         "$location",
         "$scope",
         "$timeout",
-        function ($element: JQLite, $location: LocationService, $scope: KwicScope, $timeout: ITimeoutService) {
+        "searches",
+        function (
+            $element: JQLite,
+            $location: LocationService,
+            $scope: KwicScope,
+            $timeout: ITimeoutService,
+            searches: SearchesService
+        ) {
             let $ctrl = this as KwicController
 
             $scope.sortOptions = {
@@ -386,13 +394,17 @@ angular.module("korpApp").component("kwic", {
             $scope.updateHpp = () => {
                 const hpp = Number($scope.hpp)
                 $location.search("hpp", hpp !== settings["hits_per_page_default"] ? hpp : null)
+                debouncedSearch()
             }
 
             $scope.updateSort = () => {
                 $location.search("sort", $scope.sort !== "" ? $scope.sort : null)
+                debouncedSearch()
             }
 
             $ctrl._settings = settings
+
+            const debouncedSearch = _.debounce(searches.doSearch, 500)
 
             $ctrl.toggleReading = () => {
                 // Emit event; parent should update isReading
