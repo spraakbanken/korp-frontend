@@ -12,7 +12,7 @@ import "@/services/searches"
 import "@/components/autoc"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
-import { LocationService } from "@/urlparams"
+import { HashParams, LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
 import { LexiconsRelatedWords, relatedWordSearch } from "@/backend/lexicons"
@@ -176,14 +176,17 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             // React to changes in URL params
-            function readSearchParams() {
-                const search = $location.search()
-                ctrl.freeOrder = search.in_order != null
-                ctrl.prefix = search.prefix != null || search.mid_comp != null
-                ctrl.suffix = search.suffix != null || search.mid_comp != null
-                ctrl.isCaseInsensitive = search.isCaseInsensitive != null
+            function watchParam<K extends keyof HashParams>(key: K, callback: (value: HashParams[K]) => void) {
+                $scope.$watch(() => $location.search()[key], callback)
             }
-            readSearchParams()
+
+            watchParam("in_order", (value) => (ctrl.freeOrder = value != null))
+            watchParam("prefix", (value) => (ctrl.prefix = value != null))
+            watchParam("suffix", (value) => (ctrl.suffix = value != null))
+            watchParam("mid_comp", (value) => {
+                if (value != null) ctrl.prefix = ctrl.suffix = true
+            })
+            watchParam("isCaseInsensitive", (value) => (ctrl.isCaseInsensitive = value != null))
 
             ctrl.updateSearch = function () {
                 $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
@@ -310,9 +313,6 @@ angular.module("korpApp").component("simpleSearch", {
                     ctrl.doSearch()
                 }
             })
-
-            // React to changes in URL params
-            $scope.$on("$locationChangeSuccess", () => readSearchParams())
 
             ctrl.onChange = (value, isPlain) => {
                 ctrl.currentText = isPlain ? value : undefined
