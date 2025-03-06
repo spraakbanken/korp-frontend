@@ -67,7 +67,8 @@
         "dev": "webpack-dev-server --config webpack.dev.js",
         "build": "ENVIRONMENT=production webpack --config webpack.prod.js",
         "build:labb": "ENVIRONMENT=staging webpack --config webpack.prod.js",
-        "test": "yarn playwright test",
+        "test": "playwright test",
+        "test-ui": "playwright test --ui",
         "format": "prettier . --write --ignore-path .gitignore"
     }
 }
