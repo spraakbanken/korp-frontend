@@ -10,13 +10,20 @@ import { expandOperators } from "@/cqp_parser/cqp"
 import { requestMapData } from "@/backend/backend"
 import "@/backend/backend"
 import "@/components/corpus-distribution-chart"
+import "@/components/reduce-select"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, SlickgridColumn } from "@/statistics.types"
 import { CountParams } from "@/backend/types/count"
+import { LocationService } from "@/urlparams"
+import { AttributeOption } from "@/corpus_listing"
 
 type StatisticsScope = IScope & {
+    reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
     rowData: { title: string; values: AbsRelSeq }[]
+    statCurrentAttrs: AttributeOption[]
+    statSelectedAttrs: string[]
+    statInsensitiveAttrs: string[]
 }
 
 type StatisticsController = IController & {
@@ -54,6 +61,18 @@ type MapAttributeOption = {
 
 angular.module("korpApp").component("statistics", {
     template: html`
+        <div class="flex items-baseline mb-4 gap-4">
+            <div class="flex items-center gap-1">
+                <span>{{ "reduce_text" | loc:$root.lang }}:</span>
+                <reduce-select
+                    items="statCurrentAttrs"
+                    selected="statSelectedAttrs"
+                    insensitive="statInsensitiveAttrs"
+                    on-change="reduceOnChange"
+                ></reduce-select>
+            </div>
+        </div>
+
         <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
             <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning | loc:$root.lang}}</div>
 
@@ -186,10 +205,16 @@ angular.module("korpApp").component("statistics", {
         warning: "<",
     },
     controller: [
+        "$location",
         "$rootScope",
         "$scope",
         "$uibModal",
-        function ($rootScope: RootScope, $scope: StatisticsScope, $uibModal: ui.bootstrap.IModalService) {
+        function (
+            $location: LocationService,
+            $rootScope: RootScope,
+            $scope: StatisticsScope,
+            $uibModal: ui.bootstrap.IModalService
+        ) {
             const $ctrl = this as StatisticsController
 
             $ctrl.noRowsError = false
@@ -208,6 +233,11 @@ angular.module("korpApp").component("statistics", {
                 })
 
                 $("#exportButton").hide()
+            }
+
+            // Set initial value for stats case-insensitive, but only if reduce attr is not set
+            if (!$location.search().stats_reduce && settings["statistics_case_insensitive_default"]) {
+                $location.search("stats_reduce_insensitive", "word")
             }
 
             $rootScope.$watch("lang", (lang: string) => {
@@ -331,6 +361,31 @@ angular.module("korpApp").component("statistics", {
                 cols.forEach((col) => {
                     if (col.translation) col.name = locObj(col.translation, lang)
                 })
+            }
+
+            $rootScope.$on("corpuschooserchange", () => {
+                const allAttrs = settings.corpusListing.getStatsAttributeGroups(settings.corpusListing.getReduceLang())
+                $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
+                $scope.statSelectedAttrs = ($location.search().stats_reduce || "word").split(",")
+                const insensitiveAttrs = $location.search().stats_reduce_insensitive
+                $scope.statInsensitiveAttrs = insensitiveAttrs?.split(",") || []
+            })
+
+            $scope.reduceOnChange = ({ selected, insensitive }) => {
+                if (selected) $scope.statSelectedAttrs = selected
+                if (insensitive) $scope.statInsensitiveAttrs = insensitive
+
+                if ($scope.statSelectedAttrs && $scope.statSelectedAttrs.length > 0) {
+                    const isModified =
+                        $scope.statSelectedAttrs.length != 1 || !$scope.statSelectedAttrs.includes("word")
+                    $location.search("stats_reduce", isModified ? $scope.statSelectedAttrs.join(",") : null)
+                }
+
+                if ($scope.statInsensitiveAttrs && $scope.statInsensitiveAttrs.length > 0) {
+                    $location.search("stats_reduce_insensitive", $scope.statInsensitiveAttrs.join(","))
+                } else if ($scope.statInsensitiveAttrs) {
+                    $location.search("stats_reduce_insensitive", null)
+                }
             }
 
             $ctrl.onStatsClick = (event) => {

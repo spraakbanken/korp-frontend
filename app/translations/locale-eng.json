@@ -97,7 +97,7 @@
 
     "case_insensitive": "case-insensitive",
     "case_sensitive": "case-sensitive",
-    "reduce_text": "compile based on",
+    "reduce_text": "Group by",
     "word_pic_bad_search": "Could not generate a word picture from you search. Only 'Simple search' on one word or lemgram is supported.",
     "word_pic_global_filter": "The word picture cannot be combined with global filters. Please clear the filters to continue.",
     "word_pic_description": "The Word picture shows words that tend to co-occur in syntactic relations with the search word.",
@@ -264,7 +264,7 @@
 
     "compare_vb": "Compare",
     "compare_with": "with",
-    "compare_reduce": "and compile based on",
+    "compare_reduce": "and group by",
     "compare_warning": "Please save two searches in order to perform comparison. Look for the arrow next to the search button.",
     "compare_delete": "Delete saved searches",
     "compare_save_header": "Save for comparison",

@@ -169,17 +169,11 @@ To read more about the query language, see:
 ### Display options
 
 Regardless of which version of the search interface you use, there is a row of *display options*, located in a strip
-below the search fields. Here you can set different display options for the search result. For the KWIC, you can choose the number of hits
-per page, as well as sorting order. Sorting can be done either by right or left context, on the hit itself, or randomly. The sorting takes place
+below the search fields. Here you can set different display options for the search result.
+You can choose the number of hits per page in the KWIC, as well as sorting order.
+Sorting can be done either by right or left context, on the hit itself, or randomly. The sorting takes place
 only within each corpus. With the default choice "occurrence" the hits will be displayed in the order
 they appear in the corpus (which may be a partially random order for copyright reasons).
-
-For the statistics, you can choose which attribute the statistics should be compiled on.
-
-It is also possible to disable certain functions in the result view, such as statistics, if you are not interested in statistics and want to
-speed up your searches somewhat.
-
-![Search Settings](images/sokval.png)
 
 ## Search results
 
@@ -220,10 +214,10 @@ When a word is highlighted, its syntactic head in the same sentence is also high
 ### Statistics
 
 The Statistics tab shows a table where each column corresponds to a corpus, and the rows are made up of the different words or annotations matched by the search. By default,
-the statistics are compiled on word forms, and a simple
+the statistics are grouped by word forms, and a simple
 search for only one word form will therefore only yield one row, while a search for a lemgram yields one row per word form that occurs in the material.
-Among the display options, you can choose to compile the statistics on attributes other than word form, for example part of speech or some text attribute, and whether
-the compilation will be case-sensitive or not.
+You can choose to group the statistics by attributes other than word form, for example part of speech or some text attribute.
+For some attributes, you can select whether the grouping will be case-sensitive or not.
 
 By clicking on the search hit text in a result row in the table, a new KWIC tab opens with the sentences that formed the basis of that particular row.
 
@@ -280,7 +274,7 @@ It is possible to run a log-likelihood comparison of the results from two search
 This is done from any search tab by first creating your search expression and then clicking on the arrow to the right of the search button. This allows you to save the search itself with a name of your choice,
 instead of executing it. When you have two searches saved, you can go to the *Comparison* tab, which is to the right of the three search tabs.
 Here you select the two searches you want to compare, and then which attribute the comparison should be performed on. An example of a comparison is the two searches
-*all nouns in novels* and *all nouns in news texts*, with compilation on *base form*. When this comparison is complete, two columns of base forms are presented:
+*all nouns in novels* and *all nouns in news texts*, with grouping by *base form*. When this comparison is complete, two columns of base forms are presented:
 the first lists the base forms most distinctive for search #1, and the second lists base forms distinctive for search #2. The columns are sorted in descending order by distinctness. The numbers on the right show absolute frequency.
 
 ## Other user manuals

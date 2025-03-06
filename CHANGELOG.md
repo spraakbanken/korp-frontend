@@ -15,6 +15,7 @@
   - Await `getTimeData()` before using `timeData` or `corpus.time`/`corpus.non_time`. The function is memoized, so repeated calls will not affect performance
 - Load Statistics and Word picture result when the tab is selected [#442](https://github.com/spraakbanken/korp-frontend/issues/442)
 - Remove redundant "medial part" option [#443](https://github.com/spraakbanken/korp-frontend/issues/443)
+- The "compile base on" input is relabeled as "group by" and moved into the Statistics tab
 - More space in word picture tables [#102](https://github.com/spraakbanken/korp-frontend/issues/102)
 
 ### Fixed

@@ -11,7 +11,6 @@ import "@/components/extended/extended-parallel"
 import "@/components/advanced-search"
 import "@/components/compare-search"
 import "@/components/search-history"
-import "@/components/reduce-select"
 import "@/directives/click-cover"
 import "@/directives/tab-hash"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
@@ -19,7 +18,6 @@ import { CompareSearches } from "@/services/compare-searches"
 import { RootScope } from "@/root-scope.types"
 import { LocationService, SortMethod } from "@/urlparams"
 import { SavedSearch } from "@/local-storage"
-import { AttributeOption } from "@/corpus_listing"
 
 type SearchtabsController = IController & {
     parallelMode: boolean
@@ -27,15 +25,10 @@ type SearchtabsController = IController & {
     getSortFormat: (val: string) => string
     hitsPerPage: number
     isCompareSelected: boolean
-    isStatisticsAvailable: boolean
     kwicSort: string
     kwicSortValues: string[]
     noCorporaSelected: boolean
     savedSearches: SavedSearch[]
-    reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
-    statCurrentAttrs: AttributeOption[]
-    statSelectedAttrs: string[]
-    statInsensitiveAttrs: string[]
     updateHitsPerPage: () => void
     updateSort: () => void
 }
@@ -91,16 +84,6 @@ angular.module("korpApp").component("searchtabs", {
                         ng-options="$ctrl.getSortFormat(val) for val in $ctrl.kwicSortValues track by val"
                     ></select>
                 </div>
-                <div class="flex items-center" ng-show="$ctrl.isStatisticsAvailable">
-                    <span>{{'statistics' | loc:$root.lang}}:</span>
-                    <reduce-select
-                        class="ml-2 relative -top-px"
-                        items="$ctrl.statCurrentAttrs"
-                        selected="$ctrl.statSelectedAttrs"
-                        insensitive="$ctrl.statInsensitiveAttrs"
-                        on-change="$ctrl.reduceOnChange"
-                    ></reduce-select>
-                </div>
             </div>
         </div>
     `,
@@ -130,36 +113,10 @@ angular.module("korpApp").component("searchtabs", {
             )
 
             $ctrl.savedSearches = compareSearches.savedSearches
-            $ctrl.isStatisticsAvailable = settings.statistics !== false
-
-            if (!$location.search().stats_reduce && settings.statistics_case_insensitive_default) {
-                $location.search("stats_reduce_insensitive", "word")
-            }
 
             $rootScope.$on("corpuschooserchange", function (event, selected) {
                 $ctrl.noCorporaSelected = !selected.length
-                const allAttrs = settings.corpusListing.getStatsAttributeGroups(settings.corpusListing.getReduceLang())
-                $ctrl.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
-                $ctrl.statSelectedAttrs = ($location.search().stats_reduce || "word").split(",")
-                const insensitiveAttrs = $location.search().stats_reduce_insensitive
-                $ctrl.statInsensitiveAttrs = insensitiveAttrs?.split(",") || []
             })
-
-            $ctrl.reduceOnChange = ({ selected, insensitive }) => {
-                if (selected) $ctrl.statSelectedAttrs = selected
-                if (insensitive) $ctrl.statInsensitiveAttrs = insensitive
-
-                if ($ctrl.statSelectedAttrs && $ctrl.statSelectedAttrs.length > 0) {
-                    const isModified = $ctrl.statSelectedAttrs.length != 1 || !$ctrl.statSelectedAttrs.includes("word")
-                    $location.search("stats_reduce", isModified ? $ctrl.statSelectedAttrs.join(",") : null)
-                }
-
-                if ($ctrl.statInsensitiveAttrs && $ctrl.statInsensitiveAttrs.length > 0) {
-                    $location.search("stats_reduce_insensitive", $ctrl.statInsensitiveAttrs.join(","))
-                } else if ($ctrl.statInsensitiveAttrs) {
-                    $location.search("stats_reduce_insensitive", null)
-                }
-            }
 
             const setupHitsPerPage = function () {
                 /** Include the label in the currently selected option */

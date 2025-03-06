@@ -29,16 +29,15 @@ angular.module("korpApp").component("reduceSelect", {
     template: html`<div
         uib-dropdown
         auto-close="outsideClick"
-        class="reduce-attr-select"
+        class="inline-block"
         on-toggle="toggled(open)"
         style="width: 200px"
     >
         <div
             uib-dropdown-toggle
-            class="reduce-dropdown-button inline-block align-middle bg-white border border-gray-500"
+            class="reduce-dropdown-button inline-block align-middle bg-white border border-gray-400"
         >
             <div class="reduce-dropdown-button-text">
-                <span>{{ "reduce_text" | loc:$root.lang }}:</span>
                 <span> {{keyItems[$ctrl.selected[0]].label | locObj:$root.lang}} </span>
                 <span ng-if="$ctrl.selected.length > 1"> (+{{ $ctrl.selected.length - 1 }}) </span>
                 <span class="caret"></span>

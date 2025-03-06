@@ -174,17 +174,11 @@ För att läsa mer om frågespråket, se:
 ### Visningsalternativ
 
 Oberoende av vilken version av sökgränssnittet man använder så finns det en rad med *visningsalternativ*, placerade längst ner i en rand
-under sökfälten. Här kan man ställa in olika visningsalternativ för sökresultatet. För KWIC:en kan man välja antalet träffar
-per sida, samt sorteringsordning. Sorteringen kan ske antingen efter höger- eller vänsterkontext, på själva träffen i sig, eller slumpvis. Sorteringen sker
+under sökfälten. Här kan man ställa in olika visningsalternativ för sökresultatet.
+Man välja antalet träffar per sida i KWIC:en, samt sorteringsordning.
+Sorteringen kan ske antingen efter höger- eller vänsterkontext, på själva träffen i sig, eller slumpvis. Sorteringen sker
 enbart inom varje korpus. Med standardvalet "förekomst" kommer träffarna visas i den ordning
 de förekommer i korpusen, vilket i många fall är en delvis slumpvis ordning av upphovsrättsliga skäl.
-
-För statistiken går det att välja vilket attribut statistiken ska sammanställas på.
-
-Det är även möjligt att inaktivera vissa funktioner i resultatvyn, som t.ex. statistik, om man inte är intresserad av statistik och vill
-snabba upp sina sökningar något.
-
-![Sökinställningar](images/sokval.png)
 
 ## Sökresultat
 
@@ -226,8 +220,8 @@ När ett ord är markerat markeras även dess syntaktiska huvud i samma mening, 
 Statistik-fliken visar en tabell där varje kolumn motsvarar en korpus, och raderna utgörs av de olika värden som sökningen matchat. Som standard
 sammanställs statistiken på ordformer, och vid en enkel
 sökning på endast ett ord kommer det därför bara finnas en rad, medan en sökning på ett lemgram i stället ger en rad per ordform som förekommer i materialet.
-Bland visningsalternativen kan man välja att sammanställa statistiken på andra attribut än ordform, till exempel ordklass eller något textattribut, samt om
-sammanställningen ska vara skiftlägesberoende eller ej.
+Man kan även välja att sammanställa statistiken på andra attribut än ordform, till exempel ordklass eller något textattribut.
+För vissa attribut kan man välja om sammanställningen ska vara skiftlägesberoende eller ej.
 
 Genom att klicka på sökträfftexten i en resultatrad i tabellen, öppnas en ny KWIC-flik med de meningar som legat till grund för just den statistikraden.
 

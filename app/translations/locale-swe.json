@@ -88,7 +88,7 @@
 
     "case_insensitive": "skiftlägesoberoende",
     "case_sensitive": "skiftlägesberoende",
-    "reduce_text": "sammanställ på",
+    "reduce_text": "Sammanställ på",
     "word_pic_bad_search": "En ordbild kunde inte genereras från din sökning. För närvarande stödjs endast 'Enkel sökning' på ett ord eller lemgram.",
     "word_pic_global_filter": "Ordbild kan inte kombineras med filter. Töm filter för att fortsätta.",
     "word_pic_pos_not_supported": "Ordbilden stödjer inte sökordets ordklass.",
