@@ -8,6 +8,7 @@ type ReduceSelectScope = IScope & {
     keyItems: Record<string, Item>
     hasWordAttrs: boolean
     hasStructAttrs: boolean
+    isOnlyWordSelected: boolean
     onDropdownToggle: (open: boolean) => void
     toggleSelected: (value: string, event: MouseEvent) => void
     toggleWordInsensitive: (event: MouseEvent) => void
@@ -55,7 +56,7 @@ angular.module("korpApp").component("reduceSelect", {
                         type="checkbox"
                         class="reduce-check"
                         ng-checked="keyItems['word'].selected"
-                        ng-disabled="keyItems['word'].selected && $ctrl.selected.length == 1"
+                        ng-disabled="isOnlyWordSelected"
                     />
                     <span class="reduce-label">{{keyItems['word'].label | locObj:$root.lang }}</span>
                     <span
@@ -113,10 +114,12 @@ angular.module("korpApp").component("reduceSelect", {
                 for (const name of $ctrl.insensitive || []) {
                     if (name in scope.keyItems) scope.keyItems[name].insensitive = true
                 }
+
+                updateIsOnlyWordSelected()
             }
 
             /** Report any changes upwards */
-            function updateSelected() {
+            function notify() {
                 validate()
 
                 const selected = $ctrl.items.filter((item) => item.selected).map((item) => item.value)
@@ -130,6 +133,11 @@ angular.module("korpApp").component("reduceSelect", {
 
                 // Only notify if something changed
                 if (changes.selected || changes.insensitive) $ctrl.onChange(changes)
+            }
+
+            /** Update the local flag to whether only the word attr is selected. */
+            function updateIsOnlyWordSelected() {
+                scope.isOnlyWordSelected = $ctrl.items?.every((item) => item.value == "word" || !item.selected)
             }
 
             /** Fix state inconsistencies */
@@ -154,8 +162,12 @@ angular.module("korpApp").component("reduceSelect", {
                     // Unselect all options and select only the given option
                     $ctrl.items.forEach((item) => (item.selected = false))
                     item.selected = true
-                } else {
+                }
+                // Toggle given value, unless it is "word" and it is the only one selected.
+                else if (value != "word" || !scope.isOnlyWordSelected) {
                     item.selected = !item.selected
+                    // Make sure the word option is locked if it's the only one remaining.
+                    if (scope.keyItems["word"].selected) updateIsOnlyWordSelected()
                 }
             }
 
@@ -173,7 +185,7 @@ angular.module("korpApp").component("reduceSelect", {
                     scope.keyItems["word"].selected = true
                 }
 
-                updateSelected()
+                notify()
             }
         },
     ],
