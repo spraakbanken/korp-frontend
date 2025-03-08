@@ -28,21 +28,18 @@ type ReduceSelectController = IController & {
 }
 
 angular.module("korpApp").component("reduceSelect", {
-    template: html`<div
-        uib-dropdown
-        auto-close="outsideClick"
-        class="inline-block"
-        on-toggle="toggled(open)"
-        style="width: 200px"
-    >
+    template: html`<div uib-dropdown auto-close="outsideClick" class="inline-block w-52" on-toggle="toggled(open)">
         <div
             uib-dropdown-toggle
             class="reduce-dropdown-button inline-block align-middle bg-white border border-gray-400"
         >
-            <div class="reduce-dropdown-button-text">
-                <span> {{keyItems[$ctrl.selected[0]].label | locObj:$root.lang}} </span>
-                <span ng-if="$ctrl.selected.length > 1"> (+{{ $ctrl.selected.length - 1 }}) </span>
-                <span class="caret"></span>
+            <div class="px-1 flex items-center">
+                <div class="whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    <span ng-repeat="name in $ctrl.selected">
+                        {{keyItems[name].label | locObj:$root.lang}}<span ng-if="!$last">,</span>
+                    </span>
+                </div>
+                <span class="ml-auto caret"></span>
             </div>
         </div>
         <div class="reduce-dropdown-menu" uib-dropdown-menu>
