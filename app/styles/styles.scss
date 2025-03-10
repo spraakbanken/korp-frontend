@@ -978,12 +978,6 @@ a {
   margin-bottom: 3px;
 }
 
-.autocomplete-item-disabled a {
-  font-style: italic;
-  color: indianred;
-  opacity: 0.7;
-}
-
 #labs_logo {
   visibility: hidden;
   svg {
@@ -1794,16 +1788,10 @@ line.tick {
 
 /* ----------- Autocompletion ----------- */
 
-.none-to-find {
-    color: #aaa;
+.lemgram-namespace {
+  color: #777777;
 }
-.num-to-find {
-    visibility: hidden;
-    font-size:x-small;
-}
-li.active a span .num-to-find {
-    visibility: visible;
-}
+
 .autoc-spinner {
     margin-left:-20px;margin-top:2px;float:left
 }
@@ -2004,10 +1992,6 @@ li.active a span .num-to-find {
 // TODO we should not do this, update boostrap instead?
 .sr-only {
     display: none;
-}
-
-.lemgram-namespace {
-    color: #777777;
 }
 
 .cc-level-indent {
