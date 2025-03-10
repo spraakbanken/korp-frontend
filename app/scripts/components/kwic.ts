@@ -44,7 +44,7 @@ type KwicController = IController & {
     isReading: boolean
     page: number
     pageEvent: (page: number) => void
-    contextChangeEvent: () => void
+    onReadingChange: () => void
     hitsPerPage: number
     prevParams: any
     prevUrl?: string
@@ -57,7 +57,6 @@ type KwicController = IController & {
     useContext: boolean
     hitsPictureData: HitsPictureItem[]
     _settings: any
-    toggleReading: () => void
     download: {
         options: { value: string; label: string; disabled?: boolean }[]
         selected: string
@@ -76,6 +75,8 @@ type KwicScope = IScope & {
     hpp: string
     hppOptions: string[]
     updateHpp: () => void
+    isReading: boolean
+    updateReading: () => void
     sort: SortMethod
     sortOptions: Record<SortMethod, string>
     updateSort: () => void
@@ -88,11 +89,36 @@ type HitsPictureItem = {
     rtitle: string
 }
 
+const UPDATE_DELAY = 500
+
 angular.module("korpApp").component("kwic", {
     template: html`
         <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
-            <div class="flex items-center gap-1">
-                <label for="kwic-hpp">{{ "hits_per_page" | loc:$root.lang }}:</label>
+            <div class="flex flex-wrap gap-2">
+                {{ "context" | loc:$root.lang }}:
+                <div>
+                    <input
+                        type="radio"
+                        ng-model="isReading"
+                        ng-value="false"
+                        ng-change="updateReading()"
+                        id="context-kwic"
+                    />
+                    <label for="context-kwic">{{'context_kwic' | loc:$root.lang}}</label>
+                </div>
+                <div>
+                    <input
+                        type="radio"
+                        ng-model="isReading"
+                        ng-value="true"
+                        ng-change="updateReading()"
+                        id="context-reading"
+                    />
+                    <label for="context-reading">{{'context_reading' | loc:$root.lang}}</label>
+                </div>
+            </div>
+            <div>
+                <label for="kwic-hpp" class="pr-1">{{ "hits_per_page" | loc:$root.lang }}:</label>
                 <select
                     id="kwic-hpp"
                     ng-change="updateHpp()"
@@ -100,8 +126,8 @@ angular.module("korpApp").component("kwic", {
                     ng-options="x for x in hppOptions"
                 ></select>
             </div>
-            <div class="flex items-center gap-1">
-                <label for="kwic-sort">{{ "sort_default" | loc:$root.lang }}:</label>
+            <div>
+                <label for="kwic-sort" class="pr-1">{{ "sort_default" | loc:$root.lang }}:</label>
                 <select
                     id="kwic-sort"
                     ng-change="updateSort()"
@@ -145,10 +171,6 @@ angular.module("korpApp").component("kwic", {
                 page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-            <span ng-if="$ctrl.hits" class="reading_btn link" ng-click="$ctrl.toggleReading()">
-                <span ng-if="!$ctrl.isReading">{{'show_reading' | loc:$root.lang}}</span>
-                <span ng-if="$ctrl.isReading">{{'show_kwic' | loc:$root.lang}}</span>
-            </span>
             <div class="table_scrollarea">
                 <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0">
                     <tr
@@ -259,7 +281,7 @@ angular.module("korpApp").component("kwic", {
         isReading: "<",
         page: "<",
         pageEvent: "<",
-        contextChangeEvent: "<",
+        onReadingChange: "<",
         hitsPerPage: "<",
         prevParams: "<",
         prevUrl: "<",
@@ -358,6 +380,8 @@ angular.module("korpApp").component("kwic", {
                         statemachine.send("DESELECT_WORD")
                     }
                 }
+
+                if ("isReading" in changeObj) $scope.isReading = !!$ctrl.isReading
             }
 
             $ctrl.onKwicClick = (event) => {
@@ -391,6 +415,10 @@ angular.module("korpApp").component("kwic", {
                 (val) => ($scope.sort = val || "")
             )
 
+            $scope.updateReading = _.debounce(() => {
+                if ($scope.isReading != $ctrl.isReading) $ctrl.onReadingChange()
+            }, UPDATE_DELAY)
+
             $scope.updateHpp = () => {
                 const hpp = Number($scope.hpp)
                 $location.search("hpp", hpp !== settings["hits_per_page_default"] ? hpp : null)
@@ -404,12 +432,7 @@ angular.module("korpApp").component("kwic", {
 
             $ctrl._settings = settings
 
-            const debouncedSearch = _.debounce(searches.doSearch, 500)
-
-            $ctrl.toggleReading = () => {
-                // Emit event; parent should update isReading
-                $ctrl.contextChangeEvent()
-            }
+            const debouncedSearch = _.debounce(searches.doSearch, UPDATE_DELAY)
 
             $ctrl.download = {
                 options: [
