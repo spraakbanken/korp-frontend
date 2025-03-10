@@ -49,7 +49,7 @@ angular.module("korpApp").component("autoc", {
                         <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.main}}</span>
                         <sup ng-if="match.model.desc && match.model.desc.index != 1" style="color:gray">{{match.model.desc.index}}</sup>
                         <span class="num-to-find" ng-if="match.model.count && match.model.count > 0">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count | prettyNumber:$root.lang}}
                         </span>
                     </span>
                 </a>

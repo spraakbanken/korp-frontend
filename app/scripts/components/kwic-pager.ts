@@ -19,7 +19,7 @@ angular.module("korpApp").component("kwicPager", {
                 total-items="$ctrl.totalHits"
                 ng-model="$ctrl.page"
                 ng-click="$ctrl.localPageChange($event)"
-                max-size="15"
+                max-size="10"
                 items-per-page="$ctrl.hitsPerPage"
                 previous-text="‹"
                 next-text="›"
@@ -27,6 +27,7 @@ angular.module("korpApp").component("kwicPager", {
                 last-text="»"
                 boundary-links="true"
                 rotate="false"
+                page-label="$page | prettyNumber:$root.lang"
             ></ul>
             <div class="page_input">
                 <span>{{'goto_page' | loc:$root.lang}} </span>
@@ -35,7 +36,7 @@ angular.module("korpApp").component("kwicPager", {
                     ng-keyup="$ctrl.onPageInput($event)"
                     ng-click="$event.stopPropagation()"
                 />
-                {{'of' | loc:$root.lang}} {{$ctrl.numPages}}
+                {{'of' | loc:$root.lang}} {{$ctrl.numPages | prettyNumber:$root.lang}}
             </div>
         </div>
     `,
