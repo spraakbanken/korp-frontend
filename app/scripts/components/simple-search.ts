@@ -45,93 +45,96 @@ type SimpleSearchController = IController & {
 
 angular.module("korpApp").component("simpleSearch", {
     template: html`
-        <div id="korp-simple">
-            <global-filters lang="lang"></global-filters>
-            <div class="flex flex-wrap items-center gap-4">
-                <form class="shrink-0">
-                    <autoc
-                        id="simple_text"
-                        input="$ctrl.input"
-                        is-raw-input="$ctrl.isRawInput"
-                        type="lemgram"
-                        disable-lemgram-autocomplete="$ctrl.disableLemgramAutocomplete"
-                        on-change="$ctrl.onChange(output, isRawOutput)"
-                    ></autoc>
-                    <search-submit
-                        on-search="$ctrl.updateSearch()"
-                        on-search-save="$ctrl.onSearchSave(name)"
-                    ></search-submit>
-                </form>
-                <div class="flex gap-4">
-                    <div class="flex flex-col gap-1">
-                        <div class="flex gap-2">
-                            <input id="prefixChk" type="checkbox" ng-model="$ctrl.prefix" />
-                            <label for="prefixChk">
-                                {{'prefix_chk' | loc:$root.lang}}
-                                <i
-                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                    uib-tooltip="{{'prefix_chk_help' | loc:$root.lang}}"
-                                ></i>
-                            </label>
+        <div id="korp-simple" class="flex flex-wrap items-center gap-4">
+            <div>
+                <global-filters lang="lang"></global-filters>
+                <div class="flex flex-wrap items-center gap-4">
+                    <form class="shrink-0">
+                        <autoc
+                            id="simple_text"
+                            input="$ctrl.input"
+                            is-raw-input="$ctrl.isRawInput"
+                            type="lemgram"
+                            disable-lemgram-autocomplete="$ctrl.disableLemgramAutocomplete"
+                            on-change="$ctrl.onChange(output, isRawOutput)"
+                        ></autoc>
+                        <search-submit
+                            on-search="$ctrl.updateSearch()"
+                            on-search-save="$ctrl.onSearchSave(name)"
+                        ></search-submit>
+                    </form>
+                    <div class="flex gap-4">
+                        <div class="flex flex-col gap-1">
+                            <div class="flex gap-2">
+                                <input id="prefixChk" type="checkbox" ng-model="$ctrl.prefix" />
+                                <label for="prefixChk">
+                                    {{'prefix_chk' | loc:$root.lang}}
+                                    <i
+                                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                        uib-tooltip="{{'prefix_chk_help' | loc:$root.lang}}"
+                                    ></i>
+                                </label>
+                            </div>
+                            <div class="flex gap-2">
+                                <input id="suffixChk" type="checkbox" ng-model="$ctrl.suffix" />
+                                <label for="suffixChk">
+                                    {{'suffix_chk' | loc:$root.lang}}
+                                    <i
+                                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                        uib-tooltip="{{'suffix_chk_help' | loc:$root.lang}}"
+                                    ></i>
+                                </label>
+                            </div>
                         </div>
-                        <div class="flex gap-2">
-                            <input id="suffixChk" type="checkbox" ng-model="$ctrl.suffix" />
-                            <label for="suffixChk">
-                                {{'suffix_chk' | loc:$root.lang}}
-                                <i
-                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                    uib-tooltip="{{'suffix_chk_help' | loc:$root.lang}}"
-                                ></i>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <div class="flex gap-2">
-                            <input
-                                id="freeOrderChk"
-                                type="checkbox"
-                                ng-model="$ctrl.freeOrder"
-                                ng-disabled="!$ctrl.freeOrderEnabled"
-                            />
-                            <label for="freeOrderChk">
-                                {{'free_order_chk' | loc:$root.lang}}
-                                <i
-                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                    uib-tooltip="{{'free_order_chk_help' | loc:$root.lang}}"
-                                ></i>
-                            </label>
-                        </div>
-                        <div class="flex gap-2">
-                            <input id="caseChk" type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
-                            <label for="caseChk"> {{'case_insensitive' | loc:$root.lang}} </label>
+                        <div class="flex flex-col gap-1">
+                            <div class="flex gap-2">
+                                <input
+                                    id="freeOrderChk"
+                                    type="checkbox"
+                                    ng-model="$ctrl.freeOrder"
+                                    ng-disabled="!$ctrl.freeOrderEnabled"
+                                />
+                                <label for="freeOrderChk">
+                                    {{'free_order_chk' | loc:$root.lang}}
+                                    <i
+                                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                        uib-tooltip="{{'free_order_chk_help' | loc:$root.lang}}"
+                                    ></i>
+                                </label>
+                            </div>
+                            <div class="flex gap-2">
+                                <input id="caseChk" type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
+                                <label for="caseChk"> {{'case_insensitive' | loc:$root.lang}} </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div id="similar_wrapper" ng-show="$ctrl.relatedObj" class="ml-auto">
-                    <button
-                        class="btn btn-sm btn-default"
-                        ng-click="$ctrl.showAllRelated()"
-                        ng-if="$ctrl.relatedObj.data.length != 0"
+            </div>
+
+            <div ng-show="$ctrl.relatedObj" class="ml-auto">
+                <button
+                    class="btn btn-sm btn-default"
+                    ng-click="$ctrl.showAllRelated()"
+                    ng-if="$ctrl.relatedObj.data.length != 0"
+                >
+                    <span class="text-base">{{ 'similar_header' | loc:$root.lang }} (SweFN)</span><br /><span
+                        ng-repeat="wd in $ctrl.relatedObj.data[0].words | limitTo:$ctrl.relatedDefault"
                     >
-                        <span class="btn_header">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
-                            ng-repeat="wd in $ctrl.relatedObj.data[0].words | limitTo:$ctrl.relatedDefault"
-                        >
-                            {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
-                        ><br /><span
-                            ng-repeat="wd in $ctrl.relatedObj.data[0].words.slice($ctrl.relatedDefault) | limitTo:$ctrl.relatedDefault"
-                        >
-                            {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
-                        ><span
-                            ng-if="$ctrl.relatedObj.data[0].words.length > $ctrl.relatedDefault || $ctrl.relatedObj.data.length > 1"
-                        >
-                            ...</span
-                        >
-                    </button>
-                    <div class="btn btn-sm btn-default" ng-if="$ctrl.relatedObj.data.length == 0">
-                        <span class="btn_header">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
-                            >{{'no_related_words' | loc:$root.lang}}</span
-                        >
-                    </div>
+                        {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
+                    ><br /><span
+                        ng-repeat="wd in $ctrl.relatedObj.data[0].words.slice($ctrl.relatedDefault) | limitTo:$ctrl.relatedDefault"
+                    >
+                        {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
+                    ><span
+                        ng-if="$ctrl.relatedObj.data[0].words.length > $ctrl.relatedDefault || $ctrl.relatedObj.data.length > 1"
+                    >
+                        ...</span
+                    >
+                </button>
+                <div class="btn btn-sm btn-default" ng-if="$ctrl.relatedObj.data.length == 0">
+                    <span class="text-base">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
+                        >{{'no_related_words' | loc:$root.lang}}</span
+                    >
                 </div>
             </div>
         </div>
