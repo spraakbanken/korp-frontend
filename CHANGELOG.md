@@ -18,6 +18,7 @@
 - The display options (hits per page, sort within corpora, compile based on) were moved into the KWIC and Statistics tab correspondingly
   - When these are changed, the search is re-triggered automatically
   - The "compile based on" input was relabeled as "group by"
+- The "word" group-by option no longer gets disabled if it's the only selected option
 - Moved "Show context/KWIC" option to the new display options location, rephrased and changed to radio buttons
 - Better readability for hit counts in lemgram autocomplete
 - More space in word picture tables [#102](https://github.com/spraakbanken/korp-frontend/issues/102)
