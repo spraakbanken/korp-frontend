@@ -4,6 +4,7 @@
 
 ### Fixed
 
+- Error when switching corpora with filters: slow response from /attr_values does not match new selection [#446](https://github.com/spraakbanken/korp-frontend/issues/446)
 - Error when searching for multiple tokens and grouping by text attribute [#447](https://github.com/spraakbanken/korp-frontend/issues/447)
 
 ## [9.8.4] - 2025-02-20
