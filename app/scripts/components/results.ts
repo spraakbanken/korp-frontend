@@ -9,6 +9,7 @@ import "@/components/loglike-meter"
 import "@/components/result-map"
 import "@/components/results-tab"
 import "@/components/results-word-picture"
+import "@/components/results-statistics"
 import "@/components/statistics"
 import "@/components/sidebar"
 import "@/components/tab-preloader"
@@ -18,7 +19,6 @@ import "@/controllers/comparison_controller"
 import "@/controllers/example_controller"
 import "@/controllers/kwic_controller"
 import "@/controllers/map_controller"
-import "@/controllers/statistics_controller"
 import "@/controllers/text_reader_controller"
 import "@/controllers/trend_diagram_controller"
 import "@/directives/tab-hash"
@@ -70,27 +70,16 @@ angular.module("korpApp").component("results", {
                         </div>
                     </uib-tab>
 
-                    <uib-tab stats-result-ctrl ng-if="showStatisticsTab" select="onentry()" index="2">
+                    <uib-tab ng-if="showStatisticsTab" results-tab select="select()" deselect="deselect()" index="2">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             {{'statistics' | loc:$root.lang}}
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
-                        <korp-error ng-if="error" message="{{error}}"></korp-error>
-                        <statistics
-                            aborted="aborted"
-                            columns="columns"
-                            data="data"
-                            error="error"
+                        <results-statistics
+                            is-active="isActive"
                             loading="loading"
-                            prev-params="proxy.prevParams"
-                            search-params="searchParams"
-                            warning="warning"
-                        ></statistics>
-                        <json-button
-                            ng-if="!warning && !error"
-                            endpoint="'count'"
-                            params="proxy.prevParams"
-                        ></json-button>
+                            set-progress="setProgress"
+                        ></results-statistics>
                     </uib-tab>
 
                     <uib-tab ng-if="showWordpicTab" results-tab select="select()" deselect="deselect()" index="3">
@@ -99,8 +88,8 @@ angular.module("korpApp").component("results", {
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
                         <results-word-picture
-                            loading="loading"
                             is-active="isActive"
+                            loading="loading"
                             set-progress="setProgress"
                         ></results-word-picture>
                     </uib-tab>

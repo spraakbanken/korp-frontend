@@ -1,48 +1,67 @@
 /** @format */
 import _ from "lodash"
-import angular, { ITimeoutService } from "angular"
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
-import { TabHashScope } from "@/directives/tab-hash"
+import { html } from "@/util"
 
-type StatsResultCtrlScope = TabHashScope & {
-    $root: RootScope
+type ResultsStatisticsController = IController & {
+    isActive: boolean
+    loading: boolean
+    setProgress: (loading: boolean, progress: number) => void
+}
+
+type ResultsStatisticsScope = IScope & {
     aborted: boolean
-    activate: () => void
     columns: SlickgridColumn[]
     data: Dataset
     error?: string
-    loading: boolean
-    progress: number
     proxy: StatsProxy
     searchParams: SearchParams
     showStatistics: boolean
     warning?: string
     makeRequest: (cqp: string) => void
-    onentry: () => void
     renderResult: (columns: SlickgridColumn[], data: Dataset) => void
     resetView: () => void
     resultError: (err: any) => void
 }
 
-angular.module("korpApp").directive("statsResultCtrl", () => ({
+angular.module("korpApp").component("resultsStatistics", {
+    template: html`
+        <korp-error ng-if="error" message="{{error}}"></korp-error>
+        <statistics
+            aborted="aborted"
+            columns="columns"
+            data="data"
+            error="error"
+            loading="loading"
+            prev-params="proxy.prevParams"
+            search-params="searchParams"
+            warning="warning"
+        ></statistics>
+        <json-button ng-if="!warning && !error" endpoint="'count'" params="proxy.prevParams"></json-button>
+    `,
+    bindings: {
+        isActive: "<",
+        loading: "<",
+        setProgress: "<",
+    },
     controller: [
         "$scope",
         "$location",
         "$rootScope",
         "$timeout",
-        (
-            $scope: StatsResultCtrlScope,
+        function (
+            $scope: ResultsStatisticsScope,
             $location: LocationService,
             $rootScope: RootScope,
             $timeout: ITimeoutService
-        ) => {
+        ) {
+            const $ctrl = this as ResultsStatisticsController
             const s = $scope
-            s.loading = false
-            s.progress = 0
 
             s.proxy = statsProxyFactory.create()
 
@@ -52,20 +71,26 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
 
             s.$on("abort_requests", () => {
                 s.proxy.abort()
-                if (s.loading) {
+                if ($ctrl.loading) {
                     s.aborted = true
-                    s.loading = false
+                    $ctrl.setProgress(false, 0)
                 }
             })
 
-            s.onentry = () => {
-                // Enable statistics when opening tab
-                if (!s.showStatistics) s.activate()
+            $ctrl.$onChanges = (changes) => {
+                if (changes.isActive?.currentValue) {
+                    // Enable statistics when first opening tab
+                    if (!s.showStatistics) {
+                        s.showStatistics = true
+                        const cqp = $rootScope.getActiveCqp()
+                        if (cqp) s.makeRequest(cqp)
+                    }
 
-                // workaround for bug in slickgrid
-                // slickgrid should add this automatically, but doesn't
-                $("#myGrid").css("position", "relative")
-                $(window).trigger("resize")
+                    // workaround for bug in slickgrid
+                    // slickgrid should add this automatically, but doesn't
+                    $("#myGrid").css("position", "relative")
+                    $(window).trigger("resize")
+                }
             }
 
             s.resetView = () => {
@@ -78,15 +103,14 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                 s.warning = undefined
                 s.error = undefined
                 s.aborted = false
-                s.progress = 0
-                s.loading = false
+                $ctrl.setProgress(false, 0)
             }
 
             s.makeRequest = (cqp) => {
                 if (!s.showStatistics) return
 
                 // Abort any running request
-                if (s.loading) s.proxy.abort()
+                if ($ctrl.loading) s.proxy.abort()
                 s.resetView()
 
                 const inOrder = $location.search().in_order == null
@@ -103,13 +127,13 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 
-                s.loading = true
+                $ctrl.setProgress(true, 0)
                 s.proxy
-                    .makeRequest(cqp, (progressObj) => $timeout(() => (s.progress = progressObj.percent)))
+                    .makeRequest(cqp, (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
                     .then((result) =>
                         $timeout(() => {
                             const [data, columns, searchParams] = result
-                            s.loading = false
+                            $ctrl.setProgress(false, 0)
                             s.data = data
                             s.searchParams = searchParams
                             s.renderResult(columns, data)
@@ -135,16 +159,8 @@ angular.module("korpApp").directive("statsResultCtrl", () => ({
                     return
                 }
 
-                s.loading = false
-            }
-
-            $scope.activate = function () {
-                s.showStatistics = true
-                const cqp = $rootScope.getActiveCqp()
-                if (cqp) {
-                    s.makeRequest(cqp)
-                }
+                $ctrl.setProgress(false, 0)
             }
         },
     ],
-}))
+})
