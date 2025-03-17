@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Error when searching for multiple tokens and grouping by text attribute [#447](https://github.com/spraakbanken/korp-frontend/issues/447)
+
 ## [9.8.4] - 2025-02-20
 
 ### Fixed

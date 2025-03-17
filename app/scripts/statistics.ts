@@ -113,7 +113,7 @@ const createStatisticsService = function () {
                 for (const row of e.data) {
                     if (isTotalRow(row)) continue
                     for (const attr of reduceVals) {
-                        const words = row.statsValues.map((word) => word[attr][0])
+                        const words = row.statsValues.map((word) => word[attr]?.[0]).filter(Boolean)
                         row.formattedValue[attr] = stringifiers[attr](words)
                     }
                 }
