@@ -1,32 +1,33 @@
 /** @format */
 import _ from "lodash"
-import angular, { ITimeoutService } from "angular"
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
-import { isLemgram, lemgramToString, unregescape } from "@/util"
+import { html, isLemgram, lemgramToString, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
-import { TabHashScope } from "@/directives/tab-hash"
 import { ApiRelation, RelationsResponse } from "@/backend/types/relations"
 import { loc } from "@/i18n"
 
-type WordpicCtrlScope = TabHashScope & {
+type ResultsWordPictureController = IController & {
+    isActive: boolean
+    loading: boolean
+    setProgress: (loading: boolean, progress: number) => void
+}
+
+type ResultsWordPictureScope = IScope & {
     $root: RootScope
-    activate: () => void
+    activated: boolean
     data?: TableDrawData[]
     drawTables: (tables: [string, string][], data: ApiRelation[]) => void
     error?: string
-    loading: boolean
     makeRequest: () => void
-    onentry: () => void
-    progress: number
     proxy: LemgramProxy
     renderResult: (data: RelationsResponse, word: string) => void
     renderTables: (query: string, data: ApiRelation[]) => void
     renderWordTables: (query: string, data: ApiRelation[]) => void
     resetView: () => void
     warning?: string
-    wordPic: boolean
 }
 
 /** A relation item modified for showing. */
@@ -48,20 +49,38 @@ export type TableDrawData = {
     data: TableData[][]
 }
 
-angular.module("korpApp").directive("wordpicCtrl", () => ({
+angular.module("korpApp").component("resultsWordPicture", {
+    template: html`
+        <div ng-if="!error">
+            <word-picture
+                data="data"
+                loading="loading"
+                hit-settings="hitSettings"
+                settings="settings"
+                warning="warning"
+            ></word-picture>
+        </div>
+        <korp-error ng-if="error" message="{{error}}"></korp-error>
+        <json-button ng-if="!warning && !error" endpoint="'relations'" params="proxy.prevParams"></json-button>
+    `,
+    bindings: {
+        isActive: "<",
+        loading: "<",
+        setProgress: "<",
+    },
     controller: [
         "$scope",
         "$rootScope",
         "$timeout",
-        ($scope: WordpicCtrlScope, $rootScope: RootScope, $timeout: ITimeoutService) => {
+        function ($scope: ResultsWordPictureScope, $rootScope: RootScope, $timeout: ITimeoutService) {
             /** Mapping from pos tag to identifiers used in word_picture_conf */
             const tagset = _.invert(settings["word_picture_tagset"] || {})
 
+            const $ctrl = this as ResultsWordPictureController
+
             const s = $scope
             s.proxy = lemgramProxyFactory.create()
-            s.loading = false
-            s.progress = 0
-            s.wordPic = false
+            s.activated = false
 
             $rootScope.$watch("globalFilter", () => {
                 if ($rootScope.globalFilter) s.warning = loc("word_pic_global_filter", $rootScope.lang)
@@ -71,23 +90,21 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
 
             $rootScope.$watch("wordpicSortProp", () => s.makeRequest())
 
+            // Enable word picture when opening tab
+            $ctrl.$onChanges = (changes) => {
+                if (changes.isActive?.currentValue && !s.activated) {
+                    s.activated = true
+                    s.makeRequest()
+                }
+            }
+
             s.$on("abort_requests", () => {
                 s.proxy.abort()
-                if (s.loading) {
+                if ($ctrl.loading) {
                     s.warning = loc("search_aborted", $rootScope.lang)
-                    s.loading = false
+                    $ctrl.setProgress(false, 0)
                 }
             })
-
-            s.onentry = () => {
-                // Enable word picture when opening tab
-                if (!s.wordPic) s.activate()
-            }
-
-            s.activate = function () {
-                s.wordPic = true
-                s.makeRequest()
-            }
 
             s.resetView = () => {
                 s.data = undefined
@@ -95,7 +112,7 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             }
 
             s.makeRequest = () => {
-                if (!s.wordPic) {
+                if (!s.activated) {
                     s.resetView()
                     return
                 }
@@ -116,18 +133,17 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                 }
 
                 // Abort any running request
-                if (s.loading) s.proxy.abort()
+                if ($ctrl.loading) s.proxy.abort()
 
-                s.progress = 0
-                s.loading = true
+                $ctrl.setProgress(true, 0)
                 s.warning = undefined
                 s.proxy
                     .makeRequest(word, type, $rootScope.wordpicSortProp, (progressObj) =>
-                        $timeout(() => (s.progress = progressObj.percent))
+                        $timeout(() => $ctrl.setProgress(true, progressObj.percent))
                     )
                     .then((data) =>
                         $timeout(() => {
-                            s.loading = false
+                            $ctrl.setProgress(false, 0)
                             s.renderResult(data, word)
                         })
                     )
@@ -138,14 +154,13 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                         // TODO Show error
                         $timeout(() => {
                             s.error = error
-                            s.loading = false
+                            $ctrl.setProgress(false, 0)
                         })
                     })
             }
 
             s.renderResult = (data, query) => {
-                s.loading = false
-                s.progress = 100
+                $ctrl.setProgress(false, 100)
                 if (!data.relations) {
                     s.warning = loc("no_stats_results", $rootScope.lang)
                     s.resetView()
@@ -175,19 +190,18 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
                     const [, pos] = args[0]
                     return settings["word_picture_conf"]![tagset[pos]] != null
                 })
-                if (!unique_words.length) {
-                    s.loading = false
-                    return
+
+                if (unique_words.length) {
+                    s.drawTables(unique_words, data)
                 }
 
-                s.drawTables(unique_words, data)
-                s.loading = false
+                $ctrl.setProgress(false, 0)
             }
 
             s.renderTables = (lemgram, data) => {
                 const wordClass = data[0].head === lemgram ? data[0].headpos : data[0].deppos
                 s.drawTables([[lemgram, wordClass]], data)
-                s.loading = false
+                $ctrl.setProgress(false, 0)
             }
 
             s.drawTables = (tables, data) => {
@@ -283,4 +297,4 @@ angular.module("korpApp").directive("wordpicCtrl", () => ({
             }
         },
     ],
-}))
+})

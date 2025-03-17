@@ -7,6 +7,8 @@ import "@/components/korp-error"
 import "@/components/kwic"
 import "@/components/loglike-meter"
 import "@/components/result-map"
+import "@/components/results-tab"
+import "@/components/results-word-picture"
 import "@/components/statistics"
 import "@/components/sidebar"
 import "@/components/tab-preloader"
@@ -19,7 +21,6 @@ import "@/controllers/map_controller"
 import "@/controllers/statistics_controller"
 import "@/controllers/text_reader_controller"
 import "@/controllers/trend_diagram_controller"
-import "@/controllers/word_picture_controller"
 import "@/directives/tab-hash"
 import { RootScope } from "@/root-scope.types"
 
@@ -92,27 +93,16 @@ angular.module("korpApp").component("results", {
                         ></json-button>
                     </uib-tab>
 
-                    <uib-tab ng-if="showWordpicTab" wordpic-ctrl select="onentry()" index="3">
+                    <uib-tab ng-if="showWordpicTab" results-tab select="select()" deselect="deselect()" index="3">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             {{'word_picture' | loc:$root.lang}}
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
-                        <div ng-if="!error">
-                            <word-picture
-                                data="data"
-                                activate="activate"
-                                loading="loading"
-                                hit-settings="hitSettings"
-                                settings="settings"
-                                warning="warning"
-                            ></word-picture>
-                        </div>
-                        <korp-error ng-if="error" message="{{error}}"></korp-error>
-                        <json-button
-                            ng-if="!warning && !error"
-                            endpoint="'relations'"
-                            params="proxy.prevParams"
-                        ></json-button>
+                        <results-word-picture
+                            loading="loading"
+                            is-active="isActive"
+                            set-progress="setProgress"
+                        ></results-word-picture>
                     </uib-tab>
 
                     <uib-tab example-ctrl ng-repeat="kwicTab in $root.kwicTabs" select="onentry()" deselect="onexit()">
