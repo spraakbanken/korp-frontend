@@ -37,6 +37,8 @@ angular.module("korpApp").factory("globalFilterService", [
             const attrs = Object.keys($rootScope.globalFilterData)
             const multiAttrs = attrs.filter((attr) => $rootScope.globalFilterData[attr].attribute.type === "set")
             currentData = corpora.length && attrs.length ? await countAttrValues(corpora, attrs, multiAttrs) : {}
+            // Abort if corpus selection has changed since the request was made
+            if (!_.isEqual(corpora, settings.corpusListing.getSelectedCorpora())) return
             $timeout(() => {
                 updateData()
                 // Deselect values that are not in the options
