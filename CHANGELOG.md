@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.8.5] - 2025-03-17
+
 ### Fixed
 
 - Error when switching corpora with filters: slow response from /attr_values does not match new selection [#446](https://github.com/spraakbanken/korp-frontend/issues/446)
@@ -378,6 +380,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.8.5]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.5
 [9.8.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.4
 [9.8.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.3
 [9.8.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.2
