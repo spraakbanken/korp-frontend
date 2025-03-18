@@ -3,7 +3,7 @@ import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import kwicProxyFactory, { type KwicProxy } from "@/backend/kwic-proxy"
-import { ApiKwic, ProgressReport } from "@/backend/types"
+import { ApiKwic } from "@/backend/types"
 import { QueryParams, QueryResponse } from "@/backend/types/query"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
@@ -19,7 +19,6 @@ type KwicCtrlController = IController & {
 
 export type KwicCtrlScope = IScope & {
     aborted?: boolean
-    buildQueryOptions: (isPaging: boolean) => QueryParams
     corpusHits?: Record<string, number>
     corpusOrder?: string[]
     cqp?: string
@@ -30,24 +29,18 @@ export type KwicCtrlScope = IScope & {
     hitsInProgress?: number
     hitsPerPage?: `${number}` | number
     initialSearch?: boolean
-    isReadingMode: () => boolean
     kwic?: ApiKwic[]
-    makeRequest: (isPaging?: boolean) => void
-    onProgress: (progressObj: ProgressReport<"query">, isPaging?: boolean) => void
     page?: number
     pageChange: (page: number) => void
     proxy: KwicProxy
     randomSeed?: number
-    reading_mode?: boolean
-    readingChange: () => void
-    renderCompleteResult: (data: QueryResponse, isPaging?: boolean) => void
-    renderResult: (data: QueryResponse) => void
+    isReading?: boolean
     toggleReading: () => void
 }
 
 angular.module("korpApp").component("resultsHits", {
     template: html`
-        <div class="results-kwic" ng-class="{reading_mode : reading_mode, loading: $ctrl.loading}">
+        <div class="results-kwic" ng-class="{reading_mode : isReading, loading: $ctrl.loading}">
             <korp-error ng-if="error" message="{{error}}"></korp-error>
             <kwic
                 ng-if="!error"
@@ -58,7 +51,7 @@ angular.module("korpApp").component("resultsHits", {
                 hits="hits"
                 kwic-input="kwic"
                 corpus-hits="corpusHits"
-                is-reading="reading_mode"
+                is-reading="isReading"
                 page="page"
                 page-event="pageChange"
                 on-reading-change="toggleReading"
@@ -91,9 +84,13 @@ angular.module("korpApp").component("resultsHits", {
         ) {
             const $ctrl = this as KwicCtrlController
 
-            const s = $scope
+            $scope.initialSearch = true
+            $scope.page = Number($location.search().page) || 0
+            $scope.proxy = kwicProxyFactory.create()
+            $scope.isReading = $location.search().reading_mode
 
-            s.initialSearch = true
+            // Sync url param for page number
+            utils.setupHash($scope, { key: "page", val_in: Number })
 
             $rootScope.$on("make_request", (msg, cqp) => {
                 $scope.cqp = cqp
@@ -107,55 +104,42 @@ angular.module("korpApp").component("resultsHits", {
                     $scope.randomSeed = Number($location.search()["random_seed"])
                 }
                 $scope.initialSearch = false
-                $scope.makeRequest(false)
+                makeRequest(false)
             })
 
-            s.proxy = kwicProxyFactory.create()
-
-            $scope.page = Number($location.search().page) || 0
-
-            s.pageChange = function (page) {
-                s.page = page
-                s.makeRequest(true)
+            $scope.pageChange = function (page) {
+                $scope.page = page
+                makeRequest(true)
             }
 
-            // Sync url param for page number
-            utils.setupHash($scope, { key: "page", val_in: Number })
-
-            s.$on("abort_requests", () => {
-                s.proxy.abort()
+            $scope.$on("abort_requests", () => {
+                $scope.proxy.abort()
                 if ($ctrl.loading) {
-                    s.aborted = true
+                    $scope.aborted = true
                     $ctrl.setProgress(false, 0)
                 }
             })
 
-            s.readingChange = function () {
-                s.makeRequest(false)
+            $scope.toggleReading = function () {
+                $scope.isReading = !$scope.isReading
+                $location.search("reading_mode", $scope.isReading || undefined)
+                makeRequest()
             }
 
-            s.reading_mode = $location.search().reading_mode
-            s.toggleReading = function () {
-                s.reading_mode = !s.reading_mode
-                $location.search("reading_mode", s.reading_mode || undefined)
-                s.readingChange()
-            }
-
-            s.buildQueryOptions = (isPaging) => {
-                let avoidContext, preferredContext
-                const getSortParams = function () {
-                    const { sort } = $location.search()
+            function buildQueryOptions(isPaging?: boolean): QueryParams {
+                function getSortParams() {
+                    const sort = $location.search()["sort"]
                     if (!sort) {
                         return {}
                     }
                     if (sort === "random") {
-                        if (!isPaging && !s.randomSeed) {
-                            s.randomSeed = Math.ceil(Math.random() * 10000000)
-                            $location.search("random_seed", s.randomSeed)
+                        if (!isPaging && !$scope.randomSeed) {
+                            $scope.randomSeed = Math.ceil(Math.random() * 10000000)
+                            $location.search("random_seed", $scope.randomSeed)
                         }
                         return {
                             sort,
-                            random_seed: s.randomSeed,
+                            random_seed: $scope.randomSeed,
                         }
                     } else {
                         $location.search("random_seed", null)
@@ -163,27 +147,26 @@ angular.module("korpApp").component("resultsHits", {
                     return { sort }
                 }
 
-                if (s.isReadingMode()) {
-                    preferredContext = settings["default_reading_context"]
-                    avoidContext = settings["default_overview_context"]
-                } else {
-                    preferredContext = settings["default_overview_context"]
-                    avoidContext = settings["default_reading_context"]
-                }
+                const avoidContext = $scope.isReading
+                    ? settings["default_overview_context"]
+                    : settings["default_reading_context"]
+                const preferredContext = $scope.isReading
+                    ? settings["default_reading_context"]
+                    : settings["default_overview_context"]
 
                 const context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
 
                 if (!isPaging) {
-                    s.proxy.queryData = undefined
+                    $scope.proxy.queryData = undefined
                 }
 
-                const cqp = s.cqp || s.proxy.prevCQP
+                const cqp = $scope.cqp || $scope.proxy.prevCQP
                 if (!cqp) throw new Error("cqp missing")
 
                 const params: QueryParams = {
                     corpus: settings.corpusListing.stringifySelected(),
                     cqp,
-                    query_data: s.proxy.queryData,
+                    query_data: $scope.proxy.queryData,
                     context,
                     default_context: preferredContext,
                     incremental: true,
@@ -193,38 +176,42 @@ angular.module("korpApp").component("resultsHits", {
                 return params
             }
 
-            s.onProgress = (progressObj, isPaging) => {
-                $ctrl.setProgress(true, Math.round(progressObj.percent))
-                if (!isPaging && progressObj.hits !== null) {
-                    s.hitsInProgress = progressObj.hits
-                }
-            }
-
-            s.makeRequest = (isPaging = false) => {
+            function makeRequest(isPaging?: boolean) {
                 if (!isPaging) {
-                    s.page = Number($location.search().page) || 0
+                    $scope.page = Number($location.search().page) || 0
                 }
 
                 // Abort any running request
-                if ($ctrl.loading) s.proxy.abort()
+                if ($ctrl.loading) $scope.proxy.abort()
 
                 $ctrl.setProgress(true, 0)
-                s.aborted = false
-                s.error = undefined
+                $scope.aborted = false
+                $scope.error = undefined
 
-                const ajaxParams = s.buildQueryOptions(isPaging)
+                const ajaxParams = buildQueryOptions(isPaging)
 
-                s.proxy
+                $scope.proxy
                     .makeRequest(
                         { ajaxParams },
-                        s.page,
-                        (progressObj) => $timeout(() => s.onProgress(progressObj, isPaging)),
-                        (data) => $timeout(() => s.renderResult(data))
+                        $scope.page,
+                        (progressObj) =>
+                            $timeout(() => {
+                                $ctrl.setProgress(true, Math.round(progressObj.percent))
+                                if (!isPaging && progressObj.hits !== null) {
+                                    $scope.hitsInProgress = progressObj.hits
+                                }
+                            }),
+                        (data) => $timeout(() => renderResult(data))
                     )
                     .then((data) =>
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)
-                            s.renderCompleteResult(data, isPaging)
+                            renderResult(data)
+                            if (!isPaging) {
+                                $scope.hits = data.hits
+                                $scope.hitsInProgress = data.hits
+                                $scope.corpusHits = data.corpus_hits
+                            }
                         })
                     )
                     .catch((error) => {
@@ -233,32 +220,16 @@ angular.module("korpApp").component("resultsHits", {
                         console.error(error)
                         // TODO Show error
                         $timeout(() => {
-                            s.error = error
+                            $scope.error = error
                             $ctrl.setProgress(false, 0)
                         })
                     })
             }
 
-            s.isReadingMode = () => {
-                return s.reading_mode || false
-            }
-
-            s.renderCompleteResult = (data, isPaging) => {
-                s.renderResult(data)
-                if (!isPaging) {
-                    s.hits = data.hits
-                    s.hitsInProgress = data.hits
-                    s.corpusHits = data.corpus_hits
-                }
-            }
-
-            s.renderResult = (data) => {
-                if (!data.kwic) {
-                    data.kwic = []
-                }
-
-                s.corpusOrder = data.corpus_order
-                s.kwic = data.kwic
+            function renderResult(data: QueryResponse) {
+                if (!data.kwic) data.kwic = []
+                $scope.corpusOrder = data.corpus_order
+                $scope.kwic = data.kwic
             }
         },
     ],
