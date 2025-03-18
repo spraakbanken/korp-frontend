@@ -7,6 +7,8 @@ import "@/components/korp-error"
 import "@/components/kwic"
 import "@/components/loglike-meter"
 import "@/components/result-map"
+import "@/components/results-examples"
+import "@/components/results-hits"
 import "@/components/results-tab"
 import "@/components/results-word-picture"
 import "@/components/results-statistics"
@@ -16,8 +18,6 @@ import "@/components/tab-preloader"
 import "@/components/trend-diagram"
 import "@/components/word-picture"
 import "@/controllers/comparison_controller"
-import "@/controllers/example_controller"
-import "@/controllers/kwic_controller"
 import "@/controllers/map_controller"
 import "@/controllers/text_reader_controller"
 import "@/controllers/trend_diagram_controller"
@@ -41,33 +41,12 @@ angular.module("korpApp").component("results", {
         <div ng-show="hasResult()" class="flex" id="results" ng-class="{sidebar_visible: showSidebar}">
             <div class="overflow-auto grow" id="left-column">
                 <uib-tabset class="tabbable result_tabs" tab-hash="result_tab" active="activeTab">
-                    <uib-tab kwic-ctrl index="0" select="onentry()" deselect="onexit()">
+                    <uib-tab results-tab select="select()" deselect="deselect()" index="0">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             KWIC
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
-                        <div class="results-kwic" ng-class="{reading_mode : reading_mode, loading: loading}">
-                            <korp-error ng-if="error" message="{{error}}"></korp-error>
-                            <kwic
-                                ng-if="!error"
-                                aborted="aborted"
-                                loading="loading"
-                                active="active"
-                                hits-in-progress="hitsInProgress"
-                                hits="hits"
-                                kwic-input="kwic"
-                                corpus-hits="corpusHits"
-                                is-reading="reading_mode"
-                                page="page"
-                                page-event="pageChange"
-                                on-reading-change="toggleReading"
-                                hits-per-page="hitsPerPage"
-                                prev-params="proxy.prevParams"
-                                prev-url="proxy.prevUrl"
-                                corpus-order="corpusOrder"
-                            ></kwic>
-                            <json-button endpoint="'query'" params="proxy.prevParams"></json-button>
-                        </div>
+                        <results-hits is-active="isActive" loading="loading" set-progress="setProgress"></results-hits>
                     </uib-tab>
 
                     <uib-tab ng-if="showStatisticsTab" results-tab select="select()" deselect="deselect()" index="2">
@@ -94,36 +73,23 @@ angular.module("korpApp").component("results", {
                         ></results-word-picture>
                     </uib-tab>
 
-                    <uib-tab example-ctrl ng-repeat="kwicTab in $root.kwicTabs" select="onentry()" deselect="onexit()">
+                    <uib-tab results-tab ng-repeat="kwicTab in $root.kwicTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
                             KWIC
                             <tab-preloader ng-if="loading"></tab-preloader>
-                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
+                            <i
+                                class="fa-solid fa-times-circle cursor-pointer"
+                                ng-click="closeTab('kwicTabs', $index, $event)"
+                            ></i>
                         </uib-tab-heading>
-                        <korp-error ng-if="error" message="{{error}}"></korp-error>
-                        <div
-                            class="results-kwic"
-                            ng-if="!error"
-                            ng-class="{reading_mode: kwicTab.readingMode, loading: loading}"
-                        >
-                            <kwic
-                                aborted="aborted"
-                                loading="loading"
-                                active="active"
-                                hits-in-progress="hitsInProgress"
-                                hits="hits"
-                                kwic-input="kwic"
-                                corpus-hits="corpusHits"
-                                is-reading="kwicTab.readingMode"
-                                page="page"
-                                page-event="pageChange"
-                                on-reading-change="toggleReading"
-                                hits-per-page="hitsPerPage"
-                                prev-params="proxy.prevParams"
-                                prev-url="proxy.prevUrl"
-                                corpus-order="corpusOrder"
-                            ></kwic>
-                        </div>
+                        <results-examples
+                            is-active="isActive"
+                            loading="loading"
+                            set-progress="setProgress"
+                            new-dynamic-tab="newDynamicTab"
+                            is-reading="kwicTab.readingMode"
+                            query-params="kwicTab.queryParams"
+                        ></results-examples>
                     </uib-tab>
 
                     <uib-tab ng-repeat="data in $root.graphTabs" graph-ctrl>

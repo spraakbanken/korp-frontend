@@ -1,20 +1,23 @@
 /** @format */
-import angular, { IScope } from "angular"
+import angular from "angular"
+import { DynamicTabName, RootScope } from "@/root-scope.types"
+import { TabHashScope } from "@/directives/tab-hash"
 
-export type ResultsTabScope = IScope & {
+export type ResultsTabScope = TabHashScope & {
     isActive: boolean
     loading: boolean
     progress?: number
     select: () => void
     deselect: () => void
     setProgress: (loading: boolean, progress: number) => void
+    closeTab: (tabType: DynamicTabName, i: number, event: Event) => void
 }
 
 angular.module("korpApp").directive("resultsTab", () => ({
     controller: [
         "$scope",
         "$rootScope",
-        ($scope: ResultsTabScope) => {
+        ($scope: ResultsTabScope, $rootScope: RootScope) => {
             $scope.isActive = false
             $scope.loading = false
             $scope.progress = 0
@@ -25,6 +28,12 @@ angular.module("korpApp").directive("resultsTab", () => ({
             $scope.setProgress = (loading: boolean, progress: number) => {
                 $scope.loading = loading
                 $scope.progress = progress
+            }
+
+            $scope.closeTab = (tabType, i, event) => {
+                event.preventDefault()
+                $rootScope[tabType].splice(i, 1)
+                $scope.closeDynamicTab()
             }
         },
     ],
