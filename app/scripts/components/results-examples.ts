@@ -1,15 +1,13 @@
 /** @format */
-import angular, { IController, ITimeoutService } from "angular"
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
 import settings from "@/settings"
-import { KwicCtrlScope } from "./results-hits"
 import { LocationService } from "@/urlparams"
-import { ApiKwic, ProgressReport } from "@/backend/types"
-import { QueryResponse } from "@/backend/types/query"
+import { ApiKwic } from "@/backend/types"
 import kwicProxyFactory, { KorpQueryRequestOptions, KwicProxy } from "@/backend/kwic-proxy"
 
-type ExampleCtrlController = IController & {
+type ResultsExamplesController = IController & {
     isActive: boolean
     isReading: boolean
     loading: boolean
@@ -19,11 +17,8 @@ type ExampleCtrlController = IController & {
     closeDynamicTab: () => void
 }
 
-type ScopeBase = Omit<KwicCtrlScope, "makeRequest">
-
-type ExampleCtrlScope = ScopeBase & {
+type ResultsExamplesScope = IScope & {
     aborted?: boolean
-    closeTab: (idx: number, e: Event) => void
     corpusHits?: Record<string, number>
     corpusOrder?: string[]
     cqp?: string
@@ -32,19 +27,12 @@ type ExampleCtrlScope = ScopeBase & {
     hits?: number
     /** Number of search hits, may change while search is in progress. */
     hitsInProgress?: number
-    hitsPerPage?: `${number}` | number
+    hitsPerPage: number
     isReading: boolean
     kwic?: ApiKwic[]
-    loading?: boolean
-    makeRequest: (isPaging?: boolean) => void
-    onProgress: (progressObj: ProgressReport<"query">, isPaging?: boolean) => void
     page?: number
     pageChange: (page: number) => void
     proxy: KwicProxy
-    readingChange: () => void
-    renderCompleteResult: (data: QueryResponse, isPaging?: boolean) => void
-    renderResult: (data: QueryResponse) => void
-    setupReadingWatch: () => void
     toggleReading: () => void
 }
 
@@ -81,103 +69,51 @@ angular.module("korpApp").component("resultsExamples", {
         "$location",
         "$scope",
         "$timeout",
-        function ($location: LocationService, $scope: ExampleCtrlScope, $timeout: ITimeoutService) {
-            const $ctrl = this as ExampleCtrlController
+        function ($location: LocationService, $scope: ResultsExamplesScope, $timeout: ITimeoutService) {
+            const $ctrl = this as ResultsExamplesController
 
-            const s = $scope
-            s.proxy = kwicProxyFactory.create()
-            s.hits = undefined
-            s.hitsInProgress = undefined
-            s.hitsPerPage = $location.search()["hpp"] || settings["hits_per_page_default"]
-            s.page = 0
-            s.error = undefined
-            s.kwic = undefined
-            s.corpusHits = undefined
-            s.aborted = false
+            $scope.hitsPerPage = Number($location.search()["hpp"] || settings["hits_per_page_default"])
+            $scope.proxy = kwicProxyFactory.create()
 
             $ctrl.$onInit = () => {
                 $ctrl.newDynamicTab() // TODO Move this call to when $root.kwicTab is changed?
                 // Context mode can be set when creating the tab. If not, use URL param
-                $scope.isReading = $ctrl.isReading ?? $location.search().reading_mode
-                if ($ctrl.queryParams) {
-                    // TODO Is this ever false?
-                    s.makeRequest()
-                }
+                $scope.isReading = $ctrl.isReading ?? $location.search()["reading_mode"]
+                makeRequest()
             }
 
-            s.$on("abort_requests", () => {
-                s.proxy.abort()
+            $scope.$on("abort_requests", () => {
+                $scope.proxy.abort()
                 if ($ctrl.loading) {
-                    s.aborted = true
+                    $scope.aborted = true
                     $ctrl.setProgress(false, 0)
                 }
             })
 
-            s.readingChange = function () {
-                s.makeRequest(false)
+            $scope.pageChange = function (page) {
+                $scope.page = page
+                makeRequest()
             }
 
-            s.onProgress = (progressObj, isPaging) => {
-                $ctrl.setProgress(true, Math.round(progressObj.percent))
-                if (!isPaging && progressObj.hits !== null) {
-                    s.hitsInProgress = progressObj.hits
-                }
-            }
-
-            s.renderCompleteResult = (data, isPaging) => {
-                s.renderResult(data)
-                if (!isPaging) {
-                    s.hits = data.hits
-                    s.hitsInProgress = data.hits
-                    s.corpusHits = data.corpus_hits
-                }
-            }
-
-            s.pageChange = function (page) {
-                s.page = page
-                s.makeRequest()
-            }
-
-            s.toggleReading = function () {
+            $scope.toggleReading = function () {
                 $scope.isReading = !$scope.isReading
-                s.makeRequest()
+                makeRequest()
             }
 
-            s.setupReadingWatch = _.once(function () {
-                let init = true
-                return s.$watch("reading_mode", function () {
-                    if (!init) {
-                        s.readingChange()
-                    }
-                    init = false
-                })
-            })
-
-            s.renderResult = (data) => {
-                if (!data.kwic) {
-                    data.kwic = []
-                }
-
-                s.corpusOrder = data.corpus_order
-                s.kwic = data.kwic
-
-                s.setupReadingWatch()
-            }
-
-            s.makeRequest = () => {
-                const items_per_page = Number($location.search().hpp || settings["hits_per_page_default"])
+            function makeRequest(): void {
                 const opts = $ctrl.queryParams
 
                 // example tab cannot handle incremental = true
                 opts.ajaxParams.incremental = false
 
-                opts.ajaxParams.start = (s.page || 0) * items_per_page
-                opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1
+                // TODO Remove {start:0, end:24} from all the kwicTabs.push()
+                opts.ajaxParams.start = ($scope.page || 0) * $scope.hitsPerPage
+                opts.ajaxParams.end = opts.ajaxParams.start + $scope.hitsPerPage - 1
 
-                const preferredContext = s.isReading
+                const preferredContext = $scope.isReading
                     ? settings["default_reading_context"]
                     : settings["default_overview_context"]
-                const avoidContext = s.isReading
+                const avoidContext = $scope.isReading
                     ? settings["default_overview_context"]
                     : settings["default_reading_context"]
 
@@ -190,15 +126,19 @@ angular.module("korpApp").component("resultsExamples", {
                 _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
                 // Abort any running request
-                if ($ctrl.loading) s.proxy.abort()
+                if ($ctrl.loading) $scope.proxy.abort()
 
                 $ctrl.setProgress(true, 0)
-                s.proxy
+                $scope.proxy
                     .makeRequest(opts, undefined)
                     .then((data) =>
                         $timeout(() => {
-                            s.renderResult(data)
-                            s.renderCompleteResult(data)
+                            if (!data.kwic) data.kwic = []
+                            $scope.corpusOrder = data.corpus_order
+                            $scope.kwic = data.kwic
+                            $scope.hits = data.hits
+                            $scope.hitsInProgress = data.hits
+                            $scope.corpusHits = data.corpus_hits
                         })
                     )
                     .catch((error) => {
@@ -206,7 +146,7 @@ angular.module("korpApp").component("resultsExamples", {
                         if (error.name == "AbortError") return
                         console.error(error)
                         // TODO Show error
-                        $timeout(() => (s.error = error))
+                        $timeout(() => ($scope.error = error))
                     })
                     .finally(() => $timeout(() => $ctrl.setProgress(false, 0)))
             }

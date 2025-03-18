@@ -32,6 +32,7 @@ export class KwicProxy extends BaseProxy {
             _.extend(options.ajaxParams, settings.corpusListing.getWithinParameters())
         }
 
+        /** Calculate start and end from page and hpp. Only works for main hits. Examples must provide start and end in param. */
         function getPageInterval(): { start: number; end: number } {
             const hpp = locationSearchGet("hpp")
             const itemsPerPage = Number(hpp) || settings.hits_per_page_default
@@ -113,6 +114,7 @@ export default kwicProxyFactory
 
 export type KorpQueryRequestOptions = {
     // TODO Should start,end really exist here as well as under ajaxParams?
+    // TODO Move everything in `ajaxParams` up to `opts`
     start?: number
     end?: number
     ajaxParams: QueryParams & {
