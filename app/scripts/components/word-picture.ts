@@ -254,8 +254,6 @@ angular.module("korpApp").component("wordPicture", {
                         ajaxParams: {
                             command: "relations_sentences",
                             source: row.source.join(","),
-                            start: 0,
-                            end: 24,
                         },
                     },
                 })

@@ -113,10 +113,7 @@ const kwicProxyFactory = new Factory(KwicProxy)
 export default kwicProxyFactory
 
 export type KorpQueryRequestOptions = {
-    // TODO Should start,end really exist here as well as under ajaxParams?
     // TODO Move everything in `ajaxParams` up to `opts`
-    start?: number
-    end?: number
     ajaxParams: QueryParams & {
         command?: "query" | "relations_sentences"
     }

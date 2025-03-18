@@ -162,8 +162,6 @@ angular.module("korpApp").directive("mapCtrl", [
                     const cl = settings.corpusListing.subsetFactory(queryData.corpora)
                     const numberOfTokens = queryData.subCqp.split("[").length - 1
                     const opts = {
-                        start: 0,
-                        end: 24,
                         ajaxParams: {
                             cqp: queryData.searchCqp,
                             cqp2: `[_.${queryData.label} contains "${regescape(

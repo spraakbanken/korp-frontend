@@ -106,7 +106,6 @@ angular.module("korpApp").component("resultsExamples", {
                 // example tab cannot handle incremental = true
                 opts.ajaxParams.incremental = false
 
-                // TODO Remove {start:0, end:24} from all the kwicTabs.push()
                 opts.ajaxParams.start = ($scope.page || 0) * $scope.hitsPerPage
                 opts.ajaxParams.end = opts.ajaxParams.start + $scope.hitsPerPage - 1
 

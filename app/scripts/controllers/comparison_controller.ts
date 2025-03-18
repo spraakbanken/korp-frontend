@@ -140,8 +140,6 @@ angular.module("korpApp").directive("compareCtrl", () => ({
                         cl = settings.corpusListing.subsetFactory(cmp.corpora)
 
                         const opts = {
-                            start: 0,
-                            end: 24,
                             ajaxParams: {
                                 cqp: cmp.cqp,
                                 cqp2: cqp,

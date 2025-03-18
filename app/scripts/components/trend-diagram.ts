@@ -169,8 +169,6 @@ angular.module("korpApp").component("trendDiagram", {
                 const decodedCQP = decodeURIComponent(cqp)
                 const opts = {
                     ajaxParams: {
-                        start: 0,
-                        end: 24,
                         corpus: $ctrl.data.corpusListing.stringifySelected(),
                         cqp: $ctrl.data.cqp,
                         cqp2: expandOperators(decodedCQP),

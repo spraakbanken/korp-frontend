@@ -427,8 +427,6 @@ angular.module("korpApp").component("statistics", {
                     $rootScope.kwicTabs.push({
                         queryParams: {
                             ajaxParams: {
-                                start: 0,
-                                end: 24,
                                 corpus: corpora.join(","),
                                 cqp: $ctrl.prevParams.cqp,
                                 cqp2,
