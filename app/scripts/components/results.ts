@@ -7,17 +7,17 @@ import "@/components/korp-error"
 import "@/components/kwic"
 import "@/components/loglike-meter"
 import "@/components/result-map"
+import "@/components/results-comparison"
 import "@/components/results-examples"
 import "@/components/results-hits"
+import "@/components/results-statistics"
 import "@/components/results-tab"
 import "@/components/results-word-picture"
-import "@/components/results-statistics"
 import "@/components/statistics"
 import "@/components/sidebar"
 import "@/components/tab-preloader"
 import "@/components/results-trend-diagram"
 import "@/components/word-picture"
-import "@/controllers/comparison_controller"
 import "@/controllers/map_controller"
 import "@/controllers/text_reader_controller"
 import "@/directives/tab-hash"
@@ -41,7 +41,7 @@ angular.module("korpApp").component("results", {
             <div class="overflow-auto grow" id="left-column">
                 <uib-tabset class="tabbable result_tabs" tab-hash="result_tab" active="activeTab">
                     <uib-tab results-tab select="select()" deselect="deselect()" index="0">
-                        <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
+                        <uib-tab-heading class="flex gap-2 items-center">
                             KWIC
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
@@ -49,7 +49,7 @@ angular.module("korpApp").component("results", {
                     </uib-tab>
 
                     <uib-tab ng-if="showStatisticsTab" results-tab select="select()" deselect="deselect()" index="2">
-                        <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
+                        <uib-tab-heading class="flex gap-2 items-center">
                             {{'statistics' | loc:$root.lang}}
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
@@ -61,7 +61,7 @@ angular.module("korpApp").component("results", {
                     </uib-tab>
 
                     <uib-tab ng-if="showWordpicTab" results-tab select="select()" deselect="deselect()" index="3">
-                        <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
+                        <uib-tab-heading class="flex gap-2 items-center">
                             {{'word_picture' | loc:$root.lang}}
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
                         </uib-tab-heading>
@@ -73,7 +73,7 @@ angular.module("korpApp").component("results", {
                     </uib-tab>
 
                     <uib-tab results-tab ng-repeat="kwicTab in $root.kwicTabs" select="select()" deselect="deselect()">
-                        <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading: loading}">
+                        <uib-tab-heading class="flex gap-2 items-center">
                             KWIC
                             <tab-preloader ng-if="loading"></tab-preloader>
                             <i
@@ -108,47 +108,26 @@ angular.module("korpApp").component("results", {
                         ></trend-diagram>
                     </uib-tab>
 
-                    <uib-tab ng-repeat="promise in $root.compareTabs" compare-ctrl>
-                        <uib-tab-heading class="compare_tab flex gap-2 items-center" ng-class="{loading : loading}">
+                    <uib-tab
+                        results-tab
+                        ng-repeat="promise in $root.compareTabs"
+                        select="select()"
+                        deselect="deselect()"
+                    >
+                        <uib-tab-heading class="flex gap-2 items-center">
                             {{'compare_vb' | loc:$root.lang}}
                             <tab-preloader ng-if="loading"></tab-preloader>
-                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
+                            <i
+                                class="fa-solid fa-times-circle cursor-pointer"
+                                ng-click="closeTab('compareTabs', $index, $event)"
+                            ></i>
                         </uib-tab-heading>
-                        <div class="compare_result" ng-class="{loading : loading}">
-                            <korp-error ng-if="error" message="{{error}}"></korp-error>
-                            <div class="column column_1" ng-if="!error">
-                                <h2>{{'compare_distinctive' | loc:$root.lang}} <em>{{cmp1.label}}</em></h2>
-                                <ul class="negative">
-                                    <li
-                                        ng-repeat="row in tables.negative | orderBy:resultOrder:true"
-                                        ng-click="rowClick(row, 0)"
-                                    >
-                                        <loglike-meter
-                                            item="row"
-                                            max="max"
-                                            stringify="stringify"
-                                            class="w-full meter"
-                                        ></loglike-meter>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="column column_2">
-                                <h2>{{'compare_distinctive' | loc:$root.lang}} <em>{{cmp2.label}}</em></h2>
-                                <ul class="positive">
-                                    <li
-                                        ng-repeat="row in tables.positive | orderBy:resultOrder:true"
-                                        ng-click="rowClick(row, 1)"
-                                    >
-                                        <loglike-meter
-                                            item="row"
-                                            max="max"
-                                            stringify="stringify"
-                                            class="w-full meter"
-                                        ></loglike-meter>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <results-comparison
+                            loading="loading"
+                            new-dynamic-tab="newDynamicTab"
+                            promise="promise"
+                            set-progress="setProgress"
+                        ></results-comparison>
                     </uib-tab>
 
                     <uib-tab ng-repeat="promise in $root.mapTabs" map-ctrl select="onentry()">
