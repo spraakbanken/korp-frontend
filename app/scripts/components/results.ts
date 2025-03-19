@@ -25,9 +25,6 @@ type ResultsScope = IScope & {
     hasResult: () => boolean
 }
 
-// This huge component was previously split so that each type of dynamic tabs had its own directive.
-// They had to be directives and not components, because components always wrap their template in a tag (e.g. <graph-tabs>...</graph-tabs>), and uib-tabset needs uib-tab as immediate children.
-// But we're converting directives to components in preparation for exiting AngularJS.
 angular.module("korpApp").component("results", {
     template: html`
         <div ng-show="hasResult()" class="flex" id="results" ng-class="{sidebar_visible: showSidebar}">
