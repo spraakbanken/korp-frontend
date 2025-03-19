@@ -26,6 +26,7 @@
 ### Fixed
 
 - Selecting a search history item used to reset params that were not part of the search
+- Trend diagram legend missing
 - Comparison result not showing if a search is not done first [#413](https://github.com/spraakbanken/korp-frontend/issues/413)
 - Extended search: do not cache operator options across corpora [#409](https://github.com/spraakbanken/korp-frontend/issues/409)
 - Error when logging out while protected corpora are selected [#440](https://github.com/spraakbanken/korp-frontend/issues/440)

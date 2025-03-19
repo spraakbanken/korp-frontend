@@ -645,6 +645,11 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     }
                 })
 
+                // Add legend and toggling
+                const legendElement = $(".legend", $ctrl.$result).get(0)
+                const legend = new Rickshaw.Graph.Legend({ element: legendElement, graph })
+                new Rickshaw.Graph.Behavior.Series.Toggle({ graph, legend })
+
                 if (!showTotal && $(".legend .line", $ctrl.$result).length > 1) {
                     $(".legend .line:last .action", $ctrl.$result).click()
                 }
