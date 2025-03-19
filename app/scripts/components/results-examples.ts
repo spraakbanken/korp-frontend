@@ -6,6 +6,8 @@ import settings from "@/settings"
 import { LocationService } from "@/urlparams"
 import { ApiKwic } from "@/backend/types"
 import kwicProxyFactory, { KorpQueryRequestOptions, KwicProxy } from "@/backend/kwic-proxy"
+import "@/components/korp-error"
+import "@/components/kwic"
 
 type ResultsExamplesController = IController & {
     isActive: boolean

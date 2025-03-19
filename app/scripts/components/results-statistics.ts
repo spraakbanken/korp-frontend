@@ -7,6 +7,9 @@ import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
 import { html } from "@/util"
+import "@/components/json_button"
+import "@/components/korp-error"
+import "@/components/statistics"
 
 type ResultsStatisticsController = IController & {
     isActive: boolean

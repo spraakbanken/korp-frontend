@@ -10,6 +10,8 @@ import { SavedSearch } from "@/local-storage"
 import { CompareItem, CompareResult, CompareTables } from "@/backend/backend"
 import { TabHashScope } from "@/directives/tab-hash"
 import { Attribute } from "@/settings/config.types"
+import "@/components/korp-error"
+import "@/components/loglike-meter"
 
 type CompareCtrlController = IController & {
     loading: boolean

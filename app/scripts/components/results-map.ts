@@ -9,6 +9,7 @@ import { MapRequestResult } from "@/backend/backend"
 import { MapResult } from "@/map_services"
 import { WithinParameters } from "@/backend/types"
 import { Marker, MarkerEvent, MarkerGroup } from "@/components/result-map"
+import "@/components/korp-error"
 import "@/components/result-map"
 
 type ResultsMapController = IController & {

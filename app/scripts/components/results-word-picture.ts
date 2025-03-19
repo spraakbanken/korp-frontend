@@ -8,6 +8,9 @@ import { RootScope } from "@/root-scope.types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { ApiRelation, RelationsResponse } from "@/backend/types/relations"
 import { loc } from "@/i18n"
+import "@/components/json_button"
+import "@/components/korp-error"
+import "@/components/word-picture"
 
 type ResultsWordPictureController = IController & {
     isActive: boolean
