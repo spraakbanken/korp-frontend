@@ -1,18 +1,26 @@
 /** @format */
 import _ from "lodash"
-import angular, { ICompileService } from "angular"
+import angular, { ICompileService, IController } from "angular"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import "@/backend/backend"
 import "@/components/readingmode"
-import { RootScope, TextTab } from "@/root-scope.types"
+import { TextTab } from "@/root-scope.types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { kebabize } from "@/util"
+import { html, kebabize } from "@/util"
 import { TabHashScope } from "@/directives/tab-hash"
 import { getDataForReadingMode } from "@/backend/backend"
 import { ApiKwic, Token } from "@/backend/types"
 
-type TextReaderControllerScope = TabHashScope & {
+type ResultsTextController = IController & {
+    active: boolean
+    inData: TextTab
+    loading: boolean
+    newDynamicTab: () => void
+    setProgress: (loading: boolean, progress: number) => void
+}
+
+type ResultsTextScope = TabHashScope & {
     loading: boolean
     inData: TextTab
     data: TextReaderDataContainer
@@ -44,52 +52,54 @@ type Attrs = Record<string, string>
 
 type TextReaderData = Omit<ApiKwic, "tokens"> & ReaderTokenContainer
 
-type TextReaderScope = TextReaderControllerScope & {
+type TextReaderScope = ResultsTextScope & {
     selectedToken?: ReaderToken
     wordClick: TextReaderWordHandler
 }
 
-angular.module("korpApp").directive("textReaderCtrl", [
-    () => ({
-        controller: [
-            "$scope",
-            "$rootScope",
-            ($scope: TextReaderControllerScope, $rootScope: RootScope) => {
-                $scope.loading = true
-                $scope.newDynamicTab()
+angular.module("korpApp").component("resultsText", {
+    template: html`<div ng-if="!$ctrl.loading" text-reader="text-reader"></div>`,
+    bindings: {
+        active: "<",
+        inData: "<",
+        loading: "<",
+        newDynamicTab: "<",
+        setProgress: "<",
+    },
+    controller: [
+        "$scope",
+        function ($scope: ResultsTextScope) {
+            const $ctrl = this as ResultsTextController
 
-                $scope.closeTab = function (idx, e) {
-                    e.preventDefault()
-                    $rootScope.textTabs.splice(idx, 1)
-                    $scope.closeDynamicTab()
-                }
+            $ctrl.$onInit = () => {
+                $ctrl.setProgress(true, 0)
+                $ctrl.newDynamicTab()
 
-                const corpus = $scope.inData.corpus
+                const corpus = $ctrl.inData.corpus
                 $scope.corpusObj = settings.corpora[corpus]
-                const textId = $scope.inData.sentenceData["text__id"]
+                const textId = $ctrl.inData.sentenceData["text__id"]
                 getDataForReadingMode(corpus, textId)
                     .then(function (data) {
                         const document = prepareData(data.kwic[0], $scope.corpusObj)
-                        $scope.$apply(($scope: TextReaderControllerScope) => {
-                            $scope.data = { corpus, document, sentenceData: $scope.inData.sentenceData }
-                            $scope.loading = false
+                        $scope.$apply(($scope: ResultsTextScope) => {
+                            $scope.data = { corpus, document, sentenceData: $ctrl.inData.sentenceData }
+                            $ctrl.setProgress(false, 100)
                         })
                     })
                     .catch((err) => {
-                        $scope.$apply(($scope: TextReaderControllerScope) => ($scope.loading = false))
+                        $scope.$apply(() => $ctrl.setProgress(false, 100))
                         throw err
                     })
+            }
 
-                $scope.onentry = function () {
-                    $scope.$broadcast("on-entry")
+            $ctrl.$onChanges = (changes) => {
+                if (changes.active) {
+                    $scope.$broadcast(changes.active.currentValue ? "on-entry" : "on-exit")
                 }
-                $scope.onexit = function () {
-                    $scope.$broadcast("on-exit")
-                }
-            },
-        ],
-    }),
-])
+            }
+        },
+    ],
+})
 
 angular.module("korpApp").directive("textReader", [
     "$compile",

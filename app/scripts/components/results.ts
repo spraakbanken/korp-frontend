@@ -2,18 +2,17 @@
 import angular, { IScope } from "angular"
 import { html } from "@/util"
 import settings from "@/settings"
-import "@/components/korp-error"
 import "@/components/results-comparison"
 import "@/components/results-examples"
 import "@/components/results-hits"
 import "@/components/results-map"
 import "@/components/results-statistics"
 import "@/components/results-tab"
+import "@/components/results-text"
 import "@/components/results-trend-diagram"
 import "@/components/results-word-picture"
 import "@/components/sidebar"
 import "@/components/tab-preloader"
-import "@/controllers/text_reader_controller"
 import "@/directives/tab-hash"
 import { RootScope } from "@/root-scope.types"
 
@@ -142,21 +141,22 @@ angular.module("korpApp").component("results", {
                         ></results-map>
                     </uib-tab>
 
-                    <uib-tab
-                        ng-repeat="inData in $root.textTabs"
-                        text-reader-ctrl
-                        select="onentry()"
-                        deselect="onexit()"
-                    >
-                        <uib-tab-heading class="flex gap-2 items-center" ng-class="{loading : loading}">
+                    <uib-tab results-tab ng-repeat="inData in $root.textTabs" select="select()" deselect="deselect()">
+                        <uib-tab-heading class="flex gap-2 items-center">
                             {{ 'text_tab_header' | loc:$root.lang}}
                             <tab-preloader ng-if="loading"></tab-preloader>
-                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
+                            <i
+                                class="fa-solid fa-times-circle cursor-pointer"
+                                ng-click="closeTab('textTabs', $index, $event)"
+                            ></i>
                         </uib-tab-heading>
-                        <div>
-                            <korp-error ng-if="error" message="{{error}}"></korp-error>
-                            <div ng-if="!loading" text-reader="text-reader"></div>
-                        </div>
+                        <results-text
+                            active="isActive"
+                            in-data="inData"
+                            loading="loading"
+                            new-dynamic-tab="newDynamicTab"
+                            set-progress="setProgress"
+                        ></results-text>
                     </uib-tab>
                 </uib-tabset>
             </div>
