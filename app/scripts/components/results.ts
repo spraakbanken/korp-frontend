@@ -6,10 +6,10 @@ import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/kwic"
 import "@/components/loglike-meter"
-import "@/components/result-map"
 import "@/components/results-comparison"
 import "@/components/results-examples"
 import "@/components/results-hits"
+import "@/components/results-map"
 import "@/components/results-statistics"
 import "@/components/results-tab"
 import "@/components/results-word-picture"
@@ -18,7 +18,6 @@ import "@/components/sidebar"
 import "@/components/tab-preloader"
 import "@/components/results-trend-diagram"
 import "@/components/word-picture"
-import "@/controllers/map_controller"
 import "@/controllers/text_reader_controller"
 import "@/directives/tab-hash"
 import { RootScope } from "@/root-scope.types"
@@ -130,52 +129,22 @@ angular.module("korpApp").component("results", {
                         ></results-comparison>
                     </uib-tab>
 
-                    <uib-tab ng-repeat="promise in $root.mapTabs" map-ctrl select="onentry()">
-                        <uib-tab-heading class="map_tab flex gap-2 items-center" ng-class="{loading : loading}">
+                    <uib-tab results-tab ng-repeat="promise in $root.mapTabs" select="select()" deselect="deselect()">
+                        <uib-tab-heading class="flex gap-2 items-center">
                             {{ 'map' | loc:$root.lang}}
                             <tab-preloader ng-if="loading"></tab-preloader>
-                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
+                            <i
+                                class="fa-solid fa-times-circle cursor-pointer"
+                                ng-click="closeTab('mapTabs', $index, $event)"
+                            ></i>
                         </uib-tab-heading>
-                        <div class="map_result" ng-class="{loading : loading}">
-                            <korp-error ng-if="error" message="{{error}}"></korp-error>
-                            <div ng-if="!loading && numResults != 0">
-                                <div class="rickshaw_legend" id="mapHeader">
-                                    <div
-                                        class="mapgroup"
-                                        ng-repeat="(label, group) in markerGroups"
-                                        ng-class="group.selected ? '' : 'disabled'"
-                                        ng-click="toggleMarkerGroup(label)"
-                                    >
-                                        <span class="check">✔</span>
-                                        <div class="swatch" style="background-color: {{group.color}}"></div>
-                                        <span
-                                            class="label"
-                                            ng-if="label != 'total'"
-                                            ng-bind-html="label | trust"
-                                        ></span>
-                                        <span class="label" ng-if="label == 'total'">Σ</span>
-                                    </div>
-                                    <div style="float:right;padding-right: 5px;">
-                                        <label>
-                                            <input
-                                                style="vertical-align: top;margin-top: 0px;margin-right: 5px;"
-                                                type="checkbox"
-                                                ng-model="useClustering"
-                                            />
-                                            {{'map_cluster' | loc:$root.lang}}
-                                        </label>
-                                    </div>
-                                </div>
-                                <result-map
-                                    center="center"
-                                    markers="markerGroups"
-                                    marker-callback="newKWICSearch"
-                                    selected-groups="selectedGroups"
-                                    rest-color="restColor"
-                                    use-clustering="useClustering"
-                                ></result-map>
-                            </div>
-                        </div>
+                        <results-map
+                            active="isActive"
+                            loading="loading"
+                            new-dynamic-tab="newDynamicTab"
+                            promise="promise"
+                            set-progress="setProgress"
+                        ></results-map>
                     </uib-tab>
 
                     <uib-tab
