@@ -4,7 +4,7 @@ import settings from "@/settings"
 import { html, isLemgram, lemgramToHtml, splitLemgram } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDef, WordPictureDefItem } from "@/settings/app-settings.types"
-import { ShowableApiRelation, TableData, TableDrawData } from "@/controllers/word_picture_controller"
+import { ShowableApiRelation, TableData, TableDrawData } from "@/components/results-word-picture"
 import { ApiRelation } from "@/backend/types/relations"
 import "@/components/help-box"
 
@@ -251,12 +251,8 @@ angular.module("korpApp").component("wordPicture", {
             $ctrl.onClickExample = function (row) {
                 $rootScope.kwicTabs.push({
                     queryParams: {
-                        ajaxParams: {
-                            command: "relations_sentences",
-                            source: row.source.join(","),
-                            start: 0,
-                            end: 24,
-                        },
+                        command: "relations_sentences",
+                        source: row.source.join(","),
                     },
                 })
             }

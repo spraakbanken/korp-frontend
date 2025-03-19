@@ -46,6 +46,8 @@ export type FilterData = {
     options: [string, number][]
 }
 
+export type DynamicTabName = "compareTabs" | "graphTabs" | "kwicTabs" | "mapTabs" | "textTabs"
+
 export type CompareTab = IPromise<CompareResult>
 
 export type GraphTab = {
