@@ -18,7 +18,8 @@ import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/co
 
 type TrendDiagramController = IController & {
     data: GraphTab
-    onProgress: (progress: number) => void
+    newDynamicTab: () => void
+    setProgress: (loading: boolean, progress: number) => void
     updateLoading: (loading: boolean) => void
     graph?: Graph
     time_grid: Slick.Grid<any>
@@ -129,7 +130,8 @@ angular.module("korpApp").component("trendDiagram", {
     `,
     bindings: {
         data: "<",
-        onProgress: "<",
+        newDynamicTab: "<",
+        setProgress: "<",
         updateLoading: "<",
     },
     controller: [
@@ -144,6 +146,7 @@ angular.module("korpApp").component("trendDiagram", {
             $ctrl.mode = "line"
 
             $ctrl.$onInit = () => {
+                $ctrl.newDynamicTab()
                 const interval = $ctrl.data.corpusListing.getMomentInterval()
                 if (!interval) {
                     console.error("No interval")
@@ -176,11 +179,6 @@ angular.module("korpApp").component("trendDiagram", {
                 }
 
                 $rootScope.kwicTabs.push({ queryParams: opts })
-            }
-
-            $ctrl.localUpdateLoading = (loading: boolean) => {
-                $ctrl.updateLoading(loading)
-                $ctrl.loading = loading
             }
 
             function drawPreloader(from: Moment, to: Moment): void {
@@ -569,7 +567,7 @@ angular.module("korpApp").component("trendDiagram", {
                 let series: Series[]
 
                 const done = () => {
-                    $ctrl.localUpdateLoading(false)
+                    $ctrl.setProgress(false, 100)
                     $(window).trigger("resize")
                 }
 
@@ -762,7 +760,7 @@ angular.module("korpApp").component("trendDiagram", {
                 to: `${number}`
             ) {
                 const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
-                $ctrl.localUpdateLoading(true)
+                $ctrl.setProgress(true, 0)
                 $ctrl.error = undefined
                 const currentZoom = $ctrl.zoom
                 const reqPromise = $ctrl.proxy.makeRequest(
@@ -771,7 +769,7 @@ angular.module("korpApp").component("trendDiagram", {
                     corpora.stringifySelected(),
                     from,
                     to,
-                    (progress) => $timeout(() => $ctrl.onProgress(progress.percent))
+                    (progress) => $timeout(() => $ctrl.setProgress(true, progress.percent))
                 )
 
                 try {
@@ -781,7 +779,7 @@ angular.module("korpApp").component("trendDiagram", {
                     $timeout(() => {
                         console.error(error)
                         $ctrl.error = error
-                        $ctrl.localUpdateLoading(false)
+                        $ctrl.setProgress(false, 0)
                     })
                 }
             }

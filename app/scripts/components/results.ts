@@ -15,12 +15,11 @@ import "@/components/results-statistics"
 import "@/components/statistics"
 import "@/components/sidebar"
 import "@/components/tab-preloader"
-import "@/components/trend-diagram"
+import "@/components/results-trend-diagram"
 import "@/components/word-picture"
 import "@/controllers/comparison_controller"
 import "@/controllers/map_controller"
 import "@/controllers/text_reader_controller"
-import "@/controllers/trend_diagram_controller"
 import "@/directives/tab-hash"
 import { RootScope } from "@/root-scope.types"
 
@@ -92,16 +91,20 @@ angular.module("korpApp").component("results", {
                         ></results-examples>
                     </uib-tab>
 
-                    <uib-tab ng-repeat="data in $root.graphTabs" graph-ctrl>
+                    <uib-tab results-tab ng-repeat="data in $root.graphTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             {{'graph' | loc:$root.lang}}
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
-                            <i class="fa-solid fa-times-circle cursor-pointer" ng-click="closeTab($index, $event)"></i>
+                            <i
+                                class="fa-solid fa-times-circle cursor-pointer"
+                                ng-click="closeTab('graphTabs', $index, $event)"
+                            ></i>
                         </uib-tab-heading>
                         <trend-diagram
                             data="data"
-                            on-progress="onProgress"
-                            update-loading="updateLoading"
+                            loading="loading"
+                            new-dynamic-tab="newDynamicTab"
+                            set-progress="setProgress"
                         ></trend-diagram>
                     </uib-tab>
 
