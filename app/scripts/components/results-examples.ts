@@ -15,7 +15,6 @@ type ResultsExamplesController = IController & {
     loading: boolean
     queryParams: KorpQueryRequestOptions
     setProgress: (loading: boolean, progress: number) => void
-    newDynamicTab: () => void
     closeDynamicTab: () => void
 }
 
@@ -63,7 +62,6 @@ angular.module("korpApp").component("resultsExamples", {
         isActive: "<",
         isReading: "<",
         loading: "<",
-        newDynamicTab: "<",
         queryParams: "<",
         setProgress: "<",
     },
@@ -78,7 +76,6 @@ angular.module("korpApp").component("resultsExamples", {
             $scope.proxy = kwicProxyFactory.create()
 
             $ctrl.$onInit = () => {
-                $ctrl.newDynamicTab() // TODO Move this call to when $root.kwicTab is changed?
                 // Context mode can be set when creating the tab. If not, use URL param
                 $scope.isReading = $ctrl.isReading ?? $location.search()["reading_mode"]
                 makeRequest()

@@ -15,7 +15,6 @@ import "@/components/loglike-meter"
 
 type CompareCtrlController = IController & {
     loading: boolean
-    newDynamicTab: () => void
     promise: CompareTab
     setProgress: (loading: boolean, progress: number) => void
 }
@@ -57,7 +56,6 @@ angular.module("korpApp").component("resultsComparison", {
     `,
     bindings: {
         loading: "<",
-        newDynamicTab: "<",
         promise: "<",
         setProgress: "<",
     },
@@ -69,7 +67,6 @@ angular.module("korpApp").component("resultsComparison", {
 
             $ctrl.$onInit = () => {
                 $ctrl.setProgress(true, 0)
-                $ctrl.newDynamicTab()
                 $ctrl.promise.then(render).catch((error) => {
                     $ctrl.setProgress(false, 0)
                     $scope.error = error

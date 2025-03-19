@@ -15,7 +15,6 @@ import "@/components/result-map"
 type ResultsMapController = IController & {
     active: boolean
     loading: boolean
-    newDynamicTab: () => void
     promise: MapTab
     setProgress: (loading: boolean, progress: number) => void
 }
@@ -71,7 +70,6 @@ angular.module("korpApp").component("resultsMap", {
     bindings: {
         active: "<",
         loading: "<",
-        newDynamicTab: "<",
         promise: "<",
         setProgress: "<",
     },
@@ -91,7 +89,6 @@ angular.module("korpApp").component("resultsMap", {
             const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
 
             $ctrl.$onInit = () => {
-                $ctrl.newDynamicTab()
                 $ctrl.setProgress(true, 0)
 
                 Promise.all([rickshawPromise, $ctrl.promise]).then(

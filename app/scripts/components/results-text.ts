@@ -16,7 +16,6 @@ type ResultsTextController = IController & {
     active: boolean
     inData: TextTab
     loading: boolean
-    newDynamicTab: () => void
     setProgress: (loading: boolean, progress: number) => void
 }
 
@@ -54,7 +53,6 @@ angular.module("korpApp").component("resultsText", {
         active: "<",
         inData: "<",
         loading: "<",
-        newDynamicTab: "<",
         setProgress: "<",
     },
     controller: [
@@ -66,7 +64,6 @@ angular.module("korpApp").component("resultsText", {
 
             $ctrl.$onInit = () => {
                 $ctrl.setProgress(true, 0)
-                $ctrl.newDynamicTab()
 
                 const corpus = $ctrl.inData.corpus
                 $scope.corpusObj = settings.corpora[corpus]

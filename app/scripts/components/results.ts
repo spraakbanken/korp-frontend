@@ -78,7 +78,6 @@ angular.module("korpApp").component("results", {
                             is-active="isActive"
                             loading="loading"
                             set-progress="setProgress"
-                            new-dynamic-tab="newDynamicTab"
                             is-reading="kwicTab.readingMode"
                             query-params="kwicTab.queryParams"
                         ></results-examples>
@@ -93,12 +92,7 @@ angular.module("korpApp").component("results", {
                                 ng-click="closeTab('graphTabs', $index, $event)"
                             ></i>
                         </uib-tab-heading>
-                        <trend-diagram
-                            data="data"
-                            loading="loading"
-                            new-dynamic-tab="newDynamicTab"
-                            set-progress="setProgress"
-                        ></trend-diagram>
+                        <trend-diagram data="data" loading="loading" set-progress="setProgress"></trend-diagram>
                     </uib-tab>
 
                     <uib-tab
@@ -117,7 +111,6 @@ angular.module("korpApp").component("results", {
                         </uib-tab-heading>
                         <results-comparison
                             loading="loading"
-                            new-dynamic-tab="newDynamicTab"
                             promise="promise"
                             set-progress="setProgress"
                         ></results-comparison>
@@ -135,7 +128,6 @@ angular.module("korpApp").component("results", {
                         <results-map
                             active="isActive"
                             loading="loading"
-                            new-dynamic-tab="newDynamicTab"
                             promise="promise"
                             set-progress="setProgress"
                         ></results-map>
@@ -154,7 +146,6 @@ angular.module("korpApp").component("results", {
                             active="isActive"
                             in-data="inData"
                             loading="loading"
-                            new-dynamic-tab="newDynamicTab"
                             set-progress="setProgress"
                         ></results-text>
                     </uib-tab>

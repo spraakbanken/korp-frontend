@@ -18,7 +18,6 @@ import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/co
 
 type TrendDiagramController = IController & {
     data: GraphTab
-    newDynamicTab: () => void
     setProgress: (loading: boolean, progress: number) => void
     updateLoading: (loading: boolean) => void
     graph?: Graph
@@ -130,7 +129,6 @@ angular.module("korpApp").component("trendDiagram", {
     `,
     bindings: {
         data: "<",
-        newDynamicTab: "<",
         setProgress: "<",
         updateLoading: "<",
     },
@@ -146,7 +144,6 @@ angular.module("korpApp").component("trendDiagram", {
             $ctrl.mode = "line"
 
             $ctrl.$onInit = () => {
-                $ctrl.newDynamicTab()
                 const interval = $ctrl.data.corpusListing.getMomentInterval()
                 if (!interval) {
                     console.error("No interval")

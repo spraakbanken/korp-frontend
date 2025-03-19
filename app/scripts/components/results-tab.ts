@@ -30,10 +30,16 @@ angular.module("korpApp").directive("resultsTab", () => ({
                 $scope.progress = progress
             }
 
-            $scope.closeTab = (tabType, i, event) => {
-                event.preventDefault()
-                $rootScope[tabType].splice(i, 1)
-                $scope.closeDynamicTab()
+            // The dynamic tabs use ng-repeat, which provides `$index` etc in the scope.
+            const isDynamicTab = "$index" in $scope
+            if (isDynamicTab) {
+                $scope.newDynamicTab()
+
+                $scope.closeTab = (tabType, i, event) => {
+                    event.preventDefault()
+                    $rootScope[tabType].splice(i, 1)
+                    $scope.closeDynamicTab()
+                }
             }
         },
     ],
