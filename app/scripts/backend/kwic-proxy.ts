@@ -21,15 +21,15 @@ export class KwicProxy extends BaseProxy {
 
     async makeRequest(
         options: KorpQueryRequestOptions,
-        page: number | undefined,
+        page?: number,
         progressCallback?: (data: ProgressReport<"query">) => void,
         kwicCallback?: (data: QueryResponse) => void
     ): Promise<QueryResponse> {
         this.resetRequest()
         const abortSignal = this.abortController.signal
 
-        if (!options.ajaxParams.within) {
-            _.extend(options.ajaxParams, settings.corpusListing.getWithinParameters())
+        if (!options.within) {
+            _.extend(options, settings.corpusListing.getWithinParameters())
         }
 
         /** Calculate start and end from page and hpp. Only works for main hits. Examples must provide start and end in param. */
@@ -41,12 +41,12 @@ export class KwicProxy extends BaseProxy {
             return { start, end }
         }
 
-        const command = options.ajaxParams.command || "query"
+        const command = options.command || "query"
 
         const params: QueryParams = {
             default_context: settings.default_overview_context,
             ...getPageInterval(),
-            ...options.ajaxParams,
+            ...options,
         }
 
         const show: string[] = []
@@ -112,9 +112,6 @@ export class KwicProxy extends BaseProxy {
 const kwicProxyFactory = new Factory(KwicProxy)
 export default kwicProxyFactory
 
-export type KorpQueryRequestOptions = {
-    // TODO Move everything in `ajaxParams` up to `opts`
-    ajaxParams: QueryParams & {
-        command?: "query" | "relations_sentences"
-    }
+export type KorpQueryRequestOptions = QueryParams & {
+    command?: "query" | "relations_sentences"
 }

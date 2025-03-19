@@ -251,10 +251,8 @@ angular.module("korpApp").component("wordPicture", {
             $ctrl.onClickExample = function (row) {
                 $rootScope.kwicTabs.push({
                     queryParams: {
-                        ajaxParams: {
-                            command: "relations_sentences",
-                            source: row.source.join(","),
-                        },
+                        command: "relations_sentences",
+                        source: row.source.join(","),
                     },
                 })
             }

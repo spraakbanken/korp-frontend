@@ -168,13 +168,11 @@ angular.module("korpApp").component("trendDiagram", {
                 const timecqp = getTimeCqp(time, zoom, LEVELS.indexOf(zoom) < 3)
                 const decodedCQP = decodeURIComponent(cqp)
                 const opts = {
-                    ajaxParams: {
-                        corpus: $ctrl.data.corpusListing.stringifySelected(),
-                        cqp: $ctrl.data.cqp,
-                        cqp2: expandOperators(decodedCQP),
-                        cqp3: timecqp,
-                        expand_prequeries: false,
-                    },
+                    corpus: $ctrl.data.corpusListing.stringifySelected(),
+                    cqp: $ctrl.data.cqp,
+                    cqp2: expandOperators(decodedCQP),
+                    cqp3: timecqp,
+                    expand_prequeries: false,
                 }
 
                 $rootScope.kwicTabs.push({ queryParams: opts })

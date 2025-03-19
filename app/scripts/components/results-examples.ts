@@ -104,10 +104,10 @@ angular.module("korpApp").component("resultsExamples", {
                 const opts = $ctrl.queryParams
 
                 // example tab cannot handle incremental = true
-                opts.ajaxParams.incremental = false
+                opts.incremental = false
 
-                opts.ajaxParams.start = ($scope.page || 0) * $scope.hitsPerPage
-                opts.ajaxParams.end = opts.ajaxParams.start + $scope.hitsPerPage - 1
+                opts.start = ($scope.page || 0) * $scope.hitsPerPage
+                opts.end = opts.start + $scope.hitsPerPage - 1
 
                 const preferredContext = $scope.isReading
                     ? settings["default_reading_context"]
@@ -116,20 +116,20 @@ angular.module("korpApp").component("resultsExamples", {
                     ? settings["default_overview_context"]
                     : settings["default_reading_context"]
 
-                const corpora = opts.ajaxParams.corpus ? opts.ajaxParams.corpus.split(",") : []
-                const context = settings.corpusListing.getContextQueryStringFromCorpusId(
+                opts.default_context = preferredContext
+                const corpora = opts.corpus ? opts.corpus.split(",") : []
+                opts.context = settings.corpusListing.getContextQueryStringFromCorpusId(
                     corpora,
                     preferredContext,
                     avoidContext
                 )
-                _.extend(opts.ajaxParams, { context, default_context: preferredContext })
 
                 // Abort any running request
                 if ($ctrl.loading) $scope.proxy.abort()
 
                 $ctrl.setProgress(true, 0)
                 $scope.proxy
-                    .makeRequest(opts, undefined)
+                    .makeRequest(opts)
                     .then((data) =>
                         $timeout(() => {
                             if (!data.kwic) data.kwic = []

@@ -188,11 +188,9 @@ angular.module("korpApp").component("resultsHits", {
                 $scope.aborted = false
                 $scope.error = undefined
 
-                const ajaxParams = buildQueryOptions(isPaging)
-
                 $scope.proxy
                     .makeRequest(
-                        { ajaxParams },
+                        buildQueryOptions(isPaging),
                         $scope.page,
                         (progressObj) =>
                             $timeout(() => {

@@ -162,17 +162,15 @@ angular.module("korpApp").directive("mapCtrl", [
                     const cl = settings.corpusListing.subsetFactory(queryData.corpora)
                     const numberOfTokens = queryData.subCqp.split("[").length - 1
                     const opts = {
-                        ajaxParams: {
-                            cqp: queryData.searchCqp,
-                            cqp2: `[_.${queryData.label} contains "${regescape(
-                                [point.name, point.countryCode, point.lat, point.lng].join(";")
-                            )}"]{${numberOfTokens}}`,
-                            cqp3: queryData.subCqp,
-                            corpus: cl.stringifySelected(),
-                            show_struct: _.keys(cl.getStructAttrs()).join(","),
-                            expand_prequeries: false,
-                            ...queryData.within,
-                        },
+                        cqp: queryData.searchCqp,
+                        cqp2: `[_.${queryData.label} contains "${regescape(
+                            [point.name, point.countryCode, point.lat, point.lng].join(";")
+                        )}"]{${numberOfTokens}}`,
+                        cqp3: queryData.subCqp,
+                        corpus: cl.stringifySelected(),
+                        show_struct: _.keys(cl.getStructAttrs()).join(","),
+                        expand_prequeries: false,
+                        ...queryData.within,
                     }
                     const readingMode = queryData.label === "paragraph__geocontext"
                     $timeout(() => $rootScope.kwicTabs.push({ queryParams: opts, readingMode }), 0)

@@ -139,16 +139,15 @@ angular.module("korpApp").directive("compareCtrl", () => ({
 
                         cl = settings.corpusListing.subsetFactory(cmp.corpora)
 
-                        const opts = {
-                            ajaxParams: {
+                        return $rootScope.kwicTabs.push({
+                            queryParams: {
                                 cqp: cmp.cqp,
                                 cqp2: cqp,
                                 corpus: cl.stringifySelected(),
                                 show_struct: _.keys(cl.getStructAttrs()).join(","),
                                 expand_prequeries: false,
                             },
-                        }
-                        return $rootScope.kwicTabs.push({ queryParams: opts })
+                        })
                     }
                 },
                 function (error) {

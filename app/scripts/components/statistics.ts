@@ -426,12 +426,10 @@ angular.module("korpApp").component("statistics", {
 
                     $rootScope.kwicTabs.push({
                         queryParams: {
-                            ajaxParams: {
-                                corpus: corpora.join(","),
-                                cqp: $ctrl.prevParams.cqp,
-                                cqp2,
-                                expand_prequeries: false,
-                            },
+                            corpus: corpora.join(","),
+                            cqp: $ctrl.prevParams.cqp,
+                            cqp2,
+                            expand_prequeries: false,
                         },
                     })
                 }
