@@ -13,13 +13,13 @@ import { Attribute } from "@/settings/config.types"
 import "@/components/korp-error"
 import "@/components/loglike-meter"
 
-type CompareCtrlController = IController & {
+type ResultsComparisonController = IController & {
     loading: boolean
     promise: CompareTab
     setProgress: (loading: boolean, progress: number) => void
 }
 
-type CompareCtrlScope = TabHashScope & {
+type ResultsComparisonScope = TabHashScope & {
     attributes: Record<string, Attribute>
     cmp1: SavedSearch
     cmp2: SavedSearch
@@ -62,8 +62,8 @@ angular.module("korpApp").component("resultsComparison", {
     controller: [
         "$rootScope",
         "$scope",
-        function ($rootScope: RootScope, $scope: CompareCtrlScope) {
-            const $ctrl = this as CompareCtrlController
+        function ($rootScope: RootScope, $scope: ResultsComparisonScope) {
+            const $ctrl = this as ResultsComparisonController
 
             $ctrl.$onInit = () => {
                 $ctrl.setProgress(true, 0)

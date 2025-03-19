@@ -40,7 +40,7 @@ angular.module("korpApp").component("resultsStatistics", {
             columns="columns"
             data="data"
             error="error"
-            loading="loading"
+            loading="$ctrl.loading"
             prev-params="proxy.prevParams"
             search-params="searchParams"
             warning="warning"

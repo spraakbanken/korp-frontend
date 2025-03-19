@@ -15,7 +15,6 @@ import { ApiKwic, Token } from "@/backend/types"
 type ResultsTextController = IController & {
     active: boolean
     inData: TextTab
-    loading: boolean
     setProgress: (loading: boolean, progress: number) => void
 }
 
@@ -52,7 +51,6 @@ angular.module("korpApp").component("resultsText", {
     bindings: {
         active: "<",
         inData: "<",
-        loading: "<",
         setProgress: "<",
     },
     controller: [
@@ -100,7 +98,7 @@ angular.module("korpApp").component("resultsText", {
                     const componentName = typeof config == "object" ? config.component : "standardReadingMode"
                     const componentTag = kebabize(componentName)
 
-                    const template = `<${componentTag} data="data" word-click="wordClick"></${componentTag}>`
+                    const template = html`<${componentTag} data="data" word-click="wordClick"></${componentTag}>`
                     $element.append($compile(template)($scope))
 
                     $scope.selectedToken = undefined

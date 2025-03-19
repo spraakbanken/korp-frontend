@@ -10,7 +10,6 @@ import "@/components/help-box"
 
 type WordPictureController = IController & {
     // Bindings
-    loading: boolean
     limitOptions: number[]
     data: TableDrawData[]
     warning?: string
@@ -152,7 +151,6 @@ angular.module("korpApp").component("wordPicture", {
         </help-box>
     `,
     bindings: {
-        loading: "<",
         data: "<",
         warning: "<",
     },

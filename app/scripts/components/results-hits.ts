@@ -14,13 +14,13 @@ import "@/components/kwic"
 import "@/services/utils"
 import { html } from "@/util"
 
-type KwicCtrlController = IController & {
+type ResultsHitsController = IController & {
     isActive: boolean
     loading: boolean
     setProgress: (loading: boolean, progress: number) => void
 }
 
-export type KwicCtrlScope = IScope & {
+type ResultsHitsScope = IScope & {
     aborted?: boolean
     corpusHits?: Record<string, number>
     corpusOrder?: string[]
@@ -81,11 +81,11 @@ angular.module("korpApp").component("resultsHits", {
         function (
             $location: LocationService,
             $rootScope: RootScope,
-            $scope: KwicCtrlScope,
+            $scope: ResultsHitsScope,
             $timeout: ITimeoutService,
             utils: UtilsService
         ) {
-            const $ctrl = this as KwicCtrlController
+            const $ctrl = this as ResultsHitsController
 
             $scope.initialSearch = true
             $scope.page = Number($location.search().page) || 0

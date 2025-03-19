@@ -89,7 +89,11 @@ angular.module("korpApp").component("results", {
                                 ng-click="closeTab('graphTabs', $index, $event)"
                             ></i>
                         </uib-tab-heading>
-                        <trend-diagram data="data" loading="loading" set-progress="setProgress"></trend-diagram>
+                        <results-trend-diagram
+                            data="data"
+                            loading="loading"
+                            set-progress="setProgress"
+                        ></results-trend-diagram>
                     </uib-tab>
 
                     <uib-tab

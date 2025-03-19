@@ -16,10 +16,10 @@ import { JQueryExtended } from "@/jquery.types"
 import { CorpusListing } from "@/corpus_listing"
 import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
 
-type TrendDiagramController = IController & {
+type ResultsTrendDiagramController = IController & {
     data: GraphTab
+    loading: boolean
     setProgress: (loading: boolean, progress: number) => void
-    updateLoading: (loading: boolean) => void
     graph?: Graph
     time_grid: Slick.Grid<any>
     hasEmptyIntervals?: boolean
@@ -73,7 +73,7 @@ const PALETTE = [
     "#975686",
 ]
 
-angular.module("korpApp").component("trendDiagram", {
+angular.module("korpApp").component("resultsTrendDiagram", {
     template: html`
         <korp-error ng-if="$ctrl.error" message="{{$ctrl.error}}"></korp-error>
         <div class="graph_tab" ng-show="!$ctrl.error">
@@ -129,15 +129,15 @@ angular.module("korpApp").component("trendDiagram", {
     `,
     bindings: {
         data: "<",
+        loading: "<",
         setProgress: "<",
-        updateLoading: "<",
     },
     controller: [
         "$rootScope",
         "$timeout",
         "$element",
         function ($rootScope: RootScope, $timeout: ITimeoutService, $element: IRootElementService) {
-            const $ctrl = this as TrendDiagramController
+            const $ctrl = this as ResultsTrendDiagramController
             $ctrl.zoom = "year"
             $ctrl.proxy = graphProxyFactory.create()
             $ctrl.$result = $element.find(".graph_tab")

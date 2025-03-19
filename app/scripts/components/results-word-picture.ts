@@ -55,13 +55,7 @@ export type TableDrawData = {
 angular.module("korpApp").component("resultsWordPicture", {
     template: html`
         <div ng-if="!error">
-            <word-picture
-                data="data"
-                loading="loading"
-                hit-settings="hitSettings"
-                settings="settings"
-                warning="warning"
-            ></word-picture>
+            <word-picture data="data" hit-settings="hitSettings" settings="settings" warning="warning"></word-picture>
         </div>
         <korp-error ng-if="error" message="{{error}}"></korp-error>
         <json-button ng-if="!warning && !error" endpoint="'relations'" params="proxy.prevParams"></json-button>
