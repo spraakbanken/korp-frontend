@@ -362,10 +362,13 @@ angular.module("korpApp").component("sidebar", {
 
                         // If `internal_search` is set, clicking on the value will trigger a search
                         if (attrs["internal_search"]) {
-                            inner.addClass("link").click(function () {
-                                const cqpVal = $(this).data("key")
-                                const cqp = `[${key} contains "${regescape(cqpVal)}"]`
-                                statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
+                            inner.addClass("link").on("click", function () {
+                                if (key == "lex") {
+                                    statemachine.send("SEARCH_LEMGRAM", { value: x })
+                                } else {
+                                    const cqp = `[${key} contains "${regescape(x)}"]`
+                                    statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
+                                }
                             })
                         }
 

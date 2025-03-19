@@ -102,11 +102,9 @@ angular.module("korpApp").component("extendedStandard", {
             }
 
             statemachine.listen("cqp_search", (event) => {
-                ctrl.cqp = event.cqp
-                // sometimes $scope.$apply is needed and sometimes it throws errors
-                // depending on source of the event I guess. $timeout solves it.
                 $timeout(() => {
-                    $rootScope.$apply()
+                    $location.search("search_tab", 1)
+                    ctrl.cqpChange(event.cqp)
                     triggerSearch()
                 })
             })

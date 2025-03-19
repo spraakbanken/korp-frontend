@@ -103,11 +103,8 @@ angular.module("korpApp").component("autoc", {
             ctrl.isError = false
 
             ctrl.$onChanges = () => {
-                if (ctrl.isRawInput) {
-                    ctrl.textInField = ctrl.input
-                } else {
-                    ctrl.placeholder = ctrl.input
-                }
+                ctrl.textInField = ctrl.isRawInput ? ctrl.input : ""
+                ctrl.placeholder = ctrl.isRawInput ? "" : ctrl.input
             }
 
             ctrl.typeaheadClose = function () {

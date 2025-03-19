@@ -160,11 +160,13 @@ angular.module("korpApp").component("simpleSearch", {
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
 
-            statemachine.listen("lemgram_search", (event) => {
-                ctrl.input = event.value
-                ctrl.isRawInput = false
-                ctrl.onChange(event.value, false)
-            })
+            statemachine.listen("lemgram_search", (event) =>
+                $timeout(() => {
+                    $location.search("search_tab", null)
+                    ctrl.onChange(event.value, false)
+                    ctrl.updateSearch()
+                })
+            )
 
             /** Whether tokens should be matched in arbitrary order. */
             ctrl.freeOrder = false
@@ -271,7 +273,6 @@ angular.module("korpApp").component("simpleSearch", {
                             : `[sense rank_contains \"${regescape(wd)}\"]`
 
                     statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
-                    $location.search("search_tab", 1)
                 }
                 const modalInstance = $uibModal.open({
                     template: `\

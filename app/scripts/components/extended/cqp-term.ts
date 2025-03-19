@@ -138,8 +138,11 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 // Clone to avoid modifying original
                 const ops = { ...(option.opts || settings["default_options"]) }
 
-                // For multi-value attributes, use the "contains" CQP operator for equality
-                if (option.type === "set") ops.is = "contains"
+                // For multi-value attributes, use the "contains" CQP operators for equality
+                if (option.type === "set") {
+                    if (ops.is == "=") ops.is = "contains"
+                    if (ops.is_not == "!=") ops.is_not = "not contains"
+                }
 
                 // Return as tuples
                 return Object.entries(ops)

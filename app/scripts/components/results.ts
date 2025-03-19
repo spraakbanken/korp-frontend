@@ -2,6 +2,7 @@
 import angular, { IScope } from "angular"
 import { html } from "@/util"
 import settings from "@/settings"
+import statemachine from "@/statemachine"
 import "@/components/results-comparison"
 import "@/components/results-examples"
 import "@/components/results-hits"
@@ -15,6 +16,7 @@ import "@/components/sidebar"
 import "@/components/tab-preloader"
 import "@/directives/tab-hash"
 import { RootScope } from "@/root-scope.types"
+import { LocationService } from "@/urlparams"
 
 type ResultsScope = IScope & {
     showSidebar: boolean
@@ -163,9 +165,10 @@ angular.module("korpApp").component("results", {
     `,
     bindings: {},
     controller: [
-        "$scope",
+        "$location",
         "$rootScope",
-        function ($scope: ResultsScope, $rootScope: RootScope) {
+        "$scope",
+        function ($location: LocationService, $rootScope: RootScope, $scope: ResultsScope) {
             $scope.showSidebar = false
             $scope.showStatisticsTab = settings["statistics"] != false
             $scope.showWordpicTab = settings["word_picture"] != false
@@ -173,6 +176,10 @@ angular.module("korpApp").component("results", {
             $scope.onSidebarShow = () => ($scope.showSidebar = true)
             $scope.onSidebarHide = () => ($scope.showSidebar = false)
             $scope.hasResult = () => !!$rootScope.activeSearch || !!$rootScope.compareTabs.length
+
+            const showMainTab = () => $location.search("result_tab", null)
+            statemachine.listen("cqp_search", showMainTab)
+            statemachine.listen("lemgram_search", showMainTab)
         },
     ],
 })

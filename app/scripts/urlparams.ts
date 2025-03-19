@@ -45,6 +45,8 @@ export type HashParams = {
     random_seed?: `${number}`
     /** Whether the reading mode is enabled */
     reading_mode?: boolean
+    /** What result tab is active */
+    result_tab?: number
     /**
      * Search query for Simple or Advanced search: `<mode>|<query>`
      * where `mode` can be:
