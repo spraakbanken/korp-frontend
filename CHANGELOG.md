@@ -30,6 +30,7 @@
 - Extended search: do not cache operator options across corpora [#409](https://github.com/spraakbanken/korp-frontend/issues/409)
 - Error when logging out while protected corpora are selected [#440](https://github.com/spraakbanken/korp-frontend/issues/440)
 - Error when loading with restricted corpora selected and then dismissing login dialog [#399](https://github.com/spraakbanken/korp-frontend/issues/399)
+- Cached translation files cause broken UI after releases [#435](https://github.com/spraakbanken/korp-frontend/issues/435)
 
 ## [9.8.5] - 2025-03-17
 

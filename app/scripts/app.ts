@@ -29,6 +29,9 @@ import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 
+// @ts-ignore
+const BUILD_HASH = __webpack_hash__
+
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [
     function () {
@@ -88,7 +91,7 @@ authenticationProxy.initAngular(korpApp)
 korpApp.config([
     "tmhDynamicLocaleProvider",
     (tmhDynamicLocaleProvider: tmh.tmh.IDynamicLocaleProvider) =>
-        tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js"),
+        tmhDynamicLocaleProvider.localeLocationPattern(`translations/angular-locale_{{locale}}.${BUILD_HASH}.js`),
 ])
 
 korpApp.config([

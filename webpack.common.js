@@ -150,7 +150,7 @@ module.exports = {
                 },
                 {
                     from: "app/translations/angular-locale_*.js",
-                    to: "translations/[name][ext]",
+                    to: "translations/[name].[fullhash][ext]",
                 },
                 {
                     from: "app/markup/msdtags.html",
@@ -158,11 +158,11 @@ module.exports = {
                 },
                 {
                     from: "app/translations/locale-*.json",
-                    to: "translations/[name][ext]",
+                    to: "translations/[name].[fullhash][ext]",
                 },
                 {
                     from: korpConfigDir + "/translations/*",
-                    to: "translations/[name][ext]",
+                    to: "translations/[name].[fullhash][ext]",
                 },
             ],
         }),
