@@ -187,4 +187,15 @@ module.exports = {
         globalObject: "this",
         clean: true,
     },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                // Vendor modules change less often, so clients can cache this chunk between releases.
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    chunks: "all",
+                },
+            },
+        },
+    },
 }
