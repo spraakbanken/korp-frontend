@@ -21,13 +21,10 @@ type ResultsTextController = IController & {
 }
 
 type ResultsTextScope = TabHashScope & {
-    loading: boolean
-    inData: TextTab
-    data: TextReaderDataContainer
     corpusObj: CorpusTransformed
-    closeTab: (idx: number, e: Event) => void
-    onentry: () => void
-    onexit: () => void
+    data: TextReaderDataContainer
+    selectedToken?: ReaderToken
+    wordClick: TextReaderWordHandler
 }
 
 export type TextReaderDataContainer = {
@@ -52,13 +49,7 @@ type Attrs = Record<string, string>
 
 type TextReaderData = Omit<ApiKwic, "tokens"> & ReaderTokenContainer
 
-type TextReaderScope = ResultsTextScope & {
-    selectedToken?: ReaderToken
-    wordClick: TextReaderWordHandler
-}
-
 angular.module("korpApp").component("resultsText", {
-    template: html`<div ng-if="!$ctrl.loading" text-reader="text-reader"></div>`,
     bindings: {
         active: "<",
         inData: "<",
@@ -67,8 +58,10 @@ angular.module("korpApp").component("resultsText", {
         setProgress: "<",
     },
     controller: [
+        "$compile",
+        "$element",
         "$scope",
-        function ($scope: ResultsTextScope) {
+        function ($compile: ICompileService, $element: JQLite, $scope: ResultsTextScope) {
             const $ctrl = this as ResultsTextController
 
             $ctrl.$onInit = () => {
@@ -79,12 +72,9 @@ angular.module("korpApp").component("resultsText", {
                 $scope.corpusObj = settings.corpora[corpus]
                 const textId = $ctrl.inData.sentenceData["text__id"]
                 getDataForReadingMode(corpus, textId)
-                    .then(function (data) {
+                    .then((data) => {
                         const document = prepareData(data.kwic[0], $scope.corpusObj)
-                        $scope.$apply(($scope: ResultsTextScope) => {
-                            $scope.data = { corpus, document, sentenceData: $ctrl.inData.sentenceData }
-                            $ctrl.setProgress(false, 100)
-                        })
+                        render(document)
                     })
                     .catch((err) => {
                         $scope.$apply(() => $ctrl.setProgress(false, 100))
@@ -94,48 +84,45 @@ angular.module("korpApp").component("resultsText", {
 
             $ctrl.$onChanges = (changes) => {
                 if (changes.active) {
-                    $scope.$broadcast(changes.active.currentValue ? "on-entry" : "on-exit")
+                    // Restore sidebar for previously selected token
+                    if (changes.active.currentValue && $scope.data && $scope.selectedToken) {
+                        $scope.wordClick($scope.selectedToken)
+                    }
+                    // Deselect word if exiting tab
+                    if (!changes.active.currentValue) {
+                        statemachine.send("DESELECT_WORD")
+                    }
                 }
+            }
+
+            function render(document: TextReaderData) {
+                $scope.$apply(($scope: ResultsTextScope) => {
+                    $scope.data = { corpus: $ctrl.inData.corpus, document, sentenceData: $ctrl.inData.sentenceData }
+                    $ctrl.setProgress(false, 100)
+                    const config = $scope.corpusObj.reading_mode
+                    const componentName = typeof config == "object" ? config.component : "standardReadingMode"
+                    const componentTag = kebabize(componentName)
+
+                    const template = `<${componentTag} data="data" word-click="wordClick"></${componentTag}>`
+                    $element.append($compile(template)($scope))
+
+                    $scope.selectedToken = undefined
+                })
+            }
+
+            $scope.wordClick = (token) => {
+                statemachine.send("SELECT_WORD", {
+                    sentenceData: $scope.data.document.structs,
+                    wordData: token.attrs,
+                    corpus: $scope.data.corpus,
+                    tokens: "currentSentence" in token ? token.currentSentence : undefined,
+                    inReadingMode: true,
+                })
+                $scope.selectedToken = token
             }
         },
     ],
 })
-
-angular.module("korpApp").directive("textReader", [
-    "$compile",
-    function ($compile: ICompileService) {
-        return {
-            scope: false,
-            link: function (scope: TextReaderScope, element) {
-                const config = scope.corpusObj.reading_mode
-                const componentName = typeof config == "object" ? config.component : "standardReadingMode"
-                const componentTag = kebabize(componentName)
-
-                const template = `<${componentTag} data="data" word-click="wordClick"></${componentTag}>`
-                element.append($compile(template)(scope))
-
-                scope.selectedToken = undefined
-
-                scope.wordClick = (token) => {
-                    statemachine.send("SELECT_WORD", {
-                        sentenceData: scope.data.document.structs,
-                        wordData: token.attrs,
-                        corpus: scope.data.corpus,
-                        tokens: "currentSentence" in token ? token.currentSentence : undefined,
-                        inReadingMode: true,
-                    })
-                    scope.selectedToken = token
-                }
-
-                scope.$on("on-entry", () => {
-                    if (scope.data && scope.selectedToken) {
-                        scope.wordClick(scope.selectedToken)
-                    }
-                })
-            },
-        }
-    },
-])
 
 function prepareData(kwic: ApiKwic, settings: CorpusTransformed): TextReaderData {
     const groupElement = typeof settings.reading_mode == "object" ? settings.reading_mode.group_element : undefined
