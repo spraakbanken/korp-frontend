@@ -14,7 +14,7 @@
   - Instead of `settings.time_data`, use `import { timeData } from "./timedata"`
   - Await `getTimeData()` before using `timeData` or `corpus.time`/`corpus.non_time`. The function is memoized, so repeated calls will not affect performance
 - Load Statistics and Word picture result when the tab is selected [#442](https://github.com/spraakbanken/korp-frontend/issues/442)
-- Remove redundant "medial part" option [#443](https://github.com/spraakbanken/korp-frontend/issues/443)
+- The "medial part" search option is logically linked to initial and final part [#443](https://github.com/spraakbanken/korp-frontend/issues/443)
 - The display options (hits per page, sort within corpora, compile based on) were moved into the KWIC and Statistics tab correspondingly
   - When these are changed, the search is re-triggered automatically
   - The "compile based on" input was relabeled as "group by"

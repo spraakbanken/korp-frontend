@@ -408,6 +408,8 @@
     "free_order_chk_help": "The search words can occur in any order, and not necessarily in sequence.",
     "prefix_chk": "initial part",
     "prefix_chk_help": "Allow words that begin with the search words.",
+    "midfix_chk": "medial part",
+    "midfix_chk_help": "Allow words that begin or end with the search words.",
     "suffix_chk": "final part",
     "suffix_chk_help": "Allow words that end with the search words.",
     "text_tab_header": "Reading mode",

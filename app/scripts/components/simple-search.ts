@@ -26,8 +26,6 @@ type SimpleSearchController = IController & {
     disableLemgramAutocomplete: boolean
     freeOrder: boolean
     freeOrderEnabled: boolean
-    prefix: boolean
-    suffix: boolean
     isCaseInsensitive: boolean
     currentText?: string
     lemgram?: string
@@ -41,6 +39,13 @@ type SimpleSearchController = IController & {
     updateFreeOrderEnabled: () => void
     doSearch: () => void
     onChange: (value: string, isPlain: boolean) => void
+}
+
+type SimpleSearchScope = IScope & {
+    prefix: boolean
+    midfix: boolean
+    suffix: boolean
+    onMidfixChange: () => void
 }
 
 angular.module("korpApp").component("simpleSearch", {
@@ -65,47 +70,48 @@ angular.module("korpApp").component("simpleSearch", {
                     </form>
                     <div class="flex gap-4">
                         <div class="flex flex-col gap-1">
-                            <div class="flex gap-2">
-                                <input id="prefixChk" type="checkbox" ng-model="$ctrl.prefix" />
-                                <label for="prefixChk">
-                                    {{'prefix_chk' | loc:$root.lang}}
-                                    <i
-                                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                        uib-tooltip="{{'prefix_chk_help' | loc:$root.lang}}"
-                                    ></i>
-                                </label>
-                            </div>
-                            <div class="flex gap-2">
-                                <input id="suffixChk" type="checkbox" ng-model="$ctrl.suffix" />
-                                <label for="suffixChk">
-                                    {{'suffix_chk' | loc:$root.lang}}
-                                    <i
-                                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                        uib-tooltip="{{'suffix_chk_help' | loc:$root.lang}}"
-                                    ></i>
-                                </label>
-                            </div>
+                            <label>
+                                <input type="checkbox" ng-model="prefix" />
+                                {{'prefix_chk' | loc:$root.lang}}
+                                <i
+                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                    uib-tooltip="{{'prefix_chk_help' | loc:$root.lang}}"
+                                ></i>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="midfix" ng-change="onMidfixChange()" />
+                                {{'midfix_chk' | loc:$root.lang}}
+                                <i
+                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                    uib-tooltip="{{'midfix_chk_help' | loc:$root.lang}}"
+                                ></i>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="suffix" />
+                                {{'suffix_chk' | loc:$root.lang}}
+                                <i
+                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                    uib-tooltip="{{'suffix_chk_help' | loc:$root.lang}}"
+                                ></i>
+                            </label>
                         </div>
                         <div class="flex flex-col gap-1">
-                            <div class="flex gap-2">
+                            <label>
                                 <input
-                                    id="freeOrderChk"
                                     type="checkbox"
                                     ng-model="$ctrl.freeOrder"
                                     ng-disabled="!$ctrl.freeOrderEnabled"
                                 />
-                                <label for="freeOrderChk">
-                                    {{'free_order_chk' | loc:$root.lang}}
-                                    <i
-                                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                        uib-tooltip="{{'free_order_chk_help' | loc:$root.lang}}"
-                                    ></i>
-                                </label>
-                            </div>
-                            <div class="flex gap-2">
-                                <input id="caseChk" type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
-                                <label for="caseChk"> {{'case_insensitive' | loc:$root.lang}} </label>
-                            </div>
+                                {{'free_order_chk' | loc:$root.lang}}
+                                <i
+                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                    uib-tooltip="{{'free_order_chk_help' | loc:$root.lang}}"
+                                ></i>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
+                                {{'case_insensitive' | loc:$root.lang}}
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -150,7 +156,7 @@ angular.module("korpApp").component("simpleSearch", {
         function (
             $location: LocationService,
             $rootScope: RootScope,
-            $scope: IScope,
+            $scope: SimpleSearchScope,
             $timeout: ITimeoutService,
             $uibModal: ui.bootstrap.IModalService,
             compareSearches: CompareSearches,
@@ -172,12 +178,21 @@ angular.module("korpApp").component("simpleSearch", {
             ctrl.freeOrder = false
             /** Whether the "free order" option is applicable. */
             ctrl.freeOrderEnabled = false
-            ctrl.prefix = false
-            ctrl.suffix = false
             ctrl.isCaseInsensitive = false
+
+            $scope.prefix = false
+            $scope.midfix = false
+            $scope.suffix = false
 
             if (settings.input_case_insensitive_default) {
                 $location.search("isCaseInsensitive", "")
+            }
+
+            $scope.$watch("prefix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
+            $scope.$watch("suffix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
+            $scope.onMidfixChange = () => {
+                $scope.prefix = $scope.midfix
+                $scope.suffix = $scope.midfix
             }
 
             // React to changes in URL params
@@ -186,17 +201,22 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             watchParam("in_order", (value) => (ctrl.freeOrder = value != null))
-            watchParam("prefix", (value) => (ctrl.prefix = value != null))
-            watchParam("suffix", (value) => (ctrl.suffix = value != null))
+            watchParam("prefix", (value) => ($scope.prefix = value != null))
+            watchParam("suffix", (value) => ($scope.suffix = value != null))
             watchParam("mid_comp", (value) => {
-                if (value != null) ctrl.prefix = ctrl.suffix = true
+                // Deprecated param. Translate to prefix/suffix.
+                if (value != null) {
+                    $location.search("mid_comp", null)
+                    $location.search("prefix", true)
+                    $location.search("suffix", true)
+                }
             })
             watchParam("isCaseInsensitive", (value) => (ctrl.isCaseInsensitive = value != null))
 
             ctrl.updateSearch = function () {
                 $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
-                $location.search("prefix", ctrl.prefix ? true : null)
-                $location.search("suffix", ctrl.suffix ? true : null)
+                $location.search("prefix", $scope.prefix ? true : null)
+                $location.search("suffix", $scope.suffix ? true : null)
                 $location.search("isCaseInsensitive", ctrl.isCaseInsensitive ? true : null)
                 $location.search("within", null)
                 $location.replace()
@@ -216,8 +236,8 @@ angular.module("korpApp").component("simpleSearch", {
                 if (currentText) {
                     currentText.split(/\s+/).forEach((word) => {
                         let value = regescape(word)
-                        if (ctrl.prefix) value = `${value}.*`
-                        if (ctrl.suffix) value = `.*${value}`
+                        if ($scope.prefix) value = `${value}.*`
+                        if ($scope.suffix) value = `.*${value}`
                         const condition: Condition = {
                             type: "word",
                             op: "=",
@@ -229,10 +249,10 @@ angular.module("korpApp").component("simpleSearch", {
                 } else if (ctrl.lemgram) {
                     const conditions: Condition[] = [{ type: "lex", op: "contains", val: ctrl.lemgram }]
                     // The complemgram attribute is a set of strings like: <part1>+<part2>+<...>:<probability>
-                    if (ctrl.prefix) {
+                    if ($scope.prefix) {
                         conditions.push({ type: "complemgram", op: "contains", val: `${ctrl.lemgram}\\+.*` })
                     }
-                    if (ctrl.suffix) {
+                    if ($scope.suffix) {
                         conditions.push({ type: "complemgram", op: "contains", val: `.*\\+${ctrl.lemgram}:.*` })
                     }
                     query.push({ and_block: [conditions] })
