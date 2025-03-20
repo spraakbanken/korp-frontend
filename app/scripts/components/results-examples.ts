@@ -42,13 +42,13 @@ angular.module("korpApp").component("resultsExamples", {
         <div class="results-kwic" ng-if="!error" ng-class="{reading_mode: isReading, loading: $ctrl.loading}">
             <kwic
                 aborted="aborted"
+                aligned="!isReading"
                 loading="$ctrl.loading"
                 active="$ctrl.isActive"
                 hits-in-progress="hitsInProgress"
                 hits="hits"
                 kwic-input="kwic"
                 corpus-hits="corpusHits"
-                is-reading="isReading"
                 page="page"
                 page-event="pageChange"
                 on-reading-change="toggleReading"
