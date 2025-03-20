@@ -46,33 +46,29 @@ angular.module("korpApp").component("wordPicture", {
 
         <div ng-if="$ctrl.data.length">
             <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
-                <div>
-                    <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" />
-                    <label for="wordclassChk"> {{'show_wordclass' | loc:$root.lang}}</label>
-                </div>
-                <div>
-                    <select id="numberHitsSelect" ng-model="$ctrl.limit">
-                        <option ng-repeat="option in $ctrl.limitOptions" value="{{option}}">
-                            {{'word_pic_show_some' | loc:$root.lang}} {{option}} {{'word_pic_hits' | loc:$root.lang}}
-                        </option>
-                    </select>
-                </div>
+                <label>
+                    <input ng-model="$ctrl.showWordClass" type="checkbox" />
+                    {{'show_wordclass' | loc:$root.lang}}
+                </label>
+                <select ng-model="$ctrl.limit">
+                    <option ng-repeat="option in $ctrl.limitOptions" value="{{option}}">
+                        {{'word_pic_show_some' | loc:$root.lang}} {{option}} {{'word_pic_hits' | loc:$root.lang}}
+                    </option>
+                </select>
                 <div class="flex flex-wrap gap-2">
-                    <label for="wordpic-sort">{{'sort_by' | loc:$root.lang}}:</label>
-                    <div>
-                        <input type="radio" id="wordpic-sort-mi" value="mi" ng-model="$root.wordpicSortProp" />
-                        <label for="wordpic-sort-mi">
-                            {{'stat_lmi' | loc:$root.lang}}
-                            <i
-                                class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                uib-tooltip="{{'stat_lmi_help' | loc:$root.lang}}"
-                            ></i>
-                        </label>
-                    </div>
-                    <div>
-                        <input type="radio" id="wordpic-sort-freq" value="freq" ng-model="$root.wordpicSortProp" />
-                        <label for="wordpic-sort-freq"> {{'stat_frequency' | loc:$root.lang}}</label>
-                    </div>
+                    {{'sort_by' | loc:$root.lang}}:
+                    <label>
+                        <input type="radio" value="mi" ng-model="$root.wordpicSortProp" />
+                        {{'stat_lmi' | loc:$root.lang}}
+                        <i
+                            class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                            uib-tooltip="{{'stat_lmi_help' | loc:$root.lang}}"
+                        ></i>
+                    </label>
+                    <label>
+                        <input type="radio" value="freq" ng-model="$root.wordpicSortProp" />
+                        {{'stat_frequency' | loc:$root.lang}}
+                    </label>
                 </div>
             </div>
             <div class="content_target">

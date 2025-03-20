@@ -75,7 +75,6 @@ type KwicController = IController & {
 }
 
 type KwicScope = IScope & {
-    uid: string
     hpp: string
     hppOptions: string[]
     updateHpp: () => void
@@ -100,44 +99,30 @@ angular.module("korpApp").component("kwic", {
         <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
             <div class="flex flex-wrap gap-2">
                 {{ "context" | loc:$root.lang }}:
-                <div>
-                    <input
-                        type="radio"
-                        ng-model="isReading"
-                        ng-value="false"
-                        ng-change="updateReading()"
-                        id="{{ uid }}-context-kwic"
-                    />
-                    <label for="{{ uid }}-context-kwic">{{'context_kwic' | loc:$root.lang}}</label>
-                </div>
-                <div>
-                    <input
-                        type="radio"
-                        ng-model="isReading"
-                        ng-value="true"
-                        ng-change="updateReading()"
-                        id="{{ uid }}-context-reading"
-                    />
-                    <label for="{{ uid }}-context-reading">{{'context_reading' | loc:$root.lang}}</label>
-                </div>
+                <label>
+                    <input type="radio" ng-model="isReading" ng-value="false" ng-change="updateReading()" />
+                    {{'context_kwic' | loc:$root.lang}}
+                </label>
+                <label>
+                    <input type="radio" ng-model="isReading" ng-value="true" ng-change="updateReading()" />
+                    {{'context_reading' | loc:$root.lang}}
+                </label>
             </div>
             <div ng-show="$ctrl.showSearchOptions">
-                <label for="{{ uid }}-kwic-hpp" class="pr-1">{{ "hits_per_page" | loc:$root.lang }}:</label>
-                <select
-                    id="{{ uid }}-kwic-hpp"
-                    ng-change="updateHpp()"
-                    ng-model="hpp"
-                    ng-options="x for x in hppOptions"
-                ></select>
+                <label>
+                    {{ "hits_per_page" | loc:$root.lang }}:
+                    <select ng-change="updateHpp()" ng-model="hpp" ng-options="x for x in hppOptions"></select>
+                </label>
             </div>
             <div ng-show="$ctrl.showSearchOptions">
-                <label for="{{ uid }}-kwic-sort" class="pr-1">{{ "sort_default" | loc:$root.lang }}:</label>
-                <select
-                    id="{{ uid }}-kwic-sort"
-                    ng-change="updateSort()"
-                    ng-model="sort"
-                    ng-options="k as v | loc:$root.lang for (k, v) in sortOptions"
-                ></select>
+                <label>
+                    {{ "sort_default" | loc:$root.lang }}:
+                    <select
+                        ng-change="updateSort()"
+                        ng-model="sort"
+                        ng-options="k as v | loc:$root.lang for (k, v) in sortOptions"
+                    ></select>
+                </label>
             </div>
         </div>
 
@@ -319,7 +304,6 @@ angular.module("korpApp").component("kwic", {
             $scope.sort = $location.search().sort || ""
             $scope.hppOptions = settings["hits_per_page_values"].map(String)
             $scope.hpp = String($location.search().hpp || settings["hits_per_page_default"])
-            $scope.uid = _.uniqueId("kwic-")
 
             const selectionManager = new SelectionManager()
 

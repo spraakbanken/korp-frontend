@@ -52,12 +52,10 @@ h3 {
   font-size: 1.1em;
 }
 
-input[type=text] {
-  padding: 1px 2px;
-}
 input, select {
   border: 1px solid #bbb;
   background-color: white;
+  padding: 1px 2px;
   cursor: pointer;
 }
 input:not([type]), input[type=text] {
