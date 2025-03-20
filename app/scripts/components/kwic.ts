@@ -41,10 +41,10 @@ type KwicController = IController & {
     active: boolean
     hitsInProgress: number
     hits: number
-    aligned: boolean
+    context: boolean
+    onContextChange: () => void
     page: number
     pageEvent: (page: number) => void
-    onReadingChange: () => void
     hitsPerPage: number
     prevParams: any
     prevUrl?: string
@@ -78,8 +78,8 @@ type KwicScope = IScope & {
     hpp: string
     hppOptions: string[]
     updateHpp: () => void
-    aligned: boolean
-    updateAligned: () => void
+    context: boolean
+    updateContext: () => void
     sort: SortMethod
     sortOptions: Record<SortMethod, string>
     updateSort: () => void
@@ -98,8 +98,12 @@ angular.module("korpApp").component("kwic", {
     template: html`
         <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
             <label>
-                <input type="checkbox" ng-model="aligned" ng-value="false" ng-change="updateAligned()" />
-                {{'context_kwic' | loc:$root.lang}} (<abbr title="keyword in context">KWIC</abbr>)
+                <input type="checkbox" ng-model="context" ng-value="false" ng-change="updateContext()" />
+                {{'show_context' | loc:$root.lang}}
+                <i
+                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                    uib-tooltip="{{'show_context_help' | loc:$root.lang}}"
+                ></i>
             </label>
             <div ng-show="$ctrl.showSearchOptions">
                 <label>
@@ -256,14 +260,14 @@ angular.module("korpApp").component("kwic", {
     `,
     bindings: {
         aborted: "<",
-        aligned: "<",
+        context: "<",
         loading: "<",
         active: "<",
         hitsInProgress: "<",
         hits: "<",
+        onContextChange: "<",
         page: "<",
         pageEvent: "<",
-        onReadingChange: "<",
         hitsPerPage: "<",
         prevParams: "<",
         prevUrl: "<",
@@ -307,8 +311,8 @@ angular.module("korpApp").component("kwic", {
             $ctrl.$onChanges = (changeObj) => {
                 if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
                     $ctrl.kwic = massageData($ctrl.kwicInput)
-                    $ctrl.useContext = !$ctrl.aligned || $location.search()["in_order"] != null
-                    if ($ctrl.aligned) {
+                    $ctrl.useContext = $ctrl.context || $location.search()["in_order"] != null
+                    if (!$ctrl.context) {
                         $timeout(() => {
                             centerScrollbar()
                             $element.find(".match").children().first().click()
@@ -323,7 +327,7 @@ angular.module("korpApp").component("kwic", {
                     }
 
                     // TODO Do this when shown the first time (e.g. not if loading with stats tab active)
-                    if (settings.parallel && $ctrl.aligned) {
+                    if (settings.parallel && !$ctrl.context) {
                         $timeout(() => alignParallelSentences())
                     }
                     if ($ctrl.kwic.length == 0) {
@@ -364,7 +368,7 @@ angular.module("korpApp").component("kwic", {
                     }
                 }
 
-                if ("aligned" in changeObj) $scope.aligned = !!$ctrl.aligned
+                if ("context" in changeObj) $scope.context = !!$ctrl.context
             }
 
             $ctrl.onKwicClick = (event) => {
@@ -398,8 +402,8 @@ angular.module("korpApp").component("kwic", {
                 (val) => ($scope.sort = val || "")
             )
 
-            $scope.updateAligned = _.debounce(() => {
-                if ($scope.aligned != $ctrl.aligned) $ctrl.onReadingChange()
+            $scope.updateContext = _.debounce(() => {
+                if ($scope.context != $ctrl.context) $ctrl.onContextChange()
             }, UPDATE_DELAY)
 
             $scope.updateHpp = () => {
@@ -814,9 +818,9 @@ angular.module("korpApp").component("kwic", {
             function selectUpOrDown($neighborSentence: JQLite, $searchwords: JQLite): JQLite {
                 const fallback = $neighborSentence.find(".word:last")
                 const currentX = selectionManager.selected.offset()!.left + selectionManager.selected.width()! / 2
-                return $ctrl.aligned
-                    ? getWordAt(currentX, $neighborSentence)
-                    : getFirstAtCoor(currentX, $searchwords, fallback)
+                return $ctrl.context
+                    ? getFirstAtCoor(currentX, $searchwords, fallback)
+                    : getWordAt(currentX, $neighborSentence)
             }
 
             function getFirstAtCoor(x: number, words: JQLite, fallback: JQLite) {
