@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IController, IScope, ITimeoutService } from "angular"
+import angular, { ICompileService, IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import { html, regescape } from "@/util"
 import { MapTab, RootScope } from "@/root-scope.types"
@@ -8,9 +8,8 @@ import { AppSettings } from "@/settings/app-settings.types"
 import { MapRequestResult } from "@/backend/backend"
 import { MapResult } from "@/map_services"
 import { WithinParameters } from "@/backend/types"
-import { Marker, MarkerEvent, MarkerGroup } from "@/components/result-map"
+import type { Marker, MarkerEvent, MarkerGroup } from "@/components/result-map"
 import "@/components/korp-error"
-import "@/components/result-map"
 
 type ResultsMapController = IController & {
     active: boolean
@@ -22,6 +21,7 @@ type ResultsMapController = IController & {
 type ResultsMapScope = IScope & {
     center: AppSettings["map_center"]
     error?: string
+    hasComponent?: boolean
     selectedGroups: string[]
     markerGroups?: Record<string, MarkerGroup>
     numResults: number
@@ -57,14 +57,19 @@ angular.module("korpApp").component("resultsMap", {
                     </label>
                 </div>
             </div>
-            <result-map
-                center="center"
-                markers="markerGroups"
-                marker-callback="newKWICSearch"
-                selected-groups="selectedGroups"
-                rest-color="'#9b9fa5'"
-                use-clustering="useClustering"
-            ></result-map>
+            <div ng-if="hasComponent">
+                <dynamic-wrapper
+                    name="result-map"
+                    payload="{
+                        center: center,
+                        markers: markerGroups,
+                        markerCallback: newKWICSearch,
+                        selectedGroups: selectedGroups,
+                        restColor: '#9b9fa5',
+                        useClustering: useClustering,
+                    }"
+                ></dynamic-wrapper>
+            </div>
         </div>
     </div>`,
     bindings: {
@@ -81,19 +86,22 @@ angular.module("korpApp").component("resultsMap", {
             const $ctrl = this as ResultsMapController
 
             $scope.center = settings["map_center"]
+            $scope.hasComponent = undefined
             $scope.selectedGroups = []
             $scope.markerGroups = {}
             $scope.numResults = 0
             $scope.useClustering = false
 
+            const componentPromise = import(/* webpackChunkName: "map" */ "@/components/result-map")
             const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
 
             $ctrl.$onInit = () => {
                 $ctrl.setProgress(true, 0)
 
-                Promise.all([rickshawPromise, $ctrl.promise]).then(
-                    ([Rickshaw, result]) => {
+                Promise.all([$ctrl.promise, componentPromise, rickshawPromise]).then(
+                    ([result, component, Rickshaw]) => {
                         $scope.$apply(($scope: ResultsMapScope) => {
+                            $scope.hasComponent = true
                             $ctrl.setProgress(false, 100)
                             $scope.numResults = 20
                             $scope.markerGroups = result ? getMarkerGroups(Rickshaw, result) : undefined
@@ -200,6 +208,37 @@ angular.module("korpApp").component("resultsMap", {
                 }
                 const readingMode = queryData.label === "paragraph__geocontext"
                 $timeout(() => $rootScope.kwicTabs.push({ queryParams: opts, readingMode }), 0)
+            }
+        },
+    ],
+})
+
+// https://stackoverflow.com/a/53398323/1750365
+type DynamicWrapperScope = IScope & {
+    name: string
+    payload: Record<string, unknown>
+}
+angular.module("korpApp").component("dynamicWrapper", {
+    bindings: {
+        name: "@",
+        payload: "=?",
+    },
+    controller: [
+        "$compile",
+        "$element",
+        "$scope",
+        function ($compile: ICompileService, $element: JQLite, $scope: DynamicWrapperScope) {
+            const $ctrl = this
+            $ctrl.$onInit = () => {
+                const scope = $scope.$new()
+                for (const key in $ctrl.payload || {}) {
+                    ;(scope as unknown as Record<string, unknown>)[key] = $ctrl.payload[key]
+                }
+                const attrs = Object.keys($ctrl.payload)
+                    .map((key) => `${key}="${key}"`)
+                    .join(" ")
+                const template = `<${$ctrl.name} ${attrs}></${$ctrl.name}>`
+                $element.append($compile(template)(scope))
             }
         },
     ],

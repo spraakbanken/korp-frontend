@@ -8,6 +8,10 @@ import "@/../styles/map.scss"
 import { AppSettings } from "@/settings/app-settings.types"
 import { WithinParameters } from "@/backend/types"
 import { Point } from "@/map_services"
+import "leaflet/dist/leaflet.css"
+import "leaflet.markercluster"
+import "leaflet.markercluster/dist/MarkerCluster.css"
+import "leaflet-providers"
 
 type ResultMapController = IController & {
     center: AppSettings["map_center"]
