@@ -3,7 +3,7 @@ import { loc } from "@/i18n"
 import { RootScope } from "@/root-scope.types"
 import { SearchHistoryService } from "@/services/search-history"
 import { SearchesService } from "@/services/searches"
-import { LocationService, SearchParams } from "@/urlparams"
+import { getSearchParamNames, LocationService, SearchParams } from "@/urlparams"
 import { html, splitFirst, unregescape } from "@/util"
 import angular, { IScope } from "angular"
 import "@/services/search-history"
@@ -70,9 +70,12 @@ angular.module("korpApp").component("searchHistory", {
             $scope.$watch("value", () => {
                 if (!$scope.value) return
                 if (isSearchOption($scope.value)) {
-                    $location.search($scope.value.params)
-                    // The Searches watcher stupidly only watches the `search` param, so trigger it explicitly
-                    searches.triggerSearch()
+                    // Set used params and reset unused params to their default values.
+                    const params = $scope.value.params
+                    getSearchParamNames().forEach((key) => $location.search(key, params[key] ?? null))
+
+                    // Wait for param changes like corpus selection to propagate to app state
+                    $scope.$applyAsync(() => searches.doSearch())
                 } else if ($scope.value.id == "_clear") {
                     searchHistory.clear()
                     resetValue()

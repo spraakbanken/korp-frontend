@@ -66,13 +66,12 @@ förekommer i exakt den ordning man angivit, och direkt efter varandra.
 Genom att kryssa i rutan *i fri följd* söks det i stället efter meningar som innehåller samtliga
 sökord, i valfri ordning och inte nödvändigtvis intill varandra.
 
-**Förled, mellanled och efterled**
+**Förled och efterled**
 
-Kryssrutorna *förled*, *mellanled* och *efterled* utökar ens sökning till att även inkludera ord där det sökta ordet
+Kryssrutorna *förled* och *efterled* utökar ens sökning till att även inkludera ord där det sökta ordet
 eller orden förekommer som del av ett annat ord.
 
-Vid vanlig ordsökning betyder detta helt enkelt att man söker på ord som innehåller den givna teckensekvensen i början,
-var som helst eller i slutet.
+Vid vanlig ordsökning betyder detta helt enkelt att man söker på ord som innehåller den givna teckensekvensen i början eller i slutet.
 
 Vid lemgramsökning används i stället en sammansättningsanalys som varje ord genomgått.
 
@@ -172,21 +171,6 @@ För att läsa mer om frågespråket, se:
 - [Att söka i Korp med CQP och Regexp – en introduktion (pdf)](https://www.gu.se/sites/default/files/2021-03/Att%20so%CC%88ka%20i%20Korp%20med%20CQP%20och%20Regexp.pdf) (Klas Hjortstam, 2018)
 - [CQP Interface and Query Language Manual (pdf)](https://cwb.sourceforge.io/files/CQP_Manual.pdf) (Stephanie Evert & The CWB Development Team, 2022)
 
-### Visningsalternativ
-
-Oberoende av vilken version av sökgränssnittet man använder så finns det en rad med *visningsalternativ*, placerade längst ner i en rand
-under sökfälten. Här kan man ställa in olika visningsalternativ för sökresultatet. För KWIC:en kan man välja antalet träffar
-per sida, samt sorteringsordning. Sorteringen kan ske antingen efter höger- eller vänsterkontext, på själva träffen i sig, eller slumpvis. Sorteringen sker
-enbart inom varje korpus. Med standardvalet "förekomst" kommer träffarna visas i den ordning
-de förekommer i korpusen, vilket i många fall är en delvis slumpvis ordning av upphovsrättsliga skäl.
-
-För statistiken går det att välja vilket attribut statistiken ska sammanställas på.
-
-Det är även möjligt att inaktivera vissa funktioner i resultatvyn, som t.ex. statistik, om man inte är intresserad av statistik och vill
-snabba upp sina sökningar något.
-
-![Sökinställningar](images/sokval.png)
-
 ## Sökresultat
 
 Resultatvyn, som visas först efter att en sökning har utförts, är uppdelad i tre olika avdelningar: *KWIC*, *Statistik* och *Ordbild*.
@@ -195,6 +179,11 @@ Resultatvyn, som visas först efter att en sökning har utförts, är uppdelad i
 
 KWIC, som står för "keyword in context", visar det sökta ordet eller orden i sin kontext, vanligtvis en mening. Sökresultaten, om de är många, är
 uppdelade på ett antal sidor, och för att bläddra mellan sidorna använder man tangenterna *f* respektive *n* på tangentbordet.
+
+Bland alternativen kan man välja antalet träffar per sida, samt sorteringsordning.
+Sorteringen kan ske antingen efter höger- eller vänsterkontext, på själva träffen i sig, eller slumpvis.
+Sorteringen sker enbart inom varje korpus.
+Med standardvalet "förekomst" kommer träffarna visas i den ordning de förekommer i korpusen, vilket i många fall är en delvis slumpvis ordning av upphovsrättsliga skäl.
 
 Förutsatt att man har sökt i mer än en korpus, kommer det till höger om texten som anger hur många träffar sökningen gav finnas en färgad remsa. Denna
 visar med alternerande färger storleksförhållandet mellan träffmängden i de olika korpusarna, och genom att föra musen över dem ser man vilken
@@ -227,8 +216,8 @@ När ett ord är markerat markeras även dess syntaktiska huvud i samma mening, 
 Statistik-fliken visar en tabell där varje kolumn motsvarar en korpus, och raderna utgörs av de olika värden som sökningen matchat. Som standard
 sammanställs statistiken på ordformer, och vid en enkel
 sökning på endast ett ord kommer det därför bara finnas en rad, medan en sökning på ett lemgram i stället ger en rad per ordform som förekommer i materialet.
-Bland visningsalternativen kan man välja att sammanställa statistiken på andra attribut än ordform, till exempel ordklass eller något textattribut, samt om
-sammanställningen ska vara skiftlägesberoende eller ej.
+Man kan även välja att sammanställa statistiken på andra attribut än ordform, till exempel ordklass eller något textattribut.
+För vissa attribut kan man välja om sammanställningen ska vara skiftlägesberoende eller ej.
 
 Genom att klicka på sökträfftexten i en resultatrad i tabellen, öppnas en ny KWIC-flik med de meningar som legat till grund för just den statistikraden.
 
@@ -273,11 +262,12 @@ verbet, och för ett substantiv visas utmärkande attribut, och verb som substan
 
 ![Ordbilden i Korp](images/ordbild.png)
 
-Som standard visas max 15 ord för varje relation, men till höger på sidan finns det inställningsmöjligheter för att visa fler.
-Siffran intill varje ord uppger hur många gånger just den relationen finns i det valda materialet. Listorna
-är ordnade efter ett Lexicographer's Mutual Information-värde.
+Intill varje relaterat ord finns ett mått på sambandet till sökordet inom det valda materialet.
+Du kan välja att visa och sortera på absolut frekvens (antal) eller Lexicographer's Mutual Information (LMI).
+LMI är ett värde som mäter frekvensen av ett givet ordpar i förhållande till frekvenserna av varje ord i paret.
+På så vis reduceras ord som samförekommer ofta bara för att de är vanliga i allmänhet, såsom "vara" och "ha".
 
-Genom att klicka på den lilla ikonen intill varje ord kan man få fram en ny KWIC-flik med alla de meningar i vilka vald relation förekommer.
+Genom att klicka på ett ord i tabellen kan man få fram en ny KWIC-flik med alla de meningar i vilka vald relation förekommer.
 
 ## Jämförelser
 

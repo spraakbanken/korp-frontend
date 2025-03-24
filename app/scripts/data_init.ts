@@ -3,7 +3,6 @@ import _ from "lodash"
 import memoize from "lodash/memoize"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import timeProxyFactory from "@/backend/time-proxy"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
@@ -12,6 +11,9 @@ import { Labeled, LangLocMap, LocMap } from "./i18n/types"
 import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
 import { korpRequest } from "./backend/common"
+
+// @ts-ignore
+const BUILD_HASH = __webpack_hash__
 
 // Using memoize, this will only fetch once and then return the same promise when called again.
 // TODO it would be better only to load additional languages when there is a language change
@@ -22,7 +24,7 @@ export const initLocales = memoize(async () => {
         const lang = langObj.value
         locData[lang] = {}
         for (const pkg of ["locale", "corpora"]) {
-            const file = `translations/${pkg}-${lang}.json`
+            const file = `translations/${pkg}-${lang}.${BUILD_HASH}.json`
             const def = fetch(file)
                 .then(async (response) => {
                     if (response.status >= 300) throw new Error()
@@ -57,36 +59,6 @@ async function getInfoData(corpusIds: string[]): Promise<InfoData> {
             (name) => name.indexOf("__") !== -1
         ),
     }))
-}
-
-async function getTimeData(): Promise<[[number, number][], number]> {
-    const timeProxy = timeProxyFactory.create()
-    const args = await timeProxy.makeRequest()
-
-    let [dataByCorpus, all_timestruct, rest] = args
-
-    if (all_timestruct.length == 0) {
-        return [[], 0]
-    }
-
-    // this adds data to the corpora in settings
-    for (let corpus in dataByCorpus) {
-        let struct = dataByCorpus[corpus]
-        if (corpus !== "time") {
-            const cor = settings.corpora[corpus.toLowerCase()]
-            timeProxy.expandTimeStruct(struct)
-            cor.non_time = struct[""]
-            struct = _.omit(struct, "")
-            cor.time = struct
-            if (_.keys(struct).length > 1) {
-                if (cor.common_attributes == null) {
-                    cor.common_attributes = {}
-                }
-                cor.common_attributes.date_interval = true
-            }
-        }
-    }
-    return [all_timestruct, rest]
 }
 
 async function getConfig(): Promise<Config> {
@@ -247,12 +219,7 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
         )
     }
 
-    // if the previous config calls didn't yield any corpora, don't ask for time
     if (!_.isEmpty(settings.corpora)) {
         setInitialCorpora()
-
-        if (settings.has_timespan) {
-            settings.time_data = await getTimeData()
-        }
     }
 }

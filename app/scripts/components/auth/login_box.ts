@@ -11,7 +11,7 @@ export const loginBoxComponent: IComponentOptions = {
     template: html`
         <div class="modal-header login-modal-header">
             <span class="login-header">{{'log_in' | loc:$root.lang}}</span>
-            <span ng-click="$ctrl.close()" class="close-x">×</span>
+            <span ng-click="$ctrl.dismiss()" class="close-x">×</span>
         </div>
         <div id="login_popup" class="modal-body">
             <form ng-submit="$ctrl.loginSubmit()">
@@ -43,7 +43,8 @@ export const loginBoxComponent: IComponentOptions = {
         </div>
     `,
     bindings: {
-        closeClick: "&",
+        onClose: "&",
+        onDismiss: "&",
     },
     controller: [
         "$timeout",
@@ -80,8 +81,12 @@ export const loginBoxComponent: IComponentOptions = {
 
             $ctrl.close = function () {
                 $ctrl.loginErr = false
-                $ctrl.closeClick()
-                // and do what? send to parent?
+                $ctrl.onClose()
+            }
+
+            $ctrl.dismiss = () => {
+                $ctrl.loginErr = false
+                $ctrl.onDismiss()
             }
         },
     ],

@@ -150,7 +150,7 @@ module.exports = {
                 },
                 {
                     from: "app/translations/angular-locale_*.js",
-                    to: "translations/[name][ext]",
+                    to: "translations/[name].[fullhash][ext]",
                 },
                 {
                     from: "app/markup/msdtags.html",
@@ -158,11 +158,11 @@ module.exports = {
                 },
                 {
                     from: "app/translations/locale-*.json",
-                    to: "translations/[name][ext]",
+                    to: "translations/[name].[fullhash][ext]",
                 },
                 {
                     from: korpConfigDir + "/translations/*",
-                    to: "translations/[name][ext]",
+                    to: "translations/[name].[fullhash][ext]",
                 },
             ],
         }),
@@ -186,5 +186,16 @@ module.exports = {
         path: path.resolve(__dirname, "dist"),
         globalObject: "this",
         clean: true,
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                // Vendor modules change less often, so clients can cache this chunk between releases.
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    chunks: "all",
+                },
+            },
+        },
     },
 }

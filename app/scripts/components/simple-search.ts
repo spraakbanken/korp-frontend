@@ -12,12 +12,13 @@ import "@/services/searches"
 import "@/components/autoc"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
-import { LocationService } from "@/urlparams"
+import { HashParams, LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
 import { LexiconsRelatedWords, relatedWordSearch } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
 import { CqpSearchEvent } from "@/statemachine/types"
+import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 
 type SimpleSearchController = IController & {
     input: string
@@ -25,9 +26,6 @@ type SimpleSearchController = IController & {
     disableLemgramAutocomplete: boolean
     freeOrder: boolean
     freeOrderEnabled: boolean
-    prefix: boolean
-    mid_comp: boolean
-    suffix: boolean
     isCaseInsensitive: boolean
     currentText?: string
     lemgram?: string
@@ -43,70 +41,106 @@ type SimpleSearchController = IController & {
     onChange: (value: string, isPlain: boolean) => void
 }
 
+type SimpleSearchScope = IScope & {
+    prefix: boolean
+    midfix: boolean
+    suffix: boolean
+    onMidfixChange: () => void
+}
+
 angular.module("korpApp").component("simpleSearch", {
     template: html`
-        <div id="korp-simple">
-            <global-filters lang="lang"></global-filters>
-            <div class="sm:flex justify-between">
-                <form>
-                    <autoc
-                        id="simple_text"
-                        input="$ctrl.input"
-                        is-raw-input="$ctrl.isRawInput"
-                        type="lemgram"
-                        disable-lemgram-autocomplete="$ctrl.disableLemgramAutocomplete"
-                        on-change="$ctrl.onChange(output, isRawOutput)"
-                    ></autoc>
-                    <search-submit
-                        on-search="$ctrl.updateSearch()"
-                        on-search-save="$ctrl.onSearchSave(name)"
-                    ></search-submit>
-                    <div class="opts">
-                        <input
-                            id="freeOrderChk"
-                            type="checkbox"
-                            ng-model="$ctrl.freeOrder"
-                            ng-disabled="!$ctrl.freeOrderEnabled"
-                        />
-                        <label for="freeOrderChk"> {{'free_order_chk' | loc:$root.lang}}</label>
-                        <span> {{'and' | loc:$root.lang}} </span>
-                        <span> {{'and_include' | loc:$root.lang}} </span>
-                        <input id="prefixChk" type="checkbox" ng-model="$ctrl.prefix" />
-                        <label for="prefixChk"> {{'prefix_chk' | loc:$root.lang}}</label>
-                        <input id="midChk" type="checkbox" ng-model="$ctrl.mid_comp" />
-                        <label for="midChk"> {{'compound_middle' | loc:$root.lang}} </label>
-                        <input id="suffixChk" type="checkbox" ng-model="$ctrl.suffix" />
-                        <label for="suffixChk"> {{'suffix_chk' | loc:$root.lang}} </label>
-                        <span> {{'and' | loc:$root.lang}} </span>
-                        <input id="caseChk" type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
-                        <label for="caseChk"> {{'case_insensitive' | loc:$root.lang}} </label>
+        <div id="korp-simple" class="flex flex-wrap items-center gap-4">
+            <div>
+                <global-filters lang="lang"></global-filters>
+                <div class="flex flex-wrap items-center gap-4">
+                    <form class="shrink-0">
+                        <autoc
+                            id="simple_text"
+                            input="$ctrl.input"
+                            is-raw-input="$ctrl.isRawInput"
+                            type="lemgram"
+                            disable-lemgram-autocomplete="$ctrl.disableLemgramAutocomplete"
+                            on-change="$ctrl.onChange(output, isRawOutput)"
+                        ></autoc>
+                        <search-submit
+                            on-search="$ctrl.updateSearch()"
+                            on-search-save="$ctrl.onSearchSave(name)"
+                        ></search-submit>
+                    </form>
+                    <div class="flex gap-4">
+                        <div class="flex flex-col gap-1">
+                            <label>
+                                <input type="checkbox" ng-model="prefix" />
+                                {{'prefix_chk' | loc:$root.lang}}
+                                <i
+                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                    uib-tooltip="{{'prefix_chk_help' | loc:$root.lang}}"
+                                ></i>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="midfix" ng-change="onMidfixChange()" />
+                                {{'midfix_chk' | loc:$root.lang}}
+                                <i
+                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                    uib-tooltip="{{'midfix_chk_help' | loc:$root.lang}}"
+                                ></i>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="suffix" />
+                                {{'suffix_chk' | loc:$root.lang}}
+                                <i
+                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                    uib-tooltip="{{'suffix_chk_help' | loc:$root.lang}}"
+                                ></i>
+                            </label>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    ng-model="$ctrl.freeOrder"
+                                    ng-disabled="!$ctrl.freeOrderEnabled"
+                                />
+                                {{'free_order_chk' | loc:$root.lang}}
+                                <i
+                                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                    uib-tooltip="{{'free_order_chk_help' | loc:$root.lang}}"
+                                ></i>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="$ctrl.isCaseInsensitive" />
+                                {{'case_insensitive' | loc:$root.lang}}
+                            </label>
+                        </div>
                     </div>
-                </form>
-                <div id="similar_wrapper" ng-show="$ctrl.relatedObj">
-                    <button
-                        class="btn btn-sm btn-default"
-                        ng-click="$ctrl.showAllRelated()"
-                        ng-if="$ctrl.relatedObj.data.length != 0"
+                </div>
+            </div>
+
+            <div ng-show="$ctrl.relatedObj" class="ml-auto">
+                <button
+                    class="btn btn-sm btn-default"
+                    ng-click="$ctrl.showAllRelated()"
+                    ng-if="$ctrl.relatedObj.data.length != 0"
+                >
+                    <span class="text-base">{{ 'similar_header' | loc:$root.lang }} (SweFN)</span><br /><span
+                        ng-repeat="wd in $ctrl.relatedObj.data[0].words | limitTo:$ctrl.relatedDefault"
                     >
-                        <span class="btn_header">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
-                            ng-repeat="wd in $ctrl.relatedObj.data[0].words | limitTo:$ctrl.relatedDefault"
-                        >
-                            {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
-                        ><br /><span
-                            ng-repeat="wd in $ctrl.relatedObj.data[0].words.slice($ctrl.relatedDefault) | limitTo:$ctrl.relatedDefault"
-                        >
-                            {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
-                        ><span
-                            ng-if="$ctrl.relatedObj.data[0].words.length > $ctrl.relatedDefault || $ctrl.relatedObj.data.length > 1"
-                        >
-                            ...</span
-                        >
-                    </button>
-                    <div class="btn btn-sm btn-default" ng-if="$ctrl.relatedObj.data.length == 0">
-                        <span class="btn_header">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
-                            >{{'no_related_words' | loc:$root.lang}}</span
-                        >
-                    </div>
+                        {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
+                    ><br /><span
+                        ng-repeat="wd in $ctrl.relatedObj.data[0].words.slice($ctrl.relatedDefault) | limitTo:$ctrl.relatedDefault"
+                    >
+                        {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
+                    ><span
+                        ng-if="$ctrl.relatedObj.data[0].words.length > $ctrl.relatedDefault || $ctrl.relatedObj.data.length > 1"
+                    >
+                        ...</span
+                    >
+                </button>
+                <div class="btn btn-sm btn-default" ng-if="$ctrl.relatedObj.data.length == 0">
+                    <span class="text-base">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
+                        >{{'no_related_words' | loc:$root.lang}}</span
+                    >
                 </div>
             </div>
         </div>
@@ -122,7 +156,7 @@ angular.module("korpApp").component("simpleSearch", {
         function (
             $location: LocationService,
             $rootScope: RootScope,
-            $scope: IScope,
+            $scope: SimpleSearchScope,
             $timeout: ITimeoutService,
             $uibModal: ui.bootstrap.IModalService,
             compareSearches: CompareSearches,
@@ -132,101 +166,100 @@ angular.module("korpApp").component("simpleSearch", {
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
 
-            statemachine.listen("lemgram_search", (event) => {
-                ctrl.input = event.value
-                ctrl.isRawInput = false
-                ctrl.onChange(event.value, false)
-            })
+            statemachine.listen("lemgram_search", (event) =>
+                $timeout(() => {
+                    $location.search("search_tab", null)
+                    ctrl.onChange(event.value, false)
+                    ctrl.updateSearch()
+                })
+            )
 
             /** Whether tokens should be matched in arbitrary order. */
             ctrl.freeOrder = false
             /** Whether the "free order" option is applicable. */
             ctrl.freeOrderEnabled = false
-            ctrl.prefix = false
-            ctrl.mid_comp = false
-            ctrl.suffix = false
             ctrl.isCaseInsensitive = false
+
+            $scope.prefix = false
+            $scope.midfix = false
+            $scope.suffix = false
 
             if (settings.input_case_insensitive_default) {
                 $location.search("isCaseInsensitive", "")
             }
 
-            // triggers watch on activeSearch, via the Searches service
+            $scope.$watch("prefix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
+            $scope.$watch("suffix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
+            $scope.onMidfixChange = () => {
+                $scope.prefix = $scope.midfix
+                $scope.suffix = $scope.midfix
+            }
+
+            // React to changes in URL params
+            function watchParam<K extends keyof HashParams>(key: K, callback: (value: HashParams[K]) => void) {
+                $scope.$watch(() => $location.search()[key], callback)
+            }
+
+            watchParam("in_order", (value) => (ctrl.freeOrder = value != null))
+            watchParam("prefix", (value) => ($scope.prefix = value != null))
+            watchParam("suffix", (value) => ($scope.suffix = value != null))
+            watchParam("mid_comp", (value) => {
+                // Deprecated param. Translate to prefix/suffix.
+                if (value != null) {
+                    $location.search("mid_comp", null)
+                    $location.search("prefix", true)
+                    $location.search("suffix", true)
+                }
+            })
+            watchParam("isCaseInsensitive", (value) => (ctrl.isCaseInsensitive = value != null))
+
             ctrl.updateSearch = function () {
                 $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
-                $location.search("prefix", ctrl.prefix ? true : null)
-                $location.search("mid_comp", ctrl.mid_comp ? true : null)
-                $location.search("suffix", ctrl.suffix ? true : null)
+                $location.search("prefix", $scope.prefix ? true : null)
+                $location.search("suffix", $scope.suffix ? true : null)
                 $location.search("isCaseInsensitive", ctrl.isCaseInsensitive ? true : null)
                 $location.search("within", null)
-
-                // Unset and set query in next time step in order to trigger changes correctly in the Searches service.
-                $location.search("search", null)
                 $location.replace()
-                $timeout(function () {
-                    if (ctrl.currentText) {
-                        $location.search("search", `word|${ctrl.currentText}`)
-                    } else if (ctrl.lemgram) {
-                        $location.search("search", `lemgram|${ctrl.lemgram}`)
-                    }
-                    $location.search("page", null)
-                }, 0)
+
+                if (ctrl.currentText) $location.search("search", `word|${ctrl.currentText}`)
+                else if (ctrl.lemgram) $location.search("search", `lemgram|${ctrl.lemgram}`)
+                $location.search("page", null)
+
                 matomoSend("trackEvent", "Search", "Submit search", "Simple")
+                searches.doSearch()
             }
 
             ctrl.getCQP = function () {
-                let val = ""
+                const query: CqpQuery = []
                 const currentText = (ctrl.currentText || "").trim()
 
                 if (currentText) {
-                    const suffix = ctrl.isCaseInsensitive ? " %c" : ""
-                    const wordArray = currentText.split(" ")
-                    const tokenArray = _.map(wordArray, (token) => {
-                        const orParts: string[] = []
-
-                        if (ctrl.mid_comp) {
-                            orParts.push(`.*${token}.*`)
-                        } else {
-                            if (ctrl.prefix) {
-                                orParts.push(token + ".*")
-                            }
-                            if (ctrl.suffix) {
-                                orParts.push(".*" + token)
-                            }
-                            if (!ctrl.prefix && !ctrl.suffix) {
-                                orParts.push(regescape(token))
-                            }
+                    currentText.split(/\s+/).forEach((word) => {
+                        let value = regescape(word)
+                        if ($scope.prefix) value = `${value}.*`
+                        if ($scope.suffix) value = `.*${value}`
+                        const condition: Condition = {
+                            type: "word",
+                            op: "=",
+                            val: value,
+                            flags: ctrl.isCaseInsensitive ? { c: true } : {},
                         }
-
-                        const res = _.map(orParts, (orPart) => `word = "${orPart}"${suffix}`)
-                        return `[${res.join(" | ")}]`
+                        query.push({ and_block: [[condition]] })
                     })
-                    val = tokenArray.join(" ")
                 } else if (ctrl.lemgram) {
-                    const lemgram = ctrl.lemgram
-                    val = `[lex contains "${lemgram}"`
-
+                    const conditions: Condition[] = [{ type: "lex", op: "contains", val: ctrl.lemgram }]
                     // The complemgram attribute is a set of strings like: <part1>+<part2>+<...>:<probability>
-                    if (ctrl.prefix) {
-                        // Must match first part
-                        val += ` | complemgram contains "${lemgram}\\+.*"`
+                    if ($scope.prefix) {
+                        conditions.push({ type: "complemgram", op: "contains", val: `${ctrl.lemgram}\\+.*` })
                     }
-                    if (ctrl.mid_comp) {
-                        // Can be anywhere in the string, as long as it's surrounded by start, end or the "+" separator.
-                        val += ` | complemgram contains "(.*\\+)?${lemgram}(\\+|:).*"`
+                    if ($scope.suffix) {
+                        conditions.push({ type: "complemgram", op: "contains", val: `.*\\+${ctrl.lemgram}:.*` })
                     }
-                    if (ctrl.suffix) {
-                        // Must match last part
-                        val += ` | complemgram contains ".*\\+${lemgram}:.*"`
-                    }
-                    val += "]"
+                    query.push({ and_block: [conditions] })
                 }
 
-                if ($rootScope.globalFilter) {
-                    val = stringify(mergeCqpExprs(parse(val || "[]"), $rootScope.globalFilter))
-                }
-
-                return val
+                if ($rootScope.globalFilter) mergeCqpExprs(query, $rootScope.globalFilter)
+                return stringify(query)
             }
 
             ctrl.onSearchSave = (name) => {
@@ -260,7 +293,6 @@ angular.module("korpApp").component("simpleSearch", {
                             : `[sense rank_contains \"${regescape(wd)}\"]`
 
                     statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
-                    $location.search("search_tab", 1)
                 }
                 const modalInstance = $uibModal.open({
                     template: `\
@@ -304,16 +336,6 @@ angular.module("korpApp").component("simpleSearch", {
                     ctrl.updateFreeOrderEnabled()
                     ctrl.doSearch()
                 }
-            })
-
-            // React to changes in URL params
-            $scope.$on("$locationChangeSuccess", () => {
-                const search = $location.search()
-                ctrl.freeOrder = search.in_order != null
-                ctrl.prefix = search.prefix != null
-                ctrl.mid_comp = search.mid_comp != null
-                ctrl.suffix = search.suffix != null
-                ctrl.isCaseInsensitive = search.isCaseInsensitive != null
             })
 
             ctrl.onChange = (value, isPlain) => {

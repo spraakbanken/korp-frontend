@@ -5,7 +5,9 @@ import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CqpQuery } from "./cqp_parser/cqp.types"
 import { CorpusListing } from "./corpus_listing"
 import { CompareResult, MapRequestResult } from "@/backend/backend"
+import { RelationsParams } from "@/backend/types/relations"
 import { Attribute } from "./settings/config.types"
+import { DeferredOk } from "./util"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
@@ -15,10 +17,14 @@ export type RootScope = IRootScopeService & {
         val: string
     } | null
     extendedCQP: string | null
+    getActiveCqp(): string | undefined
     /** Filter data by attribute name */
     globalFilterData: Record<string, FilterData>
     globalFilter: CqpQuery | null
-    globalFilterDef: IDeferred<never>
+    /** This deferred is used to signal that the filter feature is ready. */
+    globalFilterDef: DeferredOk
+    /** This deferred is resolved when parallel search controller is loaded */
+    langDef: DeferredOk
     simpleCQP?: string
     show_modal: "about" | false
     compareTabs: CompareTab[]
@@ -26,7 +32,7 @@ export type RootScope = IRootScopeService & {
     kwicTabs: KwicTab[]
     mapTabs: MapTab[]
     textTabs: TextTab[]
-    waitForLogin: boolean
+    wordpicSortProp: RelationsParams["sort"]
     lang: string
     loc_data: LangLocMap
     $on: (name: "corpuschooserchange", handler: (event: any, selected: string[]) => void) => void
@@ -39,6 +45,8 @@ export type FilterData = {
     /** Sorted list of options with counts */
     options: [string, number][]
 }
+
+export type DynamicTabName = "compareTabs" | "graphTabs" | "kwicTabs" | "mapTabs" | "textTabs"
 
 export type CompareTab = IPromise<CompareResult>
 

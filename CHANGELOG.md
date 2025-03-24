@@ -2,6 +2,40 @@
 
 ## [Unreleased]
 
+## [9.9.0] - 2025-03-24
+
+### Added
+
+- Choose to show word picture by frequency or LMI [#433](https://github.com/spraakbanken/korp-frontend/issues/433)
+- Word picture help texts
+
+### Changed
+
+- Display options in Simple search as a form [#357](https://github.com/spraakbanken/korp-frontend/issues/357)
+- Load corpus timespan data in parallel when loading app [#437](https://github.com/spraakbanken/korp-frontend/issues/437)
+  - Instead of `settings.time_data`, use `import { timeData } from "./timedata"`
+  - Await `getTimeData()` before using `timeData` or `corpus.time`/`corpus.non_time`. The function is memoized, so repeated calls will not affect performance
+- Load Statistics and Word picture result when the tab is selected [#442](https://github.com/spraakbanken/korp-frontend/issues/442)
+- The "medial part" search option is logically linked to initial and final part [#443](https://github.com/spraakbanken/korp-frontend/issues/443)
+- The display options (hits per page, sort within corpora, compile based on) were moved into the KWIC and Statistics tab correspondingly
+  - When these are changed, the search is re-triggered automatically
+  - The "compile based on" input was relabeled as "group by"
+- The "word" group-by option no longer gets disabled if it's the only selected option
+- Moved "Show context" option to the new display options location and changed to checkbox
+- Better readability for hit counts in lemgram autocomplete
+- More space in word picture tables [#102](https://github.com/spraakbanken/korp-frontend/issues/102)
+
+### Fixed
+
+- Selecting a search history item used to reset params that were not part of the search
+- Trend diagram legend missing
+- Internal search links in sidebar does not activate relevant search/result tabs [#450](https://github.com/spraakbanken/korp-frontend/issues/450)
+- Comparison result not showing if a search is not done first [#413](https://github.com/spraakbanken/korp-frontend/issues/413)
+- Extended search: do not cache operator options across corpora [#409](https://github.com/spraakbanken/korp-frontend/issues/409)
+- Error when logging out while protected corpora are selected [#440](https://github.com/spraakbanken/korp-frontend/issues/440)
+- Error when loading with restricted corpora selected and then dismissing login dialog [#399](https://github.com/spraakbanken/korp-frontend/issues/399)
+- Cached translation files cause broken UI after releases [#435](https://github.com/spraakbanken/korp-frontend/issues/435)
+
 ## [9.8.5] - 2025-03-17
 
 ### Fixed
@@ -380,6 +414,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.9.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.0
 [9.8.5]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.5
 [9.8.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.4
 [9.8.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.3

@@ -19,6 +19,21 @@ export const html = String.raw
 export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
     Object.fromEntries(keys.map((key) => [key, getValue(key)]))
 
+/** Create a promise that can be resolved later. */
+export const deferOk = (): DeferredOk => {
+    let resolve: () => void
+    const promise = new Promise<undefined>((res) => {
+        resolve = () => res(undefined)
+    })
+    return { promise, resolve: resolve! }
+}
+
+/** A value-less variant of a Deferred. */
+export type DeferredOk = {
+    promise: Promise<undefined>
+    resolve: () => void
+}
+
 /** Mapping from service names to their TS types. */
 type ServiceTypes = {
     $controller: IControllerService
@@ -423,6 +438,7 @@ export function setDownloadLinks(params: string, result_data: { kwic: Row[]; cor
 /** Split a string by the first occurence of a given separator */
 export const splitFirst = (sep: string, s: string): [string, string] => {
     const pos = s.indexOf(sep)
+    if (pos == -1) return [s, ""]
     return [s.slice(0, pos), s.slice(pos + sep.length)]
 }
 
@@ -455,6 +471,10 @@ export function buildUrl(base: string, params: Record<string, any>): string {
     Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value))
     return url.toString()
 }
+
+/** URL search params as a string value for comparison. */
+export const paramsString = (params: URLSearchParams | Record<string, any>) =>
+    JSON.stringify([...new URLSearchParams(params).entries()].sort())
 
 /** Trigger a download in the browser. */
 export function downloadFile(data: string, filename: string, type: string) {

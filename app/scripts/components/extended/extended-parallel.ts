@@ -5,7 +5,6 @@ import settings from "@/settings"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import { matomoSend } from "@/matomo"
-import "@/services/searches"
 import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { LocationService } from "@/urlparams"
@@ -17,7 +16,6 @@ type ExtendedParallelController = IController & {
     negates: boolean[]
     initialized: boolean
     cqpChange: (idx: number) => (cqp: string) => void
-    negChange: () => void
     onLangChange: () => void
     getEnabledLangs: (i?: number) => string[]
     addLangRow: () => void
@@ -41,13 +39,7 @@ angular.module("korpApp").component("extendedParallel", {
                     for="negate_chk{{$index}}"
                     >{{"not_containing" | loc:$root.lang}}</label
                 >
-                <input
-                    type="checkbox"
-                    id="negate_chk{{$index}}"
-                    ng-show="!$first"
-                    ng-model="$ctrl.negates[$index]"
-                    ng-change="$ctrl.negChange()"
-                />
+                <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="$ctrl.negates[$index]" />
                 <extended-tokens
                     cqp="l.cqp"
                     cqp-change="$ctrl.cqpChange($index)(cqp)"
@@ -119,10 +111,6 @@ angular.module("korpApp").component("extendedParallel", {
                 }
             }
 
-            ctrl.negChange = function () {
-                $location.search("search", null)
-            }
-
             const onCQPChange = () => {
                 const currentLangList = _.map(ctrl.langs, "lang")
                 var struct = corpusListing.getLinksFromLangs(currentLangList)
@@ -167,18 +155,15 @@ angular.module("korpApp").component("extendedParallel", {
                 var currentLangList = _.map(ctrl.langs, "lang")
                 corpusListing.setActiveLangs(currentLangList)
                 $location.search("parallel_corpora", currentLangList.join(","))
-                searches.langDef.resolve()
+                $rootScope.langDef.resolve()
             }
 
             ctrl.onSubmit = function () {
-                // Unset and set query in next time step in order to trigger changes correctly in `searches`.
-                $location.search("search", null)
                 $location.replace()
-                $timeout(function () {
-                    $location.search("search", `cqp|${onCQPChange()}`)
-                    $location.search("page", null)
-                }, 0)
+                $location.search("search", `cqp|${onCQPChange()}`)
+                $location.search("page", null)
                 matomoSend("trackEvent", "Search", "Submit search", "Extended")
+                searches.doSearch()
             }
 
             ctrl.keydown = function ($event: KeyboardEvent) {

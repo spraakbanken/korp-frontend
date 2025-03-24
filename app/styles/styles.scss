@@ -8,9 +8,10 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 * {
     box-sizing: border-box;
 }
-input[type="checkbox"] {
-  position: relative;
-  top: 2px;
+input[type=checkbox], input[type=radio] {
+  display: table-cell;
+  vertical-align: middle;
+  margin-bottom: 2px;
 }
 
 $primaryColor: rgb(221, 233, 255);
@@ -51,12 +52,10 @@ h3 {
   font-size: 1.1em;
 }
 
-input[type=text] {
-  padding: 1px 2px;
-}
 input, select {
   border: 1px solid #bbb;
   background-color: white;
+  padding: 1px 2px;
   cursor: pointer;
 }
 input:not([type]), input[type=text] {
@@ -218,20 +217,6 @@ label.placeholder {
   color: #999999;
 }
 
-#search_options {
-  border-top: none;
-  padding: 8px;
-  background-image: none;
-  margin-bottom: 8px;
-  select {
-    margin-right: 5px;
-    background-color: rgba(255,255,255,0.5);
-    padding-left: 2px;
-  }
-  > div {
-    margin-right: 10px;
-  }
-}
 .click-cover {
   position: absolute;
   top: 0;
@@ -533,10 +518,6 @@ table {
   }
 }
 
-.activate_word_pic {
-  margin-top : 1em;
-}
-
 .lemgram_result {
   counter-reset: wordpic;
 }
@@ -576,15 +557,6 @@ table {
 
 .table_scrollarea + .pager-wrapper {
   margin-top: 15px;
-}
-
-.reading_btn {
-  line-height: 1.1;
-  margin-left: 1em;
-  display: inline;
-  vertical-align: middle;
-  margin-top: 3px;
-  white-space : nowrap;
 }
 
 .results_table.reading {
@@ -1004,12 +976,6 @@ a {
   margin-bottom: 3px;
 }
 
-.autocomplete-item-disabled a {
-  font-style: italic;
-  color: indianred;
-  opacity: 0.7;
-}
-
 #labs_logo {
   visibility: hidden;
   svg {
@@ -1069,21 +1035,6 @@ a {
       border-style: solid;
       border-color: lightgrey;
       border-width: 1px;
-    }
-  }
-
-  .opts {
-    margin-top : 1em;
-    margin-bottom : 1em;
-  }
-
-  #similar_wrapper {
-    .btn_header {
-      font-size: 1.1em;
-    }
-
-    button {
-      display : block;
     }
   }
 }
@@ -1306,15 +1257,6 @@ slider {
   max-width : 500px;
   @extend .bs-callout;
   @extend .bs-callout-warning;
-}
-
-#wordPicSettings {
-  float: right;
-
-  #numberHitsSelect {
-      margin-top: 10px;
-  }
-
 }
 
 .pagination {
@@ -1834,16 +1776,10 @@ line.tick {
 
 /* ----------- Autocompletion ----------- */
 
-.none-to-find {
-    color: #aaa;
+.lemgram-namespace {
+  color: #777777;
 }
-.num-to-find {
-    visibility: hidden;
-    font-size:x-small;
-}
-li.active a span .num-to-find {
-    visibility: visible;
-}
+
 .autoc-spinner {
     margin-left:-20px;margin-top:2px;float:left
 }
@@ -1860,63 +1796,50 @@ li.active a span .num-to-find {
 
 
 /* korp multi select directive */
-.reduce-attr-select {
-  color: #000;
-  display: inline-block;
-  .reduce-dropdown-button {
+.reduce-dropdown-button {
+  cursor: pointer;
+  width: 100%;
+  height: 22px;
+  overflow: hidden;
+  background-color: rgba(255,255,255,0.5);
+  transition : border-color 200ms;
+  &:hover {
+    border-color : #999;
+  }
+}
+.reduce-dropdown-menu {
+  width: 100%;
+  max-height: 400px;
+  .selected {
+    background: rgb(242, 247, 255);
+  }
+  .attribute {
+    display: flex;
+    overflow-x: hidden;
+    white-space: nowrap;
     cursor: pointer;
-    width: 100%;
-    height: 22px;
-    overflow: hidden;
-    background-color: rgba(255,255,255,0.5);
-    .caret {
-      right: 7px;
-      position: absolute;
-      top: 10px;
-    }
-    transition : border-color 200ms;
     &:hover {
-      border-color : #999;
+      background-color : lighten(#999, 30%);
     }
+    padding: 2px 1px;
   }
-  .reduce-dropdown-button-text {
-    width: 1000px;
-    padding: 0px 5px;
+  .reduce-check {
+    margin: 0px;
+    margin-right: 4px;
   }
-  .reduce-dropdown-menu {
-    width: 100%;
-    max-height: 400px;
-    .selected {
-      background: rgb(242, 247, 255);
-    }
-    .attribute {
-      display: flex;
-      overflow-x: hidden;
-      white-space: nowrap;
-      cursor: pointer;
-      &:hover {
-        background-color : lighten(#999, 30%);
-      }
-      padding: 2px 1px;
-    }
-    .reduce-check {
-      margin: 0px;
-      margin-right: 4px;
-    }
-    .reduce-label {
-      flex-grow: 1;
-    }
-    ul {
-      margin: 0;
-      padding: 2px;
-    }
-    .insensitive-toggle {
-      float: right;
-      color: black;
-    }
-    .insensitive-toggle.selected {
-      color: grey;
-    }
+  .reduce-label {
+    flex-grow: 1;
+  }
+  ul {
+    margin: 0;
+    padding: 2px;
+  }
+  .insensitive-toggle {
+    float: right;
+    color: black;
+  }
+  .insensitive-toggle.selected {
+    color: grey;
   }
 }
 
@@ -2057,10 +1980,6 @@ li.active a span .num-to-find {
 // TODO we should not do this, update boostrap instead?
 .sr-only {
     display: none;
-}
-
-.lemgram-namespace {
-    color: #777777;
 }
 
 .cc-level-indent {

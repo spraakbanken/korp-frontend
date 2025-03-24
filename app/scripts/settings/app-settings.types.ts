@@ -21,7 +21,7 @@ export type AppSettings = {
         label: LangString
     }
     cqp_prio: string[]
-    default_options?: Record<string, OperatorKorp>
+    default_options: Record<string, OperatorKorp>
     default_language: string
     default_overview_context: string
     default_reading_context: string
@@ -61,7 +61,6 @@ export type AppSettings = {
     reduce_struct_attribute_selector: "union" | "intersection"
     statistics?: boolean
     statistics_case_insensitive_default?: boolean
-    statistics_search_default: boolean
     urnResolver?: string
     visible_modes: number
     word_label: Record<string, string>

@@ -27,11 +27,11 @@ export default angular.module("korpApp").component("corpusUpdates", {
                 <div ng-if="recentUpdates.length > LIMIT">
                     <a ng-if="!expanded" ng-click="toggleExpanded()">
                         <i class="fa fa-angle-double-down"></i>
-                        {{"show_more" | loc:$root.lang}}
+                        {{"show_more_n" | loc:$root.lang}}
                     </a>
                     <a ng-if="expanded" ng-click="toggleExpanded()">
                         <i class="fa fa-angle-double-up"></i>
-                        {{"show_less" | loc:$root.lang}}
+                        {{"show_less_n" | loc:$root.lang}}
                     </a>
                 </div>
             </div>

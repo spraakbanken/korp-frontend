@@ -1,9 +1,5 @@
 /** @format */
-import {
-    TextReaderDataContainer,
-    ReaderTokenContainer,
-    TextReaderWordHandler,
-} from "@/controllers/text_reader_controller"
+import type { TextReaderDataContainer, ReaderTokenContainer, TextReaderWordHandler } from "@/components/results-text"
 import angular, { IController, IRootElementService } from "angular"
 
 type StandardReadingModeController = IController & {

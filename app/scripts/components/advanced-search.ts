@@ -6,6 +6,7 @@ import "@/services/compare-searches"
 import "@/components/search-submit"
 import { LocationService } from "@/urlparams"
 import { CompareSearches } from "@/services/compare-searches"
+import { SearchesService } from "@/services/searches"
 
 type AdvancedSearchController = IController & {
     cqp: string
@@ -62,15 +63,15 @@ angular.module("korpApp").component("advancedSearch", {
     </div>`,
     bindings: {},
     controller: [
-        "compareSearches",
         "$location",
         "$scope",
-        "$timeout",
+        "compareSearches",
+        "searches",
         function (
-            compareSearches: CompareSearches,
             $location: LocationService,
             $scope: AdvancedSearchScope,
-            $timeout: ITimeoutService
+            compareSearches: CompareSearches,
+            searches: SearchesService
         ) {
             const $ctrl = this as AdvancedSearchController
 
@@ -92,12 +93,12 @@ angular.module("korpApp").component("advancedSearch", {
             )
 
             $ctrl.onSearch = () => {
-                $location.search("search", null)
                 $location.search("page", null)
                 $location.search("within", null)
                 $location.search("in_order", $ctrl.freeOrder ? false : null)
-                $timeout(() => $location.search("search", `cqp|${$ctrl.cqp}`), 0)
+                $location.search("search", `cqp|${$ctrl.cqp}`)
                 matomoSend("trackEvent", "Search", "Submit search", "Advanced")
+                searches.doSearch()
             }
 
             $ctrl.onSearchSave = (name) => {

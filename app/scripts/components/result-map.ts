@@ -4,9 +4,10 @@ import angular, { ICompileService, IController, IRootElementService, IScope, ITi
 import L from "leaflet"
 import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
-import { MarkerEvent, MarkerGroup } from "@/controllers/map_controller"
 import "@/../styles/map.scss"
 import { AppSettings } from "@/settings/app-settings.types"
+import { WithinParameters } from "@/backend/types"
+import { Point } from "@/map_services"
 
 type ResultMapController = IController & {
     center: AppSettings["map_center"]
@@ -19,6 +20,33 @@ type ResultMapController = IController & {
 
 type ResultMapScope = IScope & {
     showMap: boolean
+}
+
+export type MarkerGroup = {
+    selected: boolean
+    order: number
+    color: string
+    markers: Record<string, Marker>
+}
+
+export type Marker = MarkerEvent & {
+    lat: number
+    lng: number
+    label: string
+}
+
+export type MarkerEvent = {
+    point: Point
+    queryData: MarkerQueryData
+}
+
+/** Needed for making a sub-search */
+export type MarkerQueryData = {
+    searchCqp: string
+    subCqp: string
+    label: string
+    corpora: string[]
+    within: WithinParameters
 }
 
 type CustomMarker = L.Marker & {

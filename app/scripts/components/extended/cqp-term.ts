@@ -9,6 +9,7 @@ import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { Condition, OperatorKorp } from "@/cqp_parser/cqp.types"
 import { AttributeOption } from "@/corpus_listing"
+import { getTimeData } from "@/timedata"
 
 /**
  * TODO
@@ -26,7 +27,7 @@ type ExtendedCqpTermController = IController & {
     change: () => void
     types: AttributeOption[]
     typeMapping: Record<string, AttributeOption>
-    opts: [string, OperatorKorp][] | undefined
+    opts: [string, OperatorKorp][]
     valfilter: typeof valfilter
     localChange: (term: Partial<Condition>) => void
     setDefault: () => void
@@ -81,13 +82,15 @@ angular.module("korpApp").component("extendedCqpTerm", {
             ctrl.valfilter = valfilter
 
             ctrl.$onInit = () => {
-                $rootScope.$on("corpuschooserchange", () => $timeout(onCorpusChange))
+                $rootScope.$on("corpuschooserchange", () => updateAttributes())
                 $rootScope.$watch(
                     () => $location.search().parallel_corpora,
-                    () => $timeout(onCorpusChange)
+                    () => updateAttributes()
                 )
+                // React on the date interval attribute becoming available
+                getTimeData().then(() => updateAttributes())
 
-                onCorpusChange()
+                updateAttributes()
             }
 
             ctrl.localChange = (term) => {
@@ -95,52 +98,60 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 ctrl.change()
             }
 
-            function onCorpusChange() {
+            /** Update list of available attributes */
+            async function updateAttributes() {
                 // TODO: respect the setting 'wordAttributeSelector' and similar
                 if (!settings.corpusListing.selected.length) return
 
-                // Get available attribute options
-                ctrl.types = settings.corpusListing
-                    .getAttributeGroups("union", ctrl.parallellLang)
-                    .filter((item) => !item["hide_extended"])
+                // The date interval attribute is not available until time data is ready
+                if (ctrl.term.type == "date_interval") await getTimeData()
 
-                // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
-                ctrl.typeMapping = _.fromPairs(
-                    ctrl.types.map((item) => [item["is_struct_attr"] ? `_.${item.value}` : item.value, item])
-                )
+                $timeout(() => {
+                    // Get available attribute options
+                    ctrl.types = settings.corpusListing
+                        .getAttributeGroups("union", ctrl.parallellLang)
+                        .filter((item) => !item["hide_extended"])
 
-                // Reset attribute if the selected one is no longer available
-                if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
+                    // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
+                    ctrl.typeMapping = _.fromPairs(
+                        ctrl.types.map((item) => [item["is_struct_attr"] ? `_.${item.value}` : item.value, item])
+                    )
 
-                ctrl.opts = getOpts()
+                    // Reset attribute if the selected one is no longer available
+                    if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
+
+                    ctrl.opts = getOpts()
+
+                    // Reset option if the selected one is no longer available
+                    if (!ctrl.opts.find((pair) => pair[1] === ctrl.term.op)) ctrl.setDefault()
+                })
             }
 
-            const getOpts = () => getOptsMemo(ctrl.term.type)
+            function getOpts(): [string, OperatorKorp][] {
+                const option = ctrl.typeMapping[ctrl.term.type]
 
-            // returning new array each time kills angular, hence the memoizing
-            const getOptsMemo = _.memoize((type: string): [string, OperatorKorp][] | undefined => {
-                if (!(type in ctrl.typeMapping)) return
-
-                const option = ctrl.typeMapping[type]
                 if (!option) {
-                    console.error(`Attribute option missing for "${type}"`, ctrl.typeMapping)
-                    return
+                    console.error(`Attribute option missing for "${ctrl.term.type}"`, ctrl.typeMapping)
+                    return Object.entries(settings["default_options"])
                 }
 
-                const ops: Record<string, OperatorKorp> = { ...(option?.opts || settings["default_options"]) }
+                // Clone to avoid modifying original
+                const ops = { ...(option.opts || settings["default_options"]) }
 
-                // For multi-value attributes, use the "contains" CQP operator for equality
-                if (option.type === "set") ops.is = "contains"
+                // For multi-value attributes, use the "contains" CQP operators for equality
+                if (option.type === "set") {
+                    if (ops.is == "=") ops.is = "contains"
+                    if (ops.is_not == "!=") ops.is_not = "not contains"
+                }
 
-                return _.toPairs(ops)
-            })
+                // Return as tuples
+                return Object.entries(ops)
+            }
 
             ctrl.setDefault = function () {
                 // assign the first value from the opts
                 ctrl.opts = getOpts()
-
-                // TODO Correct? Was "is" before
-                ctrl.term.op = ctrl.opts?.[0]?.[1] || "="
+                ctrl.term.op = ctrl.opts[0]?.[1] || "="
 
                 ctrl.term.val = ""
                 ctrl.change()

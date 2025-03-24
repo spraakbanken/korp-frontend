@@ -9,6 +9,7 @@ import { WithinParameters } from "./types"
 import { QueryResponse } from "./types/query"
 import { CountParams } from "./types/count"
 
+// TODO Convert to object
 export type CompareResult = [CompareTables, number, SavedSearch, SavedSearch, string[]]
 
 export type CompareTables = { positive: CompareItem[]; negative: CompareItem[] }

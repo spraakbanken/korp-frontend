@@ -17,7 +17,9 @@ export { parse }
  * @param range An array like `[fromdate, todate, fromtime, totime]`
  * @param expanded_format Whether to convert to standard CQP or keep Korp-specific operators
  */
-export function parseDateInterval(opKorp: OperatorKorp, range: DateRange, expanded_format?: boolean) {
+export function parseDateInterval(opKorp: OperatorKorp, range: DateRange | string, expanded_format?: boolean) {
+    // `range` could be a string if the query is being edited in extended search
+    if (!Array.isArray(range)) return ""
     if (!expanded_format) return `$date_interval ${opKorp} '${range.join(",")}'`
 
     const [fromdate, todate, fromtime, totime] = range

@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IController, ITimeoutService } from "angular"
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
@@ -7,11 +7,12 @@ import { makeDownload } from "@/kwic_download"
 import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
-import { LocationService } from "@/urlparams"
+import { LocationService, SortMethod } from "@/urlparams"
 import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
+import { SearchesService } from "@/services/searches"
 
 export type Row = ApiKwic | LinkedKwic | CorpusHeading
 
@@ -40,10 +41,10 @@ type KwicController = IController & {
     active: boolean
     hitsInProgress: number
     hits: number
-    isReading: boolean
+    context: boolean
+    onContextChange: () => void
     page: number
     pageEvent: (page: number) => void
-    contextChangeEvent: () => void
     hitsPerPage: number
     prevParams: any
     prevUrl?: string
@@ -56,7 +57,6 @@ type KwicController = IController & {
     useContext: boolean
     hitsPictureData: HitsPictureItem[]
     _settings: any
-    toggleReading: () => void
     download: {
         options: { value: string; label: string; disabled?: boolean }[]
         selected: string
@@ -64,11 +64,25 @@ type KwicController = IController & {
         blobName?: string
         fileName?: string
     }
+    /** Hpp and sort are app-wide options, only makes sense in main KWIC. */
+    // TODO Instead, move change handling to parent component.
+    showSearchOptions: boolean
     selectLeft: (sentence: any) => any[]
     selectMatch: (sentence: any) => any[]
     selectRight: (sentence: any) => any[]
     parallelSelected: Token[]
     onKwicClick(event: Event): void
+}
+
+type KwicScope = IScope & {
+    hpp: string
+    hppOptions: string[]
+    updateHpp: () => void
+    context: boolean
+    updateContext: () => void
+    sort: SortMethod
+    sortOptions: Record<SortMethod, string>
+    updateSort: () => void
 }
 
 type HitsPictureItem = {
@@ -78,8 +92,37 @@ type HitsPictureItem = {
     rtitle: string
 }
 
+const UPDATE_DELAY = 500
+
 angular.module("korpApp").component("kwic", {
     template: html`
+        <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
+            <label>
+                <input type="checkbox" ng-model="context" ng-value="false" ng-change="updateContext()" />
+                {{'show_context' | loc:$root.lang}}
+                <i
+                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                    uib-tooltip="{{'show_context_help' | loc:$root.lang}}"
+                ></i>
+            </label>
+            <div ng-show="$ctrl.showSearchOptions">
+                <label>
+                    {{ "hits_per_page" | loc:$root.lang }}:
+                    <select ng-change="updateHpp()" ng-model="hpp" ng-options="x for x in hppOptions"></select>
+                </label>
+            </div>
+            <div ng-show="$ctrl.showSearchOptions">
+                <label>
+                    {{ "sort_default" | loc:$root.lang }}:
+                    <select
+                        ng-change="updateSort()"
+                        ng-model="sort"
+                        ng-options="k as v | loc:$root.lang for (k, v) in sortOptions"
+                    ></select>
+                </label>
+            </div>
+        </div>
+
         <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">{{'search_aborted' | loc:$root.lang}}</div>
 
         <div ng-if="!$ctrl.aborted || $ctrl.loading" ng-click="$ctrl.onKwicClick($event)">
@@ -114,10 +157,6 @@ angular.module("korpApp").component("kwic", {
                 page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-            <span ng-if="$ctrl.hits" class="reading_btn link" ng-click="$ctrl.toggleReading()">
-                <span ng-if="!$ctrl.isReading">{{'show_reading' | loc:$root.lang}}</span>
-                <span ng-if="$ctrl.isReading">{{'show_kwic' | loc:$root.lang}}</span>
-            </span>
             <div class="table_scrollarea">
                 <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0">
                     <tr
@@ -221,27 +260,47 @@ angular.module("korpApp").component("kwic", {
     `,
     bindings: {
         aborted: "<",
+        context: "<",
         loading: "<",
         active: "<",
         hitsInProgress: "<",
         hits: "<",
-        isReading: "<",
+        onContextChange: "<",
         page: "<",
         pageEvent: "<",
-        contextChangeEvent: "<",
         hitsPerPage: "<",
         prevParams: "<",
         prevUrl: "<",
         corpusOrder: "<",
         kwicInput: "<",
         corpusHits: "<",
+        showSearchOptions: "<",
     },
     controller: [
         "$element",
         "$location",
+        "$scope",
         "$timeout",
-        function ($element: JQLite, $location: LocationService, $timeout: ITimeoutService) {
+        "searches",
+        function (
+            $element: JQLite,
+            $location: LocationService,
+            $scope: KwicScope,
+            $timeout: ITimeoutService,
+            searches: SearchesService
+        ) {
             let $ctrl = this as KwicController
+
+            $scope.sortOptions = {
+                "": "appearance_context",
+                keyword: "word_context",
+                left: "left_context",
+                right: "right_context",
+                random: "random_context",
+            }
+            $scope.sort = $location.search().sort || ""
+            $scope.hppOptions = settings["hits_per_page_values"].map(String)
+            $scope.hpp = String($location.search().hpp || settings["hits_per_page_default"])
 
             const selectionManager = new SelectionManager()
 
@@ -252,8 +311,8 @@ angular.module("korpApp").component("kwic", {
             $ctrl.$onChanges = (changeObj) => {
                 if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
                     $ctrl.kwic = massageData($ctrl.kwicInput)
-                    $ctrl.useContext = $ctrl.isReading || $location.search()["in_order"] != null
-                    if (!$ctrl.isReading) {
+                    $ctrl.useContext = $ctrl.context || $location.search()["in_order"] != null
+                    if (!$ctrl.context) {
                         $timeout(() => {
                             centerScrollbar()
                             $element.find(".match").children().first().click()
@@ -268,7 +327,7 @@ angular.module("korpApp").component("kwic", {
                     }
 
                     // TODO Do this when shown the first time (e.g. not if loading with stats tab active)
-                    if (settings.parallel && !$ctrl.isReading) {
+                    if (settings.parallel && !$ctrl.context) {
                         $timeout(() => alignParallelSentences())
                     }
                     if ($ctrl.kwic.length == 0) {
@@ -308,6 +367,8 @@ angular.module("korpApp").component("kwic", {
                         statemachine.send("DESELECT_WORD")
                     }
                 }
+
+                if ("context" in changeObj) $scope.context = !!$ctrl.context
             }
 
             $ctrl.onKwicClick = (event) => {
@@ -331,12 +392,34 @@ angular.module("korpApp").component("kwic", {
                 }
             }
 
+            $scope.$watch(
+                () => $location.search().hpp,
+                (val) => ($scope.hpp = String(val || settings["hits_per_page_default"]))
+            )
+
+            $scope.$watch(
+                () => $location.search().sort,
+                (val) => ($scope.sort = val || "")
+            )
+
+            $scope.updateContext = _.debounce(() => {
+                if ($scope.context != $ctrl.context) $ctrl.onContextChange()
+            }, UPDATE_DELAY)
+
+            $scope.updateHpp = () => {
+                const hpp = Number($scope.hpp)
+                $location.search("hpp", hpp !== settings["hits_per_page_default"] ? hpp : null)
+                debouncedSearch()
+            }
+
+            $scope.updateSort = () => {
+                $location.search("sort", $scope.sort !== "" ? $scope.sort : null)
+                debouncedSearch()
+            }
+
             $ctrl._settings = settings
 
-            $ctrl.toggleReading = () => {
-                // Emit event; parent should update isReading
-                $ctrl.contextChangeEvent()
-            }
+            const debouncedSearch = _.debounce(searches.doSearch, UPDATE_DELAY)
 
             $ctrl.download = {
                 options: [
@@ -735,7 +818,7 @@ angular.module("korpApp").component("kwic", {
             function selectUpOrDown($neighborSentence: JQLite, $searchwords: JQLite): JQLite {
                 const fallback = $neighborSentence.find(".word:last")
                 const currentX = selectionManager.selected.offset()!.left + selectionManager.selected.width()! / 2
-                return $ctrl.isReading
+                return $ctrl.context
                     ? getFirstAtCoor(currentX, $searchwords, fallback)
                     : getWordAt(currentX, $neighborSentence)
             }

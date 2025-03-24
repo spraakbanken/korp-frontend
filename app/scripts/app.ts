@@ -6,7 +6,6 @@ import {
     IComponentOptions,
     ILocaleService,
     ILocationProvider,
-    IQService,
     IScope,
     ITimeoutService,
     ui,
@@ -18,7 +17,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { initLocales } from "@/data_init"
 import { RootScope } from "@/root-scope.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { getService, html } from "@/util"
+import { deferOk, getService, html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
 import "@/components/searchtabs"
@@ -29,6 +28,9 @@ import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
+
+// @ts-ignore
+const BUILD_HASH = __webpack_hash__
 
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [
@@ -89,7 +91,7 @@ authenticationProxy.initAngular(korpApp)
 korpApp.config([
     "tmhDynamicLocaleProvider",
     (tmhDynamicLocaleProvider: tmh.tmh.IDynamicLocaleProvider) =>
-        tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js"),
+        tmhDynamicLocaleProvider.localeLocationPattern(`translations/angular-locale_{{locale}}.${BUILD_HASH}.js`),
 ])
 
 korpApp.config([
@@ -121,7 +123,6 @@ korpApp.run([
     "$locale",
     "tmhDynamicLocale",
     "tmhDynamicLocaleCache",
-    "$q",
     "$timeout",
     "$uibModal",
     async function (
@@ -130,7 +131,6 @@ korpApp.run([
         $locale: ILocaleService,
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,
-        $q: IQService,
         $timeout: ITimeoutService,
         $uibModal: ui.bootstrap.IModalService
     ) {
@@ -138,9 +138,17 @@ korpApp.run([
 
         s.extendedCQP = null
         s.globalFilterData = {}
+        $rootScope.globalFilterDef = deferOk()
+        $rootScope.langDef = deferOk()
+        $rootScope.wordpicSortProp = "mi"
 
-        /** This deferred is used to signal that the filter feature is ready. */
-        s.globalFilterDef = $q.defer<never>()
+        /** Get CQP corresponding to the current search, if any. */
+        $rootScope.getActiveCqp = () => {
+            if (!$rootScope.activeSearch) return undefined
+            // Simple search puts CQP in `simpleCQP`. Extended/advanced puts it in `activeSearch.val`.
+            const isSimple = ["word", "lemgram"].includes($rootScope.activeSearch.type)
+            return isSimple ? $rootScope.simpleCQP : $rootScope.activeSearch.val
+        }
 
         // Listen to url changes like #?lang=swe
         s.$on("$locationChangeSuccess", () => {
@@ -185,22 +193,22 @@ korpApp.run([
             $rootScope.$apply(() => ($rootScope["loc_data"] = data))
         )
 
-        s.waitForLogin = false
+        /** Whether initial corpus selection is deferred because it depends on authentication. */
+        let waitForLogin = false
 
-        async function initializeCorpusSelection(selectedIds: string[]): Promise<void> {
+        async function initializeCorpusSelection(ids: string[], skipLogin?: boolean): Promise<void> {
+            if (!ids || ids.length == 0) ids = settings["preselected_corpora"] || []
+
             // Resolve any folder ids to the contained corpus ids
-            selectedIds = selectedIds.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
+            ids = ids.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
 
-            let loginNeededFor: CorpusTransformed[] = []
+            const hasAccess = (corpus: CorpusTransformed) => authenticationProxy.hasCredential(corpus.id.toUpperCase())
 
-            for (const corpusId of selectedIds) {
-                const corpusObj = settings.corpora[corpusId]
-                if (corpusObj && corpusObj.limited_access) {
-                    if (!authenticationProxy.hasCredential(corpusId.toUpperCase())) {
-                        loginNeededFor.push(corpusObj)
-                    }
-                }
-            }
+            const deniedCorpora = ids
+                .map((id) => settings.corpora[id])
+                .filter((corpus) => corpus?.limited_access && !hasAccess(corpus))
+
+            const allowedIds = ids.filter((id) => !deniedCorpora.find((corpus) => corpus.id == id))
 
             const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
 
@@ -212,14 +220,14 @@ korpApp.run([
                     content: "<korp-error></korp-error>",
                     resolvable: false,
                 })
-            } else if (loginNeededFor.length != 0) {
+            } else if (deniedCorpora.length != 0) {
                 // check if user has access
                 const loginNeededHTML = () =>
-                    loginNeededFor.map((corpus) => `<span>${locObj(corpus.title)}</span>`).join(", ")
+                    deniedCorpora.map((corpus) => `<span>${locObj(corpus.title)}</span>`).join(", ")
 
                 if (authenticationProxy.isLoggedIn()) {
                     // access partly or fully denied to selected corpora
-                    if (settings.corpusListing.corpora.length == loginNeededFor.length) {
+                    if (settings.corpusListing.corpora.length == deniedCorpora.length) {
                         openErrorModal({
                             content: "{{'access_denied' | loc:$root.lang}}",
                             buttonText: "go_to_start",
@@ -233,38 +241,37 @@ korpApp.run([
                                 <div>${loginNeededHTML()}</div>
                                 <div>{{'access_partly_denied_continue' | loc:$root.lang}}</div>`,
                             onClose: () => {
-                                const neededIds = loginNeededFor.map((corpus) => corpus.id)
-                                const filtered = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
-                                const selected = filtered.length ? filtered : settings["preselected_corpora"] || []
-                                initializeCorpusSelection(selected)
+                                initializeCorpusSelection(allowedIds)
                             },
                         })
                     }
-                } else {
+                } else if (!skipLogin) {
                     // login needed before access can be checked
                     openErrorModal({
                         content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:$root.lang}}:</span
                             >${loginNeededHTML()}`,
                         onClose: () => {
-                            s.waitForLogin = true
-                            statemachine.send("LOGIN_NEEDED", { loginNeededFor })
+                            waitForLogin = true
+                            statemachine.send("LOGIN_NEEDED", { loginNeededFor: deniedCorpora })
                         },
                     })
+                } else {
+                    // Login dismissed, fall back to allowed corpora
+                    initializeCorpusSelection(allowedIds)
                 }
-            } else if (!selectedIds.every((r) => allCorpusIds.includes(r))) {
+            } else if (!ids.every((r) => allCorpusIds.includes(r))) {
                 // some corpora missing
                 openErrorModal({
                     content: `{{'corpus_not_available' | loc:$root.lang}}`,
                     onClose: () => {
-                        const validIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
-                        const newIds = validIds.length ? validIds : settings["preselected_corpora"] || []
-                        initializeCorpusSelection(newIds)
+                        const validIds = ids.filter((corpusId) => allCorpusIds.includes(corpusId))
+                        initializeCorpusSelection(validIds)
                     },
                 })
             } else {
                 // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
-                settings.corpusListing.select(selectedIds)
-                $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", selectedIds), 0)
+                settings.corpusListing.select(ids)
+                $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", ids), 0)
             }
         }
 
@@ -318,19 +325,27 @@ korpApp.run([
             }
         }
 
-        function getCorporaFromHash(): string[] {
-            const corpus = $location.search().corpus
-            return corpus ? corpus.split(",") : settings["preselected_corpora"] || []
+        const getCorporaFromHash = (): string[] => {
+            const value = $location.search().corpus
+            return value ? value.split(",") : []
         }
 
-        statemachine.listen("login", function () {
-            if (s.waitForLogin) {
-                s.waitForLogin = false
-                initializeCorpusSelection(getCorporaFromHash())
-            }
+        initializeCorpusSelection(getCorporaFromHash())
+
+        // Retry initialization after login
+        statemachine.listen("login", () => {
+            if (!waitForLogin) return
+            waitForLogin = false
+            initializeCorpusSelection(getCorporaFromHash())
         })
 
-        initializeCorpusSelection(getCorporaFromHash())
+        // Retry intialization after dismissing login
+        statemachine.listen("logout", () => {
+            if (!waitForLogin) return
+            waitForLogin = false
+            initializeCorpusSelection(getCorporaFromHash(), true)
+        })
+
         await initLocalesPromise
     },
 ])
@@ -342,4 +357,4 @@ korpApp.filter("prettyNumber", [
     "$rootScope",
     ($rootScope) => (input: string, lang: string) => Number(input).toLocaleString(lang || $rootScope.lang),
 ])
-korpApp.filter("maxLength", () => (val: string) => val.length > 39 ? val.slice(0, 36) + "…" : val)
+korpApp.filter("maxLength", () => (val: unknown) => String(val).length > 39 ? String(val).slice(0, 36) + "…" : val)
