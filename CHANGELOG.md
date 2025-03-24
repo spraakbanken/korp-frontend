@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.9.0] - 2025-03-24
+
 ### Added
 
 - Choose to show word picture by frequency or LMI [#433](https://github.com/spraakbanken/korp-frontend/issues/433)
@@ -412,6 +414,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.9.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.0
 [9.8.5]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.5
 [9.8.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.4
 [9.8.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.3
