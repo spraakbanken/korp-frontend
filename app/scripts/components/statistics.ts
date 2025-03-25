@@ -18,6 +18,7 @@ import { CountParams } from "@/backend/types/count"
 import { LocationService } from "@/urlparams"
 import { AttributeOption } from "@/corpus_listing"
 import { SearchesService } from "@/services/searches"
+import { getTimeData } from "@/timedata"
 
 type StatisticsScope = IScope & {
     reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
@@ -349,11 +350,10 @@ angular.module("korpApp").component("statistics", {
                     grid.onHeaderCellRendered.subscribe((e, args) => refreshHeaders())
 
                     refreshHeaders()
-                    // TODO what should this do, select first row?
+                    // Select sum row
                     $(".slick-row:first input", $ctrl.$result).click()
                     $(window).trigger("resize")
 
-                    // TODO this must wait until after timedata is fetched
                     updateGraphBtnState()
 
                     $ctrl.setGeoAttributes($ctrl.searchParams.corpora)
@@ -581,9 +581,12 @@ angular.module("korpApp").component("statistics", {
                 return $ctrl.grid != null ? $ctrl.grid.invalidate() : undefined
             }
 
-            function updateGraphBtnState() {
+            async function updateGraphBtnState() {
+                await getTimeData()
                 const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
-                $ctrl.graphEnabled = _.compact(cl.getTimeInterval()).length > 0
+                $scope.$applyAsync(() => {
+                    $ctrl.graphEnabled = _.compact(cl.getTimeInterval()).length > 0
+                })
             }
 
             const getSelectedRows = () => ($ctrl.grid ? $ctrl.grid.getSelectedRows().sort() : [])

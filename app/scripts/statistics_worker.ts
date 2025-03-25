@@ -26,7 +26,7 @@ onmessage = function (e) {
 
     const simplifyValue = function (values: string[] | string, field: string): string[] {
         if (groupStatistics.indexOf(field) != -1) {
-            // TODO Can this pattern produce false positives? Will ":" not be used for something other than ranking or MWE indexing?
+            // For these attrs, ":" must only be used when merging is desired, e.g. for ranking or MWE indexing.
             return (values as string[]).map((value) => value.replace(/(:.+?)($| )/g, "$2"))
         } else {
             // for struct attributes only a value is sent, not list
@@ -50,7 +50,7 @@ onmessage = function (e) {
     }
 
     // Group data by simplified values, e.g. "foo:12" and "foo:34" under "foo"
-    // TODO: why first element of combined?
+    // Since `normalizeStatsData()` is applied, data has moved from `combined` into `combined[0]`
     const totalAbsoluteGroups = groupBy(combined[0].rows, (item) => simplifyHitString(item))
 
     const totalRow: TotalRow = {
@@ -64,6 +64,7 @@ onmessage = function (e) {
     const corporaFreqs: Record<string, Record<string, StatsRow[]>> = {}
     for (const id of corporaKeys) {
         const obj = data.corpora[id]
+        // Since `normalizeStatsData()` is applied, data has moved from `corpora[id]` into `corpora[id][0]`
         totalRow.count[id] = [obj[0].sums.absolute, obj[0].sums.relative]
         corporaFreqs[id] = groupBy(obj[0].rows, (item) => simplifyHitString(item))
     }
