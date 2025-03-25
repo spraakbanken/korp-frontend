@@ -135,11 +135,11 @@ angular.module("korpApp").component("resultsStatistics", {
                     .makeRequest(cqp, (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
                     .then((result) =>
                         $timeout(() => {
-                            const [data, columns, searchParams] = result
+                            const { rows, columns, params } = result
                             $ctrl.setProgress(false, 0)
-                            s.data = data
-                            s.searchParams = searchParams
-                            s.renderResult(columns, data)
+                            s.data = rows
+                            s.searchParams = params
+                            s.renderResult(columns, rows)
                         })
                     )
                     .catch((error) => {

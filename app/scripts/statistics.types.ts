@@ -9,7 +9,7 @@ export type StatisticsWorkerMessage = {
     groupStatistics: string[]
 }
 
-export type StatisticsWorkerResult = [Dataset, SlickgridColumn[], SearchParams]
+export type StatisticsWorkerResult = { rows: Dataset; columns: SlickgridColumn[]; params: SearchParams }
 
 export type SlickgridColumn = Slick.Column<Dataset> & {
     translation?: LangString

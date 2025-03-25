@@ -98,7 +98,7 @@ const createStatisticsService = function () {
         const structAttrs = settings.corpusListing.subsetFactory(corpora).getStructAttrs()
         const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
 
-        const searchParams: SearchParams = {
+        const params: SearchParams = {
             reduceVals,
             ignoreCase,
             originalCorpora,
@@ -106,11 +106,25 @@ const createStatisticsService = function () {
             prevNonExpandedCQP,
         }
 
+        // Delegate stats processing to a Web Worker for performance
+        const worker = new Worker(new URL("./statistics_worker", import.meta.url))
+
+        worker.postMessage({
+            type: "korpStatistics",
+            data,
+            // Worker code cannot import settings
+            groupStatistics: settings.group_statistics,
+        } satisfies StatisticsWorkerMessage)
+
+        // Return a promise that resolves when the worker is done
         return new Promise((resolve) => {
-            const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
-            statsWorker.onmessage = function (e: MessageEvent<Dataset>) {
+            worker.onmessage = (e: MessageEvent<Dataset>) => {
+                // Terminate worker to free up resources
+                worker.terminate()
+                const rows = e.data
+
                 // Format the values of the attributes we are reducing by
-                for (const row of e.data) {
+                for (const row of rows) {
                     if (isTotalRow(row)) continue
                     for (const attr of reduceVals) {
                         const words = row.statsValues.map((word) => word[attr]?.[0]).filter(Boolean)
@@ -118,14 +132,8 @@ const createStatisticsService = function () {
                     }
                 }
 
-                resolve([e.data, columns, searchParams])
+                resolve({ rows, columns, params })
             }
-
-            statsWorker.postMessage({
-                type: "korpStatistics",
-                data,
-                groupStatistics: settings.group_statistics,
-            } satisfies StatisticsWorkerMessage)
         })
     }
 
