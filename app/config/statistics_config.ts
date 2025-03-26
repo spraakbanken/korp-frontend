@@ -1,7 +1,6 @@
 /** @format */
-import _ from "lodash"
 import settings from "@/settings"
-import { lemgramToHtml, regescape, saldoToHtml } from "@/util"
+import { lemgramToHtml, regescape, saldoToHtml, splitFirst } from "@/util"
 import { locAttribute } from "@/i18n"
 import { CorpusListing } from "@/corpus_listing"
 
@@ -17,87 +16,53 @@ try {
 
 export function getCqp(hitValues: Record<string, string[]>[], ignoreCase: boolean): string {
     const positionalAttributes = ["word", ...Object.keys(settings.corpusListing.getCurrentAttributes())]
-    let hasPositionalAttributes = false
 
-    var tokens: string[] = []
-    for (var i = 0; i < hitValues.length; i++) {
-        var token = hitValues[i]
-        var andExpr: string[] = []
-        for (var attribute in token) {
-            if (token.hasOwnProperty(attribute)) {
-                var values = token[attribute]
-                andExpr.push(reduceCqp(attribute, values, ignoreCase))
-            }
-
-            // Flag if any of the attributes is positional
-            if (positionalAttributes.includes(attribute)) hasPositionalAttributes = true
-        }
-        tokens.push("[" + andExpr.join(" & ") + "]")
-    }
+    const tokens = hitValues
+        .map((token) => Object.entries(token).map(([attr, values]) => reduceCqp(attr, values, ignoreCase)))
+        .map((conditions) => "[" + conditions.join(" & ") + "]")
 
     // If reducing by structural attributes only, then `hitValues` has only the first match token,
     // so allow any number of subsequent tokens in the match.
-    if (!hasPositionalAttributes) tokens.push("[]{0,}")
+    const structOnly = hitValues.length == 1 && !positionalAttributes.some((attr) => attr in hitValues[0])
+    if (structOnly) tokens.push("[]{0,}")
 
     return `<match> ${tokens.join(" ")} </match>`
 }
 
-function reduceCqp(type: string, tokens: string[], ignoreCase: boolean): string {
-    let attrs = settings.corpusListing.getCurrentAttributes()
-    if (attrs[type] && attrs[type].stats_cqp) {
-        // A stats_cqp function should call regescape for the value as appropriate
-        return customFunctions[attrs[type].stats_cqp!](tokens, ignoreCase)
-    }
-    tokens = _.map(tokens, (val) => regescape(val))
-    switch (type) {
-        case "saldo":
-        case "prefix":
-        case "suffix":
-        case "lex":
-        case "lemma":
-        case "sense":
-        case "transformer-neighbour":
-            if (tokens[0] === "") return "ambiguity(" + type + ") = 0"
-            let res: string
-            if (tokens.length > 1) {
-                var key = tokens[0].split(":")[0]
+function reduceCqp(
+    name: string,
+    /** `values` is multiple if multiple result rows were grouped into one, e.g. ranked or MWE */
+    values: string[],
+    ignoreCase: boolean
+): string {
+    const attrs = settings.corpusListing.getCurrentAttributes()
+    const structAttrs = settings.corpusListing.getStructAttrs()
+    const attr = attrs[name] || structAttrs[name]
 
-                const variants: string[][] = []
-                _.map(tokens, function (val) {
-                    const parts = val.split(":")
-                    if (variants.length == 0) {
-                        for (var idx = 0; idx < parts.length - 1; idx++) variants.push([])
-                    }
-                    for (var idx = 1; idx < parts.length; idx++) variants[idx - 1].push(parts[idx])
-                })
+    // Use named CQP'ifier from custom config code. It must escape values as regex.
+    if (attr?.stats_cqp) return customFunctions[attr.stats_cqp](values, ignoreCase)
 
-                const variantsJoined = variants.map((variant) => ":(" + variant.join("|") + ")")
-                res = key + variantsJoined.join("")
-            } else {
-                res = tokens[0]
-            }
-            return `${type} contains '${res}'`
-        case "word":
-            let s = 'word="' + tokens[0] + '"'
-            if (ignoreCase) s = s + " %c"
-            return s
-        case "pos":
-        case "deprel":
-        case "msd":
-            return `${type}="${tokens[0]}"`
-        case "text_blingbring":
-        case "text_swefn":
-            return `_.${type} contains "${tokens[0]}"`
-        default:
-            if (attrs[type]) {
-                // word attributes
-                const op = attrs[type]["type"] === "set" ? " contains " : "="
-                return `${type}${op}"${tokens[0]}"`
-            } else {
-                // structural attributes
-                return `_.${type}="${tokens[0]}"`
-            }
-    }
+    const cqpName = name in structAttrs ? `_.${name}` : name
+
+    // Empty value: require number of values to be 0
+    if (values[0] == "") return `ambiguity(${cqpName}) = 0`
+
+    // Escape values for use in CQP regex
+    values = values.map(regescape)
+    // Combine grouped values
+    let cqpValue = values.length > 1 ? mergeRegex(values) : values[0]
+    // Case-insensitive search
+    if (name == "word" && ignoreCase) cqpValue += " %c"
+
+    const op = attr?.type === "set" ? "contains" : "="
+    return `${cqpName} ${op} '${cqpValue}'`
+}
+
+/** Merge ["foo:X", "foo:Y"] to "foo:(X|Y)" */
+function mergeRegex(values: string[]): string {
+    const init = splitFirst(values[0], ":")[0]
+    const tails = values.map((v) => splitFirst(v, ":")[1])
+    return init + ":(" + tails.join("|") + ")"
 }
 
 // Get the html (no linking) representation of the result for the statistics table
