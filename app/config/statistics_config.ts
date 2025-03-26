@@ -60,8 +60,8 @@ function reduceCqp(
 
 /** Merge ["foo:X", "foo:Y"] to "foo:(X|Y)" */
 function mergeRegex(values: string[]): string {
-    const init = splitFirst(values[0], ":")[0]
-    const tails = values.map((v) => splitFirst(v, ":")[1])
+    const init = splitFirst(":", values[0])[0]
+    const tails = values.map((v) => splitFirst(":", v)[1])
     return init + ":(" + tails.join("|") + ")"
 }
 
