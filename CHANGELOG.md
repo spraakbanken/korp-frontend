@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Statistics grouped rows: sub CQP only has one of the values [#452](https://github.com/spraakbanken/korp-frontend/issues/452)
+
 ## [9.9.0] - 2025-03-24
 
 ### Added
