@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Background color for statistics totals column
+
 ## [9.9.0] - 2025-03-24
 
 ### Added

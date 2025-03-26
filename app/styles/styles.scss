@@ -1540,11 +1540,19 @@ line.tick {
 }
 
 #myGrid .parameter-column {
-  background-color: rgb(242, 247, 255);
+  background-color: #f1f7ff;
 }
 
 #myGrid .slick-row:hover .parameter-column {
-  background-color: rgb(230, 235, 255);
+  background-color: #e6ebff;
+}
+
+#myGrid .total-column {
+  background-color: #fff8f0;
+}
+
+#myGrid .slick-row:hover .total-column {
+  background-color: #fff4e5;
 }
 
 #myGrid .statistics-link {

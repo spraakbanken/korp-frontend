@@ -57,6 +57,7 @@ const createStatisticsService = function () {
             },
             maxWidth: 25,
             minWidth: 25,
+            cssClass: "total-column",
         })
 
         columns.push({
@@ -67,6 +68,7 @@ const createStatisticsService = function () {
             formatter: (row, cell, value) => hitCountHtml(value, lang),
             minWidth,
             headerCssClass: "localized-header",
+            cssClass: "total-column",
         })
 
         corpora.forEach((id) =>
