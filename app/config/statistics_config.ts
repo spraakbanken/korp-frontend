@@ -3,7 +3,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import { lemgramToHtml, regescape, saldoToHtml } from "@/util"
 import { locAttribute } from "@/i18n"
-import { Attribute } from "@/settings/config.types"
+import { CorpusListing } from "@/corpus_listing"
 
 type Stringifier = (tokens: string[], ignoreCase?: boolean) => string
 
@@ -101,59 +101,28 @@ function reduceCqp(type: string, tokens: string[], ignoreCase: boolean): string 
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-export function reduceStringify(type: string, structAttr?: Attribute): (values: string[]) => string {
-    let attrs = settings.corpusListing.getCurrentAttributes()
+export function reduceStringify(name: string, cl?: CorpusListing): (values: string[]) => string {
+    cl ??= settings.corpusListing
+    const attrs = cl.getCurrentAttributes()
+    const structAttrs = cl.getStructAttrs()
+    const attr = attrs[name] || structAttrs[name]
 
-    if (attrs[type] && attrs[type].stats_stringify) {
-        return customFunctions[attrs[type].stats_stringify!]
-    }
+    // Use named stringifier from custom config code
+    if (attr?.stats_stringify) return customFunctions[attr.stats_stringify]
 
-    switch (type) {
-        case "word":
-        case "msd":
-            return (values) => values.join(" ")
-        case "pos":
-            return (values) => values.map((token) => locAttribute(attrs["pos"].translation, token)).join(" ")
-        case "saldo":
-        case "prefix":
-        case "suffix":
-        case "lex":
-        case "lemma":
-        case "sense":
-            let stringify: (value: string, appendIndex?: boolean) => string
-            if (type == "saldo" || type == "sense") {
-                stringify = saldoToHtml
-            } else if (type == "lemma") {
-                stringify = (lemma) => lemma.replace(/_/g, " ")
-            } else {
-                stringify = lemgramToHtml
-            }
+    const transforms: ((token: string) => string)[] = []
 
-            return (values) =>
-                values.map((token) => (token === "" ? "–" : stringify(token.replace(/:.*/g, ""), true))).join(" ")
+    if (attr?.ranked) transforms.push((token) => token.replace(/:.*/g, ""))
+    if (attr?.translation) transforms.push((token) => locAttribute(attr.translation, token))
 
-        case "transformer-neighbour":
-            return (values) => values.map((value) => value.replace(/:.*/g, "")).join(" ")
+    if (["prefix", "suffix", "lex"].includes(name)) transforms.push((token) => lemgramToHtml(token, true))
+    else if (name == "saldo" || name == "sense") transforms.push((token) => saldoToHtml(token, true))
+    else if (name == "lemma") transforms.push((lemma) => lemma.replace(/_/g, " "))
 
-        case "deprel":
-            return (values) => values.map((token) => locAttribute(attrs["deprel"].translation, token)).join(" ")
-        case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
-            return (values) => values.map((token) => ($("<span>").text(token) as any).outerHTML()).join(" ")
-        default:
-            if (attrs[type]) {
-                // word attributes
-                return (values) => values.join(" ")
-            } else {
-                // structural attributes
-                function stringify(value: string) {
-                    if (value === "") {
-                        return "-"
-                    } else if (structAttr?.translation) {
-                        return locAttribute(structAttr.translation, value)
-                    }
-                    return value
-                }
-                return (values) => values.map(stringify).join(" ")
-            }
-    }
+    // TODO This is specific to ASU corpus, move out to config
+    if (name == "msd_orig") transforms.push((token) => ($("<span>").text(token) as any).outerHTML())
+
+    const transform = (value: string) => transforms.reduce((acc, f) => f(acc), value)
+    // Join with spaces and then squash redundant and surrounding space.
+    return (values) => values.map(transform).join(" ").trim().replace(/\s+/g, " ")
 }

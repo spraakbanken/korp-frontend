@@ -39,8 +39,8 @@ const createStatisticsService = function () {
                 sortable: true,
                 formatter: (row, cell, value, columnDef, data: Row) => {
                     if (isTotalRow(data)) return "&Sigma;"
-                    const output = data.formattedValue[reduceVal!]
-                    return `<span class="statistics-link" data-row=${data.rowId}>${output}</span>`
+                    const output = data.formattedValue[reduceVal!] || `<span class="opacity-50">&empty;</span>`
+                    return `<span class="statistics-link" data-row="${data.rowId}">${output}</span>`
                 },
                 minWidth,
                 cssClass: "parameter-column",
@@ -97,8 +97,8 @@ const createStatisticsService = function () {
         const columns = createColumns(corpora, reduceVals, reduceValLabels)
 
         // Get stringifiers for formatting attribute values
-        const structAttrs = settings.corpusListing.subsetFactory(corpora).getStructAttrs()
-        const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, structAttrs[attr]))
+        const cl = settings.corpusListing.subsetFactory(corpora)
+        const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, cl))
 
         const params: SearchParams = {
             reduceVals,
