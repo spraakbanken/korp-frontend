@@ -10,13 +10,11 @@ import { korpRequest } from "./common"
 import BaseProxy from "./base-proxy"
 
 /** Like `CountResponse` but the stats are necessarily arrays. */
-export type StatsNormalized = {
+export type StatsNormalized = CountResponse & {
     corpora: {
         [name: string]: StatsColumn[]
     }
     combined: StatsColumn[]
-    count: number
-    time: number
 }
 
 /**
@@ -25,101 +23,60 @@ export type StatsNormalized = {
  * This function adds a split (converts non-arrays to single-element arrays) if not, so higher code can assume the same shape regardless.
  */
 export function normalizeStatsData(data: CountResponse): StatsNormalized {
-    const combined = !Array.isArray(data.combined) ? [data.combined] : data.combined
-
-    const corpora: Record<string, StatsColumn[]> = {}
-    for (let [corpusID, obj] of _.toPairs(data.corpora)) {
-        if (!Array.isArray(obj)) {
-            corpora[corpusID] = [obj]
-        }
-    }
-
+    const combined = Array.isArray(data.combined) ? data.combined : [data.combined]
+    const corpora = _.mapValues(data.corpora, (stats) => (Array.isArray(stats) ? stats : [stats]))
     return { ...data, combined, corpora }
 }
 
 export class StatsProxy extends BaseProxy {
     prevParams: CountParams | null = null
 
-    makeParameters(reduceVals: string[], cqp: string, ignoreCase: boolean): CountParams {
-        const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
-        const groupBy: string[] = []
-        const groupByStruct: string[] = []
-        for (let reduceVal of reduceVals) {
-            if (
-                structAttrs[reduceVal] &&
-                (structAttrs[reduceVal]["group_by"] || "group_by_struct") == "group_by_struct"
-            ) {
-                groupByStruct.push(reduceVal)
-            } else {
-                groupBy.push(reduceVal)
-            }
-        }
-
-        const parameters = {
-            group_by: groupBy.join(","),
-            group_by_struct: groupByStruct.join(","),
-            cqp: this.expandCQP(cqp),
-            corpus: settings.corpusListing.stringifySelected(true),
-            incremental: true,
-        }
-        _.extend(parameters, settings.corpusListing.getWithinParameters())
-        if (ignoreCase) {
-            _.extend(parameters, { ignore_case: "word" })
-        }
-        return parameters
-    }
-
     async makeRequest(cqp: string, onProgress: ProgressHandler<"count">): Promise<StatisticsWorkerResult> {
         this.resetRequest()
         const abortSignal = this.abortController.signal
 
-        const reduceval = locationSearchGet("stats_reduce") || "word"
-        const reduceVals = reduceval.split(",")
-
+        const reduceVals = (locationSearchGet("stats_reduce") || "word").split(",")
         const ignoreCase = locationSearchGet("stats_reduce_insensitive") != null
 
-        const reduceValLabels = _.map(reduceVals, function (reduceVal) {
-            if (reduceVal === "word") {
-                return settings.word_label
-            }
-            const maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[
-                reduceVal
-            ]
-            if (maybeReduceAttr) {
-                return maybeReduceAttr.label
-            } else {
-                return settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())[reduceVal].label
-            }
-        })
-
-        const params = this.makeParameters(reduceVals, cqp, ignoreCase)
         // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
         const originalCorpora: string = settings.corpusListing.stringifySelected(false)
 
         const wordAttrs = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())
         const structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
-        params.split = _.filter(reduceVals, (reduceVal) => {
-            return (
-                (wordAttrs[reduceVal] && wordAttrs[reduceVal].type == "set") ||
-                (structAttrs[reduceVal] && structAttrs[reduceVal].type == "set")
-            )
-        }).join(",")
+        /** Configs of reduced attributes keyed by name, excluding "word" */
+        const attrs = _.pick({ ...wordAttrs, ...structAttrs }, reduceVals)
 
-        // For ranked attributes, only count the top-ranking value in a token.
-        params.top = reduceVals.filter((attr) => (wordAttrs[attr] || structAttrs[attr])?.ranked).join(",")
+        const missingAttrs = reduceVals.filter((name) => !attrs[name] && name != "word")
+        if (missingAttrs.length) throw new Error(`Trying to reduce by missing attribute ${missingAttrs}`)
+
+        const labels = reduceVals.map((name) => (name == "word" ? settings["word_label"] : attrs[name]?.label))
+
+        // Struct attrs go in the `group_by_struct` param, except if they have `group_by: group_by`.
+        const isStruct = (name: string) => structAttrs[name] && structAttrs[name]["group_by"] != "group_by"
+        const [groupByStruct, groupBy] = _.partition(reduceVals, isStruct)
+
+        const withinParams = settings.corpusListing.getWithinParameters()
+        // Replace "ABC-aa|ABC-bb:link" with "ABC-aa:link"
+        if (settings.parallel) withinParams.within = withinParams.within?.replace(/\|.*?:/g, ":")
+
+        const params: CountParams = {
+            group_by: groupBy.join(),
+            group_by_struct: groupByStruct.join(),
+            cqp: this.expandCQP(cqp),
+            corpus: settings.corpusListing.stringifySelected(true),
+            ignore_case: ignoreCase ? "word" : undefined,
+            incremental: true,
+            split: reduceVals.filter((name) => attrs[name]?.type == "set").join(),
+            // For ranked attributes, only count the top-ranking value in a token.
+            top: reduceVals.filter((name) => attrs[name]?.ranked).join(),
+            ...withinParams,
+        }
 
         this.prevParams = params
         const data = await korpRequest("count", params, { abortSignal, onProgress })
 
         const normalizedData = normalizeStatsData(data)
-        return statisticsService.processData(
-            originalCorpora,
-            normalizedData,
-            reduceVals,
-            reduceValLabels,
-            ignoreCase,
-            cqp
-        )
+        return statisticsService.processData(originalCorpora, normalizedData, reduceVals, labels, ignoreCase, cqp)
     }
 }
 

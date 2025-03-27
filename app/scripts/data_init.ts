@@ -208,7 +208,6 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     // only if the current mode is parallel, we load the special code required
     if (config.parallel) {
         require("./parallel/corpus_listing")
-        require("./parallel/stats_proxy")
     }
 
     if (!settings.parallel) {
