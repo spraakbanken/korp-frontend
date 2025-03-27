@@ -176,7 +176,7 @@ angular.module("korpApp").component("statistics", {
                     <div id="showBarPlot"></div>
                 </div>
                 <div ng-if="!$ctrl.loading" style="margin-bottom: 5px">
-                    {{'total_rows' | loc:$root.lang}} {{$ctrl.data.length - 1}}
+                    {{'total_rows' | loc:$root.lang}} {{$ctrl.data.length - 1 | prettyNumber:$root.lang}}
                     <span ng-if="clipped">
                         {{'stats_clipped' | loc:$root.lang}}
                         <i
