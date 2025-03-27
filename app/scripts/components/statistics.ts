@@ -21,6 +21,7 @@ import { SearchesService } from "@/services/searches"
 import { getTimeData } from "@/timedata"
 
 type StatisticsScope = IScope & {
+    clipped: boolean
     reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
     rowData: { title: string; values: AbsRelSeq }[]
     statCurrentAttrs: AttributeOption[]
@@ -37,9 +38,9 @@ type StatisticsController = IController & {
     grid: Slick.Grid<Row>
     loading: boolean
     prevParams: CountParams
+    rowCount: number
     searchParams: SearchParams
     sortColumn?: string
-    totalNumberOfRows: number
     warning?: string
     onStatsClick: (event: MouseEvent) => void
     onGraphClick: () => void
@@ -175,7 +176,14 @@ angular.module("korpApp").component("statistics", {
                     <div id="showBarPlot"></div>
                 </div>
                 <div ng-if="!$ctrl.loading" style="margin-bottom: 5px">
-                    {{'total_rows' | loc:$root.lang}} {{$ctrl.totalNumberOfRows}}
+                    {{'total_rows' | loc:$root.lang}} {{$ctrl.data.length - 1}}
+                    <span ng-if="clipped">
+                        {{'stats_clipped' | loc:$root.lang}}
+                        <i
+                            class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                            uib-tooltip="{{'stats_clipped_help' | loc:$root.lang}}"
+                        ></i>
+                    </span>
                 </div>
                 <div id="myGrid"></div>
                 <div id="exportStatsSection">
@@ -203,6 +211,7 @@ angular.module("korpApp").component("statistics", {
         error: "<",
         loading: "<",
         prevParams: "<",
+        rowCount: "<",
         searchParams: "<",
         warning: "<",
     },
@@ -276,8 +285,6 @@ angular.module("korpApp").component("statistics", {
                     grid.registerPlugin(checkboxSelector)
                     $ctrl.grid = grid
                     $ctrl.grid.autosizeColumns()
-
-                    $ctrl.totalNumberOfRows = $ctrl.grid.getDataLength()
 
                     grid.onSort.subscribe((e, args) => {
                         if ($ctrl.doSort) {
@@ -357,6 +364,10 @@ angular.module("korpApp").component("statistics", {
                     updateGraphBtnState()
 
                     $ctrl.setGeoAttributes($ctrl.searchParams.corpora)
+                }
+
+                if ("rowCount" in changeObj && $ctrl.rowCount) {
+                    $scope.clipped = !!settings["statistics_limit"] && $ctrl.rowCount >= settings["statistics_limit"]
                 }
             }
 

@@ -223,6 +223,8 @@
     "no_related_words": "No hits",
 
     "total_rows": "Number of rows:",
+    "stats_clipped": "most frequent",
+    "stats_clipped_help": "The total number of rows was larger, but the least frequent rows were skipped for better performance.",
     "graph": "Graph",
     "line": "Line",
     "bar": "Bar",

@@ -61,6 +61,7 @@ export type AppSettings = {
     reduce_struct_attribute_selector: "union" | "intersection"
     statistics?: boolean
     statistics_case_insensitive_default?: boolean
+    statistics_limit?: number
     urnResolver?: string
     visible_modes: number
     word_label: Record<string, string>

@@ -19,6 +19,7 @@ type ResultsStatisticsController = IController & {
 
 type ResultsStatisticsScope = IScope & {
     aborted: boolean
+    rowCount: number
     columns: SlickgridColumn[]
     data: Dataset
     error?: string
@@ -42,6 +43,7 @@ angular.module("korpApp").component("resultsStatistics", {
             error="error"
             loading="$ctrl.loading"
             prev-params="proxy.prevParams"
+            row-count="rowCount"
             search-params="searchParams"
             warning="warning"
         ></statistics>
@@ -135,10 +137,11 @@ angular.module("korpApp").component("resultsStatistics", {
                     .makeRequest(cqp, (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
                     .then((result) =>
                         $timeout(() => {
-                            const { rows, columns, params } = result
+                            const { rows, columns, params, rowCount } = result
                             $ctrl.setProgress(false, 0)
                             s.data = rows
                             s.searchParams = params
+                            s.rowCount = rowCount
                             s.renderResult(columns, rows)
                         })
                     )

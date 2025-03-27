@@ -2,12 +2,17 @@
 import _ from "lodash"
 import settings from "@/settings"
 import type { ProgressHandler } from "@/backend/types"
-import { StatisticsWorkerResult } from "@/statistics.types"
+import { StatisticsProcessed } from "@/statistics.types"
 import { locationSearchGet, Factory } from "@/util"
 import { statisticsService } from "@/statistics"
 import { CountParams, CountResponse, StatsColumn } from "./types/count"
 import { korpRequest } from "./common"
 import BaseProxy from "./base-proxy"
+
+export type StatsResult = StatisticsProcessed & {
+    /** Total number of rows before possibly limited by configured max. */
+    rowCount: number
+}
 
 /** Like `CountResponse` but the stats are necessarily arrays. */
 export type StatsNormalized = CountResponse & {
@@ -31,7 +36,7 @@ export function normalizeStatsData(data: CountResponse): StatsNormalized {
 export class StatsProxy extends BaseProxy {
     prevParams: CountParams | null = null
 
-    async makeRequest(cqp: string, onProgress: ProgressHandler<"count">): Promise<StatisticsWorkerResult> {
+    async makeRequest(cqp: string, onProgress: ProgressHandler<"count">): Promise<StatsResult> {
         this.resetRequest()
         const abortSignal = this.abortController.signal
 
@@ -64,6 +69,7 @@ export class StatsProxy extends BaseProxy {
             group_by_struct: groupByStruct.join(),
             cqp: this.expandCQP(cqp),
             corpus: settings.corpusListing.stringifySelected(true),
+            end: settings["statistics_limit"] ? settings["statistics_limit"] - 1 : undefined,
             ignore_case: ignoreCase ? "word" : undefined,
             incremental: true,
             split: reduceVals.filter((name) => attrs[name]?.type == "set").join(),
@@ -76,7 +82,16 @@ export class StatsProxy extends BaseProxy {
         const data = await korpRequest("count", params, { abortSignal, onProgress })
 
         const normalizedData = normalizeStatsData(data)
-        return statisticsService.processData(originalCorpora, normalizedData, reduceVals, labels, ignoreCase, cqp)
+        const dataProcessed = await statisticsService.processData(
+            originalCorpora,
+            normalizedData,
+            reduceVals,
+            labels,
+            ignoreCase,
+            cqp
+        )
+
+        return { ...dataProcessed, rowCount: data.count }
     }
 }
 

@@ -8,7 +8,7 @@ import {
     isTotalRow,
     Row,
     StatisticsWorkerMessage,
-    StatisticsWorkerResult,
+    StatisticsProcessed,
     SearchParams,
     SlickgridColumn,
 } from "./statistics.types"
@@ -92,7 +92,7 @@ const createStatisticsService = function () {
         reduceValLabels: LangString[],
         ignoreCase: boolean,
         prevNonExpandedCQP: string
-    ): Promise<StatisticsWorkerResult> {
+    ): Promise<StatisticsProcessed> {
         const corpora = Object.keys(data.corpora)
         const columns = createColumns(corpora, reduceVals, reduceValLabels)
 

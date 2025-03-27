@@ -224,6 +224,8 @@
     "no_related_words": "Inga träffar",
 
     "total_rows": "Antal rader:",
+    "stats_clipped": "mest förekommande",
+    "stats_clipped_help": "Det totala antalet rader var större, men de minst förekommande har tagits bort av prestandaskäl.",
     "graph": "Trenddiagram",
     "line": "Linje",
     "bar": "Stapel",
