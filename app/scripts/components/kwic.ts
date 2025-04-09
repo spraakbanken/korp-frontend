@@ -129,12 +129,10 @@ angular.module("korpApp").component("kwic", {
         <div ng-if="!$ctrl.aborted || $ctrl.loading" ng-click="$ctrl.onKwicClick($event)">
             <div class="flex gap-8 pb-2" ng-class="{'opacity-50 italic': $ctrl.loading}">
                 <div ng-if="$ctrl.hitsInProgress != null">
-                    <span>{{'num_results' | loc:$root.lang}}: </span>
-                    <span>{{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}</span>
+                    {{'num_results' | loc:$root.lang}}: {{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}
                 </div>
                 <div ng-if="relativeFrequency != null">
-                    <span>{{'num_results_relative' | loc:$root.lang}}: </span>
-                    <span>{{ relativeFrequency | formatRelativeHits:$root.lang }}</span>
+                    {{'num_results_relative' | loc:$root.lang}}: {{ relativeFrequency | formatRelativeHits:$root.lang }}
                     <i
                         class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
                         uib-tooltip="{{'relative_help' | loc:$root.lang}}"
