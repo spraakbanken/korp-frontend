@@ -57,11 +57,12 @@ describe("search history", () => {
     test("parameters", async ({ page }) => {
         const filters = btoa(JSON.stringify({ text_party_name: ["Centerpartiet"] }))
         // Make a complicated search
+        // Use mid_comp, deprecated shortcut for prefix+suffix
         await page.goto(
             `./#?lang=eng&corpus=vivill&search=word|djur&global_filter=${filters}&mid_comp&isCaseInsensitive`
         )
         await expect(page.getByRole("table")).toContainText("djur")
-        const hits = await page.locator(".num-result").textContent()
+        const hits = (await page.getByText('Results:').textContent())?.slice(9)
         expect(hits).toBeTruthy()
 
         // Load fresh page
@@ -72,7 +73,8 @@ describe("search history", () => {
         await page.locator("search-history").getByRole("combobox").selectOption("djur")
 
         // Check that options are restored
-        await expect(page.getByLabel("medial part")).toBeChecked()
+        await expect(page.getByLabel("initial part")).toBeChecked()
+        await expect(page.getByLabel("final part")).toBeChecked()
         await expect(page.getByLabel("case-insensitive")).toBeChecked()
 
         // Check that filter is restored
@@ -81,7 +83,7 @@ describe("search history", () => {
         await expect(page.locator("sidebar")).toContainText("Centerpartiet")
 
         // Check that hit count is the same
-        const hits2 = await page.locator(".num-result").textContent()
+        const hits2 = (await page.getByText('Results:').textContent())?.slice(9)
         expect(hits2).toBe(hits)
     })
 })
