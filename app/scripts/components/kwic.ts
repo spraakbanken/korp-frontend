@@ -126,29 +126,29 @@ angular.module("korpApp").component("kwic", {
         <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">{{'search_aborted' | loc:$root.lang}}</div>
 
         <div ng-if="!$ctrl.aborted || $ctrl.loading" ng-click="$ctrl.onKwicClick($event)">
-            <div class="result_controls">
-                <div class="controls_n" ng-if="$ctrl.hitsInProgress != null">
+            <div class="flex gap-8 pb-2" ng-class="{'opacity-50 italic': $ctrl.loading}">
+                <div ng-if="$ctrl.hitsInProgress != null">
                     <span>{{'num_results' | loc:$root.lang}}: </span>
-                    <span class="num-result">{{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}</span>
+                    <span>{{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}</span>
                 </div>
-                <div class="hits_picture" ng-if="$ctrl.hitsPictureData.length > 1">
-                    <table class="hits_picture_table">
-                        <tbody>
-                            <tr>
-                                <td
-                                    class="hits_picture_corp"
-                                    ng-repeat="corpus in $ctrl.hitsPictureData"
-                                    ng-style='{width : corpus.relative + "%"}'
-                                    ng-class="{odd : $index % 2 != 0, even : $index % 2 == 0}"
-                                    ng-click="$ctrl.pageEvent(corpus.page)"
-                                    uib-tooltip="{{corpus.rtitle | locObj:$root.lang}}: {{corpus.abs}}"
-                                    tooltip-placement='{{$last? "left":"top"}}'
-                                    append-to-body="false"
-                                ></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table
+                    ng-if="$ctrl.hitsPictureData.length > 1"
+                    class="hits_picture_table flex-1 h-5 border m-0 p-0 cursor-pointer"
+                >
+                    <tbody>
+                        <tr>
+                            <td
+                                class="hits_picture_corp"
+                                ng-repeat="corpus in $ctrl.hitsPictureData"
+                                ng-style='{width : corpus.relative + "%"}'
+                                ng-click="$ctrl.pageEvent(corpus.page)"
+                                uib-tooltip="{{corpus.rtitle | locObj:$root.lang}}: {{corpus.abs}}"
+                                tooltip-placement='{{$last? "left":"top"}}'
+                                append-to-body="false"
+                            ></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <kwic-pager
                 ng-if="$ctrl.hits"
