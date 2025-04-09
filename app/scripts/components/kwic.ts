@@ -80,6 +80,7 @@ type KwicScope = IScope & {
     updateHpp: () => void
     context: boolean
     updateContext: () => void
+    relativeFrequency?: number
     sort: SortMethod
     sortOptions: Record<SortMethod, string>
     updateSort: () => void
@@ -130,6 +131,14 @@ angular.module("korpApp").component("kwic", {
                 <div ng-if="$ctrl.hitsInProgress != null">
                     <span>{{'num_results' | loc:$root.lang}}: </span>
                     <span>{{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}</span>
+                </div>
+                <div ng-if="relativeFrequency != null">
+                    <span>{{'num_results_relative' | loc:$root.lang}}: </span>
+                    <span>{{ relativeFrequency | formatRelativeHits:$root.lang }}</span>
+                    <i
+                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                        uib-tooltip="{{'relative_help' | loc:$root.lang}}"
+                    ></i>
                 </div>
                 <table
                     ng-if="$ctrl.hitsPictureData.length > 1"
@@ -334,6 +343,13 @@ angular.module("korpApp").component("kwic", {
                         selectionManager.deselect()
                         statemachine.send("DESELECT_WORD")
                     }
+                }
+
+                if ("hitsInProgress" in changeObj) {
+                    const totalTokens = settings.corpusListing
+                        .mapSelectedCorpora((corpus) => corpus.tokens || 0)
+                        .reduce((sum, t) => sum + t, 0)
+                    $scope.relativeFrequency = totalTokens ? ($ctrl.hitsInProgress / totalTokens) * 1e6 : undefined
                 }
 
                 if ("corpusHits" in changeObj && $ctrl.corpusHits) {

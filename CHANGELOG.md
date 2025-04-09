@@ -4,6 +4,7 @@
 
 ### Added
 
+- KWIC: Show number of hits as relative frequency [#456](https://github.com/spraakbanken/korp-frontend/issues/456)
 - Background color for statistics totals column
 - Configurable limit for statistics API call (alternative to [#73](https://github.com/spraakbanken/korp-frontend/issues/73) and [#92](https://github.com/spraakbanken/korp-frontend/issues/92))
 

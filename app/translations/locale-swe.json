@@ -252,6 +252,8 @@
     "and_include": "även som",
     "hits_per_page": "Träffar per sida",
     "num_results": "Antal träffar",
+    "num_results_relative": "Relativ frekvens",
+    "relative_help": "Relativ frekvens visar hur många träffar det finns per miljon token i det valda materialet. Det här måttet underlättar jämförelsen av frekvenser i korpusar av olika storlekar.",
     "next": "Nästa",
     "prev": "Föregående",
     "goto_page": "Gå till sida",

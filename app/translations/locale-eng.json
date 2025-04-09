@@ -251,6 +251,8 @@
     "and_include": "also as",
     "hits_per_page": "Hits per page",
     "num_results": "Results",
+    "num_results_relative": "Relative frequency",
+    "relative_help": "Relative frequency shows the number of hits per million tokens in selected corpora. This is helpful when comparing searches in corpora of different sizes.",
     "next": "Next",
     "prev": "Previous",
     "goto_page": "Go to page",

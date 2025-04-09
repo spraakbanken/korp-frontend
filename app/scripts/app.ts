@@ -17,7 +17,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { initLocales } from "@/data_init"
 import { RootScope } from "@/root-scope.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { deferOk, getService, html } from "@/util"
+import { deferOk, formatRelativeHits, getService, html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
 import "@/components/searchtabs"
@@ -355,6 +355,10 @@ korpApp.filter("trust", ["$sce", ($sce) => (input: string) => $sce.trustAsHtml(i
 // Can fall back on using $rootScope for numbers that will anyway be re-rendered when switching language.
 korpApp.filter("prettyNumber", [
     "$rootScope",
-    ($rootScope) => (input: string, lang: string) => Number(input).toLocaleString(lang || $rootScope.lang),
+    ($rootScope) => (input: string, lang?: string) => Number(input).toLocaleString(lang || $rootScope.lang),
+])
+korpApp.filter("formatRelativeHits", [
+    "$rootScope",
+    ($rootScope) => (input: string, lang?: string) => formatRelativeHits(input, lang || $rootScope.lang),
 ])
 korpApp.filter("maxLength", () => (val: unknown) => String(val).length > 39 ? String(val).slice(0, 36) + "…" : val)
