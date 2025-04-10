@@ -14,19 +14,21 @@ import {
 } from "./statistics.types"
 import { fromKeys, hitCountHtml } from "@/util"
 import { LangString } from "./i18n/types"
-import { getLang, locObj } from "./i18n"
+import { locObj } from "./i18n"
+import { RootScope } from "./root-scope.types"
 const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function () {
+    // Root Scope is used so the cell formatters are re-triggered when language is changed.
     const createColumns = function (
+        $rootScope: RootScope,
         corpora: string[],
         reduceVals: string[],
         reduceValLabels: LangString[]
     ): SlickgridColumn[] {
         // This sorting will not react to language change, but that's quite alright, we like columns staying in place.
-        const lang = getLang()
-        const getCorpusTitle = (id: string): string => locObj(settings.corpora[id.toLowerCase()].title, lang)
-        corpora.sort((a, b) => getCorpusTitle(a).localeCompare(getCorpusTitle(b), lang))
+        const getCorpusTitle = (id: string): string => locObj(settings.corpora[id.toLowerCase()].title, $rootScope.lang)
+        corpora.sort((a, b) => getCorpusTitle(a).localeCompare(getCorpusTitle(b), $rootScope.lang))
 
         const minWidth = 100
         const columns: SlickgridColumn[] = []
@@ -65,7 +67,7 @@ const createStatisticsService = function () {
             name: "stats_total",
             field: "total",
             sortable: true,
-            formatter: (row, cell, value) => hitCountHtml(value, lang),
+            formatter: (row, cell, value) => hitCountHtml(value, $rootScope.lang),
             minWidth,
             headerCssClass: "localized-header",
             cssClass: "total-column",
@@ -77,7 +79,7 @@ const createStatisticsService = function () {
                 translation: settings.corpora[id.toLowerCase()].title,
                 field: "count",
                 sortable: true,
-                formatter: (row, cell, value, columnDef) => hitCountHtml(value[columnDef.id!], lang),
+                formatter: (row, cell, value, columnDef) => hitCountHtml(value[columnDef.id!], $rootScope.lang),
                 minWidth,
             })
         )
@@ -86,6 +88,7 @@ const createStatisticsService = function () {
     }
 
     function processData(
+        $rootScope: RootScope,
         originalCorpora: string,
         data: StatsNormalized,
         reduceVals: string[],
@@ -97,7 +100,7 @@ const createStatisticsService = function () {
         const attributes = cl.getReduceAttrs()
         const labels = reduceVals.map((name) => (name == "word" ? settings["word_label"] : attributes[name]?.label))
 
-        const columns = createColumns(corpora, reduceVals, labels)
+        const columns = createColumns($rootScope, corpora, reduceVals, labels)
         // Get stringifiers for formatting attribute values
         const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, cl))
 

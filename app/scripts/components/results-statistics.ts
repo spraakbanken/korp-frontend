@@ -146,6 +146,7 @@ angular.module("korpApp").component("resultsStatistics", {
                     })
                     .then(async (data) => {
                         const { rows, columns, params } = await statisticsService.processData(
+                            $rootScope,
                             corpora,
                             data,
                             attrs,

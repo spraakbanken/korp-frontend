@@ -253,11 +253,10 @@ angular.module("korpApp").component("statistics", {
                 $location.search("stats_reduce_insensitive", "word")
             }
 
-            $rootScope.$watch("lang", (lang: string) => {
+            $rootScope.$watch("lang", () => {
                 if (!$ctrl.grid) return
-                var cols = $ctrl.grid.getColumns()
-                updateLabels(cols, lang)
-                // TODO Re-render formatted numbers
+                const cols = $ctrl.grid.getColumns()
+                updateLabels(cols)
                 $ctrl.grid.setColumns(cols)
             })
 
@@ -272,7 +271,7 @@ angular.module("korpApp").component("statistics", {
 
                     $ctrl.columns = [checkboxSelector.getColumnDefinition()].concat($ctrl.columns)
 
-                    updateLabels($ctrl.columns, $rootScope.lang)
+                    updateLabels($ctrl.columns)
 
                     const grid = new Slick.Grid($("#myGrid"), $ctrl.data, $ctrl.columns, {
                         enableCellNavigation: false,
@@ -371,9 +370,9 @@ angular.module("korpApp").component("statistics", {
                 }
             }
 
-            function updateLabels(cols: SlickgridColumn[], lang: string) {
+            function updateLabels(cols: SlickgridColumn[]) {
                 cols.forEach((col) => {
-                    if (col.translation) col.name = locObj(col.translation, lang)
+                    if (col.translation) col.name = locObj(col.translation, $rootScope.lang)
                 })
             }
 
