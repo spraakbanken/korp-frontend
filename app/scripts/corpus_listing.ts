@@ -151,6 +151,13 @@ export class CorpusListing {
     }
     // End TODO
 
+    getReduceAttrs(): Record<string, Attribute> {
+        return {
+            ...this.getCurrentAttributes(this.getReduceLang()),
+            ...this.getStructAttrs(this.getReduceLang()),
+        }
+    }
+
     /** Compile list of filters applicable to all selected corpora. */
     getDefaultFilters(): Record<string, Attribute> {
         // Collect filters common to all selected corpora

@@ -10,6 +10,7 @@ import { html } from "@/util"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/statistics"
+import { statisticsService } from "@/statistics"
 
 type ResultsStatisticsController = IController & {
     isActive: boolean
@@ -132,19 +133,33 @@ angular.module("korpApp").component("resultsStatistics", {
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 
+                const attrs = ($location.search()["stats_reduce"] || "word").split(",")
+                const ignoreCase = $location.search()["stats_reduce_insensitive"] != null
+                // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
+                const corpora: string = settings.corpusListing.stringifySelected(false)
+
                 $ctrl.setProgress(true, 0)
                 s.proxy
-                    .makeRequest(cqp, (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
-                    .then((result) =>
+                    .makeRequest(cqp, attrs, {
+                        ignoreCase,
+                        onProgress: (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)),
+                    })
+                    .then(async (data) => {
+                        const { rows, columns, params } = await statisticsService.processData(
+                            corpora,
+                            data,
+                            attrs,
+                            ignoreCase,
+                            cqp
+                        )
                         $timeout(() => {
-                            const { rows, columns, params, rowCount } = result
                             $ctrl.setProgress(false, 0)
                             s.data = rows
                             s.searchParams = params
-                            s.rowCount = rowCount
+                            s.rowCount = data.count
                             s.renderResult(columns, rows)
                         })
-                    )
+                    })
                     .catch((error) => {
                         // AbortError is expected if a new search is made before the previous one is finished
                         if (error.name == "AbortError") return

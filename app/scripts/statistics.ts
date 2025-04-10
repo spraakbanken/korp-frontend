@@ -89,22 +89,23 @@ const createStatisticsService = function () {
         originalCorpora: string,
         data: StatsNormalized,
         reduceVals: string[],
-        reduceValLabels: LangString[],
         ignoreCase: boolean,
         prevNonExpandedCQP: string
     ): Promise<StatisticsProcessed> {
         const corpora = Object.keys(data.corpora)
-        const columns = createColumns(corpora, reduceVals, reduceValLabels)
-
-        // Get stringifiers for formatting attribute values
         const cl = settings.corpusListing.subsetFactory(corpora)
+        const attributes = cl.getReduceAttrs()
+        const labels = reduceVals.map((name) => (name == "word" ? settings["word_label"] : attributes[name]?.label))
+
+        const columns = createColumns(corpora, reduceVals, labels)
+        // Get stringifiers for formatting attribute values
         const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, cl))
 
         const params: SearchParams = {
             reduceVals,
             ignoreCase,
             originalCorpora,
-            corpora: _.keys(data.corpora),
+            corpora,
             prevNonExpandedCQP,
         }
 

@@ -35,14 +35,12 @@ function reduceCqp(
     values: string[],
     ignoreCase: boolean
 ): string {
-    const attrs = settings.corpusListing.getCurrentAttributes()
-    const structAttrs = settings.corpusListing.getStructAttrs()
-    const attr = attrs[name] || structAttrs[name]
+    const attr = settings.corpusListing.getReduceAttrs()[name]
 
     // Use named CQP'ifier from custom config code. It must escape values as regex.
     if (attr?.stats_cqp) return customFunctions[attr.stats_cqp](values, ignoreCase)
 
-    const cqpName = name in structAttrs ? `_.${name}` : name
+    const cqpName = attr["is_struct_attr"] ? `_.${name}` : name
 
     // Empty value: require number of values to be 0
     if (values[0] == "") return `ambiguity(${cqpName}) = 0`
@@ -68,9 +66,7 @@ function mergeRegex(values: string[]): string {
 // Get the html (no linking) representation of the result for the statistics table
 export function reduceStringify(name: string, cl?: CorpusListing): (values: string[]) => string {
     cl ??= settings.corpusListing
-    const attrs = cl.getCurrentAttributes()
-    const structAttrs = cl.getStructAttrs()
-    const attr = attrs[name] || structAttrs[name]
+    const attr = cl.getReduceAttrs()[name]
 
     // Use named stringifier from custom config code
     if (attr?.stats_stringify) return customFunctions[attr.stats_stringify]
