@@ -714,21 +714,6 @@ span.absStat {
   color: #999999;
 }
 
-a {
-  &.absStat {
-    color: #999999;
-    &:hover {
-      color: indianred;
-    }
-  }
-  &.relStat {
-    color: #000000;
-    &:hover {
-      color: indianred;
-    }
-  }
-}
-
 .word_column {
   text-align: left;
 }

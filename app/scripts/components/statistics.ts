@@ -74,6 +74,16 @@ angular.module("korpApp").component("statistics", {
                     on-change="reduceOnChange"
                 ></reduce-select>
             </div>
+            <span>
+                <label>
+                    <input type="checkbox" ng-model="$root.statsRelative" />
+                    {{"num_results_relative" | loc:$root.lang}}
+                    <i
+                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                        uib-tooltip="{{'relative_help' | loc:$root.lang}}"
+                    ></i>
+                </label>
+            </span>
         </div>
 
         <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
@@ -258,6 +268,12 @@ angular.module("korpApp").component("statistics", {
                 const cols = $ctrl.grid.getColumns()
                 updateLabels(cols)
                 $ctrl.grid.setColumns(cols)
+            })
+
+            $rootScope.$watch("statsRelative", () => {
+                if (!$ctrl.grid) return
+                // Trigger reformatting
+                $ctrl.grid.setColumns($ctrl.grid.getColumns())
             })
 
             $ctrl.$onChanges = (changeObj) => {

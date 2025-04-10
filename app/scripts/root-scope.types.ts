@@ -27,6 +27,7 @@ export type RootScope = IRootScopeService & {
     langDef: DeferredOk
     simpleCQP?: string
     show_modal: "about" | false
+    statsRelative?: boolean
     compareTabs: CompareTab[]
     graphTabs: GraphTab[]
     kwicTabs: KwicTab[]

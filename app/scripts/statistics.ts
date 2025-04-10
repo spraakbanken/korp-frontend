@@ -11,8 +11,9 @@ import {
     StatisticsProcessed,
     SearchParams,
     SlickgridColumn,
+    AbsRelSeq,
 } from "./statistics.types"
-import { fromKeys, hitCountHtml } from "@/util"
+import { formatRelativeHits, fromKeys, hitCountHtml } from "@/util"
 import { LangString } from "./i18n/types"
 import { locObj } from "./i18n"
 import { RootScope } from "./root-scope.types"
@@ -67,10 +68,10 @@ const createStatisticsService = function () {
             name: "stats_total",
             field: "total",
             sortable: true,
-            formatter: (row, cell, value) => hitCountHtml(value, $rootScope.lang),
+            formatter: (row, cell, value) => formatFrequency(value),
             minWidth,
             headerCssClass: "localized-header",
-            cssClass: "total-column",
+            cssClass: "total-column text-right",
         })
 
         corpora.forEach((id) =>
@@ -79,10 +80,18 @@ const createStatisticsService = function () {
                 translation: settings.corpora[id.toLowerCase()].title,
                 field: "count",
                 sortable: true,
-                formatter: (row, cell, value, columnDef) => hitCountHtml(value[columnDef.id!], $rootScope.lang),
+                formatter: (row, cell, value, columnDef) => formatFrequency(value[columnDef.id!]),
                 minWidth,
+                cssClass: "text-right",
             })
         )
+
+        function formatFrequency(absrel: AbsRelSeq): string {
+            const [absolute, relative] = absrel
+            return $rootScope.statsRelative
+                ? formatRelativeHits(relative, $rootScope.lang)
+                : absolute.toLocaleString($rootScope.lang)
+        }
 
         return columns
     }

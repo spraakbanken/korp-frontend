@@ -216,7 +216,6 @@ export function hitCountHtml(absrel: [number, number], lang?: string) {
     const [absolute, relative] = absrel
     const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
     // TODO Remove outer span?
-    // TODO Flexbox?
     const absoluteHtml = `<span class='absStat'>(${absolute.toLocaleString(lang)})</span>`
     return `<span>${relativeHtml} ${absoluteHtml}</span>`
 }
