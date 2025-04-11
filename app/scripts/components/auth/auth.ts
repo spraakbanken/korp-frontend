@@ -4,18 +4,20 @@ import settings from "@/settings"
 import { AuthModule } from "./auth.types"
 
 function findAuthModule(): AuthModule | undefined {
-    const authModuleName = settings["auth_module"]?.["module"] || settings["auth_module"]
-    if (authModuleName == "federated_auth") {
+    const name = typeof settings.auth_module == "object" ? settings.auth_module.module : settings.auth_module
+
+    if (name == "federated_auth") {
         return require("./federatedauth/fed_auth")
     }
-    if (authModuleName == "basic_auth" || authModuleName == undefined) {
+
+    if (name == "basic_auth" || !name) {
         // load the default athentication
         return require("./basic_auth")
     }
 
     // must be a custom auth module
     try {
-        return require("custom/" + authModuleName)
+        return require("custom/" + name)
     } catch (error) {
         console.error("Auth module not available: ", authModule)
     }
@@ -29,6 +31,8 @@ export async function init(): Promise<boolean> {
     statemachine.send(loggedIn ? "USER_FOUND" : "USER_NOT_FOUND")
     return loggedIn
 }
+
+statemachine.listen("logout", () => authModule.logout())
 
 export const initAngular = authModule.initAngular
 export const login = authModule.login

@@ -25,6 +25,11 @@ declare module "rickshaw" {
     export default Rickshaw
 }
 
+declare module "comma-separated-values/csv" {
+    const CSV: any
+    export default CSV
+}
+
 interface Window {
     /** Matomo action queue */
     _paq?: any[]

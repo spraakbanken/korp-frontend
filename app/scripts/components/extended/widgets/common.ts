@@ -6,14 +6,12 @@ import { html } from "@/util"
 import "@/directives/escaper"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
-import { StructService, StructServiceOptions } from "@/backend/struct-service"
+import { getAttrValues } from "@/backend/attr-values"
 import { RootScope } from "@/root-scope.types"
 import { LocMap } from "@/i18n/types"
 
-export type WidgetDefinition = Widget | WidgetWithOptions
-export type WidgetWithOptions<T extends {} = {}> = (options: T) => Widget
 export type Widget = {
-    template: string | ((vars: Record<string, any>) => string)
+    template: string
     controller: IController
 }
 
@@ -45,15 +43,15 @@ export const selectTemplate = html`<select
 export const selectController = (autocomplete: boolean): IController => [
     "$scope",
     "$rootScope",
-    "structService",
-    function ($scope: SelectWidgetScope, $rootScope: RootScope, structService: StructService) {
+    function ($scope: SelectWidgetScope, $rootScope: RootScope) {
         $rootScope.$on("corpuschooserchange", function (event, selected: string[]) {
+            // TODO Destroy if new corpus selection doesn't support the attribute?
             if (selected.length > 0) {
                 reloadValues()
             }
         })
 
-        function reloadValues() {
+        async function reloadValues() {
             // TODO this exploits the API
             const attributeDefinition: { value: string } = $scope.$parent.$ctrl.attributeDefinition
             if (!attributeDefinition) {
@@ -72,24 +70,19 @@ export const selectController = (autocomplete: boolean): IController => [
             }
 
             $scope.loading = true
-            const opts: StructServiceOptions = { count: false, returnByCorpora: false }
-            if ($scope.type === "set") {
-                opts.split = true
-            }
-            structService.getStructValues(corpora, [attribute], opts).then(
-                function (data: string[]) {
-                    $scope.loading = false
+            const split = $scope.type === "set"
+            const data = await getAttrValues(corpora, attribute, split)
+            $scope.$apply(() => {
+                $scope.loading = false
 
-                    const dataset = _.uniq(data).map((item) => {
-                        return item === "" ? [item, loc("empty")] : [item, locAttribute($scope.translation, item)]
-                    })
-                    $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
-                    if (!autocomplete) {
-                        $scope.input = data.includes($scope.input) ? $scope.input : $scope.dataset[0][0]
-                    }
-                },
-                () => console.log("struct_values error")
-            )
+                const dataset = _.uniq(data).map((item) => {
+                    return item === "" ? [item, loc("empty")] : [item, locAttribute($scope.translation, item)]
+                })
+                $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                if (!autocomplete) {
+                    $scope.input = data.includes($scope.input) ? $scope.input : $scope.dataset[0][0]
+                }
+            })
         }
 
         // Load values initially

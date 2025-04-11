@@ -3,7 +3,7 @@ import _ from "lodash"
 import angular, { IController, IScope } from "angular"
 import { loc } from "@/i18n"
 import { html } from "@/util"
-import { CompareItem } from "@/services/backend"
+import { CompareItem } from "@/backend/backend"
 
 type MeterController = IController & {
     item: CompareItem
@@ -20,7 +20,7 @@ type MeterScope = IScope & {
 
 angular.module("korpApp").component("loglikeMeter", {
     template: html`<div>
-        <div class="background p-1" ng-style="{ width: barWidth }">{{display}}</div>
+        <div class="background p-1" ng-style="{ width: barWidth }" ng-bind-html="display | trust"></div>
         <div class="abs badge absolute right-1 top-2 px-1.5" uib-tooltip-html="tooltipHtml | trust">{{abs}}</div>
     </div>`,
     bindings: {

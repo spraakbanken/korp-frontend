@@ -62,9 +62,11 @@ export function locObj(map?: LangString, lang?: string) {
  * @param {string} [lang] The code of the language to translate to. Defaults to the global current language.
  * @returns {string} The translated string, undefined if no translation is found, or the value of `key` if `translations` is unusable.
  */
-export function locAttribute(translations: LocMap | LocLangMap, key: string, lang?: string): string {
+export function locAttribute(translations: LocMap | LocLangMap | undefined, key: string, lang?: string): string {
     lang = lang || getLang()
-    if (translations && translations[key])
-        return isObject(translations[key]) ? translations[key][lang] : translations[key]
+    if (translations?.[key]) {
+        const translation = translations[key]
+        return isObject(translation) ? translation[lang] : translation
+    }
     return key
 }

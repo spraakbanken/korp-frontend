@@ -21,6 +21,7 @@ import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { LangString } from "@/i18n/types"
+import { getTimeData } from "@/timedata"
 
 type CorpusChooserController = IController & {
     credentials: string[]
@@ -67,7 +68,7 @@ angular.module("korpApp").component("corpusChooser", {
             >
                 <div ng-if="$ctrl.initialized">
                     <span ng-if-start="$ctrl.selectCount != 1">{{ $ctrl.selectCount }}</span>
-                    <span>{{ 'corpselector_of' | loc }}</span>
+                    <span>{{ 'corpselector_of' | loc:$root.lang }}</span>
                     <span>{{ $ctrl.totalCount }}</span>
                     <span ng-if-end>{{'corpselector_selectedmultiple' | loc:$root.lang }}</span>
 
@@ -95,12 +96,12 @@ angular.module("korpApp").component("corpusChooser", {
                 <div class="popupchecks shrink-0 p-4 h-full">
                     <div class="flex">
                         <corpus-time-graph ng-if="$ctrl.showTimeGraph"></corpus-time-graph>
-                        <div class="p-2">
-                            <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-full mb-2">
+                        <div class="p-2 flex flex-wrap gap-2 items-stretch">
+                            <button ng-click="$ctrl.selectAll()" class="btn btn-default btn-sm w-40 shrink">
                                 <span class="fa-solid fa-check"></span>
                                 <span>{{'corpselector_buttonselectall' | loc:$root.lang }}</span>
                             </button>
-                            <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-full">
+                            <button ng-click="$ctrl.selectNone()" class="btn btn-default btn-sm w-40 shrink">
                                 <span class="fa-solid fa-times"></span>
                                 <span>{{ 'corpselector_buttonselectnone' | loc:$root.lang }}</span>
                             </button>
@@ -149,20 +150,22 @@ angular.module("korpApp").component("corpusChooser", {
                 const remaining = Object.keys(_.pickBy(settings.corpora, (corpus) => corpus.selected))
                 const toSelect = remaining.length ? remaining : settings.preselected_corpora || []
                 // Apply selection
-                settings.corpusListing.select(toSelect)
-                $ctrl.updateSelectedCount(toSelect)
+                select(toSelect)
                 $ctrl.updateLimitedAccess()
             })
 
             $ctrl.initialized = false
             $ctrl.showChooser = false
-            $ctrl.showTimeGraph = settings.has_timespan || false
+
+            // Load time data before showing time graph
+            getTimeData().then((data) => {
+                $ctrl.showTimeGraph = Boolean(data && data[0].length)
+            })
 
             $ctrl.onShowChooser = () => {
                 // don't open the chooser unless the info-call is done
-                if ($ctrl.initialized) {
-                    $ctrl.showChooser = !$ctrl.showChooser
-                }
+                if (!$ctrl.initialized) return
+                $ctrl.showChooser = !$ctrl.showChooser
             }
 
             $ctrl.closeChooser = () => {
@@ -184,7 +187,17 @@ angular.module("korpApp").component("corpusChooser", {
                 $ctrl.totalCount = $ctrl.root.numberOfChildren
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
                 $ctrl.updateLimitedAccess()
-                select(corpusIds)
+                select(corpusIds, true)
+
+                // Sync when corpus selection is modified elsewhere.
+                $rootScope.$watch(
+                    () => $location.search().corpus,
+                    (corpusIdsComma) => {
+                        const corpusIds = corpusIdsComma ? corpusIdsComma.split(",") : []
+                        select(corpusIds)
+                    }
+                )
+                $rootScope.$on("corpuschooserchange", (e, selected) => select(selected))
             })
 
             $ctrl.updateSelectedCount = (selection) => {
@@ -223,12 +236,14 @@ angular.module("korpApp").component("corpusChooser", {
                 }
             }
 
-            function select(corporaIds: string[], quiet = false) {
+            function select(corporaIds: string[], force?: boolean) {
+                if (!$ctrl.initialized) return
                 const selection = filterCorporaOnCredentials(
                     Object.values(settings.corpora),
                     corporaIds,
                     $ctrl.credentials
                 )
+
                 recalcFolderStatus($ctrl.root)
                 $ctrl.updateSelectedCount(selection)
                 // used when there is only one corpus selected to show name
@@ -236,17 +251,17 @@ angular.module("korpApp").component("corpusChooser", {
                     $ctrl.firstCorpus = settings.corpora[selection[0]].title
                 }
 
-                if (!quiet) {
-                    settings.corpusListing.select(selection)
-                    $rootScope.$broadcast("corpuschooserchange", selection)
-                    $location.search("corpus", selection.join(","))
-                }
-            }
+                // In parallel mode, the select function may also add hidden corpora.
+                const selectedBefore = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
+                settings.corpusListing.select(selection)
+                const selectedAfter = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
 
-            // Sync when corpus selection is modified elsewhere.
-            $rootScope.$on("corpuschooserchange", (e, selected) => {
-                select(selected, true)
-            })
+                // Exit if no actual change
+                if (!force && _.isEqual(selectedBefore, selectedAfter)) return
+
+                $rootScope.$broadcast("corpuschooserchange", selection)
+                $location.search("corpus", selection.join(","))
+            }
 
             $ctrl.onShowInfo = (node: ChooserFolderSub | CorpusTransformed) => {
                 $ctrl.showInfoBox = node.id != $ctrl.infoNode?.id

@@ -6,8 +6,8 @@ defineProps<{ progress?: number | string }>()
 <template>
     <div>
         <div
-            v-if="progress != null"
-            class="h-0.5 bg-current absolute bottom-0 left-0"
+            v-if="progress !== null"
+            class="h-0.5 bg-current absolute bottom-0 left-0 transition-all"
             :style="{ width: `${progress || 0}%` }"
         ></div>
         <i class="fa-solid fa-spinner motion-safe:animate-spin-slow"></i>

@@ -11,7 +11,7 @@ export const loginBoxComponent: IComponentOptions = {
     template: html`
         <div class="modal-header login-modal-header">
             <span class="login-header">{{'log_in' | loc:$root.lang}}</span>
-            <span ng-click="$ctrl.close()" class="close-x">×</span>
+            <span ng-click="$ctrl.dismiss()" class="close-x">×</span>
         </div>
         <div id="login_popup" class="modal-body">
             <form ng-submit="$ctrl.loginSubmit()">
@@ -43,14 +43,16 @@ export const loginBoxComponent: IComponentOptions = {
         </div>
     `,
     bindings: {
-        closeClick: "&",
+        onClose: "&",
+        onDismiss: "&",
     },
     controller: [
         "$timeout",
         function ($timeout: ITimeoutService) {
             const $ctrl: LoginBoxController = this
 
-            const options: AuthModuleOptions = settings["auth_module"]?.["options"] || {}
+            const options: AuthModuleOptions =
+                typeof settings.auth_module == "object" ? settings.auth_module.options : {}
 
             // default value of show_remember is true
             $ctrl.showSave = options.show_remember == undefined ? true : options.show_remember
@@ -59,27 +61,32 @@ export const loginBoxComponent: IComponentOptions = {
 
             $ctrl.loading = false
 
-            $ctrl.loginSubmit = function () {
+            $ctrl.loginSubmit = async () => {
                 $ctrl.loginErr = false
                 $ctrl.loading = true
-                login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
-                    .done(function () {
-                        // no send to statemachine
-                        statemachine.send("LOGIN")
-                        $ctrl.close()
+
+                try {
+                    await login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
+                    // no send to statemachine
+                    statemachine.send("LOGIN")
+                    $ctrl.close()
+                } catch (error) {
+                    console.error("Auth fail", error)
+                    $timeout(() => {
+                        $ctrl.loginErr = true
+                        $ctrl.loading = false
                     })
-                    .fail(function () {
-                        $timeout(() => {
-                            $ctrl.loginErr = true
-                            $ctrl.loading = false
-                        })
-                    })
+                }
             }
 
             $ctrl.close = function () {
                 $ctrl.loginErr = false
-                $ctrl.closeClick()
-                // and do what? send to parent?
+                $ctrl.onClose()
+            }
+
+            $ctrl.dismiss = () => {
+                $ctrl.loginErr = false
+                $ctrl.onDismiss()
             }
         },
     ],

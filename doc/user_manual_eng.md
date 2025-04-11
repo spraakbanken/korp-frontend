@@ -63,9 +63,8 @@ order does not matter, and they do not need to be next to each other.
 
 **Part of a word**
 
-The checkboxes *initial part*, *medial part* and *final part* extend the search to words that include the given word at
-the corresponding location. With *medial part* selected, matches can include the given word at any location, including
-the start and the end.
+The checkboxes *initial part* and *final part* extend the search to words that include the given word at
+the corresponding location.
 
 In the case of a lemgram search, a compound analysis is used to determine matches.
 
@@ -111,13 +110,12 @@ To add *and* including a new *or* group press on the +-button in the bottom left
 
 **Repetition, sentence start and sentence end**
 
-In the bottom right corner of every token box you can find a cogwheel button which provides further search criteria.
+In the bottom right corner of every token box you can find a menu button which provides further search criteria.
 The first one, *Repeat* lets you repeat the current token as many times as specified. By specifying a token with
 *Any word* and *Repeat 1 to 3 times* you can define a gap in your search query consisting of at least one and at max
 three tokens.
-The other two criteria in this menu are *Sentence start* and *Sentence end* which define that the current token must be
-first or last in the sentence. Remember that punctuation also counts as a token which means that the last token in a
-sentence most often is a full stop instead of a word.
+The other two criteria in this menu are *Sentence start* and *Sentence end* which add boundary criteria before or after the token.
+Note that punctuation also counts as a token which means that the last token in a sentence most often is a full stop, not a word.
 
 **Search across sentence boundaries**
 
@@ -168,30 +166,19 @@ To read more about the query language, see:
 - [Att söka i Korp med CQP och Regexp – en introduktion (PDF)](https://www.gu.se/sites/default/files/2021-03/Att%20so%CC%88ka%20i%20Korp%20med%20CQP%20och%20Regexp.pdf) (Klas Hjortstam, 2018)
 - [CQP Interface and Query Language Manual (PDF)](https://cwb.sourceforge.io/files/CQP_Manual.pdf) (Stephanie Evert & The CWB Development Team, 2022)
 
-### Display options
-
-Regardless of which version of the search interface you use, there is a row of *display options*, located in a strip
-below the search fields. Here you can set different display options for the search result. For the KWIC, you can choose the number of hits
-per page, as well as sorting order. Sorting can be done either by right or left context, on the hit itself, or randomly. The sorting takes place
-only within each corpus. With the default choice "occurrence" the hits will be displayed in the order
-they appear in the corpus (which may be a partially random order for copyright reasons).
-
-For the statistics, you can choose which attribute the statistics should be compiled on.
-
-It is also possible to disable certain functions in the result view, such as statistics, if you are not interested in statistics and want to
-speed up your searches somewhat.
-
-![Search Settings](images/sokval.png)
-
 ## Search results
 
 The results view, which appears only after a search has been performed, is divided into three different sections: *KWIC*, *Statistics*, and *Word picture*.
 
 ### KWIC
 
-
 KWIC, which stands for "keyword in context", displays the searched word or words in their context, usually a sentence. The search results, if there are many, are
 divided into a number of pages, and to page back and forth between the pages you use the *f* and *n* keys on the keyboard.
+
+You can choose the number of hits per page, as well as sorting order.
+Sorting can be done either by right or left context, on the hit itself, or randomly.
+The sorting takes place only within each corpus.
+With the default choice "not sorted", the hits will be displayed in the order they appear in the corpus (which may be a partially random order for copyright reasons).
 
 Provided you have searched in more than one corpus, there will be a colored strip to the right of the number of hits the search yielded. This
 shows the ratio between the number of hits in the different corpora, and by moving the mouse over them, you can see which
@@ -222,10 +209,10 @@ When a word is highlighted, its syntactic head in the same sentence is also high
 ### Statistics
 
 The Statistics tab shows a table where each column corresponds to a corpus, and the rows are made up of the different words or annotations matched by the search. By default,
-the statistics are compiled on word forms, and a simple
+the statistics are grouped by word forms, and a simple
 search for only one word form will therefore only yield one row, while a search for a lemgram yields one row per word form that occurs in the material.
-Among the display options, you can choose to compile the statistics on attributes other than word form, for example part of speech or some text attribute, and whether
-the compilation will be case-sensitive or not.
+You can choose to group the statistics by attributes other than word form, for example part of speech or some text attribute.
+For some attributes, you can select whether the grouping will be case-sensitive or not.
 
 By clicking on the search hit text in a result row in the table, a new KWIC tab opens with the sentences that formed the basis of that particular row.
 
@@ -268,11 +255,12 @@ syntactic relations to in the material, grouped by relation. For a verb, for exa
 
 ![Word picture in Korp](images/ordbild.png)
 
-By default, a maximum of 15 words are displayed for each relation, but to the right on the page there is an option to display more.
-The number next to each word indicates how many times the given relation is found in the selected material. The lists
-are ordered by a Lexicographer's Mutual Information value.
+Next to each related word is a measure of its association to the search word within the selected material.
+You can choose to measure and sort by absolute frequency (count) or Lexicographer's Mutual Information (LMI).
+The LMI measures the frequency of a certain word pair in relation to the frequencies of each single word.
+Thus it disfavors words that have a high co-occurrence merely by being common in general, such as "be" and "have".
 
-By clicking on the small icon next to each word, you can bring up a new KWIC tab with all the sentences in which the selected relation occurs.
+Clicking a word in the table brings up a new drilldown KWIC tab with the selected word pair and relation.
 
 
 ## Comparisons
@@ -281,7 +269,7 @@ It is possible to run a log-likelihood comparison of the results from two search
 This is done from any search tab by first creating your search expression and then clicking on the arrow to the right of the search button. This allows you to save the search itself with a name of your choice,
 instead of executing it. When you have two searches saved, you can go to the *Comparison* tab, which is to the right of the three search tabs.
 Here you select the two searches you want to compare, and then which attribute the comparison should be performed on. An example of a comparison is the two searches
-*all nouns in novels* and *all nouns in news texts*, with compilation on *base form*. When this comparison is complete, two columns of base forms are presented:
+*all nouns in novels* and *all nouns in news texts*, with grouping by *base form*. When this comparison is complete, two columns of base forms are presented:
 the first lists the base forms most distinctive for search #1, and the second lists base forms distinctive for search #2. The columns are sorted in descending order by distinctness. The numbers on the right show absolute frequency.
 
 ## Other user manuals

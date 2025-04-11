@@ -2,28 +2,35 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config"
-import type { StatsNormalized, StatisticsWorkerMessage, StatisticsWorkerResult, SearchParams } from "./statistics.types"
-import { hitCountHtml } from "@/util"
-import { Row } from "./statistics_worker"
+import { StatsNormalized } from "./backend/stats-proxy"
+import {
+    Dataset,
+    isTotalRow,
+    Row,
+    StatisticsWorkerMessage,
+    StatisticsProcessed,
+    SearchParams,
+    SlickgridColumn,
+} from "./statistics.types"
+import { formatFrequency, fromKeys } from "@/util"
 import { LangString } from "./i18n/types"
-const pieChartImg = require("../img/stats2.png")
+import { locObj } from "./i18n"
+import { RootScope } from "./root-scope.types"
 
 const createStatisticsService = function () {
+    // Root Scope is used so the cell formatters are re-triggered when language is changed.
     const createColumns = function (
-        corpora: Record<string, any>,
+        $rootScope: RootScope,
+        corpora: string[],
         reduceVals: string[],
         reduceValLabels: LangString[]
     ): SlickgridColumn[] {
-        const valueFormatter: Slick.Formatter<any> = function (row, cell, value, columnDef, dataContext) {
-            const [absolute, relative] = [...dataContext[columnDef.id + "_value"]]
-            return hitCountHtml(absolute, relative)
-        }
+        // This sorting will not react to language change, but that's quite alright, we like columns staying in place.
+        const getCorpusTitle = (id: string): string => locObj(settings.corpora[id.toLowerCase()].title, $rootScope.lang)
+        corpora.sort((a, b) => getCorpusTitle(a).localeCompare(getCorpusTitle(b), $rootScope.lang))
 
-        const corporaKeys = _.keys(corpora)
         const minWidth = 100
         const columns: SlickgridColumn[] = []
-        const cl = settings.corpusListing.subsetFactory(corporaKeys)
-        const attrObj = cl.getStructAttrs()
         for (let [reduceVal, reduceValLabel] of _.zip(reduceVals, reduceValLabels)) {
             if (reduceVal == null || reduceValLabel == null) break
             columns.push({
@@ -31,14 +38,10 @@ const createStatisticsService = function () {
                 translation: reduceValLabel,
                 field: "hit_value",
                 sortable: true,
-                formatter(row, cell, value, columnDef, dataContext) {
-                    if (dataContext["rowId"] !== 0) {
-                        const formattedValue = reduceStringify(reduceVal, dataContext[reduceVal!], attrObj[reduceVal!])
-                        dataContext["formattedValue"][reduceVal] = formattedValue
-                        return `<span class="statistics-link" data-row=${dataContext["rowId"]}>${formattedValue}</span>`
-                    } else {
-                        return "&Sigma;"
-                    }
+                formatter: (row, cell, value, columnDef, data: Row) => {
+                    if (isTotalRow(data)) return "&Sigma;"
+                    const output = data.formattedValue[reduceVal!] || `<span class="opacity-50">&empty;</span>`
+                    return `<div class="link" data-row="${data.rowId}">${output}</div>`
                 },
                 minWidth,
                 cssClass: "parameter-column",
@@ -51,72 +54,96 @@ const createStatisticsService = function () {
             field: "hit_value",
             sortable: false,
             formatter(row, cell, value, columnDef, dataContext: any) {
-                return `<img id="circlediagrambutton__${dataContext.rowId}" src="${pieChartImg}" class="arcDiagramPicture"/>`
+                return `<i class="fa-solid fa-chart-pie block text-sm mx-1"></i>`
             },
             maxWidth: 25,
             minWidth: 25,
+            cssClass: "total-column cursor-pointer",
         })
 
         columns.push({
             id: "total",
             name: "stats_total",
-            field: "total_value",
+            field: "total",
             sortable: true,
-            formatter: valueFormatter,
+            formatter: (row, cell, value) => formatFrequency($rootScope, value),
             minWidth,
             headerCssClass: "localized-header",
+            cssClass: "total-column text-right",
         })
 
-        $.each(corporaKeys.sort(), (i, corpus) => {
-            return columns.push({
-                id: corpus,
-                translation: settings.corpora[corpus.toLowerCase()].title,
-                field: corpus + "_value",
+        corpora.forEach((id) =>
+            columns.push({
+                id,
+                translation: settings.corpora[id.toLowerCase()].title,
+                field: "count",
                 sortable: true,
-                formatter: valueFormatter,
+                formatter: (row, cell, value, columnDef) => formatFrequency($rootScope, value[columnDef.id!]),
                 minWidth,
+                cssClass: "text-right",
             })
-        })
+        )
+
         return columns
     }
 
-    const processData = function (
-        def: JQuery.Deferred<StatisticsWorkerResult>,
+    function processData(
+        $rootScope: RootScope,
         originalCorpora: string,
         data: StatsNormalized,
         reduceVals: string[],
-        reduceValLabels: LangString[],
         ignoreCase: boolean,
         prevNonExpandedCQP: string
-    ) {
-        const columns = createColumns(data.corpora, reduceVals, reduceValLabels)
+    ): Promise<StatisticsProcessed> {
+        const corpora = Object.keys(data.corpora)
+        const cl = settings.corpusListing.subsetFactory(corpora)
+        const attributes = cl.getReduceAttrs()
+        const labels = reduceVals.map((name) => (name == "word" ? settings["word_label"] : attributes[name]?.label))
 
-        const statsWorker = new Worker(new URL("./statistics_worker", import.meta.url))
-        statsWorker.onmessage = function (e: MessageEvent<StatisticsWorkerResult>) {
-            const searchParams: SearchParams = {
-                reduceVals,
-                ignoreCase,
-                originalCorpora,
-                corpora: _.keys(data.corpora),
-                prevNonExpandedCQP,
-            }
-            let result = [e.data, columns, searchParams]
-            def.resolve(result as StatisticsWorkerResult)
+        const columns = createColumns($rootScope, corpora, reduceVals, labels)
+        // Get stringifiers for formatting attribute values
+        const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, cl))
+
+        const params: SearchParams = {
+            reduceVals,
+            ignoreCase,
+            originalCorpora,
+            corpora,
+            prevNonExpandedCQP,
         }
 
-        statsWorker.postMessage({
+        // Delegate stats processing to a Web Worker for performance
+        const worker = new Worker(new URL("./statistics_worker", import.meta.url))
+
+        worker.postMessage({
             type: "korpStatistics",
             data,
-            reduceVals,
+            // Worker code cannot import settings
             groupStatistics: settings.group_statistics,
-        } as StatisticsWorkerMessage)
+        } satisfies StatisticsWorkerMessage)
+
+        // Return a promise that resolves when the worker is done
+        return new Promise((resolve) => {
+            worker.onmessage = (e: MessageEvent<Dataset>) => {
+                // Terminate worker to free up resources
+                worker.terminate()
+                const rows = e.data
+
+                // Format the values of the attributes we are reducing by
+                for (const row of rows) {
+                    if (isTotalRow(row)) continue
+                    for (const attr of reduceVals) {
+                        const words = row.statsValues.map((word) => word[attr]?.[0]).filter(Boolean)
+                        row.formattedValue[attr] = stringifiers[attr](words)
+                    }
+                }
+
+                resolve({ rows, columns, params })
+            }
+        })
     }
 
     return { processData }
 }
 
 export const statisticsService = createStatisticsService()
-
-export type SlickgridColumn = Slick.Column<any> & {
-    translation?: LangString
-}

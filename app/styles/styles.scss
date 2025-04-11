@@ -8,9 +8,10 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 * {
     box-sizing: border-box;
 }
-input[type="checkbox"] {
-  position: relative;
-  top: 2px;
+input[type=checkbox], input[type=radio] {
+  display: table-cell;
+  vertical-align: middle;
+  margin-bottom: 2px;
 }
 
 $primaryColor: rgb(221, 233, 255);
@@ -51,12 +52,10 @@ h3 {
   font-size: 1.1em;
 }
 
-input[type=text] {
-  padding: 1px 2px;
-}
 input, select {
   border: 1px solid #bbb;
   background-color: white;
+  padding: 1px 2px;
   cursor: pointer;
 }
 input:not([type]), input[type=text] {
@@ -85,13 +84,17 @@ a.btn {
   color : #333;
 }
 
+.btn-group {
+  // Bootstrap uses float in btn-group, but we use flex instead because it flows nicer
+  display: inline-flex;
+  .btn {
+    float: none;
+  }
+}
+
 label {
   font-weight : initial;
   margin-bottom : 0;
-}
-
-.ui-widget {
-  font-family: inherit;
 }
 
 sup {
@@ -222,20 +225,6 @@ label.placeholder {
   color: #999999;
 }
 
-#search_options {
-  border-top: none;
-  padding: 8px;
-  background-image: none;
-  margin-bottom: 8px;
-  select {
-    margin-right: 5px;
-    background-color: rgba(255,255,255,0.5);
-    padding-left: 2px;
-  }
-  > div {
-    margin-right: 10px;
-  }
-}
 .click-cover {
   position: absolute;
   top: 0;
@@ -340,7 +329,7 @@ time-interval {
 
 .corpus-chooser {
   max-height: 80vh;
-  z-index: 9999;
+  z-index: 900;
   border: solid thin #CCCCCC;
   overflow-y: auto;
   overflow-x: hidden;
@@ -537,25 +526,8 @@ table {
   }
 }
 
-.activate_word_pic {
-  margin-top : 1em;
-}
-
-.word-pic-kwic-example {
-    cursor: pointer;
-}
-
 .lemgram_result {
-  float: left;
-  padding-top: 4px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 2px;
   counter-reset: wordpic;
-  table {
-    padding: 0 0;
-    margin: 0 0;
-  }
 }
 
 .table_scrollarea {
@@ -579,29 +551,8 @@ table {
   }
 }
 
-.hits_picture {
-  tr {
-    height : 18px;
-  }
-  .odd {
-    background-color : $primaryColor;
-  }
-  .even {
-    background-color : $primaryLight;
-  }
-}
-
 .table_scrollarea + .pager-wrapper {
   margin-top: 15px;
-}
-
-.reading_btn {
-  line-height: 1.1;
-  margin-left: 1em;
-  display: inline;
-  vertical-align: middle;
-  margin-top: 3px;
-  white-space : nowrap;
 }
 
 .results_table.reading {
@@ -720,16 +671,6 @@ table {
   background-color: #FFDDD8;
 }
 
-#json-link {
-  float: right;
-  // Clear floats so that the JSON link is right-justified and not
-  // placed to the left of the download links.
-  clear: both;
-  img {
-    border: 0px;
-  }
-}
-
 #download-links {
   float: right;
 }
@@ -779,21 +720,6 @@ table {
 
 span.absStat {
   color: #999999;
-}
-
-a {
-  &.absStat {
-    color: #999999;
-    &:hover {
-      color: indianred;
-    }
-  }
-  &.relStat {
-    color: #000000;
-    &:hover {
-      color: indianred;
-    }
-  }
 }
 
 .word_column {
@@ -930,18 +856,12 @@ a {
 }
 
 .hits_picture_table {
-  border : 1px solid lightgrey;
-  width: 100%;
-  padding: 0px;
-}
-
-.hits_picture {
-  cursor: pointer;
-  position: absolute;
-  right: 10px;
-  left: 280px;
-  top: -1px;
-  transition: left 400ms ease;
+  td:nth-child(2n+1) { // odd
+    background-color : $primaryColor;
+  }
+  td:nth-child(2n) { // even
+    background-color : $primaryLight;
+  }
 }
 
 .query_arg {
@@ -985,22 +905,9 @@ a {
   white-space: nowrap;
 }
 
-.arcDiagramPicture {
-  cursor: pointer;
-  margin-bottom: -2px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
 .c0 {
   position: relative;
 }
-
-.arcDiagramPicture {
-  position: absolute;
-  right: 0;
-}
-
 
 .lemgram_section {
   display: inline-block;
@@ -1029,12 +936,6 @@ a {
 
 .ui-dialog li {
   margin-bottom: 3px;
-}
-
-.autocomplete-item-disabled a {
-  font-style: italic;
-  color: indianred;
-  opacity: 0.7;
 }
 
 #labs_logo {
@@ -1072,18 +973,6 @@ a {
   z-index: 999;
 }
 
-.korp_fail {
-  height: 146px;
-  width: 290px;
-}
-
-.fail_text {
-  margin: 1em 0 0 1em;
-  vertical-align: top;
-  font-family: Garamond,Cochin,Serif;
-  font-size: 1.3em;
-}
-
 .arg_selects.word {
   color: #222222;
 }
@@ -1108,21 +997,6 @@ a {
       border-style: solid;
       border-color: lightgrey;
       border-width: 1px;
-    }
-  }
-
-  .opts {
-    margin-top : 1em;
-    margin-bottom : 1em;
-  }
-
-  #similar_wrapper {
-    .btn_header {
-      font-size: 1.1em;
-    }
-
-    button {
-      display : block;
     }
   }
 }
@@ -1347,15 +1221,6 @@ slider {
   @extend .bs-callout-warning;
 }
 
-#wordPicSettings {
-  float: right;
-
-  #numberHitsSelect {
-      margin-top: 10px;
-  }
-
-}
-
 .pagination {
     height: auto;
     margin : 0;
@@ -1384,24 +1249,8 @@ slider {
 
 }
 
-
-.controls_n {
-  margin-right: 5px;
-  min-width: 125px;
-}
 .pager-wrapper {
   display: inline;
-}
-
-.result_controls {
-  position: relative;
-  > * {
-    display: inline-block;
-    vertical-align: bottom;
-  }
-}
-
-.result_controls, .pager-wrapper {
   margin-bottom: 8px;
 }
 
@@ -1416,11 +1265,6 @@ slider {
     width : 45px;
     text-align: center;
   }
-}
-
-.results-kwic.loading .controls_n {
-  color: darkgrey;
-  font-style: italic;
 }
 
 .arg_value {
@@ -1472,6 +1316,10 @@ slider {
   margin-left : 4px;
 }
 
+.slick-sort-indicator {
+  float: right; // default is left
+}
+
 .graph_btn_icon {
   svg {
     margin-top : -6px;
@@ -1509,11 +1357,6 @@ slider {
 }
 .graph_tab {
   min-height : 430px;
-}
-.graph_header {
-  .controls {
-    float : left;
-  }
 }
 
 .stats_header {
@@ -1577,10 +1420,6 @@ slider {
 .form-bar .legend li:last-child:not(:only-child) {
   display : none;
 }
-.form_switch {
-  display: inline-block;
-  vertical-align: bottom;
-}
 
 line.tick {
   display : none;
@@ -1637,25 +1476,26 @@ line.tick {
 }
 
 #myGrid .parameter-column {
-  background-color: rgb(242, 247, 255);
+  background-color: #f1f7ff;
 }
 
 #myGrid .slick-row:hover .parameter-column {
-  background-color: rgb(230, 235, 255);
+  background-color: #e6ebff;
 }
 
-#myGrid .statistics-link {
-    color: navy;
-    cursor: pointer;
+#myGrid .total-column {
+  background-color: #fff8f0;
 }
 
-#myGrid .slick-row:hover .statistics-link {
-    color: indianred;
+#myGrid .slick-row:hover .total-column {
+  background-color: #fff4e5;
 }
-
 
 .ui-widget-header {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+}
+.ui-state-default {
+  background : #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
 }
 .ui-state-hover {
   background : #e6e6e6 url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
@@ -1852,6 +1692,8 @@ line.tick {
   border-radius: 2px;
   max-height : 575px;
   overflow-y: auto;
+  width: max-content; // avoid wrapping lines
+  max-width: 40em; // readable width
 
   li {
     &.selected a {
@@ -1868,16 +1710,10 @@ line.tick {
 
 /* ----------- Autocompletion ----------- */
 
-.none-to-find {
-    color: #aaa;
+.lemgram-namespace {
+  color: #777777;
 }
-.num-to-find {
-    visibility: hidden;
-    font-size:x-small;
-}
-li.active a span .num-to-find {
-    visibility: visible;
-}
+
 .autoc-spinner {
     margin-left:-20px;margin-top:2px;float:left
 }
@@ -1894,63 +1730,50 @@ li.active a span .num-to-find {
 
 
 /* korp multi select directive */
-.reduce-attr-select {
-  color: #000;
-  display: inline-block;
-  .reduce-dropdown-button {
+.reduce-dropdown-button {
+  cursor: pointer;
+  width: 100%;
+  height: 22px;
+  overflow: hidden;
+  background-color: rgba(255,255,255,0.5);
+  transition : border-color 200ms;
+  &:hover {
+    border-color : #999;
+  }
+}
+.reduce-dropdown-menu {
+  width: 100%;
+  max-height: 400px;
+  .selected {
+    background: rgb(242, 247, 255);
+  }
+  .attribute {
+    display: flex;
+    overflow-x: hidden;
+    white-space: nowrap;
     cursor: pointer;
-    width: 100%;
-    height: 22px;
-    overflow: hidden;
-    background-color: rgba(255,255,255,0.5);
-    .caret {
-      right: 7px;
-      position: absolute;
-      top: 10px;
-    }
-    transition : border-color 200ms;
     &:hover {
-      border-color : #999;
+      background-color : lighten(#999, 30%);
     }
+    padding: 2px 1px;
   }
-  .reduce-dropdown-button-text {
-    width: 1000px;
-    padding: 0px 5px;
+  .reduce-check {
+    margin: 0px;
+    margin-right: 4px;
   }
-  .reduce-dropdown-menu {
-    width: 100%;
-    max-height: 400px;
-    .selected {
-      background: rgb(242, 247, 255);
-    }
-    .attribute {
-      display: flex;
-      overflow-x: hidden;
-      white-space: nowrap;
-      cursor: pointer;
-      &:hover {
-        background-color : lighten(#999, 30%);
-      }
-      padding: 2px 1px;
-    }
-    .reduce-check {
-      margin: 0px;
-      margin-right: 4px;
-    }
-    .reduce-label {
-      flex-grow: 1;
-    }
-    ul {
-      margin: 0;
-      padding: 2px;
-    }
-    .insensitive-toggle {
-      float: right;
-      color: black;
-    }
-    .insensitive-toggle.selected {
-      color: grey;
-    }
+  .reduce-label {
+    flex-grow: 1;
+  }
+  ul {
+    margin: 0;
+    padding: 2px;
+  }
+  .insensitive-toggle {
+    float: right;
+    color: black;
+  }
+  .insensitive-toggle.selected {
+    color: grey;
   }
 }
 
@@ -2091,10 +1914,6 @@ li.active a span .num-to-find {
 // TODO we should not do this, update boostrap instead?
 .sr-only {
     display: none;
-}
-
-.lemgram-namespace {
-    color: #777777;
 }
 
 .cc-level-indent {

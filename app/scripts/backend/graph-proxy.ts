@@ -1,24 +1,23 @@
 /** @format */
 import _ from "lodash"
-import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { AjaxSettings, Granularity, Histogram, KorpResponse, NumericString } from "@/backend/types"
-import { AbsRelTuple } from "@/statistics.types"
-import { Factory, httpConfAddMethod } from "@/util"
+import { Granularity, NumericString, ProgressHandler } from "@/backend/types"
+import { Factory } from "@/util"
+import { CountTimeParams, CountTimeResponse } from "./types/count-time"
+import { korpRequest } from "./common"
 
-export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
+export class GraphProxy extends BaseProxy {
     granularity: Granularity
-    prevParams: KorpCountTimeParams | null
-    prevRequest: AjaxSettings
+    prevParams: CountTimeParams | null
 
     constructor() {
         super()
         this.prevParams = null
     }
 
-    expandSubCqps(subArray: string[]): Record<`subcqp${number}`, string> {
+    expandSubCqps(subArray: string[]): Record<`subcqp${string}`, string> {
         const padding = _.fill(new Array(subArray.length.toString().length), "0")
-        const result: Record<`subcqp${number}`, string> = {}
+        const result: Record<`subcqp${string}`, string> = {}
         for (let i = 0; i < subArray.length; i++) {
             const cqp = subArray[i]
             const p = padding.slice(i.toString().length).join("")
@@ -27,16 +26,18 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
         return result
     }
 
-    makeRequest(
+    async makeRequest(
         cqp: string,
         subcqps: string[],
         corpora: string,
         from: NumericString,
-        to: NumericString
-    ): JQuery.Promise<KorpResponse<KorpCountTimeResponse>> {
+        to: NumericString,
+        onProgress: ProgressHandler<"count_time">
+    ): Promise<CountTimeResponse> {
         this.resetRequest()
-        const self = this
-        const params: KorpCountTimeParams = {
+        const abortSignal = this.abortController.signal
+
+        const params: CountTimeParams = {
             cqp: this.expandCQP(cqp),
             corpus: corpora,
             granularity: this.granularity,
@@ -54,73 +55,10 @@ export class GraphProxy extends BaseProxy<KorpCountTimeResponse> {
         // TODO: fix this for struct attrs
         _.extend(params, this.expandSubCqps(subcqps))
         this.prevParams = params
-        const def = $.Deferred()
 
-        const ajaxSettings: AjaxSettings = {
-            url: settings.korp_backend_url + "/count_time",
-            dataType: "json",
-            data: params,
-
-            beforeSend: (req, settings) => {
-                this.prevRequest = settings
-                this.addAuthorizationHeader(req)
-            },
-
-            progress: (data, e) => {
-                const progressObj = this.calcProgress(e)
-                if (progressObj == null) {
-                    return
-                }
-                def.notify(progressObj)
-            },
-
-            error(jqXHR, textStatus, errorThrown) {
-                def.reject(textStatus)
-            },
-            success(data: KorpResponse<KorpCountTimeResponse>) {
-                def.resolve(data)
-                self.cleanup()
-            },
-        }
-
-        $.ajax(httpConfAddMethod(ajaxSettings))
-
-        return def.promise()
+        return await korpRequest("count_time", params, { abortSignal, onProgress })
     }
 }
 
 const graphProxyFactory = new Factory(GraphProxy)
 export default graphProxyFactory
-
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count_time/get */
-type KorpCountTimeParams = {
-    corpus: string
-    cqp: string
-    default_within?: string
-    with?: string
-    [subcqpn: `subcqp${number}`]: string
-    granularity?: Granularity
-    from?: NumericString
-    to?: NumericString
-    strategy?: 1 | 2 | 3
-    per_corpus?: boolean
-    combined?: boolean
-    [cqpn: `cqp${number}`]: string
-    expand_prequeries?: boolean
-    incremental?: boolean
-}
-
-/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count_time/get */
-export type KorpCountTimeResponse = {
-    corpora: Record<string, KorpGraphStats | (KorpGraphStats | KorpGraphStatsCqp)[]>
-    combined: KorpGraphStats | (KorpGraphStats | KorpGraphStatsCqp)[]
-}
-
-export type KorpGraphStats = {
-    absolute: Histogram
-    relative: Histogram
-    sums: AbsRelTuple
-}
-
-/** Stats contains subquery if graph was created with multiple rows selected in the stats table. */
-export type KorpGraphStatsCqp = KorpGraphStats & { cqp: string }

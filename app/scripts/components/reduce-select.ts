@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IController, IScope, ITimeoutService } from "angular"
+import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import { AttributeOption } from "@/corpus_listing"
 
@@ -8,6 +8,7 @@ type ReduceSelectScope = IScope & {
     keyItems: Record<string, Item>
     hasWordAttrs: boolean
     hasStructAttrs: boolean
+    onDropdownToggle: (open: boolean) => void
     toggleSelected: (value: string, event: MouseEvent) => void
     toggleWordInsensitive: (event: MouseEvent) => void
     toggled: (open: boolean) => void
@@ -26,22 +27,18 @@ type ReduceSelectController = IController & {
 }
 
 angular.module("korpApp").component("reduceSelect", {
-    template: html`<div
-        uib-dropdown
-        auto-close="outsideClick"
-        class="reduce-attr-select"
-        on-toggle="toggled(open)"
-        style="width: 200px"
-    >
+    template: html`<div uib-dropdown auto-close="outsideClick" class="inline-block w-52" on-toggle="toggled(open)">
         <div
             uib-dropdown-toggle
-            class="reduce-dropdown-button inline-block align-middle bg-white border border-gray-500"
+            class="reduce-dropdown-button inline-block align-middle bg-white border border-gray-400"
         >
-            <div class="reduce-dropdown-button-text">
-                <span>{{ "reduce_text" | loc:$root.lang }}:</span>
-                <span> {{keyItems[$ctrl.selected[0]].label | locObj:$root.lang}} </span>
-                <span ng-if="$ctrl.selected.length > 1"> (+{{ $ctrl.selected.length - 1 }}) </span>
-                <span class="caret"></span>
+            <div class="px-1 flex items-center">
+                <div class="whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    <span ng-repeat="name in $ctrl.selected">
+                        {{keyItems[name].label | locObj:$root.lang}}<span ng-if="!$last">,</span>
+                    </span>
+                </div>
+                <span class="ml-auto caret"></span>
             </div>
         </div>
         <div class="reduce-dropdown-menu" uib-dropdown-menu>
@@ -108,23 +105,23 @@ angular.module("korpApp").component("reduceSelect", {
                 for (const name of $ctrl.insensitive || []) {
                     if (name in scope.keyItems) scope.keyItems[name].insensitive = true
                 }
-
-                // Only after initialization
-                if ($ctrl.items && $ctrl.selected && $ctrl.insensitive) validate()
             }
 
             /** Report any changes upwards */
-            function updateSelected() {
+            function notify() {
                 validate()
 
                 const selected = $ctrl.items.filter((item) => item.selected).map((item) => item.value)
                 const insensitive = $ctrl.items.filter((item) => item.insensitive).map((item) => item.value)
 
-                $ctrl.onChange({
+                const changes = {
                     // Only set values that have changed
                     selected: !_.isEqual(selected, $ctrl.selected) ? selected : undefined,
                     insensitive: !_.isEqual(insensitive, $ctrl.insensitive) ? insensitive : undefined,
-                })
+                }
+
+                // Only notify if something changed
+                if (changes.selected || changes.insensitive) $ctrl.onChange(changes)
             }
 
             /** Fix state inconsistencies */
@@ -149,10 +146,11 @@ angular.module("korpApp").component("reduceSelect", {
                     // Unselect all options and select only the given option
                     $ctrl.items.forEach((item) => (item.selected = false))
                     item.selected = true
-                } else {
+                }
+                // Toggle given value, unless it is "word" and it is the only one selected.
+                else {
                     item.selected = !item.selected
                 }
-                updateSelected()
             }
 
             scope.toggleWordInsensitive = function (event) {
@@ -161,15 +159,15 @@ angular.module("korpApp").component("reduceSelect", {
                 if (!scope.keyItems["word"].selected) {
                     scope.keyItems["word"].selected = true
                 }
-                updateSelected()
             }
 
             scope.toggled = function (open) {
                 // if no element is selected when closing popop, select word
                 if (!open && !$ctrl.selected.length) {
                     scope.keyItems["word"].selected = true
-                    updateSelected()
                 }
+
+                notify()
             }
         },
     ],

@@ -2,30 +2,21 @@
 import _ from "lodash"
 import angular from "angular"
 import settings from "@/settings"
-import { updateSearchHistory } from "@/history"
 import { fetchInitialData } from "@/data_init"
 import currentMode from "@/mode"
 import * as authenticationProxy from "@/components/auth/auth"
-import { getUrlHash, html } from "@/util"
+import { getUrlHash, html, simpleModal } from "@/util"
 import korpLogo from "../img/korp.svg"
 import korpFail from "../img/korp_fail.svg"
-import { convertJstorage, localStorageSet } from "@/local-storage"
+import { convertJstorage } from "@/local-storage"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
-    if (!splash) throw new Error("preload element missing")
+    if (!splash) {
+        console.error("preload element missing")
+        return
+    }
     splash.innerHTML = html`<img class="splash" height="300" width="300" src="${korpLogo}" />`
-}
-
-const createErrorScreen = () => {
-    const elem = document.getElementById("preload")
-    if (!elem) throw new Error("preload element missing")
-    elem.innerHTML = html`
-        <div class="absolute top-1/3 text-center">
-            <img class="block" height="300" width="300" src="${korpFail}" />
-            Sorry, Korp doesn't seem to work right now
-        </div>
-    `
 }
 
 function initApp() {
@@ -37,34 +28,13 @@ function initApp() {
         }
     }
 
-    try {
-        angular.bootstrap(document, ["korpApp"])
-    } catch (error) {
-        console.error(error)
-    }
-
-    try {
-        updateSearchHistory()
-    } catch (error) {
-        console.error("ERROR setting corpora from location", error)
-    }
+    angular.bootstrap(document, ["korpApp"])
 
     if (process.env.ENVIRONMENT == "staging") {
         $("body").addClass("lab")
     }
 
     $("body").addClass(`mode-${currentMode}`)
-
-    $("#search_history").change(function (event) {
-        const optionElement = $(this).find(":selected")
-        const value = optionElement.val() as string
-        if (_.includes(["http://", "https:/"], value.slice(0, 7))) {
-            location.href = value
-        } else if (optionElement.is(".clear")) {
-            localStorageSet("searches", [])
-            updateSearchHistory()
-        }
-    })
 
     // this is to hide all ugly markup before Angular is fully loaded
     $("#main").css("display", "block")
@@ -73,22 +43,29 @@ function initApp() {
     })
 }
 
+// Handle uncaught exceptions and rejections outside Angular
+// Inside Angular, see the `$exceptionHandler` service.
+window.onerror = (message, source, lineno, colno, error) => errorModal(message)
+window.onunhandledrejection = (event) => errorModal(event.reason)
+
+function errorModal(message: any) {
+    const escaped = new Option(String(message)).innerHTML
+    const content = html`<img class="block mx-auto mb-4" height="300" width="300" src="${korpFail}" />
+        <p>${escaped}</p>`
+    simpleModal(content)
+}
+
 createSplashScreen()
 ;(async () => {
-    try {
-        // TODO This was added in July 2024, remove after a few months?
-        convertJstorage()
-        // Check if user is logged in
-        const initAuth = authenticationProxy.init()
-        // Fetch everything that only needs to be check once
-        await fetchInitialData(initAuth)
-        // Now wait for login to resolve
-        await initAuth
-        document.getElementById("preload")?.remove()
-        // startup Angular.js app
-        initApp()
-    } catch (error) {
-        console.log(error)
-        createErrorScreen()
-    }
+    // TODO This was added in July 2024, remove after a few months?
+    convertJstorage()
+    // Check if user is logged in
+    const initAuth = authenticationProxy.init()
+    // Fetch everything that only needs to be check once
+    await fetchInitialData(initAuth)
+    // Now wait for login to resolve
+    await initAuth
+    // startup Angular.js app
+    initApp()
+    document.getElementById("preload")?.remove()
 })()

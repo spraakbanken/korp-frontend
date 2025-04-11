@@ -36,8 +36,8 @@ function getPointsFromObj(obj: InnerData): Point[] {
     return points
 }
 
-export function parseMapData(data: StatsData, cqp, cqpExprs): MapResult[] {
-    const { combined, count } = data
+export function parseMapData(data: StatsData, cqp: string, cqpExprs: Record<string, string>): MapResult[] {
+    const { combined } = data
 
     let result: MapResult[] = []
     let ignoreTotal = combined.length > 1

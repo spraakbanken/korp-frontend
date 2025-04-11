@@ -23,6 +23,11 @@ if (settings.frontpage?.corpus_updates) {
         .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
         .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
 }
+
+function selectCorpus(corpusId: string) {
+    settings.corpusListing.select([corpusId])
+    rootScope.$broadcast("corpuschooserchange", [corpusId])
+}
 </script>
 
 <template>
@@ -34,14 +39,17 @@ if (settings.frontpage?.corpus_updates) {
                 <div>
                     <strong>{{ locObj(corpus.title, lang) }}</strong>
                     {{ loc("front_corpus_updated", lang) }}.
+                    <button class="btn btn-xs btn-default" @click="selectCorpus(corpus.id)">
+                        {{ loc("toggle_select") }}
+                    </button>
                 </div>
             </article>
             <div v-if="recentUpdates.length > LIMIT">
                 <a v-if="!expanded" @click="expanded = true">
-                    <i class="fa fa-angle-double-down"></i> {{ loc("show_more", lang) }}
+                    <i class="fa fa-angle-double-down"></i> {{ loc("show_more_n", lang) }}
                 </a>
                 <a v-if="expanded" @click="expanded = false">
-                    <i class="fa fa-angle-double-up"></i> {{ loc("show_less", lang) }}
+                    <i class="fa fa-angle-double-up"></i> {{ loc("show_less_n", lang) }}
                 </a>
             </div>
         </div>

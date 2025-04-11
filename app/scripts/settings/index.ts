@@ -30,6 +30,7 @@ export function setDefaultConfigValues() {
         // some safety margin
         backendURLMaxLength: 8100,
         default_language: "eng",
+        default_options: { is: "=", is_not: "!=" },
         // codes for translation ISO-639-1 to 639-2
         iso_languages: {
             en: "eng",
@@ -39,7 +40,6 @@ export function setDefaultConfigValues() {
             no: "nor",
         },
         cqp_prio: ["deprel", "pos", "msd", "suffix", "prefix", "lemma", "lex", "word"],
-        statistics_search_default: true,
         word_label: { swe: "ord", eng: "word" },
         visible_modes: 6,
         has_timespan: true,

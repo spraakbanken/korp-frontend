@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IControllerService, IHttpService, type IRequestConfig, type IScope } from "angular"
+import angular, { IControllerService, IHttpService, ui, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
@@ -8,6 +8,10 @@ import { RootScope } from "./root-scope.types"
 import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, LocationService, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
+import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
+import { CorpusTransformed } from "./settings/config-transformed.types"
+import { Row } from "./components/kwic"
+import { AbsRelSeq } from "./statistics.types"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -16,12 +20,28 @@ export const html = String.raw
 export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
     Object.fromEntries(keys.map((key) => [key, getValue(key)]))
 
+/** Create a promise that can be resolved later. */
+export const deferOk = (): DeferredOk => {
+    let resolve: () => void
+    const promise = new Promise<undefined>((res) => {
+        resolve = () => res(undefined)
+    })
+    return { promise, resolve: resolve! }
+}
+
+/** A value-less variant of a Deferred. */
+export type DeferredOk = {
+    promise: Promise<undefined>
+    resolve: () => void
+}
+
 /** Mapping from service names to their TS types. */
 export type ServiceTypes = {
     $controller: IControllerService
     $http: IHttpService
     $location: LocationService
     $rootScope: RootScope
+    $uibModal: ui.bootstrap.IModalService
     // Add types here as needed.
 }
 
@@ -94,7 +114,7 @@ export class SelectionManager {
         this.aux = $()
     }
 
-    select(word: JQuery<HTMLElement>, aux: JQuery<HTMLElement>): void {
+    select(word: JQuery<HTMLElement>, aux?: JQuery<HTMLElement>): void {
         if (word == null || !word.length) {
             return
         }
@@ -157,6 +177,25 @@ export const valfilter = (attrobj: AttributeOption): string =>
     attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value
 
 /**
+ * Get an object from a registry with optional options.
+ *
+ * The definition is a name, or a name and options.
+ * If the object is a function, the options are passed to it.
+ */
+export function getConfigurable<T>(
+    registry: Record<string, MaybeConfigurable<T>>,
+    definition: MaybeWithOptions
+): T | undefined {
+    const name = typeof definition === "string" ? definition : definition.name
+    const widget = registry[name]
+    if (_.isFunction(widget)) {
+        const options = typeof definition == "object" ? definition.options : {}
+        return widget(options)
+    }
+    return widget
+}
+
+/**
  * Format a number of "relative hits" (hits per 1 million tokens), using exactly one decimal.
  * @param x Number of relative hits
  * @param lang The locale to use.
@@ -168,19 +207,13 @@ export function formatRelativeHits(x: number | string, lang?: string) {
 }
 
 /**
- * Format as `<relative> (<absolute>)` plus surrounding HTML.
- * @param absolute Number of absolute hits
- * @param relative Number of relative hits (hits per 1 million tokens)
- * @param lang The locale to use.
- * @returns A HTML snippet.
+ * Format frequency as relative or absolute using chosen mode.
  */
-export function hitCountHtml(absolute: number, relative: number, lang?: string) {
-    lang = lang || getLang()
-    const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
-    // TODO Remove outer span?
-    // TODO Flexbox?
-    const absoluteHtml = `<span class='absStat'>(${absolute.toLocaleString(lang)})</span>`
-    return `<span>${relativeHtml} ${absoluteHtml}</span>`
+export function formatFrequency($rootScope: RootScope, absrel: AbsRelSeq) {
+    const [absolute, relative] = absrel
+    return $rootScope.statsRelative
+        ? formatRelativeHits(relative, $rootScope.lang)
+        : absolute.toLocaleString($rootScope.lang)
 }
 
 /**
@@ -282,19 +315,28 @@ export function saldoToString(saldoId: string): string {
  * @returns A string of superscript numbers.
  */
 function numberToSuperscript(number: string | number): string {
-    return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[n]).join("")
+    return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
+}
+
+/** Show a basic modal with vanilla JS */
+export function simpleModal(html: string) {
+    const dialog = document.createElement("dialog")
+    dialog.classList.add("bg-white", "p-4", "rounded-lg", "shadow-lg", "border")
+    const button = '<button class="block mx-auto btn btn-primary mt-4">OK</button>'
+    dialog.innerHTML = html + button
+    document.body.appendChild(dialog)
+    dialog.showModal()
+    dialog.querySelector("button")!.addEventListener("click", () => dialog.close())
 }
 
 // Add download links for other formats, defined in
 // settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
 
-export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data): void {
+export function setDownloadLinks(params: string, result_data: { kwic: Row[]; corpus_order: string[] }): void {
     // If some of the required parameters are null, return without
     // adding the download links.
-    if (
-        !(xhr_settings != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)
-    ) {
+    if (!(params != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
         console.log("failed to do setDownloadLinks")
         return
     }
@@ -309,7 +351,8 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
     // Get the number (index) of the corpus of the query result hit
     // number hit_num in the corpus order information of the query
     // result.
-    const get_corpus_num = (hit_num) => result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus)
+    const get_corpus_num = (hit_num: number) =>
+        result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus.toUpperCase())
 
     console.log("setDownloadLinks data:", result_data)
     $("#download-links").empty()
@@ -320,7 +363,7 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
     )
     // Settings of the corpora in the result, to be passed to the
     // download script
-    const result_corpora_settings = {}
+    const result_corpora_settings: Record<string, CorpusTransformed> = {}
     let i = 0
     while (i < result_corpora.length) {
         const corpus_ids = result_corpora[i].toLowerCase().split("|")
@@ -350,8 +393,10 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
     class="download_link">${format.toUpperCase()}</option>\
 `)
 
+        const query_params = JSON.stringify(Object.fromEntries(new URLSearchParams(params)))
+
         const download_params = {
-            query_params: xhr_settings.url,
+            query_params,
             format,
             korp_url: window.location.href,
             korp_server_url: settings.korp_backend_url,
@@ -359,7 +404,7 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
             corpus_config_info_keys: ["metadata", "licence", "homepage", "compiler"].join(","),
             urn_resolver: settings.urnResolver,
         }
-        if ("downloadFormatParams" in settings) {
+        if ("download_format_params" in settings) {
             if ("*" in settings.download_format_params) {
                 $.extend(download_params, settings.download_format_params["*"])
             }
@@ -385,82 +430,56 @@ export function setDownloadLinks(xhr_settings: JQuery.AjaxSettings, result_data)
         })
 }
 
+/** Split a string by the first occurence of a given separator */
+export const splitFirst = (sep: string, s: string): [string, string] => {
+    const pos = s.indexOf(sep)
+    if (pos == -1) return [s, ""]
+    return [s.slice(0, pos), s.slice(pos + sep.length)]
+}
+
 /** Escape special characters in a string so it can be safely inserted in a regular expression. */
 export const regescape = (s: string): string => s.replace(/[.|?|+|*||'|()^$\\]/g, "\\$&").replace(/"/g, '""')
 
 /** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
 export const unregescape = (s: string): string => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
 
-/** Return the length of baseUrl with params added. */
-const calcUrlLength = (baseUrl: string, params: any): number =>
-    baseUrl.length + new URLSearchParams(params).toString().length + 1
-
 /**
- * Add HTTP method to the HTTP configuration object conf for jQuery.ajax or AngularJS $http call:
- * if the result URL would be longer than settings.backendURLMaxLength, use POST, otherwise GET.
- * @param conf A $http or jQuery.ajax configuration object.
- *   For $http, the request parameters should be in `params` (moved to `data` for POST),
- *   and for jQuery.ajax, they should be in `data`.
- * @returns The same object, possibly modified in-place
+ * Select GET or POST depending on url length.
  */
-export function httpConfAddMethod<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T): T {
-    // The property to use for GET: AngularJS $http uses params for
-    // GET and data for POST, whereas jQuery.ajax uses data for both
-    const data = "params" in conf ? conf.params : conf.data
-    if (calcUrlLength(conf.url!, data) > settings.backendURLMaxLength) {
-        conf.method = "POST"
-        conf.data = data
-        if ("params" in conf) delete conf.params
-    } else {
-        conf.method = "GET"
-        conf["params" in conf ? "params" : "data"] = data
-    }
-    return conf
+export function selectHttpMethod(url: string, params: Record<string, any>): { url: string; request: RequestInit } {
+    const urlFull = buildUrl(url, params)
+    return urlFull.length > settings.backendURLMaxLength
+        ? { url, request: { method: "POST", body: toFormData(params) } }
+        : { url: urlFull, request: {} }
 }
 
-/**
- * Like `httpConfAddMethod`, but for use with $http, to ensure data is sent as form data and not JSON.
- * @param {object} conf A $http or jQuery.ajax configuration object.
- * @returns The same object, possibly modified in-place
- */
-export function httpConfAddMethodAngular<T extends JQuery.AjaxSettings | IRequestConfig>(conf: T & { url: string }): T {
-    const fixedConf = httpConfAddMethod(conf)
-
-    if (fixedConf.method == "POST") {
-        const formDataParams = new FormData()
-        for (var key in fixedConf.data) {
-            formDataParams.append(key, fixedConf.data[key])
-        }
-        fixedConf.data = formDataParams
-
-        if (!fixedConf.headers) {
-            fixedConf.headers = {}
-        }
-        // will be set correct automatically by Angular
-        fixedConf.headers["Content-Type"] = undefined
-    }
-
-    return fixedConf
+/** Convert object to FormData */
+function toFormData(obj: Record<string, any>): FormData {
+    const formData = new FormData()
+    Object.entries(obj).forEach(([key, value]) => formData.append(key, value))
+    return formData
 }
 
-/**
- * Like `httpConfAddMethod`, but for use with native `fetch()`.
- * @param conf A $http or jQuery.ajax configuration object.
- * @returns The same object, possibly modified in-place
- */
-export function httpConfAddMethodFetch(
-    url: string,
-    params: Record<string, string>
-): { url: string; request?: RequestInit } {
-    if (calcUrlLength(url, params) > settings.backendURLMaxLength) {
-        const body = new FormData()
-        for (const key in params) {
-            body.append(key, params[key])
-        }
-        return { url, request: { method: "POST", body } }
-    } else {
-        return { url: url + "?" + new URLSearchParams(params) }
-    }
+/** Append search params to url */
+export function buildUrl(base: string, params: Record<string, any>): string {
+    const url = new URL(base)
+    Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value))
+    return url.toString()
+}
+
+/** URL search params as a string value for comparison. */
+export const paramsString = (params: URLSearchParams | Record<string, any>) =>
+    JSON.stringify([...new URLSearchParams(params).entries()].sort())
+
+/** Trigger a download in the browser. */
+export function downloadFile(data: string, filename: string, type: string) {
+    const blob = new Blob([data], { type })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
 }
 
 /**

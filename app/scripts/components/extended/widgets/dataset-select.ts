@@ -1,9 +1,10 @@
 /** @format */
 import _ from "lodash"
 import { locAttribute } from "@/i18n"
-import { selectTemplate, WidgetScope, WidgetWithOptions } from "./common"
+import { selectTemplate, Widget, WidgetScope } from "./common"
 import { RootScope } from "@/root-scope.types"
 import { LocMap } from "@/i18n/types"
+import { Configurable } from "@/settings/config.types"
 
 type DatasetSelectOptions = {
     sort?: boolean
@@ -21,7 +22,7 @@ type DatasetSelectScope = WidgetScope & {
  * - dataset: an object or an array of values
  * - escape: boolean, will be used by the escaper-directive
  */
-export const datasetSelect: WidgetWithOptions<DatasetSelectOptions> = (options) => ({
+export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (options) => ({
     template: selectTemplate,
     controller: [
         "$scope",

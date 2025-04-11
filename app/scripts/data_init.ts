@@ -3,15 +3,17 @@ import _ from "lodash"
 import memoize from "lodash/memoize"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import timeProxyFactory from "@/backend/time-proxy"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
-import { fromKeys, getUrlHash, httpConfAddMethodFetch } from "@/util"
+import { fromKeys } from "@/util"
 import { Labeled, LangLocMap, LocMap } from "./i18n/types"
-import { CorpusInfoResponse } from "./settings/corpus-info.types"
-import { Attribute, Config, Corpus, CustomAttribute } from "./settings/config.types"
+import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
+import { korpRequest } from "./backend/common"
+
+// @ts-ignore
+const BUILD_HASH = __webpack_hash__
 
 // Using memoize, this will only fetch once and then return the same promise when called again.
 // TODO it would be better only to load additional languages when there is a language change
@@ -22,7 +24,7 @@ export const initLocales = memoize(async () => {
         const lang = langObj.value
         locData[lang] = {}
         for (const pkg of ["locale", "corpora"]) {
-            const file = `translations/${pkg}-${lang}.json`
+            const file = `translations/${pkg}-${lang}.${BUILD_HASH}.json`
             const def = fetch(file)
                 .then(async (response) => {
                     if (response.status >= 300) throw new Error()
@@ -46,10 +48,10 @@ type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_
  * Fetch CWB corpus info (Size, Updated etc).
  */
 async function getInfoData(corpusIds: string[]): Promise<InfoData> {
+    if (!corpusIds.length) return {}
+
     const params = { corpus: corpusIds.map((id) => id.toUpperCase()).join(",") }
-    const { url, request } = httpConfAddMethodFetch(settings.korp_backend_url + "/corpus_info", params)
-    const response = await fetch(url, request)
-    const data = (await response.json()) as CorpusInfoResponse
+    const data = await korpRequest("corpus_info", params)
 
     return fromKeys(corpusIds, (corpusId) => ({
         info: data.corpora[corpusId.toUpperCase()].info,
@@ -57,36 +59,6 @@ async function getInfoData(corpusIds: string[]): Promise<InfoData> {
             (name) => name.indexOf("__") !== -1
         ),
     }))
-}
-
-async function getTimeData(): Promise<[[number, number][], number]> {
-    const timeProxy = timeProxyFactory.create()
-    const args = await timeProxy.makeRequest()
-
-    let [dataByCorpus, all_timestruct, rest] = args
-
-    if (all_timestruct.length == 0) {
-        return [[], 0]
-    }
-
-    // this adds data to the corpora in settings
-    for (let corpus in dataByCorpus) {
-        let struct = dataByCorpus[corpus]
-        if (corpus !== "time") {
-            const cor = settings.corpora[corpus.toLowerCase()]
-            timeProxy.expandTimeStruct(struct)
-            cor.non_time = struct[""]
-            struct = _.omit(struct, "")
-            cor.time = struct
-            if (_.keys(struct).length > 1) {
-                if (cor.common_attributes == null) {
-                    cor.common_attributes = {}
-                }
-                cor.common_attributes.date_interval = true
-            }
-        }
-    }
-    return [all_timestruct, rest]
 }
 
 async function getConfig(): Promise<Config> {
@@ -97,27 +69,15 @@ async function getConfig(): Promise<Config> {
         return corpusConfig
     } catch {}
 
-    let configUrl: string
-    // The corpora to include can be defined elsewhere can in a mode
-    if (settings.corpus_config_url) {
-        configUrl = await settings.corpus_config_url()
-    } else {
-        const labParam = process.env.ENVIRONMENT == "staging" ? "&include_lab" : ""
-        configUrl = `${settings.korp_backend_url}/corpus_config?mode=${currentMode}${labParam}`
-    }
-    let response: Response
-    try {
-        response = await fetch(configUrl)
-    } catch (error) {
-        throw Error("Config request failed")
-    }
+    // The corpora to include are normally given by the mode config, but allow defining it elsewhere (used by Mink)
+    const corpusIds = settings.get_corpus_ids ? await settings.get_corpus_ids() : undefined
 
-    if (!response.ok) {
-        console.error("Something wrong with corpus config", response.statusText)
-        throw Error("Something wrong with corpus config")
-    }
+    const config = await korpRequest("corpus_config", {
+        mode: currentMode,
+        corpus: corpusIds?.join(",") || undefined,
+    })
 
-    return (await response.json()) as Config
+    return config
 }
 
 /**
@@ -212,14 +172,6 @@ function setInitialCorpora(): void {
         // folders expanded, save
         settings.preselected_corpora = expandedCorpora
     }
-
-    const corpusParam = getUrlHash("corpus")
-
-    const currentCorpora = corpusParam
-        ? _.flatten(_.map(corpusParam.split(","), (val) => getAllCorporaInFolders(settings.folders, val)))
-        : settings.preselected_corpora
-
-    settings.corpusListing.select(currentCorpora)
 }
 
 /**
@@ -256,21 +208,17 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     // only if the current mode is parallel, we load the special code required
     if (config.parallel) {
         require("./parallel/corpus_listing")
-        require("./parallel/stats_proxy")
     }
 
     if (!settings.parallel) {
         settings.corpusListing = new CorpusListing(settings.corpora)
     } else {
-        settings.corpusListing = new ParallelCorpusListing(settings.corpora)
+        settings.corpusListing = new ParallelCorpusListing(
+            settings.corpora as Record<string, CorpusTransformed<CorpusParallel>>
+        )
     }
 
-    // if the previous config calls didn't yield any corpora, don't ask for time
     if (!_.isEmpty(settings.corpora)) {
         setInitialCorpora()
-
-        if (settings.has_timespan) {
-            settings.time_data = await getTimeData()
-        }
     }
 }

@@ -45,15 +45,18 @@ angular.module("korpApp").factory("utils", [
                 val = config.val_in ? config.val_in(val) : val
 
                 if (config.scope_name) {
+                    // @ts-ignore
                     scope[config.scope_name] = val
                 } else if (config.scope_func) {
+                    // @ts-ignore
                     scope[config.scope_func](val)
                 } else {
+                    // @ts-ignore
                     scope[config.key] = val
                 }
             }
             onWatch()
-            scope.$watch(() => $location.search(), onWatch)
+            scope.$watch(() => $location.search()[config.key], onWatch)
 
             // Sync from scope to url
             scope.$watch(config.expr || config.scope_name || config.key, (val: any) => {

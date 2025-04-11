@@ -1,7 +1,8 @@
 /** @format */
 import { html, regescape, unregescape } from "@/util"
-import { WidgetScope, WidgetWithOptions } from "./common"
+import { Widget, WidgetScope } from "./common"
 import "@/components/autoc"
+import { Configurable } from "@/settings/config.types"
 
 export type AutocExtendedOptions = {
     type?: string
@@ -13,7 +14,7 @@ type AutocExtendedScope = WidgetScope & {
     onChange: (output: string, isRawOutput: boolean) => void
 }
 
-export const autocExtended: WidgetWithOptions<AutocExtendedOptions> = (options) => ({
+export const autocExtended: Configurable<Widget, AutocExtendedOptions> = (options) => ({
     template: html`<autoc
         input="input"
         is-raw-input="isRawInput"

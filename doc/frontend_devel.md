@@ -109,7 +109,6 @@ settings that affect the frontend.
     that may be added automatically to a corpus. See [backend documentation](https://github.com/spraakbanken/korp-backend)
     for more information about how to define attributes.
 - __config_dependent_on_authentication__ - Boolean. If true, backend config will not be fetched until login check has finished.
-- __corpus_config_url__ - Async function returning a url string. Configuration for the selected mode is fetched from here at app initialization. If not given, the default is `<korp_backend_url>/corpus_config?mode=<mode>`, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
 - __corpus_info_link__ - Object. Use this to render a link for each corpus in the corpus chooser.
   - __url_template__ - String or translation object. A URL containing a token "%s", which will be replaced with the corpus id.
   - __label__ - String or translation object. The label is the the same for all corpora.
@@ -134,10 +133,12 @@ settings that affect the frontend.
     - __label__: String or translation object.
     - __params__: Object. This is translated to URL search params when the link is clicked.
     - __hint__: String or translation object. Can contain HTML.
+- __get_corpus_ids__ - Async function returning a list of strings. The corpus ids are passed as the `corpus=` param to the `<korp_backend_url>/corpus_config?mode=<mode>` call, see the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API.
 - __group_statistics__ - List of attribute names. Attributes that either have a rank or a numbering used for multi-word units. For example, removing `:2` from `ta_bort..vbm.1:2`, to get the lemgram of this word: `ta_bort..vbm.1`.
 - __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
 - __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
+- __input_case_insensitive_default__ - Boolean. Decides if the simple search input should be case-insensitive by default.
 - __iso_languages__ - A map of two-letter ISO language codes to three-letter. Only used for fixing old links. Default: See `settings.js`
 - __map_center__ - See [Map](#map)
 - __map_enabled__ - Boolean. See [Map](#map)
@@ -155,6 +156,9 @@ settings that affect the frontend.
 - __news_url__ - See [News widget](#news-widget)
 - __reduce_word_attribute_selector__ - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora *word* attributes or only the attributes common to selected corpora. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
 - __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
+- __statistics__ - Boolean. Enable statistics search. Default: `true`
+- __statistics_case_insensitive_default__ - Boolean. Decides if the "Group by" option should be case-insensitive by default.
+- __statistics_limit__ - Boolean. Maximum number of rows to retrieve for statistics. Some accuracy is lost for large results, but it can save the browser from crashing.
 - __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
@@ -225,11 +229,13 @@ If no mode is given, mode is `default`.
 
 It then looks for mode-specific code in `<configDir>/modes/<mode>_mode.js`. Mode code may overwrite values from `config.yml` by altering the `settings` object imported from `@/settings`.
 
-It then looks for settings for this specific mode, the **corpus config**. If it exists at `<configDir>/modes/<mode>_corpus_config.json`, it will be loaded from there. Otherwise, it retrieves it from the url given by the `corpus_config_url` option, which defaults to:
+It then looks for settings for this specific mode, the **corpus config**. If it exists at `<configDir>/modes/<mode>_corpus_config.json`, it will be loaded from there. Otherwise, it retrieves it from the backend:
 
 ```
 https://<korp_backend_url>/corpus_config?mode=<mode>
 ```
+
+Normally, the mode param is enough for the backend to know what corpora to include. Alternatively, it is possible to specify corpus ids in the `corpus=` param, by assigning a function to the `get_corpus_ids` setting (in `<mode>_mode.js`). The function can be async and should return a list of corpus ids.
 
 See the [`corpus_config`](https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get) API for more information.
 
@@ -768,18 +774,7 @@ my_parameter: my value
 
 Will make `settings["my_parameter"]` available in the app.
 
-Use `snake_case` when defining new attribute in `config.yml`. Add a default  value for the new attribute in `app/scripts/settings.js`, if needed.
-
-When using the settings object, use the following format: `settings["my_parameter"]`, instead of `settings.my_parameter`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
-
-### Map
-
-Some of the code for the map is located in this repository:
-
-https://github.com/spraakbanken/korp-geo
-
-[github-frontend]: https://github.com/spraakbanken/korp-frontend/
-[github-frontend-sb]: https://github.com/spraakbanken/korp-frontend-sb/
+Use `snake_case` when defining new attributes in `config.yml`. Add a default value for the new attribute in `app/scripts/settings.js`, if needed.
 
 ### CQP Parser
 
@@ -825,17 +820,26 @@ If the commit depends on new functions in the backend, add a note of which backe
 
 ### Code format
 
-The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before committing (`yarn run prettier app/scripts/my_file.js`).
+The code should be formatted using Prettier, with the supplied `.prettierrc`. It is possible to make your editor do this automatically on save. Otherwise, run prettier before committing (`yarn run format`).
 
-We use [Babel](https://babeljs.io/) to transform modern Javascript to something that works in all browsers. A non-exhaustive list of features available is: https://babeljs.io/docs/en/learn .
+TypeScript is used to provide typing and to transpile new language features for older browsers.
 
 Use modern features where it looks good. Always use `const` or `let` instead of `var`.
 
 Identifiers should be in camel case (although our old Korp code may still have some identifiers that uses snake case).
 
-Aim to write code that is easily understood, and supplement with comments as needed. Update comments as a part of a pull request when something changes so that the comments are no longer valid.
+When using the settings object, use `settings["my_parameter"]` instead of `settings.my_parameter`. This is to emphasize that `settings` should be viewed as a data structure that is holding values, and to avoid using snake case in code.
+
+Aim to write code that is easily understood, and supplement with comments as needed. Keep comments up to date while making code changes.
 
 Files should be named using snake case: `my_file.js`.
+
+### Error handling
+
+- Throw a specific error when something fails (e.g. `KorpBackendError` if an API request fails)
+- Catch errors where they can be handled, as low as possible in the call hierarchy (e.g. log and continue, or show a message)
+
+Unhandled errors are caught and shown by `window` listeners and the `$exceptionHandler` service.
 
 ### Dependencies
 
@@ -849,28 +853,24 @@ Avoid using directives and controllers.
 
 #### Angular.js dependency injection
 
-This is how it looks everywhere in the Angular.js code:
+Angular will automatically pass the services demanded by controllers, see https://docs.angularjs.org/guide/di
+
+Do this (inline array annotation):
 
 ```js
 controller: [
   "$scope",
-  "$rootScope",
-  "backend",
-  ($scope, $rootScope, backend) => {
-    ...
-  }
+  function ($scope) { ... }
 ]
 ```
 
-The variables of the controller is created automatically by Angular.js and "injected". When reading documenation online you can find the alternative:
+Do not do (implicit annotation):
 
 ```js
-controller: ($scope, $rootScope, backend) => {
-  ...
-}
+controller: function ($scope) { ... }
 ```
 
-But this doesn't work in Korp (anymore). Due to minification done by Webpack when building the frontend (`yarn build`). It probably works with `yarn start`, so beware.
+This will fail when building the frontend (`yarn build`), due to minification by Webpack. It probably works with `yarn start`, so beware.
 
 ### Documentation
 
@@ -878,4 +878,4 @@ Update this document if needed.
 
 ### Testing
 
-The state of the frontend testing is quite bad. It is good to add e2e tests in `test/e2e/spec`, but not a demand. The tests are dependent on Språkbanken's frontend setup, Korp backend and Karp backend (auto completion feature).
+Previous test code has been flaky and underprioritized, and is now removed. To examine or restore it, filter the git log for changes to the `test/` folder.

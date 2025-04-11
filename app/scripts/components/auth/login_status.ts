@@ -41,18 +41,15 @@ export const loginStatusComponent: IComponentOptions = {
             })
 
             $ctrl.showLogin = () => {
-                $scope.closeModal = () => {
-                    modal.close()
-                }
-
                 const modal = $uibModal.open({
-                    template: `<login-box close-click='closeModal()'></login-box>`,
+                    template: `<login-box on-close="$close()" on-dismiss="$dismiss()"></login-box>`,
                     windowClass: "login",
-                    scope: $scope,
                     size: "sm",
                 })
-
-                modal.result.then(() => modal.close())
+                // Treat dismissing as a logout action
+                modal.result.catch((e) => {
+                    statemachine.send("LOGOUT")
+                })
             }
         },
     ],

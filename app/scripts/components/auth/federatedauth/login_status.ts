@@ -43,7 +43,7 @@ export const loginStatusComponent: IComponentOptions = {
                 $ctrl.doLogin(event.loginNeededFor)
             })
 
-            $ctrl.doLogin = (loginNeededFor) => {
+            $ctrl.doLogin = (loginNeededFor: CorpusTransformed[]) => {
                 // TODO here we must get the URL so that the state can be restored that way
                 login()
             }

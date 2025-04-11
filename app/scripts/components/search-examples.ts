@@ -5,8 +5,9 @@ import statemachine from "@/statemachine"
 import { html } from "@/util"
 import settings from "@/settings"
 import { SearchExample } from "@/settings/app-settings.types"
-import { RootScope } from "@/root-scope.types"
 import { HashParams, LocationService } from "@/urlparams"
+import { CqpSearchEvent } from "@/statemachine/types"
+import { SearchesService } from "@/services/searches"
 
 export default angular.module("korpApp").component("searchExamples", {
     template: html`
@@ -24,10 +25,10 @@ export default angular.module("korpApp").component("searchExamples", {
     `,
     bindings: {},
     controller: [
-        "$rootScope",
         "$scope",
         "$location",
-        function ($rootScope: RootScope, $scope: SearchExamplesScope, $location: LocationService) {
+        "searches",
+        function ($scope: SearchExamplesScope, $location: LocationService, searches: SearchesService) {
             const $ctrl = this
 
             $scope.examples = undefined
@@ -42,15 +43,12 @@ export default angular.module("korpApp").component("searchExamples", {
             }
 
             $ctrl.setSearch = (params: HashParams) => {
-                if (params.corpus) {
-                    const corpora = params.corpus.split(",")
-                    settings.corpusListing.select(corpora)
-                    $rootScope.$broadcast("corpuschooserchange", corpora)
-                }
                 if (params.cqp) {
-                    statemachine.send("SEARCH_CQP", { cqp: params.cqp })
+                    statemachine.send("SEARCH_CQP", { cqp: params.cqp } as CqpSearchEvent)
                 }
-                $location.search(params)
+                // Do not use `$location.search(params)` because it will remove existing params (like `corpus`)
+                Object.keys(params).forEach((key: keyof HashParams) => $location.search(key, params[key]))
+                searches.doSearch()
             }
         },
     ],

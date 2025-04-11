@@ -141,7 +141,7 @@ angular.module("korpApp").component("ccTree", {
                 }
             }
 
-            function selectOnly(e) {
+            function selectOnly(e: MouseEvent) {
                 const isLinux = window.navigator.userAgent.indexOf("Linux") !== -1
                 return (!isLinux && e.altKey) || (isLinux && e.ctrlKey)
             }

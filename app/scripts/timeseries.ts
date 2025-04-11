@@ -5,6 +5,7 @@ import fromPairs from "lodash/fromPairs"
 import pickBy from "lodash/pickBy"
 import range from "lodash/range"
 import settings from "@/settings"
+import { timeData } from "./timedata"
 
 /**
  * Find some even points within a range of years.
@@ -20,12 +21,11 @@ export function calculateYearTicks(min: number, max: number) {
     return range(round(min), round(max + 1), step)
 }
 
-// Time data is fetched in data_init.js, to also provide data for search result trend diagram (?)
 /** Data size per year of all corpora. */
-export const getTimeDataPairs = (): [number, number][] => settings.time_data[0]
+export const getTimeDataPairs = (): [number, number][] => timeData![0]
 
 /** Data size of unknown year in all corpora. */
-export const getCountUndated = (): number => settings.time_data[1]
+export const getCountUndated = (): number => timeData![1]
 
 /** Get data size per year of all corpora. */
 export const getSeries = () => fromPairs(getTimeDataPairs()) as YearSeries
@@ -43,8 +43,9 @@ export function getCountUndatedSelected() {
 }
 
 /** Get first and last year in all available corpora. */
-export function getSpan() {
+export function getSpan(): { min: number; max: number } | undefined {
     const timeData = getTimeDataPairs()
+    if (!timeData.length) return undefined
     return { min: timeData[0][0], max: timeData[timeData.length - 1][0] }
 }
 
