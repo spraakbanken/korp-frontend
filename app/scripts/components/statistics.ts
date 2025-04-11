@@ -355,6 +355,12 @@ angular.module("korpApp").component("statistics", {
                         e.stopImmediatePropagation()
                     })
 
+                    grid.onClick.subscribe((e, args) => {
+                        const column = grid.getColumns()[args.cell]
+                        if (column.id == "pieChart") showPieChart(args.row)
+                        else if (column.field == "hit_value") onAttrValueClick(args.row)
+                    })
+
                     grid.onHeaderClick.subscribe((e, args) => {
                         $ctrl.doSort = true // enable sorting again, resize is done
                         e.stopImmediatePropagation()
@@ -419,44 +425,32 @@ angular.module("korpApp").component("statistics", {
 
             const debouncedSearch = _.debounce(searches.doSearch, 500)
 
-            $ctrl.onStatsClick = (event) => {
-                const target = event.target as HTMLElement
-                if (target.classList.contains("arcDiagramPicture")) {
-                    const parts = $(target).attr("id").split("__")
-                    showPieChart(parseInt(parts[1]))
-                } else if (
-                    target.classList.contains("statistics-link") ||
-                    (target.classList.contains("slick-cell") && $(target).find(".statistics-link").length == 1)
-                ) {
-                    let linkElem = $(target)
-                    if (!target.classList.contains("statistics-link")) {
-                        linkElem = linkElem.find(".statistics-link")
-                    }
-                    const rowIx = parseInt(linkElem.data("row"))
-                    const rowData = $ctrl.data.find((row) => row.rowId === rowIx) as SingleRow
-                    let cqp2 = null
-                    // isPhraseLevelDisjunction can be set in custom code for constructing cqp like: ([] | [])
-                    if ("isPhraseLevelDisjunction" in rowData && rowData.isPhraseLevelDisjunction) {
-                        // In this case the statsValues array is one level deeper
-                        const statsValues = rowData.statsValues as unknown as Record<string, string[]>[][]
-                        const tokens = statsValues.map((vals) => getCqp(vals, $ctrl.searchParams.ignoreCase))
-                        cqp2 = tokens.join(" | ")
-                    } else {
-                        cqp2 = getCqp(rowData.statsValues, $ctrl.searchParams.ignoreCase)
-                    }
+            function onAttrValueClick(row: number) {
+                const rowData = $ctrl.grid.getDataItem(row) as SingleRow
+                if (isTotalRow(rowData)) return
 
-                    // Find which corpora had any hits (uppercase ids)
-                    const corpora = Object.keys(rowData.count).filter((id) => rowData.count[id][0] > 0)
-
-                    $rootScope.kwicTabs.push({
-                        queryParams: {
-                            corpus: corpora.join(","),
-                            cqp: $ctrl.prevParams.cqp,
-                            cqp2,
-                            expand_prequeries: false,
-                        },
-                    })
+                let cqp2 = null
+                // isPhraseLevelDisjunction can be set in custom code for constructing cqp like: ([] | [])
+                if ("isPhraseLevelDisjunction" in rowData && rowData.isPhraseLevelDisjunction) {
+                    // In this case the statsValues array is one level deeper
+                    const statsValues = rowData.statsValues as unknown as Record<string, string[]>[][]
+                    const tokens = statsValues.map((vals) => getCqp(vals, $ctrl.searchParams.ignoreCase))
+                    cqp2 = tokens.join(" | ")
+                } else {
+                    cqp2 = getCqp(rowData.statsValues, $ctrl.searchParams.ignoreCase)
                 }
+
+                // Find which corpora had any hits (uppercase ids)
+                const corpora = Object.keys(rowData.count).filter((id) => rowData.count[id][0] > 0)
+
+                $rootScope.kwicTabs.push({
+                    queryParams: {
+                        corpus: corpora.join(","),
+                        cqp: $ctrl.prevParams.cqp,
+                        cqp2,
+                        expand_prequeries: false,
+                    },
+                })
             }
 
             $ctrl.onGraphClick = () => {
@@ -553,12 +547,12 @@ angular.module("korpApp").component("statistics", {
                 event.stopPropagation()
             }
 
-            function showPieChart(rowId: number) {
-                const row = $ctrl.data.find((row) => row.rowId == rowId)!
+            function showPieChart(row: number) {
+                const item = $ctrl.grid.getDataItem(row)
 
                 $scope.rowData = $ctrl.searchParams.corpora.map((corpus) => ({
                     title: locObj(settings.corpora[corpus.toLowerCase()]["title"]),
-                    values: row.count[corpus], // [absolute, relative]
+                    values: item.count[corpus],
                 }))
 
                 const modal = $uibModal.open({

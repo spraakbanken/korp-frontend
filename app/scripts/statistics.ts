@@ -16,7 +16,6 @@ import { formatFrequency, fromKeys } from "@/util"
 import { LangString } from "./i18n/types"
 import { locObj } from "./i18n"
 import { RootScope } from "./root-scope.types"
-const pieChartImg = require("../img/stats2.png")
 
 const createStatisticsService = function () {
     // Root Scope is used so the cell formatters are re-triggered when language is changed.
@@ -42,7 +41,7 @@ const createStatisticsService = function () {
                 formatter: (row, cell, value, columnDef, data: Row) => {
                     if (isTotalRow(data)) return "&Sigma;"
                     const output = data.formattedValue[reduceVal!] || `<span class="opacity-50">&empty;</span>`
-                    return `<span class="statistics-link" data-row="${data.rowId}">${output}</span>`
+                    return `<div class="link" data-row="${data.rowId}">${output}</div>`
                 },
                 minWidth,
                 cssClass: "parameter-column",
@@ -55,11 +54,11 @@ const createStatisticsService = function () {
             field: "hit_value",
             sortable: false,
             formatter(row, cell, value, columnDef, dataContext: any) {
-                return `<img id="circlediagrambutton__${dataContext.rowId}" src="${pieChartImg}" class="arcDiagramPicture"/>`
+                return `<i class="fa-solid fa-chart-pie block text-sm mx-1"></i>`
             },
             maxWidth: 25,
             minWidth: 25,
-            cssClass: "total-column",
+            cssClass: "total-column cursor-pointer",
         })
 
         columns.push({

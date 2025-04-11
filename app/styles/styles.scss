@@ -905,22 +905,9 @@ span.absStat {
   white-space: nowrap;
 }
 
-.arcDiagramPicture {
-  cursor: pointer;
-  margin-bottom: -2px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
 .c0 {
   position: relative;
 }
-
-.arcDiagramPicture {
-  position: absolute;
-  right: 0;
-}
-
 
 .lemgram_section {
   display: inline-block;
@@ -1499,16 +1486,6 @@ line.tick {
 #myGrid .slick-row:hover .total-column {
   background-color: #fff4e5;
 }
-
-#myGrid .statistics-link {
-    color: navy;
-    cursor: pointer;
-}
-
-#myGrid .slick-row:hover .statistics-link {
-    color: indianred;
-}
-
 
 .ui-widget-header {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;

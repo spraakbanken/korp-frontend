@@ -13,6 +13,7 @@
 
 - Statistics grouped rows: sub CQP only has one of the values [#452](https://github.com/spraakbanken/korp-frontend/issues/452)
 - Decimal separator not updated in statistics when changing language [#246](https://github.com/spraakbanken/korp-frontend/issues/246)
+- Empty value "∅" in stats table not clickable [#457](https://github.com/spraakbanken/korp-frontend/issues/457)
 
 ## [9.9.0] - 2025-03-24
 
