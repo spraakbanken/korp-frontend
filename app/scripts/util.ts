@@ -11,6 +11,7 @@ import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { Row } from "./components/kwic"
+import { AbsRelSeq } from "./statistics.types"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -206,18 +207,13 @@ export function formatRelativeHits(x: number | string, lang?: string) {
 }
 
 /**
- * Format as `<relative> (<absolute>)` plus surrounding HTML.
- * @param absrel Tuple with numbers of 0) absolute hits and 1) relative hits (hits per 1 million tokens)
- * @param lang The locale to use.
- * @returns A HTML snippet.
+ * Format frequency as relative or absolute using chosen mode.
  */
-export function hitCountHtml(absrel: [number, number], lang?: string) {
-    lang = lang || getLang()
+export function formatFrequency($rootScope: RootScope, absrel: AbsRelSeq) {
     const [absolute, relative] = absrel
-    const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
-    // TODO Remove outer span?
-    const absoluteHtml = `<span class='absStat'>(${absolute.toLocaleString(lang)})</span>`
-    return `<span>${relativeHtml} ${absoluteHtml}</span>`
+    return $rootScope.statsRelative
+        ? formatRelativeHits(relative, $rootScope.lang)
+        : absolute.toLocaleString($rootScope.lang)
 }
 
 /**

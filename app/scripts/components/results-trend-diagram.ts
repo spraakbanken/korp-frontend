@@ -6,7 +6,7 @@ import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
 import graphProxyFactory, { GraphProxy } from "@/backend/graph-proxy"
 import { expandOperators } from "@/cqp_parser/cqp"
-import { formatRelativeHits, hitCountHtml, html } from "@/util"
+import { formatFrequency, formatRelativeHits, html } from "@/util"
 import { loc } from "@/i18n"
 import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
 import "@/components/korp-error"
@@ -76,46 +76,59 @@ const PALETTE = [
 angular.module("korpApp").component("resultsTrendDiagram", {
     template: html`
         <korp-error ng-if="$ctrl.error" message="{{$ctrl.error}}"></korp-error>
+
         <div class="graph_tab" ng-show="!$ctrl.error">
-            <div class="graph_header">
-                <div class="controls">
-                    <div class="btn-group form_switch">
-                        <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'line'">
-                            {{'line' | loc:$root.lang}}
-                        </label>
-                        <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'bar'">
-                            {{'bar' | loc:$root.lang}}
-                        </label>
-                        <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'table'">
-                            {{'table' | loc:$root.lang}}
-                        </label>
-                    </div>
-                    <div class="non_time_div">
-                        <span rel="localize[non_time_before]"></span><span class="non_time"></span
-                        ><span rel="localize[non_time_after]"></span>
-                    </div>
+            <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
+                <div class="btn-group form_switch">
+                    <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'line'">
+                        {{'line' | loc:$root.lang}}
+                    </label>
+                    <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'bar'">
+                        {{'bar' | loc:$root.lang}}
+                    </label>
+                    <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'table'">
+                        {{'table' | loc:$root.lang}}
+                    </label>
                 </div>
-                <div class="legend" ng-style='{visibility : !$ctrl.loading && $ctrl.isGraph() ? "visible" : "hidden"}'>
-                    <div
-                        class="line"
-                        ng-show="$ctrl.hasEmptyIntervals"
-                        uib-tooltip="{{'graph_material_tooltip' | loc:$root.lang}}"
-                    >
-                        <a class="action"></a>
-                        <div class="swatch" style="background-color: #999"></div>
-                        <span class="label"> <em>{{'graph_material' | loc:$root.lang}} </em></span>
-                    </div>
-                </div>
-                <div style="clear: both;"></div>
+                <label ng-if="$ctrl.mode == 'table'">
+                    <input type="checkbox" ng-model="$root.statsRelative" />
+                    {{"num_results_relative" | loc:$root.lang}}
+                    <i
+                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                        uib-tooltip="{{'relative_help' | loc:$root.lang}}"
+                    ></i>
+                </label>
             </div>
+
+            <div class="non_time_div">
+                <span rel="localize[non_time_before]"></span><span class="non_time"></span
+                ><span rel="localize[non_time_after]"></span>
+            </div>
+
+            <div class="legend" ng-style='{visibility : !$ctrl.loading && $ctrl.isGraph() ? "visible" : "hidden"}'>
+                <div
+                    class="line"
+                    ng-show="$ctrl.hasEmptyIntervals"
+                    uib-tooltip="{{'graph_material_tooltip' | loc:$root.lang}}"
+                >
+                    <a class="action"></a>
+                    <div class="swatch" style="background-color: #999"></div>
+                    <span class="label"> <em>{{'graph_material' | loc:$root.lang}} </em></span>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+
             <div class="chart_container">
                 <div class="preloader" ng-class="{loading: $ctrl.loading}">
                     <i class="fa fa-spinner fa-spin fa-5x"></i>
                 </div>
                 <div class="chart" ng-show="$ctrl.isGraph()" ng-click="$ctrl.graphClickHandler()"></div>
             </div>
+
             <div class="preview"></div>
+
             <div class="time_table" style="margin-top:20px" ng-show="$ctrl.isTable()"></div>
+
             <div class="exportTimeStatsSection" ng-show="$ctrl.isTable()">
                 <select class="timeKindOfData">
                     <option value="relative">{{'statstable_relfigures' | loc:$root.lang}}</option>
@@ -151,6 +164,12 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 }
                 checkZoomLevel(interval[0], interval[1], true)
             }
+
+            $rootScope.$watch("statsRelative", () => {
+                if (!$ctrl.time_grid) return
+                // Trigger reformatting
+                $ctrl.time_grid.setColumns($ctrl.time_grid.getColumns())
+            })
 
             $ctrl.isGraph = () => ["line", "bar"].includes($ctrl.mode)
             $ctrl.isTable = () => $ctrl.mode === "table"
@@ -425,7 +444,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                             name: timestamp,
                             field: timestamp,
                             formatter(row, cell, value, columnDef, dataContext) {
-                                return typeof value[0] === "undefined" ? "" : hitCountHtml(value, $rootScope.lang)
+                                return value == undefined ? "" : formatFrequency($rootScope, value)
                             },
                         }
                         const i = _.sortedIndexOf(_.map(seriesRow.abs_data, "x"), item.x)

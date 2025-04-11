@@ -84,6 +84,14 @@ a.btn {
   color : #333;
 }
 
+.btn-group {
+  // Bootstrap uses float in btn-group, but we use flex instead because it flows nicer
+  display: inline-flex;
+  .btn {
+    float: none;
+  }
+}
+
 label {
   font-weight : initial;
   margin-bottom : 0;
@@ -1359,11 +1367,6 @@ slider {
 .graph_tab {
   min-height : 430px;
 }
-.graph_header {
-  .controls {
-    float : left;
-  }
-}
 
 .stats_header {
   margin-bottom : 1em;
@@ -1425,10 +1428,6 @@ slider {
 
 .form-bar .legend li:last-child:not(:only-child) {
   display : none;
-}
-.form_switch {
-  display: inline-block;
-  vertical-align: bottom;
 }
 
 line.tick {
