@@ -35,12 +35,13 @@ function reduceCqp(
     values: string[],
     ignoreCase: boolean
 ): string {
+    // Note: undefined if name is `word`
     const attr = settings.corpusListing.getReduceAttrs()[name]
 
     // Use named CQP'ifier from custom config code. It must escape values as regex.
     if (attr?.stats_cqp) return customFunctions[attr.stats_cqp](values, ignoreCase)
 
-    const cqpName = attr["is_struct_attr"] ? `_.${name}` : name
+    const cqpName = attr?.["is_struct_attr"] ? `_.${name}` : name
 
     // Empty value: require number of values to be 0
     if (values[0] == "") return `ambiguity(${cqpName}) = 0`

@@ -446,6 +446,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                             formatter(row, cell, value, columnDef, dataContext) {
                                 return value == undefined ? "" : formatFrequency($rootScope, value)
                             },
+                            cssClass: "text-right",
                         }
                         const i = _.sortedIndexOf(_.map(seriesRow.abs_data, "x"), item.x)
                         // [absolute, relative], like in statistics_worker.ts
