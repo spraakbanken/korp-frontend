@@ -1316,6 +1316,10 @@ slider {
   margin-left : 4px;
 }
 
+.slick-sort-indicator {
+  float: right; // default is left
+}
+
 .graph_btn_icon {
   svg {
     margin-top : -6px;
