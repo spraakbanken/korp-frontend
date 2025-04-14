@@ -13,6 +13,7 @@
 
 - Statistics grouped rows: sub CQP only has one of the values [#452](https://github.com/spraakbanken/korp-frontend/issues/452)
 - Statistics CSV/TSV export broken when grouping by multiple attributes [#458](https://github.com/spraakbanken/korp-frontend/issues/458)
+- Use attribute value without colon-suffix in stats export [#459](https://github.com/spraakbanken/korp-frontend/issues/459)
 - Decimal separator not updated in statistics when changing language [#246](https://github.com/spraakbanken/korp-frontend/issues/246)
 - Empty value "∅" in stats table not clickable [#457](https://github.com/spraakbanken/korp-frontend/issues/457)
 

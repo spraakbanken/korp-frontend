@@ -34,7 +34,10 @@ export type TotalRow = RowBase & {
 }
 
 export type SingleRow = RowBase & {
+    /** HTML representations of each attribute value */
     formattedValue: Record<string, string>
+    /** Plain-text representations of each attribute value */
+    plainValue: Record<string, string>
     /** For each match token, a record of non-simplified attr values, e.g. ["foo:12", "foo:34"] */
     statsValues: Record<string, string[]>[]
 }
