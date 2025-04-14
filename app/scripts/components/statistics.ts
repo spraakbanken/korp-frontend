@@ -599,10 +599,7 @@ angular.module("korpApp").component("statistics", {
                 let reduceVal, val
                 const selVal = $("#kindOfData option:selected").val() === "absolute" ? 0 : 1
                 const selType = $("#kindOfFormat option:selected").val()
-                let dataDelimiter = ";"
-                if (selType === "tsv") {
-                    dataDelimiter = "\t"
-                }
+                const delimiter = selType == "tsv" ? "\t" : ";"
                 const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
 
                 let header = []
@@ -615,9 +612,10 @@ angular.module("korpApp").component("statistics", {
 
                 let output = []
                 for (const row of $ctrl.data) {
+                    // One cell per grouped attribute
                     // TODO Should isPhraseLevelDisjunction be handled here?
-                    const outputRow: string[] = $ctrl.searchParams.reduceVals.flatMap((reduceVal) =>
-                        isTotalRow(row) ? ["Σ"] : row.statsValues.map((type) => type[reduceVal][0])
+                    const outputRow: string[] = $ctrl.searchParams.reduceVals.map((attr) =>
+                        isTotalRow(row) ? "Σ" : row.statsValues.map((type) => type[attr][0]).join()
                     )
                     outputRow.push(String(row.total[selVal]))
                     for (let corp of $ctrl.searchParams.corpora) {
@@ -627,10 +625,7 @@ angular.module("korpApp").component("statistics", {
                     output.push(outputRow)
                 }
 
-                const csv = new CSV(output, {
-                    header,
-                    delimiter: dataDelimiter,
-                })
+                const csv = new CSV(output, { header, delimiter })
 
                 const csvstr = csv.encode()
 
