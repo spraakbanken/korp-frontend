@@ -18,6 +18,7 @@ import { CountParams } from "@/backend/types/count"
 import { LocationService } from "@/urlparams"
 import { AttributeOption } from "@/corpus_listing"
 import { SearchesService } from "@/services/searches"
+import { getTimeData } from "@/timedata"
 
 type StatisticsScope = IScope & {
     reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
@@ -349,11 +350,10 @@ angular.module("korpApp").component("statistics", {
                     grid.onHeaderCellRendered.subscribe((e, args) => refreshHeaders())
 
                     refreshHeaders()
-                    // TODO what should this do, select first row?
+                    // Select sum row
                     $(".slick-row:first input", $ctrl.$result).click()
                     $(window).trigger("resize")
 
-                    // TODO this must wait until after timedata is fetched
                     updateGraphBtnState()
 
                     $ctrl.setGeoAttributes($ctrl.searchParams.corpora)
@@ -581,9 +581,12 @@ angular.module("korpApp").component("statistics", {
                 return $ctrl.grid != null ? $ctrl.grid.invalidate() : undefined
             }
 
-            function updateGraphBtnState() {
+            async function updateGraphBtnState() {
+                await getTimeData()
                 const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
-                $ctrl.graphEnabled = _.compact(cl.getTimeInterval()).length > 0
+                $scope.$applyAsync(() => {
+                    $ctrl.graphEnabled = _.compact(cl.getTimeInterval()).length > 0
+                })
             }
 
             const getSelectedRows = () => ($ctrl.grid ? $ctrl.grid.getSelectedRows().sort() : [])
@@ -596,10 +599,7 @@ angular.module("korpApp").component("statistics", {
                 let reduceVal, val
                 const selVal = $("#kindOfData option:selected").val() === "absolute" ? 0 : 1
                 const selType = $("#kindOfFormat option:selected").val()
-                let dataDelimiter = ";"
-                if (selType === "tsv") {
-                    dataDelimiter = "\t"
-                }
+                const delimiter = selType == "tsv" ? "\t" : ";"
                 const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
 
                 let header = []
@@ -612,9 +612,10 @@ angular.module("korpApp").component("statistics", {
 
                 let output = []
                 for (const row of $ctrl.data) {
+                    // One cell per grouped attribute
                     // TODO Should isPhraseLevelDisjunction be handled here?
-                    const outputRow: string[] = $ctrl.searchParams.reduceVals.flatMap((reduceVal) =>
-                        isTotalRow(row) ? ["Σ"] : row.statsValues.map((type) => type[reduceVal][0])
+                    const outputRow: string[] = $ctrl.searchParams.reduceVals.map((attr) =>
+                        isTotalRow(row) ? "Σ" : row.plainValue[attr]
                     )
                     outputRow.push(String(row.total[selVal]))
                     for (let corp of $ctrl.searchParams.corpora) {
@@ -624,10 +625,7 @@ angular.module("korpApp").component("statistics", {
                     output.push(outputRow)
                 }
 
-                const csv = new CSV(output, {
-                    header,
-                    delimiter: dataDelimiter,
-                })
+                const csv = new CSV(output, { header, delimiter })
 
                 const csvstr = csv.encode()
 

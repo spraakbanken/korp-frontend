@@ -106,10 +106,10 @@
     "word_pic_show_some": "Show up to",
     "word_pic_hits": "hits",
 
-    "sort_by": "Measure and sort by",
+    "sort_by": "Calculate and order by",
     "stat_frequency": "absolute frequency",
     "stat_lmi": "LMI",
-    "stat_lmi_help": "Lexicographer's Mutual Information, a frequency measure compensated for the frequency of each word by itself",
+    "stat_lmi_help": "Lexicographer's Mutual Information, an adaptation of the Mutual Information association measure prioritizing typical items over infrequent ones",
 
     "search_aborted": "The search was aborted",
 

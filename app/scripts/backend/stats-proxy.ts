@@ -105,12 +105,8 @@ export class StatsProxy extends BaseProxy {
             )
         }).join(",")
 
-        const rankedReduceVals = _.filter(reduceVals, (reduceVal) => {
-            if (wordAttrs[reduceVal]) {
-                return wordAttrs[reduceVal].ranked
-            }
-        })
-        params.top = _.map(rankedReduceVals, (reduceVal) => reduceVal + ":1").join(",")
+        // For ranked attributes, only count the top-ranking value in a token.
+        params.top = reduceVals.filter((attr) => (wordAttrs[attr] || structAttrs[attr])?.ranked).join(",")
 
         this.prevParams = params
         const data = await korpRequest("count", params, { abortSignal, onProgress })
