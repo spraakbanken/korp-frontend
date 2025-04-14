@@ -22,16 +22,13 @@ onmessage = function (e) {
     const message: StatisticsWorkerMessage = e.data
     const data: StatsNormalized = message.data
     const { combined } = data
-    const groupStatistics = message.groupStatistics
 
-    const simplifyValue = function (values: string[] | string, field: string): string[] {
-        if (groupStatistics.indexOf(field) != -1) {
+    const simplifyValue = function (values: string[] | string, attr: string): string {
+        if (message.groupStatistics.includes(attr))
             // For these attrs, ":" must only be used when merging is desired, e.g. for ranking or MWE indexing.
-            return (values as string[]).map((value) => value.replace(/(:.+?)($| )/g, "$2"))
-        } else {
-            // for struct attributes only a value is sent, not list
-            return isArray(values) ? values : [values]
-        }
+            values = (values as string[]).map((value) => value.replace(/(:.+?)($| )/g, "$2"))
+        // for struct attributes only a value is sent, not list
+        return Array.isArray(values) ? values.join(" ") : values
     }
 
     /**
@@ -40,14 +37,10 @@ onmessage = function (e) {
      * it removes suffixes `:<rank/numbering>` from
      * attributes that are in `group_statistics` in config.yml
      */
-    const simplifyHitString = function (item: RowsEntity): string {
-        var newFields: string[] = []
-        map(item.value, function (values, field) {
-            var newValues = simplifyValue(values, field)
-            newFields.push(newValues.join(" "))
-        })
-        return newFields.join("/")
-    }
+    const simplifyHitString = (item: RowsEntity): string =>
+        Object.entries(item.value)
+            .map(([attr, values]) => simplifyValue(values, attr))
+            .join("/")
 
     // Group data by simplified values, e.g. "foo:12" and "foo:34" under "foo"
     // Since `normalizeStatsData()` is applied, data has moved from `combined` into `combined[0]`
@@ -82,6 +75,7 @@ onmessage = function (e) {
         let totalAbs = sumBy(totalAbsoluteGroups[word], "absolute")
         let totalRel = sumBy(totalAbsoluteGroups[word], "relative")
         const statsValues: Record<string, string[]>[] = []
+        const plainValue: Record<string, string> = {}
 
         for (var j = 0; j < totalAbsoluteGroups[word].length; j++) {
             // Walk through original values, e.g. "foo:12" and "foo:34"
@@ -105,6 +99,7 @@ onmessage = function (e) {
                         }
                     })
                 }
+                plainValue[reduceVal] = simplifyValue(terms, reduceVal)
             })
         }
 
@@ -113,6 +108,7 @@ onmessage = function (e) {
             count: {},
             total: [totalAbs, totalRel] as AbsRelSeq,
             formattedValue: {},
+            plainValue,
             statsValues,
         }
 

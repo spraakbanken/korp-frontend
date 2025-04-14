@@ -615,7 +615,7 @@ angular.module("korpApp").component("statistics", {
                     // One cell per grouped attribute
                     // TODO Should isPhraseLevelDisjunction be handled here?
                     const outputRow: string[] = $ctrl.searchParams.reduceVals.map((attr) =>
-                        isTotalRow(row) ? "Σ" : row.statsValues.map((type) => type[attr][0]).join()
+                        isTotalRow(row) ? "Σ" : row.plainValue[attr]
                     )
                     outputRow.push(String(row.total[selVal]))
                     for (let corp of $ctrl.searchParams.corpora) {
