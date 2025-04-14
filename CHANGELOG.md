@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.9.1] - 2025-04-14
+
 ### Fixed
 
 - Statistics grouped rows: sub CQP only has one of the values [#452](https://github.com/spraakbanken/korp-frontend/issues/452)
@@ -420,6 +422,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.9.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.1
 [9.9.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.0
 [9.8.5]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.5
 [9.8.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.4
