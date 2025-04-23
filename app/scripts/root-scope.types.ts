@@ -1,5 +1,5 @@
 /** @format */
-import { IDeferred, IPromise, IRootScopeService } from "angular"
+import { IPromise, IRootScopeService } from "angular"
 import { LangLocMap } from "@/i18n/types"
 import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CqpQuery } from "./cqp_parser/cqp.types"

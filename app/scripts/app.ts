@@ -24,6 +24,8 @@ import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
 import "@/components/korp-error"
+import "@/services/store"
+import { StoreService } from "@/services/store"
 import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
@@ -125,6 +127,7 @@ korpApp.run([
     "tmhDynamicLocaleCache",
     "$timeout",
     "$uibModal",
+    "store",
     async function (
         $rootScope: RootScope,
         $location: LocationService,
@@ -132,9 +135,11 @@ korpApp.run([
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,
         $timeout: ITimeoutService,
-        $uibModal: ui.bootstrap.IModalService
+        $uibModal: ui.bootstrap.IModalService,
+        store: StoreService
     ) {
         const s = $rootScope
+        store.initialize()
 
         s.extendedCQP = null
         s.globalFilterData = {}

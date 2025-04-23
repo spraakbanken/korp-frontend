@@ -189,20 +189,14 @@ angular.module("korpApp").component("appHeader", {
                 $rootScope.show_modal = "about"
             }
 
-            $rootScope.show_modal = false
-
             let modal: ui.bootstrap.IModalInstanceService | null = null
 
-            utils.setupHash($rootScope, {
-                key: "display",
-                scope_name: "show_modal",
-                post_change(val) {
-                    if (val) showAbout()
-                    else {
-                        modal?.close()
-                        modal = null
-                    }
-                },
+            $rootScope.$watch("show_modal", (val) => {
+                if (val) showAbout()
+                else {
+                    modal?.close()
+                    modal = null
+                }
             })
 
             const closeModals = function () {
