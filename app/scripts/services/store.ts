@@ -1,5 +1,6 @@
 /** @format */
 import angular from "angular"
+import settings from "@/settings"
 import { RootScope } from "@/root-scope.types"
 import { UtilsService } from "@/services/utils"
 
@@ -25,12 +26,22 @@ angular.module("korpApp").factory("store", [
     ($rootScope: RootScope, utils: UtilsService): StoreService => {
         const initialize = () => {
             $rootScope.show_modal = false
+            // Let `lang` be empty at init
         }
 
         // Sync to url
         utils.setupHash($rootScope, {
             key: "display",
             scope_name: "show_modal",
+        })
+        // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
+        $rootScope.$watch("loc_data", (newValue, oldValue) => {
+            if (newValue && !oldValue) {
+                utils.setupHash($rootScope, {
+                    key: "lang",
+                    default: settings["default_language"],
+                })
+            }
         })
 
         const service: StoreBase = {
