@@ -162,7 +162,7 @@ angular.module("korpApp").component("appHeader", {
         ) {
             const $ctrl = this as HeaderController
 
-            $scope.lang = $rootScope.lang
+            $scope.lang = store.lang
 
             $ctrl.logoClick = function () {
                 const [baseUrl, modeParam, langParam] = $ctrl.getUrlParts(currentMode)

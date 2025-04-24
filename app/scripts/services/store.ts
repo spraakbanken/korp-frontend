@@ -8,14 +8,16 @@ import { UtilsService } from "@/services/utils"
  * It is wrapped in a Proxy to allow direct access to properties as well as the service methods.
  */
 
+type Store = Pick<RootScope, "show_modal" | "lang">
+
 export type StoreBase = {
     initialize: () => void
-    get: <K extends keyof RootScope>(key: K) => RootScope[K]
-    set: <K extends keyof RootScope>(key: K, value: RootScope[K]) => void
+    get: <K extends keyof Store>(key: K) => Store[K]
+    set: <K extends keyof Store>(key: K, value: Store[K]) => void
     watch: (subject: string, listener: (newValue: any, oldValue: any) => void) => void
 }
 
-export type StoreService = StoreBase & RootScope
+export type StoreService = StoreBase & Store
 
 angular.module("korpApp").factory("store", [
     "$rootScope",
@@ -34,19 +36,18 @@ angular.module("korpApp").factory("store", [
         const service: StoreBase = {
             initialize,
             get: (key) => $rootScope[key],
-            set: (key, value) => ($rootScope[key] = value),
+            set: (key, value) => ($rootScope[key] = value as RootScope[typeof key]), // Why is this typecast needed?
             watch: (subject, listener) => $rootScope.$watch(subject, listener),
         }
 
         const handler: ProxyHandler<StoreService> = {
             // Provide service methods but also direct get/set of store properties.
-            get: (target, prop) =>
-                prop in target ? target[prop as keyof StoreBase] : target.get(prop as keyof RootScope),
+            get: (target, prop) => (prop in target ? target[prop as keyof StoreBase] : target.get(prop as keyof Store)),
             set: (target, prop, value) => {
                 if (prop in target) {
                     target[prop as keyof StoreBase] = value
                 } else {
-                    target.set(prop as keyof RootScope, value)
+                    target.set(prop as keyof Store, value)
                 }
                 return true
             },
