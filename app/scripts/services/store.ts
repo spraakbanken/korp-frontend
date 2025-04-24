@@ -5,6 +5,7 @@ import { UtilsService } from "@/services/utils"
 
 export type StoreService = {
     initialize: () => void
+    watch: (subject: string, listener: (newValue: any, oldValue: any) => void) => void
 }
 
 angular.module("korpApp").factory("store", [
@@ -23,6 +24,7 @@ angular.module("korpApp").factory("store", [
 
         return {
             initialize,
+            watch: (subject, listener) => $rootScope.$watch(subject, listener),
         }
     },
 ])

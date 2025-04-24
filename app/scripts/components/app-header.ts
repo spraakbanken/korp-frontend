@@ -15,7 +15,7 @@ import "@/components/radio-list"
 import { matomoSend } from "@/matomo"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
-import { UtilsService } from "@/services/utils"
+import { StoreService } from "@/services/store"
 import { Labeled } from "@/i18n/types"
 import { Config } from "@/settings/config.types"
 
@@ -151,14 +151,14 @@ angular.module("korpApp").component("appHeader", {
         "$rootScope",
         "$scope",
         "$timeout",
-        "utils",
+        "store",
         function (
             $location: LocationService,
             $uibModal: ui.bootstrap.IModalService,
             $rootScope: RootScope,
             $scope: HeaderScope,
             $timeout: ITimeoutService,
-            utils: UtilsService
+            store: StoreService
         ) {
             const $ctrl = this as HeaderController
 
@@ -191,7 +191,7 @@ angular.module("korpApp").component("appHeader", {
 
             let modal: ui.bootstrap.IModalInstanceService | null = null
 
-            $rootScope.$watch("show_modal", (val) => {
+            store.watch("show_modal", (val) => {
                 if (val) showAbout()
                 else {
                     modal?.close()
