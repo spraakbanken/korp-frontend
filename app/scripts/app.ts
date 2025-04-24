@@ -274,9 +274,8 @@ korpApp.run([
                     },
                 })
             } else {
-                // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
-                settings.corpusListing.select(ids)
-                $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", ids), 0)
+                // Corpus selection OK
+                store.corpus = ids
             }
         }
 
