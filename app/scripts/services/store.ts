@@ -9,7 +9,7 @@ import { UtilsService } from "@/services/utils"
  * It is wrapped in a Proxy to allow direct access to properties as well as the service methods.
  */
 
-type Store = Pick<RootScope, "show_modal" | "lang">
+type Store = Pick<RootScope, "show_modal" | "lang" | "corpus">
 
 export type StoreBase = {
     initialize: () => void
@@ -25,11 +25,17 @@ angular.module("korpApp").factory("store", [
     "utils",
     ($rootScope: RootScope, utils: UtilsService): StoreService => {
         const initialize = () => {
+            $rootScope.corpus = []
             $rootScope.show_modal = false
             // Let `lang` be empty at init
         }
 
         // Sync to url
+        utils.setupHash($rootScope, {
+            key: "corpus",
+            val_in: (str) => (str ? str.split(",") : []),
+            val_out: (arr) => arr.join(",") || null,
+        })
         utils.setupHash($rootScope, {
             key: "display",
             scope_name: "show_modal",

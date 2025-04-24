@@ -16,6 +16,7 @@ export type RootScope = IRootScopeService & {
         type: string
         val: string
     } | null
+    corpus: string[]
     extendedCQP: string | null
     getActiveCqp(): string | undefined
     /** Filter data by attribute name */

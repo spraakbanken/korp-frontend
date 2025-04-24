@@ -18,10 +18,10 @@ import "@/components/corpus-chooser/corpus-time-graph"
 import "@/components/corpus-chooser/info-box"
 import "@/components/corpus-chooser/tree"
 import { RootScope } from "@/root-scope.types"
-import { LocationService } from "@/urlparams"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { LangString } from "@/i18n/types"
 import { getTimeData } from "@/timedata"
+import { StoreService } from "@/services/store"
 
 type CorpusChooserController = IController & {
     credentials: string[]
@@ -132,8 +132,8 @@ angular.module("korpApp").component("corpusChooser", {
     bindings: {},
     controller: [
         "$rootScope",
-        "$location",
-        function ($rootScope: RootScope, $location: LocationService) {
+        "store",
+        function ($rootScope: RootScope, store: StoreService) {
             const $ctrl = this as CorpusChooserController
 
             statemachine.listen("login", function () {
@@ -190,14 +190,7 @@ angular.module("korpApp").component("corpusChooser", {
                 select(corpusIds, true)
 
                 // Sync when corpus selection is modified elsewhere.
-                $rootScope.$watch(
-                    () => $location.search().corpus,
-                    (corpusIdsComma) => {
-                        const corpusIds = corpusIdsComma ? corpusIdsComma.split(",") : []
-                        select(corpusIds)
-                    }
-                )
-                $rootScope.$on("corpuschooserchange", (e, selected) => select(selected))
+                store.watch("corpus", () => select(store.corpus))
             })
 
             $ctrl.updateSelectedCount = (selection) => {
@@ -259,8 +252,8 @@ angular.module("korpApp").component("corpusChooser", {
                 // Exit if no actual change
                 if (!force && _.isEqual(selectedBefore, selectedAfter)) return
 
+                store.corpus = [...selection]
                 $rootScope.$broadcast("corpuschooserchange", selection)
-                $location.search("corpus", selection.join(","))
             }
 
             $ctrl.onShowInfo = (node: ChooserFolderSub | CorpusTransformed) => {
