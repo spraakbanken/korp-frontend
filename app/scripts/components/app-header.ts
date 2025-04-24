@@ -186,7 +186,7 @@ angular.module("korpApp").component("appHeader", {
             })
 
             $ctrl.citeClick = () => {
-                store.set("show_modal", "about")
+                store.show_modal = "about"
             }
 
             let modal: ui.bootstrap.IModalInstanceService | null = null
@@ -200,7 +200,7 @@ angular.module("korpApp").component("appHeader", {
             })
 
             const closeModals = function () {
-                store.set("show_modal", false)
+                store.show_modal = false
             }
 
             type ModalScope = IScope & {
