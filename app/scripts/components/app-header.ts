@@ -177,7 +177,7 @@ angular.module("korpApp").component("appHeader", {
             $scope.$watch("lang", (newVal, oldVal) => {
                 // Watcher gets called with `undefined` on init.
                 if (!$scope.lang) return
-                $rootScope["lang"] = $scope.lang
+                store.lang = $scope.lang
                 // Set url param if different from default.
                 $location.search("lang", $scope.lang !== settings["default_language"] ? $scope.lang : null)
 
@@ -237,10 +237,10 @@ angular.module("korpApp").component("appHeader", {
             const modesInMenu = _.remove($ctrl.menu, (item) => item.mode == currentMode)
             $ctrl.visible.push(...modesInMenu)
 
-            $rootScope.$watch("lang", () => {
-                $scope.lang = $rootScope.lang
+            store.watch("lang", () => {
+                $scope.lang = store.lang
                 // Re-sort menu but not visible options
-                $ctrl.menu = collatorSort($ctrl.menu, "label", $rootScope.lang)
+                $ctrl.menu = collatorSort($ctrl.menu, "label", store.lang)
             })
 
             $ctrl.getUrl = function (modeId) {
@@ -248,7 +248,7 @@ angular.module("korpApp").component("appHeader", {
             }
 
             $ctrl.getUrlParts = function (modeId) {
-                const langParam = settings["default_language"] === $rootScope.lang ? "" : `#?lang=${$rootScope.lang}`
+                const langParam = settings["default_language"] === store.lang ? "" : `#?lang=${store.lang}`
                 const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
                 return [location.pathname, modeParam, langParam]
             }
