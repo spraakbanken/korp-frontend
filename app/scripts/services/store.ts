@@ -5,6 +5,8 @@ import { UtilsService } from "@/services/utils"
 
 export type StoreService = {
     initialize: () => void
+    get: <K extends keyof RootScope>(key: K) => RootScope[K]
+    set: <K extends keyof RootScope>(key: K, value: RootScope[K]) => void
     watch: (subject: string, listener: (newValue: any, oldValue: any) => void) => void
 }
 
@@ -24,6 +26,8 @@ angular.module("korpApp").factory("store", [
 
         return {
             initialize,
+            get: (key) => $rootScope[key],
+            set: (key, value) => ($rootScope[key] = value),
             watch: (subject, listener) => $rootScope.$watch(subject, listener),
         }
     },
