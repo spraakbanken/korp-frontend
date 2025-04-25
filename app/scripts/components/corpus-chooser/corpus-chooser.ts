@@ -148,10 +148,10 @@ angular.module("korpApp").component("corpusChooser", {
                 $ctrl.totalCount = $ctrl.root.numberOfChildren
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
                 $ctrl.updateLimitedAccess()
-            }
 
-            // Sync when corpus selection is modified elsewhere.
-            store.watch("corpus", () => select(store.corpus))
+                // Sync when corpus selection is modified elsewhere.
+                store.watch("corpus", () => select(store.corpus))
+            }
 
             statemachine.listen("login", function () {
                 $ctrl.credentials = getCredentials()

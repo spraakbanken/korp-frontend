@@ -92,6 +92,10 @@ angular.module("korpApp").component("extendedStandard", {
             const defaultWithin = Object.keys(settings.default_within || {})[0]
             ctrl.within = $location.search().within || defaultWithin
 
+            ctrl.$onInit = () => {
+                refreshWithins()
+            }
+
             // TODO this is *too* weird
             function triggerSearch() {
                 $location.search("page", null)
@@ -173,12 +177,14 @@ angular.module("korpApp").component("extendedStandard", {
                 }
             })
 
-            $rootScope.$on("corpuschooserchange", function () {
+            $rootScope.$on("corpuschooserchange", refreshWithins)
+
+            function refreshWithins() {
                 ctrl.withins = settings.corpusListing.getWithinKeys()
                 if (!ctrl.withins.includes(ctrl.within)) {
                     ctrl.within = ctrl.withins[0]
                 }
-            })
+            }
         },
     ],
 })
