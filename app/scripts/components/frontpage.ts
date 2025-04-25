@@ -12,7 +12,7 @@ export default angular.module("korpApp").component("frontpage", {
     template: html`
         <div ng-if="!$ctrl.hasResult()" class="max-w-screen-md my-10 mx-auto flex gap-8 flex-wrap">
             <div class="w-full flex gap-8 flex-wrap">
-                <section ng-if="$ctrl.showDescription && (description || modeDescription)" class="w-80 grow text-lg">
+                <section ng-if="description || modeDescription" class="w-80 grow text-lg">
                     <div ng-if="description" ng-bind-html="description | locObj:$root.lang | trust"></div>
 
                     <div ng-if="modeDescription">
@@ -35,7 +35,6 @@ export default angular.module("korpApp").component("frontpage", {
         "$scope",
         function ($rootScope: RootScope, $scope) {
             const $ctrl = this
-            $ctrl.showDescription = false
 
             $scope.newsdeskIsEnabled = isEnabled()
             $scope.description = settings.description
@@ -48,9 +47,6 @@ export default angular.module("korpApp").component("frontpage", {
                 $rootScope.compareTabs.length ||
                 $rootScope.graphTabs.length ||
                 $rootScope.mapTabs.length
-
-            // Don't show the mode description until the initial corpora have been selected, to avoid text behind any modals
-            $rootScope.$on("initialcorpuschooserchange", () => ($ctrl.showDescription = true))
         },
     ],
 })
