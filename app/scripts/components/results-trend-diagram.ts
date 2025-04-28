@@ -15,6 +15,7 @@ import { Histogram } from "@/backend/types"
 import { JQueryExtended } from "@/jquery.types"
 import { CorpusListing } from "@/corpus_listing"
 import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
+import { StoreService } from "@/services/store"
 
 type ResultsTrendDiagramController = IController & {
     data: GraphTab
@@ -149,7 +150,13 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         "$rootScope",
         "$timeout",
         "$element",
-        function ($rootScope: RootScope, $timeout: ITimeoutService, $element: IRootElementService) {
+        "store",
+        function (
+            $rootScope: RootScope,
+            $timeout: ITimeoutService,
+            $element: IRootElementService,
+            store: StoreService
+        ) {
             const $ctrl = this as ResultsTrendDiagramController
             $ctrl.zoom = "year"
             $ctrl.proxy = graphProxyFactory.create()
@@ -683,7 +690,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     },
 
                     yFormatter(y: number) {
-                        const val = formatRelativeHits(y, $rootScope.lang)
+                        const val = formatRelativeHits(y, store.lang)
                         return `<br><span rel='localize[rel_hits_short]'>${loc("rel_hits_short")}</span> ` + val
                     },
                     formatter(series: Series, x: number, y: number, formattedX: string, formattedY: string) {
@@ -699,7 +706,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                         return `<span data-cqp="${encodeURIComponent(series.cqp)}">
                                 ${rel}
                                 <br>
-                                ${loc("abs_hits_short")}: ${abs_y?.toLocaleString($rootScope.lang)}
+                                ${loc("abs_hits_short")}: ${abs_y?.toLocaleString(store.lang)}
                             </span>`
                     },
                 })

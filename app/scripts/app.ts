@@ -175,7 +175,7 @@ korpApp.run([
             }
 
             // Update global variables
-            $rootScope["lang"] = lang
+            store.lang = lang
 
             // Trigger jQuery Localize
             ;($("body") as JQueryExtended).localize()
@@ -362,13 +362,13 @@ korpApp.run([
 
 korpApp.filter("trust", ["$sce", ($sce) => (input: string) => $sce.trustAsHtml(input)])
 // Passing `lang` seems to be necessary to have the string updated when switching language.
-// Can fall back on using $rootScope for numbers that will anyway be re-rendered when switching language.
+// Can fall back on using store for numbers that will anyway be re-rendered when switching language.
 korpApp.filter("prettyNumber", [
-    "$rootScope",
-    ($rootScope) => (input: string, lang?: string) => Number(input).toLocaleString(lang || $rootScope.lang),
+    "store",
+    (store) => (input: string, lang?: string) => Number(input).toLocaleString(lang || store.lang),
 ])
 korpApp.filter("formatRelativeHits", [
-    "$rootScope",
-    ($rootScope) => (input: string, lang?: string) => formatRelativeHits(input, lang || $rootScope.lang),
+    "store",
+    (store) => (input: string, lang?: string) => formatRelativeHits(input, lang || store.lang),
 ])
 korpApp.filter("maxLength", () => (val: unknown) => String(val).length > 39 ? String(val).slice(0, 36) + "…" : val)

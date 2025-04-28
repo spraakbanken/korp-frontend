@@ -264,7 +264,7 @@ angular.module("korpApp").component("statistics", {
                 $location.search("stats_reduce_insensitive", "word")
             }
 
-            $rootScope.$watch("lang", () => {
+            store.watch("lang", () => {
                 if (!$ctrl.grid) return
                 const cols = $ctrl.grid.getColumns()
                 updateLabels(cols)
@@ -322,7 +322,7 @@ angular.module("korpApp").component("statistics", {
                                 if (sortCol.field == "hit_value") {
                                     const x = a.formattedValue[columnId]
                                     const y = b.formattedValue[columnId]
-                                    return x.localeCompare(y, $rootScope.lang) * direction
+                                    return x.localeCompare(y, store.lang) * direction
                                 }
 
                                 // Sort totals column by absolute hit count
@@ -395,7 +395,7 @@ angular.module("korpApp").component("statistics", {
 
             function updateLabels(cols: SlickgridColumn[]) {
                 cols.forEach((col) => {
-                    if (col.translation) col.name = locObj(col.translation, $rootScope.lang)
+                    if (col.translation) col.name = locObj(col.translation, store.lang)
                 })
             }
 

@@ -1,6 +1,5 @@
 /** @format */
 import { loc } from "@/i18n"
-import { RootScope } from "@/root-scope.types"
 import { SearchHistoryService } from "@/services/search-history"
 import { SearchesService } from "@/services/searches"
 import { getSearchParamNames, LocationService, SearchParams } from "@/urlparams"
@@ -8,6 +7,7 @@ import { html, splitFirst, unregescape } from "@/util"
 import angular, { IScope } from "angular"
 import "@/services/search-history"
 import "@/services/searches"
+import { StoreService } from "@/services/store"
 
 type HistoryScope = IScope & {
     getOptions: () => Option[]
@@ -43,20 +43,20 @@ angular.module("korpApp").component("searchHistory", {
     ></select>`,
     controller: [
         "$location",
-        "$rootScope",
         "$scope",
         "searches",
         "searchHistory",
+        "store",
         function (
             $location: LocationService,
-            $rootScope: RootScope,
             $scope: HistoryScope,
             searches: SearchesService,
-            searchHistory: SearchHistoryService
+            searchHistory: SearchHistoryService,
+            store: StoreService
         ) {
             $scope.getOptions = () => [
-                { id: "_label", label: loc("search_history", $rootScope.lang) },
-                { id: "_clear", label: loc("search_history_clear", $rootScope.lang) },
+                { id: "_label", label: loc("search_history", store.lang) },
+                { id: "_clear", label: loc("search_history_clear", store.lang) },
                 ...$scope.items.map(createSearchOption),
             ]
 

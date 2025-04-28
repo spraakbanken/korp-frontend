@@ -11,6 +11,7 @@ import { loc } from "@/i18n"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/word-picture"
+import { StoreService } from "@/services/store"
 
 type ResultsWordPictureController = IController & {
     isActive: boolean
@@ -69,7 +70,13 @@ angular.module("korpApp").component("resultsWordPicture", {
         "$scope",
         "$rootScope",
         "$timeout",
-        function ($scope: ResultsWordPictureScope, $rootScope: RootScope, $timeout: ITimeoutService) {
+        "store",
+        function (
+            $scope: ResultsWordPictureScope,
+            $rootScope: RootScope,
+            $timeout: ITimeoutService,
+            store: StoreService
+        ) {
             /** Mapping from pos tag to identifiers used in word_picture_conf */
             const tagset = _.invert(settings["word_picture_tagset"] || {})
 
@@ -80,7 +87,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             s.activated = false
 
             $rootScope.$watch("globalFilter", () => {
-                if ($rootScope.globalFilter) s.warning = loc("word_pic_global_filter", $rootScope.lang)
+                if ($rootScope.globalFilter) s.warning = loc("word_pic_global_filter", store.lang)
             })
 
             $rootScope.$on("make_request", () => s.makeRequest())
@@ -98,7 +105,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             s.$on("abort_requests", () => {
                 s.proxy.abort()
                 if ($ctrl.loading) {
-                    s.warning = loc("search_aborted", $rootScope.lang)
+                    s.warning = loc("search_aborted", store.lang)
                     $ctrl.setProgress(false, 0)
                 }
             })
@@ -117,7 +124,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                 const search = $rootScope.activeSearch
                 if (!search || (search.type !== "lemgram" && search.val.includes(" "))) {
                     s.resetView()
-                    s.warning = loc("word_pic_bad_search", $rootScope.lang)
+                    s.warning = loc("word_pic_bad_search", store.lang)
                     return
                 }
                 const word = search.type === "lemgram" ? unregescape(search.val) : search.val
@@ -125,7 +132,7 @@ angular.module("korpApp").component("resultsWordPicture", {
 
                 if ($rootScope.globalFilter) {
                     s.resetView()
-                    s.warning = loc("word_pic_global_filter", $rootScope.lang)
+                    s.warning = loc("word_pic_global_filter", store.lang)
                     return
                 }
 
@@ -159,7 +166,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             s.renderResult = (data, query) => {
                 $ctrl.setProgress(false, 100)
                 if (!data.relations) {
-                    s.warning = loc("no_stats_results", $rootScope.lang)
+                    s.warning = loc("no_stats_results", store.lang)
                     s.resetView()
                 } else if (isLemgram(query)) {
                     s.renderTables(query, data.relations)
