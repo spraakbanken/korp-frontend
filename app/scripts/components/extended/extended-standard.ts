@@ -14,6 +14,7 @@ import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
 import { SearchesService } from "@/services/searches"
+import { StoreService } from "@/services/store"
 
 type ExtendedStandardController = IController & {
     cqp: string
@@ -76,13 +77,15 @@ angular.module("korpApp").component("extendedStandard", {
         "$timeout",
         "compareSearches",
         "searches",
+        "store",
         function (
             $location: LocationService,
             $rootScope: RootScope,
             $scope: ExtendedStandardScope,
             $timeout: ITimeoutService,
             compareSearches: CompareSearches,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             const ctrl = this as ExtendedStandardController
 
@@ -91,10 +94,6 @@ angular.module("korpApp").component("extendedStandard", {
             ctrl.withins = []
             const defaultWithin = Object.keys(settings.default_within || {})[0]
             ctrl.within = $location.search().within || defaultWithin
-
-            ctrl.$onInit = () => {
-                refreshWithins()
-            }
 
             // TODO this is *too* weird
             function triggerSearch() {
@@ -177,14 +176,12 @@ angular.module("korpApp").component("extendedStandard", {
                 }
             })
 
-            $rootScope.$on("corpuschooserchange", refreshWithins)
-
-            function refreshWithins() {
+            store.watch("corpus", () => {
                 ctrl.withins = settings.corpusListing.getWithinKeys()
                 if (!ctrl.withins.includes(ctrl.within)) {
                     ctrl.within = ctrl.withins[0]
                 }
-            }
+            })
         },
     ],
 })

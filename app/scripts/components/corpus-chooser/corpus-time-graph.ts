@@ -12,7 +12,7 @@ import {
     getCountUndated,
 } from "@/timeseries"
 import { html } from "@/util"
-import { RootScope } from "@/root-scope.types"
+import { StoreService } from "@/services/store"
 
 type CorpusTimeGraphScope = IScope & {
     isEmpty: boolean
@@ -22,8 +22,8 @@ angular.module("korpApp").component("corpusTimeGraph", {
     template: html`<canvas ng-show="!isEmpty" id="time-graph-chart" height="80"></canvas>`,
     controller: [
         "$scope",
-        "$rootScope",
-        function ($scope: CorpusTimeGraphScope, $rootScope: RootScope) {
+        "store",
+        function ($scope: CorpusTimeGraphScope, store: StoreService) {
             // Abort and render empty if there is no time data in the current mode's corpora.
             const span = getSpan()
             if (!span) return
@@ -105,7 +105,7 @@ angular.module("korpApp").component("corpusTimeGraph", {
                             minBarLength: 2,
                         },
                     },
-                    locale: $rootScope.lang,
+                    locale: store.lang,
                     plugins: {
                         legend: {
                             display: false,
@@ -138,7 +138,7 @@ angular.module("korpApp").component("corpusTimeGraph", {
                 },
             })
 
-            $rootScope.$on("corpuschooserchange", () => {
+            store.watch("corpus", () => {
                 updateSelectedData()
                 // `'none'` to disable animations. Animations would be nice, but they look weird when new data has different min/max year.
                 // TODO Do animations look better if data is given as array including empty years, not a record?

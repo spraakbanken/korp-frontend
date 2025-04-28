@@ -9,6 +9,7 @@ import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
 import { countAttrValues } from "@/backend/attr-values"
 import { RecursiveRecord } from "@/backend/types/attr-values"
+import { StoreService } from "@/services/store"
 
 export type GlobalFilterService = {
     initialize: () => void
@@ -27,7 +28,13 @@ angular.module("korpApp").factory("globalFilterService", [
     "$location",
     "$rootScope",
     "$timeout",
-    function ($location: LocationService, $rootScope: RootScope, $timeout: ITimeoutService): GlobalFilterService {
+    "store",
+    function (
+        $location: LocationService,
+        $rootScope: RootScope,
+        $timeout: ITimeoutService,
+        store: StoreService
+    ): GlobalFilterService {
         /** Drilldown of values available for each attr. N-dimensional map where N = number of attrs. */
         let currentData: RecursiveRecord<number> = {}
 
@@ -146,7 +153,7 @@ angular.module("korpApp").factory("globalFilterService", [
 
         function initialize() {
             /** Update available filters when changing corpus selection. */
-            $rootScope.$on("corpuschooserchange", () => {
+            store.watch("corpus", () => {
                 if (settings.corpusListing.selected.length > 0) {
                     const attrs = settings.corpusListing.getDefaultFilters()
 

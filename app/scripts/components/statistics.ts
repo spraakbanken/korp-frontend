@@ -19,6 +19,7 @@ import { LocationService } from "@/urlparams"
 import { AttributeOption } from "@/corpus_listing"
 import { SearchesService } from "@/services/searches"
 import { getTimeData } from "@/timedata"
+import { StoreService } from "@/services/store"
 
 type StatisticsScope = IScope & {
     clipped: boolean
@@ -229,12 +230,14 @@ angular.module("korpApp").component("statistics", {
         "$scope",
         "$uibModal",
         "searches",
+        "store",
         function (
             $location: LocationService,
             $rootScope: RootScope,
             $scope: StatisticsScope,
             $uibModal: ui.bootstrap.IModalService,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             const $ctrl = this as StatisticsController
 
@@ -396,7 +399,7 @@ angular.module("korpApp").component("statistics", {
                 })
             }
 
-            $rootScope.$on("corpuschooserchange", () => {
+            store.watch("corpus", () => {
                 const allAttrs = settings.corpusListing.getStatsAttributeGroups(settings.corpusListing.getReduceLang())
                 $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
                 $scope.statSelectedAttrs = ($location.search().stats_reduce || "word").split(",")

@@ -10,11 +10,11 @@ import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { SearchesService } from "@/services/searches"
+import { StoreService } from "@/services/store"
 
 type ExtendedParallelController = IController & {
     langs: { lang: string; cqp: string }[]
     negates: boolean[]
-    initialized: boolean
     cqpChange: (idx: number) => (cqp: string) => void
     onLangChange: () => void
     getEnabledLangs: (i?: number) => string[]
@@ -73,24 +73,19 @@ angular.module("korpApp").component("extendedParallel", {
         "$rootScope",
         "$timeout",
         "searches",
+        "store",
         function (
             $location: LocationService,
             $rootScope: RootScope,
             $timeout: ITimeoutService,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             const ctrl = this as ExtendedParallelController
 
             const corpusListing = settings.corpusListing as ParallelCorpusListing
 
-            ctrl.initialized = false
-
-            ctrl.$onInit = () => {
-                ctrl.onLangChange()
-                ctrl.initialized = true
-
-                $rootScope.$on("corpuschooserchange", () => ctrl.onLangChange())
-            }
+            store.watch("corpus", () => ctrl.onLangChange())
 
             ctrl.negates = []
 

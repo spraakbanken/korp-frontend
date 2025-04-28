@@ -10,6 +10,7 @@ import { RootScope } from "@/root-scope.types"
 import { Condition, OperatorKorp } from "@/cqp_parser/cqp.types"
 import { AttributeOption } from "@/corpus_listing"
 import { getTimeData } from "@/timedata"
+import { StoreService } from "@/services/store"
 
 /**
  * TODO
@@ -76,21 +77,20 @@ angular.module("korpApp").component("extendedCqpTerm", {
         "$location",
         "$rootScope",
         "$timeout",
-        function ($location: LocationService, $rootScope: RootScope, $timeout: ITimeoutService) {
+        "store",
+        function ($location: LocationService, $rootScope: RootScope, $timeout: ITimeoutService, store: StoreService) {
             const ctrl = this as ExtendedCqpTermController
 
             ctrl.valfilter = valfilter
 
             ctrl.$onInit = () => {
-                $rootScope.$on("corpuschooserchange", () => updateAttributes())
+                store.watch("corpus", () => updateAttributes())
                 $rootScope.$watch(
                     () => $location.search().parallel_corpora,
                     () => updateAttributes()
                 )
                 // React on the date interval attribute becoming available
                 getTimeData().then(() => updateAttributes())
-
-                updateAttributes()
             }
 
             ctrl.localChange = (term) => {

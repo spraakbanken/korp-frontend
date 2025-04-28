@@ -37,7 +37,6 @@ export type RootScope = IRootScopeService & {
     wordpicSortProp: RelationsParams["sort"]
     lang: string
     loc_data: LangLocMap
-    $on: (name: "corpuschooserchange", handler: (event: any, selected: string[]) => void) => void
 }
 
 export type FilterData = {

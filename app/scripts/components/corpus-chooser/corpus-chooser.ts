@@ -17,7 +17,6 @@ import {
 import "@/components/corpus-chooser/corpus-time-graph"
 import "@/components/corpus-chooser/info-box"
 import "@/components/corpus-chooser/tree"
-import { RootScope } from "@/root-scope.types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { LangString } from "@/i18n/types"
 import { getTimeData } from "@/timedata"
@@ -131,9 +130,8 @@ angular.module("korpApp").component("corpusChooser", {
     `,
     bindings: {},
     controller: [
-        "$rootScope",
         "store",
-        function ($rootScope: RootScope, store: StoreService) {
+        function (store: StoreService) {
             const $ctrl = this as CorpusChooserController
 
             $ctrl.initialized = false
@@ -241,16 +239,10 @@ angular.module("korpApp").component("corpusChooser", {
                     $ctrl.firstCorpus = settings.corpora[selection[0]].title
                 }
 
-                // In parallel mode, the select function may also add hidden corpora.
-                const selectedBefore = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
-                settings.corpusListing.select(selection)
-                const selectedAfter = settings.corpusListing.mapSelectedCorpora((corpus) => corpus.id)
-
-                // Exit if no actual change
-                if (_.isEqual(selectedBefore, selectedAfter)) return
-
-                store.corpus = [...selection]
-                $rootScope.$broadcast("corpuschooserchange", selection)
+                // Store new selection if it has actually changed
+                if (!_.isEqual(selection, store.corpus)) {
+                    store.corpus = [...selection]
+                }
             }
 
             $ctrl.onShowInfo = (node: ChooserFolderSub | CorpusTransformed) => {
