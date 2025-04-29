@@ -8,7 +8,6 @@ import { matomoSend } from "@/matomo"
 import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { LocationService } from "@/urlparams"
-import { RootScope } from "@/root-scope.types"
 import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
 
@@ -70,13 +69,11 @@ angular.module("korpApp").component("extendedParallel", {
     },
     controller: [
         "$location",
-        "$rootScope",
         "$timeout",
         "searches",
         "store",
         function (
             $location: LocationService,
-            $rootScope: RootScope,
             $timeout: ITimeoutService,
             searches: SearchesService,
             store: StoreService
@@ -142,7 +139,7 @@ angular.module("korpApp").component("extendedParallel", {
                         $location.search(`cqp_${langobj.lang}`, langobj.cqp)
                     }
                 })
-                $rootScope.extendedCQP = output
+                store.extendedCqp = output
                 return output
             }
 

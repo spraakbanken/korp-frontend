@@ -7,6 +7,7 @@ import "@/components/search-submit"
 import { LocationService } from "@/urlparams"
 import { CompareSearches } from "@/services/compare-searches"
 import { SearchesService } from "@/services/searches"
+import { StoreService } from "@/services/store"
 
 type AdvancedSearchController = IController & {
     cqp: string
@@ -15,7 +16,9 @@ type AdvancedSearchController = IController & {
     onSearchSave: (name: string) => void
 }
 
-type AdvancedSearchScope = IScope & {}
+type AdvancedSearchScope = IScope & {
+    extendedCqp: string
+}
 
 angular.module("korpApp").component("advancedSearch", {
     template: html` <div>
@@ -25,7 +28,7 @@ angular.module("korpApp").component("advancedSearch", {
         </div>
         <div class="well well-small">
             {{'active_cqp_extended' | loc:$root.lang}}:
-            <pre>{{$root.extendedCQP}}</pre>
+            <pre>{{extendedCqp}}</pre>
         </div>
         <div class="well well-small">
             {{'cqp_query' | loc:$root.lang}}:
@@ -67,11 +70,13 @@ angular.module("korpApp").component("advancedSearch", {
         "$scope",
         "compareSearches",
         "searches",
+        "store",
         function (
             $location: LocationService,
             $scope: AdvancedSearchScope,
             compareSearches: CompareSearches,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             const $ctrl = this as AdvancedSearchController
 
@@ -91,6 +96,8 @@ angular.module("korpApp").component("advancedSearch", {
                 () => $location.search().search,
                 () => readSearchParam()
             )
+
+            store.watch("extendedCqp", () => ($scope.extendedCqp = store.extendedCqp || ""))
 
             $ctrl.onSearch = () => {
                 $location.search("page", null)

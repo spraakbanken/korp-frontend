@@ -10,16 +10,23 @@ import { UtilsService } from "@/services/utils"
  */
 
 export type Store = {
+    /** Last executed search query. */
     activeSearch?: {
         /** "word", "lemgram" or "cqp" */
         type: string
         val: string
     }
+    /** Selected corpus ids in lowercase */
     corpus: string[]
+    /** What modal to show */
+    display?: "about"
+    /** The current Extended search query as CQP */
+    extendedCqp?: string
     /** A simple attribute–values structure of selected filters. */
     global_filter: StoredFilterValues
-    display?: "about"
+    /** UI language */
     lang: string
+    /** Whether frequency numbers should be shown as absolute or relative (per million tokens) */
     statsRelative: boolean
 }
 

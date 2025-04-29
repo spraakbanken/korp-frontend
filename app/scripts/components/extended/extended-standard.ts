@@ -118,11 +118,8 @@ angular.module("korpApp").component("extendedStandard", {
             }
 
             ctrl.onSearchSave = (name: string) => {
-                if (!$rootScope.extendedCQP) {
-                    console.error("No extendedCQP to save")
-                    return
-                }
-                compareSearches.saveSearch(name, $rootScope.extendedCQP)
+                if (!store.extendedCqp) throw new ReferenceError("Extended CQP not set")
+                compareSearches.saveSearch(name, store.extendedCqp)
             }
 
             ctrl.cqpChange = (cqp: string) => {
@@ -167,7 +164,7 @@ angular.module("korpApp").component("extendedStandard", {
                 if ($rootScope.globalFilter) {
                     val2 = stringify(mergeCqpExprs(parse(val2), $rootScope.globalFilter))
                 }
-                $rootScope.extendedCQP = val2
+                store.extendedCqp = val2
             }
 
             $rootScope.$watch("globalFilter", function () {

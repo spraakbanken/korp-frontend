@@ -10,7 +10,6 @@ import { Attribute } from "./settings/config.types"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
-    extendedCQP: string | null
     getActiveCqp(): string | undefined
     /** Filter data by attribute name */
     globalFilterData: Record<string, FilterData>
