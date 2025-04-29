@@ -78,7 +78,7 @@ angular.module("korpApp").component("searchtabs", {
 
             $ctrl.savedSearches = compareSearches.savedSearches
 
-            store.watch("corpus", (selected: string[]) => {
+            store.watch("corpus", (selected) => {
                 $ctrl.noCorporaSelected = !selected.length
             })
         },

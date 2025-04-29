@@ -216,7 +216,7 @@ angular.module("korpApp").component("appHeader", {
             $ctrl.visible.push(...modesInMenu)
 
             matomoSend("trackEvent", "UI", "Locale init", store.lang)
-            store.watch("lang", (newVal, oldVal) => {
+            store.watch("lang", () => {
                 // Re-sort menu but not visible options
                 $ctrl.menu = collatorSort($ctrl.menu, "label", store.lang)
                 matomoSend("trackEvent", "UI", "Locale switch", store.lang)

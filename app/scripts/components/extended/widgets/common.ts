@@ -44,7 +44,7 @@ export const selectController = (autocomplete: boolean): IController => [
     "$scope",
     "store",
     function ($scope: SelectWidgetScope, store: StoreService) {
-        store.watch("corpus", (selected: string[]) => {
+        store.watch("corpus", (selected) => {
             // TODO Destroy if new corpus selection doesn't support the attribute?
             if (selected.length > 0) {
                 reloadValues()

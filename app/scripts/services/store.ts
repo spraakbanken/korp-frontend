@@ -1,7 +1,7 @@
 /** @format */
 import angular from "angular"
 import settings from "@/settings"
-import { RootScope } from "@/root-scope.types"
+import { RootScope, StoredFilterValues } from "@/root-scope.types"
 import { UtilsService } from "@/services/utils"
 
 /**
@@ -9,13 +9,13 @@ import { UtilsService } from "@/services/utils"
  * It is wrapped in a Proxy to allow direct access to properties as well as the service methods.
  */
 
-type Store = Pick<RootScope, "show_modal" | "lang" | "corpus">
+type Store = Pick<RootScope, "show_modal" | "lang" | "corpus" | "global_filter">
 
 export type StoreBase = {
     initialize: () => void
     get: <K extends keyof Store>(key: K) => Store[K]
     set: <K extends keyof Store>(key: K, value: Store[K]) => void
-    watch: (subject: string, listener: (newValue: any, oldValue: any) => void) => void
+    watch: <K extends keyof Store>(subject: K, listener: (newValue: Store[K], oldValue: Store[K]) => void) => void
 }
 
 export type StoreService = StoreBase & Store
@@ -26,6 +26,7 @@ angular.module("korpApp").factory("store", [
     ($rootScope: RootScope, utils: UtilsService): StoreService => {
         const initialize = () => {
             $rootScope.corpus = []
+            $rootScope.global_filter = {}
             $rootScope.show_modal = false
             // Let `lang` be empty at init
         }
@@ -39,6 +40,13 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, {
             key: "display",
             scope_name: "show_modal",
+        })
+        utils.setupHash($rootScope, {
+            key: "global_filter",
+            // Store in URL as base64-encoded JSON
+            default: btoa(JSON.stringify({})),
+            val_in: (str) => (str ? JSON.parse(atob(str)) : {}),
+            val_out: (obj: StoredFilterValues) => btoa(JSON.stringify(obj)),
         })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         $rootScope.$watch("loc_data", (newValue, oldValue) => {

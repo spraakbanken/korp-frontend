@@ -21,9 +21,12 @@ export type RootScope = IRootScopeService & {
     getActiveCqp(): string | undefined
     /** Filter data by attribute name */
     globalFilterData: Record<string, FilterData>
+    /** CQP fragment built from selected filter values. */
     globalFilter: CqpQuery | null
     /** This deferred is used to signal that the filter feature is ready. */
     globalFilterDef: DeferredOk
+    /** A simple attribute–values structure of selected filters. */
+    global_filter: StoredFilterValues
     /** This deferred is resolved when parallel search controller is loaded */
     langDef: DeferredOk
     simpleCQP?: string
@@ -46,6 +49,8 @@ export type FilterData = {
     /** Sorted list of options with counts */
     options: [string, number][]
 }
+
+export type StoredFilterValues = Record<string, string[]>
 
 export type DynamicTabName = "compareTabs" | "graphTabs" | "kwicTabs" | "mapTabs" | "textTabs"
 

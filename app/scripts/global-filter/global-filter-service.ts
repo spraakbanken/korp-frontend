@@ -6,7 +6,6 @@ import _ from "lodash"
 import settings from "@/settings"
 import { regescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
-import { LocationService } from "@/urlparams"
 import { countAttrValues } from "@/backend/attr-values"
 import { RecursiveRecord } from "@/backend/types/attr-values"
 import { StoreService } from "@/services/store"
@@ -15,9 +14,6 @@ export type GlobalFilterService = {
     initialize: () => void
 }
 
-/** Shape of data stored in URL */
-type StoredFilterValues = Record<string, string[]>
-
 /**
  * "Global filters" are text-level CQP conditions for selected attributes, that are managed separately in the GUI and
  * then merged with the tokens of the query when sending it to the backend. This service manages the state of the
@@ -25,16 +21,10 @@ type StoredFilterValues = Record<string, string[]>
  * manages user-selected values.
  */
 angular.module("korpApp").factory("globalFilterService", [
-    "$location",
     "$rootScope",
     "$timeout",
     "store",
-    function (
-        $location: LocationService,
-        $rootScope: RootScope,
-        $timeout: ITimeoutService,
-        store: StoreService
-    ): GlobalFilterService {
+    function ($rootScope: RootScope, $timeout: ITimeoutService, store: StoreService): GlobalFilterService {
         /** Drilldown of values available for each attr. N-dimensional map where N = number of attrs. */
         let currentData: RecursiveRecord<number> = {}
 
@@ -114,41 +104,20 @@ angular.module("korpApp").factory("globalFilterService", [
             }
         }
 
-        /** Parse encoded url param value to local data. */
-        function setFromLocation(globalFilter?: string) {
-            if (!globalFilter) return
-            const parsedFilter: StoredFilterValues = JSON.parse(atob(globalFilter))
-
-            // Copy values from param, reset filters not in param
-            for (const attr in $rootScope.globalFilterData) {
-                $rootScope.globalFilterData[attr].value = parsedFilter[attr] || []
-            }
-        }
-
-        /** Set url param from local data, as base64-encoded json. */
-        function updateLocation() {
-            const rep: StoredFilterValues = {}
-            Object.entries($rootScope.globalFilterData).forEach(([attr, filter]) => {
-                if (filter.value.length) rep[attr] = filter.value
-            })
-            if (!_.isEmpty(rep)) {
-                $location.search("global_filter", btoa(JSON.stringify(rep)))
-                // Build a CQP token object of AND-combined conditions from active filters.
-                $rootScope.globalFilter = [
-                    {
-                        and_block: Object.entries($rootScope.globalFilterData).map(([attr, filter]) =>
-                            filter.value.map((value) => ({
-                                type: `_.${attr}`,
-                                op: filter.attribute.type === "set" ? "contains" : "=",
-                                val: regescape(value),
-                            }))
-                        ),
-                    },
-                ]
-            } else {
-                $location.search("global_filter", null)
-                $rootScope.globalFilter = null
-            }
+        /** Build globally available CQP fragment. */
+        function updateCqp() {
+            // Create a token with an AND of each attribute, and an OR of the selected values of each attribute.
+            $rootScope.globalFilter = [
+                {
+                    and_block: Object.entries($rootScope.globalFilterData).map(([attr, filter]) =>
+                        filter.value.map((value) => ({
+                            type: `_.${attr}`,
+                            op: filter.attribute.type === "set" ? "contains" : "=",
+                            val: regescape(value),
+                        }))
+                    ),
+                },
+            ]
         }
 
         function initialize() {
@@ -171,29 +140,33 @@ angular.module("korpApp").factory("globalFilterService", [
                         }
                     }
 
-                    setFromLocation($location.search().global_filter)
                     getData()
-                    updateLocation()
                 }
                 // Flag that the filter feature is ready.
                 $rootScope.globalFilterDef.resolve()
             })
 
             /** Set up sync from url params to local data. */
-            $rootScope.$watch(
-                () => $location.search().global_filter,
-                (filter) => setFromLocation(filter)
-            )
+            store.watch("global_filter", () => {
+                // Copy values from param, reset filters not in param
+                for (const attr in $rootScope.globalFilterData) {
+                    $rootScope.globalFilterData[attr].value = store.global_filter[attr] || []
+                }
+            })
 
             $rootScope.$watch(
                 "globalFilterData",
                 (filterData: RootScope["globalFilterData"], filterDataOld?: RootScope["globalFilterData"]) => {
-                    // Only watch selection changes
+                    // Get data (cached) in case the set of available filters have changed
+                    getData()
+                    // Update the CQP fragment using globalFilterData
+                    updateCqp()
+                    // Only store actual changes
                     const values = _.mapValues(filterData, (filter) => filter.value)
                     const valuesOld = _.mapValues(filterDataOld, (filter) => filter.value)
                     if (!_.isEqual(values, valuesOld)) {
-                        updateLocation()
-                        getData()
+                        // Skip empty filters for a shorter URL
+                        store.global_filter = _.pickBy(values, (vals) => vals.length)
                     }
                 },
                 true
