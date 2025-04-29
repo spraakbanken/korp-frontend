@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IController, IRootElementService, ITimeoutService } from "angular"
+import angular, { IController, IRootElementService, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import moment, { Moment } from "moment"
 import CSV from "comma-separated-values/csv"
@@ -29,6 +29,10 @@ type ResultsTrendDiagramController = IController & {
     $result: JQLite
     mode: "line" | "bar" | "table"
     error?: string
+}
+
+type ResultsTrendDiagramScope = IScope & {
+    statsRelative: boolean
 }
 
 type Series = {
@@ -91,8 +95,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                         {{'table' | loc:$root.lang}}
                     </label>
                 </div>
-                <label ng-if="$ctrl.mode == 'table'">
-                    <input type="checkbox" ng-model="$root.statsRelative" />
+                <label ng-show="$ctrl.mode == 'table'">
+                    <input type="checkbox" ng-model="statsRelative" />
                     {{"num_results_relative" | loc:$root.lang}}
                     <i
                         class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
@@ -148,11 +152,13 @@ angular.module("korpApp").component("resultsTrendDiagram", {
     },
     controller: [
         "$rootScope",
+        "$scope",
         "$timeout",
         "$element",
         "store",
         function (
             $rootScope: RootScope,
+            $scope: ResultsTrendDiagramScope,
             $timeout: ITimeoutService,
             $element: IRootElementService,
             store: StoreService
@@ -172,11 +178,14 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 checkZoomLevel(interval[0], interval[1], true)
             }
 
-            $rootScope.$watch("statsRelative", () => {
+            store.watch("statsRelative", () => {
+                $scope.statsRelative = store.statsRelative
                 if (!$ctrl.time_grid) return
                 // Trigger reformatting
                 $ctrl.time_grid.setColumns($ctrl.time_grid.getColumns())
             })
+
+            $scope.$watch("statsRelative", () => (store.statsRelative = $scope.statsRelative))
 
             $ctrl.isGraph = () => ["line", "bar"].includes($ctrl.mode)
             $ctrl.isTable = () => $ctrl.mode === "table"
@@ -451,7 +460,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                             name: timestamp,
                             field: timestamp,
                             formatter(row, cell, value, columnDef, dataContext) {
-                                return value == undefined ? "" : formatFrequency($rootScope, value)
+                                return value == undefined ? "" : formatFrequency(store, value)
                             },
                             cssClass: "text-right",
                         }

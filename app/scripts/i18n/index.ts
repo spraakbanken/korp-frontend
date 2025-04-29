@@ -8,7 +8,7 @@ import type { LangString, LocLangMap, LocMap } from "@/i18n/types"
 export function getLang(): string {
     // If called during bootstrap, the Root Scope service may not be ready
     try {
-        return getService("$rootScope").lang || settings.default_language
+        return getService("store").lang || settings.default_language
     } catch (e) {
         return getUrlHash("lang") || settings.default_language
     }

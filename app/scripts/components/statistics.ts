@@ -28,6 +28,7 @@ type StatisticsScope = IScope & {
     statCurrentAttrs: AttributeOption[]
     statSelectedAttrs: string[]
     statInsensitiveAttrs: string[]
+    statsRelative: boolean
 }
 
 type StatisticsController = IController & {
@@ -76,7 +77,7 @@ angular.module("korpApp").component("statistics", {
                 ></reduce-select>
             </div>
             <label>
-                <input type="checkbox" ng-model="$root.statsRelative" />
+                <input type="checkbox" ng-model="statsRelative" />
                 {{"num_results_relative" | loc:$root.lang}}
                 <i
                     class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
@@ -271,11 +272,14 @@ angular.module("korpApp").component("statistics", {
                 $ctrl.grid.setColumns(cols)
             })
 
-            $rootScope.$watch("statsRelative", () => {
+            store.watch("statsRelative", () => {
+                $scope.statsRelative = store.statsRelative
                 if (!$ctrl.grid) return
                 // Trigger reformatting
                 $ctrl.grid.setColumns($ctrl.grid.getColumns())
             })
+
+            $scope.$watch("statsRelative", () => (store.statsRelative = $scope.statsRelative))
 
             $ctrl.$onChanges = (changeObj) => {
                 if ("columns" in changeObj && $ctrl.columns != undefined) {

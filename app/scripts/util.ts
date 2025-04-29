@@ -12,6 +12,7 @@ import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { Row } from "./components/kwic"
 import { AbsRelSeq } from "./statistics.types"
+import { StoreService } from "./services/store"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -27,6 +28,7 @@ type ServiceTypes = {
     $location: LocationService
     $rootScope: RootScope
     $uibModal: ui.bootstrap.IModalService
+    store: StoreService
     // Add types here as needed.
 }
 
@@ -194,11 +196,9 @@ export function formatRelativeHits(x: number | string, lang?: string) {
 /**
  * Format frequency as relative or absolute using chosen mode.
  */
-export function formatFrequency($rootScope: RootScope, absrel: AbsRelSeq) {
+export function formatFrequency(store: StoreService, absrel: AbsRelSeq) {
     const [absolute, relative] = absrel
-    return $rootScope.statsRelative
-        ? formatRelativeHits(relative, $rootScope.lang)
-        : absolute.toLocaleString($rootScope.lang)
+    return store.statsRelative ? formatRelativeHits(relative, store.lang) : absolute.toLocaleString(store.lang)
 }
 
 /**

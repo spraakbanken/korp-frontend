@@ -12,6 +12,7 @@ import { TabHashScope } from "@/directives/tab-hash"
 import { Attribute } from "@/settings/config.types"
 import "@/components/korp-error"
 import "@/components/loglike-meter"
+import { StoreService } from "@/services/store"
 
 type ResultsComparisonController = IController & {
     loading: boolean
@@ -62,7 +63,8 @@ angular.module("korpApp").component("resultsComparison", {
     controller: [
         "$rootScope",
         "$scope",
-        function ($rootScope: RootScope, $scope: ResultsComparisonScope) {
+        "store",
+        function ($rootScope: RootScope, $scope: ResultsComparisonScope, store: StoreService) {
             const $ctrl = this as ResultsComparisonController
 
             $ctrl.$onInit = () => {
@@ -94,7 +96,7 @@ angular.module("korpApp").component("resultsComparison", {
                     if (attribute.stringify) {
                         stringify = getStringifier(attribute.stringify)
                     } else if (attribute.translation) {
-                        stringify = (value) => locAttribute(attribute.translation!, value, $rootScope.lang)
+                        stringify = (value) => locAttribute(attribute.translation!, value, store.lang)
                     }
                 }
                 $scope.stringify = stringify

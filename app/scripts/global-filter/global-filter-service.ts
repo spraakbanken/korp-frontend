@@ -100,7 +100,7 @@ angular.module("korpApp").factory("globalFilterService", [
                     options[value] += count
                 }
                 // Cast back to list and sort alphabetically
-                filter.options = Object.entries(options).sort((a, b) => a[0].localeCompare(b[0], $rootScope.lang))
+                filter.options = Object.entries(options).sort((a, b) => a[0].localeCompare(b[0], store.lang))
             }
         }
 

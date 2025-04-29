@@ -9,7 +9,14 @@ import { UtilsService } from "@/services/utils"
  * It is wrapped in a Proxy to allow direct access to properties as well as the service methods.
  */
 
-type Store = Pick<RootScope, "show_modal" | "lang" | "corpus" | "global_filter">
+export type Store = {
+    corpus: string[]
+    /** A simple attribute–values structure of selected filters. */
+    global_filter: StoredFilterValues
+    show_modal: "about" | false
+    lang: string
+    statsRelative: boolean
+}
 
 export type StoreBase = {
     initialize: () => void
@@ -24,10 +31,16 @@ angular.module("korpApp").factory("store", [
     "$rootScope",
     "utils",
     ($rootScope: RootScope, utils: UtilsService): StoreService => {
+        // Use the root scope for storing these variables, but keep their types separate.
+        // This alias prevents TypeScript errors when accessing the store properties.
+        // They can still be accessed as `$root.lang` etc in templates.
+        const rootScopeStore = $rootScope as unknown as Store
+
         const initialize = () => {
-            $rootScope.corpus = []
-            $rootScope.global_filter = {}
-            $rootScope.show_modal = false
+            rootScopeStore.corpus = []
+            rootScopeStore.global_filter = {}
+            rootScopeStore.show_modal = false
+            rootScopeStore.statsRelative = false
             // Let `lang` be empty at init
         }
 
@@ -60,8 +73,8 @@ angular.module("korpApp").factory("store", [
 
         const service: StoreBase = {
             initialize,
-            get: (key) => $rootScope[key],
-            set: (key, value) => ($rootScope[key] = value as RootScope[typeof key]), // Why is this typecast needed?
+            get: (key) => rootScopeStore[key],
+            set: (key, value) => (rootScopeStore[key] = value),
             watch: (subject, listener) => $rootScope.$watch(subject, listener),
         }
 

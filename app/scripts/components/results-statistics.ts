@@ -11,6 +11,7 @@ import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/statistics"
 import { statisticsService } from "@/statistics"
+import { StoreService } from "@/services/store"
 
 type ResultsStatisticsController = IController & {
     isActive: boolean
@@ -60,11 +61,13 @@ angular.module("korpApp").component("resultsStatistics", {
         "$location",
         "$rootScope",
         "$timeout",
+        "store",
         function (
             $scope: ResultsStatisticsScope,
             $location: LocationService,
             $rootScope: RootScope,
-            $timeout: ITimeoutService
+            $timeout: ITimeoutService,
+            store: StoreService
         ) {
             const $ctrl = this as ResultsStatisticsController
             const s = $scope
@@ -146,7 +149,7 @@ angular.module("korpApp").component("resultsStatistics", {
                     })
                     .then(async (data) => {
                         const { rows, columns, params } = await statisticsService.processData(
-                            $rootScope,
+                            store,
                             corpora,
                             data,
                             attrs,

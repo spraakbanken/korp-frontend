@@ -15,25 +15,19 @@ export type RootScope = IRootScopeService & {
         type: string
         val: string
     } | null
-    corpus: string[]
     extendedCQP: string | null
     getActiveCqp(): string | undefined
     /** Filter data by attribute name */
     globalFilterData: Record<string, FilterData>
     /** CQP fragment built from selected filter values. */
     globalFilter: CqpQuery | null
-    /** A simple attribute–values structure of selected filters. */
-    global_filter: StoredFilterValues
     simpleCQP?: string
-    show_modal: "about" | false
-    statsRelative?: boolean
     compareTabs: CompareTab[]
     graphTabs: GraphTab[]
     kwicTabs: KwicTab[]
     mapTabs: MapTab[]
     textTabs: TextTab[]
     wordpicSortProp: RelationsParams["sort"]
-    lang: string
     loc_data: LangLocMap
 }
 
