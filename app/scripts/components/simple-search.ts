@@ -19,6 +19,7 @@ import { LexiconsRelatedWords, relatedWordSearch } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
 import { CqpSearchEvent } from "@/statemachine/types"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
+import { StoreService } from "@/services/store"
 
 type SimpleSearchController = IController & {
     input: string
@@ -153,6 +154,7 @@ angular.module("korpApp").component("simpleSearch", {
         "$uibModal",
         "compareSearches",
         "searches",
+        "store",
         function (
             $location: LocationService,
             $rootScope: RootScope,
@@ -160,7 +162,8 @@ angular.module("korpApp").component("simpleSearch", {
             $timeout: ITimeoutService,
             $uibModal: ui.bootstrap.IModalService,
             compareSearches: CompareSearches,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             const ctrl = this as SimpleSearchController
 
@@ -318,8 +321,8 @@ angular.module("korpApp").component("simpleSearch", {
                 modalInstance.result.catch(() => {})
             }
 
-            $rootScope.$watch("activeSearch", () => {
-                const search = $rootScope.activeSearch
+            store.watch("activeSearch", () => {
+                const search = store.activeSearch
                 if (!search) return
 
                 if (search.type === "word" || search.type === "lemgram") {
@@ -350,7 +353,7 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             ctrl.doSearch = function () {
-                const search = $rootScope.activeSearch
+                const search = store.activeSearch
                 ctrl.relatedObj = undefined
                 const cqp = ctrl.getCQP()
                 searches.kwicSearch(cqp)

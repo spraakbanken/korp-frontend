@@ -5,6 +5,7 @@ import { LocationService } from "@/urlparams"
 import angular from "angular"
 import "@/services/search-history"
 import { splitFirst } from "@/util"
+import { StoreService } from "./store"
 
 /**
  * This service provides a routine for activating a new search.
@@ -16,7 +17,7 @@ export type SearchesService = {
     /** Tell result controllers (kwic/statistics/word picture) to send their requests. */
     kwicSearch: (cqp: string) => void
     /**
-     * Read the `search` and `cqp` URL params and set `$rootScope.activeSearch`.
+     * Read the `search` and `cqp` URL params and set `store.activeSearch`.
      * For extended search: also merge with global filters.
      * For extended/advanced search: also trigger API requests.
      */
@@ -26,7 +27,8 @@ export type SearchesService = {
 angular.module("korpApp").factory("searches", [
     "$location",
     "$rootScope",
-    function ($location: LocationService, $rootScope: RootScope): SearchesService {
+    "store",
+    function ($location: LocationService, $rootScope: RootScope, store: StoreService): SearchesService {
         const searches: SearchesService = {
             kwicSearch(cqp: string) {
                 $rootScope.$emit("make_request", cqp)
@@ -51,7 +53,7 @@ angular.module("korpApp").factory("searches", [
 
                 // Update stored search query
                 $rootScope.$applyAsync(() => {
-                    $rootScope.activeSearch = { type, val: value }
+                    store.activeSearch = { type, val: value }
                 })
 
                 // Trigger API requests

@@ -7,6 +7,7 @@ import { isEnabled } from "@/news-service"
 import "@/components/corpus-updates"
 import "@/components/newsdesk"
 import "@/components/search-examples"
+import { StoreService } from "@/services/store"
 
 export default angular.module("korpApp").component("frontpage", {
     template: html`
@@ -33,7 +34,8 @@ export default angular.module("korpApp").component("frontpage", {
     controller: [
         "$rootScope",
         "$scope",
-        function ($rootScope: RootScope, $scope) {
+        "store",
+        function ($rootScope: RootScope, $scope, store: StoreService) {
             const $ctrl = this
 
             $scope.newsdeskIsEnabled = isEnabled()
@@ -42,11 +44,7 @@ export default angular.module("korpApp").component("frontpage", {
             $scope.modeLabel = settings.mode?.label
             $scope.examples = settings.frontpage?.examples
 
-            $ctrl.hasResult = () =>
-                $rootScope.activeSearch ||
-                $rootScope.compareTabs.length ||
-                $rootScope.graphTabs.length ||
-                $rootScope.mapTabs.length
+            $ctrl.hasResult = () => store.activeSearch || $rootScope.compareTabs.length
         },
     ],
 })

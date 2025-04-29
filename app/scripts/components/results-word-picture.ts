@@ -121,7 +121,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                     return
                 }
 
-                const search = $rootScope.activeSearch
+                const search = store.activeSearch
                 if (!search || (search.type !== "lemgram" && search.val.includes(" "))) {
                     s.resetView()
                     s.warning = loc("word_pic_bad_search", store.lang)

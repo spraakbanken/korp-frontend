@@ -10,6 +10,11 @@ import { UtilsService } from "@/services/utils"
  */
 
 export type Store = {
+    activeSearch?: {
+        /** "word", "lemgram" or "cqp" */
+        type: string
+        val: string
+    }
     corpus: string[]
     /** A simple attribute–values structure of selected filters. */
     global_filter: StoredFilterValues
@@ -37,6 +42,7 @@ angular.module("korpApp").factory("store", [
         const rootScopeStore = $rootScope as unknown as Store
 
         const initialize = () => {
+            rootScopeStore.activeSearch = undefined
             rootScopeStore.corpus = []
             rootScopeStore.global_filter = {}
             rootScopeStore.show_modal = false
