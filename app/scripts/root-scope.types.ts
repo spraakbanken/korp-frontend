@@ -7,7 +7,6 @@ import { CorpusListing } from "./corpus_listing"
 import { CompareResult, MapRequestResult } from "@/backend/backend"
 import { RelationsParams } from "@/backend/types/relations"
 import { Attribute } from "./settings/config.types"
-import { DeferredOk } from "./util"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
@@ -23,12 +22,8 @@ export type RootScope = IRootScopeService & {
     globalFilterData: Record<string, FilterData>
     /** CQP fragment built from selected filter values. */
     globalFilter: CqpQuery | null
-    /** This deferred is used to signal that the filter feature is ready. */
-    globalFilterDef: DeferredOk
     /** A simple attribute–values structure of selected filters. */
     global_filter: StoredFilterValues
-    /** This deferred is resolved when parallel search controller is loaded */
-    langDef: DeferredOk
     simpleCQP?: string
     show_modal: "about" | false
     statsRelative?: boolean

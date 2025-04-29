@@ -142,8 +142,6 @@ angular.module("korpApp").factory("globalFilterService", [
 
                     getData()
                 }
-                // Flag that the filter feature is ready.
-                $rootScope.globalFilterDef.resolve()
             })
 
             /** Set up sync from url params to local data. */

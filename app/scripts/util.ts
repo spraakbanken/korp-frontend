@@ -20,21 +20,6 @@ export const html = String.raw
 export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
     Object.fromEntries(keys.map((key) => [key, getValue(key)]))
 
-/** Create a promise that can be resolved later. */
-export const deferOk = (): DeferredOk => {
-    let resolve: () => void
-    const promise = new Promise<undefined>((res) => {
-        resolve = () => res(undefined)
-    })
-    return { promise, resolve: resolve! }
-}
-
-/** A value-less variant of a Deferred. */
-export type DeferredOk = {
-    promise: Promise<undefined>
-    resolve: () => void
-}
-
 /** Mapping from service names to their TS types. */
 type ServiceTypes = {
     $controller: IControllerService

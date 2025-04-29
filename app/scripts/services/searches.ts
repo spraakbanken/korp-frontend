@@ -63,10 +63,8 @@ angular.module("korpApp").factory("searches", [
         }
 
         // On page load, check for and perform an initial search from URL params.
-        // First wait for initialization of parallel search and global filters.
-        Promise.all([$rootScope.langDef.promise, $rootScope.globalFilterDef.promise]).then(() => {
-            searches.doSearch()
-        })
+        // Wait a tick for initialization of parallel search and global filters.
+        setTimeout(() => searches.doSearch())
 
         return searches
     },

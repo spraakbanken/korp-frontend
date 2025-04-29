@@ -150,7 +150,6 @@ angular.module("korpApp").component("extendedParallel", {
                 var currentLangList = _.map(ctrl.langs, "lang")
                 corpusListing.setActiveLangs(currentLangList)
                 $location.search("parallel_corpora", currentLangList.join(","))
-                $rootScope.langDef.resolve()
             }
 
             ctrl.onSubmit = function () {

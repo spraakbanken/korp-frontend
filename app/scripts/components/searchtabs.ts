@@ -59,21 +59,15 @@ angular.module("korpApp").component("searchtabs", {
         </div>
     `,
     controller: [
-        "$rootScope",
         "compareSearches",
         "store",
-        function ($rootScope: RootScope, compareSearches: CompareSearches, store: StoreService) {
+        function (compareSearches: CompareSearches, store: StoreService) {
             const $ctrl = this as SearchtabsController
 
             $ctrl.parallelMode = !!settings.parallel
             if ($ctrl.parallelMode) {
-                // resolve globalFilterDef since globalFilter-directive is not used
-                $rootScope.globalFilterDef.resolve()
                 const corpusListing = settings.corpusListing as ParallelCorpusListing
                 corpusListing.setActiveLangs([settings.start_lang!])
-            } else {
-                // only used in parallel mode
-                $rootScope.langDef.resolve()
             }
 
             $ctrl.savedSearches = compareSearches.savedSearches

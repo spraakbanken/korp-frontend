@@ -7,7 +7,6 @@ import {
     ILocaleService,
     ILocationProvider,
     IScope,
-    ITimeoutService,
     ui,
 } from "angular"
 import korpApp from "./korp.module"
@@ -17,7 +16,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { initLocales } from "@/data_init"
 import { RootScope } from "@/root-scope.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { deferOk, formatRelativeHits, getService, html } from "@/util"
+import { formatRelativeHits, getService, html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
 import "@/components/searchtabs"
@@ -125,7 +124,6 @@ korpApp.run([
     "$locale",
     "tmhDynamicLocale",
     "tmhDynamicLocaleCache",
-    "$timeout",
     "$uibModal",
     "store",
     async function (
@@ -134,7 +132,6 @@ korpApp.run([
         $locale: ILocaleService,
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,
-        $timeout: ITimeoutService,
         $uibModal: ui.bootstrap.IModalService,
         store: StoreService
     ) {
@@ -143,8 +140,6 @@ korpApp.run([
 
         s.extendedCQP = null
         s.globalFilterData = {}
-        $rootScope.globalFilterDef = deferOk()
-        $rootScope.langDef = deferOk()
         $rootScope.wordpicSortProp = "mi"
 
         /** Get CQP corresponding to the current search, if any. */
