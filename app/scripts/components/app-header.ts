@@ -164,12 +164,12 @@ angular.module("korpApp").component("appHeader", {
             $ctrl.languages = settings.languages
 
             $ctrl.citeClick = () => {
-                store.show_modal = "about"
+                store.display = "about"
             }
 
             let modal: ui.bootstrap.IModalInstanceService | null = null
 
-            store.watch("show_modal", (val) => {
+            store.watch("display", (val) => {
                 if (val) showAbout()
                 else {
                     modal?.close()
@@ -178,7 +178,7 @@ angular.module("korpApp").component("appHeader", {
             })
 
             const closeModals = function () {
-                store.show_modal = false
+                store.display = undefined
             }
 
             type ModalScope = IScope & {

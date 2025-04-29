@@ -18,7 +18,7 @@ export type Store = {
     corpus: string[]
     /** A simple attribute–values structure of selected filters. */
     global_filter: StoredFilterValues
-    show_modal: "about" | false
+    display?: "about"
     lang: string
     statsRelative: boolean
 }
@@ -45,7 +45,7 @@ angular.module("korpApp").factory("store", [
             rootScopeStore.activeSearch = undefined
             rootScopeStore.corpus = []
             rootScopeStore.global_filter = {}
-            rootScopeStore.show_modal = false
+            rootScopeStore.display = undefined
             rootScopeStore.statsRelative = false
             // Let `lang` be empty at init
         }
@@ -56,10 +56,7 @@ angular.module("korpApp").factory("store", [
             val_in: (str) => (str ? str.split(",") : []),
             val_out: (arr) => arr.join(",") || null,
         })
-        utils.setupHash($rootScope, {
-            key: "display",
-            scope_name: "show_modal",
-        })
+        utils.setupHash($rootScope, { key: "display" })
         utils.setupHash($rootScope, {
             key: "global_filter",
             // Store in URL as base64-encoded JSON
