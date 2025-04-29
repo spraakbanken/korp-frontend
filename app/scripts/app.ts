@@ -144,9 +144,9 @@ korpApp.run([
         /** Get CQP corresponding to the current search, if any. */
         $rootScope.getActiveCqp = () => {
             if (!store.activeSearch) return undefined
-            // Simple search puts CQP in `simpleCQP`. Extended/advanced puts it in `activeSearch.val`.
+            // Simple search puts CQP in `simpleCqp`. Extended/advanced puts it in `activeSearch.val`.
             const isSimple = ["word", "lemgram"].includes(store.activeSearch.type)
-            return isSimple ? $rootScope.simpleCQP : store.activeSearch.val
+            return isSimple ? store.simpleCqp : store.activeSearch.val
         }
 
         // Listen to url changes like #?lang=swe

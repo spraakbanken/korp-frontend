@@ -335,7 +335,7 @@ angular.module("korpApp").component("simpleSearch", {
                         ctrl.isRawInput = false
                         ctrl.onChange(ctrl.input, false)
                     }
-                    $rootScope.simpleCQP = expandOperators(ctrl.getCQP())
+                    store.simpleCqp = expandOperators(ctrl.getCQP())
                     ctrl.updateFreeOrderEnabled()
                     ctrl.doSearch()
                 }

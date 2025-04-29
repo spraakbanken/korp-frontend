@@ -15,7 +15,6 @@ export type RootScope = IRootScopeService & {
     globalFilterData: Record<string, FilterData>
     /** CQP fragment built from selected filter values. */
     globalFilter: CqpQuery | null
-    simpleCQP?: string
     compareTabs: CompareTab[]
     graphTabs: GraphTab[]
     kwicTabs: KwicTab[]

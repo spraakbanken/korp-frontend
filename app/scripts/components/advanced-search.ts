@@ -18,13 +18,14 @@ type AdvancedSearchController = IController & {
 
 type AdvancedSearchScope = IScope & {
     extendedCqp: string
+    simpleCqp: string
 }
 
 angular.module("korpApp").component("advancedSearch", {
     template: html` <div>
         <div class="well well-small">
             {{'active_cqp_simple' | loc:$root.lang}}:
-            <pre>{{$root.simpleCQP}}</pre>
+            <pre>{{simpleCqp}}</pre>
         </div>
         <div class="well well-small">
             {{'active_cqp_extended' | loc:$root.lang}}:
@@ -98,6 +99,7 @@ angular.module("korpApp").component("advancedSearch", {
             )
 
             store.watch("extendedCqp", () => ($scope.extendedCqp = store.extendedCqp || ""))
+            store.watch("simpleCqp", () => ($scope.simpleCqp = store.simpleCqp || ""))
 
             $ctrl.onSearch = () => {
                 $location.search("page", null)

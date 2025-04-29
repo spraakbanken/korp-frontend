@@ -26,6 +26,8 @@ export type Store = {
     global_filter: StoredFilterValues
     /** UI language */
     lang: string
+    /** The current Simple search query as CQP */
+    simpleCqp?: string
     /** Whether frequency numbers should be shown as absolute or relative (per million tokens) */
     statsRelative: boolean
 }
