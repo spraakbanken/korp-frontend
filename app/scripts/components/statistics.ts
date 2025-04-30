@@ -199,12 +199,12 @@ angular.module("korpApp").component("statistics", {
                 <div id="exportStatsSection">
                     <br /><br />
                     <select id="kindOfData">
-                        <option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
-                        <option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
+                        <option value="relative">{{ 'statstable_relfigures' | loc:$root.lang }}</option>
+                        <option value="absolute">{{ 'statstable_absfigures' | loc:$root.lang }}</option>
                     </select>
                     <select id="kindOfFormat">
-                        <option value="csv" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
-                        <option value="tsv" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
+                        <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
+                        <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
                     </select>
                     <a id="generateExportButton" ng-click="$ctrl.generateExport()">
                         <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>

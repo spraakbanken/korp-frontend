@@ -5,6 +5,7 @@ import { RootScope } from "@/root-scope.types"
 import { UtilsService } from "@/services/utils"
 import { Attribute } from "@/settings/config.types"
 import { CqpQuery } from "@/cqp_parser/cqp.types"
+import { getLocData } from "@/loc-data"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.
@@ -89,13 +90,11 @@ angular.module("korpApp").factory("store", [
             val_out: (obj: Record<string, string[]>) => btoa(JSON.stringify(obj)),
         })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
-        $rootScope.$watch("loc_data", (newValue, oldValue) => {
-            if (newValue && !oldValue) {
-                utils.setupHash($rootScope, {
-                    key: "lang",
-                    default: settings["default_language"],
-                })
-            }
+        getLocData().then(() => {
+            utils.setupHash($rootScope, {
+                key: "lang",
+                default: settings["default_language"],
+            })
         })
 
         const service: StoreBase = {

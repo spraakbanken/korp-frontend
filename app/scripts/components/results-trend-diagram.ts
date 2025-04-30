@@ -106,8 +106,9 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             </div>
 
             <div class="non_time_div">
-                <span rel="localize[non_time_before]"></span><span class="non_time"></span
-                ><span rel="localize[non_time_after]"></span>
+                {{ 'non_time_before' | loc:$root.lang }}
+                <span class="non_time"></span>
+                {{ 'non_time_after' | loc:$root.lang }}
             </div>
 
             <div class="legend" ng-style='{visibility : !$ctrl.loading && $ctrl.isGraph() ? "visible" : "hidden"}'>
@@ -700,7 +701,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
 
                     yFormatter(y: number) {
                         const val = formatRelativeHits(y, store.lang)
-                        return `<br><span rel='localize[rel_hits_short]'>${loc("rel_hits_short")}</span> ` + val
+                        return `<br>${loc("rel_hits_short")} ${val}`
                     },
                     formatter(series: Series, x: number, y: number, formattedX: string, formattedY: string) {
                         let abs_y

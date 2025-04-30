@@ -1,6 +1,5 @@
 /** @format */
 import { IPromise, IRootScopeService } from "angular"
-import { LangLocMap } from "@/i18n/types"
 import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CorpusListing } from "./corpus_listing"
 import { CompareResult, MapRequestResult } from "@/backend/backend"
@@ -15,7 +14,6 @@ export type RootScope = IRootScopeService & {
     mapTabs: MapTab[]
     textTabs: TextTab[]
     wordpicSortProp: RelationsParams["sort"]
-    loc_data: LangLocMap
 }
 
 export type DynamicTabName = "compareTabs" | "graphTabs" | "kwicTabs" | "mapTabs" | "textTabs"

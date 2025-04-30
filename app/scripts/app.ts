@@ -13,7 +13,7 @@ import korpApp from "./korp.module"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
 import * as authenticationProxy from "@/components/auth/auth"
-import { initLocales } from "@/data_init"
+import { getLocData } from "./loc-data"
 import { RootScope } from "@/root-scope.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { formatRelativeHits, getService, html } from "@/util"
@@ -186,11 +186,6 @@ korpApp.run([
         $rootScope.mapTabs = []
         $rootScope.textTabs = []
 
-        // This fetch was started in data_init.js, but only here can we store the result.
-        const initLocalesPromise = initLocales().then((data): void =>
-            $rootScope.$apply(() => ($rootScope["loc_data"] = data))
-        )
-
         // Sync corpus selection from store to global corpus listing
         store.watch("corpus", () => {
             // In parallel mode, the select function may also add hidden corpora.
@@ -349,7 +344,7 @@ korpApp.run([
             initializeCorpusSelection(getCorporaFromHash(), true)
         })
 
-        await initLocalesPromise
+        await getLocData()
     },
 ])
 
