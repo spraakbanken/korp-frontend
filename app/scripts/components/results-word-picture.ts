@@ -86,8 +86,8 @@ angular.module("korpApp").component("resultsWordPicture", {
             s.proxy = lemgramProxyFactory.create()
             s.activated = false
 
-            $rootScope.$watch("globalFilter", () => {
-                if ($rootScope.globalFilter) s.warning = loc("word_pic_global_filter", store.lang)
+            store.watch("globalFilter", () => {
+                if (store.globalFilter) s.warning = loc("word_pic_global_filter", store.lang)
             })
 
             $rootScope.$on("make_request", () => s.makeRequest())
@@ -130,7 +130,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                 const word = search.type === "lemgram" ? unregescape(search.val) : search.val
                 const type = search.type
 
-                if ($rootScope.globalFilter) {
+                if (store.globalFilter) {
                     s.resetView()
                     s.warning = loc("word_pic_global_filter", store.lang)
                     return

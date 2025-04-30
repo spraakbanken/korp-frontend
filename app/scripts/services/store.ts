@@ -4,6 +4,7 @@ import settings from "@/settings"
 import { RootScope } from "@/root-scope.types"
 import { UtilsService } from "@/services/utils"
 import { Attribute } from "@/settings/config.types"
+import { CqpQuery } from "@/cqp_parser/cqp.types"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.
@@ -23,6 +24,8 @@ export type Store = {
     display?: "about"
     /** The current Extended search query as CQP */
     extendedCqp?: string
+    /** CQP fragment built from selected filter values. */
+    globalFilter?: CqpQuery
     /** Filter data by attribute name */
     globalFilterData: Record<string, FilterData>
     /** A simple attribute–values structure of selected filters. */
@@ -66,13 +69,9 @@ angular.module("korpApp").factory("store", [
         const rootScopeStore = $rootScope as unknown as Store
 
         const initialize = () => {
-            rootScopeStore.activeSearch = undefined
             rootScopeStore.corpus = []
             rootScopeStore.globalFilterData = {}
             rootScopeStore.global_filter = {}
-            rootScopeStore.display = undefined
-            rootScopeStore.statsRelative = false
-            // Let `lang` be empty at init
         }
 
         // Sync to url

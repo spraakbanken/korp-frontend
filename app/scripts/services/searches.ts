@@ -46,8 +46,8 @@ angular.module("korpApp").factory("searches", [
                     value = $location.search().cqp || ""
                     // Merge with global filters
                     // (For Simple search, the equivalent is handled in the simple-search component)
-                    if ($rootScope.globalFilter) {
-                        value = stringify(mergeCqpExprs(parse(value || "[]"), $rootScope.globalFilter))
+                    if (store.globalFilter) {
+                        value = stringify(mergeCqpExprs(parse(value || "[]"), store.globalFilter))
                     }
                 }
 

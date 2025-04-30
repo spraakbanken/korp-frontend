@@ -9,6 +9,7 @@ import { RootScope } from "@/root-scope.types"
 import { countAttrValues } from "@/backend/attr-values"
 import { RecursiveRecord } from "@/backend/types/attr-values"
 import { StoreService } from "@/services/store"
+import { Condition } from "@/cqp_parser/cqp.types"
 
 export type GlobalFilterService = {
     initialize: () => void
@@ -107,17 +108,20 @@ angular.module("korpApp").factory("globalFilterService", [
         /** Build globally available CQP fragment. */
         function updateCqp() {
             // Create a token with an AND of each attribute, and an OR of the selected values of each attribute.
-            $rootScope.globalFilter = [
-                {
-                    and_block: Object.entries(store.globalFilterData).map(([attr, filter]) =>
-                        filter.value.map((value) => ({
-                            type: `_.${attr}`,
-                            op: filter.attribute.type === "set" ? "contains" : "=",
-                            val: regescape(value),
-                        }))
-                    ),
-                },
-            ]
+            const and_block = Object.entries(store.globalFilterData)
+                .map(([attr, filter]) =>
+                    filter.value.map(
+                        (value) =>
+                            ({
+                                type: `_.${attr}`,
+                                op: filter.attribute.type === "set" ? "contains" : "=",
+                                val: regescape(value),
+                            } satisfies Condition)
+                    )
+                )
+                .filter((conds) => conds.length > 0)
+            // If nothing is selected, unset globalFilter
+            store.globalFilter = and_block.length ? [{ and_block }] : undefined
         }
 
         function initialize() {

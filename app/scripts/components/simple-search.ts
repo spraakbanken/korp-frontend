@@ -261,7 +261,7 @@ angular.module("korpApp").component("simpleSearch", {
                     query.push({ and_block: [conditions] })
                 }
 
-                if ($rootScope.globalFilter) mergeCqpExprs(query, $rootScope.globalFilter)
+                if (store.globalFilter) mergeCqpExprs(query, store.globalFilter)
                 return stringify(query)
             }
 

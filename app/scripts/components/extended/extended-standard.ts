@@ -161,17 +161,13 @@ angular.module("korpApp").component("extendedStandard", {
 
             const updateExtendedCQP = function () {
                 let val2 = expandOperators(ctrl.cqp || "[]")
-                if ($rootScope.globalFilter) {
-                    val2 = stringify(mergeCqpExprs(parse(val2), $rootScope.globalFilter))
+                if (store.globalFilter) {
+                    val2 = stringify(mergeCqpExprs(parse(val2), store.globalFilter))
                 }
                 store.extendedCqp = val2
             }
 
-            $rootScope.$watch("globalFilter", function () {
-                if ($rootScope.globalFilter) {
-                    updateExtendedCQP()
-                }
-            })
+            store.watch("globalFilter", () => updateExtendedCQP())
 
             store.watch("corpus", () => {
                 ctrl.withins = settings.corpusListing.getWithinKeys()
