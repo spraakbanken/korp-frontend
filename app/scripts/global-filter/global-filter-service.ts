@@ -31,15 +31,15 @@ angular.module("korpApp").factory("globalFilterService", [
         /** Fetch token counts keyed in multiple dimensions by the values of attributes */
         async function getData(): Promise<void> {
             const corpora = settings.corpusListing.getSelectedCorpora()
-            const attrs = Object.keys($rootScope.globalFilterData)
-            const multiAttrs = attrs.filter((attr) => $rootScope.globalFilterData[attr].attribute.type === "set")
+            const attrs = Object.keys(store.globalFilterData)
+            const multiAttrs = attrs.filter((attr) => store.globalFilterData[attr].attribute.type === "set")
             currentData = corpora.length && attrs.length ? await countAttrValues(corpora, attrs, multiAttrs) : {}
             // Abort if corpus selection has changed since the request was made
             if (!_.isEqual(corpora, settings.corpusListing.getSelectedCorpora())) return
             $timeout(() => {
                 updateData()
                 // Deselect values that are not in the options
-                for (const filter of Object.values($rootScope.globalFilterData)) {
+                for (const filter of Object.values(store.globalFilterData)) {
                     filter.value = filter.value.filter((value) => filter.options.some(([v]) => v === value))
                 }
             })
@@ -53,7 +53,7 @@ angular.module("korpApp").factory("globalFilterService", [
                 parentSelected: boolean
             ): [number, boolean] {
                 const attr = attrs[0]
-                const filter = $rootScope.globalFilterData[attr]
+                const filter = store.globalFilterData[attr]
                 let sum = 0
                 const values: string[] = []
                 let include = false
@@ -86,13 +86,13 @@ angular.module("korpApp").factory("globalFilterService", [
             }
 
             // reset all filters
-            for (const filter of Object.values($rootScope.globalFilterData)) filter.options = []
+            for (const filter of Object.values(store.globalFilterData)) filter.options = []
 
             // recursively decide the counts of all values
-            collectAndSum(Object.keys($rootScope.globalFilterData), currentData, true)
+            collectAndSum(Object.keys(store.globalFilterData), currentData, true)
 
             // merge duplicate child values
-            for (const filter of Object.values($rootScope.globalFilterData)) {
+            for (const filter of Object.values(store.globalFilterData)) {
                 // Sum the counts of duplicate values
                 const options: Record<string, number> = {}
                 for (const [value, count] of filter.options) {
@@ -109,7 +109,7 @@ angular.module("korpApp").factory("globalFilterService", [
             // Create a token with an AND of each attribute, and an OR of the selected values of each attribute.
             $rootScope.globalFilter = [
                 {
-                    and_block: Object.entries($rootScope.globalFilterData).map(([attr, filter]) =>
+                    and_block: Object.entries(store.globalFilterData).map(([attr, filter]) =>
                         filter.value.map((value) => ({
                             type: `_.${attr}`,
                             op: filter.attribute.type === "set" ? "contains" : "=",
@@ -127,13 +127,13 @@ angular.module("korpApp").factory("globalFilterService", [
                     const attrs = settings.corpusListing.getDefaultFilters()
 
                     // Remove filters that are no more applicable
-                    for (const attr in $rootScope.globalFilterData) {
-                        if (!attrs[attr]) delete $rootScope.globalFilterData[attr]
+                    for (const attr in store.globalFilterData) {
+                        if (!attrs[attr]) delete store.globalFilterData[attr]
                     }
 
                     // Add new filters
                     for (const attr in attrs) {
-                        $rootScope.globalFilterData[attr] ??= {
+                        store.globalFilterData[attr] ??= {
                             attribute: attrs[attr],
                             value: [], // Selection empty by default
                             options: [], // Filled in updateData
@@ -147,14 +147,14 @@ angular.module("korpApp").factory("globalFilterService", [
             /** Set up sync from url params to local data. */
             store.watch("global_filter", () => {
                 // Copy values from param, reset filters not in param
-                for (const attr in $rootScope.globalFilterData) {
-                    $rootScope.globalFilterData[attr].value = store.global_filter[attr] || []
+                for (const attr in store.globalFilterData) {
+                    store.globalFilterData[attr].value = store.global_filter[attr] || []
                 }
             })
 
-            $rootScope.$watch(
+            store.watch(
                 "globalFilterData",
-                (filterData: RootScope["globalFilterData"], filterDataOld?: RootScope["globalFilterData"]) => {
+                (filterData, filterDataOld) => {
                     // Get data (cached) in case the set of available filters have changed
                     getData()
                     // Update the CQP fragment using globalFilterData

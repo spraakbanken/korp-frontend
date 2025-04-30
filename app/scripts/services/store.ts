@@ -1,8 +1,9 @@
 /** @format */
 import angular from "angular"
 import settings from "@/settings"
-import { RootScope, StoredFilterValues } from "@/root-scope.types"
+import { RootScope } from "@/root-scope.types"
 import { UtilsService } from "@/services/utils"
+import { Attribute } from "@/settings/config.types"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.
@@ -22,8 +23,10 @@ export type Store = {
     display?: "about"
     /** The current Extended search query as CQP */
     extendedCqp?: string
+    /** Filter data by attribute name */
+    globalFilterData: Record<string, FilterData>
     /** A simple attribute–values structure of selected filters. */
-    global_filter: StoredFilterValues
+    global_filter: Record<string, string[]>
     /** UI language */
     lang: string
     /** The current Simple search query as CQP */
@@ -32,11 +35,23 @@ export type Store = {
     statsRelative: boolean
 }
 
+export type FilterData = {
+    attribute: Attribute
+    /** Selected values */
+    value: string[]
+    /** Sorted list of options with counts */
+    options: [string, number][]
+}
+
 export type StoreBase = {
     initialize: () => void
     get: <K extends keyof Store>(key: K) => Store[K]
     set: <K extends keyof Store>(key: K, value: Store[K]) => void
-    watch: <K extends keyof Store>(subject: K, listener: (newValue: Store[K], oldValue: Store[K]) => void) => void
+    watch: <K extends keyof Store>(
+        subject: K,
+        listener: (newValue: Store[K], oldValue: Store[K]) => void,
+        deep?: boolean
+    ) => void
 }
 
 export type StoreService = StoreBase & Store
@@ -53,6 +68,7 @@ angular.module("korpApp").factory("store", [
         const initialize = () => {
             rootScopeStore.activeSearch = undefined
             rootScopeStore.corpus = []
+            rootScopeStore.globalFilterData = {}
             rootScopeStore.global_filter = {}
             rootScopeStore.display = undefined
             rootScopeStore.statsRelative = false
@@ -71,7 +87,7 @@ angular.module("korpApp").factory("store", [
             // Store in URL as base64-encoded JSON
             default: btoa(JSON.stringify({})),
             val_in: (str) => (str ? JSON.parse(atob(str)) : {}),
-            val_out: (obj: StoredFilterValues) => btoa(JSON.stringify(obj)),
+            val_out: (obj: Record<string, string[]>) => btoa(JSON.stringify(obj)),
         })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         $rootScope.$watch("loc_data", (newValue, oldValue) => {
@@ -87,7 +103,7 @@ angular.module("korpApp").factory("store", [
             initialize,
             get: (key) => rootScopeStore[key],
             set: (key, value) => (rootScopeStore[key] = value),
-            watch: (subject, listener) => $rootScope.$watch(subject, listener),
+            watch: (subject, listener, deep) => $rootScope.$watch(subject, listener, deep),
         }
 
         const handler: ProxyHandler<StoreService> = {

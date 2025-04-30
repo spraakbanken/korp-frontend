@@ -138,7 +138,6 @@ korpApp.run([
         const s = $rootScope
         store.initialize()
 
-        s.globalFilterData = {}
         $rootScope.wordpicSortProp = "mi"
 
         /** Get CQP corresponding to the current search, if any. */

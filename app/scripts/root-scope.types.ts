@@ -6,13 +6,10 @@ import { CqpQuery } from "./cqp_parser/cqp.types"
 import { CorpusListing } from "./corpus_listing"
 import { CompareResult, MapRequestResult } from "@/backend/backend"
 import { RelationsParams } from "@/backend/types/relations"
-import { Attribute } from "./settings/config.types"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
     getActiveCqp(): string | undefined
-    /** Filter data by attribute name */
-    globalFilterData: Record<string, FilterData>
     /** CQP fragment built from selected filter values. */
     globalFilter: CqpQuery | null
     compareTabs: CompareTab[]
@@ -23,16 +20,6 @@ export type RootScope = IRootScopeService & {
     wordpicSortProp: RelationsParams["sort"]
     loc_data: LangLocMap
 }
-
-export type FilterData = {
-    attribute: Attribute
-    /** Selected values */
-    value: string[]
-    /** Sorted list of options with counts */
-    options: [string, number][]
-}
-
-export type StoredFilterValues = Record<string, string[]>
 
 export type DynamicTabName = "compareTabs" | "graphTabs" | "kwicTabs" | "mapTabs" | "textTabs"
 
