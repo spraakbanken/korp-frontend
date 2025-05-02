@@ -13,6 +13,7 @@ import "@/components/korp-error"
 import "@/components/kwic"
 import "@/services/utils"
 import { html } from "@/util"
+import { StoreService } from "@/services/store"
 
 type ResultsHitsController = IController & {
     isActive: boolean
@@ -77,23 +78,23 @@ angular.module("korpApp").component("resultsHits", {
         "$rootScope",
         "$scope",
         "$timeout",
-        "utils",
+        "store",
         function (
             $location: LocationService,
             $rootScope: RootScope,
             $scope: ResultsHitsScope,
             $timeout: ITimeoutService,
-            utils: UtilsService
+            store: StoreService
         ) {
             const $ctrl = this as ResultsHitsController
 
             $scope.initialSearch = true
-            $scope.page = Number($location.search().page) || 0
             $scope.proxy = kwicProxyFactory.create()
             $scope.isReading = $location.search().reading_mode
 
-            // Sync url param for page number
-            utils.setupHash($scope, { key: "page", val_in: Number })
+            $ctrl.$onInit = () => {
+                $scope.page = store.page
+            }
 
             $rootScope.$on("make_request", (msg, cqp) => {
                 $scope.cqp = cqp
@@ -110,9 +111,14 @@ angular.module("korpApp").component("resultsHits", {
                 makeRequest(false)
             })
 
-            $scope.pageChange = function (page) {
-                $scope.page = page
+            store.watch("page", (value, old) => {
+                if (value === old) return
+                $scope.page = store.page
                 makeRequest(true)
+            })
+
+            $scope.pageChange = (page) => {
+                store.page = page
             }
 
             $scope.$on("abort_requests", () => {
@@ -180,10 +186,6 @@ angular.module("korpApp").component("resultsHits", {
             }
 
             function makeRequest(isPaging?: boolean) {
-                if (!isPaging) {
-                    $scope.page = Number($location.search().page) || 0
-                }
-
                 // Abort any running request
                 if ($ctrl.loading) $scope.proxy.abort()
 

@@ -102,7 +102,7 @@ angular.module("korpApp").component("advancedSearch", {
             store.watch("simpleCqp", () => ($scope.simpleCqp = store.simpleCqp || ""))
 
             $ctrl.onSearch = () => {
-                $location.search("page", null)
+                store.page = 0
                 $location.search("within", null)
                 $location.search("in_order", $ctrl.freeOrder ? false : null)
                 $location.search("search", `cqp|${$ctrl.cqp}`)

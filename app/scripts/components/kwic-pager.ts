@@ -7,6 +7,7 @@ type KwicPagerController = IController & {
     currentPage: number
     localPageChange: (event?: Event) => void
     onPageInput: ($event: KeyboardEvent) => void
+    page: number
     pageChange: (data: { page: number }) => void
     hitsPerPage: number
 }

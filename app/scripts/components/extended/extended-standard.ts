@@ -97,7 +97,7 @@ angular.module("korpApp").component("extendedStandard", {
 
             // TODO this is *too* weird
             function triggerSearch() {
-                $location.search("page", null)
+                store.page = 0
                 $location.search("in_order", $scope.freeOrder ? false : null)
                 $location.search("within", ctrl.within != defaultWithin ? ctrl.within : undefined)
                 $location.search("search", "cqp")

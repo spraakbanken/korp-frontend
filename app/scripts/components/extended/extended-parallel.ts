@@ -152,7 +152,7 @@ angular.module("korpApp").component("extendedParallel", {
             ctrl.onSubmit = function () {
                 $location.replace()
                 $location.search("search", `cqp|${onCQPChange()}`)
-                $location.search("page", null)
+                store.page = 0
                 matomoSend("trackEvent", "Search", "Submit search", "Extended")
                 searches.doSearch()
             }

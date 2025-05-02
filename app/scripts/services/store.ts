@@ -34,6 +34,8 @@ export type Store = {
     global_filter: Record<string, string[]>
     /** UI language */
     lang: string
+    /** Page number of KWIC result */
+    page?: number
     /** The current Simple search query as CQP */
     simpleCqp?: string
     /** Whether frequency numbers should be shown as absolute or relative (per million tokens) */
@@ -95,6 +97,7 @@ angular.module("korpApp").factory("store", [
             val_in: (str) => (str ? JSON.parse(atob(str)) : {}),
             val_out: (obj: Record<string, string[]>) => btoa(JSON.stringify(obj)),
         })
+        utils.setupHash($rootScope, { key: "page", val_in: Number })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {
             utils.setupHash($rootScope, {
