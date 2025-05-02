@@ -196,15 +196,11 @@ export const filterCorporaOnCredentials = (
 ): string[] => {
     const selection: string[] = []
     for (const corpus of collection) {
-        const corpusId = corpus.id
-        corpus.selected = false
-        if (
-            corporaIds.includes(corpusId) &&
-            (!corpus["limited_access"] || credentials.includes(corpusId.toUpperCase()))
-        ) {
-            corpus.selected = true
-            selection.push(corpusId)
-        }
+        const shouldSelect =
+            corporaIds.includes(corpus.id) &&
+            (!corpus["limited_access"] || credentials.includes(corpus.id.toUpperCase()))
+        corpus.selected = shouldSelect
+        if (shouldSelect) selection.push(corpus.id)
     }
     return selection
 }

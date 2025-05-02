@@ -176,12 +176,6 @@ korpApp.run([
         $rootScope.mapTabs = []
         $rootScope.textTabs = []
 
-        // Sync corpus selection from store to global corpus listing
-        store.watch("corpus", () => {
-            // In parallel mode, the select function may also add hidden corpora.
-            settings.corpusListing.select(store.corpus)
-        })
-
         /** Whether initial corpus selection is deferred because it depends on authentication. */
         let waitForLogin = false
 
@@ -260,6 +254,12 @@ korpApp.run([
             } else {
                 // Corpus selection OK
                 store.corpus = ids
+
+                // Sync corpus selection from store to global corpus listing
+                store.watch("corpus", () => {
+                    // In parallel mode, the select function may also add hidden corpora.
+                    settings.corpusListing.select(store.corpus)
+                })
             }
         }
 
