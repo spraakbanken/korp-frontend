@@ -31,7 +31,7 @@ type ResultsHitsScope = IScope & {
     hits?: number
     /** Number of search hits, may change while search is in progress. */
     hitsInProgress?: number
-    hitsPerPage?: `${number}` | number
+    hitsPerPage: number
     initialSearch?: boolean
     kwic?: ApiKwic[]
     page?: number
@@ -94,12 +94,13 @@ angular.module("korpApp").component("resultsHits", {
 
             $ctrl.$onInit = () => {
                 $scope.page = store.page
+                $scope.hitsPerPage = store.hpp
             }
 
             $rootScope.$on("make_request", (msg, cqp) => {
                 $scope.cqp = cqp
                 // only set this on the initial search, not when paging
-                $scope.hitsPerPage = $location.search()["hpp"] || settings["hits_per_page_default"]
+                $scope.hitsPerPage = store.hpp
 
                 // reset randomSeed when doing a search, but not for the first request
                 if (!$scope.initialSearch) {
@@ -156,6 +157,9 @@ angular.module("korpApp").component("resultsHits", {
                     return { sort }
                 }
 
+                const start = (store.page || 0) * store.hpp
+                const end = start + store.hpp - 1
+
                 const avoidContext = $scope.isReading
                     ? settings["default_overview_context"]
                     : settings["default_reading_context"]
@@ -178,6 +182,8 @@ angular.module("korpApp").component("resultsHits", {
                     query_data: $scope.proxy.queryData,
                     context,
                     default_context: preferredContext,
+                    start,
+                    end,
                     incremental: true,
                 }
 
@@ -196,7 +202,6 @@ angular.module("korpApp").component("resultsHits", {
                 $scope.proxy
                     .makeRequest(
                         buildQueryOptions(isPaging),
-                        $scope.page,
                         (progressObj) =>
                             $timeout(() => {
                                 $ctrl.setProgress(true, Math.round(progressObj.percent))

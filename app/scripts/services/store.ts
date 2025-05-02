@@ -32,6 +32,8 @@ export type Store = {
     globalFilterData: Record<string, FilterData>
     /** A simple attribute–values structure of selected filters. */
     global_filter: Record<string, string[]>
+    /** Hits per page */
+    hpp: number
     /** UI language */
     lang: string
     /** Page number of KWIC result */
@@ -76,6 +78,8 @@ angular.module("korpApp").factory("store", [
             rootScopeStore.corpus = []
             rootScopeStore.globalFilterData = {}
             rootScopeStore.global_filter = {}
+            rootScopeStore.hpp = settings["hits_per_page_default"]
+            rootScopeStore.page = 0
         }
 
         // Sync to url
@@ -97,6 +101,7 @@ angular.module("korpApp").factory("store", [
             val_in: (str) => (str ? JSON.parse(atob(str)) : {}),
             val_out: (obj: Record<string, string[]>) => btoa(JSON.stringify(obj)),
         })
+        utils.setupHash($rootScope, { key: "hpp", val_in: Number, default: settings["hits_per_page_default"] })
         utils.setupHash($rootScope, { key: "page", val_in: Number })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {

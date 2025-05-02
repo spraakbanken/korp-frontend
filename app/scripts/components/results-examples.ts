@@ -8,6 +8,7 @@ import { ApiKwic } from "@/backend/types"
 import kwicProxyFactory, { KorpQueryRequestOptions, KwicProxy } from "@/backend/kwic-proxy"
 import "@/components/korp-error"
 import "@/components/kwic"
+import { StoreService } from "@/services/store"
 
 type ResultsExamplesController = IController & {
     isActive: boolean
@@ -69,15 +70,21 @@ angular.module("korpApp").component("resultsExamples", {
         "$location",
         "$scope",
         "$timeout",
-        function ($location: LocationService, $scope: ResultsExamplesScope, $timeout: ITimeoutService) {
+        "store",
+        function (
+            $location: LocationService,
+            $scope: ResultsExamplesScope,
+            $timeout: ITimeoutService,
+            store: StoreService
+        ) {
             const $ctrl = this as ResultsExamplesController
 
-            $scope.hitsPerPage = Number($location.search()["hpp"] || settings["hits_per_page_default"])
             $scope.proxy = kwicProxyFactory.create()
 
             $ctrl.$onInit = () => {
                 // Context mode can be set when creating the tab. If not, use URL param
                 $scope.isReading = $ctrl.isReading ?? $location.search()["reading_mode"]
+                $scope.hitsPerPage = store.hpp
                 makeRequest()
             }
 

@@ -21,7 +21,6 @@ export class KwicProxy extends BaseProxy {
 
     async makeRequest(
         options: KorpQueryRequestOptions,
-        page?: number,
         progressCallback?: (data: ProgressReport<"query">) => void,
         kwicCallback?: (data: QueryResponse) => void
     ): Promise<QueryResponse> {
@@ -32,20 +31,10 @@ export class KwicProxy extends BaseProxy {
             _.extend(options, settings.corpusListing.getWithinParameters())
         }
 
-        /** Calculate start and end from page and hpp. Only works for main hits. Examples must provide start and end in param. */
-        function getPageInterval(): { start: number; end: number } {
-            const hpp = locationSearchGet("hpp")
-            const itemsPerPage = Number(hpp) || settings.hits_per_page_default
-            const start = (page || 0) * itemsPerPage
-            const end = start + itemsPerPage - 1
-            return { start, end }
-        }
-
         const command = options.command || "query"
 
         const params: QueryParams = {
             default_context: settings.default_overview_context,
-            ...getPageInterval(),
             ...options,
         }
 

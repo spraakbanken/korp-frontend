@@ -13,6 +13,7 @@ import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
 import { SearchesService } from "@/services/searches"
+import { StoreService } from "@/services/store"
 
 export type Row = ApiKwic | LinkedKwic | CorpusHeading
 
@@ -289,12 +290,14 @@ angular.module("korpApp").component("kwic", {
         "$scope",
         "$timeout",
         "searches",
+        "store",
         function (
             $element: JQLite,
             $location: LocationService,
             $scope: KwicScope,
             $timeout: ITimeoutService,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             let $ctrl = this as KwicController
 
@@ -307,12 +310,12 @@ angular.module("korpApp").component("kwic", {
             }
             $scope.sort = $location.search().sort || ""
             $scope.hppOptions = settings["hits_per_page_values"].map(String)
-            $scope.hpp = String($location.search().hpp || settings["hits_per_page_default"])
 
             const selectionManager = new SelectionManager()
 
             $ctrl.$onInit = () => {
                 addKeydownHandler()
+                $scope.hpp = String(store.hpp)
             }
 
             $ctrl.$onChanges = (changeObj) => {
@@ -406,10 +409,7 @@ angular.module("korpApp").component("kwic", {
                 }
             }
 
-            $scope.$watch(
-                () => $location.search().hpp,
-                (val) => ($scope.hpp = String(val || settings["hits_per_page_default"]))
-            )
+            store.watch("hpp", () => ($scope.hpp = String(store.hpp)))
 
             $scope.$watch(
                 () => $location.search().sort,
@@ -421,8 +421,7 @@ angular.module("korpApp").component("kwic", {
             }, UPDATE_DELAY)
 
             $scope.updateHpp = () => {
-                const hpp = Number($scope.hpp)
-                $location.search("hpp", hpp !== settings["hits_per_page_default"] ? hpp : null)
+                store.hpp = Number($scope.hpp)
                 debouncedSearch()
             }
 
