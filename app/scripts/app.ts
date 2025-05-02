@@ -138,14 +138,6 @@ korpApp.run([
         const s = $rootScope
         store.initialize()
 
-        /** Get CQP corresponding to the current search, if any. */
-        $rootScope.getActiveCqp = () => {
-            if (!store.activeSearch) return undefined
-            // Simple search puts CQP in `simpleCqp`. Extended/advanced puts it in `activeSearch.val`.
-            const isSimple = ["word", "lemgram"].includes(store.activeSearch.type)
-            return isSimple ? store.simpleCqp : store.activeSearch.val
-        }
-
         // Listen to url changes like #?lang=swe
         s.$on("$locationChangeSuccess", () => {
             // Update current locale. This is async and triggers the "$localeChangeSuccess" event.

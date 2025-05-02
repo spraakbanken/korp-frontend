@@ -493,8 +493,7 @@ angular.module("korpApp").component("statistics", {
                 }
                 $ctrl.noRowsError = false
 
-                // TODO this is wrong, it should use the previous search
-                let cqp = $rootScope.getActiveCqp()!
+                let cqp = $ctrl.searchParams.prevNonExpandedCQP
                 try {
                     cqp = expandOperators(cqp)
                 } catch {}
