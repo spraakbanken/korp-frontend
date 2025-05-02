@@ -31,11 +31,6 @@ export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (option
             let dataset: [string, string][]
             const original = $scope.dataset as Record<string, string> | string[]
 
-            store.watch("lang", (newVal, oldVal) => {
-                if (newVal != oldVal) {
-                    initialize()
-                }
-            })
             function initialize() {
                 if (_.isArray(original)) {
                     dataset = _.map(original, (item) => [item, locAttribute($scope.translation, item)])
@@ -50,6 +45,8 @@ export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (option
                 $scope.model = $scope.model || $scope.dataset[0][0]
             }
             initialize()
+
+            store.watch("lang", () => initialize())
         },
     ],
 })

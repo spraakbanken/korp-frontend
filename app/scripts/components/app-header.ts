@@ -215,11 +215,17 @@ angular.module("korpApp").component("appHeader", {
             const modesInMenu = _.remove($ctrl.menu, (item) => item.mode == currentMode)
             $ctrl.visible.push(...modesInMenu)
 
-            matomoSend("trackEvent", "UI", "Locale init", store.lang)
+            let hasLangChanged = false
             store.watch("lang", () => {
+                if (!store.lang) return
                 // Re-sort menu but not visible options
                 $ctrl.menu = collatorSort($ctrl.menu, "label", store.lang)
-                matomoSend("trackEvent", "UI", "Locale switch", store.lang)
+                if (!hasLangChanged) {
+                    hasLangChanged = true
+                    matomoSend("trackEvent", "UI", "Locale init", store.lang)
+                } else {
+                    matomoSend("trackEvent", "UI", "Locale switch", store.lang)
+                }
             })
 
             $ctrl.getUrl = function (modeId) {
