@@ -6,6 +6,7 @@ import { UtilsService } from "@/services/utils"
 import { Attribute } from "@/settings/config.types"
 import { CqpQuery } from "@/cqp_parser/cqp.types"
 import { getLocData } from "@/loc-data"
+import { getAllCorporaInFolders } from "@/components/corpus-chooser/util"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.
@@ -78,7 +79,12 @@ angular.module("korpApp").factory("store", [
         // Sync to url
         utils.setupHash($rootScope, {
             key: "corpus",
-            val_in: (str) => (str ? str.split(",") : []),
+            val_in: (str) => {
+                if (!str) return []
+                const ids = str.split(",")
+                // Resolve any folder ids to the contained corpus ids
+                return ids.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
+            },
             val_out: (arr) => arr.join(",") || null,
         })
         utils.setupHash($rootScope, { key: "display" })
