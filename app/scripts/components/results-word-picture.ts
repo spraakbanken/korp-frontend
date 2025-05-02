@@ -6,7 +6,7 @@ import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
 import { html, isLemgram, lemgramToString, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
-import { ApiRelation, RelationsResponse } from "@/backend/types/relations"
+import { ApiRelation, RelationsResponse, RelationsSort } from "@/backend/types/relations"
 import { loc } from "@/i18n"
 import "@/components/json_button"
 import "@/components/korp-error"
@@ -22,6 +22,7 @@ type ResultsWordPictureController = IController & {
 type ResultsWordPictureScope = IScope & {
     $root: RootScope
     activated: boolean
+    changeSort: (sort: RelationsSort) => void
     data?: TableDrawData[]
     drawTables: (tables: [string, string][], data: ApiRelation[]) => void
     error?: string
@@ -31,6 +32,8 @@ type ResultsWordPictureScope = IScope & {
     renderTables: (query: string, data: ApiRelation[]) => void
     renderWordTables: (query: string, data: ApiRelation[]) => void
     resetView: () => void
+    /** Sort param for the relations request. */
+    sort: RelationsSort
     warning?: string
 }
 
@@ -56,7 +59,7 @@ export type TableDrawData = {
 angular.module("korpApp").component("resultsWordPicture", {
     template: html`
         <div ng-if="!error">
-            <word-picture data="data" hit-settings="hitSettings" settings="settings" warning="warning"></word-picture>
+            <word-picture data="data" on-sort-change="changeSort(sort)" sort="sort" warning="warning"></word-picture>
         </div>
         <korp-error ng-if="error" message="{{error}}"></korp-error>
         <json-button ng-if="!warning && !error" endpoint="'relations'" params="proxy.prevParams"></json-button>
@@ -85,14 +88,13 @@ angular.module("korpApp").component("resultsWordPicture", {
             const s = $scope
             s.proxy = lemgramProxyFactory.create()
             s.activated = false
+            $scope.sort = "mi"
 
             store.watch("globalFilter", () => {
                 if (store.globalFilter) s.warning = loc("word_pic_global_filter", store.lang)
             })
 
             $rootScope.$on("make_request", () => s.makeRequest())
-
-            $rootScope.$watch("wordpicSortProp", () => s.makeRequest())
 
             // Enable word picture when opening tab
             $ctrl.$onChanges = (changes) => {
@@ -109,6 +111,11 @@ angular.module("korpApp").component("resultsWordPicture", {
                     $ctrl.setProgress(false, 0)
                 }
             })
+
+            $scope.changeSort = (sort) => {
+                $scope.sort = sort
+                $scope.makeRequest()
+            }
 
             s.resetView = () => {
                 s.data = undefined
@@ -142,7 +149,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                 $ctrl.setProgress(true, 0)
                 s.warning = undefined
                 s.proxy
-                    .makeRequest(word, type, $rootScope.wordpicSortProp, (progressObj) =>
+                    .makeRequest(word, type, $scope.sort, (progressObj) =>
                         $timeout(() => $ctrl.setProgress(true, progressObj.percent))
                     )
                     .then((data) =>

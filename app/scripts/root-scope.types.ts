@@ -3,7 +3,6 @@ import { IPromise, IRootScopeService } from "angular"
 import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CorpusListing } from "./corpus_listing"
 import { CompareResult, MapRequestResult } from "@/backend/backend"
-import { RelationsParams } from "@/backend/types/relations"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
@@ -13,7 +12,6 @@ export type RootScope = IRootScopeService & {
     kwicTabs: KwicTab[]
     mapTabs: MapTab[]
     textTabs: TextTab[]
-    wordpicSortProp: RelationsParams["sort"]
 }
 
 export type DynamicTabName = "compareTabs" | "graphTabs" | "kwicTabs" | "mapTabs" | "textTabs"
