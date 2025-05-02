@@ -23,6 +23,8 @@ type ResultsStatisticsScope = IScope & {
     aborted: boolean
     rowCount: number
     columns: SlickgridColumn[]
+    /** Last submitted cqp */
+    cqp: string
     data: Dataset
     error?: string
     proxy: StatsProxy
@@ -75,7 +77,8 @@ angular.module("korpApp").component("resultsStatistics", {
             s.proxy = statsProxyFactory.create()
 
             $rootScope.$on("make_request", (event, cqp: string) => {
-                s.makeRequest(cqp)
+                $scope.cqp = cqp
+                s.makeRequest($scope.cqp)
             })
 
             s.$on("abort_requests", () => {
@@ -90,6 +93,7 @@ angular.module("korpApp").component("resultsStatistics", {
                 if (changes.isActive?.currentValue) {
                     // Enable statistics when first opening tab
                     s.showStatistics = true
+                    if ($scope.cqp) s.makeRequest($scope.cqp)
 
                     // workaround for bug in slickgrid
                     // slickgrid should add this automatically, but doesn't
