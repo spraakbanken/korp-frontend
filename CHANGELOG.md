@@ -9,6 +9,14 @@
 - Configurable limit for statistics API call (alternative to [#73](https://github.com/spraakbanken/korp-frontend/issues/73) and [#92](https://github.com/spraakbanken/korp-frontend/issues/92))
 - Statistics: choose between absolute or relative frequencies [#454](https://github.com/spraakbanken/korp-frontend/issues/454)
 
+### Changed
+
+- Most `$rootScope` properties have moved to a new `store` service: `activeSearch`, `extendedCQP`, `globalFilterData`, `globalFilter`, `lang`, `simpleCQP`, `show_modal` (now `display`), `statsRelative`
+  - `globalFilterDef`, `langDef` and `getActiveCqp()` were removed because they are no longer needed
+  - `loc_data` was extracted to `@/loc-data.ts` (use its `getLocData()` or `locData`)
+  - The `corpuschooserchange` and `initialcorpuschooserchange` events are replaced with `store.watch("corpus", ...)`
+  - The store internally uses `$rootScope`, so there's a lot of `$root` usage remaining in HTML templates
+
 ### Fixed
 
 - Statistics grouped rows: sub CQP only has one of the values [#452](https://github.com/spraakbanken/korp-frontend/issues/452)
