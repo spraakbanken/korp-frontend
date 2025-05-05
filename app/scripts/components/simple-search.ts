@@ -169,6 +169,8 @@ angular.module("korpApp").component("simpleSearch", {
 
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
 
+            store.watch("isCaseInsensitive", () => (ctrl.isCaseInsensitive = store.isCaseInsensitive))
+
             statemachine.listen("lemgram_search", (event) =>
                 $timeout(() => {
                     $location.search("search_tab", null)
@@ -181,15 +183,10 @@ angular.module("korpApp").component("simpleSearch", {
             ctrl.freeOrder = false
             /** Whether the "free order" option is applicable. */
             ctrl.freeOrderEnabled = false
-            ctrl.isCaseInsensitive = false
 
             $scope.prefix = false
             $scope.midfix = false
             $scope.suffix = false
-
-            if (settings.input_case_insensitive_default) {
-                $location.search("isCaseInsensitive", "")
-            }
 
             $scope.$watch("prefix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
             $scope.$watch("suffix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
@@ -214,13 +211,12 @@ angular.module("korpApp").component("simpleSearch", {
                     $location.search("suffix", true)
                 }
             })
-            watchParam("isCaseInsensitive", (value) => (ctrl.isCaseInsensitive = value != null))
 
             ctrl.updateSearch = function () {
                 $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
                 $location.search("prefix", $scope.prefix ? true : null)
                 $location.search("suffix", $scope.suffix ? true : null)
-                $location.search("isCaseInsensitive", ctrl.isCaseInsensitive ? true : null)
+                store.isCaseInsensitive = ctrl.isCaseInsensitive
                 $location.search("within", null)
                 $location.replace()
 

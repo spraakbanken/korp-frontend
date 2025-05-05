@@ -35,6 +35,8 @@ export type Store = {
     global_filter: Record<string, string[]>
     /** Hits per page */
     hpp: number
+    /** In simple search, match case-insensitive */
+    isCaseInsensitive: boolean
     /** UI language */
     lang: string
     /** Page number of KWIC result */
@@ -82,6 +84,7 @@ angular.module("korpApp").factory("store", [
             rootScopeStore.globalFilterData = {}
             rootScopeStore.global_filter = {}
             rootScopeStore.hpp = settings["hits_per_page_default"]
+            rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
             rootScopeStore.page = 0
             rootScopeStore.sort = ""
         }
@@ -106,6 +109,7 @@ angular.module("korpApp").factory("store", [
             val_out: (obj: Record<string, string[]>) => btoa(JSON.stringify(obj)),
         })
         utils.setupHash($rootScope, { key: "hpp", val_in: Number, default: settings["hits_per_page_default"] })
+        utils.setupHash($rootScope, { key: "isCaseInsensitive", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "page", val_in: Number })
         utils.setupHash($rootScope, { key: "sort", default: "" })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
