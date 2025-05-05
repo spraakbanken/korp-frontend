@@ -7,6 +7,7 @@ import { Attribute } from "@/settings/config.types"
 import { CqpQuery } from "@/cqp_parser/cqp.types"
 import { getLocData } from "@/loc-data"
 import { getAllCorporaInFolders } from "@/components/corpus-chooser/util"
+import { QueryParamSort } from "@/backend/types/query"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.
@@ -38,6 +39,8 @@ export type Store = {
     lang: string
     /** Page number of KWIC result */
     page?: number
+    /** Search result order */
+    sort: QueryParamSort
     /** The current Simple search query as CQP */
     simpleCqp?: string
     /** Whether frequency numbers should be shown as absolute or relative (per million tokens) */
@@ -80,6 +83,7 @@ angular.module("korpApp").factory("store", [
             rootScopeStore.global_filter = {}
             rootScopeStore.hpp = settings["hits_per_page_default"]
             rootScopeStore.page = 0
+            rootScopeStore.sort = ""
         }
 
         // Sync to url
@@ -103,6 +107,7 @@ angular.module("korpApp").factory("store", [
         })
         utils.setupHash($rootScope, { key: "hpp", val_in: Number, default: settings["hits_per_page_default"] })
         utils.setupHash($rootScope, { key: "page", val_in: Number })
+        utils.setupHash($rootScope, { key: "sort", default: "" })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {
             utils.setupHash($rootScope, {
