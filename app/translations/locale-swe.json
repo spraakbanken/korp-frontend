@@ -412,7 +412,7 @@
     "prefix_chk": "förled",
     "prefix_chk_help": "Tillåt ord som börjar med sökorden.",
     "midfix_chk": "mellanled",
-    "midfix_chk_help": "Tillåt ord som börjar eller slutar med sökorden.",
+    "midfix_chk_help": "Tillåt ord som innehåller sökorden.",
     "suffix_chk": "efterled",
     "suffix_chk_help": "Tillåt ord som slutar med sökorden.",
     "text_tab_header": "Läsläge",
