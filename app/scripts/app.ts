@@ -137,11 +137,8 @@ korpApp.run([
     ) {
         const s = $rootScope
 
-        // Listen to url changes like #?lang=swe
-        s.$on("$locationChangeSuccess", () => {
-            // Update current locale. This is async and triggers the "$localeChangeSuccess" event.
-            tmhDynamicLocale.set($location.search().lang || settings["default_language"])
-        })
+        // Sync stored lang to current locale. This is async and triggers the "$localeChangeSuccess" event.
+        store.watch("lang", (lang) => tmhDynamicLocale.set(lang))
 
         // Listen to change of current language
         s.$on("$localeChangeSuccess", () => {
@@ -155,9 +152,6 @@ korpApp.run([
                 console.warn(`No locale matching "${$locale.id}"`)
                 return
             }
-
-            // Update global variables
-            store.lang = lang
 
             // Trigger jQuery Localize
             ;($("body") as JQueryExtended).localize()
