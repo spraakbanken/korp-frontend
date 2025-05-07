@@ -49,6 +49,16 @@ describe("init corpus selection", () => {
         await page.locator(".close-x").click()
         await expect(page.locator("corpus-chooser")).toContainText("23 of")
     })
+
+    test("folder on first level", async ({ page }) => {
+        await page.goto("/#?lang=eng&corpus=strindberg")
+        await expect(page.locator("corpus-chooser")).toContainText("2 of")
+    })
+
+    test("folder on sub level", async ({ page }) => {
+        await page.goto("/#?lang=eng&corpus=newstexts.svtnews")
+        await expect(page.locator("corpus-chooser")).toContainText("21 of")
+    })
 })
 
 describe("changing corpus selection", () => {
