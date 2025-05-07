@@ -184,10 +184,10 @@ angular.module("korpApp").component("simpleSearch", {
             /** Whether the "free order" option is applicable. */
             ctrl.freeOrderEnabled = false
 
-            $scope.prefix = false
-            $scope.midfix = false
-            $scope.suffix = false
+            store.watch("prefix", () => ($scope.prefix = store.prefix))
+            store.watch("suffix", () => ($scope.suffix = store.suffix))
 
+            // Sync between word part inputs
             $scope.$watch("prefix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
             $scope.$watch("suffix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
             $scope.onMidfixChange = () => {
@@ -201,21 +201,11 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             watchParam("in_order", (value) => (ctrl.freeOrder = value != null))
-            watchParam("prefix", (value) => ($scope.prefix = value != null))
-            watchParam("suffix", (value) => ($scope.suffix = value != null))
-            watchParam("mid_comp", (value) => {
-                // Deprecated param. Translate to prefix/suffix.
-                if (value != null) {
-                    $location.search("mid_comp", null)
-                    $location.search("prefix", true)
-                    $location.search("suffix", true)
-                }
-            })
 
             ctrl.updateSearch = function () {
                 $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
-                $location.search("prefix", $scope.prefix ? true : null)
-                $location.search("suffix", $scope.suffix ? true : null)
+                store.prefix = $scope.prefix
+                store.suffix = $scope.suffix
                 store.isCaseInsensitive = ctrl.isCaseInsensitive
                 $location.search("within", null)
                 $location.replace()

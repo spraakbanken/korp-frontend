@@ -39,14 +39,20 @@ export type Store = {
     isCaseInsensitive: boolean
     /** UI language */
     lang: string
+    /** In simple search, match anywhere in a word */
+    mid_comp: boolean
     /** Page number of KWIC result */
     page?: number
+    /** In simple search, match beginning of word */
+    prefix: boolean
     /** Search result order */
     sort: QueryParamSort
     /** The current Simple search query as CQP */
     simpleCqp?: string
     /** Whether frequency numbers should be shown as absolute or relative (per million tokens) */
     statsRelative: boolean
+    /** In simple search, match end of word */
+    suffix: boolean
 }
 
 export type FilterData = {
@@ -110,8 +116,20 @@ angular.module("korpApp").factory("store", [
         })
         utils.setupHash($rootScope, { key: "hpp", val_in: Number, default: settings["hits_per_page_default"] })
         utils.setupHash($rootScope, { key: "isCaseInsensitive", val_out: (x) => !!x || undefined })
+        utils.setupHash($rootScope, {
+            key: "mid_comp",
+            // Deprecated param. Translate to prefix/suffix.
+            post_change: (mid_comp) => {
+                if (!mid_comp) return
+                rootScopeStore.prefix = true
+                rootScopeStore.suffix = true
+                rootScopeStore.mid_comp = false
+            },
+        })
         utils.setupHash($rootScope, { key: "page", val_in: Number })
+        utils.setupHash($rootScope, { key: "prefix", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "sort", default: "" })
+        utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {
             utils.setupHash($rootScope, {
