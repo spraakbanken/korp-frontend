@@ -179,6 +179,7 @@ angular.module("korpApp").component("resultsHits", {
                 const params: QueryParams = {
                     corpus: settings.corpusListing.stringifySelected(),
                     cqp,
+                    in_order: store.in_order,
                     query_data: $scope.proxy.queryData,
                     context,
                     default_context: preferredContext,

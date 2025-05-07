@@ -37,6 +37,8 @@ export type Store = {
     hpp: number
     /** In simple search, match case-insensitive */
     isCaseInsensitive: boolean
+    /** Whether tokens in current query should match in order; default is true */
+    in_order: boolean
     /** UI language */
     lang: string
     /** In simple search, match anywhere in a word */
@@ -90,6 +92,7 @@ angular.module("korpApp").factory("store", [
             rootScopeStore.globalFilterData = {}
             rootScopeStore.global_filter = {}
             rootScopeStore.hpp = settings["hits_per_page_default"]
+            rootScopeStore.in_order = true
             rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
             rootScopeStore.page = 0
             rootScopeStore.sort = ""
@@ -115,6 +118,11 @@ angular.module("korpApp").factory("store", [
             val_out: (obj: Record<string, string[]>) => btoa(JSON.stringify(obj)),
         })
         utils.setupHash($rootScope, { key: "hpp", val_in: Number, default: settings["hits_per_page_default"] })
+        utils.setupHash($rootScope, {
+            key: "in_order",
+            val_in: (x) => x != "false",
+            val_out: (x) => (x ? undefined : "false"),
+        })
         utils.setupHash($rootScope, { key: "isCaseInsensitive", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, {
             key: "mid_comp",

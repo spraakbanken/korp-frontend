@@ -122,8 +122,7 @@ angular.module("korpApp").component("resultsStatistics", {
                 if ($ctrl.loading) s.proxy.abort()
                 s.resetView()
 
-                const inOrder = $location.search().in_order == null
-                if (!inOrder) {
+                if (!store.in_order) {
                     s.warning = "stats_not_in_order_warn"
                     return
                 }

@@ -166,24 +166,14 @@ angular.module("korpApp").component("simpleSearch", {
             store: StoreService
         ) {
             const ctrl = this as SimpleSearchController
-
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
-
-            store.watch("isCaseInsensitive", () => (ctrl.isCaseInsensitive = store.isCaseInsensitive))
-
-            statemachine.listen("lemgram_search", (event) =>
-                $timeout(() => {
-                    $location.search("search_tab", null)
-                    ctrl.onChange(event.value, false)
-                    ctrl.updateSearch()
-                })
-            )
-
             /** Whether tokens should be matched in arbitrary order. */
             ctrl.freeOrder = false
             /** Whether the "free order" option is applicable. */
             ctrl.freeOrderEnabled = false
 
+            store.watch("in_order", () => (ctrl.freeOrder = !store.in_order))
+            store.watch("isCaseInsensitive", () => (ctrl.isCaseInsensitive = store.isCaseInsensitive))
             store.watch("prefix", () => ($scope.prefix = store.prefix))
             store.watch("suffix", () => ($scope.suffix = store.suffix))
 
@@ -195,18 +185,19 @@ angular.module("korpApp").component("simpleSearch", {
                 $scope.suffix = $scope.midfix
             }
 
-            // React to changes in URL params
-            function watchParam<K extends keyof HashParams>(key: K, callback: (value: HashParams[K]) => void) {
-                $scope.$watch(() => $location.search()[key], callback)
-            }
-
-            watchParam("in_order", (value) => (ctrl.freeOrder = value != null))
+            statemachine.listen("lemgram_search", (event) =>
+                $timeout(() => {
+                    $location.search("search_tab", null)
+                    ctrl.onChange(event.value, false)
+                    ctrl.updateSearch()
+                })
+            )
 
             ctrl.updateSearch = function () {
-                $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
+                store.in_order = !ctrl.freeOrderEnabled || !ctrl.freeOrder
+                store.isCaseInsensitive = ctrl.isCaseInsensitive
                 store.prefix = $scope.prefix
                 store.suffix = $scope.suffix
-                store.isCaseInsensitive = ctrl.isCaseInsensitive
                 $location.search("within", null)
                 $location.replace()
 

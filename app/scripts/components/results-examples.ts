@@ -108,6 +108,7 @@ angular.module("korpApp").component("resultsExamples", {
 
             function makeRequest(): void {
                 const opts = $ctrl.queryParams
+                opts.in_order = store.in_order
 
                 // example tab cannot handle incremental = true
                 opts.incremental = false

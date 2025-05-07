@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { locationSearchGet, Factory } from "@/util"
+import { Factory } from "@/util"
 import { ProgressReport } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
 import { korpRequest } from "./common"
@@ -70,10 +70,6 @@ export class KwicProxy extends BaseProxy {
 
         params.show = _.uniq(["sentence"].concat(show)).join(",")
         params.show_struct = _.uniq(show_struct).join(",")
-
-        if (locationSearchGet("in_order") != null) {
-            params.in_order = false
-        }
 
         this.prevParams = params
 

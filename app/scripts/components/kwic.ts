@@ -322,7 +322,7 @@ angular.module("korpApp").component("kwic", {
             $ctrl.$onChanges = (changeObj) => {
                 if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
                     $ctrl.kwic = massageData($ctrl.kwicInput)
-                    $ctrl.useContext = $ctrl.context || $location.search()["in_order"] != null
+                    $ctrl.useContext = $ctrl.context || !store.in_order
                     if (!$ctrl.context) {
                         $timeout(() => {
                             centerScrollbar()

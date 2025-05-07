@@ -80,9 +80,7 @@ angular.module("korpApp").component("advancedSearch", {
             store: StoreService
         ) {
             const $ctrl = this as AdvancedSearchController
-
             $ctrl.cqp = "[]"
-            $ctrl.freeOrder = $location.search().in_order != null
 
             /** Read advanced CQP from `search` URL param. */
             function readSearchParam(): void {
@@ -98,13 +96,14 @@ angular.module("korpApp").component("advancedSearch", {
                 () => readSearchParam()
             )
 
+            store.watch("in_order", () => ($ctrl.freeOrder = !store.in_order))
             store.watch("extendedCqp", () => ($scope.extendedCqp = store.extendedCqp || ""))
             store.watch("simpleCqp", () => ($scope.simpleCqp = store.simpleCqp || ""))
 
             $ctrl.onSearch = () => {
                 store.page = 0
                 $location.search("within", null)
-                $location.search("in_order", $ctrl.freeOrder ? false : null)
+                store.in_order = !$ctrl.freeOrder
                 $location.search("search", `cqp|${$ctrl.cqp}`)
                 matomoSend("trackEvent", "Search", "Submit search", "Advanced")
                 searches.doSearch()

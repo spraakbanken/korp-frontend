@@ -11,7 +11,6 @@ import "@/components/extended/tokens"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
 import { LocationService } from "@/urlparams"
-import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
 import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
@@ -72,7 +71,6 @@ angular.module("korpApp").component("extendedStandard", {
     `,
     controller: [
         "$location",
-        "$rootScope",
         "$scope",
         "$timeout",
         "compareSearches",
@@ -80,7 +78,6 @@ angular.module("korpApp").component("extendedStandard", {
         "store",
         function (
             $location: LocationService,
-            $rootScope: RootScope,
             $scope: ExtendedStandardScope,
             $timeout: ITimeoutService,
             compareSearches: CompareSearches,
@@ -89,20 +86,23 @@ angular.module("korpApp").component("extendedStandard", {
         ) {
             const ctrl = this as ExtendedStandardController
 
-            $scope.freeOrder = $location.search().in_order != null
             ctrl.orderError = false
             ctrl.withins = []
             const defaultWithin = Object.keys(settings.default_within || {})[0]
             ctrl.within = $location.search().within || defaultWithin
 
-            // TODO this is *too* weird
-            function triggerSearch() {
-                store.page = 0
-                $location.search("in_order", $scope.freeOrder ? false : null)
-                $location.search("within", ctrl.within != defaultWithin ? ctrl.within : undefined)
-                $location.search("search", "cqp")
-                searches.doSearch()
-            }
+            store.watch("in_order", () => ($scope.freeOrder = !store.in_order))
+            store.watch("corpus", () => {
+                ctrl.withins = settings.corpusListing.getWithinKeys()
+                if (!ctrl.withins.includes(ctrl.within)) {
+                    ctrl.within = ctrl.withins[0]
+                }
+            })
+            store.watch("globalFilter", () => updateExtendedCQP())
+
+            $scope.$watch("freeOrder", () => {
+                ctrl.validateFreeOrder()
+            })
 
             statemachine.listen("cqp_search", (event) => {
                 $timeout(() => {
@@ -111,6 +111,14 @@ angular.module("korpApp").component("extendedStandard", {
                     triggerSearch()
                 })
             })
+
+            function triggerSearch() {
+                store.page = 0
+                store.in_order = !$scope.freeOrder
+                $location.search("within", ctrl.within != defaultWithin ? ctrl.within : undefined)
+                $location.search("search", "cqp")
+                searches.doSearch()
+            }
 
             ctrl.onSearch = () => {
                 matomoSend("trackEvent", "Search", "Submit search", "Extended")
@@ -135,10 +143,6 @@ angular.module("korpApp").component("extendedStandard", {
 
                 $location.search("cqp", cqp)
             }
-
-            $scope.$watch("freeOrder", () => {
-                ctrl.validateFreeOrder()
-            })
 
             ctrl.validateFreeOrder = () => {
                 try {
@@ -166,15 +170,6 @@ angular.module("korpApp").component("extendedStandard", {
                 }
                 store.extendedCqp = val2
             }
-
-            store.watch("globalFilter", () => updateExtendedCQP())
-
-            store.watch("corpus", () => {
-                ctrl.withins = settings.corpusListing.getWithinKeys()
-                if (!ctrl.withins.includes(ctrl.within)) {
-                    ctrl.within = ctrl.withins[0]
-                }
-            })
         },
     ],
 })
