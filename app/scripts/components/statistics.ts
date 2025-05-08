@@ -261,8 +261,8 @@ angular.module("korpApp").component("statistics", {
             }
 
             // Set initial value for stats case-insensitive, but only if reduce attr is not set
-            if (!$location.search().stats_reduce && settings["statistics_case_insensitive_default"]) {
-                $location.search("stats_reduce_insensitive", "word")
+            if (!store.stats_reduce && settings["statistics_case_insensitive_default"]) {
+                store.stats_reduce_insensitive = "word"
             }
 
             store.watch("lang", () => {
@@ -406,8 +406,8 @@ angular.module("korpApp").component("statistics", {
             store.watch("corpus", () => {
                 const allAttrs = settings.corpusListing.getStatsAttributeGroups(settings.corpusListing.getReduceLang())
                 $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
-                $scope.statSelectedAttrs = ($location.search().stats_reduce || "word").split(",")
-                const insensitiveAttrs = $location.search().stats_reduce_insensitive
+                $scope.statSelectedAttrs = (store.stats_reduce || "word").split(",")
+                const insensitiveAttrs = store.stats_reduce_insensitive
                 $scope.statInsensitiveAttrs = insensitiveAttrs?.split(",") || []
             })
 
@@ -418,13 +418,13 @@ angular.module("korpApp").component("statistics", {
                 if ($scope.statSelectedAttrs && $scope.statSelectedAttrs.length > 0) {
                     const isModified =
                         $scope.statSelectedAttrs.length != 1 || !$scope.statSelectedAttrs.includes("word")
-                    $location.search("stats_reduce", isModified ? $scope.statSelectedAttrs.join(",") : null)
+                    store.stats_reduce = isModified ? $scope.statSelectedAttrs.join(",") : "word"
                 }
 
                 if ($scope.statInsensitiveAttrs && $scope.statInsensitiveAttrs.length > 0) {
-                    $location.search("stats_reduce_insensitive", $scope.statInsensitiveAttrs.join(","))
+                    store.stats_reduce_insensitive = $scope.statInsensitiveAttrs.join(",")
                 } else if ($scope.statInsensitiveAttrs) {
-                    $location.search("stats_reduce_insensitive", null)
+                    store.stats_reduce_insensitive = ""
                 }
 
                 debouncedSearch()

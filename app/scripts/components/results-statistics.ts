@@ -135,8 +135,8 @@ angular.module("korpApp").component("resultsStatistics", {
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 
-                const attrs = ($location.search()["stats_reduce"] || "word").split(",")
-                const ignoreCase = $location.search()["stats_reduce_insensitive"] != null
+                const attrs = (store.stats_reduce || "word").split(",")
+                const ignoreCase = !!store.stats_reduce_insensitive
                 // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
                 const corpora: string = settings.corpusListing.stringifySelected(false)
 

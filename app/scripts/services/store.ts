@@ -51,6 +51,10 @@ export type Store = {
     random_seed?: number
     /** Whether to KWIC with more context */
     reading_mode: boolean
+    /** Attributes on which to aggregate counts in statistics query */
+    stats_reduce: string
+    /** Attributes on which to aggregate counts, case-insensitively, in statistics query */
+    stats_reduce_insensitive: string
     /** Search result order */
     sort: QueryParamSort
     /** The current Simple search query as CQP */
@@ -105,6 +109,8 @@ angular.module("korpApp").factory("store", [
             rootScopeStore.page = 0
             rootScopeStore.sort = ""
             rootScopeStore.within = withinDefault
+            rootScopeStore.stats_reduce = "word"
+            rootScopeStore.stats_reduce_insensitive = ""
         }
 
         // Sync to url
@@ -149,6 +155,8 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, { key: "reading_mode", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "sort", default: "" })
         utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
+        utils.setupHash($rootScope, { key: "stats_reduce", default: "word" })
+        utils.setupHash($rootScope, { key: "stats_reduce_insensitive", default: "" })
         utils.setupHash($rootScope, { key: "within", default: withinDefault })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {
