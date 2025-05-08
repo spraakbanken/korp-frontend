@@ -6,7 +6,6 @@ import kwicProxyFactory, { type KwicProxy } from "@/backend/kwic-proxy"
 import { ApiKwic } from "@/backend/types"
 import { QueryParams, QueryResponse } from "@/backend/types/query"
 import { RootScope } from "@/root-scope.types"
-import { LocationService } from "@/urlparams"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/kwic"
@@ -72,23 +71,16 @@ angular.module("korpApp").component("resultsHits", {
         setProgress: "<",
     },
     controller: [
-        "$location",
         "$rootScope",
         "$scope",
         "$timeout",
         "store",
-        function (
-            $location: LocationService,
-            $rootScope: RootScope,
-            $scope: ResultsHitsScope,
-            $timeout: ITimeoutService,
-            store: StoreService
-        ) {
+        function ($rootScope: RootScope, $scope: ResultsHitsScope, $timeout: ITimeoutService, store: StoreService) {
             const $ctrl = this as ResultsHitsController
 
             $scope.initialSearch = true
             $scope.proxy = kwicProxyFactory.create()
-            $scope.isReading = $location.search().reading_mode
+            $scope.isReading = store.reading_mode
 
             $ctrl.$onInit = () => {
                 $scope.page = store.page
@@ -128,7 +120,7 @@ angular.module("korpApp").component("resultsHits", {
 
             $scope.toggleReading = function () {
                 $scope.isReading = !$scope.isReading
-                $location.search("reading_mode", $scope.isReading || undefined)
+                store.reading_mode = $scope.isReading
                 makeRequest()
             }
 

@@ -3,7 +3,6 @@ import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
 import settings from "@/settings"
-import { LocationService } from "@/urlparams"
 import { ApiKwic } from "@/backend/types"
 import kwicProxyFactory, { KorpQueryRequestOptions, KwicProxy } from "@/backend/kwic-proxy"
 import "@/components/korp-error"
@@ -67,23 +66,17 @@ angular.module("korpApp").component("resultsExamples", {
         setProgress: "<",
     },
     controller: [
-        "$location",
         "$scope",
         "$timeout",
         "store",
-        function (
-            $location: LocationService,
-            $scope: ResultsExamplesScope,
-            $timeout: ITimeoutService,
-            store: StoreService
-        ) {
+        function ($scope: ResultsExamplesScope, $timeout: ITimeoutService, store: StoreService) {
             const $ctrl = this as ResultsExamplesController
 
             $scope.proxy = kwicProxyFactory.create()
 
             $ctrl.$onInit = () => {
                 // Context mode can be set when creating the tab. If not, use URL param
-                $scope.isReading = $ctrl.isReading ?? $location.search()["reading_mode"]
+                $scope.isReading = $ctrl.isReading ?? store.reading_mode
                 $scope.hitsPerPage = store.hpp
                 makeRequest()
             }

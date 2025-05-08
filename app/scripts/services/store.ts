@@ -49,6 +49,8 @@ export type Store = {
     prefix: boolean
     /** Randomized number used when sorting hits by random. Stored for reproducible urls. */
     random_seed?: number
+    /** Whether to KWIC with more context */
+    reading_mode: boolean
     /** Search result order */
     sort: QueryParamSort
     /** The current Simple search query as CQP */
@@ -144,6 +146,7 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, { key: "page", val_in: Number })
         utils.setupHash($rootScope, { key: "prefix", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "random_seed", val_in: Number })
+        utils.setupHash($rootScope, { key: "reading_mode", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "sort", default: "" })
         utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "within", default: withinDefault })

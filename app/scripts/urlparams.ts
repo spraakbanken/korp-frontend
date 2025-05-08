@@ -44,7 +44,7 @@ export type HashParams = {
     /** In simple search, match beginning of word */
     prefix?: true
     random_seed?: `${number}`
-    /** Whether the reading mode is enabled */
+    /** Whether to KWIC with more context */
     reading_mode?: boolean
     /** What result tab is active */
     result_tab?: number
