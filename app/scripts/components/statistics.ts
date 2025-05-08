@@ -514,9 +514,7 @@ angular.module("korpApp").component("statistics", {
                     console.log("Warning: more than one selected attribute, choosing first")
                 }
                 const selectedAttribute = selectedAttributes[0]
-
-                const within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
-                const request = requestMapData(cqp, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
+                const request = requestMapData(cqp, cqpExprs, store.within, selectedAttribute, $ctrl.mapRelative)
                 $rootScope.mapTabs.push(request)
             }
 

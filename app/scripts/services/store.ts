@@ -55,6 +55,8 @@ export type Store = {
     statsRelative: boolean
     /** In simple search, match end of word */
     suffix: boolean
+    /** Chunk size to evaluate search query within, e.g. "sentence" or "paragraph" */
+    within?: string
 }
 
 export type FilterData = {
@@ -87,6 +89,8 @@ angular.module("korpApp").factory("store", [
         // They can still be accessed as `$root.lang` etc in templates.
         const rootScopeStore = $rootScope as unknown as Store
 
+        const withinDefault = Object.keys(settings["default_within"] || {})[0]
+
         const initialize = () => {
             rootScopeStore.corpus = []
             rootScopeStore.globalFilterData = {}
@@ -96,6 +100,7 @@ angular.module("korpApp").factory("store", [
             rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
             rootScopeStore.page = 0
             rootScopeStore.sort = ""
+            rootScopeStore.within = withinDefault
         }
 
         // Sync to url
@@ -138,6 +143,7 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, { key: "prefix", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "sort", default: "" })
         utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
+        utils.setupHash($rootScope, { key: "within", default: withinDefault })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {
             utils.setupHash($rootScope, {

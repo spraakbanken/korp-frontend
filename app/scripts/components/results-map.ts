@@ -7,7 +7,6 @@ import { MapTab, RootScope } from "@/root-scope.types"
 import { AppSettings } from "@/settings/app-settings.types"
 import { MapRequestResult } from "@/backend/backend"
 import { MapResult } from "@/map_services"
-import { WithinParameters } from "@/backend/types"
 import { Marker, MarkerEvent, MarkerGroup } from "@/components/result-map"
 import "@/components/korp-error"
 import "@/components/result-map"
@@ -154,7 +153,7 @@ angular.module("korpApp").component("resultsMap", {
                 label: string,
                 cqp: string,
                 corpora: string[],
-                within: WithinParameters,
+                within: string | undefined,
                 res: MapResult,
                 idx: number
             ): Record<string, Marker> {
@@ -196,7 +195,7 @@ angular.module("korpApp").component("resultsMap", {
                     corpus: cl.stringifySelected(),
                     show_struct: _.keys(cl.getStructAttrs()).join(","),
                     expand_prequeries: false,
-                    ...queryData.within,
+                    default_within: queryData.within,
                 }
                 const readingMode = queryData.label === "paragraph__geocontext"
                 $timeout(() => $rootScope.kwicTabs.push({ queryParams: opts, readingMode }), 0)

@@ -27,10 +27,6 @@ export class KwicProxy extends BaseProxy {
         this.resetRequest()
         const abortSignal = this.abortController.signal
 
-        if (!options.within) {
-            _.extend(options, settings.corpusListing.getWithinParameters())
-        }
-
         const command = options.command || "query"
 
         const params: QueryParams = {

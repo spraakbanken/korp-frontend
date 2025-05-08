@@ -198,7 +198,7 @@ angular.module("korpApp").component("simpleSearch", {
                 store.isCaseInsensitive = ctrl.isCaseInsensitive
                 store.prefix = $scope.prefix
                 store.suffix = $scope.suffix
-                $location.search("within", null)
+                store.within = undefined
                 $location.replace()
 
                 if (ctrl.currentText) $location.search("search", `word|${ctrl.currentText}`)

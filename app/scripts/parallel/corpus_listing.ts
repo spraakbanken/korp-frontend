@@ -2,11 +2,10 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { CorpusListing } from "@/corpus_listing"
-import { getUrlHash, locationSearchGet } from "@/util"
+import { getUrlHash } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CorpusParallel } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
-import { WithinParameters } from "@/backend/types"
 
 export class ParallelCorpusListing extends CorpusListing {
     corpora: CorpusTransformed<CorpusParallel>[]
@@ -133,10 +132,8 @@ export class ParallelCorpusListing extends CorpusListing {
         return this.getAttributeQuery("context")
     }
 
-    getWithinParameters(): WithinParameters {
-        const defaultWithin = locationSearchGet("within") || _.keys(settings["default_within"])[0]
-        const within = this.getAttributeQuery("within")
-        return { default_within: defaultWithin, within }
+    getWithinParam(): string {
+        return this.getAttributeQuery("within")
     }
 
     stringifySelected(onlyMain?: boolean): string {

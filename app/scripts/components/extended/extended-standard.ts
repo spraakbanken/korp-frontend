@@ -88,8 +88,6 @@ angular.module("korpApp").component("extendedStandard", {
 
             ctrl.orderError = false
             ctrl.withins = []
-            const defaultWithin = Object.keys(settings.default_within || {})[0]
-            ctrl.within = $location.search().within || defaultWithin
 
             store.watch("in_order", () => ($scope.freeOrder = !store.in_order))
             store.watch("corpus", () => {
@@ -99,6 +97,7 @@ angular.module("korpApp").component("extendedStandard", {
                 }
             })
             store.watch("globalFilter", () => updateExtendedCQP())
+            store.watch("within", () => (ctrl.within = store.within || ctrl.withins[0]))
 
             $scope.$watch("freeOrder", () => {
                 ctrl.validateFreeOrder()
@@ -115,7 +114,7 @@ angular.module("korpApp").component("extendedStandard", {
             function triggerSearch() {
                 store.page = 0
                 store.in_order = !$scope.freeOrder
-                $location.search("within", ctrl.within != defaultWithin ? ctrl.within : undefined)
+                store.within = ctrl.within
                 $location.search("search", "cqp")
                 searches.doSearch()
             }

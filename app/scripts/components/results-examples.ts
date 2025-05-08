@@ -131,6 +131,9 @@ angular.module("korpApp").component("resultsExamples", {
                     avoidContext
                 )
 
+                opts.default_within ??= store.within
+                opts.within = settings.corpusListing.getWithinParam(opts.default_within)
+
                 // Abort any running request
                 if ($ctrl.loading) $scope.proxy.abort()
 

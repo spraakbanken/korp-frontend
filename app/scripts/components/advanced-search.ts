@@ -102,7 +102,7 @@ angular.module("korpApp").component("advancedSearch", {
 
             $ctrl.onSearch = () => {
                 store.page = 0
-                $location.search("within", null)
+                store.within = undefined
                 store.in_order = !$ctrl.freeOrder
                 $location.search("search", `cqp|${$ctrl.cqp}`)
                 matomoSend("trackEvent", "Search", "Submit search", "Advanced")

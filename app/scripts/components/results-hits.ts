@@ -176,10 +176,15 @@ angular.module("korpApp").component("resultsHits", {
                 const cqp = $scope.cqp || $scope.proxy.prevCQP
                 if (!cqp) throw new Error("cqp missing")
 
+                const default_within = store.within
+                const within = settings.corpusListing.getWithinParam(default_within)
+
                 const params: QueryParams = {
                     corpus: settings.corpusListing.stringifySelected(),
                     cqp,
                     in_order: store.in_order,
+                    default_within,
+                    within,
                     query_data: $scope.proxy.queryData,
                     context,
                     default_context: preferredContext,

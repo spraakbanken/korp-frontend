@@ -2,12 +2,10 @@
 import _ from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"
-import { locationSearchGet } from "@/util"
 import { locObj } from "@/i18n"
 import { Attribute } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { LangString } from "./i18n/types"
-import { WithinParameters } from "./backend/types"
 
 export type AttributeOption = Partial<Attribute> & {
     group: "word" | "word_attr" | "sentence_attr"
@@ -232,18 +230,19 @@ export class CorpusListing {
         return _(output).compact().join()
     }
 
-    getWithinParameters(): WithinParameters {
-        const defaultWithin = locationSearchGet("within") || _.keys(settings.default_within)[0]
-
+    /**
+     * Calculate `within` parameters for selected corpora, as a comma-separated list of corpora differing from the
+     * given default.
+     */
+    getWithinParam(defaultWithin?: string): string | undefined {
         const output: string[] = []
         for (let corpus of this.selected) {
             const withins = _.keys(corpus.within)
-            if (!withins.includes(defaultWithin)) {
+            if (!defaultWithin || !withins.includes(defaultWithin)) {
                 output.push(corpus.id.toUpperCase() + ":" + withins[0])
             }
         }
-        const within = _(output).compact().join()
-        return { default_within: defaultWithin, within }
+        return output.join() || undefined
     }
 
     getCommonWithins(): Record<string, string> {
