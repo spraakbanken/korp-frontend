@@ -7,7 +7,6 @@ import { makeDownload } from "@/kwic_download"
 import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
-import { LocationService } from "@/urlparams"
 import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
@@ -287,14 +286,12 @@ angular.module("korpApp").component("kwic", {
     },
     controller: [
         "$element",
-        "$location",
         "$scope",
         "$timeout",
         "searches",
         "store",
         function (
             $element: JQLite,
-            $location: LocationService,
             $scope: KwicScope,
             $timeout: ITimeoutService,
             searches: SearchesService,

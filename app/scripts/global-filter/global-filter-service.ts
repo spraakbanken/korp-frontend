@@ -5,7 +5,6 @@ import angular, { ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import { regescape } from "@/util"
-import { RootScope } from "@/root-scope.types"
 import { countAttrValues } from "@/backend/attr-values"
 import { RecursiveRecord } from "@/backend/types/attr-values"
 import { StoreService } from "@/services/store"
@@ -22,10 +21,9 @@ export type GlobalFilterService = {
  * manages user-selected values.
  */
 angular.module("korpApp").factory("globalFilterService", [
-    "$rootScope",
     "$timeout",
     "store",
-    function ($rootScope: RootScope, $timeout: ITimeoutService, store: StoreService): GlobalFilterService {
+    function ($timeout: ITimeoutService, store: StoreService): GlobalFilterService {
         /** Drilldown of values available for each attr. N-dimensional map where N = number of attrs. */
         let currentData: RecursiveRecord<number> = {}
 
