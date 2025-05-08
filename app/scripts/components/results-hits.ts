@@ -7,7 +7,6 @@ import { ApiKwic } from "@/backend/types"
 import { QueryParams, QueryResponse } from "@/backend/types/query"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
-import { UtilsService } from "@/services/utils"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/kwic"
@@ -37,7 +36,6 @@ type ResultsHitsScope = IScope & {
     page?: number
     pageChange: (page: number) => void
     proxy: KwicProxy
-    randomSeed?: number
     isReading?: boolean
     toggleReading: () => void
 }
@@ -102,11 +100,9 @@ angular.module("korpApp").component("resultsHits", {
                 // only set this on the initial search, not when paging
                 $scope.hitsPerPage = store.hpp
 
-                // reset randomSeed when doing a search, but not for the first request
+                // reset seed when doing a search, but not for the first request
                 if (!$scope.initialSearch) {
-                    $scope.randomSeed = undefined
-                } else {
-                    $scope.randomSeed = Number($location.search()["random_seed"])
+                    store.random_seed = undefined
                 }
                 $scope.initialSearch = false
                 makeRequest(false)
@@ -137,26 +133,6 @@ angular.module("korpApp").component("resultsHits", {
             }
 
             function buildQueryOptions(isPaging?: boolean): QueryParams {
-                function getSortParams() {
-                    const sort = $location.search()["sort"]
-                    if (!sort) {
-                        return {}
-                    }
-                    if (sort === "random") {
-                        if (!isPaging && !$scope.randomSeed) {
-                            $scope.randomSeed = Math.ceil(Math.random() * 10000000)
-                            $location.search("random_seed", $scope.randomSeed)
-                        }
-                        return {
-                            sort,
-                            random_seed: $scope.randomSeed,
-                        }
-                    } else {
-                        $location.search("random_seed", null)
-                    }
-                    return { sort }
-                }
-
                 const start = (store.page || 0) * store.hpp
                 const end = start + store.hpp - 1
 
@@ -188,12 +164,22 @@ angular.module("korpApp").component("resultsHits", {
                     query_data: $scope.proxy.queryData,
                     context,
                     default_context: preferredContext,
+                    sort: store.sort || undefined,
                     start,
                     end,
                     incremental: true,
                 }
 
-                Object.assign(params, getSortParams())
+                if (store.sort == "random") {
+                    // Randomize new seed if new search
+                    if (!isPaging && !store.random_seed) {
+                        store.random_seed = Math.ceil(Math.random() * 10000000)
+                    }
+                    params.random_seed = store.random_seed
+                } else {
+                    store.random_seed = undefined
+                }
+
                 return params
             }
 
