@@ -4,10 +4,10 @@ import angular, { IScope } from "angular"
 
 export type UtilsService = {
     /** Set up sync between a url param and a scope variable. */
-    setupHash: (scope: IScope, config: SetupHashConfigItem) => void
+    setupHash: <K extends keyof HashParams>(scope: IScope, config: SetupHashConfigItem<K>) => void
 }
 
-type SetupHashConfigItem<K extends keyof HashParams = keyof HashParams, T = any> = {
+type SetupHashConfigItem<K extends keyof HashParams, T = any> = {
     /** Name of url param */
     key: K
     /** Name of scope variable; defaults to `key` */
@@ -34,7 +34,7 @@ angular.module("korpApp").factory("utils", [
             const onWatch = () => {
                 let val = $location.search()[config.key]
                 if (val == null) {
-                    if ("default" in config) {
+                    if (config.default != null) {
                         val = config.default
                     } else {
                         if (config.post_change) config.post_change(val)

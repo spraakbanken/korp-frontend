@@ -6,7 +6,7 @@ var collapsedImg = require("../../../img/collapsed.png")
 import { collatorSort, html } from "@/util"
 import "@/components/checkbox-ternary"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { RootScope } from "@/root-scope.types"
+import { StoreService } from "@/services/store"
 
 type CcTreeController = IController & {
     node: ChooserFolder
@@ -93,14 +93,13 @@ angular.module("korpApp").component("ccTree", {
         onShowInfo: "&",
     },
     controller: [
-        "$rootScope",
-        "$scope",
-        function ($rootScope: RootScope) {
+        "store",
+        function (store: StoreService) {
             const $ctrl = this as CcTreeController
 
             $ctrl.$onInit = () => {
                 function sort<T extends ChooserFolderSub | CorpusTransformed>(nodes: T[]) {
-                    return collatorSort(nodes, "title", $rootScope.lang)
+                    return collatorSort(nodes, "title", store.lang)
                 }
                 $ctrl.sortedCorpora = sort($ctrl.node.corpora)
                 $ctrl.sortedFolders = sort($ctrl.node.subFolders)

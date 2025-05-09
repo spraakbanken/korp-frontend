@@ -31,7 +31,7 @@ export class StatsProxy extends BaseProxy {
     async makeRequest(
         cqp: string,
         attrs: string[],
-        options: { ignoreCase?: boolean; onProgress?: ProgressHandler<"count"> } = {}
+        options: { defaultWithin?: string; ignoreCase?: boolean; onProgress?: ProgressHandler<"count"> } = {}
     ): Promise<StatsNormalized> {
         const { ignoreCase, onProgress } = options
         this.resetRequest()
@@ -48,9 +48,9 @@ export class StatsProxy extends BaseProxy {
             attributes[name]?.["is_struct_attr"] && attributes[name]["group_by"] != "group_by"
         const [groupByStruct, groupBy] = _.partition(attrs, isStruct)
 
-        const withinParams = settings.corpusListing.getWithinParameters()
+        let within = settings.corpusListing.getWithinParam(options.defaultWithin)
         // Replace "ABC-aa|ABC-bb:link" with "ABC-aa:link"
-        if (settings.parallel) withinParams.within = withinParams.within?.replace(/\|.*?:/g, ":")
+        if (settings.parallel) within = within?.replace(/\|.*?:/g, ":")
 
         const params: CountParams = {
             group_by: groupBy.join(),
@@ -63,7 +63,8 @@ export class StatsProxy extends BaseProxy {
             split: attrs.filter((name) => attributes[name]?.type == "set").join(),
             // For ranked attributes, only count the top-ranking value in a token.
             top: attrs.filter((name) => attributes[name]?.ranked).join(),
-            ...withinParams,
+            default_within: options.defaultWithin,
+            within,
         }
 
         this.prevParams = params

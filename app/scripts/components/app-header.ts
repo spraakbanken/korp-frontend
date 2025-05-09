@@ -13,9 +13,8 @@ import "@/services/utils"
 import "@/components/corpus-chooser/corpus-chooser"
 import "@/components/radio-list"
 import { matomoSend } from "@/matomo"
-import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
-import { UtilsService } from "@/services/utils"
+import { StoreService } from "@/services/store"
 import { Labeled } from "@/i18n/types"
 import { Config } from "@/settings/config.types"
 
@@ -28,10 +27,6 @@ type HeaderController = IController & {
     menu: Config["modes"]
     modes: Config["modes"]
     visible: Config["modes"]
-}
-
-type HeaderScope = IScope & {
-    lang: string
 }
 
 angular.module("korpApp").component("appHeader", {
@@ -59,7 +54,7 @@ angular.module("korpApp").component("appHeader", {
                 <div class="flex items-center gap-4">
                     <login-status></login-status>
 
-                    <radio-list options="$ctrl.languages" ng-model="lang"> </radio-list>
+                    <radio-list options="$ctrl.languages" ng-model="$root.lang"> </radio-list>
 
                     <a class="transiton duration-200 hover:text-blue-600" ng-click="$ctrl.citeClick()">
                         {{'about_cite_header' | loc:$root.lang}}
@@ -146,23 +141,17 @@ angular.module("korpApp").component("appHeader", {
     `,
     bindings: {},
     controller: [
-        "$location",
         "$uibModal",
         "$rootScope",
-        "$scope",
         "$timeout",
-        "utils",
+        "store",
         function (
-            $location: LocationService,
             $uibModal: ui.bootstrap.IModalService,
             $rootScope: RootScope,
-            $scope: HeaderScope,
             $timeout: ITimeoutService,
-            utils: UtilsService
+            store: StoreService
         ) {
             const $ctrl = this as HeaderController
-
-            $scope.lang = $rootScope.lang
 
             $ctrl.logoClick = function () {
                 const [baseUrl, modeParam, langParam] = $ctrl.getUrlParts(currentMode)
@@ -174,39 +163,22 @@ angular.module("korpApp").component("appHeader", {
 
             $ctrl.languages = settings.languages
 
-            $scope.$watch("lang", (newVal, oldVal) => {
-                // Watcher gets called with `undefined` on init.
-                if (!$scope.lang) return
-                $rootScope["lang"] = $scope.lang
-                // Set url param if different from default.
-                $location.search("lang", $scope.lang !== settings["default_language"] ? $scope.lang : null)
-
-                if (!oldVal) matomoSend("trackEvent", "UI", "Locale init", $scope.lang)
-                else matomoSend("trackEvent", "UI", "Locale switch", $scope.lang)
-            })
-
             $ctrl.citeClick = () => {
-                $rootScope.show_modal = "about"
+                store.display = "about"
             }
-
-            $rootScope.show_modal = false
 
             let modal: ui.bootstrap.IModalInstanceService | null = null
 
-            utils.setupHash($rootScope, {
-                key: "display",
-                scope_name: "show_modal",
-                post_change(val) {
-                    if (val) showAbout()
-                    else {
-                        modal?.close()
-                        modal = null
-                    }
-                },
+            store.watch("display", (val) => {
+                if (val) showAbout()
+                else {
+                    modal?.close()
+                    modal = null
+                }
             })
 
             const closeModals = function () {
-                $rootScope.show_modal = false
+                store.display = undefined
             }
 
             type ModalScope = IScope & {
@@ -243,10 +215,14 @@ angular.module("korpApp").component("appHeader", {
             const modesInMenu = _.remove($ctrl.menu, (item) => item.mode == currentMode)
             $ctrl.visible.push(...modesInMenu)
 
-            $rootScope.$watch("lang", () => {
-                $scope.lang = $rootScope.lang
+            let hasLangChanged = false
+            store.watch("lang", () => {
+                if (!store.lang) return
                 // Re-sort menu but not visible options
-                $ctrl.menu = collatorSort($ctrl.menu, "label", $rootScope.lang)
+                $ctrl.menu = collatorSort($ctrl.menu, "label", store.lang)
+                if (!hasLangChanged) matomoSend("trackEvent", "UI", "Locale init", store.lang)
+                else matomoSend("trackEvent", "UI", "Locale switch", store.lang)
+                hasLangChanged = true
             })
 
             $ctrl.getUrl = function (modeId) {
@@ -254,7 +230,7 @@ angular.module("korpApp").component("appHeader", {
             }
 
             $ctrl.getUrlParts = function (modeId) {
-                const langParam = settings["default_language"] === $rootScope.lang ? "" : `#?lang=${$rootScope.lang}`
+                const langParam = settings["default_language"] === store.lang ? "" : `#?lang=${store.lang}`
                 const modeParam = modeId === "default" ? "" : `?mode=${modeId}`
                 return [location.pathname, modeParam, langParam]
             }

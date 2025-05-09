@@ -3,8 +3,8 @@ import angular from "angular"
 import { pick } from "lodash"
 import { localStorageGet, localStorageSet } from "@/local-storage"
 import { getSearchParamNames, HashParams, LocationService, SearchParams } from "@/urlparams"
-import { RootScope } from "@/root-scope.types"
 import { paramsString } from "@/util"
+import { StoreService } from "./store"
 
 export type SearchHistoryService = {
     getItems: () => SearchParams[]
@@ -17,8 +17,8 @@ export type Listener = () => void
 
 angular.module("korpApp").factory("searchHistory", [
     "$location",
-    "$rootScope",
-    function ($location: LocationService, $rootScope: RootScope): SearchHistoryService {
+    "store",
+    function ($location: LocationService, store: StoreService): SearchHistoryService {
         const listeners: Listener[] = []
 
         const notify = (): void => listeners.forEach((callback) => callback())
@@ -37,7 +37,7 @@ angular.module("korpApp").factory("searchHistory", [
         }
 
         // When a new search is made, capture it from the URL
-        $rootScope.$watch("activeSearch", () => {
+        store.watch("activeSearch", () => {
             service.addItem($location.search())
         })
 

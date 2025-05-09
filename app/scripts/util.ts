@@ -12,6 +12,7 @@ import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { Row } from "./components/kwic"
 import { AbsRelSeq } from "./statistics.types"
+import { StoreService } from "./services/store"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -20,21 +21,6 @@ export const html = String.raw
 export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
     Object.fromEntries(keys.map((key) => [key, getValue(key)]))
 
-/** Create a promise that can be resolved later. */
-export const deferOk = (): DeferredOk => {
-    let resolve: () => void
-    const promise = new Promise<undefined>((res) => {
-        resolve = () => res(undefined)
-    })
-    return { promise, resolve: resolve! }
-}
-
-/** A value-less variant of a Deferred. */
-export type DeferredOk = {
-    promise: Promise<undefined>
-    resolve: () => void
-}
-
 /** Mapping from service names to their TS types. */
 type ServiceTypes = {
     $controller: IControllerService
@@ -42,6 +28,7 @@ type ServiceTypes = {
     $location: LocationService
     $rootScope: RootScope
     $uibModal: ui.bootstrap.IModalService
+    store: StoreService
     // Add types here as needed.
 }
 
@@ -209,11 +196,9 @@ export function formatRelativeHits(x: number | string, lang?: string) {
 /**
  * Format frequency as relative or absolute using chosen mode.
  */
-export function formatFrequency($rootScope: RootScope, absrel: AbsRelSeq) {
+export function formatFrequency(store: StoreService, absrel: AbsRelSeq) {
     const [absolute, relative] = absrel
-    return $rootScope.statsRelative
-        ? formatRelativeHits(relative, $rootScope.lang)
-        : absolute.toLocaleString($rootScope.lang)
+    return store.statsRelative ? formatRelativeHits(relative, store.lang) : absolute.toLocaleString(store.lang)
 }
 
 /**

@@ -3,11 +3,11 @@ import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
 import settings from "@/settings"
-import { LocationService } from "@/urlparams"
 import { ApiKwic } from "@/backend/types"
 import kwicProxyFactory, { KorpQueryRequestOptions, KwicProxy } from "@/backend/kwic-proxy"
 import "@/components/korp-error"
 import "@/components/kwic"
+import { StoreService } from "@/services/store"
 
 type ResultsExamplesController = IController & {
     isActive: boolean
@@ -66,18 +66,18 @@ angular.module("korpApp").component("resultsExamples", {
         setProgress: "<",
     },
     controller: [
-        "$location",
         "$scope",
         "$timeout",
-        function ($location: LocationService, $scope: ResultsExamplesScope, $timeout: ITimeoutService) {
+        "store",
+        function ($scope: ResultsExamplesScope, $timeout: ITimeoutService, store: StoreService) {
             const $ctrl = this as ResultsExamplesController
 
-            $scope.hitsPerPage = Number($location.search()["hpp"] || settings["hits_per_page_default"])
             $scope.proxy = kwicProxyFactory.create()
 
             $ctrl.$onInit = () => {
                 // Context mode can be set when creating the tab. If not, use URL param
-                $scope.isReading = $ctrl.isReading ?? $location.search()["reading_mode"]
+                $scope.isReading = $ctrl.isReading ?? store.reading_mode
+                $scope.hitsPerPage = store.hpp
                 makeRequest()
             }
 
@@ -101,6 +101,7 @@ angular.module("korpApp").component("resultsExamples", {
 
             function makeRequest(): void {
                 const opts = $ctrl.queryParams
+                opts.in_order = store.in_order
 
                 // example tab cannot handle incremental = true
                 opts.incremental = false
@@ -122,6 +123,9 @@ angular.module("korpApp").component("resultsExamples", {
                     preferredContext,
                     avoidContext
                 )
+
+                opts.default_within ??= store.within
+                opts.within = settings.corpusListing.getWithinParam(opts.default_within)
 
                 // Abort any running request
                 if ($ctrl.loading) $scope.proxy.abort()

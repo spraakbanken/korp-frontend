@@ -1,10 +1,10 @@
 /** @format */
 import { mergeCqpExprs, parse, stringify } from "@/cqp_parser/cqp"
 import { RootScope } from "@/root-scope.types"
-import { LocationService } from "@/urlparams"
 import angular from "angular"
 import "@/services/search-history"
 import { splitFirst } from "@/util"
+import { StoreService } from "./store"
 
 /**
  * This service provides a routine for activating a new search.
@@ -16,7 +16,7 @@ export type SearchesService = {
     /** Tell result controllers (kwic/statistics/word picture) to send their requests. */
     kwicSearch: (cqp: string) => void
     /**
-     * Read the `search` and `cqp` URL params and set `$rootScope.activeSearch`.
+     * Read the `search` and `cqp` URL params and set `store.activeSearch`.
      * For extended search: also merge with global filters.
      * For extended/advanced search: also trigger API requests.
      */
@@ -24,34 +24,33 @@ export type SearchesService = {
 }
 
 angular.module("korpApp").factory("searches", [
-    "$location",
     "$rootScope",
-    function ($location: LocationService, $rootScope: RootScope): SearchesService {
+    "store",
+    function ($rootScope: RootScope, store: StoreService): SearchesService {
         const searches: SearchesService = {
             kwicSearch(cqp: string) {
                 $rootScope.$emit("make_request", cqp)
             },
 
             doSearch() {
-                const searchExpr = $location.search().search
-                if (!searchExpr) return
+                if (!store.search) return
 
                 // The value is a string like <type>|<expr>
-                let [type, value] = splitFirst("|", searchExpr)
+                let [type, value] = splitFirst("|", store.search)
 
-                // For Extended search, the CQP is instead in the `cqp` URL param
+                // For Extended search, the CQP is instead in state prop `cqp`
                 if (type === "cqp" && !value) {
-                    value = $location.search().cqp || ""
+                    value = store.cqp
                     // Merge with global filters
                     // (For Simple search, the equivalent is handled in the simple-search component)
-                    if ($rootScope.globalFilter) {
-                        value = stringify(mergeCqpExprs(parse(value || "[]"), $rootScope.globalFilter))
+                    if (store.globalFilter) {
+                        value = stringify(mergeCqpExprs(parse(value || "[]"), store.globalFilter))
                     }
                 }
 
                 // Update stored search query
                 $rootScope.$applyAsync(() => {
-                    $rootScope.activeSearch = { type, val: value }
+                    store.activeSearch = { type, val: value }
                 })
 
                 // Trigger API requests
@@ -63,10 +62,8 @@ angular.module("korpApp").factory("searches", [
         }
 
         // On page load, check for and perform an initial search from URL params.
-        // First wait for initialization of parallel search and global filters.
-        Promise.all([$rootScope.langDef.promise, $rootScope.globalFilterDef.promise]).then(() => {
-            searches.doSearch()
-        })
+        // Wait a tick for initialization of parallel search and global filters.
+        setTimeout(() => searches.doSearch())
 
         return searches
     },

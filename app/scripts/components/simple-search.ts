@@ -19,6 +19,7 @@ import { LexiconsRelatedWords, relatedWordSearch } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
 import { CqpSearchEvent } from "@/statemachine/types"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
+import { StoreService } from "@/services/store"
 
 type SimpleSearchController = IController & {
     input: string
@@ -153,6 +154,7 @@ angular.module("korpApp").component("simpleSearch", {
         "$uibModal",
         "compareSearches",
         "searches",
+        "store",
         function (
             $location: LocationService,
             $rootScope: RootScope,
@@ -160,11 +162,28 @@ angular.module("korpApp").component("simpleSearch", {
             $timeout: ITimeoutService,
             $uibModal: ui.bootstrap.IModalService,
             compareSearches: CompareSearches,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             const ctrl = this as SimpleSearchController
-
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
+            /** Whether tokens should be matched in arbitrary order. */
+            ctrl.freeOrder = false
+            /** Whether the "free order" option is applicable. */
+            ctrl.freeOrderEnabled = false
+
+            store.watch("in_order", () => (ctrl.freeOrder = !store.in_order))
+            store.watch("isCaseInsensitive", () => (ctrl.isCaseInsensitive = store.isCaseInsensitive))
+            store.watch("prefix", () => ($scope.prefix = store.prefix))
+            store.watch("suffix", () => ($scope.suffix = store.suffix))
+
+            // Sync between word part inputs
+            $scope.$watch("prefix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
+            $scope.$watch("suffix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
+            $scope.onMidfixChange = () => {
+                $scope.prefix = $scope.midfix
+                $scope.suffix = $scope.midfix
+            }
 
             statemachine.listen("lemgram_search", (event) =>
                 $timeout(() => {
@@ -174,56 +193,17 @@ angular.module("korpApp").component("simpleSearch", {
                 })
             )
 
-            /** Whether tokens should be matched in arbitrary order. */
-            ctrl.freeOrder = false
-            /** Whether the "free order" option is applicable. */
-            ctrl.freeOrderEnabled = false
-            ctrl.isCaseInsensitive = false
-
-            $scope.prefix = false
-            $scope.midfix = false
-            $scope.suffix = false
-
-            if (settings.input_case_insensitive_default) {
-                $location.search("isCaseInsensitive", "")
-            }
-
-            $scope.$watch("prefix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
-            $scope.$watch("suffix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
-            $scope.onMidfixChange = () => {
-                $scope.prefix = $scope.midfix
-                $scope.suffix = $scope.midfix
-            }
-
-            // React to changes in URL params
-            function watchParam<K extends keyof HashParams>(key: K, callback: (value: HashParams[K]) => void) {
-                $scope.$watch(() => $location.search()[key], callback)
-            }
-
-            watchParam("in_order", (value) => (ctrl.freeOrder = value != null))
-            watchParam("prefix", (value) => ($scope.prefix = value != null))
-            watchParam("suffix", (value) => ($scope.suffix = value != null))
-            watchParam("mid_comp", (value) => {
-                // Deprecated param. Translate to prefix/suffix.
-                if (value != null) {
-                    $location.search("mid_comp", null)
-                    $location.search("prefix", true)
-                    $location.search("suffix", true)
-                }
-            })
-            watchParam("isCaseInsensitive", (value) => (ctrl.isCaseInsensitive = value != null))
-
             ctrl.updateSearch = function () {
-                $location.search("in_order", ctrl.freeOrder && ctrl.freeOrderEnabled ? false : null)
-                $location.search("prefix", $scope.prefix ? true : null)
-                $location.search("suffix", $scope.suffix ? true : null)
-                $location.search("isCaseInsensitive", ctrl.isCaseInsensitive ? true : null)
-                $location.search("within", null)
+                store.in_order = !ctrl.freeOrderEnabled || !ctrl.freeOrder
+                store.isCaseInsensitive = ctrl.isCaseInsensitive
+                store.prefix = $scope.prefix
+                store.suffix = $scope.suffix
+                store.within = undefined
                 $location.replace()
 
-                if (ctrl.currentText) $location.search("search", `word|${ctrl.currentText}`)
-                else if (ctrl.lemgram) $location.search("search", `lemgram|${ctrl.lemgram}`)
-                $location.search("page", null)
+                if (ctrl.currentText) store.search = `word|${ctrl.currentText}`
+                else if (ctrl.lemgram) store.search = `lemgram|${ctrl.lemgram}`
+                store.page = 0
 
                 matomoSend("trackEvent", "Search", "Submit search", "Simple")
                 searches.doSearch()
@@ -258,7 +238,7 @@ angular.module("korpApp").component("simpleSearch", {
                     query.push({ and_block: [conditions] })
                 }
 
-                if ($rootScope.globalFilter) mergeCqpExprs(query, $rootScope.globalFilter)
+                if (store.globalFilter) mergeCqpExprs(query, store.globalFilter)
                 return stringify(query)
             }
 
@@ -318,8 +298,8 @@ angular.module("korpApp").component("simpleSearch", {
                 modalInstance.result.catch(() => {})
             }
 
-            $rootScope.$watch("activeSearch", () => {
-                const search = $rootScope.activeSearch
+            store.watch("activeSearch", () => {
+                const search = store.activeSearch
                 if (!search) return
 
                 if (search.type === "word" || search.type === "lemgram") {
@@ -332,7 +312,7 @@ angular.module("korpApp").component("simpleSearch", {
                         ctrl.isRawInput = false
                         ctrl.onChange(ctrl.input, false)
                     }
-                    $rootScope.simpleCQP = expandOperators(ctrl.getCQP())
+                    store.simpleCqp = expandOperators(ctrl.getCQP())
                     ctrl.updateFreeOrderEnabled()
                     ctrl.doSearch()
                 }
@@ -350,7 +330,7 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             ctrl.doSearch = function () {
-                const search = $rootScope.activeSearch
+                const search = store.activeSearch
                 ctrl.relatedObj = undefined
                 const cqp = ctrl.getCQP()
                 searches.kwicSearch(cqp)

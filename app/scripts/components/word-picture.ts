@@ -5,18 +5,22 @@ import { html, isLemgram, lemgramToHtml, splitLemgram } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDef, WordPictureDefItem } from "@/settings/app-settings.types"
 import { ShowableApiRelation, TableData, TableDrawData } from "@/components/results-word-picture"
-import { ApiRelation } from "@/backend/types/relations"
+import { ApiRelation, RelationsSort } from "@/backend/types/relations"
 import "@/components/help-box"
 
 type WordPictureController = IController & {
     // Bindings
-    limitOptions: number[]
     data: TableDrawData[]
+    onSortChange: (args: { sort: RelationsSort }) => void
+    sort: RelationsSort
     warning?: string
 
     // Locals
     limit: string // Number as string to work with <select ng-model>
+    limitOptions: number[]
     showWordClass: boolean
+    sortLocal: RelationsSort
+    statProp: RelationsSort
     renderResultHeader: (section: TableData[], index: number) => ApiRelation[] | { word: string }
     getHeaderLabel: (header: WordPictureDefItem, section: TableData[], idx: number) => string
     getHeaderClasses: (header: WordPictureDefItem | "_", token: string) => string
@@ -28,10 +32,8 @@ type WordPictureController = IController & {
     getTableClass: (wordClass: string, parentIdx: number, idx: number) => string | undefined
     minimize: (table: ShowableApiRelation[]) => ShowableApiRelation[]
     parseLemgram: (row: ShowableApiRelation) => ParsedLemgram
-    sortProp: RootScope["wordpicSortProp"]
     onClickExample: (row: ShowableApiRelation) => void
 }
-
 type ParsedLemgram = {
     label: string
     pos?: string
@@ -58,7 +60,7 @@ angular.module("korpApp").component("wordPicture", {
                 <div class="flex flex-wrap gap-2">
                     {{'sort_by' | loc:$root.lang}}:
                     <label>
-                        <input type="radio" value="mi" ng-model="$root.wordpicSortProp" />
+                        <input type="radio" value="mi" ng-model="$ctrl.sortLocal" ng-change="$ctrl.changeSort()" />
                         {{'stat_lmi' | loc:$root.lang}}
                         <i
                             class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
@@ -66,7 +68,7 @@ angular.module("korpApp").component("wordPicture", {
                         ></i>
                     </label>
                     <label>
-                        <input type="radio" value="freq" ng-model="$root.wordpicSortProp" />
+                        <input type="radio" value="freq" ng-model="$ctrl.sortLocal" ng-change="$ctrl.changeSort()" />
                         {{'stat_frequency' | loc:$root.lang}}
                     </label>
                 </div>
@@ -119,14 +121,14 @@ angular.module("korpApp").component("wordPicture", {
                                             <span ng-if="!data.label" class="opacity-50">&empty;</span>
                                         </td>
                                         <td
-                                            ng-if="$ctrl.sortProp == 'freq'"
+                                            ng-if="$ctrl.statProp == 'freq'"
                                             title="{{'stat_lmi' | loc:$root.lang}}: {{row.mi | number:2}}"
                                             class="px-1 text-right"
                                         >
                                             {{row.freq}}
                                         </td>
                                         <td
-                                            ng-if="$ctrl.sortProp == 'mi'"
+                                            ng-if="$ctrl.statProp == 'mi'"
                                             title="{{'stat_frequency' | loc:$root.lang}}: {{row.freq}}"
                                             class="px-1 text-right"
                                         >
@@ -148,6 +150,8 @@ angular.module("korpApp").component("wordPicture", {
     `,
     bindings: {
         data: "<",
+        onSortChange: "&",
+        sort: "<",
         warning: "<",
     },
     controller: [
@@ -158,14 +162,10 @@ angular.module("korpApp").component("wordPicture", {
             $ctrl.limitOptions = [...LIMITS]
             $ctrl.limit = String(LIMITS[0])
             $ctrl.showWordClass = false
-            $ctrl.sortProp = $rootScope.wordpicSortProp
 
             $ctrl.$onChanges = (changes) => {
-                // Update local sortProp value after new data is received
                 if ("data" in changes && changes.data.currentValue) {
-                    $ctrl.sortProp = $rootScope.wordpicSortProp
-
-                    // Find options for the limit setting
+                    $ctrl.statProp = $ctrl.sort
                     // Find length of longest column
                     const max = Math.max(
                         ...$ctrl.data.flatMap((word) =>
@@ -180,6 +180,14 @@ angular.module("korpApp").component("wordPicture", {
                     // Clamp previously selected value
                     if (Number($ctrl.limit) > LIMITS[endIndex]) $ctrl.limit = String(LIMITS[endIndex])
                 }
+
+                if ("sort" in changes) {
+                    $ctrl.sortLocal = changes.sort.currentValue
+                }
+            }
+
+            $ctrl.changeSort = () => {
+                $ctrl.onSortChange({ sort: $ctrl.sortLocal })
             }
 
             $ctrl.renderResultHeader = function (section, index) {

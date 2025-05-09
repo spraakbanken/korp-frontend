@@ -7,12 +7,13 @@ import { makeDownload } from "@/kwic_download"
 import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
-import { LocationService, SortMethod } from "@/urlparams"
 import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
 import { SearchesService } from "@/services/searches"
+import { StoreService } from "@/services/store"
+import { QueryParamSort } from "@/backend/types/query"
 
 export type Row = ApiKwic | LinkedKwic | CorpusHeading
 
@@ -81,8 +82,8 @@ type KwicScope = IScope & {
     context: boolean
     updateContext: () => void
     relativeFrequency?: number
-    sort: SortMethod
-    sortOptions: Record<SortMethod, string>
+    sort: QueryParamSort
+    sortOptions: Record<QueryParamSort, string>
     updateSort: () => void
 }
 
@@ -285,16 +286,16 @@ angular.module("korpApp").component("kwic", {
     },
     controller: [
         "$element",
-        "$location",
         "$scope",
         "$timeout",
         "searches",
+        "store",
         function (
             $element: JQLite,
-            $location: LocationService,
             $scope: KwicScope,
             $timeout: ITimeoutService,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             let $ctrl = this as KwicController
 
@@ -305,20 +306,20 @@ angular.module("korpApp").component("kwic", {
                 right: "right_context",
                 random: "random_context",
             }
-            $scope.sort = $location.search().sort || ""
             $scope.hppOptions = settings["hits_per_page_values"].map(String)
-            $scope.hpp = String($location.search().hpp || settings["hits_per_page_default"])
 
             const selectionManager = new SelectionManager()
 
             $ctrl.$onInit = () => {
                 addKeydownHandler()
+                $scope.hpp = String(store.hpp)
+                $scope.sort = store.sort
             }
 
             $ctrl.$onChanges = (changeObj) => {
                 if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
                     $ctrl.kwic = massageData($ctrl.kwicInput)
-                    $ctrl.useContext = $ctrl.context || $location.search()["in_order"] != null
+                    $ctrl.useContext = $ctrl.context || !store.in_order
                     if (!$ctrl.context) {
                         $timeout(() => {
                             centerScrollbar()
@@ -406,28 +407,20 @@ angular.module("korpApp").component("kwic", {
                 }
             }
 
-            $scope.$watch(
-                () => $location.search().hpp,
-                (val) => ($scope.hpp = String(val || settings["hits_per_page_default"]))
-            )
-
-            $scope.$watch(
-                () => $location.search().sort,
-                (val) => ($scope.sort = val || "")
-            )
+            store.watch("hpp", () => ($scope.hpp = String(store.hpp)))
+            store.watch("sort", () => ($scope.sort = store.sort))
 
             $scope.updateContext = _.debounce(() => {
                 if ($scope.context != $ctrl.context) $ctrl.onContextChange()
             }, UPDATE_DELAY)
 
             $scope.updateHpp = () => {
-                const hpp = Number($scope.hpp)
-                $location.search("hpp", hpp !== settings["hits_per_page_default"] ? hpp : null)
+                store.hpp = Number($scope.hpp)
                 debouncedSearch()
             }
 
             $scope.updateSort = () => {
-                $location.search("sort", $scope.sort !== "" ? $scope.sort : null)
+                store.sort = $scope.sort
                 debouncedSearch()
             }
 

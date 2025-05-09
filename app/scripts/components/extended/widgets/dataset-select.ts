@@ -2,9 +2,9 @@
 import _ from "lodash"
 import { locAttribute } from "@/i18n"
 import { selectTemplate, Widget, WidgetScope } from "./common"
-import { RootScope } from "@/root-scope.types"
 import { LocMap } from "@/i18n/types"
 import { Configurable } from "@/settings/config.types"
+import { StoreService } from "@/services/store"
 
 type DatasetSelectOptions = {
     sort?: boolean
@@ -26,16 +26,11 @@ export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (option
     template: selectTemplate,
     controller: [
         "$scope",
-        "$rootScope",
-        function ($scope: DatasetSelectScope, $rootScope: RootScope) {
+        "store",
+        function ($scope: DatasetSelectScope, store: StoreService) {
             let dataset: [string, string][]
             const original = $scope.dataset as Record<string, string> | string[]
 
-            $rootScope.$watch("lang", (newVal, oldVal) => {
-                if (newVal != oldVal) {
-                    initialize()
-                }
-            })
             function initialize() {
                 if (_.isArray(original)) {
                     dataset = _.map(original, (item) => [item, locAttribute($scope.translation, item)])
@@ -50,6 +45,8 @@ export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (option
                 $scope.model = $scope.model || $scope.dataset[0][0]
             }
             initialize()
+
+            store.watch("lang", () => initialize())
         },
     ],
 })
