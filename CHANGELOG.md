@@ -11,11 +11,14 @@
 
 ### Changed
 
-- Most `$rootScope` properties have moved to a new `store` service: `activeSearch`, `extendedCQP`, `globalFilterData`, `globalFilter`, `lang`, `simpleCQP`, `show_modal` (now `display`), `statsRelative`
-  - `globalFilterDef`, `langDef` and `getActiveCqp()` were removed because they are no longer needed
-  - `loc_data` was extracted to `@/loc-data.ts` (use its `getLocData()` or `locData`)
+- A `store` service was introduced to consolidate state management
+  - Most Root Scope properties have moved to it: `activeSearch`, `extendedCQP`, `globalFilterData`, `globalFilter`, `lang`, `simpleCQP`, `show_modal` (now `display`), `statsRelative`
+  - Most other app state properties that were synced to URL parameters have also moved to it: `corpus`, `cqp`, `cqp_<lang>` (as `cqpParallel`), `global_filter`, `hpp`, `isCaseInsensitive`, `mid_comp`, `in_order`, `page`, `parallel_corpora`, `prefix`, `random_seed`, `reading_mode`, `search`, `sort`, `stats_reduce`, `stats_reduce_insensitive`, `suffix`, `within`
   - The `corpuschooserchange` and `initialcorpuschooserchange` events are replaced with `store.watch("corpus", ...)`
   - The store internally uses `$rootScope`, so there's a lot of `$root` usage remaining in HTML templates
+  - `globalFilterDef`, `langDef` and `getActiveCqp()` were removed because they are no longer needed
+  - `loc_data` was extracted to `@/loc-data.ts` (use its `getLocData()` or `locData`)
+  - In `CorpusListing`, `getWithinParameters()` now takes the app-wide value as input and returns only the corpus-specific value.
 
 ### Fixed
 

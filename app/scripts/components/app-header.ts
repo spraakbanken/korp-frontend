@@ -220,12 +220,9 @@ angular.module("korpApp").component("appHeader", {
                 if (!store.lang) return
                 // Re-sort menu but not visible options
                 $ctrl.menu = collatorSort($ctrl.menu, "label", store.lang)
-                if (!hasLangChanged) {
-                    hasLangChanged = true
-                    matomoSend("trackEvent", "UI", "Locale init", store.lang)
-                } else {
-                    matomoSend("trackEvent", "UI", "Locale switch", store.lang)
-                }
+                if (!hasLangChanged) matomoSend("trackEvent", "UI", "Locale init", store.lang)
+                else matomoSend("trackEvent", "UI", "Locale switch", store.lang)
+                hasLangChanged = true
             })
 
             $ctrl.getUrl = function (modeId) {

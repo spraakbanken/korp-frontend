@@ -231,13 +231,13 @@ export class CorpusListing {
     }
 
     /**
-     * Calculate `within` parameters for selected corpora, as a comma-separated list of corpora differing from the
+     * Calculate `within` parameter for selected corpora, as a comma-separated list of corpora differing from the
      * given default.
      */
     getWithinParam(defaultWithin?: string): string | undefined {
         const output: string[] = []
-        for (let corpus of this.selected) {
-            const withins = _.keys(corpus.within)
+        for (const corpus of this.selected) {
+            const withins = Object.keys(corpus.within)
             if (!defaultWithin || !withins.includes(defaultWithin)) {
                 output.push(corpus.id.toUpperCase() + ":" + withins[0])
             }
