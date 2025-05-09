@@ -1,7 +1,6 @@
 /** @format */
 import { mergeCqpExprs, parse, stringify } from "@/cqp_parser/cqp"
 import { RootScope } from "@/root-scope.types"
-import { LocationService } from "@/urlparams"
 import angular from "angular"
 import "@/services/search-history"
 import { splitFirst } from "@/util"
@@ -25,21 +24,19 @@ export type SearchesService = {
 }
 
 angular.module("korpApp").factory("searches", [
-    "$location",
     "$rootScope",
     "store",
-    function ($location: LocationService, $rootScope: RootScope, store: StoreService): SearchesService {
+    function ($rootScope: RootScope, store: StoreService): SearchesService {
         const searches: SearchesService = {
             kwicSearch(cqp: string) {
                 $rootScope.$emit("make_request", cqp)
             },
 
             doSearch() {
-                const searchExpr = $location.search().search
-                if (!searchExpr) return
+                if (!store.search) return
 
                 // The value is a string like <type>|<expr>
-                let [type, value] = splitFirst("|", searchExpr)
+                let [type, value] = splitFirst("|", store.search)
 
                 // For Extended search, the CQP is instead in state prop `cqp`
                 if (type === "cqp" && !value) {

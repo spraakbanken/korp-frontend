@@ -201,8 +201,8 @@ angular.module("korpApp").component("simpleSearch", {
                 store.within = undefined
                 $location.replace()
 
-                if (ctrl.currentText) $location.search("search", `word|${ctrl.currentText}`)
-                else if (ctrl.lemgram) $location.search("search", `lemgram|${ctrl.lemgram}`)
+                if (ctrl.currentText) store.search = `word|${ctrl.currentText}`
+                else if (ctrl.lemgram) store.search = `lemgram|${ctrl.lemgram}`
                 store.page = 0
 
                 matomoSend("trackEvent", "Search", "Submit search", "Simple")

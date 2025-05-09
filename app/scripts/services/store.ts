@@ -55,14 +55,22 @@ export type Store = {
     random_seed?: number
     /** Whether to KWIC with more context */
     reading_mode: boolean
+    /**
+     * Search query for Simple or Advanced search: `<mode>|<query>`
+     * where `mode` can be:
+     *   - "word", for simple word search
+     *   - "lemgram", when using autocomplete in Simple
+     *   - "cqp", for advanced mode (`query` is a CQP expression)
+     */
+    search?: `${string}|${string}` | "cqp"
+    /** The current Simple search query as CQP */
+    simpleCqp?: string
+    /** Search result order */
+    sort: QueryParamSort
     /** Attributes on which to aggregate counts in statistics query */
     stats_reduce: string
     /** Attributes on which to aggregate counts, case-insensitively, in statistics query */
     stats_reduce_insensitive: string
-    /** Search result order */
-    sort: QueryParamSort
-    /** The current Simple search query as CQP */
-    simpleCqp?: string
     /** Whether frequency numbers should be shown as absolute or relative (per million tokens) */
     statsRelative: boolean
     /** In simple search, match end of word */
@@ -165,10 +173,11 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, { key: "prefix", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "random_seed", val_in: Number })
         utils.setupHash($rootScope, { key: "reading_mode", val_out: (x) => !!x || undefined })
+        utils.setupHash($rootScope, { key: "search" })
         utils.setupHash($rootScope, { key: "sort", default: "" })
-        utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "stats_reduce", default: "word" })
         utils.setupHash($rootScope, { key: "stats_reduce_insensitive", default: "" })
+        utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "within", default: withinDefault })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {

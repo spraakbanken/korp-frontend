@@ -115,7 +115,7 @@ angular.module("korpApp").component("extendedStandard", {
                 store.page = 0
                 store.in_order = !$scope.freeOrder
                 store.within = ctrl.within
-                $location.search("search", "cqp")
+                store.search = "cqp"
                 searches.doSearch()
             }
 
