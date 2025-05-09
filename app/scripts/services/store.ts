@@ -45,6 +45,8 @@ export type Store = {
     mid_comp: boolean
     /** Page number of KWIC result */
     page?: number
+    /** In parallel mode, what languages to build a query for */
+    parallel_corpora: string[]
     /** In simple search, match beginning of word */
     prefix: boolean
     /** Randomized number used when sorting hits by random. Stored for reproducible urls. */
@@ -107,10 +109,11 @@ angular.module("korpApp").factory("store", [
             rootScopeStore.in_order = true
             rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
             rootScopeStore.page = 0
+            rootScopeStore.parallel_corpora = []
             rootScopeStore.sort = ""
-            rootScopeStore.within = withinDefault
             rootScopeStore.stats_reduce = "word"
             rootScopeStore.stats_reduce_insensitive = ""
+            rootScopeStore.within = withinDefault
         }
 
         // Sync to url
@@ -150,6 +153,11 @@ angular.module("korpApp").factory("store", [
             },
         })
         utils.setupHash($rootScope, { key: "page", val_in: Number })
+        utils.setupHash($rootScope, {
+            key: "parallel_corpora",
+            val_in: (str) => (str ? str.split(",") : []),
+            val_out: (arr) => arr.join(",") || null,
+        })
         utils.setupHash($rootScope, { key: "prefix", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "random_seed", val_in: Number })
         utils.setupHash($rootScope, { key: "reading_mode", val_out: (x) => !!x || undefined })

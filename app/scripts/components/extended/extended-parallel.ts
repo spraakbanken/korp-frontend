@@ -86,9 +86,9 @@ angular.module("korpApp").component("extendedParallel", {
 
             ctrl.negates = []
 
-            const langs = $location.search().parallel_corpora
-            if (langs) {
-                ctrl.langs = langs.split(",").map((lang) => ({
+            const langs = store.parallel_corpora
+            if (langs.length) {
+                ctrl.langs = langs.map((lang) => ({
                     lang,
                     cqp: $location.search()[`cqp_${lang}`] || "[]",
                 }))
@@ -146,7 +146,7 @@ angular.module("korpApp").component("extendedParallel", {
             ctrl.onLangChange = function () {
                 var currentLangList = _.map(ctrl.langs, "lang")
                 corpusListing.setActiveLangs(currentLangList)
-                $location.search("parallel_corpora", currentLangList.join(","))
+                store.parallel_corpora = currentLangList
             }
 
             ctrl.onSubmit = function () {
