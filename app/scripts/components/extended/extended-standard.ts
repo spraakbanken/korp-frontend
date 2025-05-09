@@ -140,7 +140,7 @@ angular.module("korpApp").component("extendedStandard", {
 
                 ctrl.validateFreeOrder()
 
-                $location.search("cqp", cqp)
+                store.cqp = cqp
             }
 
             ctrl.validateFreeOrder = () => {
@@ -155,7 +155,7 @@ angular.module("korpApp").component("extendedStandard", {
                 }
             }
 
-            ctrl.cqp = $location.search().cqp || ""
+            ctrl.cqp = store.cqp
 
             ctrl.repeatError = false
             ctrl.updateRepeatError = (error) => {

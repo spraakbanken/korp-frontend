@@ -23,6 +23,8 @@ export type Store = {
     }
     /** Selected corpus ids in lowercase */
     corpus: string[]
+    /** CQP query for Extended search, possibly with frontend-specific operators */
+    cqp: string
     /** What modal to show */
     display?: "about"
     /** The current Extended search query as CQP */
@@ -103,6 +105,7 @@ angular.module("korpApp").factory("store", [
 
         const initialize = () => {
             rootScopeStore.corpus = []
+            rootScopeStore.cqp = "[]"
             rootScopeStore.globalFilterData = {}
             rootScopeStore.global_filter = {}
             rootScopeStore.hpp = settings["hits_per_page_default"]
@@ -127,6 +130,7 @@ angular.module("korpApp").factory("store", [
             },
             val_out: (arr) => arr.join(",") || null,
         })
+        utils.setupHash($rootScope, { key: "cqp", default: "[]" })
         utils.setupHash($rootScope, { key: "display" })
         utils.setupHash($rootScope, {
             key: "global_filter",

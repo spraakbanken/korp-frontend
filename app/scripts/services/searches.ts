@@ -41,9 +41,9 @@ angular.module("korpApp").factory("searches", [
                 // The value is a string like <type>|<expr>
                 let [type, value] = splitFirst("|", searchExpr)
 
-                // For Extended search, the CQP is instead in the `cqp` URL param
+                // For Extended search, the CQP is instead in state prop `cqp`
                 if (type === "cqp" && !value) {
-                    value = $location.search().cqp || ""
+                    value = store.cqp
                     // Merge with global filters
                     // (For Simple search, the equivalent is handled in the simple-search component)
                     if (store.globalFilter) {
