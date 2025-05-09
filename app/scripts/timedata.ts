@@ -15,10 +15,10 @@ export let timeData: [[number, number][], number] | undefined
 export const getTimeData: () => Promise<[[number, number][], number] | undefined> = memoize(async () => {
     if (!settings.has_timespan) return undefined
 
-    const data = await korpRequest("timespan", {
-        granularity: "y",
-        corpus: settings.corpusListing.stringifyAll(),
-    })
+    const corpus = settings.corpusListing.stringifyAll()
+    if (!corpus) return undefined
+
+    const data = await korpRequest("timespan", { granularity: "y", corpus })
 
     const rest = data.combined[""] || 0
     delete data.combined[""]
