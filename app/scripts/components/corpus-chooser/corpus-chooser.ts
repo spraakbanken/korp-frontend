@@ -29,7 +29,6 @@ type CorpusChooserController = IController & {
     updateLimitedAccess: () => void
     /** Updates selectCount, selectedNumberOfTokens and selectedNumberOfSentences */
     updateSelectedCount: (ids: string[]) => void
-    initialized: boolean
     showChooser: boolean
     showTimeGraph: boolean
     showInfoBox: boolean
@@ -60,12 +59,12 @@ angular.module("korpApp").component("corpusChooser", {
             ng-click="$ctrl.closeChooser()"
             ng-if="$ctrl.showChooser"
         ></div>
-        <div class="scroll_checkboxes shrink-0" ng-class="{'cursor-pointer': $ctrl.initialized}">
+        <div class="scroll_checkboxes shrink-0 cursor-pointer">
             <div
                 ng-click="$ctrl.onShowChooser()"
                 class="hp_topframe no-underline flex justify-between items-center border border-gray-400 transition-all duration-500 hover:bg-blue-50 rounded h-12"
             >
-                <div ng-if="$ctrl.initialized">
+                <div>
                     <span ng-if-start="$ctrl.selectCount != 1">{{ $ctrl.selectCount }}</span>
                     <span>{{ 'corpselector_of' | loc:$root.lang }}</span>
                     <span>{{ $ctrl.totalCount }}</span>
@@ -81,9 +80,6 @@ angular.module("korpApp").component("corpusChooser", {
                         loc:$root.lang }} {{ $ctrl.suffixedNumbers($ctrl.totalNumberOfTokens, $root.lang) }} {{
                         'corpselector_tokens' | loc:$root.lang }}
                     </span>
-                </div>
-                <div ng-if="!$ctrl.initialized">
-                    <i class="fa-solid fa-spinner fa-pulse"></i>
                 </div>
                 <div class="transition-colors duration-500">
                     <i class="fa-solid fa-caret-up relative top-2"></i>
@@ -134,22 +130,20 @@ angular.module("korpApp").component("corpusChooser", {
         function (store: StoreService) {
             const $ctrl = this as CorpusChooserController
 
-            $ctrl.initialized = false
             $ctrl.showChooser = false
 
             $ctrl.$onInit = () => {
                 $ctrl.credentials = getCredentials()
-                $ctrl.initialized = true
                 // remove the corpora with hide=true (linked corpora)
                 const ccCorpora = _.omitBy(settings.corpora, "hide")
                 $ctrl.root = initCorpusStructure(ccCorpora)
                 $ctrl.totalCount = $ctrl.root.numberOfChildren
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
                 $ctrl.updateLimitedAccess()
-
-                // Sync when corpus selection is modified elsewhere.
-                store.watch("corpus", () => select(store.corpus))
             }
+
+            // Sync when corpus selection is modified elsewhere.
+            store.watch("corpus", () => select(store.corpus))
 
             statemachine.listen("login", function () {
                 $ctrl.credentials = getCredentials()
@@ -175,8 +169,6 @@ angular.module("korpApp").component("corpusChooser", {
             })
 
             $ctrl.onShowChooser = () => {
-                // don't open the chooser unless the info-call is done
-                if (!$ctrl.initialized) return
                 $ctrl.showChooser = !$ctrl.showChooser
             }
 
@@ -223,7 +215,6 @@ angular.module("korpApp").component("corpusChooser", {
             }
 
             function select(corporaIds: string[]) {
-                if (!$ctrl.initialized) return
                 // This modifies corpus.selected
                 const selection = filterCorporaOnCredentials(
                     Object.values(settings.corpora),
