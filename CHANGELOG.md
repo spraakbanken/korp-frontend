@@ -27,6 +27,7 @@
 - Use attribute value without colon-suffix in stats export [#459](https://github.com/spraakbanken/korp-frontend/issues/459)
 - Decimal separator not updated in statistics when changing language [#246](https://github.com/spraakbanken/korp-frontend/issues/246)
 - Empty value "∅" in stats table not clickable [#457](https://github.com/spraakbanken/korp-frontend/issues/457)
+- Update progress indicator when aborting search
 
 ## [9.9.0] - 2025-03-24
 
