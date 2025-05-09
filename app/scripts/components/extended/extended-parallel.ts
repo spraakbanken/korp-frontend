@@ -90,7 +90,7 @@ angular.module("korpApp").component("extendedParallel", {
             if (langs.length) {
                 ctrl.langs = langs.map((lang) => ({
                     lang,
-                    cqp: $location.search()[`cqp_${lang}`] || "[]",
+                    cqp: store.cqpParallel[lang] || "[]",
                 }))
             } else {
                 ctrl.langs = [{ lang: settings.start_lang!, cqp: "[]" }]
@@ -134,11 +134,10 @@ angular.module("korpApp").component("extendedParallel", {
                     return ":LINKED_CORPUS:" + linkedCorpus + " " + neg + " " + expanded
                 }).join("")
 
-                _.each(ctrl.langs, function (langobj, i) {
-                    if (!_.isEmpty(langobj.lang)) {
-                        $location.search(`cqp_${langobj.lang}`, langobj.cqp)
-                    }
-                })
+                store.cqpParallel = {}
+                for (const { lang, cqp } of ctrl.langs) {
+                    if (lang) store.cqpParallel[lang] = cqp
+                }
                 store.extendedCqp = output
                 return output
             }
@@ -192,11 +191,13 @@ angular.module("korpApp").component("extendedParallel", {
             ctrl.addLangRow = function () {
                 ctrl.langs.push({ lang: ctrl.getEnabledLangs()[0], cqp: "[]" })
                 ctrl.onLangChange()
+                onCQPChange()
             }
+
             ctrl.removeLangRow = function () {
-                const lang = ctrl.langs.pop()!
-                $location.search(`cqp_${lang.lang}`, null)
+                ctrl.langs.pop()
                 ctrl.onLangChange()
+                onCQPChange()
             }
         },
     ],

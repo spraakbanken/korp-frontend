@@ -136,7 +136,6 @@ korpApp.run([
         store: StoreService
     ) {
         const s = $rootScope
-        store.initialize()
 
         // Listen to url changes like #?lang=swe
         s.$on("$locationChangeSuccess", () => {

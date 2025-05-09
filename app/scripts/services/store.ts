@@ -8,6 +8,7 @@ import { CqpQuery } from "@/cqp_parser/cqp.types"
 import { getLocData } from "@/loc-data"
 import { getAllCorporaInFolders } from "@/components/corpus-chooser/util"
 import { QueryParamSort } from "@/backend/types/query"
+import { HashParams, LocationService } from "@/urlparams"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.
@@ -25,6 +26,8 @@ export type Store = {
     corpus: string[]
     /** CQP query for Extended search, possibly with frontend-specific operators */
     cqp: string
+    /** CQP query for each selected language in parallel mode; mapped to URL params `cqp_<lang>` */
+    cqpParallel: Record<string, string>
     /** What modal to show */
     display?: "about"
     /** The current Extended search query as CQP */
@@ -88,7 +91,6 @@ export type FilterData = {
 }
 
 export type StoreBase = {
-    initialize: () => void
     get: <K extends keyof Store>(key: K) => Store[K]
     set: <K extends keyof Store>(key: K, value: Store[K]) => void
     watch: <K extends keyof Store>(
@@ -101,9 +103,10 @@ export type StoreBase = {
 export type StoreService = StoreBase & Store
 
 angular.module("korpApp").factory("store", [
+    "$location",
     "$rootScope",
     "utils",
-    ($rootScope: RootScope, utils: UtilsService): StoreService => {
+    ($location: LocationService, $rootScope: RootScope, utils: UtilsService): StoreService => {
         // Use the root scope for storing these variables, but keep their types separate.
         // This alias prevents TypeScript errors when accessing the store properties.
         // They can still be accessed as `$root.lang` etc in templates.
@@ -111,21 +114,21 @@ angular.module("korpApp").factory("store", [
 
         const withinDefault = Object.keys(settings["default_within"] || {})[0]
 
-        const initialize = () => {
-            rootScopeStore.corpus = []
-            rootScopeStore.cqp = "[]"
-            rootScopeStore.globalFilterData = {}
-            rootScopeStore.global_filter = {}
-            rootScopeStore.hpp = settings["hits_per_page_default"]
-            rootScopeStore.in_order = true
-            rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
-            rootScopeStore.page = 0
-            rootScopeStore.parallel_corpora = []
-            rootScopeStore.sort = ""
-            rootScopeStore.stats_reduce = "word"
-            rootScopeStore.stats_reduce_insensitive = ""
-            rootScopeStore.within = withinDefault
-        }
+        // Initialize
+        rootScopeStore.corpus = []
+        rootScopeStore.cqp = "[]"
+        rootScopeStore.cqpParallel = {}
+        rootScopeStore.globalFilterData = {}
+        rootScopeStore.global_filter = {}
+        rootScopeStore.hpp = settings["hits_per_page_default"]
+        rootScopeStore.in_order = true
+        rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
+        rootScopeStore.page = 0
+        rootScopeStore.parallel_corpora = []
+        rootScopeStore.sort = ""
+        rootScopeStore.stats_reduce = "word"
+        rootScopeStore.stats_reduce_insensitive = ""
+        rootScopeStore.within = withinDefault
 
         // Sync to url
         utils.setupHash($rootScope, {
@@ -186,9 +189,29 @@ angular.module("korpApp").factory("store", [
                 default: settings["default_language"],
             })
         })
+        // Sync the cqpParallel property to multiple URL params.
+        // Read URL params only once. We could watch them, but it's not worth it?
+        Object.entries($location.search()).forEach(([key, value]) => {
+            if (key.startsWith("cqp_")) {
+                const lang = key.slice(4)
+                const cqp = value as string
+                rootScopeStore.cqpParallel[lang] = cqp
+            }
+        })
+        $rootScope.$watch(
+            "cqpParallel",
+            (cqpParallel: Record<string, string>) => {
+                // Remove old cqp_ params from the URL
+                ;(Object.entries($location.search()) as [keyof HashParams, unknown][]).forEach(([key, value]) => {
+                    if (key.startsWith("cqp_")) $location.search(key, null)
+                })
+                // Set new cqp_ params
+                Object.entries(cqpParallel).forEach(([lang, cqp]) => $location.search(`cqp_${lang}`, cqp))
+            },
+            true
+        )
 
         const service: StoreBase = {
-            initialize,
             get: (key) => rootScopeStore[key],
             set: (key, value) => (rootScopeStore[key] = value),
             watch: (subject, listener, deep) => $rootScope.$watch(subject, listener, deep),
