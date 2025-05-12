@@ -27,7 +27,7 @@ type CcTreeController = IController & {
 
 angular.module("korpApp").component("ccTree", {
     template: html`
-        <div ng-class="{ 'cc-level-indent' : $ctrl.indent }">
+        <div ng-class="{ 'ml-6' : $ctrl.indent }">
             <div
                 ng-repeat="folder in $ctrl.sortedFolders"
                 class="tree relative"
