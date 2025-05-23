@@ -20,7 +20,7 @@ type DatasetSelectScope = WidgetScope & {
  * Select-element.
  * Use the following settings in the corpus:
  * - dataset: an object or an array of values
- * - escape: boolean, will be used by the escaper-directive
+ * - escape: boolean (true by default), set to false to prevent escaping regexp value
  */
 export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (options) => ({
     template: selectTemplate,

@@ -19,6 +19,7 @@
   - `globalFilterDef`, `langDef` and `getActiveCqp()` were removed because they are no longer needed
   - `loc_data` was extracted to `@/loc-data.ts` (use its `getLocData()` or `locData`)
   - In `CorpusListing`, `getWithinParameters()` now takes the app-wide value as input and returns only the corpus-specific value.
+- The `escaper` directive has been removed; escaping is applied automatically
 
 ### Fixed
 

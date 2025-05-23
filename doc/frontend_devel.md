@@ -621,29 +621,25 @@ In `custom/extended.js`, we can define custom (non-Angular) components to be use
 ```js
 export default {
     complemgramExtended: {
-        template: `<input type="text" ng-model="model" />
-        `,
-        controller: [
-            "$scope", function($scope) {
-                $scope.$watch("input; () => ...)
-                ...
+        template: `<input type="text" ng-model="input" />`,
+        controller: ["$scope", function($scope) {
+            $scope.$watch("input", () => ...)
+            ...
         }],
     },
     attr: {
-        template: `
-            <select ...>
-        `,
+        template: `<select ...>`,
         controller: ["$scope", "$uibModal", function($scope, $uibModal) {
             if($scope.show) $uibModal.open
-        }
+            ...
+        }]
     },
     ...
 }
 ```
 
-Template is an Angular.js template string and controller is an Angular.js controller function.
-
-Make sure to set `$scope.model` as the final result to be used in the CQP-query.
+- `template` is an Angular.js template string and `controller` is an Angular.js controller function.
+- Make sure to write the input value to `$scope.input`, which will automatically be regexp-escaped depending on the selected operator and attribute config.
 
 `complemgramExtended` can then be used as key for `extendedComponent` in the configuration files.
 
@@ -655,13 +651,6 @@ attributes: {
     }
 }
 ```
-
-##### escaper
-
-`escaper` is a directive that takes the user's input and escapes any regexp characters before saving it to `scope.model`. 
-When the model changes it automatically de-escapes any regexp characters before showing the value to the user. 
-Input must be saved to `scope.input` for it to work. Example: `<input ng-model="input" escaper>`
-
 
 ##### Customizing sidebar
 

@@ -3,7 +3,6 @@ import _ from "lodash"
 import settings from "@/settings"
 import { loc, locAttribute } from "@/i18n"
 import { html } from "@/util"
-import "@/directives/escaper"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
 import { getAttrValues } from "@/backend/attr-values"
@@ -35,7 +34,6 @@ export type SelectWidgetScope = WidgetScope & {
 export const selectTemplate = html`<select
         ng-show="!inputOnly"
         ng-model="input"
-        escaper
         ng-options="tuple[0] as tuple[1] for tuple in dataset"
     ></select>
     <input ng-show="inputOnly" type="text" ng-model="input" />`
