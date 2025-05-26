@@ -29,6 +29,31 @@ type HeaderController = IController & {
     visible: Config["modes"]
 }
 
+// Allow overriding logos with site-specific ones specified in the
+// configuration
+
+const korpLogoHtml: string =
+    settings["logo"]?.["korp"] ??
+    html`<img ng-if="$root.lang == 'swe'" src="${korpLogo}" height="300" width="300" />
+        <img ng-if="$root.lang != 'swe'" src="${korpLogoEn}" height="300" width="300" />`
+
+const orgLogoHtml: string =
+    settings["logo"]?.["organization"] ??
+    html`<a
+            class="hidden min-[1150px]:flex h-20 shrink flex-col justify-end"
+            href="https://spraakbanken.gu.se/"
+            target="_blank"
+        >
+            <img ng-if="$root.lang == 'swe'" src="${sbxLogo}" />
+            <img ng-if="$root.lang != 'swe'" src="${sbxLogoEn}" />
+        </a>
+
+        <a class="hidden xl:block shrink-0 h-32 -mt-2" href="https://gu.se/" target="_blank">
+            <img src="${guLogo}" class="h-full" />
+        </a>`
+
+const chooserRightLogoHtml: string = settings["logo"]?.["chooser_right"] ?? ""
+
 angular.module("korpApp").component("appHeader", {
     template: html`
         <div id="header">
@@ -95,10 +120,7 @@ angular.module("korpApp").component("appHeader", {
             </div>
 
             <div class="flex justify-between items-end gap-3 my-3 px-3" id="header_left">
-                <a class="shrink-0 relative ml-4 pl-0.5" ng-click="$ctrl.logoClick()">
-                    <img ng-if="$root.lang == 'swe'" src="${korpLogo}" height="300" width="300" />
-                    <img ng-if="$root.lang != 'swe'" src="${korpLogoEn}" height="300" width="300" />
-                </a>
+                <a class="shrink-0 relative ml-4 pl-0.5" ng-click="$ctrl.logoClick()"> ${korpLogoHtml} </a>
                 <div id="labs_logo">
                     <svg
                         height="60"
@@ -122,20 +144,10 @@ angular.module("korpApp").component("appHeader", {
 
                 <div class="grow min-[1150px]:hidden"></div>
                 <corpus-chooser></corpus-chooser>
+                ${chooserRightLogoHtml}
                 <div class="grow hidden min-[1150px]:block"></div>
 
-                <a
-                    class="hidden min-[1150px]:flex h-20 shrink flex-col justify-end"
-                    href="https://spraakbanken.gu.se/"
-                    target="_blank"
-                >
-                    <img ng-if="$root.lang == 'swe'" src="${sbxLogo}" />
-                    <img ng-if="$root.lang != 'swe'" src="${sbxLogoEn}" />
-                </a>
-
-                <a class="hidden xl:block shrink-0 h-32 -mt-2" href="https://gu.se/" target="_blank">
-                    <img src="${guLogo}" class="h-full" />
-                </a>
+                ${orgLogoHtml}
             </div>
         </div>
     `,

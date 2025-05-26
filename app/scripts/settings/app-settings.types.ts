@@ -47,6 +47,11 @@ export type AppSettings = {
     iso_languages: Record<string, string>
     korp_backend_url: string
     languages: Labeled[]
+    logo?: {
+        korp?: string
+        organization?: string
+        chooser_right?: string
+    }
     map_center?: { lat: number; lng: number; zoom: number }
     map_enabled?: boolean
     markup: Record<string, string>

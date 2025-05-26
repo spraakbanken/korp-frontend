@@ -100,6 +100,11 @@ settings that affect the frontend.
     - value: swe
       label: Svenska
     ```
+- __logo__ - Object. Specify site-specific logos, overriding those of Språkbanken. Default: Use Språkbanken’s logos.
+  - __korp__ - String. HTML content for the Korp logo to the left of the corpus chooser.
+  - __organization__ - String. HTML content for the organization logo(s) on the top right of the Korp window.
+  - __chooser_right__ - String. HTML content for a logo to the right of the corpus chooser: Default: empty.
+  The HTML content can refer to image files in the `app/img/` directory of the configuration as `img/`_file_, and to the [plain Korp logo](../app/img/korp.svg) as `img/korp.svg`.
 
 **Others:**
 

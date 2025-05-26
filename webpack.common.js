@@ -123,6 +123,12 @@ module.exports = {
                     to: "img",
                 },
                 {
+                    // Allow referring to the Korp logo from the
+                    // configuration
+                    from: "app/img/korp.svg",
+                    to: "img",
+                },
+                {
                     from: "app/img/apple-touch-icon.png",
                     to: "img",
                 },
@@ -155,6 +161,12 @@ module.exports = {
                 {
                     from: korpConfigDir + "/translations/*",
                     to: "translations/[name].[fullhash][ext]",
+                },
+                {
+                    // Copy images in the configuration
+                    from: korpConfigDir + "/img/*",
+                    to: "img/[name][ext]",
+                    noErrorOnMissing: true,
                 },
             ],
         }),
