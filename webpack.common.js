@@ -8,20 +8,12 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 // Read .env into process.env
 Dotenv.config()
 
-function getKorpConfigDir() {
-    fs = require("fs")
-    let config = "app"
-    try {
-        json = fs.readFileSync("run_config.json", { encoding: "utf-8" })
-        config = JSON.parse(json).configDir || "app"
-        console.log('Using "' + config + '" as config directory.')
-    } catch (err) {
-        console.log('No run_config.json given, using "app" as config directory (default).')
-    }
-    return config
-}
-
-const korpConfigDir = getKorpConfigDir()
+// Read config dir
+let korpConfigDir = "app"
+try {
+    korpConfigDir = require("./run_config.json").configDir
+    console.log(`Using "${korpConfigDir}" as config directory.`)
+} catch {}
 
 module.exports = {
     resolve: {
