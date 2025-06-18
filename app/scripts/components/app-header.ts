@@ -1,11 +1,7 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService, ui } from "angular"
 import _ from "lodash"
-import korpLogo from "../../img/korp_slogan.svg"
-import korpLogoEn from "../../img/korp_slogan_en.svg"
-import sbxLogo from "../../img/sprakbanken_text_slogan.svg"
-import sbxLogoEn from "../../img/sprakbanken_text_slogan_en.svg"
-import guLogo from "../../img/gu_logo_sv_head.svg"
+import korpLogo from "../../img/korp.svg"
 import settings from "@/settings"
 import currentMode from "@/mode"
 import { collatorSort, html } from "@/util"
@@ -32,26 +28,8 @@ type HeaderController = IController & {
 // Allow overriding logos with site-specific ones specified in the
 // configuration
 
-const korpLogoHtml: string =
-    settings["logo"]?.["korp"] ??
-    html`<img ng-if="$root.lang == 'swe'" src="${korpLogo}" height="300" width="300" />
-        <img ng-if="$root.lang != 'swe'" src="${korpLogoEn}" height="300" width="300" />`
-
-const orgLogoHtml: string =
-    settings["logo"]?.["organization"] ??
-    html`<a
-            class="hidden min-[1150px]:flex h-20 shrink flex-col justify-end"
-            href="https://spraakbanken.gu.se/"
-            target="_blank"
-        >
-            <img ng-if="$root.lang == 'swe'" src="${sbxLogo}" />
-            <img ng-if="$root.lang != 'swe'" src="${sbxLogoEn}" />
-        </a>
-
-        <a class="hidden xl:block shrink-0 h-32 -mt-2" href="https://gu.se/" target="_blank">
-            <img src="${guLogo}" class="h-full" />
-        </a>`
-
+const korpLogoHtml: string = settings["logo"]?.["korp"] ?? html`<img src="${korpLogo}" height="300" width="300" />`
+const orgLogoHtml: string = settings["logo"]?.["organization"] ?? ""
 const chooserRightLogoHtml: string = settings["logo"]?.["chooser_right"] ?? ""
 
 angular.module("korpApp").component("appHeader", {
