@@ -123,12 +123,6 @@ module.exports = {
                     to: "img",
                 },
                 {
-                    // Allow referring to the Korp logo from the
-                    // configuration
-                    from: "app/img/korp.svg",
-                    to: "img",
-                },
-                {
                     from: "app/img/apple-touch-icon.png",
                     to: "img",
                 },
