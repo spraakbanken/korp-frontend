@@ -157,9 +157,10 @@ module.exports = {
                     to: "translations/[name].[fullhash][ext]",
                 },
                 {
-                    // Copy images in the configuration
+                    // Copy images in the configuration, adding a hash
+                    // to avoid over-caching if the image is changed
                     from: korpConfigDir + "/img/*",
-                    to: "img/[name][ext]",
+                    to: "img/[name].[fullhash][ext]",
                     noErrorOnMissing: true,
                 },
             ],

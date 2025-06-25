@@ -25,12 +25,27 @@ type HeaderController = IController & {
     visible: Config["modes"]
 }
 
+// @ts-ignore
+const BUILD_HASH = __webpack_hash__
+
 // Allow overriding logos with site-specific ones specified in the
 // configuration
 
-const korpLogoHtml: string = settings["logo"]?.["korp"] ?? html`<img src="${korpLogo}" height="300" width="300" />`
-const orgLogoHtml: string = settings["logo"]?.["organization"] ?? ""
-const chooserRightLogoHtml: string = settings["logo"]?.["chooser_right"] ?? ""
+// Return htmlStr with quoted references to "img/filename.ext"
+// replaced with "img/filename.BUILD_HASH.ext".
+function addImgHash(htmlStr: string): string {
+    return htmlStr.replace(/(["']img\/[^"']+)(\.[^"'.]+["'])/g, `$1.${BUILD_HASH}$2`)
+}
+
+// Return the logo HTML for key logoKey in the configuration; if not
+// defined, return defaultVal, by default "".
+function getLogo(logoKey: "korp" | "organization" | "chooser_right", defaultVal: string = ""): string {
+    return settings["logo"]?.[logoKey] != undefined ? addImgHash(settings["logo"]?.[logoKey] as string) : defaultVal
+}
+
+const korpLogoHtml: string = getLogo("korp", html`<img src="${korpLogo}" height="300" width="300" />`)
+const orgLogoHtml: string = getLogo("organization")
+const chooserRightLogoHtml: string = getLogo("chooser_right")
 
 angular.module("korpApp").component("appHeader", {
     template: html`
