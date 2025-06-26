@@ -4,7 +4,7 @@ import _ from "lodash"
 import korpLogo from "../../img/korp.svg"
 import settings from "@/settings"
 import currentMode from "@/mode"
-import { collatorSort, html } from "@/util"
+import { addImgHash, collatorSort, html } from "@/util"
 import "@/services/utils"
 import "@/components/corpus-chooser/corpus-chooser"
 import "@/components/radio-list"
@@ -13,6 +13,7 @@ import { RootScope } from "@/root-scope.types"
 import { StoreService } from "@/services/store"
 import { Labeled } from "@/i18n/types"
 import { Config } from "@/settings/config.types"
+import { AppSettings } from "@/settings/app-settings.types"
 
 type HeaderController = IController & {
     citeClick: () => void
@@ -25,25 +26,12 @@ type HeaderController = IController & {
     visible: Config["modes"]
 }
 
-// @ts-ignore
-const BUILD_HASH = __webpack_hash__
+type LogoConfig = Exclude<AppSettings["logo"], undefined>
 
-// Allow overriding logos with site-specific ones specified in the
-// configuration
+/** Return the logo HTML for key logoKey in the configuration; if not defined, return "". */
+const getLogo = (logoKey: keyof LogoConfig): string => addImgHash(settings["logo"]?.[logoKey] || "")
 
-// Return htmlStr with quoted references to "img/filename.ext"
-// replaced with "img/filename.BUILD_HASH.ext".
-function addImgHash(htmlStr: string): string {
-    return htmlStr.replace(/(["']img\/[^"']+)(\.[^"'.]+["'])/g, `$1.${BUILD_HASH}$2`)
-}
-
-// Return the logo HTML for key logoKey in the configuration; if not
-// defined, return defaultVal, by default "".
-function getLogo(logoKey: "korp" | "organization" | "chooser_right", defaultVal: string = ""): string {
-    return settings["logo"]?.[logoKey] != undefined ? addImgHash(settings["logo"]?.[logoKey] as string) : defaultVal
-}
-
-const korpLogoHtml: string = getLogo("korp", html`<img src="${korpLogo}" height="300" width="300" />`)
+const korpLogoHtml: string = getLogo("korp") || html`<img src="${korpLogo}" height="300" width="300" />`
 const orgLogoHtml: string = getLogo("organization")
 const chooserRightLogoHtml: string = getLogo("chooser_right")
 

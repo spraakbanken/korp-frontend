@@ -16,7 +16,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { getLocData } from "@/loc-data"
 import { RootScope } from "@/root-scope.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { formatRelativeHits, getService, html } from "@/util"
+import { BUILD_HASH, formatRelativeHits, getService, html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
 import "@/components/searchtabs"
@@ -29,9 +29,6 @@ import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
-
-// @ts-ignore
-const BUILD_HASH = __webpack_hash__
 
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [

@@ -8,6 +8,7 @@
 - Background color for statistics totals column
 - Configurable limit for statistics API call (alternative to [#73](https://github.com/spraakbanken/korp-frontend/issues/73) and [#92](https://github.com/spraakbanken/korp-frontend/issues/92))
 - Statistics: choose between absolute or relative frequencies [#454](https://github.com/spraakbanken/korp-frontend/issues/454)
+- Specify site-specific logos in configuration [#325](https://github.com/spraakbanken/korp-frontend/issues/325)
 
 ### Changed
 

@@ -17,6 +17,10 @@ import { StoreService } from "./services/store"
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
 
+/** The build hash, added to filenames for some asset files. */
+// @ts-expect-error This magic Webpack variable is undefined, but is replaced at build time
+export const BUILD_HASH = __webpack_hash__
+
 /** Create an object from a list of keys and a function for creating corresponding values. */
 export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
     Object.fromEntries(keys.map((key) => [key, getValue(key)]))
@@ -301,6 +305,11 @@ export function saldoToString(saldoId: string): string {
  */
 function numberToSuperscript(number: string | number): string {
     return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
+}
+
+/** Return htmlStr with quoted references to "img/filename.ext" replaced with "img/filename.BUILD_HASH.ext". */
+export function addImgHash(htmlStr: string): string {
+    return htmlStr.replace(/(["']img\/[^"']+)(\.[^"'.]+["'])/g, `$1.${BUILD_HASH}$2`)
 }
 
 /** Show a basic modal with vanilla JS */

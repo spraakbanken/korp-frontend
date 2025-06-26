@@ -2,9 +2,7 @@
 import memoize from "lodash/memoize"
 import { LangLocMap, LocMap } from "./i18n/types"
 import settings from "./settings"
-
-// @ts-ignore
-const BUILD_HASH = __webpack_hash__
+import { BUILD_HASH } from "./util"
 
 // Using memoize, this will only fetch once and then return the same promise when called again.
 // TODO it would be better only to load additional languages when there is a language change
