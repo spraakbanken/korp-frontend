@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.10.0] - 2025-06-26
+
 ### Added
 
 - KWIC: Show number of hits as relative frequency [#456](https://github.com/spraakbanken/korp-frontend/issues/456)
@@ -449,6 +451,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.10.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.0
 [9.9.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.1
 [9.9.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.0
 [9.8.5]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.5
