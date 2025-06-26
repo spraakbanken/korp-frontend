@@ -84,6 +84,14 @@ a.btn {
   color : #333;
 }
 
+.btn-group {
+  // Bootstrap uses float in btn-group, but we use flex instead because it flows nicer
+  display: inline-flex;
+  .btn {
+    float: none;
+  }
+}
+
 label {
   font-weight : initial;
   margin-bottom : 0;
@@ -94,7 +102,7 @@ sup {
 }
 
 img {
-  border: 0px;
+  border-width: 0;
 }
 
 /* unvisited link */
@@ -543,18 +551,6 @@ table {
   }
 }
 
-.hits_picture {
-  tr {
-    height : 18px;
-  }
-  .odd {
-    background-color : $primaryColor;
-  }
-  .even {
-    background-color : $primaryLight;
-  }
-}
-
 .table_scrollarea + .pager-wrapper {
   margin-top: 15px;
 }
@@ -726,21 +722,6 @@ span.absStat {
   color: #999999;
 }
 
-a {
-  &.absStat {
-    color: #999999;
-    &:hover {
-      color: indianred;
-    }
-  }
-  &.relStat {
-    color: #000000;
-    &:hover {
-      color: indianred;
-    }
-  }
-}
-
 .word_column {
   text-align: left;
 }
@@ -875,18 +856,12 @@ a {
 }
 
 .hits_picture_table {
-  border : 1px solid lightgrey;
-  width: 100%;
-  padding: 0px;
-}
-
-.hits_picture {
-  cursor: pointer;
-  position: absolute;
-  right: 10px;
-  left: 280px;
-  top: -1px;
-  transition: left 400ms ease;
+  td:nth-child(2n+1) { // odd
+    background-color : $primaryColor;
+  }
+  td:nth-child(2n) { // even
+    background-color : $primaryLight;
+  }
 }
 
 .query_arg {
@@ -930,22 +905,9 @@ a {
   white-space: nowrap;
 }
 
-.arcDiagramPicture {
-  cursor: pointer;
-  margin-bottom: -2px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
 .c0 {
   position: relative;
 }
-
-.arcDiagramPicture {
-  position: absolute;
-  right: 0;
-}
-
 
 .lemgram_section {
   display: inline-block;
@@ -1287,24 +1249,8 @@ slider {
 
 }
 
-
-.controls_n {
-  margin-right: 5px;
-  min-width: 125px;
-}
 .pager-wrapper {
   display: inline;
-}
-
-.result_controls {
-  position: relative;
-  > * {
-    display: inline-block;
-    vertical-align: bottom;
-  }
-}
-
-.result_controls, .pager-wrapper {
   margin-bottom: 8px;
 }
 
@@ -1319,11 +1265,6 @@ slider {
     width : 45px;
     text-align: center;
   }
-}
-
-.results-kwic.loading .controls_n {
-  color: darkgrey;
-  font-style: italic;
 }
 
 .arg_value {
@@ -1413,11 +1354,6 @@ slider {
 .graph_tab {
   min-height : 430px;
 }
-.graph_header {
-  .controls {
-    float : left;
-  }
-}
 
 .stats_header {
   margin-bottom : 1em;
@@ -1480,10 +1416,6 @@ slider {
 .form-bar .legend li:last-child:not(:only-child) {
   display : none;
 }
-.form_switch {
-  display: inline-block;
-  vertical-align: bottom;
-}
 
 line.tick {
   display : none;
@@ -1540,22 +1472,20 @@ line.tick {
 }
 
 #myGrid .parameter-column {
-  background-color: rgb(242, 247, 255);
+  background-color: #f1f7ff;
 }
 
 #myGrid .slick-row:hover .parameter-column {
-  background-color: rgb(230, 235, 255);
+  background-color: #e6ebff;
 }
 
-#myGrid .statistics-link {
-    color: navy;
-    cursor: pointer;
+#myGrid .total-column {
+  background-color: #fff8f0;
 }
 
-#myGrid .slick-row:hover .statistics-link {
-    color: indianred;
+#myGrid .slick-row:hover .total-column {
+  background-color: #fff4e5;
 }
-
 
 .ui-widget-header {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
@@ -1977,24 +1907,10 @@ line.tick {
     outline:red 2px solid;
 }
 
-// TODO we should not do this, update boostrap instead?
-.sr-only {
-    display: none;
-}
-
-.cc-level-indent {
-  margin-left: 30px;
-}
-
 #preload {
   display: flex;
   justify-content: center;
   height: 100vh;
-}
-
-.splash {
-  animation: blinker 2s infinite;
-  margin: auto;
 }
 
 // reading mode
@@ -2004,12 +1920,6 @@ line.tick {
   border-radius: 10px;
   padding-left: 3px;
   margin-left: -3px;
-}
-
-@keyframes blinker {
-  from { opacity: 1.0; }
-  50% { opacity: 0.5; }
-  to { opacity: 1.0; }
 }
 
 // Overloading "glyphicon" class with "fa".

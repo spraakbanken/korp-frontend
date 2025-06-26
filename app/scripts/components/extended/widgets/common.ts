@@ -3,12 +3,11 @@ import _ from "lodash"
 import settings from "@/settings"
 import { loc, locAttribute } from "@/i18n"
 import { html } from "@/util"
-import "@/directives/escaper"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
 import { getAttrValues } from "@/backend/attr-values"
-import { RootScope } from "@/root-scope.types"
 import { LocMap } from "@/i18n/types"
+import { StoreService } from "@/services/store"
 
 export type Widget = {
     template: string
@@ -35,16 +34,15 @@ export type SelectWidgetScope = WidgetScope & {
 export const selectTemplate = html`<select
         ng-show="!inputOnly"
         ng-model="input"
-        escaper
         ng-options="tuple[0] as tuple[1] for tuple in dataset"
     ></select>
     <input ng-show="inputOnly" type="text" ng-model="input" />`
 
 export const selectController = (autocomplete: boolean): IController => [
     "$scope",
-    "$rootScope",
-    function ($scope: SelectWidgetScope, $rootScope: RootScope) {
-        $rootScope.$on("corpuschooserchange", function (event, selected: string[]) {
+    "store",
+    function ($scope: SelectWidgetScope, store: StoreService) {
+        store.watch("corpus", (selected) => {
             // TODO Destroy if new corpus selection doesn't support the attribute?
             if (selected.length > 0) {
                 reloadValues()

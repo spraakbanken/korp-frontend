@@ -11,28 +11,19 @@ import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { Row } from "./components/kwic"
+import { AbsRelSeq } from "./statistics.types"
+import { StoreService } from "./services/store"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
 
+/** The build hash, added to filenames for some asset files. */
+// @ts-expect-error This magic Webpack variable is undefined, but is replaced at build time
+export const BUILD_HASH = __webpack_hash__
+
 /** Create an object from a list of keys and a function for creating corresponding values. */
 export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
     Object.fromEntries(keys.map((key) => [key, getValue(key)]))
-
-/** Create a promise that can be resolved later. */
-export const deferOk = (): DeferredOk => {
-    let resolve: () => void
-    const promise = new Promise<undefined>((res) => {
-        resolve = () => res(undefined)
-    })
-    return { promise, resolve: resolve! }
-}
-
-/** A value-less variant of a Deferred. */
-export type DeferredOk = {
-    promise: Promise<undefined>
-    resolve: () => void
-}
 
 /** Mapping from service names to their TS types. */
 type ServiceTypes = {
@@ -41,6 +32,7 @@ type ServiceTypes = {
     $location: LocationService
     $rootScope: RootScope
     $uibModal: ui.bootstrap.IModalService
+    store: StoreService
     // Add types here as needed.
 }
 
@@ -206,19 +198,11 @@ export function formatRelativeHits(x: number | string, lang?: string) {
 }
 
 /**
- * Format as `<relative> (<absolute>)` plus surrounding HTML.
- * @param absrel Tuple with numbers of 0) absolute hits and 1) relative hits (hits per 1 million tokens)
- * @param lang The locale to use.
- * @returns A HTML snippet.
+ * Format frequency as relative or absolute using chosen mode.
  */
-export function hitCountHtml(absrel: [number, number], lang?: string) {
-    lang = lang || getLang()
+export function formatFrequency(store: StoreService, absrel: AbsRelSeq) {
     const [absolute, relative] = absrel
-    const relativeHtml = `<span class='relStat'>${formatRelativeHits(relative, lang)}</span>`
-    // TODO Remove outer span?
-    // TODO Flexbox?
-    const absoluteHtml = `<span class='absStat'>(${absolute.toLocaleString(lang)})</span>`
-    return `<span>${relativeHtml} ${absoluteHtml}</span>`
+    return store.statsRelative ? formatRelativeHits(relative, store.lang) : absolute.toLocaleString(store.lang)
 }
 
 /**
@@ -321,6 +305,11 @@ export function saldoToString(saldoId: string): string {
  */
 function numberToSuperscript(number: string | number): string {
     return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
+}
+
+/** Return htmlStr with quoted references to "img/filename.ext" replaced with "img/filename.BUILD_HASH.ext". */
+export function addImgHash(htmlStr: string): string {
+    return htmlStr.replace(/(["']img\/[^"']+)(\.[^"'.]+["'])/g, `$1.${BUILD_HASH}$2`)
 }
 
 /** Show a basic modal with vanilla JS */

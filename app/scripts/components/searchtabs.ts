@@ -16,6 +16,7 @@ import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { CompareSearches } from "@/services/compare-searches"
 import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
+import { StoreService } from "@/services/store"
 
 type SearchtabsController = IController & {
     parallelMode: boolean
@@ -58,25 +59,20 @@ angular.module("korpApp").component("searchtabs", {
         </div>
     `,
     controller: [
-        "$rootScope",
         "compareSearches",
-        function ($rootScope: RootScope, compareSearches: CompareSearches) {
+        "store",
+        function (compareSearches: CompareSearches, store: StoreService) {
             const $ctrl = this as SearchtabsController
 
             $ctrl.parallelMode = !!settings.parallel
             if ($ctrl.parallelMode) {
-                // resolve globalFilterDef since globalFilter-directive is not used
-                $rootScope.globalFilterDef.resolve()
                 const corpusListing = settings.corpusListing as ParallelCorpusListing
                 corpusListing.setActiveLangs([settings.start_lang!])
-            } else {
-                // only used in parallel mode
-                $rootScope.langDef.resolve()
             }
 
             $ctrl.savedSearches = compareSearches.savedSearches
 
-            $rootScope.$on("corpuschooserchange", function (event, selected) {
+            store.watch("corpus", (selected) => {
                 $ctrl.noCorporaSelected = !selected.length
             })
         },

@@ -1,6 +1,7 @@
 /** @format */
 
 import { ILocationService } from "angular"
+import { QueryParamSort } from "./backend/types/query"
 
 /** Extends the Angular Location service to assign types for supported URL hash params. */
 export type LocationService = Omit<ILocationService, "search"> & {
@@ -43,7 +44,7 @@ export type HashParams = {
     /** In simple search, match beginning of word */
     prefix?: true
     random_seed?: `${number}`
-    /** Whether the reading mode is enabled */
+    /** Whether to KWIC with more context */
     reading_mode?: boolean
     /** What result tab is active */
     result_tab?: number
@@ -58,7 +59,7 @@ export type HashParams = {
     /** Current search mode */
     search_tab?: number
     /** Search result order */
-    sort?: SortMethod
+    sort?: QueryParamSort
     /** Attributes on which to aggregate counts in statistics query */
     stats_reduce?: string
     /** Attributes on which to aggregate counts, case-insensitively, in statistics query */
@@ -68,8 +69,6 @@ export type HashParams = {
     /** Chunk size to evaluate search query within, e.g. "sentence" or "paragraph" */
     within?: string
 }
-
-export type SortMethod = "" | "keyword" | "left" | "right" | "random"
 
 export type SearchParams = Pick<HashParams, SearchParamNames>
 

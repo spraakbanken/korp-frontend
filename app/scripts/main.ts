@@ -16,7 +16,7 @@ const createSplashScreen = () => {
         console.error("preload element missing")
         return
     }
-    splash.innerHTML = html`<img class="splash" height="300" width="300" src="${korpLogo}" />`
+    splash.innerHTML = html`<img class="animate-pulse" height="300" width="300" src="${korpLogo}" />`
 }
 
 function initApp() {

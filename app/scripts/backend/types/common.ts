@@ -63,11 +63,6 @@ export type Histogram = {
     ""?: number
 }
 
-export type WithinParameters = {
-    default_within: string
-    within: string
-}
-
 /** Search hit */
 export type ApiKwic = {
     corpus: string

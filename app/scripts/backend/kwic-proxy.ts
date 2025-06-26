@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
-import { locationSearchGet, Factory } from "@/util"
+import { Factory } from "@/util"
 import { ProgressReport } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
 import { korpRequest } from "./common"
@@ -21,31 +21,16 @@ export class KwicProxy extends BaseProxy {
 
     async makeRequest(
         options: KorpQueryRequestOptions,
-        page?: number,
         progressCallback?: (data: ProgressReport<"query">) => void,
         kwicCallback?: (data: QueryResponse) => void
     ): Promise<QueryResponse> {
         this.resetRequest()
         const abortSignal = this.abortController.signal
 
-        if (!options.within) {
-            _.extend(options, settings.corpusListing.getWithinParameters())
-        }
-
-        /** Calculate start and end from page and hpp. Only works for main hits. Examples must provide start and end in param. */
-        function getPageInterval(): { start: number; end: number } {
-            const hpp = locationSearchGet("hpp")
-            const itemsPerPage = Number(hpp) || settings.hits_per_page_default
-            const start = (page || 0) * itemsPerPage
-            const end = start + itemsPerPage - 1
-            return { start, end }
-        }
-
         const command = options.command || "query"
 
         const params: QueryParams = {
             default_context: settings.default_overview_context,
-            ...getPageInterval(),
             ...options,
         }
 
@@ -81,10 +66,6 @@ export class KwicProxy extends BaseProxy {
 
         params.show = _.uniq(["sentence"].concat(show)).join(",")
         params.show_struct = _.uniq(show_struct).join(",")
-
-        if (locationSearchGet("in_order") != null) {
-            params.in_order = false
-        }
 
         this.prevParams = params
 

@@ -7,7 +7,7 @@ import { locObj } from "@/i18n"
 import { LangString } from "@/i18n/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { ChooserFolderSub } from "./util"
-import { RootScope } from "@/root-scope.types"
+import { StoreService } from "@/services/store"
 
 type CcInfoBoxController = IController & {
     object: ChooserFolderSub | CorpusTransformed
@@ -67,8 +67,8 @@ angular.module("korpApp").component("ccInfoBox", {
         object: "<",
     },
     controller: [
-        "$rootScope",
-        function ($rootScope: RootScope) {
+        "store",
+        function (store: StoreService) {
             let $ctrl = this as CcInfoBoxController
 
             const isFolder = (object: ChooserFolderSub | CorpusTransformed): object is ChooserFolderSub =>
@@ -115,8 +115,8 @@ angular.module("korpApp").component("ccInfoBox", {
             /** Create data for corpus link. */
             function makeLink() {
                 if (!settings["corpus_info_link"]) return
-                const urlTemplate = locObj(settings["corpus_info_link"]["url_template"], $rootScope.lang)
-                const label = locObj(settings["corpus_info_link"]["label"], $rootScope.lang)
+                const urlTemplate = locObj(settings["corpus_info_link"]["url_template"], store.lang)
+                const label = locObj(settings["corpus_info_link"]["label"], store.lang)
                 if (!urlTemplate || !label) {
                     console.error(`Invalid setting "corpus_info_link"`, settings["corpus_info_link"])
                     return

@@ -10,6 +10,8 @@ import { html } from "@/util"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/statistics"
+import { statisticsService } from "@/statistics"
+import { StoreService } from "@/services/store"
 
 type ResultsStatisticsController = IController & {
     isActive: boolean
@@ -19,7 +21,10 @@ type ResultsStatisticsController = IController & {
 
 type ResultsStatisticsScope = IScope & {
     aborted: boolean
+    rowCount: number
     columns: SlickgridColumn[]
+    /** Last submitted cqp */
+    cqp: string
     data: Dataset
     error?: string
     proxy: StatsProxy
@@ -42,6 +47,7 @@ angular.module("korpApp").component("resultsStatistics", {
             error="error"
             loading="$ctrl.loading"
             prev-params="proxy.prevParams"
+            row-count="rowCount"
             search-params="searchParams"
             warning="warning"
         ></statistics>
@@ -57,11 +63,13 @@ angular.module("korpApp").component("resultsStatistics", {
         "$location",
         "$rootScope",
         "$timeout",
+        "store",
         function (
             $scope: ResultsStatisticsScope,
             $location: LocationService,
             $rootScope: RootScope,
-            $timeout: ITimeoutService
+            $timeout: ITimeoutService,
+            store: StoreService
         ) {
             const $ctrl = this as ResultsStatisticsController
             const s = $scope
@@ -69,7 +77,8 @@ angular.module("korpApp").component("resultsStatistics", {
             s.proxy = statsProxyFactory.create()
 
             $rootScope.$on("make_request", (event, cqp: string) => {
-                s.makeRequest(cqp)
+                $scope.cqp = cqp
+                s.makeRequest($scope.cqp)
             })
 
             s.$on("abort_requests", () => {
@@ -83,11 +92,8 @@ angular.module("korpApp").component("resultsStatistics", {
             $ctrl.$onChanges = (changes) => {
                 if (changes.isActive?.currentValue) {
                     // Enable statistics when first opening tab
-                    if (!s.showStatistics) {
-                        s.showStatistics = true
-                        const cqp = $rootScope.getActiveCqp()
-                        if (cqp) s.makeRequest(cqp)
-                    }
+                    s.showStatistics = true
+                    if ($scope.cqp) s.makeRequest($scope.cqp)
 
                     // workaround for bug in slickgrid
                     // slickgrid should add this automatically, but doesn't
@@ -116,8 +122,7 @@ angular.module("korpApp").component("resultsStatistics", {
                 if ($ctrl.loading) s.proxy.abort()
                 s.resetView()
 
-                const inOrder = $location.search().in_order == null
-                if (!inOrder) {
+                if (!store.in_order) {
                     s.warning = "stats_not_in_order_warn"
                     return
                 }
@@ -130,18 +135,35 @@ angular.module("korpApp").component("resultsStatistics", {
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 
+                const attrs = (store.stats_reduce || "word").split(",")
+                const ignoreCase = !!store.stats_reduce_insensitive
+                // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
+                const corpora: string = settings.corpusListing.stringifySelected(false)
+
                 $ctrl.setProgress(true, 0)
                 s.proxy
-                    .makeRequest(cqp, (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
-                    .then((result) =>
+                    .makeRequest(cqp, attrs, {
+                        defaultWithin: store.within,
+                        ignoreCase,
+                        onProgress: (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)),
+                    })
+                    .then(async (data) => {
+                        const { rows, columns, params } = await statisticsService.processData(
+                            store,
+                            corpora,
+                            data,
+                            attrs,
+                            ignoreCase,
+                            cqp
+                        )
                         $timeout(() => {
-                            const [data, columns, searchParams] = result
                             $ctrl.setProgress(false, 0)
-                            s.data = data
-                            s.searchParams = searchParams
-                            s.renderResult(columns, data)
+                            s.data = rows
+                            s.searchParams = params
+                            s.rowCount = data.count
+                            s.renderResult(columns, rows)
                         })
-                    )
+                    })
                     .catch((error) => {
                         // AbortError is expected if a new search is made before the previous one is finished
                         if (error.name == "AbortError") return

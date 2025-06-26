@@ -19,7 +19,6 @@ export const defaultWidget: DefaultWidget = {
         <input
             ng-model="input"
             class="arg_value"
-            escaper
             ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
             placeholder="${placeholder}"
         />

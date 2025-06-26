@@ -326,7 +326,7 @@ angular.module("korpApp").component("sidebar", {
 
                 output.data("attrs", attrs)
                 if (value === "|" || value === "" || value === null) {
-                    output.append(`<i rel='localize[empty]' style='color : grey'>${loc("empty")}</i>`)
+                    output.append(`<em style='color : grey'>${loc("empty")}</em>`)
                     return output
                 }
 

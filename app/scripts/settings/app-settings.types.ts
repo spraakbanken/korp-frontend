@@ -40,12 +40,18 @@ export type AppSettings = {
     has_timespan: boolean
     hits_per_page_values: number[]
     hits_per_page_default: number
+    /** Implement this to do customized async initialization. Return true to skip standard initialization afterwards. */
     initialization_checks?: (rootScope: RootScope) => Promise<boolean>
     input_case_insensitive_default?: boolean
     /** codes for translation ISO-639-1 to 639-2 */
     iso_languages: Record<string, string>
     korp_backend_url: string
     languages: Labeled[]
+    logo?: {
+        korp?: string
+        organization?: string
+        chooser_right?: string
+    }
     map_center?: { lat: number; lng: number; zoom: number }
     map_enabled?: boolean
     markup: Record<string, string>
@@ -61,6 +67,7 @@ export type AppSettings = {
     reduce_struct_attribute_selector: "union" | "intersection"
     statistics?: boolean
     statistics_case_insensitive_default?: boolean
+    statistics_limit?: number
     urnResolver?: string
     visible_modes: number
     word_label: Record<string, string>

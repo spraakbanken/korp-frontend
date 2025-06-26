@@ -1,46 +1,16 @@
 /** @format */
 import _ from "lodash"
-import memoize from "lodash/memoize"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
 import { fromKeys } from "@/util"
-import { Labeled, LangLocMap, LocMap } from "./i18n/types"
+import { Labeled } from "./i18n/types"
 import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
 import { korpRequest } from "./backend/common"
-
-// @ts-ignore
-const BUILD_HASH = __webpack_hash__
-
-// Using memoize, this will only fetch once and then return the same promise when called again.
-// TODO it would be better only to load additional languages when there is a language change
-export const initLocales = memoize(async () => {
-    const locData: LangLocMap = {}
-    const defs: Promise<void>[] = []
-    for (const langObj of settings.languages) {
-        const lang = langObj.value
-        locData[lang] = {}
-        for (const pkg of ["locale", "corpora"]) {
-            const file = `translations/${pkg}-${lang}.${BUILD_HASH}.json`
-            const def = fetch(file)
-                .then(async (response) => {
-                    if (response.status >= 300) throw new Error()
-                    const data = (await response.json()) as LocMap
-                    Object.assign(locData[lang], data)
-                })
-                .catch(() => {
-                    console.log("No language file: ", file)
-                })
-            defs.push(def)
-        }
-    }
-
-    await Promise.all(defs)
-    return locData
-})
+import { getLocData } from "./loc-data"
 
 type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_attributes">>
 
@@ -189,8 +159,8 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
         return
     }
 
-    // Start fetching locales asap. Await and read it later, in the Angular context.
-    initLocales()
+    // Start fetching translation strings.
+    getLocData()
 
     if (settings.config_dependent_on_authentication) {
         await authDef
@@ -208,7 +178,6 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     // only if the current mode is parallel, we load the special code required
     if (config.parallel) {
         require("./parallel/corpus_listing")
-        require("./parallel/stats_proxy")
     }
 
     if (!settings.parallel) {

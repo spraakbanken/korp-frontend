@@ -7,12 +7,13 @@ import { makeDownload } from "@/kwic_download"
 import { SelectionManager, html, setDownloadLinks } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
-import { LocationService, SortMethod } from "@/urlparams"
 import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
 import { SearchesService } from "@/services/searches"
+import { StoreService } from "@/services/store"
+import { QueryParamSort } from "@/backend/types/query"
 
 export type Row = ApiKwic | LinkedKwic | CorpusHeading
 
@@ -80,8 +81,9 @@ type KwicScope = IScope & {
     updateHpp: () => void
     context: boolean
     updateContext: () => void
-    sort: SortMethod
-    sortOptions: Record<SortMethod, string>
+    relativeFrequency?: number
+    sort: QueryParamSort
+    sortOptions: Record<QueryParamSort, string>
     updateSort: () => void
 }
 
@@ -126,29 +128,35 @@ angular.module("korpApp").component("kwic", {
         <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">{{'search_aborted' | loc:$root.lang}}</div>
 
         <div ng-if="!$ctrl.aborted || $ctrl.loading" ng-click="$ctrl.onKwicClick($event)">
-            <div class="result_controls">
-                <div class="controls_n" ng-if="$ctrl.hitsInProgress != null">
-                    <span>{{'num_results' | loc:$root.lang}}: </span>
-                    <span class="num-result">{{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}</span>
+            <div class="flex gap-8 pb-2" ng-class="{'opacity-50 italic': $ctrl.loading}">
+                <div ng-if="$ctrl.hitsInProgress != null">
+                    {{'num_results' | loc:$root.lang}}: {{ $ctrl.hitsInProgress | prettyNumber:$root.lang }}
                 </div>
-                <div class="hits_picture" ng-if="$ctrl.hitsPictureData.length > 1">
-                    <table class="hits_picture_table">
-                        <tbody>
-                            <tr>
-                                <td
-                                    class="hits_picture_corp"
-                                    ng-repeat="corpus in $ctrl.hitsPictureData"
-                                    ng-style='{width : corpus.relative + "%"}'
-                                    ng-class="{odd : $index % 2 != 0, even : $index % 2 == 0}"
-                                    ng-click="$ctrl.pageEvent(corpus.page)"
-                                    uib-tooltip="{{corpus.rtitle | locObj:$root.lang}}: {{corpus.abs}}"
-                                    tooltip-placement='{{$last? "left":"top"}}'
-                                    append-to-body="false"
-                                ></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div ng-if="relativeFrequency != null">
+                    {{'num_results_relative' | loc:$root.lang}}: {{ relativeFrequency | formatRelativeHits:$root.lang }}
+                    <i
+                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                        uib-tooltip="{{'relative_help' | loc:$root.lang}}"
+                    ></i>
                 </div>
+                <table
+                    ng-if="$ctrl.hitsPictureData.length > 1"
+                    class="hits_picture_table flex-1 h-5 border m-0 p-0 cursor-pointer"
+                >
+                    <tbody>
+                        <tr>
+                            <td
+                                class="hits_picture_corp"
+                                ng-repeat="corpus in $ctrl.hitsPictureData"
+                                ng-style='{width : corpus.relative + "%"}'
+                                ng-click="$ctrl.pageEvent(corpus.page)"
+                                uib-tooltip="{{corpus.rtitle | locObj:$root.lang}}: {{corpus.abs}}"
+                                tooltip-placement='{{$last? "left":"top"}}'
+                                append-to-body="false"
+                            ></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <kwic-pager
                 ng-if="$ctrl.hits"
@@ -278,16 +286,16 @@ angular.module("korpApp").component("kwic", {
     },
     controller: [
         "$element",
-        "$location",
         "$scope",
         "$timeout",
         "searches",
+        "store",
         function (
             $element: JQLite,
-            $location: LocationService,
             $scope: KwicScope,
             $timeout: ITimeoutService,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             let $ctrl = this as KwicController
 
@@ -298,20 +306,20 @@ angular.module("korpApp").component("kwic", {
                 right: "right_context",
                 random: "random_context",
             }
-            $scope.sort = $location.search().sort || ""
             $scope.hppOptions = settings["hits_per_page_values"].map(String)
-            $scope.hpp = String($location.search().hpp || settings["hits_per_page_default"])
 
             const selectionManager = new SelectionManager()
 
             $ctrl.$onInit = () => {
                 addKeydownHandler()
+                $scope.hpp = String(store.hpp)
+                $scope.sort = store.sort
             }
 
             $ctrl.$onChanges = (changeObj) => {
                 if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
                     $ctrl.kwic = massageData($ctrl.kwicInput)
-                    $ctrl.useContext = $ctrl.context || $location.search()["in_order"] != null
+                    $ctrl.useContext = $ctrl.context || !store.in_order
                     if (!$ctrl.context) {
                         $timeout(() => {
                             centerScrollbar()
@@ -334,6 +342,13 @@ angular.module("korpApp").component("kwic", {
                         selectionManager.deselect()
                         statemachine.send("DESELECT_WORD")
                     }
+                }
+
+                if ("hitsInProgress" in changeObj) {
+                    const totalTokens = settings.corpusListing
+                        .mapSelectedCorpora((corpus) => corpus.tokens || 0)
+                        .reduce((sum, t) => sum + t, 0)
+                    $scope.relativeFrequency = totalTokens ? ($ctrl.hitsInProgress / totalTokens) * 1e6 : undefined
                 }
 
                 if ("corpusHits" in changeObj && $ctrl.corpusHits) {
@@ -392,28 +407,20 @@ angular.module("korpApp").component("kwic", {
                 }
             }
 
-            $scope.$watch(
-                () => $location.search().hpp,
-                (val) => ($scope.hpp = String(val || settings["hits_per_page_default"]))
-            )
-
-            $scope.$watch(
-                () => $location.search().sort,
-                (val) => ($scope.sort = val || "")
-            )
+            store.watch("hpp", () => ($scope.hpp = String(store.hpp)))
+            store.watch("sort", () => ($scope.sort = store.sort))
 
             $scope.updateContext = _.debounce(() => {
                 if ($scope.context != $ctrl.context) $ctrl.onContextChange()
             }, UPDATE_DELAY)
 
             $scope.updateHpp = () => {
-                const hpp = Number($scope.hpp)
-                $location.search("hpp", hpp !== settings["hits_per_page_default"] ? hpp : null)
+                store.hpp = Number($scope.hpp)
                 debouncedSearch()
             }
 
             $scope.updateSort = () => {
-                $location.search("sort", $scope.sort !== "" ? $scope.sort : null)
+                store.sort = $scope.sort
                 debouncedSearch()
             }
 

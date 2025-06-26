@@ -1,9 +1,8 @@
 /** @format */
-import _ from "lodash"
 import settings from "@/settings"
-import { lemgramToHtml, regescape, saldoToHtml } from "@/util"
+import { lemgramToHtml, regescape, saldoToHtml, splitFirst } from "@/util"
 import { locAttribute } from "@/i18n"
-import { Attribute } from "@/settings/config.types"
+import { CorpusListing } from "@/corpus_listing"
 
 type Stringifier = (tokens: string[], ignoreCase?: boolean) => string
 
@@ -17,143 +16,75 @@ try {
 
 export function getCqp(hitValues: Record<string, string[]>[], ignoreCase: boolean): string {
     const positionalAttributes = ["word", ...Object.keys(settings.corpusListing.getCurrentAttributes())]
-    let hasPositionalAttributes = false
 
-    var tokens: string[] = []
-    for (var i = 0; i < hitValues.length; i++) {
-        var token = hitValues[i]
-        var andExpr: string[] = []
-        for (var attribute in token) {
-            if (token.hasOwnProperty(attribute)) {
-                var values = token[attribute]
-                andExpr.push(reduceCqp(attribute, values, ignoreCase))
-            }
-
-            // Flag if any of the attributes is positional
-            if (positionalAttributes.includes(attribute)) hasPositionalAttributes = true
-        }
-        tokens.push("[" + andExpr.join(" & ") + "]")
-    }
+    const tokens = hitValues
+        .map((token) => Object.entries(token).map(([attr, values]) => reduceCqp(attr, values, ignoreCase)))
+        .map((conditions) => "[" + conditions.join(" & ") + "]")
 
     // If reducing by structural attributes only, then `hitValues` has only the first match token,
     // so allow any number of subsequent tokens in the match.
-    if (!hasPositionalAttributes) tokens.push("[]{0,}")
+    const structOnly = hitValues.length == 1 && !positionalAttributes.some((attr) => attr in hitValues[0])
+    if (structOnly) tokens.push("[]{0,}")
 
     return `<match> ${tokens.join(" ")} </match>`
 }
 
-function reduceCqp(type: string, tokens: string[], ignoreCase: boolean): string {
-    let attrs = settings.corpusListing.getCurrentAttributes()
-    if (attrs[type] && attrs[type].stats_cqp) {
-        // A stats_cqp function should call regescape for the value as appropriate
-        return customFunctions[attrs[type].stats_cqp!](tokens, ignoreCase)
-    }
-    tokens = _.map(tokens, (val) => regescape(val))
-    switch (type) {
-        case "saldo":
-        case "prefix":
-        case "suffix":
-        case "lex":
-        case "lemma":
-        case "sense":
-        case "transformer-neighbour":
-            if (tokens[0] === "") return "ambiguity(" + type + ") = 0"
-            let res: string
-            if (tokens.length > 1) {
-                var key = tokens[0].split(":")[0]
+function reduceCqp(
+    name: string,
+    /** `values` is multiple if multiple result rows were grouped into one, e.g. ranked or MWE */
+    values: string[],
+    ignoreCase: boolean
+): string {
+    // Note: undefined if name is `word`
+    const attr = settings.corpusListing.getReduceAttrs()[name]
 
-                const variants: string[][] = []
-                _.map(tokens, function (val) {
-                    const parts = val.split(":")
-                    if (variants.length == 0) {
-                        for (var idx = 0; idx < parts.length - 1; idx++) variants.push([])
-                    }
-                    for (var idx = 1; idx < parts.length; idx++) variants[idx - 1].push(parts[idx])
-                })
+    // Use named CQP'ifier from custom config code. It must escape values as regex.
+    if (attr?.stats_cqp) return customFunctions[attr.stats_cqp](values, ignoreCase)
 
-                const variantsJoined = variants.map((variant) => ":(" + variant.join("|") + ")")
-                res = key + variantsJoined.join("")
-            } else {
-                res = tokens[0]
-            }
-            return `${type} contains '${res}'`
-        case "word":
-            let s = 'word="' + tokens[0] + '"'
-            if (ignoreCase) s = s + " %c"
-            return s
-        case "pos":
-        case "deprel":
-        case "msd":
-            return `${type}="${tokens[0]}"`
-        case "text_blingbring":
-        case "text_swefn":
-            return `_.${type} contains "${tokens[0]}"`
-        default:
-            if (attrs[type]) {
-                // word attributes
-                const op = attrs[type]["type"] === "set" ? " contains " : "="
-                return `${type}${op}"${tokens[0]}"`
-            } else {
-                // structural attributes
-                return `_.${type}="${tokens[0]}"`
-            }
-    }
+    const cqpName = attr?.["is_struct_attr"] ? `_.${name}` : name
+
+    // Empty value: require number of values to be 0
+    if (values[0] == "") return `ambiguity(${cqpName}) = 0`
+
+    // Escape values for use in CQP regex
+    values = values.map(regescape)
+    // Combine grouped values
+    let cqpValue = values.length > 1 ? mergeRegex(values) : values[0]
+    // Case-insensitive search
+    if (name == "word" && ignoreCase) cqpValue += " %c"
+
+    const op = attr?.type === "set" ? "contains" : "="
+    return `${cqpName} ${op} '${cqpValue}'`
+}
+
+/** Merge ["foo:X", "foo:Y"] to "foo:(X|Y)" */
+function mergeRegex(values: string[]): string {
+    const init = splitFirst(":", values[0])[0]
+    const tails = values.map((v) => splitFirst(":", v)[1])
+    return init + ":(" + tails.join("|") + ")"
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-export function reduceStringify(type: string, structAttr?: Attribute): (values: string[]) => string {
-    let attrs = settings.corpusListing.getCurrentAttributes()
+export function reduceStringify(name: string, cl?: CorpusListing): (values: string[]) => string {
+    cl ??= settings.corpusListing
+    const attr = cl.getReduceAttrs()[name]
 
-    if (attrs[type] && attrs[type].stats_stringify) {
-        return customFunctions[attrs[type].stats_stringify!]
-    }
+    // Use named stringifier from custom config code
+    if (attr?.stats_stringify) return customFunctions[attr.stats_stringify]
 
-    switch (type) {
-        case "word":
-        case "msd":
-            return (values) => values.join(" ")
-        case "pos":
-            return (values) => values.map((token) => locAttribute(attrs["pos"].translation, token)).join(" ")
-        case "saldo":
-        case "prefix":
-        case "suffix":
-        case "lex":
-        case "lemma":
-        case "sense":
-            let stringify: (value: string, appendIndex?: boolean) => string
-            if (type == "saldo" || type == "sense") {
-                stringify = saldoToHtml
-            } else if (type == "lemma") {
-                stringify = (lemma) => lemma.replace(/_/g, " ")
-            } else {
-                stringify = lemgramToHtml
-            }
+    const transforms: ((token: string) => string)[] = []
 
-            return (values) =>
-                values.map((token) => (token === "" ? "–" : stringify(token.replace(/:.*/g, ""), true))).join(" ")
+    if (attr?.ranked) transforms.push((token) => token.replace(/:.*/g, ""))
+    if (attr?.translation) transforms.push((token) => locAttribute(attr.translation, token))
 
-        case "transformer-neighbour":
-            return (values) => values.map((value) => value.replace(/:.*/g, "")).join(" ")
+    if (["prefix", "suffix", "lex"].includes(name)) transforms.push((token) => lemgramToHtml(token, true))
+    else if (name == "saldo" || name == "sense") transforms.push((token) => saldoToHtml(token, true))
+    else if (name == "lemma") transforms.push((lemma) => lemma.replace(/_/g, " "))
 
-        case "deprel":
-            return (values) => values.map((token) => locAttribute(attrs["deprel"].translation, token)).join(" ")
-        case "msd_orig": // TODO: OMG this is corpus specific, move out to config ASAP (ASU corpus)
-            return (values) => values.map((token) => ($("<span>").text(token) as any).outerHTML()).join(" ")
-        default:
-            if (attrs[type]) {
-                // word attributes
-                return (values) => values.join(" ")
-            } else {
-                // structural attributes
-                function stringify(value: string) {
-                    if (value === "") {
-                        return "-"
-                    } else if (structAttr?.translation) {
-                        return locAttribute(structAttr.translation, value)
-                    }
-                    return value
-                }
-                return (values) => values.map(stringify).join(" ")
-            }
-    }
+    // TODO This is specific to ASU corpus, move out to config
+    if (name == "msd_orig") transforms.push((token) => ($("<span>").text(token) as any).outerHTML())
+
+    const transform = (value: string) => transforms.reduce((acc, f) => f(acc), value)
+    // Join with spaces and then squash redundant and surrounding space.
+    return (values) => values.map(transform).join(" ").trim().replace(/\s+/g, " ")
 }
