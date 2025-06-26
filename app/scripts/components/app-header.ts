@@ -1,11 +1,7 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService, ui } from "angular"
 import _ from "lodash"
-import korpLogo from "../../img/korp_slogan.svg"
-import korpLogoEn from "../../img/korp_slogan_en.svg"
-import sbxLogo from "../../img/sprakbanken_text_slogan.svg"
-import sbxLogoEn from "../../img/sprakbanken_text_slogan_en.svg"
-import guLogo from "../../img/gu_logo_sv_head.svg"
+import korpLogo from "../../img/korp.svg"
 import settings from "@/settings"
 import currentMode from "@/mode"
 import { collatorSort, html } from "@/util"
@@ -28,6 +24,28 @@ type HeaderController = IController & {
     modes: Config["modes"]
     visible: Config["modes"]
 }
+
+// @ts-ignore
+const BUILD_HASH = __webpack_hash__
+
+// Allow overriding logos with site-specific ones specified in the
+// configuration
+
+// Return htmlStr with quoted references to "img/filename.ext"
+// replaced with "img/filename.BUILD_HASH.ext".
+function addImgHash(htmlStr: string): string {
+    return htmlStr.replace(/(["']img\/[^"']+)(\.[^"'.]+["'])/g, `$1.${BUILD_HASH}$2`)
+}
+
+// Return the logo HTML for key logoKey in the configuration; if not
+// defined, return defaultVal, by default "".
+function getLogo(logoKey: "korp" | "organization" | "chooser_right", defaultVal: string = ""): string {
+    return settings["logo"]?.[logoKey] != undefined ? addImgHash(settings["logo"]?.[logoKey] as string) : defaultVal
+}
+
+const korpLogoHtml: string = getLogo("korp", html`<img src="${korpLogo}" height="300" width="300" />`)
+const orgLogoHtml: string = getLogo("organization")
+const chooserRightLogoHtml: string = getLogo("chooser_right")
 
 angular.module("korpApp").component("appHeader", {
     template: html`
@@ -95,10 +113,7 @@ angular.module("korpApp").component("appHeader", {
             </div>
 
             <div class="flex justify-between items-end gap-3 my-3 px-3" id="header_left">
-                <a class="shrink-0 relative ml-4 pl-0.5" ng-click="$ctrl.logoClick()">
-                    <img ng-if="$root.lang == 'swe'" src="${korpLogo}" height="300" width="300" />
-                    <img ng-if="$root.lang != 'swe'" src="${korpLogoEn}" height="300" width="300" />
-                </a>
+                <a class="shrink-0 relative ml-4 pl-0.5" ng-click="$ctrl.logoClick()"> ${korpLogoHtml} </a>
                 <div id="labs_logo">
                     <svg
                         height="60"
@@ -122,20 +137,10 @@ angular.module("korpApp").component("appHeader", {
 
                 <div class="grow min-[1150px]:hidden"></div>
                 <corpus-chooser></corpus-chooser>
+                ${chooserRightLogoHtml}
                 <div class="grow hidden min-[1150px]:block"></div>
 
-                <a
-                    class="hidden min-[1150px]:flex h-20 shrink flex-col justify-end"
-                    href="https://spraakbanken.gu.se/"
-                    target="_blank"
-                >
-                    <img ng-if="$root.lang == 'swe'" src="${sbxLogo}" />
-                    <img ng-if="$root.lang != 'swe'" src="${sbxLogoEn}" />
-                </a>
-
-                <a class="hidden xl:block shrink-0 h-32 -mt-2" href="https://gu.se/" target="_blank">
-                    <img src="${guLogo}" class="h-full" />
-                </a>
+                ${orgLogoHtml}
             </div>
         </div>
     `,

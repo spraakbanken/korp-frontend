@@ -100,6 +100,12 @@ settings that affect the frontend.
     - value: swe
       label: Svenska
     ```
+- __logo__ - Object. Specify site-specific logos.
+  - __korp__ - String. HTML content for the Korp logo to the left of the corpus chooser. Default: [plain Korp logo](../app/img/korp.svg).
+  - __organization__ - String. HTML content for the organization logo(s) on the top right of the Korp window. Default: empty.
+  - __chooser_right__ - String. HTML content for a logo to the right of the corpus chooser: Default: empty.
+  The HTML content can refer to image files in the `app/img/` directory of the configuration as `img/`_file_.
+  If you wish to use the the [plain Korp logo](../app/img/korp.svg) (or other images in this repository) differently from the default, you should copy it to the configuration.
 
 **Others:**
 
