@@ -41,7 +41,47 @@ describe("KWIC", () => {
         await page.getByLabel("Show context").click()
 
         // Expect result with context
-        await expect(page.locator(".results_table")).toContainText("Så skall min skröplighet", { timeout: 10000 })
-        await expect(page.locator(".results_table")).toContainText("Men mörkrets makt är stor")
+        await expect(page.locator(".results_table.reading")).toContainText("Så skall min skröplighet", { timeout: 10000 })
+        await expect(page.locator(".results_table.reading")).toContainText("Men mörkrets makt är stor")
+    })
+
+    test("can be navigated with keyboard", async ({ page }) => {
+        // Make a search
+        await page.goto("./#?lang=eng&corpus=attasidor&search=word|katt")
+        // The first two KWIC rows should be:
+        //   Vargen har dödat sex får, tre hundar, en katt och en höna.
+        //                        Eller att skaffa en katt .
+
+        // Click a word in the result, check the selection marker and the sidebar
+        await page.getByRole("table").getByText("katt").first().click()
+        await expect(page.locator(".token_selected").first()).toHaveText("katt")
+        await expect(page.locator("sidebar")).toContainText("baseform: katt")
+
+        // Use arrow key to navigate, check that the selection marker and the sidebar are updated
+        await page.keyboard.press("ArrowRight")
+        await expect(page.locator(".token_selected").first()).toHaveText("och")
+        await expect(page.locator("sidebar")).toContainText("msd: MAD")
+
+        // Test the other arrow keys
+        await page.keyboard.press("ArrowDown")
+        await expect(page.locator(".token_selected").first()).toHaveText(".")
+        await page.keyboard.press("ArrowUp")
+        await expect(page.locator(".token_selected").first()).toHaveText("och")
+        await page.keyboard.press("ArrowLeft")
+        await expect(page.locator(".token_selected").first()).toHaveText("katt")
+
+        // Switch to context view
+        await page.getByLabel("Show context").click()
+        // The first two KWIC rows should be:
+        //   Vargen  har  dödat sex får, tre hundar, en katt och en höna.
+        //   Eller att skaffa en katt.
+
+        await page.locator(".results_table.reading").getByText("katt").first().click()
+        await page.keyboard.press("ArrowDown")
+        await expect(page.locator(".token_selected").first()).toHaveText(".")
+        await page.keyboard.press("ArrowLeft")
+        await expect(page.locator(".token_selected").first()).toHaveText("katt")
+        await page.keyboard.press("ArrowUp")
+        await expect(page.locator(".token_selected").first()).toHaveText("sex")
     })
 })
