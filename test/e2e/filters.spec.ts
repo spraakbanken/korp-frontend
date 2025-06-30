@@ -75,4 +75,18 @@ describe("filters", () => {
         await page.getByRole("table").locator(".word").first().click()
         await expect(page.locator("sidebar")).not.toContainText("Centerpartiet")
     })
+
+    test("escaping values", async ({ page }) => {
+        await page.goto("/#?lang=eng&corpus=aspacsv")
+
+        // Enter a filter value with special characters
+        await page.getByRole("button", { name: "Add author" }).click()
+        await page.locator("#korp-simple").getByText("J.R.R. Tolkien").click()
+        await page.getByRole("button", { name: "Author: J.R.R. Tolkien" }).click()
+
+        // Search and check that there are results
+        await page.getByRole("textbox").fill("Smaug")
+        await page.getByRole("button", { name: "Search" }).click()
+        await expect(page.getByRole("table")).toContainText("Smaug")
+    })
 })
