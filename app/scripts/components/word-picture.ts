@@ -44,7 +44,7 @@ const LIMITS: readonly number[] = [15, 50, 100, 500, 1000]
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
-        <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
+        <div ng-if="$ctrl.warning" class="korp-warning" role="status">{{$ctrl.warning}}</div>
 
         <div ng-if="$ctrl.data.length">
             <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">

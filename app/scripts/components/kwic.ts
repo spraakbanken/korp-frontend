@@ -125,7 +125,9 @@ angular.module("korpApp").component("kwic", {
             </div>
         </div>
 
-        <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">{{'search_aborted' | loc:$root.lang}}</div>
+        <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning" role="status">
+            {{'search_aborted' | loc:$root.lang}}
+        </div>
 
         <div ng-if="!$ctrl.aborted || $ctrl.loading" ng-click="$ctrl.onKwicClick($event)">
             <div class="flex gap-8 pb-2" ng-class="{'opacity-50 italic': $ctrl.loading}">

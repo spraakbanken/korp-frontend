@@ -87,9 +87,9 @@ angular.module("korpApp").component("statistics", {
         </div>
 
         <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
-            <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning | loc:$root.lang}}</div>
+            <div ng-if="$ctrl.warning" class="korp-warning" role="status">{{$ctrl.warning | loc:$root.lang}}</div>
 
-            <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">
+            <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning" role="status">
                 {{'search_aborted' | loc:$root.lang}}
             </div>
 
