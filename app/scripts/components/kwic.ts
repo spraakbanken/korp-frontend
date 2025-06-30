@@ -144,6 +144,7 @@ angular.module("korpApp").component("kwic", {
                 <table
                     ng-if="$ctrl.hitsPictureData.length > 1"
                     class="hits_picture_table flex-1 h-5 border m-0 p-0 cursor-pointer"
+                    role="navigation"
                 >
                     <tbody>
                         <tr>
