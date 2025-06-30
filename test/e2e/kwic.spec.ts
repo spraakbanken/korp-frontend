@@ -28,4 +28,20 @@ describe("KWIC", () => {
         // Eventually, full result is done
         await expect(page.getByRole("progressbar")).toHaveCount(0, { timeout: 20000 })
     })
+
+    test("context view", async ({ page }) => {
+        // Context search is slow, so use a small corpus
+        await page.goto("./#?lang=eng&corpus=psalmboken&search=word|Så skall min skröplighet")
+
+        // Expect result without context
+        await expect(page.getByRole("table")).toContainText("Så skall min skröplighet")
+        await expect(page.getByRole("table")).not.toContainText("Men mörkrets makt är stor")
+
+        // Enable context, automatically updates the search
+        await page.getByLabel("Show context").click()
+
+        // Expect result with context
+        await expect(page.locator(".results_table")).toContainText("Så skall min skröplighet", { timeout: 10000 })
+        await expect(page.locator(".results_table")).toContainText("Men mörkrets makt är stor")
+    })
 })
