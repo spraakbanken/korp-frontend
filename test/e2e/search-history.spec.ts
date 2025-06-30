@@ -62,7 +62,7 @@ describe("search history", () => {
             `./#?lang=eng&corpus=vivill&search=word|djur&global_filter=${filters}&mid_comp&isCaseInsensitive`
         )
         await expect(page.getByRole("table")).toContainText("djur")
-        const hits = (await page.getByText('Results:').textContent())?.slice(9)
+        const hits = (await page.getByText('Results:').textContent())?.trim().slice(9)
         expect(hits).toBeTruthy()
 
         // Load fresh page
@@ -83,7 +83,7 @@ describe("search history", () => {
         await expect(page.locator("sidebar")).toContainText("Centerpartiet")
 
         // Check that hit count is the same
-        const hits2 = (await page.getByText('Results:').textContent())?.slice(9)
+        const hits2 = (await page.getByText('Results:').textContent())?.trim().slice(9)
         expect(hits2).toBe(hits)
     })
 })
