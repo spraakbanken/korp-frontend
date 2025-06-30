@@ -89,4 +89,24 @@ describe("filters", () => {
         await page.getByRole("button", { name: "Search" }).click()
         await expect(page.getByRole("table")).toContainText("Smaug")
     })
+
+    test("empty value", async ({ page }) => {
+        await page.goto("/#?lang=eng&corpus=aspacsv")
+
+        // Enter an empty filter value
+        await page.getByRole("button", { name: "Add description" }).click()
+        await page.locator("#korp-simple").getByText("–").click()
+        await page.getByRole("button", { name: "Description: –" }).click()
+
+        // Make a search
+        await page.getByRole("textbox").fill("draken")
+        await page.getByRole("button", { name: "Search" }).click()
+
+        // Check results
+        await expect(page.getByRole("table")).toContainText("draken")
+
+        // Check query
+        await page.getByRole('link', { name: 'Advanced' }).click()
+        await expect(page.locator("pre").first()).toContainText('_.text_description = ""')
+    })
 })
