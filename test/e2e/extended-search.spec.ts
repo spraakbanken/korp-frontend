@@ -15,17 +15,25 @@ describe("extended search", () => {
         await page.reload()
         await expect(page.getByRole("table")).toContainText("björn")
     })
-    ;[{ attr: "lemgram" }, { attr: "compounds" }].forEach(({ attr }) =>
+
+    const lemgramAttrs = ["lemgram", "compounds"]
+    lemgramAttrs.forEach((attr) =>
         test(`warn about unselected ${attr}`, async ({ page }) => {
             await page.goto(`./#?lang=eng&corpus=suc3&search_tab=1`)
 
+            // Enter text but don't select a lemgram
             await page.selectOption("select.arg_type", attr)
             await page.getByRole("textbox").fill("framtid")
             await page.locator("#query_table").click()
+
+            // Should warn about unselected lemgram
             await expect(page.getByText("Choose a value")).toBeVisible()
 
+            // Select a lemgram
             await page.getByRole("textbox").fill("frihet")
             await page.getByRole("listbox").getByText("frihet").first().click()
+
+            // Warning should disappear
             await expect(page.getByText("Choose a value")).not.toBeVisible()
         })
     )
