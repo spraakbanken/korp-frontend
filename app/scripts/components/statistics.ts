@@ -408,7 +408,7 @@ angular.module("korpApp").component("statistics", {
                 $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
                 $scope.statSelectedAttrs = (store.stats_reduce || "word").split(",")
                 const insensitiveAttrs = store.stats_reduce_insensitive
-                $scope.statInsensitiveAttrs = insensitiveAttrs?.split(",") || []
+                $scope.statInsensitiveAttrs = insensitiveAttrs ? insensitiveAttrs.split(",") : []
             })
 
             $scope.reduceOnChange = ({ selected, insensitive }) => {
