@@ -68,7 +68,7 @@ angular.module("korpApp").component("statistics", {
     template: html`
         <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
             <div class="flex items-center gap-1">
-                <span>{{ "reduce_text" | loc:$root.lang }}:</span>
+                <label for="reduce-select">{{ "reduce_text" | loc:$root.lang }}:</label>
                 <reduce-select
                     items="statCurrentAttrs"
                     selected="statSelectedAttrs"

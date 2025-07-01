@@ -28,7 +28,8 @@ type ReduceSelectController = IController & {
 
 angular.module("korpApp").component("reduceSelect", {
     template: html`<div uib-dropdown auto-close="outsideClick" class="inline-block w-52" on-toggle="toggled(open)">
-        <div
+        <button
+            id="reduce-select"
             uib-dropdown-toggle
             class="reduce-dropdown-button inline-block align-middle bg-white border border-gray-400"
         >
@@ -40,13 +41,14 @@ angular.module("korpApp").component("reduceSelect", {
                 </div>
                 <span class="ml-auto caret"></span>
             </div>
-        </div>
-        <div class="reduce-dropdown-menu" uib-dropdown-menu>
+        </button>
+        <div class="reduce-dropdown-menu" uib-dropdown-menu role="listbox">
             <ul>
                 <li
                     ng-click="toggleSelected('word', $event)"
                     ng-class="keyItems['word'].selected ? 'selected':''"
                     class="attribute"
+                    role="option"
                 >
                     <input type="checkbox" class="reduce-check" ng-checked="keyItems['word'].selected" />
                     <span class="reduce-label">{{keyItems['word'].label | locObj:$root.lang }}</span>
@@ -63,6 +65,7 @@ angular.module("korpApp").component("reduceSelect", {
                     ng-click="toggleSelected(item.value, $event)"
                     ng-class="item.selected ? 'selected':''"
                     class="attribute"
+                    role="option"
                 >
                     <input type="checkbox" class="reduce-check" ng-checked="item.selected" />
                     <span class="reduce-label">{{item.label | locObj:$root.lang }}</span>
@@ -73,6 +76,7 @@ angular.module("korpApp").component("reduceSelect", {
                     ng-click="toggleSelected(item.value, $event)"
                     ng-class="item.selected ? 'selected':''"
                     class="attribute"
+                    role="option"
                 >
                     <input type="checkbox" class="reduce-check" ng-checked="item.selected" />
                     <span class="reduce-label">{{item.label | locObj:$root.lang }}</span>
