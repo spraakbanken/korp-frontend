@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Switching to Statistics tab always fetches new results [#468](https://github.com/spraakbanken/korp-frontend/issues/468)
+
 ## [9.10.0] - 2025-06-26
 
 ### Added

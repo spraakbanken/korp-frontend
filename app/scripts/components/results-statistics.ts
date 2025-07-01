@@ -92,8 +92,10 @@ angular.module("korpApp").component("resultsStatistics", {
             $ctrl.$onChanges = (changes) => {
                 if (changes.isActive?.currentValue) {
                     // Enable statistics when first opening tab
-                    s.showStatistics = true
-                    if ($scope.cqp) s.makeRequest($scope.cqp)
+                    if (!s.showStatistics) {
+                        s.showStatistics = true
+                        if ($scope.cqp) s.makeRequest($scope.cqp)
+                    }
 
                     // workaround for bug in slickgrid
                     // slickgrid should add this automatically, but doesn't
