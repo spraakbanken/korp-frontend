@@ -28,7 +28,7 @@ describe("statistics", () => {
         // Open example search, check results
         const row = page.locator(".slick-row").filter({ hasText: "katter" }).first()
         const total = Number(await row.locator(".slick-cell").filter({ hasText: /\d+/ }).first().textContent())
-        await page.getByText("katter").first().click()
+        await row.getByText("katter").first().click()
 
         // Check results
         await expect(page.getByRole("table")).toContainText("katter")
@@ -46,11 +46,40 @@ describe("statistics", () => {
         await page.getByRole("option", { name: "msd" }).click()
         await page.getByLabel("Group by:").click()
 
+        // Result should reload
         // There are a few more rows
         await expect(page.getByText("Number of rows: 11")).toBeVisible()
 
         // Reload and check result
         await page.reload()
         await expect(page.getByText("Number of rows: 11")).toBeVisible()
+    })
+
+    test("case-insensitive word", async ({ page }) => {
+        await page.goto("/#?lang=eng&corpus=attasidor,da&search=lemgram|katt\.\.nn\.1&result_tab=2")
+        await expect(page.getByText("Number of rows: 8")).toBeVisible()
+
+        // Set case-insensitive
+        await page.getByLabel("Group by:").click()
+        await page.getByRole("button", { name: "Aa" }).click()
+        await page.getByLabel("Group by:").click()
+
+        // Result should reload
+        // There should be fewer rows
+        await expect(page.getByText("Number of rows: 5")).toBeVisible()
+
+        // Reload and check result
+        await page.reload()
+        await expect(page.getByText("Number of rows: 5")).toBeVisible()
+
+        // Open example search, check results
+        const row = page.locator(".slick-row").filter({ hasText: "katter" }).first()
+        const total = Number(await row.locator(".slick-cell").filter({ hasText: /\d+/ }).first().textContent())
+        await row.getByText("katter").first().click()
+
+        // Check results
+        await expect(page.getByRole("table")).toContainText("katter")
+        const hits = (await page.getByText('Results:').last().textContent())?.trim().slice(9)
+        expect(Number(hits)).toEqual(total)
     })
 })
