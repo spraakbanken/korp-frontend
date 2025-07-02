@@ -11,7 +11,6 @@ export type StatisticsWorkerMessage = {
 
 export type StatisticsProcessed = {
     rows: Dataset
-    columns: SlickgridColumn[]
     params: SearchParams
 }
 

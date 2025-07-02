@@ -13,82 +13,77 @@ import {
     SlickgridColumn,
 } from "./statistics.types"
 import { formatFrequency, fromKeys } from "@/util"
-import { LangString } from "./i18n/types"
 import { locObj } from "./i18n"
 import { StoreService } from "./services/store"
 
-const createStatisticsService = function () {
-    // Root Scope is used so the cell formatters are re-triggered when language is changed.
-    const createColumns = function (
-        store: StoreService,
-        corpora: string[],
-        reduceVals: string[],
-        reduceValLabels: LangString[]
-    ): SlickgridColumn[] {
-        // This sorting will not react to language change, but that's quite alright, we like columns staying in place.
-        const getCorpusTitle = (id: string): string => locObj(settings.corpora[id.toLowerCase()].title, store.lang)
-        corpora.sort((a, b) => getCorpusTitle(a).localeCompare(getCorpusTitle(b), store.lang))
+/** Create SlickGrid column definitions for statistics data. */
+export function createColumns(store: StoreService, corpora: string[], attrs: string[]): SlickgridColumn[] {
+    const cl = settings.corpusListing.subsetFactory(corpora)
+    const attributes = cl.getReduceAttrs()
+    const labels = attrs.map((name) => (name == "word" ? settings["word_label"] : attributes[name]?.label))
 
-        const minWidth = 100
-        const columns: SlickgridColumn[] = []
-        for (let [reduceVal, reduceValLabel] of _.zip(reduceVals, reduceValLabels)) {
-            if (reduceVal == null || reduceValLabel == null) break
-            columns.push({
-                id: reduceVal,
-                translation: reduceValLabel,
-                field: "hit_value",
-                sortable: true,
-                formatter: (row, cell, value, columnDef, data: Row) => {
-                    if (isTotalRow(data)) return "&Sigma;"
-                    const output = data.formattedValue[reduceVal!] || `<span class="opacity-50">&empty;</span>`
-                    return `<div class="link" data-row="${data.rowId}">${output}</div>`
-                },
-                minWidth,
-                cssClass: "parameter-column",
-            })
-        }
+    // This sorting will not react to language change, but that's quite alright, we like columns staying in place.
+    const getCorpusTitle = (id: string): string => locObj(settings.corpora[id.toLowerCase()].title, store.lang)
+    corpora.sort((a, b) => getCorpusTitle(a).localeCompare(getCorpusTitle(b), store.lang))
 
+    const minWidth = 100
+    const columns: SlickgridColumn[] = []
+    for (let [reduceVal, reduceValLabel] of _.zip(attrs, labels)) {
+        if (reduceVal == null || reduceValLabel == null) break
         columns.push({
-            id: "pieChart",
-            name: "",
+            id: reduceVal,
+            translation: reduceValLabel,
             field: "hit_value",
-            sortable: false,
-            formatter(row, cell, value, columnDef, dataContext: any) {
-                return `<i class="fa-solid fa-chart-pie block text-sm mx-1"></i>`
-            },
-            maxWidth: 25,
-            minWidth: 25,
-            cssClass: "total-column cursor-pointer",
-        })
-
-        columns.push({
-            id: "total",
-            name: "stats_total",
-            field: "total",
             sortable: true,
-            formatter: (row, cell, value) => formatFrequency(store, value),
+            formatter: (row, cell, value, columnDef, data: Row) => {
+                if (isTotalRow(data)) return "&Sigma;"
+                const output = data.formattedValue[reduceVal!] || `<span class="opacity-50">&empty;</span>`
+                return `<div class="link" data-row="${data.rowId}">${output}</div>`
+            },
             minWidth,
-            headerCssClass: "localized-header",
-            cssClass: "total-column text-right",
+            cssClass: "parameter-column",
         })
-
-        corpora.forEach((id) =>
-            columns.push({
-                id,
-                translation: settings.corpora[id.toLowerCase()].title,
-                field: "count",
-                sortable: true,
-                formatter: (row, cell, value, columnDef) => formatFrequency(store, value[columnDef.id!]),
-                minWidth,
-                cssClass: "text-right",
-            })
-        )
-
-        return columns
     }
 
+    columns.push({
+        id: "pieChart",
+        name: "",
+        field: "hit_value",
+        sortable: false,
+        formatter: () => `<i class="fa-solid fa-chart-pie block text-sm mx-1"></i>`,
+        maxWidth: 25,
+        minWidth: 25,
+        cssClass: "total-column cursor-pointer",
+    })
+
+    columns.push({
+        id: "total",
+        name: "stats_total",
+        field: "total",
+        sortable: true,
+        formatter: (row, cell, value) => formatFrequency(store, value),
+        minWidth,
+        headerCssClass: "localized-header",
+        cssClass: "total-column text-right",
+    })
+
+    corpora.forEach((id) =>
+        columns.push({
+            id,
+            translation: settings.corpora[id.toLowerCase()].title,
+            field: "count",
+            sortable: true,
+            formatter: (row, cell, value, columnDef) => formatFrequency(store, value[columnDef.id!]),
+            minWidth,
+            cssClass: "text-right",
+        })
+    )
+
+    return columns
+}
+
+const createStatisticsService = function () {
     function processData(
-        store: StoreService,
         originalCorpora: string,
         data: StatsNormalized,
         reduceVals: string[],
@@ -97,10 +92,7 @@ const createStatisticsService = function () {
     ): Promise<StatisticsProcessed> {
         const corpora = Object.keys(data.corpora)
         const cl = settings.corpusListing.subsetFactory(corpora)
-        const attributes = cl.getReduceAttrs()
-        const labels = reduceVals.map((name) => (name == "word" ? settings["word_label"] : attributes[name]?.label))
 
-        const columns = createColumns(store, corpora, reduceVals, labels)
         // Get stringifiers for formatting attribute values
         const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, cl))
 
@@ -138,7 +130,7 @@ const createStatisticsService = function () {
                     }
                 }
 
-                resolve({ rows, columns, params })
+                resolve({ rows, params })
             }
         })
     }

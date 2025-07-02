@@ -15,7 +15,6 @@ import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, SlickgridColumn } from "@/statistics.types"
 import { CountParams } from "@/backend/types/count"
-import { LocationService } from "@/urlparams"
 import { AttributeOption } from "@/corpus_listing"
 import { SearchesService } from "@/services/searches"
 import { getTimeData } from "@/timedata"
@@ -226,14 +225,12 @@ angular.module("korpApp").component("statistics", {
         warning: "<",
     },
     controller: [
-        "$location",
         "$rootScope",
         "$scope",
         "$uibModal",
         "searches",
         "store",
         function (
-            $location: LocationService,
             $rootScope: RootScope,
             $scope: StatisticsScope,
             $uibModal: ui.bootstrap.IModalService,

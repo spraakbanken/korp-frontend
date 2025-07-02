@@ -3,14 +3,13 @@ import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
-import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
 import { html } from "@/util"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/statistics"
-import { statisticsService } from "@/statistics"
+import { createColumns, statisticsService } from "@/statistics"
 import { StoreService } from "@/services/store"
 
 type ResultsStatisticsController = IController & {
@@ -60,13 +59,11 @@ angular.module("korpApp").component("resultsStatistics", {
     },
     controller: [
         "$scope",
-        "$location",
         "$rootScope",
         "$timeout",
         "store",
         function (
             $scope: ResultsStatisticsScope,
-            $location: LocationService,
             $rootScope: RootScope,
             $timeout: ITimeoutService,
             store: StoreService
@@ -150,8 +147,9 @@ angular.module("korpApp").component("resultsStatistics", {
                         onProgress: (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)),
                     })
                     .then(async (data) => {
-                        const { rows, columns, params } = await statisticsService.processData(
-                            store,
+                        const columns = createColumns(store, Object.keys(data.corpora), attrs)
+
+                        const { rows, params } = await statisticsService.processData(
                             corpora,
                             data,
                             attrs,
