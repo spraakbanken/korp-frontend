@@ -60,7 +60,7 @@ describe("KWIC", () => {
         // Use arrow key to navigate, check that the selection marker and the sidebar are updated
         await page.keyboard.press("ArrowRight")
         await expect(page.locator(".token_selected").first()).toHaveText("och")
-        await expect(page.locator("sidebar")).toContainText("msd: MAD")
+        await expect(page.locator("sidebar")).toContainText("msd: KN")
 
         // Test the other arrow keys
         await page.keyboard.press("ArrowDown")
