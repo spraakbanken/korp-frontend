@@ -167,12 +167,15 @@ angular.module("korpApp").component("reduceSelect", {
             }
 
             scope.toggled = function (open) {
-                // if no element is selected when closing popop, select word
-                if (!open && !$ctrl.selected.length) {
-                    scope.keyItems["word"].selected = true
-                }
+                // When closing the dropdown, notify about changes
+                if (!open) {
+                    // If no element is selected, select word
+                    if (!$ctrl.selected.length) {
+                        scope.keyItems["word"].selected = true
+                    }
 
-                notify()
+                    notify()
+                }
             }
         },
     ],

@@ -150,10 +150,11 @@ export class CorpusListing {
     // End TODO
 
     getReduceAttrs(): Record<string, Attribute> {
-        return {
+        const allAttrs = {
             ...this.getCurrentAttributes(this.getReduceLang()),
             ...this.getStructAttrs(this.getReduceLang()),
         }
+        return _.pickBy(allAttrs, (attribute) => attribute["display_type"] !== "hidden")
     }
 
     /** Compile list of filters applicable to all selected corpora. */

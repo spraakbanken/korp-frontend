@@ -38,7 +38,6 @@ type ResultsStatisticsScope = IScope & {
 
 angular.module("korpApp").component("resultsStatistics", {
     template: html`
-        <korp-error ng-if="error" message="{{error}}"></korp-error>
         <statistics
             aborted="aborted"
             columns="columns"
@@ -50,6 +49,7 @@ angular.module("korpApp").component("resultsStatistics", {
             search-params="searchParams"
             warning="warning"
         ></statistics>
+        <korp-error ng-if="error" message="{{error}}"></korp-error>
         <json-button ng-if="!warning && !error" endpoint="'count'" params="proxy.prevParams"></json-button>
     `,
     bindings: {
