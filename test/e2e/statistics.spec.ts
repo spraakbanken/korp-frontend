@@ -35,4 +35,22 @@ describe("statistics", () => {
         const hits = (await page.getByText('Results:').last().textContent())?.trim().slice(9)
         expect(Number(hits)).toEqual(total)
     })
+
+    test("group by", async ({ page }) => {
+        await page.goto("/#?lang=eng&corpus=attasidor,da&search=lemgram|katt\.\.nn\.1&result_tab=2")
+        await expect(page.getByText("Number of rows: 8")).toBeVisible()
+
+        // Modify selection of attributes to group the statistics by
+        await page.getByLabel("Group by:").click()
+        await page.getByRole("option", { name: "sense" }).click()
+        await page.getByRole("option", { name: "msd" }).click()
+        await page.getByLabel("Group by:").click()
+
+        // There are a few more rows
+        await expect(page.getByText("Number of rows: 11")).toBeVisible()
+
+        // Reload and check result
+        await page.reload()
+        await expect(page.getByText("Number of rows: 11")).toBeVisible()
+    })
 })
