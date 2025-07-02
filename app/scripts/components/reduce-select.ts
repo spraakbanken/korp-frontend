@@ -52,12 +52,13 @@ angular.module("korpApp").component("reduceSelect", {
                 >
                     <input type="checkbox" class="reduce-check" ng-checked="keyItems['word'].selected" />
                     <span class="reduce-label">{{keyItems['word'].label | locObj:$root.lang }}</span>
-                    <span
+                    <button
                         ng-class="keyItems['word'].insensitive ? 'selected':''"
                         class="insensitive-toggle"
                         ng-click="toggleWordInsensitive($event)"
-                        ><b>Aa</b></span
                     >
+                        <b>Aa</b>
+                    </button>
                 </li>
                 <b ng-if="hasWordAttrs">{{'word_attr' | loc:$root.lang}}</b>
                 <li

@@ -6,6 +6,7 @@
 
 - First click on the "Group by" dropdown triggers a re-fetch [#467](https://github.com/spraakbanken/korp-frontend/issues/467)
 - Switching to Statistics tab always fetches new results [#468](https://github.com/spraakbanken/korp-frontend/issues/468)
+- Case-insensitive statistics generates bad CQP for example [#469](https://github.com/spraakbanken/korp-frontend/issues/469)
 
 ## [9.10.0] - 2025-06-26
 
