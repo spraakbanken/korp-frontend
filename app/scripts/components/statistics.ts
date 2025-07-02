@@ -15,7 +15,6 @@ import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, SlickgridColumn } from "@/statistics.types"
 import { CountParams } from "@/backend/types/count"
-import { LocationService } from "@/urlparams"
 import { AttributeOption } from "@/corpus_listing"
 import { SearchesService } from "@/services/searches"
 import { getTimeData } from "@/timedata"
@@ -68,7 +67,7 @@ angular.module("korpApp").component("statistics", {
     template: html`
         <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
             <div class="flex items-center gap-1">
-                <span>{{ "reduce_text" | loc:$root.lang }}:</span>
+                <label for="reduce-select">{{ "reduce_text" | loc:$root.lang }}:</label>
                 <reduce-select
                     items="statCurrentAttrs"
                     selected="statSelectedAttrs"
@@ -87,9 +86,9 @@ angular.module("korpApp").component("statistics", {
         </div>
 
         <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
-            <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning | loc:$root.lang}}</div>
+            <div ng-if="$ctrl.warning" class="korp-warning" role="status">{{$ctrl.warning | loc:$root.lang}}</div>
 
-            <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">
+            <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning" role="status">
                 {{'search_aborted' | loc:$root.lang}}
             </div>
 
@@ -226,14 +225,12 @@ angular.module("korpApp").component("statistics", {
         warning: "<",
     },
     controller: [
-        "$location",
         "$rootScope",
         "$scope",
         "$uibModal",
         "searches",
         "store",
         function (
-            $location: LocationService,
             $rootScope: RootScope,
             $scope: StatisticsScope,
             $uibModal: ui.bootstrap.IModalService,
@@ -408,7 +405,7 @@ angular.module("korpApp").component("statistics", {
                 $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
                 $scope.statSelectedAttrs = (store.stats_reduce || "word").split(",")
                 const insensitiveAttrs = store.stats_reduce_insensitive
-                $scope.statInsensitiveAttrs = insensitiveAttrs?.split(",") || []
+                $scope.statInsensitiveAttrs = insensitiveAttrs ? insensitiveAttrs.split(",") : []
             })
 
             $scope.reduceOnChange = ({ selected, insensitive }) => {

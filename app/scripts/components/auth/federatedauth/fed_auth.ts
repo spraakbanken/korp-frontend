@@ -62,11 +62,11 @@ export const init = async () => {
     state.username = name || email
 
     state.credentials = Object.keys(scope.corpora || {})
-        .filter((id) => (scope.corpora?.[id] || 0) > levels["READ"])
+        .filter((id) => (scope.corpora?.[id] || 0) >= levels["READ"])
         .map((id) => id.toUpperCase())
 
     state.otherCredentials = Object.keys(scope.other || {})
-        .filter((id) => (scope.other?.[id] || 0) > levels["READ"])
+        .filter((id) => (scope.other?.[id] || 0) >= levels["READ"])
         .map((id) => id.toUpperCase())
 
     return true

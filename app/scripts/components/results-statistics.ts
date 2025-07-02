@@ -3,14 +3,13 @@ import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
-import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
 import { html } from "@/util"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/statistics"
-import { statisticsService } from "@/statistics"
+import { createColumns, statisticsService } from "@/statistics"
 import { StoreService } from "@/services/store"
 
 type ResultsStatisticsController = IController & {
@@ -39,7 +38,6 @@ type ResultsStatisticsScope = IScope & {
 
 angular.module("korpApp").component("resultsStatistics", {
     template: html`
-        <korp-error ng-if="error" message="{{error}}"></korp-error>
         <statistics
             aborted="aborted"
             columns="columns"
@@ -51,6 +49,7 @@ angular.module("korpApp").component("resultsStatistics", {
             search-params="searchParams"
             warning="warning"
         ></statistics>
+        <korp-error ng-if="error" message="{{error}}"></korp-error>
         <json-button ng-if="!warning && !error" endpoint="'count'" params="proxy.prevParams"></json-button>
     `,
     bindings: {
@@ -60,13 +59,11 @@ angular.module("korpApp").component("resultsStatistics", {
     },
     controller: [
         "$scope",
-        "$location",
         "$rootScope",
         "$timeout",
         "store",
         function (
             $scope: ResultsStatisticsScope,
-            $location: LocationService,
             $rootScope: RootScope,
             $timeout: ITimeoutService,
             store: StoreService
@@ -92,8 +89,10 @@ angular.module("korpApp").component("resultsStatistics", {
             $ctrl.$onChanges = (changes) => {
                 if (changes.isActive?.currentValue) {
                     // Enable statistics when first opening tab
-                    s.showStatistics = true
-                    if ($scope.cqp) s.makeRequest($scope.cqp)
+                    if (!s.showStatistics) {
+                        s.showStatistics = true
+                        if ($scope.cqp) s.makeRequest($scope.cqp)
+                    }
 
                     // workaround for bug in slickgrid
                     // slickgrid should add this automatically, but doesn't
@@ -148,8 +147,9 @@ angular.module("korpApp").component("resultsStatistics", {
                         onProgress: (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)),
                     })
                     .then(async (data) => {
-                        const { rows, columns, params } = await statisticsService.processData(
-                            store,
+                        const columns = createColumns(store, Object.keys(data.corpora), attrs)
+
+                        const { rows, params } = await statisticsService.processData(
                             corpora,
                             data,
                             attrs,

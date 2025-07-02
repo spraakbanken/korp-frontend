@@ -44,7 +44,7 @@ const LIMITS: readonly number[] = [15, 50, 100, 500, 1000]
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
-        <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
+        <div ng-if="$ctrl.warning" class="korp-warning" role="status">{{$ctrl.warning}}</div>
 
         <div ng-if="$ctrl.data.length">
             <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
@@ -73,16 +73,17 @@ angular.module("korpApp").component("wordPicture", {
                     </label>
                 </div>
             </div>
-            <div class="content_target">
-                <div class="tableContainer radialBkg" ng-repeat="word in $ctrl.data">
-                    <div
-                        class="header"
-                        ng-if="$ctrl.isLemgram(word.token)"
-                        ng-bind-html="$ctrl.lemgramToHtml(word.token) | trust"
-                    ></div>
-                    <div class="header" ng-if="!$ctrl.isLemgram(word.token)">
-                        {{word.token}} ({{word.wordClassShort | loc:$root.lang}})
-                    </div>
+            <div class="content_target flex flex-wrap gap-4 items-start">
+                <section class="radialBkg p-2 border border-gray-400" ng-repeat="word in $ctrl.data">
+                    <h2 class="text-xl mb-4">
+                        <span
+                            ng-if="$ctrl.isLemgram(word.token)"
+                            ng-bind-html="$ctrl.lemgramToHtml(word.token) | trust"
+                        ></span>
+                        <span ng-if="!$ctrl.isLemgram(word.token)">
+                            {{word.token}} ({{word.wordClassShort | loc:$root.lang}})
+                        </span>
+                    </h2>
 
                     <div class="lemgram_section" ng-repeat="section in word.data" ng-init="parentIndex = $index">
                         <div class="lemgram_help">
@@ -139,7 +140,7 @@ angular.module("korpApp").component("wordPicture", {
                             </table>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
 

@@ -8,6 +8,7 @@ import { Attribute } from "./config.types"
 import { RootScope } from "@/root-scope.types"
 import { HashParams } from "@/urlparams"
 import { OperatorKorp } from "@/cqp_parser/cqp.types"
+import { StatisticsProcessed } from "@/statistics.types"
 
 export type AppSettings = {
     auth_module?: string | { module: string; options: Record<string, any> }
@@ -68,6 +69,7 @@ export type AppSettings = {
     statistics?: boolean
     statistics_case_insensitive_default?: boolean
     statistics_limit?: number
+    statistics_postprocess?: (processed: StatisticsProcessed) => StatisticsProcessed
     urnResolver?: string
     visible_modes: number
     word_label: Record<string, string>

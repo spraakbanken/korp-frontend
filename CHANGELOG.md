@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [9.10.1] - 2025-07-02
+
+### Fixed
+
+- Links with stats_reduce with missing attribute crashes [#314](https://github.com/spraakbanken/korp-frontend/issues/314)
+- Federated authentication module: require READ, not WRITE [#461](https://github.com/spraakbanken/korp-frontend/issues/461)
+- First click on the "Group by" dropdown triggers a re-fetch [#467](https://github.com/spraakbanken/korp-frontend/issues/467)
+- Switching to Statistics tab always fetches new results [#468](https://github.com/spraakbanken/korp-frontend/issues/468)
+- Case-insensitive statistics generates bad CQP for example [#469](https://github.com/spraakbanken/korp-frontend/issues/469)
+
 ## [9.10.0] - 2025-06-26
 
 ### Added
@@ -451,6 +461,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.10.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.1
 [9.10.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.0
 [9.9.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.1
 [9.9.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.0
