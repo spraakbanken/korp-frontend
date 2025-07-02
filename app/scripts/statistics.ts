@@ -130,7 +130,13 @@ const createStatisticsService = function () {
                     }
                 }
 
-                resolve({ rows, params })
+                let processed: StatisticsProcessed = { rows, params }
+
+                if (settings["statistics_postprocess"]) {
+                    processed = settings["statistics_postprocess"](processed)
+                }
+
+                resolve(processed)
             }
         })
     }

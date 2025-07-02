@@ -166,7 +166,7 @@ The first few settings are needed at initialization time, and thus must be speci
 - __statistics__ - Boolean. Enable statistics search. Default: `true`
 - __statistics_case_insensitive_default__ - Boolean. Decides if the "Group by" option should be case-insensitive by default.
 - __statistics_limit__ - Boolean. Maximum number of rows to retrieve for statistics. Some accuracy is lost for large results, but it can save the browser from crashing.
-- __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
+- __statistics_postprocess__ - Function. Allows post-processing of the statistics result.
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```yaml
