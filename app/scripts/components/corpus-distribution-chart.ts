@@ -10,7 +10,7 @@ angular.module("korpApp").component("corpusDistributionChart", {
     template: html`
         <div class="flex flex-col gap-2 items-center">
             <canvas id="distribution-chart"></canvas>
-            <radio-list options="$ctrl.modeOptions" ng-model="mode"></radio-list>
+            <radio-list v-props-options="$ctrl.modeOptions" v-props-value="mode" v-on-change="setMode"></radio-list>
         </div>
     `,
     bindings: {
@@ -54,6 +54,10 @@ angular.module("korpApp").component("corpusDistributionChart", {
                 })
             }
 
+            $scope.setMode = (mode: Mode) => {
+                $scope.mode = mode
+            }
+
             $scope.$watch("mode", () => {
                 chart.data.datasets[0].data = getValues()
                 chart.update()
@@ -64,6 +68,7 @@ angular.module("korpApp").component("corpusDistributionChart", {
 
 type CorpusDistributionChartScope = IScope & {
     mode: Mode
+    setMode: (mode: Mode) => void
 }
 
 type CorpusDistributionChartController = IController & {

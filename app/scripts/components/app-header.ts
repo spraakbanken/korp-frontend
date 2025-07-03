@@ -7,7 +7,6 @@ import currentMode from "@/mode"
 import { addImgHash, collatorSort, html } from "@/util"
 import "@/services/utils"
 import "@/components/corpus-chooser/corpus-chooser"
-import "@/components/radio-list"
 import { matomoSend } from "@/matomo"
 import { RootScope } from "@/root-scope.types"
 import { StoreService } from "@/services/store"
@@ -23,6 +22,7 @@ type HeaderController = IController & {
     logoClick: () => void
     menu: Config["modes"]
     modes: Config["modes"]
+    setLanguage: (lang: string) => void
     visible: Config["modes"]
 }
 
@@ -60,7 +60,11 @@ angular.module("korpApp").component("appHeader", {
                 <div class="flex items-center gap-4">
                     <login-status></login-status>
 
-                    <radio-list options="$ctrl.languages" ng-model="$root.lang"> </radio-list>
+                    <radio-list
+                        v-props-options="$ctrl.languages"
+                        v-props-value="$root.lang"
+                        v-on-change="$ctrl.setLanguage"
+                    ></radio-list>
 
                     <a class="transiton duration-200 hover:text-blue-600" ng-click="$ctrl.citeClick()">
                         {{'about_cite_header' | loc:$root.lang}}
@@ -217,6 +221,8 @@ angular.module("korpApp").component("appHeader", {
                 else matomoSend("trackEvent", "UI", "Locale switch", store.lang)
                 hasLangChanged = true
             })
+
+            $ctrl.setLanguage = (lang: string) => (store.lang = lang)
 
             $ctrl.getUrl = function (modeId) {
                 return $ctrl.getUrlParts(modeId).join("")
