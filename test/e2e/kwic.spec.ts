@@ -45,6 +45,7 @@ describe("KWIC", () => {
         await expect(page.locator(".results_table.reading")).toContainText("Men mörkrets makt är stor")
     })
 
+    // Flaky because of https://github.com/spraakbanken/korp-frontend/issues/470 (KWIC word gets unselected when full result is done)
     test("can be navigated with keyboard", async ({ page }) => {
         // Make a search
         await page.goto("./#?lang=eng&corpus=attasidor&search=word|katt")
