@@ -18,7 +18,8 @@ defineEmits<{
 <template>
     <div role="radiogroup">
         <span v-for="(option, i) in options">
-            <span v-if="i > 0" class="text-gray-500 mx-1">|</span>
+            <!-- The Number cast seems to be necessary when ngVue reads this into an AngularJS directive -->
+            <span v-if="Number(i) > 0" class="text-gray-500 mx-1">|</span>
 
             <!-- Currently selected option as text -->
             <span v-if="option.value == value" role="radio" aria-checked>{{ locObj(option.label, store.lang) }}</span>

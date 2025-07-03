@@ -3,7 +3,6 @@ import angular, { type IController, type IScope } from "angular"
 import { Chart } from "chart.js"
 import { html } from "@/util"
 import { loc } from "@/i18n"
-import { type Option } from "@/components/radio-list"
 import { StoreService } from "@/services/store"
 
 angular.module("korpApp").component("corpusDistributionChart", {
@@ -70,6 +69,9 @@ type CorpusDistributionChartScope = IScope & {
     mode: Mode
     setMode: (mode: Mode) => void
 }
+
+// Same as in RadioList.vue, but we cannot import a type from a Vue component
+type Option<V = string> = { label: string; value: V }
 
 type CorpusDistributionChartController = IController & {
     row: { title: string; values: [number, number] }[]
