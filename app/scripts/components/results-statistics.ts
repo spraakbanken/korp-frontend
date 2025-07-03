@@ -3,14 +3,14 @@ import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
-import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
 import { html } from "@/util"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/statistics"
-import { statisticsService } from "@/statistics"
+import { createColumns, statisticsService } from "@/statistics"
+import { StoreService } from "@/services/store"
 
 type ResultsStatisticsController = IController & {
     isActive: boolean
@@ -22,6 +22,8 @@ type ResultsStatisticsScope = IScope & {
     aborted: boolean
     rowCount: number
     columns: SlickgridColumn[]
+    /** Last submitted cqp */
+    cqp: string
     data: Dataset
     error?: string
     proxy: StatsProxy
@@ -36,7 +38,6 @@ type ResultsStatisticsScope = IScope & {
 
 angular.module("korpApp").component("resultsStatistics", {
     template: html`
-        <korp-error ng-if="error" message="{{error}}"></korp-error>
         <statistics
             aborted="aborted"
             columns="columns"
@@ -48,6 +49,7 @@ angular.module("korpApp").component("resultsStatistics", {
             search-params="searchParams"
             warning="warning"
         ></statistics>
+        <korp-error ng-if="error" message="{{error}}"></korp-error>
         <json-button ng-if="!warning && !error" endpoint="'count'" params="proxy.prevParams"></json-button>
     `,
     bindings: {
@@ -57,14 +59,14 @@ angular.module("korpApp").component("resultsStatistics", {
     },
     controller: [
         "$scope",
-        "$location",
         "$rootScope",
         "$timeout",
+        "store",
         function (
             $scope: ResultsStatisticsScope,
-            $location: LocationService,
             $rootScope: RootScope,
-            $timeout: ITimeoutService
+            $timeout: ITimeoutService,
+            store: StoreService
         ) {
             const $ctrl = this as ResultsStatisticsController
             const s = $scope
@@ -72,7 +74,8 @@ angular.module("korpApp").component("resultsStatistics", {
             s.proxy = statsProxyFactory.create()
 
             $rootScope.$on("make_request", (event, cqp: string) => {
-                s.makeRequest(cqp)
+                $scope.cqp = cqp
+                s.makeRequest($scope.cqp)
             })
 
             s.$on("abort_requests", () => {
@@ -88,8 +91,7 @@ angular.module("korpApp").component("resultsStatistics", {
                     // Enable statistics when first opening tab
                     if (!s.showStatistics) {
                         s.showStatistics = true
-                        const cqp = $rootScope.getActiveCqp()
-                        if (cqp) s.makeRequest(cqp)
+                        if ($scope.cqp) s.makeRequest($scope.cqp)
                     }
 
                     // workaround for bug in slickgrid
@@ -119,8 +121,7 @@ angular.module("korpApp").component("resultsStatistics", {
                 if ($ctrl.loading) s.proxy.abort()
                 s.resetView()
 
-                const inOrder = $location.search().in_order == null
-                if (!inOrder) {
+                if (!store.in_order) {
                     s.warning = "stats_not_in_order_warn"
                     return
                 }
@@ -133,20 +134,22 @@ angular.module("korpApp").component("resultsStatistics", {
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }
 
-                const attrs = ($location.search()["stats_reduce"] || "word").split(",")
-                const ignoreCase = $location.search()["stats_reduce_insensitive"] != null
+                const attrs = (store.stats_reduce || "word").split(",")
+                const ignoreCase = !!store.stats_reduce_insensitive
                 // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
                 const corpora: string = settings.corpusListing.stringifySelected(false)
 
                 $ctrl.setProgress(true, 0)
                 s.proxy
                     .makeRequest(cqp, attrs, {
+                        defaultWithin: store.within,
                         ignoreCase,
                         onProgress: (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)),
                     })
                     .then(async (data) => {
-                        const { rows, columns, params } = await statisticsService.processData(
-                            $rootScope,
+                        const columns = createColumns(store, Object.keys(data.corpora), attrs)
+
+                        const { rows, params } = await statisticsService.processData(
                             corpora,
                             data,
                             attrs,

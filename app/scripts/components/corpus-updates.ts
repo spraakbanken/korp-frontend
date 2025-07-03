@@ -4,7 +4,7 @@ import moment from "moment"
 import settings from "@/settings"
 import { html } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { RootScope } from "@/root-scope.types"
+import { StoreService } from "@/services/store"
 
 export default angular.module("korpApp").component("corpusUpdates", {
     template: html`
@@ -39,9 +39,9 @@ export default angular.module("korpApp").component("corpusUpdates", {
     `,
     bindings: {},
     controller: [
-        "$rootScope",
         "$scope",
-        function ($rootScope: RootScope, $scope: CorpusUpdatesScope) {
+        "store",
+        function ($scope: CorpusUpdatesScope, store: StoreService) {
             const $ctrl = this
 
             $scope.LIMIT = 5
@@ -68,8 +68,7 @@ export default angular.module("korpApp").component("corpusUpdates", {
             }
 
             $scope.selectCorpus = (corpusId: string) => {
-                settings.corpusListing.select([corpusId])
-                $rootScope.$broadcast("corpuschooserchange", [corpusId])
+                store.corpus = [corpusId]
             }
         },
     ],

@@ -5,7 +5,6 @@ import settings from "@/settings"
 import { normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map_services"
 import { korpRequest } from "./common"
-import { WithinParameters } from "./types"
 import { QueryResponse } from "./types/query"
 import { CountParams } from "./types/count"
 
@@ -35,7 +34,7 @@ export type CompareItem = {
 export type MapRequestResult = {
     corpora: string[]
     cqp: string
-    within: WithinParameters
+    within?: string
     data: MapResult[]
     attribute: MapAttribute
 }
@@ -105,10 +104,13 @@ export async function requestCompare(
 export async function requestMapData(
     cqp: string,
     cqpExprs: Record<string, string>,
-    within: WithinParameters,
+    defaultWithin: string | undefined,
     attribute: MapAttribute,
     relative?: boolean
 ): Promise<MapRequestResult> {
+    const cl = settings.corpusListing.subsetFactory(attribute.corpora)
+    const within = cl.getWithinParam(defaultWithin)
+
     const params: CountParams = {
         group_by_struct: attribute.label,
         cqp,
@@ -116,7 +118,8 @@ export async function requestMapData(
         incremental: true,
         split: attribute.label,
         relative_to_struct: relative ? attribute.label : undefined,
-        ...settings.corpusListing.getWithinParameters(),
+        default_within: defaultWithin,
+        within,
     }
 
     Object.keys(cqpExprs).map((cqp, i) => (params[`subcqp${i}`] = cqp))
@@ -125,7 +128,7 @@ export async function requestMapData(
 
     const normalizedData = normalizeStatsData(data) as any // TODO Type correctly
     let result = parseMapData(normalizedData, cqp, cqpExprs)
-    return { corpora: attribute.corpora, cqp, within, data: result, attribute }
+    return { corpora: attribute.corpora, cqp, within: defaultWithin, data: result, attribute }
 }
 
 export async function getDataForReadingMode(inputCorpus: string, textId: string): Promise<QueryResponse> {

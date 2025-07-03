@@ -7,30 +7,28 @@ import {
     ILocaleService,
     ILocationProvider,
     IScope,
-    ITimeoutService,
     ui,
 } from "angular"
 import korpApp from "./korp.module"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
 import * as authenticationProxy from "@/components/auth/auth"
-import { initLocales } from "@/data_init"
+import { getLocData } from "@/loc-data"
 import { RootScope } from "@/root-scope.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { deferOk, formatRelativeHits, getService, html } from "@/util"
+import { BUILD_HASH, formatRelativeHits, getService, html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
 import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
 import "@/components/korp-error"
+import "@/services/store"
+import { StoreService } from "@/services/store"
 import { JQueryExtended } from "./jquery.types"
 import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
 import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
-
-// @ts-ignore
-const BUILD_HASH = __webpack_hash__
 
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [
@@ -123,38 +121,21 @@ korpApp.run([
     "$locale",
     "tmhDynamicLocale",
     "tmhDynamicLocaleCache",
-    "$timeout",
     "$uibModal",
+    "store",
     async function (
         $rootScope: RootScope,
         $location: LocationService,
         $locale: ILocaleService,
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,
-        $timeout: ITimeoutService,
-        $uibModal: ui.bootstrap.IModalService
+        $uibModal: ui.bootstrap.IModalService,
+        store: StoreService
     ) {
         const s = $rootScope
 
-        s.extendedCQP = null
-        s.globalFilterData = {}
-        $rootScope.globalFilterDef = deferOk()
-        $rootScope.langDef = deferOk()
-        $rootScope.wordpicSortProp = "mi"
-
-        /** Get CQP corresponding to the current search, if any. */
-        $rootScope.getActiveCqp = () => {
-            if (!$rootScope.activeSearch) return undefined
-            // Simple search puts CQP in `simpleCQP`. Extended/advanced puts it in `activeSearch.val`.
-            const isSimple = ["word", "lemgram"].includes($rootScope.activeSearch.type)
-            return isSimple ? $rootScope.simpleCQP : $rootScope.activeSearch.val
-        }
-
-        // Listen to url changes like #?lang=swe
-        s.$on("$locationChangeSuccess", () => {
-            // Update current locale. This is async and triggers the "$localeChangeSuccess" event.
-            tmhDynamicLocale.set($location.search().lang || settings["default_language"])
-        })
+        // Sync stored lang to current locale. This is async and triggers the "$localeChangeSuccess" event.
+        store.watch("lang", (lang) => tmhDynamicLocale.set(lang))
 
         // Listen to change of current language
         s.$on("$localeChangeSuccess", () => {
@@ -168,9 +149,6 @@ korpApp.run([
                 console.warn(`No locale matching "${$locale.id}"`)
                 return
             }
-
-            // Update global variables
-            $rootScope["lang"] = lang
 
             // Trigger jQuery Localize
             ;($("body") as JQueryExtended).localize()
@@ -187,11 +165,6 @@ korpApp.run([
         $rootScope.graphTabs = []
         $rootScope.mapTabs = []
         $rootScope.textTabs = []
-
-        // This fetch was started in data_init.js, but only here can we store the result.
-        const initLocalesPromise = initLocales().then((data): void =>
-            $rootScope.$apply(() => ($rootScope["loc_data"] = data))
-        )
 
         /** Whether initial corpus selection is deferred because it depends on authentication. */
         let waitForLogin = false
@@ -269,9 +242,14 @@ korpApp.run([
                     },
                 })
             } else {
-                // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
-                settings.corpusListing.select(ids)
-                $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", ids), 0)
+                // Corpus selection OK
+                store.corpus = ids
+
+                // Sync corpus selection from store to global corpus listing
+                store.watch("corpus", () => {
+                    // In parallel mode, the select function may also add hidden corpora.
+                    settings.corpusListing.select(store.corpus)
+                })
             }
         }
 
@@ -346,19 +324,19 @@ korpApp.run([
             initializeCorpusSelection(getCorporaFromHash(), true)
         })
 
-        await initLocalesPromise
+        await getLocData()
     },
 ])
 
 korpApp.filter("trust", ["$sce", ($sce) => (input: string) => $sce.trustAsHtml(input)])
 // Passing `lang` seems to be necessary to have the string updated when switching language.
-// Can fall back on using $rootScope for numbers that will anyway be re-rendered when switching language.
+// Can fall back on using store for numbers that will anyway be re-rendered when switching language.
 korpApp.filter("prettyNumber", [
-    "$rootScope",
-    ($rootScope) => (input: string, lang?: string) => Number(input).toLocaleString(lang || $rootScope.lang),
+    "store",
+    (store) => (input: string, lang?: string) => Number(input).toLocaleString(lang || store.lang),
 ])
 korpApp.filter("formatRelativeHits", [
-    "$rootScope",
-    ($rootScope) => (input: string, lang?: string) => formatRelativeHits(input, lang || $rootScope.lang),
+    "store",
+    (store) => (input: string, lang?: string) => formatRelativeHits(input, lang || store.lang),
 ])
 korpApp.filter("maxLength", () => (val: unknown) => String(val).length > 39 ? String(val).slice(0, 36) + "…" : val)

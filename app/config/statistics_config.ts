@@ -49,12 +49,13 @@ function reduceCqp(
     // Escape values for use in CQP regex
     values = values.map(regescape)
     // Combine grouped values
-    let cqpValue = values.length > 1 ? mergeRegex(values) : values[0]
-    // Case-insensitive search
-    if (name == "word" && ignoreCase) cqpValue += " %c"
+    const cqpValue = values.length > 1 ? mergeRegex(values) : values[0]
+    // Enclose in quotes and support case-insensitive search
+    let quoted = `'${cqpValue}'`
+    if (name == "word" && ignoreCase) quoted += " %c"
 
     const op = attr?.type === "set" ? "contains" : "="
-    return `${cqpName} ${op} '${cqpValue}'`
+    return `${cqpName} ${op} ${quoted}`
 }
 
 /** Merge ["foo:X", "foo:Y"] to "foo:(X|Y)" */

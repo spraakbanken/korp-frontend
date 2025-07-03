@@ -80,29 +80,35 @@ Språkbanken's configuration repository is <https://github.com/spraakbanken/korp
 It can be used as a supplement to this documentation. Make sure to check out the branch
 corresponding to the branch you are using in the main repository.
 
-## Settings in `config.yml`
+## Settings
 
-*Note: In the spring 2022 there was a rewrite where most of the frontend configuration moved to the backend. We also changed format from camel case to
-snake case. So `wordpictureTagset` became `word_picture_tagset`. Also `config.js` was turned into a YAML-file, `config.yml`.*
+Settings can be given on three levels, and are loaded in the following order:
 
-Many of the settings listed here can be given in a modes-file in the backend instead of `config.yml`. For example `autocomplete` could be wanted in
-one mode and not another. See the 
-[backend documentation](https://github.com/spraakbanken/korp-backend) for more 
-settings that affect the frontend.
+1. `config.yml`
+2. `<mode>_mode.js` – see [Modes](#modes)
+3. backend `/corpus_config` – see [Modes](#modes)
 
-**Attributes that must be added to `config.yml`, and doesn't work in modes-files:**
+In case of conflicts, values from a later layer overwrites those from a previous layer.
+Note that nested values are not merged: If you use `config.yml` to specify `logo.korp` and `<mode>_mode.js` to specify `logo.organization`, then `logo.korp` will be undefined.
 
-- __korp_backend_url__ - URL to Korp's backend
-- __languages__ - Array of objects with language code and translation of supported UI languages, for example:
+### Settings reference
+
+The first few settings are needed at initialization time, and thus must be specified in `config.yml` or `<mode>_mode.js`.
+
+- __korp_backend_url__ - String. _Required during init._ URL to Korp's backend
+- __languages__ - Array of objects. _Required during init._ Each object has a language code and label, for example:
     ```yaml
     - value: eng
       label: English
     - value: swe
       label: Svenska
     ```
-
-**Others:**
-
+- __logo__ - Object. _Optional, but must be set during init._ Specify site-specific logos.
+  - __korp__ - String. HTML content for the Korp logo to the left of the corpus chooser. Default: [plain Korp logo](../app/img/korp.svg).
+  - __organization__ - String. HTML content for the organization logo(s) on the top right of the Korp window. Default: empty.
+  - __chooser_right__ - String. HTML content for a logo to the right of the corpus chooser: Default: empty.
+  The HTML content can refer to image files in the `app/img/` directory of the configuration as `img/`_file_.
+  If you wish to use the the [plain Korp logo](../app/img/korp.svg) (or other images in this repository) differently from the default, you should copy it to the configuration.
 - __auth_module__ - String or object. See [Authentication](#authentication)
 - __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
 - __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
@@ -138,6 +144,7 @@ settings that affect the frontend.
 - __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
 - __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
+- __initialization_checks__ - Async function. Implement this to do customized async initialization when setting initial corpus selection. Return true to skip standard selection processing afterwards.
 - __input_case_insensitive_default__ - Boolean. Decides if the simple search input should be case-insensitive by default.
 - __iso_languages__ - A map of two-letter ISO language codes to three-letter. Only used for fixing old links. Default: See `settings.js`
 - __map_center__ - See [Map](#map)
@@ -159,7 +166,7 @@ settings that affect the frontend.
 - __statistics__ - Boolean. Enable statistics search. Default: `true`
 - __statistics_case_insensitive_default__ - Boolean. Decides if the "Group by" option should be case-insensitive by default.
 - __statistics_limit__ - Boolean. Maximum number of rows to retrieve for statistics. Some accuracy is lost for large results, but it can save the browser from crashing.
-- __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
+- __statistics_postprocess__ - Function. Allows post-processing of the statistics result.
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```yaml
@@ -620,29 +627,25 @@ In `custom/extended.js`, we can define custom (non-Angular) components to be use
 ```js
 export default {
     complemgramExtended: {
-        template: `<input type="text" ng-model="model" />
-        `,
-        controller: [
-            "$scope", function($scope) {
-                $scope.$watch("input; () => ...)
-                ...
+        template: `<input type="text" ng-model="input" />`,
+        controller: ["$scope", function($scope) {
+            $scope.$watch("input", () => ...)
+            ...
         }],
     },
     attr: {
-        template: `
-            <select ...>
-        `,
+        template: `<select ...>`,
         controller: ["$scope", "$uibModal", function($scope, $uibModal) {
             if($scope.show) $uibModal.open
-        }
+            ...
+        }]
     },
     ...
 }
 ```
 
-Template is an Angular.js template string and controller is an Angular.js controller function.
-
-Make sure to set `$scope.model` as the final result to be used in the CQP-query.
+- `template` is an Angular.js template string and `controller` is an Angular.js controller function.
+- Make sure to write the input value to `$scope.input`, which will automatically be regexp-escaped depending on the selected operator and attribute config.
 
 `complemgramExtended` can then be used as key for `extendedComponent` in the configuration files.
 
@@ -654,13 +657,6 @@ attributes: {
     }
 }
 ```
-
-##### escaper
-
-`escaper` is a directive that takes the user's input and escapes any regexp characters before saving it to `scope.model`. 
-When the model changes it automatically de-escapes any regexp characters before showing the value to the user. 
-Input must be saved to `scope.input` for it to work. Example: `<input ng-model="input" escaper>`
-
 
 ##### Customizing sidebar
 

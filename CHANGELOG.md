@@ -2,18 +2,52 @@
 
 ## [Unreleased]
 
+## [9.10.1] - 2025-07-02
+
+### Fixed
+
+- Links with stats_reduce with missing attribute crashes [#314](https://github.com/spraakbanken/korp-frontend/issues/314)
+- Federated authentication module: require READ, not WRITE [#461](https://github.com/spraakbanken/korp-frontend/issues/461)
+- First click on the "Group by" dropdown triggers a re-fetch [#467](https://github.com/spraakbanken/korp-frontend/issues/467)
+- Switching to Statistics tab always fetches new results [#468](https://github.com/spraakbanken/korp-frontend/issues/468)
+- Case-insensitive statistics generates bad CQP for example [#469](https://github.com/spraakbanken/korp-frontend/issues/469)
+
+## [9.10.0] - 2025-06-26
+
 ### Added
 
 - KWIC: Show number of hits as relative frequency [#456](https://github.com/spraakbanken/korp-frontend/issues/456)
 - Background color for statistics totals column
 - Configurable limit for statistics API call (alternative to [#73](https://github.com/spraakbanken/korp-frontend/issues/73) and [#92](https://github.com/spraakbanken/korp-frontend/issues/92))
 - Statistics: choose between absolute or relative frequencies [#454](https://github.com/spraakbanken/korp-frontend/issues/454)
+- Specify site-specific logos in configuration [#325](https://github.com/spraakbanken/korp-frontend/issues/325)
+
+### Changed
+
+- A `store` service was introduced to consolidate state management
+  - Most Root Scope properties have moved to it: `activeSearch`, `extendedCQP`, `globalFilterData`, `globalFilter`, `lang`, `simpleCQP`, `show_modal` (now `display`), `statsRelative`
+  - Most other app state properties that were synced to URL parameters have also moved to it: `corpus`, `cqp`, `cqp_<lang>` (as `cqpParallel`), `global_filter`, `hpp`, `isCaseInsensitive`, `mid_comp`, `in_order`, `page`, `parallel_corpora`, `prefix`, `random_seed`, `reading_mode`, `search`, `sort`, `stats_reduce`, `stats_reduce_insensitive`, `suffix`, `within`
+  - The `corpuschooserchange` and `initialcorpuschooserchange` events are replaced with `store.watch("corpus", ...)`
+  - The store internally uses `$rootScope`, so there's a lot of `$root` usage remaining in HTML templates
+  - `globalFilterDef`, `langDef` and `getActiveCqp()` were removed because they are no longer needed
+  - `loc_data` was extracted to `@/loc-data.ts` (use its `getLocData()` or `locData`)
+  - In `CorpusListing`, `getWithinParameters()` now takes the app-wide value as input and returns only the corpus-specific value.
+- The `escaper` directive has been removed; escaping is applied automatically
+
+### Fixed
+
+- Decimal separator not updated in statistics when changing language [#246](https://github.com/spraakbanken/korp-frontend/issues/246)
+- Empty value "∅" in stats table not clickable [#457](https://github.com/spraakbanken/korp-frontend/issues/457)
+- Update progress indicator when aborting search
+- Prevent bad timespan request if no corpora are available
+
+## [9.9.1] - 2025-04-14
 
 ### Fixed
 
 - Statistics grouped rows: sub CQP only has one of the values [#452](https://github.com/spraakbanken/korp-frontend/issues/452)
-- Decimal separator not updated in statistics when changing language [#246](https://github.com/spraakbanken/korp-frontend/issues/246)
-- Empty value "∅" in stats table not clickable [#457](https://github.com/spraakbanken/korp-frontend/issues/457)
+- Statistics CSV/TSV export broken when grouping by multiple attributes [#458](https://github.com/spraakbanken/korp-frontend/issues/458)
+- Use attribute value without colon-suffix in stats export [#459](https://github.com/spraakbanken/korp-frontend/issues/459)
 
 ## [9.9.0] - 2025-03-24
 
@@ -427,6 +461,9 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.10.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.1
+[9.10.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.0
+[9.9.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.1
 [9.9.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.0
 [9.8.5]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.5
 [9.8.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.4

@@ -5,17 +5,14 @@ import angular, { ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import { regescape } from "@/util"
-import { RootScope } from "@/root-scope.types"
-import { LocationService } from "@/urlparams"
 import { countAttrValues } from "@/backend/attr-values"
 import { RecursiveRecord } from "@/backend/types/attr-values"
+import { StoreService } from "@/services/store"
+import { Condition } from "@/cqp_parser/cqp.types"
 
 export type GlobalFilterService = {
     initialize: () => void
 }
-
-/** Shape of data stored in URL */
-type StoredFilterValues = Record<string, string[]>
 
 /**
  * "Global filters" are text-level CQP conditions for selected attributes, that are managed separately in the GUI and
@@ -24,25 +21,24 @@ type StoredFilterValues = Record<string, string[]>
  * manages user-selected values.
  */
 angular.module("korpApp").factory("globalFilterService", [
-    "$location",
-    "$rootScope",
     "$timeout",
-    function ($location: LocationService, $rootScope: RootScope, $timeout: ITimeoutService): GlobalFilterService {
+    "store",
+    function ($timeout: ITimeoutService, store: StoreService): GlobalFilterService {
         /** Drilldown of values available for each attr. N-dimensional map where N = number of attrs. */
         let currentData: RecursiveRecord<number> = {}
 
         /** Fetch token counts keyed in multiple dimensions by the values of attributes */
         async function getData(): Promise<void> {
             const corpora = settings.corpusListing.getSelectedCorpora()
-            const attrs = Object.keys($rootScope.globalFilterData)
-            const multiAttrs = attrs.filter((attr) => $rootScope.globalFilterData[attr].attribute.type === "set")
+            const attrs = Object.keys(store.globalFilterData)
+            const multiAttrs = attrs.filter((attr) => store.globalFilterData[attr].attribute.type === "set")
             currentData = corpora.length && attrs.length ? await countAttrValues(corpora, attrs, multiAttrs) : {}
             // Abort if corpus selection has changed since the request was made
             if (!_.isEqual(corpora, settings.corpusListing.getSelectedCorpora())) return
             $timeout(() => {
                 updateData()
                 // Deselect values that are not in the options
-                for (const filter of Object.values($rootScope.globalFilterData)) {
+                for (const filter of Object.values(store.globalFilterData)) {
                     filter.value = filter.value.filter((value) => filter.options.some(([v]) => v === value))
                 }
             })
@@ -56,7 +52,7 @@ angular.module("korpApp").factory("globalFilterService", [
                 parentSelected: boolean
             ): [number, boolean] {
                 const attr = attrs[0]
-                const filter = $rootScope.globalFilterData[attr]
+                const filter = store.globalFilterData[attr]
                 let sum = 0
                 const values: string[] = []
                 let include = false
@@ -89,13 +85,13 @@ angular.module("korpApp").factory("globalFilterService", [
             }
 
             // reset all filters
-            for (const filter of Object.values($rootScope.globalFilterData)) filter.options = []
+            for (const filter of Object.values(store.globalFilterData)) filter.options = []
 
             // recursively decide the counts of all values
-            collectAndSum(Object.keys($rootScope.globalFilterData), currentData, true)
+            collectAndSum(Object.keys(store.globalFilterData), currentData, true)
 
             // merge duplicate child values
-            for (const filter of Object.values($rootScope.globalFilterData)) {
+            for (const filter of Object.values(store.globalFilterData)) {
                 // Sum the counts of duplicate values
                 const options: Record<string, number> = {}
                 for (const [value, count] of filter.options) {
@@ -103,90 +99,74 @@ angular.module("korpApp").factory("globalFilterService", [
                     options[value] += count
                 }
                 // Cast back to list and sort alphabetically
-                filter.options = Object.entries(options).sort((a, b) => a[0].localeCompare(b[0], $rootScope.lang))
+                filter.options = Object.entries(options).sort((a, b) => a[0].localeCompare(b[0], store.lang))
             }
         }
 
-        /** Parse encoded url param value to local data. */
-        function setFromLocation(globalFilter?: string) {
-            if (!globalFilter) return
-            const parsedFilter: StoredFilterValues = JSON.parse(atob(globalFilter))
-
-            // Copy values from param, reset filters not in param
-            for (const attr in $rootScope.globalFilterData) {
-                $rootScope.globalFilterData[attr].value = parsedFilter[attr] || []
-            }
-        }
-
-        /** Set url param from local data, as base64-encoded json. */
-        function updateLocation() {
-            const rep: StoredFilterValues = {}
-            Object.entries($rootScope.globalFilterData).forEach(([attr, filter]) => {
-                if (filter.value.length) rep[attr] = filter.value
-            })
-            if (!_.isEmpty(rep)) {
-                $location.search("global_filter", btoa(JSON.stringify(rep)))
-                // Build a CQP token object of AND-combined conditions from active filters.
-                $rootScope.globalFilter = [
-                    {
-                        and_block: Object.entries($rootScope.globalFilterData).map(([attr, filter]) =>
-                            filter.value.map((value) => ({
+        /** Build globally available CQP fragment. */
+        function updateCqp() {
+            // Create a token with an AND of each attribute, and an OR of the selected values of each attribute.
+            const and_block = Object.entries(store.globalFilterData)
+                .map(([attr, filter]) =>
+                    filter.value.map(
+                        (value) =>
+                            ({
                                 type: `_.${attr}`,
                                 op: filter.attribute.type === "set" ? "contains" : "=",
                                 val: regescape(value),
-                            }))
-                        ),
-                    },
-                ]
-            } else {
-                $location.search("global_filter", null)
-                $rootScope.globalFilter = null
-            }
+                            } satisfies Condition)
+                    )
+                )
+                .filter((conds) => conds.length > 0)
+            // If nothing is selected, unset globalFilter
+            store.globalFilter = and_block.length ? [{ and_block }] : undefined
         }
 
         function initialize() {
             /** Update available filters when changing corpus selection. */
-            $rootScope.$on("corpuschooserchange", () => {
+            store.watch("corpus", () => {
                 if (settings.corpusListing.selected.length > 0) {
                     const attrs = settings.corpusListing.getDefaultFilters()
 
                     // Remove filters that are no more applicable
-                    for (const attr in $rootScope.globalFilterData) {
-                        if (!attrs[attr]) delete $rootScope.globalFilterData[attr]
+                    for (const attr in store.globalFilterData) {
+                        if (!attrs[attr]) delete store.globalFilterData[attr]
                     }
 
                     // Add new filters
                     for (const attr in attrs) {
-                        $rootScope.globalFilterData[attr] ??= {
+                        store.globalFilterData[attr] ??= {
                             attribute: attrs[attr],
                             value: [], // Selection empty by default
                             options: [], // Filled in updateData
                         }
                     }
 
-                    setFromLocation($location.search().global_filter)
                     getData()
-                    updateLocation()
                 }
-                // Flag that the filter feature is ready.
-                $rootScope.globalFilterDef.resolve()
             })
 
             /** Set up sync from url params to local data. */
-            $rootScope.$watch(
-                () => $location.search().global_filter,
-                (filter) => setFromLocation(filter)
-            )
+            store.watch("global_filter", () => {
+                // Copy values from param, reset filters not in param
+                for (const attr in store.globalFilterData) {
+                    store.globalFilterData[attr].value = store.global_filter[attr] || []
+                }
+            })
 
-            $rootScope.$watch(
+            store.watch(
                 "globalFilterData",
-                (filterData: RootScope["globalFilterData"], filterDataOld?: RootScope["globalFilterData"]) => {
-                    // Only watch selection changes
+                (filterData, filterDataOld) => {
+                    // Get data (cached) in case the set of available filters have changed
+                    getData()
+                    // Update the CQP fragment using globalFilterData
+                    updateCqp()
+                    // Only store actual changes
                     const values = _.mapValues(filterData, (filter) => filter.value)
                     const valuesOld = _.mapValues(filterDataOld, (filter) => filter.value)
                     if (!_.isEqual(values, valuesOld)) {
-                        updateLocation()
-                        getData()
+                        // Skip empty filters for a shorter URL
+                        store.global_filter = _.pickBy(values, (vals) => vals.length)
                     }
                 },
                 true

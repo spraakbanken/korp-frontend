@@ -41,7 +41,7 @@ angular.module("korpApp").directive("tabHash", [
                 key: attr.tabHash,
                 scope_name: "activeTab",
                 val_in: Number,
-                default: 0,
+                default: "0",
             })
 
             /** Increment max tab index and select last. */

@@ -3,7 +3,7 @@ import settings from "@/settings"
 import BaseProxy from "@/backend/base-proxy"
 import type { ProgressHandler } from "@/backend/types"
 import { Factory } from "@/util"
-import { RelationsParams, RelationsResponse } from "./types/relations"
+import { RelationsParams, RelationsResponse, RelationsSort } from "./types/relations"
 import { korpRequest } from "./common"
 
 export class LemgramProxy extends BaseProxy {
@@ -12,7 +12,7 @@ export class LemgramProxy extends BaseProxy {
     async makeRequest(
         word: string,
         type: string,
-        sort: RelationsParams["sort"],
+        sort: RelationsSort,
         onProgress: ProgressHandler<"relations">
     ): Promise<RelationsResponse> {
         this.resetRequest()

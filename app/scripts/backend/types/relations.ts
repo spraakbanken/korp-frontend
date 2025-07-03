@@ -8,7 +8,7 @@ export type RelationsParams = {
     min?: number
     max?: number
     incremental?: boolean
-    sort?: "freq" | "mi"
+    sort?: RelationsSort
 }
 
 export type RelationsResponse = {
@@ -16,6 +16,8 @@ export type RelationsResponse = {
     /** Execution time in seconds */
     time: number
 }
+
+export type RelationsSort = "freq" | "mi"
 
 export type ApiRelation = {
     dep: string

@@ -6,7 +6,6 @@ import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import "@/../styles/map.scss"
 import { AppSettings } from "@/settings/app-settings.types"
-import { WithinParameters } from "@/backend/types"
 import { Point } from "@/map_services"
 
 type ResultMapController = IController & {
@@ -46,7 +45,7 @@ export type MarkerQueryData = {
     subCqp: string
     label: string
     corpora: string[]
-    within: WithinParameters
+    within?: string
 }
 
 type CustomMarker = L.Marker & {

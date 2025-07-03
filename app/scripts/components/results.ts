@@ -16,6 +16,7 @@ import "@/components/sidebar"
 import "@/directives/tab-hash"
 import { RootScope } from "@/root-scope.types"
 import { LocationService } from "@/urlparams"
+import { StoreService } from "@/services/store"
 
 type ResultsScope = IScope & {
     showSidebar: boolean
@@ -167,14 +168,15 @@ angular.module("korpApp").component("results", {
         "$location",
         "$rootScope",
         "$scope",
-        function ($location: LocationService, $rootScope: RootScope, $scope: ResultsScope) {
+        "store",
+        function ($location: LocationService, $rootScope: RootScope, $scope: ResultsScope, store: StoreService) {
             $scope.showSidebar = false
             $scope.showStatisticsTab = settings["statistics"] != false
             $scope.showWordpicTab = settings["word_picture"] != false
 
             $scope.onSidebarShow = () => ($scope.showSidebar = true)
             $scope.onSidebarHide = () => ($scope.showSidebar = false)
-            $scope.hasResult = () => !!$rootScope.activeSearch || !!$rootScope.compareTabs.length
+            $scope.hasResult = () => !!store.activeSearch || !!$rootScope.compareTabs.length
 
             const showMainTab = () => $location.search("result_tab", null)
             statemachine.listen("cqp_search", showMainTab)

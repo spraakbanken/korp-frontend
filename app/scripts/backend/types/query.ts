@@ -22,7 +22,7 @@ export type QueryParams = {
     default_within?: string
     within?: string
     in_order?: boolean
-    sort?: string
+    sort?: QueryParamSort
     random_seed?: number
     cut?: number
     [cqpn: `cqp${number}`]: string
@@ -46,3 +46,5 @@ export type QueryResponse = {
     /** A hash of this query */
     query_data: string
 }
+
+export type QueryParamSort = "" | "keyword" | "left" | "right" | "random"

@@ -1,12 +1,12 @@
 /** @format */
-import angular, { IController, IScope, ITimeoutService } from "angular"
+import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/services/compare-searches"
 import "@/components/search-submit"
-import { LocationService } from "@/urlparams"
 import { CompareSearches } from "@/services/compare-searches"
 import { SearchesService } from "@/services/searches"
+import { StoreService } from "@/services/store"
 
 type AdvancedSearchController = IController & {
     cqp: string
@@ -15,17 +15,20 @@ type AdvancedSearchController = IController & {
     onSearchSave: (name: string) => void
 }
 
-type AdvancedSearchScope = IScope & {}
+type AdvancedSearchScope = IScope & {
+    extendedCqp: string
+    simpleCqp: string
+}
 
 angular.module("korpApp").component("advancedSearch", {
     template: html` <div>
         <div class="well well-small">
             {{'active_cqp_simple' | loc:$root.lang}}:
-            <pre>{{$root.simpleCQP}}</pre>
+            <pre>{{simpleCqp}}</pre>
         </div>
         <div class="well well-small">
             {{'active_cqp_extended' | loc:$root.lang}}:
-            <pre>{{$root.extendedCQP}}</pre>
+            <pre>{{extendedCqp}}</pre>
         </div>
         <div class="well well-small">
             {{'cqp_query' | loc:$root.lang}}:
@@ -63,40 +66,37 @@ angular.module("korpApp").component("advancedSearch", {
     </div>`,
     bindings: {},
     controller: [
-        "$location",
         "$scope",
         "compareSearches",
         "searches",
+        "store",
         function (
-            $location: LocationService,
             $scope: AdvancedSearchScope,
             compareSearches: CompareSearches,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             const $ctrl = this as AdvancedSearchController
-
             $ctrl.cqp = "[]"
-            $ctrl.freeOrder = $location.search().in_order != null
 
-            /** Read advanced CQP from `search` URL param. */
+            /** Read advanced CQP from state prop `search`. */
             function readSearchParam(): void {
-                const search = $location.search().search
-                if (search?.slice(0, 4) == "cqp|") {
-                    $ctrl.cqp = search.slice(4)
+                if (store.search?.slice(0, 4) == "cqp|") {
+                    $ctrl.cqp = store.search.slice(4)
                 }
             }
 
-            // Sync CQP from URL to component.
-            $scope.$watch(
-                () => $location.search().search,
-                () => readSearchParam()
-            )
+            // Sync CQP from store to component.
+            store.watch("search", () => readSearchParam())
+            store.watch("in_order", () => ($ctrl.freeOrder = !store.in_order))
+            store.watch("extendedCqp", () => ($scope.extendedCqp = store.extendedCqp || ""))
+            store.watch("simpleCqp", () => ($scope.simpleCqp = store.simpleCqp || ""))
 
             $ctrl.onSearch = () => {
-                $location.search("page", null)
-                $location.search("within", null)
-                $location.search("in_order", $ctrl.freeOrder ? false : null)
-                $location.search("search", `cqp|${$ctrl.cqp}`)
+                store.page = 0
+                store.within = undefined
+                store.in_order = !$ctrl.freeOrder
+                store.search = `cqp|${$ctrl.cqp}`
                 matomoSend("trackEvent", "Search", "Submit search", "Advanced")
                 searches.doSearch()
             }

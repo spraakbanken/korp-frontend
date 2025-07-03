@@ -1,6 +1,12 @@
 /** @format */
+// Read config dir
+let korpConfigDir = "app"
+try {
+    korpConfigDir = require("./run_config.json").configDir
+} catch {}
+
 module.exports = {
-    content: ["./app/**/*.vue", "./app/**/*.js", "./app/**/*.ts", "./app/**/*.html"],
+    content: ["./app/**/*.{js,ts,html,vue}", korpConfigDir + "/**/*.{js,ts,html,vue,yml}"],
     theme: {
         extend: {
             animation: {
@@ -27,6 +33,4 @@ module.exports = {
             },
         },
     },
-    // classes used in, for example, mode-files are not added to bundle automatically
-    safelist: ["my-5", "h-32", "p-5", "text-lg", "mt-2", "mt-3"],
 }

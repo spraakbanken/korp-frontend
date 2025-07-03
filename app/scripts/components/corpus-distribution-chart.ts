@@ -4,7 +4,7 @@ import { Chart } from "chart.js"
 import { html } from "@/util"
 import { loc } from "@/i18n"
 import { type Option } from "@/components/radio-list"
-import { RootScope } from "@/root-scope.types"
+import { StoreService } from "@/services/store"
 
 angular.module("korpApp").component("corpusDistributionChart", {
     template: html`
@@ -17,18 +17,18 @@ angular.module("korpApp").component("corpusDistributionChart", {
         row: "<",
     },
     controller: [
-        "$rootScope",
         "$scope",
-        function ($rootScope: RootScope, $scope: CorpusDistributionChartScope) {
+        "store",
+        function ($scope: CorpusDistributionChartScope, store: StoreService) {
             const $ctrl = this as CorpusDistributionChartController
             $ctrl.modeOptions = [
                 {
                     value: "relative",
-                    label: loc("statstable_relfigures", $rootScope.lang),
+                    label: loc("statstable_relfigures", store.lang),
                 },
                 {
                     value: "absolute",
-                    label: loc("statstable_absfigures", $rootScope.lang),
+                    label: loc("statstable_absfigures", store.lang),
                 },
             ]
             $scope.mode = "relative"
@@ -44,7 +44,7 @@ angular.module("korpApp").component("corpusDistributionChart", {
                         datasets: [{ data: getValues() }],
                     },
                     options: {
-                        locale: $rootScope.lang,
+                        locale: store.lang,
                         plugins: {
                             legend: {
                                 display: false,

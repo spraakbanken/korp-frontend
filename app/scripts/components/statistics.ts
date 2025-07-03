@@ -15,10 +15,10 @@ import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, SlickgridColumn } from "@/statistics.types"
 import { CountParams } from "@/backend/types/count"
-import { LocationService } from "@/urlparams"
 import { AttributeOption } from "@/corpus_listing"
 import { SearchesService } from "@/services/searches"
 import { getTimeData } from "@/timedata"
+import { StoreService } from "@/services/store"
 
 type StatisticsScope = IScope & {
     clipped: boolean
@@ -27,6 +27,7 @@ type StatisticsScope = IScope & {
     statCurrentAttrs: AttributeOption[]
     statSelectedAttrs: string[]
     statInsensitiveAttrs: string[]
+    statsRelative: boolean
 }
 
 type StatisticsController = IController & {
@@ -66,7 +67,7 @@ angular.module("korpApp").component("statistics", {
     template: html`
         <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
             <div class="flex items-center gap-1">
-                <span>{{ "reduce_text" | loc:$root.lang }}:</span>
+                <label for="reduce-select">{{ "reduce_text" | loc:$root.lang }}:</label>
                 <reduce-select
                     items="statCurrentAttrs"
                     selected="statSelectedAttrs"
@@ -75,7 +76,7 @@ angular.module("korpApp").component("statistics", {
                 ></reduce-select>
             </div>
             <label>
-                <input type="checkbox" ng-model="$root.statsRelative" />
+                <input type="checkbox" ng-model="statsRelative" />
                 {{"num_results_relative" | loc:$root.lang}}
                 <i
                     class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
@@ -85,9 +86,9 @@ angular.module("korpApp").component("statistics", {
         </div>
 
         <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
-            <div ng-if="$ctrl.warning" class="korp-warning">{{$ctrl.warning | loc:$root.lang}}</div>
+            <div ng-if="$ctrl.warning" class="korp-warning" role="status">{{$ctrl.warning | loc:$root.lang}}</div>
 
-            <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning">
+            <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning" role="status">
                 {{'search_aborted' | loc:$root.lang}}
             </div>
 
@@ -197,12 +198,12 @@ angular.module("korpApp").component("statistics", {
                 <div id="exportStatsSection">
                     <br /><br />
                     <select id="kindOfData">
-                        <option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
-                        <option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
+                        <option value="relative">{{ 'statstable_relfigures' | loc:$root.lang }}</option>
+                        <option value="absolute">{{ 'statstable_absfigures' | loc:$root.lang }}</option>
                     </select>
                     <select id="kindOfFormat">
-                        <option value="csv" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
-                        <option value="tsv" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
+                        <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
+                        <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
                     </select>
                     <a id="generateExportButton" ng-click="$ctrl.generateExport()">
                         <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
@@ -224,17 +225,17 @@ angular.module("korpApp").component("statistics", {
         warning: "<",
     },
     controller: [
-        "$location",
         "$rootScope",
         "$scope",
         "$uibModal",
         "searches",
+        "store",
         function (
-            $location: LocationService,
             $rootScope: RootScope,
             $scope: StatisticsScope,
             $uibModal: ui.bootstrap.IModalService,
-            searches: SearchesService
+            searches: SearchesService,
+            store: StoreService
         ) {
             const $ctrl = this as StatisticsController
 
@@ -257,22 +258,25 @@ angular.module("korpApp").component("statistics", {
             }
 
             // Set initial value for stats case-insensitive, but only if reduce attr is not set
-            if (!$location.search().stats_reduce && settings["statistics_case_insensitive_default"]) {
-                $location.search("stats_reduce_insensitive", "word")
+            if (!store.stats_reduce && settings["statistics_case_insensitive_default"]) {
+                store.stats_reduce_insensitive = "word"
             }
 
-            $rootScope.$watch("lang", () => {
+            store.watch("lang", () => {
                 if (!$ctrl.grid) return
                 const cols = $ctrl.grid.getColumns()
                 updateLabels(cols)
                 $ctrl.grid.setColumns(cols)
             })
 
-            $rootScope.$watch("statsRelative", () => {
+            store.watch("statsRelative", () => {
+                $scope.statsRelative = store.statsRelative
                 if (!$ctrl.grid) return
                 // Trigger reformatting
                 $ctrl.grid.setColumns($ctrl.grid.getColumns())
             })
+
+            $scope.$watch("statsRelative", () => (store.statsRelative = $scope.statsRelative))
 
             $ctrl.$onChanges = (changeObj) => {
                 if ("columns" in changeObj && $ctrl.columns != undefined) {
@@ -319,7 +323,7 @@ angular.module("korpApp").component("statistics", {
                                 if (sortCol.field == "hit_value") {
                                     const x = a.formattedValue[columnId]
                                     const y = b.formattedValue[columnId]
-                                    return x.localeCompare(y, $rootScope.lang) * direction
+                                    return x.localeCompare(y, store.lang) * direction
                                 }
 
                                 // Sort totals column by absolute hit count
@@ -392,16 +396,16 @@ angular.module("korpApp").component("statistics", {
 
             function updateLabels(cols: SlickgridColumn[]) {
                 cols.forEach((col) => {
-                    if (col.translation) col.name = locObj(col.translation, $rootScope.lang)
+                    if (col.translation) col.name = locObj(col.translation, store.lang)
                 })
             }
 
-            $rootScope.$on("corpuschooserchange", () => {
+            store.watch("corpus", () => {
                 const allAttrs = settings.corpusListing.getStatsAttributeGroups(settings.corpusListing.getReduceLang())
                 $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
-                $scope.statSelectedAttrs = ($location.search().stats_reduce || "word").split(",")
-                const insensitiveAttrs = $location.search().stats_reduce_insensitive
-                $scope.statInsensitiveAttrs = insensitiveAttrs?.split(",") || []
+                $scope.statSelectedAttrs = (store.stats_reduce || "word").split(",")
+                const insensitiveAttrs = store.stats_reduce_insensitive
+                $scope.statInsensitiveAttrs = insensitiveAttrs ? insensitiveAttrs.split(",") : []
             })
 
             $scope.reduceOnChange = ({ selected, insensitive }) => {
@@ -411,13 +415,13 @@ angular.module("korpApp").component("statistics", {
                 if ($scope.statSelectedAttrs && $scope.statSelectedAttrs.length > 0) {
                     const isModified =
                         $scope.statSelectedAttrs.length != 1 || !$scope.statSelectedAttrs.includes("word")
-                    $location.search("stats_reduce", isModified ? $scope.statSelectedAttrs.join(",") : null)
+                    store.stats_reduce = isModified ? $scope.statSelectedAttrs.join(",") : "word"
                 }
 
                 if ($scope.statInsensitiveAttrs && $scope.statInsensitiveAttrs.length > 0) {
-                    $location.search("stats_reduce_insensitive", $scope.statInsensitiveAttrs.join(","))
+                    store.stats_reduce_insensitive = $scope.statInsensitiveAttrs.join(",")
                 } else if ($scope.statInsensitiveAttrs) {
-                    $location.search("stats_reduce_insensitive", null)
+                    store.stats_reduce_insensitive = ""
                 }
 
                 debouncedSearch()
@@ -486,8 +490,7 @@ angular.module("korpApp").component("statistics", {
                 }
                 $ctrl.noRowsError = false
 
-                // TODO this is wrong, it should use the previous search
-                let cqp = $rootScope.getActiveCqp()!
+                let cqp = $ctrl.searchParams.prevNonExpandedCQP
                 try {
                     cqp = expandOperators(cqp)
                 } catch {}
@@ -508,9 +511,7 @@ angular.module("korpApp").component("statistics", {
                     console.log("Warning: more than one selected attribute, choosing first")
                 }
                 const selectedAttribute = selectedAttributes[0]
-
-                const within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
-                const request = requestMapData(cqp, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
+                const request = requestMapData(cqp, cqpExprs, store.within, selectedAttribute, $ctrl.mapRelative)
                 $rootScope.mapTabs.push(request)
             }
 
@@ -617,10 +618,7 @@ angular.module("korpApp").component("statistics", {
                 let reduceVal, val
                 const selVal = $("#kindOfData option:selected").val() === "absolute" ? 0 : 1
                 const selType = $("#kindOfFormat option:selected").val()
-                let dataDelimiter = ";"
-                if (selType === "tsv") {
-                    dataDelimiter = "\t"
-                }
+                const delimiter = selType == "tsv" ? "\t" : ";"
                 const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
 
                 let header = []
@@ -633,9 +631,10 @@ angular.module("korpApp").component("statistics", {
 
                 let output = []
                 for (const row of $ctrl.data) {
+                    // One cell per grouped attribute
                     // TODO Should isPhraseLevelDisjunction be handled here?
-                    const outputRow: string[] = $ctrl.searchParams.reduceVals.flatMap((reduceVal) =>
-                        isTotalRow(row) ? ["Σ"] : row.statsValues.map((type) => type[reduceVal][0])
+                    const outputRow: string[] = $ctrl.searchParams.reduceVals.map((attr) =>
+                        isTotalRow(row) ? "Σ" : row.plainValue[attr]
                     )
                     outputRow.push(String(row.total[selVal]))
                     for (let corp of $ctrl.searchParams.corpora) {
@@ -645,10 +644,7 @@ angular.module("korpApp").component("statistics", {
                     output.push(outputRow)
                 }
 
-                const csv = new CSV(output, {
-                    header,
-                    delimiter: dataDelimiter,
-                })
+                const csv = new CSV(output, { header, delimiter })
 
                 const csvstr = csv.encode()
 

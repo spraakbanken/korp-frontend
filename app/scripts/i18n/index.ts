@@ -3,12 +3,13 @@ import isObject from "lodash/isObject"
 import settings from "@/settings"
 import { getService, getUrlHash } from "@/util"
 import type { LangString, LocLangMap, LocMap } from "@/i18n/types"
+import { locData } from "@/loc-data"
 
 /** Get the current UI language. */
 export function getLang(): string {
     // If called during bootstrap, the Root Scope service may not be ready
     try {
-        return getService("$rootScope").lang || settings.default_language
+        return getService("store").lang || settings.default_language
     } catch (e) {
         return getUrlHash("lang") || settings.default_language
     }
@@ -23,8 +24,9 @@ export function getLang(): string {
 export function loc(key: string, lang?: string) {
     lang = lang || getLang()
     try {
-        return getService("$rootScope").loc_data[lang][key]
+        return locData![lang][key]
     } catch (e) {
+        console.warn(`No localization data for key ${key} in language ${lang}`)
         return key
     }
 }

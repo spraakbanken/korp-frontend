@@ -21,12 +21,12 @@ onmessage = function (e) {
     const message = e.data
     const { combined, corpora } = message.data
 
-    const simplifyValue = function (values: string[] | string, attr: string): string[] {
+    const simplifyValue = function (values: string[] | string, attr: string): string {
         if (message.groupStatistics.includes(attr))
             // For these attrs, ":" must only be used when merging is desired, e.g. for ranking or MWE indexing.
-            return (values as string[]).map((value) => value.replace(/(:.+?)($| )/g, "$2"))
+            values = (values as string[]).map((value) => value.replace(/(:.+?)($| )/g, "$2"))
         // for struct attributes only a value is sent, not list
-        return Array.isArray(values) ? values : [values]
+        return Array.isArray(values) ? values.join(" ") : values
     }
 
     /**
@@ -37,7 +37,7 @@ onmessage = function (e) {
      */
     const simplifyHitString = (item: RowsEntity): string =>
         Object.entries(item.value)
-            .map(([attr, values]) => simplifyValue(values, attr).join(" "))
+            .map(([attr, values]) => simplifyValue(values, attr))
             .join("/")
 
     // Group data by simplified values, e.g. "foo:12" and "foo:34" under "foo"
@@ -62,6 +62,7 @@ onmessage = function (e) {
         const rowId = rowIds[i]
         /** Actual (pre grouping) values by attribute per token, used for creating sub CQPs. */
         const statsValues: Record<string, string[]>[] = []
+        const plainValue: Record<string, string> = {}
 
         for (const row of groupedRows[rowId]) {
             // Walk through original values, e.g. "foo:12" and "foo:34"
@@ -80,6 +81,7 @@ onmessage = function (e) {
                         }
                     })
                 }
+                plainValue[reduceVal] = simplifyValue(terms, reduceVal)
             }
         }
 
@@ -88,6 +90,7 @@ onmessage = function (e) {
             count: mapValues(corporaFreqs, (freqs) => sumByAbsRel(freqs[rowId])),
             total: sumByAbsRel(groupedRows[rowId]),
             formattedValue: {},
+            plainValue,
             statsValues,
         } satisfies SingleRow
     }

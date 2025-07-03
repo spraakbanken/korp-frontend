@@ -29,14 +29,8 @@ export type ChooserFolderRoot = ChooserFolder & {
 const isRoot = (folder: ChooserFolder): folder is ChooserFolderRoot => "isRoot" in folder
 const isSub = (folder: ChooserFolder): folder is ChooserFolderSub => !isRoot(folder)
 
-export const initCorpusStructure = (
-    collection: Record<string, CorpusTransformed>,
-    initialCorpusSelection: string[]
-): ChooserFolderRoot => {
-    // first set the select status of all corpora
+export const initCorpusStructure = (collection: Record<string, CorpusTransformed>): ChooserFolderRoot => {
     for (const corpus of Object.values(collection)) {
-        corpus.selected = initialCorpusSelection.includes(corpus.id)
-
         const tokens = parseInt(corpus.info.Size || "0")
         corpus.tokens = tokens
         corpus.sentences = parseInt(corpus.info.Sentences || "0")
@@ -202,15 +196,11 @@ export const filterCorporaOnCredentials = (
 ): string[] => {
     const selection: string[] = []
     for (const corpus of collection) {
-        const corpusId = corpus.id
-        corpus.selected = false
-        if (
-            corporaIds.includes(corpusId) &&
-            (!corpus["limited_access"] || credentials.includes(corpusId.toUpperCase()))
-        ) {
-            corpus.selected = true
-            selection.push(corpusId)
-        }
+        const shouldSelect =
+            corporaIds.includes(corpus.id) &&
+            (!corpus["limited_access"] || credentials.includes(corpus.id.toUpperCase()))
+        corpus.selected = shouldSelect
+        if (shouldSelect) selection.push(corpus.id)
     }
     return selection
 }

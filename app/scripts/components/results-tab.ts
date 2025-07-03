@@ -26,8 +26,10 @@ angular.module("korpApp").directive("resultsTab", () => ({
             $scope.deselect = () => ($scope.isActive = false)
 
             $scope.setProgress = (loading: boolean, progress: number) => {
-                $scope.loading = loading
-                $scope.progress = progress
+                $scope.$applyAsync(() => {
+                    $scope.loading = loading
+                    $scope.progress = progress
+                })
             }
 
             // The dynamic tabs use ng-repeat, which provides `$index` etc in the scope.
