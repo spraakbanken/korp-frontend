@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IController, IScope, ITimeoutService, ui } from "angular"
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
@@ -12,7 +12,7 @@ import "@/services/searches"
 import "@/components/autoc"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
-import { HashParams, LocationService } from "@/urlparams"
+import { LocationService } from "@/urlparams"
 import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
 import { LexiconsRelatedWords, relatedWordSearch } from "@/backend/lexicons"
@@ -20,6 +20,7 @@ import { SearchesService } from "@/services/searches"
 import { CqpSearchEvent } from "@/statemachine/types"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
+import { loc } from "@/i18n"
 
 type SimpleSearchController = IController & {
     input: string
@@ -148,19 +149,15 @@ angular.module("korpApp").component("simpleSearch", {
     `,
     controller: [
         "$location",
-        "$rootScope",
         "$scope",
         "$timeout",
-        "$uibModal",
         "compareSearches",
         "searches",
         "store",
         function (
             $location: LocationService,
-            $rootScope: RootScope,
             $scope: SimpleSearchScope,
             $timeout: ITimeoutService,
-            $uibModal: ui.bootstrap.IModalService,
             compareSearches: CompareSearches,
             searches: SearchesService,
             store: StoreService
@@ -251,51 +248,42 @@ angular.module("korpApp").component("simpleSearch", {
             ctrl.relatedDefault = 3
 
             ctrl.showAllRelated = () => {
-                type ShowAllRelatedScope = IScope & {
-                    stringifyRelatedHeader: (wd: string) => string
-                    clickX: () => void
-                    stringifyRelated: (wd: string) => string
-                    relatedObj: any
-                    clickRelated: (wd: string, attribute: string) => void
-                }
-                const scope = $rootScope.$new() as ShowAllRelatedScope
-                scope.stringifyRelatedHeader = (wd) => wd.replace(/_/g, " ")
-                scope.clickX = () => modalInstance.dismiss()
-                scope.stringifyRelated = ctrl.stringifyRelated
-                scope.relatedObj = ctrl.relatedObj
-                scope.clickRelated = function (wd, attribute) {
-                    if (modalInstance != null) {
-                        modalInstance.close()
-                    }
-                    const cqp =
-                        attribute === "saldo"
-                            ? `[saldo contains \"${regescape(wd)}\"]`
-                            : `[sense rank_contains \"${regescape(wd)}\"]`
-
-                    statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
-                }
-                const modalInstance = $uibModal.open({
-                    template: `\
-                        <div class="modal-header">
-                            <h3 class="modal-title">{{'similar_header' | loc:$root.lang}} (SWE-FN)</h3>
-                            <span ng-click="clickX()" class="close-x">×</span>
+                store.modal = {
+                    content: html`<div class="related-modal">
+                        <div ng-repeat="obj in relatedObj.data">
+                            <h3>
+                                <a
+                                    target="_blank"
+                                    ng-href="https://spraakbanken.gu.se/karp/#?mode=swefn&lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}"
+                                >
+                                    {{stringifyRelatedHeader(obj.label)}}
+                                </a>
+                            </h3>
+                            <ul>
+                                <li ng-repeat="wd in obj.words">
+                                    <a ng-click="clickRelated(wd, relatedObj.attribute, $close)" class="link">
+                                        {{stringifyRelated(wd) + " "}}
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="modal-body">
-                            <div ng-repeat="obj in relatedObj.data" class="col"><a target="_blank" ng-href="https://spraakbanken.gu.se/karp/#?mode=swefn&lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
-                              <div class="list_wrapper">
-                                  <ul>
-                                    <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd, relatedObj.attribute)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
-                                  </ul>
-                              </div>
-                            </div>
-                        </div>\
-                        `,
-                    scope,
+                    </div>`,
+                    scopeData: {
+                        stringifyRelatedHeader: (wd: string) => wd.replace(/_/g, " "),
+                        stringifyRelated: ctrl.stringifyRelated,
+                        relatedObj: ctrl.relatedObj,
+                        clickRelated: (wd: string, attribute: string, close: () => void) => {
+                            close()
+                            const cqp =
+                                attribute === "saldo"
+                                    ? `[saldo contains \"${regescape(wd)}\"]`
+                                    : `[sense rank_contains \"${regescape(wd)}\"]`
+                            statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
+                        },
+                    },
                     size: "lg",
-                    windowClass: "related",
-                })
-                // Ignore rejection from dismissing the modal
-                modalInstance.result.catch(() => {})
+                    title: `${loc("similar_header", store.lang)} (SweFN)`,
+                }
             }
 
             store.watch("activeSearch", () => {

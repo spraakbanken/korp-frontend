@@ -7,24 +7,26 @@ import { Modal } from "bootstrap"
 export type ModalData = {
     buttonText?: string
     content: string
-    title?: string
     onClose?: () => void
-    uncloseable?: boolean
     scopeData?: Record<string, any>
+    size?: "sm" | "lg" | "xl"
+    title?: string
+    uncloseable?: boolean
 }
 
 type AppModalScope = IScope & {
     buttonText: string
-    title: string
-    onClose: () => void
     closeable: boolean
+    onClose: () => void
+    size?: "sm" | "lg" | "xl"
+    title: string
     /** Allow closing from content template. */
     $close: () => void
 }
 
 angular.module("korpApp").component("appModal", {
     template: html`<div id="app-modal" class="modal" aria-hidden>
-        <div class="modal-dialog">
+        <div class="modal-dialog" ng-class="size ? 'modal-' + size : ''">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title">{{title}}</h3>
@@ -74,6 +76,7 @@ angular.module("korpApp").component("appModal", {
                 $scope.title = data.title || ""
                 $scope.onClose = data.onClose || (() => {})
                 $scope.closeable = !data.uncloseable
+                $scope.size = data.size
 
                 const modalScope = $scope.$new() as any
                 for (const key in data.scopeData) {
