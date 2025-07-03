@@ -4,17 +4,18 @@ import { computed, ref } from "vue"
 import moment from "moment"
 import settings from "@/settings"
 import { loc, locObj } from "@/i18n"
-import { rootScope } from "@/vue-services"
+import { store } from "@/vue-services"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { withAngular } from "@/util"
 
 const LIMIT = 5
-const lang = ref<string>(rootScope.lang)
+const lang = ref<string>(store.lang)
 const recentUpdates = ref<CorpusTransformed[]>([])
 const expanded = ref(false)
 
 const recentUpdatesFiltered = computed(() => recentUpdates.value.slice(0, expanded.value ? undefined : LIMIT))
 
-rootScope.$watch("lang", (value: string) => (lang.value = value))
+store.watch("lang", (value) => (lang.value = value))
 
 if (settings.frontpage?.corpus_updates) {
     const limitDate = moment().subtract(6, "months")
@@ -25,8 +26,7 @@ if (settings.frontpage?.corpus_updates) {
 }
 
 function selectCorpus(corpusId: string) {
-    settings.corpusListing.select([corpusId])
-    rootScope.$broadcast("corpuschooserchange", [corpusId])
+    withAngular(() => (store.corpus = [corpusId]))
 }
 </script>
 

@@ -57,22 +57,21 @@ export const safeApply = <R>(scope: IScope, fn: (scope: IScope) => R): R =>
     scope.$$phase || scope.$root.$$phase ? fn(scope) : scope.$apply(fn)
 
 /** Safely (?) use an Angular service from outside the Angular context. */
-export const withService = <K extends keyof ServiceTypes, R>(name: K, fn: (service: ServiceTypes[K]) => R) =>
-    safeApply(getService("$rootScope"), () => fn(getService(name)))
+export const withAngular = <R>(fn: () => R) => safeApply(getService("$rootScope"), () => fn())
 
 /**
  * Get values from the URL search string via Angular.
  * Only use this in code outside Angular. Inside, use `$location.search()`.
  */
 export const locationSearchGet = <K extends keyof HashParams>(key: K): HashParams[K] =>
-    withService("$location", ($location) => ($location.search() as HashParams)[key])
+    withAngular(() => getService("$location").search()[key])
 
 /**
  * Set values in the URL search string via Angular.
  * Only use this in code outside Angular. Inside, use `$location.search()`.
  */
 export const locationSearchSet = <K extends keyof HashParams>(name: K, value: HashParams[K]): LocationService =>
-    withService("$location", ($location) => $location.search(name, value))
+    withAngular(() => getService("$location").search(name, value))
 
 /**
  * Allows a given class to be overridden before instantiation.
