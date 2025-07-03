@@ -21,7 +21,7 @@ require("rickshaw/rickshaw.css")
 
 require("leaflet/dist/leaflet.css")
 require("leaflet.markercluster/dist/MarkerCluster.css")
-require("./styles/_bootstrap-custom.scss")
+require("./styles/bootstrap-custom.scss")
 
 require("./styles/tailwind.scss")
 

@@ -9,6 +9,7 @@ import { getLocData } from "@/loc-data"
 import { getAllCorporaInFolders } from "@/components/corpus-chooser/util"
 import { QueryParamSort } from "@/backend/types/query"
 import { HashParams, LocationService } from "@/urlparams"
+import { ModalData } from "@/components/app-modal"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.
@@ -48,6 +49,7 @@ export type Store = {
     lang: string
     /** In simple search, match anywhere in a word */
     mid_comp: boolean
+    modal?: ModalData
     /** Page number of KWIC result */
     page?: number
     /** In parallel mode, what languages to build a query for */

@@ -42,14 +42,13 @@ svg {
   vertical-align: baseline;
 }
 
+h3 {
+  font-size: 1.1em;
+}
+
 h4 {
   font-weight : bold;
   margin: 1.3rem 0;
-}
-
-h3 {
-  margin: 1rem 0;
-  font-size: 1.1em;
 }
 
 input, select {
@@ -997,31 +996,6 @@ h2, h3 {
   font-weight : normal;
 }
 
-
-.modal-header {
-  display : block;
-  & > * {
-    display: inline-block;
-    width : 49%;
-  }
-  .close-x {
-    text-align: right;
-    font-size : 2em;
-    cursor: pointer;
-    &:hover {
-      color : darkgrey;
-    }
-  }
-}
-
-.modal.fade.in {
-  top : 90px;
-  margin-top : 0;
-}
-body.modal-open {
-  overflow: hidden;
-}
-
 .related.modal {
 
   .modal-body {
@@ -1545,12 +1519,6 @@ line.tick {
 }
 .nav-tabs > li > a, .nav-pills > li > a {
   margin-right : 0;
-}
-
-
-
-.modal-header_left {
-  display : none;
 }
 
 .compare_result {

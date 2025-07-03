@@ -9,20 +9,19 @@ import { AuthModuleOptions } from "./basic_auth.types"
 // TODO make it not closable when login is NEEDED
 export const loginBoxComponent: IComponentOptions = {
     template: html`
-        <div class="modal-header login-modal-header">
-            <span class="login-header">{{'log_in' | loc:$root.lang}}</span>
-            <span ng-click="$ctrl.dismiss()" class="close-x">×</span>
-        </div>
-        <div id="login_popup" class="modal-body">
+        <div id="login_popup">
             <form ng-submit="$ctrl.loginSubmit()">
                 <label for="usrname">{{'username' | loc:$root.lang}}</label>
                 <input id="usrname" ng-model="$ctrl.loginUsr" type="text" />
+
                 <label for="pass">{{'password' | loc:$root.lang}}</label>
                 <input id="pass" ng-model="$ctrl.loginPass" type="password" />
+
                 <a class="password-reset" href="https://ws.spraakbanken.gu.se/user/password" target="_blank"
                     >{{'forgot_password' | loc:$root.lang}}</a
                 >
                 <div style="clear:both"></div>
+
                 <input
                     ng-if="$ctrl.showSave"
                     class="save-login"
@@ -33,8 +32,15 @@ export const loginBoxComponent: IComponentOptions = {
                 <label ng-if="$ctrl.showSave" class="save-login" for="saveLogin"
                     >{{'save_login' | loc:$root.lang}}</label
                 >
+
                 <p ng-show="$ctrl.loginErr" class="err_msg">{{'login_fail_msg' | loc:$root.lang}}</p>
-                <input class="btn btn-sm bg-blue-500 text-white" type="submit" value="{{'send' | loc:$root.lang}}" />
+
+                <input
+                    class="btn btn-primary bg-blue-600 text-white"
+                    type="submit"
+                    value="{{'send' | loc:$root.lang}}"
+                />
+
                 <div ng-if="$ctrl.loading" style="float: right; margin-top: 11px; margin-right: 9px;">
                     <i class="fa-solid fa-spinner fa-pulse w-fit"></i>
                 </div>
@@ -44,7 +50,6 @@ export const loginBoxComponent: IComponentOptions = {
     `,
     bindings: {
         onClose: "&",
-        onDismiss: "&",
     },
     controller: [
         "$timeout",
@@ -69,7 +74,7 @@ export const loginBoxComponent: IComponentOptions = {
                     await login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
                     // no send to statemachine
                     statemachine.send("LOGIN")
-                    $ctrl.close()
+                    $ctrl.onClose()
                 } catch (error) {
                     console.error("Auth fail", error)
                     $timeout(() => {
@@ -77,16 +82,6 @@ export const loginBoxComponent: IComponentOptions = {
                         $ctrl.loading = false
                     })
                 }
-            }
-
-            $ctrl.close = function () {
-                $ctrl.loginErr = false
-                $ctrl.onClose()
-            }
-
-            $ctrl.dismiss = () => {
-                $ctrl.loginErr = false
-                $ctrl.onDismiss()
             }
         },
     ],

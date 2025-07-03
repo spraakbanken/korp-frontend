@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IController, IScope, ITimeoutService, ui } from "angular"
+import angular, { IController } from "angular"
 import _ from "lodash"
 import korpLogo from "../../img/korp.svg"
 import settings from "@/settings"
@@ -9,7 +9,6 @@ import "@/services/utils"
 import "@/components/corpus-chooser/corpus-chooser"
 import "@/components/radio-list"
 import { matomoSend } from "@/matomo"
-import { RootScope } from "@/root-scope.types"
 import { StoreService } from "@/services/store"
 import { Labeled } from "@/i18n/types"
 import { Config } from "@/settings/config.types"
@@ -134,16 +133,8 @@ angular.module("korpApp").component("appHeader", {
     `,
     bindings: {},
     controller: [
-        "$uibModal",
-        "$rootScope",
-        "$timeout",
         "store",
-        function (
-            $uibModal: ui.bootstrap.IModalService,
-            $rootScope: RootScope,
-            $timeout: ITimeoutService,
-            store: StoreService
-        ) {
+        function (store: StoreService) {
             const $ctrl = this as HeaderController
 
             $ctrl.logoClick = function () {
@@ -160,37 +151,16 @@ angular.module("korpApp").component("appHeader", {
                 store.display = "about"
             }
 
-            let modal: ui.bootstrap.IModalInstanceService | null = null
-
             store.watch("display", (val) => {
                 if (val) showAbout()
-                else {
-                    modal?.close()
-                    modal = null
-                }
             })
 
-            const closeModals = function () {
-                store.display = undefined
-            }
-
-            type ModalScope = IScope & {
-                clickX: () => void
-            }
-
-            const modalScope = $rootScope.$new(true) as ModalScope
-            modalScope.clickX = () => closeModals()
-
             function showAbout() {
-                // $timeout is used to let localization happen before modal is shown (if loaded with "display=about")
-                $timeout(() => {
-                    modal = $uibModal.open({
-                        template: require("../../markup/about.html"),
-                        scope: modalScope,
-                        windowClass: "about",
-                    })
-                    modal.result.catch(() => closeModals())
-                })
+                store.modal = {
+                    content: require("../../markup/about.html"),
+                    onClose: () => (store.display = undefined),
+                    title: "Korp version 9.10.1",
+                }
             }
 
             const N_VISIBLE = settings["visible_modes"]

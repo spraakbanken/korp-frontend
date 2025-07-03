@@ -1,6 +1,6 @@
 /** @format */
 import _ from "lodash"
-import angular, { IControllerService, IHttpService, ui, type IScope } from "angular"
+import angular, { IControllerService, IHttpService, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
@@ -31,7 +31,6 @@ type ServiceTypes = {
     $http: IHttpService
     $location: LocationService
     $rootScope: RootScope
-    $uibModal: ui.bootstrap.IModalService
     store: StoreService
     // Add types here as needed.
 }

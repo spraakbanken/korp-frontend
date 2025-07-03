@@ -122,24 +122,17 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
+"@popperjs/core@^2.9.2":
+  version "2.11.8"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
+  integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
+
 "@types/angular-dynamic-locale@^0.1.35":
   version "0.1.35"
   resolved "https://registry.yarnpkg.com/@types/angular-dynamic-locale/-/angular-dynamic-locale-0.1.35.tgz#55ad0c54d8c1bfce2c9604d12e6cace142f36bf4"
   integrity sha512-MnO5qyU7HpSSHDUvpf+Em9smDLjREGCgt6SRlrf3YlhlVNHqKvEad8GL2riFkSe/NlDtNdUkudIvpGQCo2R9lw==
   dependencies:
     angular-dynamic-locale "*"
-
-"@types/angular-ui-bootstrap@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@types/angular-ui-bootstrap/-/angular-ui-bootstrap-1.0.7.tgz#53e26f12147049d7f03c536ffa981472c3b75c2d"
-  integrity sha512-pYtOQ6aqfmOg0pQHXfG4YHiMAyr56YSmobt2QwcIvsVxKeKkz8i/YuUVJ+WMoptaAmb25/HQrjT8bV28HtY1xA==
-  dependencies:
-    "@types/angular" "*"
-
-"@types/angular@*":
-  version "1.8.9"
-  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.8.9.tgz#d1ae3e87a67f72342d55ff26e611df83df0fb176"
-  integrity sha512-Z0HukqZkx0fotsV3QO00yqU9NzcQI+tMcrum+8MvfB4ePqCawZctF/gz6QiuII+T1ax+LitNoPx/eICTgnF4sg==
 
 "@types/angular@^1.8.4":
   version "1.8.4"
@@ -160,6 +153,13 @@
   integrity sha512-p7ienRMiS41Nu2/igbJxxLDWrSZ0WxM8UQgCeO9KhoVF7cOVFkrKsiDr1EsJIla8vV3oEEjGcz11jc5yimhzZw==
   dependencies:
     "@types/node" "*"
+
+"@types/bootstrap@^5.2.10":
+  version "5.2.10"
+  resolved "https://registry.yarnpkg.com/@types/bootstrap/-/bootstrap-5.2.10.tgz#58506463bccc6602bc051487ad8d3a6458f94c6c"
+  integrity sha512-F2X+cd6551tep0MvVZ6nM8v7XgGN/twpdNDjqS1TUM7YFNEtQYWk+dKAnH+T1gr6QgCoGMPl487xw/9hXooa2g==
+  dependencies:
+    "@popperjs/core" "^2.9.2"
 
 "@types/connect-history-api-fallback@^1.3.5":
   version "1.3.5"
@@ -612,11 +612,6 @@ angular-filter@0.5.17:
   dependencies:
     angular "*"
 
-angular-ui-bootstrap@2.5.6:
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
-  integrity sha512-yzcHpPMLQl0232nDzm5P4iAFTFQ9dMw0QgFLuKYbDj9M0xJ62z0oudYD/Lvh1pWfRsukiytP4Xj6BHOSrSXP8A==
-
 angular-ui-sortable@~0.19.0:
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/angular-ui-sortable/-/angular-ui-sortable-0.19.0.tgz#4ac4391fc4d4de57110db4b5d31a7c198d314fd0"
@@ -752,6 +747,11 @@ bootstrap-sass@^3.4.3:
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/bootstrap-sass/-/bootstrap-sass-3.4.3.tgz#742cc8f4286303ae9fe8e4c95237321eae73766c"
   integrity sha512-vPgFnGMp1jWZZupOND65WS6mkR8rxhJxndT/AcMbqcq1hHMdkcH4sMPhznLzzoHOHkSCrd6J9F8pWBriPCKP2Q==
+
+bootstrap@^5.3.7:
+  version "5.3.7"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.3.7.tgz#8640065036124d961d885d80b5945745e1154d90"
+  integrity sha512-7KgiD8UHjfcPBHEpDNg+zGz8L3LqR3GVwqZiBRFX04a1BCArZOz1r2kjly2HQ0WokqTO0v1nF+QAt8dsW4lKlw==
 
 brace-expansion@^1.1.7:
   version "1.1.11"

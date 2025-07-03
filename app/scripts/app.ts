@@ -1,14 +1,6 @@
 /** @format */
 import _ from "lodash"
-import {
-    ICacheObject,
-    ICompileProvider,
-    IComponentOptions,
-    ILocaleService,
-    ILocationProvider,
-    IScope,
-    ui,
-} from "angular"
+import { ICacheObject, ICompileProvider, IComponentOptions, ILocaleService, ILocationProvider, IScope } from "angular"
 import korpApp from "./korp.module"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
@@ -19,6 +11,7 @@ import { CorpusTransformed } from "./settings/config-transformed.types"
 import { BUILD_HASH, formatRelativeHits, getService, html } from "@/util"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
+import "@/components/app-modal"
 import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
@@ -38,23 +31,15 @@ korpApp.factory("$exceptionHandler", [
             console.error(exception)
 
             // Cannot inject services normally here, because it creates circular dependencies
-            const $uibModal = getService("$uibModal")
-            const $rootScope = getService("$rootScope")
+            const store = getService("store")
 
-            const scope = $rootScope.$new() as IScope & { message: string }
-            scope.message = String(exception)
-
-            const modal = $uibModal.open({
-                template: html`<div class="modal-body">
-                        <korp-error message="{{message}}"></korp-error>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" ng-click="$close()">{{'modal_close' | loc:$root.lang}}</button>
-                    </div>`,
-                scope: scope,
-            })
-            // Dismissing the modal rejects the `result` promise. Catch it to avoid a "Possibly unhandled rejection" error.
-            modal.result.catch(() => {})
+            store.modal = {
+                content: html`<korp-error message="{{ message }}"></korp-error>`,
+                scopeData: {
+                    message: String(exception),
+                },
+                title: loc("error", store.lang),
+            }
         }
     },
 ])
@@ -92,13 +77,13 @@ korpApp.config([
         tmhDynamicLocaleProvider.localeLocationPattern(`translations/angular-locale_{{locale}}.${BUILD_HASH}.js`),
 ])
 
-korpApp.config([
-    "$uibTooltipProvider",
-    ($uibTooltipProvider: ui.bootstrap.ITooltipProvider) =>
-        $uibTooltipProvider.options({
-            appendToBody: true,
-        }),
-])
+// korpApp.config([
+//     "$uibTooltipProvider",
+//     ($uibTooltipProvider: ui.bootstrap.ITooltipProvider) =>
+//         $uibTooltipProvider.options({
+//             appendToBody: true,
+//         }),
+// ])
 
 /**
  * Makes the hashPrefix "" instead of "!" which means our URL:s are ?mode=test#?lang=eng
@@ -121,7 +106,6 @@ korpApp.run([
     "$locale",
     "tmhDynamicLocale",
     "tmhDynamicLocaleCache",
-    "$uibModal",
     "store",
     async function (
         $rootScope: RootScope,
@@ -129,7 +113,6 @@ korpApp.run([
         $locale: ILocaleService,
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,
-        $uibModal: ui.bootstrap.IModalService,
         store: StoreService
     ) {
         const s = $rootScope
@@ -189,58 +172,61 @@ korpApp.run([
                 // custom initialization code called
             } else if (_.isEmpty(settings.corpora)) {
                 // no corpora
-                openErrorModal({
+                store.modal = {
                     content: "<korp-error></korp-error>",
-                    resolvable: false,
-                })
+                    uncloseable: true,
+                }
             } else if (deniedCorpora.length != 0) {
-                // check if user has access
-                const loginNeededHTML = () =>
-                    deniedCorpora.map((corpus) => `<span>${locObj(corpus.title)}</span>`).join(", ")
+                const deniedNames = deniedCorpora.map((corpus) => `<span>${locObj(corpus.title)}</span>`).join(", ")
 
+                // check if user has access
                 if (authenticationProxy.isLoggedIn()) {
                     // access partly or fully denied to selected corpora
                     if (settings.corpusListing.corpora.length == deniedCorpora.length) {
-                        openErrorModal({
-                            content: "{{'access_denied' | loc:$root.lang}}",
+                        store.modal = {
+                            content: "<div>{{'access_denied' | loc:$root.lang}}</div>",
                             buttonText: "go_to_start",
                             onClose: () => {
                                 window.location.href = window.location.href.split("?")[0]
                             },
-                        })
+                        }
                     } else {
-                        openErrorModal({
-                            content: html`<div>{{'access_partly_denied' | loc:$root.lang}}:</div>
-                                <div>${loginNeededHTML()}</div>
-                                <div>{{'access_partly_denied_continue' | loc:$root.lang}}</div>`,
-                            onClose: () => {
-                                initializeCorpusSelection(allowedIds)
-                            },
-                        })
+                        store.modal = {
+                            content: html`<div>
+                                <div>{{'access_partly_denied' | loc:$root.lang}}:</div>
+                                <div>${deniedNames}</div>
+                                <div>{{'access_partly_denied_continue' | loc:$root.lang}}</div>
+                            </div>`,
+                            onClose: () => initializeCorpusSelection(allowedIds),
+                        }
                     }
                 } else if (!skipLogin) {
                     // login needed before access can be checked
-                    openErrorModal({
-                        content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:$root.lang}}:</span
-                            >${loginNeededHTML()}`,
+                    store.modal = {
+                        buttonText: "log_in",
+                        content: html`<div>
+                            <span class="mr-1">{{'login_needed_for_corpora' | loc:$root.lang}}:</span>
+                            ${deniedNames}
+                        </div>`,
                         onClose: () => {
                             waitForLogin = true
                             statemachine.send("LOGIN_NEEDED", { loginNeededFor: deniedCorpora })
                         },
-                    })
+                    }
                 } else {
                     // Login dismissed, fall back to allowed corpora
                     initializeCorpusSelection(allowedIds)
                 }
             } else if (!ids.every((r) => allCorpusIds.includes(r))) {
                 // some corpora missing
-                openErrorModal({
-                    content: `{{'corpus_not_available' | loc:$root.lang}}`,
+                store.modal = {
+                    content: html`<div>{{'corpus_not_available' | loc:$root.lang}}</div>`,
                     onClose: () => {
+                        // TODO The invalid ids are already removed from store.corpus because corpusChooser does select() -> filterCorporaOnCredentials()
                         const validIds = ids.filter((corpusId) => allCorpusIds.includes(corpusId))
                         initializeCorpusSelection(validIds)
                     },
-                })
+                }
             } else {
                 // Corpus selection OK
                 store.corpus = ids
@@ -250,56 +236,6 @@ korpApp.run([
                     // In parallel mode, the select function may also add hidden corpora.
                     settings.corpusListing.select(store.corpus)
                 })
-            }
-        }
-
-        // TODO the top bar could show even though the modal is open,
-        // thus allowing switching modes or language when an error has occured.
-        type ErrorModalOptions = {
-            content: string
-            resolvable?: boolean
-            onClose?: () => void
-            buttonText?: string
-            translations?: LocLangMap
-        }
-        function openErrorModal({ content, resolvable = true, onClose, buttonText, translations }: ErrorModalOptions) {
-            type ModalScope = IScope & {
-                translations?: LocLangMap
-                closeModal: () => void
-            }
-            const s = $rootScope.$new(true) as ModalScope
-
-            const useCustomButton = !_.isEmpty(buttonText)
-
-            const modal = $uibModal.open({
-                template: html` <div class="modal-body" ng-class="{'mt-10' : resolvable }">
-                    <div>${content}</div>
-                    <div class="ml-auto mr-0 w-fit">
-                        <button
-                            ng-if="${resolvable}"
-                            ng-click="closeModal()"
-                            class="btn bg-blue-500 text-white font-bold mt-3"
-                        >
-                            <span ng-if="${useCustomButton}">{{'${buttonText}' | loc:$root.lang }}</span>
-                            <span ng-if="!${useCustomButton}">OK</span>
-                        </button>
-                    </div>
-                </div>`,
-                scope: s,
-                size: "md",
-                // Prevent backdrop click if not resolvable
-                backdrop: resolvable || "static",
-                keyboard: false,
-            })
-            modal.result.catch(() => onClose?.())
-
-            s.translations = translations
-
-            s.closeModal = () => {
-                if (onClose && resolvable) {
-                    modal.close()
-                    onClose()
-                }
             }
         }
 

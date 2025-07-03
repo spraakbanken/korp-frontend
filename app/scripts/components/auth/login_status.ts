@@ -1,8 +1,10 @@
 /** @format */
-import { IComponentOptions, IController, IScope, ui } from "angular"
+import { IComponentOptions, IController, IScope } from "angular"
 import statemachine from "@/statemachine"
 import { getUsername, isLoggedIn } from "./auth"
 import { html } from "@/util"
+import { StoreService } from "@/services/store"
+import { loc } from "@/i18n"
 
 export const loginStatusComponent: IComponentOptions = {
     template: html`
@@ -16,9 +18,8 @@ export const loginStatusComponent: IComponentOptions = {
     `,
     bindings: {},
     controller: [
-        "$uibModal",
-        "$scope",
-        function ($uibModal: ui.bootstrap.IModalService, $scope: LoginStatusScope) {
+        "store",
+        function (store: StoreService) {
             const $ctrl: LoginStatusController = this
 
             $ctrl.loggedIn = isLoggedIn()
@@ -41,15 +42,15 @@ export const loginStatusComponent: IComponentOptions = {
             })
 
             $ctrl.showLogin = () => {
-                const modal = $uibModal.open({
-                    template: `<login-box on-close="$close()" on-dismiss="$dismiss()"></login-box>`,
-                    windowClass: "login",
-                    size: "sm",
-                })
-                // Treat dismissing as a logout action
-                modal.result.catch((e) => {
-                    statemachine.send("LOGOUT")
-                })
+                store.modal = {
+                    content: html`<login-box on-close="$close()"></login-box>`,
+                    title: loc("log_in", store.lang),
+                    onClose() {
+                        if (!isLoggedIn()) {
+                            statemachine.send("LOGOUT")
+                        }
+                    },
+                }
             }
         },
     ],

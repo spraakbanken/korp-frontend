@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    // Restore Bootstrap button background-image which Tailwind unsets
+    button.btn-close {
+        background-image: var(--bs-btn-close-bg)
+    }
+}

@@ -1,15 +1,10 @@
-<div class="modal-header">
-    <h2>Korp version 9.10.1</h2>
-    <span ng-click="clickX()" class="close-x">×</span>
-</div>
+<div id="about_body">
+    <p ng-bind-html="'about_body' | loc:$root.lang | trust"></p>
 
-<div id="about_body" class="modal-body">
-    <p ng-bind-html="'about_body' | loc:lang | trust"></p>
+    <h4 ng-bind-html="'about_cite_header' | loc:$root.lang | trust"></h4>
+    <p ng-bind-html="'about_cite' | loc:$root.lang | trust"></p>
 
-    <h4 ng-bind-html="'about_cite_header' | loc:lang | trust"></h4>
-    <p ng-bind-html="'about_cite' | loc:lang | trust"></p>
-
-    <h4>{{'about_man' | loc:lang}}</h4>
+    <h4>{{'about_man' | loc:$root.lang}}</h4>
     <ul>
         <li>
             <a target="_blank" href="https://spraakbanken.gu.se/om/personal/lars">Lars Borin</a>
@@ -19,7 +14,7 @@
         </li>
     </ul>
 
-    <h4>{{'about_dev' | loc:lang}}</h4>
+    <h4>{{'about_dev' | loc:$root.lang}}</h4>
     <ul>
         <li>
             <a target="_blank" href="https://spraakbanken.gu.se/om/personal/maria">Maria Öhrman</a>
@@ -35,7 +30,7 @@
         </li>
     </ul>
 
-    <h4>{{'about_contributors' | loc:lang}}</h4>
+    <h4>{{'about_contributors' | loc:$root.lang}}</h4>
     <ul>
         <li>Dan Rosén</li>
         <li>Johan Roxendal</li>
@@ -52,7 +47,7 @@
     </ul>
 
     <p>
-        {{'about_logo' | loc:lang}}
+        {{'about_logo' | loc:$root.lang}}
         <a target="_blank" href="https://spraakbanken.gu.se/om/personal/staffan">Staffan Melin</a>.
     </p>
 </div>
