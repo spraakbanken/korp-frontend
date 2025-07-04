@@ -16,7 +16,7 @@ import { StoreService } from "@/services/store"
 type ResultsWordPictureController = IController & {
     isActive: boolean
     loading: boolean
-    setProgress: (loading: boolean, progress: number) => void
+    setProgress: (event: { loading: boolean; progress: number }) => void
 }
 
 type ResultsWordPictureScope = IScope & {
@@ -67,7 +67,7 @@ angular.module("korpApp").component("resultsWordPicture", {
     bindings: {
         isActive: "<",
         loading: "<",
-        setProgress: "<",
+        setProgress: "&",
     },
     controller: [
         "$scope",
@@ -108,7 +108,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                 s.proxy.abort()
                 if ($ctrl.loading) {
                     s.warning = loc("search_aborted", store.lang)
-                    $ctrl.setProgress(false, 0)
+                    $ctrl.setProgress({ loading: false, progress: 0 })
                 }
             })
 
@@ -146,15 +146,15 @@ angular.module("korpApp").component("resultsWordPicture", {
                 // Abort any running request
                 if ($ctrl.loading) s.proxy.abort()
 
-                $ctrl.setProgress(true, 0)
+                $ctrl.setProgress({ loading: true, progress: 0 })
                 s.warning = undefined
                 s.proxy
                     .makeRequest(word, type, $scope.sort, (progressObj) =>
-                        $timeout(() => $ctrl.setProgress(true, progressObj.percent))
+                        $timeout(() => $ctrl.setProgress({ loading: true, progress: progressObj.percent }))
                     )
                     .then((data) =>
                         $timeout(() => {
-                            $ctrl.setProgress(false, 0)
+                            $ctrl.setProgress({ loading: false, progress: 0 })
                             s.renderResult(data, word)
                         })
                     )
@@ -165,13 +165,13 @@ angular.module("korpApp").component("resultsWordPicture", {
                         // TODO Show error
                         $timeout(() => {
                             s.error = error
-                            $ctrl.setProgress(false, 0)
+                            $ctrl.setProgress({ loading: false, progress: 0 })
                         })
                     })
             }
 
             s.renderResult = (data, query) => {
-                $ctrl.setProgress(false, 100)
+                $ctrl.setProgress({ loading: false, progress: 100 })
                 if (!data.relations) {
                     s.warning = loc("no_stats_results", store.lang)
                     s.resetView()
@@ -206,13 +206,13 @@ angular.module("korpApp").component("resultsWordPicture", {
                     s.drawTables(unique_words, data)
                 }
 
-                $ctrl.setProgress(false, 0)
+                $ctrl.setProgress({ loading: false, progress: 0 })
             }
 
             s.renderTables = (lemgram, data) => {
                 const wordClass = data[0].head === lemgram ? data[0].headpos : data[0].deppos
                 s.drawTables([[lemgram, wordClass]], data)
-                $ctrl.setProgress(false, 0)
+                $ctrl.setProgress({ loading: false, progress: 0 })
             }
 
             s.drawTables = (tables, data) => {

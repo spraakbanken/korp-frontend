@@ -86,7 +86,7 @@ angular.module("korpApp").component("searchtabs", {
             </li>
         </ul>
 
-        <div class="tab-content p-4 border border-t-0">
+        <div class="tab-content p-4 border dborder-t-0">
             <div class="tab-pane" role="tabpanel" tabindex="0" id="searchtab-simple">
                 <simple-search></simple-search>
             </div>
@@ -121,7 +121,7 @@ angular.module("korpApp").component("searchtabs", {
             const $ctrl = this as SearchtabsController
             $scope.activeTab = 0
 
-            /** Bootstrap tab handles */
+            /** Bootstrap tab triggers */
             const tabs: Tab[] = []
 
             $ctrl.$onInit = () => {
@@ -148,7 +148,6 @@ angular.module("korpApp").component("searchtabs", {
             $scope.setTab = (index) => ($scope.activeTab = index)
 
             function syncActiveTab() {
-                console.log($scope.activeTab)
                 tabs[$scope.activeTab]?.show()
             }
 

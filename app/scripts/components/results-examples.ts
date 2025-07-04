@@ -14,7 +14,7 @@ type ResultsExamplesController = IController & {
     isReading: boolean
     loading: boolean
     queryParams: KorpQueryRequestOptions
-    setProgress: (loading: boolean, progress: number) => void
+    setProgress: (event: { loading: boolean; progress: number }) => void
     closeDynamicTab: () => void
 }
 
@@ -63,7 +63,7 @@ angular.module("korpApp").component("resultsExamples", {
         isReading: "<",
         loading: "<",
         queryParams: "<",
-        setProgress: "<",
+        setProgress: "&",
     },
     controller: [
         "$scope",
@@ -85,7 +85,7 @@ angular.module("korpApp").component("resultsExamples", {
                 $scope.proxy.abort()
                 if ($ctrl.loading) {
                     $scope.aborted = true
-                    $ctrl.setProgress(false, 0)
+                    $ctrl.setProgress({ loading: false, progress: 0 })
                 }
             })
 
@@ -130,7 +130,7 @@ angular.module("korpApp").component("resultsExamples", {
                 // Abort any running request
                 if ($ctrl.loading) $scope.proxy.abort()
 
-                $ctrl.setProgress(true, 0)
+                $ctrl.setProgress({ loading: true, progress: 0 })
                 $scope.proxy
                     .makeRequest(opts)
                     .then((data) =>
@@ -150,7 +150,7 @@ angular.module("korpApp").component("resultsExamples", {
                         // TODO Show error
                         $timeout(() => ($scope.error = error))
                     })
-                    .finally(() => $timeout(() => $ctrl.setProgress(false, 0)))
+                    .finally(() => $timeout(() => $ctrl.setProgress({ loading: false, progress: 0 })))
             }
         },
     ],

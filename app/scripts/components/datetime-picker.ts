@@ -1,5 +1,5 @@
 /** @format */
-import angular, { type ui, type IComponentController, type IScope } from "angular"
+import angular, { type IComponentController, type IScope } from "angular"
 import { html } from "@/util"
 import moment, { type Moment } from "moment"
 
@@ -109,6 +109,6 @@ type DatetimePickerScope = IScope & {
     date: Date
     time: Date
     combined: Moment
-    datepickerOptions: ui.bootstrap.IDatepickerConfig
+    datepickerOptions: any
     handleClick: (event: JQuery.ClickEvent) => void
 }

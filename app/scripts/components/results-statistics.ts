@@ -15,7 +15,7 @@ import { StoreService } from "@/services/store"
 type ResultsStatisticsController = IController & {
     isActive: boolean
     loading: boolean
-    setProgress: (loading: boolean, progress: number) => void
+    setProgress: (event: { loading: boolean; progress: number }) => void
 }
 
 type ResultsStatisticsScope = IScope & {
@@ -55,7 +55,7 @@ angular.module("korpApp").component("resultsStatistics", {
     bindings: {
         isActive: "<",
         loading: "<",
-        setProgress: "<",
+        setProgress: "&",
     },
     controller: [
         "$scope",
@@ -82,7 +82,7 @@ angular.module("korpApp").component("resultsStatistics", {
                 s.proxy.abort()
                 if ($ctrl.loading) {
                     s.aborted = true
-                    $ctrl.setProgress(false, 0)
+                    $ctrl.setProgress({ loading: false, progress: 0 })
                 }
             })
 
@@ -111,7 +111,7 @@ angular.module("korpApp").component("resultsStatistics", {
                 s.warning = undefined
                 s.error = undefined
                 s.aborted = false
-                $ctrl.setProgress(false, 0)
+                $ctrl.setProgress({ loading: false, progress: 0 })
             }
 
             s.makeRequest = (cqp) => {
@@ -139,12 +139,13 @@ angular.module("korpApp").component("resultsStatistics", {
                 // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
                 const corpora: string = settings.corpusListing.stringifySelected(false)
 
-                $ctrl.setProgress(true, 0)
+                $ctrl.setProgress({ loading: true, progress: 0 })
                 s.proxy
                     .makeRequest(cqp, attrs, {
                         defaultWithin: store.within,
                         ignoreCase,
-                        onProgress: (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)),
+                        onProgress: (progressObj) =>
+                            $timeout(() => $ctrl.setProgress({ loading: true, progress: progressObj.percent })),
                     })
                     .then(async (data) => {
                         const columns = createColumns(store, Object.keys(data.corpora), attrs)
@@ -157,7 +158,7 @@ angular.module("korpApp").component("resultsStatistics", {
                             cqp
                         )
                         $timeout(() => {
-                            $ctrl.setProgress(false, 0)
+                            $ctrl.setProgress({ loading: false, progress: 0 })
                             s.data = rows
                             s.searchParams = params
                             s.rowCount = data.count
@@ -184,7 +185,7 @@ angular.module("korpApp").component("resultsStatistics", {
                     return
                 }
 
-                $ctrl.setProgress(false, 0)
+                $ctrl.setProgress({ loading: false, progress: 0 })
             }
         },
     ],

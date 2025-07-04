@@ -16,7 +16,7 @@ import { StoreService } from "@/services/store"
 type ResultsHitsController = IController & {
     isActive: boolean
     loading: boolean
-    setProgress: (loading: boolean, progress: number) => void
+    setProgress: (event: { loading: boolean; progress: number }) => void
 }
 
 type ResultsHitsScope = IScope & {
@@ -68,7 +68,7 @@ angular.module("korpApp").component("resultsHits", {
     bindings: {
         isActive: "<",
         loading: "<",
-        setProgress: "<",
+        setProgress: "&",
     },
     controller: [
         "$rootScope",
@@ -114,7 +114,7 @@ angular.module("korpApp").component("resultsHits", {
                 $scope.proxy.abort()
                 if ($ctrl.loading) {
                     $scope.aborted = true
-                    $ctrl.setProgress(false, 0)
+                    $ctrl.setProgress({ loading: false, progress: 0 })
                 }
             })
 
@@ -179,7 +179,7 @@ angular.module("korpApp").component("resultsHits", {
                 // Abort any running request
                 if ($ctrl.loading) $scope.proxy.abort()
 
-                $ctrl.setProgress(true, 0)
+                $ctrl.setProgress({ loading: true, progress: 0 })
                 $scope.aborted = false
                 $scope.error = undefined
 
@@ -188,7 +188,7 @@ angular.module("korpApp").component("resultsHits", {
                         buildQueryOptions(isPaging),
                         (progressObj) =>
                             $timeout(() => {
-                                $ctrl.setProgress(true, Math.round(progressObj.percent))
+                                $ctrl.setProgress({ loading: true, progress: Math.round(progressObj.percent) })
                                 if (!isPaging && progressObj.hits !== null) {
                                     $scope.hitsInProgress = progressObj.hits
                                 }
@@ -197,7 +197,7 @@ angular.module("korpApp").component("resultsHits", {
                     )
                     .then((data) =>
                         $timeout(() => {
-                            $ctrl.setProgress(false, 0)
+                            $ctrl.setProgress({ loading: false, progress: 0 })
                             renderResult(data)
                             if (!isPaging) {
                                 $scope.hits = data.hits
@@ -213,7 +213,7 @@ angular.module("korpApp").component("resultsHits", {
                         // TODO Show error
                         $timeout(() => {
                             $scope.error = error
-                            $ctrl.setProgress(false, 0)
+                            $ctrl.setProgress({ loading: false, progress: 0 })
                         })
                     })
             }
