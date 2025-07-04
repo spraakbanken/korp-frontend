@@ -10,13 +10,14 @@ import { loc, locAttribute, locObj } from "@/i18n"
 import "@/services/utils"
 import "@/components/deptree/deptree"
 import "@/components/sidebar-section"
-import "@/video-controller" // May be used by custom code
+import "@/components/video-player" // May be used by custom code
 import { RootScope } from "@/root-scope.types"
 import { CqpSearchEvent, SelectWordEvent } from "@/statemachine/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config.types"
 import { JQueryExtended } from "@/jquery.types"
 import { Token } from "@/backend/types"
+import { StoreService } from "@/services/store"
 
 export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
 export type SidebarComponent = {
@@ -43,7 +44,6 @@ type SidebarController = IController & {
     sentenceData: Record<string, string>
     inReadingMode: boolean
     tokens: Token[]
-    showDepTree: boolean
     openReadingMode: () => void
     updateContent: (event: SelectWordEvent) => void
     openDepTree: () => void
@@ -105,12 +105,6 @@ angular.module("korpApp").component("sidebar", {
             <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.openDepTree()" class="link show_deptree">
                 {{'show_deptree' | loc:$root.lang}}
             </div>
-            <dep-tree
-                ng-if="$ctrl.showDepTree"
-                tokens="$ctrl.tokens"
-                corpus="$ctrl.corpusObj"
-                on-close="$ctrl.closeDepTree()"
-            ></dep-tree>
         </div>
     `,
     bindings: {
@@ -124,12 +118,14 @@ angular.module("korpApp").component("sidebar", {
         "$element",
         "$rootScope",
         "$scope",
+        "store",
         function (
             $compile: ICompileService,
             $controller: IControllerService,
             $element: JQLite,
             $rootScope: RootScope,
-            $scope: SidebarScope
+            $scope: SidebarScope,
+            store: StoreService
         ) {
             let $ctrl = this as SidebarController
 
@@ -156,12 +152,21 @@ angular.module("korpApp").component("sidebar", {
                 }
             }
 
+            // TODO Test it
             $ctrl.openDepTree = () => {
-                $ctrl.showDepTree = true
+                store.modal = {
+                    content: html`<dep-tree
+                        tokens="$ctrl.tokens"
+                        corpus="$ctrl.corpusObj"
+                        on-close="$ctrl.closeDepTree()"
+                    ></dep-tree>`,
+                    size: "lg",
+                    title: loc("dep_tree", store.lang),
+                }
             }
 
             $ctrl.closeDepTree = () => {
-                $ctrl.showDepTree = false
+                store.modal = undefined
             }
 
             $ctrl.openReadingMode = () => {

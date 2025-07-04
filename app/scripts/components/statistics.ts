@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IController, IScope, ui } from "angular"
+import angular, { IController, IScope } from "angular"
 import _ from "lodash"
 import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
@@ -68,6 +68,24 @@ angular.module("korpApp").component("statistics", {
         <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
             <div class="flex items-center gap-1">
                 <label for="reduce-select">{{ "reduce_text" | loc:$root.lang }}:</label>
+
+                <div class="dropdown">
+                    <a
+                        class="dropdown-toggle"
+                        id="dLabel"
+                        role="button"
+                        data-toggle="dropdown"
+                        data-target="#"
+                        href="/page.html"
+                    >
+                        Dropdown
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        ...
+                    </ul>
+                </div>
+
                 <reduce-select
                     items="statCurrentAttrs"
                     selected="statSelectedAttrs"
@@ -227,16 +245,9 @@ angular.module("korpApp").component("statistics", {
     controller: [
         "$rootScope",
         "$scope",
-        "$uibModal",
         "searches",
         "store",
-        function (
-            $rootScope: RootScope,
-            $scope: StatisticsScope,
-            $uibModal: ui.bootstrap.IModalService,
-            searches: SearchesService,
-            store: StoreService
-        ) {
+        function ($rootScope: RootScope, $scope: StatisticsScope, searches: SearchesService, store: StoreService) {
             const $ctrl = this as StatisticsController
 
             $ctrl.noRowsError = false
@@ -556,20 +567,11 @@ angular.module("korpApp").component("statistics", {
                     values: item.count[corpus],
                 }))
 
-                const modal = $uibModal.open({
-                    template: html`
-                        <div class="modal-header">
-                            <h3 class="modal-title !w-full">{{ 'statstable_distribution' | loc }}</h3>
-                        </div>
-                        <div class="modal-body">
-                            <corpus-distribution-chart row="$parent.rowData"></corpus-distribution-chart>
-                        </div>
-                    `,
-                    scope: $scope,
-                    windowClass: "!text-base",
-                })
-                // Ignore rejection from dismissing the modal
-                modal.result.catch(() => {})
+                // TODO Test it
+                store.modal = {
+                    content: html`<corpus-distribution-chart row="rowData"></corpus-distribution-chart>`,
+                    title: loc("statstable_distribution", store.lang),
+                }
             }
 
             $ctrl.resizeGrid = (resizeColumns) => {

@@ -633,13 +633,6 @@ export default {
             ...
         }],
     },
-    attr: {
-        template: `<select ...>`,
-        controller: ["$scope", "$uibModal", function($scope, $uibModal) {
-            if($scope.show) $uibModal.open
-            ...
-        }]
-    },
     ...
 }
 ```
