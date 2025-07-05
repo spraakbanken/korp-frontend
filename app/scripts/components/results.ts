@@ -117,7 +117,7 @@ angular.module("korpApp").component("results", {
                             <tab-preloader ng-if="tabProgressDynamic.kwicTabs[$index].loading"></tab-preloader>
                             <i
                                 class="fa-solid fa-times-circle cursor-pointer"
-                                ng-click="closeTab('kwicTabs', $index, $event)"
+                                ng-click="closeTab('kwicTabs', $index)"
                             ></i>
                         </button>
                     </li>
@@ -353,19 +353,20 @@ angular.module("korpApp").component("results", {
             })
 
             $scope.closeTab = (type, index, event) => {
-                event.preventDefault()
-                // TODO The template will use recalculated `$index` after a tab is closed, putting our stuff out of sync
+                // Remove the tab model
+                // Note that this will update $index in later tab elements of same type
                 $rootScope[type].splice(index, 1)
-                $scope.tabProgressDynamic[type].splice(index, 1)
 
+                // Update local tab tracking
+                $scope.tabProgressDynamic[type].splice(index, 1)
                 const id = `${type}-${index}`
-                const idIndex = Object.keys(tabs).indexOf(id)
                 delete tabs[id]
 
-                // Select next or last tab
-                const ids = Object.keys(tabs)
-                const nextId = ids[Math.min(idIndex, ids.length - 1)]
-                $scope.setTabId(nextId)
+                // Select last-selected permanent tab
+                // TODO Only if it's the current tab being closed
+                //   - but currently, clicking the close button first selects the tab, so we need to fix that too
+                // TODO Select next tab instead, i.e. the one replacing the closed one in the list
+                $scope.setTabId(String($scope.activeTab))
             }
             $scope.setProgress = (index, loading, progress) => ($scope.tabProgress[index] = { loading, progress })
             $scope.setProgressDynamic = (type, index, loading, progress) =>
