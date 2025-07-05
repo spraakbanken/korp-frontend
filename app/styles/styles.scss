@@ -817,38 +817,6 @@ span.absStat {
   color: grey;
 }
 
-#mode_switch {
-  margin : 0;
-  margin-right: 10px;
-  padding-left: 0;
-  a:visited {
-    color : rgb(67 56 202 / var(--tw-text-opacity));
-  }
-  a:hover {
-    color: indianred;
-  }
-  li {
-    &.visible {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    &.selected a {
-      color : black;
-    }
-    &.visible:after {
-      content: "|";
-      margin : 0 0.3em;
-      color : grey;
-    }
-    &:last-child:after {
-      display: none;
-    }
-    .dropdown-toggle {
-      background-color : transparent;
-    }
-  }
-}
-
 .radioList_selected {
   color: black !important;
   cursor: default;

@@ -37,20 +37,23 @@ const chooserRightLogoHtml: string = getLogo("chooser_right")
 angular.module("korpApp").component("appHeader", {
     template: html`
         <div id="header">
-            <div class="flex items-center justify-between px-3 py-2" id="top_bar">
-                <ul id="mode_switch">
-                    <li class="visible" ng-repeat="mode in $ctrl.visible" ng-class="{selected: mode.selected}">
-                        <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:$oot.lang}}</a>
-                    </li>
-                    <li class="menu_more visible" ng-if="$ctrl.menu.length" uib-dropdown>
-                        <a uib-dropdown-toggle>
-                            {{'more' | loc:$root.lang}}
-                            <i class="fa fa-angle-double-down ml-1"></i>
+            <div class="flex items-center justify-between gap-4 px-3 py-2" id="top_bar">
+                <ul id="mode_switch" class="flex flex-wrap separator-pipe">
+                    <li ng-repeat="mode in $ctrl.visible">
+                        <a ng-href="{{$ctrl.getUrl(mode.mode)}}" ng-class="{'!text-inherit': mode.selected}">
+                            {{mode.label | locObj:$oot.lang}}
                         </a>
+                    </li>
 
-                        <ul uib-dropdown-menu>
-                            <li ng-repeat="mode in $ctrl.menu" ng-class="{selected: mode.selected}">
-                                <a ng-href="{{$ctrl.getUrl(mode.mode)}}"> {{mode.label | locObj:$root.lang}}</a>
+                    <li ng-if="$ctrl.menu.length" class="dropdown">
+                        <a class="dropdown-toggle" role="button" data-bs-toggle="dropdown">
+                            {{'more' | loc:$root.lang}}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="mode in $ctrl.menu">
+                                <a ng-href="{{$ctrl.getUrl(mode.mode)}}" class="dropdown-item"
+                                    >{{mode.label | locObj:$root.lang}}</a
+                                >
                             </li>
                         </ul>
                     </li>
@@ -65,31 +68,35 @@ angular.module("korpApp").component("appHeader", {
                         {{'about_cite_header' | loc:$root.lang}}
                     </a>
 
-                    <div uib-dropdown>
+                    <div class="dropdown">
                         <button
-                            uib-dropdown-toggle
+                            data-bs-toggle="dropdown"
                             class="px-2 py-1 border border-gray-300 bg-gray-200 rounded text-gray-800"
                         >
                             <span class="font-bold uppercase"> {{'menu' | loc:$root.lang}} </span>
                             <i class="fa fa-lg fa-bars ml-2 align-middle text-indigo-600"></i>
                         </button>
-                        <ul uib-dropdown-menu class="dropdown-menu-right">
+                        <ul class="dropdown-menu dropdown-menu-right">
                             <li>
-                                <a id="about" ng-click="$ctrl.citeClick()"> {{'about' | loc:$root.lang}} </a>
+                                <a class="dropdown-item" ng-click="$ctrl.citeClick()"> {{'about' | loc:$root.lang}} </a>
                             </li>
                             <li>
-                                <a href="https://spraakbanken.gu.se/verktyg/korp/användarhandledning" target="_blank">
+                                <a
+                                    href="https://spraakbanken.gu.se/verktyg/korp/användarhandledning"
+                                    target="_blank"
+                                    class="dropdown-item"
+                                >
                                     {{'docs' | loc:$root.lang}}
                                 </a>
                             </li>
                             <li id="korplink">
-                                <a href="/korp"> {{'korp' | loc:$root.lang}} </a>
+                                <a href="/korp" class="dropdown-item"> {{'korp' | loc:$root.lang}} </a>
                             </li>
                             <li id="korplablink">
-                                <a href="/korplabb"> {{'korp_lab' | loc:$root.lang}} </a>
+                                <a href="/korplabb" class="dropdown-item"> {{'korp_lab' | loc:$root.lang}} </a>
                             </li>
                             <li>
-                                <a href="https://spraakbanken.gu.se/sparv" target="_blank">
+                                <a href="https://spraakbanken.gu.se/sparv" target="_blank" class="dropdown-item">
                                     {{'import_chain' | loc:$root.lang}}
                                 </a>
                             </li>

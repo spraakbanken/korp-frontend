@@ -8,3 +8,12 @@
         background-image: var(--bs-btn-close-bg)
     }
 }
+
+@layer utilities {
+    .separator-pipe > *:not(:last-child)::after {
+        content: "|";
+        margin-inline-start: 0.2em;
+        margin-inline-end: 0.3em;
+        color: grey;
+    }
+}
