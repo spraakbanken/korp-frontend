@@ -15,6 +15,10 @@ declare module "*.png" {
     export default content
 }
 
+declare module "*.peggy" {
+    export const parse: <T = any>(input: string) => T
+}
+
 declare module "rickshaw" {
     const Rickshaw: any
     export default Rickshaw

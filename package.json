@@ -4,6 +4,7 @@
     "dependencies": {
         "@fontsource/source-sans-pro": "^5.1.0",
         "@fortawesome/fontawesome-free": "6.2.1",
+        "@rocket.chat/peggy-loader": "^0.31.28",
         "@types/angular-dynamic-locale": "^0.1.35",
         "@types/angular-ui-bootstrap": "^1.0.7",
         "@types/jqueryui": "^1.12.23",
@@ -27,6 +28,7 @@
         "leaflet.markercluster": "^1.5.3",
         "lodash": "^4.17.21",
         "moment": "2.29.4",
+        "peggy": "^5.0.4",
         "rickshaw": "1.7.1",
         "slickgrid": "3.0.3",
         "tailwindcss": "3.2.4",

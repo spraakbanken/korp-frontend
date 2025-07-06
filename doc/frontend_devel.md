@@ -776,12 +776,7 @@ Use `snake_case` when defining new attributes in `config.yml`. Add a default val
 
 CQP queries are of course parsed in the backend to perform searching. But they are also parsed in the frontend, for programmatic manipulation etc. The frontend parser is written in [Peggy](https://peggyjs.org/) syntax: [CQPParser.peggy](../app/scripts/cqp_parser/CQPParser.peggy). It covers only some of the full CQP syntax supported by the backend, and it is quite expected to throw errors when parsing user-crafted queries.
 
-To rebuild JS code from the Peggy file, do:
-
-```sh
-cd app/scripts/cqp_parser
-npx peggy --format es -d _:lodash CQPParser.peggy
-```
+The parser is compiled at build time by [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader).
 
 ## Contributing with pull requests on Github
 

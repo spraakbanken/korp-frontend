@@ -1,4 +1,6 @@
-{
+{{
+  import _ from "lodash"
+
   function makeObj(type, op, val, flags) {
     return {type : type, op : op, val: val, flags: flags}
   }
@@ -10,7 +12,7 @@
     })
     return output
   }
-}
+}}
 
 
 start

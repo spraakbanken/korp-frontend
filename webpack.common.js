@@ -100,6 +100,15 @@ module.exports = {
                 test: /\.ya?ml$/,
                 use: "yaml-loader",
             },
+            {
+                test: /\.peggy$/,
+                use: {
+                    loader: "@rocket.chat/peggy-loader",
+                    options: {
+                        format: "es",
+                    },
+                },
+            },
         ],
     },
     plugins: [

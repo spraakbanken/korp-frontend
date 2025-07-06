@@ -2,12 +2,10 @@
 import _ from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"
-import { parse as parse_ } from "./CQPParser"
+import { parse } from "./CQPParser.peggy"
 import type { Condition, CqpQuery, DateRange, Operator, OperatorKorp, Value } from "./cqp.types"
 
 /** Parse CQP string to syntax tree. */
-// Rename to be able to add typing.
-const parse: (input: string, options?: never) => CqpQuery = parse_
 export { parse }
 
 /**
@@ -145,7 +143,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
     return output.join(" ")
 }
 
-export const expandOperators = (cqpstr: string) => stringify(parse(cqpstr), true)
+export const expandOperators = (cqpstr: string) => stringify(parse<CqpQuery>(cqpstr), true)
 
 /**
  * Find first and last date in any date interval conditions.

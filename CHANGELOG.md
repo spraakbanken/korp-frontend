@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Use [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader) to compile CQP parser at build time
+
 ## [9.10.1] - 2025-07-02
 
 ### Fixed
