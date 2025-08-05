@@ -1,18 +1,19 @@
 /** @format */
 import _ from "lodash"
-import angular, { IControllerService, IHttpService, ui, type IScope } from "angular"
+import angular, { IControllerService, IHttpService, ILocationService, ui, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
 import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
-import { HashParams, LocationService, UrlParams } from "./urlparams"
+import { HashParams, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { Row } from "./components/kwic"
 import { AbsRelSeq } from "./statistics.types"
 import { StoreService } from "./services/store"
+import moment, { Moment } from "moment"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -34,6 +35,13 @@ type ServiceTypes = {
     $uibModal: ui.bootstrap.IModalService
     store: StoreService
     // Add types here as needed.
+}
+
+/** Extends the Angular Location service to assign types for supported URL hash params. */
+export type LocationService = Omit<ILocationService, "search"> & {
+    search(): HashParams
+    search(search: HashParams): LocationService
+    search<K extends keyof HashParams>(search: K, paramValue: HashParams[K] | any): LocationService
 }
 
 /** Get a parameter from the `?<key>=<value>` part of the URL. */
@@ -93,6 +101,15 @@ export class Factory<T extends new (...args: any) => InstanceType<T>> {
     create(...args: any[]): InstanceType<T> {
         return new this.class_(...args)
     }
+}
+
+/** Create a Moment that uses the date from one Date object and the time from another. */
+export function combineDateTime(date: Date, time: Date): Moment {
+    const m = moment(moment(date).format("YYYY-MM-DD"))
+    const m_time = moment(time)
+    m.add(m_time.hour(), "hour")
+    m.add(m_time.minute(), "minute")
+    return m
 }
 
 /** Toggles class names for selected word elements in KWIC. */

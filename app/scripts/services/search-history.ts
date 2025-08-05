@@ -2,8 +2,8 @@
 import angular from "angular"
 import { pick } from "lodash"
 import { localStorageGet, localStorageSet } from "@/local-storage"
-import { getSearchParamNames, HashParams, LocationService, SearchParams } from "@/urlparams"
-import { paramsString } from "@/util"
+import { getSearchParamNames, HashParams, SearchParams } from "@/urlparams"
+import { LocationService, paramsString } from "@/util"
 import { StoreService } from "./store"
 
 export type SearchHistoryService = {

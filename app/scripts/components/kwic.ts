@@ -52,7 +52,7 @@ type KwicController = IController & {
     corpusOrder: string[]
     /** Current page of results. */
     kwicInput: ApiKwic[]
-    corpusHits: any
+    corpusHits: Record<string, number>
     // Locals
     kwic: Row[]
     useContext: boolean
@@ -91,7 +91,7 @@ type HitsPictureItem = {
     page: number
     relative: number
     abs: number
-    rtitle: string
+    rtitle: LangString
 }
 
 const UPDATE_DELAY = 500
@@ -355,27 +355,8 @@ angular.module("korpApp").component("kwic", {
                 }
 
                 if ("corpusHits" in changeObj && $ctrl.corpusHits) {
-                    const items = _.map(
-                        $ctrl.corpusOrder,
-                        (obj) =>
-                            <HitsPictureItem>{
-                                rid: obj,
-                                rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
-                                relative: $ctrl.corpusHits[obj] / $ctrl.hits,
-                                abs: $ctrl.corpusHits[obj],
-                                page: -1, // this is properly set below
-                            }
-                    ).filter((item) => item.abs > 0)
-
-                    // calculate which is the first page of hits for each item
-                    let index = 0
-                    _.each(items, (obj) => {
-                        // $ctrl.kwicInput.length == page size
-                        obj.page = Math.floor(index / $ctrl.kwicInput.length)
-                        index += obj.abs
-                    })
-
-                    $ctrl.hitsPictureData = items
+                    const pageSize = $ctrl.kwicInput.length
+                    $ctrl.hitsPictureData = calculateHitsPicture($ctrl.corpusOrder, $ctrl.corpusHits, pageSize)
                 }
 
                 if ("active" in changeObj) {
@@ -387,6 +368,30 @@ angular.module("korpApp").component("kwic", {
                 }
 
                 if ("context" in changeObj) $scope.context = !!$ctrl.context
+            }
+
+            function calculateHitsPicture(
+                corpusOrder: string[],
+                corpusHits: Record<string, number>,
+                pageSize: number
+            ): HitsPictureItem[] {
+                const items: HitsPictureItem[] = corpusOrder
+                    .map((id) => ({
+                        rtitle: settings.corpusListing.getTitleObj(id.toLowerCase()),
+                        relative: corpusHits[id] / $ctrl.hits,
+                        abs: corpusHits[id],
+                        page: -1, // this is properly set below
+                    }))
+                    .filter((item) => item.abs > 0)
+
+                // calculate which is the first page of hits for each item
+                let index = 0
+                items.forEach((item) => {
+                    item.page = Math.floor(index / pageSize)
+                    index += item.abs
+                })
+
+                return items
             }
 
             $ctrl.onKwicClick = (event) => {

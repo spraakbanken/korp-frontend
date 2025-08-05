@@ -1,14 +1,5 @@
 /** @format */
-
-import { ILocationService } from "angular"
 import { QueryParamSort } from "./backend/types/query"
-
-/** Extends the Angular Location service to assign types for supported URL hash params. */
-export type LocationService = Omit<ILocationService, "search"> & {
-    search(): HashParams
-    search(search: HashParams): LocationService
-    search<K extends keyof HashParams>(search: K, paramValue: HashParams[K] | any): LocationService
-}
 
 /** Supported parameters for the `?<key>=<value>` part of the URL. */
 export type UrlParams = {

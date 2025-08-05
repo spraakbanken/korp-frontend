@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IScope } from "angular"
-import { html } from "@/util"
+import { html, LocationService } from "@/util"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
 import "@/components/results-comparison"
@@ -16,7 +16,6 @@ import "@/components/sidebar"
 import "@/components/tab-preloader"
 import "@/directives/tab-hash"
 import { RootScope } from "@/root-scope.types"
-import { LocationService } from "@/urlparams"
 import { StoreService } from "@/services/store"
 
 type ResultsScope = IScope & {

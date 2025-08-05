@@ -1,6 +1,7 @@
 /** @format */
-import { HashParams, LocationService } from "@/urlparams"
 import angular, { IScope } from "angular"
+import { HashParams } from "@/urlparams"
+import { LocationService } from "@/util"
 
 export type UtilsService = {
     /** Set up sync between a url param and a scope variable. */

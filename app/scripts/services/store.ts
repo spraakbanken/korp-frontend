@@ -8,7 +8,8 @@ import { CqpQuery } from "@/cqp_parser/cqp.types"
 import { getLocData } from "@/loc-data"
 import { getAllCorporaInFolders } from "@/components/corpus-chooser/util"
 import { QueryParamSort } from "@/backend/types/query"
-import { HashParams, LocationService } from "@/urlparams"
+import { HashParams } from "@/urlparams"
+import { LocationService } from "@/util"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.

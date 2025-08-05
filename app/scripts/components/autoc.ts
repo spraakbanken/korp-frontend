@@ -166,6 +166,7 @@ angular.module("korpApp").component("autoc", {
                 if (ctrl.variant === "dalin") {
                     morphologies.push("dalinm")
                 } else {
+                    // TODO Move to CorpusListing
                     for (let id of corpora) {
                         const morfs = settings.corpora[id].morphology || ""
                         for (let morf of morfs.split("|")) {
@@ -182,9 +183,9 @@ angular.module("korpApp").component("autoc", {
             }
 
             ctrl.getRows = function (input: string) {
-                const corporaIDs = _.map(settings.corpusListing.selected, "id")
-                const morphologies = ctrl.getMorphologies(corporaIDs)
                 if (ctrl.type === "lemgram") {
+                    const corporaIDs = _.map(settings.corpusListing.selected, "id")
+                    const morphologies = ctrl.getMorphologies(corporaIDs)
                     return ctrl.getLemgrams(input, morphologies, corporaIDs)
                 } else if (ctrl.type === "sense") {
                     return ctrl.getSenses(input)
