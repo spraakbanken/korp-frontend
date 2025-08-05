@@ -401,9 +401,17 @@ angular.module("korpApp").component("statistics", {
             }
 
             store.watch("corpus", () => {
-                const allAttrs = settings.corpusListing.getStatsAttributeGroups(settings.corpusListing.getReduceLang())
-                $scope.statCurrentAttrs = _.filter(allAttrs, (item) => !item["hide_statistics"])
-                $scope.statSelectedAttrs = (store.stats_reduce || "word").split(",")
+                // Update list of attributes
+                $scope.statCurrentAttrs = settings.corpusListing
+                    .getStatsAttributeGroups(settings.corpusListing.getReduceLang())
+                    .filter((item) => !item["hide_statistics"])
+
+                // Deselect removed attributes, fall back to word
+                const names = $scope.statCurrentAttrs.map((option) => option.value)
+                const selected = _.intersection(store.stats_reduce.split(","), names)
+                $scope.statSelectedAttrs = selected.length > 0 ? selected : ["word"]
+                store.stats_reduce = $scope.statSelectedAttrs.join()
+
                 const insensitiveAttrs = store.stats_reduce_insensitive
                 $scope.statInsensitiveAttrs = insensitiveAttrs ? insensitiveAttrs.split(",") : []
             })
