@@ -45,6 +45,7 @@ describe("statistics", () => {
         await page.getByRole("option", { name: "sense" }).click()
         await page.getByRole("option", { name: "msd" }).click()
         await page.getByLabel("Group by:").click()
+        await expect(page.getByLabel("Group by:")).toHaveText('word, sense, msd')
 
         // Result should reload
         // There are a few more rows
@@ -81,5 +82,20 @@ describe("statistics", () => {
         await expect(page.getByRole("table")).toContainText("katter")
         const hits = (await page.getByText('Results:').last().textContent())?.trim().slice(9)
         expect(Number(hits)).toEqual(total)
+    })
+
+    test("group-by fallback on corpus change", async ({ page }) => {
+        // Search in drama and group by the author attribute
+        await page.goto("/#?lang=eng&corpus=drama&search=lemgram|stad\.\.nn\.1&stats_reduce=text_author&result_tab=2")
+        await expect(page.locator("corpus-chooser")).toBeVisible() // Wait for initialization
+
+        // Switch corpus to folke which has no author attribute
+        await page.locator("corpus-chooser").click()
+        await page.getByText("Select none").click()
+        await page.getByText("Folke").click()
+        await expect(page.locator("corpus-chooser")).toContainText("Folke selected")
+
+        // Fall back to word
+        await expect(page.getByLabel("Group by:")).toHaveText('word')
     })
 })
