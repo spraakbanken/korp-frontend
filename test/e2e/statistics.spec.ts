@@ -36,6 +36,27 @@ describe("statistics", () => {
         expect(Number(hits)).toEqual(total)
     })
 
+    test("example reuse result options", async ({ page }) => {
+        // Get some statistics and provide non-default options for KWIC search
+        await page.goto("/#?lang=eng&corpus=fragelistor&search=lemgram|katt\.\.nn\.1&result_tab=2&reading_mode&hpp=50")
+        await expect(page.getByRole("progressbar").first()).toBeHidden({ timeout: 15000 })
+
+        // Change corpus so it's different from what was used for the statistics
+        await page.locator("corpus-chooser").click()
+        await page.getByText("Select none").click()
+        await page.getByText("Dramawebben (demo)").click()
+        await page.locator("corpus-chooser").click()
+
+        // Open example search from statistics
+        await page.getByRole("link", { name: "Statistics" }).click()
+        await page.locator(".slick-row").getByText("katter").first().click()
+        await expect(page.locator(".results_table").nth(1)).toBeVisible()
+
+        // Check that the correct corpus and the KWIC options are being used
+        await expect(page.locator(".results_table").nth(1)).toContainText("Av småbrödssorter bakades mest skorpor")
+        expect(await page.locator(".results_table").nth(1).getByRole("paragraph").count()).toEqual(51)
+    })
+
     test("group by", async ({ page }) => {
         await page.goto("/#?lang=eng&corpus=attasidor,da&search=lemgram|katt\.\.nn\.1&result_tab=2")
         await expect(page.getByText("Number of rows: 8")).toBeVisible()
