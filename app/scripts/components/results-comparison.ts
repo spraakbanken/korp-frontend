@@ -79,10 +79,12 @@ angular.module("korpApp").component("resultsComparison", {
             $scope.resultOrder = (item) => Math.abs(item.loglike)
 
             function render(result: CompareResult) {
-                const [tables, max, cmp1, cmp2, reduce] = result
                 $ctrl.setProgress(false, 100)
-
+                const [tables, max, cmp1, cmp2, reduce] = result
                 $scope.tables = tables
+                $scope.max = max
+                $scope.cmp1 = cmp1
+                $scope.cmp2 = cmp2
                 $scope.reduce = reduce
 
                 const cl = settings.corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
@@ -96,15 +98,10 @@ angular.module("korpApp").component("resultsComparison", {
                     if (attribute.stringify) {
                         stringify = getStringifier(attribute.stringify)
                     } else if (attribute.translation) {
-                        stringify = (value) => locAttribute(attribute.translation!, value, store.lang)
+                        stringify = (value) => locAttribute(attribute.translation, value, store.lang)
                     }
                 }
                 $scope.stringify = stringify
-
-                $scope.max = max
-
-                $scope.cmp1 = cmp1
-                $scope.cmp2 = cmp2
             }
 
             $scope.rowClick = (row, cmp_index) => {

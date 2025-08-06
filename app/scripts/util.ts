@@ -5,12 +5,9 @@ import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
-import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
 import { HashParams, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
-import { CorpusTransformed } from "./settings/config-transformed.types"
-import { Row } from "./components/kwic"
 import { AbsRelSeq } from "./statistics.types"
 import { StoreService } from "./services/store"
 import moment, { Moment } from "moment"
@@ -110,45 +107,6 @@ export function combineDateTime(date: Date, time: Date): Moment {
     m.add(m_time.hour(), "hour")
     m.add(m_time.minute(), "minute")
     return m
-}
-
-/** Toggles class names for selected word elements in KWIC. */
-export class SelectionManager {
-    selected: JQuery<HTMLElement>
-    aux: JQuery<HTMLElement>
-
-    constructor() {
-        this.selected = $()
-        this.aux = $()
-    }
-
-    select(word: JQuery<HTMLElement>, aux?: JQuery<HTMLElement>): void {
-        if (word == null || !word.length) {
-            return
-        }
-        if (this.selected.length) {
-            this.selected.removeClass("word_selected token_selected")
-            this.aux.removeClass("word_selected aux_selected")
-        }
-        this.selected = word
-        this.aux = aux || $()
-        this.aux.addClass("word_selected aux_selected")
-        word.addClass("word_selected token_selected")
-    }
-
-    deselect(): void {
-        if (!this.selected.length) {
-            return
-        }
-        this.selected.removeClass("word_selected token_selected")
-        this.selected = $()
-        this.aux.removeClass("word_selected aux_selected")
-        this.aux = $()
-    }
-
-    hasSelected(): boolean {
-        return this.selected.length > 0
-    }
 }
 
 /** Format a number like 60723 => 61K */
@@ -335,107 +293,6 @@ export function simpleModal(html: string) {
     document.body.appendChild(dialog)
     dialog.showModal()
     dialog.querySelector("button")!.addEventListener("click", () => dialog.close())
-}
-
-// Add download links for other formats, defined in
-// settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
-// 2014-02-26/04-30)
-
-export function setDownloadLinks(params: string, result_data: { kwic: Row[]; corpus_order: string[] }): void {
-    // If some of the required parameters are null, return without
-    // adding the download links.
-    if (!(params != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
-        console.log("failed to do setDownloadLinks")
-        return
-    }
-
-    if (result_data.kwic.length == 0) {
-        $("#download-links").hide()
-        return
-    }
-
-    $("#download-links").show()
-
-    // Get the number (index) of the corpus of the query result hit
-    // number hit_num in the corpus order information of the query
-    // result.
-    const get_corpus_num = (hit_num: number) =>
-        result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus.toUpperCase())
-
-    console.log("setDownloadLinks data:", result_data)
-    $("#download-links").empty()
-    // Corpora in the query result
-    const result_corpora = result_data.corpus_order.slice(
-        get_corpus_num(0),
-        get_corpus_num(result_data.kwic.length - 1) + 1
-    )
-    // Settings of the corpora in the result, to be passed to the
-    // download script
-    const result_corpora_settings: Record<string, CorpusTransformed> = {}
-    let i = 0
-    while (i < result_corpora.length) {
-        const corpus_ids = result_corpora[i].toLowerCase().split("|")
-        let j = 0
-        while (j < corpus_ids.length) {
-            const corpus_id = corpus_ids[j]
-            result_corpora_settings[corpus_id] = settings.corpora[corpus_id]
-            j++
-        }
-        i++
-    }
-    $("#download-links").append("<option value='init' rel='localize[download_kwic]'></option>")
-    i = 0
-    while (i < settings.download_formats.length) {
-        const format = settings.download_formats[i]
-        // NOTE: Using attribute rel="localize[...]" to localize the
-        // title attribute requires a small change to
-        // lib/jquery.localize.js. Without that, we could use
-        // `loc`, but it would not change the
-        // localizations immediately when switching languages but only
-        // after reloading the page.
-        // # title = loc('formatdescr_' + format)
-        const option = $(`\
-<option
-    value="${format}"
-    title="${loc(`formatdescr_${format}`)}"
-    class="download_link">${format.toUpperCase()}</option>\
-`)
-
-        const query_params = JSON.stringify(Object.fromEntries(new URLSearchParams(params)))
-
-        const download_params = {
-            query_params,
-            format,
-            korp_url: window.location.href,
-            korp_server_url: settings.korp_backend_url,
-            corpus_config: JSON.stringify(result_corpora_settings),
-            corpus_config_info_keys: ["metadata", "licence", "homepage", "compiler"].join(","),
-            urn_resolver: settings.urnResolver,
-        }
-        if ("download_format_params" in settings) {
-            if ("*" in settings.download_format_params) {
-                $.extend(download_params, settings.download_format_params["*"])
-            }
-            if (format in settings.download_format_params) {
-                $.extend(download_params, settings.download_format_params[format])
-            }
-        }
-        option.appendTo("#download-links").data("params", download_params)
-        i++
-    }
-    $("#download-links").off("change")
-    ;($("#download-links") as JQueryExtended)
-        .localize()
-        .click(false)
-        .change(function (event) {
-            const params = $(":selected", this).data("params")
-            if (!params) {
-                return
-            }
-            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script!, params)
-            const self = $(this)
-            return setTimeout(() => self.val("init"), 1000)
-        })
 }
 
 /** Split a string by the first occurence of a given separator */
