@@ -9,6 +9,7 @@ import "@/components/extended/struct-token"
 import "@/components/extended/add-box"
 import "@/directives/scroll-to-start"
 import { CqpQuery, CqpToken } from "@/cqp_parser/cqp.types"
+import { createDefaultCondition } from "./util"
 
 type ExtendedTokensController = IController & {
     cqp: string
@@ -94,7 +95,7 @@ angular.module("korpApp").component("extendedTokens", {
             ctrl.data = parse(ctrl.cqp || "[]")
 
             ctrl.addToken = function () {
-                const token: CqpToken = { and_block: [[{ type: "word", op: "=", val: "" }]] }
+                const token: CqpToken = { and_block: [[createDefaultCondition()]] }
                 ctrl.data.push(token)
                 ctrl.change()
             }

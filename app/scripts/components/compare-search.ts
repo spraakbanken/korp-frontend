@@ -12,7 +12,7 @@ import { SavedSearch } from "@/local-storage"
 import { AttributeOption } from "@/corpus_listing"
 
 type CompareSearchController = IController & {
-    valfilter: (attrobj: AttributeOption) => string
+    valfilter: typeof valfilter
     savedSearches: SavedSearch[]
     $doCheck: () => void
     cmp1: SavedSearch

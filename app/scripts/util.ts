@@ -151,9 +151,6 @@ export class SelectionManager {
     }
 }
 
-export const getCqpAttribute = (option: AttributeOption): string =>
-    option.is_struct_attr ? `_.${option.value}` : option.value
-
 /** Format a number like 60723 => 61K */
 export function suffixedNumbers(num: number, lang: string) {
     let out = ""

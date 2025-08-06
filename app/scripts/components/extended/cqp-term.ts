@@ -104,9 +104,7 @@ angular.module("korpApp").component("extendedCqpTerm", {
                     ctrl.types = settings.corpusListing.getAttributeGroupsExtended(ctrl.parallellLang)
 
                     // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
-                    ctrl.typeMapping = _.fromPairs(
-                        ctrl.types.map((item) => [item["is_struct_attr"] ? `_.${item.value}` : item.value, item])
-                    )
+                    ctrl.typeMapping = _.fromPairs(ctrl.types.map((item) => [valfilter(item), item]))
 
                     // Reset attribute if the selected one is no longer available
                     if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
