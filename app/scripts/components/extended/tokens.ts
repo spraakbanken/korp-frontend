@@ -14,7 +14,7 @@ type ExtendedTokensController = IController & {
     cqp: string
     data: CqpQuery
     repeatError: boolean
-    parallellLang: string
+    parallellLang: string | undefined
     prev: string
     showCloseButton: boolean
     addToken: () => void

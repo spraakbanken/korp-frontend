@@ -8,7 +8,7 @@ import { createDefaultCondition } from "./util"
 type ExtendedAndTokenController = IController & {
     and: Condition[]
     first: boolean
-    parallellLang: string
+    parallellLang: string | undefined
     change: () => void
     remove: () => void
     removeOr: (idx: number) => void

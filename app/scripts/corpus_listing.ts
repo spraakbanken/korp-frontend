@@ -366,6 +366,14 @@ export class CorpusListing {
         return [word].concat(attrs, sentAttrs)
     }
 
+    getAttributeGroupsExtended(lang?: string): AttributeOption[] {
+        return this.getAttributeGroups("union", lang).filter((attr) => !attr["hide_extended"])
+    }
+
+    getAttributeGroupsCompare(lang?: string): AttributeOption[] {
+        return this.getAttributeGroups("intersection", lang).filter((attr) => !attr["hide_compare"])
+    }
+
     getStatsAttributeGroups(lang: string): AttributeOption[] {
         const word = this.getWordGroup()
 

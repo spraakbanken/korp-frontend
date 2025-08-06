@@ -9,7 +9,7 @@ import { createDefaultCondition } from "./util"
 type ExtendedTokenController = IController & {
     showClose: boolean
     token: CqpToken & Required<Pick<CqpToken, "and_block">>
-    parallellLang: string
+    parallellLang: string | undefined
     repeatError: boolean
     remove: () => void
     change: () => void

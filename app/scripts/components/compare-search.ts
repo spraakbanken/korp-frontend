@@ -85,8 +85,7 @@ angular.module("korpApp").component("compareSearch", {
             $ctrl.updateAttributes = () => {
                 if ($ctrl.cmp1 && $ctrl.cmp2) {
                     const listing = settings.corpusListing.subsetFactory([...$ctrl.cmp1.corpora, ...$ctrl.cmp2.corpora])
-                    const allAttrs = listing.getAttributeGroups("intersection")
-                    $ctrl.currentAttrs = allAttrs.filter((item) => !item["hide_compare"])
+                    $ctrl.currentAttrs = listing.getAttributeGroupsCompare()
                 }
             }
 
