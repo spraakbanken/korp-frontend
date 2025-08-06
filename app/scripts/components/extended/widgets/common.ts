@@ -22,7 +22,7 @@ export type WidgetScope<T = string> = IScope & {
 
 export type SelectWidgetScope = WidgetScope & {
     $parent: any
-    dataset: string[][]
+    options: string[][]
     type: string
     translation: LocMap
     inputOnly: boolean
@@ -34,7 +34,7 @@ export type SelectWidgetScope = WidgetScope & {
 export const selectTemplate = html`<select
         ng-show="!inputOnly"
         ng-model="input"
-        ng-options="tuple[0] as tuple[1] for tuple in dataset"
+        ng-options="tuple[0] as tuple[1] for tuple in options"
     ></select>
     <input ng-show="inputOnly" type="text" ng-model="input" />`
 
@@ -70,15 +70,16 @@ export const selectController = (autocomplete: boolean): IController => [
             $scope.loading = true
             const split = $scope.type === "set"
             const data = await getAttrValues(corpora, attribute, split)
+
+            const options = _.uniq(data)
+                .map((item) => (item === "" ? ["", loc("empty")] : [item, locAttribute($scope.translation, item)]))
+                .sort((a, b) => a[1].localeCompare(b[1], store.lang))
+
             $scope.$apply(() => {
                 $scope.loading = false
-
-                const dataset = _.uniq(data).map((item) => {
-                    return item === "" ? [item, loc("empty")] : [item, locAttribute($scope.translation, item)]
-                })
-                $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
+                $scope.options = options
                 if (!autocomplete) {
-                    $scope.input = data.includes($scope.input) ? $scope.input : $scope.dataset[0][0]
+                    $scope.input = data.includes($scope.input) ? $scope.input : $scope.options[0][0]
                 }
             })
         }
@@ -90,15 +91,15 @@ export const selectController = (autocomplete: boolean): IController => [
             $scope.inputOnly = !["=", "!=", "contains", "not contains"].includes($scope.orObj.op)
             if (newVal !== oldVal) {
                 if (!autocomplete) {
-                    $scope.input = "" || $scope.dataset[0][0]
+                    $scope.input = $scope.options[0][0]
                 }
             }
         })
 
         $scope.getRows = (input) =>
             input
-                ? $scope.dataset.filter((tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
-                : $scope.dataset
+                ? $scope.options.filter((tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
+                : $scope.options
 
         $scope.typeaheadInputFormatter = (model) => locAttribute($scope.translation, model)
     },
