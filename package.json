@@ -60,7 +60,7 @@
         "yaml-loader": "^0.8.0"
     },
     "engines": {
-        "node": ">=18"
+        "node": ">=20"
     },
     "scripts": {
         "start": "webpack-dev-server --config webpack.dev.js",
