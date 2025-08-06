@@ -378,6 +378,12 @@ export class CorpusListing {
         return [word].concat(attrs, sentAttrs)
     }
 
+    /** Get list of morphology ids used by currently selected corpora. */
+    getMorphologies(): string[] {
+        const morphologies = this.mapSelectedCorpora((corpus) => (corpus.morphology || "").split("|")).flat()
+        return _.uniq(_.compact(morphologies))
+    }
+
     // update attributes so that we don't need to check them multiple times
     // currently done only for common and struct attributes, but code for
     // positional could be added here, but is tricky because parallel mode lang might be needed

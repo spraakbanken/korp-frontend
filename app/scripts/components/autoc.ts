@@ -25,9 +25,8 @@ type AutocController = IController & {
     placeholderToString: (placeholder: string) => string | undefined
     textInput: () => void
     selectedItem: (item: unknown, selected: LemgramOut | Sense) => void
-    getMorphologies: (corpora: string[]) => string[]
     getRows: (input: string) => IPromise<LemgramOut[]> | IPromise<Sense[]> | undefined
-    getLemgrams: (input: string, morphologies: string[], corpora: string[]) => IPromise<LemgramOut[]>
+    getLemgrams: (input: string) => IPromise<LemgramOut[]>
     getSenses: (input: string) => IPromise<Sense[]>
 }
 
@@ -161,38 +160,23 @@ angular.module("korpApp").component("autoc", {
                 ctrl.typeaheadClose()
             }
 
-            ctrl.getMorphologies = function (corpora: string[]) {
-                const morphologies: string[] = []
-                if (ctrl.variant === "dalin") {
-                    morphologies.push("dalinm")
-                } else {
-                    // TODO Move to CorpusListing
-                    for (let id of corpora) {
-                        const morfs = settings.corpora[id].morphology || ""
-                        for (let morf of morfs.split("|")) {
-                            if (morf !== "" && !morphologies.includes(morf)) {
-                                morphologies.push(morf)
-                            }
-                        }
-                    }
-                    if (morphologies.length === 0) {
-                        morphologies.push("saldom")
-                    }
-                }
-                return morphologies
+            function getMorphologies(): string[] {
+                if (ctrl.variant === "dalin") return ["dalinm"]
+                const morphologies = settings.corpusListing.getMorphologies()
+                return morphologies.length ? morphologies : ["saldom"]
             }
 
             ctrl.getRows = function (input: string) {
                 if (ctrl.type === "lemgram") {
-                    const corporaIDs = _.map(settings.corpusListing.selected, "id")
-                    const morphologies = ctrl.getMorphologies(corporaIDs)
-                    return ctrl.getLemgrams(input, morphologies, corporaIDs)
+                    return ctrl.getLemgrams(input)
                 } else if (ctrl.type === "sense") {
                     return ctrl.getSenses(input)
                 }
             }
 
-            ctrl.getLemgrams = async (input: string, morphologies: string[], corpora: string[]) => {
+            ctrl.getLemgrams = async (input: string) => {
+                const morphologies = getMorphologies()
+                const corpora = settings.corpusListing.getSelectedCorpora()
                 const data = await getLemgrams(input, morphologies, corpora)
                 const output: LemgramOut[] = data.map((item) => {
                     if (ctrl.variant === "affix") item.count = -1
