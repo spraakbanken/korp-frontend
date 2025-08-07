@@ -465,19 +465,11 @@ angular.module("korpApp").component("statistics", {
             }
 
             $ctrl.onGraphClick = () => {
-                const subcqps: string[] = []
-                const labelMapping: Record<string, string> = {}
-
                 const showTotal = getSelectedRows().includes(0)
 
-                for (const rowIx of getSelectedRows()) {
-                    const row = getDataAt(rowIx)
-                    if (isTotalRow(row)) continue
-                    const cqp = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
-                    subcqps.push(cqp)
-                    const parts = $ctrl.searchParams.reduceVals.map((reduceVal) => row.formattedValue[reduceVal])
-                    labelMapping[cqp] = parts.join(", ")
-                }
+                const subQueries = getSubQueries()
+                const subcqps = subQueries.map(([cqp]) => cqp)
+                const labelMapping = Object.fromEntries(subQueries)
 
                 $rootScope.graphTabs.push({
                     cqp: $ctrl.searchParams.prevNonExpandedCQP,
@@ -502,16 +494,7 @@ angular.module("korpApp").component("statistics", {
                     cqp = expandOperators(cqp)
                 } catch {}
 
-                const cqpExprs: Record<string, string> = {}
-                for (let rowIx of selectedRows) {
-                    var row = getDataAt(rowIx)
-                    if (isTotalRow(row)) continue
-                    const cqp = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
-                    const parts = $ctrl.searchParams.reduceVals.map(
-                        (reduceVal) => (row as SingleRow).formattedValue[reduceVal]
-                    )
-                    cqpExprs[cqp] = parts.join(", ")
-                }
+                const cqpExprs = Object.fromEntries(getSubQueries())
 
                 const selectedAttributes = _.filter($ctrl.mapAttributes, "selected")
                 if (selectedAttributes.length > 1) {
@@ -520,6 +503,21 @@ angular.module("korpApp").component("statistics", {
                 const selectedAttribute = selectedAttributes[0]
                 const request = requestMapData(cqp, cqpExprs, store.within, selectedAttribute, $ctrl.mapRelative)
                 $rootScope.mapTabs.push(request)
+            }
+
+            /** Create KWIC sub queries for selected table rows, as a list of `[cqp, label]` pairs. */
+            function getSubQueries(): [string, string][] {
+                const rows = getSelectedRows().map(getDataAt)
+                const pairs: [string, string][] = []
+                for (const row of rows) {
+                    if (isTotalRow(row)) continue
+                    const cqp = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
+                    const label = $ctrl.searchParams.reduceVals
+                        .map((reduceVal) => row.formattedValue[reduceVal])
+                        .join(", ")
+                    pairs.push([cqp, label])
+                }
+                return pairs
             }
 
             $ctrl.mapEnabled = !!settings["map_enabled"]
