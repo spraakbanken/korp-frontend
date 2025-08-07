@@ -1,13 +1,13 @@
 /** @format */
 import _ from "lodash"
-import settings from "@/settings"
-import { loc, locAttribute } from "@/i18n"
+import { locAttribute } from "@/i18n"
 import { html } from "@/util"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
-import { getAttrValues } from "@/backend/attr-values"
 import { LocMap } from "@/i18n/types"
 import { StoreService } from "@/services/store"
+import { AttributeOption } from "@/corpus_listing"
+import { loadOptions } from "@/extended-search"
 
 export type Widget = {
     template: string
@@ -15,6 +15,7 @@ export type Widget = {
 }
 
 export type WidgetScope<T = string> = IScope & {
+    attr: AttributeOption
     orObj: Condition
     model: T
     input: string
@@ -50,36 +51,15 @@ export const selectController = (autocomplete: boolean): IController => [
         })
 
         async function reloadValues() {
-            // TODO this exploits the API
-            const attributeDefinition: { value: string } = $scope.$parent.$ctrl.attributeDefinition
-            if (!attributeDefinition) {
-                return
-            }
-
-            const attribute = attributeDefinition.value
-            const selectedCorpora = settings.corpusListing.selected
-
-            // check which corpora support attributes
-            const corpora: string[] = []
-            for (let corpusSettings of selectedCorpora) {
-                if (attribute in corpusSettings["struct_attributes"] || attribute in corpusSettings.attributes) {
-                    corpora.push(corpusSettings.id)
-                }
-            }
-
             $scope.loading = true
-            const split = $scope.type === "set"
-            const data = await getAttrValues(corpora, attribute, split)
-
-            const options = _.uniq(data)
-                .map((item) => (item === "" ? ["", loc("empty")] : [item, locAttribute($scope.translation, item)]))
-                .sort((a, b) => a[1].localeCompare(b[1], store.lang))
-
+            const options = await loadOptions($scope.attr, store.lang)
+            const currentInputExists = options.find((option) => option[0] == $scope.input)
             $scope.$apply(() => {
                 $scope.loading = false
                 $scope.options = options
-                if (!autocomplete) {
-                    $scope.input = data.includes($scope.input) ? $scope.input : $scope.options[0][0]
+                // Reset old selection if that option has been removed.
+                if (!autocomplete && !currentInputExists) {
+                    $scope.input = $scope.options[0][0]
                 }
             })
         }
@@ -101,6 +81,6 @@ export const selectController = (autocomplete: boolean): IController => [
                 ? $scope.options.filter((tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
                 : $scope.options
 
-        $scope.typeaheadInputFormatter = (model) => locAttribute($scope.translation, model)
+        $scope.typeaheadInputFormatter = (model) => locAttribute($scope.translation, model, store.lang)
     },
 ]

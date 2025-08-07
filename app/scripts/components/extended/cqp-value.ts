@@ -1,6 +1,5 @@
 /** @format */
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
-import _ from "lodash"
 import { AttributeOption } from "@/corpus_listing"
 import { Condition } from "@/cqp_parser/cqp.types"
 import extendedComponents from "./widgets"
@@ -46,7 +45,7 @@ angular.module("korpApp").component("extendedCqpValue", {
 
                 // orObj name preserved for backward-compatability with components
                 childScope.orObj = ctrl.term
-                _.extend(childScope, ctrl.attributeDefinition)
+                childScope.attr = ctrl.attributeDefinition
                 childScope.model = ctrl.term.val
 
                 // Set up regexp escaping
