@@ -12,9 +12,7 @@ import "@/components/compare-search"
 import "@/components/search-history"
 import "@/directives/click-cover"
 import "@/directives/tab-hash"
-import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { CompareSearches } from "@/services/compare-searches"
-import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
 import { StoreService } from "@/services/store"
 
@@ -63,13 +61,7 @@ angular.module("korpApp").component("searchtabs", {
         "store",
         function (compareSearches: CompareSearches, store: StoreService) {
             const $ctrl = this as SearchtabsController
-
             $ctrl.parallelMode = !!settings.parallel
-            if ($ctrl.parallelMode) {
-                const corpusListing = settings.corpusListing as ParallelCorpusListing
-                corpusListing.setActiveLangs([settings.start_lang!])
-            }
-
             $ctrl.savedSearches = compareSearches.savedSearches
 
             store.watch("corpus", (selected) => {

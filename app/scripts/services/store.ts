@@ -125,7 +125,7 @@ angular.module("korpApp").factory("store", [
         rootScopeStore.in_order = true
         rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
         rootScopeStore.page = 0
-        rootScopeStore.parallel_corpora = []
+        rootScopeStore.parallel_corpora = settings.start_lang ? [settings.start_lang] : []
         rootScopeStore.sort = ""
         rootScopeStore.stats_reduce = "word"
         rootScopeStore.stats_reduce_insensitive = ""
