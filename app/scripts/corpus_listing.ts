@@ -359,31 +359,25 @@ export class CorpusListing {
         return sentAttrs
     }
 
-    getAttributeGroups(setOperator: SetOperator = "union", lang?: string): AttributeOption[] {
+    getAttributeGroups(wordOp: SetOperator, structOp: SetOperator, lang?: string): AttributeOption[] {
         const word = this.getWordGroup()
-        const attrs = this.getWordAttributeGroups(setOperator, lang)
-        const sentAttrs = this.getStructAttributeGroups(setOperator, lang)
+        const attrs = this.getWordAttributeGroups(wordOp, lang)
+        const sentAttrs = this.getStructAttributeGroups(structOp, lang)
         return [word].concat(attrs, sentAttrs)
     }
 
     getAttributeGroupsExtended(lang?: string): AttributeOption[] {
-        return this.getAttributeGroups("union", lang).filter((attr) => !attr["hide_extended"])
+        return this.getAttributeGroups("union", "union", lang).filter((attr) => !attr["hide_extended"])
     }
 
     getAttributeGroupsCompare(lang?: string): AttributeOption[] {
-        return this.getAttributeGroups("intersection", lang).filter((attr) => !attr["hide_compare"])
+        return this.getAttributeGroups("intersection", "intersection", lang).filter((attr) => !attr["hide_compare"])
     }
 
-    getStatsAttributeGroups(lang: string): AttributeOption[] {
-        const word = this.getWordGroup()
-
+    getAttributeGroupsStatistics(lang?: string): AttributeOption[] {
         const wordOp = settings["reduce_word_attribute_selector"] || "union"
-        const attrs = this.getWordAttributeGroups(wordOp, lang)
-
         const structOp = settings["reduce_struct_attribute_selector"] || "union"
-        const sentAttrs = this.getStructAttributeGroups(structOp, lang)
-
-        return [word].concat(attrs, sentAttrs)
+        return this.getAttributeGroups(wordOp, structOp, lang).filter((attr) => !attr["hide_statistics"])
     }
 
     /** Get list of morphology ids used by currently selected corpora. */
