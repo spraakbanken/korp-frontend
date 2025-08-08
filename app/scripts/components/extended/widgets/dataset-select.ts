@@ -1,22 +1,17 @@
 /** @format */
 import _ from "lodash"
-import { locAttribute } from "@/i18n"
 import { selectTemplate, Widget, WidgetScope } from "./common"
-import { LocLangMap } from "@/i18n/types"
 import { Configurable } from "@/settings/config.types"
 import { StoreService } from "@/services/store"
+import { getDatasetOptions } from "@/data_init"
 
 type DatasetSelectOptions = {
     sort?: boolean
 }
 
 type DatasetSelectScope = WidgetScope & {
-    translation: LocLangMap
-    dataset: Dataset
     options: [string, string][]
 }
-
-type Dataset = Record<string, string> | string[]
 
 /**
  * Select-element.
@@ -31,7 +26,12 @@ export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (option
         "store",
         function ($scope: DatasetSelectScope, store: StoreService) {
             function initialize() {
-                $scope.options = formatOptions($scope.dataset, $scope.translation, store.lang, options?.sort !== false)
+                $scope.options = getDatasetOptions(
+                    $scope.attr.dataset,
+                    $scope.attr.translation,
+                    store.lang,
+                    options?.sort !== false
+                )
                 $scope.model = $scope.model || $scope.options[0][0]
             }
             initialize()
@@ -40,10 +40,3 @@ export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (option
         },
     ],
 })
-
-function formatOptions(dataset: Dataset, translation: LocLangMap, lang: string, sort: boolean): [string, string][] {
-    const options: [string, string][] = _.isArray(dataset)
-        ? _.map(dataset, (item) => [item, locAttribute(translation, item, lang)])
-        : _.map(dataset, (v, k) => [k, locAttribute(translation, v, lang)])
-    return sort ? options.sort((a, b) => a[1].localeCompare(b[1], lang)) : options
-}

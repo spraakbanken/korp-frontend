@@ -6,7 +6,8 @@ import { getAllCorporaInFolders } from "@/corpus-chooser"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
 import { fromKeys } from "@/util"
-import { Labeled } from "./i18n/types"
+import { locAttribute } from "@/i18n"
+import { Labeled, LocLangMap, LocMap } from "./i18n/types"
 import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
 import { korpRequest } from "./backend/common"
@@ -198,4 +199,17 @@ export function getRecentCorpusUpdates(): CorpusTransformed[] {
     return settings.corpusListing.corpora
         .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
         .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
+}
+
+/** Get the dataset options of an attribute. */
+export function getDatasetOptions(
+    dataset: Attribute["dataset"],
+    translation?: LocMap | LocLangMap,
+    lang?: string,
+    sort?: boolean
+): [string, string][] {
+    const options: [string, string][] = _.isArray(dataset)
+        ? _.map(dataset, (item) => [item, locAttribute(translation, item, lang)])
+        : _.map(dataset, (v, k) => [k, locAttribute(translation, v, lang)])
+    return sort ? options.sort((a, b) => a[1].localeCompare(b[1], lang)) : options
 }

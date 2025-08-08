@@ -24,8 +24,6 @@ export type WidgetScope<T = string> = IScope & {
 export type SelectWidgetScope = WidgetScope & {
     $parent: any
     options: string[][]
-    type: string
-    translation: LocMap
     inputOnly: boolean
     loading: boolean
     getRows: (input?: string) => string[][]
@@ -81,6 +79,6 @@ export const selectController = (autocomplete: boolean): IController => [
                 ? $scope.options.filter((tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
                 : $scope.options
 
-        $scope.typeaheadInputFormatter = (model) => locAttribute($scope.translation, model, store.lang)
+        $scope.typeaheadInputFormatter = (model) => locAttribute($scope.attr.translation, model, store.lang)
     },
 ]
