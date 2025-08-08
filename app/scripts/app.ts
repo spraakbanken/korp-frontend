@@ -27,7 +27,7 @@ import "@/services/store"
 import { StoreService } from "@/services/store"
 import { JQueryExtended } from "./jquery.types"
 import { LocLangMap } from "@/i18n/types"
-import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
+import { getAllCorporaInFolders } from "@/corpus-chooser"
 
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [

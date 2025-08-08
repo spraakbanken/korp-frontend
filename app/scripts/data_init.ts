@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
+import { getAllCorporaInFolders } from "@/corpus-chooser"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
 import { fromKeys } from "@/util"
