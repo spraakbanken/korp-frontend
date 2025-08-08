@@ -2,10 +2,11 @@
 import _ from "lodash"
 import angular, { IController, IPromise } from "angular"
 import settings from "@/settings"
-import { html, saldoToString } from "@/util"
+import { html } from "@/util"
 import { getLemgrams, getSenses, LemgramCount } from "@/backend/lexicons"
 import "@/directives/typeahead-click-open"
 import { Lemgram } from "@/lemgram"
+import { Saldo } from "@/saldo"
 
 type AutocController = IController & {
     input: string
@@ -21,7 +22,7 @@ type AutocController = IController & {
     placeholder: string
     typeaheadClose: () => void
     lemgramify: (lemgram: string) => Lemgram | undefined
-    sensify: (saldo: string) => Saldo
+    sensify: (saldo: string) => Saldo | undefined
     placeholderToString: (placeholder: string) => string | undefined
     textInput: () => void
     selectedItem: (item: unknown, selected: LemgramOut | Sense) => void
@@ -30,8 +31,7 @@ type AutocController = IController & {
     getSenses: (input: string) => IPromise<Sense[]>
 }
 
-type LemgramOut = LemgramCount & { parts: Lemgram | undefined; variant: string }
-type Saldo = { form: string; index: string }
+type LemgramOut = LemgramCount & { parts: Lemgram; variant: string }
 type Sense = { sense: string; parts: Saldo; desc?: Saldo; variant: string }
 
 angular.module("korpApp").component("autoc", {
@@ -44,7 +44,7 @@ angular.module("korpApp").component("autoc", {
                         <span>{{match.model.parts.form}}</span>
                         <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
                         <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
-                        <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.main}}</span>
+                        <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.form}}</span>
                         <sup ng-if="match.model.desc && match.model.desc.index != 1" style="color:gray">{{match.model.desc.index}}</sup>
                     </span>
                     <span ng-if="match.model.count > 0" class="ml-auto pl-1 text-sm">
@@ -113,14 +113,7 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.lemgramify = Lemgram.parse
 
-            // TODO Check compatibility and use saldoRegexp in @/util
-            ctrl.sensify = function (sense: string) {
-                const senseParts = sense.split("..")
-                return {
-                    form: senseParts[0].replace(/_/g, " "),
-                    index: senseParts[1],
-                }
-            }
+            ctrl.sensify = Saldo.parse
 
             ctrl.placeholderToString = _.memoize(function (placeholder: string) {
                 if (!placeholder) {
@@ -129,7 +122,7 @@ angular.module("korpApp").component("autoc", {
                 if (ctrl.type === "lemgram") {
                     return Lemgram.parse(placeholder)?.toString()
                 } else {
-                    return saldoToString(placeholder)
+                    return Saldo.parse(placeholder)?.toString()
                 }
             })
 
@@ -168,7 +161,7 @@ angular.module("korpApp").component("autoc", {
                     if (ctrl.variant === "affix") item.count = -1
                     return {
                         ...item,
-                        parts: ctrl.lemgramify(item.lemgram),
+                        parts: ctrl.lemgramify(item.lemgram)!,
                         variant: ctrl.variant,
                     }
                 })
@@ -181,7 +174,7 @@ angular.module("korpApp").component("autoc", {
                 const output: Sense[] = data.map((item) => {
                     const out = {
                         sense: item.sense,
-                        parts: ctrl.sensify(item.sense),
+                        parts: ctrl.sensify(item.sense)!,
                         desc: item.desc ? ctrl.sensify(item.desc) : undefined,
                         variant: ctrl.variant,
                     }
@@ -189,8 +182,10 @@ angular.module("korpApp").component("autoc", {
                 })
                 output.sort(function (a, b) {
                     if (a.parts.form === b.parts.form) {
-                        return b.parts.index.localeCompare(a.parts.index)
+                        // Sort same-form senses by index
+                        return a.parts.index - b.parts.index
                     } else {
+                        // Sort by length
                         return a.sense.length - b.sense.length
                     }
                 })

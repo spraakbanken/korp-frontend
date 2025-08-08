@@ -177,55 +177,6 @@ export function formatFrequency(store: StoreService, absrel: AbsRelSeq) {
     return store.statsRelative ? formatRelativeHits(relative, store.lang) : absolute.toLocaleString(store.lang)
 }
 
-const saldoRegexp = /(.*?)\.\.(\d\d?)(:\d+)?$/
-
-export function splitSaldo(saldoId: string): SaldoSplit {
-    const match = saldoId.match(saldoRegexp)
-    if (!match) throw new RangeError(`Not a saldo id ${saldoId}`)
-    return {
-        concept: match[1].replace(/_/g, " "),
-        index: parseInt(match[2]),
-    }
-}
-
-export type SaldoSplit = {
-    concept: string
-    index: number
-}
-
-/**
- * Render a SALDO string as pretty HTML.
- * @param saldoId A SALDO string, e.g. "vara..2"
- * @param appendIndex Whether the numerical index should be included in output.
- * @returns An HTML string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
- */
-export function saldoToHtml(saldoId: string, appendIndex?: boolean): string {
-    try {
-        const { concept, index } = splitSaldo(saldoId)
-        const indexHtml = appendIndex && index > 1 ? `<sup>${index}</sup>` : ""
-        return concept + indexHtml
-    } catch (error) {
-        console.error(error)
-        return saldoId
-    }
-}
-
-/**
- * Render a SALDO string in pretty plain text.
- * @param saldoId A SALDO string, e.g. "vara..2"
- * @returns An plain-text string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
- */
-export function saldoToString(saldoId: string): string {
-    try {
-        const { concept, index } = splitSaldo(saldoId)
-        const indexSup = index > 1 ? numberToSuperscript(index) : ""
-        return concept + indexSup
-    } catch (error) {
-        console.error(error)
-        return saldoId
-    }
-}
-
 /**
  * Represent a number with superscript characters like "⁴²".
  * @param n A decimal number.

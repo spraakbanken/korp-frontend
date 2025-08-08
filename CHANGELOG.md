@@ -6,6 +6,10 @@
 
 - Use [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader) to compile CQP parser at build time
 
+### Changed
+
+- Moved SALDO and lemgram parsing/prettifying from util to their own classes
+
 ### Fixed
 
 - Prevent empty "Group by" selector when changing corpus

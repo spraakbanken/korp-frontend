@@ -1,9 +1,10 @@
 /** @format */
 import settings from "@/settings"
-import { regescape, saldoToHtml, splitFirst } from "@/util"
+import { regescape, splitFirst } from "@/util"
 import { locAttribute } from "@/i18n"
 import { CorpusListing } from "@/corpus_listing"
 import { Lemgram } from "@/lemgram"
+import { Saldo } from "@/saldo"
 
 type Stringifier = (tokens: string[], ignoreCase?: boolean) => string
 
@@ -80,7 +81,7 @@ export function reduceStringify(name: string, cl?: CorpusListing): (values: stri
     if (attr?.translation) transforms.push((token) => locAttribute(attr.translation, token))
 
     if (["prefix", "suffix", "lex"].includes(name)) transforms.push((token) => Lemgram.parse(token)?.toHtml() || token)
-    else if (name == "saldo" || name == "sense") transforms.push((token) => saldoToHtml(token, true))
+    else if (name == "saldo" || name == "sense") transforms.push((token) => Saldo.parse(token)?.toHtml() || token)
     else if (name == "lemma") transforms.push((lemma) => lemma.replace(/_/g, " "))
 
     // TODO This is specific to ASU corpus, move out to config

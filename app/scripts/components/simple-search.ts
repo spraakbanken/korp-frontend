@@ -4,7 +4,7 @@ import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
-import { html, LocationService, regescape, saldoToHtml, unregescape } from "@/util"
+import { html, LocationService, regescape, unregescape } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/services/compare-searches"
 import "@/backend/lexicons"
@@ -19,6 +19,7 @@ import { SearchesService } from "@/services/searches"
 import { CqpSearchEvent } from "@/statemachine/types"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
+import { Saldo } from "@/saldo"
 
 type SimpleSearchController = IController & {
     input: string
@@ -245,7 +246,7 @@ angular.module("korpApp").component("simpleSearch", {
                 compareSearches.saveSearch(name, ctrl.getCQP())
             }
 
-            ctrl.stringifyRelated = (wd) => saldoToHtml(wd)
+            ctrl.stringifyRelated = (wd) => Saldo.parse(wd)?.form || wd
 
             ctrl.relatedDefault = 3
 

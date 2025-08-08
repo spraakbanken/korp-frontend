@@ -2,6 +2,11 @@
 import { loc } from "@/i18n"
 import { numberToSuperscript } from "@/util"
 
+/**
+ * A parsed lemgram string.
+ *
+ * Read about lemgrams at https://spraakbanken.gu.se/faq/vad-ar-ett-lemgram
+ */
 export class Lemgram {
     static regexp = /((\w+)--)?(.*?)\.\.(\w+)\.(\d+)(:\d+)?$/
 
@@ -16,15 +21,16 @@ export class Lemgram {
 
     /** Parse a lemgram id string to a Lemgram object, or `undefined` if invalid. */
     static parse(id: string): Lemgram | undefined {
-        const match = id.trim().match(Lemgram.regexp)!
+        const match = id?.trim().match(Lemgram.regexp)
         if (!match) return
+        const [, , morphology, form, pos, index, start] = match
         return new Lemgram(
             id,
-            match[3].replace(/_/g, " "),
-            match[4].substring(0, 2),
-            parseInt(match[5]),
-            match[2],
-            match[6] ? parseInt(match[6]) : undefined
+            form.replace(/_/g, " "),
+            pos.substring(0, 2),
+            parseInt(index),
+            morphology,
+            start ? parseInt(start) : undefined
         )
     }
 
