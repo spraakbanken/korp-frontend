@@ -1,12 +1,13 @@
 /** @format */
 import angular, { IController } from "angular"
 import settings from "@/settings"
-import { html, isLemgram, lemgramToHtml, splitLemgram } from "@/util"
+import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDef, WordPictureDefItem } from "@/settings/app-settings.types"
 import { ShowableApiRelation, TableData, TableDrawData } from "@/components/results-word-picture"
 import { ApiRelation, RelationsSort } from "@/backend/types/relations"
 import "@/components/help-box"
+import { Lemgram } from "@/lemgram"
 
 type WordPictureController = IController & {
     // Bindings
@@ -34,10 +35,11 @@ type WordPictureController = IController & {
     parseLemgram: (row: ShowableApiRelation) => ParsedLemgram
     onClickExample: (row: ShowableApiRelation) => void
 }
+
 type ParsedLemgram = {
     label: string
     pos?: string
-    idx?: string
+    idx?: number
 }
 
 const LIMITS: readonly number[] = [15, 50, 100, 500, 1000]
@@ -208,17 +210,17 @@ angular.module("korpApp").component("wordPicture", {
                     return `lemgram_header_item ${header.css_class}`
                 } else {
                     let classes = "hit"
-                    if (isLemgram(token)) {
+                    if (Lemgram.parse(token)) {
                         classes += " lemgram"
                     }
                     return classes
                 }
             }
 
-            $ctrl.isLemgram = isLemgram
-            $ctrl.lemgramToHtml = lemgramToHtml
+            $ctrl.isLemgram = (id) => !!Lemgram.parse(id)
+            $ctrl.lemgramToHtml = (id) => Lemgram.parse(id)!.toHtml()
 
-            $ctrl.fromLemgram = (word) => (isLemgram(word) ? splitLemgram(word).form : word)
+            $ctrl.fromLemgram = (word) => Lemgram.parse(word)?.form || word
 
             $ctrl.getResultHeader = (index, wordClass) => settings.word_picture_conf![wordClass][index]
 
@@ -233,22 +235,20 @@ angular.module("korpApp").component("wordPicture", {
 
             $ctrl.parseLemgram = function (row) {
                 const set = row[row.show_rel].split("|")
-                const lemgram = set[0]
+                const id = set[0]
                 const prefix = row.depextra ? `${row.depextra} ` : ""
 
-                if (isLemgram(lemgram)) {
-                    const match = splitLemgram(lemgram)
-                    const concept = row.dep ? match.form.replace(/_/g, " ") : "-"
+                const lemgram = Lemgram.parse(id)
+                if (lemgram) {
+                    const concept = row.dep ? lemgram.form : "-"
                     return {
                         label: prefix + concept,
-                        pos: match.pos.slice(0, 2),
-                        idx: match.index,
+                        pos: lemgram.pos,
+                        idx: lemgram.index,
                     }
                 }
 
-                return {
-                    label: prefix + lemgram,
-                }
+                return { label: prefix + id }
             }
 
             $ctrl.onClickExample = function (row) {

@@ -177,71 +177,21 @@ export function formatFrequency(store: StoreService, absrel: AbsRelSeq) {
     return store.statsRelative ? formatRelativeHits(relative, store.lang) : absolute.toLocaleString(store.lang)
 }
 
-/**
- * Render a lemgram string as pretty HTML.
- * TODO No HTML in placeholder in Extended!
- * @param lemgram A lemgram string, e.g. "vara..nn.2"
- * @param appendIndex Whether the numerical index should be included in output.
- * @returns An HTML string.
- */
-export function lemgramToHtml(lemgram: string, appendIndex?: boolean): string {
-    lemgram = _.trim(lemgram)
-    if (!isLemgram(lemgram)) return lemgram
-    const { form, pos, index } = splitLemgram(lemgram)
-    const indexHtml = appendIndex && index !== "1" ? `<sup>${index}</sup>` : ""
-    const concept = form.replace(/_/g, " ")
-    const type = pos.slice(0, 2)
-    return `${concept}${indexHtml} (<span rel="localize[${type}]">${loc(type)}</span>)`
-}
-
-/**
- * Render a lemgram string in pretty plain text.
- * @param lemgram A lemgram string, e.g. "vara..n.2"
- * @returns A plain-text string.
- */
-export function lemgramToString(lemgram: string): string {
-    const { form, pos, index } = splitLemgram(_.trim(lemgram))
-    const indexSup = parseInt(index) > 1 ? numberToSuperscript(index) : ""
-    const concept = form.replace(/_/g, " ")
-    const type = pos.slice(0, 2)
-    return `${concept}${indexSup} (${loc(type)})`
-}
-
-const lemgramRegexp = /\.\.\w+\.\d\d?(:\d+)?$/
-
-/**
- * Determines if a string is a lemgram string, e.g. "vara..n.2"
- */
-export const isLemgram = (str: string): boolean => str.search(lemgramRegexp) !== -1
-
-/**
- * Analyze a lemgram string into its constituents.
- * @param lemgram A lemgram string, e.g. "vara..n.2"
- * @throws If input is not a lemgram. You can test it first with `isLemgram`!
- */
-export function splitLemgram(lemgram: string): LemgramSplit {
-    if (!isLemgram(lemgram)) {
-        throw new Error(`Input to splitLemgram is not a lemgram: ${lemgram}`)
-    }
-    const match = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d+)(:\d+)?$/)!
-    return {
-        morph: match[2],
-        form: match[3],
-        pos: match[4],
-        index: match[5],
-        startIndex: match[6],
-    }
-}
-
-type LemgramSplit = {
-    morph: string
-    form: string
-    pos: string
-    index: string
-    startIndex: string
-}
-
 const saldoRegexp = /(.*?)\.\.(\d\d?)(:\d+)?$/
+
+export function splitSaldo(saldoId: string): SaldoSplit {
+    const match = saldoId.match(saldoRegexp)
+    if (!match) throw new RangeError(`Not a saldo id ${saldoId}`)
+    return {
+        concept: match[1].replace(/_/g, " "),
+        index: parseInt(match[2]),
+    }
+}
+
+export type SaldoSplit = {
+    concept: string
+    index: number
+}
 
 /**
  * Render a SALDO string as pretty HTML.
@@ -250,11 +200,14 @@ const saldoRegexp = /(.*?)\.\.(\d\d?)(:\d+)?$/
  * @returns An HTML string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
  */
 export function saldoToHtml(saldoId: string, appendIndex?: boolean): string {
-    const match = saldoId.match(saldoRegexp)
-    if (!match) return saldoId
-    const concept = match[1].replace(/_/g, " ")
-    const indexHtml = appendIndex && match[2] !== "1" ? `<sup>${match[2]}</sup>` : ""
-    return `${concept}${indexHtml}`
+    try {
+        const { concept, index } = splitSaldo(saldoId)
+        const indexHtml = appendIndex && index > 1 ? `<sup>${index}</sup>` : ""
+        return concept + indexHtml
+    } catch (error) {
+        console.error(error)
+        return saldoId
+    }
 }
 
 /**
@@ -263,11 +216,14 @@ export function saldoToHtml(saldoId: string, appendIndex?: boolean): string {
  * @returns An plain-text string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
  */
 export function saldoToString(saldoId: string): string {
-    const match = saldoId.match(saldoRegexp)
-    if (!match) return saldoId
-    const concept = match[1].replace(/_/g, " ")
-    const indexSup = parseInt(match[2]) > 1 ? numberToSuperscript(match[2]) : ""
-    return `${concept}${indexSup}`
+    try {
+        const { concept, index } = splitSaldo(saldoId)
+        const indexSup = index > 1 ? numberToSuperscript(index) : ""
+        return concept + indexSup
+    } catch (error) {
+        console.error(error)
+        return saldoId
+    }
 }
 
 /**
@@ -275,7 +231,7 @@ export function saldoToString(saldoId: string): string {
  * @param n A decimal number.
  * @returns A string of superscript numbers.
  */
-function numberToSuperscript(number: string | number): string {
+export function numberToSuperscript(number: string | number): string {
     return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
 }
 

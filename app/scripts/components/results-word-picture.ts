@@ -3,7 +3,7 @@ import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
-import { html, isLemgram, lemgramToString, unregescape } from "@/util"
+import { html, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { ApiRelation, RelationsResponse, RelationsSort } from "@/backend/types/relations"
@@ -12,6 +12,7 @@ import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/word-picture"
 import { StoreService } from "@/services/store"
+import { Lemgram } from "@/lemgram"
 
 type ResultsWordPictureController = IController & {
     isActive: boolean
@@ -175,7 +176,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                 if (!data.relations) {
                     s.warning = loc("no_stats_results", store.lang)
                     s.resetView()
-                } else if (isLemgram(query)) {
+                } else if (Lemgram.parse(query)) {
                     s.renderTables(query, data.relations)
                 } else {
                     s.renderWordTables(query, data.relations)
@@ -277,7 +278,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                         if (settings["word_picture_conf"]![wordClass][i] && section.length) {
                             const toIndex = settings["word_picture_conf"]![wordClass][i].indexOf("_")
                             sectionsWithSearchWord[i][toIndex] = {
-                                word: isLemgram(token) ? lemgramToString(token) : token,
+                                word: Lemgram.parse(token)?.toString() || token,
                             }
                         }
 

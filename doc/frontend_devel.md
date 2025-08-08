@@ -731,8 +731,8 @@ import { lemgramToHtml, saldoToHtml } from "@/util"
 
 export const {
     sense: (sense) => saldoToHtml(sense, true),
-    lemgram: (str) => lemgramToHtml(str, true),
-    complemgram: (str) => str.split('+').map((lemgram) => lemgramToHtml(lemgram, true)).join('+')
+    lemgram: (str) => Lemgram.parse(str)?.toHtml() || str,
+    complemgram: (str) => str.split('+').map((s) => Lemgram.parse(s)?.toHtml() || s).join('+')
 }
 ```
 

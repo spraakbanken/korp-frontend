@@ -5,7 +5,7 @@ import "../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { getStringifier } from "@/stringify"
-import { html, regescape, splitLemgram, safeApply, getConfigurable } from "@/util"
+import { html, regescape, safeApply, getConfigurable } from "@/util"
 import { loc, locAttribute, locObj } from "@/i18n"
 import "@/services/utils"
 import "@/components/deptree/deptree"
@@ -335,20 +335,8 @@ angular.module("korpApp").component("sidebar", {
                     output.append(info_link)
                     const pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>'
                     const ul = $("<ul>")
-                    const getStringVal = (str: string) => [...str].map((char) => char.charCodeAt(0)).join("")
                     // The value is either single, or a pipe-separated list
                     const valueArray = (value?.split("|") || []).filter(Boolean)
-                    if (key === "variants") {
-                        // TODO: this doesn't sort quite as expected
-                        valueArray.sort(function (a, b) {
-                            const splita = splitLemgram(a)
-                            const splitb = splitLemgram(b)
-                            const strvala = getStringVal(splita.form) + splita.index + getStringVal(splita.pos)
-                            const strvalb = getStringVal(splitb.form) + splitb.index + getStringVal(splitb.pos)
-
-                            return parseInt(strvala) - parseInt(strvalb)
-                        })
-                    }
 
                     const lis: JQLite[] = []
                     for (const x of valueArray) {

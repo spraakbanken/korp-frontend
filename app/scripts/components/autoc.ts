@@ -2,10 +2,10 @@
 import _ from "lodash"
 import angular, { IController, IPromise } from "angular"
 import settings from "@/settings"
-import { html, lemgramToString, saldoToString } from "@/util"
-import { loc } from "@/i18n"
+import { html, saldoToString } from "@/util"
 import { getLemgrams, getSenses, LemgramCount } from "@/backend/lexicons"
 import "@/directives/typeahead-click-open"
+import { Lemgram } from "@/lemgram"
 
 type AutocController = IController & {
     input: string
@@ -30,9 +30,8 @@ type AutocController = IController & {
     getSenses: (input: string) => IPromise<Sense[]>
 }
 
-type Lemgram = { main: string; index: string; pos: string; namespace?: string }
 type LemgramOut = LemgramCount & { parts: Lemgram | undefined; variant: string }
-type Saldo = { main: string; index: string }
+type Saldo = { form: string; index: string }
 type Sense = { sense: string; parts: Saldo; desc?: Saldo; variant: string }
 
 angular.module("korpApp").component("autoc", {
@@ -41,8 +40,8 @@ angular.module("korpApp").component("autoc", {
             <script type="text/ng-template" id="lemgramautocomplete.html">
                 <a class="!flex items-baseline cursor-pointer" ng-class="{'autocomplete-item-disabled' : match.model.count == 0, '!text-gray-500' : (match.model.variant != 'dalin' && match.model.count == 0)}">
                     <span>
-                        <span ng-if="match.model.parts.namespace" class="label lemgram-namespace">{{match.model.parts.namespace | loc}}</span>
-                        <span>{{match.model.parts.main}}</span>
+                        <span ng-if="match.model.parts.morphology" class="label lemgram-namespace">{{match.model.parts.morphology | loc}}</span>
+                        <span>{{match.model.parts.form}}</span>
                         <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
                         <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
                         <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.main}}</span>
@@ -112,26 +111,13 @@ angular.module("korpApp").component("autoc", {
                 }
             }
 
-            // TODO Check compatibility and merge with splitLemgram in @/util
-            ctrl.lemgramify = function (lemgram: string) {
-                const lemgramRegExp = /([^_.-]*--)?(.*)\.\.(\w+)\.(\d\d?)/
-                const match = lemgram.match(lemgramRegExp)
-                if (!match) {
-                    return
-                }
-                return {
-                    main: match[2].replace(/_/g, " "),
-                    pos: loc(match[3].slice(0, 2)),
-                    index: match[4],
-                    namespace: match[1] ? match[1].slice(0, -2) : "",
-                }
-            }
+            ctrl.lemgramify = Lemgram.parse
 
             // TODO Check compatibility and use saldoRegexp in @/util
             ctrl.sensify = function (sense: string) {
                 const senseParts = sense.split("..")
                 return {
-                    main: senseParts[0].replace(/_/g, " "),
+                    form: senseParts[0].replace(/_/g, " "),
                     index: senseParts[1],
                 }
             }
@@ -141,7 +127,7 @@ angular.module("korpApp").component("autoc", {
                     return
                 }
                 if (ctrl.type === "lemgram") {
-                    return lemgramToString(placeholder)
+                    return Lemgram.parse(placeholder)?.toString()
                 } else {
                     return saldoToString(placeholder)
                 }
@@ -202,7 +188,7 @@ angular.module("korpApp").component("autoc", {
                     return out
                 })
                 output.sort(function (a, b) {
-                    if (a.parts.main === b.parts.main) {
+                    if (a.parts.form === b.parts.form) {
                         return b.parts.index.localeCompare(a.parts.index)
                     } else {
                         return a.sense.length - b.sense.length
