@@ -279,6 +279,12 @@ function numberToSuperscript(number: string | number): string {
     return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
 }
 
+/** Format time as hh:mm:ss if hours > 0, else mm:ss */
+export function transformSeconds(seconds: number) {
+    const hhmmss = new Date(seconds * 1000).toISOString().substring(11, 19)
+    return hhmmss.replace(/^00:/, "")
+}
+
 /** Return htmlStr with quoted references to "img/filename.ext" replaced with "img/filename.BUILD_HASH.ext". */
 export function addImgHash(htmlStr: string): string {
     return htmlStr.replace(/(["']img\/[^"']+)(\.[^"'.]+["'])/g, `$1.${BUILD_HASH}$2`)
