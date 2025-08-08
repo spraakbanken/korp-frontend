@@ -1,25 +1,12 @@
 /** @format */
 import _ from "lodash"
 import angular, { ICompileService, IController, IRootElementService, IScope, ITimeoutService } from "angular"
-import L from "leaflet"
 import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import "@/../styles/map.scss"
 import { AppSettings } from "@/settings/app-settings.types"
-import {
-    createCircleMarker,
-    createMultiMarkerIcon,
-    CustomMarker,
-    CustomMarkerMany,
-    isMarker,
-    isMarkerCluster,
-    MarkerCluster,
-    MarkerClusterGroup,
-    MarkerData,
-    MarkerEvent,
-    MarkerGroup,
-    MergedMarker,
-} from "@/map"
+import { MarkerData, MarkerEvent, MarkerGroup } from "@/map"
+import { StatisticsMap } from "@/statistics-map"
 
 type ResultMapController = IController & {
     center: AppSettings["map_center"]
@@ -72,13 +59,27 @@ angular.module("korpApp").component("resultMap", {
             const $ctrl = this as ResultMapController
 
             $scope.showMap = false
-            let selectedMarkers: MarkerData[] = []
-            let featureLayer: L.FeatureGroup
-            let markerCluster: MarkerClusterGroup
-            /** Maximum frequency in current result */
-            let maxRel = 0
 
-            const useClustering = () => (angular.isDefined($ctrl.useClustering) ? $ctrl.useClustering : true)
+            let map: StatisticsMap
+
+            const container = $element.find(".map-container")[0]
+            map = new StatisticsMap(container, mouseOver, mouseOut)
+
+            $ctrl.$onInit = () => {
+                map.setCenter($ctrl.center)
+                $scope.showMap = true
+                updateMarkers()
+
+                $ctrl.$onChanges = (changes) => {
+                    if (changes.useClustering) map.useClustering = changes.useClustering.currentValue
+                    updateMarkers()
+                }
+            }
+
+            function updateMarkers() {
+                const selectedMarkers = $ctrl.selectedGroups.map((group) => $ctrl.markers[group])
+                map.updateMarkers(selectedMarkers, $ctrl.restColor)
+            }
 
             const hoverTemplate = html`<div class="hover-info">
                 <div ng-if="showLabel" class="swatch" style="background-color: {{color}}"></div>
@@ -92,182 +93,14 @@ angular.module("korpApp").component("resultMap", {
                 <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.rel | number:2}}</span></div>
             </div>`
 
-            $ctrl.$onChanges = () => {
-                updateMarkers()
-            }
-
-            const container = $element.find(".map-container")[0]
-            const map = L.map(container, {
-                minZoom: 1,
-                maxZoom: 13,
-            }).setView([51.505, -0.09], 13)
-
-            // Load map layer with leaflet-providers
-            L.tileLayer.provider("OpenStreetMap").addTo(map)
-
-            $ctrl.$onInit = () => {
-                if ($ctrl.center) map.setView([$ctrl.center.lat, $ctrl.center.lng], $ctrl.center.zoom)
-                $scope.showMap = true
-            }
-
-            $scope.$on("update_map", () => $timeout(() => map.invalidateSize()))
-
-            function createMarkerIcon(color: string, cluster: boolean) {
-                // TODO use scope.maxRel, but scope.maxRel is not set when markers are created
-                // diameter = ((relSize / scope.maxRel) * 45) + 5
-                return createCircleMarker(color, 10, cluster ? 1 : 5)
-            }
-
-            /**
-             * use the previously calculated "scope.maxRel" to decide the sizes of the bars
-             * in the cluster icon that is returned (between 5px and 50px)
-             */
-            function createClusterIcon(clusterGroups: Record<string, MarkerGroup>, restColor: string) {
-                const groups = Object.keys(clusterGroups)
-                groups.sort((group1, group2) => clusterGroups[group1].order - clusterGroups[group2].order)
-                if (groups.length > 4) {
-                    groups.splice(3)
-                    groups.push(restColor)
-                }
-                return function (cluster: MarkerClusterGroup) {
-                    const sizes = _.fromPairs(groups.map((color) => [color, 0]))
-                    cluster.getAllChildMarkers().forEach((childMarker: CustomMarker) => {
-                        let color = childMarker.markerData.color
-                        if (!(color in sizes)) color = restColor
-                        sizes[color] += childMarker.markerData.point.rel
-                    })
-
-                    if (groups.length === 1) {
-                        const color = groups[0]
-                        const groupSize = sizes[color]
-                        const diameter = (groupSize / maxRel) * 45 + 5
-                        return createCircleMarker(color, diameter, diameter)
-                    }
-
-                    const elements = _.map(
-                        sizes,
-                        (size, color) =>
-                            html`<div
-                                class="cluster-geokorp-marker"
-                                style="height:${(size / maxRel) * 45 + 5}px; background-color:${color}"
-                            ></div>`
-                    )
-                    return L.divIcon({
-                        html: html`<div class="cluster-geokorp-marker-group">${elements.join("")}</div>`,
-                        iconSize: new L.Point(40, 50),
-                    })
-                }
-            }
-
-            /**
-             * check if the cluster with split into several clusters / markers on zooom
-             * TODO: does not work in some cases
-             */
-            function shouldZooomToBounds(cluster: any) {
-                // This code is a modification of MarkerCluster.zoomToBounds()
-                // See https://github.com/Leaflet/Leaflet.markercluster/blob/master/src/MarkerCluster.js
-                let childClusters = cluster._childClusters.slice()
-                const map = cluster._group._map
-                const boundsZoom = map.getBoundsZoom(cluster._bounds)
-                let zoom = cluster._zoom + 1
-                while (childClusters.length > 0 && boundsZoom > zoom) {
-                    zoom += 1
-                    const newClusters = childClusters.flatMap((childCluster: any) => childCluster._childClusters)
-                    childClusters = newClusters
-                }
-                return childClusters.length > 1
-            }
-
-            /**
-             * check all current clusters and sum up the sizes of its childen
-             * this is the max relative value of any cluster and can be used to
-             * calculate marker sizes
-             * TODO this needs to use the "rest" group when doing calcuations!!
-             */
-            function updateMarkerSizes() {
-                maxRel = 0
-                if (useClustering() && markerCluster) {
-                    map.eachLayer((layer) => {
-                        if (isMarkerCluster(layer)) {
-                            const sumRels: Record<string, number> = {}
-                            for (const child of layer.getAllChildMarkers()) {
-                                const color = child.markerData.color
-                                if (!sumRels[color]) sumRels[color] = 0
-                                sumRels[color] += child.markerData.point.rel
-                            }
-                            maxRel = Math.max(maxRel, ...Object.values(sumRels))
-                        } else if (isMarker(layer)) maxRel = Math.max(maxRel, layer.markerData.point.rel)
-                    })
-                    return markerCluster.refreshClusters()
-                }
-            }
-            // TODO when scope.maxRel is set, we should redraw all non-cluster markers using this
-
-            /**
-             * create normal layer (and all listeners) to be used when clustering is not enabled
-             */
-            function createFeatureLayer() {
-                const featureLayer = L.featureGroup()
-                featureLayer.on("click", (e) => {
-                    const marker = e.propagatedFrom as CustomMarker | CustomMarkerMany
-                    selectedMarkers = marker.markerData instanceof Array ? marker.markerData : [marker.markerData]
-                    mouseOver(selectedMarkers)
-                })
-                featureLayer.on("mouseover", (e) => {
-                    const marker = e.propagatedFrom as CustomMarker | CustomMarkerMany
-                    marker.markerData instanceof Array ? mouseOver(marker.markerData) : mouseOver([marker.markerData])
-                })
-                featureLayer.on("mouseout", () =>
-                    selectedMarkers.length > 0 ? mouseOver(selectedMarkers) : mouseOut()
-                )
-                return featureLayer
-            }
-
-            /**
-             * create marker cluster layer and all listeners
-             */
-            function createMarkerCluster(
-                clusterGroups: Record<string, MarkerGroup>,
-                restColor: string
-            ): MarkerClusterGroup {
-                const markerCluster = L.markerClusterGroup({
-                    spiderfyOnMaxZoom: false,
-                    showCoverageOnHover: false,
-                    maxClusterRadius: 40,
-                    zoomToBoundsOnClick: false,
-                    iconCreateFunction: createClusterIcon(clusterGroups, restColor) as any,
-                }) as MarkerClusterGroup
-                markerCluster.on("clustermouseover", (e: { propagatedFrom: MarkerCluster }) =>
-                    mouseOver(e.propagatedFrom.getAllChildMarkers().map((layer) => layer.markerData))
-                )
-                markerCluster.on("clustermouseout", () =>
-                    selectedMarkers.length > 0 ? mouseOver(selectedMarkers) : mouseOut()
-                )
-                markerCluster.on("clusterclick", (e: { propagatedFrom: MarkerCluster }) => {
-                    selectedMarkers = e.propagatedFrom.getAllChildMarkers().map((layer) => layer.markerData)
-                    mouseOver(selectedMarkers)
-                    if (shouldZooomToBounds(e.propagatedFrom)) {
-                        return e.propagatedFrom.zoomToBounds()
-                    }
-                })
-                markerCluster.on("click", (e: { propagatedFrom: CustomMarker }) => {
-                    selectedMarkers = [e.propagatedFrom.markerData]
-                    return mouseOver(selectedMarkers)
-                })
-                markerCluster.on("mouseover", (e) => mouseOver([e.propagatedFrom.markerData]))
-                markerCluster.on("mouseout", (e) =>
-                    selectedMarkers.length > 0 ? mouseOver(selectedMarkers) : mouseOut()
-                )
-                markerCluster.on("animationend", (e) => updateMarkerSizes())
-                return markerCluster
-            }
+            $scope.$on("update_map", () => $timeout(() => map.map.invalidateSize()))
 
             /**
              * takes a list of markers and displays clickable (callback determined by directive user) info boxes
              */
             function mouseOver(markerData: MarkerData[]) {
-                return $timeout(() => {
-                    return $scope.$apply(() => {
+                $timeout(() => {
+                    $scope.$apply(() => {
                         markerData.sort((a, b) => b.point.rel - a.point.rel)
                         const selectedMarkers = markerData
 
@@ -286,7 +119,7 @@ angular.module("korpApp").component("resultMap", {
                         hoverInfoElem.append(content)
                         hoverInfoElem[0].scrollTop = 0
                         hoverInfoElem.css("opacity", "1")
-                        return hoverInfoElem.css("display", "block")
+                        hoverInfoElem.css("display", "block")
                     })
                 }, 0)
             }
@@ -294,79 +127,7 @@ angular.module("korpApp").component("resultMap", {
             function mouseOut() {
                 const hoverInfoElem = $element.find(".hover-info-container")
                 hoverInfoElem.css("opacity", "0")
-                return hoverInfoElem.css("display", "none")
-            }
-
-            map.on("click", (e) => {
-                selectedMarkers = []
-                return mouseOut()
-            })
-
-            function updateMarkers() {
-                if (markerCluster) map.removeLayer(markerCluster)
-                if (featureLayer) map.removeLayer(featureLayer)
-
-                if (useClustering()) {
-                    const selectedMarkers = $ctrl.selectedGroups.map((group) => $ctrl.markers[group])
-                    const clusterGroups = _.keyBy(selectedMarkers, "color")
-                    markerCluster = createMarkerCluster(clusterGroups, $ctrl.restColor)
-                    map.addLayer(markerCluster)
-
-                    const isCluster = $ctrl.selectedGroups.length !== 1
-                    for (const group of $ctrl.selectedGroups) {
-                        const markerGroup = $ctrl.markers[group]
-                        maxRel = 0
-                        Object.values(markerGroup.markers).map((markerOrig) => {
-                            const icon = createMarkerIcon(markerGroup.color, isCluster)
-                            const marker = L.marker([markerOrig.lat, markerOrig.lng], { icon }) as CustomMarker
-                            marker.markerData = {
-                                label: markerOrig.label,
-                                color: markerGroup.color,
-                                point: markerOrig.point,
-                                queryData: markerOrig.queryData,
-                            }
-                            markerCluster.addLayer(marker)
-                        })
-                    }
-                } else {
-                    featureLayer = createFeatureLayer()
-                    map.addLayer(featureLayer)
-
-                    const markers = $ctrl.selectedGroups.map((group) => $ctrl.markers[group])
-                    const markersMerged = mergeMarkers(markers)
-                    for (const markerData of markersMerged) {
-                        const icon = createMultiMarkerIcon(markerData.markerData, maxRel)
-                        const marker = L.marker([markerData.lat, markerData.lng], { icon }) as CustomMarkerMany
-                        marker.markerData = markerData.markerData
-                        featureLayer.addLayer(marker)
-                    }
-                }
-
-                updateMarkerSizes()
-            }
-
-            /**
-             * merge lists of markers into one list with several hits in one marker
-             * also calculate maxRel
-             */
-            function mergeMarkers(markerLists: MarkerGroup[]): MergedMarker[] {
-                maxRel = 0
-                const val = markerLists.reduce((memo, parent) => {
-                    for (const child1 of Object.values(parent.markers)) {
-                        const child: MarkerData = { ...child1, color: parent.color }
-                        const latLng = child1.lat + "," + child1.lng
-                        if (child.point.rel > maxRel) maxRel = child.point.rel
-                        if (latLng in memo) memo[latLng].markerData.push(child)
-                        else
-                            memo[latLng] = {
-                                markerData: [child],
-                                lat: child1.lat,
-                                lng: child1.lng,
-                            }
-                    }
-                    return memo
-                }, {} as Record<string, MergedMarker>)
-                return Object.values(val)
+                hoverInfoElem.css("display", "none")
             }
         },
     ],
