@@ -2,6 +2,7 @@
 import L from "leaflet"
 import { InnerData, StatsData } from "@/interfaces/stats"
 import { html } from "@/util"
+import { MapRequestResult } from "./backend/backend"
 
 export type MarkerGroup = {
     selected: boolean
@@ -118,6 +119,52 @@ function getPointsFromObj(obj: InnerData): Point[] {
         })
     }
     return points
+}
+
+export function getMarkerGroups(result: MapRequestResult, newColor: () => string): Record<string, MarkerGroup> {
+    const groups = result.data.reduce((groups, res, idx) => {
+        const markers = getMarkers(result.attribute.label, result.cqp, result.corpora, result.within, res, idx)
+        const group = {
+            selected: true,
+            order: idx,
+            color: newColor(),
+            markers,
+        }
+        return { ...groups, [res.label]: group }
+    }, {} as Record<string, MarkerGroup>)
+    return groups
+}
+
+function getMarkers(
+    label: string,
+    cqp: string,
+    corpora: string[],
+    within: string | undefined,
+    res: MapResult,
+    idx: number
+): Record<string, Marker> {
+    return Object.fromEntries(
+        res.points.map((point, pointIdx) => {
+            // Include point index in the key, so that multiple
+            // places with the same name but different coordinates
+            // each get their own markers
+            const id = [point.name.replace(/-/g, ""), pointIdx.toString(), idx].join(":")
+            const marker = {
+                lat: point.lat,
+                lng: point.lng,
+                queryData: {
+                    searchCqp: cqp,
+                    subCqp: res.cqp,
+                    label,
+                    corpora,
+                    within,
+                },
+                label: res.label,
+                point,
+            }
+            return [id, marker]
+        })
+    )
 }
 
 export function createCircleMarker(color: string, diameter: number, borderRadius: number) {

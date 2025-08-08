@@ -5,8 +5,7 @@ import settings from "@/settings"
 import { html, regescape } from "@/util"
 import { MapTab, RootScope } from "@/root-scope.types"
 import { AppSettings } from "@/settings/app-settings.types"
-import { MapRequestResult } from "@/backend/backend"
-import { MapResult, Marker, MarkerEvent, MarkerGroup } from "@/map"
+import { getMarkerGroups, MarkerEvent, MarkerGroup } from "@/map"
 import "@/components/korp-error"
 import "@/components/result-map"
 
@@ -91,10 +90,11 @@ angular.module("korpApp").component("resultsMap", {
 
                 Promise.all([rickshawPromise, $ctrl.promise]).then(
                     ([Rickshaw, result]) => {
+                        const palette = new (Rickshaw as any).Color.Palette({ scheme: "colorwheel" })
                         $scope.$apply(($scope: ResultsMapScope) => {
                             $ctrl.setProgress(false, 100)
                             $scope.numResults = 20
-                            $scope.markerGroups = result ? getMarkerGroups(Rickshaw, result) : undefined
+                            $scope.markerGroups = result ? getMarkerGroups(result, () => palette.color()) : undefined
                             $scope.selectedGroups = _.keys($scope.markerGroups)
                         })
                     },
@@ -124,60 +124,6 @@ angular.module("korpApp").component("resultsMap", {
                 } else {
                     $scope.selectedGroups = [...$scope.selectedGroups, groupName]
                 }
-            }
-
-            function getMarkerGroups(Rickshaw: any, result: MapRequestResult): Record<string, MarkerGroup> {
-                const palette: { color: () => string } = new Rickshaw.Color.Palette({ scheme: "colorwheel" }) // spectrum2000
-                const groups = result.data.reduce((groups, res, idx) => {
-                    const markers = getMarkers(
-                        result.attribute.label,
-                        result.cqp,
-                        result.corpora,
-                        result.within,
-                        res,
-                        idx
-                    )
-                    const group = {
-                        selected: true,
-                        order: idx,
-                        color: palette.color(),
-                        markers,
-                    }
-                    return { ...groups, [res.label]: group }
-                }, {} as Record<string, MarkerGroup>)
-                return groups
-            }
-
-            function getMarkers(
-                label: string,
-                cqp: string,
-                corpora: string[],
-                within: string | undefined,
-                res: MapResult,
-                idx: number
-            ): Record<string, Marker> {
-                return _.fromPairs(
-                    res.points.map((point, pointIdx) => {
-                        // Include point index in the key, so that multiple
-                        // places with the same name but different coordinates
-                        // each get their own markers
-                        const id = [point.name.replace(/-/g, ""), pointIdx.toString(), idx].join(":")
-                        const marker = {
-                            lat: point.lat,
-                            lng: point.lng,
-                            queryData: {
-                                searchCqp: cqp,
-                                subCqp: res.cqp,
-                                label,
-                                corpora,
-                                within,
-                            },
-                            label: res.label,
-                            point,
-                        }
-                        return [id, marker]
-                    })
-                )
             }
 
             /** Open the occurrences at a selected location */
