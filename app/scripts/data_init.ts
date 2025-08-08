@@ -11,6 +11,7 @@ import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./se
 import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
 import { korpRequest } from "./backend/common"
 import { getLocData } from "./loc-data"
+import moment from "moment"
 
 type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_attributes">>
 
@@ -52,8 +53,6 @@ async function getConfig(): Promise<Config> {
 
 /**
  * Transform the raw config fetched form backend, to a structure that frontend code can handle.
- *
- * TODO: Use the `Config` and `ConfigTransformed` types, not `any`.
  *
  * @see ./settings/README.md
  */
@@ -191,4 +190,12 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     if (!_.isEmpty(settings.corpora)) {
         setInitialCorpora()
     }
+}
+
+/** Find most recently updated corpora. */
+export function getRecentCorpusUpdates(): CorpusTransformed[] {
+    const limitDate = moment().subtract(6, "months")
+    return settings.corpusListing.corpora
+        .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
+        .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
 }
