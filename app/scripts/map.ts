@@ -3,6 +3,9 @@ import L from "leaflet"
 import { InnerData, StatsData } from "@/interfaces/stats"
 import { html } from "@/util"
 import { MapRequestResult } from "./backend/backend"
+import settings from "./settings"
+import { pick } from "lodash"
+import { CorpusTransformed } from "./settings/config-transformed.types"
 
 export type MarkerGroup = {
     selected: boolean
@@ -78,6 +81,35 @@ type Point = {
     countryCode: string
     lat: number
     lng: number
+}
+
+export type MapAttributeOption = {
+    label: string
+    corpora: string[]
+    selected?: boolean
+}
+
+export function getGeoAttributes(corpora: CorpusTransformed[]) {
+    const attrs: Record<string, MapAttributeOption> = {}
+    for (const corpus of corpora) {
+        for (const attr of corpus.private_struct_attributes) {
+            if (attr.indexOf("geo") !== -1) {
+                if (attrs[attr]) {
+                    attrs[attr].corpora.push(corpus.id)
+                } else {
+                    attrs[attr] = {
+                        label: attr,
+                        corpora: [corpus.id],
+                    }
+                }
+            }
+        }
+    }
+
+    const attributes = Object.values(attrs)
+    // Select first attribute
+    if (attributes.length) attributes[0].selected = true
+    return attributes
 }
 
 export function parseMapData(data: StatsData, cqp: string, cqpExprs: Record<string, string>): MapResult[] {

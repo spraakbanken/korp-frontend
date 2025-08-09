@@ -19,11 +19,12 @@ import { AttributeOption } from "@/corpus_listing"
 import { SearchesService } from "@/services/searches"
 import { getTimeData } from "@/timedata"
 import { StoreService } from "@/services/store"
+import { getGeoAttributes, MapAttributeOption } from "@/map"
+import { StatisticsGrid } from "@/statistics-grid"
 
 type StatisticsScope = IScope & {
     clipped: boolean
     reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
-    rowData: { title: string; values: AbsRelSeq }[]
     statCurrentAttrs: AttributeOption[]
     statSelectedAttrs: string[]
     statInsensitiveAttrs: string[]
@@ -50,12 +51,6 @@ type StatisticsController = IController & {
     mapRelative?: boolean
     graphEnabled: boolean
     noRowsError: boolean
-}
-
-type MapAttributeOption = {
-    label: string
-    corpora: string[]
-    selected?: boolean
 }
 
 angular.module("korpApp").component("statistics", {
@@ -236,15 +231,16 @@ angular.module("korpApp").component("statistics", {
 
             $ctrl.noRowsError = false
             $ctrl.mapRelative = true
-            let grid: Slick.Grid<Row>
-            let doSort = true
-            let sortColumn: string | undefined = undefined
-            let sortAsc = true
+            let grid: StatisticsGrid
+            let corpusListing = settings.corpusListing
 
             $ctrl.$onInit = () => {
                 $(window).on(
                     "resize",
-                    _.debounce(() => resizeGrid(true), 100)
+                    _.debounce(() => {
+                        grid?.resizeCanvas()
+                        grid?.autosizeColumns()
+                    }, 100)
                 )
 
                 $("#kindOfData,#kindOfFormat").change(() => {
@@ -276,95 +272,22 @@ angular.module("korpApp").component("statistics", {
             $scope.$watch("statsRelative", () => (store.statsRelative = $scope.statsRelative))
 
             $ctrl.$onChanges = (changeObj) => {
-                if ("columns" in changeObj && $ctrl.columns != undefined) {
+                if ("searchParams" in changeObj && $ctrl.searchParams) {
+                    corpusListing = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
+                }
+
+                if ("columns" in changeObj && $ctrl.columns) {
                     showGenerateExport()
-
-                    // @ts-ignore CheckboxSelectColumn type is missing?
-                    const checkboxSelector = new Slick.CheckboxSelectColumn({
-                        cssClass: "slick-cell-checkboxsel",
-                    })
-
-                    $ctrl.columns = [checkboxSelector.getColumnDefinition()].concat($ctrl.columns)
-
                     updateLabels($ctrl.columns)
 
-                    grid = new Slick.Grid($("#myGrid"), $ctrl.data, $ctrl.columns, {
-                        enableCellNavigation: false,
-                        enableColumnReorder: false,
-                        forceFitColumns: false,
-                    })
-
-                    // @ts-ignore RowSelectionModel type is missing?
-                    grid.setSelectionModel(new Slick.RowSelectionModel({ selectActiveRow: false }))
-                    grid.registerPlugin(checkboxSelector)
-                    grid.autosizeColumns()
-
-                    grid.onSort.subscribe((e, args) => {
-                        if (doSort) {
-                            sortAsc = args.sortAsc
-                            // @ts-ignore columnId is missing from type, but it's there
-                            sortColumn = args.columnId
-                            const { sortCol } = args
-
-                            $ctrl.data.sort((a, b) => {
-                                if (!sortCol) return 0
-
-                                // Place totals row first
-                                if (isTotalRow(a)) return -1
-                                if (isTotalRow(b)) return 1
-
-                                const direction = sortAsc ? 1 : -1
-
-                                // Sort by an attribute value
-                                if (sortCol.field == "hit_value") {
-                                    const x = a.formattedValue[sortColumn!]
-                                    const y = b.formattedValue[sortColumn!]
-                                    return x.localeCompare(y, store.lang) * direction
-                                }
-
-                                // Sort totals column by absolute hit count
-                                if (sortCol.field == "total") {
-                                    return (a.total[0] - b.total[0]) * direction
-                                }
-
-                                // Sort data column by absolute hit count
-                                if (sortCol.field == "count" && sortCol.id) {
-                                    const x = a.count[sortCol.id][0]
-                                    const y = b.count[sortCol.id][0]
-                                    return (x - y) * direction
-                                }
-
-                                return 0
-                            })
-
-                            grid.setData($ctrl.data, false)
-                            grid.updateRowCount()
-                            grid.render()
-                        } else {
-                            if (sortColumn) {
-                                grid.setSortColumn(sortColumn, sortAsc)
-                            } else {
-                                grid.setSortColumns([])
-                            }
-                        }
-                    })
-
-                    grid.onColumnsResized.subscribe((e, args) => {
-                        doSort = false // if sort event triggered, sorting will not occur
-                        resizeGrid(false)
-                        e.stopImmediatePropagation()
-                    })
-
-                    grid.onClick.subscribe((e, args) => {
-                        const column = grid.getColumns()[args.cell]
-                        if (column.id == "pieChart") showPieChart(args.row)
-                        else if (column.field == "hit_value") onAttrValueClick(args.row)
-                    })
-
-                    grid.onHeaderClick.subscribe((e, args) => {
-                        doSort = true // enable sorting again, resize is done
-                        e.stopImmediatePropagation()
-                    })
+                    grid = new StatisticsGrid(
+                        $("#myGrid").get(0)!,
+                        $ctrl.data,
+                        $ctrl.columns,
+                        () => store.lang,
+                        showPieChart,
+                        onAttrValueClick
+                    )
 
                     const refreshHeaders = () =>
                         $(".localized-header .slick-column-name")
@@ -381,8 +304,7 @@ angular.module("korpApp").component("statistics", {
                     $(window).trigger("resize")
 
                     updateGraphBtnState()
-
-                    setGeoAttributes($ctrl.searchParams.corpora)
+                    $ctrl.mapAttributes = getGeoAttributes(corpusListing.corpora)
                 }
 
                 if ("rowCount" in changeObj && $ctrl.rowCount) {
@@ -432,23 +354,22 @@ angular.module("korpApp").component("statistics", {
 
             const debouncedSearch = _.debounce(searches.doSearch, 500)
 
-            function onAttrValueClick(row: number) {
-                const rowData = grid.getDataItem(row) as SingleRow
-                if (isTotalRow(rowData)) return
+            function onAttrValueClick(row: Row) {
+                if (isTotalRow(row)) return
 
                 let cqp2 = null
                 // isPhraseLevelDisjunction can be set in custom code for constructing cqp like: ([] | [])
-                if ("isPhraseLevelDisjunction" in rowData && rowData.isPhraseLevelDisjunction) {
+                if ("isPhraseLevelDisjunction" in row && row.isPhraseLevelDisjunction) {
                     // In this case the statsValues array is one level deeper
-                    const statsValues = rowData.statsValues as unknown as Record<string, string[]>[][]
+                    const statsValues = row.statsValues as unknown as Record<string, string[]>[][]
                     const tokens = statsValues.map((vals) => getCqp(vals, $ctrl.searchParams.ignoreCase))
                     cqp2 = tokens.join(" | ")
                 } else {
-                    cqp2 = getCqp(rowData.statsValues, $ctrl.searchParams.ignoreCase)
+                    cqp2 = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
                 }
 
                 // Find which corpora had any hits (uppercase ids)
-                const corpora = Object.keys(rowData.count).filter((id) => rowData.count[id][0] > 0)
+                const corpora = Object.keys(row.count).filter((id) => row.count[id][0] > 0)
 
                 $rootScope.kwicTabs.push({
                     queryParams: {
@@ -461,7 +382,7 @@ angular.module("korpApp").component("statistics", {
             }
 
             $ctrl.onGraphClick = () => {
-                const showTotal = getSelectedRows().includes(0)
+                const showTotal = grid.getSelectedRows().includes(0)
 
                 const subQueries = getSubQueries()
                 const subcqps = subQueries.map(([cqp]) => cqp)
@@ -472,14 +393,12 @@ angular.module("korpApp").component("statistics", {
                     subcqps,
                     labelMapping,
                     showTotal,
-                    corpusListing: settings.corpusListing.subsetFactory($ctrl.searchParams.corpora),
+                    corpusListing,
                 })
             }
 
             $ctrl.showMap = function () {
-                const selectedRows = getSelectedRows()
-
-                if (selectedRows.length == 0) {
+                if (grid.getSelectedRows().length == 0) {
                     $ctrl.noRowsError = true
                     return
                 }
@@ -503,7 +422,8 @@ angular.module("korpApp").component("statistics", {
 
             /** Create KWIC sub queries for selected table rows, as a list of `[cqp, label]` pairs. */
             function getSubQueries(): [string, string][] {
-                const rows = getSelectedRows().map(getDataAt)
+                const rowIds = grid.getSelectedRows().sort()
+                const rows = rowIds.map(grid.getDataItem)
                 const pairs: [string, string][] = []
                 for (const row of rows) {
                     if (isTotalRow(row)) continue
@@ -518,43 +438,19 @@ angular.module("korpApp").component("statistics", {
 
             $ctrl.mapEnabled = !!settings["map_enabled"]
 
-            function setGeoAttributes(corpora: string[]) {
-                const attrs: Record<string, MapAttributeOption> = {}
-                for (let corpus of settings.corpusListing.subsetFactory(corpora).selected) {
-                    for (let attr of corpus.private_struct_attributes) {
-                        if (attr.indexOf("geo") !== -1) {
-                            if (attrs[attr]) {
-                                attrs[attr].corpora.push(corpus.id)
-                            } else {
-                                attrs[attr] = {
-                                    label: attr,
-                                    corpora: [corpus.id],
-                                }
-                            }
-                        }
-                    }
-                }
-
-                $ctrl.mapAttributes = Object.values(attrs)
-
-                // Select first attribute
-                if ($ctrl.mapAttributes.length) {
-                    $ctrl.mapAttributes[0].selected = true
-                }
-            }
-
             $ctrl.mapToggleSelected = function (index, event) {
                 _.map($ctrl.mapAttributes, (attr) => (attr.selected = false))
                 $ctrl.mapAttributes[index].selected = true
                 event.stopPropagation()
             }
 
-            function showPieChart(row: number) {
-                const item = grid.getDataItem(row)
-
-                $scope.rowData = $ctrl.searchParams.corpora.map((corpus) => ({
-                    title: locObj(settings.corpora[corpus.toLowerCase()]["title"]),
-                    values: item.count[corpus],
+            function showPieChart(row: Row) {
+                const scope = $scope.$new() as IScope & {
+                    rowData: { title: string; values: AbsRelSeq }[]
+                }
+                scope.rowData = Object.entries(row.count).map(([corpus, absrel]) => ({
+                    title: locObj(settings.corpora[corpus.toLowerCase()].title, store.lang),
+                    values: absrel,
                 }))
 
                 const modal = $uibModal.open({
@@ -563,84 +459,42 @@ angular.module("korpApp").component("statistics", {
                             <h3 class="modal-title !w-full">{{ 'statstable_distribution' | loc }}</h3>
                         </div>
                         <div class="modal-body">
-                            <corpus-distribution-chart row="$parent.rowData"></corpus-distribution-chart>
+                            <corpus-distribution-chart row="rowData"></corpus-distribution-chart>
                         </div>
                     `,
-                    scope: $scope,
+                    scope,
                     windowClass: "!text-base",
                 })
                 // Ignore rejection from dismissing the modal
                 modal.result.catch(() => {})
             }
 
-            function resizeGrid(resizeColumns?: boolean) {
-                let width: number
-                let height = 0
-                $(".slick-row").each(function () {
-                    height += $(this).outerHeight(true) || 0
-                })
-                $("#myGrid:visible.slick-viewport").height(height)
-
-                // adding 20 px to width if vertical scrollbar appears
-                width = $ctrl.data?.length * 25 >= height ? 20 : 0
-
-                $(".slick-header-column").each(function () {
-                    width += $(this).outerWidth(true) || 0
-                })
-                if (width > ($(window).width() || 0) - 40) {
-                    width = ($(window).width() || 0) - 40
-                }
-                $("#myGrid:visible.slick-viewport").width(width)
-
-                if (grid != null) {
-                    grid.resizeCanvas()
-                    if (resizeColumns) {
-                        grid.autosizeColumns()
-                    }
-                }
-                return grid != null ? grid.invalidate() : undefined
-            }
-
             async function updateGraphBtnState() {
+                // Ensure cl.getTimeInterval() is not called before time data is loaded.
                 await getTimeData()
-                const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
                 $scope.$applyAsync(() => {
-                    $ctrl.graphEnabled = _.compact(cl.getTimeInterval()).length > 0
+                    $ctrl.graphEnabled = !!corpusListing.getTimeInterval()
                 })
-            }
-
-            const getSelectedRows = () => (grid ? grid.getSelectedRows().sort() : [])
-
-            function getDataAt(rowIx: number): Row {
-                return grid.getData()[rowIx]
             }
 
             function updateExportBlob() {
-                let reduceVal, val
                 const selVal = $("#kindOfData option:selected").val() === "absolute" ? 0 : 1
                 const selType = $("#kindOfFormat option:selected").val()
                 const delimiter = selType == "tsv" ? "\t" : ";"
-                const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
 
-                let header = []
-                for (reduceVal of $ctrl.searchParams.reduceVals) {
-                    header.push(reduceVal)
-                }
+                const attrs = $ctrl.searchParams.reduceVals
+                const corpusIds = $ctrl.searchParams.corpora
+                const corpusTitles = corpusIds.map((id) => locObj(corpusListing.getTitleObj(id), store.lang))
+                const header = [...attrs, loc("stats_total"), ...corpusTitles]
 
-                header.push(loc("stats_total"))
-                header = header.concat(_.map(cl.corpora, (corpus) => locObj(corpus["title"])))
-
-                let output = []
+                const output = []
                 for (const row of $ctrl.data) {
                     // One cell per grouped attribute
                     // TODO Should isPhraseLevelDisjunction be handled here?
-                    const outputRow: string[] = $ctrl.searchParams.reduceVals.map((attr) =>
-                        isTotalRow(row) ? "Σ" : row.plainValue[attr]
-                    )
+                    const outputRow: string[] = attrs.map((attr) => (isTotalRow(row) ? "Σ" : row.plainValue[attr]))
                     outputRow.push(String(row.total[selVal]))
-                    for (let corp of $ctrl.searchParams.corpora) {
-                        val = row.count[corp][selVal] || 0
-                        outputRow.push(String(val))
+                    for (const corp of corpusIds) {
+                        outputRow.push(String(row.count[corp][selVal] || 0))
                     }
                     output.push(outputRow)
                 }
