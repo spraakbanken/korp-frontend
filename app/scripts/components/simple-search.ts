@@ -14,7 +14,7 @@ import "@/components/search-submit"
 import "@/global-filter/global-filters"
 import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
-import { LexiconsRelatedWords, relatedWordSearch } from "@/backend/lexicons"
+import { relatedWordSearch } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
 import { CqpSearchEvent } from "@/statemachine/types"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
@@ -47,6 +47,11 @@ type SimpleSearchScope = IScope & {
     midfix: boolean
     suffix: boolean
     onMidfixChange: () => void
+}
+
+export type LexiconsRelatedWords = {
+    label: string
+    words: string[]
 }
 
 angular.module("korpApp").component("simpleSearch", {
@@ -335,23 +340,19 @@ angular.module("korpApp").component("simpleSearch", {
                 const cqp = ctrl.getCQP()
                 searches.kwicSearch(cqp)
 
+                // For lemgram, find related words via SweFN in Karp
                 if (search?.type === "lemgram") {
+                    // Require that some selected corpora use the "sense" attribute (sometimes named "saldo")
+                    // because we are creating links to search using that attribute.
                     const attrExists = (name: string) =>
                         settings.corpusListing.selected.some((corpus) => name in corpus.attributes)
-                    const sense = attrExists("sense")
-                    const saldo = attrExists("saldo")
+                    const attribute = ["sense", "saldo"].find(attrExists)
+                    if (!attribute) return
 
-                    if (sense || saldo) {
-                        relatedWordSearch(unregescape(search.val)).then((data) => {
-                            // Lower some nasty words
-                            if (data.length >= 2 && data[0].label == "Excreting") {
-                                // Swap the first two elements
-                                const [first, second, ...rest] = data
-                                data = [second, first, ...rest]
-                            }
-                            $timeout(() => (ctrl.relatedObj = { data, attribute: sense ? "sense" : "saldo" }))
-                        })
-                    }
+                    relatedWordSearch(unregescape(search.val)).then((frames) => {
+                        const data = frames.map((entry) => ({ label: entry.swefnID, words: entry.LUs }))
+                        $timeout(() => (ctrl.relatedObj = { data, attribute }))
+                    })
                 }
             }
         },
