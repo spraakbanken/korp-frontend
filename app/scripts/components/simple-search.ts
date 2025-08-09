@@ -1,5 +1,5 @@
 /** @format */
-import angular, { IController, IScope, ITimeoutService, ui } from "angular"
+import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
@@ -10,16 +10,13 @@ import "@/services/compare-searches"
 import "@/backend/lexicons"
 import "@/services/searches"
 import "@/components/autoc"
+import "@/components/related-words"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
-import { RootScope } from "@/root-scope.types"
 import { CompareSearches } from "@/services/compare-searches"
-import { relatedWordSearch } from "@/backend/lexicons"
 import { SearchesService } from "@/services/searches"
-import { CqpSearchEvent } from "@/statemachine/types"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
-import { Saldo } from "@/saldo"
 
 type SimpleSearchController = IController & {
     input: string
@@ -30,13 +27,9 @@ type SimpleSearchController = IController & {
     isCaseInsensitive: boolean
     currentText?: string
     lemgram?: string
-    relatedObj?: { data: LexiconsRelatedWords[]; attribute: string }
-    relatedDefault: number
     updateSearch: () => void
     getCQP: () => string
     onSearchSave: (name: string) => void
-    stringifyRelated: (wd: string) => string
-    showAllRelated: () => void
     updateFreeOrderEnabled: () => void
     doSearch: () => void
     onChange: (value: string, isPlain: boolean) => void
@@ -47,11 +40,6 @@ type SimpleSearchScope = IScope & {
     midfix: boolean
     suffix: boolean
     onMidfixChange: () => void
-}
-
-export type LexiconsRelatedWords = {
-    label: string
-    words: string[]
 }
 
 angular.module("korpApp").component("simpleSearch", {
@@ -123,49 +111,20 @@ angular.module("korpApp").component("simpleSearch", {
                 </div>
             </div>
 
-            <div ng-show="$ctrl.relatedObj" class="ml-auto">
-                <button
-                    class="btn btn-sm btn-default"
-                    ng-click="$ctrl.showAllRelated()"
-                    ng-if="$ctrl.relatedObj.data.length != 0"
-                >
-                    <span class="text-base">{{ 'similar_header' | loc:$root.lang }} (SweFN)</span><br /><span
-                        ng-repeat="wd in $ctrl.relatedObj.data[0].words | limitTo:$ctrl.relatedDefault"
-                    >
-                        {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
-                    ><br /><span
-                        ng-repeat="wd in $ctrl.relatedObj.data[0].words.slice($ctrl.relatedDefault) | limitTo:$ctrl.relatedDefault"
-                    >
-                        {{$ctrl.stringifyRelated(wd)}}<span ng-if="!$last">, </span></span
-                    ><span
-                        ng-if="$ctrl.relatedObj.data[0].words.length > $ctrl.relatedDefault || $ctrl.relatedObj.data.length > 1"
-                    >
-                        ...</span
-                    >
-                </button>
-                <div class="btn btn-sm btn-default" ng-if="$ctrl.relatedObj.data.length == 0">
-                    <span class="text-base">{{ 'similar_header' | loc:$root.lang }} (SWE-FN)</span><br /><span
-                        >{{'no_related_words' | loc:$root.lang}}</span
-                    >
-                </div>
-            </div>
+            <related-words class="ml-auto"></related-words>
         </div>
     `,
     controller: [
         "$location",
-        "$rootScope",
         "$scope",
         "$timeout",
-        "$uibModal",
         "compareSearches",
         "searches",
         "store",
         function (
             $location: LocationService,
-            $rootScope: RootScope,
             $scope: SimpleSearchScope,
             $timeout: ITimeoutService,
-            $uibModal: ui.bootstrap.IModalService,
             compareSearches: CompareSearches,
             searches: SearchesService,
             store: StoreService
@@ -251,58 +210,6 @@ angular.module("korpApp").component("simpleSearch", {
                 compareSearches.saveSearch(name, ctrl.getCQP())
             }
 
-            ctrl.stringifyRelated = (wd) => Saldo.parse(wd)?.form || wd
-
-            ctrl.relatedDefault = 3
-
-            ctrl.showAllRelated = () => {
-                type ShowAllRelatedScope = IScope & {
-                    stringifyRelatedHeader: (wd: string) => string
-                    clickX: () => void
-                    stringifyRelated: (wd: string) => string
-                    relatedObj: any
-                    clickRelated: (wd: string, attribute: string) => void
-                }
-                const scope = $rootScope.$new() as ShowAllRelatedScope
-                scope.stringifyRelatedHeader = (wd) => wd.replace(/_/g, " ")
-                scope.clickX = () => modalInstance.dismiss()
-                scope.stringifyRelated = ctrl.stringifyRelated
-                scope.relatedObj = ctrl.relatedObj
-                scope.clickRelated = function (wd, attribute) {
-                    if (modalInstance != null) {
-                        modalInstance.close()
-                    }
-                    const cqp =
-                        attribute === "saldo"
-                            ? `[saldo contains \"${regescape(wd)}\"]`
-                            : `[sense rank_contains \"${regescape(wd)}\"]`
-
-                    statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
-                }
-                const modalInstance = $uibModal.open({
-                    template: `\
-                        <div class="modal-header">
-                            <h3 class="modal-title">{{'similar_header' | loc:$root.lang}} (SWE-FN)</h3>
-                            <span ng-click="clickX()" class="close-x">×</span>
-                        </div>
-                        <div class="modal-body">
-                            <div ng-repeat="obj in relatedObj.data" class="col"><a target="_blank" ng-href="https://spraakbanken.gu.se/karp/#?mode=swefn&lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
-                              <div class="list_wrapper">
-                                  <ul>
-                                    <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd, relatedObj.attribute)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
-                                  </ul>
-                              </div>
-                            </div>
-                        </div>\
-                        `,
-                    scope,
-                    size: "lg",
-                    windowClass: "related",
-                })
-                // Ignore rejection from dismissing the modal
-                modalInstance.result.catch(() => {})
-            }
-
             store.watch("activeSearch", () => {
                 const search = store.activeSearch
                 if (!search) return
@@ -335,25 +242,8 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             ctrl.doSearch = function () {
-                const search = store.activeSearch
-                ctrl.relatedObj = undefined
                 const cqp = ctrl.getCQP()
                 searches.kwicSearch(cqp)
-
-                // For lemgram, find related words via SweFN in Karp
-                if (search?.type === "lemgram") {
-                    // Require that some selected corpora use the "sense" attribute (sometimes named "saldo")
-                    // because we are creating links to search using that attribute.
-                    const attrExists = (name: string) =>
-                        settings.corpusListing.selected.some((corpus) => name in corpus.attributes)
-                    const attribute = ["sense", "saldo"].find(attrExists)
-                    if (!attribute) return
-
-                    relatedWordSearch(unregescape(search.val)).then((frames) => {
-                        const data = frames.map((entry) => ({ label: entry.swefnID, words: entry.LUs }))
-                        $timeout(() => (ctrl.relatedObj = { data, attribute }))
-                    })
-                }
             }
         },
     ],
