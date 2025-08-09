@@ -34,19 +34,14 @@ type StatisticsController = IController & {
     aborted: boolean
     columns: SlickgridColumn[]
     data: Dataset
-    doSort: boolean
     error: boolean
-    grid: Slick.Grid<Row>
     loading: boolean
     prevParams: CountParams
     rowCount: number
     searchParams: SearchParams
-    sortColumn?: string
     warning?: string
     onStatsClick: (event: MouseEvent) => void
     onGraphClick: () => void
-    resizeGrid: (resizeColumns: boolean) => void
-    setGeoAttributes: (corpora: string[]) => void
     mapToggleSelected: (index: number, event: Event) => void
     generateExport: () => void
     showMap: () => void
@@ -240,14 +235,16 @@ angular.module("korpApp").component("statistics", {
             const $ctrl = this as StatisticsController
 
             $ctrl.noRowsError = false
-            $ctrl.doSort = true
-            $ctrl.sortColumn = undefined
             $ctrl.mapRelative = true
+            let grid: Slick.Grid<Row>
+            let doSort = true
+            let sortColumn: string | undefined = undefined
+            let sortAsc = true
 
             $ctrl.$onInit = () => {
                 $(window).on(
                     "resize",
-                    _.debounce(() => $ctrl.resizeGrid(true), 100)
+                    _.debounce(() => resizeGrid(true), 100)
                 )
 
                 $("#kindOfData,#kindOfFormat").change(() => {
@@ -263,17 +260,17 @@ angular.module("korpApp").component("statistics", {
             }
 
             store.watch("lang", () => {
-                if (!$ctrl.grid) return
-                const cols = $ctrl.grid.getColumns()
+                if (!grid) return
+                const cols = grid.getColumns()
                 updateLabels(cols)
-                $ctrl.grid.setColumns(cols)
+                grid.setColumns(cols)
             })
 
             store.watch("statsRelative", () => {
                 $scope.statsRelative = store.statsRelative
-                if (!$ctrl.grid) return
+                if (!grid) return
                 // Trigger reformatting
-                $ctrl.grid.setColumns($ctrl.grid.getColumns())
+                grid.setColumns(grid.getColumns())
             })
 
             $scope.$watch("statsRelative", () => (store.statsRelative = $scope.statsRelative))
@@ -291,7 +288,7 @@ angular.module("korpApp").component("statistics", {
 
                     updateLabels($ctrl.columns)
 
-                    const grid = new Slick.Grid($("#myGrid"), $ctrl.data, $ctrl.columns, {
+                    grid = new Slick.Grid($("#myGrid"), $ctrl.data, $ctrl.columns, {
                         enableCellNavigation: false,
                         enableColumnReorder: false,
                         forceFitColumns: false,
@@ -300,15 +297,14 @@ angular.module("korpApp").component("statistics", {
                     // @ts-ignore RowSelectionModel type is missing?
                     grid.setSelectionModel(new Slick.RowSelectionModel({ selectActiveRow: false }))
                     grid.registerPlugin(checkboxSelector)
-                    $ctrl.grid = grid
-                    $ctrl.grid.autosizeColumns()
+                    grid.autosizeColumns()
 
                     grid.onSort.subscribe((e, args) => {
-                        if ($ctrl.doSort) {
+                        if (doSort) {
+                            sortAsc = args.sortAsc
                             // @ts-ignore columnId is missing from type, but it's there
-                            const { columnId, sortAsc, sortCol } = args
-                            $ctrl.sortColumn = columnId
-                            $ctrl.sortAsc = sortAsc
+                            sortColumn = args.columnId
+                            const { sortCol } = args
 
                             $ctrl.data.sort((a, b) => {
                                 if (!sortCol) return 0
@@ -321,8 +317,8 @@ angular.module("korpApp").component("statistics", {
 
                                 // Sort by an attribute value
                                 if (sortCol.field == "hit_value") {
-                                    const x = a.formattedValue[columnId]
-                                    const y = b.formattedValue[columnId]
+                                    const x = a.formattedValue[sortColumn!]
+                                    const y = b.formattedValue[sortColumn!]
                                     return x.localeCompare(y, store.lang) * direction
                                 }
 
@@ -345,8 +341,8 @@ angular.module("korpApp").component("statistics", {
                             grid.updateRowCount()
                             grid.render()
                         } else {
-                            if ($ctrl.sortColumn) {
-                                grid.setSortColumn($ctrl.sortColumn, $ctrl.sortAsc)
+                            if (sortColumn) {
+                                grid.setSortColumn(sortColumn, sortAsc)
                             } else {
                                 grid.setSortColumns([])
                             }
@@ -354,8 +350,8 @@ angular.module("korpApp").component("statistics", {
                     })
 
                     grid.onColumnsResized.subscribe((e, args) => {
-                        $ctrl.doSort = false // if sort event triggered, sorting will not occur
-                        $ctrl.resizeGrid(false)
+                        doSort = false // if sort event triggered, sorting will not occur
+                        resizeGrid(false)
                         e.stopImmediatePropagation()
                     })
 
@@ -366,7 +362,7 @@ angular.module("korpApp").component("statistics", {
                     })
 
                     grid.onHeaderClick.subscribe((e, args) => {
-                        $ctrl.doSort = true // enable sorting again, resize is done
+                        doSort = true // enable sorting again, resize is done
                         e.stopImmediatePropagation()
                     })
 
@@ -381,12 +377,12 @@ angular.module("korpApp").component("statistics", {
 
                     refreshHeaders()
                     // Select sum row
-                    $(".slick-row:first input", $ctrl.$result).click()
+                    $(".slick-row:first input").click()
                     $(window).trigger("resize")
 
                     updateGraphBtnState()
 
-                    $ctrl.setGeoAttributes($ctrl.searchParams.corpora)
+                    setGeoAttributes($ctrl.searchParams.corpora)
                 }
 
                 if ("rowCount" in changeObj && $ctrl.rowCount) {
@@ -437,7 +433,7 @@ angular.module("korpApp").component("statistics", {
             const debouncedSearch = _.debounce(searches.doSearch, 500)
 
             function onAttrValueClick(row: number) {
-                const rowData = $ctrl.grid.getDataItem(row) as SingleRow
+                const rowData = grid.getDataItem(row) as SingleRow
                 if (isTotalRow(rowData)) return
 
                 let cqp2 = null
@@ -522,7 +518,7 @@ angular.module("korpApp").component("statistics", {
 
             $ctrl.mapEnabled = !!settings["map_enabled"]
 
-            $ctrl.setGeoAttributes = function (corpora) {
+            function setGeoAttributes(corpora: string[]) {
                 const attrs: Record<string, MapAttributeOption> = {}
                 for (let corpus of settings.corpusListing.subsetFactory(corpora).selected) {
                     for (let attr of corpus.private_struct_attributes) {
@@ -554,7 +550,7 @@ angular.module("korpApp").component("statistics", {
             }
 
             function showPieChart(row: number) {
-                const item = $ctrl.grid.getDataItem(row)
+                const item = grid.getDataItem(row)
 
                 $scope.rowData = $ctrl.searchParams.corpora.map((corpus) => ({
                     title: locObj(settings.corpora[corpus.toLowerCase()]["title"]),
@@ -577,7 +573,7 @@ angular.module("korpApp").component("statistics", {
                 modal.result.catch(() => {})
             }
 
-            $ctrl.resizeGrid = (resizeColumns) => {
+            function resizeGrid(resizeColumns?: boolean) {
                 let width: number
                 let height = 0
                 $(".slick-row").each(function () {
@@ -596,13 +592,13 @@ angular.module("korpApp").component("statistics", {
                 }
                 $("#myGrid:visible.slick-viewport").width(width)
 
-                if ($ctrl.grid != null) {
-                    $ctrl.grid.resizeCanvas()
+                if (grid != null) {
+                    grid.resizeCanvas()
                     if (resizeColumns) {
-                        $ctrl.grid.autosizeColumns()
+                        grid.autosizeColumns()
                     }
                 }
-                return $ctrl.grid != null ? $ctrl.grid.invalidate() : undefined
+                return grid != null ? grid.invalidate() : undefined
             }
 
             async function updateGraphBtnState() {
@@ -613,10 +609,10 @@ angular.module("korpApp").component("statistics", {
                 })
             }
 
-            const getSelectedRows = () => ($ctrl.grid ? $ctrl.grid.getSelectedRows().sort() : [])
+            const getSelectedRows = () => (grid ? grid.getSelectedRows().sort() : [])
 
             function getDataAt(rowIx: number): Row {
-                return $ctrl.grid.getData()[rowIx]
+                return grid.getData()[rowIx]
             }
 
             function updateExportBlob() {
