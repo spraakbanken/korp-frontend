@@ -9,6 +9,7 @@
 ### Fixed
 
 - Prevent empty "Group by" selector when changing corpus
+- Prevent relative frequency "NaN" when loading first KWIC result
 
 ## [9.10.1] - 2025-07-02
 
