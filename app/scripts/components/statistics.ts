@@ -1,10 +1,9 @@
 /** @format */
 import angular, { IController, IScope, ui } from "angular"
 import _ from "lodash"
-import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
-import { html } from "@/util"
-import { loc, locObj } from "@/i18n"
+import { downloadFile, html } from "@/util"
+import { locObj } from "@/i18n"
 import { getCqp } from "../../config/statistics_config"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { requestMapData } from "@/backend/backend"
@@ -13,7 +12,7 @@ import "@/components/corpus-distribution-chart"
 import "@/components/reduce-select"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
-import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, SlickgridColumn } from "@/statistics.types"
+import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SlickgridColumn } from "@/statistics.types"
 import { CountParams } from "@/backend/types/count"
 import { AttributeOption } from "@/corpus_listing"
 import { SearchesService } from "@/services/searches"
@@ -21,6 +20,7 @@ import { getTimeData } from "@/timedata"
 import { StoreService } from "@/services/store"
 import { getGeoAttributes, MapAttributeOption } from "@/map"
 import { StatisticsGrid } from "@/statistics-grid"
+import { createStatisticsCsv } from "@/statistics-export"
 
 type StatisticsScope = IScope & {
     clipped: boolean
@@ -198,7 +198,6 @@ angular.module("korpApp").component("statistics", {
                     <a id="generateExportButton" ng-click="$ctrl.generateExport()">
                         <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
                     </a>
-                    <a class="btn btn-sm btn-default" id="exportButton"> {{'statstable_export' | loc:$root.lang}} </a>
                 </div>
             </div>
         </div>
@@ -242,12 +241,6 @@ angular.module("korpApp").component("statistics", {
                         grid?.autosizeColumns()
                     }, 100)
                 )
-
-                $("#kindOfData,#kindOfFormat").change(() => {
-                    showGenerateExport()
-                })
-
-                $("#exportButton").hide()
             }
 
             // Set initial value for stats case-insensitive, but only if reduce attr is not set
@@ -277,7 +270,6 @@ angular.module("korpApp").component("statistics", {
                 }
 
                 if ("columns" in changeObj && $ctrl.columns) {
-                    showGenerateExport()
                     updateLabels($ctrl.columns)
 
                     grid = new StatisticsGrid(
@@ -477,54 +469,14 @@ angular.module("korpApp").component("statistics", {
                 })
             }
 
-            function updateExportBlob() {
-                const selVal = $("#kindOfData option:selected").val() === "absolute" ? 0 : 1
-                const selType = $("#kindOfFormat option:selected").val()
-                const delimiter = selType == "tsv" ? "\t" : ";"
-
-                const attrs = $ctrl.searchParams.reduceVals
-                const corpusIds = $ctrl.searchParams.corpora
-                const corpusTitles = corpusIds.map((id) => locObj(corpusListing.getTitleObj(id), store.lang))
-                const header = [...attrs, loc("stats_total"), ...corpusTitles]
-
-                const output = []
-                for (const row of $ctrl.data) {
-                    // One cell per grouped attribute
-                    // TODO Should isPhraseLevelDisjunction be handled here?
-                    const outputRow: string[] = attrs.map((attr) => (isTotalRow(row) ? "Σ" : row.plainValue[attr]))
-                    outputRow.push(String(row.total[selVal]))
-                    for (const corp of corpusIds) {
-                        outputRow.push(String(row.count[corp][selVal] || 0))
-                    }
-                    output.push(outputRow)
-                }
-
-                const csv = new CSV(output, { header, delimiter })
-
-                const csvstr = csv.encode()
-
-                const blob = new Blob([csvstr], { type: `text/${selType}` })
-                const csvUrl = URL.createObjectURL(blob)
-
-                $("#exportButton").attr({
-                    download: `export.${selType}`,
-                    href: csvUrl,
-                })
-            }
-
             $ctrl.generateExport = () => {
-                hideGenerateExport()
-                updateExportBlob()
-            }
-
-            function showGenerateExport() {
-                $("#exportButton").hide()
-                $("#generateExportButton").show()
-            }
-
-            function hideGenerateExport() {
-                $("#exportButton").show()
-                $("#generateExportButton").hide()
+                const frequencyType: string = $("#kindOfData option:selected").val()
+                const csvType: string = $("#kindOfFormat option:selected").val()
+                const { reduceVals } = $ctrl.searchParams
+                const corpora = corpusListing.corpora
+                const csv = createStatisticsCsv($ctrl.data, reduceVals, corpora, frequencyType, csvType, store.lang)
+                const mimeType = csvType == "tsv" ? "text/tab-separated-values" : "text/csv"
+                downloadFile(csv, `korp-statistics.${csvType}`, mimeType)
             }
         },
     ],
