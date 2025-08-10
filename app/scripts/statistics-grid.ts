@@ -1,4 +1,11 @@
 /** @format */
+import "slickgrid/lib/jquery.event.drag-2.3.0"
+import "slickgrid/slick.core"
+import "slickgrid/slick.grid"
+import "slickgrid/plugins/slick.checkboxselectcolumn"
+import "slickgrid/plugins/slick.rowselectionmodel"
+import "slickgrid/slick.interactions.js"
+import "slickgrid/slick.grid.css"
 import { Dataset, isTotalRow, Row, SingleRow, SlickgridColumn } from "./statistics.types"
 
 export class StatisticsGrid extends Slick.Grid<Row> {
