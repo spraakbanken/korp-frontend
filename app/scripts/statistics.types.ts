@@ -1,10 +1,10 @@
 /** @format*/
-import { CountsSplit } from "@/backend/types/count"
+import { CountsMerged } from "@/backend/types/count"
 import { LangString } from "@/i18n/types"
 
 export type StatisticsWorkerMessage = {
     type: "korpStatistics"
-    data: CountsSplit
+    data: CountsMerged
     groupStatistics: string[]
 }
 

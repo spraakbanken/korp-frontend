@@ -40,20 +40,18 @@ onmessage = function (e) {
             .join("/")
 
     // Group data by simplified values, e.g. "foo:12" and "foo:34" under "foo"
-    // Since `normalizeStatsData()` is applied, data has moved from `combined` into `combined[0]`
-    const groupedRows = groupBy(combined[0].rows, (item) => simplifyHitString(item))
+    const groupedRows = groupBy(combined.rows, (item) => simplifyHitString(item))
     const rowIds = Object.keys(groupedRows)
     // Pre-allocate array for performance
     const dataset: Dataset = new Array(rowIds.length + 1)
 
-    // Since `normalizeStatsData()` is applied, data has moved from `corpora[id]` into `corpora[id][0]`
-    const totalsByCorpus = mapValues(corpora, (data) => [data[0].sums.absolute, data[0].sums.relative] as AbsRelSeq)
-    const corporaFreqs = mapValues(corpora, (data) => groupBy(data[0].rows, (item) => simplifyHitString(item)))
+    const totalsByCorpus = mapValues(corpora, (data) => [data.sums.absolute, data.sums.relative] as AbsRelSeq)
+    const corporaFreqs = mapValues(corpora, (data) => groupBy(data.rows, (item) => simplifyHitString(item)))
 
     dataset[0] = {
         id: "row_total",
         count: totalsByCorpus,
-        total: [combined[0].sums.absolute, combined[0].sums.relative],
+        total: [combined.sums.absolute, combined.sums.relative],
         rowId: 0,
     } satisfies TotalRow
 

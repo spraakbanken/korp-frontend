@@ -2,11 +2,10 @@
 import _ from "lodash"
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
-import { normalizeStatsData } from "@/backend/stats-proxy"
 import { MapResult, parseMapData } from "@/map"
 import { korpRequest } from "./common"
 import { QueryResponse } from "./types/query"
-import { CountParams } from "./types/count"
+import { CountParams, CountsSplit } from "./types/count"
 
 // TODO Convert to object
 export type CompareResult = [CompareTables, number, SavedSearch, SavedSearch, string[]]
@@ -122,10 +121,17 @@ export async function requestMapData(
         within,
     }
 
-    Object.keys(cqpExprs).map((cqp, i) => (params[`subcqp${i}`] = cqp))
+    Object.keys(cqpExprs).forEach((cqp, i) => (params[`subcqp${i}`] = cqp))
 
     const data = await korpRequest("count", params)
-    const normalizedData = normalizeStatsData(data)
+
+    // Normalize data to the split format.
+    const normalizedData: CountsSplit = {
+        ...data,
+        combined: Array.isArray(data.combined) ? data.combined : [data.combined],
+        corpora: _.mapValues(data.corpora, (stats) => (Array.isArray(stats) ? stats : [stats])),
+    }
+
     let result = parseMapData(normalizedData, cqp, cqpExprs)
     return { corpora: attribute.corpora, cqp, within: defaultWithin, data: result, attribute }
 }

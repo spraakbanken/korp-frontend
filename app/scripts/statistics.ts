@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config"
-import { CountsSplit } from "@/backend/types/count"
+import { CountsMerged } from "@/backend/types/count"
 import {
     Dataset,
     isTotalRow,
@@ -85,7 +85,7 @@ export function createColumns(store: StoreService, corpora: string[], attrs: str
 const createStatisticsService = function () {
     function processData(
         originalCorpora: string,
-        data: CountsSplit,
+        data: CountsMerged,
         reduceVals: string[],
         ignoreCase: boolean,
         prevNonExpandedCQP: string
