@@ -8,7 +8,7 @@ import { RootScope } from "./root-scope.types"
 import { HashParams, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
-import { AbsRelSeq } from "./statistics.types"
+import { AbsRelSeq } from "./statistics/statistics.types"
 import { StoreService } from "./services/store"
 import moment, { Moment } from "moment"
 

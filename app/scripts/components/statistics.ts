@@ -4,7 +4,6 @@ import _ from "lodash"
 import settings from "@/settings"
 import { downloadFile, html } from "@/util"
 import { locObj } from "@/i18n"
-import { getCqp } from "../../config/statistics_config"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { requestMapData } from "@/backend/backend"
 import "@/backend/backend"
@@ -12,7 +11,7 @@ import "@/components/corpus-distribution-chart"
 import "@/components/reduce-select"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
-import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SlickgridColumn } from "@/statistics.types"
+import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams } from "@/statistics/statistics.types"
 import { CountParams } from "@/backend/types/count"
 import { AttributeOption } from "@/corpus_listing"
 import { SearchesService } from "@/services/searches"
@@ -20,7 +19,7 @@ import { getTimeData } from "@/timedata"
 import { StoreService } from "@/services/store"
 import { getGeoAttributes, MapAttributeOption } from "@/map"
 import { StatisticsGrid } from "@/statistics-grid"
-import { createStatisticsCsv } from "@/statistics-export"
+import { createStatisticsCsv, getCqp } from "@/statistics/statistics"
 
 type StatisticsScope = IScope & {
     clipped: boolean
@@ -33,7 +32,6 @@ type StatisticsScope = IScope & {
 
 type StatisticsController = IController & {
     aborted: boolean
-    columns: SlickgridColumn[]
     data: Dataset
     error: boolean
     loading: boolean
@@ -204,7 +202,6 @@ angular.module("korpApp").component("statistics", {
     `,
     bindings: {
         aborted: "<",
-        columns: "<",
         data: "<",
         error: "<",
         loading: "<",
@@ -248,12 +245,7 @@ angular.module("korpApp").component("statistics", {
                 store.stats_reduce_insensitive = "word"
             }
 
-            store.watch("lang", () => {
-                if (!grid) return
-                const cols = grid.getColumns()
-                updateLabels(cols)
-                grid.setColumns(cols)
-            })
+            store.watch("lang", () => grid?.refreshColumns())
 
             store.watch("statsRelative", () => {
                 $scope.statsRelative = store.statsRelative
@@ -269,14 +261,13 @@ angular.module("korpApp").component("statistics", {
                     corpusListing = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
                 }
 
-                if ("columns" in changeObj && $ctrl.columns) {
-                    updateLabels($ctrl.columns)
-
+                if ("data" in changeObj && $ctrl.data) {
                     grid = new StatisticsGrid(
                         $("#myGrid").get(0)!,
                         $ctrl.data,
-                        $ctrl.columns,
-                        () => store.lang,
+                        corpusListing.corpora.map((corpus) => corpus.id.toUpperCase()),
+                        $ctrl.searchParams.reduceVals,
+                        store,
                         showPieChart,
                         onAttrValueClick
                     )
@@ -302,12 +293,6 @@ angular.module("korpApp").component("statistics", {
                 if ("rowCount" in changeObj && $ctrl.rowCount) {
                     $scope.clipped = !!settings["statistics_limit"] && $ctrl.rowCount >= settings["statistics_limit"]
                 }
-            }
-
-            function updateLabels(cols: SlickgridColumn[]) {
-                cols.forEach((col) => {
-                    if (col.translation) col.name = locObj(col.translation, store.lang)
-                })
             }
 
             store.watch("corpus", () => {

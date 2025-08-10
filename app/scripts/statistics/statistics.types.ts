@@ -13,10 +13,6 @@ export type StatisticsProcessed = {
     params: SearchParams
 }
 
-export type SlickgridColumn = Slick.Column<Dataset> & {
-    translation?: LangString
-}
-
 export type SearchParams = {
     reduceVals: string[]
     ignoreCase: boolean

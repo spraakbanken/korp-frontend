@@ -4,12 +4,12 @@ import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
 import { RootScope } from "@/root-scope.types"
-import { Dataset, SearchParams, SlickgridColumn } from "@/statistics.types"
+import { Dataset, SearchParams } from "@/statistics/statistics.types"
 import { html } from "@/util"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/statistics"
-import { createColumns, statisticsService } from "@/statistics"
+import { processStatisticsResult } from "@/statistics/statistics"
 import { StoreService } from "@/services/store"
 
 type ResultsStatisticsController = IController & {
@@ -21,7 +21,6 @@ type ResultsStatisticsController = IController & {
 type ResultsStatisticsScope = IScope & {
     aborted: boolean
     rowCount: number
-    columns: SlickgridColumn[]
     /** Last submitted cqp */
     cqp: string
     data: Dataset
@@ -31,7 +30,7 @@ type ResultsStatisticsScope = IScope & {
     showStatistics: boolean
     warning?: string
     makeRequest: (cqp: string) => void
-    renderResult: (columns: SlickgridColumn[], data: Dataset) => void
+    renderResult: (data: Dataset) => void
     resetView: () => void
     resultError: (err: any) => void
 }
@@ -40,7 +39,6 @@ angular.module("korpApp").component("resultsStatistics", {
     template: html`
         <statistics
             aborted="aborted"
-            columns="columns"
             data="data"
             error="error"
             loading="$ctrl.loading"
@@ -147,21 +145,14 @@ angular.module("korpApp").component("resultsStatistics", {
                         onProgress: (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)),
                     })
                     .then(async (data) => {
-                        const columns = createColumns(store, Object.keys(data.corpora), attrs)
-
-                        const { rows, params } = await statisticsService.processData(
-                            corpora,
-                            data,
-                            attrs,
-                            ignoreCase,
-                            cqp
-                        )
+                        const { rows, params } = await processStatisticsResult(corpora, data, attrs, ignoreCase, cqp)
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)
                             s.data = rows
                             s.searchParams = params
                             s.rowCount = data.count
-                            s.renderResult(columns, rows)
+
+                            if (data.combined.sums.absolute == 0) s.warning = "no_stats_results"
                         })
                     })
                     .catch((error) => {
@@ -174,17 +165,6 @@ angular.module("korpApp").component("resultsStatistics", {
                             s.error = error
                         })
                     })
-            }
-
-            s.renderResult = (columns, data) => {
-                s.columns = columns
-
-                if (data[0].total[0] === 0) {
-                    s.warning = "no_stats_results"
-                    return
-                }
-
-                $ctrl.setProgress(false, 0)
             }
         },
     ],

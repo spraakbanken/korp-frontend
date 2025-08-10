@@ -6,7 +6,7 @@ import { RootScope } from "@/root-scope.types"
 import "@/../styles/map.scss"
 import { AppSettings } from "@/settings/app-settings.types"
 import { MarkerData, MarkerEvent, MarkerGroup } from "@/map"
-import { StatisticsMap } from "@/statistics-map"
+import { StatisticsMap } from "@/statistics/statistics-map"
 
 type ResultMapController = IController & {
     center: AppSettings["map_center"]

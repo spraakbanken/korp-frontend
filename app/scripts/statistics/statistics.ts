@@ -1,7 +1,12 @@
 /** @format */
+import _ from "lodash"
 import settings from "@/settings"
-import { regescape, splitFirst } from "@/util"
-import { locAttribute } from "@/i18n"
+import { CountsMerged } from "@/backend/types/count"
+import { Dataset, isTotalRow, StatisticsWorkerMessage, StatisticsProcessed, SearchParams } from "./statistics.types"
+import { fromKeys, regescape, splitFirst } from "@/util"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { loc, locAttribute, locObj } from "@/i18n"
+import CSV from "comma-separated-values/csv"
 import { CorpusListing } from "@/corpus_listing"
 import { Lemgram } from "@/lemgram"
 import { Saldo } from "@/saldo"
@@ -14,6 +19,64 @@ try {
     customFunctions = require("custom/statistics.js").default
 } catch (error) {
     console.log("No module for statistics functions available")
+}
+
+export function processStatisticsResult(
+    originalCorpora: string,
+    data: CountsMerged,
+    reduceVals: string[],
+    ignoreCase: boolean,
+    prevNonExpandedCQP: string
+): Promise<StatisticsProcessed> {
+    const corpora = Object.keys(data.corpora)
+    const cl = settings.corpusListing.subsetFactory(corpora)
+
+    // Get stringifiers for formatting attribute values
+    const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, cl))
+
+    const params: SearchParams = {
+        reduceVals,
+        ignoreCase,
+        originalCorpora,
+        corpora,
+        prevNonExpandedCQP,
+    }
+
+    // Delegate stats processing to a Web Worker for performance
+    const worker = new Worker(new URL("./statistics_worker", import.meta.url))
+
+    worker.postMessage({
+        type: "korpStatistics",
+        data,
+        // Worker code cannot import settings
+        groupStatistics: settings.group_statistics,
+    } satisfies StatisticsWorkerMessage)
+
+    // Return a promise that resolves when the worker is done
+    return new Promise((resolve) => {
+        worker.onmessage = (e: MessageEvent<Dataset>) => {
+            // Terminate worker to free up resources
+            worker.terminate()
+            const rows = e.data
+
+            // Format the values of the attributes we are reducing by
+            for (const row of rows) {
+                if (isTotalRow(row)) continue
+                for (const attr of reduceVals) {
+                    const words = row.statsValues.map((word) => word[attr]?.[0]).filter(Boolean)
+                    row.formattedValue[attr] = stringifiers[attr](words)
+                }
+            }
+
+            let processed: StatisticsProcessed = { rows, params }
+
+            if (settings["statistics_postprocess"]) {
+                processed = settings["statistics_postprocess"](processed)
+            }
+
+            resolve(processed)
+        }
+    })
 }
 
 export function getCqp(hitValues: Record<string, string[]>[], ignoreCase: boolean): string {
@@ -68,7 +131,7 @@ function mergeRegex(values: string[]): string {
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-export function reduceStringify(name: string, cl?: CorpusListing): (values: string[]) => string {
+function reduceStringify(name: string, cl?: CorpusListing): (values: string[]) => string {
     cl ??= settings.corpusListing
     const attr = cl.getReduceAttrs()[name]
 
@@ -90,4 +153,28 @@ export function reduceStringify(name: string, cl?: CorpusListing): (values: stri
     const transform = (value: string) => transforms.reduce((acc, f) => f(acc), value)
     // Join with spaces and then squash redundant and surrounding space.
     return (values) => values.map(transform).join(" ").trim().replace(/\s+/g, " ")
+}
+
+export function createStatisticsCsv(
+    data: Dataset,
+    attrs: string[],
+    corpora: CorpusTransformed[],
+    frequencyType: string,
+    csvType: string,
+    lang?: string
+): string {
+    const delimiter = csvType == "tsv" ? "\t" : ";"
+    const frequencyIndex = frequencyType == "absolute" ? 0 : 1
+    const corpusTitles = corpora.map((corpus) => locObj(corpus.title, lang))
+    const header = [...attrs, loc("stats_total", lang), ...corpusTitles]
+
+    const output = data.map((row) => {
+        // One cell per grouped attribute
+        // TODO Should isPhraseLevelDisjunction be handled here?
+        const attrValues = attrs.map((attr) => (isTotalRow(row) ? "Σ" : row.plainValue[attr]))
+        const frequencies = corpora.map((corpus) => row.count[corpus.id.toUpperCase()][frequencyIndex])
+        return [...attrValues, row.total[frequencyIndex], ...frequencies]
+    })
+
+    return CSV.encode(output, { header, delimiter })
 }

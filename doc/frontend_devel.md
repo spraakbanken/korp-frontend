@@ -601,7 +601,7 @@ Add `my_key` to `<configDir>/translations/corpora-<lang>.json` for all `lang`.
 [Deprecation warning] Before the Angular approach we used the `rel` attribute, like so (but you shouldn't any more):
   `<span rel="localize[translation_key]">...</span>`
 
-#### Components
+### Components
 
 Define your own components as a map in `custom/components.js`. `component` will be added as a component with name `componentName` to the Angular app.
 
@@ -620,7 +620,7 @@ These can then be used in other custom components / extended / sidebar or as rea
 Remember that in Angular, if you use `myComponentName` as a name of a component, you must use 
 `my-component-name` when using the component in markup.
 
-#### Customizing extended search
+### Customizing extended search
 
 In `custom/extended.js`, we can define custom (non-Angular) components to be used in extended search:
 
@@ -658,7 +658,7 @@ attributes: {
 }
 ```
 
-##### Customizing sidebar
+### Customizing sidebar
 
 In `custom/sidebar.js`, we can define custom components to be used in the sidebar:
 
@@ -693,7 +693,7 @@ Data about the search, the current token and current attribute is stored in a nu
 
 *Note: The component not an actual Angular.js [component](https://docs.angularjs.org/guide/component). It will be added to the interface by manually creating a new scope and using `$controller` to instantiate the controller and `$compile` to instantiate the template.*
 
-#### Rendering attribute values in the statistics view
+### Rendering attribute values in the statistics view
 
 Define your own rules for rendering values and generating CQP-expressions for certain attributes.
 
@@ -717,12 +717,9 @@ export default {
 }
 ```
 
-Rendering values and generating CQP can also be controlled by editing `app/config/statistics_config.js`, but 
-of course it is best to avoid editing the actual code if it is possible.
-
 If you need to merge rows or otherwise alter the table structure, you can extend the `StatsProxy` class and do `statsProxyFactory.setClass(MyStatsProxy)`.
 
-#### Stringify functions
+### Stringify functions
 
 Add all custom pretty-printing to `custom/stringify.js`. Example file:
 

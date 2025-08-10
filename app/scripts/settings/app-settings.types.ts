@@ -7,7 +7,7 @@ import { Labeled, LangString } from "@/i18n/types"
 import { Attribute } from "./config.types"
 import { HashParams } from "@/urlparams"
 import { OperatorKorp } from "@/cqp_parser/cqp.types"
-import { StatisticsProcessed } from "@/statistics.types"
+import { StatisticsProcessed } from "@/statistics/statistics.types"
 
 export type AppSettings = {
     auth_module?: string | { module: string; options: Record<string, any> }
