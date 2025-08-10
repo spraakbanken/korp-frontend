@@ -125,8 +125,7 @@ export async function requestMapData(
     Object.keys(cqpExprs).map((cqp, i) => (params[`subcqp${i}`] = cqp))
 
     const data = await korpRequest("count", params)
-
-    const normalizedData = normalizeStatsData(data) as any // TODO Type correctly
+    const normalizedData = normalizeStatsData(data)
     let result = parseMapData(normalizedData, cqp, cqpExprs)
     return { corpora: attribute.corpora, cqp, within: defaultWithin, data: result, attribute }
 }

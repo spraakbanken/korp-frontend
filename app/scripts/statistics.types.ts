@@ -1,11 +1,10 @@
 /** @format*/
-// TODO: Merge with @/interfaces/stats.ts
-import { StatsNormalized } from "./backend/stats-proxy"
-import { LangString } from "./i18n/types"
+import { CountsSplit } from "@/backend/types/count"
+import { LangString } from "@/i18n/types"
 
 export type StatisticsWorkerMessage = {
     type: "korpStatistics"
-    data: StatsNormalized
+    data: CountsSplit
     groupStatistics: string[]
 }
 

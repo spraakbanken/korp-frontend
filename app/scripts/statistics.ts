@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { reduceStringify } from "../config/statistics_config"
-import { StatsNormalized } from "./backend/stats-proxy"
+import { CountsSplit } from "@/backend/types/count"
 import {
     Dataset,
     isTotalRow,
@@ -13,8 +13,8 @@ import {
     SlickgridColumn,
 } from "./statistics.types"
 import { formatFrequency, fromKeys } from "@/util"
-import { locObj } from "./i18n"
-import { StoreService } from "./services/store"
+import { locObj } from "@/i18n"
+import { StoreService } from "@/services/store"
 
 /** Create SlickGrid column definitions for statistics data. */
 export function createColumns(store: StoreService, corpora: string[], attrs: string[]): SlickgridColumn[] {
@@ -85,7 +85,7 @@ export function createColumns(store: StoreService, corpora: string[], attrs: str
 const createStatisticsService = function () {
     function processData(
         originalCorpora: string,
-        data: StatsNormalized,
+        data: CountsSplit,
         reduceVals: string[],
         ignoreCase: boolean,
         prevNonExpandedCQP: string

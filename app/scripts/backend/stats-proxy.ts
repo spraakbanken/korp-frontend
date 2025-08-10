@@ -3,23 +3,16 @@ import _ from "lodash"
 import settings from "@/settings"
 import type { ProgressHandler } from "@/backend/types"
 import { Factory } from "@/util"
-import { CountParams, CountResponse, StatsColumn } from "./types/count"
+import { CountParams, CountResponse, CountsSplit } from "./types/count"
 import { korpRequest } from "./common"
 import BaseProxy from "./base-proxy"
-/** Like `CountResponse` but the stats are necessarily arrays. */
-export type StatsNormalized = CountResponse & {
-    corpora: {
-        [name: string]: StatsColumn[]
-    }
-    combined: StatsColumn[]
-}
 
 /**
  * Stats in the response can be split by subqueries if the `subcqp#` param is used, but otherwise not.
  *
  * This function adds a split (converts non-arrays to single-element arrays) if not, so higher code can assume the same shape regardless.
  */
-export function normalizeStatsData(data: CountResponse): StatsNormalized {
+export function normalizeStatsData(data: CountResponse): CountsSplit {
     const combined = Array.isArray(data.combined) ? data.combined : [data.combined]
     const corpora = _.mapValues(data.corpora, (stats) => (Array.isArray(stats) ? stats : [stats]))
     return { ...data, combined, corpora }
@@ -32,7 +25,7 @@ export class StatsProxy extends BaseProxy {
         cqp: string,
         attrs: string[],
         options: { defaultWithin?: string; ignoreCase?: boolean; onProgress?: ProgressHandler<"count"> } = {}
-    ): Promise<StatsNormalized> {
+    ): Promise<CountsSplit> {
         const { ignoreCase, onProgress } = options
         this.resetRequest()
         const abortSignal = this.abortController.signal

@@ -2,8 +2,7 @@
 import groupBy from "lodash/groupBy"
 import mapValues from "lodash/mapValues"
 import sumBy from "lodash/sumBy"
-import type { RowsEntity } from "./interfaces/stats"
-import type { StatsRow } from "./backend/types/count"
+import type { StatsRow } from "@/backend/types/count"
 import type { AbsRelSeq, Dataset, SingleRow, TotalRow, StatisticsWorkerMessage } from "./statistics.types"
 
 /*
@@ -35,7 +34,7 @@ onmessage = function (e) {
      * it removes suffixes `:<rank/numbering>` from
      * attributes that are in `group_statistics` in config.yml
      */
-    const simplifyHitString = (item: RowsEntity): string =>
+    const simplifyHitString = (item: StatsRow): string =>
         Object.entries(item.value)
             .map(([attr, values]) => simplifyValue(values, attr))
             .join("/")

@@ -1,11 +1,9 @@
 /** @format */
 import L from "leaflet"
-import { InnerData, StatsData } from "@/interfaces/stats"
 import { html } from "@/util"
-import { MapRequestResult } from "./backend/backend"
-import settings from "./settings"
-import { pick } from "lodash"
-import { CorpusTransformed } from "./settings/config-transformed.types"
+import { MapRequestResult } from "@/backend/backend"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { CountsSplit, StatsColumn } from "@/backend/types/count"
 
 export type MarkerGroup = {
     selected: boolean
@@ -112,7 +110,7 @@ export function getGeoAttributes(corpora: CorpusTransformed[]) {
     return attributes
 }
 
-export function parseMapData(data: StatsData, cqp: string, cqpExprs: Record<string, string>): MapResult[] {
+export function parseMapData(data: CountsSplit, cqp: string, cqpExprs: Record<string, string>): MapResult[] {
     const { combined } = data
 
     let result: MapResult[] = []
@@ -133,7 +131,7 @@ export function parseMapData(data: StatsData, cqp: string, cqpExprs: Record<stri
     return result
 }
 
-function getPointsFromObj(obj: InnerData): Point[] {
+function getPointsFromObj(obj: StatsColumn): Point[] {
     let points: Point[] = []
     for (const row of obj.rows || []) {
         const value = Object.values(row.value)[0][0]

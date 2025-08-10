@@ -2,7 +2,7 @@
 import CSV from "comma-separated-values/csv"
 import { Dataset, isTotalRow } from "@/statistics.types"
 import { loc, locObj } from "@/i18n"
-import { CorpusTransformed } from "./settings/config-transformed.types"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
 
 export function createStatisticsCsv(
     data: Dataset,
