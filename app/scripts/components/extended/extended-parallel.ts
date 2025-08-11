@@ -8,11 +8,10 @@ import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
-import { getEnabledLangs, getParallelCqp } from "@/parallel/parallel-cqp"
+import { getEnabledLangs, getParallelCqp, ParallelQuery } from "@/parallel/parallel-cqp"
 
 type ExtendedParallelController = IController & {
-    langs: { lang: string; cqp: string }[]
-    negates: boolean[]
+    langs: ParallelQuery[]
     cqpChange: (idx: number) => (cqp: string) => void
     onLangChange: () => void
     getEnabledLangs: (i?: number) => string[]
@@ -37,7 +36,7 @@ angular.module("korpApp").component("extendedParallel", {
                     for="negate_chk{{$index}}"
                     >{{"not_containing" | loc:$root.lang}}</label
                 >
-                <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="$ctrl.negates[$index]" />
+                <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="l.negate" />
                 <extended-tokens
                     cqp="l.cqp"
                     cqp-change="$ctrl.cqpChange($index)(cqp)"
@@ -83,17 +82,11 @@ angular.module("korpApp").component("extendedParallel", {
 
             store.watch("corpus", () => ctrl.onLangChange())
 
-            ctrl.negates = []
+            const newLang = (lang = settings.start_lang!, cqp = "[]") => ({ lang, cqp, negate: false })
 
-            const langs = store.parallel_corpora
-            if (langs.length) {
-                ctrl.langs = langs.map((lang) => ({
-                    lang,
-                    cqp: store.cqpParallel[lang] || "[]",
-                }))
-            } else {
-                ctrl.langs = [{ lang: settings.start_lang!, cqp: "[]" }]
-            }
+            ctrl.langs = store.parallel_corpora.length
+                ? store.parallel_corpora.map((lang) => newLang(lang, store.cqpParallel[lang] || "[]"))
+                : [newLang()]
 
             ctrl.cqpChange = (idx) => (cqp) => {
                 if (ctrl.langs[idx].cqp != cqp) {
@@ -103,8 +96,7 @@ angular.module("korpApp").component("extendedParallel", {
             }
 
             function updateCqp() {
-                const queries = ctrl.langs.map((query, i) => ({ ...query, negate: ctrl.negates[i] }))
-                store.extendedCqp = getParallelCqp(queries)
+                store.extendedCqp = getParallelCqp(ctrl.langs)
 
                 store.cqpParallel = {}
                 for (const { lang, cqp } of ctrl.langs) {
@@ -138,7 +130,7 @@ angular.module("korpApp").component("extendedParallel", {
             ctrl.getEnabledLangs = (i) => getEnabledLangs(ctrl.langs, i)
 
             ctrl.addLangRow = function () {
-                ctrl.langs.push({ lang: ctrl.getEnabledLangs()[0], cqp: "[]" })
+                ctrl.langs.push(newLang(ctrl.getEnabledLangs()[0]))
                 ctrl.onLangChange()
                 updateCqp()
             }

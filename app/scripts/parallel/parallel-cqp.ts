@@ -4,7 +4,13 @@ import settings from "@/settings"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { expandOperators } from "@/cqp_parser/cqp"
 
-export function getParallelCqp(queries: { lang: string; cqp: string; negate: boolean }[]) {
+export type ParallelQuery = {
+    lang: string
+    cqp: string
+    negate: boolean
+}
+
+export function getParallelCqp(queries: ParallelQuery[]) {
     const corpusListing = settings.corpusListing as ParallelCorpusListing
     const langs = queries.map((query) => query.lang)
     const linkedCorpora = corpusListing.getLinksFromLangs(langs).flat(2)
@@ -34,7 +40,7 @@ function expand(cqp: string) {
     }
 }
 
-export function getEnabledLangs(queries: { lang: string; cqp: string }[], i?: number) {
+export function getEnabledLangs(queries: ParallelQuery[], i?: number) {
     const corpusListing = settings.corpusListing as ParallelCorpusListing
 
     function getLinkedLangs(lang: string) {
