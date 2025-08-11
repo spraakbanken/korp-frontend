@@ -8,7 +8,7 @@ import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
-import { getParallelCqp } from "@/parallel/parallel-cqp"
+import { getEnabledLangs, getParallelCqp } from "@/parallel/parallel-cqp"
 
 type ExtendedParallelController = IController & {
     langs: { lang: string; cqp: string }[]
@@ -135,29 +135,7 @@ angular.module("korpApp").component("extendedParallel", {
                 }
             }
 
-            const enabledLangsHelper = function (lang: string) {
-                return _(corpusListing.getLinksFromLangs([lang]))
-                    .flatten()
-                    .map("lang")
-                    .uniq()
-                    .value()
-            }
-
-            ctrl.getEnabledLangs = function (i) {
-                if (i === 0) {
-                    ctrl.langs[0].lang ??= settings.start_lang!
-                    return enabledLangsHelper(settings.start_lang!)
-                }
-                var currentLangList = _.map(ctrl.langs, "lang")
-                if (i != undefined) delete currentLangList[i]
-                const firstlang = ctrl.langs[0]?.lang || settings.start_lang!
-                var other = enabledLangsHelper(firstlang)
-                var langResult = _.difference(other, currentLangList)
-                if (i != undefined && ctrl.langs[i] && !ctrl.langs[i].lang) {
-                    ctrl.langs[i].lang = langResult[0]
-                }
-                return langResult
-            }
+            ctrl.getEnabledLangs = (i) => getEnabledLangs(ctrl.langs, i)
 
             ctrl.addLangRow = function () {
                 ctrl.langs.push({ lang: ctrl.getEnabledLangs()[0], cqp: "[]" })
