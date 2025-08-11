@@ -3,7 +3,6 @@ import angular from "angular"
 import settings from "@/settings"
 import { RootScope } from "@/root-scope.types"
 import { UtilsService } from "@/services/utils"
-import { Attribute } from "@/settings/config.types"
 import { CqpQuery } from "@/cqp_parser/cqp.types"
 import { getLocData } from "@/loc-data"
 import { getAllCorporaInFolders } from "@/corpus-chooser"
@@ -35,8 +34,6 @@ export type Store = {
     extendedCqp?: string
     /** CQP fragment built from selected filter values. */
     globalFilter?: CqpQuery
-    /** Filter data by attribute name */
-    globalFilterData: Record<string, FilterData>
     /** A simple attribute–values structure of selected filters. */
     global_filter: Record<string, string[]>
     /** Hits per page */
@@ -83,14 +80,6 @@ export type Store = {
     within?: string
 }
 
-export type FilterData = {
-    attribute: Attribute
-    /** Selected values */
-    value: string[]
-    /** Sorted list of options with counts */
-    options: [string, number][]
-}
-
 export type StoreBase = {
     get: <K extends keyof Store>(key: K) => Store[K]
     set: <K extends keyof Store>(key: K, value: Store[K]) => void
@@ -119,7 +108,6 @@ angular.module("korpApp").factory("store", [
         rootScopeStore.corpus = []
         rootScopeStore.cqp = "[]"
         rootScopeStore.cqpParallel = {}
-        rootScopeStore.globalFilterData = {}
         rootScopeStore.global_filter = {}
         rootScopeStore.hpp = settings["hits_per_page_default"]
         rootScopeStore.in_order = true
