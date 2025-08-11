@@ -2,13 +2,13 @@
 import angular, { IController, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import { expandOperators } from "@/cqp_parser/cqp"
 import { html, LocationService } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
+import { getParallelCqp } from "@/parallel/parallel-cqp"
 
 type ExtendedParallelController = IController & {
     langs: { lang: string; cqp: string }[]
@@ -98,47 +98,18 @@ angular.module("korpApp").component("extendedParallel", {
             ctrl.cqpChange = (idx) => (cqp) => {
                 if (ctrl.langs[idx].cqp != cqp) {
                     ctrl.langs[idx].cqp = cqp
-                    onCQPChange()
+                    updateCqp()
                 }
             }
 
-            const onCQPChange = () => {
-                const currentLangList = _.map(ctrl.langs, "lang")
-                var struct = corpusListing.getLinksFromLangs(currentLangList)
-                function getLangMapping(excludeLangs: string[]) {
-                    return _(struct)
-                        .flatten()
-                        .filter(function (item) {
-                            return !_.includes(excludeLangs, item.lang)
-                        })
-                        .groupBy("lang")
-                        .value()
-                }
-                function expandCQP(cqp: string) {
-                    try {
-                        return expandOperators(cqp)
-                    } catch (e) {
-                        console.log("parallel cqp parsing error", e)
-                        return cqp
-                    }
-                }
-
-                var output = expandCQP(ctrl.langs[0].cqp)
-
-                output += _.map(ctrl.langs.slice(1), function (langobj, i) {
-                    const langMapping = getLangMapping(currentLangList.slice(0, i + 1))
-                    const linkedCorpus = _(langMapping[langobj.lang]).map("id").invokeMap("toUpperCase").join("|")
-                    const expanded = expandCQP(langobj.cqp)
-                    const neg = ctrl.negates[i + 1] ? "!" : ""
-                    return ":LINKED_CORPUS:" + linkedCorpus + " " + neg + " " + expanded
-                }).join("")
+            function updateCqp() {
+                const queries = ctrl.langs.map((query, i) => ({ ...query, negate: ctrl.negates[i] }))
+                store.extendedCqp = getParallelCqp(queries)
 
                 store.cqpParallel = {}
                 for (const { lang, cqp } of ctrl.langs) {
                     if (lang) store.cqpParallel[lang] = cqp
                 }
-                store.extendedCqp = output
-                return output
             }
 
             ctrl.onLangChange = function () {
@@ -149,7 +120,8 @@ angular.module("korpApp").component("extendedParallel", {
 
             ctrl.onSubmit = function () {
                 $location.replace()
-                store.search = `cqp|${onCQPChange()}`
+                updateCqp()
+                store.search = `cqp|${store.extendedCqp}`
                 store.page = 0
                 matomoSend("trackEvent", "Search", "Submit search", "Extended")
                 searches.doSearch()
@@ -190,13 +162,13 @@ angular.module("korpApp").component("extendedParallel", {
             ctrl.addLangRow = function () {
                 ctrl.langs.push({ lang: ctrl.getEnabledLangs()[0], cqp: "[]" })
                 ctrl.onLangChange()
-                onCQPChange()
+                updateCqp()
             }
 
             ctrl.removeLangRow = function () {
                 ctrl.langs.pop()
                 ctrl.onLangChange()
-                onCQPChange()
+                updateCqp()
             }
         },
     ],
