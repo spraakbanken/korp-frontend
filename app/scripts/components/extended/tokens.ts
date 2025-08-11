@@ -2,14 +2,13 @@
 import angular, { IController } from "angular"
 import "components-jqueryui/ui/widgets/sortable.js"
 import "angular-ui-sortable/src/sortable"
-import { parse, stringify } from "@/cqp_parser/cqp"
+import { createCondition, parse, stringify } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import "@/components/extended/token"
 import "@/components/extended/struct-token"
 import "@/components/extended/add-box"
 import "@/directives/scroll-to-start"
 import { CqpQuery, CqpToken } from "@/cqp_parser/cqp.types"
-import { createDefaultCondition } from "./util"
 
 type ExtendedTokensController = IController & {
     cqp: string
@@ -95,7 +94,7 @@ angular.module("korpApp").component("extendedTokens", {
             ctrl.data = parse(ctrl.cqp || "[]")
 
             ctrl.addToken = function () {
-                const token: CqpToken = { and_block: [[createDefaultCondition()]] }
+                const token: CqpToken = { and_block: [[createCondition()]] }
                 ctrl.data.push(token)
                 ctrl.change()
             }

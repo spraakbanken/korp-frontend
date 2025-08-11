@@ -218,3 +218,5 @@ export const hasStruct = (cqpObjs: CqpQuery) => cqpObjs.some((token) => token.st
 /** Determine whether a query will work with the in_order option */
 export const supportsInOrder = (cqpObjs: CqpQuery) =>
     cqpObjs.length > 1 && !hasWildcard(cqpObjs) && !hasRepetition(cqpObjs) && !hasStruct(cqpObjs)
+
+export const createCondition = (val = ""): Condition => ({ type: "word", op: "=", val })

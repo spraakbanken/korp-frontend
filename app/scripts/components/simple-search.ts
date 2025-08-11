@@ -3,7 +3,7 @@ import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
-import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
+import { createCondition, expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html, LocationService, regescape, unregescape } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/backend/lexicons"
@@ -179,12 +179,8 @@ angular.module("korpApp").component("simpleSearch", {
                         let value = regescape(word)
                         if ($scope.prefix) value = `${value}.*`
                         if ($scope.suffix) value = `.*${value}`
-                        const condition: Condition = {
-                            type: "word",
-                            op: "=",
-                            val: value,
-                            flags: ctrl.isCaseInsensitive ? { c: true } : {},
-                        }
+                        const condition = createCondition(value)
+                        if (ctrl.isCaseInsensitive) condition.flags = { c: true }
                         query.push({ and_block: [[condition]] })
                     })
                 } else if (ctrl.lemgram) {

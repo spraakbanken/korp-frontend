@@ -4,7 +4,7 @@ import { clamp } from "lodash"
 import { html } from "@/util"
 import "@/components/extended/and-token"
 import { CqpToken } from "@/cqp_parser/cqp.types"
-import { createDefaultCondition } from "./util"
+import { createCondition } from "@/cqp_parser/cqp"
 
 type ExtendedTokenController = IController & {
     showClose: boolean
@@ -115,7 +115,7 @@ angular.module("korpApp").component("extendedToken", {
             ctrl.max = MAX
 
             ctrl.addAnd = () => {
-                ctrl.token.and_block.push([createDefaultCondition()])
+                ctrl.token.and_block.push([createCondition()])
                 ctrl.change()
             }
 
