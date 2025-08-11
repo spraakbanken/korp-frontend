@@ -6,13 +6,12 @@ import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html, LocationService } from "@/util"
 import { matomoSend } from "@/matomo"
-import "@/services/compare-searches"
 import "@/components/extended/tokens"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
-import { CompareSearches } from "@/services/compare-searches"
 import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
+import { savedSearches } from "@/saved-searches"
 
 type ExtendedStandardController = IController & {
     cqp: string
@@ -72,14 +71,12 @@ angular.module("korpApp").component("extendedStandard", {
         "$location",
         "$scope",
         "$timeout",
-        "compareSearches",
         "searches",
         "store",
         function (
             $location: LocationService,
             $scope: ExtendedStandardScope,
             $timeout: ITimeoutService,
-            compareSearches: CompareSearches,
             searches: SearchesService,
             store: StoreService
         ) {
@@ -125,7 +122,7 @@ angular.module("korpApp").component("extendedStandard", {
 
             ctrl.onSearchSave = (name: string) => {
                 if (!store.extendedCqp) throw new ReferenceError("Extended CQP not set")
-                compareSearches.saveSearch(name, store.extendedCqp)
+                savedSearches.push(name, store.extendedCqp)
             }
 
             ctrl.cqpChange = (cqp: string) => {

@@ -3,18 +3,16 @@ import angular, { IController, IQService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import "@/backend/backend"
-import "@/services/compare-searches"
 import { html, valfilter } from "@/util"
 import { requestCompare } from "@/backend/backend"
 import { RootScope } from "@/root-scope.types"
-import { CompareSearches } from "@/services/compare-searches"
 import { SavedSearch } from "@/local-storage"
 import { AttributeOption } from "@/corpus_listing"
+import { savedSearches } from "@/saved-searches"
 
 type CompareSearchController = IController & {
     valfilter: typeof valfilter
     savedSearches: SavedSearch[]
-    $doCheck: () => void
     cmp1: SavedSearch
     cmp2: SavedSearch
     updateAttributes: () => void
@@ -64,21 +62,24 @@ angular.module("korpApp").component("compareSearch", {
     controller: [
         "$q",
         "$rootScope",
-        "compareSearches",
-        function ($q: IQService, $rootScope: RootScope, compareSearches: CompareSearches) {
+        function ($q: IQService, $rootScope: RootScope) {
             const $ctrl = this as CompareSearchController
 
+            $ctrl.reduce = "word"
             $ctrl.valfilter = valfilter
 
-            let prev: SavedSearch[]
-            $ctrl.savedSearches = compareSearches.savedSearches
-            $ctrl.$doCheck = () => {
-                if (!_.isEqual(prev, compareSearches.savedSearches)) {
-                    $ctrl.cmp1 = compareSearches.savedSearches[0]
-                    $ctrl.cmp2 = compareSearches.savedSearches[1]
+            $ctrl.$onInit = () => {
+                updateSavedSearches()
+                savedSearches.listen(() => updateSavedSearches())
+            }
+
+            function updateSavedSearches() {
+                const searches = savedSearches.list()
+                if (!_.isEqual($ctrl.savedSearches, searches)) {
+                    $ctrl.savedSearches = searches
+                    $ctrl.cmp1 = searches[0]
+                    $ctrl.cmp2 = searches[1]
                     $ctrl.updateAttributes()
-                    prev = Array.from(compareSearches.savedSearches)
-                    $ctrl.savedSearches = prev
                 }
             }
 
@@ -89,12 +90,10 @@ angular.module("korpApp").component("compareSearch", {
                 }
             }
 
-            $ctrl.reduce = "word"
-
             $ctrl.sendCompare = () =>
                 $rootScope.compareTabs.push($q.resolve(requestCompare($ctrl.cmp1, $ctrl.cmp2, [$ctrl.reduce])))
 
-            $ctrl.deleteCompares = () => compareSearches.flush()
+            $ctrl.deleteCompares = () => savedSearches.clear()
         },
     ],
 })

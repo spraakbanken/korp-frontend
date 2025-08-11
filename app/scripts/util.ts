@@ -100,6 +100,16 @@ export class Factory<T extends new (...args: any) => InstanceType<T>> {
     }
 }
 
+export abstract class Observable {
+    private listeners: Array<() => void> = []
+    listen(cb: () => void) {
+        this.listeners.push(cb)
+    }
+    protected notify() {
+        this.listeners.forEach((cb) => cb())
+    }
+}
+
 /** Create a Moment that uses the date from one Date object and the time from another. */
 export function combineDateTime(date: Date, time: Date): Moment {
     const m = moment(moment(date).format("YYYY-MM-DD"))

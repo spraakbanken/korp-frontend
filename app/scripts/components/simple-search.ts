@@ -6,17 +6,16 @@ import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html, LocationService, regescape, unregescape } from "@/util"
 import { matomoSend } from "@/matomo"
-import "@/services/compare-searches"
 import "@/backend/lexicons"
 import "@/services/searches"
 import "@/components/autoc"
 import "@/components/related-words"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
-import { CompareSearches } from "@/services/compare-searches"
 import { SearchesService } from "@/services/searches"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
+import { savedSearches } from "@/saved-searches"
 
 type SimpleSearchController = IController & {
     input: string
@@ -118,14 +117,12 @@ angular.module("korpApp").component("simpleSearch", {
         "$location",
         "$scope",
         "$timeout",
-        "compareSearches",
         "searches",
         "store",
         function (
             $location: LocationService,
             $scope: SimpleSearchScope,
             $timeout: ITimeoutService,
-            compareSearches: CompareSearches,
             searches: SearchesService,
             store: StoreService
         ) {
@@ -207,7 +204,7 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             ctrl.onSearchSave = (name) => {
-                compareSearches.saveSearch(name, ctrl.getCQP())
+                savedSearches.push(name, ctrl.getCQP())
             }
 
             store.watch("activeSearch", () => {

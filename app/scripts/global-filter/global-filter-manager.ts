@@ -5,7 +5,7 @@ import { RecursiveRecord } from "@/backend/types/attr-values"
 import { Condition } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
 import { Attribute } from "@/settings/config.types"
-import { regescape } from "@/util"
+import { Observable, regescape } from "@/util"
 import settings from "@/settings"
 
 export type FilterData = {
@@ -16,13 +16,14 @@ export type FilterData = {
     options: [string, number][]
 }
 
-export class GlobalFilterManager {
+export class GlobalFilterManager extends Observable {
     attrs: Attribute[]
     data: RecursiveRecord<number>
     filters: Record<string, FilterData> = {}
-    listeners: Array<() => void> = []
 
-    constructor(private store: StoreService) {}
+    constructor(private store: StoreService) {
+        super()
+    }
 
     /** Update filter data to match selected attributes. */
     async update(attrs: Attribute[]) {
@@ -78,10 +79,6 @@ export class GlobalFilterManager {
         const values = mapValues(this.filters, (filter) => filter.value)
         // Skip empty filters.
         return pickBy(values, (vals) => vals.length)
-    }
-
-    listen(callback: () => void) {
-        this.listeners.push(callback)
     }
 
     /** Update filter options' disabled state and counts from current selection. */
@@ -155,9 +152,5 @@ export class GlobalFilterManager {
     private createCondition(attr: Attribute, value: string): Condition {
         const op = attr.type === "set" ? "contains" : "="
         return { type: `_.${attr.name}`, op, val: regescape(value) }
-    }
-
-    private notify() {
-        this.listeners.forEach((callback) => callback())
     }
 }
