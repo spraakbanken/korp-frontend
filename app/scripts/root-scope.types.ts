@@ -2,7 +2,8 @@
 import { IPromise, IRootScopeService } from "angular"
 import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CorpusListing } from "./corpus_listing"
-import { CompareResult, MapRequestResult } from "@/backend/backend"
+import { MapRequestResult } from "@/backend/backend"
+import { CompareResult } from "@/backend/compare"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {

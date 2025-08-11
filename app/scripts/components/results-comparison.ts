@@ -7,7 +7,7 @@ import { getStringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
 import { CompareTab, RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { CompareItem, CompareResult, CompareTables } from "@/backend/backend"
+import { CompareItem, CompareResult, CompareTables } from "@/backend/compare"
 import { TabHashScope } from "@/directives/tab-hash"
 import { Attribute } from "@/settings/config.types"
 import "@/components/korp-error"
@@ -80,28 +80,16 @@ angular.module("korpApp").component("resultsComparison", {
 
             function render(result: CompareResult) {
                 $ctrl.setProgress(false, 100)
-                const [tables, max, cmp1, cmp2, reduce] = result
+                const { tables, max, cmp1, cmp2, reduce, stringify } = result
                 $scope.tables = tables
                 $scope.max = max
                 $scope.cmp1 = cmp1
                 $scope.cmp2 = cmp2
                 $scope.reduce = reduce
+                $scope.stringify = stringify
 
                 const cl = settings.corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
                 $scope.attributes = { ...cl.getCurrentAttributes(), ...cl.getStructAttrs() }
-
-                let stringify = (x: string) => x
-                // currently we only support one attribute to reduce/group by, so simplify by only checking first item
-                const reduceAttrName = _.trimStart(reduce[0], "_.")
-                if ($scope.attributes[reduceAttrName]) {
-                    const attribute = $scope.attributes[reduceAttrName]
-                    if (attribute.stringify) {
-                        stringify = getStringifier(attribute.stringify)
-                    } else if (attribute.translation) {
-                        stringify = (value) => locAttribute(attribute.translation, value, store.lang)
-                    }
-                }
-                $scope.stringify = stringify
             }
 
             $scope.rowClick = (row, cmp_index) => {
