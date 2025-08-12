@@ -5,6 +5,7 @@ import { Granularity, NumericString, ProgressHandler } from "@/backend/types"
 import { Factory } from "@/util"
 import { CountTimeParams, CountTimeResponse } from "./types/count-time"
 import { korpRequest } from "./common"
+import { expandCqp } from "@/cqp_parser/cqp"
 
 export class GraphProxy extends BaseProxy {
     granularity: Granularity
@@ -38,7 +39,7 @@ export class GraphProxy extends BaseProxy {
         const abortSignal = this.abortController.signal
 
         const params: CountTimeParams = {
-            cqp: this.expandCQP(cqp),
+            cqp: expandCqp(cqp),
             corpus: corpora,
             granularity: this.granularity,
             incremental: true,

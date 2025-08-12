@@ -2,7 +2,7 @@
 import { difference, groupBy, uniq } from "lodash"
 import settings from "@/settings"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
-import { expandOperators } from "@/cqp_parser/cqp"
+import { expandCqp, expandOperators } from "@/cqp_parser/cqp"
 
 export type ParallelQuery = {
     lang: string
@@ -16,28 +16,19 @@ export function getParallelCqp(queries: ParallelQuery[]) {
     const linkedCorpora = corpusListing.getLinksFromLangs(langs).flat(2)
     const [head, ...tail] = queries
 
-    const headCqp = expand(head.cqp)
+    const headCqp = expandCqp(head.cqp)
     const tailCqps = tail.map((langobj, i) => {
         const prevLangs = langs.slice(0, i)
         const corpora = linkedCorpora.filter((corpus) => !prevLangs.includes(corpus.lang))
         const langMapping = groupBy(corpora, "lang")
         const linkedCorpus = langMapping[langobj.lang].map((corpus) => corpus.id.toUpperCase()).join("|")
 
-        const expanded = expand(langobj.cqp)
+        const expanded = expandCqp(langobj.cqp)
         const neg = langobj.negate ? "!" : ""
         return `:LINKED_CORPUS:${linkedCorpus} ${neg} ${expanded}`
     })
 
     return headCqp + tailCqps.join("")
-}
-
-function expand(cqp: string) {
-    try {
-        return expandOperators(cqp)
-    } catch (e) {
-        console.log("parallel cqp parsing error", e)
-        return cqp
-    }
 }
 
 export function getEnabledLangs(queries: ParallelQuery[], i?: number) {

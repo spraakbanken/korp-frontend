@@ -4,7 +4,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import { downloadFile, html } from "@/util"
 import { locObj } from "@/i18n"
-import { expandOperators } from "@/cqp_parser/cqp"
+import { expandCqp, expandOperators } from "@/cqp_parser/cqp"
 import { requestMapData } from "@/backend/backend"
 import "@/components/corpus-distribution-chart"
 import "@/components/reduce-select"
@@ -380,11 +380,7 @@ angular.module("korpApp").component("statistics", {
                 }
                 $ctrl.noRowsError = false
 
-                let cqp = $ctrl.searchParams.prevNonExpandedCQP
-                try {
-                    cqp = expandOperators(cqp)
-                } catch {}
-
+                const cqp = expandCqp($ctrl.searchParams.prevNonExpandedCQP)
                 const cqpExprs = Object.fromEntries(getSubQueries())
 
                 const selectedAttributes = _.filter($ctrl.mapAttributes, "selected")

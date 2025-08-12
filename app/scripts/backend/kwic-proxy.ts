@@ -6,6 +6,7 @@ import { Factory } from "@/util"
 import { ProgressReport } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
 import { korpRequest } from "./common"
+import { expandCqp } from "@/cqp_parser/cqp"
 
 export class KwicProxy extends BaseProxy {
     prevParams: QueryParams | null
@@ -58,7 +59,7 @@ export class KwicProxy extends BaseProxy {
         }
 
         if (params.cqp) {
-            params.cqp = this.expandCQP(params.cqp)
+            params.cqp = expandCqp(params.cqp)
         }
 
         params.show = _.uniq(["sentence"].concat(show)).join(",")

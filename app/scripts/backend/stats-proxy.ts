@@ -6,6 +6,7 @@ import { Factory } from "@/util"
 import { CountParams, CountResponse, CountsMerged, CountsSplit } from "./types/count"
 import { korpRequest } from "./common"
 import BaseProxy from "./base-proxy"
+import { expandCqp } from "@/cqp_parser/cqp"
 
 export class StatsProxy extends BaseProxy {
     prevParams: CountParams | null = null
@@ -37,7 +38,7 @@ export class StatsProxy extends BaseProxy {
         const params: CountParams = {
             group_by: groupBy.join(),
             group_by_struct: groupByStruct.join(),
-            cqp: this.expandCQP(cqp),
+            cqp: expandCqp(cqp),
             corpus: settings.corpusListing.stringifySelected(true),
             end: settings["statistics_limit"] ? settings["statistics_limit"] - 1 : undefined,
             ignore_case: ignoreCase ? "word" : undefined,

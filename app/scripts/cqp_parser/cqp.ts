@@ -145,6 +145,15 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
 
 export const expandOperators = (cqpstr: string) => stringify(parse<CqpQuery>(cqpstr), true)
 
+export function expandCqp(cqp: string): string {
+    try {
+        return expandOperators(cqp)
+    } catch (e) {
+        console.warn("CQP expansion failed", cqp, e)
+        return cqp
+    }
+}
+
 /**
  * Find first and last date in any date interval conditions.
  * @param obj Syntax tree
