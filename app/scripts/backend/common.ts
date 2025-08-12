@@ -104,3 +104,5 @@ export function parsePartialJson<T = any>(json: string): Partial<T> | undefined 
         return JSON.parse(json.replace(/,\s*$/, "}"))
     } catch {}
 }
+
+export const pageToRange = (page: number, size: number) => ({ start: page * size, end: page * size + size - 1 })

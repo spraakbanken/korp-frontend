@@ -12,6 +12,7 @@ import "@/components/kwic"
 import "@/services/utils"
 import { html } from "@/util"
 import { StoreService } from "@/services/store"
+import { pageToRange } from "@/backend/common"
 
 type ResultsHitsController = IController & {
     isActive: boolean
@@ -125,8 +126,7 @@ angular.module("korpApp").component("resultsHits", {
             }
 
             function buildQueryOptions(isPaging?: boolean): QueryParams {
-                const start = (store.page || 0) * store.hpp
-                const end = start + store.hpp - 1
+                const { start, end } = pageToRange(store.page || 0, store.hpp)
 
                 const avoidContext = $scope.isReading
                     ? settings["default_overview_context"]

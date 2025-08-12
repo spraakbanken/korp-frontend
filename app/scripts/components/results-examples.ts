@@ -8,6 +8,7 @@ import kwicProxyFactory, { KorpQueryRequestOptions, KwicProxy } from "@/backend/
 import "@/components/korp-error"
 import "@/components/kwic"
 import { StoreService } from "@/services/store"
+import { pageToRange } from "@/backend/common"
 
 type ResultsExamplesController = IController & {
     isActive: boolean
@@ -100,36 +101,10 @@ angular.module("korpApp").component("resultsExamples", {
             }
 
             function makeRequest(): void {
-                const opts = $ctrl.queryParams
-                opts.in_order = store.in_order
-
-                // example tab cannot handle incremental = true
-                opts.incremental = false
-
-                opts.start = ($scope.page || 0) * $scope.hitsPerPage
-                opts.end = opts.start + $scope.hitsPerPage - 1
-
-                const preferredContext = $scope.isReading
-                    ? settings["default_reading_context"]
-                    : settings["default_overview_context"]
-                const avoidContext = $scope.isReading
-                    ? settings["default_overview_context"]
-                    : settings["default_reading_context"]
-
-                opts.default_context = preferredContext
-                const corpora = opts.corpus ? opts.corpus.split(",") : []
-                opts.context = settings.corpusListing.getContextQueryStringFromCorpusId(
-                    corpora,
-                    preferredContext,
-                    avoidContext
-                )
-
-                opts.default_within ??= store.within
-                opts.within = settings.corpusListing.getWithinParam(opts.default_within)
-
                 // Abort any running request
                 if ($ctrl.loading) $scope.proxy.abort()
 
+                const opts = getRequestOptions()
                 $ctrl.setProgress(true, 0)
                 $scope.proxy
                     .makeRequest(opts)
@@ -151,6 +126,35 @@ angular.module("korpApp").component("resultsExamples", {
                         $timeout(() => ($scope.error = error))
                     })
                     .finally(() => $timeout(() => $ctrl.setProgress(false, 0)))
+            }
+
+            function getRequestOptions(): KorpQueryRequestOptions {
+                const { start, end } = pageToRange($scope.page || 0, $scope.hitsPerPage)
+                const opts = {
+                    ...$ctrl.queryParams,
+                    in_order: store.in_order,
+                    start,
+                    end,
+                    // example tab cannot handle incremental
+                    incremental: false,
+                }
+
+                const preferredContext = $scope.isReading
+                    ? settings["default_reading_context"]
+                    : settings["default_overview_context"]
+                const avoidContext = $scope.isReading
+                    ? settings["default_overview_context"]
+                    : settings["default_reading_context"]
+                opts.default_context = preferredContext
+                opts.context = settings.corpusListing.getContextQueryStringFromCorpusId(
+                    opts.corpus?.split(",") || [],
+                    preferredContext,
+                    avoidContext
+                )
+
+                opts.default_within ??= store.within
+                opts.within = settings.corpusListing.getWithinParam(opts.default_within)
+                return opts
             }
         },
     ],
