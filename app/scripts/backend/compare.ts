@@ -2,9 +2,10 @@
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
 import { korpRequest } from "./common"
-import { groupBy, sumBy } from "lodash"
+import { groupBy, range, sumBy, uniq, zip } from "lodash"
 import { getStringifier, Stringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
+import { Attribute } from "@/settings/config.types"
 
 export type CompareResult = {
     tables: CompareTables
@@ -105,4 +106,59 @@ export async function requestCompare(cmp1: SavedSearch, cmp2: SavedSearch, reduc
         reduce,
         stringify,
     }
+}
+
+export function buildItemCqp(row: CompareItem, attributes: (Attribute | undefined)[]) {
+    const attrs = attributes.map((attr) => attr?.name || "word")
+    const splitTokens = row.elems.map((elem) => elem.split("/").map((tokens) => tokens.split(" ")))
+
+    // number of tokens in search
+    const tokenLength = splitTokens[0][0].length
+
+    // transform result from grouping on attribute to grouping on token place
+    var tokens = range(0, tokenLength).map((tokenIdx) =>
+        attrs.map((reduceAttr, attrIdx) => uniq(splitTokens.map((res) => res[attrIdx][tokenIdx])))
+    )
+
+    const cqps = tokens.map((token) => {
+        const cqpAnd = range(0, token.length).map((attrI) => {
+            let type: string | undefined
+            let val: string
+            let attrKey = attrs[attrI]
+            const attrVal = token[attrI]
+
+            if (attrKey.includes("_.")) {
+                console.log("error, attribute key contains _.")
+            }
+
+            const attribute = attributes[attrI]
+            if (attribute) {
+                type = attribute.type
+                if (attribute["is_struct_attr"]) {
+                    attrKey = `_.${attrKey}`
+                }
+            }
+
+            const op = type === "set" ? "contains" : "="
+
+            if (type === "set" && attrVal.length > 1) {
+                // Assemble variants for each position in the token
+                const transpose = <T>(matrix: T[][]) => zip(...matrix) as T[][]
+                const variantsByValue = attrVal.map((val) => val.split(":").slice(1))
+                const variantsByPosition = transpose(variantsByValue).map(uniq)
+                const variantsStrs = variantsByPosition.map((variants) => `:(${variants.join("|")})`)
+                const key = attrVal[0].split(":")[0]
+                val = key + variantsStrs.join("")
+            } else {
+                val = attrVal[0]
+            }
+
+            const isEmptySet = type === "set" && (val === "|" || val === "")
+            return isEmptySet ? `ambiguity(${attrKey}) = 0` : `${attrKey} ${op} "${val}"`
+        })
+
+        return `[${cqpAnd.join(" & ")}]`
+    })
+
+    return cqps.join(" ")
 }

@@ -2,6 +2,7 @@
 
 import omit from "lodash/omit"
 import { SearchParams } from "./urlparams"
+import { toJson } from "angular"
 
 /** Get object from local storage. */
 export const localStorageGet = <K extends keyof LocalStorage>(key: K): LocalStorage[K] | undefined => {
@@ -11,7 +12,7 @@ export const localStorageGet = <K extends keyof LocalStorage>(key: K): LocalStor
 
 /** Write object to local storage. To delete, use native `localStorage.removeItem(key)`. */
 export const localStorageSet = <K extends keyof LocalStorage>(key: K, value: LocalStorage[K]): void =>
-    localStorage.setItem(key, JSON.stringify(value))
+    localStorage.setItem(key, toJson(value))
 
 /**
  * Convert old jStorage data to native localStorage.

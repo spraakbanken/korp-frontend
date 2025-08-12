@@ -7,7 +7,7 @@ import { getStringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
 import { CompareTab, RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { CompareItem, CompareResult, CompareTables } from "@/backend/compare"
+import { buildItemCqp, CompareItem, CompareResult, CompareTables } from "@/backend/compare"
 import { TabHashScope } from "@/directives/tab-hash"
 import { Attribute } from "@/settings/config.types"
 import "@/components/korp-error"
@@ -93,69 +93,14 @@ angular.module("korpApp").component("resultsComparison", {
             }
 
             $scope.rowClick = (row, cmp_index) => {
+                const attrs = $scope.reduce.map((name) => $scope.attributes[name])
+                const cqp = buildItemCqp(row, attrs)
+
                 const cmps = [$scope.cmp1, $scope.cmp2]
                 const cmp = cmps[cmp_index]
-
-                const splitTokens = _.map(row.elems, (elem) => _.map(elem.split("/"), (tokens) => tokens.split(" ")))
-
-                // number of tokens in search
-                const tokenLength = splitTokens[0][0].length
-
-                // transform result from grouping on attribute to grouping on token place
-                var tokens = _.map(_.range(0, tokenLength), (tokenIdx) =>
-                    _.map($scope.reduce, (reduceAttr, attrIdx) =>
-                        _.uniq(_.map(splitTokens, (res) => res[attrIdx][tokenIdx]))
-                    )
-                )
-
-                const cqps = _.map(tokens, function (token) {
-                    const cqpAnd = _.map(_.range(0, token.length), function (attrI) {
-                        let type: string | undefined
-                        let val: string
-                        let attrKey = $scope.reduce[attrI]
-                        const attrVal = token[attrI]
-
-                        if (attrKey.includes("_.")) {
-                            console.log("error, attribute key contains _.")
-                        }
-
-                        const attribute = $scope.attributes[attrKey]
-                        if (attribute) {
-                            ;({ type } = attribute)
-                            if (attribute["is_struct_attr"]) {
-                                attrKey = `_.${attrKey}`
-                            }
-                        }
-
-                        const op = type === "set" ? "contains" : "="
-
-                        if (type === "set" && attrVal.length > 1) {
-                            // Assemble variants for each position in the token
-                            const transpose = <T>(matrix: T[][]) => _.zip(...matrix) as T[][]
-                            const variantsByValue = attrVal.map((val) => val.split(":").slice(1))
-                            const variantsByPosition = transpose(variantsByValue).map(_.uniq)
-                            const variantsStrs = variantsByPosition.map((variants) => `:(${variants.join("|")})`)
-                            const key = attrVal[0].split(":")[0]
-                            val = key + variantsStrs.join("")
-                        } else {
-                            val = attrVal[0]
-                        }
-
-                        if (type === "set" && (val === "|" || val === "")) {
-                            return `ambiguity(${attrKey}) = 0`
-                        } else {
-                            return `${attrKey} ${op} "${val}"`
-                        }
-                    })
-
-                    return `[${cqpAnd.join(" & ")}]`
-                })
-
-                const cqp = cqps.join(" ")
-
                 const cl = settings.corpusListing.subsetFactory(cmp.corpora)
 
-                return $rootScope.kwicTabs.push({
+                $rootScope.kwicTabs.push({
                     queryParams: {
                         cqp: cmp.cqp,
                         cqp2: cqp,
