@@ -19,6 +19,7 @@ import { StoreService } from "@/services/store"
 import { getGeoAttributes, MapAttributeOption } from "@/map"
 import { StatisticsGrid } from "@/statistics-grid"
 import { createStatisticsCsv, getCqp } from "@/statistics/statistics"
+import { ExampleTask } from "@/backend/example-task"
 
 type StatisticsScope = IScope & {
     clipped: boolean
@@ -347,14 +348,14 @@ angular.module("korpApp").component("statistics", {
                 // Find which corpora had any hits (uppercase ids)
                 const corpora = Object.keys(row.count).filter((id) => row.count[id][0] > 0)
 
-                $rootScope.kwicTabs.push({
-                    queryParams: {
+                $rootScope.kwicTabs.push(
+                    new ExampleTask({
                         corpus: corpora.join(","),
                         cqp: $ctrl.prevParams.cqp,
                         cqp2,
                         expand_prequeries: false,
-                    },
-                })
+                    })
+                )
             }
 
             $ctrl.onGraphClick = () => {

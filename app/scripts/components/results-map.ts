@@ -8,6 +8,7 @@ import { AppSettings } from "@/settings/app-settings.types"
 import { getMarkerGroups, MarkerEvent, MarkerGroup } from "@/map"
 import "@/components/korp-error"
 import "@/components/result-map"
+import { ExampleTask } from "@/backend/example-task"
 
 type ResultsMapController = IController & {
     active: boolean
@@ -143,7 +144,7 @@ angular.module("korpApp").component("resultsMap", {
                     default_within: queryData.within,
                 }
                 const readingMode = queryData.label === "paragraph__geocontext"
-                $timeout(() => $rootScope.kwicTabs.push({ queryParams: opts, readingMode }), 0)
+                $timeout(() => $rootScope.kwicTabs.push(new ExampleTask(opts, readingMode)), 0)
             }
         },
     ],

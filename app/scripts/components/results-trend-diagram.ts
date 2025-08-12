@@ -16,6 +16,7 @@ import { JQueryExtended } from "@/jquery.types"
 import { CorpusListing } from "@/corpus_listing"
 import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
 import { StoreService } from "@/services/store"
+import { ExampleTask } from "@/backend/example-task"
 
 type ResultsTrendDiagramController = IController & {
     data: GraphTab
@@ -211,7 +212,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     expand_prequeries: false,
                 }
 
-                $rootScope.kwicTabs.push({ queryParams: opts })
+                $rootScope.kwicTabs.push(new ExampleTask(opts))
             }
 
             function drawPreloader(from: Moment, to: Moment): void {

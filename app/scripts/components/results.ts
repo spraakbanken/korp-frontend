@@ -64,7 +64,7 @@ angular.module("korpApp").component("results", {
                         ></results-word-picture>
                     </uib-tab>
 
-                    <uib-tab results-tab ng-repeat="kwicTab in $root.kwicTabs" select="select()" deselect="deselect()">
+                    <uib-tab results-tab ng-repeat="task in $root.kwicTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             KWIC
                             <tab-preloader ng-if="loading"></tab-preloader>
@@ -77,8 +77,7 @@ angular.module("korpApp").component("results", {
                             is-active="isActive"
                             loading="loading"
                             set-progress="setProgress"
-                            is-reading="kwicTab.readingMode"
-                            query-params="kwicTab.queryParams"
+                            task="task"
                         ></results-examples>
                     </uib-tab>
 

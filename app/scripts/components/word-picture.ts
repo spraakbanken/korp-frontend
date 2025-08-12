@@ -8,6 +8,7 @@ import { ShowableApiRelation, TableData, TableDrawData } from "@/components/resu
 import { ApiRelation, RelationsSort } from "@/backend/types/relations"
 import "@/components/help-box"
 import { Lemgram } from "@/lemgram"
+import { ExampleTask } from "@/backend/example-task"
 
 type WordPictureController = IController & {
     // Bindings
@@ -252,12 +253,12 @@ angular.module("korpApp").component("wordPicture", {
             }
 
             $ctrl.onClickExample = function (row) {
-                $rootScope.kwicTabs.push({
-                    queryParams: {
+                $rootScope.kwicTabs.push(
+                    new ExampleTask({
                         command: "relations_sentences",
                         source: row.source.join(","),
-                    },
-                })
+                    })
+                )
             }
         },
     ],

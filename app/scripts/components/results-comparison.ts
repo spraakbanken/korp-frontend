@@ -13,6 +13,7 @@ import { Attribute } from "@/settings/config.types"
 import "@/components/korp-error"
 import "@/components/loglike-meter"
 import { StoreService } from "@/services/store"
+import { ExampleTask } from "@/backend/example-task"
 
 type ResultsComparisonController = IController & {
     loading: boolean
@@ -99,15 +100,15 @@ angular.module("korpApp").component("resultsComparison", {
                 const cmp = cmps[cmp_index]
                 const cl = settings.corpusListing.subsetFactory(cmp.corpora)
 
-                $rootScope.kwicTabs.push({
-                    queryParams: {
+                $rootScope.kwicTabs.push(
+                    new ExampleTask({
                         cqp: cmp.cqp,
                         cqp2: cqp,
                         corpus: cl.stringifySelected(),
                         show_struct: _.keys(cl.getStructAttrs()).join(","),
                         expand_prequeries: false,
-                    },
-                })
+                    })
+                )
             }
 
             $scope.stringify = (value) => {

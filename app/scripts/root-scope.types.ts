@@ -1,15 +1,15 @@
 /** @format */
 import { IPromise, IRootScopeService } from "angular"
-import { KorpQueryRequestOptions } from "./backend/kwic-proxy"
 import { CorpusListing } from "./corpus_listing"
 import { MapRequestResult } from "@/backend/backend"
 import { CompareResult } from "@/backend/compare"
+import { ExampleTask } from "@/backend/example-task"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
     compareTabs: CompareTab[]
     graphTabs: GraphTab[]
-    kwicTabs: KwicTab[]
+    kwicTabs: ExampleTask[]
     mapTabs: MapTab[]
     textTabs: TextTab[]
 }
@@ -24,11 +24,6 @@ export type GraphTab = {
     labelMapping: Record<string, string>
     showTotal: boolean
     corpusListing: CorpusListing
-}
-
-export type KwicTab = {
-    queryParams: KorpQueryRequestOptions
-    readingMode?: boolean
 }
 
 export type MapTab = IPromise<MapRequestResult | void>
