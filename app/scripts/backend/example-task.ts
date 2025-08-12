@@ -1,12 +1,12 @@
 /** @format */
 import settings from "@/settings"
 import { pageToRange } from "./common"
-import { KorpQueryRequestOptions } from "./kwic-proxy"
+import { QueryParams } from "./types/query"
 
 export class ExampleTask {
-    constructor(readonly queryParams: KorpQueryRequestOptions, readonly isReading?: boolean) {}
+    constructor(readonly queryParams: QueryParams, public isReading?: boolean) {}
 
-    getParams(page: number, hpp: number, inOrder?: boolean, within?: string): KorpQueryRequestOptions {
+    getParams(page: number, hpp: number, inOrder?: boolean, within?: string): QueryParams {
         const { start, end } = pageToRange(page || 0, hpp)
         const opts = {
             ...this.queryParams,
