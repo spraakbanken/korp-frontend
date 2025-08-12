@@ -1,24 +1,23 @@
 /** @format */
-import angular, { IController } from "angular"
+import angular, { IController, IQService } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
-import settings from "@/settings"
 import { getStringifier, Stringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
-import { CompareTab, RootScope } from "@/root-scope.types"
+import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { buildItemCqp, CompareItem, CompareResult, CompareTables } from "@/backend/compare"
 import { TabHashScope } from "@/directives/tab-hash"
 import { Attribute } from "@/settings/config.types"
 import "@/components/korp-error"
 import "@/components/loglike-meter"
 import { StoreService } from "@/services/store"
+import { CompareItem, CompareResult, CompareTables, CompareTask } from "@/backend/compare-task"
 import { ExampleTask } from "@/backend/example-task"
 
 type ResultsComparisonController = IController & {
     loading: boolean
-    promise: CompareTab
     setProgress: (loading: boolean, progress: number) => void
+    task: CompareTask
 }
 
 type ResultsComparisonScope = TabHashScope & {
@@ -28,7 +27,6 @@ type ResultsComparisonScope = TabHashScope & {
     error?: string
     max: number
     resultOrder: (item: CompareItem) => number
-    reduce: string[]
     rowClick: (row: CompareItem, cmp_index: number) => void
     stringify: Stringifier
     tables: CompareTables
@@ -58,61 +56,47 @@ angular.module("korpApp").component("resultsComparison", {
     `,
     bindings: {
         loading: "<",
-        promise: "<",
         setProgress: "<",
+        task: "<",
     },
     controller: [
+        "$q",
         "$rootScope",
         "$scope",
         "store",
-        function ($rootScope: RootScope, $scope: ResultsComparisonScope, store: StoreService) {
+        function ($q: IQService, $rootScope: RootScope, $scope: ResultsComparisonScope, store: StoreService) {
             const $ctrl = this as ResultsComparisonController
 
             $ctrl.$onInit = () => {
+                $scope.attributes = $ctrl.task.attributes
                 $ctrl.setProgress(true, 0)
-                $ctrl.promise.then(render).catch((error) => {
-                    $ctrl.setProgress(false, 0)
-                    $scope.error = error
-                    $scope.$digest()
-                })
+                $q.resolve($ctrl.task.send())
+                    .then(render)
+                    .catch((error) => {
+                        $ctrl.setProgress(false, 0)
+                        $scope.error = error
+                        $scope.$digest()
+                    })
             }
 
             $scope.resultOrder = (item) => Math.abs(item.loglike)
 
             function render(result: CompareResult) {
                 $ctrl.setProgress(false, 100)
-                const { tables, max, cmp1, cmp2, reduce } = result
+                const { tables, max, cmp1, cmp2 } = result
                 $scope.tables = tables
                 $scope.max = max
                 $scope.cmp1 = cmp1
                 $scope.cmp2 = cmp2
-                $scope.reduce = reduce
-
-                const cl = settings.corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
-                $scope.attributes = { ...cl.getCurrentAttributes(), ...cl.getStructAttrs() }
             }
 
             $scope.rowClick = (row, cmp_index) => {
-                const attrs = $scope.reduce.map((name) => $scope.attributes[name])
-                const cqp = buildItemCqp(row, attrs)
-
-                const cmps = [$scope.cmp1, $scope.cmp2]
-                const cmp = cmps[cmp_index]
-                const cl = settings.corpusListing.subsetFactory(cmp.corpora)
-
-                $rootScope.kwicTabs.push(
-                    new ExampleTask({
-                        cqp: cmp.cqp,
-                        cqp2: cqp,
-                        corpus: cl.stringifySelected(),
-                        show_struct: _.keys(cl.getStructAttrs()).join(","),
-                        expand_prequeries: false,
-                    })
-                )
+                const exampleTask = $ctrl.task.createExampleTask(cmp_index, row)
+                $rootScope.kwicTabs.push(exampleTask)
             }
 
             $scope.stringify = (value) => {
-                const attr = $scope.attributes[$scope.reduce[0]]
+                const attr = $scope.attributes[$ctrl.task.reduce[0]]
                 if (attr?.stringify) return getStringifier(attr.stringify)(value)
                 if (attr?.translation) return locAttribute(attr.translation, String(value), store.lang)
                 return String(value)

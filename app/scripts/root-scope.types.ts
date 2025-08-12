@@ -2,12 +2,12 @@
 import { IPromise, IRootScopeService } from "angular"
 import { CorpusListing } from "./corpus_listing"
 import { MapRequestResult } from "@/backend/backend"
-import { CompareResult } from "@/backend/compare"
 import { ExampleTask } from "@/backend/example-task"
+import { CompareTask } from "./backend/compare-task"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
-    compareTabs: CompareTab[]
+    compareTabs: CompareTask[]
     graphTabs: GraphTab[]
     kwicTabs: ExampleTask[]
     mapTabs: MapTab[]
@@ -15,8 +15,6 @@ export type RootScope = IRootScopeService & {
 }
 
 export type DynamicTabName = "compareTabs" | "graphTabs" | "kwicTabs" | "mapTabs" | "textTabs"
-
-export type CompareTab = IPromise<CompareResult>
 
 export type GraphTab = {
     cqp: string

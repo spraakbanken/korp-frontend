@@ -1,13 +1,13 @@
 /** @format */
-import angular, { IController, IQService } from "angular"
+import angular, { IController } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import { html, valfilter } from "@/util"
-import { requestCompare } from "@/backend/compare"
 import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
 import { AttributeOption } from "@/corpus_listing"
 import { savedSearches } from "@/saved-searches"
+import { CompareTask } from "@/backend/compare-task"
 
 type CompareSearchController = IController & {
     valfilter: typeof valfilter
@@ -59,9 +59,8 @@ angular.module("korpApp").component("compareSearch", {
         </div>
     `,
     controller: [
-        "$q",
         "$rootScope",
-        function ($q: IQService, $rootScope: RootScope) {
+        function ($rootScope: RootScope) {
             const $ctrl = this as CompareSearchController
 
             $ctrl.reduce = "word"
@@ -90,7 +89,7 @@ angular.module("korpApp").component("compareSearch", {
             }
 
             $ctrl.sendCompare = () =>
-                $rootScope.compareTabs.push($q.resolve(requestCompare($ctrl.cmp1, $ctrl.cmp2, [$ctrl.reduce])))
+                $rootScope.compareTabs.push(new CompareTask($ctrl.cmp1, $ctrl.cmp2, [$ctrl.reduce]))
 
             $ctrl.deleteCompares = () => savedSearches.clear()
         },

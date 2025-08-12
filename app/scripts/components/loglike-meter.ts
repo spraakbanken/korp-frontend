@@ -3,7 +3,7 @@ import _ from "lodash"
 import angular, { IController, IScope } from "angular"
 import { loc } from "@/i18n"
 import { html } from "@/util"
-import { CompareItem } from "@/backend/compare"
+import { CompareItem } from "@/backend/compare-task"
 
 type MeterController = IController & {
     item: CompareItem

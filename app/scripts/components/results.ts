@@ -97,12 +97,7 @@ angular.module("korpApp").component("results", {
                         ></results-trend-diagram>
                     </uib-tab>
 
-                    <uib-tab
-                        results-tab
-                        ng-repeat="promise in $root.compareTabs"
-                        select="select()"
-                        deselect="deselect()"
-                    >
+                    <uib-tab results-tab ng-repeat="task in $root.compareTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             {{'compare_vb' | loc:$root.lang}}
                             <tab-preloader ng-if="loading"></tab-preloader>
@@ -113,7 +108,7 @@ angular.module("korpApp").component("results", {
                         </uib-tab-heading>
                         <results-comparison
                             loading="loading"
-                            promise="promise"
+                            task="task"
                             set-progress="setProgress"
                         ></results-comparison>
                     </uib-tab>
