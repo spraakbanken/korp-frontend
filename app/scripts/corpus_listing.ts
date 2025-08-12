@@ -208,16 +208,8 @@ export class CorpusListing {
         return _.union(...struct)
     }
 
-    getContextQueryStringFromCorpusId(corpus_ids: string[], prefer: string, avoid: string): string {
-        const corpora = _.map(corpus_ids, (corpus_id) => settings.corpora[corpus_id.toLowerCase()])
-        return this.getContextQueryStringFromCorpora(_.compact(corpora), prefer, avoid)
-    }
-
-    getContextQueryString(prefer: string, avoid: string): string {
-        return this.getContextQueryStringFromCorpora(this.selected, prefer, avoid)
-    }
-
-    getContextQueryStringFromCorpora(corpora: CorpusTransformed[], prefer: string, avoid: string) {
+    getContextParam(prefer: string, avoid: string, corpusIds?: string[]) {
+        const corpora = corpusIds?.map((id) => this.struct[id.toLowerCase()]) || this.selected
         const output: string[] = []
         for (let corpus of corpora) {
             const contexts = _.keys(corpus.context)
@@ -228,7 +220,7 @@ export class CorpusListing {
                 output.push(corpus.id.toUpperCase() + ":" + contexts[0])
             }
         }
-        return _(output).compact().join()
+        return _.compact(output).join()
     }
 
     /**

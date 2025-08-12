@@ -134,7 +134,7 @@ angular.module("korpApp").component("resultsHits", {
                     ? settings["default_reading_context"]
                     : settings["default_overview_context"]
 
-                const context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
+                const context = settings.corpusListing.getContextParam(preferredContext, avoidContext)
 
                 if (!isPaging) {
                     $scope.proxy.queryData = undefined

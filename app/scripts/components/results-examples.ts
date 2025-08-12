@@ -145,10 +145,10 @@ angular.module("korpApp").component("resultsExamples", {
                     ? settings["default_overview_context"]
                     : settings["default_reading_context"]
                 opts.default_context = preferredContext
-                opts.context = settings.corpusListing.getContextQueryStringFromCorpusId(
-                    opts.corpus?.split(",") || [],
+                opts.context = settings.corpusListing.getContextParam(
                     preferredContext,
-                    avoidContext
+                    avoidContext,
+                    opts.corpus?.split(",")
                 )
 
                 opts.default_within ??= store.within
