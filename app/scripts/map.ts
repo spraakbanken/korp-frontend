@@ -1,9 +1,7 @@
 /** @format */
 import L from "leaflet"
 import { html } from "@/util"
-import { MapRequestResult } from "@/backend/backend"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { CountsSplit, StatsColumn } from "@/backend/types/count"
 
 export type MarkerGroup = {
     selected: boolean
@@ -21,12 +19,6 @@ export type Marker = MarkerEvent & {
 export type MarkerEvent = {
     point: Point
     queryData: MarkerQueryData
-}
-
-export type MapResult = {
-    label: string
-    cqp: string
-    points: Point[]
 }
 
 /** Needed for making a sub-search */
@@ -72,7 +64,7 @@ export const isMarker = <T extends L.Layer>(layer: T | CustomMarker): layer is C
 export const isMarkerCluster = <T extends L.Layer>(layer: T | MarkerClusterGroup): layer is MarkerClusterGroup =>
     "getChildCount" in layer
 
-type Point = {
+export type Point = {
     abs: number
     rel: number
     name: string
@@ -108,93 +100,6 @@ export function getGeoAttributes(corpora: CorpusTransformed[]) {
     // Select first attribute
     if (attributes.length) attributes[0].selected = true
     return attributes
-}
-
-export function parseMapData(data: CountsSplit, cqp: string, cqpExprs: Record<string, string>): MapResult[] {
-    const { combined } = data
-
-    let result: MapResult[] = []
-    let ignoreTotal = combined.length > 1
-
-    for (let res of combined) {
-        let label = res.cqp ? cqpExprs[res.cqp] : "Σ"
-        let isTotal = !res.cqp
-        if (isTotal && ignoreTotal) {
-            continue
-        }
-        result.push({
-            label: label,
-            cqp: res.cqp || cqp,
-            points: getPointsFromObj(res),
-        })
-    }
-    return result
-}
-
-function getPointsFromObj(obj: StatsColumn): Point[] {
-    let points: Point[] = []
-    for (const row of obj.rows || []) {
-        const value = Object.values(row.value)[0][0]
-        if (!value) {
-            continue
-        }
-        const [name, countryCode, lat, lng] = value.split(";")
-        points.push({
-            name,
-            countryCode,
-            lat: parseFloat(lat),
-            lng: parseFloat(lng),
-            abs: row.absolute,
-            rel: row.relative,
-        })
-    }
-    return points
-}
-
-export function getMarkerGroups(result: MapRequestResult, newColor: () => string): Record<string, MarkerGroup> {
-    const groups = result.data.reduce((groups, res, idx) => {
-        const markers = getMarkers(result.attribute.label, result.cqp, result.corpora, result.within, res, idx)
-        const group = {
-            selected: true,
-            order: idx,
-            color: newColor(),
-            markers,
-        }
-        return { ...groups, [res.label]: group }
-    }, {} as Record<string, MarkerGroup>)
-    return groups
-}
-
-function getMarkers(
-    label: string,
-    cqp: string,
-    corpora: string[],
-    within: string | undefined,
-    res: MapResult,
-    idx: number
-): Record<string, Marker> {
-    return Object.fromEntries(
-        res.points.map((point, pointIdx) => {
-            // Include point index in the key, so that multiple
-            // places with the same name but different coordinates
-            // each get their own markers
-            const id = [point.name.replace(/-/g, ""), pointIdx.toString(), idx].join(":")
-            const marker = {
-                lat: point.lat,
-                lng: point.lng,
-                queryData: {
-                    searchCqp: cqp,
-                    subCqp: res.cqp,
-                    label,
-                    corpora,
-                    within,
-                },
-                label: res.label,
-                point,
-            }
-            return [id, marker]
-        })
-    )
 }
 
 export function createCircleMarker(color: string, diameter: number, borderRadius: number) {

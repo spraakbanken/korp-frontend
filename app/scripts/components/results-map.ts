@@ -3,18 +3,19 @@ import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import { html, regescape } from "@/util"
-import { MapTab, RootScope } from "@/root-scope.types"
+import { RootScope } from "@/root-scope.types"
 import { AppSettings } from "@/settings/app-settings.types"
-import { getMarkerGroups, MarkerEvent, MarkerGroup } from "@/map"
+import { MarkerEvent, MarkerGroup } from "@/map"
 import "@/components/korp-error"
 import "@/components/result-map"
 import { ExampleTask } from "@/backend/example-task"
+import { MapTask } from "@/backend/map-task"
 
 type ResultsMapController = IController & {
     active: boolean
     loading: boolean
-    promise: MapTab
     setProgress: (loading: boolean, progress: number) => void
+    task: MapTask
 }
 
 type ResultsMapScope = IScope & {
@@ -68,8 +69,8 @@ angular.module("korpApp").component("resultsMap", {
     bindings: {
         active: "<",
         loading: "<",
-        promise: "<",
         setProgress: "<",
+        task: "<",
     },
     controller: [
         "$rootScope",
@@ -88,14 +89,15 @@ angular.module("korpApp").component("resultsMap", {
 
             $ctrl.$onInit = () => {
                 $ctrl.setProgress(true, 0)
+                const promise = $ctrl.task.send()
 
-                Promise.all([rickshawPromise, $ctrl.promise]).then(
+                Promise.all([rickshawPromise, promise]).then(
                     ([Rickshaw, result]) => {
                         const palette = new (Rickshaw as any).Color.Palette({ scheme: "colorwheel" })
                         $scope.$apply(($scope: ResultsMapScope) => {
                             $ctrl.setProgress(false, 100)
                             $scope.numResults = 20
-                            $scope.markerGroups = result ? getMarkerGroups(result, () => palette.color()) : undefined
+                            $scope.markerGroups = result ? $ctrl.task.getMarkerGroups(() => palette.color()) : undefined
                             $scope.selectedGroups = _.keys($scope.markerGroups)
                         })
                     },

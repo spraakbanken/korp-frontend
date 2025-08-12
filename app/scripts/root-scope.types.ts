@@ -1,16 +1,16 @@
 /** @format */
-import { IPromise, IRootScopeService } from "angular"
+import { IRootScopeService } from "angular"
 import { CorpusListing } from "./corpus_listing"
-import { MapRequestResult } from "@/backend/backend"
+import { CompareTask } from "@/backend/compare-task"
 import { ExampleTask } from "@/backend/example-task"
-import { CompareTask } from "./backend/compare-task"
+import { MapTask } from "@/backend/map-task"
 
 /** Extends the Angular Root Scope interface with properties used by this app. */
 export type RootScope = IRootScopeService & {
     compareTabs: CompareTask[]
     graphTabs: GraphTab[]
     kwicTabs: ExampleTask[]
-    mapTabs: MapTab[]
+    mapTabs: MapTask[]
     textTabs: TextTab[]
 }
 
@@ -23,8 +23,6 @@ export type GraphTab = {
     showTotal: boolean
     corpusListing: CorpusListing
 }
-
-export type MapTab = IPromise<MapRequestResult | void>
 
 export type TextTab = {
     corpus: string

@@ -4,8 +4,7 @@ import _ from "lodash"
 import settings from "@/settings"
 import { downloadFile, html } from "@/util"
 import { locObj } from "@/i18n"
-import { expandCqp, expandOperators } from "@/cqp_parser/cqp"
-import { requestMapData } from "@/backend/backend"
+import { expandCqp } from "@/cqp_parser/cqp"
 import "@/components/corpus-distribution-chart"
 import "@/components/reduce-select"
 import { RootScope } from "@/root-scope.types"
@@ -20,6 +19,7 @@ import { getGeoAttributes, MapAttributeOption } from "@/map"
 import { StatisticsGrid } from "@/statistics-grid"
 import { createStatisticsCsv, getCqp } from "@/statistics/statistics"
 import { ExampleTask } from "@/backend/example-task"
+import { MapTask } from "@/backend/map-task"
 
 type StatisticsScope = IScope & {
     clipped: boolean
@@ -388,9 +388,8 @@ angular.module("korpApp").component("statistics", {
                 if (selectedAttributes.length > 1) {
                     console.log("Warning: more than one selected attribute, choosing first")
                 }
-                const selectedAttribute = selectedAttributes[0]
-                const request = requestMapData(cqp, cqpExprs, store.within, selectedAttribute, $ctrl.mapRelative)
-                $rootScope.mapTabs.push(request)
+                const { label, corpora } = selectedAttributes[0]
+                $rootScope.mapTabs.push(new MapTask(cqp, cqpExprs, label, corpora, store.within, $ctrl.mapRelative))
             }
 
             /** Create KWIC sub queries for selected table rows, as a list of `[cqp, label]` pairs. */
