@@ -59,7 +59,6 @@ angular.module("korpApp").component("resultsHits", {
                 page-event="pageChange"
                 hits-per-page="hitsPerPage"
                 prev-params="proxy.prevParams"
-                prev-url="proxy.prevUrl"
                 corpus-order="corpusOrder"
                 show-search-options="true"
             ></kwic>
@@ -141,7 +140,7 @@ angular.module("korpApp").component("resultsHits", {
                     $scope.proxy.queryData = undefined
                 }
 
-                const cqp = $scope.cqp || $scope.proxy.prevCQP
+                const cqp = $scope.cqp
                 if (!cqp) throw new Error("cqp missing")
 
                 const default_within = store.within

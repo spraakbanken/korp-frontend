@@ -8,9 +8,7 @@ import { QueryParams, QueryResponse } from "./types/query"
 import { korpRequest } from "./common"
 
 export class KwicProxy extends BaseProxy {
-    prevCQP?: string
     prevParams: QueryParams | null
-    prevUrl?: string // Used for download
     queryData?: string
 
     constructor() {
@@ -62,7 +60,6 @@ export class KwicProxy extends BaseProxy {
         if (params.cqp) {
             params.cqp = this.expandCQP(params.cqp)
         }
-        this.prevCQP = params.cqp
 
         params.show = _.uniq(["sentence"].concat(show)).join(",")
         params.show_struct = _.uniq(show_struct).join(",")

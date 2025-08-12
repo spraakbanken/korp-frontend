@@ -55,7 +55,6 @@ angular.module("korpApp").component("resultsExamples", {
                 page-event="pageChange"
                 hits-per-page="hitsPerPage"
                 prev-params="proxy.prevParams"
-                prev-url="proxy.prevUrl"
                 corpus-order="corpusOrder"
             ></kwic>
         </div>`,

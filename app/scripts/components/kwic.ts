@@ -32,7 +32,6 @@ type KwicController = IController & {
     pageEvent: (page: number) => void
     hitsPerPage: number
     prevParams: any
-    prevUrl?: string
     corpusOrder: string[]
     /** Current page of results. */
     kwicInput: ApiKwic[]
@@ -258,7 +257,6 @@ angular.module("korpApp").component("kwic", {
         pageEvent: "<",
         hitsPerPage: "<",
         prevParams: "<",
-        prevUrl: "<",
         corpusOrder: "<",
         kwicInput: "<",
         corpusHits: "<",
