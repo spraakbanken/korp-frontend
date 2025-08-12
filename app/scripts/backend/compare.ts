@@ -3,8 +3,6 @@ import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
 import { korpRequest } from "./common"
 import { groupBy, range, sumBy, uniq, zip } from "lodash"
-import { getStringifier, Stringifier } from "@/stringify"
-import { locAttribute } from "@/i18n"
 import { Attribute } from "@/settings/config.types"
 
 export type CompareResult = {
@@ -13,7 +11,6 @@ export type CompareResult = {
     cmp1: SavedSearch
     cmp2: SavedSearch
     reduce: string[]
-    stringify: Stringifier
 }
 
 export type CompareTables = { positive: CompareItem[]; negative: CompareItem[] }
@@ -89,22 +86,12 @@ export async function requestCompare(cmp1: SavedSearch, cmp2: SavedSearch, reduc
     const positive = groupAndSum(tables.positive)
     const negative = groupAndSum(tables.negative)
 
-    // Find value stringifier. Currently we only support one attribute to reduce/group by, so simplify by only checking first item.
-    const name = reduce[0]
-    let stringify: Stringifier = (x) => String(x)
-    if (attrs[name]?.stringify) {
-        stringify = getStringifier(attrs[name].stringify)
-    } else if (attrs[name]?.translation) {
-        stringify = (value) => locAttribute(attrs[name].translation, String(value))
-    }
-
     return {
         tables: { positive, negative },
         max,
         cmp1,
         cmp2,
         reduce,
-        stringify,
     }
 }
 

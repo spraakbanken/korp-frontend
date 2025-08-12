@@ -3,7 +3,7 @@ import angular, { IController } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
 import settings from "@/settings"
-import { getStringifier } from "@/stringify"
+import { getStringifier, Stringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
 import { CompareTab, RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
@@ -29,7 +29,7 @@ type ResultsComparisonScope = TabHashScope & {
     resultOrder: (item: CompareItem) => number
     reduce: string[]
     rowClick: (row: CompareItem, cmp_index: number) => void
-    stringify: (x: string) => string
+    stringify: Stringifier
     tables: CompareTables
 }
 
@@ -80,13 +80,12 @@ angular.module("korpApp").component("resultsComparison", {
 
             function render(result: CompareResult) {
                 $ctrl.setProgress(false, 100)
-                const { tables, max, cmp1, cmp2, reduce, stringify } = result
+                const { tables, max, cmp1, cmp2, reduce } = result
                 $scope.tables = tables
                 $scope.max = max
                 $scope.cmp1 = cmp1
                 $scope.cmp2 = cmp2
                 $scope.reduce = reduce
-                $scope.stringify = stringify
 
                 const cl = settings.corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
                 $scope.attributes = { ...cl.getCurrentAttributes(), ...cl.getStructAttrs() }
@@ -109,6 +108,13 @@ angular.module("korpApp").component("resultsComparison", {
                         expand_prequeries: false,
                     },
                 })
+            }
+
+            $scope.stringify = (value) => {
+                const attr = $scope.attributes[$scope.reduce[0]]
+                if (attr?.stringify) return getStringifier(attr.stringify)(value)
+                if (attr?.translation) return locAttribute(attr.translation, String(value), store.lang)
+                return String(value)
             }
         },
     ],
