@@ -2,13 +2,10 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
-import settings from "@/settings"
 import { ApiKwic } from "@/backend/types"
-import kwicProxyFactory, { KorpQueryRequestOptions, KwicProxy } from "@/backend/kwic-proxy"
 import "@/components/korp-error"
 import "@/components/kwic"
 import { StoreService } from "@/services/store"
-import { pageToRange } from "@/backend/common"
 import { ExampleTask } from "@/backend/example-task"
 
 type ResultsExamplesController = IController & {
@@ -33,7 +30,6 @@ type ResultsExamplesScope = IScope & {
     kwic?: ApiKwic[]
     page?: number
     pageChange: (page: number) => void
-    proxy: KwicProxy
     toggleReading: () => void
 }
 
@@ -53,7 +49,7 @@ angular.module("korpApp").component("resultsExamples", {
                 page="page"
                 page-event="pageChange"
                 hits-per-page="hitsPerPage"
-                prev-params="proxy.prevParams"
+                prev-params="task.proxy.prevParams"
                 corpus-order="corpusOrder"
             ></kwic>
         </div>`,
@@ -70,8 +66,6 @@ angular.module("korpApp").component("resultsExamples", {
         function ($scope: ResultsExamplesScope, $timeout: ITimeoutService, store: StoreService) {
             const $ctrl = this as ResultsExamplesController
 
-            $scope.proxy = kwicProxyFactory.create()
-
             $ctrl.$onInit = () => {
                 // Context mode can be set when creating the tab. If not, use URL param
                 $scope.isReading = $ctrl.task.isReading ?? store.reading_mode
@@ -80,7 +74,7 @@ angular.module("korpApp").component("resultsExamples", {
             }
 
             $scope.$on("abort_requests", () => {
-                $scope.proxy.abort()
+                $ctrl.task.abort()
                 if ($ctrl.loading) {
                     $scope.aborted = true
                     $ctrl.setProgress(false, 0)
@@ -100,12 +94,11 @@ angular.module("korpApp").component("resultsExamples", {
 
             function makeRequest(): void {
                 // Abort any running request
-                if ($ctrl.loading) $scope.proxy.abort()
+                if ($ctrl.loading) $ctrl.task.abort()
 
-                const opts = $ctrl.task.getParams($scope.page || 0, $scope.hitsPerPage, store.in_order, store.within)
                 $ctrl.setProgress(true, 0)
-                $scope.proxy
-                    .makeRequest(opts)
+                $ctrl.task
+                    .send($scope.page || 0, $scope.hitsPerPage, store.in_order, store.within)
                     .then((data) =>
                         $timeout(() => {
                             if (!data.kwic) data.kwic = []

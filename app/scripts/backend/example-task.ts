@@ -1,12 +1,18 @@
 /** @format */
 import settings from "@/settings"
 import { pageToRange } from "./common"
-import { QueryParams } from "./types/query"
+import { QueryParams, QueryResponse } from "./types/query"
+import kwicProxyFactory from "./kwic-proxy"
 
 export class ExampleTask {
+    readonly proxy = kwicProxyFactory.create()
     constructor(readonly queryParams: QueryParams, public isReading?: boolean) {}
 
-    getParams(page: number, hpp: number, inOrder?: boolean, within?: string): QueryParams {
+    abort(): void {
+        this.proxy.abort()
+    }
+
+    protected getParams(page: number, hpp: number, inOrder?: boolean, within?: string): QueryParams {
         const { start, end } = pageToRange(page || 0, hpp)
         const opts = {
             ...this.queryParams,
@@ -26,6 +32,12 @@ export class ExampleTask {
 
         opts.default_within ??= within
         opts.within = settings.corpusListing.getWithinParam(opts.default_within)
+
         return opts
+    }
+
+    send(page: number, hpp: number, inOrder?: boolean, within?: string): Promise<QueryResponse> {
+        const opts = this.getParams(page, hpp, inOrder, within)
+        return this.proxy.makeRequest(opts)
     }
 }
