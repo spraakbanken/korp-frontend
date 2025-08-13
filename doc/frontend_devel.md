@@ -749,7 +749,10 @@ When clicking on a word in the KWIC a link will be added to the sidebar. Clickin
 
 The corpus must have the structural attribute `text__id`, which should be a unique ID in the corpus. `_head` and `_tail` are also needed and should contain the whitespace before and after the token. It is optional to put whitespace in both attributes. The simplest use case is to just put the trailing whitespace in `_tail` of that token and leave `_head` empty. The frontend will assume that any corpus with `reading_mode: true` will have these attributes.
 
-It is possible to write a custom reading component. See [this file](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js) for an example. See [Components](#components) for documentation on custom components.
+The setting can also be an object with:
+
+- `component` (string) A [custom component](#components) to use instead of the default [standardReadingMode component](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.ts)
+- `group_element` (string) An element name to use for grouping, e.g. `sentence`. The default reader component does not support grouped text, so only use this if your `component` supports it.
 
 
 # Developing the Korp Frontend

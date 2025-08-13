@@ -130,7 +130,7 @@ angular.module("korpApp").component("results", {
                         ></results-map>
                     </uib-tab>
 
-                    <uib-tab results-tab ng-repeat="inData in $root.textTabs" select="select()" deselect="deselect()">
+                    <uib-tab results-tab ng-repeat="task in $root.textTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             {{ 'text_tab_header' | loc:$root.lang}}
                             <tab-preloader ng-if="loading"></tab-preloader>
@@ -139,12 +139,7 @@ angular.module("korpApp").component("results", {
                                 ng-click="closeTab('textTabs', $index, $event)"
                             ></i>
                         </uib-tab-heading>
-                        <results-text
-                            active="isActive"
-                            in-data="inData"
-                            loading="loading"
-                            set-progress="setProgress"
-                        ></results-text>
+                        <results-text active="isActive" set-progress="setProgress" task="task"></results-text>
                     </uib-tab>
                 </uib-tabset>
             </div>

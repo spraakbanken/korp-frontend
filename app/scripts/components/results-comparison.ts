@@ -1,18 +1,16 @@
 /** @format */
-import angular, { IController, IQService } from "angular"
+import angular, { IController, IQService, IScope } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
 import { getStringifier, Stringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
 import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { TabHashScope } from "@/directives/tab-hash"
 import { Attribute } from "@/settings/config.types"
 import "@/components/korp-error"
 import "@/components/loglike-meter"
 import { StoreService } from "@/services/store"
 import { CompareItem, CompareResult, CompareTables, CompareTask } from "@/backend/compare-task"
-import { ExampleTask } from "@/backend/example-task"
 
 type ResultsComparisonController = IController & {
     loading: boolean
@@ -20,7 +18,7 @@ type ResultsComparisonController = IController & {
     task: CompareTask
 }
 
-type ResultsComparisonScope = TabHashScope & {
+type ResultsComparisonScope = IScope & {
     attributes: Record<string, Attribute>
     cmp1: SavedSearch
     cmp2: SavedSearch

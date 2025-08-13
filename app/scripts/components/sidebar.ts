@@ -17,6 +17,7 @@ import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config.types"
 import { JQueryExtended } from "@/jquery.types"
 import { Token } from "@/backend/types"
+import { TextTask } from "@/backend/text-task"
 
 export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
 export type SidebarComponent = {
@@ -165,10 +166,7 @@ angular.module("korpApp").component("sidebar", {
             }
 
             $ctrl.openReadingMode = () => {
-                $rootScope.textTabs.push({
-                    corpus: $ctrl.corpusObj.id,
-                    sentenceData: $ctrl.sentenceData,
-                })
+                $rootScope.textTabs.push(new TextTask($ctrl.corpusObj.id, $ctrl.sentenceData))
             }
 
             $ctrl.updateContent = ({ sentenceData, wordData, corpus, tokens, inReadingMode }) => {
