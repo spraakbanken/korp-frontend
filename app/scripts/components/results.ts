@@ -81,7 +81,7 @@ angular.module("korpApp").component("results", {
                         ></results-examples>
                     </uib-tab>
 
-                    <uib-tab results-tab ng-repeat="data in $root.graphTabs" select="select()" deselect="deselect()">
+                    <uib-tab results-tab ng-repeat="task in $root.graphTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             {{'graph' | loc:$root.lang}}
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
@@ -91,7 +91,7 @@ angular.module("korpApp").component("results", {
                             ></i>
                         </uib-tab-heading>
                         <results-trend-diagram
-                            data="data"
+                            task="task"
                             loading="loading"
                             set-progress="setProgress"
                         ></results-trend-diagram>

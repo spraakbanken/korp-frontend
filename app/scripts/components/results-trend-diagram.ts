@@ -4,35 +4,34 @@ import _ from "lodash"
 import moment, { Moment } from "moment"
 import CSV from "comma-separated-values/csv"
 import settings from "@/settings"
-import graphProxyFactory, { GraphProxy } from "@/backend/graph-proxy"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { formatFrequency, formatRelativeHits, html } from "@/util"
 import { loc } from "@/i18n"
 import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
 import "@/components/korp-error"
-import { GraphTab, RootScope } from "@/root-scope.types"
-import { Histogram } from "@/backend/types"
+import { RootScope } from "@/root-scope.types"
+import { Histogram, NumericString } from "@/backend/types"
 import { JQueryExtended } from "@/jquery.types"
-import { CorpusListing } from "@/corpus_listing"
 import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
 import { StoreService } from "@/services/store"
 import { ExampleTask } from "@/backend/example-task"
+import { TrendTask } from "@/backend/trend-task"
 
 type ResultsTrendDiagramController = IController & {
-    data: GraphTab
     loading: boolean
     setProgress: (loading: boolean, progress: number) => void
+    task: TrendTask
     graph?: Graph
     time_grid: Slick.Grid<any>
     hasEmptyIntervals?: boolean
     zoom: Level
-    proxy: GraphProxy
     $result: JQLite
     mode: "line" | "bar" | "table"
     error?: string
 }
 
 type ResultsTrendDiagramScope = IScope & {
+    nontime: number
     statsRelative: boolean
 }
 
@@ -106,10 +105,9 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 </label>
             </div>
 
-            <div class="non_time_div">
-                {{ 'non_time_before' | loc:$root.lang }}
-                <span class="non_time"></span>
-                {{ 'non_time_after' | loc:$root.lang }}
+            <div ng-if="nontime">
+                {{ 'non_time_before' | loc:$root.lang }} {{ nontime | number:2 }}% {{ 'non_time_after' | loc:$root.lang
+                }}
             </div>
 
             <div class="legend" ng-style='{visibility : !$ctrl.loading && $ctrl.isGraph() ? "visible" : "hidden"}'>
@@ -148,9 +146,9 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         </div>
     `,
     bindings: {
-        data: "<",
         loading: "<",
         setProgress: "<",
+        task: "<",
     },
     controller: [
         "$rootScope",
@@ -167,17 +165,14 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         ) {
             const $ctrl = this as ResultsTrendDiagramController
             $ctrl.zoom = "year"
-            $ctrl.proxy = graphProxyFactory.create()
             $ctrl.$result = $element.find(".graph_tab")
             $ctrl.mode = "line"
 
             $ctrl.$onInit = () => {
-                const interval = $ctrl.data.corpusListing.getMomentInterval()
-                if (!interval) {
-                    console.error("No interval")
-                    return
-                }
+                const interval = $ctrl.task.corpusListing.getMomentInterval()
+                if (!interval) throw new Error("Time interval missing")
                 checkZoomLevel(interval[0], interval[1], true)
+                $scope.nontime = getNonTime()
             }
 
             store.watch("statsRelative", () => {
@@ -205,8 +200,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 const timecqp = getTimeCqp(time, zoom, LEVELS.indexOf(zoom) < 3)
                 const decodedCQP = decodeURIComponent(cqp)
                 const opts = {
-                    corpus: $ctrl.data.corpusListing.stringifySelected(),
-                    cqp: $ctrl.data.cqp,
+                    corpus: $ctrl.task.corpusListing.stringifySelected(),
+                    cqp: $ctrl.task.cqp,
                     cqp2: expandOperators(decodedCQP),
                     cqp3: timecqp,
                     expand_prequeries: false,
@@ -219,22 +214,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 const left = $ctrl.graph ? $ctrl.graph.x(from.unix()) : 0
                 const width = $ctrl.graph ? $ctrl.graph.x(to.unix()) - left : "100%"
                 $(".preloader", $ctrl.$result).css({ left, width })
-            }
-
-            function setZoom(zoom: Level, from: Moment, to: Moment) {
-                $ctrl.zoom = zoom
-                const fmt = "YYYYMMDDHHmmss"
-
-                drawPreloader(from, to)
-                $ctrl.proxy.granularity = GRANULARITIES[zoom]
-                makeRequest(
-                    $ctrl.data.cqp,
-                    $ctrl.data.subcqps,
-                    $ctrl.data.corpusListing,
-                    $ctrl.data.showTotal,
-                    from.format(fmt) as `${number}`,
-                    to.format(fmt) as `${number}`
-                )
             }
 
             function checkZoomLevelDefault() {
@@ -255,7 +234,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 })!
 
                 if ((newZoom && oldZoom !== newZoom) || forceSearch) {
-                    setZoom(newZoom, from, to)
+                    $ctrl.zoom = newZoom
+                    makeRequest(from, to)
                 }
             }
 
@@ -311,16 +291,11 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 return output
             }
 
-            /** Percentage of hits that are undated. */
+            /** Percentage of selected material that is undated. */
             function getNonTime(): number {
-                // TODO: move settings.corpusListing.selected to the subview
-                const non_time = _.reduce(
-                    _.map(settings.corpusListing.selected, "non_time"),
-                    (a, b) => (a || 0) + (b || 0),
-                    0
-                )
-                const sizelist = _.map(settings.corpusListing.selected, (item) => Number(item.info.Size))
-                const totalsize = _.reduce(sizelist, (a, b) => a + b, 0)
+                const corpora = $ctrl.task.corpusListing.selected
+                const non_time = _.sum(corpora.map((corpus) => corpus.non_time || 0))
+                const totalsize = _.sum(corpora.map((corpus) => Number(corpus.info.Size) || 0))
                 return (non_time / totalsize) * 100
             }
 
@@ -495,19 +470,20 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $ctrl.time_grid = time_grid
             }
 
-            function makeSeries(Rickshaw: any, data: CountTimeResponse, cqp: string, zoom: Level) {
+            function makeSeries(Rickshaw: any, data: CountTimeResponse, zoom: Level) {
                 const createTotalSeries = (stats: GraphStats) => ({
                     data: getSeriesData(stats.relative, zoom),
                     color: "steelblue",
                     name: "&Sigma;",
-                    cqp,
+                    cqp: $ctrl.task.cqp,
                     abs_data: getSeriesData(stats.absolute, zoom),
                 })
 
+                const labels = Object.fromEntries($ctrl.task.subqueries)
                 const createSubquerySeries = (stats: GraphStatsCqp, i: number) => ({
                     data: getSeriesData(stats.relative, zoom),
                     color: PALETTE[i % PALETTE.length],
-                    name: $ctrl.data.labelMapping[stats.cqp],
+                    name: labels[stats.cqp],
                     cqp: stats.cqp,
                     abs_data: getSeriesData(stats.absolute, zoom),
                 })
@@ -587,18 +563,12 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                         from.startOf($ctrl.zoom)
                         const to = moment.unix(_.last(points).x)
                         to.endOf($ctrl.zoom)
-                        setZoom($ctrl.zoom, from, to)
+                        makeRequest(from, to)
                     }
                 }
             }
 
-            function renderGraph(
-                Rickshaw: any,
-                data: CountTimeResponse,
-                cqp: string,
-                currentZoom: Level,
-                showTotal?: boolean
-            ) {
+            function renderGraph(Rickshaw: any, data: CountTimeResponse, currentZoom: Level) {
                 let series: Series[]
 
                 const done = () => {
@@ -607,7 +577,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 }
 
                 if ($ctrl.graph) {
-                    series = makeSeries(Rickshaw, data, cqp, currentZoom)
+                    series = makeSeries(Rickshaw, data, currentZoom)
                     spliceData(series)
                     drawIntervals($ctrl.graph)
                     $ctrl.graph.render()
@@ -615,19 +585,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     return
                 }
 
-                const nontime = getNonTime()
-
-                if (nontime) {
-                    const nontimeEl = $(".non_time", $ctrl.$result)
-                        .empty()
-                        .text(nontime.toFixed(2) + "%")
-                        .parent() as JQueryExtended
-                    nontimeEl.localize()
-                } else {
-                    $(".non_time_div", $ctrl.$result).hide()
-                }
-
-                series = makeSeries(Rickshaw, data, cqp, currentZoom)
+                series = makeSeries(Rickshaw, data, currentZoom)
 
                 const graph = new Rickshaw.Graph({
                     element: $(".chart", $ctrl.$result).empty().get(0),
@@ -688,7 +646,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 const legend = new Rickshaw.Graph.Legend({ element: legendElement, graph })
                 new Rickshaw.Graph.Behavior.Series.Toggle({ graph, legend })
 
-                if (!showTotal && $(".legend .line", $ctrl.$result).length > 1) {
+                if (!$ctrl.task.showTotal && $(".legend .line", $ctrl.$result).length > 1) {
                     $(".legend .line:last .action", $ctrl.$result).click()
                 }
 
@@ -791,30 +749,20 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 done()
             }
 
-            async function makeRequest(
-                cqp: string,
-                subcqps: string[],
-                corpora: CorpusListing,
-                showTotal: boolean,
-                from: `${number}`,
-                to: `${number}`
-            ) {
-                const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
+            async function makeRequest(from: Moment, to: Moment) {
+                drawPreloader(from, to)
                 $ctrl.setProgress(true, 0)
                 $ctrl.error = undefined
                 const currentZoom = $ctrl.zoom
-                const reqPromise = $ctrl.proxy.makeRequest(
-                    cqp,
-                    subcqps,
-                    corpora.stringifySelected(),
-                    from,
-                    to,
-                    (progress) => $timeout(() => $ctrl.setProgress(true, progress.percent))
+
+                const reqPromise = $ctrl.task.send(currentZoom, from, to, (progress) =>
+                    $timeout(() => $ctrl.setProgress(true, progress.percent))
                 )
 
                 try {
+                    const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
                     const [Rickshaw, graphData] = await Promise.all([rickshawPromise, reqPromise])
-                    $timeout(() => renderGraph(Rickshaw, graphData, cqp, currentZoom, showTotal))
+                    $timeout(() => renderGraph(Rickshaw, graphData, currentZoom))
                 } catch (error) {
                     $timeout(() => {
                         console.error(error)

@@ -20,6 +20,7 @@ import { StatisticsGrid } from "@/statistics-grid"
 import { createStatisticsCsv, getCqp } from "@/statistics/statistics"
 import { ExampleTask } from "@/backend/example-task"
 import { MapTask } from "@/backend/map-task"
+import { TrendTask } from "@/backend/trend-task"
 
 type StatisticsScope = IScope & {
     clipped: boolean
@@ -360,18 +361,10 @@ angular.module("korpApp").component("statistics", {
 
             $ctrl.onGraphClick = () => {
                 const showTotal = grid.getSelectedRows().includes(0)
-
-                const subQueries = getSubQueries()
-                const subcqps = subQueries.map(([cqp]) => cqp)
-                const labelMapping = Object.fromEntries(subQueries)
-
-                $rootScope.graphTabs.push({
-                    cqp: $ctrl.searchParams.prevNonExpandedCQP,
-                    subcqps,
-                    labelMapping,
-                    showTotal,
-                    corpusListing,
-                })
+                const subqueries = getSubqueries()
+                $rootScope.graphTabs.push(
+                    new TrendTask($ctrl.searchParams.prevNonExpandedCQP, subqueries, showTotal, corpusListing)
+                )
             }
 
             $ctrl.showMap = function () {
@@ -382,7 +375,7 @@ angular.module("korpApp").component("statistics", {
                 $ctrl.noRowsError = false
 
                 const cqp = expandCqp($ctrl.searchParams.prevNonExpandedCQP)
-                const cqpExprs = Object.fromEntries(getSubQueries())
+                const cqpExprs = Object.fromEntries(getSubqueries())
 
                 const selectedAttributes = _.filter($ctrl.mapAttributes, "selected")
                 if (selectedAttributes.length > 1) {
@@ -393,7 +386,7 @@ angular.module("korpApp").component("statistics", {
             }
 
             /** Create KWIC sub queries for selected table rows, as a list of `[cqp, label]` pairs. */
-            function getSubQueries(): [string, string][] {
+            function getSubqueries(): [string, string][] {
                 const rowIds = grid.getSelectedRows().sort()
                 const rows = rowIds.map(grid.getDataItem)
                 const pairs: [string, string][] = []
