@@ -125,16 +125,8 @@ angular.module("korpApp").component("resultsHits", {
             }
 
             function buildQueryOptions(isPaging?: boolean): QueryParams {
+                const contextParams = settings.corpusListing.getContextParam($scope.isReading)
                 const { start, end } = pageToRange(store.page || 0, store.hpp)
-
-                const avoidContext = $scope.isReading
-                    ? settings["default_overview_context"]
-                    : settings["default_reading_context"]
-                const preferredContext = $scope.isReading
-                    ? settings["default_reading_context"]
-                    : settings["default_overview_context"]
-
-                const context = settings.corpusListing.getContextParam(preferredContext, avoidContext)
 
                 if (!isPaging) {
                     $scope.proxy.queryData = undefined
@@ -153,8 +145,7 @@ angular.module("korpApp").component("resultsHits", {
                     default_within,
                     within,
                     query_data: $scope.proxy.queryData,
-                    context,
-                    default_context: preferredContext,
+                    ...contextParams,
                     sort: store.sort || undefined,
                     start,
                     end,

@@ -208,7 +208,10 @@ export class CorpusListing {
         return _.union(...struct)
     }
 
-    getContextParam(prefer: string, avoid: string, corpusIds?: string[]) {
+    getContextParam(isReading?: boolean, corpusIds?: string[]) {
+        const prefer = isReading ? settings["default_reading_context"] : settings["default_overview_context"]
+        const avoid = isReading ? settings["default_overview_context"] : settings["default_reading_context"]
+        // Use specified corpora or fall back to selected
         const corpora = corpusIds?.map((id) => this.struct[id.toLowerCase()]) || this.selected
         const output: string[] = []
         for (let corpus of corpora) {
@@ -220,7 +223,10 @@ export class CorpusListing {
                 output.push(corpus.id.toUpperCase() + ":" + contexts[0])
             }
         }
-        return _.compact(output).join()
+        return {
+            context: _.compact(output).join(),
+            default_context: prefer,
+        }
     }
 
     /**
