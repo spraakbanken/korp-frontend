@@ -139,11 +139,8 @@ angular.module("korpApp").component("resultsStatistics", {
 
                 $ctrl.setProgress(true, 0)
                 s.proxy
-                    .makeRequest(cqp, attrs, {
-                        defaultWithin: store.within,
-                        ignoreCase,
-                        onProgress: (progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)),
-                    })
+                    .setProgressHandler((progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
+                    .makeRequest(cqp, attrs, store.within, ignoreCase)
                     .then(async (data) => {
                         const { rows, params } = await processStatisticsResult(corpora, data, attrs, ignoreCase, cqp)
                         $timeout(() => {

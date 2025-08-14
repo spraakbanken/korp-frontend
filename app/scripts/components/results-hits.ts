@@ -174,17 +174,15 @@ angular.module("korpApp").component("resultsHits", {
                 $scope.error = undefined
 
                 $scope.proxy
-                    .makeRequest(
-                        buildQueryOptions(isPaging),
-                        (progressObj) =>
-                            $timeout(() => {
-                                $ctrl.setProgress(true, Math.round(progressObj.percent))
-                                if (!isPaging && progressObj.hits !== null) {
-                                    $scope.hitsInProgress = progressObj.hits
-                                }
-                            }),
-                        (data) => $timeout(() => renderResult(data))
+                    .setProgressHandler((progressObj) =>
+                        $timeout(() => {
+                            $ctrl.setProgress(true, Math.round(progressObj.percent))
+                            if (!isPaging && progressObj.hits !== null) {
+                                $scope.hitsInProgress = progressObj.hits
+                            }
+                        })
                     )
+                    .makeRequest(buildQueryOptions(isPaging), (data) => $timeout(() => renderResult(data)))
                     .then((data) =>
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)

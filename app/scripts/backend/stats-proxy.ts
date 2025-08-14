@@ -1,24 +1,18 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import type { ProgressHandler } from "@/backend/types"
 import { Factory } from "@/util"
-import { CountParams, CountResponse, CountsMerged, CountsSplit } from "./types/count"
-import { korpRequest } from "./common"
-import Abortable from "./base-proxy"
+import { CountParams, CountResponse, CountsMerged } from "./types/count"
+import ProxyBase from "./proxy-base"
 import { expandCqp } from "@/cqp_parser/cqp"
 
-export class StatsProxy extends Abortable {
+export type StatsProxyInput = [string, string[], string | undefined, boolean | undefined]
+
+export class StatsProxy extends ProxyBase<"count", StatsProxyInput, CountsMerged> {
+    protected readonly endpoint = "count"
     prevParams: CountParams | null = null
 
-    async makeRequest(
-        cqp: string,
-        attrs: string[],
-        options: { defaultWithin?: string; ignoreCase?: boolean; onProgress?: ProgressHandler<"count"> } = {}
-    ): Promise<CountsMerged> {
-        const { ignoreCase, onProgress } = options
-        this.abort()
-
+    protected buildParams(cqp: string, attrs: string[], defaultWithin?: string, ignoreCase?: boolean): CountParams {
         /** Configs of reduced attributes keyed by name, excluding "word" */
         const attributes = _.pick(settings.corpusListing.getReduceAttrs(), attrs)
 
@@ -30,7 +24,7 @@ export class StatsProxy extends Abortable {
             attributes[name]?.["is_struct_attr"] && attributes[name]["group_by"] != "group_by"
         const [groupByStruct, groupBy] = _.partition(attrs, isStruct)
 
-        let within = settings.corpusListing.getWithinParam(options.defaultWithin)
+        let within = settings.corpusListing.getWithinParam(defaultWithin)
         // Replace "ABC-aa|ABC-bb:link" with "ABC-aa:link"
         if (settings.parallel) within = within?.replace(/\|.*?:/g, ":")
 
@@ -45,15 +39,17 @@ export class StatsProxy extends Abortable {
             split: attrs.filter((name) => attributes[name]?.type == "set").join(),
             // For ranked attributes, only count the top-ranking value in a token.
             top: attrs.filter((name) => attributes[name]?.ranked).join(),
-            default_within: options.defaultWithin,
+            default_within: defaultWithin,
             within,
         }
 
         this.prevParams = params
-        const abortSignal = this.getAbortSignal()
-        const data = await korpRequest("count", params, { abortSignal, onProgress })
-        // Since we are not using the `subcqp{N}` parameter, we know the result is not split by subqueries.
-        return data as CountsMerged
+        return params
+    }
+
+    protected processResult(response: CountResponse): CountsMerged {
+        // We know it's the merged type, not split, because we are not using `subcqp{N}` params.
+        return response as CountsMerged
     }
 }
 

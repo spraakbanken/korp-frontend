@@ -1,14 +1,22 @@
 /** @format */
-import _ from "lodash"
+import { once, uniq } from "lodash"
 import settings from "@/settings"
-import Abortable from "@/backend/base-proxy"
+import ProxyBase from "@/backend/proxy-base"
 import { Factory } from "@/util"
-import { ProgressReport } from "./types"
+import { ProgressHandler } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
-import { korpRequest } from "./common"
 import { expandCqp } from "@/cqp_parser/cqp"
 
-export class KwicProxy extends Abortable {
+export type KwicProxyInput = [KorpQueryRequestOptions, ((data: QueryResponse) => void) | undefined]
+
+export type KorpQueryRequestOptions = QueryParams & {
+    command?: "query" | "relations_sentences"
+}
+
+export class KwicProxy extends ProxyBase<"query", KwicProxyInput, QueryResponse> {
+    command: "query" | "relations_sentences"
+    protected readonly endpoint = "query"
+    kwicCallback?: (data: QueryResponse) => void
     prevParams: QueryParams | null
     queryData?: string
 
@@ -18,13 +26,9 @@ export class KwicProxy extends Abortable {
         this.prevParams = null
     }
 
-    async makeRequest(
-        options: KorpQueryRequestOptions,
-        progressCallback?: (data: ProgressReport<"query">) => void,
-        kwicCallback?: (data: QueryResponse) => void
-    ): Promise<QueryResponse> {
-        this.abort()
-        const command = options.command || "query"
+    protected buildParams(options: KorpQueryRequestOptions, kwicCallback?: (data: QueryResponse) => void): QueryParams {
+        this.command = options.command || "query"
+        this.kwicCallback = once(kwicCallback || (() => {}))
 
         const params: QueryParams = {
             default_context: settings.default_overview_context,
@@ -60,36 +64,31 @@ export class KwicProxy extends Abortable {
             params.cqp = expandCqp(params.cqp)
         }
 
-        params.show = _.uniq(["sentence"].concat(show)).join(",")
-        params.show_struct = _.uniq(show_struct).join(",")
+        params.show = uniq(["sentence"].concat(show)).join(",")
+        params.show_struct = uniq(show_struct).join(",")
 
         this.prevParams = params
+        return params
+    }
 
-        // If the result callback is called in the progress handler, do not do it again at finish.
-        const kwicCallbackOnce = _.once(kwicCallback || (() => {}))
+    protected processResult(response: QueryResponse): QueryResponse {
+        this.kwicCallback?.(response)
+        return response
+    }
 
-        function onProgress(progress: ProgressReport<"query">) {
+    setProgressHandler(onProgress: ProgressHandler<"query">): this {
+        return super.setProgressHandler((progress) => {
             if (!progress) return
-            progressCallback?.(progress)
+            onProgress?.(progress)
 
             // Show current page of results if they are available
             // The request may continue to count hits in the background
             if ("kwic" in progress.data) {
-                kwicCallbackOnce(progress.data as QueryResponse)
+                this.kwicCallback?.(progress.data as QueryResponse)
             }
-        }
-
-        const abortSignal = this.getAbortSignal()
-        const data = await korpRequest(command, params, { abortSignal, onProgress })
-        this.queryData = data.query_data
-        kwicCallbackOnce(data)
-        return data
+        })
     }
 }
 
 const kwicProxyFactory = new Factory(KwicProxy)
 export default kwicProxyFactory
-
-export type KorpQueryRequestOptions = QueryParams & {
-    command?: "query" | "relations_sentences"
-}

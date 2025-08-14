@@ -87,7 +87,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             const $ctrl = this as ResultsWordPictureController
 
             const s = $scope
-            s.proxy = lemgramProxyFactory.create()
+            s.proxy = new LemgramProxy()
             s.activated = false
             $scope.sort = "mi"
 
@@ -150,9 +150,8 @@ angular.module("korpApp").component("resultsWordPicture", {
                 $ctrl.setProgress(true, 0)
                 s.warning = undefined
                 s.proxy
-                    .makeRequest(word, type, $scope.sort, (progressObj) =>
-                        $timeout(() => $ctrl.setProgress(true, progressObj.percent))
-                    )
+                    .setProgressHandler((progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
+                    .makeRequest(word, type, $scope.sort)
                     .then((data) =>
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)

@@ -7,7 +7,7 @@ import { padStart } from "lodash"
 import { expandCqp } from "@/cqp_parser/cqp"
 import { korpRequest } from "./common"
 import { CountTimeParams } from "./types/count-time"
-import Abortable from "./base-proxy"
+import Abortable from "./abortable"
 
 export class TrendTask extends Abortable {
     constructor(
