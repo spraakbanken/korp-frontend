@@ -5,10 +5,10 @@ import type { ProgressHandler } from "@/backend/types"
 import { Factory } from "@/util"
 import { CountParams, CountResponse, CountsMerged, CountsSplit } from "./types/count"
 import { korpRequest } from "./common"
-import BaseProxy from "./base-proxy"
+import Abortable from "./base-proxy"
 import { expandCqp } from "@/cqp_parser/cqp"
 
-export class StatsProxy extends BaseProxy {
+export class StatsProxy extends Abortable {
     prevParams: CountParams | null = null
 
     async makeRequest(
@@ -17,8 +17,7 @@ export class StatsProxy extends BaseProxy {
         options: { defaultWithin?: string; ignoreCase?: boolean; onProgress?: ProgressHandler<"count"> } = {}
     ): Promise<CountsMerged> {
         const { ignoreCase, onProgress } = options
-        this.resetRequest()
-        const abortSignal = this.abortController.signal
+        this.abort()
 
         /** Configs of reduced attributes keyed by name, excluding "word" */
         const attributes = _.pick(settings.corpusListing.getReduceAttrs(), attrs)
@@ -51,6 +50,7 @@ export class StatsProxy extends BaseProxy {
         }
 
         this.prevParams = params
+        const abortSignal = this.getAbortSignal()
         const data = await korpRequest("count", params, { abortSignal, onProgress })
         // Since we are not using the `subcqp{N}` parameter, we know the result is not split by subqueries.
         return data as CountsMerged

@@ -1,14 +1,14 @@
 /** @format */
 import _ from "lodash"
 import settings from "@/settings"
-import BaseProxy from "@/backend/base-proxy"
+import Abortable from "@/backend/base-proxy"
 import { Factory } from "@/util"
 import { ProgressReport } from "./types"
 import { QueryParams, QueryResponse } from "./types/query"
 import { korpRequest } from "./common"
 import { expandCqp } from "@/cqp_parser/cqp"
 
-export class KwicProxy extends BaseProxy {
+export class KwicProxy extends Abortable {
     prevParams: QueryParams | null
     queryData?: string
 
@@ -23,9 +23,7 @@ export class KwicProxy extends BaseProxy {
         progressCallback?: (data: ProgressReport<"query">) => void,
         kwicCallback?: (data: QueryResponse) => void
     ): Promise<QueryResponse> {
-        this.resetRequest()
-        const abortSignal = this.abortController.signal
-
+        this.abort()
         const command = options.command || "query"
 
         const params: QueryParams = {
@@ -81,6 +79,7 @@ export class KwicProxy extends BaseProxy {
             }
         }
 
+        const abortSignal = this.getAbortSignal()
         const data = await korpRequest(command, params, { abortSignal, onProgress })
         this.queryData = data.query_data
         kwicCallbackOnce(data)

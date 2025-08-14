@@ -7,21 +7,16 @@ import { padStart } from "lodash"
 import { expandCqp } from "@/cqp_parser/cqp"
 import { korpRequest } from "./common"
 import { CountTimeParams } from "./types/count-time"
+import Abortable from "./base-proxy"
 
-export class TrendTask {
-    private abortController = new AbortController()
-
+export class TrendTask extends Abortable {
     constructor(
         readonly cqp: string,
         readonly subqueries: [string, string][],
         readonly showTotal: boolean,
         readonly corpusListing: CorpusListing
-    ) {}
-
-    /** Abort any running request */
-    abort(): void {
-        this.abortController?.abort()
-        this.abortController = new AbortController()
+    ) {
+        super()
     }
 
     send(zoom: Level, from: Moment, to: Moment, onProgress: ProgressHandler<"count_time">) {
@@ -46,7 +41,7 @@ export class TrendTask {
             ...subcqps,
         }
 
-        const abortSignal = this.abortController.signal
+        const abortSignal = this.getAbortSignal()
         return korpRequest("count_time", params, { abortSignal, onProgress })
     }
 }

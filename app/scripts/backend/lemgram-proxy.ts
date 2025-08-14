@@ -1,12 +1,12 @@
 /** @format */
 import settings from "@/settings"
-import BaseProxy from "@/backend/base-proxy"
+import Abortable from "@/backend/base-proxy"
 import type { ProgressHandler } from "@/backend/types"
 import { Factory } from "@/util"
 import { RelationsParams, RelationsResponse, RelationsSort } from "./types/relations"
 import { korpRequest } from "./common"
 
-export class LemgramProxy extends BaseProxy {
+export class LemgramProxy extends Abortable {
     prevParams?: RelationsParams
 
     async makeRequest(
@@ -15,8 +15,7 @@ export class LemgramProxy extends BaseProxy {
         sort: RelationsSort,
         onProgress: ProgressHandler<"relations">
     ): Promise<RelationsResponse> {
-        this.resetRequest()
-        const abortSignal = this.abortController.signal
+        this.abort()
 
         const params = {
             word,
@@ -28,6 +27,7 @@ export class LemgramProxy extends BaseProxy {
         }
         this.prevParams = params
 
+        const abortSignal = this.getAbortSignal()
         return korpRequest("relations", params, { abortSignal, onProgress })
     }
 }
