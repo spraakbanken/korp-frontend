@@ -2,7 +2,7 @@
 import { pageToRange } from "./common"
 import ProxyBase from "./proxy-base"
 import { RelationsSentencesResponse } from "./types/relations-sentences"
-import { buildShowParams } from "./kwic-proxy"
+import settings from "@/settings"
 
 export class RelationsSentencesProxy extends ProxyBase<"relations_sentences"> {
     protected readonly endpoint = "relations_sentences"
@@ -14,7 +14,7 @@ export class RelationsSentencesProxy extends ProxyBase<"relations_sentences"> {
             source,
             start,
             end,
-            ...buildShowParams(),
+            ...settings.corpusListing.buildShowParams(),
         })
     }
 }

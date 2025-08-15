@@ -266,6 +266,24 @@ export class CorpusListing {
         return withins
     }
 
+    buildShowParams() {
+        const show: string[] = ["sentence"]
+        const show_struct: string[] = []
+
+        for (const corpus of settings.corpusListing.selected) {
+            show.push(...Object.keys(corpus.within).map((key) => key.split(" ").pop()!))
+            show.push(...Object.keys(corpus.attributes))
+
+            show_struct.push(...Object.keys(corpus["struct_attributes"]))
+            if (corpus["reading_mode"]) show_struct.push("text__id")
+        }
+
+        return {
+            show: _.uniq(show).join(),
+            show_struct: _.uniq(show_struct).join(),
+        }
+    }
+
     getTimeInterval(): [number, number] | undefined {
         const all = _(this.selected)
             .map("time")

@@ -1,5 +1,4 @@
 /** @format */
-import { uniq } from "lodash"
 import settings from "@/settings"
 import ProxyBase from "@/backend/proxy-base"
 import { Factory } from "@/util"
@@ -19,7 +18,7 @@ export class KwicProxy extends ProxyBase<"query"> {
         const params: QueryParams = {
             default_context: settings.default_overview_context,
             ...options,
-            ...buildShowParams(),
+            ...settings.corpusListing.buildShowParams(),
         }
 
         if (params.cqp) {
@@ -37,36 +36,3 @@ export class KwicProxy extends ProxyBase<"query"> {
 
 const kwicProxyFactory = new Factory(KwicProxy)
 export default kwicProxyFactory
-
-// TODO Move to CorpusListing?
-export function buildShowParams() {
-    const show: string[] = []
-    const show_struct: string[] = []
-
-    for (let corpus of settings.corpusListing.selected) {
-        for (let key in corpus.within) {
-            // val = corpus.within[key]
-            show.push(key.split(" ").pop()!)
-        }
-        for (let key in corpus.attributes) {
-            // val = corpus.attributes[key]
-            show.push(key)
-        }
-
-        if (corpus["struct_attributes"] != null) {
-            $.each(corpus["struct_attributes"], function (key, val) {
-                if ($.inArray(key, show_struct) === -1) {
-                    return show_struct.push(key)
-                }
-            })
-            if (corpus["reading_mode"]) {
-                show_struct.push("text__id")
-            }
-        }
-    }
-
-    return {
-        show: uniq(["sentence"].concat(show)).join(","),
-        show_struct: uniq(show_struct).join(","),
-    }
-}
