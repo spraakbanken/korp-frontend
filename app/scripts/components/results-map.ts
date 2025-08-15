@@ -8,8 +8,8 @@ import { AppSettings } from "@/settings/app-settings.types"
 import { MarkerEvent, MarkerGroup } from "@/map"
 import "@/components/korp-error"
 import "@/components/result-map"
-import { ExampleTask } from "@/backend/example-task"
-import { MapTask } from "@/backend/map-task"
+import { ExampleTask } from "@/backend/task/example-task"
+import { MapTask } from "@/backend/task/map-task"
 
 type ResultsMapController = IController & {
     active: boolean

@@ -1,7 +1,7 @@
 /** @format */
 import { SavedSearch } from "@/local-storage"
 import settings from "@/settings"
-import { korpRequest } from "./common"
+import { korpRequest } from "../common"
 import { groupBy, range, sumBy, uniq, zip } from "lodash"
 import { Attribute } from "@/settings/config.types"
 import { CorpusListing } from "@/corpus_listing"

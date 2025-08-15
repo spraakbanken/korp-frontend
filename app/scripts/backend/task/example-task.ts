@@ -1,8 +1,8 @@
 /** @format */
 import settings, { getDefaultWithin } from "@/settings"
-import { pageToRange } from "./common"
-import { QueryParams, QueryResponse } from "./types/query"
-import kwicProxyFactory from "./kwic-proxy"
+import { pageToRange } from "../common"
+import { QueryParams, QueryResponse } from "../types/query"
+import kwicProxyFactory from "../proxy/kwic-proxy"
 import { CorpusListing } from "@/corpus_listing"
 
 export class ExampleTask {

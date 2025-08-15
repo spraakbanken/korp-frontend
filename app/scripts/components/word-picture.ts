@@ -8,7 +8,7 @@ import { ShowableApiRelation, TableData, TableDrawData } from "@/components/resu
 import { ApiRelation, RelationsSort } from "@/backend/types/relations"
 import "@/components/help-box"
 import { Lemgram } from "@/lemgram"
-import { WordpicExampleTask } from "@/backend/wordpic-example-task"
+import { WordpicExampleTask } from "@/backend/task/wordpic-example-task"
 
 type WordPictureController = IController & {
     // Bindings

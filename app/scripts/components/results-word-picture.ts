@@ -2,7 +2,7 @@
 import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
-import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
+import lemgramProxyFactory, { LemgramProxy } from "@/backend/proxy/lemgram-proxy"
 import { html, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"

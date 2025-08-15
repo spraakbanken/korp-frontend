@@ -3,19 +3,17 @@ import angular, { IController, IRootElementService, IScope, ITimeoutService } fr
 import _ from "lodash"
 import moment, { Moment } from "moment"
 import CSV from "comma-separated-values/csv"
-import settings from "@/settings"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { formatFrequency, formatRelativeHits, html } from "@/util"
 import { loc } from "@/i18n"
-import { formatUnixDate, getTimeCqp, GRANULARITIES, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
+import { formatUnixDate, getTimeCqp, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
 import "@/components/korp-error"
 import { RootScope } from "@/root-scope.types"
-import { Histogram, NumericString } from "@/backend/types"
-import { JQueryExtended } from "@/jquery.types"
+import { Histogram } from "@/backend/types"
 import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
 import { StoreService } from "@/services/store"
-import { ExampleTask } from "@/backend/example-task"
-import { TrendTask } from "@/backend/trend-task"
+import { ExampleTask } from "@/backend/task/example-task"
+import { TrendTask } from "@/backend/task/trend-task"
 
 type ResultsTrendDiagramController = IController & {
     loading: boolean

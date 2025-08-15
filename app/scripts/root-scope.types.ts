@@ -1,11 +1,11 @@
 /** @format */
 import { IRootScopeService } from "angular"
-import { CompareTask } from "@/backend/compare-task"
-import { ExampleTask } from "@/backend/example-task"
-import { MapTask } from "@/backend/map-task"
-import { TextTask } from "@/backend/text-task"
-import { TrendTask } from "@/backend/trend-task"
-import { WordpicExampleTask } from "./backend/wordpic-example-task"
+import { CompareTask } from "@/backend/task/compare-task"
+import { ExampleTask } from "@/backend/task/example-task"
+import { MapTask } from "@/backend/task/map-task"
+import { TextTask } from "@/backend/task/text-task"
+import { TrendTask } from "@/backend/task/trend-task"
+import { WordpicExampleTask } from "./backend/task/wordpic-example-task"
 
 /**
  * Extends the Angular Root Scope interface with properties used by this app.

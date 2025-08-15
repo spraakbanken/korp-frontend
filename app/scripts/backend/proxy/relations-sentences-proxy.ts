@@ -1,7 +1,7 @@
 /** @format */
-import { pageToRange } from "./common"
+import { pageToRange } from "../common"
 import ProxyBase from "./proxy-base"
-import { RelationsSentencesResponse } from "./types/relations-sentences"
+import { RelationsSentencesResponse } from "../types/relations-sentences"
 import settings from "@/settings"
 
 export class RelationsSentencesProxy extends ProxyBase<"relations_sentences"> {

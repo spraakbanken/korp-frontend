@@ -2,7 +2,7 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import kwicProxyFactory, { type KwicProxy } from "@/backend/kwic-proxy"
+import kwicProxyFactory, { type KwicProxy } from "@/backend/proxy/kwic-proxy"
 import { ApiKwic } from "@/backend/types"
 import { QueryParams, QueryResponse } from "@/backend/types/query"
 import { RootScope } from "@/root-scope.types"

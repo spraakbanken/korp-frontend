@@ -2,7 +2,7 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { Factory } from "@/util"
-import { CountParams, CountsMerged } from "./types/count"
+import { CountParams, CountsMerged } from "../types/count"
 import ProxyBase from "./proxy-base"
 import { expandCqp } from "@/cqp_parser/cqp"
 

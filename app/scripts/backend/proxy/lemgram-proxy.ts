@@ -1,8 +1,8 @@
 /** @format */
 import settings from "@/settings"
-import ProxyBase from "@/backend/proxy-base"
+import ProxyBase from "./proxy-base"
 import { Factory } from "@/util"
-import { RelationsParams, RelationsSort } from "./types/relations"
+import { RelationsParams, RelationsSort } from "../types/relations"
 
 export class LemgramProxy extends ProxyBase<"relations"> {
     protected readonly endpoint = "relations"

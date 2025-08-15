@@ -1,8 +1,8 @@
 /** @format */
 import settings from "@/settings"
-import ProxyBase from "@/backend/proxy-base"
+import ProxyBase from "./proxy-base"
 import { Factory } from "@/util"
-import { QueryParams, QueryResponse } from "./types/query"
+import { QueryParams, QueryResponse } from "../types/query"
 import { expandCqp } from "@/cqp_parser/cqp"
 
 export class KwicProxy extends ProxyBase<"query"> {

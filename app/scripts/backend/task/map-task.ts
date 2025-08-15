@@ -1,8 +1,8 @@
 /** @format */
 import { MarkerGroup, Point } from "@/map"
 import settings from "@/settings"
-import { CountParams, StatsRow } from "./types/count"
-import { korpRequest } from "./common"
+import { CountParams, StatsRow } from "../types/count"
+import { korpRequest } from "../common"
 import { compact } from "lodash"
 
 export type MapAttribute = { label: string; corpora: string[] }

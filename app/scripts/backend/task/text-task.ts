@@ -1,8 +1,8 @@
 /** @format */
 import settings from "@/settings"
-import { korpRequest } from "./common"
+import { korpRequest } from "../common"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { ApiKwic, Token } from "./types"
+import { ApiKwic, Token } from "../types"
 import { omit } from "lodash"
 
 export type TextReaderDataContainer = {

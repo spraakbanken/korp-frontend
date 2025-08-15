@@ -2,7 +2,7 @@
 import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
-import statsProxyFactory, { StatsProxy } from "@/backend/stats-proxy"
+import statsProxyFactory, { StatsProxy } from "@/backend/proxy/stats-proxy"
 import { RootScope } from "@/root-scope.types"
 import { Dataset, SearchParams } from "@/statistics/statistics.types"
 import { html } from "@/util"

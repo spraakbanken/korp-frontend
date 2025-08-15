@@ -1,13 +1,13 @@
 /** @format */
 import { CorpusListing } from "@/corpus_listing"
-import { NumericString, ProgressHandler } from "./types"
+import { NumericString, ProgressHandler } from "../types"
 import { GRANULARITIES, Level } from "@/trend-diagram/util"
 import { Moment } from "moment"
 import { padStart } from "lodash"
 import { expandCqp } from "@/cqp_parser/cqp"
-import { korpRequest } from "./common"
-import { CountTimeParams } from "./types/count-time"
-import Abortable from "./abortable"
+import { korpRequest } from "../common"
+import { CountTimeParams } from "../types/count-time"
+import Abortable from "../abortable"
 
 export class TrendTask extends Abortable {
     constructor(

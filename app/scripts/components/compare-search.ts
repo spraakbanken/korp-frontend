@@ -7,7 +7,7 @@ import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
 import { AttributeOption } from "@/corpus_listing"
 import { savedSearches } from "@/saved-searches"
-import { CompareTask } from "@/backend/compare-task"
+import { CompareTask } from "@/backend/task/compare-task"
 
 type CompareSearchController = IController & {
     valfilter: typeof valfilter
