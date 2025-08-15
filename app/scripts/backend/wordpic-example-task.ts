@@ -7,9 +7,9 @@ export class WordpicExampleTask extends ExampleTask {
         super({ source })
     }
 
-    getParams(page: number, hpp: number, inOrder?: boolean, within?: string): KorpQueryRequestOptions {
+    getParams(page: number, hpp: number): KorpQueryRequestOptions {
         return {
-            ...super.getParams(page, hpp, inOrder, within),
+            ...super.getParams(page, hpp),
             command: "relations_sentences",
         }
     }

@@ -52,3 +52,7 @@ export function setDefaultConfigValues() {
 
     _.defaults(settings, settingsDefaultsDep)
 }
+
+export function getDefaultWithin() {
+    return Object.keys(settings["default_within"] || {})[0]
+}

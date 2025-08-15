@@ -98,7 +98,7 @@ angular.module("korpApp").component("resultsExamples", {
 
                 $ctrl.setProgress(true, 0)
                 $ctrl.task
-                    .send($scope.page || 0, $scope.hitsPerPage, store.in_order, store.within)
+                    .send($scope.page || 0, $scope.hitsPerPage)
                     .then((data) =>
                         $timeout(() => {
                             if (!data.kwic) data.kwic = []

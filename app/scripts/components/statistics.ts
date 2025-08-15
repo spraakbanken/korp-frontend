@@ -355,6 +355,7 @@ angular.module("korpApp").component("statistics", {
                         cqp: $ctrl.params.cqp,
                         cqp2,
                         expand_prequeries: false,
+                        default_within: $ctrl.params.default_within,
                     })
                 )
             }
@@ -363,7 +364,13 @@ angular.module("korpApp").component("statistics", {
                 const showTotal = grid.getSelectedRows().includes(0)
                 const subqueries = getSubqueries()
                 $rootScope.graphTabs.push(
-                    new TrendTask($ctrl.searchParams.prevNonExpandedCQP, subqueries, showTotal, corpusListing)
+                    new TrendTask(
+                        $ctrl.searchParams.prevNonExpandedCQP,
+                        subqueries,
+                        showTotal,
+                        corpusListing,
+                        $ctrl.params.default_within
+                    )
                 )
             }
 
@@ -382,7 +389,9 @@ angular.module("korpApp").component("statistics", {
                     console.log("Warning: more than one selected attribute, choosing first")
                 }
                 const { label, corpora } = selectedAttributes[0]
-                $rootScope.mapTabs.push(new MapTask(cqp, cqpExprs, label, corpora, store.within, $ctrl.mapRelative))
+                $rootScope.mapTabs.push(
+                    new MapTask(cqp, cqpExprs, label, corpora, $ctrl.params.default_within, $ctrl.mapRelative)
+                )
             }
 
             /** Create KWIC sub queries for selected table rows, as a list of `[cqp, label]` pairs. */

@@ -205,6 +205,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     cqp2: expandOperators(decodedCQP),
                     cqp3: timecqp,
                     expand_prequeries: false,
+                    default_within: $ctrl.task.defaultWithin,
                 }
 
                 $rootScope.kwicTabs.push(new ExampleTask(opts))

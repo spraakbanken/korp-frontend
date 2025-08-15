@@ -14,7 +14,8 @@ export class TrendTask extends Abortable {
         readonly cqp: string,
         readonly subqueries: [string, string][],
         readonly showTotal: boolean,
-        readonly corpusListing: CorpusListing
+        readonly corpusListing: CorpusListing,
+        readonly defaultWithin?: string
     ) {
         super()
     }
@@ -32,6 +33,7 @@ export class TrendTask extends Abortable {
 
         const params: CountTimeParams = {
             cqp: expandCqp(this.cqp),
+            default_within: this.defaultWithin,
             corpus: this.corpusListing.stringifySelected(),
             granularity: GRANULARITIES[zoom],
             from: formatDate(from),

@@ -1,6 +1,6 @@
 /** @format */
 import angular from "angular"
-import settings from "@/settings"
+import settings, { getDefaultWithin } from "@/settings"
 import { RootScope } from "@/root-scope.types"
 import { UtilsService } from "@/services/utils"
 import { CqpQuery } from "@/cqp_parser/cqp.types"
@@ -102,8 +102,6 @@ angular.module("korpApp").factory("store", [
         // They can still be accessed as `$root.lang` etc in templates.
         const rootScopeStore = $rootScope as unknown as Store
 
-        const withinDefault = Object.keys(settings["default_within"] || {})[0]
-
         // Initialize
         rootScopeStore.corpus = []
         rootScopeStore.cqp = "[]"
@@ -117,7 +115,7 @@ angular.module("korpApp").factory("store", [
         rootScopeStore.sort = ""
         rootScopeStore.stats_reduce = "word"
         rootScopeStore.stats_reduce_insensitive = ""
-        rootScopeStore.within = withinDefault
+        rootScopeStore.within = getDefaultWithin()
 
         // Sync to url
         utils.setupHash($rootScope, {
@@ -170,7 +168,7 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, { key: "stats_reduce", default: "word" })
         utils.setupHash($rootScope, { key: "stats_reduce_insensitive", default: "" })
         utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
-        utils.setupHash($rootScope, { key: "within", default: withinDefault })
+        utils.setupHash($rootScope, { key: "within", default: getDefaultWithin() })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {
             utils.setupHash($rootScope, {
