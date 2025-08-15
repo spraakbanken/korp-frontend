@@ -2,13 +2,13 @@
 import _ from "lodash"
 import settings from "@/settings"
 import { Factory } from "@/util"
-import { CountParams, CountResponse, CountsMerged } from "./types/count"
+import { CountParams, CountsMerged } from "./types/count"
 import ProxyBase from "./proxy-base"
 import { expandCqp } from "@/cqp_parser/cqp"
 
 export type StatsProxyInput = [string, string[], string | undefined, boolean | undefined]
 
-export class StatsProxy extends ProxyBase<"count", StatsProxyInput, CountsMerged> {
+export class StatsProxy extends ProxyBase<"count"> {
     protected readonly endpoint = "count"
     prevParams: CountParams | null = null
 
@@ -47,9 +47,15 @@ export class StatsProxy extends ProxyBase<"count", StatsProxyInput, CountsMerged
         return params
     }
 
-    protected processResult(response: CountResponse): CountsMerged {
+    async makeRequest(
+        cqp: string,
+        attrs: string[],
+        defaultWithin?: string,
+        ignoreCase?: boolean
+    ): Promise<CountsMerged> {
+        const params = this.buildParams(cqp, attrs, defaultWithin, ignoreCase)
         // We know it's the merged type, not split, because we are not using `subcqp{N}` params.
-        return response as CountsMerged
+        return (await this.send(params)) as CountsMerged
     }
 }
 

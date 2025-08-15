@@ -2,11 +2,9 @@
 import settings from "@/settings"
 import ProxyBase from "@/backend/proxy-base"
 import { Factory } from "@/util"
-import { RelationsParams, RelationsResponse, RelationsSort } from "./types/relations"
+import { RelationsParams, RelationsSort } from "./types/relations"
 
-export type LemgramProxyInput = [string, string, RelationsSort]
-
-export class LemgramProxy extends ProxyBase<"relations", LemgramProxyInput, RelationsResponse> {
+export class LemgramProxy extends ProxyBase<"relations"> {
     protected readonly endpoint = "relations"
     prevParams?: RelationsParams
 
@@ -23,8 +21,9 @@ export class LemgramProxy extends ProxyBase<"relations", LemgramProxyInput, Rela
         return params
     }
 
-    protected processResult(response: RelationsResponse): RelationsResponse {
-        return response
+    makeRequest(word: string, type: string, sort: RelationsSort): Promise<any> {
+        const params = this.buildParams(word, type, sort)
+        return this.send(params)
     }
 }
 

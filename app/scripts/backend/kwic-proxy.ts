@@ -6,13 +6,11 @@ import { Factory } from "@/util"
 import { QueryParams, QueryResponse } from "./types/query"
 import { expandCqp } from "@/cqp_parser/cqp"
 
-export type KwicProxyInput = [KorpQueryRequestOptions]
-
 export type KorpQueryRequestOptions = QueryParams & {
     command?: "query" | "relations_sentences"
 }
 
-export class KwicProxy extends ProxyBase<"query", KwicProxyInput, QueryResponse> {
+export class KwicProxy extends ProxyBase<"query"> {
     command: "query" | "relations_sentences"
     protected readonly endpoint = "query"
     prevParams: QueryParams | null
@@ -68,8 +66,9 @@ export class KwicProxy extends ProxyBase<"query", KwicProxyInput, QueryResponse>
         return params
     }
 
-    protected processResult(response: QueryResponse): QueryResponse {
-        return response
+    makeRequest(options: KorpQueryRequestOptions): Promise<QueryResponse> {
+        const params = this.buildParams(options)
+        return this.send(params)
     }
 }
 
