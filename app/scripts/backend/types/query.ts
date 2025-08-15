@@ -1,24 +1,16 @@
 /** @format */
 import { ApiKwic } from "./common"
 
-/**
- * The `query` and `relations_sentences` endpoints are combined here.
- * @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get
- * @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture/paths/~1relations_sentences/get
- */
+/** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */
 export type QueryParams = {
-    /* Required for `query` */
-    corpus?: string
-    /* Required for `query` */
-    cqp?: string
+    corpus: string
+    cqp: string
     start?: number
     end?: number
     default_context?: string
     context?: string
     show?: string
     show_struct?: string
-    /** Required for `relations_sentences` */
-    source?: string
     default_within?: string
     within?: string
     in_order?: boolean

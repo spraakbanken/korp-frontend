@@ -6,12 +6,7 @@ import { Factory } from "@/util"
 import { QueryParams, QueryResponse } from "./types/query"
 import { expandCqp } from "@/cqp_parser/cqp"
 
-export type KorpQueryRequestOptions = QueryParams & {
-    command?: "query" | "relations_sentences"
-}
-
 export class KwicProxy extends ProxyBase<"query"> {
-    command: "query" | "relations_sentences"
     protected readonly endpoint = "query"
     queryData?: string
 
@@ -20,50 +15,21 @@ export class KwicProxy extends ProxyBase<"query"> {
         this.queryData = undefined
     }
 
-    protected buildParams(options: KorpQueryRequestOptions): QueryParams {
-        this.command = options.command || "query"
-
+    protected buildParams(options: QueryParams): QueryParams {
         const params: QueryParams = {
             default_context: settings.default_overview_context,
             ...options,
-        }
-
-        const show: string[] = []
-        const show_struct: string[] = []
-
-        for (let corpus of settings.corpusListing.selected) {
-            for (let key in corpus.within) {
-                // val = corpus.within[key]
-                show.push(key.split(" ").pop()!)
-            }
-            for (let key in corpus.attributes) {
-                // val = corpus.attributes[key]
-                show.push(key)
-            }
-
-            if (corpus["struct_attributes"] != null) {
-                $.each(corpus["struct_attributes"], function (key, val) {
-                    if ($.inArray(key, show_struct) === -1) {
-                        return show_struct.push(key)
-                    }
-                })
-                if (corpus["reading_mode"]) {
-                    show_struct.push("text__id")
-                }
-            }
+            ...buildShowParams(),
         }
 
         if (params.cqp) {
             params.cqp = expandCqp(params.cqp)
         }
 
-        params.show = uniq(["sentence"].concat(show)).join(",")
-        params.show_struct = uniq(show_struct).join(",")
-
         return params
     }
 
-    makeRequest(options: KorpQueryRequestOptions): Promise<QueryResponse> {
+    makeRequest(options: QueryParams): Promise<QueryResponse> {
         const params = this.buildParams(options)
         return this.send(params)
     }
@@ -71,3 +37,36 @@ export class KwicProxy extends ProxyBase<"query"> {
 
 const kwicProxyFactory = new Factory(KwicProxy)
 export default kwicProxyFactory
+
+// TODO Move to CorpusListing?
+export function buildShowParams() {
+    const show: string[] = []
+    const show_struct: string[] = []
+
+    for (let corpus of settings.corpusListing.selected) {
+        for (let key in corpus.within) {
+            // val = corpus.within[key]
+            show.push(key.split(" ").pop()!)
+        }
+        for (let key in corpus.attributes) {
+            // val = corpus.attributes[key]
+            show.push(key)
+        }
+
+        if (corpus["struct_attributes"] != null) {
+            $.each(corpus["struct_attributes"], function (key, val) {
+                if ($.inArray(key, show_struct) === -1) {
+                    return show_struct.push(key)
+                }
+            })
+            if (corpus["reading_mode"]) {
+                show_struct.push("text__id")
+            }
+        }
+    }
+
+    return {
+        show: uniq(["sentence"].concat(show)).join(","),
+        show_struct: uniq(show_struct).join(","),
+    }
+}

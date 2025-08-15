@@ -7,12 +7,13 @@ import "@/components/korp-error"
 import "@/components/kwic"
 import { StoreService } from "@/services/store"
 import { ExampleTask } from "@/backend/example-task"
+import { WordpicExampleTask } from "@/backend/wordpic-example-task"
 
 type ResultsExamplesController = IController & {
     isActive: boolean
     loading: boolean
     setProgress: (loading: boolean, progress: number) => void
-    task: ExampleTask
+    task: ExampleTask | WordpicExampleTask
 }
 
 type ResultsExamplesScope = IScope & {
@@ -87,6 +88,7 @@ angular.module("korpApp").component("resultsExamples", {
             }
 
             $scope.toggleReading = function () {
+                // TODO For wordpic examples, do not allow switching mode, because /relations_sentences does not support it
                 $scope.isReading = !$scope.isReading
                 $ctrl.task.isReading = $scope.isReading
                 makeRequest()

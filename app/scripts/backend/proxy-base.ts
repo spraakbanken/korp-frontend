@@ -3,7 +3,7 @@ import { korpRequest } from "./common"
 import { API, ProgressHandler } from "./types"
 
 /** Handles the request and processes input and outputs for a given Korp backend API endpoint. */
-export default abstract class ProxyBase<K extends keyof API> {
+export default abstract class ProxyBase<K extends keyof API = keyof API> {
     private abortController = new AbortController()
     protected abstract readonly endpoint: K
     private onProgress?: ProgressHandler<K>

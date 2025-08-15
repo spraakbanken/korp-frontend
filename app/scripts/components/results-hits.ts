@@ -36,7 +36,7 @@ type ResultsHitsScope = IScope & {
     page?: number
     pageChange: (page: number) => void
     proxy: KwicProxy
-    isReading?: boolean
+    isReading: boolean
     toggleReading: () => void
 }
 
@@ -80,7 +80,7 @@ angular.module("korpApp").component("resultsHits", {
 
             $scope.initialSearch = true
             $scope.proxy = kwicProxyFactory.create()
-            $scope.isReading = store.reading_mode
+            $scope.isReading = store.reading_mode || false
 
             $ctrl.$onInit = () => {
                 $scope.page = store.page

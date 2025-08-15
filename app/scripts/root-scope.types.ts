@@ -5,6 +5,7 @@ import { ExampleTask } from "@/backend/example-task"
 import { MapTask } from "@/backend/map-task"
 import { TextTask } from "@/backend/text-task"
 import { TrendTask } from "@/backend/trend-task"
+import { WordpicExampleTask } from "./backend/wordpic-example-task"
 
 /**
  * Extends the Angular Root Scope interface with properties used by this app.
@@ -16,7 +17,7 @@ export type RootScope = IRootScopeService & DynamicTabs
 export type DynamicTabs = {
     compareTabs: CompareTask[]
     graphTabs: TrendTask[]
-    kwicTabs: ExampleTask[]
+    kwicTabs: (ExampleTask | WordpicExampleTask)[]
     mapTabs: MapTask[]
     textTabs: TextTask[]
 }
