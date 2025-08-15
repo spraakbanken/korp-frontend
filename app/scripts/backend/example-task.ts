@@ -3,19 +3,26 @@ import settings, { getDefaultWithin } from "@/settings"
 import { pageToRange } from "./common"
 import { QueryParams, QueryResponse } from "./types/query"
 import kwicProxyFactory from "./kwic-proxy"
+import { CorpusListing } from "@/corpus_listing"
 
 export class ExampleTask {
+    readonly corpusListing: CorpusListing
     readonly proxy = kwicProxyFactory.create()
-    constructor(readonly queryParams: QueryParams, public isReading?: boolean) {}
+    constructor(readonly queryParams: QueryParams, public isReading?: boolean) {
+        const corpusIds = queryParams.corpus!.split(",")
+        this.corpusListing = settings.corpusListing.subsetFactory(corpusIds)
+    }
 
     abort(): void {
         this.proxy.abort()
     }
 
     protected getParams(page: number, hpp: number): QueryParams {
-        const corpusIds = this.queryParams.corpus?.split(",")
-        const contextParams = settings.corpusListing.getContextParam(this.isReading, corpusIds)
         const { start, end } = pageToRange(page || 0, hpp)
+
+        // Override context param only if isReading is explicitly enabled/disabled
+        const contextParams = this.isReading != undefined ? this.corpusListing.getContextParam(this.isReading) : {}
+
         const opts = {
             ...this.queryParams,
             ...contextParams,
@@ -26,7 +33,7 @@ export class ExampleTask {
         }
 
         opts.default_within ??= getDefaultWithin()
-        opts.within = settings.corpusListing.getWithinParam(opts.default_within)
+        opts.within = this.corpusListing.getWithinParam(opts.default_within)
 
         return opts
     }
