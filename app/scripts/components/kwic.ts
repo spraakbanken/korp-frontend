@@ -7,7 +7,6 @@ import { makeDownload } from "@/kwic_download"
 import { html } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
-import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
@@ -295,7 +294,7 @@ angular.module("korpApp").component("kwic", {
             }
 
             $ctrl.$onChanges = (changeObj) => {
-                if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
+                if (changeObj.kwicInput?.currentValue) {
                     $ctrl.kwic = massageData($ctrl.kwicInput)
                     $ctrl.useContext = $ctrl.context || !store.in_order
                     if (!$ctrl.context) {

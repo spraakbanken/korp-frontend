@@ -172,6 +172,7 @@ angular.module("korpApp").component("resultsHits", {
                 $ctrl.setProgress(true, 0)
                 $scope.aborted = false
                 $scope.error = undefined
+                let hasKwic = false
 
                 $scope.proxy
                     .setProgressHandler((progressObj) =>
@@ -180,10 +181,11 @@ angular.module("korpApp").component("resultsHits", {
                             if (!isPaging && progressObj.hits !== null) {
                                 $scope.hitsInProgress = progressObj.hits
                             }
-                            // Store the KWIC data for the current page as soon as it is availbale.
+                            // Store the KWIC data for the current page as soon as it is available.
                             // The request may continue to count hits across corpora.
-                            if ("kwic" in progressObj.data) {
+                            if (!hasKwic && "kwic" in progressObj.data) {
                                 renderResult(progressObj.data as QueryResponse)
+                                hasKwic = true
                             }
                         })
                     )
@@ -191,7 +193,7 @@ angular.module("korpApp").component("resultsHits", {
                     .then((data) =>
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)
-                            renderResult(data)
+                            if (!hasKwic) renderResult(data)
                             if (!isPaging) {
                                 $scope.hits = data.hits
                                 $scope.hitsInProgress = data.hits
