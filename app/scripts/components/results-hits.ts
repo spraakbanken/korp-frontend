@@ -180,9 +180,14 @@ angular.module("korpApp").component("resultsHits", {
                             if (!isPaging && progressObj.hits !== null) {
                                 $scope.hitsInProgress = progressObj.hits
                             }
+                            // Store the KWIC data for the current page as soon as it is availbale.
+                            // The request may continue to count hits across corpora.
+                            if ("kwic" in progressObj.data) {
+                                renderResult(progressObj.data as QueryResponse)
+                            }
                         })
                     )
-                    .makeRequest(buildQueryOptions(isPaging), (data) => $timeout(() => renderResult(data)))
+                    .makeRequest(buildQueryOptions(isPaging))
                     .then((data) =>
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)

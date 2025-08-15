@@ -34,6 +34,6 @@ export class ExampleTask {
 
     send(page: number, hpp: number, inOrder?: boolean, within?: string): Promise<QueryResponse> {
         const opts = this.getParams(page, hpp, inOrder, within)
-        return this.proxy.makeRequest(opts, undefined)
+        return this.proxy.makeRequest(opts)
     }
 }
