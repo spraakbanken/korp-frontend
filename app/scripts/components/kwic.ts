@@ -31,7 +31,7 @@ type KwicController = IController & {
     page: number
     pageEvent: (page: number) => void
     hitsPerPage: number
-    prevParams: any
+    params: any
     corpusOrder: string[]
     /** Current page of results. */
     kwicInput: ApiKwic[]
@@ -256,7 +256,7 @@ angular.module("korpApp").component("kwic", {
         page: "<",
         pageEvent: "<",
         hitsPerPage: "<",
-        prevParams: "<",
+        params: "<",
         corpusOrder: "<",
         kwicInput: "<",
         corpusHits: "<",
@@ -305,8 +305,8 @@ angular.module("korpApp").component("kwic", {
                         })
                     }
 
-                    if (settings["enable_backend_kwic_download"] && $ctrl.prevParams) {
-                        setDownloadLinks($ctrl.prevParams, {
+                    if (settings["enable_backend_kwic_download"] && $ctrl.params) {
+                        setDownloadLinks($ctrl.params, {
                             kwic: $ctrl.kwic,
                             corpus_order: $ctrl.corpusOrder,
                         })
@@ -404,7 +404,7 @@ angular.module("korpApp").component("kwic", {
                         return
                     }
                     const [dataType, fileType] = value.split("/") as ["annotations" | "kwic", "csv" | "tsv"]
-                    const [fileName, blobName] = makeDownload(dataType, fileType, $ctrl.kwic, $ctrl.prevParams, hits)
+                    const [fileName, blobName] = makeDownload(dataType, fileType, $ctrl.kwic, $ctrl.params, hits)
                     $ctrl.download.fileName = fileName
                     $ctrl.download.blobName = blobName
                     $ctrl.download.selected = ""

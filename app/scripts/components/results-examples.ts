@@ -49,7 +49,7 @@ angular.module("korpApp").component("resultsExamples", {
                 page="page"
                 page-event="pageChange"
                 hits-per-page="hitsPerPage"
-                prev-params="task.proxy.prevParams"
+                params="task.proxy.params"
                 corpus-order="corpusOrder"
             ></kwic>
         </div>`,

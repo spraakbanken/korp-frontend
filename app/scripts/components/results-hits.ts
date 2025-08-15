@@ -58,11 +58,11 @@ angular.module("korpApp").component("resultsHits", {
                 page="page"
                 page-event="pageChange"
                 hits-per-page="hitsPerPage"
-                prev-params="proxy.prevParams"
+                params="proxy.params"
                 corpus-order="corpusOrder"
                 show-search-options="true"
             ></kwic>
-            <json-button endpoint="'query'" params="proxy.prevParams"></json-button>
+            <json-button endpoint="'query'" params="proxy.params"></json-button>
         </div>
     `,
     bindings: {

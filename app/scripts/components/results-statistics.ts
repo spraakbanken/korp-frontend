@@ -42,13 +42,13 @@ angular.module("korpApp").component("resultsStatistics", {
             data="data"
             error="error"
             loading="$ctrl.loading"
-            prev-params="proxy.prevParams"
+            params="proxy.params"
             row-count="rowCount"
             search-params="searchParams"
             warning="warning"
         ></statistics>
         <korp-error ng-if="error" message="{{error}}"></korp-error>
-        <json-button ng-if="!warning && !error" endpoint="'count'" params="proxy.prevParams"></json-button>
+        <json-button ng-if="!warning && !error" endpoint="'count'" params="proxy.params"></json-button>
     `,
     bindings: {
         isActive: "<",

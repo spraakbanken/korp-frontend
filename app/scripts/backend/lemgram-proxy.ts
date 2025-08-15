@@ -6,7 +6,6 @@ import { RelationsParams, RelationsSort } from "./types/relations"
 
 export class LemgramProxy extends ProxyBase<"relations"> {
     protected readonly endpoint = "relations"
-    prevParams?: RelationsParams
 
     buildParams(word: string, type: string, sort: RelationsSort): RelationsParams {
         const params = {
@@ -17,7 +16,6 @@ export class LemgramProxy extends ProxyBase<"relations"> {
             sort,
             max: 1000,
         }
-        this.prevParams = params
         return params
     }
 

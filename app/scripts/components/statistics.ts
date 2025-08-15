@@ -36,7 +36,7 @@ type StatisticsController = IController & {
     data: Dataset
     error: boolean
     loading: boolean
-    prevParams: CountParams
+    params: CountParams
     rowCount: number
     searchParams: SearchParams
     warning?: string
@@ -206,7 +206,7 @@ angular.module("korpApp").component("statistics", {
         data: "<",
         error: "<",
         loading: "<",
-        prevParams: "<",
+        params: "<",
         rowCount: "<",
         searchParams: "<",
         warning: "<",
@@ -352,7 +352,7 @@ angular.module("korpApp").component("statistics", {
                 $rootScope.kwicTabs.push(
                     new ExampleTask({
                         corpus: corpora.join(","),
-                        cqp: $ctrl.prevParams.cqp,
+                        cqp: $ctrl.params.cqp,
                         cqp2,
                         expand_prequeries: false,
                     })

@@ -10,7 +10,6 @@ export type StatsProxyInput = [string, string[], string | undefined, boolean | u
 
 export class StatsProxy extends ProxyBase<"count"> {
     protected readonly endpoint = "count"
-    prevParams: CountParams | null = null
 
     protected buildParams(cqp: string, attrs: string[], defaultWithin?: string, ignoreCase?: boolean): CountParams {
         /** Configs of reduced attributes keyed by name, excluding "word" */
@@ -43,7 +42,6 @@ export class StatsProxy extends ProxyBase<"count"> {
             within,
         }
 
-        this.prevParams = params
         return params
     }
 

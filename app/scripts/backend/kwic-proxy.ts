@@ -13,13 +13,11 @@ export type KorpQueryRequestOptions = QueryParams & {
 export class KwicProxy extends ProxyBase<"query"> {
     command: "query" | "relations_sentences"
     protected readonly endpoint = "query"
-    prevParams: QueryParams | null
     queryData?: string
 
     constructor() {
         super()
         this.queryData = undefined
-        this.prevParams = null
     }
 
     protected buildParams(options: KorpQueryRequestOptions): QueryParams {
@@ -62,7 +60,6 @@ export class KwicProxy extends ProxyBase<"query"> {
         params.show = uniq(["sentence"].concat(show)).join(",")
         params.show_struct = uniq(show_struct).join(",")
 
-        this.prevParams = params
         return params
     }
 
