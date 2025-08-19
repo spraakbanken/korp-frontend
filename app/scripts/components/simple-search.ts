@@ -164,6 +164,7 @@ angular.module("korpApp").component("simpleSearch", {
 
                 if (ctrl.currentText) store.search = `word|${ctrl.currentText}`
                 else if (ctrl.lemgram) store.search = `lemgram|${ctrl.lemgram}`
+                else return
                 store.page = 0
 
                 matomoSend("trackEvent", "Search", "Submit search", "Simple")

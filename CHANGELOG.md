@@ -30,6 +30,7 @@
 - Prevent relative frequency "NaN" when loading first KWIC result
 - Related words heading link url
 - Use `angular.toJson` in `localStorageGet` to avoid storing `$$hashKey` etc.
+- Stray value when clearing simple search input
 
 ## [9.10.1] - 2025-07-02
 
