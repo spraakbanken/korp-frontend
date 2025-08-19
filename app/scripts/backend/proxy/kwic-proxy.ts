@@ -7,6 +7,7 @@ import { expandCqp } from "@/cqp_parser/cqp"
 
 export class KwicProxy extends ProxyBase<"query"> {
     protected readonly endpoint = "query"
+    /** Cache token for quicker paging requests. Must be unset if the query is changed. */
     queryData?: string
 
     constructor() {
@@ -28,9 +29,11 @@ export class KwicProxy extends ProxyBase<"query"> {
         return params
     }
 
-    makeRequest(options: QueryParams): Promise<QueryResponse> {
+    async makeRequest(options: QueryParams): Promise<QueryResponse> {
         const params = this.buildParams(options)
-        return this.send(params)
+        const data = await this.send(params)
+        this.queryData = data.query_data
+        return data
     }
 }
 
