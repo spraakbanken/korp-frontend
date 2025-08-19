@@ -70,6 +70,7 @@
     "show_context": "Show context",
     "show_context_help": "By default, search hits are listed in a keywords-in-context layout (KWIC). Enabling this option will instead show them with wrapped lines, suitable for reading. For some corpora, this also retrieves more of the context, such as a full paragraph.",
     "log_in": "Log in",
+    "login_help": "An account is only necessary if you need to access protected corpora. To apply for access, email sb-info@svenska.gu.se and let us know what corpora you are interested in.",
     "username": "Email",
     "password": "Password",
     "login_fail_msg": "Authentication failed, please check your username and password and try again.",

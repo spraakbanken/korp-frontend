@@ -14,6 +14,7 @@ export const loginBoxComponent: IComponentOptions = {
             <span ng-click="$ctrl.dismiss()" class="close-x">×</span>
         </div>
         <div id="login_popup" class="modal-body">
+            <p>{{ "login_help" | loc:$root.lang }}</p>
             <form ng-submit="$ctrl.loginSubmit()">
                 <label for="usrname">{{'username' | loc:$root.lang}}</label>
                 <input id="usrname" ng-model="$ctrl.loginUsr" type="text" />

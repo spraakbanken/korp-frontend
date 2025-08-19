@@ -44,7 +44,6 @@ export const loginStatusComponent: IComponentOptions = {
                 const modal = $uibModal.open({
                     template: `<login-box on-close="$close()" on-dismiss="$dismiss()"></login-box>`,
                     windowClass: "login",
-                    size: "sm",
                 })
                 // Treat dismissing as a logout action
                 modal.result.catch((e) => {

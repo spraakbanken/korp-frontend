@@ -70,6 +70,7 @@
     "show_context": "Visa kontext",
     "show_context_help": "Som standard visas sökträffar med träfforden centrerade (keyword in context, KWIC). Med detta alternativ påslaget visas de istället med radbrytningar för bättre läsbarhet. Vissa korpusar ger också mer kontext i det läget, typiskt ett helt stycke.",
     "log_in": "Logga in",
+    "login_help": "Ett konto behövs bara om du vill få tillgång till skyddade korpusar. För att ansöka om tillgång, kontakta sb-info@svenska.gu.se och meddela vilka korpusar du är intresserad av.",
     "username": "Epostadress",
     "password": "Lösenord",
     "login_fail_msg": "Login misslyckades, kontrollera användarnamn och lösenord och försök igen.",

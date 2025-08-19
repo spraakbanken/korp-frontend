@@ -5,6 +5,7 @@
 ### Added
 
 - Use [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader) to compile CQP parser at build time
+- Login form help text
 
 ### Changed
 
