@@ -100,6 +100,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
     corpora.sort((a, b) => getCorpusTitle(a).localeCompare(getCorpusTitle(b), store.lang))
 
     const minWidth = 100
+    const dir = settings["dir"] ? `dir="${settings["dir"]}"` : ""
     const columns: SlickgridColumn[] = []
     for (let [reduceVal, reduceValLabel] of zip(attrs, labels)) {
         if (reduceVal == null || reduceValLabel == null) break
@@ -111,7 +112,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
             formatter: (row, cell, value, columnDef, data: Row) => {
                 if (isTotalRow(data)) return "&Sigma;"
                 const output = data.formattedValue[reduceVal!] || `<span class="opacity-50">&empty;</span>`
-                return `<div class="link" data-row="${data.rowId}">${output}</div>`
+                return `<div class="link" data-row="${data.rowId}" ${dir}>${output}</div>`
             },
             minWidth,
             cssClass: "parameter-column",

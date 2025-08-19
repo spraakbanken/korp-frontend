@@ -583,8 +583,8 @@ table {
   white-space: nowrap;
 }
 
-.left {
-  text-align: right;
+.before-match {
+  text-align: end;
   vertical-align: text-top;
 }
 
@@ -599,7 +599,8 @@ table {
   background-color : white !important;
 }
 
-.right {
+.after-match {
+  text-align: start;
   vertical-align: text-top;
 }
 

@@ -6,6 +6,7 @@
 
 - Use [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader) to compile CQP parser at build time
 - Login form help text
+- Experimental support for right-to-left (rtl) corpus text
 
 ### Changed
 

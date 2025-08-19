@@ -58,6 +58,7 @@ type KwicController = IController & {
 }
 
 type KwicScope = IScope & {
+    dir?: string
     hpp: string
     hppOptions: string[]
     updateHpp: () => void
@@ -143,7 +144,7 @@ angular.module("korpApp").component("kwic", {
                 page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-            <div class="table_scrollarea">
+            <div class="table_scrollarea" dir="{{ dir }}">
                 <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0">
                     <tr
                         class="sentence"
@@ -169,7 +170,7 @@ angular.module("korpApp").component("kwic", {
                             />
                         </td>
 
-                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="left">
+                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="before-match">
                             <kwic-word
                                 ng-repeat="word in $ctrl.selectLeft(sentence)"
                                 word="word"
@@ -185,7 +186,7 @@ angular.module("korpApp").component("kwic", {
                                 sentence-index="$parent.$index"
                             />
                         </td>
-                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="right">
+                        <td ng-if="::!sentence.newCorpus && !sentence.isLinked" class="after-match">
                             <kwic-word
                                 ng-repeat="word in $ctrl.selectRight(sentence)"
                                 word="word"
@@ -276,6 +277,7 @@ angular.module("korpApp").component("kwic", {
         ) {
             let $ctrl = this as KwicController
 
+            $scope.dir = settings["dir"]
             $scope.sortOptions = {
                 "": "appearance_context",
                 keyword: "word_context",
@@ -606,8 +608,8 @@ angular.module("korpApp").component("kwic", {
                     const getNextToken = (): JQLite | undefined => {
                         if (event.key == "ArrowUp") return selectUp()
                         if (event.key == "ArrowDown") return selectDown()
-                        if (event.key == "ArrowLeft") return selectPrev()
-                        if (event.key == "ArrowRight") return selectNext()
+                        if (event.key == "ArrowLeft") return $scope.dir == "rtl" ? selectNext() : selectPrev()
+                        if (event.key == "ArrowRight") return $scope.dir == "rtl" ? selectPrev() : selectNext()
                     }
                     const next = getNextToken()
                     if (next) {

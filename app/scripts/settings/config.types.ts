@@ -13,6 +13,8 @@ export type Config = {
         custom_attributes?: Record<string, CustomAttribute>
     }
     corpora: Record<string, Corpus>
+    /** Writing direction of corpus text. */
+    dir?: "rtl"
     folders?: Record<string, Folder>
     label: LangString
     map_enabled?: boolean

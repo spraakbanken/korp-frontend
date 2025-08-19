@@ -9,6 +9,7 @@ import { Lemgram } from "@/lemgram"
 import { Saldo } from "@/saldo"
 
 type AutocController = IController & {
+    dir?: string
     input: string
     isRawInput: boolean
     type: "lemgram" | "sense"
@@ -57,6 +58,7 @@ angular.module("korpApp").component("autoc", {
                     <input
                         autofocus
                         type="text"
+                        dir="{{ $ctrl.dir }}"
                         ng-model="$ctrl.textInField"
                         ng-change="$ctrl.textInput()"
                         uib-typeahead="row for row in $ctrl.getRows($viewValue)"
@@ -98,6 +100,7 @@ angular.module("korpApp").component("autoc", {
         function () {
             const ctrl = this as AutocController
 
+            ctrl.dir = settings["dir"]
             ctrl.isError = false
 
             ctrl.$onChanges = () => {
