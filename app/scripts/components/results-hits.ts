@@ -198,6 +198,7 @@ angular.module("korpApp").component("resultsHits", {
                                 $scope.hits = data.hits
                                 $scope.hitsInProgress = data.hits
                                 $scope.corpusHits = data.corpus_hits
+                                $scope.corpusOrder = data.corpus_order
                             }
                         })
                     )
@@ -214,8 +215,6 @@ angular.module("korpApp").component("resultsHits", {
             }
 
             function renderResult(data: QueryResponse) {
-                if (!data.kwic) data.kwic = []
-                $scope.corpusOrder = data.corpus_order
                 $scope.kwic = data.kwic
             }
         },

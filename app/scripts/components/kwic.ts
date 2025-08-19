@@ -329,7 +329,7 @@ angular.module("korpApp").component("kwic", {
                         $ctrl.hitsInProgress && totalTokens ? ($ctrl.hitsInProgress / totalTokens) * 1e6 : undefined
                 }
 
-                if ("corpusHits" in changeObj && $ctrl.corpusHits) {
+                if ("corpusHits" in changeObj && $ctrl.corpusHits && $ctrl.corpusOrder) {
                     const pageSize = $ctrl.kwicInput.length
                     $ctrl.hitsPictureData = calculateHitsPicture($ctrl.corpusOrder, $ctrl.corpusHits, pageSize)
                 }
