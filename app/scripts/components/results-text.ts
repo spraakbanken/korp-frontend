@@ -1,57 +1,30 @@
 /** @format */
+import angular, { ICompileService, IController, IScope } from "angular"
 import _ from "lodash"
-import angular, { ICompileService, IController } from "angular"
 import statemachine from "@/statemachine"
-import settings from "@/settings"
-import "@/backend/backend"
 import "@/components/readingmode"
-import { TextTab } from "@/root-scope.types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { html, kebabize } from "@/util"
-import { TabHashScope } from "@/directives/tab-hash"
-import { getDataForReadingMode } from "@/backend/backend"
-import { ApiKwic, Token } from "@/backend/types"
+import { ReaderToken, TextReaderData, TextReaderDataContainer, TextTask } from "@/backend/task/text-task"
 
 type ResultsTextController = IController & {
     active: boolean
-    inData: TextTab
     setProgress: (loading: boolean, progress: number) => void
+    task: TextTask
 }
 
-type ResultsTextScope = TabHashScope & {
+type ResultsTextScope = IScope & {
     corpusObj: CorpusTransformed
     data: TextReaderDataContainer
     selectedToken?: ReaderToken
-    wordClick: TextReaderWordHandler
+    wordClick: (token: ReaderToken) => void
 }
-
-export type TextReaderDataContainer = {
-    corpus: string
-    document: TextReaderData
-    sentenceData: TextTab["sentenceData"]
-}
-
-export type TextReaderWordHandler = (token: ReaderToken) => void
-
-export type ReaderTokenContainer = { tokens: Group<ReaderToken>[] | ReaderToken[] }
-
-type Group<T> = { attrs: Record<string, string>; tokens: T[] }
-
-type ReaderToken = {
-    /** Original token content, plus struct attrs renamed to `(struct)_(attr)` */
-    attrs: Attrs
-    currentSentence: Attrs[]
-}
-
-type Attrs = Record<string, string>
-
-type TextReaderData = Omit<ApiKwic, "tokens"> & ReaderTokenContainer
 
 angular.module("korpApp").component("resultsText", {
     bindings: {
         active: "<",
-        inData: "<",
         setProgress: "<",
+        task: "<",
     },
     controller: [
         "$compile",
@@ -63,14 +36,9 @@ angular.module("korpApp").component("resultsText", {
             $ctrl.$onInit = () => {
                 $ctrl.setProgress(true, 0)
 
-                const corpus = $ctrl.inData.corpus
-                $scope.corpusObj = settings.corpora[corpus]
-                const textId = $ctrl.inData.sentenceData["text__id"]
-                getDataForReadingMode(corpus, textId)
-                    .then((data) => {
-                        const document = prepareData(data.kwic[0], $scope.corpusObj)
-                        render(document)
-                    })
+                $ctrl.task
+                    .send()
+                    .then(render)
                     .catch((err) => {
                         $scope.$apply(() => $ctrl.setProgress(false, 100))
                         throw err
@@ -92,9 +60,9 @@ angular.module("korpApp").component("resultsText", {
 
             function render(document: TextReaderData) {
                 $scope.$apply(($scope: ResultsTextScope) => {
-                    $scope.data = { corpus: $ctrl.inData.corpus, document, sentenceData: $ctrl.inData.sentenceData }
+                    $scope.data = { corpus: $ctrl.task.corpusId, document, sentenceData: $ctrl.task.sentenceData }
                     $ctrl.setProgress(false, 100)
-                    const config = $scope.corpusObj.reading_mode
+                    const config = $ctrl.task.corpus.reading_mode
                     const componentName = typeof config == "object" ? config.component : "standardReadingMode"
                     const componentTag = kebabize(componentName)
 
@@ -118,85 +86,3 @@ angular.module("korpApp").component("resultsText", {
         },
     ],
 })
-
-function prepareData(kwic: ApiKwic, settings: CorpusTransformed): TextReaderData {
-    const groupElement = typeof settings.reading_mode == "object" ? settings.reading_mode.group_element : undefined
-
-    if (groupElement) {
-        const groups = groupTokens(kwic.tokens, groupElement)
-        const tokens = groups.map((group) => ({ ...group, tokens: convertTokens(group.tokens) }))
-        return { ...kwic, tokens }
-    }
-
-    const tokens = convertTokens(kwic.tokens)
-    return { ...kwic, tokens }
-}
-
-/**
- * Partition a token sequence into groups corresponding to structs of the `groupElement` type.
- * The `groupElement` structs are assumed to cover the whole document, i.e. no tokens in between.
- */
-function groupTokens(tokens: Token[], groupElement: string): Group<Token>[] {
-    const groups: Group<Token>[] = []
-    for (const token of tokens) {
-        // Start a new group if this tokens opens a new struct of the groupElement type
-        if (token.structs?.open) {
-            const struct = token.structs.open.find((open) => open[groupElement])
-            if (!struct) continue
-            // Copy attrs to group
-            const attrs = { ...struct[groupElement] }
-            groups.push({ attrs, tokens: [] })
-        }
-        // Add token to current group
-        groups[groups.length - 1].tokens.push(token)
-    }
-    return groups
-}
-
-function convertTokens(tokens: Token[]): ReaderToken[] {
-    const out: ReaderToken[] = []
-    let currentSentence: Record<string, string>[] = []
-    /** Attributes per currently open struct */
-    const open: Record<string, Record<string, string>> = {}
-
-    for (const token of tokens) {
-        // Store new struct attrs and track current sentence
-        for (const openStruct of token.structs?.open || []) {
-            const name = Object.keys(openStruct)[0]
-            open[name] = openStruct[name]
-            if (name === "sentence") currentSentence = []
-        }
-
-        // Convert and push token
-        const attrs = convertToken(token, open)
-        currentSentence.push(attrs)
-        out.push({ attrs, currentSentence })
-
-        // Clear closed struct attrs
-        for (const name of token.structs?.close || []) {
-            delete open[name]
-        }
-    }
-
-    return out
-}
-
-function convertToken(token: Token, open: Record<string, Record<string, string>>): Record<string, string> {
-    // Add attrs of all open structs
-    const structAttrs: Record<string, string> = {}
-    for (const name in open) {
-        for (const attr in open[name]) {
-            if (open[name][attr]) structAttrs[name + "_" + attr] = open[name][attr]
-        }
-    }
-
-    return {
-        ..._.omit(token, "structs"),
-        ...structAttrs,
-        head: parseWhitespace(token._head),
-        tail: parseWhitespace(token._tail),
-    }
-}
-
-const parseWhitespace = (str?: string): string =>
-    str?.replace(/\\s/g, " ").replace(/\\n/g, "\n").replace(/\\t/g, "\t") || ""

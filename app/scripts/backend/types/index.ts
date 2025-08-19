@@ -9,6 +9,7 @@ import { LemgramCountParams, LemgramCountResponse } from "./lemgram-count"
 import { LoglikeParams, LoglikeResponse } from "./loglike"
 import { QueryParams, QueryResponse } from "./query"
 import { RelationsParams, RelationsResponse } from "./relations"
+import { RelationsSentencesParams, RelationsSentencesResponse } from "./relations-sentences"
 import { TimespanParams, TimespanResponse } from "./timespan"
 
 export * from "./common"
@@ -53,9 +54,8 @@ export type API = {
         response: RelationsResponse
     }
     relations_sentences: {
-        // TODO Create correct types for `RelationSentences*`
-        params: QueryParams
-        response: QueryResponse
+        params: RelationsSentencesParams
+        response: RelationsSentencesResponse
     }
     timespan: {
         params: TimespanParams

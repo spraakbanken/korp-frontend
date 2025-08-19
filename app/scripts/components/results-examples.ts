@@ -2,20 +2,18 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
-import settings from "@/settings"
 import { ApiKwic } from "@/backend/types"
-import kwicProxyFactory, { KorpQueryRequestOptions, KwicProxy } from "@/backend/kwic-proxy"
 import "@/components/korp-error"
 import "@/components/kwic"
 import { StoreService } from "@/services/store"
+import { ExampleTask } from "@/backend/task/example-task"
+import { WordpicExampleTask } from "@/backend/task/wordpic-example-task"
 
 type ResultsExamplesController = IController & {
     isActive: boolean
-    isReading: boolean
     loading: boolean
-    queryParams: KorpQueryRequestOptions
     setProgress: (loading: boolean, progress: number) => void
-    closeDynamicTab: () => void
+    task: ExampleTask | WordpicExampleTask
 }
 
 type ResultsExamplesScope = IScope & {
@@ -33,7 +31,6 @@ type ResultsExamplesScope = IScope & {
     kwic?: ApiKwic[]
     page?: number
     pageChange: (page: number) => void
-    proxy: KwicProxy
     toggleReading: () => void
 }
 
@@ -53,17 +50,15 @@ angular.module("korpApp").component("resultsExamples", {
                 page="page"
                 page-event="pageChange"
                 hits-per-page="hitsPerPage"
-                prev-params="proxy.prevParams"
-                prev-url="proxy.prevUrl"
+                params="task.proxy.params"
                 corpus-order="corpusOrder"
             ></kwic>
         </div>`,
     bindings: {
         isActive: "<",
-        isReading: "<",
         loading: "<",
-        queryParams: "<",
         setProgress: "<",
+        task: "<",
     },
     controller: [
         "$scope",
@@ -72,17 +67,15 @@ angular.module("korpApp").component("resultsExamples", {
         function ($scope: ResultsExamplesScope, $timeout: ITimeoutService, store: StoreService) {
             const $ctrl = this as ResultsExamplesController
 
-            $scope.proxy = kwicProxyFactory.create()
-
             $ctrl.$onInit = () => {
                 // Context mode can be set when creating the tab. If not, use URL param
-                $scope.isReading = $ctrl.isReading ?? store.reading_mode
+                $scope.isReading = !!$ctrl.task.isReading
                 $scope.hitsPerPage = store.hpp
                 makeRequest()
             }
 
             $scope.$on("abort_requests", () => {
-                $scope.proxy.abort()
+                $ctrl.task.abort()
                 if ($ctrl.loading) {
                     $scope.aborted = true
                     $ctrl.setProgress(false, 0)
@@ -95,44 +88,19 @@ angular.module("korpApp").component("resultsExamples", {
             }
 
             $scope.toggleReading = function () {
+                // TODO For wordpic examples, do not allow switching mode, because /relations_sentences does not support it
                 $scope.isReading = !$scope.isReading
+                $ctrl.task.isReading = $scope.isReading
                 makeRequest()
             }
 
             function makeRequest(): void {
-                const opts = $ctrl.queryParams
-                opts.in_order = store.in_order
-
-                // example tab cannot handle incremental = true
-                opts.incremental = false
-
-                opts.start = ($scope.page || 0) * $scope.hitsPerPage
-                opts.end = opts.start + $scope.hitsPerPage - 1
-
-                const preferredContext = $scope.isReading
-                    ? settings["default_reading_context"]
-                    : settings["default_overview_context"]
-                const avoidContext = $scope.isReading
-                    ? settings["default_overview_context"]
-                    : settings["default_reading_context"]
-
-                opts.default_context = preferredContext
-                const corpora = opts.corpus ? opts.corpus.split(",") : []
-                opts.context = settings.corpusListing.getContextQueryStringFromCorpusId(
-                    corpora,
-                    preferredContext,
-                    avoidContext
-                )
-
-                opts.default_within ??= store.within
-                opts.within = settings.corpusListing.getWithinParam(opts.default_within)
-
                 // Abort any running request
-                if ($ctrl.loading) $scope.proxy.abort()
+                if ($ctrl.loading) $ctrl.task.abort()
 
                 $ctrl.setProgress(true, 0)
-                $scope.proxy
-                    .makeRequest(opts)
+                $ctrl.task
+                    .send($scope.page || 0, $scope.hitsPerPage)
                     .then((data) =>
                         $timeout(() => {
                             if (!data.kwic) data.kwic = []

@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IScope } from "angular"
-import { html } from "@/util"
+import { html, LocationService } from "@/util"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
 import "@/components/results-comparison"
@@ -16,7 +16,6 @@ import "@/components/sidebar"
 import "@/components/tab-preloader"
 import "@/directives/tab-hash"
 import { RootScope } from "@/root-scope.types"
-import { LocationService } from "@/urlparams"
 import { StoreService } from "@/services/store"
 
 type ResultsScope = IScope & {
@@ -65,7 +64,7 @@ angular.module("korpApp").component("results", {
                         ></results-word-picture>
                     </uib-tab>
 
-                    <uib-tab results-tab ng-repeat="kwicTab in $root.kwicTabs" select="select()" deselect="deselect()">
+                    <uib-tab results-tab ng-repeat="task in $root.kwicTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             KWIC
                             <tab-preloader ng-if="loading"></tab-preloader>
@@ -78,12 +77,11 @@ angular.module("korpApp").component("results", {
                             is-active="isActive"
                             loading="loading"
                             set-progress="setProgress"
-                            is-reading="kwicTab.readingMode"
-                            query-params="kwicTab.queryParams"
+                            task="task"
                         ></results-examples>
                     </uib-tab>
 
-                    <uib-tab results-tab ng-repeat="data in $root.graphTabs" select="select()" deselect="deselect()">
+                    <uib-tab results-tab ng-repeat="task in $root.graphTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             {{'graph' | loc:$root.lang}}
                             <tab-preloader ng-if="loading" progress="progress"></tab-preloader>
@@ -93,18 +91,13 @@ angular.module("korpApp").component("results", {
                             ></i>
                         </uib-tab-heading>
                         <results-trend-diagram
-                            data="data"
+                            task="task"
                             loading="loading"
                             set-progress="setProgress"
                         ></results-trend-diagram>
                     </uib-tab>
 
-                    <uib-tab
-                        results-tab
-                        ng-repeat="promise in $root.compareTabs"
-                        select="select()"
-                        deselect="deselect()"
-                    >
+                    <uib-tab results-tab ng-repeat="task in $root.compareTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             {{'compare_vb' | loc:$root.lang}}
                             <tab-preloader ng-if="loading"></tab-preloader>
@@ -115,12 +108,12 @@ angular.module("korpApp").component("results", {
                         </uib-tab-heading>
                         <results-comparison
                             loading="loading"
-                            promise="promise"
                             set-progress="setProgress"
+                            task="task"
                         ></results-comparison>
                     </uib-tab>
 
-                    <uib-tab results-tab ng-repeat="promise in $root.mapTabs" select="select()" deselect="deselect()">
+                    <uib-tab results-tab ng-repeat="task in $root.mapTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             {{ 'map' | loc:$root.lang}}
                             <tab-preloader ng-if="loading"></tab-preloader>
@@ -132,12 +125,12 @@ angular.module("korpApp").component("results", {
                         <results-map
                             active="isActive"
                             loading="loading"
-                            promise="promise"
                             set-progress="setProgress"
+                            task="task"
                         ></results-map>
                     </uib-tab>
 
-                    <uib-tab results-tab ng-repeat="inData in $root.textTabs" select="select()" deselect="deselect()">
+                    <uib-tab results-tab ng-repeat="task in $root.textTabs" select="select()" deselect="deselect()">
                         <uib-tab-heading class="flex gap-2 items-center">
                             {{ 'text_tab_header' | loc:$root.lang}}
                             <tab-preloader ng-if="loading"></tab-preloader>
@@ -146,12 +139,7 @@ angular.module("korpApp").component("results", {
                                 ng-click="closeTab('textTabs', $index, $event)"
                             ></i>
                         </uib-tab-heading>
-                        <results-text
-                            active="isActive"
-                            in-data="inData"
-                            loading="loading"
-                            set-progress="setProgress"
-                        ></results-text>
+                        <results-text active="isActive" set-progress="setProgress" task="task"></results-text>
                     </uib-tab>
                 </uib-tabset>
             </div>

@@ -14,7 +14,6 @@ declare global {
 window.jQuery = $
 window.$ = $
 
-require("slickgrid/slick.grid.css")
 require("./styles/ui_mods.css")
 require("./styles/jquery.tooltip.css")
 require("rickshaw/rickshaw.css")
@@ -39,13 +38,6 @@ try {
 } catch (error) {
     if (error.code != "MODULE_NOT_FOUND") console.error("Error importing mode file:", error)
 }
-
-require("slickgrid/lib/jquery.event.drag-2.3.0")
-require("slickgrid/slick.core")
-require("slickgrid/slick.grid")
-require("slickgrid/plugins/slick.checkboxselectcolumn")
-require("slickgrid/plugins/slick.rowselectionmodel")
-require("slickgrid/slick.interactions.js")
 
 require("./scripts/jq_extensions.js")
 

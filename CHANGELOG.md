@@ -6,10 +6,28 @@
 
 - Use [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader) to compile CQP parser at build time
 
+### Changed
+
+- A big effort to separate "core" code (types/interfaces and data processing) from "UI" code (components, other AngularJS usage). Notably:
+  - Moved data processing related to dynamic result tabs into corresponding classes: `CompareTask`, `ExampleTask`, `MapTask`, `TextTask`, `TrendTask`, `WordpicExampleTask`
+  - Added `ProxyBase` abstract class to streamline proxy classes
+    - Renamed `prevParams` to `params`
+    - Removed `prevUrl` and `prevCQP`
+  - Moved SALDO and lemgram parsing/prettifying from util to their own classes
+  - Dropped the `RootScope` arg from `settings["initialization_checks"]` – use `getService()` if needed
+  - Converted `compareSearches` service to non-AngularJS-dependent `savedSearches`
+  - Converted `globalFilterService` service to non-AngularJS-dependent `GlobalFilterManager`
+  - In `CorpusListing`:
+    - Merged `getContextQueryString` and `getContextQueryStringFromCorpusId` as `getContextParams`
+    - Split `getAttributeGroups`/`getStatsAttributeGroups` into `getAttributeGroups`, `getAttributeGroupsCompare`, `getAttributeGroupsExtended` and `getAttributeGroupsStatistics`
+
 ### Fixed
 
+- Improve statistics download [#154](https://github.com/spraakbanken/korp-frontend/issues/154)
 - Prevent empty "Group by" selector when changing corpus
 - Prevent relative frequency "NaN" when loading first KWIC result
+- Related words heading link url
+- Use `angular.toJson` in `localStorageGet` to avoid storing `$$hashKey` etc.
 
 ## [9.10.1] - 2025-07-02
 

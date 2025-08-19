@@ -4,6 +4,7 @@ import settings from "@/settings"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Folder } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
+import { locObj } from "./i18n"
 
 export type ChooserFolder = {
     corpora: CorpusTransformed[]
@@ -28,6 +29,8 @@ export type ChooserFolderRoot = ChooserFolder & {
 
 const isRoot = (folder: ChooserFolder): folder is ChooserFolderRoot => "isRoot" in folder
 const isSub = (folder: ChooserFolder): folder is ChooserFolderSub => !isRoot(folder)
+export const isFolder = (object: ChooserFolder | CorpusTransformed): object is ChooserFolderSub =>
+    "numberOfChildren" in object
 
 export const initCorpusStructure = (collection: Record<string, CorpusTransformed>): ChooserFolderRoot => {
     for (const corpus of Object.values(collection)) {
@@ -239,4 +242,47 @@ function getFolderSelectStatus(folder: Pick<ChooserFolderSub, "subFolders" | "co
     }
 
     return selected
+}
+
+/** Get token/sentence info for a corpus. */
+export function getSizeInfo(corpus: CorpusTransformed): CorpusSizeInfo[] {
+    const infos: CorpusSizeInfo[] = [{ lang: corpus.lang, tokens: corpus.tokens!, sentences: corpus.sentences! }]
+    // For parallel corpora, include linked language
+    if (corpus["linked_to"]) {
+        for (const linkedCorpusId of corpus["linked_to"]) {
+            const linkedCorpus = settings.corpora[linkedCorpusId]
+            infos.push({
+                lang: linkedCorpus.lang!,
+                tokens: parseInt(linkedCorpus.info.Size!) || 0,
+                sentences: parseInt(linkedCorpus.info.Sentences!) || 0,
+            })
+        }
+    }
+    return infos
+}
+
+export type CorpusSizeInfo = {
+    lang?: string
+    tokens: number
+    sentences: number
+}
+
+/** Create data for corpus link. */
+export function makeLink(corpusId: string, lang?: string): CorpusLinkInfo | undefined {
+    if (!settings["corpus_info_link"]) return
+    const urlTemplate = locObj(settings["corpus_info_link"]["url_template"], lang)
+    const label = locObj(settings["corpus_info_link"]["label"], lang)
+    if (!urlTemplate || !label) {
+        console.error(`Invalid setting "corpus_info_link"`, settings["corpus_info_link"])
+        return
+    }
+    // Parallel corpora have an id like "<main_id>-<lang>"
+    const id = settings["parallel"] ? corpusId.split("-")[0] : corpusId
+    const url = urlTemplate.replace("%s", id)
+    return { url, label }
+}
+
+export type CorpusLinkInfo = {
+    url: string
+    label: string
 }

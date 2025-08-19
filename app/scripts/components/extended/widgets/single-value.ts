@@ -15,7 +15,7 @@ export const singleValue: Widget = {
     controller: [
         "$scope",
         function ($scope: SingleValueScope) {
-            $scope.model = Object.values($scope.dataset)[0]
+            $scope.model = $scope.attr.dataset ? Object.values($scope.attr.dataset)[0] : "-"
         },
     ],
 }

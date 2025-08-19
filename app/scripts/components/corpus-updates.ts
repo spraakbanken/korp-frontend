@@ -1,10 +1,10 @@
 /** @format */
 import angular, { IScope } from "angular"
-import moment from "moment"
 import settings from "@/settings"
 import { html } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { StoreService } from "@/services/store"
+import { getRecentCorpusUpdates } from "@/data_init"
 
 export default angular.module("korpApp").component("corpusUpdates", {
     template: html`
@@ -51,11 +51,7 @@ export default angular.module("korpApp").component("corpusUpdates", {
 
             $ctrl.$onInit = () => {
                 if (settings.frontpage?.corpus_updates) {
-                    const limitDate = moment().subtract(6, "months")
-                    // Find most recently updated corpora
-                    $scope.recentUpdates = settings.corpusListing.corpora
-                        .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
-                        .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
+                    $scope.recentUpdates = getRecentCorpusUpdates()
                     $scope.toggleExpanded(false)
                 }
             }

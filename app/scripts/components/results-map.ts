@@ -3,19 +3,19 @@ import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import { html, regescape } from "@/util"
-import { MapTab, RootScope } from "@/root-scope.types"
+import { RootScope } from "@/root-scope.types"
 import { AppSettings } from "@/settings/app-settings.types"
-import { MapRequestResult } from "@/backend/backend"
-import { MapResult } from "@/map_services"
-import { Marker, MarkerEvent, MarkerGroup } from "@/components/result-map"
+import { MarkerEvent, MarkerGroup } from "@/map"
 import "@/components/korp-error"
 import "@/components/result-map"
+import { ExampleTask } from "@/backend/task/example-task"
+import { MapTask } from "@/backend/task/map-task"
 
 type ResultsMapController = IController & {
     active: boolean
     loading: boolean
-    promise: MapTab
     setProgress: (loading: boolean, progress: number) => void
+    task: MapTask
 }
 
 type ResultsMapScope = IScope & {
@@ -69,8 +69,8 @@ angular.module("korpApp").component("resultsMap", {
     bindings: {
         active: "<",
         loading: "<",
-        promise: "<",
         setProgress: "<",
+        task: "<",
     },
     controller: [
         "$rootScope",
@@ -89,13 +89,15 @@ angular.module("korpApp").component("resultsMap", {
 
             $ctrl.$onInit = () => {
                 $ctrl.setProgress(true, 0)
+                const promise = $ctrl.task.send()
 
-                Promise.all([rickshawPromise, $ctrl.promise]).then(
+                Promise.all([rickshawPromise, promise]).then(
                     ([Rickshaw, result]) => {
+                        const palette = new (Rickshaw as any).Color.Palette({ scheme: "colorwheel" })
                         $scope.$apply(($scope: ResultsMapScope) => {
                             $ctrl.setProgress(false, 100)
                             $scope.numResults = 20
-                            $scope.markerGroups = result ? getMarkerGroups(Rickshaw, result) : undefined
+                            $scope.markerGroups = result ? $ctrl.task.getMarkerGroups(() => palette.color()) : undefined
                             $scope.selectedGroups = _.keys($scope.markerGroups)
                         })
                     },
@@ -127,60 +129,6 @@ angular.module("korpApp").component("resultsMap", {
                 }
             }
 
-            function getMarkerGroups(Rickshaw: any, result: MapRequestResult): Record<string, MarkerGroup> {
-                const palette: { color: () => string } = new Rickshaw.Color.Palette({ scheme: "colorwheel" }) // spectrum2000
-                const groups = result.data.reduce((groups, res, idx) => {
-                    const markers = getMarkers(
-                        result.attribute.label,
-                        result.cqp,
-                        result.corpora,
-                        result.within,
-                        res,
-                        idx
-                    )
-                    const group = {
-                        selected: true,
-                        order: idx,
-                        color: palette.color(),
-                        markers,
-                    }
-                    return { ...groups, [res.label]: group }
-                }, {} as Record<string, MarkerGroup>)
-                return groups
-            }
-
-            function getMarkers(
-                label: string,
-                cqp: string,
-                corpora: string[],
-                within: string | undefined,
-                res: MapResult,
-                idx: number
-            ): Record<string, Marker> {
-                return _.fromPairs(
-                    res.points.map((point, pointIdx) => {
-                        // Include point index in the key, so that multiple
-                        // places with the same name but different coordinates
-                        // each get their own markers
-                        const id = [point.name.replace(/-/g, ""), pointIdx.toString(), idx].join(":")
-                        const marker = {
-                            lat: point.lat,
-                            lng: point.lng,
-                            queryData: {
-                                searchCqp: cqp,
-                                subCqp: res.cqp,
-                                label,
-                                corpora,
-                                within,
-                            },
-                            label: res.label,
-                            point,
-                        }
-                        return [id, marker]
-                    })
-                )
-            }
-
             /** Open the occurrences at a selected location */
             $scope.newKWICSearch = (marker: MarkerEvent) => {
                 const { point, queryData } = marker
@@ -198,7 +146,7 @@ angular.module("korpApp").component("resultsMap", {
                     default_within: queryData.within,
                 }
                 const readingMode = queryData.label === "paragraph__geocontext"
-                $timeout(() => $rootScope.kwicTabs.push({ queryParams: opts, readingMode }), 0)
+                $timeout(() => $rootScope.kwicTabs.push(new ExampleTask(opts, readingMode)), 0)
             }
         },
     ],

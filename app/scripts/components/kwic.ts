@@ -4,36 +4,19 @@ import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { makeDownload } from "@/kwic_download"
-import { SelectionManager, html, setDownloadLinks } from "@/util"
+import { html } from "@/util"
 import "@/components/kwic-pager"
 import "@/components/kwic-word"
-import { LangString } from "@/i18n/types"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
 import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
 import { QueryParamSort } from "@/backend/types/query"
-
-export type Row = ApiKwic | LinkedKwic | CorpusHeading
-
-/** Row from a secondary language in parallel mode. */
-export type LinkedKwic = {
-    tokens: ApiKwic["tokens"]
-    isLinked: true
-    corpus: string
-}
-
-/** A row introducing the next corpus in the hit listing. */
-export type CorpusHeading = {
-    corpus: string
-    newCorpus: LangString
-    noContext?: boolean
-}
-
-export const isKwic = (row: Row): row is ApiKwic => "tokens" in row && !isLinkedKwic(row)
-export const isLinkedKwic = (row: Row): row is LinkedKwic => "isLinked" in row
-export const isCorpusHeading = (row: Row): row is CorpusHeading => "newCorpus" in row
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { JQueryExtended, JQueryStaticExtended } from "@/jquery.types"
+import { loc } from "@/i18n"
+import { calculateHitsPicture, HitsPictureItem, isKwic, isLinkedKwic, massageData, Row } from "@/kwic"
 
 type KwicController = IController & {
     // Bindings
@@ -47,12 +30,11 @@ type KwicController = IController & {
     page: number
     pageEvent: (page: number) => void
     hitsPerPage: number
-    prevParams: any
-    prevUrl?: string
+    params: any
     corpusOrder: string[]
     /** Current page of results. */
     kwicInput: ApiKwic[]
-    corpusHits: any
+    corpusHits: Record<string, number>
     // Locals
     kwic: Row[]
     useContext: boolean
@@ -85,13 +67,6 @@ type KwicScope = IScope & {
     sort: QueryParamSort
     sortOptions: Record<QueryParamSort, string>
     updateSort: () => void
-}
-
-type HitsPictureItem = {
-    page: number
-    relative: number
-    abs: number
-    rtitle: string
 }
 
 const UPDATE_DELAY = 500
@@ -280,8 +255,7 @@ angular.module("korpApp").component("kwic", {
         page: "<",
         pageEvent: "<",
         hitsPerPage: "<",
-        prevParams: "<",
-        prevUrl: "<",
+        params: "<",
         corpusOrder: "<",
         kwicInput: "<",
         corpusHits: "<",
@@ -320,7 +294,7 @@ angular.module("korpApp").component("kwic", {
             }
 
             $ctrl.$onChanges = (changeObj) => {
-                if ("kwicInput" in changeObj && $ctrl.kwicInput != undefined) {
+                if (changeObj.kwicInput?.currentValue) {
                     $ctrl.kwic = massageData($ctrl.kwicInput)
                     $ctrl.useContext = $ctrl.context || !store.in_order
                     if (!$ctrl.context) {
@@ -330,8 +304,8 @@ angular.module("korpApp").component("kwic", {
                         })
                     }
 
-                    if (settings["enable_backend_kwic_download"] && $ctrl.prevParams) {
-                        setDownloadLinks($ctrl.prevParams, {
+                    if (settings["enable_backend_kwic_download"] && $ctrl.params) {
+                        setDownloadLinks($ctrl.params, {
                             kwic: $ctrl.kwic,
                             corpus_order: $ctrl.corpusOrder,
                         })
@@ -356,27 +330,8 @@ angular.module("korpApp").component("kwic", {
                 }
 
                 if ("corpusHits" in changeObj && $ctrl.corpusHits) {
-                    const items = _.map(
-                        $ctrl.corpusOrder,
-                        (obj) =>
-                            <HitsPictureItem>{
-                                rid: obj,
-                                rtitle: settings.corpusListing.getTitleObj(obj.toLowerCase()),
-                                relative: $ctrl.corpusHits[obj] / $ctrl.hits,
-                                abs: $ctrl.corpusHits[obj],
-                                page: -1, // this is properly set below
-                            }
-                    ).filter((item) => item.abs > 0)
-
-                    // calculate which is the first page of hits for each item
-                    let index = 0
-                    _.each(items, (obj) => {
-                        // $ctrl.kwicInput.length == page size
-                        obj.page = Math.floor(index / $ctrl.kwicInput.length)
-                        index += obj.abs
-                    })
-
-                    $ctrl.hitsPictureData = items
+                    const pageSize = $ctrl.kwicInput.length
+                    $ctrl.hitsPictureData = calculateHitsPicture($ctrl.corpusOrder, $ctrl.corpusHits, pageSize)
                 }
 
                 if ("active" in changeObj) {
@@ -449,7 +404,7 @@ angular.module("korpApp").component("kwic", {
                         return
                     }
                     const [dataType, fileType] = value.split("/") as ["annotations" | "kwic", "csv" | "tsv"]
-                    const [fileName, blobName] = makeDownload(dataType, fileType, $ctrl.kwic, $ctrl.prevParams, hits)
+                    const [fileName, blobName] = makeDownload(dataType, fileType, $ctrl.kwic, $ctrl.params, hits)
                     $ctrl.download.fileName = fileName
                     $ctrl.download.blobName = blobName
                     $ctrl.download.selected = ""
@@ -481,140 +436,6 @@ angular.module("korpApp").component("kwic", {
                 const from = sentence.match.end
                 const len = sentence.tokens.length
                 return sentence.tokens.slice(from, len)
-            }
-
-            // TODO Create new tokens instead of modifying the existing ones
-            function massageData(hitArray: ApiKwic[]): Row[] {
-                const punctArray = [",", ".", ";", ":", "!", "?", "..."]
-
-                let prevCorpus = ""
-                const output: Row[] = []
-
-                for (const hitContext of hitArray) {
-                    const mainCorpusId = settings.parallel
-                        ? hitContext.corpus.split("|")[0].toLowerCase()
-                        : hitContext.corpus.toLowerCase()
-
-                    const id = (settings.parallel && hitContext.corpus.split("|")[1].toLowerCase()) || mainCorpusId
-
-                    const [matchSentenceStart, matchSentenceEnd] = findMatchSentence(hitContext)
-                    const isMatchSentence = (i: number) =>
-                        matchSentenceStart && matchSentenceEnd && matchSentenceStart <= i && i <= matchSentenceEnd
-
-                    // When using `in_order=false`, there are multiple matches
-                    // Otherwise, cast single match to array for consistency
-                    const matches = !(hitContext.match instanceof Array) ? [hitContext.match] : hitContext.match
-                    const isMatch = (i: number) => matches.some(({ start, end }) => start <= i && i < end)
-
-                    // Copy struct attributes to tokens
-                    /** Currently open structural elements (e.g. `<ne>`) */
-                    const currentStruct: Record<string, Record<string, string>> = {}
-                    for (const [i, wd] of hitContext.tokens.entries()) {
-                        wd.position = i
-
-                        if (isMatch(i)) wd._match = true
-                        if (isMatchSentence(i)) wd._matchSentence = true
-                        if (punctArray.includes(wd.word)) wd._punct = true
-
-                        wd.structs ??= {}
-
-                        // For each new structural element this token opens, add it to currentStruct
-                        for (const structItem of wd.structs.open || []) {
-                            // structItem is an object with a single key
-                            const structKey = _.keys(structItem)[0]
-                            if (structKey == "sentence") wd._open_sentence = true
-
-                            // Store structural attributes with a qualified name e.g. "ne_type"
-                            // Also set a dummy value for the struct itself, e.g. `"ne": ""`
-                            currentStruct[structKey] = {}
-                            const attrs = _.toPairs(structItem[structKey]).map(([key, val]) => [
-                                structKey + "_" + key,
-                                val,
-                            ])
-                            for (const [key, val] of [[structKey, ""], ...attrs]) {
-                                if (key in settings.corpora[id].attributes) {
-                                    currentStruct[structKey][key] = val
-                                }
-                            }
-                        }
-
-                        // Copy structural attributes to token
-                        // The keys of currentStruct are included in the names of each attribute
-                        Object.values(currentStruct).forEach((attrs) => Object.assign(wd, attrs))
-
-                        // For each struct this token closes, remove it from currentStruct
-                        for (let structItem of wd.structs.close || []) delete currentStruct[structItem]
-                    }
-
-                    // At the start of each new corpus, add a row with the corpus title
-                    if (prevCorpus !== id) {
-                        const corpus = settings.corpora[id]
-                        const newSent = {
-                            corpus: id,
-                            newCorpus: corpus.title,
-                            noContext: _.keys(corpus.context).length === 1,
-                        }
-                        output.push(newSent)
-                    }
-
-                    hitContext.corpus = mainCorpusId
-
-                    output.push(hitContext)
-                    if (hitContext.aligned) {
-                        // just check for sentence opened, no other structs
-                        const alignedTokens = Object.values(hitContext.aligned)[0]
-                        for (let wd of alignedTokens) {
-                            if (wd.structs && wd.structs.open) {
-                                for (let structItem of wd.structs.open) {
-                                    if (_.keys(structItem)[0] == "sentence") {
-                                        wd._open_sentence = true
-                                    }
-                                }
-                            }
-                        }
-
-                        const [corpus_aligned, tokens] = _.toPairs(hitContext.aligned)[0]
-                        output.push({
-                            tokens,
-                            isLinked: true,
-                            corpus: corpus_aligned,
-                        })
-                    }
-
-                    prevCorpus = id
-                }
-
-                return output
-            }
-
-            /** Find span of sentence containing the match */
-            // This is used in reading mode (when free order is not used) to highlight the sentence.
-            function findMatchSentence(hitContext: ApiKwic): [number?, number?] {
-                if (Array.isArray(hitContext.match)) return []
-                const span: [number?, number?] = []
-                const { start, end } = hitContext.match
-                let decr = start
-                let incr = end
-                while (decr >= 0) {
-                    const token = hitContext.tokens[decr]
-                    const sentenceOpen = _.filter((token.structs && token.structs.open) || [], (attr) => attr.sentence)
-                    if (sentenceOpen.length > 0) {
-                        span[0] = decr
-                        break
-                    }
-                    decr--
-                }
-                while (incr < hitContext.tokens.length) {
-                    const token = hitContext.tokens[incr]
-                    const closed = (token.structs && token.structs.close) || []
-                    if (closed.includes("sentence")) {
-                        span[1] = incr
-                        break
-                    }
-                    incr++
-                }
-
-                return span
             }
 
             function onWordClick(event: Event) {
@@ -882,3 +703,137 @@ angular.module("korpApp").component("kwic", {
         },
     ],
 })
+
+/** Toggles class names for selected word elements in KWIC. */
+class SelectionManager {
+    selected: JQuery<HTMLElement>
+    aux: JQuery<HTMLElement>
+
+    constructor() {
+        this.selected = $()
+        this.aux = $()
+    }
+
+    select(word: JQuery<HTMLElement>, aux?: JQuery<HTMLElement>): void {
+        if (!word?.length) return
+        this.deselect()
+
+        this.selected = word
+        this.selected.addClass("word_selected token_selected")
+        this.aux = aux || $()
+        this.aux.addClass("word_selected aux_selected")
+    }
+
+    deselect(): void {
+        if (!this.selected.length) return
+
+        this.selected.removeClass("word_selected token_selected")
+        this.selected = $()
+        this.aux.removeClass("word_selected aux_selected")
+        this.aux = $()
+    }
+
+    hasSelected(): boolean {
+        return this.selected.length > 0
+    }
+}
+
+// Add download links for other formats, defined in
+// settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
+// 2014-02-26/04-30)
+export function setDownloadLinks(params: string, result_data: { kwic: Row[]; corpus_order: string[] }): void {
+    // If some of the required parameters are null, return without
+    // adding the download links.
+    if (!(params != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
+        console.log("failed to do setDownloadLinks")
+        return
+    }
+
+    if (result_data.kwic.length == 0) {
+        $("#download-links").hide()
+        return
+    }
+
+    $("#download-links").show()
+
+    // Get the number (index) of the corpus of the query result hit
+    // number hit_num in the corpus order information of the query
+    // result.
+    const get_corpus_num = (hit_num: number) =>
+        result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus.toUpperCase())
+
+    console.log("setDownloadLinks data:", result_data)
+    $("#download-links").empty()
+    // Corpora in the query result
+    const result_corpora = result_data.corpus_order.slice(
+        get_corpus_num(0),
+        get_corpus_num(result_data.kwic.length - 1) + 1
+    )
+    // Settings of the corpora in the result, to be passed to the
+    // download script
+    const result_corpora_settings: Record<string, CorpusTransformed> = {}
+    let i = 0
+    while (i < result_corpora.length) {
+        const corpus_ids = result_corpora[i].toLowerCase().split("|")
+        let j = 0
+        while (j < corpus_ids.length) {
+            const corpus_id = corpus_ids[j]
+            result_corpora_settings[corpus_id] = settings.corpora[corpus_id]
+            j++
+        }
+        i++
+    }
+    $("#download-links").append("<option value='init' rel='localize[download_kwic]'></option>")
+    i = 0
+    while (i < settings.download_formats.length) {
+        const format = settings.download_formats[i]
+        // NOTE: Using attribute rel="localize[...]" to localize the
+        // title attribute requires a small change to
+        // lib/jquery.localize.js. Without that, we could use
+        // `loc`, but it would not change the
+        // localizations immediately when switching languages but only
+        // after reloading the page.
+        // # title = loc('formatdescr_' + format)
+        const option = $(`\
+<option
+    value="${format}"
+    title="${loc(`formatdescr_${format}`)}"
+    class="download_link">${format.toUpperCase()}</option>\
+`)
+
+        const query_params = JSON.stringify(Object.fromEntries(new URLSearchParams(params)))
+
+        const download_params = {
+            query_params,
+            format,
+            korp_url: window.location.href,
+            korp_server_url: settings.korp_backend_url,
+            corpus_config: JSON.stringify(result_corpora_settings),
+            corpus_config_info_keys: ["metadata", "licence", "homepage", "compiler"].join(","),
+            urn_resolver: settings.urnResolver,
+        }
+        if ("download_format_params" in settings) {
+            if ("*" in settings.download_format_params) {
+                $.extend(download_params, settings.download_format_params["*"])
+            }
+            if (format in settings.download_format_params) {
+                $.extend(download_params, settings.download_format_params[format])
+            }
+        }
+        option.appendTo("#download-links").data("params", download_params)
+        i++
+    }
+    $("#download-links").off("change")
+    ;($("#download-links") as JQueryExtended)
+        .localize()
+        .click(false)
+        .change(function () {
+            const params = $(":selected", this).data("params")
+            if (!params) {
+                return
+            }
+            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script!, params)
+            const self = $(this)
+            return setTimeout(() => self.val("init"), 1000)
+        })
+}

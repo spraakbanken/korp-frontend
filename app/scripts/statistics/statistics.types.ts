@@ -1,21 +1,16 @@
 /** @format*/
-// TODO: Merge with @/interfaces/stats.ts
-import { StatsNormalized } from "./backend/stats-proxy"
-import { LangString } from "./i18n/types"
+import { CountsMerged } from "@/backend/types/count"
+import { LangString } from "@/i18n/types"
 
 export type StatisticsWorkerMessage = {
     type: "korpStatistics"
-    data: StatsNormalized
+    data: CountsMerged
     groupStatistics: string[]
 }
 
 export type StatisticsProcessed = {
     rows: Dataset
     params: SearchParams
-}
-
-export type SlickgridColumn = Slick.Column<Dataset> & {
-    translation?: LangString
 }
 
 export type SearchParams = {

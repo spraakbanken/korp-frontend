@@ -5,10 +5,9 @@
 
 import { Labeled, LangString } from "@/i18n/types"
 import { Attribute } from "./config.types"
-import { RootScope } from "@/root-scope.types"
 import { HashParams } from "@/urlparams"
 import { OperatorKorp } from "@/cqp_parser/cqp.types"
-import { StatisticsProcessed } from "@/statistics.types"
+import { StatisticsProcessed } from "@/statistics/statistics.types"
 
 export type AppSettings = {
     auth_module?: string | { module: string; options: Record<string, any> }
@@ -42,7 +41,7 @@ export type AppSettings = {
     hits_per_page_values: number[]
     hits_per_page_default: number
     /** Implement this to do customized async initialization. Return true to skip standard initialization afterwards. */
-    initialization_checks?: (rootScope: RootScope) => Promise<boolean>
+    initialization_checks?: () => Promise<boolean>
     input_case_insensitive_default?: boolean
     /** codes for translation ISO-639-1 to 639-2 */
     iso_languages: Record<string, string>

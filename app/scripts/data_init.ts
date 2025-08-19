@@ -2,15 +2,17 @@
 import _ from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
+import { getAllCorporaInFolders } from "@/corpus-chooser"
 import { CorpusListing } from "./corpus_listing"
 import { ParallelCorpusListing } from "./parallel/corpus_listing"
 import { fromKeys } from "@/util"
-import { Labeled } from "./i18n/types"
+import { locAttribute } from "@/i18n"
+import { Labeled, LocLangMap, LocMap } from "./i18n/types"
 import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
 import { korpRequest } from "./backend/common"
 import { getLocData } from "./loc-data"
+import moment from "moment"
 
 type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_attributes">>
 
@@ -52,8 +54,6 @@ async function getConfig(): Promise<Config> {
 
 /**
  * Transform the raw config fetched form backend, to a structure that frontend code can handle.
- *
- * TODO: Use the `Config` and `ConfigTransformed` types, not `any`.
  *
  * @see ./settings/README.md
  */
@@ -191,4 +191,25 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     if (!_.isEmpty(settings.corpora)) {
         setInitialCorpora()
     }
+}
+
+/** Find most recently updated corpora. */
+export function getRecentCorpusUpdates(): CorpusTransformed[] {
+    const limitDate = moment().subtract(6, "months")
+    return settings.corpusListing.corpora
+        .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
+        .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
+}
+
+/** Get the dataset options of an attribute. */
+export function getDatasetOptions(
+    dataset: Attribute["dataset"],
+    translation?: LocMap | LocLangMap,
+    lang?: string,
+    sort?: boolean
+): [string, string][] {
+    const options: [string, string][] = _.isArray(dataset)
+        ? _.map(dataset, (item) => [item, locAttribute(translation, item, lang)])
+        : _.map(dataset, (v, k) => [k, locAttribute(translation, v, lang)])
+    return sort ? options.sort((a, b) => a[1].localeCompare(b[1], lang)) : options
 }

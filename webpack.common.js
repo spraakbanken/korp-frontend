@@ -187,7 +187,7 @@ module.exports = {
     ],
     entry: {
         index: "./app/index.ts",
-        worker: "./app/scripts/statistics_worker.ts",
+        worker: "./app/scripts/statistics/statistics_worker.ts",
     },
     output: {
         filename: "[name].[contenthash].js",

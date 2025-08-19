@@ -3,7 +3,6 @@ import angular, { IController } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
 import { html } from "@/util"
-import "@/services/compare-searches"
 import "@/components/simple-search"
 import "@/components/extended/extended-standard"
 import "@/components/extended/extended-parallel"
@@ -12,16 +11,13 @@ import "@/components/compare-search"
 import "@/components/search-history"
 import "@/directives/click-cover"
 import "@/directives/tab-hash"
-import { ParallelCorpusListing } from "@/parallel/corpus_listing"
-import { CompareSearches } from "@/services/compare-searches"
-import { RootScope } from "@/root-scope.types"
-import { SavedSearch } from "@/local-storage"
 import { StoreService } from "@/services/store"
+import { savedSearches } from "@/saved-searches"
 
 type SearchtabsController = IController & {
     parallelMode: boolean
     noCorporaSelected: boolean
-    savedSearches: SavedSearch[]
+    savedSearches: number
 }
 
 angular.module("korpApp").component("searchtabs", {
@@ -47,7 +43,7 @@ angular.module("korpApp").component("searchtabs", {
                 <uib-tab ng-if="!$ctrl.parallelMode">
                     <uib-tab-heading>
                         {{'compare' | loc:$root.lang}}
-                        <span class="badge" ng-if="$ctrl.savedSearches.length">{{$ctrl.savedSearches.length}}</span>
+                        <span class="badge" ng-if="$ctrl.savedSearches">{{$ctrl.savedSearches}}</span>
                     </uib-tab-heading>
                     <compare-search></compare-search>
                 </uib-tab>
@@ -59,22 +55,17 @@ angular.module("korpApp").component("searchtabs", {
         </div>
     `,
     controller: [
-        "compareSearches",
         "store",
-        function (compareSearches: CompareSearches, store: StoreService) {
+        function (store: StoreService) {
             const $ctrl = this as SearchtabsController
-
             $ctrl.parallelMode = !!settings.parallel
-            if ($ctrl.parallelMode) {
-                const corpusListing = settings.corpusListing as ParallelCorpusListing
-                corpusListing.setActiveLangs([settings.start_lang!])
-            }
-
-            $ctrl.savedSearches = compareSearches.savedSearches
+            $ctrl.savedSearches = savedSearches.list().length
 
             store.watch("corpus", (selected) => {
                 $ctrl.noCorporaSelected = !selected.length
             })
+
+            savedSearches.listen(() => ($ctrl.savedSearches = savedSearches.list().length))
         },
     ],
 })

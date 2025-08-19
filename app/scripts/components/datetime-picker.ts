@@ -1,7 +1,7 @@
 /** @format */
 import angular, { type ui, type IComponentController, type IScope } from "angular"
-import { html } from "@/util"
-import moment, { type Moment } from "moment"
+import { combineDateTime, html } from "@/util"
+import { type Moment } from "moment"
 
 angular.module("korpApp").component("datetimePicker", {
     template: html`
@@ -76,16 +76,10 @@ angular.module("korpApp").component("datetimePicker", {
             // Report changes from datepicker/timepicker upwards
             $scope.$watchGroup(["date", "time"], () => {
                 if (!$scope.date || !$scope.time) return
-
-                // Combine date and time
-                const m = moment(moment($scope.date).format("YYYY-MM-DD"))
-                const m_time = moment($scope.time)
-                m.add(m_time.hour(), "hour")
-                m.add(m_time.minute(), "minute")
-                $scope.combined = m
-
+                $scope.combined = combineDateTime($scope.date, $scope.time)
+                
                 // Report new values
-                $ctrl.update({ m })
+                $ctrl.update({ m: $scope.combined })
             })
 
             $scope.handleClick = function (event) {

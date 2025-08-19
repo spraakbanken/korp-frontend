@@ -1,6 +1,6 @@
 /** @format */
 import angular, { ICompileService, IScope, ITimeoutService, ui } from "angular"
-import moment from "moment"
+import { transformSeconds } from "./util"
 
 type VideoInstanceControllerScope = IScope & {
     fileName: string
@@ -38,31 +38,6 @@ angular.module("korpApp").controller("VideoInstanceCtrl", [
     ) {
         $scope.fileName = fileName
         $scope.sentence = sentence
-
-        /** Format time as hh:mm:ss if hours > 0, else mm:ss */
-        const transformSeconds = function (seconds: number) {
-            let sHours
-            const d = moment.duration(seconds, "seconds")
-            const hours = Math.floor(d.asHours())
-            if (hours !== 0) {
-                sHours = String(hours) + ":"
-            } else {
-                sHours = ""
-            }
-
-            const mins = Math.floor(d.asMinutes()) - hours * 60
-            let sMins = String(mins + ":")
-
-            if (sMins.length === 2 && sHours) {
-                sMins = `0${sMins}`
-            }
-            let secs = String(Math.floor(d.asSeconds()) - hours * 3600 - mins * 60)
-            if (secs.length === 1) {
-                secs = `0${secs}`
-            }
-
-            return sHours + sMins + secs
-        }
 
         if (startTime) {
             $scope.startTime = transformSeconds(startTime)

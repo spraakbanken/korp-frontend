@@ -2,7 +2,7 @@
 import angular, { IController } from "angular"
 import "components-jqueryui/ui/widgets/sortable.js"
 import "angular-ui-sortable/src/sortable"
-import { parse, stringify } from "@/cqp_parser/cqp"
+import { createCondition, parse, stringify } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import "@/components/extended/token"
 import "@/components/extended/struct-token"
@@ -14,7 +14,7 @@ type ExtendedTokensController = IController & {
     cqp: string
     data: CqpQuery
     repeatError: boolean
-    parallellLang: string
+    parallellLang: string | undefined
     prev: string
     showCloseButton: boolean
     addToken: () => void
@@ -94,7 +94,7 @@ angular.module("korpApp").component("extendedTokens", {
             ctrl.data = parse(ctrl.cqp || "[]")
 
             ctrl.addToken = function () {
-                const token: CqpToken = { and_block: [[{ type: "word", op: "=", val: "" }]] }
+                const token: CqpToken = { and_block: [[createCondition()]] }
                 ctrl.data.push(token)
                 ctrl.change()
             }

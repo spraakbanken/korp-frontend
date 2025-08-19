@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController } from "angular"
-import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "./util"
+import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "@/corpus-chooser"
 import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
 import { collatorSort, html } from "@/util"

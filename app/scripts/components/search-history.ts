@@ -2,12 +2,13 @@
 import { loc } from "@/i18n"
 import { SearchHistoryService } from "@/services/search-history"
 import { SearchesService } from "@/services/searches"
-import { getSearchParamNames, LocationService, SearchParams } from "@/urlparams"
-import { html, splitFirst, unregescape } from "@/util"
+import { getSearchParamNames, SearchParams } from "@/urlparams"
+import { html, LocationService } from "@/util"
 import angular, { IScope } from "angular"
 import "@/services/search-history"
 import "@/services/searches"
 import { StoreService } from "@/services/store"
+import { createSearchOption, isSearchOption, Option } from "@/search-history"
 
 type HistoryScope = IScope & {
     getOptions: () => Option[]
@@ -15,24 +16,6 @@ type HistoryScope = IScope & {
     items: SearchParams[]
     /** Selected option */
     value?: Option
-}
-
-type Option = { id: string; label: string }
-type SearchOption = Option & { params: SearchParams }
-
-const isSearchOption = (option: Option): option is SearchOption => "params" in option
-
-const createSearchOption = (params: SearchParams): SearchOption => ({
-    id: JSON.stringify(params),
-    label: getLabel(params),
-    params,
-})
-
-const getLabel = (params: SearchParams): string => {
-    if (!params.search) return "–"
-    if (params.search == "cqp") return params.cqp || "–"
-    const [type, value] = splitFirst("|", params.search)
-    return type === "lemgram" ? unregescape(value) : value
 }
 
 angular.module("korpApp").component("searchHistory", {

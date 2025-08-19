@@ -2,10 +2,10 @@
 import angular, { IScope } from "angular"
 import _ from "lodash"
 import statemachine from "@/statemachine"
-import { html } from "@/util"
+import { html, LocationService } from "@/util"
 import settings from "@/settings"
 import { SearchExample } from "@/settings/app-settings.types"
-import { HashParams, LocationService } from "@/urlparams"
+import { HashParams } from "@/urlparams"
 import { CqpSearchEvent } from "@/statemachine/types"
 import { SearchesService } from "@/services/searches"
 

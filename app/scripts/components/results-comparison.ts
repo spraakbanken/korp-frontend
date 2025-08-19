@@ -1,35 +1,32 @@
 /** @format */
-import angular, { IController } from "angular"
+import angular, { IController, IQService, IScope } from "angular"
 import _ from "lodash"
 import { html } from "@/util"
-import settings from "@/settings"
-import { getStringifier } from "@/stringify"
+import { getStringifier, Stringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"
-import { CompareTab, RootScope } from "@/root-scope.types"
+import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { CompareItem, CompareResult, CompareTables } from "@/backend/backend"
-import { TabHashScope } from "@/directives/tab-hash"
 import { Attribute } from "@/settings/config.types"
 import "@/components/korp-error"
 import "@/components/loglike-meter"
 import { StoreService } from "@/services/store"
+import { CompareItem, CompareResult, CompareTables, CompareTask } from "@/backend/task/compare-task"
 
 type ResultsComparisonController = IController & {
     loading: boolean
-    promise: CompareTab
     setProgress: (loading: boolean, progress: number) => void
+    task: CompareTask
 }
 
-type ResultsComparisonScope = TabHashScope & {
+type ResultsComparisonScope = IScope & {
     attributes: Record<string, Attribute>
     cmp1: SavedSearch
     cmp2: SavedSearch
     error?: string
     max: number
     resultOrder: (item: CompareItem) => number
-    reduce: string[]
     rowClick: (row: CompareItem, cmp_index: number) => void
-    stringify: (x: string) => string
+    stringify: Stringifier
     tables: CompareTables
 }
 
@@ -57,128 +54,50 @@ angular.module("korpApp").component("resultsComparison", {
     `,
     bindings: {
         loading: "<",
-        promise: "<",
         setProgress: "<",
+        task: "<",
     },
     controller: [
+        "$q",
         "$rootScope",
         "$scope",
         "store",
-        function ($rootScope: RootScope, $scope: ResultsComparisonScope, store: StoreService) {
+        function ($q: IQService, $rootScope: RootScope, $scope: ResultsComparisonScope, store: StoreService) {
             const $ctrl = this as ResultsComparisonController
 
             $ctrl.$onInit = () => {
+                $scope.attributes = $ctrl.task.attributes
                 $ctrl.setProgress(true, 0)
-                $ctrl.promise.then(render).catch((error) => {
-                    $ctrl.setProgress(false, 0)
-                    $scope.error = error
-                    $scope.$digest()
-                })
+                $q.resolve($ctrl.task.send())
+                    .then(render)
+                    .catch((error) => {
+                        $ctrl.setProgress(false, 0)
+                        $scope.error = error
+                        $scope.$digest()
+                    })
             }
 
             $scope.resultOrder = (item) => Math.abs(item.loglike)
 
             function render(result: CompareResult) {
-                const [tables, max, cmp1, cmp2, reduce] = result
                 $ctrl.setProgress(false, 100)
-
+                const { tables, max, cmp1, cmp2 } = result
                 $scope.tables = tables
-                $scope.reduce = reduce
-
-                const cl = settings.corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
-                $scope.attributes = { ...cl.getCurrentAttributes(), ...cl.getStructAttrs() }
-
-                let stringify = (x: string) => x
-                // currently we only support one attribute to reduce/group by, so simplify by only checking first item
-                const reduceAttrName = _.trimStart(reduce[0], "_.")
-                if ($scope.attributes[reduceAttrName]) {
-                    const attribute = $scope.attributes[reduceAttrName]
-                    if (attribute.stringify) {
-                        stringify = getStringifier(attribute.stringify)
-                    } else if (attribute.translation) {
-                        stringify = (value) => locAttribute(attribute.translation!, value, store.lang)
-                    }
-                }
-                $scope.stringify = stringify
-
                 $scope.max = max
-
                 $scope.cmp1 = cmp1
                 $scope.cmp2 = cmp2
             }
 
             $scope.rowClick = (row, cmp_index) => {
-                const cmps = [$scope.cmp1, $scope.cmp2]
-                const cmp = cmps[cmp_index]
+                const exampleTask = $ctrl.task.createExampleTask(cmp_index, row)
+                $rootScope.kwicTabs.push(exampleTask)
+            }
 
-                const splitTokens = _.map(row.elems, (elem) => _.map(elem.split("/"), (tokens) => tokens.split(" ")))
-
-                // number of tokens in search
-                const tokenLength = splitTokens[0][0].length
-
-                // transform result from grouping on attribute to grouping on token place
-                var tokens = _.map(_.range(0, tokenLength), (tokenIdx) =>
-                    _.map($scope.reduce, (reduceAttr, attrIdx) =>
-                        _.uniq(_.map(splitTokens, (res) => res[attrIdx][tokenIdx]))
-                    )
-                )
-
-                const cqps = _.map(tokens, function (token) {
-                    const cqpAnd = _.map(_.range(0, token.length), function (attrI) {
-                        let type: string | undefined
-                        let val: string
-                        let attrKey = $scope.reduce[attrI]
-                        const attrVal = token[attrI]
-
-                        if (attrKey.includes("_.")) {
-                            console.log("error, attribute key contains _.")
-                        }
-
-                        const attribute = $scope.attributes[attrKey]
-                        if (attribute) {
-                            ;({ type } = attribute)
-                            if (attribute["is_struct_attr"]) {
-                                attrKey = `_.${attrKey}`
-                            }
-                        }
-
-                        const op = type === "set" ? "contains" : "="
-
-                        if (type === "set" && attrVal.length > 1) {
-                            // Assemble variants for each position in the token
-                            const transpose = <T>(matrix: T[][]) => _.zip(...matrix) as T[][]
-                            const variantsByValue = attrVal.map((val) => val.split(":").slice(1))
-                            const variantsByPosition = transpose(variantsByValue).map(_.uniq)
-                            const variantsStrs = variantsByPosition.map((variants) => `:(${variants.join("|")})`)
-                            const key = attrVal[0].split(":")[0]
-                            val = key + variantsStrs.join("")
-                        } else {
-                            val = attrVal[0]
-                        }
-
-                        if (type === "set" && (val === "|" || val === "")) {
-                            return `ambiguity(${attrKey}) = 0`
-                        } else {
-                            return `${attrKey} ${op} "${val}"`
-                        }
-                    })
-
-                    return `[${cqpAnd.join(" & ")}]`
-                })
-
-                const cqp = cqps.join(" ")
-
-                const cl = settings.corpusListing.subsetFactory(cmp.corpora)
-
-                return $rootScope.kwicTabs.push({
-                    queryParams: {
-                        cqp: cmp.cqp,
-                        cqp2: cqp,
-                        corpus: cl.stringifySelected(),
-                        show_struct: _.keys(cl.getStructAttrs()).join(","),
-                        expand_prequeries: false,
-                    },
-                })
+            $scope.stringify = (value) => {
+                const attr = $scope.attributes[$ctrl.task.reduce[0]]
+                if (attr?.stringify) return getStringifier(attr.stringify)(value)
+                if (attr?.translation) return locAttribute(attr.translation, String(value), store.lang)
+                return String(value)
             }
         },
     ],

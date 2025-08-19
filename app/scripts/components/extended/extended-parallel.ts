@@ -2,18 +2,16 @@
 import angular, { IController, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import { expandOperators } from "@/cqp_parser/cqp"
-import { html } from "@/util"
+import { html, LocationService } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
-import { LocationService } from "@/urlparams"
 import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
+import { getEnabledLangs, getParallelCqp, ParallelQuery } from "@/parallel/parallel-cqp"
 
 type ExtendedParallelController = IController & {
-    langs: { lang: string; cqp: string }[]
-    negates: boolean[]
+    langs: ParallelQuery[]
     cqpChange: (idx: number) => (cqp: string) => void
     onLangChange: () => void
     getEnabledLangs: (i?: number) => string[]
@@ -38,7 +36,7 @@ angular.module("korpApp").component("extendedParallel", {
                     for="negate_chk{{$index}}"
                     >{{"not_containing" | loc:$root.lang}}</label
                 >
-                <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="$ctrl.negates[$index]" />
+                <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="l.negate" />
                 <extended-tokens
                     cqp="l.cqp"
                     cqp-change="$ctrl.cqpChange($index)(cqp)"
@@ -84,62 +82,26 @@ angular.module("korpApp").component("extendedParallel", {
 
             store.watch("corpus", () => ctrl.onLangChange())
 
-            ctrl.negates = []
+            const newLang = (lang = settings.start_lang!, cqp = "[]") => ({ lang, cqp, negate: false })
 
-            const langs = store.parallel_corpora
-            if (langs.length) {
-                ctrl.langs = langs.map((lang) => ({
-                    lang,
-                    cqp: store.cqpParallel[lang] || "[]",
-                }))
-            } else {
-                ctrl.langs = [{ lang: settings.start_lang!, cqp: "[]" }]
-            }
+            ctrl.langs = store.parallel_corpora.length
+                ? store.parallel_corpora.map((lang) => newLang(lang, store.cqpParallel[lang] || "[]"))
+                : [newLang()]
 
             ctrl.cqpChange = (idx) => (cqp) => {
                 if (ctrl.langs[idx].cqp != cqp) {
                     ctrl.langs[idx].cqp = cqp
-                    onCQPChange()
+                    updateCqp()
                 }
             }
 
-            const onCQPChange = () => {
-                const currentLangList = _.map(ctrl.langs, "lang")
-                var struct = corpusListing.getLinksFromLangs(currentLangList)
-                function getLangMapping(excludeLangs: string[]) {
-                    return _(struct)
-                        .flatten()
-                        .filter(function (item) {
-                            return !_.includes(excludeLangs, item.lang)
-                        })
-                        .groupBy("lang")
-                        .value()
-                }
-                function expandCQP(cqp: string) {
-                    try {
-                        return expandOperators(cqp)
-                    } catch (e) {
-                        console.log("parallel cqp parsing error", e)
-                        return cqp
-                    }
-                }
-
-                var output = expandCQP(ctrl.langs[0].cqp)
-
-                output += _.map(ctrl.langs.slice(1), function (langobj, i) {
-                    const langMapping = getLangMapping(currentLangList.slice(0, i + 1))
-                    const linkedCorpus = _(langMapping[langobj.lang]).map("id").invokeMap("toUpperCase").join("|")
-                    const expanded = expandCQP(langobj.cqp)
-                    const neg = ctrl.negates[i + 1] ? "!" : ""
-                    return ":LINKED_CORPUS:" + linkedCorpus + " " + neg + " " + expanded
-                }).join("")
+            function updateCqp() {
+                store.extendedCqp = getParallelCqp(ctrl.langs)
 
                 store.cqpParallel = {}
                 for (const { lang, cqp } of ctrl.langs) {
                     if (lang) store.cqpParallel[lang] = cqp
                 }
-                store.extendedCqp = output
-                return output
             }
 
             ctrl.onLangChange = function () {
@@ -150,7 +112,8 @@ angular.module("korpApp").component("extendedParallel", {
 
             ctrl.onSubmit = function () {
                 $location.replace()
-                store.search = `cqp|${onCQPChange()}`
+                updateCqp()
+                store.search = `cqp|${store.extendedCqp}`
                 store.page = 0
                 matomoSend("trackEvent", "Search", "Submit search", "Extended")
                 searches.doSearch()
@@ -164,40 +127,18 @@ angular.module("korpApp").component("extendedParallel", {
                 }
             }
 
-            const enabledLangsHelper = function (lang: string) {
-                return _(corpusListing.getLinksFromLangs([lang]))
-                    .flatten()
-                    .map("lang")
-                    .uniq()
-                    .value()
-            }
-
-            ctrl.getEnabledLangs = function (i) {
-                if (i === 0) {
-                    ctrl.langs[0].lang ??= settings.start_lang!
-                    return enabledLangsHelper(settings.start_lang!)
-                }
-                var currentLangList = _.map(ctrl.langs, "lang")
-                if (i != undefined) delete currentLangList[i]
-                const firstlang = ctrl.langs[0]?.lang || settings.start_lang!
-                var other = enabledLangsHelper(firstlang)
-                var langResult = _.difference(other, currentLangList)
-                if (i != undefined && ctrl.langs[i] && !ctrl.langs[i].lang) {
-                    ctrl.langs[i].lang = langResult[0]
-                }
-                return langResult
-            }
+            ctrl.getEnabledLangs = (i) => getEnabledLangs(ctrl.langs, i)
 
             ctrl.addLangRow = function () {
-                ctrl.langs.push({ lang: ctrl.getEnabledLangs()[0], cqp: "[]" })
+                ctrl.langs.push(newLang(ctrl.getEnabledLangs()[0]))
                 ctrl.onLangChange()
-                onCQPChange()
+                updateCqp()
             }
 
             ctrl.removeLangRow = function () {
                 ctrl.langs.pop()
                 ctrl.onLangChange()
-                onCQPChange()
+                updateCqp()
             }
         },
     ],

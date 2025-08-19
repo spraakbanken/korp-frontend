@@ -2,7 +2,7 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import settings from "@/settings"
-import kwicProxyFactory, { type KwicProxy } from "@/backend/kwic-proxy"
+import kwicProxyFactory, { type KwicProxy } from "@/backend/proxy/kwic-proxy"
 import { ApiKwic } from "@/backend/types"
 import { QueryParams, QueryResponse } from "@/backend/types/query"
 import { RootScope } from "@/root-scope.types"
@@ -12,6 +12,7 @@ import "@/components/kwic"
 import "@/services/utils"
 import { html } from "@/util"
 import { StoreService } from "@/services/store"
+import { pageToRange } from "@/backend/common"
 
 type ResultsHitsController = IController & {
     isActive: boolean
@@ -35,7 +36,7 @@ type ResultsHitsScope = IScope & {
     page?: number
     pageChange: (page: number) => void
     proxy: KwicProxy
-    isReading?: boolean
+    isReading: boolean
     toggleReading: () => void
 }
 
@@ -57,12 +58,11 @@ angular.module("korpApp").component("resultsHits", {
                 page="page"
                 page-event="pageChange"
                 hits-per-page="hitsPerPage"
-                prev-params="proxy.prevParams"
-                prev-url="proxy.prevUrl"
+                params="proxy.params"
                 corpus-order="corpusOrder"
                 show-search-options="true"
             ></kwic>
-            <json-button endpoint="'query'" params="proxy.prevParams"></json-button>
+            <json-button endpoint="'query'" params="proxy.params"></json-button>
         </div>
     `,
     bindings: {
@@ -80,7 +80,7 @@ angular.module("korpApp").component("resultsHits", {
 
             $scope.initialSearch = true
             $scope.proxy = kwicProxyFactory.create()
-            $scope.isReading = store.reading_mode
+            $scope.isReading = store.reading_mode || false
 
             $ctrl.$onInit = () => {
                 $scope.page = store.page
@@ -125,23 +125,14 @@ angular.module("korpApp").component("resultsHits", {
             }
 
             function buildQueryOptions(isPaging?: boolean): QueryParams {
-                const start = (store.page || 0) * store.hpp
-                const end = start + store.hpp - 1
-
-                const avoidContext = $scope.isReading
-                    ? settings["default_overview_context"]
-                    : settings["default_reading_context"]
-                const preferredContext = $scope.isReading
-                    ? settings["default_reading_context"]
-                    : settings["default_overview_context"]
-
-                const context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
+                const contextParams = settings.corpusListing.getContextParams($scope.isReading)
+                const { start, end } = pageToRange(store.page || 0, store.hpp)
 
                 if (!isPaging) {
                     $scope.proxy.queryData = undefined
                 }
 
-                const cqp = $scope.cqp || $scope.proxy.prevCQP
+                const cqp = $scope.cqp
                 if (!cqp) throw new Error("cqp missing")
 
                 const default_within = store.within
@@ -154,8 +145,7 @@ angular.module("korpApp").component("resultsHits", {
                     default_within,
                     within,
                     query_data: $scope.proxy.queryData,
-                    context,
-                    default_context: preferredContext,
+                    ...contextParams,
                     sort: store.sort || undefined,
                     start,
                     end,
@@ -182,23 +172,28 @@ angular.module("korpApp").component("resultsHits", {
                 $ctrl.setProgress(true, 0)
                 $scope.aborted = false
                 $scope.error = undefined
+                let hasKwic = false
 
                 $scope.proxy
-                    .makeRequest(
-                        buildQueryOptions(isPaging),
-                        (progressObj) =>
-                            $timeout(() => {
-                                $ctrl.setProgress(true, Math.round(progressObj.percent))
-                                if (!isPaging && progressObj.hits !== null) {
-                                    $scope.hitsInProgress = progressObj.hits
-                                }
-                            }),
-                        (data) => $timeout(() => renderResult(data))
+                    .setProgressHandler((progressObj) =>
+                        $timeout(() => {
+                            $ctrl.setProgress(true, Math.round(progressObj.percent))
+                            if (!isPaging && progressObj.hits !== null) {
+                                $scope.hitsInProgress = progressObj.hits
+                            }
+                            // Store the KWIC data for the current page as soon as it is available.
+                            // The request may continue to count hits across corpora.
+                            if (!hasKwic && "kwic" in progressObj.data) {
+                                renderResult(progressObj.data as QueryResponse)
+                                hasKwic = true
+                            }
+                        })
                     )
+                    .makeRequest(buildQueryOptions(isPaging))
                     .then((data) =>
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)
-                            renderResult(data)
+                            if (!hasKwic) renderResult(data)
                             if (!isPaging) {
                                 $scope.hits = data.hits
                                 $scope.hitsInProgress = data.hits

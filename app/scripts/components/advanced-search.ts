@@ -2,11 +2,10 @@
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import { matomoSend } from "@/matomo"
-import "@/services/compare-searches"
 import "@/components/search-submit"
-import { CompareSearches } from "@/services/compare-searches"
 import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
+import { savedSearches } from "@/saved-searches"
 
 type AdvancedSearchController = IController & {
     cqp: string
@@ -67,15 +66,9 @@ angular.module("korpApp").component("advancedSearch", {
     bindings: {},
     controller: [
         "$scope",
-        "compareSearches",
         "searches",
         "store",
-        function (
-            $scope: AdvancedSearchScope,
-            compareSearches: CompareSearches,
-            searches: SearchesService,
-            store: StoreService
-        ) {
+        function ($scope: AdvancedSearchScope, searches: SearchesService, store: StoreService) {
             const $ctrl = this as AdvancedSearchController
             $ctrl.cqp = "[]"
 
@@ -102,7 +95,7 @@ angular.module("korpApp").component("advancedSearch", {
             }
 
             $ctrl.onSearchSave = (name) => {
-                compareSearches.saveSearch(name, $ctrl.cqp)
+                savedSearches.push(name, $ctrl.cqp)
             }
         },
     ],

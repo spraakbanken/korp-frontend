@@ -62,7 +62,7 @@ export class CorpusListing {
     }
 
     select(idArray: string[]): void {
-        this.selected = idArray.map((id) => this.struct[id])
+        this.selected = idArray.map((id) => this.struct[id]).filter(Boolean)
         this.updateAttributes()
     }
 
@@ -208,18 +208,12 @@ export class CorpusListing {
         return _.union(...struct)
     }
 
-    getContextQueryStringFromCorpusId(corpus_ids: string[], prefer: string, avoid: string): string {
-        const corpora = _.map(corpus_ids, (corpus_id) => settings.corpora[corpus_id.toLowerCase()])
-        return this.getContextQueryStringFromCorpora(_.compact(corpora), prefer, avoid)
-    }
-
-    getContextQueryString(prefer: string, avoid: string): string {
-        return this.getContextQueryStringFromCorpora(this.selected, prefer, avoid)
-    }
-
-    getContextQueryStringFromCorpora(corpora: CorpusTransformed[], prefer: string, avoid: string) {
+    getContextParams(isReading: boolean) {
+        const prefer = isReading ? settings["default_reading_context"] : settings["default_overview_context"]
+        const avoid = isReading ? settings["default_overview_context"] : settings["default_reading_context"]
+        // Use specified corpora or fall back to selected
         const output: string[] = []
-        for (let corpus of corpora) {
+        for (let corpus of this.selected) {
             const contexts = _.keys(corpus.context)
             if (!contexts.includes(prefer)) {
                 if (contexts.length > 1 && contexts.includes(avoid)) {
@@ -228,7 +222,10 @@ export class CorpusListing {
                 output.push(corpus.id.toUpperCase() + ":" + contexts[0])
             }
         }
-        return _(output).compact().join()
+        return {
+            context: _.compact(output).join(),
+            default_context: prefer,
+        }
     }
 
     /**
@@ -267,6 +264,24 @@ export class CorpusListing {
             return { sentence: "sentence" }
         }
         return withins
+    }
+
+    buildShowParams() {
+        const show: string[] = ["sentence"]
+        const show_struct: string[] = []
+
+        for (const corpus of settings.corpusListing.selected) {
+            show.push(...Object.keys(corpus.within).map((key) => key.split(" ").pop()!))
+            show.push(...Object.keys(corpus.attributes))
+
+            show_struct.push(...Object.keys(corpus["struct_attributes"]))
+            if (corpus["reading_mode"]) show_struct.push("text__id")
+        }
+
+        return {
+            show: _.uniq(show).join(),
+            show_struct: _.uniq(show_struct).join(),
+        }
     }
 
     getTimeInterval(): [number, number] | undefined {
@@ -359,23 +374,31 @@ export class CorpusListing {
         return sentAttrs
     }
 
-    getAttributeGroups(setOperator: SetOperator = "union", lang?: string): AttributeOption[] {
+    getAttributeGroups(wordOp: SetOperator, structOp: SetOperator, lang?: string): AttributeOption[] {
         const word = this.getWordGroup()
-        const attrs = this.getWordAttributeGroups(setOperator, lang)
-        const sentAttrs = this.getStructAttributeGroups(setOperator, lang)
+        const attrs = this.getWordAttributeGroups(wordOp, lang)
+        const sentAttrs = this.getStructAttributeGroups(structOp, lang)
         return [word].concat(attrs, sentAttrs)
     }
 
-    getStatsAttributeGroups(lang: string): AttributeOption[] {
-        const word = this.getWordGroup()
+    getAttributeGroupsExtended(lang?: string): AttributeOption[] {
+        return this.getAttributeGroups("union", "union", lang).filter((attr) => !attr["hide_extended"])
+    }
 
+    getAttributeGroupsCompare(lang?: string): AttributeOption[] {
+        return this.getAttributeGroups("intersection", "intersection", lang).filter((attr) => !attr["hide_compare"])
+    }
+
+    getAttributeGroupsStatistics(lang?: string): AttributeOption[] {
         const wordOp = settings["reduce_word_attribute_selector"] || "union"
-        const attrs = this.getWordAttributeGroups(wordOp, lang)
-
         const structOp = settings["reduce_struct_attribute_selector"] || "union"
-        const sentAttrs = this.getStructAttributeGroups(structOp, lang)
+        return this.getAttributeGroups(wordOp, structOp, lang).filter((attr) => !attr["hide_statistics"])
+    }
 
-        return [word].concat(attrs, sentAttrs)
+    /** Get list of morphology ids used by currently selected corpora. */
+    getMorphologies(): string[] {
+        const morphologies = this.mapSelectedCorpora((corpus) => (corpus.morphology || "").split("|")).flat()
+        return _.uniq(_.compact(morphologies))
     }
 
     // update attributes so that we don't need to check them multiple times

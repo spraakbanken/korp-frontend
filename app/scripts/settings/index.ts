@@ -14,10 +14,6 @@ declare global {
 
 if (process.env.ENVIRONMENT != "production") window.settings = settings
 
-settings.markup = {
-    msd: require("@/../markup/msd.html"),
-}
-
 /**
  * function to set default values if parameters have been left out of config.js
  */
@@ -55,4 +51,8 @@ export function setDefaultConfigValues() {
     }
 
     _.defaults(settings, settingsDefaultsDep)
+}
+
+export function getDefaultWithin() {
+    return Object.keys(settings["default_within"] || {})[0]
 }

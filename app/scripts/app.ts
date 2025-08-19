@@ -16,7 +16,7 @@ import * as authenticationProxy from "@/components/auth/auth"
 import { getLocData } from "@/loc-data"
 import { RootScope } from "@/root-scope.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
-import { BUILD_HASH, formatRelativeHits, getService, html } from "@/util"
+import { BUILD_HASH, formatRelativeHits, getService, html, LocationService } from "@/util"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
 import "@/components/searchtabs"
@@ -26,9 +26,8 @@ import "@/components/korp-error"
 import "@/services/store"
 import { StoreService } from "@/services/store"
 import { JQueryExtended } from "./jquery.types"
-import { LocationService } from "./urlparams"
 import { LocLangMap } from "@/i18n/types"
-import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
+import { getAllCorporaInFolders } from "@/corpus-chooser"
 
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [
@@ -185,7 +184,7 @@ korpApp.run([
 
             const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
 
-            if (settings.initialization_checks && (await settings.initialization_checks(s))) {
+            if (settings.initialization_checks && (await settings.initialization_checks())) {
                 // custom initialization code called
             } else if (_.isEmpty(settings.corpora)) {
                 // no corpora

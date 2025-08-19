@@ -1,18 +1,16 @@
 /** @format */
 import _ from "lodash"
-import angular, { IControllerService, IHttpService, ui, type IScope } from "angular"
+import angular, { IControllerService, IHttpService, ILocationService, ui, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
 import { RootScope } from "./root-scope.types"
-import { JQueryExtended, JQueryStaticExtended } from "./jquery.types"
-import { HashParams, LocationService, UrlParams } from "./urlparams"
+import { HashParams, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
-import { CorpusTransformed } from "./settings/config-transformed.types"
-import { Row } from "./components/kwic"
-import { AbsRelSeq } from "./statistics.types"
+import { AbsRelSeq } from "./statistics/statistics.types"
 import { StoreService } from "./services/store"
+import moment, { Moment } from "moment"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
 export const html = String.raw
@@ -34,6 +32,13 @@ type ServiceTypes = {
     $uibModal: ui.bootstrap.IModalService
     store: StoreService
     // Add types here as needed.
+}
+
+/** Extends the Angular Location service to assign types for supported URL hash params. */
+export type LocationService = Omit<ILocationService, "search"> & {
+    search(): HashParams
+    search(search: HashParams): LocationService
+    search<K extends keyof HashParams>(search: K, paramValue: HashParams[K] | any): LocationService
 }
 
 /** Get a parameter from the `?<key>=<value>` part of the URL. */
@@ -95,47 +100,24 @@ export class Factory<T extends new (...args: any) => InstanceType<T>> {
     }
 }
 
-/** Toggles class names for selected word elements in KWIC. */
-export class SelectionManager {
-    selected: JQuery<HTMLElement>
-    aux: JQuery<HTMLElement>
-
-    constructor() {
-        this.selected = $()
-        this.aux = $()
+export abstract class Observable {
+    private listeners: Array<() => void> = []
+    listen(cb: () => void) {
+        this.listeners.push(cb)
     }
-
-    select(word: JQuery<HTMLElement>, aux?: JQuery<HTMLElement>): void {
-        if (word == null || !word.length) {
-            return
-        }
-        if (this.selected.length) {
-            this.selected.removeClass("word_selected token_selected")
-            this.aux.removeClass("word_selected aux_selected")
-        }
-        this.selected = word
-        this.aux = aux || $()
-        this.aux.addClass("word_selected aux_selected")
-        word.addClass("word_selected token_selected")
-    }
-
-    deselect(): void {
-        if (!this.selected.length) {
-            return
-        }
-        this.selected.removeClass("word_selected token_selected")
-        this.selected = $()
-        this.aux.removeClass("word_selected aux_selected")
-        this.aux = $()
-    }
-
-    hasSelected(): boolean {
-        return this.selected.length > 0
+    protected notify() {
+        this.listeners.forEach((cb) => cb())
     }
 }
 
-export const getCqpAttribute = (option: AttributeOption): string =>
-    option.is_struct_attr ? `_.${option.value}` : option.value
+/** Create a Moment that uses the date from one Date object and the time from another. */
+export function combineDateTime(date: Date, time: Date): Moment {
+    const m = moment(moment(date).format("YYYY-MM-DD"))
+    const m_time = moment(time)
+    m.add(m_time.hour(), "hour")
+    m.add(m_time.minute(), "minute")
+    return m
+}
 
 /** Format a number like 60723 => 61K */
 export function suffixedNumbers(num: number, lang: string) {
@@ -206,105 +188,18 @@ export function formatFrequency(store: StoreService, absrel: AbsRelSeq) {
 }
 
 /**
- * Render a lemgram string as pretty HTML.
- * TODO No HTML in placeholder in Extended!
- * @param lemgram A lemgram string, e.g. "vara..nn.2"
- * @param appendIndex Whether the numerical index should be included in output.
- * @returns An HTML string.
- */
-export function lemgramToHtml(lemgram: string, appendIndex?: boolean): string {
-    lemgram = _.trim(lemgram)
-    if (!isLemgram(lemgram)) return lemgram
-    const { form, pos, index } = splitLemgram(lemgram)
-    const indexHtml = appendIndex && index !== "1" ? `<sup>${index}</sup>` : ""
-    const concept = form.replace(/_/g, " ")
-    const type = pos.slice(0, 2)
-    return `${concept}${indexHtml} (<span rel="localize[${type}]">${loc(type)}</span>)`
-}
-
-/**
- * Render a lemgram string in pretty plain text.
- * @param lemgram A lemgram string, e.g. "vara..n.2"
- * @returns A plain-text string.
- */
-export function lemgramToString(lemgram: string): string {
-    const { form, pos, index } = splitLemgram(_.trim(lemgram))
-    const indexSup = parseInt(index) > 1 ? numberToSuperscript(index) : ""
-    const concept = form.replace(/_/g, " ")
-    const type = pos.slice(0, 2)
-    return `${concept}${indexSup} (${loc(type)})`
-}
-
-const lemgramRegexp = /\.\.\w+\.\d\d?(:\d+)?$/
-
-/**
- * Determines if a string is a lemgram string, e.g. "vara..n.2"
- */
-export const isLemgram = (str: string): boolean => str.search(lemgramRegexp) !== -1
-
-/**
- * Analyze a lemgram string into its constituents.
- * @param lemgram A lemgram string, e.g. "vara..n.2"
- * @throws If input is not a lemgram. You can test it first with `isLemgram`!
- */
-export function splitLemgram(lemgram: string): LemgramSplit {
-    if (!isLemgram(lemgram)) {
-        throw new Error(`Input to splitLemgram is not a lemgram: ${lemgram}`)
-    }
-    const match = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d+)(:\d+)?$/)!
-    return {
-        morph: match[2],
-        form: match[3],
-        pos: match[4],
-        index: match[5],
-        startIndex: match[6],
-    }
-}
-
-type LemgramSplit = {
-    morph: string
-    form: string
-    pos: string
-    index: string
-    startIndex: string
-}
-
-const saldoRegexp = /(.*?)\.\.(\d\d?)(:\d+)?$/
-
-/**
- * Render a SALDO string as pretty HTML.
- * @param saldoId A SALDO string, e.g. "vara..2"
- * @param appendIndex Whether the numerical index should be included in output.
- * @returns An HTML string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
- */
-export function saldoToHtml(saldoId: string, appendIndex?: boolean): string {
-    const match = saldoId.match(saldoRegexp)
-    if (!match) return saldoId
-    const concept = match[1].replace(/_/g, " ")
-    const indexHtml = appendIndex && match[2] !== "1" ? `<sup>${match[2]}</sup>` : ""
-    return `${concept}${indexHtml}`
-}
-
-/**
- * Render a SALDO string in pretty plain text.
- * @param saldoId A SALDO string, e.g. "vara..2"
- * @returns An plain-text string. If `saldoId` cannot be parsed as SALDO, it is returned as is.
- */
-export function saldoToString(saldoId: string): string {
-    const match = saldoId.match(saldoRegexp)
-    if (!match) return saldoId
-    const concept = match[1].replace(/_/g, " ")
-    const indexSup = parseInt(match[2]) > 1 ? numberToSuperscript(match[2]) : ""
-    return `${concept}${indexSup}`
-}
-
-/**
  * Represent a number with superscript characters like "⁴²".
  * @param n A decimal number.
  * @returns A string of superscript numbers.
  */
-function numberToSuperscript(number: string | number): string {
+export function numberToSuperscript(number: string | number): string {
     return [...String(number)].map((n) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(n)]).join("")
+}
+
+/** Format time as hh:mm:ss if hours > 0, else mm:ss */
+export function transformSeconds(seconds: number) {
+    const hhmmss = new Date(seconds * 1000).toISOString().substring(11, 19)
+    return hhmmss.replace(/^00:/, "")
 }
 
 /** Return htmlStr with quoted references to "img/filename.ext" replaced with "img/filename.BUILD_HASH.ext". */
@@ -321,107 +216,6 @@ export function simpleModal(html: string) {
     document.body.appendChild(dialog)
     dialog.showModal()
     dialog.querySelector("button")!.addEventListener("click", () => dialog.close())
-}
-
-// Add download links for other formats, defined in
-// settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
-// 2014-02-26/04-30)
-
-export function setDownloadLinks(params: string, result_data: { kwic: Row[]; corpus_order: string[] }): void {
-    // If some of the required parameters are null, return without
-    // adding the download links.
-    if (!(params != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
-        console.log("failed to do setDownloadLinks")
-        return
-    }
-
-    if (result_data.kwic.length == 0) {
-        $("#download-links").hide()
-        return
-    }
-
-    $("#download-links").show()
-
-    // Get the number (index) of the corpus of the query result hit
-    // number hit_num in the corpus order information of the query
-    // result.
-    const get_corpus_num = (hit_num: number) =>
-        result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus.toUpperCase())
-
-    console.log("setDownloadLinks data:", result_data)
-    $("#download-links").empty()
-    // Corpora in the query result
-    const result_corpora = result_data.corpus_order.slice(
-        get_corpus_num(0),
-        get_corpus_num(result_data.kwic.length - 1) + 1
-    )
-    // Settings of the corpora in the result, to be passed to the
-    // download script
-    const result_corpora_settings: Record<string, CorpusTransformed> = {}
-    let i = 0
-    while (i < result_corpora.length) {
-        const corpus_ids = result_corpora[i].toLowerCase().split("|")
-        let j = 0
-        while (j < corpus_ids.length) {
-            const corpus_id = corpus_ids[j]
-            result_corpora_settings[corpus_id] = settings.corpora[corpus_id]
-            j++
-        }
-        i++
-    }
-    $("#download-links").append("<option value='init' rel='localize[download_kwic]'></option>")
-    i = 0
-    while (i < settings.download_formats.length) {
-        const format = settings.download_formats[i]
-        // NOTE: Using attribute rel="localize[...]" to localize the
-        // title attribute requires a small change to
-        // lib/jquery.localize.js. Without that, we could use
-        // `loc`, but it would not change the
-        // localizations immediately when switching languages but only
-        // after reloading the page.
-        // # title = loc('formatdescr_' + format)
-        const option = $(`\
-<option
-    value="${format}"
-    title="${loc(`formatdescr_${format}`)}"
-    class="download_link">${format.toUpperCase()}</option>\
-`)
-
-        const query_params = JSON.stringify(Object.fromEntries(new URLSearchParams(params)))
-
-        const download_params = {
-            query_params,
-            format,
-            korp_url: window.location.href,
-            korp_server_url: settings.korp_backend_url,
-            corpus_config: JSON.stringify(result_corpora_settings),
-            corpus_config_info_keys: ["metadata", "licence", "homepage", "compiler"].join(","),
-            urn_resolver: settings.urnResolver,
-        }
-        if ("download_format_params" in settings) {
-            if ("*" in settings.download_format_params) {
-                $.extend(download_params, settings.download_format_params["*"])
-            }
-            if (format in settings.download_format_params) {
-                $.extend(download_params, settings.download_format_params[format])
-            }
-        }
-        option.appendTo("#download-links").data("params", download_params)
-        i++
-    }
-    $("#download-links").off("change")
-    ;($("#download-links") as JQueryExtended)
-        .localize()
-        .click(false)
-        .change(function (event) {
-            const params = $(":selected", this).data("params")
-            if (!params) {
-                return
-            }
-            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script!, params)
-            const self = $(this)
-            return setTimeout(() => self.val("init"), 1000)
-        })
 }
 
 /** Split a string by the first occurence of a given separator */

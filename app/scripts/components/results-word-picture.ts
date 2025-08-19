@@ -2,8 +2,8 @@
 import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
-import lemgramProxyFactory, { LemgramProxy } from "@/backend/lemgram-proxy"
-import { html, isLemgram, lemgramToString, unregescape } from "@/util"
+import lemgramProxyFactory, { LemgramProxy } from "@/backend/proxy/lemgram-proxy"
+import { html, unregescape } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { ApiRelation, RelationsResponse, RelationsSort } from "@/backend/types/relations"
@@ -12,6 +12,7 @@ import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/word-picture"
 import { StoreService } from "@/services/store"
+import { Lemgram } from "@/lemgram"
 
 type ResultsWordPictureController = IController & {
     isActive: boolean
@@ -62,7 +63,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             <word-picture data="data" on-sort-change="changeSort(sort)" sort="sort" warning="warning"></word-picture>
         </div>
         <korp-error ng-if="error" message="{{error}}"></korp-error>
-        <json-button ng-if="!warning && !error" endpoint="'relations'" params="proxy.prevParams"></json-button>
+        <json-button ng-if="!warning && !error" endpoint="'relations'" params="proxy.params"></json-button>
     `,
     bindings: {
         isActive: "<",
@@ -86,7 +87,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             const $ctrl = this as ResultsWordPictureController
 
             const s = $scope
-            s.proxy = lemgramProxyFactory.create()
+            s.proxy = new LemgramProxy()
             s.activated = false
             $scope.sort = "mi"
 
@@ -149,9 +150,8 @@ angular.module("korpApp").component("resultsWordPicture", {
                 $ctrl.setProgress(true, 0)
                 s.warning = undefined
                 s.proxy
-                    .makeRequest(word, type, $scope.sort, (progressObj) =>
-                        $timeout(() => $ctrl.setProgress(true, progressObj.percent))
-                    )
+                    .setProgressHandler((progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
+                    .makeRequest(word, type, $scope.sort)
                     .then((data) =>
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)
@@ -175,7 +175,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                 if (!data.relations) {
                     s.warning = loc("no_stats_results", store.lang)
                     s.resetView()
-                } else if (isLemgram(query)) {
+                } else if (Lemgram.parse(query)) {
                     s.renderTables(query, data.relations)
                 } else {
                     s.renderWordTables(query, data.relations)
@@ -277,7 +277,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                         if (settings["word_picture_conf"]![wordClass][i] && section.length) {
                             const toIndex = settings["word_picture_conf"]![wordClass][i].indexOf("_")
                             sectionsWithSearchWord[i][toIndex] = {
-                                word: isLemgram(token) ? lemgramToString(token) : token,
+                                word: Lemgram.parse(token)?.toString() || token,
                             }
                         }
 

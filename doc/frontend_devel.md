@@ -601,7 +601,7 @@ Add `my_key` to `<configDir>/translations/corpora-<lang>.json` for all `lang`.
 [Deprecation warning] Before the Angular approach we used the `rel` attribute, like so (but you shouldn't any more):
   `<span rel="localize[translation_key]">...</span>`
 
-#### Components
+### Components
 
 Define your own components as a map in `custom/components.js`. `component` will be added as a component with name `componentName` to the Angular app.
 
@@ -620,7 +620,7 @@ These can then be used in other custom components / extended / sidebar or as rea
 Remember that in Angular, if you use `myComponentName` as a name of a component, you must use 
 `my-component-name` when using the component in markup.
 
-#### Customizing extended search
+### Customizing extended search
 
 In `custom/extended.js`, we can define custom (non-Angular) components to be used in extended search:
 
@@ -658,7 +658,7 @@ attributes: {
 }
 ```
 
-##### Customizing sidebar
+### Customizing sidebar
 
 In `custom/sidebar.js`, we can define custom components to be used in the sidebar:
 
@@ -693,7 +693,7 @@ Data about the search, the current token and current attribute is stored in a nu
 
 *Note: The component not an actual Angular.js [component](https://docs.angularjs.org/guide/component). It will be added to the interface by manually creating a new scope and using `$controller` to instantiate the controller and `$compile` to instantiate the template.*
 
-#### Rendering attribute values in the statistics view
+### Rendering attribute values in the statistics view
 
 Define your own rules for rendering values and generating CQP-expressions for certain attributes.
 
@@ -717,22 +717,20 @@ export default {
 }
 ```
 
-Rendering values and generating CQP can also be controlled by editing `app/config/statistics_config.js`, but 
-of course it is best to avoid editing the actual code if it is possible.
+If you need to merge rows or otherwise alter the table structure, implement and assign a function to the `statistics_postprocess` setting.
 
-If you need to merge rows or otherwise alter the table structure, you can extend the `StatsProxy` class and do `statsProxyFactory.setClass(MyStatsProxy)`.
-
-#### Stringify functions
+### Stringify functions
 
 Add all custom pretty-printing to `custom/stringify.js`. Example file:
 
 ```js
-import { lemgramToHtml, saldoToHtml } from "@/util"
+import { Lemgram } from "@/lemgram"
+import { Saldo } from "@/saldo"
 
 export const {
-    sense: (sense) => saldoToHtml(sense, true),
-    lemgram: (str) => lemgramToHtml(str, true),
-    complemgram: (str) => str.split('+').map((lemgram) => lemgramToHtml(lemgram, true)).join('+')
+    sense: (sense) => Saldo.parse(sense)?.toHtml() || sense,
+    lemgram: (str) => Lemgram.parse(str)?.toHtml() || str,
+    complemgram: (str) => str.split('+').map((s) => Lemgram.parse(s)?.toHtml() || s).join('+')
 }
 ```
 
@@ -751,7 +749,10 @@ When clicking on a word in the KWIC a link will be added to the sidebar. Clickin
 
 The corpus must have the structural attribute `text__id`, which should be a unique ID in the corpus. `_head` and `_tail` are also needed and should contain the whitespace before and after the token. It is optional to put whitespace in both attributes. The simplest use case is to just put the trailing whitespace in `_tail` of that token and leave `_head` empty. The frontend will assume that any corpus with `reading_mode: true` will have these attributes.
 
-It is possible to write a custom reading component. See [this file](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js) for an example. See [Components](#components) for documentation on custom components.
+The setting can also be an object with:
+
+- `component` (string) A [custom component](#components) to use instead of the default [standardReadingMode component](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.ts)
+- `group_element` (string) An element name to use for grouping, e.g. `sentence`. The default reader component does not support grouped text, so only use this if your `component` supports it.
 
 
 # Developing the Korp Frontend

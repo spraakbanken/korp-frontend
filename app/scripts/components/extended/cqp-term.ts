@@ -21,7 +21,7 @@ import { StoreService } from "@/services/store"
 
 type ExtendedCqpTermController = IController & {
     term: Condition
-    parallellLang: string
+    parallellLang: string | undefined
     removeOr: () => void
     change: () => void
     types: AttributeOption[]
@@ -101,14 +101,10 @@ angular.module("korpApp").component("extendedCqpTerm", {
 
                 $timeout(() => {
                     // Get available attribute options
-                    ctrl.types = settings.corpusListing
-                        .getAttributeGroups("union", ctrl.parallellLang)
-                        .filter((item) => !item["hide_extended"])
+                    ctrl.types = settings.corpusListing.getAttributeGroupsExtended(ctrl.parallellLang)
 
                     // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
-                    ctrl.typeMapping = _.fromPairs(
-                        ctrl.types.map((item) => [item["is_struct_attr"] ? `_.${item.value}` : item.value, item])
-                    )
+                    ctrl.typeMapping = _.fromPairs(ctrl.types.map((item) => [valfilter(item), item]))
 
                     // Reset attribute if the selected one is no longer available
                     if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value

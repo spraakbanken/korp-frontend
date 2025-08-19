@@ -1,6 +1,6 @@
 /** @format */
 import angular from "angular"
-import { DynamicTabName, RootScope } from "@/root-scope.types"
+import { DynamicTabs, RootScope } from "@/root-scope.types"
 import { TabHashScope } from "@/directives/tab-hash"
 
 export type ResultsTabScope = TabHashScope & {
@@ -10,7 +10,7 @@ export type ResultsTabScope = TabHashScope & {
     select: () => void
     deselect: () => void
     setProgress: (loading: boolean, progress: number) => void
-    closeTab: (tabType: DynamicTabName, i: number, event: Event) => void
+    closeTab: (tabType: keyof DynamicTabs, i: number, event: Event) => void
 }
 
 angular.module("korpApp").directive("resultsTab", () => ({

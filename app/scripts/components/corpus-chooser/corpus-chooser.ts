@@ -13,7 +13,7 @@ import {
     initCorpusStructure,
     recalcFolderStatus,
     updateLimitedAccess,
-} from "./util"
+} from "@/corpus-chooser"
 import "@/components/corpus-chooser/corpus-time-graph"
 import "@/components/corpus-chooser/info-box"
 import "@/components/corpus-chooser/tree"

@@ -1,14 +1,14 @@
 /** @format */
 import angular from "angular"
-import settings from "@/settings"
+import settings, { getDefaultWithin } from "@/settings"
 import { RootScope } from "@/root-scope.types"
 import { UtilsService } from "@/services/utils"
-import { Attribute } from "@/settings/config.types"
 import { CqpQuery } from "@/cqp_parser/cqp.types"
 import { getLocData } from "@/loc-data"
-import { getAllCorporaInFolders } from "@/components/corpus-chooser/util"
+import { getAllCorporaInFolders } from "@/corpus-chooser"
 import { QueryParamSort } from "@/backend/types/query"
-import { HashParams, LocationService } from "@/urlparams"
+import { HashParams } from "@/urlparams"
+import { LocationService } from "@/util"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.
@@ -34,8 +34,6 @@ export type Store = {
     extendedCqp?: string
     /** CQP fragment built from selected filter values. */
     globalFilter?: CqpQuery
-    /** Filter data by attribute name */
-    globalFilterData: Record<string, FilterData>
     /** A simple attribute–values structure of selected filters. */
     global_filter: Record<string, string[]>
     /** Hits per page */
@@ -82,14 +80,6 @@ export type Store = {
     within?: string
 }
 
-export type FilterData = {
-    attribute: Attribute
-    /** Selected values */
-    value: string[]
-    /** Sorted list of options with counts */
-    options: [string, number][]
-}
-
 export type StoreBase = {
     get: <K extends keyof Store>(key: K) => Store[K]
     set: <K extends keyof Store>(key: K, value: Store[K]) => void
@@ -112,23 +102,20 @@ angular.module("korpApp").factory("store", [
         // They can still be accessed as `$root.lang` etc in templates.
         const rootScopeStore = $rootScope as unknown as Store
 
-        const withinDefault = Object.keys(settings["default_within"] || {})[0]
-
         // Initialize
         rootScopeStore.corpus = []
         rootScopeStore.cqp = "[]"
         rootScopeStore.cqpParallel = {}
-        rootScopeStore.globalFilterData = {}
         rootScopeStore.global_filter = {}
         rootScopeStore.hpp = settings["hits_per_page_default"]
         rootScopeStore.in_order = true
         rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
         rootScopeStore.page = 0
-        rootScopeStore.parallel_corpora = []
+        rootScopeStore.parallel_corpora = settings.start_lang ? [settings.start_lang] : []
         rootScopeStore.sort = ""
         rootScopeStore.stats_reduce = "word"
         rootScopeStore.stats_reduce_insensitive = ""
-        rootScopeStore.within = withinDefault
+        rootScopeStore.within = getDefaultWithin()
 
         // Sync to url
         utils.setupHash($rootScope, {
@@ -181,7 +168,7 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, { key: "stats_reduce", default: "word" })
         utils.setupHash($rootScope, { key: "stats_reduce_insensitive", default: "" })
         utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
-        utils.setupHash($rootScope, { key: "within", default: withinDefault })
+        utils.setupHash($rootScope, { key: "within", default: getDefaultWithin() })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {
             utils.setupHash($rootScope, {

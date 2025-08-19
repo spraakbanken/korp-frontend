@@ -2,10 +2,11 @@
 import _ from "lodash"
 import angular, { IController, IPromise } from "angular"
 import settings from "@/settings"
-import { html, lemgramToString, saldoToString } from "@/util"
-import { loc } from "@/i18n"
+import { html } from "@/util"
 import { getLemgrams, getSenses, LemgramCount } from "@/backend/lexicons"
 import "@/directives/typeahead-click-open"
+import { Lemgram } from "@/lemgram"
+import { Saldo } from "@/saldo"
 
 type AutocController = IController & {
     input: string
@@ -21,19 +22,16 @@ type AutocController = IController & {
     placeholder: string
     typeaheadClose: () => void
     lemgramify: (lemgram: string) => Lemgram | undefined
-    sensify: (saldo: string) => Saldo
+    sensify: (saldo: string) => Saldo | undefined
     placeholderToString: (placeholder: string) => string | undefined
     textInput: () => void
     selectedItem: (item: unknown, selected: LemgramOut | Sense) => void
-    getMorphologies: (corpora: string[]) => string[]
     getRows: (input: string) => IPromise<LemgramOut[]> | IPromise<Sense[]> | undefined
-    getLemgrams: (input: string, morphologies: string[], corpora: string[]) => IPromise<LemgramOut[]>
+    getLemgrams: (input: string) => IPromise<LemgramOut[]>
     getSenses: (input: string) => IPromise<Sense[]>
 }
 
-type Lemgram = { main: string; index: string; pos: string; namespace?: string }
-type LemgramOut = LemgramCount & { parts: Lemgram | undefined; variant: string }
-type Saldo = { main: string; index: string }
+type LemgramOut = LemgramCount & { parts: Lemgram; variant: string }
 type Sense = { sense: string; parts: Saldo; desc?: Saldo; variant: string }
 
 angular.module("korpApp").component("autoc", {
@@ -42,11 +40,11 @@ angular.module("korpApp").component("autoc", {
             <script type="text/ng-template" id="lemgramautocomplete.html">
                 <a class="!flex items-baseline cursor-pointer" ng-class="{'autocomplete-item-disabled' : match.model.count == 0, '!text-gray-500' : (match.model.variant != 'dalin' && match.model.count == 0)}">
                     <span>
-                        <span ng-if="match.model.parts.namespace" class="label lemgram-namespace">{{match.model.parts.namespace | loc}}</span>
-                        <span>{{match.model.parts.main}}</span>
+                        <span ng-if="match.model.parts.morphology" class="label lemgram-namespace">{{match.model.parts.morphology | loc}}</span>
+                        <span>{{match.model.parts.form}}</span>
                         <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
                         <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
-                        <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.main}}</span>
+                        <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.form}}</span>
                         <sup ng-if="match.model.desc && match.model.desc.index != 1" style="color:gray">{{match.model.desc.index}}</sup>
                     </span>
                     <span ng-if="match.model.count > 0" class="ml-auto pl-1 text-sm">
@@ -113,38 +111,18 @@ angular.module("korpApp").component("autoc", {
                 }
             }
 
-            // TODO Check compatibility and merge with splitLemgram in @/util
-            ctrl.lemgramify = function (lemgram: string) {
-                const lemgramRegExp = /([^_.-]*--)?(.*)\.\.(\w+)\.(\d\d?)/
-                const match = lemgram.match(lemgramRegExp)
-                if (!match) {
-                    return
-                }
-                return {
-                    main: match[2].replace(/_/g, " "),
-                    pos: loc(match[3].slice(0, 2)),
-                    index: match[4],
-                    namespace: match[1] ? match[1].slice(0, -2) : "",
-                }
-            }
+            ctrl.lemgramify = Lemgram.parse
 
-            // TODO Check compatibility and use saldoRegexp in @/util
-            ctrl.sensify = function (sense: string) {
-                const senseParts = sense.split("..")
-                return {
-                    main: senseParts[0].replace(/_/g, " "),
-                    index: senseParts[1],
-                }
-            }
+            ctrl.sensify = Saldo.parse
 
             ctrl.placeholderToString = _.memoize(function (placeholder: string) {
                 if (!placeholder) {
                     return
                 }
                 if (ctrl.type === "lemgram") {
-                    return lemgramToString(placeholder)
+                    return Lemgram.parse(placeholder)?.toString()
                 } else {
-                    return saldoToString(placeholder)
+                    return Saldo.parse(placeholder)?.toString()
                 }
             })
 
@@ -161,43 +139,29 @@ angular.module("korpApp").component("autoc", {
                 ctrl.typeaheadClose()
             }
 
-            ctrl.getMorphologies = function (corpora: string[]) {
-                const morphologies: string[] = []
-                if (ctrl.variant === "dalin") {
-                    morphologies.push("dalinm")
-                } else {
-                    for (let id of corpora) {
-                        const morfs = settings.corpora[id].morphology || ""
-                        for (let morf of morfs.split("|")) {
-                            if (morf !== "" && !morphologies.includes(morf)) {
-                                morphologies.push(morf)
-                            }
-                        }
-                    }
-                    if (morphologies.length === 0) {
-                        morphologies.push("saldom")
-                    }
-                }
-                return morphologies
+            function getMorphologies(): string[] {
+                if (ctrl.variant === "dalin") return ["dalinm"]
+                const morphologies = settings.corpusListing.getMorphologies()
+                return morphologies.length ? morphologies : ["saldom"]
             }
 
             ctrl.getRows = function (input: string) {
-                const corporaIDs = _.map(settings.corpusListing.selected, "id")
-                const morphologies = ctrl.getMorphologies(corporaIDs)
                 if (ctrl.type === "lemgram") {
-                    return ctrl.getLemgrams(input, morphologies, corporaIDs)
+                    return ctrl.getLemgrams(input)
                 } else if (ctrl.type === "sense") {
                     return ctrl.getSenses(input)
                 }
             }
 
-            ctrl.getLemgrams = async (input: string, morphologies: string[], corpora: string[]) => {
+            ctrl.getLemgrams = async (input: string) => {
+                const morphologies = getMorphologies()
+                const corpora = settings.corpusListing.getSelectedCorpora()
                 const data = await getLemgrams(input, morphologies, corpora)
                 const output: LemgramOut[] = data.map((item) => {
                     if (ctrl.variant === "affix") item.count = -1
                     return {
                         ...item,
-                        parts: ctrl.lemgramify(item.lemgram),
+                        parts: ctrl.lemgramify(item.lemgram)!,
                         variant: ctrl.variant,
                     }
                 })
@@ -210,16 +174,18 @@ angular.module("korpApp").component("autoc", {
                 const output: Sense[] = data.map((item) => {
                     const out = {
                         sense: item.sense,
-                        parts: ctrl.sensify(item.sense),
+                        parts: ctrl.sensify(item.sense)!,
                         desc: item.desc ? ctrl.sensify(item.desc) : undefined,
                         variant: ctrl.variant,
                     }
                     return out
                 })
                 output.sort(function (a, b) {
-                    if (a.parts.main === b.parts.main) {
-                        return b.parts.index.localeCompare(a.parts.index)
+                    if (a.parts.form === b.parts.form) {
+                        // Sort same-form senses by index
+                        return a.parts.index - b.parts.index
                     } else {
+                        // Sort by length
                         return a.sense.length - b.sense.length
                     }
                 })

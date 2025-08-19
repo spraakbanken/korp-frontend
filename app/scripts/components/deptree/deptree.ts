@@ -6,6 +6,7 @@ import { locObj } from "@/i18n"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { drawBratTree } from "./deptree-util"
 import { Token } from "@/backend/types"
+import { LangString } from "@/i18n/types"
 
 type DeptreeController = IController & {
     tokens: Token[]
@@ -54,7 +55,7 @@ angular.module("korpApp").component("depTree", {
                 type ModalScope = IScope & {
                     clickX: () => void
                     label: string
-                    value: string
+                    value: LangString
                 }
 
                 const modal = $uibModal.open({
