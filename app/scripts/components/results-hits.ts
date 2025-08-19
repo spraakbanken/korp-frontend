@@ -125,7 +125,7 @@ angular.module("korpApp").component("resultsHits", {
             }
 
             function buildQueryOptions(isPaging?: boolean): QueryParams {
-                const contextParams = settings.corpusListing.getContextParam($scope.isReading)
+                const contextParams = settings.corpusListing.getContextParams($scope.isReading)
                 const { start, end } = pageToRange(store.page || 0, store.hpp)
 
                 if (!isPaging) {

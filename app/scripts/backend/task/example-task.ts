@@ -21,7 +21,7 @@ export class ExampleTask {
         const { start, end } = pageToRange(page || 0, hpp)
 
         // Override context param only if isReading is explicitly enabled/disabled
-        const contextParams = this.isReading != undefined ? this.corpusListing.getContextParam(this.isReading) : {}
+        const contextParams = this.isReading != undefined ? this.corpusListing.getContextParams(this.isReading) : {}
 
         const opts = {
             ...this.queryParams,

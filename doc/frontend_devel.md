@@ -717,7 +717,7 @@ export default {
 }
 ```
 
-If you need to merge rows or otherwise alter the table structure, you can extend the `StatsProxy` class and do `statsProxyFactory.setClass(MyStatsProxy)`.
+If you need to merge rows or otherwise alter the table structure, implement and assign a function to the `statistics_postprocess` setting.
 
 ### Stringify functions
 
