@@ -20,8 +20,8 @@ export class CorpusListing {
     corpora: CorpusTransformed[]
     selected: CorpusTransformed[]
     struct: Record<string, CorpusTransformed>
-    structAttributes: Record<string, Attribute>
-    commonAttributes: Record<string, Attribute>
+    structAttributes: Record<string, Attribute> = {}
+    commonAttributes: Record<string, Attribute> = {}
     _wordGroup: AttributeOption
 
     constructor(corpora: Record<string, CorpusTransformed>) {

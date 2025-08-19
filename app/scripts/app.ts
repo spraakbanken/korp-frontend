@@ -243,6 +243,7 @@ korpApp.run([
             } else {
                 // Corpus selection OK
                 store.corpus = ids
+                settings.corpusListing.select(store.corpus)
 
                 // Sync corpus selection from store to global corpus listing
                 store.watch("corpus", () => {
