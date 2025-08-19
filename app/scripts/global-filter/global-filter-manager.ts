@@ -17,8 +17,8 @@ export type FilterData = {
 }
 
 export class GlobalFilterManager extends Observable {
-    attrs: Attribute[]
-    data: RecursiveRecord<number>
+    attrs: Attribute[] = []
+    data: RecursiveRecord<number> = {}
     filters: Record<string, FilterData> = {}
 
     constructor(private store: StoreService) {

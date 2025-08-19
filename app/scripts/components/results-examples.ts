@@ -69,7 +69,7 @@ angular.module("korpApp").component("resultsExamples", {
 
             $ctrl.$onInit = () => {
                 // Context mode can be set when creating the tab. If not, use URL param
-                $scope.isReading = $ctrl.task.isReading ?? store.reading_mode
+                $scope.isReading = !!$ctrl.task.isReading
                 $scope.hitsPerPage = store.hpp
                 makeRequest()
             }

@@ -62,7 +62,7 @@ export class CorpusListing {
     }
 
     select(idArray: string[]): void {
-        this.selected = idArray.map((id) => this.struct[id])
+        this.selected = idArray.map((id) => this.struct[id]).filter(Boolean)
         this.updateAttributes()
     }
 
