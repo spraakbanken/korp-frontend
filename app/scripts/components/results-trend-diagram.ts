@@ -3,13 +3,12 @@ import angular, { IController, IRootElementService, IScope, ITimeoutService } fr
 import _ from "lodash"
 import moment, { Moment } from "moment"
 import { expandOperators } from "@/cqp_parser/cqp"
-import { downloadFile, formatFrequency, formatRelativeHits, html } from "@/util"
+import { downloadFile, formatRelativeHits, html } from "@/util"
 import { loc } from "@/i18n"
 import {
     formatUnixDate,
     getTimeCqp,
     LEVELS,
-    FORMATS,
     Level,
     findOptimalLevel,
     Series,
@@ -38,6 +37,7 @@ type ResultsTrendDiagramController = IController & {
 }
 
 type ResultsTrendDiagramScope = IScope & {
+    isInitDone: boolean
     nontime: number
     statsRelative: boolean
 }
@@ -49,15 +49,30 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         <div class="graph_tab" ng-show="!$ctrl.error">
             <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
                 <div class="btn-group form_switch">
-                    <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'line'">
+                    <button
+                        class="btn btn-default btn-sm"
+                        ng-model="$ctrl.mode"
+                        uib-btn-radio="'line'"
+                        ng-disabled="!isInitDone"
+                    >
                         {{'line' | loc:$root.lang}}
-                    </label>
-                    <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'bar'">
+                    </button>
+                    <button
+                        class="btn btn-default btn-sm"
+                        ng-model="$ctrl.mode"
+                        uib-btn-radio="'bar'"
+                        ng-disabled="!isInitDone"
+                    >
                         {{'bar' | loc:$root.lang}}
-                    </label>
-                    <label class="btn btn-default btn-sm" ng-model="$ctrl.mode" uib-btn-radio="'table'">
+                    </button>
+                    <button
+                        class="btn btn-default btn-sm"
+                        ng-model="$ctrl.mode"
+                        uib-btn-radio="'table'"
+                        ng-disabled="!isInitDone"
+                    >
                         {{'table' | loc:$root.lang}}
-                    </label>
+                    </button>
                 </div>
                 <label ng-show="$ctrl.mode == 'table'">
                     <input type="checkbox" ng-model="statsRelative" />
@@ -254,25 +269,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 }
             }
 
-            function renderGraph(Rickshaw: any, data: CountTimeResponse, currentZoom: Level) {
-                let series: Series[]
-
-                const done = () => {
-                    $ctrl.setProgress(false, 100)
-                    $(window).trigger("resize")
-                }
-
-                if ($ctrl.graph) {
-                    series = makeSeries(Rickshaw, data, currentZoom, $ctrl.task.cqp, $ctrl.task.subqueries)
-                    spliceGraphData($ctrl.graph, series)
-                    drawIntervals($ctrl.graph)
-                    $ctrl.graph.render()
-                    done()
-                    return
-                }
-
-                series = makeSeries(Rickshaw, data, currentZoom, $ctrl.task.cqp, $ctrl.task.subqueries)
-
+            function createGraph(Rickshaw: any, series: Series[]): Graph {
                 const graph: Graph = new Rickshaw.Graph({
                     element: $(".chart", $ctrl.$result).empty().get(0),
                     renderer: "line",
@@ -283,50 +280,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                         right: 0.01,
                     },
                 })
-                let width = $(".tab-pane").width()
-                graph.setSize({ width })
-                graph.render()
-                $ctrl.graph = graph
-
-                drawIntervals(graph)
-
-                $(window).on(
-                    "resize",
-                    _.throttle(() => {
-                        if ($ctrl.$result.is(":visible")) {
-                            width = $(".tab-pane").width()
-                            graph.setSize()
-                            $ctrl.preview.configure({ width })
-                            $ctrl.preview.render()
-                            return graph.render()
-                        }
-                    }, 200)
-                )
-
-                $(".form_switch", $ctrl.$result).click(() => {
-                    const val = $ctrl.mode
-                    for (let cls of $ctrl.$result.attr("class").split(" ")) {
-                        if (cls.match(/^form-/)) {
-                            $ctrl.$result.removeClass(cls)
-                        }
-                    }
-                    $ctrl.$result.addClass(`form-${val}`)
-                    $(".chart,.legend", $ctrl.$result.parent()).show()
-                    $(".time_table", $ctrl.$result.parent()).hide()
-                    if (val === "bar") {
-                        setBarMode()
-                    } else if (val === "table") {
-                        const el = $(".time_table", $ctrl.$result)
-                        $ctrl.time_grid = renderTable(store, el, series)
-                        setTableMode(series)
-                    }
-
-                    if (val !== "table") {
-                        graph.setRenderer(val)
-                        graph.render()
-                        $(".exportTimeStatsSection", $ctrl.$result).hide()
-                    }
-                })
+                // let width = $(".tab-pane").width()
+                // graph.setSize({ width })
 
                 // Add legend and toggling
                 const legendElement = $(".legend", $ctrl.$result).get(0)
@@ -434,7 +389,61 @@ angular.module("korpApp").component("resultsTrendDiagram", {
 
                 yAxis.render()
 
-                done()
+                return graph
+            }
+
+            function renderGraph(Rickshaw: any, data: CountTimeResponse, currentZoom: Level) {
+                const series = makeSeries(Rickshaw, data, currentZoom, $ctrl.task.cqp, $ctrl.task.subqueries)
+
+                // Create or update graph
+                if ($ctrl.graph) spliceGraphData($ctrl.graph, series)
+                else $ctrl.graph = createGraph(Rickshaw, series)
+
+                drawIntervals($ctrl.graph)
+                $ctrl.graph.render()
+
+                $ctrl.setProgress(false, 100)
+                $(window).trigger("resize")
+            }
+
+            function setupInteraction() {
+                $(window).on(
+                    "resize",
+                    _.throttle(() => {
+                        if ($ctrl.$result.is(":visible")) {
+                            const width = $(".tab-pane").width()
+                            $ctrl.graph!.setSize()
+                            $ctrl.preview.configure({ width })
+                            $ctrl.preview.render()
+                            return $ctrl.graph!.render()
+                        }
+                    }, 200)
+                )
+
+                $(".form_switch", $ctrl.$result).click(() => {
+                    const val = $ctrl.mode
+                    for (let cls of $ctrl.$result.attr("class").split(" ")) {
+                        if (cls.match(/^form-/)) {
+                            $ctrl.$result.removeClass(cls)
+                        }
+                    }
+                    $ctrl.$result.addClass(`form-${val}`)
+                    $(".chart,.legend", $ctrl.$result.parent()).show()
+                    $(".time_table", $ctrl.$result.parent()).hide()
+                    if (val === "bar") {
+                        setBarMode()
+                    } else if (val === "table") {
+                        const el = $(".time_table", $ctrl.$result)
+                        $ctrl.time_grid = renderTable(store, el, $ctrl.graph!.series)
+                        setTableMode($ctrl.graph!.series)
+                    }
+
+                    if (val !== "table") {
+                        $ctrl.graph!.setRenderer(val)
+                        $ctrl.graph!.render()
+                        $(".exportTimeStatsSection", $ctrl.$result).hide()
+                    }
+                })
             }
 
             async function makeRequest(from: Moment, to: Moment) {
@@ -450,7 +459,13 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 try {
                     const rickshawPromise = import(/* webpackChunkName: "rickshaw" */ "rickshaw")
                     const [Rickshaw, graphData] = await Promise.all([rickshawPromise, reqPromise])
-                    $timeout(() => renderGraph(Rickshaw, graphData, currentZoom))
+                    $timeout(() => {
+                        renderGraph(Rickshaw, graphData, currentZoom)
+                        if (!$scope.isInitDone) {
+                            setupInteraction()
+                            $scope.isInitDone = true
+                        }
+                    })
                 } catch (error) {
                     $timeout(() => {
                         console.error(error)

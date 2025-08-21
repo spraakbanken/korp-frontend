@@ -31,6 +31,7 @@
 - Related words heading link url
 - Use `angular.toJson` in `localStorageGet` to avoid storing `$$hashKey` etc.
 - Stray value when clearing simple search input
+- Prevent switching trend diagram form before done loading
 
 ## [9.10.1] - 2025-07-02
 
