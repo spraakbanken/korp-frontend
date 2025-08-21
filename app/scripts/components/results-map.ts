@@ -132,21 +132,14 @@ angular.module("korpApp").component("resultsMap", {
             /** Open the occurrences at a selected location */
             $scope.newKWICSearch = (marker: MarkerEvent) => {
                 const { point, queryData } = marker
-                const cl = settings.corpusListing.subsetFactory(queryData.corpora)
+                const location = [point.name, point.countryCode, point.lat, point.lng].join(";")
                 const numberOfTokens = queryData.subCqp.split("[").length - 1
-                const opts = {
-                    cqp: queryData.searchCqp,
-                    cqp2: `[_.${queryData.label} contains "${regescape(
-                        [point.name, point.countryCode, point.lat, point.lng].join(";")
-                    )}"]{${numberOfTokens}}`,
-                    cqp3: queryData.subCqp,
-                    corpus: cl.stringifySelected(),
-                    show_struct: _.keys(cl.getStructAttrs()).join(","),
-                    expand_prequeries: false,
-                    default_within: queryData.within,
-                }
+                const cqpGeo = `[_.${queryData.label} contains "${regescape(location)}"]{${numberOfTokens}}`
+
+                const cqps = [queryData.searchCqp, cqpGeo, queryData.subCqp]
                 const readingMode = queryData.label === "paragraph__geocontext"
-                $timeout(() => $rootScope.kwicTabs.push(new ExampleTask(opts, readingMode)), 0)
+                const task = new ExampleTask(queryData.corpora, cqps, queryData.within, readingMode)
+                $timeout(() => $rootScope.kwicTabs.push(task))
             }
         },
     ],

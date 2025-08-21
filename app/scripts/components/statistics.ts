@@ -350,16 +350,7 @@ angular.module("korpApp").component("statistics", {
                 const corpora = Object.keys(row.count).filter((id) => row.count[id][0] > 0)
 
                 $rootScope.kwicTabs.push(
-                    new ExampleTask(
-                        {
-                            corpus: corpora.join(","),
-                            cqp: $ctrl.params.cqp,
-                            cqp2,
-                            expand_prequeries: false,
-                            default_within: $ctrl.params.default_within,
-                        },
-                        store.reading_mode
-                    )
+                    new ExampleTask(corpora, [$ctrl.params.cqp, cqp2], $ctrl.params.default_within, store.reading_mode)
                 )
             }
 

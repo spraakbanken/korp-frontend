@@ -197,16 +197,10 @@ angular.module("korpApp").component("resultsTrendDiagram", {
 
                 const timecqp = getTimeCqp(time, zoom, LEVELS.indexOf(zoom) < 3)
                 const decodedCQP = decodeURIComponent(cqp)
-                const opts = {
-                    corpus: $ctrl.task.corpusListing.stringifySelected(),
-                    cqp: $ctrl.task.cqp,
-                    cqp2: expandOperators(decodedCQP),
-                    cqp3: timecqp,
-                    expand_prequeries: false,
-                    default_within: $ctrl.task.defaultWithin,
-                }
 
-                $rootScope.kwicTabs.push(new ExampleTask(opts))
+                const corpusIds = $ctrl.task.corpusListing.getSelectedCorpora()
+                const cqps = [$ctrl.task.cqp, expandOperators(decodedCQP), timecqp]
+                $rootScope.kwicTabs.push(new ExampleTask(corpusIds, cqps, $ctrl.task.defaultWithin))
             }
 
             function drawPreloader(from: Moment, to: Moment): void {

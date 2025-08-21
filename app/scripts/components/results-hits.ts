@@ -1,10 +1,9 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
-import settings from "@/settings"
 import kwicProxyFactory, { type KwicProxy } from "@/backend/proxy/kwic-proxy"
 import { ApiKwic } from "@/backend/types"
-import { QueryParams, QueryResponse } from "@/backend/types/query"
+import { QueryResponse } from "@/backend/types/query"
 import { RootScope } from "@/root-scope.types"
 import "@/components/json_button"
 import "@/components/korp-error"
@@ -12,7 +11,6 @@ import "@/components/kwic"
 import "@/services/utils"
 import { html } from "@/util"
 import { StoreService } from "@/services/store"
-import { pageToRange } from "@/backend/common"
 
 type ResultsHitsController = IController & {
     isActive: boolean
@@ -24,7 +22,7 @@ type ResultsHitsScope = IScope & {
     aborted?: boolean
     corpusHits?: Record<string, number>
     corpusOrder?: string[]
-    cqp?: string
+    cqp: string
     error?: string
     /** Number of total search hits, updated when a search is completed. */
     hits?: number
@@ -79,7 +77,7 @@ angular.module("korpApp").component("resultsHits", {
             const $ctrl = this as ResultsHitsController
 
             $scope.initialSearch = true
-            $scope.proxy = kwicProxyFactory.create()
+            $scope.proxy = kwicProxyFactory.create(store)
             $scope.isReading = store.reading_mode || false
 
             $ctrl.$onInit = () => {
@@ -124,47 +122,6 @@ angular.module("korpApp").component("resultsHits", {
                 makeRequest()
             }
 
-            function buildQueryOptions(isPaging?: boolean): QueryParams {
-                const contextParams = settings.corpusListing.getContextParams($scope.isReading)
-                const { start, end } = pageToRange(store.page || 0, store.hpp)
-
-                if (!isPaging) {
-                    $scope.proxy.queryData = undefined
-                }
-
-                const cqp = $scope.cqp
-                if (!cqp) throw new Error("cqp missing")
-
-                const default_within = store.within
-                const within = settings.corpusListing.getWithinParam(default_within)
-
-                const params: QueryParams = {
-                    corpus: settings.corpusListing.stringifySelected(),
-                    cqp,
-                    in_order: store.in_order,
-                    default_within,
-                    within,
-                    query_data: $scope.proxy.queryData,
-                    ...contextParams,
-                    sort: store.sort || undefined,
-                    start,
-                    end,
-                    incremental: true,
-                }
-
-                if (store.sort == "random") {
-                    // Randomize new seed if new search
-                    if (!isPaging && !store.random_seed) {
-                        store.random_seed = Math.ceil(Math.random() * 10000000)
-                    }
-                    params.random_seed = store.random_seed
-                } else {
-                    store.random_seed = undefined
-                }
-
-                return params
-            }
-
             function makeRequest(isPaging?: boolean) {
                 // Abort any running request
                 if ($ctrl.loading) $scope.proxy.abort()
@@ -173,6 +130,11 @@ angular.module("korpApp").component("resultsHits", {
                 $scope.aborted = false
                 $scope.error = undefined
                 let hasKwic = false
+
+                // Randomize new seed if new search
+                if (store.sort == "random" && !store.random_seed && !isPaging) {
+                    store.random_seed = Math.ceil(Math.random() * 10000000)
+                } else store.random_seed = undefined
 
                 $scope.proxy
                     .setProgressHandler((progressObj) =>
@@ -189,7 +151,7 @@ angular.module("korpApp").component("resultsHits", {
                             }
                         })
                     )
-                    .makeRequest(buildQueryOptions(isPaging))
+                    .makeRequest($scope.cqp, isPaging)
                     .then((data) =>
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)

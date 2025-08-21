@@ -69,7 +69,7 @@ angular.module("korpApp").component("resultsExamples", {
 
             $ctrl.$onInit = () => {
                 // Context mode can be set when creating the tab. If not, use URL param
-                $scope.isReading = !!$ctrl.task.isReading
+                $scope.isReading = !!$ctrl.task.isReadingInit
                 $scope.hitsPerPage = store.hpp
                 makeRequest()
             }
@@ -84,23 +84,22 @@ angular.module("korpApp").component("resultsExamples", {
 
             $scope.pageChange = function (page) {
                 $scope.page = page
-                makeRequest()
+                makeRequest(true)
             }
 
             $scope.toggleReading = function () {
                 // TODO For wordpic examples, do not allow switching mode, because /relations_sentences does not support it
                 $scope.isReading = !$scope.isReading
-                $ctrl.task.isReading = $scope.isReading
                 makeRequest()
             }
 
-            function makeRequest(): void {
+            function makeRequest(isPaging = false): void {
                 // Abort any running request
                 if ($ctrl.loading) $ctrl.task.abort()
 
                 $ctrl.setProgress(true, 0)
                 $ctrl.task
-                    .send($scope.page || 0, $scope.hitsPerPage)
+                    .send($scope.page || 0, $scope.hitsPerPage, isPaging, $scope.isReading)
                     .then((data) =>
                         $timeout(() => {
                             if (!data.kwic) data.kwic = []

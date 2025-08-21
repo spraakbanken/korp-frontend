@@ -105,16 +105,9 @@ export class CompareTask {
     }
 
     createExampleTask(cmpI: number, row: CompareItem): ExampleTask {
-        const cqp = this.buildItemCqp(row)
+        const itemCqp = this.buildItemCqp(row)
         const cmp = [this.cmp1, this.cmp2][cmpI]
-        const cl = this.cl.subsetFactory(cmp.corpora)
-        return new ExampleTask({
-            cqp: cmp.cqp,
-            cqp2: cqp,
-            corpus: cl.stringifySelected(),
-            show_struct: Object.keys(cl.getStructAttrs()).join(","),
-            expand_prequeries: false,
-        })
+        return new ExampleTask(cmp.corpora, [cmp.cqp, itemCqp])
     }
 
     buildItemCqp(row: CompareItem) {
