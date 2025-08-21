@@ -27,6 +27,9 @@ type ResultsTrendDiagramController = IController & {
 }
 
 type ResultsTrendDiagramScope = IScope & {
+    downloadFrequencyType: "relative" | "absolute"
+    downloadCsvType: "csv" | "tsv"
+    download: () => void
     isInitDone: boolean
     nontime: number
     statsRelative: boolean
@@ -102,15 +105,18 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             <div class="preview"></div>
 
             <div class="time_table" style="margin-top:20px" ng-show="$ctrl.isTable()"></div>
-
-            <div class="exportTimeStatsSection" ng-show="$ctrl.isTable()">
-                <select class="timeKindOfData">
+            <div ng-show="$ctrl.isTable()">
+                <select ng-model="downloadFrequencyType">
                     <option value="relative">{{'statstable_relfigures' | loc:$root.lang}}</option>
-                    <option value="absolute">{{'statstable_absfigures' | loc:$root.lang}}</option></select
-                ><select class="timeKindOfFormat">
+                    <option value="absolute">{{'statstable_absfigures' | loc:$root.lang}}</option>
+                </select>
+                <select ng-model="downloadCsvType">
                     <option value="tsv">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
-                    <option value="csv">{{'statstable_exp_csv' | loc:$root.lang}}</option></select
-                ><a class="export btn btn-default btn-sm">{{'statstable_export' | loc:$root.lang}}</a>
+                    <option value="csv">{{'statstable_exp_csv' | loc:$root.lang}}</option>
+                </select>
+                <button class="btn btn-default btn-sm" ng-click="download()">
+                    {{'statstable_export' | loc:$root.lang}}
+                </button>
             </div>
         </div>
     `,
@@ -135,6 +141,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             const $ctrl = this as ResultsTrendDiagramController
             $ctrl.$result = $element.find(".graph_tab")
             $ctrl.mode = "line"
+            $scope.downloadFrequencyType = "relative"
+            $scope.downloadCsvType = "tsv"
 
             $ctrl.$onInit = () => {
                 const interval = $ctrl.task.corpusListing.getMomentInterval()
@@ -179,6 +187,16 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $rootScope.kwicTabs.push(new ExampleTask(corpusIds, cqps, $ctrl.task.defaultWithin))
             }
 
+            $scope.download = function () {
+                const csv = createTrendTableCsv(
+                    $ctrl.graph!.series,
+                    $scope.downloadFrequencyType,
+                    $scope.downloadCsvType
+                )
+                const mimeType = $scope.downloadCsvType == "tsv" ? "text/tab-separated-values" : "text/csv"
+                downloadFile(csv, `korp-trend-table.${$scope.downloadCsvType}`, mimeType)
+            }
+
             function drawPreloader(from: Moment, to: Moment): void {
                 const left = $ctrl.graph ? $ctrl.graph.graph.x(from.unix()) : 0
                 const width = $ctrl.graph ? $ctrl.graph.graph.x(to.unix()) - left : "100%"
@@ -210,15 +228,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 if ($ctrl.time_grid != null) {
                     $ctrl.time_grid.resizeCanvas()
                 }
-                $(".exportTimeStatsSection", $ctrl.$result).show()
-
-                $(".exportTimeStatsSection .btn.export", $ctrl.$result).click(() => {
-                    const frequencyType = $(".timeKindOfData option:selected", $ctrl.$result).val()
-                    const csvType = $(".timeKindOfFormat option:selected", $ctrl.$result).val()
-                    const csv = createTrendTableCsv(series, frequencyType, csvType)
-                    const mimeType = csvType == "tsv" ? "text/tab-separated-values" : "text/csv"
-                    downloadFile(csv, `korp-trend-table.${csvType}`, mimeType)
-                })
             }
 
             function renderGraph(Rickshaw: any, data: CountTimeResponse, currentZoom: Level) {
@@ -280,7 +289,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     if (val !== "table") {
                         $ctrl.graph!.graph.setRenderer(val)
                         $ctrl.graph!.graph.render()
-                        $(".exportTimeStatsSection", $ctrl.$result).hide()
                     }
                 })
             }
