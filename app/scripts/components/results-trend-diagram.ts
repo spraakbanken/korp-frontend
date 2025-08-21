@@ -1,36 +1,26 @@
 /** @format */
 import angular, { IController, IRootElementService, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
-import moment, { Moment } from "moment"
+import { Moment } from "moment"
 import { expandOperators } from "@/cqp_parser/cqp"
-import { downloadFile, formatRelativeHits, html } from "@/util"
-import { loc } from "@/i18n"
-import {
-    formatUnixDate,
-    getTimeCqp,
-    LEVELS,
-    Level,
-    findOptimalLevel,
-    Series,
-    createTrendTableCsv,
-} from "@/trend-diagram/util"
+import { downloadFile, html } from "@/util"
+import { getTimeCqp, LEVELS, Level, findOptimalLevel, Series, createTrendTableCsv } from "@/trend-diagram/util"
 import "@/components/korp-error"
 import { RootScope } from "@/root-scope.types"
 import { CountTimeResponse } from "@/backend/types/count-time"
 import { StoreService } from "@/services/store"
 import { ExampleTask } from "@/backend/task/example-task"
 import { TrendTask } from "@/backend/task/trend-task"
-import { getEmptyBlocks, Graph, makeSeries, spliceGraphData } from "@/trend-diagram/graph"
+import { TrendGraph } from "@/trend-diagram/graph"
 import { renderTable } from "@/trend-diagram/trend-table"
 
 type ResultsTrendDiagramController = IController & {
     loading: boolean
     setProgress: (loading: boolean, progress: number) => void
     task: TrendTask
-    graph?: Graph
+    graph?: TrendGraph
     time_grid: Slick.Grid<any>
     hasEmptyIntervals?: boolean
-    zoom: Level
     $result: JQLite
     mode: "line" | "bar" | "table"
     error?: string
@@ -143,7 +133,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             store: StoreService
         ) {
             const $ctrl = this as ResultsTrendDiagramController
-            $ctrl.zoom = "year"
             $ctrl.$result = $element.find(".graph_tab")
             $ctrl.mode = "line"
 
@@ -151,10 +140,13 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 const interval = $ctrl.task.corpusListing.getMomentInterval()
                 if (!interval) throw new Error("Time interval missing")
                 const [from, to] = interval
-                $ctrl.zoom = findOptimalLevel(from, to)
                 makeRequest(from, to)
 
                 $scope.nontime = $ctrl.task.corpusListing.getUndatedRatio() * 100
+            }
+
+            $ctrl.$onChanges = (changes) => {
+                if (changes.loading && $ctrl.graph) $ctrl.graph.loading = $ctrl.loading
             }
 
             store.watch("statsRelative", () => {
@@ -173,7 +165,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 const target = $(".chart", $ctrl.$result)
                 const time = $(".detail .x_label > span", target).data("val")
                 let cqp = $(".detail .item.active > span", target).data("cqp")
-                const zoom = $ctrl.zoom
+                const zoom = $ctrl.graph!.zoom
 
                 if (!cqp) {
                     return
@@ -188,29 +180,9 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             }
 
             function drawPreloader(from: Moment, to: Moment): void {
-                const left = $ctrl.graph ? $ctrl.graph.x(from.unix()) : 0
-                const width = $ctrl.graph ? $ctrl.graph.x(to.unix()) - left : "100%"
+                const left = $ctrl.graph ? $ctrl.graph.graph.x(from.unix()) : 0
+                const width = $ctrl.graph ? $ctrl.graph.graph.x(to.unix()) - left : "100%"
                 $(".preloader", $ctrl.$result).css({ left, width })
-            }
-
-            /** Change the current zoom level if needed to match a given date range. */
-            function checkZoomLevel(from: Moment, to: Moment) {
-                const newZoom = findOptimalLevel(from, to)
-                // Trigger search if new zoom level is different
-                if (newZoom && $ctrl.zoom !== newZoom) {
-                    $ctrl.zoom = newZoom
-                    makeRequest(from, to)
-                }
-            }
-
-            /** Adds divs with .empty_area to fill spaces in graph where there is no dated material */
-            function drawIntervals(graph: Graph): void {
-                const emptyIntervals = getEmptyBlocks(graph, $ctrl.zoom)
-                $ctrl.hasEmptyIntervals = !!emptyIntervals.length
-                $(".empty_area", $ctrl.$result).remove()
-                for (const { left, width } of emptyIntervals) {
-                    $("<div>", { class: "empty_area" }).css({ left, width }).appendTo(graph.element)
-                }
             }
 
             function setBarMode(): void {
@@ -249,158 +221,25 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 })
             }
 
-            function previewPanStop() {
-                if (!$ctrl.graph) {
-                    console.error("No graph")
-                    return
-                }
-                const visibleData = $ctrl.graph.stackData()
-                const grouped = _.groupBy(visibleData[0], "zoom")
-
-                for (let zoomLevel in grouped) {
-                    const points = grouped[zoomLevel]
-                    if (zoomLevel !== $ctrl.zoom) {
-                        const from = moment.unix(points[0].x)
-                        from.startOf($ctrl.zoom)
-                        const to = moment.unix(_.last(points).x)
-                        to.endOf($ctrl.zoom)
-                        makeRequest(from, to)
-                    }
-                }
-            }
-
-            function createGraph(Rickshaw: any, series: Series[]): Graph {
-                const graph: Graph = new Rickshaw.Graph({
-                    element: $(".chart", $ctrl.$result).empty().get(0),
-                    renderer: "line",
-                    interpolation: "linear",
-                    series,
-                    padding: {
-                        top: 0.1,
-                        right: 0.01,
-                    },
-                })
-                // let width = $(".tab-pane").width()
-                // graph.setSize({ width })
-
-                // Add legend and toggling
-                const legendElement = $(".legend", $ctrl.$result).get(0)
-                const legend = new Rickshaw.Graph.Legend({ element: legendElement, graph })
-                new Rickshaw.Graph.Behavior.Series.Toggle({ graph, legend })
-
-                if (!$ctrl.task.showTotal && $(".legend .line", $ctrl.$result).length > 1) {
-                    $(".legend .line:last .action", $ctrl.$result).click()
-                }
-
-                new Rickshaw.Graph.HoverDetail({
-                    // xFormatter and yFormatter are called once for every data series per "hover detail creation"
-                    // formatter is only called once per per "hover detail creation"
-                    graph,
-                    xFormatter(x: number) {
-                        return `<span data-val='${x}'>${formatUnixDate($ctrl.zoom, x)}</span>`
-                    },
-
-                    yFormatter(y: number) {
-                        const val = formatRelativeHits(y, store.lang)
-                        return `<br>${loc("rel_hits_short")} ${val}`
-                    },
-                    formatter(series: Series, x: number, y: number, formattedX: string, formattedY: string) {
-                        let abs_y
-                        const i = _.sortedIndexOf(_.map(series.data, "x"), x)
-                        try {
-                            abs_y = series.abs_data[i].y
-                        } catch (e) {
-                            console.log("i", i, x)
-                        }
-
-                        const rel = series.name + ":&nbsp;" + formattedY
-                        return `<span data-cqp="${encodeURIComponent(series.cqp)}">
-                                ${rel}
-                                <br>
-                                ${loc("abs_hits_short")}: ${abs_y?.toLocaleString(store.lang)}
-                            </span>`
-                    },
-                })
-
-                // [first, last] = settings.corpusListing.getTimeInterval()
-                // [firstVal, lastVal] = settings.corpusListing.getMomentInterval()
-
-                // TODO: fix decade again
-                // timeunit = if last - first > 100 then "decade" else @zoom
-
-                const time = new Rickshaw.Fixtures.Time()
-                // Fix time.ceil for decades: Rickshaw.Fixtures.Time.ceil
-                // returns one decade too small values for 1900 and before.
-                // (The root cause may be Rickshaw's approximate handling of
-                // leap years: 1900 was not a leap year.)
-                const old_ceil = time.ceil
-                time.ceil = (time: number, unit: any) => {
-                    if (unit.name === "decade") {
-                        const out = Math.ceil(time / unit.seconds) * unit.seconds
-                        const mom = moment(out * 1000)
-                        const monthDay = mom.date()
-                        // If the day of the month is not 1, it is within the
-                        // previous month (December), so add enough days to
-                        // move the date to the expected month (January).
-                        if (monthDay !== 1) {
-                            mom.add(32 - monthDay, "day")
-                        }
-                        return mom.unix()
-                    } else {
-                        return old_ceil(time, unit)
-                    }
-                }
-
-                const xAxis = new Rickshaw.Graph.Axis.Time({
-                    graph,
-                    // Use the fixed .ceil for decades
-                    timeFixture: time,
-                    // timeUnit: time.unit("month") # TODO: bring back decade
-                })
-
-                $ctrl.preview = new Rickshaw.Graph.RangeSlider.Preview({
-                    graph,
-                    element: $(".preview", $ctrl.$result).get(0),
-                })
-
-                $("body").on("mouseup", ".preview .middle_handle", () => {
-                    previewPanStop()
-                })
-
-                $("body").on("mouseup", ".preview .left_handle, .preview .right_handle", () => {
-                    if (!$ctrl.loading) {
-                        previewPanStop()
-                    }
-                })
-
-                const old_render = xAxis.render
-                xAxis.render = _.throttle(() => {
-                    old_render.call(xAxis)
-                    drawIntervals(graph)
-                    const [from, to] = graph.renderer.domain().x
-                    checkZoomLevel(moment.unix(from), moment.unix(to))
-                }, 20)
-
-                xAxis.render()
-
-                const yAxis = new Rickshaw.Graph.Axis.Y({
-                    graph,
-                })
-
-                yAxis.render()
-
-                return graph
-            }
-
             function renderGraph(Rickshaw: any, data: CountTimeResponse, currentZoom: Level) {
-                const series = makeSeries(Rickshaw, data, currentZoom, $ctrl.task.cqp, $ctrl.task.subqueries)
+                const series = TrendGraph.makeSeries(Rickshaw, data, currentZoom, $ctrl.task.cqp, $ctrl.task.subqueries)
 
                 // Create or update graph
-                if ($ctrl.graph) spliceGraphData($ctrl.graph, series)
-                else $ctrl.graph = createGraph(Rickshaw, series)
+                if ($ctrl.graph) $ctrl.graph.spliceGraphData(series)
+                else {
+                    $ctrl.graph = new TrendGraph(
+                        Rickshaw,
+                        $ctrl.$result,
+                        series,
+                        currentZoom,
+                        makeRequest,
+                        store,
+                        $ctrl.task.showTotal
+                    )
+                }
 
-                drawIntervals($ctrl.graph)
-                $ctrl.graph.render()
+                $ctrl.graph.refresh()
+                $ctrl.hasEmptyIntervals = $ctrl.graph.hasEmptyIntervals
 
                 $ctrl.setProgress(false, 100)
                 $(window).trigger("resize")
@@ -412,10 +251,10 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     _.throttle(() => {
                         if ($ctrl.$result.is(":visible")) {
                             const width = $(".tab-pane").width()
-                            $ctrl.graph!.setSize()
-                            $ctrl.preview.configure({ width })
-                            $ctrl.preview.render()
-                            return $ctrl.graph!.render()
+                            $ctrl.graph!.graph.setSize()
+                            $ctrl.graph!.preview.configure({ width })
+                            $ctrl.graph!.preview.render()
+                            return $ctrl.graph!.graph.render()
                         }
                     }, 200)
                 )
@@ -439,8 +278,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     }
 
                     if (val !== "table") {
-                        $ctrl.graph!.setRenderer(val)
-                        $ctrl.graph!.render()
+                        $ctrl.graph!.graph.setRenderer(val)
+                        $ctrl.graph!.graph.render()
                         $(".exportTimeStatsSection", $ctrl.$result).hide()
                     }
                 })
@@ -450,7 +289,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 drawPreloader(from, to)
                 $ctrl.setProgress(true, 0)
                 $ctrl.error = undefined
-                const currentZoom = $ctrl.zoom
+                const currentZoom = $ctrl.graph?.zoom || findOptimalLevel(from, to)
 
                 const reqPromise = $ctrl.task.send(currentZoom, from, to, (progress) =>
                     $timeout(() => $ctrl.setProgress(true, progress.percent))
