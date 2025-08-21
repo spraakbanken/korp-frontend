@@ -87,10 +87,10 @@ export function findOptimalLevel(from: Moment, to: Moment): Level {
     })!
 }
 
-/** Transform a count-by-date map to a range-covering list of points. */
+/** Transform a count-by-date map to a range-covering, sorted list of points. */
 export function getSeriesData(data: Histogram, zoom: Level): SeriesPoint[] {
     delete data[""]
-    const points: Point[] = Object.entries(data).map(([date, y]) => ({ x: parseDate(zoom, date), y: y! }))
+    const points: Point[] = Object.entries(data).map(([date, y]) => ({ x: parseDate(zoom, date), y }))
     const pointsFilled = fillMissingDate(points, zoom)
     const output: SeriesPoint[] = pointsFilled.map((point) => ({
         x: point.x.unix(),
@@ -101,16 +101,13 @@ export function getSeriesData(data: Histogram, zoom: Level): SeriesPoint[] {
     return output
 }
 
+/** Fill missing time units with the value of the last previous count. Result is not sorted. */
 export function fillMissingDate(data: Point[], level: Level): Point[] {
     const dateArray = data.map((point) => point.x)
-    const min = minBy(dateArray, (mom) => mom.toDate())
-    const max = maxBy(dateArray, (mom) => mom.toDate())
-
-    if (!min || !max) return data
-
     // Round range boundaries, e.g. [June 5, Sep 18] => [June 1, Sep 30]
-    min.startOf(level)
-    max.endOf(level)
+    const min = minBy(dateArray)?.startOf(level)
+    const max = maxBy(dateArray)?.endOf(level)
+    if (!min || !max) return data
 
     // Number of time units between min and max
     const n_diff = moment(max).diff(min, level)
