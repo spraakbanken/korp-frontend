@@ -2,11 +2,19 @@
 import angular, { IController, IRootElementService, IScope, ITimeoutService } from "angular"
 import _ from "lodash"
 import moment, { Moment } from "moment"
-import CSV from "comma-separated-values/csv"
 import { expandOperators } from "@/cqp_parser/cqp"
-import { formatFrequency, formatRelativeHits, html } from "@/util"
+import { downloadFile, formatFrequency, formatRelativeHits, html } from "@/util"
 import { loc } from "@/i18n"
-import { formatUnixDate, getTimeCqp, LEVELS, FORMATS, Level, findOptimalLevel, Series } from "@/trend-diagram/util"
+import {
+    formatUnixDate,
+    getTimeCqp,
+    LEVELS,
+    FORMATS,
+    Level,
+    findOptimalLevel,
+    Series,
+    createTrendTableCsv,
+} from "@/trend-diagram/util"
 import "@/components/korp-error"
 import { RootScope } from "@/root-scope.types"
 import { CountTimeResponse } from "@/backend/types/count-time"
@@ -99,8 +107,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     <option value="relative">{{'statstable_relfigures' | loc:$root.lang}}</option>
                     <option value="absolute">{{'statstable_absfigures' | loc:$root.lang}}</option></select
                 ><select class="timeKindOfFormat">
-                    <option value="TSV">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
-                    <option value="CSV">{{'statstable_exp_csv' | loc:$root.lang}}</option></select
+                    <option value="tsv">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
+                    <option value="csv">{{'statstable_exp_csv' | loc:$root.lang}}</option></select
                 ><a class="export btn btn-default btn-sm">{{'statstable_export' | loc:$root.lang}}</a>
             </div>
         </div>
@@ -230,48 +238,11 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $(".exportTimeStatsSection", $ctrl.$result).show()
 
                 $(".exportTimeStatsSection .btn.export", $ctrl.$result).click(() => {
-                    const selVal = $(".timeKindOfData option:selected", $ctrl.$result).val()
-                    const selType = $(".timeKindOfFormat option:selected", $ctrl.$result).val()
-                    const dataDelimiter = selType === "TSV" ? "\t" : ";"
-
-                    const header = [loc("stats_hit")]
-
-                    for (let cell of series[0].data) {
-                        const stampformat = FORMATS[cell.zoom]
-                        header.push(moment(cell.x * 1000).format(stampformat))
-                    }
-
-                    const output: (string | number)[][] = [header]
-
-                    for (let row of series) {
-                        const cells: (string | number)[] = [row.name === "&Sigma;" ? "Σ" : row.name]
-                        for (let cell of row.data) {
-                            if (selVal === "relative") {
-                                cells.push(cell.y)
-                            } else {
-                                const i = _.sortedIndexOf(_.map(row.abs_data, "x"), cell.x)
-                                cells.push(row.abs_data[i].y)
-                            }
-                        }
-                        output.push(cells)
-                    }
-
-                    const csv = new CSV(output, {
-                        delimiter: dataDelimiter,
-                    })
-
-                    const csvstr = csv.encode()
-                    const blob = new Blob([csvstr], { type: `text/${selType}` })
-                    const csvUrl = URL.createObjectURL(blob)
-
-                    const a = document.createElement("a")
-                    a.href = csvUrl
-                    a.download = `export.${selType}`
-                    a.style.display = "none"
-                    document.body.appendChild(a)
-                    a.click()
-                    document.body.removeChild(a)
-                    window.URL.revokeObjectURL(csvUrl)
+                    const frequencyType = $(".timeKindOfData option:selected", $ctrl.$result).val()
+                    const csvType = $(".timeKindOfFormat option:selected", $ctrl.$result).val()
+                    const csv = createTrendTableCsv(series, frequencyType, csvType)
+                    const mimeType = csvType == "tsv" ? "text/tab-separated-values" : "text/csv"
+                    downloadFile(csv, `korp-trend-table.${csvType}`, mimeType)
                 })
             }
 

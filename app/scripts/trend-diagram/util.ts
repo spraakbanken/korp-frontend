@@ -1,6 +1,8 @@
 /** @format */
 import { Granularity, Histogram } from "@/backend/types"
-import { maxBy, minBy, range } from "lodash"
+import { loc } from "@/i18n"
+import CSV from "comma-separated-values/csv"
+import { maxBy, minBy, range, sortedIndexOf } from "lodash"
 import moment, { Moment } from "moment"
 
 export type Series = {
@@ -206,4 +208,31 @@ export function formatUnixDate(zoom: Level, time: number) {
     // TODO this should respect locale and could present whole months as August 2020 instead of 2020-08
     const m = moment.unix(time)
     return m.format(FORMATS[zoom])
+}
+
+export function createTrendTableCsv(series: Series[], frequencyType: string, csvType: string): string {
+    // Create header row
+    const formatHeader = (cell: SeriesPoint): string => moment(cell.x * 1000).format(FORMATS[cell.zoom])
+    const dateHeaders = series[0].data.map(formatHeader)
+    const header = [loc("stats_hit"), ...dateHeaders]
+
+    // Create data rows
+    const formatCell = (row: Series, cell: SeriesPoint): number => {
+        if (frequencyType === "relative") return cell.y
+        else {
+            const i = sortedIndexOf(
+                row.abs_data.map((point) => point.x),
+                cell.x
+            )
+            return row.abs_data[i].y
+        }
+    }
+    const data = series.map((row) => [
+        row.name === "&Sigma;" ? "Σ" : row.name,
+        ...row.data.map((cell) => formatCell(row, cell)),
+    ])
+
+    // Output CSV
+    const delimiter = csvType == "tsv" ? "\t" : ";"
+    return CSV.encode(data, { header, delimiter })
 }
