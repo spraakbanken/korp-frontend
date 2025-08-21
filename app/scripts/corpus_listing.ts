@@ -317,6 +317,13 @@ export class CorpusListing {
         return from && to ? [from, to] : undefined
     }
 
+    /** Percentage of selected material that is undated. */
+    getUndatedRatio(): number {
+        const non_time = _.sum(this.selected.map((corpus) => corpus.non_time || 0))
+        const totalsize = _.sum(this.selected.map((corpus) => Number(corpus.info.Size) || 0))
+        return non_time / totalsize
+    }
+
     getTitleObj(corpus: string): LangString {
         return this.struct[corpus].title
     }

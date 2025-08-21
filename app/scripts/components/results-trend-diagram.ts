@@ -143,7 +143,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $ctrl.zoom = findOptimalLevel(from, to)
                 makeRequest(from, to)
 
-                $scope.nontime = getNonTime()
+                $scope.nontime = $ctrl.task.corpusListing.getUndatedRatio() * 100
             }
 
             store.watch("statsRelative", () => {
@@ -190,14 +190,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     $ctrl.zoom = newZoom
                     makeRequest(from, to)
                 }
-            }
-
-            /** Percentage of selected material that is undated. */
-            function getNonTime(): number {
-                const corpora = $ctrl.task.corpusListing.selected
-                const non_time = _.sum(corpora.map((corpus) => corpus.non_time || 0))
-                const totalsize = _.sum(corpora.map((corpus) => Number(corpus.info.Size) || 0))
-                return (non_time / totalsize) * 100
             }
 
             /** Adds divs with .empty_area to fill spaces in graph where there is no dated material */
