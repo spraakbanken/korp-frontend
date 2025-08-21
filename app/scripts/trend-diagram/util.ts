@@ -1,6 +1,25 @@
 /** @format */
-import { Granularity } from "@/backend/types"
-import moment from "moment"
+import { Granularity, Histogram } from "@/backend/types"
+import { maxBy, minBy, range } from "lodash"
+import moment, { Moment } from "moment"
+
+export type Series = {
+    data: SeriesPoint[]
+    abs_data: SeriesPoint[]
+    color: string
+    name: string
+    cqp: string
+    emptyIntervals?: SeriesPoint[][]
+}
+
+type Point = { x: Moment; y: number }
+
+export type SeriesPoint = {
+    /** Unix timestamp */
+    x: number
+    y: number
+    zoom: Level
+}
 
 export type Level = "year" | "month" | "day" | "hour" | "minute" | "second"
 
@@ -38,6 +57,112 @@ const PARSE_FORMATS: Record<Level, string> = {
     day: "YYYYMMDD",
     month: "YYYYMM",
     year: "YYYY",
+}
+
+export const PALETTE = [
+    "#ca472f",
+    "#0b84a5",
+    "#f6c85f",
+    "#9dd866",
+    "#ffa056",
+    "#8dddd0",
+    "#df9eaa",
+    "#6f4e7c",
+    "#544e4d",
+    "#0e6e16",
+    "#975686",
+]
+
+/** Find a date granularity level that gives a good number of time units in a given range. */
+export function findOptimalLevel(from: Moment, to: Moment): Level {
+    // Preferred number of x points in a graph (less is uninformative, more is messy)
+    const idealPoints = 1000
+    // Find what granularity (years, months etc) gives us closest to the ideal number of points
+    // E.g. between 1900 and 2000, use months.
+    return minBy(LEVELS, (level) => {
+        const points = to.diff(from, level)
+        return Math.abs(idealPoints - points)
+    })!
+}
+
+/** Transform a count-by-date map to a range-covering list of points. */
+export function getSeriesData(data: Histogram, zoom: Level): SeriesPoint[] {
+    delete data[""]
+    const points: Point[] = Object.entries(data).map(([date, y]) => ({ x: parseDate(zoom, date), y: y! }))
+    const pointsFilled = fillMissingDate(points, zoom)
+    const output: SeriesPoint[] = pointsFilled.map((point) => ({
+        x: point.x.unix(),
+        y: point.y,
+        zoom,
+    }))
+    output.sort((a, b) => a.x - b.x)
+    return output
+}
+
+export function fillMissingDate(data: Point[], level: Level): Point[] {
+    const dateArray = data.map((point) => point.x)
+    const min = minBy(dateArray, (mom) => mom.toDate())
+    const max = maxBy(dateArray, (mom) => mom.toDate())
+
+    if (!min || !max) return data
+
+    // Round range boundaries, e.g. [June 5, Sep 18] => [June 1, Sep 30]
+    min.startOf(level)
+    max.endOf(level)
+
+    // Number of time units between min and max
+    const n_diff = moment(max).diff(min, level)
+
+    // Create a mapping from unix timestamps to counts
+    const momentMapping: Record<number, number> = Object.fromEntries(
+        data.map((point) => [point.x.startOf(level).unix(), point.y])
+    )
+
+    // Step through the range and fill in missing timestamps
+    /** Copied counts for unseen timestamps in the range */
+    const newMoments: Point[] = []
+    let lastYVal: number = 0
+    for (const i of range(0, n_diff + 1)) {
+        // Get timestamp at current iteration step
+        const newMoment = moment(min).add(i, level)
+        const count = momentMapping[newMoment.unix()]
+        // If this timestamp has been counted, don't fill this timestamp but remember the count
+        // Distinguish between null (no text at timestamp) and undefined (timestamp has not been counted)
+        if (count !== undefined) lastYVal = count
+        // If there's no count here, fill this timestamp with the last seen count
+        else newMoments.push({ x: newMoment, y: lastYVal })
+    }
+
+    // Merge actual counts with filled ones
+    return [...data, ...newMoments]
+}
+
+/** Find intervals within the full timespan where no material is dated. */
+export function getEmptyIntervals(data: SeriesPoint[]): SeriesPoint[][] {
+    const intervals: SeriesPoint[][] = []
+    let i = 0
+
+    while (i < data.length) {
+        let item = data[i]
+
+        if (item.y === null) {
+            const interval = [{ ...item }]
+            let breaker = true
+            while (breaker) {
+                i++
+                item = data[i]
+                if ((item != null ? item.y : undefined) === null) {
+                    interval.push({ ...item })
+                } else {
+                    intervals.push(interval)
+                    breaker = false
+                }
+            }
+        }
+        i++
+    }
+
+    return intervals
 }
 
 export function getTimeCqp(timeUnix: number, zoom: Level, coarseGranularity?: boolean) {

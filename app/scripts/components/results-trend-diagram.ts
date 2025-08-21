@@ -6,14 +6,14 @@ import CSV from "comma-separated-values/csv"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { formatFrequency, formatRelativeHits, html } from "@/util"
 import { loc } from "@/i18n"
-import { formatUnixDate, getTimeCqp, parseDate, LEVELS, FORMATS, Level } from "@/trend-diagram/util"
+import { formatUnixDate, getTimeCqp, LEVELS, FORMATS, Level, findOptimalLevel, Series } from "@/trend-diagram/util"
 import "@/components/korp-error"
 import { RootScope } from "@/root-scope.types"
-import { Histogram } from "@/backend/types"
-import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
+import { CountTimeResponse } from "@/backend/types/count-time"
 import { StoreService } from "@/services/store"
 import { ExampleTask } from "@/backend/task/example-task"
 import { TrendTask } from "@/backend/task/trend-task"
+import { getEmptyBlocks, Graph, makeSeries, spliceGraphData } from "@/trend-diagram/graph"
 
 type ResultsTrendDiagramController = IController & {
     loading: boolean
@@ -33,48 +33,10 @@ type ResultsTrendDiagramScope = IScope & {
     statsRelative: boolean
 }
 
-type Series = {
-    data: SeriesPoint[]
-    abs_data: SeriesPoint[]
-    color: string
-    name: string
-    cqp: string
-    emptyIntervals?: SeriesPoint[][]
-}
-
-type Point = { x: Moment; y: number }
-
-type SeriesPoint = {
-    /** Unix timestamp */
-    x: number
-    y: number
-    zoom: Level
-}
-
-// Rickshaw graph
-type Graph = {
-    series: Series[]
-    [key: string]: any
-}
-
 type TableRow = {
     label: string
     [timestamp: `${number}${string}`]: [number, number]
 }
-
-const PALETTE = [
-    "#ca472f",
-    "#0b84a5",
-    "#f6c85f",
-    "#9dd866",
-    "#ffa056",
-    "#8dddd0",
-    "#df9eaa",
-    "#6f4e7c",
-    "#544e4d",
-    "#0e6e16",
-    "#975686",
-]
 
 angular.module("korpApp").component("resultsTrendDiagram", {
     template: html`
@@ -169,7 +131,10 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             $ctrl.$onInit = () => {
                 const interval = $ctrl.task.corpusListing.getMomentInterval()
                 if (!interval) throw new Error("Time interval missing")
-                checkZoomLevel(interval[0], interval[1], true)
+                const [from, to] = interval
+                $ctrl.zoom = findOptimalLevel(from, to)
+                makeRequest(from, to)
+
                 $scope.nontime = getNonTime()
             }
 
@@ -209,79 +174,14 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $(".preloader", $ctrl.$result).css({ left, width })
             }
 
-            function checkZoomLevelDefault() {
-                if (!$ctrl.graph) {
-                    console.error("No graph")
-                    return
-                }
-                const domain = $ctrl.graph.renderer.domain()
-                checkZoomLevel(moment.unix(domain.x[0]), moment.unix(domain.x[1]))
-            }
-
-            function checkZoomLevel(from: Moment, to: Moment, forceSearch?: boolean) {
-                const oldZoom = $ctrl.zoom
-                const idealNumHits = 1000
-                const newZoom = _.minBy(LEVELS, function (zoom) {
-                    const nPoints = to.diff(from, zoom)
-                    return Math.abs(idealNumHits - nPoints)
-                })!
-
-                if ((newZoom && oldZoom !== newZoom) || forceSearch) {
+            /** Change the current zoom level if needed to match a given date range. */
+            function checkZoomLevel(from: Moment, to: Moment) {
+                const newZoom = findOptimalLevel(from, to)
+                // Trigger search if new zoom level is different
+                if (newZoom && $ctrl.zoom !== newZoom) {
                     $ctrl.zoom = newZoom
                     makeRequest(from, to)
                 }
-            }
-
-            function fillMissingDate(data: Point[]): Point[] {
-                const dateArray = data.map((point) => point.x)
-                const min = _.minBy(dateArray, (mom) => mom.toDate())
-                const max = _.maxBy(dateArray, (mom) => mom.toDate())
-
-                if (!min || !max) {
-                    return data
-                }
-
-                // Round range boundaries, e.g. [June 5, Sep 18] => [June 1, Sep 30]
-                min.startOf($ctrl.zoom)
-                max.endOf($ctrl.zoom)
-
-                // Number of time units between min and max
-                const n_diff = moment(max).diff(min, $ctrl.zoom)
-
-                // Create a mapping from unix timestamps to counts
-                const momentMapping: Record<number, number> = _.fromPairs(
-                    data.map((point) => [moment(point.x).startOf($ctrl.zoom).unix(), point.y])
-                )
-
-                // Step through the range and fill in missing timestamps
-                /** Copied counts for unseen timestamps in the range */
-                const newMoments: Point[] = []
-                let lastYVal: number = 0
-                for (const i of _.range(0, n_diff + 1)) {
-                    const newMoment = moment(min).add(i, $ctrl.zoom)
-                    const count = momentMapping[newMoment.unix()]
-                    // If this timestamp has been counted, don't fill this timestamp but remember the count
-                    // Distinguish between null (no text at timestamp) and undefined (timestamp has not been counted)
-                    if (count !== undefined) lastYVal = count
-                    // If there's no count here, fill this timestamp with the last seen count
-                    else newMoments.push({ x: newMoment, y: lastYVal })
-                }
-
-                // Merge actual counts with filled ones
-                return [...data, ...newMoments]
-            }
-
-            function getSeriesData(data: Histogram, zoom: Level): SeriesPoint[] {
-                delete data[""]
-                const points: Point[] = _.map(data, (y, date) => ({ x: parseDate($ctrl.zoom, date), y: y! }))
-                const pointsFilled = fillMissingDate(points)
-                const output: SeriesPoint[] = pointsFilled.map((point) => ({
-                    x: point.x.unix(),
-                    y: point.y,
-                    zoom,
-                }))
-                output.sort((a, b) => a.x - b.x)
-                return output
             }
 
             /** Percentage of selected material that is undated. */
@@ -292,56 +192,13 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 return (non_time / totalsize) * 100
             }
 
-            /** Find intervals within the full timespan where no material is dated. */
-            function getEmptyIntervals(data: SeriesPoint[]): SeriesPoint[][] {
-                const intervals: SeriesPoint[][] = []
-                let i = 0
-
-                while (i < data.length) {
-                    let item = data[i]
-
-                    if (item.y === null) {
-                        const interval = [_.clone(item)]
-                        let breaker = true
-                        while (breaker) {
-                            i++
-                            item = data[i]
-                            if ((item != null ? item.y : undefined) === null) {
-                                interval.push(_.clone(item))
-                            } else {
-                                intervals.push(interval)
-                                breaker = false
-                            }
-                        }
-                    }
-                    i++
-                }
-
-                return intervals
-            }
-
             /** Adds divs with .empty_area to fill spaces in graph where there is no dated material */
             function drawIntervals(graph: Graph): void {
-                const emptyIntervals = graph.series[0].emptyIntervals!
+                const emptyIntervals = getEmptyBlocks(graph, $ctrl.zoom)
                 $ctrl.hasEmptyIntervals = !!emptyIntervals.length
-                const [from, to]: number[] = graph.renderer.domain().x
-
-                const unitSpan = moment.unix(to).diff(moment.unix(from), $ctrl.zoom)
-                const unitWidth = graph.width / unitSpan
-
                 $(".empty_area", $ctrl.$result).remove()
-                for (const list of emptyIntervals) {
-                    const max = _.maxBy(list, "x")!
-                    const min = _.minBy(list, "x")!
-                    const from = graph.x(min.x)
-                    const to = graph.x(max.x)
-
-                    $("<div>", { class: "empty_area" })
-                        .css({
-                            left: from - unitWidth / 2,
-                            width: to - from + unitWidth,
-                        })
-                        .appendTo(graph.element)
+                for (const { left, width } of emptyIntervals) {
+                    $("<div>", { class: "empty_area" }).css({ left, width }).appendTo(graph.element)
                 }
             }
 
@@ -463,84 +320,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $ctrl.time_grid = time_grid
             }
 
-            function makeSeries(Rickshaw: any, data: CountTimeResponse, zoom: Level) {
-                const createTotalSeries = (stats: GraphStats) => ({
-                    data: getSeriesData(stats.relative, zoom),
-                    color: "steelblue",
-                    name: "&Sigma;",
-                    cqp: $ctrl.task.cqp,
-                    abs_data: getSeriesData(stats.absolute, zoom),
-                })
-
-                const labels = Object.fromEntries($ctrl.task.subqueries)
-                const createSubquerySeries = (stats: GraphStatsCqp, i: number) => ({
-                    data: getSeriesData(stats.relative, zoom),
-                    color: PALETTE[i % PALETTE.length],
-                    name: labels[stats.cqp],
-                    cqp: stats.cqp,
-                    abs_data: getSeriesData(stats.absolute, zoom),
-                })
-
-                const series: Series[] = _.isArray(data.combined)
-                    ? data.combined.map((item, i) =>
-                          "cqp" in item ? createSubquerySeries(item, i) : createTotalSeries(item)
-                      )
-                    : [createTotalSeries(data.combined)]
-
-                Rickshaw.Series.zeroFill(series)
-
-                const emptyIntervals = getEmptyIntervals(series[0].data)
-                series[0].emptyIntervals = emptyIntervals
-
-                for (let s of series) {
-                    s.data = _.filter(s.data, (item) => item.y !== null)
-                    s.abs_data = _.filter(s.abs_data, (item) => item.y !== null)
-                }
-
-                return series
-            }
-
-            /** Replace a part of the graph with new data (of a higher/lower resolution) */
-            function spliceData(newSeries: Series[]) {
-                if (!$ctrl.graph) {
-                    console.error("No graph")
-                    return
-                }
-                for (let seriesIndex = 0; seriesIndex < $ctrl.graph.series.length; seriesIndex++) {
-                    const seriesObj = $ctrl.graph.series[seriesIndex]
-                    const first = newSeries[seriesIndex].data[0].x
-                    const last = _.last(newSeries[seriesIndex].data)!.x
-
-                    // Walk through old data, match timestamps with new data and find out what part to replace
-                    let startSplice = false
-                    let from = 0
-                    // Default to replacing everything in case counting fails?
-                    let n_elems = seriesObj.data.length + newSeries[seriesIndex].data.length
-                    let j = 0
-                    for (let i = 0; i < seriesObj.data.length; i++) {
-                        const { x } = seriesObj.data[i]
-                        if (x >= first && !startSplice) {
-                            // Overlapping range starts here
-                            startSplice = true
-                            from = i
-                        }
-                        if (startSplice) {
-                            // Count number of elements to replace
-                            j++
-                            // Stop counting at end of new data
-                            if (x >= last) {
-                                n_elems = j
-                                break
-                            }
-                        }
-                    }
-
-                    // Replace overlap with new data
-                    seriesObj.data.splice(from, n_elems, ...newSeries[seriesIndex].data)
-                    seriesObj.abs_data.splice(from, n_elems, ...newSeries[seriesIndex].abs_data)
-                }
-            }
-
             function previewPanStop() {
                 if (!$ctrl.graph) {
                     console.error("No graph")
@@ -570,17 +349,17 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 }
 
                 if ($ctrl.graph) {
-                    series = makeSeries(Rickshaw, data, currentZoom)
-                    spliceData(series)
+                    series = makeSeries(Rickshaw, data, currentZoom, $ctrl.task.cqp, $ctrl.task.subqueries)
+                    spliceGraphData($ctrl.graph, series)
                     drawIntervals($ctrl.graph)
                     $ctrl.graph.render()
                     done()
                     return
                 }
 
-                series = makeSeries(Rickshaw, data, currentZoom)
+                series = makeSeries(Rickshaw, data, currentZoom, $ctrl.task.cqp, $ctrl.task.subqueries)
 
-                const graph = new Rickshaw.Graph({
+                const graph: Graph = new Rickshaw.Graph({
                     element: $(".chart", $ctrl.$result).empty().get(0),
                     renderer: "line",
                     interpolation: "linear",
@@ -728,7 +507,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 xAxis.render = _.throttle(() => {
                     old_render.call(xAxis)
                     drawIntervals(graph)
-                    checkZoomLevelDefault()
+                    const [from, to] = graph.renderer.domain().x
+                    checkZoomLevel(moment.unix(from), moment.unix(to))
                 }, 20)
 
                 xAxis.render()
