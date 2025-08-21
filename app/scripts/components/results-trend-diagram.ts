@@ -22,6 +22,7 @@ import { StoreService } from "@/services/store"
 import { ExampleTask } from "@/backend/task/example-task"
 import { TrendTask } from "@/backend/task/trend-task"
 import { getEmptyBlocks, Graph, makeSeries, spliceGraphData } from "@/trend-diagram/graph"
+import { renderTable } from "@/trend-diagram/trend-table"
 
 type ResultsTrendDiagramController = IController & {
     loading: boolean
@@ -39,11 +40,6 @@ type ResultsTrendDiagramController = IController & {
 type ResultsTrendDiagramScope = IScope & {
     nontime: number
     statsRelative: boolean
-}
-
-type TableRow = {
-    label: string
-    [timestamp: `${number}${string}`]: [number, number]
 }
 
 angular.module("korpApp").component("resultsTrendDiagram", {
@@ -238,51 +234,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 })
             }
 
-            function renderTable(series: Series[]) {
-                const rows: TableRow[] = []
-                const columnsMap: Record<string, Slick.Column<any>> = {}
-                for (const seriesRow of series) {
-                    const tableRow: TableRow = { label: seriesRow.name }
-                    for (const item of seriesRow.data) {
-                        const stampformat = FORMATS[item.zoom]
-                        const timestamp = moment(item.x * 1000).format(stampformat) as `${number}${string}` // this needs to be fixed for other resolutions
-                        columnsMap[timestamp] = {
-                            name: timestamp,
-                            field: timestamp,
-                            formatter(row, cell, value, columnDef, dataContext) {
-                                return value == undefined ? "" : formatFrequency(store, value)
-                            },
-                            cssClass: "text-right",
-                        }
-                        const i = _.sortedIndexOf(_.map(seriesRow.abs_data, "x"), item.x)
-                        // [absolute, relative], like in statistics_worker.ts
-                        tableRow[timestamp] = [seriesRow.abs_data[i].y, item.y]
-                    }
-                    rows.push(tableRow)
-                }
-                // Sort columns
-                const columns: Slick.Column<any>[] = [
-                    {
-                        name: "Hit",
-                        field: "label",
-                        formatter(row, cell, value, columnDef, dataContext) {
-                            return value
-                        },
-                    },
-                ]
-                for (const key of _.keys(columnsMap).sort()) {
-                    columns.push(columnsMap[key])
-                }
-
-                const time_grid = new Slick.Grid($(".time_table", $ctrl.$result), rows, columns, {
-                    enableCellNavigation: false,
-                    enableColumnReorder: false,
-                    forceFitColumns: false,
-                })
-                $(".time_table", $ctrl.$result).width("100%")
-                $ctrl.time_grid = time_grid
-            }
-
             function previewPanStop() {
                 if (!$ctrl.graph) {
                     console.error("No graph")
@@ -365,7 +316,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     if (val === "bar") {
                         setBarMode()
                     } else if (val === "table") {
-                        renderTable(series)
+                        const el = $(".time_table", $ctrl.$result)
+                        $ctrl.time_grid = renderTable(store, el, series)
                         setTableMode(series)
                     }
 
