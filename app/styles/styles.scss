@@ -1349,10 +1349,6 @@ slider {
   }
 }
 
-.form-table .preview {
-  display : none;
-}
-
 .rickshaw_graph {
   .empty_area {
     background-color : #999;
@@ -1390,7 +1386,7 @@ slider {
   }
 }
 
-.form-bar .rickshaw_graph .x_tick .title {
+.rickshaw_graph .x_tick .title {
   left : 0;
 }
 
@@ -1399,7 +1395,7 @@ slider {
   display : none;
 }
 
-.form-bar .legend li:last-child:not(:only-child) {
+.graph_tab .legend li:last-child:not(:only-child) {
   display : none;
 }
 
@@ -1410,10 +1406,6 @@ line.tick {
 .dot.active {
   cursor : pointer;
 }
-
-.rickshaw_graph .x_tick {
-}
-
 
 
 .preview {

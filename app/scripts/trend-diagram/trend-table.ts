@@ -37,12 +37,20 @@ export function renderTable(store: StoreService, el: JQLite, series: Series[]) {
     }
 
     // Sort columns
-    const columns: Slick.Column<any>[] = [{ name: "Hit", field: "label" }]
+    const columns: Slick.Column<any>[] = [
+        {
+            name: "Hit",
+            field: "label",
+            // This formatter looks pointless but is needed to prevent escaping `&Sigma;`
+            formatter: (row, cell, value) => value,
+        },
+    ]
     for (const key of Object.keys(columnsMap).sort()) {
         columns.push(columnsMap[key])
     }
 
     const grid = new Slick.Grid(el, rows, columns, {
+        autoHeight: true,
         enableCellNavigation: false,
         enableColumnReorder: false,
         forceFitColumns: false,

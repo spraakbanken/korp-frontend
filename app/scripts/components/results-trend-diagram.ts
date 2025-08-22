@@ -22,7 +22,6 @@ type ResultsTrendDiagramController = IController & {
     time_grid: Slick.Grid<any>
     hasEmptyIntervals?: boolean
     $result: JQLite
-    mode: "line" | "bar" | "table"
     error?: string
 }
 
@@ -30,7 +29,9 @@ type ResultsTrendDiagramScope = IScope & {
     downloadFrequencyType: "relative" | "absolute"
     downloadCsvType: "csv" | "tsv"
     download: () => void
+    isGraph: boolean
     isInitDone: boolean
+    mode: "line" | "bar" | "table"
     nontime: number
     statsRelative: boolean
 }
@@ -44,7 +45,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 <div class="btn-group form_switch">
                     <button
                         class="btn btn-default btn-sm"
-                        ng-model="$ctrl.mode"
+                        ng-model="mode"
                         uib-btn-radio="'line'"
                         ng-disabled="!isInitDone"
                     >
@@ -52,7 +53,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     </button>
                     <button
                         class="btn btn-default btn-sm"
-                        ng-model="$ctrl.mode"
+                        ng-model="mode"
                         uib-btn-radio="'bar'"
                         ng-disabled="!isInitDone"
                     >
@@ -60,14 +61,14 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     </button>
                     <button
                         class="btn btn-default btn-sm"
-                        ng-model="$ctrl.mode"
+                        ng-model="mode"
                         uib-btn-radio="'table'"
                         ng-disabled="!isInitDone"
                     >
                         {{'table' | loc:$root.lang}}
                     </button>
                 </div>
-                <label ng-show="$ctrl.mode == 'table'">
+                <label ng-show="mode == 'table'">
                     <input type="checkbox" ng-model="statsRelative" />
                     {{"num_results_relative" | loc:$root.lang}}
                     <i
@@ -82,7 +83,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 }}
             </div>
 
-            <div class="legend" ng-style='{visibility : !$ctrl.loading && $ctrl.isGraph() ? "visible" : "hidden"}'>
+            <div class="legend" ng-show="isGraph && !$ctrl.loading">
                 <div
                     class="line"
                     ng-show="$ctrl.hasEmptyIntervals"
@@ -99,13 +100,13 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 <div class="preloader" ng-class="{loading: $ctrl.loading}">
                     <i class="fa fa-spinner fa-spin fa-5x"></i>
                 </div>
-                <div class="chart" ng-show="$ctrl.isGraph()" ng-click="$ctrl.graphClickHandler()"></div>
+                <div class="chart" ng-show="isGraph" ng-click="$ctrl.graphClickHandler()"></div>
             </div>
 
-            <div class="preview"></div>
+            <div class="preview" ng-show="isGraph"></div>
 
-            <div class="time_table" style="margin-top:20px" ng-show="$ctrl.isTable()"></div>
-            <div ng-show="$ctrl.isTable()">
+            <div class="time_table" style="margin-top:20px" ng-show="mode == 'table'"></div>
+            <div ng-show="mode == 'table'">
                 <select ng-model="downloadFrequencyType">
                     <option value="relative">{{'statstable_relfigures' | loc:$root.lang}}</option>
                     <option value="absolute">{{'statstable_absfigures' | loc:$root.lang}}</option>
@@ -140,9 +141,10 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         ) {
             const $ctrl = this as ResultsTrendDiagramController
             $ctrl.$result = $element.find(".graph_tab")
-            $ctrl.mode = "line"
             $scope.downloadFrequencyType = "relative"
             $scope.downloadCsvType = "tsv"
+            $scope.isGraph = true
+            $scope.mode = "line"
 
             $ctrl.$onInit = () => {
                 const interval = $ctrl.task.corpusListing.getMomentInterval()
@@ -164,10 +166,25 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $ctrl.time_grid.setColumns($ctrl.time_grid.getColumns())
             })
 
-            $scope.$watch("statsRelative", () => (store.statsRelative = $scope.statsRelative))
+            $scope.$watch("mode", () => {
+                if (!$scope.mode) return
+                $scope.isGraph = ["line", "bar"].includes($scope.mode)
 
-            $ctrl.isGraph = () => ["line", "bar"].includes($ctrl.mode)
-            $ctrl.isTable = () => $ctrl.mode === "table"
+                if ($scope.mode === "table") {
+                    const el = $(".time_table", $ctrl.$result)
+                    // Render in next tick when the container is showing.
+                    $timeout(() => ($ctrl.time_grid = renderTable(store, el, $ctrl.graph!.series)))
+                } else {
+                    if (!$ctrl.graph) return
+
+                    if ($scope.mode === "bar") setBarMode()
+
+                    $ctrl.graph.graph.setRenderer($scope.mode)
+                    $ctrl.graph.graph.render()
+                }
+            })
+
+            $scope.$watch("statsRelative", () => (store.statsRelative = $scope.statsRelative))
 
             $ctrl.graphClickHandler = () => {
                 const target = $(".chart", $ctrl.$result)
@@ -218,18 +235,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 }
             }
 
-            function setTableMode(series: Series[]) {
-                $(".chart,.legend", $ctrl.$result).hide()
-                $(".time_table", $ctrl.$result.parent()).show()
-                const nRows = series.length || 2
-                let h = nRows * 2 + 4
-                h = Math.min(h, 40)
-                $(".time_table:visible", $ctrl.$result).height(`${h}.1em`)
-                if ($ctrl.time_grid != null) {
-                    $ctrl.time_grid.resizeCanvas()
-                }
-            }
-
             function renderGraph(Rickshaw: any, data: CountTimeResponse, currentZoom: Level) {
                 const series = TrendGraph.makeSeries(Rickshaw, data, currentZoom, $ctrl.task.cqp, $ctrl.task.subqueries)
 
@@ -267,30 +272,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                         }
                     }, 200)
                 )
-
-                $(".form_switch", $ctrl.$result).click(() => {
-                    const val = $ctrl.mode
-                    for (let cls of $ctrl.$result.attr("class").split(" ")) {
-                        if (cls.match(/^form-/)) {
-                            $ctrl.$result.removeClass(cls)
-                        }
-                    }
-                    $ctrl.$result.addClass(`form-${val}`)
-                    $(".chart,.legend", $ctrl.$result.parent()).show()
-                    $(".time_table", $ctrl.$result.parent()).hide()
-                    if (val === "bar") {
-                        setBarMode()
-                    } else if (val === "table") {
-                        const el = $(".time_table", $ctrl.$result)
-                        $ctrl.time_grid = renderTable(store, el, $ctrl.graph!.series)
-                        setTableMode($ctrl.graph!.series)
-                    }
-
-                    if (val !== "table") {
-                        $ctrl.graph!.graph.setRenderer(val)
-                        $ctrl.graph!.graph.render()
-                    }
-                })
             }
 
             async function makeRequest(from: Moment, to: Moment) {

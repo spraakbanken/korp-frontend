@@ -141,6 +141,7 @@ export function getEmptyIntervals(data: SeriesPoint[]): SeriesPoint[][] {
     const intervals: SeriesPoint[][] = []
     let i = 0
 
+    // TODO Last point is always (?) null, so we'll get a pointless empty interval at the end. Shouldn't we remove the empty last point?
     while (i < data.length) {
         let item = data[i]
 
