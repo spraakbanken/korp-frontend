@@ -208,7 +208,7 @@ export function formatUnixDate(zoom: Level, time: number) {
     return m.format(FORMATS[zoom])
 }
 
-export function createTrendTableCsv(series: Series[], frequencyType: string, csvType: string): string {
+export function createTrendTableCsv(series: Series[], relative: boolean, csvType: string): string {
     // Create header row
     const formatHeader = (cell: SeriesPoint): string => moment(cell.x * 1000).format(FORMATS[cell.zoom])
     const dateHeaders = series[0].data.map(formatHeader)
@@ -216,7 +216,7 @@ export function createTrendTableCsv(series: Series[], frequencyType: string, csv
 
     // Create data rows
     const formatCell = (row: Series, cell: SeriesPoint): number => {
-        if (frequencyType === "relative") return cell.y
+        if (relative) return cell.y
         else {
             const i = sortedIndexOf(
                 row.abs_data.map((point) => point.x),

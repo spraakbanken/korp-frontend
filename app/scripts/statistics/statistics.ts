@@ -159,12 +159,12 @@ export function createStatisticsCsv(
     data: Dataset,
     attrs: string[],
     corpora: CorpusTransformed[],
-    frequencyType: string,
+    relative: boolean,
     csvType: string,
     lang?: string
 ): string {
     const delimiter = csvType == "tsv" ? "\t" : ";"
-    const frequencyIndex = frequencyType == "absolute" ? 0 : 1
+    const frequencyIndex = relative ? 1 : 0
     const corpusTitles = corpora.map((corpus) => locObj(corpus.title, lang))
     const header = [...attrs, loc("stats_total", lang), ...corpusTitles]
 

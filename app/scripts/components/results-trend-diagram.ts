@@ -26,7 +26,6 @@ type ResultsTrendDiagramController = IController & {
 }
 
 type ResultsTrendDiagramScope = IScope & {
-    downloadFrequencyType: "relative" | "absolute"
     downloadCsvType: "csv" | "tsv"
     download: () => void
     isGraph: boolean
@@ -107,10 +106,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
 
             <div class="time_table" style="margin-top:20px" ng-show="mode == 'table'"></div>
             <div ng-show="mode == 'table'">
-                <select ng-model="downloadFrequencyType">
-                    <option value="relative">{{'statstable_relfigures' | loc:$root.lang}}</option>
-                    <option value="absolute">{{'statstable_absfigures' | loc:$root.lang}}</option>
-                </select>
                 <select ng-model="downloadCsvType">
                     <option value="tsv">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
                     <option value="csv">{{'statstable_exp_csv' | loc:$root.lang}}</option>
@@ -141,7 +136,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         ) {
             const $ctrl = this as ResultsTrendDiagramController
             $ctrl.$result = $element.find(".graph_tab")
-            $scope.downloadFrequencyType = "relative"
             $scope.downloadCsvType = "tsv"
             $scope.isGraph = true
             $scope.mode = "line"
@@ -205,11 +199,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             }
 
             $scope.download = function () {
-                const csv = createTrendTableCsv(
-                    $ctrl.graph!.series,
-                    $scope.downloadFrequencyType,
-                    $scope.downloadCsvType
-                )
+                const csv = createTrendTableCsv($ctrl.graph!.series, store.statsRelative, $scope.downloadCsvType)
                 const mimeType = $scope.downloadCsvType == "tsv" ? "text/tab-separated-values" : "text/csv"
                 downloadFile(csv, `korp-trend-table.${$scope.downloadCsvType}`, mimeType)
             }

@@ -186,10 +186,6 @@ angular.module("korpApp").component("statistics", {
                 <div id="myGrid"></div>
                 <div id="exportStatsSection">
                     <br /><br />
-                    <select id="kindOfData">
-                        <option value="relative">{{ 'statstable_relfigures' | loc:$root.lang }}</option>
-                        <option value="absolute">{{ 'statstable_absfigures' | loc:$root.lang }}</option>
-                    </select>
                     <select id="kindOfFormat">
                         <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
                         <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
@@ -446,11 +442,17 @@ angular.module("korpApp").component("statistics", {
             }
 
             $ctrl.generateExport = () => {
-                const frequencyType: string = $("#kindOfData option:selected").val()
                 const csvType: string = $("#kindOfFormat option:selected").val()
                 const { reduceVals } = $ctrl.searchParams
                 const corpora = corpusListing.corpora
-                const csv = createStatisticsCsv($ctrl.data, reduceVals, corpora, frequencyType, csvType, store.lang)
+                const csv = createStatisticsCsv(
+                    $ctrl.data,
+                    reduceVals,
+                    corpora,
+                    store.statsRelative,
+                    csvType,
+                    store.lang
+                )
                 const mimeType = csvType == "tsv" ? "text/tab-separated-values" : "text/csv"
                 downloadFile(csv, `korp-statistics.${csvType}`, mimeType)
             }

@@ -23,6 +23,7 @@
     - Merged `getContextQueryString` and `getContextQueryStringFromCorpusId` as `getContextParams`
     - Split `getAttributeGroups`/`getStatsAttributeGroups` into `getAttributeGroups`, `getAttributeGroupsCompare`, `getAttributeGroupsExtended` and `getAttributeGroupsStatistics`
 - The JSON button is a regular button, not an image, and downloads the stored, actual response instead of sending a new request
+- Stats/trend CSV export uses central abs/rel switch, not its own select
 
 ### Fixed
 
