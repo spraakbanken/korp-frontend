@@ -48,7 +48,7 @@ angular.module("korpApp").component("resultsStatistics", {
             warning="warning"
         ></statistics>
         <korp-error ng-if="error" message="{{error}}"></korp-error>
-        <json-button ng-if="!warning && !error" endpoint="'count'" params="proxy.params"></json-button>
+        <json-button ng-if="data && !loading && !warning" endpoint="count" data="proxy.response"></json-button>
     `,
     bindings: {
         isActive: "<",

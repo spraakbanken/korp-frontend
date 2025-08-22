@@ -136,10 +136,6 @@ module.exports = {
                     to: "img",
                 },
                 {
-                    from: "app/img/json.png",
-                    to: "img",
-                },
-                {
                     from: korpConfigDir + "/modes/*mode.js",
                     to: "modes/[name][ext]",
                     noErrorOnMissing: true,

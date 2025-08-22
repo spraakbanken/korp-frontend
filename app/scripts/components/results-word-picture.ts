@@ -35,7 +35,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             <word-picture data="data" on-sort-change="changeSort(sort)" sort="sort" warning="warning"></word-picture>
         </div>
         <korp-error ng-if="error" message="{{error}}"></korp-error>
-        <json-button ng-if="!warning && !error" endpoint="'relations'" params="proxy.params"></json-button>
+        <json-button ng-if="!warning && !error" endpoint="relations" data="proxy.response"></json-button>
     `,
     bindings: {
         isActive: "<",

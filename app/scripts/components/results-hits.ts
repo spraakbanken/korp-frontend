@@ -60,7 +60,7 @@ angular.module("korpApp").component("resultsHits", {
                 corpus-order="corpusOrder"
                 show-search-options="true"
             ></kwic>
-            <json-button endpoint="'query'" params="proxy.params"></json-button>
+            <json-button endpoint="query" data="proxy.response"></json-button>
         </div>
     `,
     bindings: {
