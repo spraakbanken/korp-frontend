@@ -128,8 +128,11 @@ export class ParallelCorpusListing extends CorpusListing {
         return output.join(",")
     }
 
-    getContextQueryString(): string {
-        return this.getAttributeQuery("context")
+    getContextParams() {
+        return {
+            context: this.getAttributeQuery("context"),
+            default_context: settings["default_overview_context"],
+        }
     }
 
     getWithinParam(): string {
