@@ -42,12 +42,11 @@ export class CorpusListing {
         return _.map(this.corpora, func)
     }
 
-    subsetFactory(idArray: string[]) {
-        // returns a new CorpusListing instance from an id subset.
-        idArray = _.invokeMap(idArray, "toLowerCase")
-        const cl = new CorpusListing(_.pick(this.struct, ...idArray))
-        cl.selected = cl.corpora
-        cl.updateAttributes()
+    /** Creates a new CorpusListing instance from an id subset */
+    subsetFactory(ids: string[]) {
+        ids = ids.map((id) => id.toLowerCase())
+        const cl = new CorpusListing(_.pick(this.struct, ...ids))
+        cl.select(ids)
         return cl
     }
 

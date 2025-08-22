@@ -21,6 +21,13 @@ export class ParallelCorpusListing extends CorpusListing {
         this.setActiveLangs(activeLangs.split(","))
     }
 
+    subsetFactory(ids: string[]): ParallelCorpusListing {
+        ids = ids.map((id) => id.toLowerCase())
+        const cl = new ParallelCorpusListing(_.pick(this.struct, ...ids))
+        cl.select(ids)
+        return cl
+    }
+
     select(idArray: string[]): void {
         this.selected = _.uniq(idArray.flatMap((id) => this.getLinked(this.struct[id])))
         this.updateAttributes()
