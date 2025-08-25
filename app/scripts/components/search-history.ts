@@ -1,14 +1,19 @@
 /** @format */
 import { loc } from "@/i18n"
-import { SearchHistoryService } from "@/services/search-history"
 import { SearchesService } from "@/services/searches"
 import { getSearchParamNames, SearchParams } from "@/urlparams"
 import { html, LocationService } from "@/util"
 import angular, { IScope } from "angular"
-import "@/services/search-history"
 import "@/services/searches"
 import { StoreService } from "@/services/store"
-import { createSearchOption, isSearchOption, Option } from "@/search-history"
+import {
+    addToSearchHistory,
+    clearSearchHistory,
+    createSearchOption,
+    getSearchHistory,
+    isSearchOption,
+    Option,
+} from "@/search-history"
 
 type HistoryScope = IScope & {
     getOptions: () => Option[]
@@ -28,15 +33,8 @@ angular.module("korpApp").component("searchHistory", {
         "$location",
         "$scope",
         "searches",
-        "searchHistory",
         "store",
-        function (
-            $location: LocationService,
-            $scope: HistoryScope,
-            searches: SearchesService,
-            searchHistory: SearchHistoryService,
-            store: StoreService
-        ) {
+        function ($location: LocationService, $scope: HistoryScope, searches: SearchesService, store: StoreService) {
             $scope.getOptions = () => [
                 { id: "_label", label: loc("search_history", store.lang) },
                 { id: "_clear", label: loc("search_history_clear", store.lang) },
@@ -44,10 +42,16 @@ angular.module("korpApp").component("searchHistory", {
             ]
 
             /** Read stored search history */
-            const refreshItems = () => ($scope.items = searchHistory.getItems())
+            const refreshItems = () => ($scope.items = getSearchHistory())
 
             /** Select the label option */
             const resetValue = () => ($scope.value = $scope.getOptions().find((option) => option.id == "_label"))
+
+            // When a new search is made, capture it from the URL
+            store.watch("activeSearch", () => {
+                addToSearchHistory($location.search())
+                refreshItems()
+            })
 
             // Set state (and trigger a search) when an option is selected
             $scope.$watch("value", () => {
@@ -60,7 +64,8 @@ angular.module("korpApp").component("searchHistory", {
                     // Wait for param changes like corpus selection to propagate to app state
                     $scope.$applyAsync(() => searches.doSearch())
                 } else if ($scope.value.id == "_clear") {
-                    searchHistory.clear()
+                    clearSearchHistory()
+                    refreshItems()
                     resetValue()
                 }
             })
@@ -68,9 +73,6 @@ angular.module("korpApp").component("searchHistory", {
             // Initialize
             refreshItems()
             resetValue()
-
-            // Subscribe to new searches
-            searchHistory.listen(refreshItems)
         },
     ],
 })
