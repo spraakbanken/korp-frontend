@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IScope, ui } from "angular"
-import { html, regescape, unregescape } from "@/util"
+import { html, regescape, splitFirst, unregescape } from "@/util"
 import { Saldo } from "@/saldo"
 import { CqpSearchEvent } from "@/statemachine/types"
 import statemachine from "@/statemachine"
@@ -52,7 +52,7 @@ angular.module("korpApp").component("relatedWords", {
 
             // Update when a new simple search is made
             store.watch("activeSearch", async (search) => {
-                if (!search || search.type == "cqp") return
+                if (!search?.type) return
 
                 // Reset and hide until there are results.
                 $scope.frames = []
@@ -67,7 +67,8 @@ angular.module("korpApp").component("relatedWords", {
                 if (!attribute) return
                 $scope.attribute = attribute
 
-                const frames = await relatedWordSearch(unregescape(search.val))
+                const [, lemgram] = splitFirst("|", store.search!)
+                const frames = await relatedWordSearch(unregescape(lemgram))
                 $scope.$apply(() => {
                     $scope.frames = frames
                     $scope.isVisible = true

@@ -1,9 +1,8 @@
 /** @format */
 import angular, { IController, IScope } from "angular"
-import { html } from "@/util"
+import { html, splitFirst } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/components/search-submit"
-import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
 import { savedSearches } from "@/saved-searches"
 
@@ -66,24 +65,24 @@ angular.module("korpApp").component("advancedSearch", {
     bindings: {},
     controller: [
         "$scope",
-        "searches",
         "store",
-        function ($scope: AdvancedSearchScope, searches: SearchesService, store: StoreService) {
+        function ($scope: AdvancedSearchScope, store: StoreService) {
             const $ctrl = this as AdvancedSearchController
             $ctrl.cqp = "[]"
 
-            /** Read advanced CQP from state prop `search`. */
-            function readSearchParam(): void {
-                if (store.search?.slice(0, 4) == "cqp|") {
-                    $ctrl.cqp = store.search.slice(4)
-                }
-            }
-
-            // Sync CQP from store to component.
-            store.watch("search", () => readSearchParam())
             store.watch("in_order", () => ($ctrl.freeOrder = !store.in_order))
             store.watch("extendedCqp", () => ($scope.extendedCqp = store.extendedCqp || ""))
             store.watch("simpleCqp", () => ($scope.simpleCqp = store.simpleCqp || ""))
+
+            store.watch("search", restoreSearch)
+            store.watch("cqp", restoreSearch)
+            function restoreSearch() {
+                // For advanced, `search` has the format `cqp|<query>`
+                const [type, val] = splitFirst("|", store.search || "")
+                if (type != "cqp" || !val) return
+                $ctrl.cqp = val
+                store.activeSearch = { cqp: $ctrl.cqp }
+            }
 
             $ctrl.onSearch = () => {
                 store.page = 0
@@ -91,7 +90,7 @@ angular.module("korpApp").component("advancedSearch", {
                 store.in_order = !$ctrl.freeOrder
                 store.search = `cqp|${$ctrl.cqp}`
                 matomoSend("trackEvent", "Search", "Submit search", "Advanced")
-                searches.doSearch()
+                store.activeSearch = { cqp: $ctrl.cqp }
             }
 
             $ctrl.onSearchSave = (name) => {

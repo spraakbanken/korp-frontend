@@ -18,9 +18,8 @@ import { LocationService } from "@/util"
 export type Store = {
     /** Last executed search query. */
     activeSearch?: {
-        /** "word", "lemgram" or "cqp" */
-        type: string
-        val: string
+        type?: "word" | "lemgram"
+        cqp: string
     }
     /** Selected corpus ids in lowercase */
     corpus: string[]

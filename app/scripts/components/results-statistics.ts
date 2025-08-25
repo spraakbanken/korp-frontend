@@ -29,7 +29,8 @@ type ResultsStatisticsScope = IScope & {
     searchParams: SearchParams
     showStatistics: boolean
     warning?: string
-    makeRequest: (cqp: string) => void
+    makeRequest: () => void
+    onUpdateSearch: () => void
     renderResult: (data: Dataset) => void
     resetView: () => void
     resultError: (err: any) => void
@@ -42,6 +43,7 @@ angular.module("korpApp").component("resultsStatistics", {
             data="data"
             error="error"
             loading="$ctrl.loading"
+            on-update-search="onUpdateSearch()"
             params="proxy.params"
             row-count="rowCount"
             search-params="searchParams"
@@ -71,10 +73,15 @@ angular.module("korpApp").component("resultsStatistics", {
 
             s.proxy = statsProxyFactory.create()
 
-            $rootScope.$on("make_request", (event, cqp: string) => {
-                $scope.cqp = cqp
-                s.makeRequest($scope.cqp)
+            store.watch("activeSearch", (search) => {
+                if (!search) return
+                $scope.cqp = search.cqp
+                s.makeRequest()
             })
+
+            $scope.onUpdateSearch = () => {
+                $scope.makeRequest()
+            }
 
             s.$on("abort_requests", () => {
                 s.proxy.abort()
@@ -89,7 +96,7 @@ angular.module("korpApp").component("resultsStatistics", {
                     // Enable statistics when first opening tab
                     if (!s.showStatistics) {
                         s.showStatistics = true
-                        if ($scope.cqp) s.makeRequest($scope.cqp)
+                        if ($scope.cqp) s.makeRequest()
                     }
 
                     // workaround for bug in slickgrid
@@ -112,7 +119,7 @@ angular.module("korpApp").component("resultsStatistics", {
                 $ctrl.setProgress(false, 0)
             }
 
-            s.makeRequest = (cqp) => {
+            s.makeRequest = () => {
                 if (!s.showStatistics) return
 
                 // Abort any running request
@@ -128,6 +135,7 @@ angular.module("korpApp").component("resultsStatistics", {
                 if (!grid) throw new Error("myGrid element not found")
                 grid.innerHTML = ""
 
+                let cqp = $scope.cqp
                 if (settings.parallel) {
                     cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
                 }

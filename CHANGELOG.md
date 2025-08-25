@@ -7,6 +7,7 @@
 - Use [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader) to compile CQP parser at build time
 - Login form help text
 - Experimental support for right-to-left (rtl) corpus text
+- Word picture works with any search mode as long as it is a single word or lemgram
 
 ### Changed
 
@@ -22,6 +23,9 @@
   - In `CorpusListing`:
     - Merged `getContextQueryString` and `getContextQueryStringFromCorpusId` as `getContextParams`
     - Split `getAttributeGroups`/`getStatsAttributeGroups` into `getAttributeGroups`, `getAttributeGroupsCompare`, `getAttributeGroupsExtended` and `getAttributeGroupsStatistics`
+- The `searches` service is removed in favor of the store:
+  - Write to `store.activeSearch` to commit a new main search query, result tabs watch it
+  - Search tabs watch `store.search` and `store.cqp` to restore a search from init/frontpage/history
 - The JSON button is a regular button, not an image, and downloads the stored, actual response instead of sending a new request
 - Stats/trend CSV export uses central abs/rel switch, not its own select
 
@@ -34,6 +38,7 @@
 - Use `angular.toJson` in `localStorageGet` to avoid storing `$$hashKey` etc.
 - Stray value when clearing simple search input
 - Prevent switching trend diagram form before done loading
+- Extended search query is propertly restored when activating a search history item
 
 ## [9.10.1] - 2025-07-02
 

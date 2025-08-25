@@ -29,6 +29,7 @@ type ResultsExamplesScope = IScope & {
     hitsPerPage: number
     isReading: boolean
     kwic?: ApiKwic[]
+    onUpdateSearch: () => void
     page?: number
     pageChange: (page: number) => void
     toggleReading: () => void
@@ -52,6 +53,7 @@ angular.module("korpApp").component("resultsExamples", {
                 hits-per-page="hitsPerPage"
                 params="task.proxy.params"
                 corpus-order="corpusOrder"
+                on-update-search="onUpdateSearch()"
             ></kwic>
         </div>`,
     bindings: {
@@ -118,6 +120,10 @@ angular.module("korpApp").component("resultsExamples", {
                         $timeout(() => ($scope.error = error))
                     })
                     .finally(() => $timeout(() => $ctrl.setProgress(false, 0)))
+            }
+
+            $scope.onUpdateSearch = () => {
+                makeRequest(false)
             }
         },
     ],

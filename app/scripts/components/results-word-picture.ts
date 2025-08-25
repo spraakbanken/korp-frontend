@@ -1,7 +1,7 @@
 /** @format */
 import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
-import { RelationsProxy, RelationsEmptyError, TableDrawData } from "@/backend/proxy/relations-proxy"
+import { RelationsProxy, RelationsEmptyError, TableDrawData, RelationsQuery } from "@/backend/proxy/relations-proxy"
 import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { RelationsSort } from "@/backend/types/relations"
@@ -44,15 +44,9 @@ angular.module("korpApp").component("resultsWordPicture", {
     },
     controller: [
         "$scope",
-        "$rootScope",
         "$timeout",
         "store",
-        function (
-            $scope: ResultsWordPictureScope,
-            $rootScope: RootScope,
-            $timeout: ITimeoutService,
-            store: StoreService
-        ) {
+        function ($scope: ResultsWordPictureScope, $timeout: ITimeoutService, store: StoreService) {
             const $ctrl = this as ResultsWordPictureController
             $scope.proxy = new RelationsProxy()
             $scope.activated = false
@@ -62,13 +56,16 @@ angular.module("korpApp").component("resultsWordPicture", {
                 if (store.globalFilter) $scope.warning = loc("word_pic_global_filter", store.lang)
             })
 
-            $rootScope.$on("make_request", () => makeRequest())
+            store.watch("activeSearch", (search) => {
+                if (!search) return
+                makeRequest()
+            })
 
             // Enable word picture when opening tab
             $ctrl.$onChanges = (changes) => {
                 if (changes.isActive?.currentValue && !$scope.activated) {
                     $scope.activated = true
-                    makeRequest()
+                    if (store.activeSearch) makeRequest()
                 }
             }
 
@@ -94,12 +91,15 @@ angular.module("korpApp").component("resultsWordPicture", {
             function makeRequest() {
                 if (!$scope.activated) return resetView()
 
-                // Check that the search is word-picture-compatible.
-                const search = store.activeSearch
-                if (!search) return resetView(loc("word_pic_bad_search", store.lang))
-                const { type, val } = search
-                if (type != "word" && type != "lemgram") return resetView(loc("word_pic_bad_search", store.lang))
-                if (search.val.includes(" ")) return resetView(loc("word_pic_bad_search", store.lang))
+                let query: RelationsQuery
+                try {
+                    query = RelationsProxy.parseCqp(store.activeSearch!.cqp)
+                } catch (error) {
+                    // The search query is not compatible with word picture
+                    console.warn(error)
+                    return resetView(loc("word_pic_bad_search", store.lang))
+                }
+
                 if (store.globalFilter) return resetView(loc("word_pic_global_filter", store.lang))
 
                 // Abort any running request
@@ -109,7 +109,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                 $scope.warning = undefined
                 $scope.proxy
                     .setProgressHandler((progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
-                    .makeRequest(type, val, $scope.sort)
+                    .makeRequest(query.type, query.word, $scope.sort)
                     .then((data) => $timeout(() => ($scope.data = data)))
                     .catch((error) => {
                         // AbortError is expected if a new search is made before the previous one is finished

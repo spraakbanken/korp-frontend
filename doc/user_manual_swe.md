@@ -255,8 +255,9 @@ Efter att du gjort ditt val och klickat på "Visa karta"-knappen kommer en ny ka
 
 ### Ordbild
 
-Ordbildsfunktionen är som standard inaktiverad, och måste först aktiveras genom att kryssa i rutan "Visa ordbild" bland sökinställningarna.
-Ordbildsfliken är endast aktiv då man från *Enkel* sökning har sökt på ett *ensamt ord* eller ett *lemgram*. Här visas det sökta ordet tillsammans med ord som det har
+För att kunna skapa en ordbild behöver sökfrågan vara exakt ett ord eller lemgram. I utökad och avancerad sökning innebär det ett enda token med ett enda villkor på attributet _ord_ eller _lemgram_.
+
+Här visas det sökta ordet tillsammans med ord som det har
 olika syntaktiska relationer till i materialet, grupperat efter relation. För ett verb visas till exempel de subjekt och objekt som är särskilt utmärkande för just det
 verbet, och för ett substantiv visas utmärkande attribut, och verb som substantivet är subjekt och objekt till.
 

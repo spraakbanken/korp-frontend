@@ -4,18 +4,18 @@ import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { createCondition, expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
-import { html, LocationService, regescape, unregescape } from "@/util"
+import { html, LocationService, regescape, splitFirst, unregescape } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/backend/lexicons"
-import "@/services/searches"
 import "@/components/autoc"
 import "@/components/related-words"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
-import { SearchesService } from "@/services/searches"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
 import { savedSearches } from "@/saved-searches"
+import { getTimeData } from "@/timedata"
+import { getLocData } from "@/loc-data"
 
 type SimpleSearchController = IController & {
     input: string
@@ -30,7 +30,6 @@ type SimpleSearchController = IController & {
     getCQP: () => string
     onSearchSave: (name: string) => void
     updateFreeOrderEnabled: () => void
-    doSearch: () => void
     onChange: (value: string, isPlain: boolean) => void
 }
 
@@ -117,13 +116,11 @@ angular.module("korpApp").component("simpleSearch", {
         "$location",
         "$scope",
         "$timeout",
-        "searches",
         "store",
         function (
             $location: LocationService,
             $scope: SimpleSearchScope,
             $timeout: ITimeoutService,
-            searches: SearchesService,
             store: StoreService
         ) {
             const ctrl = this as SimpleSearchController
@@ -137,6 +134,25 @@ angular.module("korpApp").component("simpleSearch", {
             store.watch("isCaseInsensitive", () => (ctrl.isCaseInsensitive = store.isCaseInsensitive))
             store.watch("prefix", () => ($scope.prefix = store.prefix))
             store.watch("suffix", () => ($scope.suffix = store.suffix))
+
+            store.watch("search", restoreSearch)
+            store.watch("cqp", restoreSearch)
+            function restoreSearch() {
+                // For simple, `search` has the format `{word,lemgram}|<value>`
+                const [type, val] = splitFirst("|", store.search || "")
+                if (type != "word" && type != "lemgram") return
+                // Wait for loc data used by autoc placeholder
+                // TODO Make autoc refresh when loc data is ready instead, remove this $timeout
+                $timeout(async () => {
+                    await getLocData()
+                    // Restore input
+                    const isPlain = type == "word"
+                    const input = isPlain ? val : unregescape(val)
+                    ctrl.onChange(input, isPlain)
+                    // Trigger search
+                    commitSearch()
+                })
+            }
 
             // Sync between word part inputs
             $scope.$watch("prefix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
@@ -168,7 +184,7 @@ angular.module("korpApp").component("simpleSearch", {
                 store.page = 0
 
                 matomoSend("trackEvent", "Search", "Submit search", "Simple")
-                searches.doSearch()
+                commitSearch()
             }
 
             ctrl.getCQP = function () {
@@ -204,40 +220,29 @@ angular.module("korpApp").component("simpleSearch", {
                 savedSearches.push(name, ctrl.getCQP())
             }
 
-            store.watch("activeSearch", () => {
-                const search = store.activeSearch
-                if (!search) return
-
-                if (search.type === "word" || search.type === "lemgram") {
-                    if (search.type === "word") {
-                        ctrl.input = search.val
-                        ctrl.isRawInput = true
-                        ctrl.onChange(search.val, true)
-                    } else {
-                        ctrl.input = unregescape(search.val)
-                        ctrl.isRawInput = false
-                        ctrl.onChange(ctrl.input, false)
-                    }
-                    store.simpleCqp = expandOperators(ctrl.getCQP())
-                    ctrl.updateFreeOrderEnabled()
-                    ctrl.doSearch()
+            function commitSearch() {
+                const cqp = ctrl.getCQP()
+                store.simpleCqp = expandOperators(cqp)
+                store.activeSearch = {
+                    type: ctrl.isRawInput ? "word" : "lemgram",
+                    cqp,
                 }
-            })
+            }
 
             ctrl.onChange = (value, isPlain) => {
+                // Set input
+                ctrl.isRawInput = isPlain
+                ctrl.input = ctrl.isRawInput ? value : unregescape(value)
+                // Set output
                 ctrl.currentText = isPlain ? value : undefined
                 ctrl.lemgram = !isPlain ? regescape(value) : undefined
+                // Validate
                 ctrl.updateFreeOrderEnabled()
             }
 
             ctrl.updateFreeOrderEnabled = () => {
                 const cqpObjs = parse(ctrl.getCQP() || "[]")
                 ctrl.freeOrderEnabled = supportsInOrder(cqpObjs)
-            }
-
-            ctrl.doSearch = function () {
-                const cqp = ctrl.getCQP()
-                searches.kwicSearch(cqp)
             }
         },
     ],

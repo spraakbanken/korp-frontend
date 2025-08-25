@@ -10,7 +10,6 @@ import "@/components/kwic-word"
 import { KwicWordScope } from "@/components/kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
-import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
 import { QueryParamSort } from "@/backend/types/query"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
@@ -55,6 +54,7 @@ type KwicController = IController & {
     selectRight: (sentence: any) => any[]
     parallelSelected: Token[]
     onKwicClick(event: Event): void
+    onUpdateSearch: () => void
 }
 
 type KwicScope = IScope & {
@@ -261,20 +261,14 @@ angular.module("korpApp").component("kwic", {
         kwicInput: "<",
         corpusHits: "<",
         showSearchOptions: "<",
+        onUpdateSearch: "&",
     },
     controller: [
         "$element",
         "$scope",
         "$timeout",
-        "searches",
         "store",
-        function (
-            $element: JQLite,
-            $scope: KwicScope,
-            $timeout: ITimeoutService,
-            searches: SearchesService,
-            store: StoreService
-        ) {
+        function ($element: JQLite, $scope: KwicScope, $timeout: ITimeoutService, store: StoreService) {
             let $ctrl = this as KwicController
 
             $scope.dir = settings["dir"]
@@ -377,17 +371,17 @@ angular.module("korpApp").component("kwic", {
 
             $scope.updateHpp = () => {
                 store.hpp = Number($scope.hpp)
-                debouncedSearch()
+                updateSearch()
             }
 
             $scope.updateSort = () => {
                 store.sort = $scope.sort
-                debouncedSearch()
+                updateSearch()
             }
 
             $ctrl._settings = settings
 
-            const debouncedSearch = _.debounce(searches.doSearch, UPDATE_DELAY)
+            const updateSearch = _.debounce(() => $ctrl.onUpdateSearch(), UPDATE_DELAY)
 
             $ctrl.download = {
                 options: [

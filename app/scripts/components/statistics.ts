@@ -12,7 +12,6 @@ import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams } from "@/statistics/statistics.types"
 import { CountParams } from "@/backend/types/count"
 import { AttributeOption } from "@/corpus_listing"
-import { SearchesService } from "@/services/searches"
 import { getTimeData } from "@/timedata"
 import { StoreService } from "@/services/store"
 import { getGeoAttributes, MapAttributeOption } from "@/map"
@@ -42,6 +41,7 @@ type StatisticsController = IController & {
     warning?: string
     onStatsClick: (event: MouseEvent) => void
     onGraphClick: () => void
+    onUpdateSearch: () => void
     mapToggleSelected: (index: number, event: Event) => void
     generateExport: () => void
     showMap: () => void
@@ -51,6 +51,8 @@ type StatisticsController = IController & {
     graphEnabled: boolean
     noRowsError: boolean
 }
+
+const UPDATE_DELAY = 500
 
 angular.module("korpApp").component("statistics", {
     template: html`
@@ -202,6 +204,7 @@ angular.module("korpApp").component("statistics", {
         data: "<",
         error: "<",
         loading: "<",
+        onUpdateSearch: "&",
         params: "<",
         rowCount: "<",
         searchParams: "<",
@@ -211,13 +214,11 @@ angular.module("korpApp").component("statistics", {
         "$rootScope",
         "$scope",
         "$uibModal",
-        "searches",
         "store",
         function (
             $rootScope: RootScope,
             $scope: StatisticsScope,
             $uibModal: ui.bootstrap.IModalService,
-            searches: SearchesService,
             store: StoreService
         ) {
             const $ctrl = this as StatisticsController
@@ -323,10 +324,10 @@ angular.module("korpApp").component("statistics", {
                     store.stats_reduce_insensitive = ""
                 }
 
-                debouncedSearch()
+                updateSearch()
             }
 
-            const debouncedSearch = _.debounce(searches.doSearch, 500)
+            const updateSearch = _.debounce(() => $ctrl.onUpdateSearch(), UPDATE_DELAY)
 
             function onAttrValueClick(row: Row) {
                 if (isTotalRow(row)) return

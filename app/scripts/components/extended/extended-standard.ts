@@ -9,7 +9,6 @@ import { matomoSend } from "@/matomo"
 import "@/components/extended/tokens"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
-import { SearchesService } from "@/services/searches"
 import { StoreService } from "@/services/store"
 import { savedSearches } from "@/saved-searches"
 
@@ -71,13 +70,11 @@ angular.module("korpApp").component("extendedStandard", {
         "$location",
         "$scope",
         "$timeout",
-        "searches",
         "store",
         function (
             $location: LocationService,
             $scope: ExtendedStandardScope,
             $timeout: ITimeoutService,
-            searches: SearchesService,
             store: StoreService
         ) {
             const ctrl = this as ExtendedStandardController
@@ -107,12 +104,27 @@ angular.module("korpApp").component("extendedStandard", {
                 })
             })
 
+            store.watch("search", restoreSearch)
+            store.watch("cqp", restoreSearch)
+            function restoreSearch() {
+                // For extended, `search` is just "cqp" and the query is in `cqp`
+                if (store.search != "cqp" || !store.cqp) return
+                ctrl.cqpChange(store.cqp)
+                triggerSearch()
+            }
+
             function triggerSearch() {
                 store.page = 0
                 store.in_order = !$scope.freeOrder
                 store.within = ctrl.within
                 store.search = "cqp"
-                searches.doSearch()
+
+                let cqp = store.cqp
+                if (store.globalFilter) {
+                    cqp = stringify(mergeCqpExprs(parse(cqp || "[]"), store.globalFilter))
+                }
+
+                store.activeSearch = { cqp }
             }
 
             ctrl.onSearch = () => {

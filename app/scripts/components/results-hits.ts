@@ -31,6 +31,7 @@ type ResultsHitsScope = IScope & {
     hitsPerPage: number
     initialSearch?: boolean
     kwic?: ApiKwic[]
+    onUpdateSearch: () => void
     page?: number
     pageChange: (page: number) => void
     proxy: KwicProxy
@@ -59,6 +60,7 @@ angular.module("korpApp").component("resultsHits", {
                 params="proxy.params"
                 corpus-order="corpusOrder"
                 show-search-options="true"
+                on-update-search="onUpdateSearch()"
             ></kwic>
             <json-button endpoint="query" data="proxy.response"></json-button>
         </div>
@@ -85,8 +87,13 @@ angular.module("korpApp").component("resultsHits", {
                 $scope.hitsPerPage = store.hpp
             }
 
-            $rootScope.$on("make_request", (msg, cqp) => {
-                $scope.cqp = cqp
+            store.watch("activeSearch", (search) => {
+                if (!search) return
+                $scope.cqp = search.cqp
+                $scope.onUpdateSearch()
+            })
+
+            $scope.onUpdateSearch = () => {
                 // only set this on the initial search, not when paging
                 $scope.hitsPerPage = store.hpp
 
@@ -96,7 +103,7 @@ angular.module("korpApp").component("resultsHits", {
                 }
                 $scope.initialSearch = false
                 makeRequest(false)
-            })
+            }
 
             store.watch("page", (value, old) => {
                 if (value === old) return

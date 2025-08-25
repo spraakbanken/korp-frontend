@@ -1,10 +1,8 @@
 /** @format */
 import { loc } from "@/i18n"
-import { SearchesService } from "@/services/searches"
 import { getSearchParamNames, SearchParams } from "@/urlparams"
 import { html, LocationService } from "@/util"
 import angular, { IScope } from "angular"
-import "@/services/searches"
 import { StoreService } from "@/services/store"
 import {
     addToSearchHistory,
@@ -32,9 +30,8 @@ angular.module("korpApp").component("searchHistory", {
     controller: [
         "$location",
         "$scope",
-        "searches",
         "store",
-        function ($location: LocationService, $scope: HistoryScope, searches: SearchesService, store: StoreService) {
+        function ($location: LocationService, $scope: HistoryScope, store: StoreService) {
             $scope.getOptions = () => [
                 { id: "_label", label: loc("search_history", store.lang) },
                 { id: "_clear", label: loc("search_history_clear", store.lang) },
@@ -60,9 +57,7 @@ angular.module("korpApp").component("searchHistory", {
                     // Set used params and reset unused params to their default values.
                     const params = $scope.value.params
                     getSearchParamNames().forEach((key) => $location.search(key, params[key] ?? null))
-
-                    // Wait for param changes like corpus selection to propagate to app state
-                    $scope.$applyAsync(() => searches.doSearch())
+                    resetValue()
                 } else if ($scope.value.id == "_clear") {
                     clearSearchHistory()
                     refreshItems()

@@ -6,6 +6,8 @@ import { ApiRelation, RelationsParams, RelationsSort } from "../types/relations"
 import { WordPictureDefItem } from "@/settings/app-settings.types"
 import { invert, isEqual } from "lodash"
 import { Lemgram } from "@/lemgram"
+import { parse } from "@/cqp_parser/cqp"
+import { CqpQuery } from "@/cqp_parser/cqp.types"
 
 /** A relation item modified for showing. */
 export type ShowableApiRelation = ApiRelation & {
@@ -26,6 +28,11 @@ export type TableDrawData = {
     data: TableData[][]
 }
 
+export type RelationsQuery = {
+    type: WordType
+    word: string
+}
+
 type WordType = "word" | "lemgram"
 
 export class RelationsProxy extends ProxyBase<"relations"> {
@@ -33,6 +40,27 @@ export class RelationsProxy extends ProxyBase<"relations"> {
     readonly config = settings["word_picture_conf"] || {}
     /** Mapping from pos tag to identifiers used in word_picture_conf */
     readonly tagset = invert(settings["word_picture_tagset"] || {})
+
+    /** Parse a Check if a query can be used for word picture. */
+    static parseCqp(cqp: string): RelationsQuery {
+        const tokens = parse<CqpQuery>(cqp)
+
+        if (tokens.length != 1) throw new RelationsParseError("Must be single token")
+        const conditions = tokens[0].and_block
+        if (conditions?.length != 1 || conditions[0].length != 1)
+            throw new RelationsParseError("Must have a single condition")
+        const condition = conditions[0][0]
+
+        if (!["word", "sense", "saldo"].includes(condition.type)) throw new RelationsParseError(`Attribute not allowed`)
+
+        if (condition.op != "=") throw new RelationsParseError(`Operator must be equality`)
+        if (!condition.val) throw new RelationsParseError("Condition value must not be empty")
+
+        return {
+            type: condition.type == "word" ? "word" : "lemgram",
+            word: condition.val as string,
+        }
+    }
 
     buildParams(type: WordType, word: string, sort: RelationsSort): RelationsParams {
         return {
@@ -176,3 +204,4 @@ export class RelationsProxy extends ProxyBase<"relations"> {
 }
 
 export class RelationsEmptyError extends Error {}
+export class RelationsParseError extends Error {}

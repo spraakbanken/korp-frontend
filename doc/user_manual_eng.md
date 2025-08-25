@@ -249,8 +249,9 @@ After you have made your choice and clicked on the "Show map" button, a new map 
 
 ### Word picture
 
-The word picture function (if available) is disabled by default, and must first be activated by ticking the "Show word picture" box in the search settings.
-The word picture tab is only active when you have searched for a *single word* or a *lemgram* from *Simple* search. Here, the searched word is displayed together with words that it has
+To generate a word picture, the search query must contain a single word or lemgram. In extended and advanced search, that means a single token with a single condition on the _word_ or _lemgram_ attribute.
+
+Here, the searched word is displayed together with words that it has
 syntactic relations to in the material, grouped by relation. For a verb, for example, the subjects and objects that are particularly characteristic of that particular verb are displayed, and for a noun, characteristic modifiers are shown, as well as verbs of which the noun is subject and object.
 
 ![Word picture in Korp](images/ordbild.png)
