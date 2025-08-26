@@ -118,8 +118,9 @@ angular.module("korpApp").component("extendedStandard", {
                 store.in_order = !$scope.freeOrder
                 store.within = ctrl.within
                 store.search = "cqp"
+                store.cqp = ctrl.cqp
 
-                let cqp = store.cqp
+                let cqp = ctrl.cqp
                 if (store.globalFilter) {
                     cqp = stringify(mergeCqpExprs(parse(cqp || "[]"), store.globalFilter))
                 }
@@ -147,8 +148,6 @@ angular.module("korpApp").component("extendedStandard", {
                 }
 
                 ctrl.validateFreeOrder()
-
-                store.cqp = cqp
             }
 
             ctrl.validateFreeOrder = () => {

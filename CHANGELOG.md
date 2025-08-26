@@ -28,6 +28,7 @@
   - Search tabs watch `store.search` and `store.cqp` to restore a search from init/frontpage/history
 - The JSON button is a regular button, not an image, and downloads the stored, actual response instead of sending a new request
 - Stats/trend CSV export uses central abs/rel switch, not its own select
+- In extended search, the query is stored in URL only when searching, not dynamically while editing
 
 ### Fixed
 
