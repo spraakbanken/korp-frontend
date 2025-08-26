@@ -1,7 +1,8 @@
 /** @format */
 import { loc } from "@/i18n"
 import { getSearchParamNames, SearchParams } from "@/urlparams"
-import { html, LocationService } from "@/util"
+import { html } from "@/util"
+import { LocationService } from "@/angular-util"
 import angular, { IScope } from "angular"
 import { StoreService } from "@/services/store"
 import {

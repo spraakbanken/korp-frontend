@@ -1,6 +1,6 @@
 const { getLocData } = require("@/loc-data");
 const { default: settings } = require("@/settings");
-const { locationSearchGet } = require("@/util");
+const { locationSearchGet } = require("@/angular-util");
 
 (function($) {
 	dl_cache = {}

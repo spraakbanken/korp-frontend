@@ -8,7 +8,7 @@ import { getLocData } from "@/loc-data"
 import { getAllCorporaInFolders } from "@/corpus-chooser"
 import { QueryParamSort } from "@/backend/types/query"
 import { HashParams } from "@/urlparams"
-import { LocationService } from "@/util"
+import { LocationService } from "@/angular-util"
 
 /**
  * @file The store service provides state management. It uses the Root Scope to store and watch properties.

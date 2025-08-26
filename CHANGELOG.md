@@ -17,6 +17,7 @@
     - Renamed `prevParams` to `params`
     - Removed `prevUrl` and `prevCQP`
   - Moved SALDO and lemgram parsing/prettifying from util to their own classes
+  - Moved AngularJS-specific utils from `@/util` to `@/angular-util`
   - Dropped the `RootScope` arg from `settings["initialization_checks"]` – use `getService()` if needed
   - Converted `compareSearches` service to non-AngularJS-dependent `savedSearches`
   - Converted `globalFilterService` service to non-AngularJS-dependent `GlobalFilterManager`

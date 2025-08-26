@@ -1,10 +1,8 @@
 /** @format */
 import _ from "lodash"
-import angular, { IControllerService, IHttpService, ILocationService, ui, type IScope } from "angular"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
-import { RootScope } from "./root-scope.types"
 import { HashParams, UrlParams } from "./urlparams"
 import { AttributeOption } from "./corpus_listing"
 import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
@@ -23,24 +21,6 @@ export const BUILD_HASH = __webpack_hash__
 export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
     Object.fromEntries(keys.map((key) => [key, getValue(key)]))
 
-/** Mapping from service names to their TS types. */
-type ServiceTypes = {
-    $controller: IControllerService
-    $http: IHttpService
-    $location: LocationService
-    $rootScope: RootScope
-    $uibModal: ui.bootstrap.IModalService
-    store: StoreService
-    // Add types here as needed.
-}
-
-/** Extends the Angular Location service to assign types for supported URL hash params. */
-export type LocationService = Omit<ILocationService, "search"> & {
-    search(): HashParams
-    search(search: HashParams): LocationService
-    search<K extends keyof HashParams>(search: K, paramValue: HashParams[K] | any): LocationService
-}
-
 /** Get a parameter from the `?<key>=<value>` part of the URL. */
 export const getUrlParam = <K extends keyof UrlParams>(key: K) =>
     new URLSearchParams(window.location.search).get(key) as UrlParams[K]
@@ -52,32 +32,6 @@ export const getUrlParam = <K extends keyof UrlParams>(key: K) =>
  */
 export const getUrlHash = <K extends keyof HashParams>(key: K) =>
     new URLSearchParams(window.location.hash.slice(2)).get(key) as HashParams[K]
-
-/** Get an Angular service from outside the Angular context. */
-export const getService = <K extends keyof ServiceTypes>(name: K): ServiceTypes[K] =>
-    angular.element("body").injector().get(name)
-
-/** Wraps `scope.$apply()` to interfere less with the digest cycle (?) */
-export const safeApply = <R>(scope: IScope, fn: (scope: IScope) => R): R =>
-    scope.$$phase || scope.$root.$$phase ? fn(scope) : scope.$apply(fn)
-
-/** Safely (?) use an Angular service from outside the Angular context. */
-export const withService = <K extends keyof ServiceTypes, R>(name: K, fn: (service: ServiceTypes[K]) => R) =>
-    safeApply(getService("$rootScope"), () => fn(getService(name)))
-
-/**
- * Get values from the URL search string via Angular.
- * Only use this in code outside Angular. Inside, use `$location.search()`.
- */
-export const locationSearchGet = <K extends keyof HashParams>(key: K): HashParams[K] =>
-    withService("$location", ($location) => ($location.search() as HashParams)[key])
-
-/**
- * Set values in the URL search string via Angular.
- * Only use this in code outside Angular. Inside, use `$location.search()`.
- */
-export const locationSearchSet = <K extends keyof HashParams>(name: K, value: HashParams[K]): LocationService =>
-    withService("$location", ($location) => $location.search(name, value))
 
 /**
  * Allows a given class to be overridden before instantiation.

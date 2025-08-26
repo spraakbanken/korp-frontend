@@ -1,7 +1,8 @@
 /** @format */
 import isObject from "lodash/isObject"
 import settings from "@/settings"
-import { getService, getUrlHash } from "@/util"
+import { getUrlHash } from "@/util"
+import { getService } from "@/angular-util"
 import type { LangString, LocLangMap, LocMap } from "@/i18n/types"
 import { locData } from "@/loc-data"
 
