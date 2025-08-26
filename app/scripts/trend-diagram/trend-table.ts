@@ -11,7 +11,7 @@ export type TableRow = {
     [timestamp: `${number}${string}`]: AbsRelSeq
 }
 
-export function renderTable(store: StoreService, el: JQLite, series: Series[]) {
+export function renderTable(store: StoreService, el: HTMLElement, series: Series[]) {
     const rows: TableRow[] = []
     const columnsMap: Record<string, Slick.Column<any>> = {}
     for (const seriesRow of series) {
@@ -55,6 +55,5 @@ export function renderTable(store: StoreService, el: JQLite, series: Series[]) {
         enableColumnReorder: false,
         forceFitColumns: false,
     })
-    el.width("100%")
     return grid
 }

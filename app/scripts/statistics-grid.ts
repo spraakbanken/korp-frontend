@@ -1,5 +1,4 @@
 /** @format */
-import "slickgrid/lib/jquery.event.drag-2.3.0"
 import "slickgrid/slick.core"
 import "slickgrid/slick.grid"
 import "slickgrid/plugins/slick.checkboxselectcolumn"

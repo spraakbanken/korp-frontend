@@ -104,7 +104,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
 
             <div class="preview" ng-show="isGraph"></div>
 
-            <div class="time_table" style="margin-top:20px" ng-show="mode == 'table'"></div>
+            <div class="time_table mt-4 w-full" ng-show="mode == 'table'"></div>
             <div ng-show="mode == 'table'">
                 <select ng-model="downloadCsvType">
                     <option value="tsv">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
@@ -165,7 +165,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $scope.isGraph = ["line", "bar"].includes($scope.mode)
 
                 if ($scope.mode === "table") {
-                    const el = $(".time_table", $ctrl.$result)
+                    const el = $(".time_table", $ctrl.$result).get(0)!
                     // Render in next tick when the container is showing.
                     $timeout(() => ($ctrl.time_grid = renderTable(store, el, $ctrl.graph!.series)))
                 } else {

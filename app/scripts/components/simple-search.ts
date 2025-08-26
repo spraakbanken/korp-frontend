@@ -14,7 +14,6 @@ import "@/global-filter/global-filters"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
 import { savedSearches } from "@/saved-searches"
-import { getTimeData } from "@/timedata"
 import { getLocData } from "@/loc-data"
 
 type SimpleSearchController = IController & {

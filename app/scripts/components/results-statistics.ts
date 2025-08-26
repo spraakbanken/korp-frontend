@@ -99,9 +99,7 @@ angular.module("korpApp").component("resultsStatistics", {
                         if ($scope.cqp) s.makeRequest()
                     }
 
-                    // workaround for bug in slickgrid
-                    // slickgrid should add this automatically, but doesn't
-                    $("#myGrid").css("position", "relative")
+                    // Re-fit grid in case it was generated while another tab was active
                     $(window).trigger("resize")
                 }
             }
