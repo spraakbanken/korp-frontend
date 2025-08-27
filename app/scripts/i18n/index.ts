@@ -24,12 +24,8 @@ export function getLang(): string {
  */
 export function loc(key: string, lang?: string) {
     lang = lang || getLang()
-    try {
-        return locData![lang][key]
-    } catch (e) {
-        console.warn(`No localization data for key ${key} in language ${lang}`)
-        return key
-    }
+    const out = locData?.[lang][key]
+    return out ?? key
 }
 
 /**
