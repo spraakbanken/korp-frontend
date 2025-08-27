@@ -51,13 +51,14 @@ export class RelationsProxy extends ProxyBase<"relations"> {
             throw new RelationsParseError("Must have a single condition")
         const condition = conditions[0][0]
 
-        if (!["word", "sense", "saldo"].includes(condition.type)) throw new RelationsParseError(`Attribute not allowed`)
+        const isWord = condition.type == "word" && condition.op == "="
+        const isLemgram = condition.type == "lex" && condition.op == "contains"
+        if (!isWord && !isLemgram) throw new RelationsParseError(`Attribute/operator not allowed`)
 
-        if (condition.op != "=") throw new RelationsParseError(`Operator must be equality`)
         if (!condition.val) throw new RelationsParseError("Condition value must not be empty")
 
         return {
-            type: condition.type == "word" ? "word" : "lemgram",
+            type: isWord ? "word" : "lemgram",
             word: condition.val as string,
         }
     }
