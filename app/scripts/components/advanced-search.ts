@@ -1,5 +1,6 @@
 /** @format */
 import angular, { IController, IScope } from "angular"
+import { isEqual } from "lodash"
 import { html, splitFirst } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/components/search-submit"
@@ -74,15 +75,18 @@ angular.module("korpApp").component("advancedSearch", {
             store.watch("extendedCqp", () => ($scope.extendedCqp = store.extendedCqp || ""))
             store.watch("simpleCqp", () => ($scope.simpleCqp = store.simpleCqp || ""))
 
-            store.watch("search", restoreSearch)
-            store.watch("cqp", restoreSearch)
-            function restoreSearch() {
+            // Restore search when set via URL
+            store.watch("search", () => {
                 // For advanced, `search` has the format `cqp|<query>`
                 const [type, val] = splitFirst("|", store.search || "")
                 if (type != "cqp" || !val) return
                 $ctrl.cqp = val
-                store.activeSearch = { cqp: $ctrl.cqp }
-            }
+
+                const newSearch = { cqp: $ctrl.cqp }
+                if (!isEqual(store.activeSearch, newSearch)) {
+                    store.activeSearch = newSearch
+                }
+            })
 
             $ctrl.onSearch = () => {
                 store.page = 0

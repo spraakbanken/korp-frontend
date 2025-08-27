@@ -87,6 +87,7 @@ export type StoreBase = {
         listener: (newValue: Store[K], oldValue: Store[K]) => void,
         deep?: boolean
     ) => void
+    watchGroup: (subjects: (keyof Store)[], listener: () => void) => void
 }
 
 export type StoreService = StoreBase & Store
@@ -201,6 +202,7 @@ angular.module("korpApp").factory("store", [
             get: (key) => rootScopeStore[key],
             set: (key, value) => (rootScopeStore[key] = value),
             watch: (subject, listener, deep) => $rootScope.$watch(subject, listener, deep),
+            watchGroup: (subject, listener) => $rootScope.$watchGroup(subject, listener),
         }
 
         const handler: ProxyHandler<StoreService> = {

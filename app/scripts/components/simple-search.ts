@@ -1,5 +1,6 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
+import { isEqual } from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { createCondition, expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
@@ -14,7 +15,6 @@ import "@/global-filter/global-filters"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
 import { savedSearches } from "@/saved-searches"
-import { getLocData } from "@/loc-data"
 
 type SimpleSearchController = IController & {
     input: string
@@ -134,24 +134,23 @@ angular.module("korpApp").component("simpleSearch", {
             store.watch("prefix", () => ($scope.prefix = store.prefix))
             store.watch("suffix", () => ($scope.suffix = store.suffix))
 
-            store.watch("search", restoreSearch)
-            store.watch("cqp", restoreSearch)
-            function restoreSearch() {
+            // Restore search when set via URL
+            store.watch("search", () => {
                 // For simple, `search` has the format `{word,lemgram}|<value>`
                 const [type, val] = splitFirst("|", store.search || "")
                 if (type != "word" && type != "lemgram") return
-                // Wait for loc data used by autoc placeholder
-                // TODO Make autoc refresh when loc data is ready instead, remove this $timeout
-                $timeout(async () => {
-                    await getLocData()
+
+                // Wait for global filters and locale data
+                $timeout(() => {
                     // Restore input
                     const isPlain = type == "word"
                     const input = isPlain ? val : unregescape(val)
                     ctrl.onChange(input, isPlain)
+
                     // Trigger search
                     commitSearch()
                 })
-            }
+            })
 
             // Sync between word part inputs
             $scope.$watch("prefix", () => ($scope.midfix = $scope.prefix && $scope.suffix))
@@ -183,7 +182,7 @@ angular.module("korpApp").component("simpleSearch", {
                 store.page = 0
 
                 matomoSend("trackEvent", "Search", "Submit search", "Simple")
-                commitSearch()
+                commitSearch(true)
             }
 
             ctrl.getCQP = function () {
@@ -219,12 +218,13 @@ angular.module("korpApp").component("simpleSearch", {
                 savedSearches.push(name, ctrl.getCQP())
             }
 
-            function commitSearch() {
+            function commitSearch(force = false) {
                 const cqp = ctrl.getCQP()
                 store.simpleCqp = expandOperators(cqp)
-                store.activeSearch = {
-                    type: ctrl.isRawInput ? "word" : "lemgram",
-                    cqp,
+                const type = ctrl.isRawInput ? "word" : "lemgram"
+                const newSearch = { type, cqp } as const
+                if (!isEqual(store.activeSearch, newSearch) || force) {
+                    store.activeSearch = newSearch
                 }
             }
 

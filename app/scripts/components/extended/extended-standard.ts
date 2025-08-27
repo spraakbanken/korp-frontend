@@ -1,5 +1,6 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
+import { isEqual } from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
@@ -104,16 +105,16 @@ angular.module("korpApp").component("extendedStandard", {
                 })
             })
 
-            store.watch("search", restoreSearch)
-            store.watch("cqp", restoreSearch)
-            function restoreSearch() {
+            // Restore search when set via URL
+            store.watchGroup(["search", "cqp"], () => {
                 // For extended, `search` is just "cqp" and the query is in `cqp`
                 if (store.search != "cqp" || !store.cqp) return
                 ctrl.cqpChange(store.cqp)
-                triggerSearch()
-            }
+                // Wait for global filters
+                $timeout(() => triggerSearch())
+            })
 
-            function triggerSearch() {
+            function triggerSearch(force = false) {
                 store.page = 0
                 store.in_order = !$scope.freeOrder
                 store.within = ctrl.within
@@ -125,12 +126,15 @@ angular.module("korpApp").component("extendedStandard", {
                     cqp = stringify(mergeCqpExprs(parse(cqp || "[]"), store.globalFilter))
                 }
 
-                store.activeSearch = { cqp }
+                const newSearch = { cqp }
+                if (!isEqual(store.activeSearch, newSearch) || force) {
+                    store.activeSearch = newSearch
+                }
             }
 
             ctrl.onSearch = () => {
                 matomoSend("trackEvent", "Search", "Submit search", "Extended")
-                triggerSearch()
+                triggerSearch(true)
             }
 
             ctrl.onSearchSave = (name: string) => {

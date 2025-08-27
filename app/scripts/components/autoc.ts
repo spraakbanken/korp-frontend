@@ -123,6 +123,7 @@ angular.module("korpApp").component("autoc", {
                     return
                 }
                 if (ctrl.type === "lemgram") {
+                    // TODO If placeholder is set immediately, loc data is not ready here and the POS is not translated
                     return Lemgram.parse(placeholder)?.toString()
                 } else {
                     return Saldo.parse(placeholder)?.toString()
