@@ -30,6 +30,7 @@
 - The JSON button is a regular button, not an image, and downloads the stored, actual response instead of sending a new request
 - Stats/trend CSV export uses central abs/rel switch, not its own select
 - In extended search, the query is stored in URL only when searching, not dynamically while editing
+- Search history is broken in parallel mode, and is disabled for now
 
 ### Fixed
 

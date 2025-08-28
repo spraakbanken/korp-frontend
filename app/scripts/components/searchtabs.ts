@@ -47,7 +47,7 @@ angular.module("korpApp").component("searchtabs", {
                     <compare-search></compare-search>
                 </uib-tab>
 
-                <div class="flex justify-end items-center">
+                <div ng-if="!$ctrl.parallelMode" class="flex justify-end items-center">
                     <search-history class="hidden md:block shrink min-w-0 m-1"></search-history>
                 </div>
             </uib-tabset>
