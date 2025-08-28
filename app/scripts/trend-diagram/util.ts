@@ -225,10 +225,7 @@ export function createTrendTableCsv(series: Series[], relative: boolean, csvType
             return row.abs_data[i].y
         }
     }
-    const data = series.map((row) => [
-        row.name === "&Sigma;" ? "Σ" : row.name,
-        ...row.data.map((cell) => formatCell(row, cell)),
-    ])
+    const data = series.map((row) => [row.name, ...row.data.map((cell) => formatCell(row, cell))])
 
     // Output CSV
     const delimiter = csvType == "tsv" ? "\t" : ";"

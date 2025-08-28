@@ -108,6 +108,10 @@ export function suffixedNumbers(num: number, lang: string) {
 export const kebabize = (str: string): string =>
     [...str].map((x, i) => (x == x.toUpperCase() ? (i ? "-" : "") + x.toLowerCase() : x)).join("")
 
+/** Replace HTML special chars */
+export const escapeHtml = (str: string): string =>
+    str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+
 /** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
 export const valfilter = (attrobj: AttributeOption): string =>
     attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value

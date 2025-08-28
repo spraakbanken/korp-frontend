@@ -35,6 +35,7 @@
 ### Fixed
 
 - Improve statistics download [#154](https://github.com/spraakbanken/korp-frontend/issues/154)
+- Statistics grid error if attribute value contains HTML [#472](https://github.com/spraakbanken/korp-frontend/issues/472)
 - Map examples empty if query uses repetition [#475](https://github.com/spraakbanken/korp-frontend/issues/475)
 - Prevent empty "Group by" selector when changing corpus
 - Prevent relative frequency "NaN" when loading first KWIC result

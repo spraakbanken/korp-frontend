@@ -161,7 +161,7 @@ export class TrendGraph {
         const createTotalSeries = (stats: GraphStats) => ({
             data: getSeriesData(stats.relative, zoom),
             color: "steelblue",
-            name: "&Sigma;",
+            name: "Σ",
             cqp,
             abs_data: getSeriesData(stats.absolute, zoom),
         })

@@ -1,7 +1,7 @@
 /** @format */
 import moment from "moment"
 import { FORMATS, Series } from "./util"
-import { formatFrequency } from "@/util"
+import { escapeHtml, formatFrequency } from "@/util"
 import { sortedIndexOf } from "lodash"
 import { AbsRelSeq } from "@/statistics/statistics.types"
 import { StoreService } from "@/services/store"
@@ -41,8 +41,7 @@ export function renderTable(store: StoreService, el: HTMLElement, series: Series
         {
             name: "Hit",
             field: "label",
-            // This formatter looks pointless but is needed to prevent escaping `&Sigma;`
-            formatter: (row, cell, value) => value,
+            formatter: (row, cell, value) => escapeHtml(value) || `<span class="opacity-50">&empty;</span>`,
         },
     ]
     for (const key of Object.keys(columnsMap).sort()) {
