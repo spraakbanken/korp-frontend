@@ -8,7 +8,6 @@ import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { StoreService } from "@/services/store"
 import { getEnabledLangs, getParallelCqp, ParallelQuery } from "@/parallel/parallel-cqp"
-import { RootScope } from "@/root-scope.types"
 
 type ExtendedParallelController = IController & {
     langs: ParallelQuery[]
@@ -67,10 +66,9 @@ angular.module("korpApp").component("extendedParallel", {
     },
     controller: [
         "$location",
-        "$rootScope",
         "$timeout",
         "store",
-        function ($location: LocationService, $rootScope: RootScope, $timeout: ITimeoutService, store: StoreService) {
+        function ($location: LocationService, $timeout: ITimeoutService, store: StoreService) {
             const newLang = (lang = settings.start_lang!, cqp = "[]") => ({ lang, cqp, negate: false })
 
             const ctrl = this as ExtendedParallelController
@@ -78,10 +76,14 @@ angular.module("korpApp").component("extendedParallel", {
 
             const corpusListing = settings.corpusListing as ParallelCorpusListing
 
-            $rootScope.$on("restore_search", () => {
+            // Restore search when set via URL
+            store.watch("search", () => {
+                if (!store.search) return
+                // Restore input
                 ctrl.langs = store.parallel_corpora.length
                     ? store.parallel_corpora.map((lang) => newLang(lang, store.cqpParallel[lang] || "[]"))
                     : [newLang()]
+                updateCqp()
                 commitSearch()
             })
 
@@ -95,6 +97,7 @@ angular.module("korpApp").component("extendedParallel", {
             function updateCqp() {
                 store.extendedCqp = getParallelCqp(ctrl.langs)
 
+                // Sync to URL
                 store.cqpParallel = {}
                 for (const { lang, cqp } of ctrl.langs) {
                     if (lang) store.cqpParallel[lang] = cqp
@@ -115,7 +118,6 @@ angular.module("korpApp").component("extendedParallel", {
             }
 
             function commitSearch() {
-                updateCqp()
                 matomoSend("trackEvent", "Search", "Submit search", "Extended")
                 store.activeSearch = { cqp: store.extendedCqp! }
             }
@@ -133,13 +135,11 @@ angular.module("korpApp").component("extendedParallel", {
             ctrl.addLangRow = function () {
                 ctrl.langs.push(newLang(ctrl.getEnabledLangs()[0]))
                 ctrl.onLangChange()
-                updateCqp()
             }
 
             ctrl.removeLangRow = function () {
                 ctrl.langs.pop()
                 ctrl.onLangChange()
-                updateCqp()
             }
         },
     ],
