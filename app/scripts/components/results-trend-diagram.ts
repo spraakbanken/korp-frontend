@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController, IRootElementService, IScope, ITimeoutService } from "angular"
-import _ from "lodash"
+import { throttle } from "lodash"
 import { Moment } from "moment"
 import { expandOperators } from "@/cqp_parser/cqp"
 import { downloadFile, html } from "@/util"
@@ -252,7 +252,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             function setupInteraction() {
                 $(window).on(
                     "resize",
-                    _.throttle(() => {
+                    throttle(() => {
                         if ($ctrl.$result.is(":visible")) {
                             const width = $(".tab-pane").width()
                             $ctrl.graph!.graph.setSize()

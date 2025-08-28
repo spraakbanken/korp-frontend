@@ -1,5 +1,4 @@
 /** @format */
-import _ from "lodash"
 import settings from "@/settings"
 import { CountsMerged } from "@/backend/types/count"
 import { Dataset, isTotalRow, StatisticsWorkerMessage, StatisticsProcessed, SearchParams } from "./statistics.types"

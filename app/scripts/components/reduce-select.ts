@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { isEqual, keyBy } from "lodash"
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import { AttributeOption } from "@/corpus_listing"
@@ -98,7 +98,7 @@ angular.module("korpApp").component("reduceSelect", {
 
             $ctrl.$onChanges = (changes) => {
                 if ("items" in changes && $ctrl.items) {
-                    scope.keyItems = _.keyBy($ctrl.items, "value")
+                    scope.keyItems = keyBy($ctrl.items, "value")
                     scope.hasWordAttrs = $ctrl.items.some((item) => item.group == "word_attr")
                     scope.hasStructAttrs = $ctrl.items.some((item) => item.group == "sentence_attr")
                 }
@@ -121,8 +121,8 @@ angular.module("korpApp").component("reduceSelect", {
 
                 const changes = {
                     // Only set values that have changed
-                    selected: !_.isEqual(selected, $ctrl.selected) ? selected : undefined,
-                    insensitive: !_.isEqual(insensitive, $ctrl.insensitive) ? insensitive : undefined,
+                    selected: !isEqual(selected, $ctrl.selected) ? selected : undefined,
+                    insensitive: !isEqual(insensitive, $ctrl.insensitive) ? insensitive : undefined,
                 }
 
                 // Only notify if something changed

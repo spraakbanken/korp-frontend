@@ -1,6 +1,5 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
-import _ from "lodash"
 import { html } from "@/util"
 import { ApiKwic } from "@/backend/types"
 import "@/components/korp-error"

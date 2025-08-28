@@ -1,6 +1,5 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
-import _ from "lodash"
 import kwicProxyFactory, { type KwicProxy } from "@/backend/proxy/kwic-proxy"
 import { ApiKwic } from "@/backend/types"
 import { QueryResponse } from "@/backend/types/query"

@@ -1,10 +1,8 @@
 /** @format */
-import _ from "lodash"
 import { locAttribute } from "@/i18n"
 import { html } from "@/util"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
-import { LocMap } from "@/i18n/types"
 import { StoreService } from "@/services/store"
 import { AttributeOption } from "@/corpus_listing"
 import { loadOptions } from "@/extended-search"

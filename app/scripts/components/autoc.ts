@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { memoize } from "lodash"
 import angular, { IController, IPromise } from "angular"
 import settings from "@/settings"
 import { html } from "@/util"
@@ -110,7 +110,7 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.typeaheadClose = function () {
                 if (ctrl.errorOnEmpty) {
-                    ctrl.isError = !(ctrl.placeholder != null && _.isEmpty(ctrl.textInField))
+                    ctrl.isError = !(ctrl.placeholder != null && !ctrl.textInField)
                 }
             }
 
@@ -118,7 +118,7 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.sensify = Saldo.parse
 
-            ctrl.placeholderToString = _.memoize(function (placeholder: string) {
+            ctrl.placeholderToString = memoize(function (placeholder: string) {
                 if (!placeholder) {
                     return
                 }

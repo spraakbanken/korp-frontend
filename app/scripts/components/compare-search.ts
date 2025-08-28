@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController } from "angular"
-import _ from "lodash"
+import { isEqual } from "lodash"
 import settings from "@/settings"
 import { html, valfilter } from "@/util"
 import { RootScope } from "@/root-scope.types"
@@ -73,7 +73,7 @@ angular.module("korpApp").component("compareSearch", {
 
             function updateSavedSearches() {
                 const searches = savedSearches.list()
-                if (!_.isEqual($ctrl.savedSearches, searches)) {
+                if (!isEqual($ctrl.savedSearches, searches)) {
                     $ctrl.savedSearches = searches
                     $ctrl.cmp1 = searches[0]
                     $ctrl.cmp2 = searches[1]

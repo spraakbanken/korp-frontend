@@ -1,6 +1,5 @@
 /** @format */
 import angular, { ICompileService, IController, IScope } from "angular"
-import _ from "lodash"
 import statemachine from "@/statemachine"
 import "@/components/readingmode"
 import { CorpusTransformed } from "@/settings/config-transformed.types"

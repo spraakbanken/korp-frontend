@@ -1,5 +1,4 @@
 /** @format */
-import _ from "lodash"
 import angular, { IScope, ITimeoutService } from "angular"
 import { UtilsService } from "@/services/utils"
 import { LocationService } from "@/angular-util"

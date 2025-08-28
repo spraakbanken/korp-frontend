@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { isFunction } from "lodash"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
@@ -115,7 +115,7 @@ export function getConfigurable<T>(
 ): T | undefined {
     const name = typeof definition === "string" ? definition : definition.name
     const widget = registry[name]
-    if (_.isFunction(widget)) {
+    if (isFunction(widget)) {
         const options = typeof definition == "object" ? definition.options : {}
         return widget(options)
     }

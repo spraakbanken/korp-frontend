@@ -1,6 +1,5 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
-import _ from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { createCondition, expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"

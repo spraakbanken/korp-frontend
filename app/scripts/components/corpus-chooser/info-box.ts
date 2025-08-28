@@ -1,6 +1,5 @@
 /** @format */
 import angular, { IController } from "angular"
-import _ from "lodash"
 import { html } from "@/util"
 import { LangString } from "@/i18n/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
@@ -83,7 +82,7 @@ angular.module("korpApp").component("ccInfoBox", {
 
                 if (!isFolder($ctrl.object)) {
                     $ctrl.limitedAccess = $ctrl.object["limited_access"] || false
-                    $ctrl.context = _.keys($ctrl.object.context).length > 1
+                    $ctrl.context = Object.keys($ctrl.object.context).length > 1
                     $ctrl.langStats = getSizeInfo($ctrl.object)
                     $ctrl.lastUpdated = $ctrl.object.info.Updated
                     $ctrl.link = makeLink($ctrl.object.id, store.lang)

@@ -1,5 +1,4 @@
 /** @format */
-import _ from "lodash"
 import angular, { IController, IScope } from "angular"
 import { loc } from "@/i18n"
 import { html } from "@/util"

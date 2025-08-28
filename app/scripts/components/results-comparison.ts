@@ -1,6 +1,5 @@
 /** @format */
 import angular, { IController, IQService, IScope } from "angular"
-import _ from "lodash"
 import { html } from "@/util"
 import { getStringifier, Stringifier } from "@/stringify"
 import { locAttribute } from "@/i18n"

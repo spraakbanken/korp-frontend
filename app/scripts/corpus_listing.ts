@@ -1,5 +1,19 @@
 /** @format */
-import _ from "lodash"
+import {
+    compact,
+    intersection,
+    isEmpty,
+    maxBy,
+    merge,
+    minBy,
+    pick,
+    pickBy,
+    sortBy,
+    sum,
+    union,
+    uniq,
+    zipObject,
+} from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"
 import { locObj } from "@/i18n"
@@ -26,7 +40,7 @@ export class CorpusListing {
 
     constructor(corpora: Record<string, CorpusTransformed>) {
         this.struct = corpora
-        this.corpora = _.values(corpora)
+        this.corpora = Object.values(corpora)
         this.selected = []
     }
 
@@ -39,13 +53,13 @@ export class CorpusListing {
     }
 
     map<T>(func: (corpus: CorpusTransformed) => T): T[] {
-        return _.map(this.corpora, func)
+        return this.corpora.map(func)
     }
 
     /** Creates a new CorpusListing instance from an id subset */
     subsetFactory(ids: string[]) {
         ids = ids.map((id) => id.toLowerCase())
-        const cl = new CorpusListing(_.pick(this.struct, ...ids))
+        const cl = new CorpusListing(pick(this.struct, ...ids))
         cl.select(ids)
         return cl
     }
@@ -57,7 +71,7 @@ export class CorpusListing {
 
     // Returns an array of all the selected corpora's IDs in uppercase
     getSelectedCorpora() {
-        return _.map(this.selected, "id")
+        return this.selected.map((corpus) => corpus.id)
     }
 
     select(idArray: string[]): void {
@@ -66,23 +80,23 @@ export class CorpusListing {
     }
 
     mapSelectedCorpora<T>(f: (corpus: CorpusTransformed) => T): T[] {
-        return _.map(this.selected, f)
+        return this.selected.map(f)
     }
 
     // takes an array of mapping objs and returns their intersection
     _mapping_intersection<T extends {}>(mappingArray: T[]): T {
         return (
-            _.reduce(mappingArray, function (a: T, b: T) {
-                const keys_intersect = _.intersection(_.keys(a), _.keys(b)) as (keyof T)[]
-                const to_mergea = _.pick(a, ...keys_intersect)
-                const to_mergeb = _.pick(b, ...keys_intersect)
-                return _.merge({}, to_mergea, to_mergeb)
+            mappingArray.reduce(function (a: T, b: T) {
+                const keys_intersect = intersection(Object.keys(a), Object.keys(b)) as (keyof T)[]
+                const to_mergea = pick(a, ...keys_intersect)
+                const to_mergeb = pick(b, ...keys_intersect)
+                return merge({}, to_mergea, to_mergeb)
             }) || ({} as T)
         )
     }
 
     _mapping_union<T extends {}>(mappingArray: T[]): T {
-        return _.reduce(mappingArray, (a, b) => _.merge(a, b), {} as T)
+        return mappingArray.reduce((a, b) => merge(a, b), {} as T)
     }
 
     getCurrentAttributes(lang?: string) {
@@ -118,33 +132,33 @@ export class CorpusListing {
             // Set the is_struct_attr flag for all struct attributes
             Object.values(corpus["struct_attributes"]).forEach((attr) => (attr["is_struct_attr"] = true))
             // if a position attribute is declared as structural, include here
-            const posAttrs = _.pickBy(corpus.attributes, (val, key) => val["is_struct_attr"])
+            const posAttrs = pickBy(corpus.attributes, (val, key) => val["is_struct_attr"])
             return { ...posAttrs, ...corpus["struct_attributes"] }
         })
         const rest = this._invalidateAttrs(attrs)
 
         // TODO this code merges datasets from attributes with the same name and
         // should be moved to the code for extended controller "datasetSelect"
-        const withDataset: [string, Attribute][] = _.toPairs(rest).filter((item) => item[1].dataset)
+        const withDataset: [string, Attribute][] = Object.entries(rest).filter((item) => item[1].dataset)
         $.each(withDataset, function (i, item) {
             const key = item[0]
             const val = item[1]
             return $.each(attrs, function (j, origStruct) {
                 if (origStruct[key] && origStruct[key].dataset) {
                     let ds = origStruct[key].dataset
-                    if ($.isArray(ds)) {
-                        ds = _.zipObject(ds, ds)
+                    if (Array.isArray(ds)) {
+                        ds = zipObject(ds, ds)
                     }
 
-                    if (_.isArray(val.dataset)) {
-                        val.dataset = _.zipObject(val.dataset, val.dataset)
+                    if (Array.isArray(val.dataset)) {
+                        val.dataset = zipObject(val.dataset, val.dataset)
                     }
                     return $.extend(val.dataset, ds)
                 }
             })
         })
 
-        return $.extend(rest, _.fromPairs(withDataset))
+        return $.extend(rest, Object.fromEntries(withDataset))
     }
     // End TODO
 
@@ -153,14 +167,14 @@ export class CorpusListing {
             ...this.getCurrentAttributes(this.getReduceLang()),
             ...this.getStructAttrs(this.getReduceLang()),
         }
-        return _.pickBy(allAttrs, (attribute) => attribute["display_type"] !== "hidden")
+        return pickBy(allAttrs, (attribute) => attribute["display_type"] !== "hidden")
     }
 
     /** Compile list of filters applicable to all selected corpora. */
     getDefaultFilters(): Record<string, Attribute> {
         // Collect filters common to all selected corpora
-        const attrs = _.intersection(...this.selected.map((corpus) => corpus["attribute_filters"] || []))
-        return _.pick(this.structAttributes, ...attrs)
+        const attrs = intersection(...this.selected.map((corpus) => corpus["attribute_filters"] || []))
+        return pick(this.structAttributes, ...attrs)
     }
 
     _invalidateAttrs(attrs: Record<string, Attribute>[]) {
@@ -191,20 +205,22 @@ export class CorpusListing {
     }
 
     stringifySelected(onlyMain?: boolean): string {
-        return _.map(this.selected, "id")
+        return this.selected
+            .map((corpus) => corpus.id)
             .map((a) => a.toUpperCase())
             .join(",")
     }
 
     stringifyAll(): string {
-        return _.map(this.corpora, "id")
+        return this.corpora
+            .map((corpus) => corpus.id)
             .map((a) => a.toUpperCase())
             .join(",")
     }
 
     getWithinKeys(): string[] {
-        const struct = _.map(this.selected, (corpus) => _.keys(corpus.within))
-        return _.union(...struct)
+        const struct = this.selected.map((corpus) => Object.keys(corpus.within))
+        return union(...struct)
     }
 
     getContextParams(isReading: boolean) {
@@ -213,7 +229,7 @@ export class CorpusListing {
         // Use specified corpora or fall back to selected
         const output: string[] = []
         for (let corpus of this.selected) {
-            const contexts = _.keys(corpus.context)
+            const contexts = Object.keys(corpus.context)
             if (!contexts.includes(prefer)) {
                 if (contexts.length > 1 && contexts.includes(avoid)) {
                     contexts.splice(contexts.indexOf(avoid), 1)
@@ -222,7 +238,7 @@ export class CorpusListing {
             }
         }
         return {
-            context: _.compact(output).join(),
+            context: compact(output).join(),
             default_context: prefer,
         }
     }
@@ -254,12 +270,12 @@ export class CorpusListing {
                 }
                 return acc
             },
-            _.pickBy(allWithins[0], (val, within) => {
+            pickBy(allWithins[0], (val, within) => {
                 // ignore withins that start with numbers, such as "5 sentence"
                 return !within.match(/^[0-9]/)
             })
         )
-        if (_.isEmpty(withins)) {
+        if (isEmpty(withins)) {
             return { sentence: "sentence" }
         }
         return withins
@@ -278,20 +294,19 @@ export class CorpusListing {
         }
 
         return {
-            show: _.uniq(show).join(),
-            show_struct: _.uniq(show_struct).join(),
+            show: uniq(show).join(),
+            show_struct: uniq(show_struct).join(),
         }
     }
 
     getTimeInterval(): [number, number] | undefined {
-        const all = _(this.selected)
-            .map("time")
+        const all = this.selected
+            .map((corpus) => corpus.time)
             .filter((item) => item != null)
-            .map(_.keys)
-            .flatten()
+            .map(Object.keys)
+            .flat()
             .map(Number)
             .sort((a, b) => a - b)
-            .value()
 
         const from = all[0]
         const to = all.pop()
@@ -300,26 +315,21 @@ export class CorpusListing {
 
     getMomentInterval(): [Moment, Moment] | undefined {
         const infoGetter = (prop: "FirstDate" | "LastDate") => {
-            return _(this.selected)
-                .map("info")
-                .map(prop)
-                .compact()
-                .map((item) => moment(item))
-                .value()
+            return compact(this.selected.map((corpus) => corpus.info[prop])).map((item) => moment(item))
         }
 
         const froms = infoGetter("FirstDate")
         const tos = infoGetter("LastDate")
 
-        const from = _.minBy(froms, (item) => item.unix())
-        const to = _.maxBy(tos, (item) => item.unix())
+        const from = minBy(froms, (item) => item.unix())
+        const to = maxBy(tos, (item) => item.unix())
         return from && to ? [from, to] : undefined
     }
 
     /** Percentage of selected material that is undated. */
     getUndatedRatio(): number {
-        const non_time = _.sum(this.selected.map((corpus) => corpus.non_time || 0))
-        const totalsize = _.sum(this.selected.map((corpus) => Number(corpus.info.Size) || 0))
+        const non_time = sum(this.selected.map((corpus) => corpus.non_time || 0))
+        const totalsize = sum(this.selected.map((corpus) => Number(corpus.info.Size) || 0))
         return non_time / totalsize
     }
 
@@ -375,7 +385,7 @@ export class CorpusListing {
             }
         }
 
-        sentAttrs = _.sortBy(sentAttrs, (item) => locObj(item.label))
+        sentAttrs = sortBy(sentAttrs, (item) => locObj(item.label))
 
         return sentAttrs
     }
@@ -404,20 +414,20 @@ export class CorpusListing {
     /** Get list of morphology ids used by currently selected corpora. */
     getMorphologies(): string[] {
         const morphologies = this.mapSelectedCorpora((corpus) => (corpus.morphology || "").split("|")).flat()
-        return _.uniq(_.compact(morphologies))
+        return uniq(compact(morphologies))
     }
 
     // update attributes so that we don't need to check them multiple times
     // currently done only for common and struct attributes, but code for
     // positional could be added here, but is tricky because parallel mode lang might be needed
     updateAttributes(): void {
-        const common_keys = _.compact(_.flatten(_.map(this.selected, (corp) => _.keys(corp.common_attributes))))
-        this.commonAttributes = _.pick(settings["common_struct_types"], ...common_keys) as Record<string, Attribute>
+        const common_keys = compact(this.selected.flatMap((corp) => Object.keys(corp.common_attributes || {})))
+        this.commonAttributes = pick(settings["common_struct_types"], ...common_keys) as Record<string, Attribute>
         this.structAttributes = this._getStructAttrs()
     }
 
     isDateInterval(type: string): boolean {
-        if (_.isEmpty(type)) {
+        if (!type) {
             return false
         }
         const attribute = type.split("_.").slice(-1)[0]

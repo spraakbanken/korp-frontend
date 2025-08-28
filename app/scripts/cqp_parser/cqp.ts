@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { cloneDeep, compact, maxBy, minBy, sortBy } from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"
 import { parse } from "./CQPParser.peggy"
@@ -79,7 +79,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
         expanded_format = false
     }
     const output: string[] = []
-    cqp_obj = prioSort(_.cloneDeep(cqp_obj))
+    cqp_obj = prioSort(cloneDeep(cqp_obj))
 
     for (let token of cqp_obj) {
         if (typeof token === "string") {
@@ -102,8 +102,8 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
                 }
 
                 let flagstr = ""
-                if (flags && _.keys(flags).length) {
-                    flagstr = ` %${_.keys(flags).join("")}`
+                if (flags && Object.keys(flags).length) {
+                    flagstr = ` %${Object.keys(flags).join("")}`
                 }
 
                 if (type === "word" && val === "") {
@@ -118,7 +118,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
                     or_array.push(out + flagstr)
                 }
             }
-            if (!_.isEmpty(or_array)) {
+            if (or_array.length) {
                 outer_and_array.push(or_array)
             }
         }
@@ -126,8 +126,8 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
         let or_out: string[] = outer_and_array.map((x) => (x.length > 1 ? `(${x.join(" | ")})` : x.join(" | ")))
 
         if (token.bound) {
-            or_out = _.compact(or_out)
-            for (let bound of _.keys(token.bound)) {
+            or_out = compact(or_out)
+            for (let bound of Object.keys(token.bound)) {
                 or_out.push(`${bound}(sentence)`)
             }
         }
@@ -176,8 +176,8 @@ export function getTimeInterval(obj: CqpQuery): [Moment, Moment] | undefined {
     if (!froms.length) {
         return
     }
-    const from = _.minBy(froms, (m) => m.toDate())
-    const to = _.maxBy(tos, (m) => m.toDate())
+    const from = minBy(froms, (m) => m.toDate())
+    const to = maxBy(tos, (m) => m.toDate())
     return from && to ? [from, to] : undefined
 }
 
@@ -186,12 +186,12 @@ export function getTimeInterval(obj: CqpQuery): [Moment, Moment] | undefined {
  */
 export function prioSort(cqpObjs: CqpQuery) {
     const getPrio = function (or_block: Condition[]) {
-        const numbers = _.map(or_block, (item) => _.indexOf(settings.cqp_prio, item.type))
+        const numbers = or_block.map((item) => settings.cqp_prio.indexOf(item.type))
         return Math.min(...(numbers || []))
     }
 
     for (let token of cqpObjs) {
-        token.and_block = (_.sortBy(token.and_block, getPrio) as Condition[][]).reverse()
+        token.and_block = (sortBy(token.and_block, getPrio) as Condition[][]).reverse()
     }
 
     return cqpObjs

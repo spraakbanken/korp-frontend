@@ -1,6 +1,5 @@
 /** @format */
 import angular, { IController, ITimeoutService } from "angular"
-import _ from "lodash"
 import settings from "@/settings"
 import { html } from "@/util"
 import { LocationService } from "@/angular-util"
@@ -103,7 +102,7 @@ angular.module("korpApp").component("extendedParallel", {
             }
 
             ctrl.onLangChange = function () {
-                var currentLangList = _.map(ctrl.langs, "lang")
+                const currentLangList = ctrl.langs.map((lang) => lang.lang)
                 corpusListing.setActiveLangs(currentLangList)
                 store.parallel_corpora = currentLangList
             }

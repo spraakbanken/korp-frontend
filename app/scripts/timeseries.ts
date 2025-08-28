@@ -1,7 +1,5 @@
 /** @format */
-import _ from "lodash"
 import assignWith from "lodash/assignWith"
-import fromPairs from "lodash/fromPairs"
 import pickBy from "lodash/pickBy"
 import range from "lodash/range"
 import settings from "@/settings"
@@ -28,7 +26,7 @@ export const getTimeDataPairs = (): [number, number][] => timeData![0]
 export const getCountUndated = (): number => timeData![1]
 
 /** Get data size per year of all corpora. */
-export const getSeries = () => fromPairs(getTimeDataPairs()) as YearSeries
+export const getSeries = () => Object.fromEntries(getTimeDataPairs()) as YearSeries
 
 /** Get data size per year of selected corpora. */
 export function getSeriesSelected() {

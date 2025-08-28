@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController, IScope, ui } from "angular"
-import _ from "lodash"
+import { debounce, intersection } from "lodash"
 import settings from "@/settings"
 import { downloadFile, html } from "@/util"
 import { locObj } from "@/i18n"
@@ -231,7 +231,7 @@ angular.module("korpApp").component("statistics", {
             $ctrl.$onInit = () => {
                 $(window).on(
                     "resize",
-                    _.debounce(() => {
+                    debounce(() => {
                         grid?.resizeCanvas()
                         grid?.autosizeColumns()
                     }, 100)
@@ -300,7 +300,7 @@ angular.module("korpApp").component("statistics", {
 
                 // Deselect removed attributes, fall back to word
                 const names = $scope.statCurrentAttrs.map((option) => option.value)
-                const selected = _.intersection(store.stats_reduce.split(","), names)
+                const selected = intersection(store.stats_reduce.split(","), names)
                 $scope.statSelectedAttrs = selected.length > 0 ? selected : ["word"]
                 store.stats_reduce = $scope.statSelectedAttrs.join()
 
@@ -327,7 +327,7 @@ angular.module("korpApp").component("statistics", {
                 updateSearch()
             }
 
-            const updateSearch = _.debounce(() => $ctrl.onUpdateSearch(), UPDATE_DELAY)
+            const updateSearch = debounce(() => $ctrl.onUpdateSearch(), UPDATE_DELAY)
 
             function onAttrValueClick(row: Row) {
                 if (isTotalRow(row)) return
@@ -375,7 +375,7 @@ angular.module("korpApp").component("statistics", {
                 const cqp = expandCqp($ctrl.searchParams.prevNonExpandedCQP)
                 const cqpExprs = Object.fromEntries(getSubqueries())
 
-                const selectedAttributes = _.filter($ctrl.mapAttributes, "selected")
+                const selectedAttributes = $ctrl.mapAttributes.filter((attr) => attr.selected)
                 if (selectedAttributes.length > 1) {
                     console.log("Warning: more than one selected attribute, choosing first")
                 }
@@ -404,7 +404,7 @@ angular.module("korpApp").component("statistics", {
             $ctrl.mapEnabled = !!settings["map_enabled"]
 
             $ctrl.mapToggleSelected = function (index, event) {
-                _.map($ctrl.mapAttributes, (attr) => (attr.selected = false))
+                $ctrl.mapAttributes.map((attr) => (attr.selected = false))
                 $ctrl.mapAttributes[index].selected = true
                 event.stopPropagation()
             }

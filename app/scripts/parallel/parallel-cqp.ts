@@ -2,7 +2,7 @@
 import { difference, groupBy, uniq } from "lodash"
 import settings from "@/settings"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
-import { expandCqp, expandOperators } from "@/cqp_parser/cqp"
+import { expandCqp } from "@/cqp_parser/cqp"
 
 export type ParallelQuery = {
     lang: string

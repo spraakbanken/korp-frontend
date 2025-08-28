@@ -1,5 +1,4 @@
 /** @format */
-import _ from "lodash"
 import moment, { Moment } from "moment"
 import settings from "@/settings"
 import { html } from "@/util"

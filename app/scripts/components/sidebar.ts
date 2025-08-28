@@ -1,6 +1,6 @@
 /** @format */
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
-import _ from "lodash"
+import { template } from "lodash"
 import "../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
@@ -232,10 +232,10 @@ angular.module("korpApp").component("sidebar", {
                 let pairs: [string, any][] = []
                 let sortingArr: string[] = []
                 if (type === "struct") {
-                    pairs = _.toPairs(sentenceData)
+                    pairs = Object.entries(sentenceData)
                     sortingArr = $ctrl.corpusObj["_struct_attributes_order"]
                 } else if (type === "pos") {
-                    pairs = _.toPairs(wordData)
+                    pairs = Object.entries(wordData)
                     sortingArr = $ctrl.corpusObj["_attributes_order"]
                 }
 
@@ -345,7 +345,7 @@ angular.module("korpApp").component("sidebar", {
                             val = locAttribute(attrs.translation, val, $ctrl.lang)
                         }
 
-                        const inner = $(_.template(pattern)({ key: x, val }))
+                        const inner = $(template(pattern)({ key: x, val }))
 
                         // If `internal_search` is set, clicking on the value will trigger a search
                         if (attrs["internal_search"]) {
@@ -362,7 +362,7 @@ angular.module("korpApp").component("sidebar", {
                         // If `external_search` is set, clicking on the value will open the given url new tab
                         const li = $("<li></li>").data("key", x).append(inner)
                         if (attrs["external_search"]) {
-                            const url = _.template(attrs["external_search"])({ val: x })
+                            const url = template(attrs["external_search"])({ val: x })
                             li.append($(`<a href='${url}' class='external_link' target='_blank'></a>`))
                         }
 
@@ -387,7 +387,7 @@ angular.module("korpApp").component("sidebar", {
                     )
                 } else if (attrs.pattern) {
                     output.append(
-                        _.template(attrs.pattern)({
+                        template(attrs.pattern)({
                             key,
                             val: str_value,
                             pos_attrs: wordData,

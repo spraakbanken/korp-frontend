@@ -1,5 +1,4 @@
 /** @format */
-import _ from "lodash"
 import angular, { ICompileService, IController, IRootElementService, IScope, ITimeoutService } from "angular"
 import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"

@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { partition, pick } from "lodash"
 import settings from "@/settings"
 import { Factory } from "@/util"
 import { CountParams, CountsMerged } from "../types/count"
@@ -13,7 +13,7 @@ export class StatsProxy extends ProxyBase<"count"> {
 
     protected buildParams(cqp: string, attrs: string[], defaultWithin?: string, ignoreCase?: boolean): CountParams {
         /** Configs of reduced attributes keyed by name, excluding "word" */
-        const attributes = _.pick(settings.corpusListing.getReduceAttrs(), attrs)
+        const attributes = pick(settings.corpusListing.getReduceAttrs(), attrs)
 
         const missingAttrs = attrs.filter((name) => !attributes[name] && name != "word")
         if (missingAttrs.length) throw new Error(`Trying to reduce by missing attribute ${missingAttrs}`)
@@ -21,7 +21,7 @@ export class StatsProxy extends ProxyBase<"count"> {
         // Struct attrs go in the `group_by_struct` param, except if they have `group_by: group_by`.
         const isStruct = (name: string) =>
             attributes[name]?.["is_struct_attr"] && attributes[name]["group_by"] != "group_by"
-        const [groupByStruct, groupBy] = _.partition(attrs, isStruct)
+        const [groupByStruct, groupBy] = partition(attrs, isStruct)
 
         let within = settings.corpusListing.getWithinParam(defaultWithin)
         // Replace "ABC-aa|ABC-bb:link" with "ABC-aa:link"

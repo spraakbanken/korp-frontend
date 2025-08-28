@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { defaults } from "lodash"
 import settings from "korp_config"
 import { AppSettings } from "./app-settings.types"
 import { Settings } from "./settings.types"
@@ -42,7 +42,7 @@ export function setDefaultConfigValues() {
     }
 
     // Assign default values to settings properties if undefined
-    _.defaults(settings, settingsDefaults)
+    defaults(settings, settingsDefaults)
 
     // Default values depending on other settings values, possibly
     // assigned a default value above
@@ -50,7 +50,7 @@ export function setDefaultConfigValues() {
         hits_per_page_default: settings.hits_per_page_values[0],
     }
 
-    _.defaults(settings, settingsDefaultsDep)
+    defaults(settings, settingsDefaultsDep)
 }
 
 export function getDefaultWithin() {

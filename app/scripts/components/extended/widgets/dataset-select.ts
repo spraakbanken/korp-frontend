@@ -1,5 +1,4 @@
 /** @format */
-import _ from "lodash"
 import { selectTemplate, Widget, WidgetScope } from "./common"
 import { Configurable } from "@/settings/config.types"
 import { StoreService } from "@/services/store"

@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IScope } from "angular"
-import _ from "lodash"
+import { shuffle } from "lodash"
 import statemachine from "@/statemachine"
 import { html } from "@/util"
 import { LocationService } from "@/angular-util"
@@ -37,7 +37,7 @@ export default angular.module("korpApp").component("searchExamples", {
                 const examples = settings.frontpage?.examples
                 if (examples) {
                     // Pick three random examples
-                    $scope.examples = _.shuffle(examples).slice(0, 3)
+                    $scope.examples = shuffle(examples).slice(0, 3)
                 }
             }
 

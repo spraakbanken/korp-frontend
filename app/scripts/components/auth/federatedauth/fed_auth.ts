@@ -4,7 +4,6 @@
  *   If the JWT call fails, it will redirect the user to a login service, a service that will redirect
  *   the user back to Korp. After that the JWT call is expected to return a JWT.
  */
-import _ from "lodash"
 import { loginStatusComponent } from "./login_status"
 import settings from "@/settings"
 import { IModule } from "angular"
@@ -94,6 +93,6 @@ export const getCredentials = () => state.credentials || []
 
 export const getUsername = () => state.username
 
-export const isLoggedIn = () => !_.isEmpty(state.jwt)
+export const isLoggedIn = () => !!state.jwt
 
 export const getOtherCredentials = () => state.otherCredentials || []

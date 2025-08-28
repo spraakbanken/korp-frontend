@@ -1,5 +1,4 @@
 /** @format */
-import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import { html, regescape } from "@/util"
@@ -98,7 +97,7 @@ angular.module("korpApp").component("resultsMap", {
                             $ctrl.setProgress(false, 100)
                             $scope.numResults = 20
                             $scope.markerGroups = result ? $ctrl.task.getMarkerGroups(() => palette.color()) : undefined
-                            $scope.selectedGroups = _.keys($scope.markerGroups)
+                            $scope.selectedGroups = Object.keys($scope.markerGroups || {})
                         })
                     },
                     (error) => {

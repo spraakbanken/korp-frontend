@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
-import _ from "lodash"
+import { compact, debounce } from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { makeDownload } from "@/kwic_download"
@@ -365,7 +365,7 @@ angular.module("korpApp").component("kwic", {
             store.watch("hpp", () => ($scope.hpp = String(store.hpp)))
             store.watch("sort", () => ($scope.sort = store.sort))
 
-            $scope.updateContext = _.debounce(() => {
+            $scope.updateContext = debounce(() => {
                 if ($scope.context != $ctrl.context) $ctrl.onContextChange()
             }, UPDATE_DELAY)
 
@@ -381,7 +381,7 @@ angular.module("korpApp").component("kwic", {
 
             $ctrl._settings = settings
 
-            const updateSearch = _.debounce(() => $ctrl.onUpdateSearch(), UPDATE_DELAY)
+            const updateSearch = debounce(() => $ctrl.onUpdateSearch(), UPDATE_DELAY)
 
             $ctrl.download = {
                 options: [
@@ -506,8 +506,8 @@ angular.module("korpApp").component("kwic", {
 
                     // Find linked tokens in main sentence and highlight them.
                     mainSent!.tokens.forEach((token) => {
-                        const refs = _.map(_.compact(token["wordlink-" + lang].split("|")), Number)
-                        if (_.includes(refs, linkref)) {
+                        const refs = compact(token["wordlink-" + lang].split("|")).map(Number)
+                        if (refs.includes(linkref)) {
                             token._link_selected = true
                             $ctrl.parallelSelected.push(token)
                         }
@@ -536,7 +536,7 @@ angular.module("korpApp").component("kwic", {
             }
 
             function clearLinks() {
-                _.each($ctrl.parallelSelected, (word) => delete word._link_selected)
+                $ctrl.parallelSelected.forEach((word) => delete word._link_selected)
                 $ctrl.parallelSelected = []
             }
 

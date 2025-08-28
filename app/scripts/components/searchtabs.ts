@@ -1,6 +1,5 @@
 /** @format */
 import angular, { IController } from "angular"
-import _ from "lodash"
 import settings from "@/settings"
 import { html } from "@/util"
 import "@/components/simple-search"

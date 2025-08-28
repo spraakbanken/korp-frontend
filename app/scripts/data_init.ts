@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { isEmpty, keyBy, mapValues, omit, pick } from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
 import { getAllCorporaInFolders } from "@/corpus-chooser"
@@ -71,8 +71,8 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
             const names = corpus[attrsKey]
             const attrs = config.attributes[attrsKey] as Record<string, T>
             if (!names || !attrs) return [{}, []]
-            const defs1 = _.pick(attrs, names)
-            const defs = _.keyBy(defs1, "name")
+            const defs1 = pick(attrs, names)
+            const defs = keyBy(defs1, "name")
             const order = names.map((name) => attrs[name].name)
             return [defs, order]
         }
@@ -82,7 +82,7 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
         const [custom_attributes, _custom_attributes_order] = transformAttributes2<CustomAttribute>("custom_attributes")
 
         return {
-            ..._.omit(corpus, "pos_attributes"),
+            ...omit(corpus, "pos_attributes"),
             attributes,
             struct_attributes,
             custom_attributes,
@@ -102,15 +102,15 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
         // sort the list so that sentence is before paragraph
         const sortingArr = ["sentence", "paragraph", "text", "1 sentence", "1 paragraph", "1 text"]
         list.sort((a, b) => sortingArr.indexOf(a.value) - sortingArr.indexOf(b.value))
-        return _.fromPairs(list.map((elem) => [elem.value, elem.value]))
+        return Object.fromEntries(list.map((elem) => [elem.value, elem.value]))
     }
 
     const modes = config.modes.map((mode) => ({ ...mode, selected: mode.mode == currentMode }))
 
     return {
         folders: {},
-        ..._.omit(config, "pos_attributes", "corpora"),
-        corpora: _.mapValues(config.corpora, transformCorpus),
+        ...omit(config, "pos_attributes", "corpora"),
+        corpora: mapValues(config.corpora, transformCorpus),
         modes,
         mode: modes.find((mode) => mode.selected)!,
     }
@@ -122,16 +122,15 @@ function setInitialCorpora(): void {
     if (!(settings.preselected_corpora && settings.preselected_corpora.length)) {
         // if all corpora in mode is limited_access, make them all preselected
         if (settings.corpusListing.corpora.filter((corpus) => !corpus.limited_access).length == 0) {
-            settings.preselected_corpora = _.map(
-                _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
-                "id"
-            )
+            settings.preselected_corpora = settings.corpusListing.corpora
+                .filter((corpus) => !corpus.hide)
+                .map((corpus) => corpus.id)
+
             // else filter out the ones with limited_access
         } else {
-            settings.preselected_corpora = _.map(
-                _.filter(settings.corpusListing.corpora, (corpus) => !(corpus.hide || corpus.limited_access)),
-                "id"
-            )
+            settings.preselected_corpora = settings.corpusListing.corpora
+                .filter((corpus) => !(corpus.hide || corpus.limited_access))
+                .map((corpus) => corpus.id)
         }
     } else {
         let expandedCorpora: string[] = []
@@ -188,7 +187,7 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
         )
     }
 
-    if (!_.isEmpty(settings.corpora)) {
+    if (!isEmpty(settings.corpora)) {
         setInitialCorpora()
     }
 }
@@ -208,8 +207,9 @@ export function getDatasetOptions(
     lang?: string,
     sort?: boolean
 ): [string, string][] {
-    const options: [string, string][] = _.isArray(dataset)
-        ? _.map(dataset, (item) => [item, locAttribute(translation, item, lang)])
-        : _.map(dataset, (v, k) => [k, locAttribute(translation, v, lang)])
+    dataset ??= []
+    const options: [string, string][] = Array.isArray(dataset)
+        ? dataset.map((item) => [item, locAttribute(translation, item, lang)])
+        : Object.entries(dataset).map(([k, v]) => [k, locAttribute(translation, v, lang)])
     return sort ? options.sort((a, b) => a[1].localeCompare(b[1], lang)) : options
 }

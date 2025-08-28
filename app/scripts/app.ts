@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { isEmpty } from "lodash"
 import {
     ICacheObject,
     ICompileProvider,
@@ -187,7 +187,7 @@ korpApp.run([
 
             if (settings.initialization_checks && (await settings.initialization_checks())) {
                 // custom initialization code called
-            } else if (_.isEmpty(settings.corpora)) {
+            } else if (isEmpty(settings.corpora)) {
                 // no corpora
                 openErrorModal({
                     content: "<korp-error></korp-error>",
@@ -270,7 +270,7 @@ korpApp.run([
             }
             const s = $rootScope.$new(true) as ModalScope
 
-            const useCustomButton = !_.isEmpty(buttonText)
+            const useCustomButton = !isEmpty(buttonText)
 
             const modal = $uibModal.open({
                 template: html` <div class="modal-body" ng-class="{'mt-10' : resolvable }">

@@ -1,5 +1,5 @@
 /** @format */
-import { isNaN, memoize, omit, range } from "lodash"
+import { memoize, omit, range } from "lodash"
 import settings from "@/settings"
 import { Histogram } from "./backend/types"
 import { korpRequest } from "./backend/common"
@@ -49,7 +49,7 @@ function expandTimeStruct(struct: Histogram): void {
     const minYear = Math.min(...years)
     const maxYear = Math.max(...years)
 
-    if (isNaN(maxYear) || isNaN(minYear)) {
+    if (Number.isNaN(maxYear) || Number.isNaN(minYear)) {
         console.log("expandTimestruct broken, years:", years)
         return
     }

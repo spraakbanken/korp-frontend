@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService, ui } from "angular"
-import _ from "lodash"
+import { head } from "lodash"
 import { html } from "@/util"
 import { locObj } from "@/i18n"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
@@ -70,7 +70,7 @@ angular.module("korpApp").component("depTree", {
 
                             $timeout(() => {
                                 drawBratTree(Visualizer, $ctrl.tokens, "magic_secret_id", (msg) => {
-                                    const [type, val] = _.head(_.toPairs(msg))!
+                                    const [type, val] = head(Object.entries(msg))!
                                     $scope.$apply((s: ModalScope) => {
                                         s.label = locObj($ctrl.corpus.attributes[type].label)
                                         s.value = $ctrl.corpus.attributes[type].translation![val]

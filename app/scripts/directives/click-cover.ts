@@ -1,5 +1,4 @@
 /** @format */
-import _ from "lodash"
 import angular from "angular"
 
 // <div click-cover="(boolean expression)">...</div>

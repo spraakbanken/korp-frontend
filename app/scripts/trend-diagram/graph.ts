@@ -1,7 +1,7 @@
 /** @format */
 import moment, { Moment } from "moment"
 import { findOptimalLevel, formatUnixDate, getEmptyIntervals, getSeriesData, Level, PALETTE, Series } from "./util"
-import { last as _last, groupBy, isArray, last, maxBy, minBy, sortedIndexOf, throttle } from "lodash"
+import { last as _last, groupBy, last, maxBy, minBy, sortedIndexOf, throttle } from "lodash"
 import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
 import { StoreService } from "@/services/store"
 import { formatRelativeHits } from "@/util"
@@ -175,7 +175,7 @@ export class TrendGraph {
             abs_data: getSeriesData(stats.absolute, zoom),
         })
 
-        const series: Series[] = isArray(data.combined)
+        const series: Series[] = Array.isArray(data.combined)
             ? data.combined.map((item, i) => ("cqp" in item ? createSubquerySeries(item, i) : createTotalSeries(item)))
             : [createTotalSeries(data.combined)]
 

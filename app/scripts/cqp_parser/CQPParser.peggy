@@ -1,5 +1,5 @@
 {{
-  import _ from "lodash"
+  import { mergeWith } from "lodash"
 
   function makeObj(type, op, val, flags) {
     return {type : type, op : op, val: val, flags: flags}
@@ -36,8 +36,8 @@ token
     var output = left
     right.forEach(function(item) {
       var val = item[1]
-      output = _.mergeWith(output, val, function(a, b) {
-        return _.isArray(a) ? a.concat(b) : undefined;
+      output = mergeWith(output, val, function(a, b) {
+        return Array.isArray(a) ? a.concat(b) : undefined;
       })
     })
 
@@ -75,10 +75,8 @@ and
     return {and_block : [unpack([left], right)]}
   }
   / bound:bound_block {
-    bound = _.fromPairs(bound.map(function(item) {
-      return [item, true]
-    }))
-    return {"bound" : bound, "and_block" : []}
+    bound = Object.fromEntries(bound.map(item => [item, true]))
+    return {bound, and_block: []}
   }
   / "(" and:and ")" {return and}
 
@@ -90,8 +88,8 @@ or
       prefix = lhs[0]
 
     if(flags) {
-      flags = _.zipObject(flags[1], _.map(flags[1], function() { return true; }));
-    }
+      flags = Object.fromEntries(flags[1].map(flag => [flag, true]))
+    }    
     return makeObj(prefix + lhs[1].join(""), infix_op, rhs, flags)
   }
   / date
@@ -113,7 +111,7 @@ date
   = "$" "date_interval" " "? op:("!=" / "=") " "? ["'] val:([0-9]+ "," [0-9]+ "," [0-9]+ "," [0-9]+) ['"]
 {
 
-  val = _.filter(val, _.isArray).map(function(item) {
+  val = val.filter(Array.isArray).map(function(item) {
     return item.join("")
   })
   return makeObj("date_interval", op, val)

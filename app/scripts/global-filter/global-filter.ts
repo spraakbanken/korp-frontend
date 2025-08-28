@@ -1,6 +1,5 @@
 /** @format */
 import angular, { IController, IScope } from "angular"
-import _ from "lodash"
 import { locAttribute } from "@/i18n"
 import { html } from "@/util"
 import { LangString } from "@/i18n/types"
@@ -92,7 +91,7 @@ angular.module("korpApp").component("globalFilter", {
 
             $ctrl.$onInit = () => {
                 $scope.filterLabel = $ctrl.attrDef.label
-                $scope.selected = _.clone($ctrl.attrValue)
+                $scope.selected = [...$ctrl.attrValue]
             }
 
             $scope.dropdownToggle = (open?: boolean) => {

@@ -1,10 +1,11 @@
 /** @format */
-import _ from "lodash"
 import settings from "@/settings"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Folder } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
 import { locObj } from "./i18n"
+import { sum } from "lodash"
+import { splitFirst } from "./util"
 
 export type ChooserFolder = {
     corpora: CorpusTransformed[]
@@ -49,14 +50,14 @@ export const initCorpusStructure = (collection: Record<string, CorpusTransformed
         let totalTokens = 0
         let totalSentences = 0
 
-        const folders: ChooserFolderSub[] = _.map(foldersRaw, (folder, id) => {
+        const folders: ChooserFolderSub[] = Object.entries(foldersRaw).map(([id, folder]) => {
             ids.push(...(folder.corpora || []))
-            const corpora = _.map(folder.corpora, (corpusId) => collection[corpusId])
+            const corpora = (folder.corpora || []).map((corpusId) => collection[corpusId])
 
             // this is needed for folder identity checks in chooser
             let nCorpora = corpora.length
-            let tokens = _.reduce(corpora, (tokens, corpus) => tokens + corpus.tokens!, 0)
-            let sentences = _.reduce(corpora, (sentences, corpus) => sentences + corpus.sentences!, 0)
+            let tokens = sum(corpora.map((corpus) => corpus.tokens || 0))
+            let sentences = sum(corpora.map((corpus) => corpus.sentences || 0))
             let subFolders: ChooserFolderSub[] = []
             if (folder.subfolders) {
                 const summary = initFolders(folder.subfolders)
@@ -92,14 +93,16 @@ export const initCorpusStructure = (collection: Record<string, CorpusTransformed
     }
 
     const { folders, ids, tokens, sentences } = initFolders(settings["folders"])
-    const topLevelCorpora = _.filter(collection, (corpus) => !ids.includes(corpus.id))
+    const topLevelCorpora = Object.values(collection).filter((corpus) => !ids.includes(corpus.id))
+    const topLevelTokens = sum(topLevelCorpora.map((corpus) => corpus.tokens || 0))
+    const topLevelSentences = sum(topLevelCorpora.map((corpus) => corpus.sentences || 0))
 
     return {
         corpora: topLevelCorpora,
         subFolders: folders,
         numberOfChildren: ids.length + topLevelCorpora.length,
-        tokens: _.reduce(topLevelCorpora, (tokensTop, corpus) => tokensTop + corpus.tokens!, 0) + tokens,
-        sentences: sentences + topLevelCorpora.reduce((sum, corpus) => sum + corpus.sentences!, 0),
+        tokens: topLevelTokens + tokens,
+        sentences: topLevelSentences + sentences,
         isRoot: true,
     }
 }
@@ -133,9 +136,7 @@ export const getAllCorporaInFolders = (lastLevel: Record<string, Folder>, folder
 
     // Go down the alley to the last subfolder
     while (folderOrCorpus.includes(".")) {
-        const posOfPeriod = _.indexOf(folderOrCorpus, ".")
-        const leftPart = folderOrCorpus.substring(0, posOfPeriod)
-        const rightPart = folderOrCorpus.substring(posOfPeriod + 1)
+        const [leftPart, rightPart] = splitFirst(".", folderOrCorpus)
         if (lastLevel[leftPart]) {
             lastLevel = lastLevel[leftPart]["subfolders"]!
             folderOrCorpus = rightPart

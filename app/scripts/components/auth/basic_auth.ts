@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { isEmpty } from "lodash"
 import { IModule } from "angular"
 import settings from "@/settings"
 import { localStorageGet, localStorageSet } from "@/local-storage"
@@ -14,7 +14,7 @@ export const init = () => {
     if (creds) {
         state.loginObj = creds
     }
-    return !_.isEmpty(creds)
+    return !isEmpty(creds)
 }
 
 export const initAngular = (korpApp: IModule) => {
@@ -23,7 +23,7 @@ export const initAngular = (korpApp: IModule) => {
 }
 
 export const getAuthorizationHeader = () =>
-    !_.isEmpty(state.loginObj) ? { Authorization: `Basic ${state.loginObj.auth}` } : {}
+    !isEmpty(state.loginObj) ? { Authorization: `Basic ${state.loginObj.auth}` } : {}
 
 function toBase64(str: string) {
     // copied from https://stackoverflow.com/a/43271130
@@ -65,4 +65,4 @@ export const getCredentials = (): string[] => state.loginObj?.credentials || []
 
 export const getUsername = () => state.loginObj?.name
 
-export const isLoggedIn = () => !_.isEmpty(state.loginObj)
+export const isLoggedIn = () => !isEmpty(state.loginObj)

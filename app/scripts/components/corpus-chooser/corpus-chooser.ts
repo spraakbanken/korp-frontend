@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController } from "angular"
-import _ from "lodash"
+import { isEqual, omitBy, pickBy } from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { getCredentials } from "@/components/auth/auth"
@@ -135,7 +135,7 @@ angular.module("korpApp").component("corpusChooser", {
             $ctrl.$onInit = () => {
                 $ctrl.credentials = getCredentials()
                 // remove the corpora with hide=true (linked corpora)
-                const ccCorpora = _.omitBy(settings.corpora, "hide")
+                const ccCorpora = omitBy(settings.corpora, "hide")
                 $ctrl.root = initCorpusStructure(ccCorpora)
                 $ctrl.totalCount = $ctrl.root.numberOfChildren
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
@@ -156,7 +156,7 @@ angular.module("korpApp").component("corpusChooser", {
                 for (const corpus of Object.values(settings.corpora))
                     corpus.selected = corpus.selected && !corpus.limited_access
                 // Select those, or if none remain, fall back to default selection
-                const remaining = Object.keys(_.pickBy(settings.corpora, (corpus) => corpus.selected))
+                const remaining = Object.keys(pickBy(settings.corpora, (corpus) => corpus.selected))
                 const toSelect = remaining.length ? remaining : settings.preselected_corpora || []
                 // Apply selection
                 select(toSelect)
@@ -231,7 +231,7 @@ angular.module("korpApp").component("corpusChooser", {
                 }
 
                 // Store new selection if it has actually changed
-                if (!_.isEqual(selection, store.corpus)) {
+                if (!isEqual(selection, store.corpus)) {
                     store.corpus = [...selection]
                 }
             }

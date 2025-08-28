@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { omit } from "lodash"
 import * as karp from "@/karp"
 import { korpRequest } from "./common"
 
@@ -17,7 +17,7 @@ export async function getLemgrams(wf: string, resources: string[], corporaIDs: s
         count: "lemgram",
         corpus: corporaIDs.join(","),
     })
-    const counts = _.omit(data, "time")
+    const counts = omit(data, "time")
 
     return lemgrams.map((lemgram) => ({ lemgram, count: counts[lemgram] || 0 }))
 }
