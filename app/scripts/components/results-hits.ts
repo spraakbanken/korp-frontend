@@ -4,7 +4,6 @@ import _ from "lodash"
 import kwicProxyFactory, { type KwicProxy } from "@/backend/proxy/kwic-proxy"
 import { ApiKwic } from "@/backend/types"
 import { QueryResponse } from "@/backend/types/query"
-import { RootScope } from "@/root-scope.types"
 import "@/components/json_button"
 import "@/components/korp-error"
 import "@/components/kwic"
@@ -71,11 +70,10 @@ angular.module("korpApp").component("resultsHits", {
         setProgress: "<",
     },
     controller: [
-        "$rootScope",
         "$scope",
         "$timeout",
         "store",
-        function ($rootScope: RootScope, $scope: ResultsHitsScope, $timeout: ITimeoutService, store: StoreService) {
+        function ($scope: ResultsHitsScope, $timeout: ITimeoutService, store: StoreService) {
             const $ctrl = this as ResultsHitsController
 
             $scope.initialSearch = true

@@ -3,7 +3,6 @@ import _ from "lodash"
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import statsProxyFactory, { StatsProxy } from "@/backend/proxy/stats-proxy"
-import { RootScope } from "@/root-scope.types"
 import { Dataset, SearchParams } from "@/statistics/statistics.types"
 import { html } from "@/util"
 import "@/components/json_button"
@@ -59,15 +58,9 @@ angular.module("korpApp").component("resultsStatistics", {
     },
     controller: [
         "$scope",
-        "$rootScope",
         "$timeout",
         "store",
-        function (
-            $scope: ResultsStatisticsScope,
-            $rootScope: RootScope,
-            $timeout: ITimeoutService,
-            store: StoreService
-        ) {
+        function ($scope: ResultsStatisticsScope, $timeout: ITimeoutService, store: StoreService) {
             const $ctrl = this as ResultsStatisticsController
             const s = $scope
 
