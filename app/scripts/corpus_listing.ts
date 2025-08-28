@@ -1,25 +1,12 @@
 /** @format */
-import {
-    compact,
-    intersection,
-    isEmpty,
-    maxBy,
-    merge,
-    minBy,
-    pick,
-    pickBy,
-    sortBy,
-    sum,
-    union,
-    uniq,
-    zipObject,
-} from "lodash"
+import { compact, intersection, isEmpty, maxBy, minBy, pick, pickBy, sortBy, sum, union, uniq, zipObject } from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"
 import { locObj } from "@/i18n"
 import { Attribute } from "./settings/config.types"
 import { CorpusTransformed } from "./settings/config-transformed.types"
 import { LangString } from "./i18n/types"
+import { objectIntersection, objectUnion } from "./util"
 
 export type AttributeOption = Partial<Attribute> & {
     group: "word" | "word_attr" | "sentence_attr"
@@ -83,22 +70,6 @@ export class CorpusListing {
         return this.selected.map(f)
     }
 
-    // takes an array of mapping objs and returns their intersection
-    _mapping_intersection<T extends {}>(mappingArray: T[]): T {
-        return (
-            mappingArray.reduce(function (a: T, b: T) {
-                const keys_intersect = intersection(Object.keys(a), Object.keys(b)) as (keyof T)[]
-                const to_mergea = pick(a, ...keys_intersect)
-                const to_mergeb = pick(b, ...keys_intersect)
-                return merge({}, to_mergea, to_mergeb)
-            }) || ({} as T)
-        )
-    }
-
-    _mapping_union<T extends {}>(mappingArray: T[]): T {
-        return mappingArray.reduce((a, b) => merge(a, b), {} as T)
-    }
-
     getCurrentAttributes(lang?: string) {
         // lang not used here, only in parallel mode
         const attrs = this.mapSelectedCorpora((corpus) => corpus.attributes)
@@ -108,7 +79,7 @@ export class CorpusListing {
     getCurrentAttributesIntersection() {
         const attrs = this.mapSelectedCorpora((corpus) => corpus.attributes)
 
-        return this._mapping_intersection(attrs)
+        return objectIntersection(attrs)
     }
 
     getStructAttrsIntersection(lang?: string): Record<string, Attribute> {
@@ -120,7 +91,7 @@ export class CorpusListing {
 
             return corpus["struct_attributes"]
         })
-        return this._mapping_intersection(attrs)
+        return objectIntersection(attrs)
     }
 
     getStructAttrs(lang?: string): Record<string, Attribute> {
@@ -178,8 +149,8 @@ export class CorpusListing {
     }
 
     _invalidateAttrs(attrs: Record<string, Attribute>[]) {
-        const union = this._mapping_union(attrs)
-        const intersection = this._mapping_intersection(attrs)
+        const union = objectUnion(attrs)
+        const intersection = objectIntersection(attrs)
         $.each(union, function (key, value) {
             if (intersection[key] == null) {
                 value["disabled"] = true

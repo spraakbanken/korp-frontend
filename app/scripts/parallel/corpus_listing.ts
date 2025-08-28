@@ -2,7 +2,7 @@
 import { pick, uniq } from "lodash"
 import settings from "@/settings"
 import { CorpusListing } from "@/corpus_listing"
-import { getUrlHash } from "@/util"
+import { getUrlHash, objectIntersection } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CorpusParallel } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
@@ -71,7 +71,7 @@ export class ParallelCorpusListing extends CorpusListing {
 
             return corpus["struct_attributes"]
         })
-        return this._mapping_intersection(attrs)
+        return objectIntersection(attrs)
     }
 
     getLinked(corp: CorpusTransformed<CorpusParallel>, only_selected?: boolean) {

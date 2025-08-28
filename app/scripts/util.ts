@@ -1,5 +1,5 @@
 /** @format */
-import { isFunction } from "lodash"
+import { intersection, isFunction, merge, pick } from "lodash"
 import settings from "@/settings"
 import { getLang, loc, locObj } from "@/i18n"
 import { LangString } from "./i18n/types"
@@ -20,6 +20,15 @@ export const BUILD_HASH = __webpack_hash__
 /** Create an object from a list of keys and a function for creating corresponding values. */
 export const fromKeys = <K extends keyof any, T>(keys: K[], getValue: (key: K) => T) =>
     Object.fromEntries(keys.map((key) => [key, getValue(key)]))
+
+/** Takes an array of mapping objs and returns their intersection */
+export function objectIntersection<T extends object>(objs: T[]): T {
+    const keys = intersection(...objs.map(Object.keys))
+    return merge({}, ...objs.map((obj) => pick(obj, ...keys)))
+}
+
+/** Merge a list of objects, like _.merge but return-typed */
+export const objectUnion = <T extends object>(objs: T[]): T => merge({}, ...objs) as T
 
 /** Get a parameter from the `?<key>=<value>` part of the URL. */
 export const getUrlParam = <K extends keyof UrlParams>(key: K) =>
