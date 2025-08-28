@@ -90,6 +90,8 @@ angular.module("korpApp").component("resultsWordPicture", {
             function makeRequest() {
                 if (!$scope.activated) return resetView()
 
+                if (store.globalFilter) return resetView(loc("word_pic_global_filter", store.lang))
+
                 let query: RelationsQuery
                 try {
                     query = RelationsProxy.parseCqp(store.activeSearch!.cqp)
@@ -98,8 +100,6 @@ angular.module("korpApp").component("resultsWordPicture", {
                     console.warn(error)
                     return resetView(loc("word_pic_bad_search", store.lang))
                 }
-
-                if (store.globalFilter) return resetView(loc("word_pic_global_filter", store.lang))
 
                 // Abort any running request
                 if ($ctrl.loading) $scope.proxy.abort()
