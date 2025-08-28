@@ -79,18 +79,13 @@ export function processStatisticsResult(
 }
 
 export function getCqp(hitValues: Record<string, string[]>[], ignoreCase: boolean): string {
-    const positionalAttributes = ["word", ...Object.keys(settings.corpusListing.getCurrentAttributes())]
-
     const tokens = hitValues
         .map((token) => Object.entries(token).map(([attr, values]) => reduceCqp(attr, values, ignoreCase)))
         .map((conditions) => "[" + conditions.join(" & ") + "]")
 
     // If reducing by structural attributes only, then `hitValues` has only the first match token,
     // so allow any number of subsequent tokens in the match.
-    const structOnly = hitValues.length == 1 && !positionalAttributes.some((attr) => attr in hitValues[0])
-    if (structOnly) tokens.push("[]{0,}")
-
-    return `<match> ${tokens.join(" ")} </match>`
+    return `<match> ${tokens.join(" ")} []{0,} </match>`
 }
 
 function reduceCqp(

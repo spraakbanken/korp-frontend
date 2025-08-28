@@ -132,10 +132,9 @@ angular.module("korpApp").component("resultsMap", {
             $scope.newKWICSearch = (marker: MarkerEvent) => {
                 const { point, queryData } = marker
                 const location = [point.name, point.countryCode, point.lat, point.lng].join(";")
-                const numberOfTokens = queryData.subCqp.split("[").length - 1
-                const cqpGeo = `[_.${queryData.label} contains "${regescape(location)}"]{${numberOfTokens}}`
+                const cqpGeo = `<match> [_.${queryData.label} contains "${regescape(location)}"] []{0,} </match>`
 
-                const cqps = [queryData.searchCqp, cqpGeo, queryData.subCqp]
+                const cqps = [queryData.searchCqp, queryData.subCqp, cqpGeo]
                 const readingMode = queryData.label === "paragraph__geocontext"
                 const task = new ExampleTask(queryData.corpora, cqps, queryData.within, readingMode)
                 $timeout(() => $rootScope.kwicTabs.push(task))

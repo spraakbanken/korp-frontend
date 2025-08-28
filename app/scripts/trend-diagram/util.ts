@@ -194,7 +194,7 @@ export function getTimeCqp(timeUnix: number, zoom: Level, coarseGranularity?: bo
     }
 
     // In case the main query matches multiple tokens, this subquery must only match the first token in the main match.
-    timecqp = `<match> ${timecqp}`
+    timecqp = `<match> ${timecqp} []{0,} </match>`
     return timecqp
 }
 
