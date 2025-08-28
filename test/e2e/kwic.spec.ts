@@ -5,7 +5,7 @@ describe("KWIC", () => {
     test("progress bar and first page preview", async ({ page }) => {
         // Let a large corpus be last, so the full result takes longer than the first page
         // Corpora are searched in alphabetical order
-        await page.goto("./#?lang=eng&corpus=suc3,wikipedia-sv")
+        await page.goto("./#?lang=eng&corpus=attasidor,newstexts.svtnews")
 
         // Disable backend cache so the search doesn't load too fast
         await page.route("**/query*", async (route) => {
