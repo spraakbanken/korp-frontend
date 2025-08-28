@@ -1,6 +1,6 @@
 /** @format */
 import { memoize } from "lodash"
-import angular, { IController, IPromise } from "angular"
+import angular, { IController, IPromise, IScope } from "angular"
 import settings from "@/settings"
 import { html } from "@/util"
 import { getLemgrams, getSenses, LemgramCount } from "@/backend/lexicons"
@@ -20,16 +20,19 @@ type AutocController = IController & {
     onChange: (change: { output?: string; isRawOutput: boolean }) => void
     isError: boolean
     textInField: string
-    placeholder: string
     typeaheadClose: () => void
     lemgramify: (lemgram: string) => Lemgram | undefined
     sensify: (saldo: string) => Saldo | undefined
-    placeholderToString: (placeholder: string) => string | undefined
     textInput: () => void
-    selectedItem: (item: unknown, selected: LemgramOut | Sense) => void
+    onSelect: (item: unknown, selected: LemgramOut | Sense) => void
     getRows: (input: string) => IPromise<LemgramOut[]> | IPromise<Sense[]> | undefined
     getLemgrams: (input: string) => IPromise<LemgramOut[]>
     getSenses: (input: string) => IPromise<Sense[]>
+}
+
+type AutocScope = IScope & {
+    placeholder: string
+    selected: string
 }
 
 type LemgramOut = LemgramCount & { parts: Lemgram; variant: string }
@@ -65,8 +68,8 @@ angular.module("korpApp").component("autoc", {
                         typeahead-wait-ms="500"
                         typeahead-template-url="lemgramautocomplete.html"
                         typeahead-loading="$ctrl.isLoading"
-                        typeahead-on-select="$ctrl.selectedItem($item, $model, $label)"
-                        placeholder="{{$ctrl.placeholderToString($ctrl.placeholder)}}"
+                        typeahead-on-select="$ctrl.onSelect($item, $model, $label)"
+                        placeholder="{{placeholder}}"
                         typeahead-click-open
                         typeahead-is-open="$ctrl.typeaheadIsOpen"
                         ng-blur="$ctrl.typeaheadClose()"
@@ -97,7 +100,8 @@ angular.module("korpApp").component("autoc", {
         onChange: "&",
     },
     controller: [
-        function () {
+        "$scope",
+        function ($scope: AutocScope) {
             const ctrl = this as AutocController
 
             ctrl.dir = settings["dir"]
@@ -105,12 +109,14 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.$onChanges = () => {
                 ctrl.textInField = ctrl.isRawInput ? ctrl.input : ""
-                ctrl.placeholder = ctrl.isRawInput ? "" : ctrl.input
+                $scope.selected = ctrl.isRawInput ? "" : ctrl.input
             }
+
+            $scope.$watch("selected", () => ($scope.placeholder = getPlaceholder()))
 
             ctrl.typeaheadClose = function () {
                 if (ctrl.errorOnEmpty) {
-                    ctrl.isError = !(ctrl.placeholder != null && !ctrl.textInField)
+                    ctrl.isError = !($scope.selected != null && !ctrl.textInField)
                 }
             }
 
@@ -118,28 +124,22 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.sensify = Saldo.parse
 
-            ctrl.placeholderToString = memoize(function (placeholder: string) {
-                if (!placeholder) {
-                    return
-                }
-                if (ctrl.type === "lemgram") {
-                    // TODO If placeholder is set immediately, loc data is not ready here and the POS is not translated
-                    return Lemgram.parse(placeholder)?.toString()
-                } else {
-                    return Saldo.parse(placeholder)?.toString()
-                }
-            })
+            function getPlaceholder(): string {
+                if (!$scope.selected) return ""
+                if (ctrl.type === "lemgram") return Lemgram.parse($scope.selected)?.toString() || ""
+                return Saldo.parse($scope.selected)?.toString() || ""
+            }
 
             ctrl.textInput = () => ctrl.onChange({ output: ctrl.textInField, isRawOutput: true })
 
-            ctrl.selectedItem = function (item, selected) {
+            ctrl.onSelect = function (item, selected) {
                 if (ctrl.type === "lemgram") {
-                    ctrl.placeholder = (selected as LemgramOut).lemgram
+                    $scope.selected = (selected as LemgramOut).lemgram
                 } else {
-                    ctrl.placeholder = (selected as Sense).sense
+                    $scope.selected = (selected as Sense).sense
                 }
                 ctrl.textInField = ""
-                ctrl.onChange({ output: ctrl.placeholder, isRawOutput: false })
+                ctrl.onChange({ output: $scope.selected, isRawOutput: false })
                 ctrl.typeaheadClose()
             }
 
