@@ -280,8 +280,6 @@ angular.module("korpApp").component("statistics", {
                     grid.onHeaderCellRendered.subscribe((e, args) => refreshHeaders())
 
                     refreshHeaders()
-                    // Select sum row
-                    $(".slick-row:first input").click()
                     $(window).trigger("resize")
 
                     updateGraphBtnState()

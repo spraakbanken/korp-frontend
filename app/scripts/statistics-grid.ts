@@ -38,6 +38,7 @@ export class StatisticsGrid extends Slick.Grid<Row> {
         // @ts-ignore RowSelectionModel type is missing?
         this.setSelectionModel(new Slick.RowSelectionModel({ selectActiveRow: false }))
         this.registerPlugin(checkboxSelector)
+        this.setSelectedRows([0])
         this.autosizeColumns()
         this.refreshColumns()
 
