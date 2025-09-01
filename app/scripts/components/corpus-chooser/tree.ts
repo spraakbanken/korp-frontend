@@ -54,7 +54,7 @@ angular.module("korpApp").component("ccTree", {
                     </label>
                     <i
                         ng-click="$ctrl.showInfo($event, folder)"
-                        class="fa-solid text-xl fa-info-circle text-gray-700 rounded-full bg-white text-blue-500 mr-1 mt-1 h-fit"
+                        class="fa-solid text-xl fa-info-circle rounded-full bg-white text-blue-500 mr-1 mt-1 h-fit"
                     ></i>
                 </div>
                 <cc-tree
@@ -81,7 +81,7 @@ angular.module("korpApp").component("ccTree", {
                 <i
                     ng-click="$ctrl.showInfo($event, corpus)"
                     style="margin-top: 2px;"
-                    class="fa-solid text-xl fa-info-circle text-gray-700 rounded-full bg-white text-blue-500 mr-1 h-fit"
+                    class="fa-solid text-xl fa-info-circle rounded-full bg-white text-blue-500 mr-1 h-fit"
                 ></i>
             </div>
         </div>
