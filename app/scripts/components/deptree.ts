@@ -1,7 +1,6 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService, ui } from "angular"
 import { html } from "@/util"
-import { locObj } from "@/i18n"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Token } from "@/backend/types"
 import { LangString } from "@/i18n/types"
@@ -21,7 +20,7 @@ angular.module("korpApp").component("depTree", {
                     <span ng-click="clickX()" class="close-x">×</span>
                 </div>
                 <div class="modal-body">
-                    <div ng-if="label">{{label | loc:$root.lang}}: {{value | locObj:$root.lang}}</div>
+                    <div ng-if="label">{{label | locObj:$root.lang}}: {{value | locObj:$root.lang}}</div>
                     <div id="magic_secret_id"></div>
                 </div>
             </script>
@@ -52,7 +51,7 @@ angular.module("korpApp").component("depTree", {
 
                 type ModalScope = IScope & {
                     clickX: () => void
-                    label: string
+                    label: LangString
                     value: LangString
                 }
 
@@ -70,7 +69,7 @@ angular.module("korpApp").component("depTree", {
                                 drawBratTree($ctrl.tokens, "magic_secret_id", (msg) => {
                                     const [type, val] = Object.entries(msg)[0]
                                     $scope.$apply((s: ModalScope) => {
-                                        s.label = locObj($ctrl.corpus.attributes[type].label)
+                                        s.label = $ctrl.corpus.attributes[type].label
                                         s.value = $ctrl.corpus.attributes[type].translation![val]
                                     })
                                 })
