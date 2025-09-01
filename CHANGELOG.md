@@ -4,19 +4,140 @@
 
 ### Added
 
+- Use [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader) to compile CQP parser at build time
+- Login form help text
+- Experimental support for right-to-left (rtl) corpus text
+- Word picture works with any search mode as long as it is a single word or lemgram
+
+### Changed
+
+- A big effort to separate "core" code (types/interfaces and data processing) from "UI" code (components, other AngularJS usage). Notably:
+  - Moved data processing related to dynamic result tabs into corresponding classes: `CompareTask`, `ExampleTask`, `MapTask`, `TextTask`, `TrendTask`, `WordpicExampleTask`
+  - Added `ProxyBase` abstract class to streamline proxy classes
+    - Renamed `prevParams` to `params`
+    - Removed `prevUrl` and `prevCQP`
+  - Moved SALDO and lemgram parsing/prettifying from util to their own classes
+  - Moved AngularJS-specific utils from `@/util` to `@/angular-util`
+  - Dropped the `RootScope` arg from `settings["initialization_checks"]` – use `getService()` if needed
+  - Converted `compareSearches` service to non-AngularJS-dependent `savedSearches`
+  - Converted `globalFilterService` service to non-AngularJS-dependent `GlobalFilterManager`
+  - In `CorpusListing`:
+    - Merged `getContextQueryString` and `getContextQueryStringFromCorpusId` as `getContextParams`
+    - Split `getAttributeGroups`/`getStatsAttributeGroups` into `getAttributeGroups`, `getAttributeGroupsCompare`, `getAttributeGroupsExtended` and `getAttributeGroupsStatistics`
+- Changes to reduce circular dependencies, notably:
+  - Removed `settings.corpusListing`; use `import { corpusListing } from "@/corpora/corpus_listing"` instead
+  - Auth modules are `AuthModule` objects, not just a group of functions
+    - Import `{ auth }` instead of `* as authenticationProxy`
+  - Moved `valfilter` in `@/util` to `prefixAttr` in `@/settings`
+  - Moved locale-related functions from `@/util` to `@/i18n/util`
+- The `searches` service is removed in favor of the store:
+  - Write to `store.activeSearch` to commit a new main search query, result tabs watch it
+  - Search tabs watch `store.search` and `store.cqp` to restore a search from init/frontpage/history
+- The JSON button is a regular button, not an image, and downloads the stored, actual response instead of sending a new request
+- Stats/trend CSV export uses central abs/rel switch, not its own select
+- In extended search, the query is stored in URL only when searching, not dynamically while editing
+- Search history is broken in parallel mode, and is disabled for now
+
+### Fixed
+
+- Improve statistics download [#154](https://github.com/spraakbanken/korp-frontend/issues/154)
+- Statistics grid error if attribute value contains HTML [#472](https://github.com/spraakbanken/korp-frontend/issues/472)
+- Map examples empty if query uses repetition [#475](https://github.com/spraakbanken/korp-frontend/issues/475)
+- Prevent empty "Group by" selector when changing corpus
+- Prevent relative frequency "NaN" when loading first KWIC result
+- Related words heading link url
+- Use `angular.toJson` in `localStorageGet` to avoid storing `$$hashKey` etc.
+- Stray value when clearing simple search input
+- Prevent switching trend diagram form before done loading
+- Extended search query is propertly restored when activating a search history item
+
+## [9.10.1] - 2025-07-02
+
+### Fixed
+
+- Links with stats_reduce with missing attribute crashes [#314](https://github.com/spraakbanken/korp-frontend/issues/314)
+- Federated authentication module: require READ, not WRITE [#461](https://github.com/spraakbanken/korp-frontend/issues/461)
+- First click on the "Group by" dropdown triggers a re-fetch [#467](https://github.com/spraakbanken/korp-frontend/issues/467)
+- Switching to Statistics tab always fetches new results [#468](https://github.com/spraakbanken/korp-frontend/issues/468)
+- Case-insensitive statistics generates bad CQP for example [#469](https://github.com/spraakbanken/korp-frontend/issues/469)
+
+## [9.10.0] - 2025-06-26
+
+### Added
+
+- KWIC: Show number of hits as relative frequency [#456](https://github.com/spraakbanken/korp-frontend/issues/456)
+- Background color for statistics totals column
+- Configurable limit for statistics API call (alternative to [#73](https://github.com/spraakbanken/korp-frontend/issues/73) and [#92](https://github.com/spraakbanken/korp-frontend/issues/92))
+- Statistics: choose between absolute or relative frequencies [#454](https://github.com/spraakbanken/korp-frontend/issues/454)
+- Specify site-specific logos in configuration [#325](https://github.com/spraakbanken/korp-frontend/issues/325)
+
+### Changed
+
+- A `store` service was introduced to consolidate state management
+  - Most Root Scope properties have moved to it: `activeSearch`, `extendedCQP`, `globalFilterData`, `globalFilter`, `lang`, `simpleCQP`, `show_modal` (now `display`), `statsRelative`
+  - Most other app state properties that were synced to URL parameters have also moved to it: `corpus`, `cqp`, `cqp_<lang>` (as `cqpParallel`), `global_filter`, `hpp`, `isCaseInsensitive`, `mid_comp`, `in_order`, `page`, `parallel_corpora`, `prefix`, `random_seed`, `reading_mode`, `search`, `sort`, `stats_reduce`, `stats_reduce_insensitive`, `suffix`, `within`
+  - The `corpuschooserchange` and `initialcorpuschooserchange` events are replaced with `store.watch("corpus", ...)`
+  - The store internally uses `$rootScope`, so there's a lot of `$root` usage remaining in HTML templates
+  - `globalFilterDef`, `langDef` and `getActiveCqp()` were removed because they are no longer needed
+  - `loc_data` was extracted to `@/loc-data.ts` (use its `getLocData()` or `locData`)
+  - In `CorpusListing`, `getWithinParameters()` now takes the app-wide value as input and returns only the corpus-specific value.
+- The `escaper` directive has been removed; escaping is applied automatically
+
+### Fixed
+
+- Decimal separator not updated in statistics when changing language [#246](https://github.com/spraakbanken/korp-frontend/issues/246)
+- Empty value "∅" in stats table not clickable [#457](https://github.com/spraakbanken/korp-frontend/issues/457)
+- Update progress indicator when aborting search
+- Prevent bad timespan request if no corpora are available
+
+## [9.9.1] - 2025-04-14
+
+### Fixed
+
+- Statistics grouped rows: sub CQP only has one of the values [#452](https://github.com/spraakbanken/korp-frontend/issues/452)
+- Statistics CSV/TSV export broken when grouping by multiple attributes [#458](https://github.com/spraakbanken/korp-frontend/issues/458)
+- Use attribute value without colon-suffix in stats export [#459](https://github.com/spraakbanken/korp-frontend/issues/459)
+
+## [9.9.0] - 2025-03-24
+
+### Added
+
 - Choose to show word picture by frequency or LMI [#433](https://github.com/spraakbanken/korp-frontend/issues/433)
 - Word picture help texts
 
 ### Changed
 
+- Display options in Simple search as a form [#357](https://github.com/spraakbanken/korp-frontend/issues/357)
 - Load corpus timespan data in parallel when loading app [#437](https://github.com/spraakbanken/korp-frontend/issues/437)
   - Instead of `settings.time_data`, use `import { timeData } from "./timedata"`
   - Await `getTimeData()` before using `timeData` or `corpus.time`/`corpus.non_time`. The function is memoized, so repeated calls will not affect performance
+- Load Statistics and Word picture result when the tab is selected [#442](https://github.com/spraakbanken/korp-frontend/issues/442)
+- The "medial part" search option is logically linked to initial and final part [#443](https://github.com/spraakbanken/korp-frontend/issues/443)
+- The display options (hits per page, sort within corpora, compile based on) were moved into the KWIC and Statistics tab correspondingly
+  - When these are changed, the search is re-triggered automatically
+  - The "compile based on" input was relabeled as "group by"
+- The "word" group-by option no longer gets disabled if it's the only selected option
+- Moved "Show context" option to the new display options location and changed to checkbox
+- Better readability for hit counts in lemgram autocomplete
 - More space in word picture tables [#102](https://github.com/spraakbanken/korp-frontend/issues/102)
 
 ### Fixed
 
 - Selecting a search history item used to reset params that were not part of the search
+- Trend diagram legend missing
+- Internal search links in sidebar does not activate relevant search/result tabs [#450](https://github.com/spraakbanken/korp-frontend/issues/450)
+- Comparison result not showing if a search is not done first [#413](https://github.com/spraakbanken/korp-frontend/issues/413)
+- Extended search: do not cache operator options across corpora [#409](https://github.com/spraakbanken/korp-frontend/issues/409)
+- Error when logging out while protected corpora are selected [#440](https://github.com/spraakbanken/korp-frontend/issues/440)
+- Error when loading with restricted corpora selected and then dismissing login dialog [#399](https://github.com/spraakbanken/korp-frontend/issues/399)
+- Cached translation files cause broken UI after releases [#435](https://github.com/spraakbanken/korp-frontend/issues/435)
+
+## [9.8.5] - 2025-03-17
+
+### Fixed
+
+- Error when switching corpora with filters: slow response from /attr_values does not match new selection [#446](https://github.com/spraakbanken/korp-frontend/issues/446)
+- Error when searching for multiple tokens and grouping by text attribute [#447](https://github.com/spraakbanken/korp-frontend/issues/447)
 
 ## [9.8.4] - 2025-02-20
 
@@ -389,6 +510,11 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.10.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.1
+[9.10.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.0
+[9.9.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.1
+[9.9.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.0
+[9.8.5]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.5
 [9.8.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.4
 [9.8.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.3
 [9.8.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.8.2

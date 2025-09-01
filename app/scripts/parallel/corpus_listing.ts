@@ -1,12 +1,11 @@
 /** @format */
-import _ from "lodash"
+import { pick, uniq } from "lodash"
 import settings from "@/settings"
-import { CorpusListing } from "@/corpus_listing"
-import { getUrlHash, locationSearchGet } from "@/util"
+import { CorpusListing } from "@/corpora/corpus_listing"
+import { getUrlHash, objectIntersection } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CorpusParallel } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
-import { WithinParameters } from "@/backend/types"
 
 export class ParallelCorpusListing extends CorpusListing {
     corpora: CorpusTransformed<CorpusParallel>[]
@@ -22,8 +21,15 @@ export class ParallelCorpusListing extends CorpusListing {
         this.setActiveLangs(activeLangs.split(","))
     }
 
+    subsetFactory(ids: string[]): ParallelCorpusListing {
+        ids = ids.map((id) => id.toLowerCase())
+        const cl = new ParallelCorpusListing(pick(this.struct, ...ids))
+        cl.select(ids)
+        return cl
+    }
+
     select(idArray: string[]): void {
-        this.selected = _.uniq(idArray.flatMap((id) => this.getLinked(this.struct[id])))
+        this.selected = uniq(idArray.flatMap((id) => this.getLinked(this.struct[id])))
         this.updateAttributes()
     }
 
@@ -36,20 +42,16 @@ export class ParallelCorpusListing extends CorpusListing {
     }
 
     getCurrentAttributes(lang?: string): Record<string, Attribute> {
-        if (_.isEmpty(lang)) {
-            lang = settings.corpusListing.getReduceLang()
-        }
+        if (!lang) lang = this.getReduceLang()
 
-        const corpora = _.filter(this.selected, (item) => item.lang === lang)
+        const corpora = this.selected.filter((item) => item.lang === lang)
         return corpora.reduce((attrs, corpus) => ({ ...attrs, ...corpus.attributes }), {} as Record<string, Attribute>)
     }
 
     getStructAttrs(lang?: string): Record<string, Attribute> {
-        if (_.isEmpty(lang)) {
-            lang = settings.corpusListing.getReduceLang()
-        }
+        if (!lang) lang = this.getReduceLang()
 
-        const corpora = _.filter(this.selected, (item) => item.lang === lang)
+        const corpora = this.selected.filter((item) => item.lang === lang)
         const struct = corpora.reduce(
             (attrs, corpus) => ({ ...attrs, ...corpus.struct_attributes }),
             {} as Record<string, Attribute>
@@ -60,8 +62,8 @@ export class ParallelCorpusListing extends CorpusListing {
     }
 
     getStructAttrsIntersection(lang: string): Record<string, Attribute> {
-        const corpora = _.filter(this.selected, (item) => item.lang === lang)
-        const attrs = _.map(corpora, function (corpus) {
+        const corpora = this.selected.filter((item) => item.lang === lang)
+        const attrs = corpora.map(function (corpus) {
             for (let key in corpus["struct_attributes"]) {
                 const value = corpus["struct_attributes"][key]
                 value["is_struct_attr"] = true
@@ -69,7 +71,7 @@ export class ParallelCorpusListing extends CorpusListing {
 
             return corpus["struct_attributes"]
         })
-        return this._mapping_intersection(attrs)
+        return objectIntersection(attrs)
     }
 
     getLinked(corp: CorpusTransformed<CorpusParallel>, only_selected?: boolean) {
@@ -81,7 +83,7 @@ export class ParallelCorpusListing extends CorpusListing {
     }
 
     getEnabledByLang(lang: string): CorpusTransformed<CorpusParallel>[][] {
-        const corps = _.filter(this.selected, (item) => item["lang"] === lang)
+        const corps = this.selected.filter((item) => item["lang"] === lang)
         return corps.map((item) => this.getLinked(item, true))
     }
 
@@ -90,18 +92,16 @@ export class ParallelCorpusListing extends CorpusListing {
             return this.getEnabledByLang(activeLangs[0])
         }
         // get the languages that are enabled given a list of active languages
-        const main = _.filter(this.selected, (corp) => corp.lang === activeLangs[0])
+        const main = this.selected.filter((corp) => corp.lang === activeLangs[0])
 
         let output: CorpusTransformed<CorpusParallel>[][] = []
         for (var lang of activeLangs.slice(1)) {
-            const other = _.filter(this.selected, (corp) => corp.lang === lang)
+            const other = this.selected.filter((corp) => corp.lang === lang)
 
             for (var cps of other) {
-                const linked = _(main)
-                    .filter((mainCorpus) => mainCorpus["linked_to"].includes(cps.id))
-                    .value()
+                const linked = main.filter((mainCorpus) => mainCorpus["linked_to"].includes(cps.id))
 
-                output = output.concat(_.map(linked, (item) => [item, cps]))
+                output = output.concat(linked.map((item) => [item, cps]))
             }
         }
 
@@ -119,8 +119,8 @@ export class ParallelCorpusListing extends CorpusListing {
 
             const other = corps.slice(1)
 
-            const pair = _.map(other, function (corp) {
-                const a = mainIsPivot ? _.keys(corp[attr])[0] : _.keys(corps[0][attr])[0]
+            const pair = other.map(function (corp) {
+                const a = mainIsPivot ? Object.keys(corp[attr])[0] : Object.keys(corps[0][attr])[0]
                 return mainId + "|" + corp.id.toUpperCase() + ":" + a
             })
             return output.push(pair)
@@ -129,26 +129,29 @@ export class ParallelCorpusListing extends CorpusListing {
         return output.join(",")
     }
 
-    getContextQueryString(): string {
-        return this.getAttributeQuery("context")
+    getContextParams() {
+        return {
+            context: this.getAttributeQuery("context"),
+            default_context: settings["default_overview_context"],
+        }
     }
 
-    getWithinParameters(): WithinParameters {
-        const defaultWithin = locationSearchGet("within") || _.keys(settings["default_within"])[0]
-        const within = this.getAttributeQuery("within")
-        return { default_within: defaultWithin, within }
+    getWithinParam(): string {
+        return this.getAttributeQuery("within")
     }
 
     stringifySelected(onlyMain?: boolean): string {
         let struct = this.getLinksFromLangs(this.activeLangs)
         if (onlyMain) {
-            struct = _.map(struct, (pair) => {
-                return _.filter(pair, (item) => {
+            struct = struct.map((pair) => {
+                return pair.filter((item) => {
                     return item.lang === this.activeLangs[0]
                 })
             })
 
-            return _.map(_.flatten(struct), "id")
+            return struct
+                .flat()
+                .map((corpus) => corpus.id)
                 .map((a) => a.toUpperCase())
                 .join(",")
         }
@@ -158,7 +161,7 @@ export class ParallelCorpusListing extends CorpusListing {
             const item = struct[i]
             var main = item[0]
 
-            const pair = _.map(item.slice(1), (corp) => main.id.toUpperCase() + "|" + corp.id.toUpperCase())
+            const pair = item.slice(1).map((corp) => main.id.toUpperCase() + "|" + corp.id.toUpperCase())
 
             output.push(pair)
         }

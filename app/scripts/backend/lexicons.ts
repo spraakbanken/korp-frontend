@@ -1,12 +1,7 @@
 /** @format */
-import _ from "lodash"
+import { omit } from "lodash"
 import * as karp from "@/karp"
 import { korpRequest } from "./common"
-
-export type LexiconsRelatedWords = {
-    label: string
-    words: string[]
-}
 
 export type LemgramCount = { lemgram: string; count: number }
 
@@ -22,7 +17,7 @@ export async function getLemgrams(wf: string, resources: string[], corporaIDs: s
         count: "lemgram",
         corpus: corporaIDs.join(","),
     })
-    const counts = _.omit(data, "time")
+    const counts = omit(data, "time")
 
     return lemgrams.map((lemgram) => ({ lemgram, count: counts[lemgram] || 0 }))
 }
@@ -37,10 +32,17 @@ export async function getSenses(wf: string): Promise<SenseResult[]> {
 }
 
 /** Look up SweFN frames matching a given lemgram and get their other lexical units (LUs)  */
-export async function relatedWordSearch(lemgram: string): Promise<LexiconsRelatedWords[]> {
+export async function relatedWordSearch(lemgram: string): Promise<karp.SwefnEntry[]> {
     const senses = (await karp.getSenseId(lemgram)).hits
     if (senses.length == 0) return []
 
     const frames = (await karp.getSwefnFrame(senses)).hits
-    return frames.map((entry) => ({ label: entry.swefnID, words: entry.LUs }))
+    if (frames.length == 0) return []
+
+    // Lower some nasty words
+    const skiplist = ["Excreting"]
+    const first = frames.findIndex((entry) => !skiplist.includes(entry.swefnID))
+    if (first > 0) frames.splice(0, first + 1, frames[first], ...frames.slice(0, first))
+
+    return frames
 }

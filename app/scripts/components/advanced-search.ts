@@ -1,12 +1,11 @@
 /** @format */
-import angular, { IController, IScope, ITimeoutService } from "angular"
-import { html } from "@/util"
+import angular, { IController, IScope } from "angular"
+import { isEqual } from "lodash"
+import { html, splitFirst } from "@/util"
 import { matomoSend } from "@/matomo"
-import "@/services/compare-searches"
 import "@/components/search-submit"
-import { LocationService } from "@/urlparams"
-import { CompareSearches } from "@/services/compare-searches"
-import { SearchesService } from "@/services/searches"
+import { StoreService } from "@/services/store"
+import { savedSearches } from "@/search/saved-searches"
 
 type AdvancedSearchController = IController & {
     cqp: string
@@ -15,17 +14,20 @@ type AdvancedSearchController = IController & {
     onSearchSave: (name: string) => void
 }
 
-type AdvancedSearchScope = IScope & {}
+type AdvancedSearchScope = IScope & {
+    extendedCqp: string
+    simpleCqp: string
+}
 
 angular.module("korpApp").component("advancedSearch", {
     template: html` <div>
         <div class="well well-small">
             {{'active_cqp_simple' | loc:$root.lang}}:
-            <pre>{{$root.simpleCQP}}</pre>
+            <pre>{{simpleCqp}}</pre>
         </div>
         <div class="well well-small">
             {{'active_cqp_extended' | loc:$root.lang}}:
-            <pre>{{$root.extendedCQP}}</pre>
+            <pre>{{extendedCqp}}</pre>
         </div>
         <div class="well well-small">
             {{'cqp_query' | loc:$root.lang}}:
@@ -63,46 +65,40 @@ angular.module("korpApp").component("advancedSearch", {
     </div>`,
     bindings: {},
     controller: [
-        "$location",
         "$scope",
-        "compareSearches",
-        "searches",
-        function (
-            $location: LocationService,
-            $scope: AdvancedSearchScope,
-            compareSearches: CompareSearches,
-            searches: SearchesService
-        ) {
+        "store",
+        function ($scope: AdvancedSearchScope, store: StoreService) {
             const $ctrl = this as AdvancedSearchController
-
             $ctrl.cqp = "[]"
-            $ctrl.freeOrder = $location.search().in_order != null
 
-            /** Read advanced CQP from `search` URL param. */
-            function readSearchParam(): void {
-                const search = $location.search().search
-                if (search?.slice(0, 4) == "cqp|") {
-                    $ctrl.cqp = search.slice(4)
+            store.watch("in_order", () => ($ctrl.freeOrder = !store.in_order))
+            store.watch("extendedCqp", () => ($scope.extendedCqp = store.extendedCqp || ""))
+            store.watch("simpleCqp", () => ($scope.simpleCqp = store.simpleCqp || ""))
+
+            // Restore search when set via URL
+            store.watch("search", () => {
+                // For advanced, `search` has the format `cqp|<query>`
+                const [type, val] = splitFirst("|", store.search || "")
+                if (type != "cqp" || !val) return
+                $ctrl.cqp = val
+
+                const newSearch = { cqp: $ctrl.cqp }
+                if (!isEqual(store.activeSearch, newSearch)) {
+                    store.activeSearch = newSearch
                 }
-            }
-
-            // Sync CQP from URL to component.
-            $scope.$watch(
-                () => $location.search().search,
-                () => readSearchParam()
-            )
+            })
 
             $ctrl.onSearch = () => {
-                $location.search("page", null)
-                $location.search("within", null)
-                $location.search("in_order", $ctrl.freeOrder ? false : null)
-                $location.search("search", `cqp|${$ctrl.cqp}`)
+                store.page = 0
+                store.within = undefined
+                store.in_order = !$ctrl.freeOrder
+                store.search = `cqp|${$ctrl.cqp}`
                 matomoSend("trackEvent", "Search", "Submit search", "Advanced")
-                searches.doSearch()
+                store.activeSearch = { cqp: $ctrl.cqp }
             }
 
             $ctrl.onSearchSave = (name) => {
-                compareSearches.saveSearch(name, $ctrl.cqp)
+                savedSearches.push(name, $ctrl.cqp)
             }
         },
     ],

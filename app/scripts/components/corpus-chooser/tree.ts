@@ -1,12 +1,13 @@
 /** @format */
 import angular, { IController } from "angular"
-import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "./util"
+import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "@/corpora/corpus-chooser"
 import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
-import { collatorSort, html } from "@/util"
+import { html } from "@/util"
+import { collatorSort } from "@/i18n/util"
 import "@/components/checkbox-ternary"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { RootScope } from "@/root-scope.types"
+import { StoreService } from "@/services/store"
 
 type CcTreeController = IController & {
     node: ChooserFolder
@@ -27,7 +28,7 @@ type CcTreeController = IController & {
 
 angular.module("korpApp").component("ccTree", {
     template: html`
-        <div ng-class="{ 'cc-level-indent' : $ctrl.indent }">
+        <div ng-class="{ 'ml-6' : $ctrl.indent }">
             <div
                 ng-repeat="folder in $ctrl.sortedFolders"
                 class="tree relative"
@@ -93,14 +94,13 @@ angular.module("korpApp").component("ccTree", {
         onShowInfo: "&",
     },
     controller: [
-        "$rootScope",
-        "$scope",
-        function ($rootScope: RootScope) {
+        "store",
+        function (store: StoreService) {
             const $ctrl = this as CcTreeController
 
             $ctrl.$onInit = () => {
                 function sort<T extends ChooserFolderSub | CorpusTransformed>(nodes: T[]) {
-                    return collatorSort(nodes, "title", $rootScope.lang)
+                    return collatorSort(nodes, "title", store.lang)
                 }
                 $ctrl.sortedCorpora = sort($ctrl.node.corpora)
                 $ctrl.sortedFolders = sort($ctrl.node.subFolders)

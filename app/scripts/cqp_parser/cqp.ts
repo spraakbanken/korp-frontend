@@ -1,13 +1,12 @@
 /** @format */
-import _ from "lodash"
+import { cloneDeep, compact, maxBy, minBy, sortBy } from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"
-import { parse as parse_ } from "./CQPParser"
+import { parse } from "./CQPParser.peggy"
 import type { Condition, CqpQuery, DateRange, Operator, OperatorKorp, Value } from "./cqp.types"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 /** Parse CQP string to syntax tree. */
-// Rename to be able to add typing.
-const parse: (input: string, options?: never) => CqpQuery = parse_
 export { parse }
 
 /**
@@ -81,7 +80,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
         expanded_format = false
     }
     const output: string[] = []
-    cqp_obj = prioSort(_.cloneDeep(cqp_obj))
+    cqp_obj = prioSort(cloneDeep(cqp_obj))
 
     for (let token of cqp_obj) {
         if (typeof token === "string") {
@@ -104,13 +103,13 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
                 }
 
                 let flagstr = ""
-                if (flags && _.keys(flags).length) {
-                    flagstr = ` %${_.keys(flags).join("")}`
+                if (flags && Object.keys(flags).length) {
+                    flagstr = ` %${Object.keys(flags).join("")}`
                 }
 
                 if (type === "word" && val === "") {
                     out = ""
-                } else if (settings.corpusListing.isDateInterval(type)) {
+                } else if (corpusListing.isDateInterval(type)) {
                     out = parseDateInterval(op, val as DateRange, expanded_format)
                 } else {
                     out = `${type} ${op} \"${val}\"`
@@ -120,7 +119,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
                     or_array.push(out + flagstr)
                 }
             }
-            if (!_.isEmpty(or_array)) {
+            if (or_array.length) {
                 outer_and_array.push(or_array)
             }
         }
@@ -128,8 +127,8 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
         let or_out: string[] = outer_and_array.map((x) => (x.length > 1 ? `(${x.join(" | ")})` : x.join(" | ")))
 
         if (token.bound) {
-            or_out = _.compact(or_out)
-            for (let bound of _.keys(token.bound)) {
+            or_out = compact(or_out)
+            for (let bound of Object.keys(token.bound)) {
                 or_out.push(`${bound}(sentence)`)
             }
         }
@@ -145,7 +144,16 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
     return output.join(" ")
 }
 
-export const expandOperators = (cqpstr: string) => stringify(parse(cqpstr), true)
+export const expandOperators = (cqpstr: string) => stringify(parse<CqpQuery>(cqpstr), true)
+
+export function expandCqp(cqp: string): string {
+    try {
+        return expandOperators(cqp)
+    } catch (e) {
+        console.warn("CQP expansion failed", cqp, e)
+        return cqp
+    }
+}
 
 /**
  * Find first and last date in any date interval conditions.
@@ -169,8 +177,8 @@ export function getTimeInterval(obj: CqpQuery): [Moment, Moment] | undefined {
     if (!froms.length) {
         return
     }
-    const from = _.minBy(froms, (m) => m.toDate())
-    const to = _.maxBy(tos, (m) => m.toDate())
+    const from = minBy(froms, (m) => m.toDate())
+    const to = maxBy(tos, (m) => m.toDate())
     return from && to ? [from, to] : undefined
 }
 
@@ -179,12 +187,12 @@ export function getTimeInterval(obj: CqpQuery): [Moment, Moment] | undefined {
  */
 export function prioSort(cqpObjs: CqpQuery) {
     const getPrio = function (or_block: Condition[]) {
-        const numbers = _.map(or_block, (item) => _.indexOf(settings.cqp_prio, item.type))
+        const numbers = or_block.map((item) => settings.cqp_prio.indexOf(item.type))
         return Math.min(...(numbers || []))
     }
 
     for (let token of cqpObjs) {
-        token.and_block = (_.sortBy(token.and_block, getPrio) as Condition[][]).reverse()
+        token.and_block = (sortBy(token.and_block, getPrio) as Condition[][]).reverse()
     }
 
     return cqpObjs
@@ -220,3 +228,5 @@ export const hasStruct = (cqpObjs: CqpQuery) => cqpObjs.some((token) => token.st
 /** Determine whether a query will work with the in_order option */
 export const supportsInOrder = (cqpObjs: CqpQuery) =>
     cqpObjs.length > 1 && !hasWildcard(cqpObjs) && !hasRepetition(cqpObjs) && !hasStruct(cqpObjs)
+
+export const createCondition = (val = ""): Condition => ({ type: "word", op: "=", val })

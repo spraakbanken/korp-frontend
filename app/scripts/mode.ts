@@ -1,6 +1,6 @@
 /** @format */
 
-import { getUrlParam } from "./util"
+import { getUrlParam } from "@/util"
 
 const currentMode = getUrlParam("mode") || "default"
 

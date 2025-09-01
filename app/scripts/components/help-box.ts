@@ -10,7 +10,7 @@ type HelpBoxScope = IScope & {
 angular.module("korpApp").component("helpBox", {
     template: html`
         <div class="bs-callout bs-callout-info max-w-screen-sm">
-            {{$ctrl.text}}
+            <div ng-transclude></div>
             <div ng-if="$ctrl.extendedText && extended" class="mt-2">{{$ctrl.extendedText}}</div>
             <div>
                 <button ng-if="$ctrl.extendedText" class="btn btn-default btn-xs" ng-click="toggleExtended()">
@@ -21,9 +21,9 @@ angular.module("korpApp").component("helpBox", {
         </div>
     `,
     bindings: {
-        text: "<",
         extendedText: "<",
     },
+    transclude: true,
     controller: [
         "$scope",
         function ($scope: HelpBoxScope) {

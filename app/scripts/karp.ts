@@ -1,5 +1,5 @@
 /** @format */
-import { buildUrl } from "./util"
+import { buildUrl } from "@/util"
 
 const karpURL = "https://spraakbanken4.it.gu.se/karp/v7"
 

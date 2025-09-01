@@ -1,5 +1,0 @@
-Rebuild parser:
-
-```sh
-npx peggy --format es -d _:lodash CQPParser.peggy
-```

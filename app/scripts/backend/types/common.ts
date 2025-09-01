@@ -1,7 +1,4 @@
 /** @format */
-
-import { API } from "."
-
 /** A Korp response is either successful or has error info */
 export type Response<R> = ResponseBase & (R | ErrorResponse)
 
@@ -35,17 +32,6 @@ export type ProgressResponse = {
     [progress_n: `progress_${number}`]: string | { corpus: string; hits?: number }
 }
 
-export type ProgressReport<K extends keyof API> = {
-    /** Response data */
-    data: Partial<Response<API[K]["response"]>>
-    /** How many percent of the material has been searched. */
-    percent: number
-    /** How many search hits so far. */
-    hits: number | null
-}
-
-export type ProgressHandler<K extends keyof API = keyof API> = (report: ProgressReport<K>) => void
-
 /** Frequency count as absolute and relative (to some total size). */
 export type AbsRelTuple = { absolute: number; relative: number }
 
@@ -61,11 +47,6 @@ export type Histogram = {
     [date: NumericString]: number
     /** Frequency of items at unknown time */
     ""?: number
-}
-
-export type WithinParameters = {
-    default_within: string
-    within: string
 }
 
 /** Search hit */

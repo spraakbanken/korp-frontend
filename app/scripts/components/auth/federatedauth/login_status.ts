@@ -3,7 +3,7 @@ import { IComponentOptions, IController, ITimeoutService } from "angular"
 import statemachine from "@/statemachine"
 import { html } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { getUsername, isLoggedIn, login } from "@/components/auth/auth"
+import { auth } from "@/components/auth/auth"
 
 export const loginStatusComponent: IComponentOptions = {
     template: html`
@@ -21,10 +21,10 @@ export const loginStatusComponent: IComponentOptions = {
         function ($timeout: ITimeoutService) {
             const $ctrl: LoginStatusController = this
 
-            $ctrl.loggedIn = isLoggedIn()
+            $ctrl.loggedIn = auth.isLoggedIn()
 
             if ($ctrl.loggedIn) {
-                $ctrl.username = getUsername()
+                $ctrl.username = auth.getUsername()
             }
 
             $ctrl.logout = function () {
@@ -35,7 +35,7 @@ export const loginStatusComponent: IComponentOptions = {
             statemachine.listen("login", () => {
                 $timeout(() => {
                     $ctrl.loggedIn = true
-                    $ctrl.username = getUsername()
+                    $ctrl.username = auth.getUsername()
                 })
             })
 
@@ -45,7 +45,7 @@ export const loginStatusComponent: IComponentOptions = {
 
             $ctrl.doLogin = (loginNeededFor: CorpusTransformed[]) => {
                 // TODO here we must get the URL so that the state can be restored that way
-                login()
+                auth.login()
             }
         },
     ],

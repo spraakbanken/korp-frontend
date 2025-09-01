@@ -1,10 +1,9 @@
 /** @format */
-import _ from "lodash"
 import angular from "angular"
 import { html } from "@/util"
 
 angular.module("korpApp").component("tabPreloader", {
-    template: html`<div>
+    template: html`<div role="progressbar" aria-valuenow="{{$ctrl.progress || 0}}">
         <div
             ng-if="$ctrl.progress !== null"
             class="h-0.5 bg-current absolute bottom-0 left-0 transition-all"

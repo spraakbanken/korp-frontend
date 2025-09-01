@@ -1,8 +1,9 @@
 /** @format */
-import _ from "lodash"
+import { defaults } from "lodash"
 import settings from "korp_config"
 import { AppSettings } from "./app-settings.types"
 import { Settings } from "./settings.types"
+import { Attribute } from "./config.types"
 
 export default settings
 
@@ -13,10 +14,6 @@ declare global {
 }
 
 if (process.env.ENVIRONMENT != "production") window.settings = settings
-
-settings.markup = {
-    msd: require("@/../markup/msd.html"),
-}
 
 /**
  * function to set default values if parameters have been left out of config.js
@@ -30,6 +27,7 @@ export function setDefaultConfigValues() {
         // some safety margin
         backendURLMaxLength: 8100,
         default_language: "eng",
+        default_options: { is: "=", is_not: "!=" },
         // codes for translation ISO-639-1 to 639-2
         iso_languages: {
             en: "eng",
@@ -39,14 +37,13 @@ export function setDefaultConfigValues() {
             no: "nor",
         },
         cqp_prio: ["deprel", "pos", "msd", "suffix", "prefix", "lemma", "lex", "word"],
-        statistics_search_default: true,
         word_label: { swe: "ord", eng: "word" },
         visible_modes: 6,
         has_timespan: true,
     }
 
     // Assign default values to settings properties if undefined
-    _.defaults(settings, settingsDefaults)
+    defaults(settings, settingsDefaults)
 
     // Default values depending on other settings values, possibly
     // assigned a default value above
@@ -54,5 +51,10 @@ export function setDefaultConfigValues() {
         hits_per_page_default: settings.hits_per_page_values[0],
     }
 
-    _.defaults(settings, settingsDefaultsDep)
+    defaults(settings, settingsDefaultsDep)
 }
+
+export const getDefaultWithin = () => Object.keys(settings["default_within"] || {})[0]
+
+/** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
+export const prefixAttr = (attr: Attribute): string => (attr["is_struct_attr"] ? `_.${attr.name}` : attr.name)

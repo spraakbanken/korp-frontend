@@ -3,12 +3,12 @@ import angular, { IController } from "angular"
 import { html } from "@/util"
 import "@/components/extended/cqp-term"
 import { Condition } from "@/cqp_parser/cqp.types"
-import { createDefaultCondition } from "./util"
+import { createCondition } from "@/cqp_parser/cqp"
 
 type ExtendedAndTokenController = IController & {
     and: Condition[]
     first: boolean
-    parallellLang: string
+    parallellLang: string | undefined
     change: () => void
     remove: () => void
     removeOr: (idx: number) => void
@@ -54,7 +54,7 @@ angular.module("korpApp").component("extendedAndToken", {
                 else ctrl.change()
             }
 
-            ctrl.addOr = () => ctrl.and.push(createDefaultCondition())
+            ctrl.addOr = () => ctrl.and.push(createCondition())
         },
     ],
 })

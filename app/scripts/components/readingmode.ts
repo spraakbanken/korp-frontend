@@ -1,14 +1,10 @@
 /** @format */
-import {
-    TextReaderDataContainer,
-    ReaderTokenContainer,
-    TextReaderWordHandler,
-} from "@/controllers/text_reader_controller"
 import angular, { IController, IRootElementService } from "angular"
+import { ReaderToken, ReaderTokenContainer, TextReaderDataContainer } from "@/backend/task/text-task"
 
 type StandardReadingModeController = IController & {
     data: TextReaderDataContainer
-    wordClick: TextReaderWordHandler
+    wordClick: (token: ReaderToken) => void
 }
 
 angular.module("korpApp").component("standardReadingMode", {

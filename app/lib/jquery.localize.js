@@ -1,5 +1,6 @@
+const { getLocData } = require("@/loc-data");
 const { default: settings } = require("@/settings");
-const { locationSearchGet, getService } = require("@/util");
+const { locationSearchGet } = require("@/angular-util");
 
 (function($) {
 	dl_cache = {}
@@ -44,32 +45,33 @@ const { locationSearchGet, getService } = require("@/util");
 
 	$.fn.localize = function() {
 		//TODO: make this less slow.
-		var lang = locationSearchGet("lang") || settings["default_language"];
-		var data = getService("$rootScope")["loc_data"][lang];
-		this.find("[rel^=localize]").each(function(i, elem) {
-			var elem = $(elem);
-			var key = elem.attr("rel").match(/localize\[(.*?)\]/)[1];
-			var value = valueForKey(key, data) ?? key;
+        const lang = locationSearchGet("lang") || settings["default_language"];
+        getLocData().then(locData => {
+            this.find("[rel^=localize]").each(function (i, elem) {
+                var elem = $(elem);
+                var key = elem.attr("rel").match(/localize\[(.*?)\]/)[1];
+                var value = valueForKey(key, locData[lang]) ?? key;
 			
-			if (elem.is('input')) {
-				elem.val(value);
-			} else if (elem.is('optgroup')) {
-				elem.attr("label", value);
-			} else if(elem.is("button")) {
-				elem.attr("title", value);
-			} else if (elem.is('a') && elem.attr('title') && ! elem.text()) {
-			    elem.attr('title', value);
-			}
-			else {
-				if(elem.is("option[data-loc-title]")) {
-					elem.attr("title", valueForKey(elem.data("locTitle"), data));
-				}
-				elem.html(value);
-			}
-		});
-		if($.localize.options && $.localize.options.callback) {
-			$.proxy($.localize.options.callback, this)();
-		}
+                if (elem.is('input')) {
+                    elem.val(value);
+                } else if (elem.is('optgroup')) {
+                    elem.attr("label", value);
+                } else if (elem.is("button")) {
+                    elem.attr("title", value);
+                } else if (elem.is('a') && elem.attr('title') && !elem.text()) {
+                    elem.attr('title', value);
+                }
+                else {
+                    if (elem.is("option[data-loc-title]")) {
+                        elem.attr("title", valueForKey(elem.data("locTitle"), locData[lang]));
+                    }
+                    elem.html(value);
+                }
+            });
+            if ($.localize.options && $.localize.options.callback) {
+                $.proxy($.localize.options.callback, this)();
+            }
+        })
 		return this;
 	};
 

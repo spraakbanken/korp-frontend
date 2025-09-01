@@ -9,6 +9,3 @@ Once fetched, they are transformed from its current structure to a previous vers
 
 However, the transformed config and the settings are then merged into the same object.
 This object is then used with `import settings from "@/settings"`.
-
-As an exception to the serializable structure of `settings`, the **corpus listing** singleton object (`CorpusListing` or `ParallelCorpusListing`) lives as `settings.corpusListing`.
-This is weird and should probably change.

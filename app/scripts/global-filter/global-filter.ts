@@ -1,12 +1,10 @@
 /** @format */
 import angular, { IController, IScope } from "angular"
-import _ from "lodash"
 import { locAttribute } from "@/i18n"
 import { html } from "@/util"
-import "./global-filter-service"
 import { LangString } from "@/i18n/types"
-import { RootScope } from "@/root-scope.types"
 import { Attribute } from "@/settings/config.types"
+import { StoreService } from "@/services/store"
 
 type GlobalFilterController = IController & {
     attrDef: Attribute
@@ -84,16 +82,16 @@ angular.module("korpApp").component("globalFilter", {
         onChange: "&",
     },
     controller: [
-        "$rootScope",
         "$scope",
-        function ($rootScope: RootScope, $scope: GlobalFilterScope) {
+        "store",
+        function ($scope: GlobalFilterScope, store: StoreService) {
             const $ctrl = this as GlobalFilterController
             // if scope.options.length > 20
             //     # TODO enable autocomplete
 
             $ctrl.$onInit = () => {
                 $scope.filterLabel = $ctrl.attrDef.label
-                $scope.selected = _.clone($ctrl.attrValue)
+                $scope.selected = [...$ctrl.attrValue]
             }
 
             $scope.dropdownToggle = (open?: boolean) => {
@@ -116,8 +114,7 @@ angular.module("korpApp").component("globalFilter", {
 
             $scope.isSelectedList = (value: string) => $scope.selected.includes(value)
 
-            $scope.translateAttribute = (value: string) =>
-                locAttribute($ctrl.attrDef.translation, value, $rootScope.lang)
+            $scope.translateAttribute = (value: string) => locAttribute($ctrl.attrDef.translation, value, store.lang)
         },
     ],
 })

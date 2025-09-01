@@ -4,7 +4,7 @@
  */
 
 import { OperatorKorp } from "@/cqp_parser/cqp.types"
-import { Labeled, LangString } from "@/i18n/types"
+import { Labeled, LangString, LocLangMap, LocMap } from "@/i18n/types"
 
 export type Config = {
     attributes: {
@@ -13,6 +13,8 @@ export type Config = {
         custom_attributes?: Record<string, CustomAttribute>
     }
     corpora: Record<string, Corpus>
+    /** Writing direction of corpus text. */
+    dir?: "rtl"
     folders?: Record<string, Folder>
     label: LangString
     map_enabled?: boolean
@@ -63,7 +65,7 @@ export type Folder = {
 }
 
 export type Attribute = {
-    dataset?: Record<string, string>
+    dataset?: Record<string, string> | string[]
     /** Handled by CorpusListing */
     disabled?: true
     display_type?: "hidden"
@@ -92,7 +94,7 @@ export type Attribute = {
     stats_cqp?: string
     stats_stringify?: string
     stringify?: string
-    translation?: Record<string, string>
+    translation?: LocLangMap | LocMap
     type?: "set" | "url"
 }
 

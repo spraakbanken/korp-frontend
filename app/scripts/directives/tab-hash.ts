@@ -1,8 +1,7 @@
 /** @format */
-import _ from "lodash"
 import angular, { IScope, ITimeoutService } from "angular"
 import { UtilsService } from "@/services/utils"
-import { LocationService } from "@/urlparams"
+import { LocationService } from "@/services/types"
 import "@/services/utils"
 
 type UiBootstrapTabsetScope = IScope & {
@@ -41,7 +40,7 @@ angular.module("korpApp").directive("tabHash", [
                 key: attr.tabHash,
                 scope_name: "activeTab",
                 val_in: Number,
-                default: 0,
+                default: "0",
             })
 
             /** Increment max tab index and select last. */

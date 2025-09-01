@@ -1,47 +1,47 @@
 /** @format */
 import angular, { IController, IScope, ui } from "angular"
-import _ from "lodash"
-import CSV from "comma-separated-values/csv"
+import { debounce, intersection } from "lodash"
 import settings from "@/settings"
-import { html } from "@/util"
-import { loc, locObj } from "@/i18n"
-import { getCqp } from "../../config/statistics_config"
-import { expandOperators } from "@/cqp_parser/cqp"
-import { requestMapData } from "@/backend/backend"
-import "@/backend/backend"
-import "@/services/searches"
+import { downloadFile, html } from "@/util"
+import { locObj } from "@/i18n"
+import { expandCqp } from "@/cqp_parser/cqp"
 import "@/components/corpus-distribution-chart"
-import { SearchesService } from "@/services/searches"
+import "@/components/reduce-select"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
-import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow, SlickgridColumn } from "@/statistics.types"
+import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams } from "@/statistics/statistics.types"
 import { CountParams } from "@/backend/types/count"
+import { AttributeOption, corpusListing } from "@/corpora/corpus_listing"
+import { getTimeData } from "@/backend/timedata"
+import { StoreService } from "@/services/store"
+import { getGeoAttributes, MapAttributeOption } from "@/statistics/map"
+import { StatisticsGrid } from "@/statistics/statistics-grid"
+import { createStatisticsCsv, getCqp } from "@/statistics/statistics"
+import { ExampleTask } from "@/backend/task/example-task"
+import { MapTask } from "@/backend/task/map-task"
+import { TrendTask } from "@/backend/task/trend-task"
 
 type StatisticsScope = IScope & {
-    rowData: { title: string; values: AbsRelSeq }[]
+    clipped: boolean
+    reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
+    statCurrentAttrs: AttributeOption[]
+    statSelectedAttrs: string[]
+    statInsensitiveAttrs: string[]
+    statsRelative: boolean
 }
 
 type StatisticsController = IController & {
     aborted: boolean
-    activate: () => void
-    columns: SlickgridColumn[]
     data: Dataset
-    doSort: boolean
     error: boolean
-    grid: Slick.Grid<Row>
-    hasResult: boolean
-    inOrder: boolean
     loading: boolean
-    noHits: boolean
-    prevParams: CountParams
+    params: CountParams
+    rowCount: number
     searchParams: SearchParams
-    showStatistics: boolean
-    sortColumn?: string
-    totalNumberOfRows: number
+    warning?: string
     onStatsClick: (event: MouseEvent) => void
     onGraphClick: () => void
-    resizeGrid: (resizeColumns: boolean) => void
-    setGeoAttributes: (corpora: string[]) => void
+    onUpdateSearch: () => void
     mapToggleSelected: (index: number, event: Event) => void
     generateExport: () => void
     showMap: () => void
@@ -52,40 +52,38 @@ type StatisticsController = IController & {
     noRowsError: boolean
 }
 
-type MapAttributeOption = {
-    label: string
-    corpora: string[]
-    selected?: boolean
-}
+const UPDATE_DELAY = 500
 
 angular.module("korpApp").component("statistics", {
     template: html`
-        <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
-            <div ng-if="!$ctrl.inOrder && !$ctrl.hasResult">{{'stats_not_in_order_warn' | loc:$root.lang}}</div>
-            <div ng-if="!$ctrl.showStatistics">
-                {{'stats_warn' | loc:$root.lang}}
-                <div>
-                    <button class="btn btn-sm btn-default activate_word_pic" ng-click="$ctrl.activate()">
-                        {{'word_pic_warn_btn' | loc:$root.lang}}
-                    </button>
-                </div>
+        <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
+            <div class="flex items-center gap-1">
+                <label for="reduce-select">{{ "reduce_text" | loc:$root.lang }}:</label>
+                <reduce-select
+                    items="statCurrentAttrs"
+                    selected="statSelectedAttrs"
+                    insensitive="statInsensitiveAttrs"
+                    on-change="reduceOnChange"
+                ></reduce-select>
             </div>
-            <div ng-if="$ctrl.showStatistics && !$ctrl.hasResult && $ctrl.inOrder">
-                <div>
-                    <button class="btn btn-sm btn-default activate_word_pic" ng-click="$ctrl.activate()">
-                        {{'update_btn' | loc:$root.lang}}
-                    </button>
-                </div>
-            </div>
+            <label>
+                <input type="checkbox" ng-model="statsRelative" />
+                {{"num_results_relative" | loc:$root.lang}}
+                <i
+                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                    uib-tooltip="{{'relative_help' | loc:$root.lang}}"
+                ></i>
+            </label>
+        </div>
 
-            <div ng-if="$ctrl.showStatistics && $ctrl.noHits" class="korp-warning">
-                {{"no_stats_results" | loc:$root.lang}}
-            </div>
-            <div ng-if="$ctrl.showStatistics && $ctrl.aborted && !$ctrl.loading" class="korp-warning">
+        <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
+            <div ng-if="$ctrl.warning" class="korp-warning" role="status">{{$ctrl.warning | loc:$root.lang}}</div>
+
+            <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning" role="status">
                 {{'search_aborted' | loc:$root.lang}}
             </div>
 
-            <div ng-show="$ctrl.showStatistics && $ctrl.hasResult && !$ctrl.noHits && !$ctrl.aborted">
+            <div ng-show="!$ctrl.warning && !$ctrl.aborted">
                 <div class="stats_header">
                     <button
                         class="btn btn-sm btn-default show-graph-btn"
@@ -178,167 +176,99 @@ angular.module("korpApp").component("statistics", {
                     <div id="showBarPlot"></div>
                 </div>
                 <div ng-if="!$ctrl.loading" style="margin-bottom: 5px">
-                    {{'total_rows' | loc:$root.lang}} {{$ctrl.totalNumberOfRows}}
+                    {{'total_rows' | loc:$root.lang}} {{$ctrl.data.length - 1 | prettyNumber:$root.lang}}
+                    <span ng-if="clipped">
+                        {{'stats_clipped' | loc:$root.lang}}
+                        <i
+                            class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                            uib-tooltip="{{'stats_clipped_help' | loc:$root.lang}}"
+                        ></i>
+                    </span>
                 </div>
                 <div id="myGrid" role="grid"></div>
                 <div id="exportStatsSection">
                     <br /><br />
-                    <select id="kindOfData">
-                        <option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
-                        <option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
-                    </select>
                     <select id="kindOfFormat">
-                        <option value="csv" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
-                        <option value="tsv" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
+                        <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
+                        <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
                     </select>
                     <a id="generateExportButton" ng-click="$ctrl.generateExport()">
                         <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
                     </a>
-                    <a class="btn btn-sm btn-default" id="exportButton"> {{'statstable_export' | loc:$root.lang}} </a>
                 </div>
             </div>
         </div>
     `,
     bindings: {
         aborted: "<",
-        activate: "<",
-        columns: "<",
         data: "<",
         error: "<",
-        hasResult: "<",
-        inOrder: "<",
         loading: "<",
-        noHits: "<",
-        prevParams: "<",
+        onUpdateSearch: "&",
+        params: "<",
+        rowCount: "<",
         searchParams: "<",
-        showStatistics: "<",
+        warning: "<",
     },
     controller: [
         "$rootScope",
         "$scope",
         "$uibModal",
-        "searches",
+        "store",
         function (
             $rootScope: RootScope,
             $scope: StatisticsScope,
             $uibModal: ui.bootstrap.IModalService,
-            searches: SearchesService
+            store: StoreService
         ) {
             const $ctrl = this as StatisticsController
 
             $ctrl.noRowsError = false
-            $ctrl.doSort = true
-            $ctrl.sortColumn = undefined
             $ctrl.mapRelative = true
+            let grid: StatisticsGrid
+            let cl = corpusListing
 
             $ctrl.$onInit = () => {
                 $(window).on(
                     "resize",
-                    _.debounce(() => $ctrl.resizeGrid(true), 100)
+                    debounce(() => {
+                        grid?.resizeCanvas()
+                        grid?.autosizeColumns()
+                    }, 100)
                 )
-
-                $("#kindOfData,#kindOfFormat").change(() => {
-                    showGenerateExport()
-                })
-
-                $("#exportButton").hide()
             }
 
-            $rootScope.$watch("lang", (lang: string) => {
-                if (!$ctrl.grid) return
-                var cols = $ctrl.grid.getColumns()
-                updateLabels(cols, lang)
-                // TODO Re-render formatted numbers
-                $ctrl.grid.setColumns(cols)
+            // Set initial value for stats case-insensitive, but only if reduce attr is not set
+            if (!store.stats_reduce && settings["statistics_case_insensitive_default"]) {
+                store.stats_reduce_insensitive = "word"
+            }
+
+            store.watch("lang", () => grid?.refreshColumns())
+
+            store.watch("statsRelative", () => {
+                $scope.statsRelative = store.statsRelative
+                if (!grid) return
+                // Trigger reformatting
+                grid.setColumns(grid.getColumns())
             })
 
+            $scope.$watch("statsRelative", () => (store.statsRelative = $scope.statsRelative))
+
             $ctrl.$onChanges = (changeObj) => {
-                if ("columns" in changeObj && $ctrl.columns != undefined) {
-                    showGenerateExport()
+                if ("searchParams" in changeObj && $ctrl.searchParams) {
+                    cl = corpusListing.subsetFactory($ctrl.searchParams.corpora)
+                }
 
-                    // @ts-ignore CheckboxSelectColumn type is missing?
-                    const checkboxSelector = new Slick.CheckboxSelectColumn({
-                        cssClass: "slick-cell-checkboxsel",
-                    })
-
-                    $ctrl.columns = [checkboxSelector.getColumnDefinition()].concat($ctrl.columns)
-
-                    updateLabels($ctrl.columns, $rootScope.lang)
-
-                    const grid = new Slick.Grid($("#myGrid"), $ctrl.data, $ctrl.columns, {
-                        enableCellNavigation: false,
-                        enableColumnReorder: false,
-                        forceFitColumns: false,
-                    })
-
-                    // @ts-ignore RowSelectionModel type is missing?
-                    grid.setSelectionModel(new Slick.RowSelectionModel({ selectActiveRow: false }))
-                    grid.registerPlugin(checkboxSelector)
-                    $ctrl.grid = grid
-                    $ctrl.grid.autosizeColumns()
-
-                    $ctrl.totalNumberOfRows = $ctrl.grid.getDataLength()
-
-                    grid.onSort.subscribe((e, args) => {
-                        if ($ctrl.doSort) {
-                            // @ts-ignore columnId is missing from type, but it's there
-                            const { columnId, sortAsc, sortCol } = args
-                            $ctrl.sortColumn = columnId
-                            $ctrl.sortAsc = sortAsc
-
-                            $ctrl.data.sort((a, b) => {
-                                if (!sortCol) return 0
-
-                                // Place totals row first
-                                if (isTotalRow(a)) return -1
-                                if (isTotalRow(b)) return 1
-
-                                const direction = sortAsc ? 1 : -1
-
-                                // Sort by an attribute value
-                                if (sortCol.field == "hit_value") {
-                                    const x = a.formattedValue[columnId]
-                                    const y = b.formattedValue[columnId]
-                                    return x.localeCompare(y, $rootScope.lang) * direction
-                                }
-
-                                // Sort totals column by absolute hit count
-                                if (sortCol.field == "total") {
-                                    return (a.total[0] - b.total[0]) * direction
-                                }
-
-                                // Sort data column by absolute hit count
-                                if (sortCol.field == "count" && sortCol.id) {
-                                    const x = a.count[sortCol.id][0]
-                                    const y = b.count[sortCol.id][0]
-                                    return (x - y) * direction
-                                }
-
-                                return 0
-                            })
-
-                            grid.setData($ctrl.data, false)
-                            grid.updateRowCount()
-                            grid.render()
-                        } else {
-                            if ($ctrl.sortColumn) {
-                                grid.setSortColumn($ctrl.sortColumn, $ctrl.sortAsc)
-                            } else {
-                                grid.setSortColumns([])
-                            }
-                        }
-                    })
-
-                    grid.onColumnsResized.subscribe((e, args) => {
-                        $ctrl.doSort = false // if sort event triggered, sorting will not occur
-                        $ctrl.resizeGrid(false)
-                        e.stopImmediatePropagation()
-                    })
-
-                    grid.onHeaderClick.subscribe((e, args) => {
-                        $ctrl.doSort = true // enable sorting again, resize is done
-                        e.stopImmediatePropagation()
-                    })
+                if ("data" in changeObj && $ctrl.data) {
+                    grid = new StatisticsGrid(
+                        $("#myGrid").get(0)!,
+                        $ctrl.data,
+                        cl.corpora.map((corpus) => corpus.id.toUpperCase()),
+                        $ctrl.searchParams.reduceVals,
+                        store,
+                        showPieChart,
+                        onAttrValueClick
+                    )
 
                     const refreshHeaders = () =>
                         $(".localized-header .slick-column-name")
@@ -350,167 +280,140 @@ angular.module("korpApp").component("statistics", {
                     grid.onHeaderCellRendered.subscribe((e, args) => refreshHeaders())
 
                     refreshHeaders()
-                    // TODO what should this do, select first row?
-                    $(".slick-row:first input", $ctrl.$result).click()
                     $(window).trigger("resize")
 
-                    // TODO this must wait until after timedata is fetched
                     updateGraphBtnState()
+                    $ctrl.mapAttributes = getGeoAttributes(cl.corpora)
+                }
 
-                    $ctrl.setGeoAttributes($ctrl.searchParams.corpora)
+                if ("rowCount" in changeObj && $ctrl.rowCount) {
+                    $scope.clipped = !!settings["statistics_limit"] && $ctrl.rowCount >= settings["statistics_limit"]
                 }
             }
 
-            function updateLabels(cols: SlickgridColumn[], lang: string) {
-                cols.forEach((col) => {
-                    if (col.translation) col.name = locObj(col.translation, lang)
-                })
+            store.watch("corpus", () => {
+                // Update list of attributes
+                const reduceLang = corpusListing.getReduceLang()
+                $scope.statCurrentAttrs = corpusListing.getAttributeGroupsStatistics(reduceLang)
+
+                // Deselect removed attributes, fall back to word
+                const names = $scope.statCurrentAttrs.map((option) => option.name)
+                const selected = intersection(store.stats_reduce.split(","), names)
+                $scope.statSelectedAttrs = selected.length > 0 ? selected : ["word"]
+                store.stats_reduce = $scope.statSelectedAttrs.join()
+
+                const insensitiveAttrs = store.stats_reduce_insensitive
+                $scope.statInsensitiveAttrs = insensitiveAttrs ? insensitiveAttrs.split(",") : []
+            })
+
+            $scope.reduceOnChange = ({ selected, insensitive }) => {
+                if (selected) $scope.statSelectedAttrs = selected
+                if (insensitive) $scope.statInsensitiveAttrs = insensitive
+
+                if ($scope.statSelectedAttrs && $scope.statSelectedAttrs.length > 0) {
+                    const isModified =
+                        $scope.statSelectedAttrs.length != 1 || !$scope.statSelectedAttrs.includes("word")
+                    store.stats_reduce = isModified ? $scope.statSelectedAttrs.join(",") : "word"
+                }
+
+                if ($scope.statInsensitiveAttrs && $scope.statInsensitiveAttrs.length > 0) {
+                    store.stats_reduce_insensitive = $scope.statInsensitiveAttrs.join(",")
+                } else if ($scope.statInsensitiveAttrs) {
+                    store.stats_reduce_insensitive = ""
+                }
+
+                updateSearch()
             }
 
-            $ctrl.onStatsClick = (event) => {
-                const target = event.target as HTMLElement
-                if (target.classList.contains("arcDiagramPicture")) {
-                    const parts = $(target).attr("id").split("__")
-                    showPieChart(parseInt(parts[1]))
-                } else if (
-                    target.classList.contains("statistics-link") ||
-                    (target.classList.contains("slick-cell") && $(target).find(".statistics-link").length == 1)
-                ) {
-                    let linkElem = $(target)
-                    if (!target.classList.contains("statistics-link")) {
-                        linkElem = linkElem.find(".statistics-link")
-                    }
-                    const rowIx = parseInt(linkElem.data("row"))
-                    const rowData = $ctrl.data.find((row) => row.rowId === rowIx) as SingleRow
-                    let cqp2 = null
-                    // isPhraseLevelDisjunction can be set in custom code for constructing cqp like: ([] | [])
-                    if ("isPhraseLevelDisjunction" in rowData && rowData.isPhraseLevelDisjunction) {
-                        // In this case the statsValues array is one level deeper
-                        const statsValues = rowData.statsValues as unknown as Record<string, string[]>[][]
-                        const tokens = statsValues.map((vals) => getCqp(vals, $ctrl.searchParams.ignoreCase))
-                        cqp2 = tokens.join(" | ")
-                    } else {
-                        cqp2 = getCqp(rowData.statsValues, $ctrl.searchParams.ignoreCase)
-                    }
+            const updateSearch = debounce(() => $ctrl.onUpdateSearch(), UPDATE_DELAY)
 
-                    // Find which corpora had any hits (uppercase ids)
-                    const corpora = Object.keys(rowData.count).filter((id) => rowData.count[id][0] > 0)
+            function onAttrValueClick(row: Row) {
+                if (isTotalRow(row)) return
 
-                    $rootScope.kwicTabs.push({
-                        queryParams: {
-                            ajaxParams: {
-                                start: 0,
-                                end: 24,
-                                corpus: corpora.join(","),
-                                cqp: $ctrl.prevParams.cqp,
-                                cqp2,
-                                expand_prequeries: false,
-                            },
-                        },
-                    })
+                let cqp2 = null
+                // isPhraseLevelDisjunction can be set in custom code for constructing cqp like: ([] | [])
+                if ("isPhraseLevelDisjunction" in row && row.isPhraseLevelDisjunction) {
+                    // In this case the statsValues array is one level deeper
+                    const statsValues = row.statsValues as unknown as Record<string, string[]>[][]
+                    const tokens = statsValues.map((vals) => getCqp(vals, $ctrl.searchParams.ignoreCase))
+                    cqp2 = tokens.join(" | ")
+                } else {
+                    cqp2 = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
                 }
+
+                // Find which corpora had any hits (uppercase ids)
+                const corpora = Object.keys(row.count).filter((id) => row.count[id][0] > 0)
+
+                $rootScope.kwicTabs.push(
+                    new ExampleTask(corpora, [$ctrl.params.cqp, cqp2], $ctrl.params.default_within, store.reading_mode)
+                )
             }
 
             $ctrl.onGraphClick = () => {
-                const subcqps: string[] = []
-                const labelMapping: Record<string, string> = {}
-
-                const showTotal = getSelectedRows().includes(0)
-
-                for (const rowIx of getSelectedRows()) {
-                    const row = getDataAt(rowIx)
-                    if (isTotalRow(row)) continue
-                    const cqp = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
-                    subcqps.push(cqp)
-                    const parts = $ctrl.searchParams.reduceVals.map((reduceVal) => row.formattedValue[reduceVal])
-                    labelMapping[cqp] = parts.join(", ")
-                }
-
-                $rootScope.graphTabs.push({
-                    cqp: $ctrl.searchParams.prevNonExpandedCQP,
-                    subcqps,
-                    labelMapping,
-                    showTotal,
-                    corpusListing: settings.corpusListing.subsetFactory($ctrl.searchParams.corpora),
-                })
+                const showTotal = grid.getSelectedRows().includes(0)
+                const subqueries = getSubqueries()
+                $rootScope.graphTabs.push(
+                    new TrendTask(
+                        $ctrl.searchParams.prevNonExpandedCQP,
+                        subqueries,
+                        showTotal,
+                        cl,
+                        $ctrl.params.default_within
+                    )
+                )
             }
 
             $ctrl.showMap = function () {
-                const selectedRows = getSelectedRows()
-
-                if (selectedRows.length == 0) {
+                if (grid.getSelectedRows().length == 0) {
                     $ctrl.noRowsError = true
                     return
                 }
                 $ctrl.noRowsError = false
 
-                // TODO this is wrong, it should use the previous search
-                let cqp = $rootScope.getActiveCqp()!
-                try {
-                    cqp = expandOperators(cqp)
-                } catch {}
+                const cqp = expandCqp($ctrl.searchParams.prevNonExpandedCQP)
+                const cqpExprs = Object.fromEntries(getSubqueries())
 
-                const cqpExprs: Record<string, string> = {}
-                for (let rowIx of selectedRows) {
-                    var row = getDataAt(rowIx)
-                    if (isTotalRow(row)) continue
-                    const cqp = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
-                    const parts = $ctrl.searchParams.reduceVals.map(
-                        (reduceVal) => (row as SingleRow).formattedValue[reduceVal]
-                    )
-                    cqpExprs[cqp] = parts.join(", ")
-                }
-
-                const selectedAttributes = _.filter($ctrl.mapAttributes, "selected")
+                const selectedAttributes = $ctrl.mapAttributes.filter((attr) => attr.selected)
                 if (selectedAttributes.length > 1) {
                     console.log("Warning: more than one selected attribute, choosing first")
                 }
-                const selectedAttribute = selectedAttributes[0]
+                const { label, corpora } = selectedAttributes[0]
+                $rootScope.mapTabs.push(
+                    new MapTask(cqp, cqpExprs, label, corpora, $ctrl.params.default_within, $ctrl.mapRelative)
+                )
+            }
 
-                const within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
-                const request = requestMapData(cqp, cqpExprs, within, selectedAttribute, $ctrl.mapRelative)
-                $rootScope.mapTabs.push(request)
+            /** Create KWIC sub queries for selected table rows, as a list of `[cqp, label]` pairs. */
+            function getSubqueries(): [string, string][] {
+                const rowIds = grid.getSelectedRows().sort()
+                const rows = rowIds.map(grid.getDataItem)
+                const pairs: [string, string][] = []
+                for (const row of rows) {
+                    if (isTotalRow(row)) continue
+                    const cqp = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
+                    const label = $ctrl.searchParams.reduceVals
+                        .map((reduceVal) => row.formattedValue[reduceVal])
+                        .join(", ")
+                    pairs.push([cqp, label])
+                }
+                return pairs
             }
 
             $ctrl.mapEnabled = !!settings["map_enabled"]
 
-            $ctrl.setGeoAttributes = function (corpora) {
-                const attrs: Record<string, MapAttributeOption> = {}
-                for (let corpus of settings.corpusListing.subsetFactory(corpora).selected) {
-                    for (let attr of corpus.private_struct_attributes) {
-                        if (attr.indexOf("geo") !== -1) {
-                            if (attrs[attr]) {
-                                attrs[attr].corpora.push(corpus.id)
-                            } else {
-                                attrs[attr] = {
-                                    label: attr,
-                                    corpora: [corpus.id],
-                                }
-                            }
-                        }
-                    }
-                }
-
-                $ctrl.mapAttributes = Object.values(attrs)
-
-                // Select first attribute
-                if ($ctrl.mapAttributes.length) {
-                    $ctrl.mapAttributes[0].selected = true
-                }
-            }
-
             $ctrl.mapToggleSelected = function (index, event) {
-                _.map($ctrl.mapAttributes, (attr) => (attr.selected = false))
+                $ctrl.mapAttributes.map((attr) => (attr.selected = false))
                 $ctrl.mapAttributes[index].selected = true
                 event.stopPropagation()
             }
 
-            function showPieChart(rowId: number) {
-                const row = $ctrl.data.find((row) => row.rowId == rowId)!
-
-                $scope.rowData = $ctrl.searchParams.corpora.map((corpus) => ({
-                    title: locObj(settings.corpora[corpus.toLowerCase()]["title"]),
-                    values: row.count[corpus], // [absolute, relative]
+            function showPieChart(row: Row) {
+                const scope = $scope.$new() as IScope & {
+                    rowData: { title: string; values: AbsRelSeq }[]
+                }
+                scope.rowData = Object.entries(row.count).map(([corpus, absrel]) => ({
+                    title: locObj(settings.corpora[corpus.toLowerCase()].title, store.lang),
+                    values: absrel,
                 }))
 
                 const modal = $uibModal.open({
@@ -519,116 +422,38 @@ angular.module("korpApp").component("statistics", {
                             <h3 class="modal-title !w-full">{{ 'statstable_distribution' | loc }}</h3>
                         </div>
                         <div class="modal-body">
-                            <corpus-distribution-chart row="$parent.rowData"></corpus-distribution-chart>
+                            <corpus-distribution-chart row="rowData"></corpus-distribution-chart>
                         </div>
                     `,
-                    scope: $scope,
+                    scope,
                     windowClass: "!text-base",
                 })
                 // Ignore rejection from dismissing the modal
                 modal.result.catch(() => {})
             }
 
-            $ctrl.resizeGrid = (resizeColumns) => {
-                let width: number
-                let height = 0
-                $(".slick-row").each(function () {
-                    height += $(this).outerHeight(true) || 0
-                })
-                $("#myGrid:visible.slick-viewport").height(height)
-
-                // adding 20 px to width if vertical scrollbar appears
-                width = $ctrl.data?.length * 25 >= height ? 20 : 0
-
-                $(".slick-header-column").each(function () {
-                    width += $(this).outerWidth(true) || 0
-                })
-                if (width > ($(window).width() || 0) - 40) {
-                    width = ($(window).width() || 0) - 40
-                }
-                $("#myGrid:visible.slick-viewport").width(width)
-
-                if ($ctrl.grid != null) {
-                    $ctrl.grid.resizeCanvas()
-                    if (resizeColumns) {
-                        $ctrl.grid.autosizeColumns()
-                    }
-                }
-                return $ctrl.grid != null ? $ctrl.grid.invalidate() : undefined
-            }
-
-            function updateGraphBtnState() {
-                const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
-                $ctrl.graphEnabled = _.compact(cl.getTimeInterval()).length > 0
-            }
-
-            const getSelectedRows = () => ($ctrl.grid ? $ctrl.grid.getSelectedRows().sort() : [])
-
-            function getDataAt(rowIx: number): Row {
-                return $ctrl.grid.getData()[rowIx]
-            }
-
-            function updateExportBlob() {
-                let reduceVal, val
-                const selVal = $("#kindOfData option:selected").val() === "absolute" ? 0 : 1
-                const selType = $("#kindOfFormat option:selected").val()
-                let dataDelimiter = ";"
-                if (selType === "tsv") {
-                    dataDelimiter = "\t"
-                }
-                const cl = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
-
-                let header = []
-                for (reduceVal of $ctrl.searchParams.reduceVals) {
-                    header.push(reduceVal)
-                }
-
-                header.push(loc("stats_total"))
-                header = header.concat(_.map(cl.corpora, (corpus) => locObj(corpus["title"])))
-
-                let output = []
-                for (const row of $ctrl.data) {
-                    // TODO Should isPhraseLevelDisjunction be handled here?
-                    const outputRow: string[] = $ctrl.searchParams.reduceVals.flatMap((reduceVal) =>
-                        isTotalRow(row) ? ["Σ"] : row.statsValues.map((type) => type[reduceVal][0])
-                    )
-                    outputRow.push(String(row.total[selVal]))
-                    for (let corp of $ctrl.searchParams.corpora) {
-                        val = row.count[corp][selVal] || 0
-                        outputRow.push(String(val))
-                    }
-                    output.push(outputRow)
-                }
-
-                const csv = new CSV(output, {
-                    header,
-                    delimiter: dataDelimiter,
-                })
-
-                const csvstr = csv.encode()
-
-                const blob = new Blob([csvstr], { type: `text/${selType}` })
-                const csvUrl = URL.createObjectURL(blob)
-
-                $("#exportButton").attr({
-                    download: `export.${selType}`,
-                    href: csvUrl,
+            async function updateGraphBtnState() {
+                // Ensure cl.getTimeInterval() is not called before time data is loaded.
+                await getTimeData()
+                $scope.$applyAsync(() => {
+                    $ctrl.graphEnabled = !!cl.getTimeInterval()
                 })
             }
 
             $ctrl.generateExport = () => {
-                hideGenerateExport()
-                updateExportBlob()
-            }
-
-            function showGenerateExport() {
-                $("#exportButton").hide()
-                $("#generateExportButton").show()
-            }
-
-            function hideGenerateExport() {
-                $("#exportButton").show()
-                $("#generateExportButton").hide()
+                const csvType: string = $("#kindOfFormat option:selected").val()
+                const { reduceVals } = $ctrl.searchParams
+                const corpora = cl.corpora
+                const csv = createStatisticsCsv(
+                    $ctrl.data,
+                    reduceVals,
+                    corpora,
+                    store.statsRelative,
+                    csvType,
+                    store.lang
+                )
+                const mimeType = csvType == "tsv" ? "text/tab-separated-values" : "text/csv"
+                downloadFile(csv, `korp-statistics.${csvType}`, mimeType)
             }
         },
     ],

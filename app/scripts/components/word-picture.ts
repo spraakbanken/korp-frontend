@@ -1,29 +1,28 @@
 /** @format */
 import angular, { IController } from "angular"
 import settings from "@/settings"
-import { html, isLemgram, lemgramToHtml, splitLemgram } from "@/util"
-import { loc } from "@/i18n"
+import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import { WordPictureDef, WordPictureDefItem } from "@/settings/app-settings.types"
-import { ShowableApiRelation, TableData, TableDrawData } from "@/controllers/word_picture_controller"
-import { ApiRelation } from "@/backend/types/relations"
+import { ShowableApiRelation, TableData, TableDrawData } from "@/backend/proxy/relations-proxy"
+import { ApiRelation, RelationsSort } from "@/backend/types/relations"
 import "@/components/help-box"
+import { Lemgram } from "@/lemgram"
+import { WordpicExampleTask } from "@/backend/task/wordpic-example-task"
 
 type WordPictureController = IController & {
     // Bindings
-    wordPic: boolean
-    activate: () => void
-    loading: boolean
-    hitSettings: string[]
-    settings: {
-        showNumberOfHits: `${number}`
-    }
     data: TableDrawData[]
+    onSortChange: (args: { sort: RelationsSort }) => void
+    sort: RelationsSort
     warning?: string
 
     // Locals
+    limit: string // Number as string to work with <select ng-model>
+    limitOptions: number[]
     showWordClass: boolean
-    localeString: (lang: string, hitSetting: string) => string
+    sortLocal: RelationsSort
+    statProp: RelationsSort
     renderResultHeader: (section: TableData[], index: number) => ApiRelation[] | { word: string }
     getHeaderLabel: (header: WordPictureDefItem, section: TableData[], idx: number) => string
     getHeaderClasses: (header: WordPictureDefItem | "_", token: string) => string
@@ -35,75 +34,59 @@ type WordPictureController = IController & {
     getTableClass: (wordClass: string, parentIdx: number, idx: number) => string | undefined
     minimize: (table: ShowableApiRelation[]) => ShowableApiRelation[]
     parseLemgram: (row: ShowableApiRelation) => ParsedLemgram
-    sortProp: RootScope["wordpicSortProp"]
     onClickExample: (row: ShowableApiRelation) => void
 }
 
 type ParsedLemgram = {
     label: string
     pos?: string
-    idx?: string
+    idx?: number
 }
+
+const LIMITS: readonly number[] = [15, 50, 100, 500, 1000]
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
-        <help-box
-            text="'word_pic_description' | loc:$root.lang"
-            extended-text="'word_pic_result_description' | loc:$root.lang"
-        ></help-box>
+        <div ng-if="$ctrl.warning" class="korp-warning" role="status">{{$ctrl.warning}}</div>
 
-        <div ng-if="!$ctrl.wordPic">
-            {{'word_pic_warn' | loc:$root.lang}}
-            <div>
-                <button class="btn btn-sm btn-default activate_word_pic" ng-click="$ctrl.activate()">
-                    {{'word_pic_warn_btn' | loc:$root.lang}}
-                </button>
-            </div>
-        </div>
-
-        <div ng-if="$ctrl.wordPic && $ctrl.warning" class="korp-warning">{{$ctrl.warning}}</div>
-
-        <div ng-if="$ctrl.wordPic && $ctrl.data.length">
-            <div class="float-right flex flex-col gap-2">
-                <div>
-                    <input id="wordclassChk" ng-model="$ctrl.showWordClass" type="checkbox" />
-                    <label for="wordclassChk">{{'show_wordclass' | loc:$root.lang}}</label>
-                </div>
-                <div>
-                    <select id="numberHitsSelect" ng-model="$ctrl.settings.showNumberOfHits">
-                        <option ng-repeat="hitSetting in $ctrl.hitSettings" value="{{hitSetting}}">
-                            {{ $ctrl.localeString($root.lang, hitSetting) }}
-                        </option>
-                    </select>
-                </div>
-                <div>
-                    <label for="wordpic-sort">{{'sort_by' | loc:$root.lang}}:</label>
-                    <div>
-                        <input type="radio" id="wordpic-sort-freq" value="freq" ng-model="$root.wordpicSortProp" />
-                        <label for="wordpic-sort-freq">{{'stat_frequency' | loc:$root.lang}}</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="wordpic-sort-mi" value="mi" ng-model="$root.wordpicSortProp" />
-                        <label for="wordpic-sort-mi">
-                            {{'stat_lmi' | loc:$root.lang}}
-                            <i
-                                class="fa fa-info-circle text-gray-400"
-                                uib-tooltip="{{'stat_lmi_help' | loc:$root.lang}}"
-                            ></i>
-                        </label>
-                    </div>
+        <div ng-if="$ctrl.data.length">
+            <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
+                <label>
+                    <input ng-model="$ctrl.showWordClass" type="checkbox" />
+                    {{'show_wordclass' | loc:$root.lang}}
+                </label>
+                <select ng-model="$ctrl.limit">
+                    <option ng-repeat="option in $ctrl.limitOptions" value="{{option}}">
+                        {{'word_pic_show_some' | loc:$root.lang}} {{option}} {{'word_pic_hits' | loc:$root.lang}}
+                    </option>
+                </select>
+                <div class="flex flex-wrap gap-2">
+                    {{'sort_by' | loc:$root.lang}}:
+                    <label>
+                        <input type="radio" value="mi" ng-model="$ctrl.sortLocal" ng-change="$ctrl.changeSort()" />
+                        {{'stat_lmi' | loc:$root.lang}}
+                        <i
+                            class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                            uib-tooltip="{{'stat_lmi_help' | loc:$root.lang}}"
+                        ></i>
+                    </label>
+                    <label>
+                        <input type="radio" value="freq" ng-model="$ctrl.sortLocal" ng-change="$ctrl.changeSort()" />
+                        {{'stat_frequency' | loc:$root.lang}}
+                    </label>
                 </div>
             </div>
-            <div class="content_target">
-                <div class="tableContainer radialBkg" ng-repeat="word in $ctrl.data">
-                    <div
-                        class="header"
-                        ng-if="$ctrl.isLemgram(word.token)"
-                        ng-bind-html="$ctrl.lemgramToHtml(word.token) | trust"
-                    ></div>
-                    <div class="header" ng-if="!$ctrl.isLemgram(word.token)">
-                        {{word.token}} ({{word.wordClassShort | loc:$root.lang}})
-                    </div>
+            <div class="content_target flex flex-wrap gap-4 items-start">
+                <section class="radialBkg p-2 border border-gray-400" ng-repeat="word in $ctrl.data">
+                    <h2 class="text-xl mb-4">
+                        <span
+                            ng-if="$ctrl.isLemgram(word.token)"
+                            ng-bind-html="$ctrl.lemgramToHtml(word.token) | trust"
+                        ></span>
+                        <span ng-if="!$ctrl.isLemgram(word.token)">
+                            {{word.token}} ({{word.wordClassShort | loc:$root.lang}})
+                        </span>
+                    </h2>
 
                     <div class="lemgram_section" ng-repeat="section in word.data" ng-init="parentIndex = $index">
                         <div class="lemgram_help">
@@ -142,14 +125,14 @@ angular.module("korpApp").component("wordPicture", {
                                             <span ng-if="!data.label" class="opacity-50">&empty;</span>
                                         </td>
                                         <td
-                                            ng-if="$ctrl.sortProp == 'freq'"
+                                            ng-if="$ctrl.statProp == 'freq'"
                                             title="{{'stat_lmi' | loc:$root.lang}}: {{row.mi | number:2}}"
                                             class="px-1 text-right"
                                         >
                                             {{row.freq}}
                                         </td>
                                         <td
-                                            ng-if="$ctrl.sortProp == 'mi'"
+                                            ng-if="$ctrl.statProp == 'mi'"
                                             title="{{'stat_frequency' | loc:$root.lang}}: {{row.freq}}"
                                             class="px-1 text-right"
                                         >
@@ -160,17 +143,19 @@ angular.module("korpApp").component("wordPicture", {
                             </table>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
+
+        <help-box>
+            <p>{{'word_pic_description' | loc:$root.lang}}</p>
+            <p>{{'word_pic_result_description' | loc:$root.lang}}</p>
+        </help-box>
     `,
     bindings: {
-        wordPic: "<",
-        activate: "<",
-        loading: "<",
-        hitSettings: "<",
-        settings: "<",
         data: "<",
+        onSortChange: "&",
+        sort: "<",
         warning: "<",
     },
     controller: [
@@ -178,22 +163,35 @@ angular.module("korpApp").component("wordPicture", {
         function ($rootScope: RootScope) {
             const $ctrl = this as WordPictureController
 
+            $ctrl.limitOptions = [...LIMITS]
+            $ctrl.limit = String(LIMITS[0])
             $ctrl.showWordClass = false
-            $ctrl.sortProp = $rootScope.wordpicSortProp
 
             $ctrl.$onChanges = (changes) => {
-                // Update local sortProp value after new data is received
-                if ("data" in changes) {
-                    $ctrl.sortProp = $rootScope.wordpicSortProp
+                if ("data" in changes && changes.data.currentValue) {
+                    $ctrl.statProp = $ctrl.sort
+                    // Find length of longest column
+                    const max = Math.max(
+                        ...$ctrl.data.flatMap((word) =>
+                            word.data.flatMap((table) =>
+                                table.flatMap((col) => (Array.isArray(col.table) ? col.table.length : 0))
+                            )
+                        )
+                    )
+                    // Include options up to the first that is higher than the longest column
+                    const endIndex = LIMITS.findIndex((limit) => limit >= max)
+                    $ctrl.limitOptions = LIMITS.slice(0, endIndex + 1)
+                    // Clamp previously selected value
+                    if (Number($ctrl.limit) > LIMITS[endIndex]) $ctrl.limit = String(LIMITS[endIndex])
+                }
+
+                if ("sort" in changes) {
+                    $ctrl.sortLocal = changes.sort.currentValue
                 }
             }
 
-            $ctrl.localeString = function (lang, hitSetting) {
-                if (hitSetting === "1000") {
-                    return loc("word_pic_show_all", lang)
-                } else {
-                    return loc("word_pic_show_some", lang) + " " + hitSetting + " " + loc("word_pic_hits", lang)
-                }
+            $ctrl.changeSort = () => {
+                $ctrl.onSortChange({ sort: $ctrl.sortLocal })
             }
 
             $ctrl.renderResultHeader = function (section, index) {
@@ -213,17 +211,17 @@ angular.module("korpApp").component("wordPicture", {
                     return `lemgram_header_item ${header.css_class}`
                 } else {
                     let classes = "hit"
-                    if (isLemgram(token)) {
+                    if (Lemgram.parse(token)) {
                         classes += " lemgram"
                     }
                     return classes
                 }
             }
 
-            $ctrl.isLemgram = isLemgram
-            $ctrl.lemgramToHtml = lemgramToHtml
+            $ctrl.isLemgram = (id) => !!Lemgram.parse(id)
+            $ctrl.lemgramToHtml = (id) => Lemgram.parse(id)!.toHtml()
 
-            $ctrl.fromLemgram = (word) => (isLemgram(word) ? splitLemgram(word).form : word)
+            $ctrl.fromLemgram = (word) => Lemgram.parse(word)?.form || word
 
             $ctrl.getResultHeader = (index, wordClass) => settings.word_picture_conf![wordClass][index]
 
@@ -234,39 +232,28 @@ angular.module("korpApp").component("wordPicture", {
                 return def != "_" ? def.css_class : undefined
             }
 
-            $ctrl.minimize = (table) => table.slice(0, Number($ctrl.settings.showNumberOfHits))
+            $ctrl.minimize = (table) => table.slice(0, Number($ctrl.limit) || LIMITS[0])
 
             $ctrl.parseLemgram = function (row) {
                 const set = row[row.show_rel].split("|")
-                const lemgram = set[0]
+                const id = set[0]
                 const prefix = row.depextra ? `${row.depextra} ` : ""
 
-                if (isLemgram(lemgram)) {
-                    const match = splitLemgram(lemgram)
-                    const concept = row.dep ? match.form.replace(/_/g, " ") : "-"
+                const lemgram = Lemgram.parse(id)
+                if (lemgram) {
+                    const concept = row.dep ? lemgram.form : "-"
                     return {
                         label: prefix + concept,
-                        pos: match.pos.slice(0, 2),
-                        idx: match.index,
+                        pos: lemgram.pos,
+                        idx: lemgram.index,
                     }
                 }
 
-                return {
-                    label: prefix + lemgram,
-                }
+                return { label: prefix + id }
             }
 
             $ctrl.onClickExample = function (row) {
-                $rootScope.kwicTabs.push({
-                    queryParams: {
-                        ajaxParams: {
-                            command: "relations_sentences",
-                            source: row.source.join(","),
-                            start: 0,
-                            end: 24,
-                        },
-                    },
-                })
+                $rootScope.kwicTabs.push(new WordpicExampleTask(row.source.join(",")))
             }
         },
     ],

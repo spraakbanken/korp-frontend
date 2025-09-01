@@ -1,11 +1,12 @@
 /** @format */
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
-import _ from "lodash"
+import { template } from "lodash"
 import "../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { getStringifier } from "@/stringify"
-import { html, regescape, splitLemgram, safeApply, getConfigurable } from "@/util"
+import { html, regescape, getConfigurable } from "@/util"
+import { safeApply } from "@/angular-util"
 import { loc, locAttribute, locObj } from "@/i18n"
 import "@/services/utils"
 import "@/components/deptree/deptree"
@@ -17,6 +18,8 @@ import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config.types"
 import { JQueryExtended } from "@/jquery.types"
 import { Token } from "@/backend/types"
+import { TextTask } from "@/backend/task/text-task"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
 export type SidebarComponent = {
@@ -165,15 +168,12 @@ angular.module("korpApp").component("sidebar", {
             }
 
             $ctrl.openReadingMode = () => {
-                $rootScope.textTabs.push({
-                    corpus: $ctrl.corpusObj.id,
-                    sentenceData: $ctrl.sentenceData,
-                })
+                $rootScope.textTabs.push(new TextTask($ctrl.corpusObj.id, $ctrl.sentenceData))
             }
 
             $ctrl.updateContent = ({ sentenceData, wordData, corpus, tokens, inReadingMode }) => {
                 // TODO: this is pretty broken
-                const corpusObj = settings.corpora[corpus] || settings.corpusListing.get(corpus)
+                const corpusObj = settings.corpora[corpus] || corpusListing.get(corpus)
                 $ctrl.corpusObj = corpusObj
                 $ctrl.sentenceData = sentenceData
                 $ctrl.inReadingMode = inReadingMode
@@ -233,10 +233,10 @@ angular.module("korpApp").component("sidebar", {
                 let pairs: [string, any][] = []
                 let sortingArr: string[] = []
                 if (type === "struct") {
-                    pairs = _.toPairs(sentenceData)
+                    pairs = Object.entries(sentenceData)
                     sortingArr = $ctrl.corpusObj["_struct_attributes_order"]
                 } else if (type === "pos") {
-                    pairs = _.toPairs(wordData)
+                    pairs = Object.entries(wordData)
                     sortingArr = $ctrl.corpusObj["_attributes_order"]
                 }
 
@@ -326,7 +326,7 @@ angular.module("korpApp").component("sidebar", {
 
                 output.data("attrs", attrs)
                 if (value === "|" || value === "" || value === null) {
-                    output.append(`<i rel='localize[empty]' style='color : grey'>${loc("empty")}</i>`)
+                    output.append(`<em style='color : grey'>${loc("empty")}</em>`)
                     return output
                 }
 
@@ -335,20 +335,8 @@ angular.module("korpApp").component("sidebar", {
                     output.append(info_link)
                     const pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>'
                     const ul = $("<ul>")
-                    const getStringVal = (str: string) => [...str].map((char) => char.charCodeAt(0)).join("")
                     // The value is either single, or a pipe-separated list
                     const valueArray = (value?.split("|") || []).filter(Boolean)
-                    if (key === "variants") {
-                        // TODO: this doesn't sort quite as expected
-                        valueArray.sort(function (a, b) {
-                            const splita = splitLemgram(a)
-                            const splitb = splitLemgram(b)
-                            const strvala = getStringVal(splita.form) + splita.index + getStringVal(splita.pos)
-                            const strvalb = getStringVal(splitb.form) + splitb.index + getStringVal(splitb.pos)
-
-                            return parseInt(strvala) - parseInt(strvalb)
-                        })
-                    }
 
                     const lis: JQLite[] = []
                     for (const x of valueArray) {
@@ -358,21 +346,24 @@ angular.module("korpApp").component("sidebar", {
                             val = locAttribute(attrs.translation, val, $ctrl.lang)
                         }
 
-                        const inner = $(_.template(pattern)({ key: x, val }))
+                        const inner = $(template(pattern)({ key: x, val }))
 
                         // If `internal_search` is set, clicking on the value will trigger a search
                         if (attrs["internal_search"]) {
-                            inner.addClass("link").click(function () {
-                                const cqpVal = $(this).data("key")
-                                const cqp = `[${key} contains "${regescape(cqpVal)}"]`
-                                statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
+                            inner.addClass("link").on("click", function () {
+                                if (key == "lex") {
+                                    statemachine.send("SEARCH_LEMGRAM", { value: x })
+                                } else {
+                                    const cqp = `[${key} contains "${regescape(x)}"]`
+                                    statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
+                                }
                             })
                         }
 
                         // If `external_search` is set, clicking on the value will open the given url new tab
                         const li = $("<li></li>").data("key", x).append(inner)
                         if (attrs["external_search"]) {
-                            const url = _.template(attrs["external_search"])({ val: x })
+                            const url = template(attrs["external_search"])({ val: x })
                             li.append($(`<a href='${url}' class='external_link' target='_blank'></a>`))
                         }
 
@@ -397,7 +388,7 @@ angular.module("korpApp").component("sidebar", {
                     )
                 } else if (attrs.pattern) {
                     output.append(
-                        _.template(attrs.pattern)({
+                        template(attrs.pattern)({
                             key,
                             val: str_value,
                             pos_attrs: wordData,

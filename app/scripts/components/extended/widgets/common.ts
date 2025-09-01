@@ -1,14 +1,11 @@
 /** @format */
-import _ from "lodash"
-import settings from "@/settings"
-import { loc, locAttribute } from "@/i18n"
+import { locAttribute } from "@/i18n"
 import { html } from "@/util"
-import "@/directives/escaper"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
-import { getAttrValues } from "@/backend/attr-values"
-import { RootScope } from "@/root-scope.types"
-import { LocMap } from "@/i18n/types"
+import { StoreService } from "@/services/store"
+import { AttributeOption } from "@/corpora/corpus_listing"
+import { loadOptions } from "@/search/extended-search"
 
 export type Widget = {
     template: string
@@ -16,6 +13,7 @@ export type Widget = {
 }
 
 export type WidgetScope<T = string> = IScope & {
+    attr: AttributeOption
     orObj: Condition
     model: T
     input: string
@@ -23,9 +21,7 @@ export type WidgetScope<T = string> = IScope & {
 
 export type SelectWidgetScope = WidgetScope & {
     $parent: any
-    dataset: string[][]
-    type: string
-    translation: LocMap
+    options: string[][]
     inputOnly: boolean
     loading: boolean
     getRows: (input?: string) => string[][]
@@ -35,16 +31,15 @@ export type SelectWidgetScope = WidgetScope & {
 export const selectTemplate = html`<select
         ng-show="!inputOnly"
         ng-model="input"
-        escaper
-        ng-options="tuple[0] as tuple[1] for tuple in dataset"
+        ng-options="tuple[0] as tuple[1] for tuple in options"
     ></select>
     <input ng-show="inputOnly" type="text" ng-model="input" />`
 
 export const selectController = (autocomplete: boolean): IController => [
     "$scope",
-    "$rootScope",
-    function ($scope: SelectWidgetScope, $rootScope: RootScope) {
-        $rootScope.$on("corpuschooserchange", function (event, selected: string[]) {
+    "store",
+    function ($scope: SelectWidgetScope, store: StoreService) {
+        store.watch("corpus", (selected) => {
             // TODO Destroy if new corpus selection doesn't support the attribute?
             if (selected.length > 0) {
                 reloadValues()
@@ -52,35 +47,15 @@ export const selectController = (autocomplete: boolean): IController => [
         })
 
         async function reloadValues() {
-            // TODO this exploits the API
-            const attributeDefinition: { value: string } = $scope.$parent.$ctrl.attributeDefinition
-            if (!attributeDefinition) {
-                return
-            }
-
-            const attribute = attributeDefinition.value
-            const selectedCorpora = settings.corpusListing.selected
-
-            // check which corpora support attributes
-            const corpora: string[] = []
-            for (let corpusSettings of selectedCorpora) {
-                if (attribute in corpusSettings["struct_attributes"] || attribute in corpusSettings.attributes) {
-                    corpora.push(corpusSettings.id)
-                }
-            }
-
             $scope.loading = true
-            const split = $scope.type === "set"
-            const data = await getAttrValues(corpora, attribute, split)
+            const options = await loadOptions($scope.attr, store.lang)
+            const currentInputExists = options.find((option) => option[0] == $scope.input)
             $scope.$apply(() => {
                 $scope.loading = false
-
-                const dataset = _.uniq(data).map((item) => {
-                    return item === "" ? [item, loc("empty")] : [item, locAttribute($scope.translation, item)]
-                })
-                $scope.dataset = _.sortBy(dataset, (tuple) => tuple[1])
-                if (!autocomplete) {
-                    $scope.input = data.includes($scope.input) ? $scope.input : $scope.dataset[0][0]
+                $scope.options = options
+                // Reset old selection if that option has been removed.
+                if (!autocomplete && !currentInputExists) {
+                    $scope.input = $scope.options[0][0]
                 }
             })
         }
@@ -92,16 +67,16 @@ export const selectController = (autocomplete: boolean): IController => [
             $scope.inputOnly = !["=", "!=", "contains", "not contains"].includes($scope.orObj.op)
             if (newVal !== oldVal) {
                 if (!autocomplete) {
-                    $scope.input = "" || $scope.dataset[0][0]
+                    $scope.input = $scope.options[0][0]
                 }
             }
         })
 
         $scope.getRows = (input) =>
             input
-                ? $scope.dataset.filter((tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
-                : $scope.dataset
+                ? $scope.options.filter((tuple) => tuple[0].toLowerCase().indexOf(input.toLowerCase()) !== -1)
+                : $scope.options
 
-        $scope.typeaheadInputFormatter = (model) => locAttribute($scope.translation, model)
+        $scope.typeaheadInputFormatter = (model) => locAttribute($scope.attr.translation, model, store.lang)
     },
 ]

@@ -4,22 +4,21 @@
  *   If the JWT call fails, it will redirect the user to a login service, a service that will redirect
  *   the user back to Korp. After that the JWT call is expected to return a JWT.
  */
-import _ from "lodash"
 import { loginStatusComponent } from "./login_status"
 import settings from "@/settings"
 import { IModule } from "angular"
+import { AuthModule } from "../auth.types"
 
-export type AuthModuleOptions = {
+type Options = {
     jwt_url: string
     login_service: string
     logout_service: string
 }
 
 type State = {
-    credentials?: string[]
-    otherCredentials?: string[]
-    jwt?: string
-    username?: string
+    credentials: string[]
+    jwt: string
+    username: string
 }
 
 type JwtPayload = {
@@ -27,73 +26,62 @@ type JwtPayload = {
     email: string
     scope: {
         corpora?: Record<string, number>
-        other?: Record<string, number>
     }
     levels: Record<"READ" | "WRITE" | "ADMIN", number>
 }
 
-const state: State = {
-    jwt: undefined,
-    username: undefined,
-}
+let state: State | undefined = undefined
 
-const authModule = settings.auth_module as { module: string; options: AuthModuleOptions }
+if (typeof settings.auth_module != "object")
+    throw new Error("federated_auth requires options (jwt_url, login_service, logout_service)")
+const options = settings.auth_module.options as Options
 
-export const init = async () => {
-    const response = await fetch(authModule.options.jwt_url, {
-        headers: { accept: "text/plain" },
-        credentials: "include",
-    })
+const authModule: AuthModule = {
+    init: async () => {
+        const response = await fetch(options.jwt_url, {
+            headers: { accept: "text/plain" },
+            credentials: "include",
+        })
 
-    if (!response.ok) {
-        if (response.status == 401) {
-            console.log("User not logged in")
-        } else {
-            console.warn(`An error has occured: ${response.status}`)
+        if (!response.ok) {
+            if (response.status == 401) {
+                console.log("User not logged in")
+            } else {
+                console.warn(`An error has occured: ${response.status}`)
+            }
+            return false
         }
-        return false
-    }
 
-    const jwt = await response.text()
-    state.jwt = jwt
+        const jwt = await response.text()
 
-    const jwtPayload: JwtPayload = JSON.parse(atob(jwt.split(".")[1]))
-    const { name, email, scope, levels } = jwtPayload
-    state.username = name || email
+        const jwtPayload: JwtPayload = JSON.parse(atob(jwt.split(".")[1]))
+        const { name, email, scope, levels } = jwtPayload
+        const username = name || email
 
-    state.credentials = Object.keys(scope.corpora || {})
-        .filter((id) => (scope.corpora?.[id] || 0) > levels["READ"])
-        .map((id) => id.toUpperCase())
+        const credentials = Object.keys(scope.corpora || {})
+            .filter((id) => (scope.corpora?.[id] || 0) >= levels["READ"])
+            .map((id) => id.toUpperCase())
 
-    state.otherCredentials = Object.keys(scope.other || {})
-        .filter((id) => (scope.other?.[id] || 0) > levels["READ"])
-        .map((id) => id.toUpperCase())
+        state = { jwt, username, credentials }
 
-    return true
+        return true
+    },
+    initAngular: (korpApp: IModule) => {
+        korpApp.component("loginStatus", loginStatusComponent)
+    },
+    login: () => {
+        // TODO try to implement this again
+        // if we already tried to login, don't redirect again, to avoid infinite loops
+        // if (document.referrer == "") {
+        // }
+        window.location.href = `${options.login_service}?redirect=${window.location.href}`
+    },
+    logout: () => (window.location.href = options.logout_service),
+    getAuthorizationHeader: (): Record<string, string> => (state ? { Authorization: `Bearer ${state.jwt}` } : {}),
+    hasCredential: (corpusId) => (state?.credentials || []).includes(corpusId),
+    getCredentials: () => state?.credentials || [],
+    getUsername: () => state!.username,
+    isLoggedIn: () => !!state,
 }
 
-export const initAngular = (korpApp: IModule) => {
-    korpApp.component("loginStatus", loginStatusComponent)
-}
-
-export const login = () => {
-    // TODO try to implement this again
-    // if we already tried to login, don't redirect again, to avoid infinite loops
-    // if (document.referrer == "") {
-    // }
-    window.location.href = `${authModule.options.login_service}?redirect=${window.location.href}`
-}
-
-export const getAuthorizationHeader = () => (isLoggedIn() ? { Authorization: `Bearer ${state.jwt}` } : {})
-
-export const hasCredential = (corpusId: string) => getCredentials().includes(corpusId)
-
-export const logout = () => (window.location.href = authModule.options.logout_service)
-
-export const getCredentials = () => state.credentials || []
-
-export const getUsername = () => state.username
-
-export const isLoggedIn = () => !_.isEmpty(state.jwt)
-
-export const getOtherCredentials = () => state.otherCredentials || []
+export default authModule

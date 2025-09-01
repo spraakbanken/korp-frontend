@@ -1,56 +1,58 @@
 <div class="modal-header">
-    <h2>Korp version 9.8.4</h2>
+    <h2>Korp version 9.10.1</h2>
     <span ng-click="clickX()" class="close-x">×</span>
-
 </div>
-<div id="about_body" class="modal-body" >
-    <p ng-bind-html="'about_body' | loc:lang | trust" ></p>
-    
-    <b ng-bind-html="'about_cite_header' | loc:lang | trust"></b>
+
+<div id="about_body" class="modal-body">
+    <p ng-bind-html="'about_body' | loc:lang | trust"></p>
+
+    <h4 ng-bind-html="'about_cite_header' | loc:lang | trust"></h4>
     <p ng-bind-html="'about_cite' | loc:lang | trust"></p>
 
-    <div>
-        <b>{{'about_man' | loc:lang}}</b>
-        <ul>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/lars">Lars Borin</a></li>
-            <li>
-                <a target="_blank"  href="https://spraakbanken.gu.se/om/personal/markus">Markus Forsberg</a></li>
-        </ul>
-        <b>{{'about_dev' | loc:lang}}</b>
-        <ul>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/maria">Maria Öhrman</a>
-            </li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/martin">Martin Hammarstedt</a>
-            </li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/anne">Anne Schumacher</a>
-            </li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/arild">Arild Matsson</a>
-            </li>
-        </ul>
-        <b>{{'about_contributors' | loc:lang}}</b>
-        <ul>
-            <li>Dan Rosén</li>
-            <li>Johan Roxendal</li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/jonatan">Jonatan Uppström</a>
-            </li>
-            <li>Jyrki Niemi</li>
-            <li>Malin Ahlberg</li>
-            <li>Olof Olsson</li>
-            <li>
-                <a target="_blank" href="https://spraakbanken.gu.se/om/personal/peter">Peter Ljunglöf</a>
-            </li>
-            <li>Roland Schäfer</li>
-        </ul>
+    <h4>{{'about_man' | loc:lang}}</h4>
+    <ul>
+        <li>
+            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/lars">Lars Borin</a>
+        </li>
+        <li>
+            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/markus">Markus Forsberg</a>
+        </li>
+    </ul>
 
-        <span>
-            {{'about_logo' | loc:lang}}
-            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/staffan">Staffan Melin</a></span>.
+    <h4>{{'about_dev' | loc:lang}}</h4>
+    <ul>
+        <li>
+            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/maria">Maria Öhrman</a>
+        </li>
+        <li>
+            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/martin">Martin Hammarstedt</a>
+        </li>
+        <li>
+            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/anne">Anne Schumacher</a>
+        </li>
+        <li>
+            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/arild">Arild Matsson</a>
+        </li>
+    </ul>
 
-    </div>
+    <h4>{{'about_contributors' | loc:lang}}</h4>
+    <ul>
+        <li>Dan Rosén</li>
+        <li>Johan Roxendal</li>
+        <li>
+            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/jonatan">Jonatan Uppström</a>
+        </li>
+        <li>Jyrki Niemi</li>
+        <li>Malin Ahlberg</li>
+        <li>Olof Olsson</li>
+        <li>
+            <a target="_blank" href="https://spraakbanken.gu.se/om/personal/peter">Peter Ljunglöf</a>
+        </li>
+        <li>Roland Schäfer</li>
+    </ul>
+
+    <p>
+        {{'about_logo' | loc:lang}}
+        <a target="_blank" href="https://spraakbanken.gu.se/om/personal/staffan">Staffan Melin</a>.
+    </p>
 </div>

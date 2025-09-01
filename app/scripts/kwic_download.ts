@@ -1,20 +1,20 @@
 /** @format */
-import _ from "lodash"
+import { fill } from "lodash"
 import moment from "moment"
 import CSV from "comma-separated-values/csv"
 import { locObj } from "@/i18n"
-import { CorpusHeading, isCorpusHeading, isKwic, Row } from "./components/kwic"
-import { ApiKwic } from "./backend/types"
-import { QueryParams } from "./backend/types/query"
+import { CorpusHeading, isCorpusHeading, isKwic, Row } from "@/kwic"
+import { ApiKwic } from "@/backend/types"
+import { QueryParams } from "@/backend/types/query"
 
 // The annotations option is not available for parallel
 type AnnotationsRow = ApiKwic | CorpusHeading
 
 type TableRow = (string | number)[]
 
-const emptyRow = (length: number) => _.fill(new Array(length), "")
+const emptyRow = (length: number) => fill(new Array(length), "")
 
-const padRows = (data: string[], length: number) => _.map(data, (value) => [value, ...emptyRow(length - 1)])
+const padRows = (data: string[], length: number) => data.map((value) => [value, ...emptyRow(length - 1)])
 
 function createFile(dataType: string, fileType: string, content: string) {
     const date = moment().format("YYYYMMDD_HHmmss")

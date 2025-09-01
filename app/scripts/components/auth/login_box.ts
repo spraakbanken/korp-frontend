@@ -3,17 +3,22 @@ import { IComponentOptions, IController, ITimeoutService } from "angular"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { html } from "@/util"
-import { login } from "./basic_auth"
-import { AuthModuleOptions } from "./basic_auth.types"
+import { auth } from "./auth"
+
+export type AuthModuleOptions = {
+    show_remember?: boolean
+    default_value_remember?: boolean
+}
 
 // TODO make it not closable when login is NEEDED
 export const loginBoxComponent: IComponentOptions = {
     template: html`
         <div class="modal-header login-modal-header">
             <span class="login-header">{{'log_in' | loc:$root.lang}}</span>
-            <span ng-click="$ctrl.close()" class="close-x">×</span>
+            <span ng-click="$ctrl.dismiss()" class="close-x">×</span>
         </div>
         <div id="login_popup" class="modal-body">
+            <p>{{ "login_help" | loc:$root.lang }}</p>
             <form ng-submit="$ctrl.loginSubmit()">
                 <label for="usrname">{{'username' | loc:$root.lang}}</label>
                 <input id="usrname" ng-model="$ctrl.loginUsr" type="text" />
@@ -43,7 +48,8 @@ export const loginBoxComponent: IComponentOptions = {
         </div>
     `,
     bindings: {
-        closeClick: "&",
+        onClose: "&",
+        onDismiss: "&",
     },
     controller: [
         "$timeout",
@@ -65,7 +71,7 @@ export const loginBoxComponent: IComponentOptions = {
                 $ctrl.loading = true
 
                 try {
-                    await login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
+                    await auth.login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
                     // no send to statemachine
                     statemachine.send("LOGIN")
                     $ctrl.close()
@@ -80,8 +86,12 @@ export const loginBoxComponent: IComponentOptions = {
 
             $ctrl.close = function () {
                 $ctrl.loginErr = false
-                $ctrl.closeClick()
-                // and do what? send to parent?
+                $ctrl.onClose()
+            }
+
+            $ctrl.dismiss = () => {
+                $ctrl.loginErr = false
+                $ctrl.onDismiss()
             }
         },
     ],

@@ -1,8 +1,9 @@
 /** @format */
-import angular, { IController, IScope } from "angular"
-import settings from "@/settings"
+import angular, { IController } from "angular"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { html } from "@/util"
 import { CqpToken } from "@/cqp_parser/cqp.types"
+import { StoreService } from "@/services/store"
 
 type ExtendedStructTokenController = IController & {
     token: CqpToken
@@ -62,22 +63,20 @@ angular.module("korpApp").component("extendedStructToken", {
         change: "&",
     },
     controller: [
-        "$scope",
-        function ($scope: IScope) {
+        "store",
+        function (store: StoreService) {
             const ctrl = this as ExtendedStructTokenController
 
-            ctrl.$onInit = () => {
-                onCorpusChange()
-                if (!ctrl.token.struct) {
-                    const structs = Object.keys(ctrl.tagTypes)
+            store.watch("corpus", () => {
+                // Update options
+                ctrl.tagTypes = corpusListing.getCommonWithins()
+                const structs = Object.keys(ctrl.tagTypes)
+                // Set default value
+                if (!ctrl.token.struct || !structs.includes(ctrl.token.struct)) {
                     ctrl.token.struct = structs.includes("sentence") ? "sentence" : structs[0]
                     ctrl.change()
                 }
-
-                $scope.$on("corpuschooserchange", onCorpusChange)
-            }
-
-            const onCorpusChange = () => (ctrl.tagTypes = settings.corpusListing.getCommonWithins())
+            })
         },
     ],
 })

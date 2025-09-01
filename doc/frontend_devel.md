@@ -80,29 +80,35 @@ Språkbanken's configuration repository is <https://github.com/spraakbanken/korp
 It can be used as a supplement to this documentation. Make sure to check out the branch
 corresponding to the branch you are using in the main repository.
 
-## Settings in `config.yml`
+## Settings
 
-*Note: In the spring 2022 there was a rewrite where most of the frontend configuration moved to the backend. We also changed format from camel case to
-snake case. So `wordpictureTagset` became `word_picture_tagset`. Also `config.js` was turned into a YAML-file, `config.yml`.*
+Settings can be given on three levels, and are loaded in the following order:
 
-Many of the settings listed here can be given in a modes-file in the backend instead of `config.yml`. For example `autocomplete` could be wanted in
-one mode and not another. See the 
-[backend documentation](https://github.com/spraakbanken/korp-backend) for more 
-settings that affect the frontend.
+1. `config.yml`
+2. `<mode>_mode.js` – see [Modes](#modes)
+3. backend `/corpus_config` – see [Modes](#modes)
 
-**Attributes that must be added to `config.yml`, and doesn't work in modes-files:**
+In case of conflicts, values from a later layer overwrites those from a previous layer.
+Note that nested values are not merged: If you use `config.yml` to specify `logo.korp` and `<mode>_mode.js` to specify `logo.organization`, then `logo.korp` will be undefined.
 
-- __korp_backend_url__ - URL to Korp's backend
-- __languages__ - Array of objects with language code and translation of supported UI languages, for example:
+### Settings reference
+
+The first few settings are needed at initialization time, and thus must be specified in `config.yml` or `<mode>_mode.js`.
+
+- __korp_backend_url__ - String. _Required during init._ URL to Korp's backend
+- __languages__ - Array of objects. _Required during init._ Each object has a language code and label, for example:
     ```yaml
     - value: eng
       label: English
     - value: swe
       label: Svenska
     ```
-
-**Others:**
-
+- __logo__ - Object. _Optional, but must be set during init._ Specify site-specific logos.
+  - __korp__ - String. HTML content for the Korp logo to the left of the corpus chooser. Default: [plain Korp logo](../app/img/korp.svg).
+  - __organization__ - String. HTML content for the organization logo(s) on the top right of the Korp window. Default: empty.
+  - __chooser_right__ - String. HTML content for a logo to the right of the corpus chooser: Default: empty.
+  The HTML content can refer to image files in the `app/img/` directory of the configuration as `img/`_file_.
+  If you wish to use the the [plain Korp logo](../app/img/korp.svg) (or other images in this repository) differently from the default, you should copy it to the configuration.
 - __auth_module__ - String or object. See [Authentication](#authentication)
 - __autocomplete__ - Boolean. See [auto completion menu](#auto-completion-menu)
 - __common_struct_types__ - Object with attribute name as a key and attribute definition as value. Attributes 
@@ -138,6 +144,7 @@ settings that affect the frontend.
 - __has_timespan__ - Boolean. If the backend supports the `timespan` call, used in corpus chooser for example. Default: `true`
 - __hits_per_page_values__ - Array of integer. The available page sizes. Default: `[25, 50, 75, 100]`
 - __hits_per_page_default__ - Integer. The preselected page size. Default: `hits_per_page_values[0]`
+- __initialization_checks__ - Async function. Implement this to do customized async initialization when setting initial corpus selection. Return true to skip standard selection processing afterwards.
 - __input_case_insensitive_default__ - Boolean. Decides if the simple search input should be case-insensitive by default.
 - __iso_languages__ - A map of two-letter ISO language codes to three-letter. Only used for fixing old links. Default: See `settings.js`
 - __map_center__ - See [Map](#map)
@@ -157,8 +164,9 @@ settings that affect the frontend.
 - __reduce_word_attribute_selector__ - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora *word* attributes or only the attributes common to selected corpora. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
 - __reduce_struct_attribute_selector__ - Same as __reduce_word_attribute_selector__, but for structural attributes.
 - __statistics__ - Boolean. Enable statistics search. Default: `true`
-- __statistics_case_insensitive_default__ - Boolean. Decides if the "Reduce by" option should be case-insensitive by default.
-- __statistics_search_default__ - Boolean. Decides if "Show statistics" will be checked or not when loading Korp. Default: `true`
+- __statistics_case_insensitive_default__ - Boolean. Decides if the "Group by" option should be case-insensitive by default.
+- __statistics_limit__ - Boolean. Maximum number of rows to retrieve for statistics. Some accuracy is lost for large results, but it can save the browser from crashing.
+- __statistics_postprocess__ - Function. Allows post-processing of the statistics result.
 - __visible_modes__ - Integer. The number of modes to show links to. If there are more modes than this value, the rest will be added to a drop-down. Default: `6`
 - __word_label__ - Translation object. Translations for "word". Add if you need support for other languages. Default:
     ```yaml
@@ -593,7 +601,7 @@ Add `my_key` to `<configDir>/translations/corpora-<lang>.json` for all `lang`.
 [Deprecation warning] Before the Angular approach we used the `rel` attribute, like so (but you shouldn't any more):
   `<span rel="localize[translation_key]">...</span>`
 
-#### Components
+### Components
 
 Define your own components as a map in `custom/components.js`. `component` will be added as a component with name `componentName` to the Angular app.
 
@@ -612,36 +620,32 @@ These can then be used in other custom components / extended / sidebar or as rea
 Remember that in Angular, if you use `myComponentName` as a name of a component, you must use 
 `my-component-name` when using the component in markup.
 
-#### Customizing extended search
+### Customizing extended search
 
 In `custom/extended.js`, we can define custom (non-Angular) components to be used in extended search:
 
 ```js
 export default {
     complemgramExtended: {
-        template: `<input type="text" ng-model="model" />
-        `,
-        controller: [
-            "$scope", function($scope) {
-                $scope.$watch("input; () => ...)
-                ...
+        template: `<input type="text" ng-model="input" />`,
+        controller: ["$scope", function($scope) {
+            $scope.$watch("input", () => ...)
+            ...
         }],
     },
     attr: {
-        template: `
-            <select ...>
-        `,
+        template: `<select ...>`,
         controller: ["$scope", "$uibModal", function($scope, $uibModal) {
             if($scope.show) $uibModal.open
-        }
+            ...
+        }]
     },
     ...
 }
 ```
 
-Template is an Angular.js template string and controller is an Angular.js controller function.
-
-Make sure to set `$scope.model` as the final result to be used in the CQP-query.
+- `template` is an Angular.js template string and `controller` is an Angular.js controller function.
+- Make sure to write the input value to `$scope.input`, which will automatically be regexp-escaped depending on the selected operator and attribute config.
 
 `complemgramExtended` can then be used as key for `extendedComponent` in the configuration files.
 
@@ -654,14 +658,7 @@ attributes: {
 }
 ```
 
-##### escaper
-
-`escaper` is a directive that takes the user's input and escapes any regexp characters before saving it to `scope.model`. 
-When the model changes it automatically de-escapes any regexp characters before showing the value to the user. 
-Input must be saved to `scope.input` for it to work. Example: `<input ng-model="input" escaper>`
-
-
-##### Customizing sidebar
+### Customizing sidebar
 
 In `custom/sidebar.js`, we can define custom components to be used in the sidebar:
 
@@ -696,7 +693,7 @@ Data about the search, the current token and current attribute is stored in a nu
 
 *Note: The component not an actual Angular.js [component](https://docs.angularjs.org/guide/component). It will be added to the interface by manually creating a new scope and using `$controller` to instantiate the controller and `$compile` to instantiate the template.*
 
-#### Rendering attribute values in the statistics view
+### Rendering attribute values in the statistics view
 
 Define your own rules for rendering values and generating CQP-expressions for certain attributes.
 
@@ -720,22 +717,20 @@ export default {
 }
 ```
 
-Rendering values and generating CQP can also be controlled by editing `app/config/statistics_config.js`, but 
-of course it is best to avoid editing the actual code if it is possible.
+If you need to merge rows or otherwise alter the table structure, implement and assign a function to the `statistics_postprocess` setting.
 
-If you need to merge rows or otherwise alter the table structure, you can extend the `StatsProxy` class and do `statsProxyFactory.setClass(MyStatsProxy)`.
-
-#### Stringify functions
+### Stringify functions
 
 Add all custom pretty-printing to `custom/stringify.js`. Example file:
 
 ```js
-import { lemgramToHtml, saldoToHtml } from "@/util"
+import { Lemgram } from "@/lemgram"
+import { Saldo } from "@/saldo"
 
 export const {
-    sense: (sense) => saldoToHtml(sense, true),
-    lemgram: (str) => lemgramToHtml(str, true),
-    complemgram: (str) => str.split('+').map((lemgram) => lemgramToHtml(lemgram, true)).join('+')
+    sense: (sense) => Saldo.parse(sense)?.toHtml() || sense,
+    lemgram: (str) => Lemgram.parse(str)?.toHtml() || str,
+    complemgram: (str) => str.split('+').map((s) => Lemgram.parse(s)?.toHtml() || s).join('+')
 }
 ```
 
@@ -754,7 +749,10 @@ When clicking on a word in the KWIC a link will be added to the sidebar. Clickin
 
 The corpus must have the structural attribute `text__id`, which should be a unique ID in the corpus. `_head` and `_tail` are also needed and should contain the whitespace before and after the token. It is optional to put whitespace in both attributes. The simplest use case is to just put the trailing whitespace in `_tail` of that token and leave `_head` empty. The frontend will assume that any corpus with `reading_mode: true` will have these attributes.
 
-It is possible to write a custom reading component. See [this file](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.js) for an example. See [Components](#components) for documentation on custom components.
+The setting can also be an object with:
+
+- `component` (string) A [custom component](#components) to use instead of the default [standardReadingMode component](https://github.com/spraakbanken/korp-frontend/blob/dev/app/scripts/components/readingmode.ts)
+- `group_element` (string) An element name to use for grouping, e.g. `sentence`. The default reader component does not support grouped text, so only use this if your `component` supports it.
 
 
 # Developing the Korp Frontend
@@ -779,12 +777,7 @@ Use `snake_case` when defining new attributes in `config.yml`. Add a default val
 
 CQP queries are of course parsed in the backend to perform searching. But they are also parsed in the frontend, for programmatic manipulation etc. The frontend parser is written in [Peggy](https://peggyjs.org/) syntax: [CQPParser.peggy](../app/scripts/cqp_parser/CQPParser.peggy). It covers only some of the full CQP syntax supported by the backend, and it is quite expected to throw errors when parsing user-crafted queries.
 
-To rebuild JS code from the Peggy file, do:
-
-```sh
-cd app/scripts/cqp_parser
-npx peggy --format es -d _:lodash CQPParser.peggy
-```
+The parser is compiled at build time by [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader).
 
 ## Contributing with pull requests on Github
 

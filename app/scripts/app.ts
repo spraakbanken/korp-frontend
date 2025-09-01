@@ -1,5 +1,5 @@
 /** @format */
-import _ from "lodash"
+import { isEmpty } from "lodash"
 import {
     ICacheObject,
     ICompileProvider,
@@ -7,27 +7,31 @@ import {
     ILocaleService,
     ILocationProvider,
     IScope,
-    ITimeoutService,
     ui,
 } from "angular"
-import korpApp from "./korp.module"
+import korpApp from "@/korp.module"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
-import * as authenticationProxy from "@/components/auth/auth"
-import { initLocales } from "@/data_init"
+import { auth } from "@/components/auth/auth"
+import { getLocData } from "@/loc-data"
 import { RootScope } from "@/root-scope.types"
-import { CorpusTransformed } from "./settings/config-transformed.types"
-import { deferOk, getService, html } from "@/util"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { BUILD_HASH, html } from "@/util"
+import { formatRelativeHits } from "@/i18n/util"
+import { getService } from "@/angular-util"
+import { LocationService } from "@/services/types"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
 import "@/components/searchtabs"
 import "@/components/frontpage"
 import "@/components/results"
 import "@/components/korp-error"
-import { JQueryExtended } from "./jquery.types"
-import { LocationService } from "./urlparams"
+import "@/services/store"
+import { StoreService } from "@/services/store"
+import { JQueryExtended } from "@/jquery.types"
 import { LocLangMap } from "@/i18n/types"
-import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
+import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [
@@ -79,7 +83,7 @@ korpApp.filter(
             input === "" ? "–" : input
 )
 
-authenticationProxy.initAngular(korpApp)
+auth.initAngular(korpApp)
 
 /**
  * angular-dynamic-locale updates translations in the builtin $locale service, which is used
@@ -88,7 +92,7 @@ authenticationProxy.initAngular(korpApp)
 korpApp.config([
     "tmhDynamicLocaleProvider",
     (tmhDynamicLocaleProvider: tmh.tmh.IDynamicLocaleProvider) =>
-        tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js"),
+        tmhDynamicLocaleProvider.localeLocationPattern(`translations/angular-locale_{{locale}}.${BUILD_HASH}.js`),
 ])
 
 korpApp.config([
@@ -120,38 +124,21 @@ korpApp.run([
     "$locale",
     "tmhDynamicLocale",
     "tmhDynamicLocaleCache",
-    "$timeout",
     "$uibModal",
+    "store",
     async function (
         $rootScope: RootScope,
         $location: LocationService,
         $locale: ILocaleService,
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,
-        $timeout: ITimeoutService,
-        $uibModal: ui.bootstrap.IModalService
+        $uibModal: ui.bootstrap.IModalService,
+        store: StoreService
     ) {
         const s = $rootScope
 
-        s.extendedCQP = null
-        s.globalFilterData = {}
-        $rootScope.globalFilterDef = deferOk()
-        $rootScope.langDef = deferOk()
-        $rootScope.wordpicSortProp = "freq"
-
-        /** Get CQP corresponding to the current search, if any. */
-        $rootScope.getActiveCqp = () => {
-            if (!$rootScope.activeSearch) return undefined
-            // Simple search puts CQP in `simpleCQP`. Extended/advanced puts it in `activeSearch.val`.
-            const isSimple = ["word", "lemgram"].includes($rootScope.activeSearch.type)
-            return isSimple ? $rootScope.simpleCQP : $rootScope.activeSearch.val
-        }
-
-        // Listen to url changes like #?lang=swe
-        s.$on("$locationChangeSuccess", () => {
-            // Update current locale. This is async and triggers the "$localeChangeSuccess" event.
-            tmhDynamicLocale.set($location.search().lang || settings["default_language"])
-        })
+        // Sync stored lang to current locale. This is async and triggers the "$localeChangeSuccess" event.
+        store.watch("lang", (lang) => tmhDynamicLocale.set(lang))
 
         // Listen to change of current language
         s.$on("$localeChangeSuccess", () => {
@@ -165,9 +152,6 @@ korpApp.run([
                 console.warn(`No locale matching "${$locale.id}"`)
                 return
             }
-
-            // Update global variables
-            $rootScope["lang"] = lang
 
             // Trigger jQuery Localize
             ;($("body") as JQueryExtended).localize()
@@ -185,46 +169,41 @@ korpApp.run([
         $rootScope.mapTabs = []
         $rootScope.textTabs = []
 
-        // This fetch was started in data_init.js, but only here can we store the result.
-        const initLocalesPromise = initLocales().then((data): void =>
-            $rootScope.$apply(() => ($rootScope["loc_data"] = data))
-        )
+        /** Whether initial corpus selection is deferred because it depends on authentication. */
+        let waitForLogin = false
 
-        s.waitForLogin = false
+        async function initializeCorpusSelection(ids: string[], skipLogin?: boolean): Promise<void> {
+            if (!ids || ids.length == 0) ids = settings["preselected_corpora"] || []
 
-        async function initializeCorpusSelection(selectedIds: string[]): Promise<void> {
             // Resolve any folder ids to the contained corpus ids
-            selectedIds = selectedIds.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
+            ids = ids.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
 
-            let loginNeededFor: CorpusTransformed[] = []
+            const hasAccess = (corpus: CorpusTransformed) => auth.hasCredential(corpus.id.toUpperCase())
 
-            for (const corpusId of selectedIds) {
-                const corpusObj = settings.corpora[corpusId]
-                if (corpusObj && corpusObj.limited_access) {
-                    if (!authenticationProxy.hasCredential(corpusId.toUpperCase())) {
-                        loginNeededFor.push(corpusObj)
-                    }
-                }
-            }
+            const deniedCorpora = ids
+                .map((id) => settings.corpora[id])
+                .filter((corpus) => corpus?.limited_access && !hasAccess(corpus))
 
-            const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
+            const allowedIds = ids.filter((id) => !deniedCorpora.find((corpus) => corpus.id == id))
 
-            if (settings.initialization_checks && (await settings.initialization_checks(s))) {
+            const allCorpusIds = corpusListing.corpora.map((corpus) => corpus.id)
+
+            if (settings.initialization_checks && (await settings.initialization_checks())) {
                 // custom initialization code called
-            } else if (_.isEmpty(settings.corpora)) {
+            } else if (isEmpty(settings.corpora)) {
                 // no corpora
                 openErrorModal({
                     content: "<korp-error></korp-error>",
                     resolvable: false,
                 })
-            } else if (loginNeededFor.length != 0) {
+            } else if (deniedCorpora.length != 0) {
                 // check if user has access
                 const loginNeededHTML = () =>
-                    loginNeededFor.map((corpus) => `<span>${locObj(corpus.title)}</span>`).join(", ")
+                    deniedCorpora.map((corpus) => `<span>${locObj(corpus.title)}</span>`).join(", ")
 
-                if (authenticationProxy.isLoggedIn()) {
+                if (auth.isLoggedIn()) {
                     // access partly or fully denied to selected corpora
-                    if (settings.corpusListing.corpora.length == loginNeededFor.length) {
+                    if (corpusListing.corpora.length == deniedCorpora.length) {
                         openErrorModal({
                             content: "{{'access_denied' | loc:$root.lang}}",
                             buttonText: "go_to_start",
@@ -238,38 +217,43 @@ korpApp.run([
                                 <div>${loginNeededHTML()}</div>
                                 <div>{{'access_partly_denied_continue' | loc:$root.lang}}</div>`,
                             onClose: () => {
-                                const neededIds = loginNeededFor.map((corpus) => corpus.id)
-                                const filtered = selectedIds.filter((corpusId) => !neededIds.includes(corpusId))
-                                const selected = filtered.length ? filtered : settings["preselected_corpora"] || []
-                                initializeCorpusSelection(selected)
+                                initializeCorpusSelection(allowedIds)
                             },
                         })
                     }
-                } else {
+                } else if (!skipLogin) {
                     // login needed before access can be checked
                     openErrorModal({
                         content: html`<span class="mr-1">{{'login_needed_for_corpora' | loc:$root.lang}}:</span
                             >${loginNeededHTML()}`,
                         onClose: () => {
-                            s.waitForLogin = true
-                            statemachine.send("LOGIN_NEEDED", { loginNeededFor })
+                            waitForLogin = true
+                            statemachine.send("LOGIN_NEEDED", { loginNeededFor: deniedCorpora })
                         },
                     })
+                } else {
+                    // Login dismissed, fall back to allowed corpora
+                    initializeCorpusSelection(allowedIds)
                 }
-            } else if (!selectedIds.every((r) => allCorpusIds.includes(r))) {
+            } else if (!ids.every((r) => allCorpusIds.includes(r))) {
                 // some corpora missing
                 openErrorModal({
                     content: `{{'corpus_not_available' | loc:$root.lang}}`,
                     onClose: () => {
-                        const validIds = selectedIds.filter((corpusId) => allCorpusIds.includes(corpusId))
-                        const newIds = validIds.length ? validIds : settings["preselected_corpora"] || []
-                        initializeCorpusSelection(newIds)
+                        const validIds = ids.filter((corpusId) => allCorpusIds.includes(corpusId))
+                        initializeCorpusSelection(validIds)
                     },
                 })
             } else {
-                // here $timeout must be used so that message is not sent before all controllers/componenters are initialized
-                settings.corpusListing.select(selectedIds)
-                $timeout(() => $rootScope.$broadcast("initialcorpuschooserchange", selectedIds), 0)
+                // Corpus selection OK
+                store.corpus = ids
+                corpusListing.select(store.corpus)
+
+                // Sync corpus selection from store to global corpus listing
+                store.watch("corpus", () => {
+                    // In parallel mode, the select function may also add hidden corpora.
+                    corpusListing.select(store.corpus)
+                })
             }
         }
 
@@ -289,7 +273,7 @@ korpApp.run([
             }
             const s = $rootScope.$new(true) as ModalScope
 
-            const useCustomButton = !_.isEmpty(buttonText)
+            const useCustomButton = !isEmpty(buttonText)
 
             const modal = $uibModal.open({
                 template: html` <div class="modal-body" ng-class="{'mt-10' : resolvable }">
@@ -323,28 +307,40 @@ korpApp.run([
             }
         }
 
-        function getCorporaFromHash(): string[] {
-            const corpus = $location.search().corpus
-            return corpus ? corpus.split(",") : settings["preselected_corpora"] || []
+        const getCorporaFromHash = (): string[] => {
+            const value = $location.search().corpus
+            return value ? value.split(",") : []
         }
 
-        statemachine.listen("login", function () {
-            if (s.waitForLogin) {
-                s.waitForLogin = false
-                initializeCorpusSelection(getCorporaFromHash())
-            }
+        initializeCorpusSelection(getCorporaFromHash())
+
+        // Retry initialization after login
+        statemachine.listen("login", () => {
+            if (!waitForLogin) return
+            waitForLogin = false
+            initializeCorpusSelection(getCorporaFromHash())
         })
 
-        initializeCorpusSelection(getCorporaFromHash())
-        await initLocalesPromise
+        // Retry intialization after dismissing login
+        statemachine.listen("logout", () => {
+            if (!waitForLogin) return
+            waitForLogin = false
+            initializeCorpusSelection(getCorporaFromHash(), true)
+        })
+
+        await getLocData()
     },
 ])
 
 korpApp.filter("trust", ["$sce", ($sce) => (input: string) => $sce.trustAsHtml(input)])
 // Passing `lang` seems to be necessary to have the string updated when switching language.
-// Can fall back on using $rootScope for numbers that will anyway be re-rendered when switching language.
+// Can fall back on using store for numbers that will anyway be re-rendered when switching language.
 korpApp.filter("prettyNumber", [
-    "$rootScope",
-    ($rootScope) => (input: string, lang: string) => Number(input).toLocaleString(lang || $rootScope.lang),
+    "store",
+    (store) => (input: string, lang?: string) => Number(input).toLocaleString(lang || store.lang),
 ])
-korpApp.filter("maxLength", () => (val: string) => val.length > 39 ? val.slice(0, 36) + "…" : val)
+korpApp.filter("formatRelativeHits", [
+    "store",
+    (store) => (input: string, lang?: string) => formatRelativeHits(input, lang || store.lang),
+])
+korpApp.filter("maxLength", () => (val: unknown) => String(val).length > 39 ? String(val).slice(0, 36) + "…" : val)

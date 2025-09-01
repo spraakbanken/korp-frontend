@@ -117,17 +117,29 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@playwright/test@^1.49.1":
-  version "1.49.1"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.49.1.tgz#55fa360658b3187bfb6371e2f8a64f50ef80c827"
-  integrity sha512-Ky+BVzPz8pL6PQxHqNRW1k3mIyv933LML7HktS8uik0bUXNCdPhoS/kLihiO1tMf/egaJb4IutXd7UywvXEW+g==
+"@peggyjs/from-mem@3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@peggyjs/from-mem/-/from-mem-3.1.1.tgz#29d1f8f328242a0265d5e8d3c4081e0bb242bef4"
+  integrity sha512-m5OEjgJaePWpyNtQCvRZkpLoV+z44eh6QIO9yEwQuOThdUdkECO3wcKLT3tFA3H8WM5bxU/K/dpmo7r/X16UEw==
   dependencies:
-    playwright "1.49.1"
+    semver "7.7.2"
+
+"@playwright/test@^1.49.1":
+  version "1.55.0"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.55.0.tgz#080fa6d9ee6d749ff523b1c18259572d0268b963"
+  integrity sha512-04IXzPwHrW69XusN/SIdDdKZBzMfOT9UNT/YiJit/xpy2VuAoB8NHc8Aplb96zsWDddLnbkPL3TsmrS04ZU2xQ==
+  dependencies:
+    playwright "1.55.0"
 
 "@polka/url@^1.0.0-next.20":
   version "1.0.0-next.21"
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
+
+"@rocket.chat/peggy-loader@^0.31.28":
+  version "0.31.28"
+  resolved "https://registry.yarnpkg.com/@rocket.chat/peggy-loader/-/peggy-loader-0.31.28.tgz#b5650aa17b910cb7f49b6506c4101451892a4b97"
+  integrity sha512-Kz9ZZh8PmafJiPe7OeAGQrakg+hTWmobnq7UdVBiLni9JPhcBfhDs3iV+3RYg2MhNoKNEhLZXmQmqouW3QYt1g==
 
 "@types/angular-dynamic-locale@^0.1.35":
   version "0.1.35"
@@ -827,9 +839,9 @@ camelcase-css@^2.0.1:
   integrity sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==
 
 caniuse-lite@^1.0.30001426, caniuse-lite@^1.0.30001449:
-  version "1.0.30001669"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001669.tgz"
-  integrity sha512-DlWzFDJqstqtIVx1zeSpIMLjunf5SmwOw0N2Ck/QSQdS8PLS4+9HrLaYei4w8BIAL7IB/UEDu889d8vhCTPA0w==
+  version "1.0.30001616"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001616.tgz"
+  integrity sha512-RHVYKov7IcdNjVHJFNY/78RdG4oGVjbayxv8u5IO74Wv7Hlq4PnJE6mo/OjFijjVFNy5ijnCt6H3IIo4t+wfEw==
 
 chalk@^2.0.0:
   version "2.4.2"
@@ -931,6 +943,11 @@ comma-separated-values@3.6.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/comma-separated-values/-/comma-separated-values-3.6.4.tgz#c309ec7024f74b7ae19223372054242617e35bd2"
   integrity sha512-B0mjBHUfu4JqzYM5NurRTBl2QuNqQ9/O62EUfL4+bo2KN81fGsFOFOHbHn5SP65n3lmFPzGLkdg8wfuLKk9HOQ==
+
+commander@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-14.0.0.tgz#f244fc74a92343514e56229f16ef5c5e22ced5e9"
+  integrity sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==
 
 commander@^2.20.0:
   version "2.20.3"
@@ -1906,7 +1923,7 @@ jquery-ui-dist@>=1.12.x:
   dependencies:
     jquery ">=1.8.0 <4.0.0"
 
-jquery@3.6.3, "jquery@>=1.8.0 <4.0.0", jquery@>=3.0.0, jquery@>=3.1.x:
+jquery@3.6.3, "jquery@>=1.8.0 <4.0.0", jquery@>=3.1.x:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.3.tgz#23ed2ffed8a19e048814f13391a19afcdba160e6"
   integrity sha512-bZ5Sy3YzKo9Fyc8wH2iIQK4JImJ6R0GWI9kL1/k7Z91ZBNgkRXE6U0JfHIizZbort8ZunhSI3jw9I6253ahKfg==
@@ -2344,6 +2361,15 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
+peggy@^5.0.4:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/peggy/-/peggy-5.0.6.tgz#ac3a8e200baf1fd8b236a38b2b4306d89914bb0b"
+  integrity sha512-Sud8Zus0JAgE+U4zwkJv29OOaXhviFI7J90/6cGfy3OoqR8dpnieeF9a46dj0bTtqiFnrFatldA6ltQyOJvNmg==
+  dependencies:
+    "@peggyjs/from-mem" "3.1.1"
+    commander "^14.0.0"
+    source-map-generator "2.0.2"
+
 picocolors@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
@@ -2366,17 +2392,17 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.49.1:
-  version "1.49.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.49.1.tgz#32c62f046e950f586ff9e35ed490a424f2248015"
-  integrity sha512-BzmpVcs4kE2CH15rWfzpjzVGhWERJfmnXmniSyKeRZUs9Ws65m+RGIi7mjJK/euCegfn3i7jvqWeWyHe9y3Vgg==
+playwright-core@1.55.0:
+  version "1.55.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.55.0.tgz#ec8a9f8ef118afb3e86e0f46f1393e3bea32adf4"
+  integrity sha512-GvZs4vU3U5ro2nZpeiwyb0zuFaqb9sUiAJuyrWpcGouD8y9/HLgGbNRjIph7zU9D3hnPaisMl9zG9CgFi/biIg==
 
-playwright@1.49.1:
-  version "1.49.1"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.49.1.tgz#830266dbca3008022afa7b4783565db9944ded7c"
-  integrity sha512-VYL8zLoNTBxVOrJBbDuRgDWa3i+mfQgDTrL8Ah9QXZ7ax4Dsj0MSq5bYgytRnDVVe+njoKnfsYkH3HzqVj5UZA==
+playwright@1.55.0:
+  version "1.55.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.55.0.tgz#7aca7ac3ffd9e083a8ad8b2514d6f9ba401cc78b"
+  integrity sha512-sdCWStblvV1YU909Xqx0DhOjPZE4/5lJsIS84IfN9dAZfcl/CIZ5O8l3o0j7hPMjDvqoTF8ZUcc+i/GL5erstA==
   dependencies:
-    playwright-core "1.49.1"
+    playwright-core "1.55.0"
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -2729,6 +2755,11 @@ selfsigned@^2.1.1:
   dependencies:
     node-forge "^1"
 
+semver@7.7.2:
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
+  integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
+
 semver@^7.3.4, semver@^7.3.8:
   version "7.3.8"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
@@ -2842,12 +2873,11 @@ slash@^4.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-4.0.0.tgz#2422372176c4c6c5addb5e2ada885af984b396a7"
   integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
 
-slickgrid@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-3.0.3.tgz#9b5637eb682dbd2380a6f444100b9656f59e4fb0"
-  integrity sha512-9NlWDTHftNs3+Ta62cF6rV9Vo4PBHCYuBVxb5yHxZ62CiuqtMvKusktEOt1O1RLC1J+lg5v4Qs7LccJ6T3CAJQ==
+slickgrid@^4:
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-4.1.7.tgz#743149e1cefcdb0cd6fba61e3fc7e31b3193dba8"
+  integrity sha512-dWaJjOlOdBXjQN/ivwzTGlF+Xx3ktKNK+CxejnsMXUybgUj32vqAjwezeTYkiDZDr5K0MMPMXvNysfIhjn79KA==
   dependencies:
-    jquery ">=3.0.0"
     sortablejs "^1.15.0"
 
 sockjs@^0.3.24:
@@ -2863,6 +2893,11 @@ sortablejs@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.15.0.tgz#53230b8aa3502bb77a29e2005808ffdb4a5f7e2a"
   integrity sha512-bv9qgVMjUMf89wAvM6AxVvS/4MX3sPeN0+agqShejLU5z5GX4C75ow1O2e5k4L6XItUyAK3gH6AxSbXrOM5e8w==
+
+source-map-generator@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/source-map-generator/-/source-map-generator-2.0.2.tgz#54a5dc54bc7a61bcce754030a9d686bed82a8c55"
+  integrity sha512-unCl5BQhF/us51DiT7SvlSY3QUPhyfAdHJxd8l7FXdwzqxli0UDMV2dEuei2SeGp3Z4rB/AJ9zKi1mGOp2K2ww==
 
 "source-map-js@>=0.6.2 <2.0.0", source-map-js@^1.0.2:
   version "1.0.2"

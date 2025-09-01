@@ -1,9 +1,10 @@
 {
     "name": "korp-frontend",
-    "version": "9.8.4",
+    "version": "9.10.1",
     "dependencies": {
         "@fontsource/source-sans-pro": "^5.1.0",
         "@fortawesome/fontawesome-free": "6.2.1",
+        "@rocket.chat/peggy-loader": "^0.31.28",
         "@types/angular-dynamic-locale": "^0.1.35",
         "@types/angular-ui-bootstrap": "^1.0.7",
         "@types/jqueryui": "^1.12.23",
@@ -27,8 +28,9 @@
         "leaflet.markercluster": "^1.5.3",
         "lodash": "^4.17.21",
         "moment": "2.29.4",
+        "peggy": "^5.0.4",
         "rickshaw": "1.7.1",
-        "slickgrid": "3.0.3",
+        "slickgrid": "^4",
         "tailwindcss": "3.2.4",
         "xstate": "4.35.4"
     },
@@ -59,7 +61,7 @@
         "yaml-loader": "^0.8.0"
     },
     "engines": {
-        "node": ">=18"
+        "node": ">=20"
     },
     "scripts": {
         "start": "webpack-dev-server --config webpack.dev.js",

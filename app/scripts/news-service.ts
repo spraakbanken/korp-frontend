@@ -1,8 +1,8 @@
 /** @format */
 import Yaml from "js-yaml"
-import settings from "./settings"
+import settings from "@/settings"
 import moment from "moment"
-import { LangString } from "./i18n/types"
+import { LangString } from "@/i18n/types"
 
 export function isEnabled(): boolean {
     return !!settings.news_url

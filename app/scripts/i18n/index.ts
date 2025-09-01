@@ -1,14 +1,21 @@
 /** @format */
 import isObject from "lodash/isObject"
 import settings from "@/settings"
-import { getService, getUrlHash } from "@/util"
-import type { LangString, LocLangMap, LocMap } from "@/i18n/types"
+import { getUrlHash } from "@/util"
+import { getService } from "@/angular-util"
+import type { LangLocMap, LangString, LocLangMap, LocMap } from "@/i18n/types"
+
+let locData: LangLocMap | undefined
+
+export function setLocData(value: LangLocMap) {
+    locData = value
+}
 
 /** Get the current UI language. */
 export function getLang(): string {
     // If called during bootstrap, the Root Scope service may not be ready
     try {
-        return getService("$rootScope").lang || settings.default_language
+        return getService("store").lang || settings.default_language
     } catch (e) {
         return getUrlHash("lang") || settings.default_language
     }
@@ -22,11 +29,8 @@ export function getLang(): string {
  */
 export function loc(key: string, lang?: string) {
     lang = lang || getLang()
-    try {
-        return getService("$rootScope").loc_data[lang][key]
-    } catch (e) {
-        return key
-    }
+    const out = locData?.[lang][key]
+    return out ?? key
 }
 
 /**

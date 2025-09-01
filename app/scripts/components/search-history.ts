@@ -1,13 +1,18 @@
 /** @format */
 import { loc } from "@/i18n"
-import { RootScope } from "@/root-scope.types"
-import { SearchHistoryService } from "@/services/search-history"
-import { SearchesService } from "@/services/searches"
-import { getSearchParamNames, LocationService, SearchParams } from "@/urlparams"
-import { html, splitFirst, unregescape } from "@/util"
+import { getSearchParamNames, SearchParams } from "@/urlparams"
+import { html } from "@/util"
+import { LocationService } from "@/services/types"
 import angular, { IScope } from "angular"
-import "@/services/search-history"
-import "@/services/searches"
+import { StoreService } from "@/services/store"
+import {
+    addToSearchHistory,
+    clearSearchHistory,
+    createSearchOption,
+    getSearchHistory,
+    isSearchOption,
+    Option,
+} from "@/search/search-history"
 
 type HistoryScope = IScope & {
     getOptions: () => Option[]
@@ -15,24 +20,6 @@ type HistoryScope = IScope & {
     items: SearchParams[]
     /** Selected option */
     value?: Option
-}
-
-type Option = { id: string; label: string }
-type SearchOption = Option & { params: SearchParams }
-
-const isSearchOption = (option: Option): option is SearchOption => "params" in option
-
-const createSearchOption = (params: SearchParams): SearchOption => ({
-    id: JSON.stringify(params),
-    label: getLabel(params),
-    params,
-})
-
-const getLabel = (params: SearchParams): string => {
-    if (!params.search) return "–"
-    if (params.search == "cqp") return params.cqp || "–"
-    const [type, value] = splitFirst("|", params.search)
-    return type === "lemgram" ? unregescape(value) : value
 }
 
 angular.module("korpApp").component("searchHistory", {
@@ -43,28 +30,26 @@ angular.module("korpApp").component("searchHistory", {
     ></select>`,
     controller: [
         "$location",
-        "$rootScope",
         "$scope",
-        "searches",
-        "searchHistory",
-        function (
-            $location: LocationService,
-            $rootScope: RootScope,
-            $scope: HistoryScope,
-            searches: SearchesService,
-            searchHistory: SearchHistoryService
-        ) {
+        "store",
+        function ($location: LocationService, $scope: HistoryScope, store: StoreService) {
             $scope.getOptions = () => [
-                { id: "_label", label: loc("search_history", $rootScope.lang) },
-                { id: "_clear", label: loc("search_history_clear", $rootScope.lang) },
+                { id: "_label", label: loc("search_history", store.lang) },
+                { id: "_clear", label: loc("search_history_clear", store.lang) },
                 ...$scope.items.map(createSearchOption),
             ]
 
             /** Read stored search history */
-            const refreshItems = () => ($scope.items = searchHistory.getItems())
+            const refreshItems = () => ($scope.items = getSearchHistory())
 
             /** Select the label option */
             const resetValue = () => ($scope.value = $scope.getOptions().find((option) => option.id == "_label"))
+
+            // When a new search is made, capture it from the URL
+            store.watch("activeSearch", () => {
+                addToSearchHistory($location.search())
+                refreshItems()
+            })
 
             // Set state (and trigger a search) when an option is selected
             $scope.$watch("value", () => {
@@ -73,11 +58,10 @@ angular.module("korpApp").component("searchHistory", {
                     // Set used params and reset unused params to their default values.
                     const params = $scope.value.params
                     getSearchParamNames().forEach((key) => $location.search(key, params[key] ?? null))
-
-                    // Wait for param changes like corpus selection to propagate to app state
-                    $scope.$applyAsync(() => searches.doSearch())
+                    resetValue()
                 } else if ($scope.value.id == "_clear") {
-                    searchHistory.clear()
+                    clearSearchHistory()
+                    refreshItems()
                     resetValue()
                 }
             })
@@ -85,9 +69,6 @@ angular.module("korpApp").component("searchHistory", {
             // Initialize
             refreshItems()
             resetValue()
-
-            // Subscribe to new searches
-            searchHistory.listen(refreshItems)
         },
     ],
 })

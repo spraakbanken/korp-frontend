@@ -1,68 +1,45 @@
 /** @format */
-import _ from "lodash"
-import { IModule } from "angular"
 import settings from "@/settings"
-import { localStorageGet, localStorageSet } from "@/local-storage"
+import { Creds, localStorageGet, localStorageSet } from "@/local-storage"
 import { loginBoxComponent } from "./login_box"
 import { loginStatusComponent } from "./login_status"
-import { AuthState, LoginResponseData } from "./basic_auth.types"
+import { AuthModule } from "./auth.types"
+import { toBase64 } from "@/util"
 
-const state: AuthState = {}
+let creds: Creds | undefined
 
-export const init = () => {
-    const creds = localStorageGet("creds")
-    if (creds) {
-        state.loginObj = creds
-    }
-    return !_.isEmpty(creds)
-}
-
-export const initAngular = (korpApp: IModule) => {
-    korpApp.component("loginStatus", loginStatusComponent)
-    korpApp.component("loginBox", loginBoxComponent)
-}
-
-export const getAuthorizationHeader = () =>
-    !_.isEmpty(state.loginObj) ? { Authorization: `Basic ${state.loginObj.auth}` } : {}
-
-function toBase64(str: string) {
-    // copied from https://stackoverflow.com/a/43271130
-    function u_btoa(buffer: Uint8Array | Buffer) {
-        const binary: string[] = []
-        const bytes = new Uint8Array(buffer)
-        for (let i = 0; i < bytes.byteLength; i++) {
-            binary.push(String.fromCharCode(bytes[i]))
-        }
-        return window.btoa(binary.join(""))
-    }
-    return u_btoa(new TextEncoder().encode(str))
-}
-
-export async function login(name: string, pass: string, saveLogin: boolean): Promise<LoginResponseData> {
-    const auth = toBase64(name + ":" + pass)
-
+async function login(name: string, pass: string, saveLogin: boolean): Promise<void> {
+    const token = toBase64(name + ":" + pass)
     const url = `${settings.korp_backend_url}/authenticate`
-    const headers = { Authorization: `Basic ${auth}` }
+    const headers = { Authorization: `Basic ${token}` }
     const response = await fetch(url, { headers })
     const data = await response.json()
 
     if (!data.corpora) throw new Error("No corpora in auth response")
 
-    state.loginObj = { name, credentials: data.corpora, auth }
-    if (saveLogin) localStorageSet("creds", state.loginObj)
-    return data
+    creds = { name, credentials: data.corpora, auth: token }
+    if (saveLogin) localStorageSet("creds", creds)
 }
 
-export const hasCredential = (corpusId: string): boolean =>
-    state.loginObj?.credentials?.includes(corpusId.toUpperCase()) || false
-
-export const logout = (): void => {
-    state.loginObj = undefined
-    localStorage.removeItem("creds")
+const authModule: AuthModule = {
+    init: () => {
+        creds = localStorageGet("creds")
+        return !!creds
+    },
+    initAngular: (korpApp) => {
+        korpApp.component("loginStatus", loginStatusComponent)
+        korpApp.component("loginBox", loginBoxComponent)
+    },
+    login,
+    logout: () => {
+        creds = undefined
+        localStorage.removeItem("creds")
+    },
+    getAuthorizationHeader: (): Record<string, string> => (creds ? { Authorization: `Basic ${creds.auth}` } : {}),
+    hasCredential: (corpusId) => creds?.credentials?.includes(corpusId.toUpperCase()) || false,
+    getCredentials: () => creds?.credentials || [],
+    getUsername: () => creds!.name,
+    isLoggedIn: () => !!creds,
 }
 
-export const getCredentials = (): string[] => state.loginObj?.credentials || []
-
-export const getUsername = () => state.loginObj?.name
-
-export const isLoggedIn = () => !_.isEmpty(state.loginObj)
+export default authModule

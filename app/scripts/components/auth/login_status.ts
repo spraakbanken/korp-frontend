@@ -1,7 +1,7 @@
 /** @format */
 import { IComponentOptions, IController, IScope, ui } from "angular"
 import statemachine from "@/statemachine"
-import { getUsername, isLoggedIn } from "./auth"
+import { auth } from "./auth"
 import { html } from "@/util"
 
 export const loginStatusComponent: IComponentOptions = {
@@ -21,9 +21,9 @@ export const loginStatusComponent: IComponentOptions = {
         function ($uibModal: ui.bootstrap.IModalService, $scope: LoginStatusScope) {
             const $ctrl: LoginStatusController = this
 
-            $ctrl.loggedIn = isLoggedIn()
+            $ctrl.loggedIn = auth.isLoggedIn()
             if ($ctrl.loggedIn) {
-                $ctrl.username = getUsername()
+                $ctrl.username = auth.getUsername()
             }
 
             $ctrl.logout = function () {
@@ -33,7 +33,7 @@ export const loginStatusComponent: IComponentOptions = {
 
             statemachine.listen("login", () => {
                 $ctrl.loggedIn = true
-                $ctrl.username = getUsername()
+                $ctrl.username = auth.getUsername()
             })
 
             statemachine.listen("login_needed", function () {
@@ -41,18 +41,14 @@ export const loginStatusComponent: IComponentOptions = {
             })
 
             $ctrl.showLogin = () => {
-                $scope.closeModal = () => {
-                    modal.close()
-                }
-
                 const modal = $uibModal.open({
-                    template: `<login-box close-click='closeModal()'></login-box>`,
+                    template: `<login-box on-close="$close()" on-dismiss="$dismiss()"></login-box>`,
                     windowClass: "login",
-                    scope: $scope,
-                    size: "sm",
                 })
-                // Ignore rejection from dismissing the modal
-                modal.result.catch(() => {})
+                // Treat dismissing as a logout action
+                modal.result.catch((e) => {
+                    statemachine.send("LOGOUT")
+                })
             }
         },
     ],

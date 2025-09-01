@@ -1,19 +1,17 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
-import _ from "lodash"
+import { isEqual } from "lodash"
 import statemachine from "@/statemachine"
-import settings from "@/settings"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html } from "@/util"
+import { LocationService } from "@/services/types"
 import { matomoSend } from "@/matomo"
-import "@/services/compare-searches"
 import "@/components/extended/tokens"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
-import { LocationService } from "@/urlparams"
-import { RootScope } from "@/root-scope.types"
-import { CompareSearches } from "@/services/compare-searches"
-import { SearchesService } from "@/services/searches"
+import { StoreService } from "@/services/store"
+import { savedSearches } from "@/search/saved-searches"
 
 type ExtendedStandardController = IController & {
     cqp: string
@@ -71,57 +69,77 @@ angular.module("korpApp").component("extendedStandard", {
     `,
     controller: [
         "$location",
-        "$rootScope",
         "$scope",
         "$timeout",
-        "compareSearches",
-        "searches",
+        "store",
         function (
             $location: LocationService,
-            $rootScope: RootScope,
             $scope: ExtendedStandardScope,
             $timeout: ITimeoutService,
-            compareSearches: CompareSearches,
-            searches: SearchesService
+            store: StoreService
         ) {
             const ctrl = this as ExtendedStandardController
 
-            $scope.freeOrder = $location.search().in_order != null
             ctrl.orderError = false
             ctrl.withins = []
-            const defaultWithin = Object.keys(settings.default_within || {})[0]
-            ctrl.within = $location.search().within || defaultWithin
 
-            // TODO this is *too* weird
-            function triggerSearch() {
-                $location.search("page", null)
-                $location.search("in_order", $scope.freeOrder ? false : null)
-                $location.search("within", ctrl.within != defaultWithin ? ctrl.within : undefined)
-                $location.search("search", "cqp")
-                searches.doSearch()
-            }
+            store.watch("in_order", () => ($scope.freeOrder = !store.in_order))
+            store.watch("corpus", () => {
+                ctrl.withins = corpusListing.getWithinKeys()
+                if (!ctrl.withins.includes(ctrl.within)) {
+                    ctrl.within = ctrl.withins[0]
+                }
+            })
+            store.watch("globalFilter", () => updateExtendedCQP())
+            store.watch("within", () => (ctrl.within = store.within || ctrl.withins[0]))
+
+            $scope.$watch("freeOrder", () => {
+                ctrl.validateFreeOrder()
+            })
 
             statemachine.listen("cqp_search", (event) => {
-                ctrl.cqp = event.cqp
-                // sometimes $scope.$apply is needed and sometimes it throws errors
-                // depending on source of the event I guess. $timeout solves it.
                 $timeout(() => {
-                    $rootScope.$apply()
+                    $location.search("search_tab", 1)
+                    ctrl.cqpChange(event.cqp)
                     triggerSearch()
                 })
             })
 
+            // Restore search when set via URL
+            store.watchGroup(["search", "cqp"], () => {
+                // For extended, `search` is just "cqp" and the query is in `cqp`
+                if (store.search != "cqp" || !store.cqp) return
+                ctrl.cqpChange(store.cqp)
+                // Wait for global filters
+                $timeout(() => triggerSearch())
+            })
+
+            function triggerSearch(force = false) {
+                store.page = 0
+                store.in_order = !$scope.freeOrder
+                store.within = ctrl.within
+                store.search = "cqp"
+                store.cqp = ctrl.cqp
+
+                let cqp = ctrl.cqp
+                if (store.globalFilter) {
+                    cqp = stringify(mergeCqpExprs(parse(cqp || "[]"), store.globalFilter))
+                }
+
+                const newSearch = { cqp }
+                if (!isEqual(store.activeSearch, newSearch) || force) {
+                    store.activeSearch = newSearch
+                }
+            }
+
             ctrl.onSearch = () => {
                 matomoSend("trackEvent", "Search", "Submit search", "Extended")
-                triggerSearch()
+                triggerSearch(true)
             }
 
             ctrl.onSearchSave = (name: string) => {
-                if (!$rootScope.extendedCQP) {
-                    console.error("No extendedCQP to save")
-                    return
-                }
-                compareSearches.saveSearch(name, $rootScope.extendedCQP)
+                if (!store.extendedCqp) throw new ReferenceError("Extended CQP not set")
+                savedSearches.push(name, store.extendedCqp)
             }
 
             ctrl.cqpChange = (cqp: string) => {
@@ -134,13 +152,7 @@ angular.module("korpApp").component("extendedStandard", {
                 }
 
                 ctrl.validateFreeOrder()
-
-                $location.search("cqp", cqp)
             }
-
-            $scope.$watch("freeOrder", () => {
-                ctrl.validateFreeOrder()
-            })
 
             ctrl.validateFreeOrder = () => {
                 try {
@@ -154,7 +166,7 @@ angular.module("korpApp").component("extendedStandard", {
                 }
             }
 
-            ctrl.cqp = $location.search().cqp || ""
+            ctrl.cqp = store.cqp
 
             ctrl.repeatError = false
             ctrl.updateRepeatError = (error) => {
@@ -163,24 +175,11 @@ angular.module("korpApp").component("extendedStandard", {
 
             const updateExtendedCQP = function () {
                 let val2 = expandOperators(ctrl.cqp || "[]")
-                if ($rootScope.globalFilter) {
-                    val2 = stringify(mergeCqpExprs(parse(val2), $rootScope.globalFilter))
+                if (store.globalFilter) {
+                    val2 = stringify(mergeCqpExprs(parse(val2), store.globalFilter))
                 }
-                $rootScope.extendedCQP = val2
+                store.extendedCqp = val2
             }
-
-            $rootScope.$watch("globalFilter", function () {
-                if ($rootScope.globalFilter) {
-                    updateExtendedCQP()
-                }
-            })
-
-            $rootScope.$on("corpuschooserchange", function () {
-                ctrl.withins = settings.corpusListing.getWithinKeys()
-                if (!ctrl.withins.includes(ctrl.within)) {
-                    ctrl.within = ctrl.withins[0]
-                }
-            })
         },
     ],
 })

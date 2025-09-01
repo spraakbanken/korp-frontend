@@ -1,12 +1,11 @@
 /** @format */
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
-import _ from "lodash"
-import { AttributeOption } from "@/corpus_listing"
+import { AttributeOption } from "@/corpora/corpus_listing"
 import { Condition } from "@/cqp_parser/cqp.types"
 import extendedComponents from "./widgets"
 import { Widget, WidgetScope } from "./widgets/common"
 import { defaultWidget } from "./widgets/default"
-import { getConfigurable } from "@/util"
+import { getConfigurable, regescape, unregescape } from "@/util"
 
 type ExtendedCqpValueController = IController & {
     change: (event: { term: Partial<Condition> }) => void
@@ -40,14 +39,29 @@ angular.module("korpApp").component("extendedCqpValue", {
                     delete ctrl.term.flags["c"]
                 }
 
-                const childScope: Partial<WidgetScope<Condition["val"]>> & IScope = $scope.$new()
+                const childScope = $scope.$new() as WidgetScope<Condition["val"]> & IScope
                 childScope.$watch("model", (val: Condition["val"]) => ctrl.change({ term: { val } }))
                 childScope.$watch("orObj.flags", (flags: Condition["flags"]) => ctrl.change({ term: { flags } }), true)
 
                 // orObj name preserved for backward-compatability with components
                 childScope.orObj = ctrl.term
-                _.extend(childScope, ctrl.attributeDefinition)
+                childScope.attr = ctrl.attributeDefinition
                 childScope.model = ctrl.term.val
+
+                // Set up regexp escaping
+                // CQP natively uses regexp by default, so we need to escape input in most cases.
+                // A few of our own operators should however allow regexp (= skip escaping).
+                // Additionally, an attribute config can set `escape: false` to enable using regexp values with non-regexp operators.
+                const shouldUseRegexp = () =>
+                    ctrl.attributeDefinition.escape === false ||
+                    ["*=", "!*=", "regexp_contains", "not_regexp_contains"].includes(childScope.orObj.op)
+                const write = (val: string) => (shouldUseRegexp() ? val : regescape(val))
+                const read = (val: string) => (shouldUseRegexp() ? val : unregescape(val))
+                // Set initial input value
+                childScope.input = read(childScope.model as string)
+                // Sync from input to model, escaping special characters if needed
+                childScope.$watch("input", () => (childScope.model = write(childScope.input)))
+                childScope.$watch("orObj.op", () => (childScope.model = write(childScope.input)))
 
                 const locals = { $scope: childScope }
                 const { template, controller } = getWidget()
@@ -72,7 +86,7 @@ angular.module("korpApp").component("extendedCqpValue", {
                     return { template, controller }
                 }
 
-                const placeholder = ctrl.attributeDefinition.value === "word" ? "<{{'any' | loc:$root.lang}}>" : ""
+                const placeholder = ctrl.attributeDefinition.name === "word" ? "<{{'any' | loc:$root.lang}}>" : ""
                 const template = defaultWidget.template({ placeholder })
                 return { template, controller }
             }

@@ -1,0 +1,150 @@
+/** @format */
+import angular from "angular"
+import settings, { getDefaultWithin } from "@/settings"
+import { RootScope } from "@/root-scope.types"
+import { UtilsService } from "@/services/utils"
+import { getLocData } from "@/loc-data"
+import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
+import { HashParams } from "@/urlparams"
+import { LocationService } from "@/services/types"
+import { Store, StoreBase, StoreService } from "./store.types"
+export * from "./store.types"
+
+angular.module("korpApp").factory("store", [
+    "$location",
+    "$rootScope",
+    "utils",
+    ($location: LocationService, $rootScope: RootScope, utils: UtilsService): StoreService => {
+        // Use the root scope for storing these variables, but keep their types separate.
+        // This alias prevents TypeScript errors when accessing the store properties.
+        // They can still be accessed as `$root.lang` etc in templates.
+        const rootScopeStore = $rootScope as unknown as Store
+
+        // Initialize
+        rootScopeStore.corpus = []
+        rootScopeStore.cqp = "[]"
+        rootScopeStore.cqpParallel = {}
+        rootScopeStore.global_filter = {}
+        rootScopeStore.hpp = settings["hits_per_page_default"]
+        rootScopeStore.in_order = true
+        rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
+        rootScopeStore.page = 0
+        rootScopeStore.parallel_corpora = settings.start_lang ? [settings.start_lang] : []
+        rootScopeStore.sort = ""
+        rootScopeStore.stats_reduce = "word"
+        rootScopeStore.stats_reduce_insensitive = ""
+        rootScopeStore.within = getDefaultWithin()
+
+        // Sync to url
+        utils.setupHash($rootScope, {
+            key: "corpus",
+            val_in: (str) => {
+                if (!str) return []
+                const ids = str.split(",")
+                // Resolve any folder ids to the contained corpus ids
+                return ids.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
+            },
+            val_out: (arr) => arr.join(",") || null,
+        })
+        utils.setupHash($rootScope, { key: "cqp", default: "[]" })
+        utils.setupHash($rootScope, { key: "display" })
+        utils.setupHash($rootScope, {
+            key: "global_filter",
+            // Store in URL as base64-encoded JSON
+            default: btoa(JSON.stringify({})),
+            val_in: (str) => (str ? JSON.parse(atob(str)) : {}),
+            val_out: (obj: Record<string, string[]>) => btoa(JSON.stringify(obj)),
+        })
+        utils.setupHash($rootScope, { key: "hpp", val_in: Number, default: settings["hits_per_page_default"] })
+        utils.setupHash($rootScope, {
+            key: "in_order",
+            val_in: (x) => x != "false",
+            val_out: (x) => (x ? undefined : "false"),
+        })
+        utils.setupHash($rootScope, { key: "isCaseInsensitive", val_out: (x) => !!x || undefined })
+        utils.setupHash($rootScope, {
+            key: "mid_comp",
+            // Deprecated param. Translate to prefix/suffix.
+            post_change: (mid_comp) => {
+                if (!mid_comp) return
+                rootScopeStore.prefix = true
+                rootScopeStore.suffix = true
+                rootScopeStore.mid_comp = false
+            },
+        })
+        utils.setupHash($rootScope, { key: "page", val_in: Number })
+        utils.setupHash($rootScope, {
+            key: "parallel_corpora",
+            val_in: (str) => (str ? str.split(",") : []),
+            val_out: (arr) => arr.join(",") || null,
+        })
+        utils.setupHash($rootScope, { key: "prefix", val_out: (x) => !!x || undefined })
+        utils.setupHash($rootScope, { key: "random_seed", val_in: Number })
+        utils.setupHash($rootScope, { key: "reading_mode", val_out: (x) => !!x || undefined })
+        utils.setupHash($rootScope, { key: "search" })
+        utils.setupHash($rootScope, { key: "sort", default: "" })
+        utils.setupHash($rootScope, { key: "stats_reduce", default: "word" })
+        utils.setupHash($rootScope, { key: "stats_reduce_insensitive", default: "" })
+        utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
+        utils.setupHash($rootScope, { key: "within", default: getDefaultWithin() })
+        // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
+        getLocData().then(() => {
+            utils.setupHash($rootScope, {
+                key: "lang",
+                default: settings["default_language"],
+            })
+        })
+        // Sync the cqpParallel property to multiple URL params.
+        // Read URL params only once. We could watch them, but it's not worth it?
+        Object.entries($location.search()).forEach(([key, value]) => {
+            if (key.startsWith("cqp_")) {
+                const lang = key.slice(4)
+                const cqp = value as string
+                rootScopeStore.cqpParallel[lang] = cqp
+            }
+        })
+        $rootScope.$watch(
+            "cqpParallel",
+            (cqpParallel: Record<string, string>) => {
+                // Remove old cqp_ params from the URL
+                ;(Object.entries($location.search()) as [keyof HashParams, unknown][]).forEach(([key, value]) => {
+                    if (key.startsWith("cqp_")) $location.search(key, null)
+                })
+                // Set new cqp_ params
+                Object.entries(cqpParallel).forEach(([lang, cqp]) => $location.search(`cqp_${lang}`, cqp))
+            },
+            true
+        )
+
+        const service: StoreBase = {
+            get: (key) => rootScopeStore[key],
+            set: (key, value) => (rootScopeStore[key] = value),
+            watch: (subject, listener, deep) => $rootScope.$watch(subject, listener, deep),
+            watchGroup: (subject, listener) => $rootScope.$watchGroup(subject, listener),
+        }
+
+        const handler: ProxyHandler<StoreService> = {
+            // Provide service methods but also direct get/set of store properties.
+            get: (target, prop) => (prop in target ? target[prop as keyof StoreBase] : target.get(prop as keyof Store)),
+            set: (target, prop, value) => {
+                if (prop in target) {
+                    target[prop as keyof StoreBase] = value
+                } else {
+                    target.set(prop as keyof Store, value)
+                }
+                return true
+            },
+        }
+
+        return new MyProxy(service, handler)
+    },
+])
+
+/**
+ * The built-in typing of the Proxy class assumes the same type for the target as for the proxy.
+ * This lets us give two different types.
+ * See https://github.com/microsoft/TypeScript/issues/20846
+ */
+const MyProxy = Proxy as {
+    new <T, H extends object>(target: T, handler: ProxyHandler<H>): H
+}

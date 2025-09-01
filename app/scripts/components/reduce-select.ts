@@ -1,13 +1,14 @@
 /** @format */
-import _ from "lodash"
+import { isEqual, keyBy } from "lodash"
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
-import { AttributeOption } from "@/corpus_listing"
+import { AttributeOption } from "@/corpora/corpus_listing"
 
 type ReduceSelectScope = IScope & {
     keyItems: Record<string, Item>
     hasWordAttrs: boolean
     hasStructAttrs: boolean
+    onDropdownToggle: (open: boolean) => void
     toggleSelected: (value: string, event: MouseEvent) => void
     toggleWordInsensitive: (event: MouseEvent) => void
     toggled: (open: boolean) => void
@@ -26,51 +27,46 @@ type ReduceSelectController = IController & {
 }
 
 angular.module("korpApp").component("reduceSelect", {
-    template: html`<div
-        uib-dropdown
-        auto-close="outsideClick"
-        class="reduce-attr-select"
-        on-toggle="toggled(open)"
-        style="width: 200px"
-    >
-        <div
+    template: html`<div uib-dropdown auto-close="outsideClick" class="inline-block w-52" on-toggle="toggled(open)">
+        <button
+            id="reduce-select"
             uib-dropdown-toggle
-            class="reduce-dropdown-button inline-block align-middle bg-white border border-gray-500"
+            class="reduce-dropdown-button inline-block align-middle bg-white border border-gray-400"
         >
-            <div class="reduce-dropdown-button-text">
-                <span>{{ "reduce_text" | loc:$root.lang }}:</span>
-                <span> {{keyItems[$ctrl.selected[0]].label | locObj:$root.lang}} </span>
-                <span ng-if="$ctrl.selected.length > 1"> (+{{ $ctrl.selected.length - 1 }}) </span>
-                <span class="caret"></span>
+            <div class="px-1 flex items-center">
+                <div class="whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    <span ng-repeat="name in $ctrl.selected">
+                        {{keyItems[name].label | locObj:$root.lang}}<span ng-if="!$last">,</span>
+                    </span>
+                </div>
+                <span class="ml-auto caret"></span>
             </div>
-        </div>
-        <div class="reduce-dropdown-menu" uib-dropdown-menu>
+        </button>
+        <div class="reduce-dropdown-menu" uib-dropdown-menu role="listbox">
             <ul>
                 <li
                     ng-click="toggleSelected('word', $event)"
                     ng-class="keyItems['word'].selected ? 'selected':''"
                     class="attribute"
+                    role="option"
                 >
-                    <input
-                        type="checkbox"
-                        class="reduce-check"
-                        ng-checked="keyItems['word'].selected"
-                        ng-disabled="keyItems['word'].selected && $ctrl.selected.length == 1"
-                    />
+                    <input type="checkbox" class="reduce-check" ng-checked="keyItems['word'].selected" />
                     <span class="reduce-label">{{keyItems['word'].label | locObj:$root.lang }}</span>
-                    <span
+                    <button
                         ng-class="keyItems['word'].insensitive ? 'selected':''"
                         class="insensitive-toggle"
                         ng-click="toggleWordInsensitive($event)"
-                        ><b>Aa</b></span
                     >
+                        <b>Aa</b>
+                    </button>
                 </li>
                 <b ng-if="hasWordAttrs">{{'word_attr' | loc:$root.lang}}</b>
                 <li
                     ng-repeat="item in $ctrl.items | filter:{ group: 'word_attr' }"
-                    ng-click="toggleSelected(item.value, $event)"
+                    ng-click="toggleSelected(item.name, $event)"
                     ng-class="item.selected ? 'selected':''"
                     class="attribute"
+                    role="option"
                 >
                     <input type="checkbox" class="reduce-check" ng-checked="item.selected" />
                     <span class="reduce-label">{{item.label | locObj:$root.lang }}</span>
@@ -78,9 +74,10 @@ angular.module("korpApp").component("reduceSelect", {
                 <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:$root.lang}}</b>
                 <li
                     ng-repeat="item in $ctrl.items | filter:{ group: 'sentence_attr' }"
-                    ng-click="toggleSelected(item.value, $event)"
+                    ng-click="toggleSelected(item.name, $event)"
                     ng-class="item.selected ? 'selected':''"
                     class="attribute"
+                    role="option"
                 >
                     <input type="checkbox" class="reduce-check" ng-checked="item.selected" />
                     <span class="reduce-label">{{item.label | locObj:$root.lang }}</span>
@@ -101,7 +98,7 @@ angular.module("korpApp").component("reduceSelect", {
 
             $ctrl.$onChanges = (changes) => {
                 if ("items" in changes && $ctrl.items) {
-                    scope.keyItems = _.keyBy($ctrl.items, "value")
+                    scope.keyItems = keyBy($ctrl.items, "name")
                     scope.hasWordAttrs = $ctrl.items.some((item) => item.group == "word_attr")
                     scope.hasStructAttrs = $ctrl.items.some((item) => item.group == "sentence_attr")
                 }
@@ -113,22 +110,19 @@ angular.module("korpApp").component("reduceSelect", {
                 for (const name of $ctrl.insensitive || []) {
                     if (name in scope.keyItems) scope.keyItems[name].insensitive = true
                 }
-
-                // Only after initialization
-                if ($ctrl.items && $ctrl.selected && $ctrl.insensitive) updateSelected()
             }
 
             /** Report any changes upwards */
-            function updateSelected() {
+            function notify() {
                 validate()
 
-                const selected = $ctrl.items.filter((item) => item.selected).map((item) => item.value)
-                const insensitive = $ctrl.items.filter((item) => item.insensitive).map((item) => item.value)
+                const selected = $ctrl.items.filter((item) => item.selected).map((item) => item.name)
+                const insensitive = $ctrl.items.filter((item) => item.insensitive).map((item) => item.name)
 
                 const changes = {
                     // Only set values that have changed
-                    selected: !_.isEqual(selected, $ctrl.selected) ? selected : undefined,
-                    insensitive: !_.isEqual(insensitive, $ctrl.insensitive) ? insensitive : undefined,
+                    selected: !isEqual(selected, $ctrl.selected) ? selected : undefined,
+                    insensitive: !isEqual(insensitive, $ctrl.insensitive) ? insensitive : undefined,
                 }
 
                 // Only notify if something changed
@@ -157,10 +151,11 @@ angular.module("korpApp").component("reduceSelect", {
                     // Unselect all options and select only the given option
                     $ctrl.items.forEach((item) => (item.selected = false))
                     item.selected = true
-                } else {
+                }
+                // Toggle given value, unless it is "word" and it is the only one selected.
+                else {
                     item.selected = !item.selected
                 }
-                updateSelected()
             }
 
             scope.toggleWordInsensitive = function (event) {
@@ -169,14 +164,17 @@ angular.module("korpApp").component("reduceSelect", {
                 if (!scope.keyItems["word"].selected) {
                     scope.keyItems["word"].selected = true
                 }
-                updateSelected()
             }
 
             scope.toggled = function (open) {
-                // if no element is selected when closing popop, select word
-                if (!open && !$ctrl.selected.length) {
-                    scope.keyItems["word"].selected = true
-                    updateSelected()
+                // When closing the dropdown, notify about changes
+                if (!open) {
+                    // If no element is selected, select word
+                    if (!$ctrl.selected.length) {
+                        scope.keyItems["word"].selected = true
+                    }
+
+                    notify()
                 }
             }
         },
