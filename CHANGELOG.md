@@ -4,6 +4,7 @@
 
 ### Added
 
+- Make "dependency tree" link more visible in the sidebar [#451](https://github.com/spraakbanken/korp-frontend/issues/451)
 - Use [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader) to compile CQP parser at build time
 - Login form help text
 - Experimental support for right-to-left (rtl) corpus text

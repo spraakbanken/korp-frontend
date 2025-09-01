@@ -20,6 +20,7 @@ import { JQueryExtended } from "@/jquery.types"
 import { Token } from "@/backend/types"
 import { TextTask } from "@/backend/task/text-task"
 import { corpusListing } from "@/corpora/corpus_listing"
+import deptreeImg from "@/../img/deptree.svg"
 
 export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
 export type SidebarComponent = {
@@ -105,9 +106,14 @@ angular.module("korpApp").component("sidebar", {
                 <div id="selected_word"></div>
             </sidebar-section>
 
-            <div ng-show="$ctrl.corpusObj.attributes.deprel" ng-click="$ctrl.openDepTree()" class="link show_deptree">
+            <button
+                ng-show="$ctrl.corpusObj.attributes.deprel"
+                ng-click="$ctrl.openDepTree()"
+                class="btn btn-link text-center w-full"
+            >
+                <img src="${deptreeImg}" class="block mx-auto" />
                 {{'show_deptree' | loc:$root.lang}}
-            </div>
+            </button>
             <dep-tree
                 ng-if="$ctrl.showDepTree"
                 tokens="$ctrl.tokens"
