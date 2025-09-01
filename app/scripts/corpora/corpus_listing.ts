@@ -159,6 +159,8 @@ export class CorpusListing {
         return pickBy(allAttrs, (attribute) => attribute["display_type"] !== "hidden")
     }
 
+    static isStruct = (attr?: Attribute): boolean => !!attr?.["is_struct_attr"] && attr?.["group_by"] != "group_by"
+
     /** Compile list of filters applicable to all selected corpora. */
     getDefaultFilters(): Record<string, Attribute> {
         // Collect filters common to all selected corpora

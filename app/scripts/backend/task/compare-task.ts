@@ -113,7 +113,11 @@ export class CompareTask extends TaskBase<CompareResult> {
     }
 
     buildItemCqp(row: CompareItem) {
-        const splitTokens = row.elems.map((elem) => elem.split("/").map((tokens) => tokens.split(" ")))
+        // If the grouping attribute is positional, the value is a space-separated list, otherwise it's a single value.
+        const parseToken = (value: string, i: number) =>
+            CorpusListing.isStruct(this.attributes[this.reduce[i]]) ? [value] : value.split(" ")
+
+        const splitTokens = row.elems.map((elem) => elem.split("/").map(parseToken))
 
         // number of tokens in search
         const tokenLength = splitTokens[0][0].length
