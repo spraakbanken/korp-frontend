@@ -1,7 +1,7 @@
 /** @format */
 import angular, { IScope, ITimeoutService } from "angular"
 import { UtilsService } from "@/services/utils"
-import { LocationService } from "@/angular-util"
+import { LocationService } from "@/services/types"
 import "@/services/utils"
 
 type UiBootstrapTabsetScope = IScope & {

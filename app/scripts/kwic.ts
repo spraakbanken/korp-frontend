@@ -3,6 +3,7 @@ import { ApiKwic } from "@/backend/types"
 import { LangString } from "@/i18n/types"
 import settings from "@/settings"
 import { sum } from "lodash"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 export type Row = ApiKwic | LinkedKwic | CorpusHeading
 
@@ -170,7 +171,7 @@ export function calculateHitsPicture(
     const total = sum(Object.values(corpusHits))
     const items: HitsPictureItem[] = corpusOrder
         .map((id) => ({
-            rtitle: settings.corpusListing.getTitleObj(id.toLowerCase()),
+            rtitle: corpusListing.getTitleObj(id.toLowerCase()),
             relative: corpusHits[id] / total,
             abs: corpusHits[id],
             page: -1, // this is properly set below

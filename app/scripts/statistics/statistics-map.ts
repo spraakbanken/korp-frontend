@@ -13,7 +13,7 @@ import {
     MarkerData,
     MarkerGroup,
     MergedMarker,
-} from "@/map"
+} from "@/statistics/map"
 import { AppSettings } from "@/settings/app-settings.types"
 import { html } from "@/util"
 

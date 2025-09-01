@@ -2,7 +2,7 @@
 import { isEqual, keyBy } from "lodash"
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
-import { AttributeOption } from "@/corpus_listing"
+import { AttributeOption } from "@/corpora/corpus_listing"
 
 type ReduceSelectScope = IScope & {
     keyItems: Record<string, Item>
@@ -63,7 +63,7 @@ angular.module("korpApp").component("reduceSelect", {
                 <b ng-if="hasWordAttrs">{{'word_attr' | loc:$root.lang}}</b>
                 <li
                     ng-repeat="item in $ctrl.items | filter:{ group: 'word_attr' }"
-                    ng-click="toggleSelected(item.value, $event)"
+                    ng-click="toggleSelected(item.name, $event)"
                     ng-class="item.selected ? 'selected':''"
                     class="attribute"
                     role="option"
@@ -74,7 +74,7 @@ angular.module("korpApp").component("reduceSelect", {
                 <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:$root.lang}}</b>
                 <li
                     ng-repeat="item in $ctrl.items | filter:{ group: 'sentence_attr' }"
-                    ng-click="toggleSelected(item.value, $event)"
+                    ng-click="toggleSelected(item.name, $event)"
                     ng-class="item.selected ? 'selected':''"
                     class="attribute"
                     role="option"
@@ -98,7 +98,7 @@ angular.module("korpApp").component("reduceSelect", {
 
             $ctrl.$onChanges = (changes) => {
                 if ("items" in changes && $ctrl.items) {
-                    scope.keyItems = keyBy($ctrl.items, "value")
+                    scope.keyItems = keyBy($ctrl.items, "name")
                     scope.hasWordAttrs = $ctrl.items.some((item) => item.group == "word_attr")
                     scope.hasStructAttrs = $ctrl.items.some((item) => item.group == "sentence_attr")
                 }
@@ -116,8 +116,8 @@ angular.module("korpApp").component("reduceSelect", {
             function notify() {
                 validate()
 
-                const selected = $ctrl.items.filter((item) => item.selected).map((item) => item.value)
-                const insensitive = $ctrl.items.filter((item) => item.insensitive).map((item) => item.value)
+                const selected = $ctrl.items.filter((item) => item.selected).map((item) => item.name)
+                const insensitive = $ctrl.items.filter((item) => item.insensitive).map((item) => item.name)
 
                 const changes = {
                     // Only set values that have changed

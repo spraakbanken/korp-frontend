@@ -1,6 +1,6 @@
 /** @format */
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
-import { AttributeOption } from "@/corpus_listing"
+import { AttributeOption } from "@/corpora/corpus_listing"
 import { Condition } from "@/cqp_parser/cqp.types"
 import extendedComponents from "./widgets"
 import { Widget, WidgetScope } from "./widgets/common"
@@ -86,7 +86,7 @@ angular.module("korpApp").component("extendedCqpValue", {
                     return { template, controller }
                 }
 
-                const placeholder = ctrl.attributeDefinition.value === "word" ? "<{{'any' | loc:$root.lang}}>" : ""
+                const placeholder = ctrl.attributeDefinition.name === "word" ? "<{{'any' | loc:$root.lang}}>" : ""
                 const template = defaultWidget.template({ placeholder })
                 return { template, controller }
             }

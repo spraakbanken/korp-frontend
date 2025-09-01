@@ -1,15 +1,15 @@
 /** @format */
-import { CorpusListing } from "@/corpus_listing"
+import { CorpusListing } from "@/corpora/corpus_listing"
 import { NumericString, ProgressHandler } from "../types"
 import { GRANULARITIES, Level } from "@/trend-diagram/util"
 import { Moment } from "moment"
 import { padStart } from "lodash"
 import { expandCqp } from "@/cqp_parser/cqp"
 import { korpRequest } from "../common"
-import { CountTimeParams } from "../types/count-time"
-import Abortable from "../abortable"
+import { CountTimeParams, CountTimeResponse } from "../types/count-time"
+import { TaskBase } from "./task-base"
 
-export class TrendTask extends Abortable {
+export class TrendTask extends TaskBase<CountTimeResponse> {
     constructor(
         readonly cqp: string,
         readonly subqueries: [string, string][],

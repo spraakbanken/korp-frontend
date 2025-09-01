@@ -2,14 +2,7 @@
 import range from "lodash/range"
 import { Chart, ChartDataset } from "chart.js/auto"
 import { loc } from "@/i18n"
-import {
-    calculateYearTicks,
-    getCountUndated,
-    getCountUndatedSelected,
-    getSeries,
-    getSeriesSelected,
-    getSpan,
-} from "@/timeseries"
+import { getCountUndated, getCountUndatedSelected, getSeries, getSeriesSelected, getSpan } from "@/backend/timedata"
 
 type Data = Record<number, number | undefined>
 type Dataset = ChartDataset<"bar", Data>
@@ -138,4 +131,18 @@ export class CorpusTimeChart {
         // TODO Do animations look better if data is given as array including empty years, not a record?
         this.chart.update("none")
     }
+}
+
+/**
+ * Find some even points within a range of years.
+ *
+ * E.g: (1830, 2024) => [1850, 1900, 1950, 2000]
+ */
+export function calculateYearTicks(min: number, max: number) {
+    // Find a reasonable step size
+    const step = [1000, 500, 100, 50, 10, 5].find((i) => i <= (max - min) / 2) || 1
+    const round = (year: number) => Math.ceil(year / step) * step
+    // `range` excludes end value, which is fine because we used `ceil`
+    // `max + 1` to have last year included in case `step` is 1
+    return range(round(min), round(max + 1), step)
 }

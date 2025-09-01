@@ -1,11 +1,12 @@
 /** @format */
 import { SavedSearch } from "@/local-storage"
-import settings from "@/settings"
+import { prefixAttr } from "@/settings"
+import { corpusListing, CorpusListing } from "@/corpora/corpus_listing"
 import { korpRequest } from "../common"
 import { groupBy, range, sumBy, uniq, zip } from "lodash"
 import { Attribute } from "@/settings/config.types"
-import { CorpusListing } from "@/corpus_listing"
 import { ExampleTask } from "./example-task"
+import { TaskBase } from "./task-base"
 
 export type CompareResult = {
     tables: CompareTables
@@ -34,13 +35,14 @@ export type CompareItem = {
     tokenLists: string[][]
 }
 
-export class CompareTask {
+export class CompareTask extends TaskBase<CompareResult> {
     attributes: Record<string, Attribute>
     cl: CorpusListing
     reduce: string[]
 
     constructor(public cmp1: SavedSearch, public cmp2: SavedSearch, reduce: string[]) {
-        this.cl = settings.corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
+        super()
+        this.cl = corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
         this.attributes = { ...this.cl.getCurrentAttributes(), ...this.cl.getStructAttrs() }
         this.reduce = reduce.map((item) => item.replace(/^_\./, ""))
     }
@@ -135,9 +137,7 @@ export class CompareTask {
                 const attribute = this.attributes[attrKey]
                 if (attribute) {
                     type = attribute.type
-                    if (attribute["is_struct_attr"]) {
-                        attrKey = `_.${attrKey}`
-                    }
+                    attrKey = prefixAttr(attribute)
                 }
 
                 const op = type === "set" ? "contains" : "="

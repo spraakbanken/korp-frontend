@@ -4,7 +4,7 @@ import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
 import "@/../styles/map.scss"
 import { AppSettings } from "@/settings/app-settings.types"
-import { MarkerData, MarkerEvent, MarkerGroup } from "@/map"
+import { MarkerData, MarkerEvent, MarkerGroup } from "@/statistics/map"
 import { StatisticsMap } from "@/statistics/statistics-map"
 
 type ResultMapController = IController & {

@@ -1,7 +1,8 @@
 /** @format */
 import moment from "moment"
 import { FORMATS, Series } from "./util"
-import { escapeHtml, formatFrequency } from "@/util"
+import { escapeHtml } from "@/util"
+import { formatFrequency } from "@/i18n/util"
 import { sortedIndexOf } from "lodash"
 import { AbsRelSeq } from "@/statistics/statistics.types"
 import { StoreService } from "@/services/store"

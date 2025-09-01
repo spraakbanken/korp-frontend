@@ -1,21 +1,39 @@
 /** @format */
-import { compact, intersection, isEmpty, maxBy, minBy, pick, pickBy, sortBy, sum, union, uniq, zipObject } from "lodash"
+import {
+    compact,
+    get,
+    intersection,
+    isEmpty,
+    maxBy,
+    minBy,
+    pick,
+    pickBy,
+    sortBy,
+    sum,
+    union,
+    uniq,
+    zipObject,
+} from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"
 import { locObj } from "@/i18n"
-import { Attribute } from "./settings/config.types"
-import { CorpusTransformed } from "./settings/config-transformed.types"
-import { LangString } from "./i18n/types"
-import { objectIntersection, objectUnion } from "./util"
+import { Attribute } from "@/settings/config.types"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { LangString } from "@/i18n/types"
+import { objectIntersection, objectUnion } from "@/util"
 
-export type AttributeOption = Partial<Attribute> & {
+export type AttributeOption = Attribute & {
     group: "word" | "word_attr" | "sentence_attr"
-    value: string
-    label: LangString
 }
 
 /** How to join attribute lists of different corpora */
 export type SetOperator = "union" | "intersection"
+
+export let corpusListing: CorpusListing
+export function setCorpusListing(cl: CorpusListing): void {
+    if (corpusListing) throw new Error("Cannot reset global corpusListing")
+    corpusListing = cl
+}
 
 export class CorpusListing {
     corpora: CorpusTransformed[]
@@ -256,7 +274,7 @@ export class CorpusListing {
         const show: string[] = ["sentence"]
         const show_struct: string[] = []
 
-        for (const corpus of settings.corpusListing.selected) {
+        for (const corpus of corpusListing.selected) {
             show.push(...Object.keys(corpus.within).map((key) => key.split(" ").pop()!))
             show.push(...Object.keys(corpus.attributes))
 
@@ -315,7 +333,7 @@ export class CorpusListing {
         if (!this._wordGroup) {
             this._wordGroup = {
                 group: "word",
-                value: "word",
+                name: "word",
                 label: settings["word_label"],
             }
         }
@@ -330,7 +348,7 @@ export class CorpusListing {
         for (let key in allAttrs) {
             const obj = allAttrs[key]
             if (obj["display_type"] !== "hidden") {
-                attrs.push({ group: "word_attr", value: key, ...obj })
+                attrs.push({ group: "word_attr", ...obj })
             }
         }
 
@@ -352,7 +370,7 @@ export class CorpusListing {
         for (let key in object) {
             const obj = object[key]
             if (obj["display_type"] !== "hidden") {
-                sentAttrs.push({ group: "sentence_attr", value: key, ...obj })
+                sentAttrs.push({ group: "sentence_attr", ...obj })
             }
         }
 
@@ -365,21 +383,23 @@ export class CorpusListing {
         const word = this.getWordGroup()
         const attrs = this.getWordAttributeGroups(wordOp, lang)
         const sentAttrs = this.getStructAttributeGroups(structOp, lang)
-        return [word].concat(attrs, sentAttrs)
+        return [word, ...attrs, ...sentAttrs]
     }
 
     getAttributeGroupsExtended(lang?: string): AttributeOption[] {
-        return this.getAttributeGroups("union", "union", lang).filter((attr) => !attr["hide_extended"])
+        return this.getAttributeGroups("union", "union", lang).filter((attr) => !get(attr, "hide_extended"))
     }
 
     getAttributeGroupsCompare(lang?: string): AttributeOption[] {
-        return this.getAttributeGroups("intersection", "intersection", lang).filter((attr) => !attr["hide_compare"])
+        return this.getAttributeGroups("intersection", "intersection", lang).filter(
+            (attr) => !get(attr, "hide_compare")
+        )
     }
 
     getAttributeGroupsStatistics(lang?: string): AttributeOption[] {
         const wordOp = settings["reduce_word_attribute_selector"] || "union"
         const structOp = settings["reduce_struct_attribute_selector"] || "union"
-        return this.getAttributeGroups(wordOp, structOp, lang).filter((attr) => !attr["hide_statistics"])
+        return this.getAttributeGroups(wordOp, structOp, lang).filter((attr) => !get(attr, "hide_statistics"))
     }
 
     /** Get list of morphology ids used by currently selected corpora. */
@@ -394,6 +414,7 @@ export class CorpusListing {
     updateAttributes(): void {
         const common_keys = compact(this.selected.flatMap((corp) => Object.keys(corp.common_attributes || {})))
         this.commonAttributes = pick(settings["common_struct_types"], ...common_keys) as Record<string, Attribute>
+        Object.entries(this.commonAttributes).forEach(([name, attr]) => (attr.name = name))
         this.structAttributes = this._getStructAttrs()
     }
 

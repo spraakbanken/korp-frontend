@@ -1,9 +1,10 @@
 /** @format */
 import angular, { IController } from "angular"
-import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "@/corpus-chooser"
+import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "@/corpora/corpus-chooser"
 import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
-import { collatorSort, html } from "@/util"
+import { html } from "@/util"
+import { collatorSort } from "@/i18n/util"
 import "@/components/checkbox-ternary"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { StoreService } from "@/services/store"

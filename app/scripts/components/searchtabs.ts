@@ -11,7 +11,7 @@ import "@/components/search-history"
 import "@/directives/click-cover"
 import "@/directives/tab-hash"
 import { StoreService } from "@/services/store"
-import { savedSearches } from "@/saved-searches"
+import { savedSearches } from "@/search/saved-searches"
 
 type SearchtabsController = IController & {
     parallelMode: boolean

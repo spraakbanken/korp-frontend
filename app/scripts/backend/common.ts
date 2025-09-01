@@ -1,6 +1,6 @@
 /** @format */
 import { selectHttpMethod } from "@/util"
-import { getAuthorizationHeader } from "@/components/auth/auth"
+import { auth } from "@/components/auth/auth"
 import settings from "@/settings"
 import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response as KResponse } from "./types"
 import { omitBy, pickBy } from "lodash"
@@ -21,7 +21,7 @@ export async function korpRequest<K extends keyof API>(
     params = omitBy(params, (value) => value == null) as API[K]["params"]
     // Switch to POST if the URL would be to long
     const { url, request } = selectHttpMethod(settings.korp_backend_url + "/" + endpoint, params)
-    request.headers = { ...request.headers, ...getAuthorizationHeader() }
+    request.headers = { ...request.headers, ...auth.getAuthorizationHeader() }
     if (options.abortSignal) request.signal = options.abortSignal
 
     // Send request

@@ -5,6 +5,7 @@ import { Factory } from "@/util"
 import { CountParams, CountsMerged } from "../types/count"
 import ProxyBase from "./proxy-base"
 import { expandCqp } from "@/cqp_parser/cqp"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 export type StatsProxyInput = [string, string[], string | undefined, boolean | undefined]
 
@@ -13,7 +14,7 @@ export class StatsProxy extends ProxyBase<"count"> {
 
     protected buildParams(cqp: string, attrs: string[], defaultWithin?: string, ignoreCase?: boolean): CountParams {
         /** Configs of reduced attributes keyed by name, excluding "word" */
-        const attributes = pick(settings.corpusListing.getReduceAttrs(), attrs)
+        const attributes = pick(corpusListing.getReduceAttrs(), attrs)
 
         const missingAttrs = attrs.filter((name) => !attributes[name] && name != "word")
         if (missingAttrs.length) throw new Error(`Trying to reduce by missing attribute ${missingAttrs}`)
@@ -23,7 +24,7 @@ export class StatsProxy extends ProxyBase<"count"> {
             attributes[name]?.["is_struct_attr"] && attributes[name]["group_by"] != "group_by"
         const [groupByStruct, groupBy] = partition(attrs, isStruct)
 
-        let within = settings.corpusListing.getWithinParam(defaultWithin)
+        let within = corpusListing.getWithinParam(defaultWithin)
         // Replace "ABC-aa|ABC-bb:link" with "ABC-aa:link"
         if (settings.parallel) within = within?.replace(/\|.*?:/g, ":")
 
@@ -31,7 +32,7 @@ export class StatsProxy extends ProxyBase<"count"> {
             group_by: groupBy.join(),
             group_by_struct: groupByStruct.join(),
             cqp: expandCqp(cqp),
-            corpus: settings.corpusListing.stringifySelected(true),
+            corpus: corpusListing.stringifySelected(true),
             end: settings["statistics_limit"] ? settings["statistics_limit"] - 1 : undefined,
             ignore_case: ignoreCase ? "word" : undefined,
             incremental: true,

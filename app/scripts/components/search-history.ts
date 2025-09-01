@@ -2,7 +2,7 @@
 import { loc } from "@/i18n"
 import { getSearchParamNames, SearchParams } from "@/urlparams"
 import { html } from "@/util"
-import { LocationService } from "@/angular-util"
+import { LocationService } from "@/services/types"
 import angular, { IScope } from "angular"
 import { StoreService } from "@/services/store"
 import {
@@ -12,7 +12,7 @@ import {
     getSearchHistory,
     isSearchOption,
     Option,
-} from "@/search-history"
+} from "@/search/search-history"
 
 type HistoryScope = IScope & {
     getOptions: () => Option[]

@@ -5,13 +5,15 @@ import "slickgrid/plugins/slick.checkboxselectcolumn"
 import "slickgrid/plugins/slick.rowselectionmodel"
 import "slickgrid/slick.interactions.js"
 import "slickgrid/slick.grid.css"
-import { Dataset, isTotalRow, Row, SingleRow } from "./statistics/statistics.types"
-import { StoreService } from "./services/store"
-import settings from "./settings"
-import { locObj } from "./i18n"
-import { escapeHtml, formatFrequency } from "./util"
-import { LangString } from "./i18n/types"
+import { Dataset, isTotalRow, Row, SingleRow } from "./statistics.types"
+import { StoreService } from "@/services/store"
+import settings from "@/settings"
+import { locObj } from "@/i18n"
+import { escapeHtml } from "@/util"
+import { formatFrequency } from "@/i18n/util"
+import { LangString } from "@/i18n/types"
 import { zip } from "lodash"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 export class StatisticsGrid extends Slick.Grid<Row> {
     constructor(
@@ -91,7 +93,7 @@ type Comparer<T> = (a: T, b: T) => number
 
 /** Create SlickGrid column definitions for statistics data. */
 function createColumns(store: StoreService, corpora: string[], attrs: string[]): SlickgridColumn[] {
-    const cl = settings.corpusListing.subsetFactory(corpora)
+    const cl = corpusListing.subsetFactory(corpora)
     const attributes = cl.getReduceAttrs()
     const labels = attrs.map((name) => (name == "word" ? settings["word_label"] : attributes[name]?.label))
 

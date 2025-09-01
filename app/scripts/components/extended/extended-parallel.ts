@@ -2,12 +2,15 @@
 import angular, { IController, ITimeoutService } from "angular"
 import settings from "@/settings"
 import { html } from "@/util"
-import { LocationService } from "@/angular-util"
+import { LocationService } from "@/services/types"
 import { matomoSend } from "@/matomo"
 import "@/components/extended/tokens"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { StoreService } from "@/services/store"
 import { getEnabledLangs, getParallelCqp, ParallelQuery } from "@/parallel/parallel-cqp"
+import { corpusListing as corpusListing_ } from "@/corpora/corpus_listing"
+
+const corpusListing = corpusListing_ as ParallelCorpusListing
 
 type ExtendedParallelController = IController & {
     langs: ParallelQuery[]
@@ -73,8 +76,6 @@ angular.module("korpApp").component("extendedParallel", {
 
             const ctrl = this as ExtendedParallelController
             ctrl.langs = [newLang()]
-
-            const corpusListing = settings.corpusListing as ParallelCorpusListing
 
             // Restore search when set via URL
             store.watch("search", () => {

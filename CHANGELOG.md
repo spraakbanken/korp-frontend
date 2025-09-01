@@ -24,6 +24,12 @@
   - In `CorpusListing`:
     - Merged `getContextQueryString` and `getContextQueryStringFromCorpusId` as `getContextParams`
     - Split `getAttributeGroups`/`getStatsAttributeGroups` into `getAttributeGroups`, `getAttributeGroupsCompare`, `getAttributeGroupsExtended` and `getAttributeGroupsStatistics`
+- Changes to reduce circular dependencies, notably:
+  - Removed `settings.corpusListing`; use `import { corpusListing } from "@/corpora/corpus_listing"` instead
+  - Auth modules are `AuthModule` objects, not just a group of functions
+    - Import `{ auth }` instead of `* as authenticationProxy`
+  - Moved `valfilter` in `@/util` to `prefixAttr` in `@/settings`
+  - Moved locale-related functions from `@/util` to `@/i18n/util`
 - The `searches` service is removed in favor of the store:
   - Write to `store.activeSearch` to commit a new main search query, result tabs watch it
   - Search tabs watch `store.search` and `store.cqp` to restore a search from init/frontpage/history

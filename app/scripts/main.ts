@@ -3,11 +3,12 @@ import angular from "angular"
 import settings from "@/settings"
 import { fetchInitialData } from "@/data_init"
 import currentMode from "@/mode"
-import * as authenticationProxy from "@/components/auth/auth"
 import { getUrlHash, html, simpleModal } from "@/util"
 import korpLogo from "../img/korp.svg"
 import korpFail from "../img/korp_fail.svg"
 import { convertJstorage } from "@/local-storage"
+import { findAuthModule } from "@/components/auth/init"
+import { initAuth, setAuthModule } from "@/components/auth/auth"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
@@ -58,12 +59,15 @@ createSplashScreen()
 ;(async () => {
     // TODO This was added in July 2024, remove after a few months?
     convertJstorage()
+    // Identify authentication module
+    const authModule = findAuthModule()
+    setAuthModule(authModule)
     // Check if user is logged in
-    const initAuth = authenticationProxy.init()
+    const authPromise = initAuth()
     // Fetch everything that only needs to be check once
-    await fetchInitialData(initAuth)
+    await fetchInitialData(authPromise)
     // Now wait for login to resolve
-    await initAuth
+    await authPromise
     // startup Angular.js app
     initApp()
     document.getElementById("preload")?.remove()

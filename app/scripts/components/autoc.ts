@@ -1,5 +1,4 @@
 /** @format */
-import { memoize } from "lodash"
 import angular, { IController, IPromise, IScope } from "angular"
 import settings from "@/settings"
 import { html } from "@/util"
@@ -7,6 +6,7 @@ import { getLemgrams, getSenses, LemgramCount } from "@/backend/lexicons"
 import "@/directives/typeahead-click-open"
 import { Lemgram } from "@/lemgram"
 import { Saldo } from "@/saldo"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 type AutocController = IController & {
     dir?: string
@@ -142,7 +142,7 @@ angular.module("korpApp").component("autoc", {
 
             function getMorphologies(): string[] {
                 if (ctrl.variant === "dalin") return ["dalinm"]
-                const morphologies = settings.corpusListing.getMorphologies()
+                const morphologies = corpusListing.getMorphologies()
                 return morphologies.length ? morphologies : ["saldom"]
             }
 
@@ -156,7 +156,7 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.getLemgrams = async (input: string) => {
                 const morphologies = getMorphologies()
-                const corpora = settings.corpusListing.getSelectedCorpora()
+                const corpora = corpusListing.getSelectedCorpora()
                 const data = await getLemgrams(input, morphologies, corpora)
                 const output: LemgramOut[] = data.map((item) => {
                     if (ctrl.variant === "affix") item.count = -1

@@ -1,13 +1,14 @@
 /** @format */
 import memoize from "lodash/memoize"
-import { LangLocMap, LocMap } from "./i18n/types"
-import settings from "./settings"
-import { BUILD_HASH } from "./util"
+import { LangLocMap, LocMap } from "@/i18n/types"
+import settings from "@/settings"
+import { BUILD_HASH } from "@/util"
+import { setLocData } from "@/i18n"
 
 // Using memoize, this will only fetch once and then return the same promise when called again.
 // TODO it would be better only to load additional languages when there is a language change
 export const getLocData = memoize(async () => {
-    locData = {}
+    const locData: LangLocMap = {}
     const defs: Promise<void>[] = []
     for (const langObj of settings.languages) {
         const lang = langObj.value
@@ -27,8 +28,7 @@ export const getLocData = memoize(async () => {
         }
     }
 
+    setLocData(locData)
     await Promise.all(defs)
     return locData
 })
-
-export let locData: LangLocMap | undefined

@@ -3,6 +3,7 @@ import { defaults } from "lodash"
 import settings from "korp_config"
 import { AppSettings } from "./app-settings.types"
 import { Settings } from "./settings.types"
+import { Attribute } from "./config.types"
 
 export default settings
 
@@ -53,6 +54,7 @@ export function setDefaultConfigValues() {
     defaults(settings, settingsDefaultsDep)
 }
 
-export function getDefaultWithin() {
-    return Object.keys(settings["default_within"] || {})[0]
-}
+export const getDefaultWithin = () => Object.keys(settings["default_within"] || {})[0]
+
+/** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
+export const prefixAttr = (attr: Attribute): string => (attr["is_struct_attr"] ? `_.${attr.name}` : attr.name)

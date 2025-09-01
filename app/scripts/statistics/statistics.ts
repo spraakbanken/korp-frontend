@@ -1,12 +1,12 @@
 /** @format */
-import settings from "@/settings"
+import settings, { prefixAttr } from "@/settings"
 import { CountsMerged } from "@/backend/types/count"
 import { Dataset, isTotalRow, StatisticsWorkerMessage, StatisticsProcessed, SearchParams } from "./statistics.types"
 import { fromKeys, regescape, splitFirst } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { loc, locAttribute, locObj } from "@/i18n"
 import CSV from "comma-separated-values/csv"
-import { CorpusListing } from "@/corpus_listing"
+import { corpusListing, CorpusListing } from "@/corpora/corpus_listing"
 import { Lemgram } from "@/lemgram"
 import { Saldo } from "@/saldo"
 
@@ -28,7 +28,7 @@ export function processStatisticsResult(
     prevNonExpandedCQP: string
 ): Promise<StatisticsProcessed> {
     const corpora = Object.keys(data.corpora)
-    const cl = settings.corpusListing.subsetFactory(corpora)
+    const cl = corpusListing.subsetFactory(corpora)
 
     // Get stringifiers for formatting attribute values
     const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, cl))
@@ -95,12 +95,12 @@ function reduceCqp(
     ignoreCase: boolean
 ): string {
     // Note: undefined if name is `word`
-    const attr = settings.corpusListing.getReduceAttrs()[name]
+    const attr = corpusListing.getReduceAttrs()[name]
 
     // Use named CQP'ifier from custom config code. It must escape values as regex.
     if (attr?.stats_cqp) return customFunctions[attr.stats_cqp](values, ignoreCase)
 
-    const cqpName = attr?.["is_struct_attr"] ? `_.${name}` : name
+    const cqpName = attr ? prefixAttr(attr) : name
 
     // Empty value: require number of values to be 0
     if (values[0] == "") return `ambiguity(${cqpName}) = 0`
@@ -126,7 +126,7 @@ function mergeRegex(values: string[]): string {
 
 // Get the html (no linking) representation of the result for the statistics table
 function reduceStringify(name: string, cl?: CorpusListing): (values: string[]) => string {
-    cl ??= settings.corpusListing
+    cl ??= corpusListing
     const attr = cl.getReduceAttrs()[name]
 
     // Use named stringifier from custom config code

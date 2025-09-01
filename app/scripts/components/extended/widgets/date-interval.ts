@@ -1,6 +1,6 @@
 /** @format */
 import moment, { Moment } from "moment"
-import settings from "@/settings"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { html } from "@/util"
 import { Widget, WidgetScope } from "./common"
 import "@/components/datetime-picker"
@@ -79,11 +79,11 @@ export const dateInterval: Widget = {
         "store",
         function ($scope: DateIntervalScope, store: StoreService) {
             function updateIntervals() {
-                const moments = settings.corpusListing.getMomentInterval()
+                const moments = corpusListing.getMomentInterval()
                 if (moments) {
                     ;[$scope.minDate, $scope.maxDate] = moments.map((m) => m.toDate())
                 } else {
-                    const interval = settings.corpusListing.getTimeInterval()
+                    const interval = corpusListing.getTimeInterval()
                     if (!interval) return
                     const [from, to] = interval
                     $scope.minDate = getYear(from)
@@ -112,7 +112,7 @@ export const dateInterval: Widget = {
             if (!$scope.model) {
                 $scope.fromDate = $scope.minDate
                 $scope.toDate = $scope.maxDate
-                const moments = settings.corpusListing.getMomentInterval()
+                const moments = corpusListing.getMomentInterval()
                 if (moments) [$scope.fromTime, $scope.toTime] = moments.map((m) => m.toDate())
             } else if ($scope.model.length === 4) {
                 ;[$scope.fromDate, $scope.toDate] = $scope.model.slice(0, 3).map(getDate)

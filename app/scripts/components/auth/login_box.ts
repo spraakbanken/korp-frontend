@@ -3,8 +3,12 @@ import { IComponentOptions, IController, ITimeoutService } from "angular"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { html } from "@/util"
-import { login } from "./basic_auth"
-import { AuthModuleOptions } from "./basic_auth.types"
+import { auth } from "./auth"
+
+export type AuthModuleOptions = {
+    show_remember?: boolean
+    default_value_remember?: boolean
+}
 
 // TODO make it not closable when login is NEEDED
 export const loginBoxComponent: IComponentOptions = {
@@ -67,7 +71,7 @@ export const loginBoxComponent: IComponentOptions = {
                 $ctrl.loading = true
 
                 try {
-                    await login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
+                    await auth.login($ctrl.loginUsr, $ctrl.loginPass, $ctrl.saveLogin)
                     // no send to statemachine
                     statemachine.send("LOGIN")
                     $ctrl.close()

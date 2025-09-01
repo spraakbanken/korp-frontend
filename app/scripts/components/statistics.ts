@@ -11,11 +11,11 @@ import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams } from "@/statistics/statistics.types"
 import { CountParams } from "@/backend/types/count"
-import { AttributeOption } from "@/corpus_listing"
-import { getTimeData } from "@/timedata"
+import { AttributeOption, corpusListing } from "@/corpora/corpus_listing"
+import { getTimeData } from "@/backend/timedata"
 import { StoreService } from "@/services/store"
-import { getGeoAttributes, MapAttributeOption } from "@/map"
-import { StatisticsGrid } from "@/statistics-grid"
+import { getGeoAttributes, MapAttributeOption } from "@/statistics/map"
+import { StatisticsGrid } from "@/statistics/statistics-grid"
 import { createStatisticsCsv, getCqp } from "@/statistics/statistics"
 import { ExampleTask } from "@/backend/task/example-task"
 import { MapTask } from "@/backend/task/map-task"
@@ -226,7 +226,7 @@ angular.module("korpApp").component("statistics", {
             $ctrl.noRowsError = false
             $ctrl.mapRelative = true
             let grid: StatisticsGrid
-            let corpusListing = settings.corpusListing
+            let cl = corpusListing
 
             $ctrl.$onInit = () => {
                 $(window).on(
@@ -256,14 +256,14 @@ angular.module("korpApp").component("statistics", {
 
             $ctrl.$onChanges = (changeObj) => {
                 if ("searchParams" in changeObj && $ctrl.searchParams) {
-                    corpusListing = settings.corpusListing.subsetFactory($ctrl.searchParams.corpora)
+                    cl = corpusListing.subsetFactory($ctrl.searchParams.corpora)
                 }
 
                 if ("data" in changeObj && $ctrl.data) {
                     grid = new StatisticsGrid(
                         $("#myGrid").get(0)!,
                         $ctrl.data,
-                        corpusListing.corpora.map((corpus) => corpus.id.toUpperCase()),
+                        cl.corpora.map((corpus) => corpus.id.toUpperCase()),
                         $ctrl.searchParams.reduceVals,
                         store,
                         showPieChart,
@@ -283,7 +283,7 @@ angular.module("korpApp").component("statistics", {
                     $(window).trigger("resize")
 
                     updateGraphBtnState()
-                    $ctrl.mapAttributes = getGeoAttributes(corpusListing.corpora)
+                    $ctrl.mapAttributes = getGeoAttributes(cl.corpora)
                 }
 
                 if ("rowCount" in changeObj && $ctrl.rowCount) {
@@ -293,11 +293,11 @@ angular.module("korpApp").component("statistics", {
 
             store.watch("corpus", () => {
                 // Update list of attributes
-                const reduceLang = settings.corpusListing.getReduceLang()
-                $scope.statCurrentAttrs = settings.corpusListing.getAttributeGroupsStatistics(reduceLang)
+                const reduceLang = corpusListing.getReduceLang()
+                $scope.statCurrentAttrs = corpusListing.getAttributeGroupsStatistics(reduceLang)
 
                 // Deselect removed attributes, fall back to word
-                const names = $scope.statCurrentAttrs.map((option) => option.value)
+                const names = $scope.statCurrentAttrs.map((option) => option.name)
                 const selected = intersection(store.stats_reduce.split(","), names)
                 $scope.statSelectedAttrs = selected.length > 0 ? selected : ["word"]
                 store.stats_reduce = $scope.statSelectedAttrs.join()
@@ -357,7 +357,7 @@ angular.module("korpApp").component("statistics", {
                         $ctrl.searchParams.prevNonExpandedCQP,
                         subqueries,
                         showTotal,
-                        corpusListing,
+                        cl,
                         $ctrl.params.default_within
                     )
                 )
@@ -436,14 +436,14 @@ angular.module("korpApp").component("statistics", {
                 // Ensure cl.getTimeInterval() is not called before time data is loaded.
                 await getTimeData()
                 $scope.$applyAsync(() => {
-                    $ctrl.graphEnabled = !!corpusListing.getTimeInterval()
+                    $ctrl.graphEnabled = !!cl.getTimeInterval()
                 })
             }
 
             $ctrl.generateExport = () => {
                 const csvType: string = $("#kindOfFormat option:selected").val()
                 const { reduceVals } = $ctrl.searchParams
-                const corpora = corpusListing.corpora
+                const corpora = cl.corpora
                 const csv = createStatisticsCsv(
                     $ctrl.data,
                     reduceVals,

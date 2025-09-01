@@ -5,7 +5,7 @@ import { html, splitFirst } from "@/util"
 import { matomoSend } from "@/matomo"
 import "@/components/search-submit"
 import { StoreService } from "@/services/store"
-import { savedSearches } from "@/saved-searches"
+import { savedSearches } from "@/search/saved-searches"
 
 type AdvancedSearchController = IController & {
     cqp: string

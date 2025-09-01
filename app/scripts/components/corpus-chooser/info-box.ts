@@ -3,7 +3,14 @@ import angular, { IController } from "angular"
 import { html } from "@/util"
 import { LangString } from "@/i18n/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { ChooserFolderSub, CorpusLinkInfo, CorpusSizeInfo, getSizeInfo, isFolder, makeLink } from "@/corpus-chooser"
+import {
+    ChooserFolderSub,
+    CorpusLinkInfo,
+    CorpusSizeInfo,
+    getSizeInfo,
+    isFolder,
+    makeLink,
+} from "@/corpora/corpus-chooser"
 import { StoreService } from "@/services/store"
 
 type CcInfoBoxController = IController & {

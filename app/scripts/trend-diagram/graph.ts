@@ -4,7 +4,7 @@ import { findOptimalLevel, formatUnixDate, getEmptyIntervals, getSeriesData, Lev
 import { last as _last, groupBy, last, maxBy, minBy, sortedIndexOf, throttle } from "lodash"
 import { CountTimeResponse, GraphStats, GraphStatsCqp } from "@/backend/types/count-time"
 import { StoreService } from "@/services/store"
-import { formatRelativeHits } from "@/util"
+import { formatRelativeHits } from "@/i18n/util"
 import { loc } from "@/i18n"
 
 // Rickshaw graph
@@ -83,8 +83,8 @@ export class TrendGraph {
             },
         })
 
-        // [first, last] = settings.corpusListing.getTimeInterval()
-        // [firstVal, lastVal] = settings.corpusListing.getMomentInterval()
+        // [first, last] = corpusListing.getTimeInterval()
+        // [firstVal, lastVal] = corpusListing.getMomentInterval()
 
         // TODO: fix decade again
         // timeunit = if last - first > 100 then "decade" else @zoom

@@ -1,16 +1,16 @@
 /** @format */
 import angular, { IController } from "angular"
 import { isEqual } from "lodash"
-import settings from "@/settings"
-import { html, valfilter } from "@/util"
+import { html } from "@/util"
+import { prefixAttr } from "@/settings"
 import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/local-storage"
-import { AttributeOption } from "@/corpus_listing"
-import { savedSearches } from "@/saved-searches"
+import { AttributeOption, corpusListing } from "@/corpora/corpus_listing"
+import { savedSearches } from "@/search/saved-searches"
 import { CompareTask } from "@/backend/task/compare-task"
 
 type CompareSearchController = IController & {
-    valfilter: typeof valfilter
+    prefixAttr: typeof prefixAttr
     savedSearches: SavedSearch[]
     cmp1: SavedSearch
     cmp2: SavedSearch
@@ -50,7 +50,7 @@ angular.module("korpApp").component("compareSearch", {
                 {{'compare_reduce' | loc:$root.lang}}
                 <select
                     ng-model="$ctrl.reduce"
-                    ng-options="$ctrl.valfilter(obj) as obj.label | locObj:$root.lang group by obj.group | loc for obj in $ctrl.currentAttrs"
+                    ng-options="$ctrl.prefixAttr(obj) as obj.label | locObj:$root.lang group by obj.group | loc for obj in $ctrl.currentAttrs"
                 ></select>
                 <button class="btn btn-sm btn-default search" ng-click="$ctrl.sendCompare()">
                     {{'compare_vb' | loc:$root.lang}}
@@ -64,7 +64,7 @@ angular.module("korpApp").component("compareSearch", {
             const $ctrl = this as CompareSearchController
 
             $ctrl.reduce = "word"
-            $ctrl.valfilter = valfilter
+            $ctrl.prefixAttr = prefixAttr
 
             $ctrl.$onInit = () => {
                 updateSavedSearches()
@@ -83,7 +83,7 @@ angular.module("korpApp").component("compareSearch", {
 
             $ctrl.updateAttributes = () => {
                 if ($ctrl.cmp1 && $ctrl.cmp2) {
-                    const listing = settings.corpusListing.subsetFactory([...$ctrl.cmp1.corpora, ...$ctrl.cmp2.corpora])
+                    const listing = corpusListing.subsetFactory([...$ctrl.cmp1.corpora, ...$ctrl.cmp2.corpora])
                     $ctrl.currentAttrs = listing.getAttributeGroupsCompare()
                 }
             }

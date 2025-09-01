@@ -1,6 +1,6 @@
 /** @format */
 import angular, { ICompileService, IScope, ITimeoutService, ui } from "angular"
-import { transformSeconds } from "./util"
+import { transformSeconds } from "@/util"
 
 type VideoInstanceControllerScope = IScope & {
     fileName: string

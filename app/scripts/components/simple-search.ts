@@ -5,7 +5,7 @@ import statemachine from "@/statemachine"
 import settings from "@/settings"
 import { createCondition, expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html, regescape, splitFirst, unregescape } from "@/util"
-import { LocationService } from "@/angular-util"
+import { LocationService } from "@/services/types"
 import { matomoSend } from "@/matomo"
 import "@/backend/lexicons"
 import "@/components/autoc"
@@ -14,7 +14,7 @@ import "@/components/search-submit"
 import "@/global-filter/global-filters"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
-import { savedSearches } from "@/saved-searches"
+import { savedSearches } from "@/search/saved-searches"
 
 type SimpleSearchController = IController & {
     input: string

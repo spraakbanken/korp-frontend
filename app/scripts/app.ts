@@ -9,15 +9,17 @@ import {
     IScope,
     ui,
 } from "angular"
-import korpApp from "./korp.module"
+import korpApp from "@/korp.module"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
-import * as authenticationProxy from "@/components/auth/auth"
+import { auth } from "@/components/auth/auth"
 import { getLocData } from "@/loc-data"
 import { RootScope } from "@/root-scope.types"
-import { CorpusTransformed } from "./settings/config-transformed.types"
-import { BUILD_HASH, formatRelativeHits, html } from "@/util"
-import { getService, LocationService } from "@/angular-util"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { BUILD_HASH, html } from "@/util"
+import { formatRelativeHits } from "@/i18n/util"
+import { getService } from "@/angular-util"
+import { LocationService } from "@/services/types"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
 import "@/components/searchtabs"
@@ -26,9 +28,10 @@ import "@/components/results"
 import "@/components/korp-error"
 import "@/services/store"
 import { StoreService } from "@/services/store"
-import { JQueryExtended } from "./jquery.types"
+import { JQueryExtended } from "@/jquery.types"
 import { LocLangMap } from "@/i18n/types"
-import { getAllCorporaInFolders } from "@/corpus-chooser"
+import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [
@@ -80,7 +83,7 @@ korpApp.filter(
             input === "" ? "–" : input
 )
 
-authenticationProxy.initAngular(korpApp)
+auth.initAngular(korpApp)
 
 /**
  * angular-dynamic-locale updates translations in the builtin $locale service, which is used
@@ -175,7 +178,7 @@ korpApp.run([
             // Resolve any folder ids to the contained corpus ids
             ids = ids.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
 
-            const hasAccess = (corpus: CorpusTransformed) => authenticationProxy.hasCredential(corpus.id.toUpperCase())
+            const hasAccess = (corpus: CorpusTransformed) => auth.hasCredential(corpus.id.toUpperCase())
 
             const deniedCorpora = ids
                 .map((id) => settings.corpora[id])
@@ -183,7 +186,7 @@ korpApp.run([
 
             const allowedIds = ids.filter((id) => !deniedCorpora.find((corpus) => corpus.id == id))
 
-            const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
+            const allCorpusIds = corpusListing.corpora.map((corpus) => corpus.id)
 
             if (settings.initialization_checks && (await settings.initialization_checks())) {
                 // custom initialization code called
@@ -198,9 +201,9 @@ korpApp.run([
                 const loginNeededHTML = () =>
                     deniedCorpora.map((corpus) => `<span>${locObj(corpus.title)}</span>`).join(", ")
 
-                if (authenticationProxy.isLoggedIn()) {
+                if (auth.isLoggedIn()) {
                     // access partly or fully denied to selected corpora
-                    if (settings.corpusListing.corpora.length == deniedCorpora.length) {
+                    if (corpusListing.corpora.length == deniedCorpora.length) {
                         openErrorModal({
                             content: "{{'access_denied' | loc:$root.lang}}",
                             buttonText: "go_to_start",
@@ -244,12 +247,12 @@ korpApp.run([
             } else {
                 // Corpus selection OK
                 store.corpus = ids
-                settings.corpusListing.select(store.corpus)
+                corpusListing.select(store.corpus)
 
                 // Sync corpus selection from store to global corpus listing
                 store.watch("corpus", () => {
                     // In parallel mode, the select function may also add hidden corpora.
-                    settings.corpusListing.select(store.corpus)
+                    corpusListing.select(store.corpus)
                 })
             }
         }

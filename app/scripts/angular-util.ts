@@ -1,26 +1,7 @@
 /** @format */
-import angular, { IControllerService, IHttpService, ILocationService, IScope, ui } from "angular"
-import { RootScope } from "./root-scope.types"
-import { StoreService } from "./services/store"
-import { HashParams } from "./urlparams"
-
-/** Mapping from service names to their TS types. */
-type ServiceTypes = {
-    $controller: IControllerService
-    $http: IHttpService
-    $location: LocationService
-    $rootScope: RootScope
-    $uibModal: ui.bootstrap.IModalService
-    store: StoreService
-    // Add types here as needed.
-}
-
-/** Extends the Angular Location service to assign types for supported URL hash params. */
-export type LocationService = Omit<ILocationService, "search"> & {
-    search(): HashParams
-    search(search: HashParams): LocationService
-    search<K extends keyof HashParams>(search: K, paramValue: HashParams[K] | any): LocationService
-}
+import angular, { IScope } from "angular"
+import { HashParams } from "@/urlparams"
+import { ServiceTypes, LocationService } from "@/services/types"
 
 /** Get an Angular service from outside the Angular context. */
 export const getService = <K extends keyof ServiceTypes>(name: K): ServiceTypes[K] =>

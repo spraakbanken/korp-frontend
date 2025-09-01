@@ -1,8 +1,9 @@
 /** @format */
-import { memoize, omit, range } from "lodash"
+import { assignWith, memoize, omit, pickBy, range } from "lodash"
 import settings from "@/settings"
-import { Histogram } from "./backend/types"
-import { korpRequest } from "./backend/common"
+import { Histogram } from "./types"
+import { korpRequest } from "./common"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 /**
  * Time data, if available.
@@ -15,7 +16,7 @@ export let timeData: [[number, number][], number] | undefined
 export const getTimeData: () => Promise<[[number, number][], number] | undefined> = memoize(async () => {
     if (!settings.has_timespan) return undefined
 
-    const corpus = settings.corpusListing.stringifyAll()
+    const corpus = corpusListing.stringifyAll()
     if (!corpus) return undefined
 
     const data = await korpRequest("timespan", { granularity: "y", corpus })
@@ -76,5 +77,37 @@ function addToCorpora(dataByCorpus: Record<string, Histogram>) {
     }
 
     // Update list of common attributes
-    settings.corpusListing.updateAttributes()
+    corpusListing.updateAttributes()
 }
+
+/** Data size per year of all corpora. */
+export const getTimeDataPairs = (): [number, number][] => timeData![0]
+
+/** Data size of unknown year in all corpora. */
+export const getCountUndated = (): number => timeData![1]
+
+/** Get data size per year of all corpora. */
+export const getSeries = () => Object.fromEntries(getTimeDataPairs()) as YearSeries
+
+/** Get data size per year of selected corpora. */
+export function getSeriesSelected() {
+    // `pickBy` removes zeroes.
+    const series = corpusListing.selected.map((corpus) => ("time" in corpus ? pickBy(corpus.time) : {}))
+    // Sum the counts by year for each corpora
+    return assignWith<YearSeries>({}, ...series, (sum: number | undefined, value: number) => (sum || 0) + value)
+}
+
+/** Get data size of unknown year in selected corpora */
+export function getCountUndatedSelected() {
+    return corpusListing.selected.reduce((sum, corpus) => sum + (corpus["non_time"] || 0), 0)
+}
+
+/** Get first and last year in all available corpora. */
+export function getSpan(): { min: number; max: number } | undefined {
+    const timeData = getTimeDataPairs()
+    if (!timeData.length) return undefined
+    return { min: timeData[0][0], max: timeData[timeData.length - 1][0] }
+}
+
+/** Numeric data by year. */
+export type YearSeries = Record<number, number>

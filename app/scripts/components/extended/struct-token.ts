@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController } from "angular"
-import settings from "@/settings"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { html } from "@/util"
 import { CqpToken } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
@@ -69,7 +69,7 @@ angular.module("korpApp").component("extendedStructToken", {
 
             store.watch("corpus", () => {
                 // Update options
-                ctrl.tagTypes = settings.corpusListing.getCommonWithins()
+                ctrl.tagTypes = corpusListing.getCommonWithins()
                 const structs = Object.keys(ctrl.tagTypes)
                 // Set default value
                 if (!ctrl.token.struct || !structs.includes(ctrl.token.struct)) {

@@ -9,6 +9,7 @@ import "@/components/korp-error"
 import "@/components/statistics"
 import { processStatisticsResult } from "@/statistics/statistics"
 import { StoreService } from "@/services/store"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 type ResultsStatisticsController = IController & {
     isActive: boolean
@@ -133,7 +134,7 @@ angular.module("korpApp").component("resultsStatistics", {
                 const attrs = (store.stats_reduce || "word").split(",")
                 const ignoreCase = !!store.stats_reduce_insensitive
                 // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
-                const corpora: string = settings.corpusListing.stringifySelected(false)
+                const corpora: string = corpusListing.stringifySelected(false)
 
                 $ctrl.setProgress(true, 0)
                 s.proxy

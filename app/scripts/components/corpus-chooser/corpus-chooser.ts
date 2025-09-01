@@ -3,8 +3,9 @@ import angular, { IController } from "angular"
 import { isEqual, omitBy, pickBy } from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
-import { getCredentials } from "@/components/auth/auth"
-import { html, suffixedNumbers } from "@/util"
+import { auth } from "@/components/auth/auth"
+import { html } from "@/util"
+import { suffixedNumbers } from "@/i18n/util"
 import {
     ChooserFolderRoot,
     ChooserFolderSub,
@@ -13,13 +14,13 @@ import {
     initCorpusStructure,
     recalcFolderStatus,
     updateLimitedAccess,
-} from "@/corpus-chooser"
+} from "@/corpora/corpus-chooser"
 import "@/components/corpus-chooser/corpus-time-graph"
 import "@/components/corpus-chooser/info-box"
 import "@/components/corpus-chooser/tree"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { LangString } from "@/i18n/types"
-import { getTimeData } from "@/timedata"
+import { getTimeData } from "@/backend/timedata"
 import { StoreService } from "@/services/store"
 
 type CorpusChooserController = IController & {
@@ -133,7 +134,7 @@ angular.module("korpApp").component("corpusChooser", {
             $ctrl.showChooser = false
 
             $ctrl.$onInit = () => {
-                $ctrl.credentials = getCredentials()
+                $ctrl.credentials = auth.getCredentials()
                 // remove the corpora with hide=true (linked corpora)
                 const ccCorpora = omitBy(settings.corpora, "hide")
                 $ctrl.root = initCorpusStructure(ccCorpora)
@@ -146,7 +147,7 @@ angular.module("korpApp").component("corpusChooser", {
             store.watch("corpus", () => select(store.corpus))
 
             statemachine.listen("login", function () {
-                $ctrl.credentials = getCredentials()
+                $ctrl.credentials = auth.getCredentials()
                 $ctrl.updateLimitedAccess()
             })
 

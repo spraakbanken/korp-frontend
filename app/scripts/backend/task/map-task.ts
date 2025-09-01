@@ -1,9 +1,10 @@
 /** @format */
-import { MarkerGroup, Point } from "@/map"
-import settings from "@/settings"
+import { MarkerGroup, Point } from "@/statistics/map"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { CountParams, StatsRow } from "../types/count"
 import { korpRequest } from "../common"
 import { compact } from "lodash"
+import { TaskBase } from "./task-base"
 
 export type MapAttribute = { label: string; corpora: string[] }
 
@@ -13,7 +14,7 @@ export type MapSeries = {
     points: Point[]
 }
 
-export class MapTask {
+export class MapTask extends TaskBase<MapSeries[]> {
     data: MapSeries[]
 
     constructor(
@@ -23,10 +24,12 @@ export class MapTask {
         readonly corpora: string[],
         readonly within?: string,
         readonly relative?: boolean
-    ) {}
+    ) {
+        super()
+    }
 
     async send(): Promise<MapSeries[]> {
-        const cl = settings.corpusListing.subsetFactory(this.corpora)
+        const cl = corpusListing.subsetFactory(this.corpora)
         const within = cl.getWithinParam(this.within)
 
         const params: CountParams = {

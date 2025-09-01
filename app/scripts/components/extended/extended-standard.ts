@@ -2,16 +2,16 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import { isEqual } from "lodash"
 import statemachine from "@/statemachine"
-import settings from "@/settings"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html } from "@/util"
-import { LocationService } from "@/angular-util"
+import { LocationService } from "@/services/types"
 import { matomoSend } from "@/matomo"
 import "@/components/extended/tokens"
 import "@/components/search-submit"
 import "@/global-filter/global-filters"
 import { StoreService } from "@/services/store"
-import { savedSearches } from "@/saved-searches"
+import { savedSearches } from "@/search/saved-searches"
 
 type ExtendedStandardController = IController & {
     cqp: string
@@ -85,7 +85,7 @@ angular.module("korpApp").component("extendedStandard", {
 
             store.watch("in_order", () => ($scope.freeOrder = !store.in_order))
             store.watch("corpus", () => {
-                ctrl.withins = settings.corpusListing.getWithinKeys()
+                ctrl.withins = corpusListing.getWithinKeys()
                 if (!ctrl.withins.includes(ctrl.within)) {
                     ctrl.within = ctrl.withins[0]
                 }

@@ -1,9 +1,10 @@
 /** @format */
-import settings from "@/settings"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { korpRequest } from "../common"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { ApiKwic, Token } from "../types"
 import { omit } from "lodash"
+import { TaskBase } from "./task-base"
 
 export type TextReaderDataContainer = {
     corpus: string
@@ -23,11 +24,12 @@ export type ReaderToken = {
 
 export type TextReaderData = Omit<ApiKwic, "tokens"> & ReaderTokenContainer
 
-export class TextTask {
+export class TextTask extends TaskBase<TextReaderData> {
     corpus: CorpusTransformed
     textId: string
     constructor(readonly corpusId: string, readonly sentenceData: Record<string, string>) {
-        this.corpus = settings.corpusListing.get(this.corpusId)
+        super()
+        this.corpus = corpusListing.get(this.corpusId)
         this.textId = this.sentenceData["text__id"]
         if (!this.textId) throw new RangeError("Sentence has no text__id")
     }

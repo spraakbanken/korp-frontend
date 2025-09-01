@@ -19,6 +19,7 @@ import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config
 import { JQueryExtended } from "@/jquery.types"
 import { Token } from "@/backend/types"
 import { TextTask } from "@/backend/task/text-task"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
 export type SidebarComponent = {
@@ -172,7 +173,7 @@ angular.module("korpApp").component("sidebar", {
 
             $ctrl.updateContent = ({ sentenceData, wordData, corpus, tokens, inReadingMode }) => {
                 // TODO: this is pretty broken
-                const corpusObj = settings.corpora[corpus] || settings.corpusListing.get(corpus)
+                const corpusObj = settings.corpora[corpus] || corpusListing.get(corpus)
                 $ctrl.corpusObj = corpusObj
                 $ctrl.sentenceData = sentenceData
                 $ctrl.inReadingMode = inReadingMode

@@ -1,13 +1,8 @@
 /** @format */
 import { intersection, isFunction, merge, pick } from "lodash"
 import settings from "@/settings"
-import { getLang, loc, locObj } from "@/i18n"
-import { LangString } from "./i18n/types"
-import { HashParams, UrlParams } from "./urlparams"
-import { AttributeOption } from "./corpus_listing"
-import { MaybeWithOptions, MaybeConfigurable } from "./settings/config.types"
-import { AbsRelSeq } from "./statistics/statistics.types"
-import { StoreService } from "./services/store"
+import { HashParams, UrlParams } from "@/urlparams"
+import { MaybeWithOptions, MaybeConfigurable } from "@/settings/config.types"
 import moment, { Moment } from "moment"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
@@ -82,28 +77,6 @@ export function combineDateTime(date: Date, time: Date): Moment {
     return m
 }
 
-/** Format a number like 60723 => 61K */
-export function suffixedNumbers(num: number, lang: string) {
-    let out = ""
-    if (num < 1000) {
-        // 232
-        out = num.toString()
-    } else if (num >= 1000 && num < 1e6) {
-        // 232,21K
-        out = (num / 1000).toFixed(2).toString() + "K"
-    } else if (num >= 1e6 && num < 1e9) {
-        // 232,21M
-        out = (num / 1e6).toFixed(2).toString() + "M"
-    } else if (num >= 1e9 && num < 1e12) {
-        // 232,21G
-        out = (num / 1e9).toFixed(2).toString() + "G"
-    } else if (num >= 1e12) {
-        // 232,21T
-        out = (num / 1e12).toFixed(2).toString() + "T"
-    }
-    return out.replace(".", loc("util_decimalseparator", lang))
-}
-
 /** FooBar -> foo-bar */
 export const kebabize = (str: string): string =>
     [...str].map((x, i) => (x == x.toUpperCase() ? (i ? "-" : "") + x.toLowerCase() : x)).join("")
@@ -112,9 +85,15 @@ export const kebabize = (str: string): string =>
 export const escapeHtml = (str: string): string =>
     str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
-/** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
-export const valfilter = (attrobj: AttributeOption): string =>
-    attrobj["is_struct_attr"] ? `_.${attrobj.value}` : attrobj.value
+/** Unicode-tolerant Base64 encoding, copied from https://stackoverflow.com/a/43271130 */
+export function toBase64(str: string) {
+    const binary: string[] = []
+    const bytes = new Uint8Array(new TextEncoder().encode(str))
+    for (let i = 0; i < bytes.byteLength; i++) {
+        binary.push(String.fromCharCode(bytes[i]))
+    }
+    return window.btoa(binary.join(""))
+}
 
 /**
  * Get an object from a registry with optional options.
@@ -133,25 +112,6 @@ export function getConfigurable<T>(
         return widget(options)
     }
     return widget
-}
-
-/**
- * Format a number of "relative hits" (hits per 1 million tokens), using exactly one decimal.
- * @param x Number of relative hits
- * @param lang The locale to use.
- * @returns A string with the number nicely formatted.
- */
-export function formatRelativeHits(x: number | string, lang?: string) {
-    lang = lang || getLang()
-    return Number(x).toLocaleString(lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-}
-
-/**
- * Format frequency as relative or absolute using chosen mode.
- */
-export function formatFrequency(store: StoreService, absrel: AbsRelSeq) {
-    const [absolute, relative] = absrel
-    return store.statsRelative ? formatRelativeHits(relative, store.lang) : absolute.toLocaleString(store.lang)
 }
 
 /**
@@ -235,17 +195,4 @@ export function downloadFile(data: string, filename: string, type: string) {
     a.download = filename
     a.click()
     URL.revokeObjectURL(url)
-}
-
-/**
- * Sort elements alphabetically by a given attribute.
- * @param elems A list of objects.
- * @param key A key that should be present in the objects.
- * @param lang The code of the language to translate to. Defaults to the global current language.
- * @returns A copy of the list, sorted.
- */
-export function collatorSort<K extends keyof any, T extends Record<K, LangString>>(elems: T[], key: K, lang?: string) {
-    lang = lang || getLang()
-    const comparator = new Intl.Collator(lang).compare
-    return elems.slice().sort((a, b) => comparator(locObj(a[key], lang), locObj(b[key], lang)))
 }

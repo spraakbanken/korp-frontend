@@ -1,8 +1,9 @@
 /** @format */
-import { QueryParams, QueryResponse } from "../types/query"
+import { QueryResponse } from "../types/query"
 import { ExampleProxy } from "../proxy/example-proxy"
+import { TaskBase } from "./task-base"
 
-export class ExampleTask {
+export class ExampleTask extends TaskBase<QueryResponse> {
     readonly proxy: ExampleProxy
 
     constructor(
@@ -11,6 +12,7 @@ export class ExampleTask {
         defaultWithin?: string,
         readonly isReadingInit = false
     ) {
+        super()
         this.proxy = new ExampleProxy(corpusIds, cqps, defaultWithin)
     }
 

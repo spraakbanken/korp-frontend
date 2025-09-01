@@ -4,8 +4,8 @@ import { html } from "@/util"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
-import { AttributeOption } from "@/corpus_listing"
-import { loadOptions } from "@/extended-search"
+import { AttributeOption } from "@/corpora/corpus_listing"
+import { loadOptions } from "@/search/extended-search"
 
 export type Widget = {
     template: string

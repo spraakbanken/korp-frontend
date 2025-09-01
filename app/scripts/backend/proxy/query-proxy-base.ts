@@ -1,5 +1,6 @@
 /** @format */
-import settings, { getDefaultWithin } from "@/settings"
+import { getDefaultWithin } from "@/settings"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { QueryParams, QueryResponse } from "../types/query"
 import ProxyBase from "./proxy-base"
 import { expandCqp } from "@/cqp_parser/cqp"
@@ -19,16 +20,16 @@ export abstract class QueryProxyBase extends ProxyBase<"query"> {
 
     protected buildParamsBase(corpusIds: string[], cqp: string, hpp: number, options: QueryParamOptions): QueryParams {
         if (!options.isPaging) this.queryData = undefined
-        const corpusListing = settings.corpusListing.subsetFactory(corpusIds)
+        const cl = corpusListing.subsetFactory(corpusIds)
         const defaultWithin = options.defaultWithin || getDefaultWithin()
 
         return {
-            corpus: corpusListing.stringifySelected(),
+            corpus: cl.stringifySelected(),
             cqp: expandCqp(cqp),
             default_within: defaultWithin,
-            within: corpusListing.getWithinParam(defaultWithin),
-            ...corpusListing.getContextParams(!!options.isReading),
-            ...corpusListing.buildShowParams(),
+            within: cl.getWithinParam(defaultWithin),
+            ...cl.getContextParams(!!options.isReading),
+            ...cl.buildShowParams(),
             query_data: this.queryData,
             ...pageToRange(options.page || 0, hpp),
         }

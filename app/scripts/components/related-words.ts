@@ -5,7 +5,7 @@ import { Saldo } from "@/saldo"
 import { CqpSearchEvent } from "@/statemachine/types"
 import statemachine from "@/statemachine"
 import { StoreService } from "@/services/store"
-import settings from "@/settings"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { relatedWordSearch } from "@/backend/lexicons"
 import { SwefnEntry } from "@/karp"
 
@@ -62,7 +62,7 @@ angular.module("korpApp").component("relatedWords", {
 
                 // Find what name for the sense attribute is used by currently selected corpora.
                 const attribute = ["sense", "saldo"].find((name) =>
-                    settings.corpusListing.selected.some((corpus) => name in corpus.attributes)
+                    corpusListing.selected.some((corpus) => name in corpus.attributes)
                 )
                 if (!attribute) return
                 $scope.attribute = attribute

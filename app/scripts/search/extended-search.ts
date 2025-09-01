@@ -1,17 +1,16 @@
 /** @format */
 import uniq from "lodash/uniq"
-import { getAttrValues } from "./backend/attr-values"
-import { AttributeOption } from "./corpus_listing"
-import { loc, locAttribute } from "./i18n"
-import settings from "./settings"
+import { getAttrValues } from "@/backend/attr-values"
+import { AttributeOption, corpusListing } from "@/corpora/corpus_listing"
+import { loc, locAttribute } from "@/i18n"
 
 /** Load attribute values from backend data as selector options. */
 export async function loadOptions(attr: AttributeOption, lang: string) {
-    const name = attr.value
+    const name = attr.name
     const split = attr.type === "set"
 
     // check which corpora support attributes
-    const corpora = settings.corpusListing.selected
+    const corpora = corpusListing.selected
         .filter((corpus) => name in corpus.struct_attributes || name in corpus.attributes)
         .map((corpus) => corpus.id)
 

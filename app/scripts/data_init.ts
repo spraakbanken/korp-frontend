@@ -2,16 +2,16 @@
 import { isEmpty, keyBy, mapValues, omit, pick } from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import { getAllCorporaInFolders } from "@/corpus-chooser"
-import { CorpusListing } from "./corpus_listing"
-import { ParallelCorpusListing } from "./parallel/corpus_listing"
+import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
+import { corpusListing, CorpusListing, setCorpusListing } from "@/corpora/corpus_listing"
+import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { fromKeys } from "@/util"
 import { locAttribute } from "@/i18n"
-import { Labeled, LocLangMap, LocMap } from "./i18n/types"
-import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
-import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
-import { korpRequest } from "./backend/common"
-import { getLocData } from "./loc-data"
+import { Labeled, LocLangMap, LocMap } from "@/i18n/types"
+import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "@/settings/config.types"
+import { ConfigTransformed, CorpusTransformed } from "@/settings/config-transformed.types"
+import { korpRequest } from "@/backend/common"
+import { getLocData } from "@/loc-data"
 import moment from "moment"
 
 type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_attributes">>
@@ -121,14 +121,14 @@ function setInitialCorpora(): void {
     // if no preselectedCorpora is defined, use all of them
     if (!(settings.preselected_corpora && settings.preselected_corpora.length)) {
         // if all corpora in mode is limited_access, make them all preselected
-        if (settings.corpusListing.corpora.filter((corpus) => !corpus.limited_access).length == 0) {
-            settings.preselected_corpora = settings.corpusListing.corpora
+        if (corpusListing.corpora.filter((corpus) => !corpus.limited_access).length == 0) {
+            settings.preselected_corpora = corpusListing.corpora
                 .filter((corpus) => !corpus.hide)
                 .map((corpus) => corpus.id)
 
             // else filter out the ones with limited_access
         } else {
-            settings.preselected_corpora = settings.corpusListing.corpora
+            settings.preselected_corpora = corpusListing.corpora
                 .filter((corpus) => !(corpus.hide || corpus.limited_access))
                 .map((corpus) => corpus.id)
         }
@@ -180,11 +180,10 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     }
 
     if (!settings.parallel) {
-        settings.corpusListing = new CorpusListing(settings.corpora)
+        setCorpusListing(new CorpusListing(settings.corpora))
     } else {
-        settings.corpusListing = new ParallelCorpusListing(
-            settings.corpora as Record<string, CorpusTransformed<CorpusParallel>>
-        )
+        const corpora = settings.corpora as Record<string, CorpusTransformed<CorpusParallel>>
+        setCorpusListing(new ParallelCorpusListing(corpora))
     }
 
     if (!isEmpty(settings.corpora)) {
@@ -195,7 +194,7 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
 /** Find most recently updated corpora. */
 export function getRecentCorpusUpdates(): CorpusTransformed[] {
     const limitDate = moment().subtract(6, "months")
-    return settings.corpusListing.corpora
+    return corpusListing.corpora
         .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
         .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
 }

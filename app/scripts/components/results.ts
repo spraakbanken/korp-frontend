@@ -1,7 +1,7 @@
 /** @format */
 import angular, { IScope } from "angular"
 import { html } from "@/util"
-import { LocationService } from "@/angular-util"
+import { LocationService } from "@/services/types"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
 import "@/components/results-comparison"

@@ -3,9 +3,9 @@ import settings from "@/settings"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Folder } from "@/settings/config.types"
 import { LangString } from "@/i18n/types"
-import { locObj } from "./i18n"
+import { locObj } from "@/i18n"
 import { sum } from "lodash"
-import { splitFirst } from "./util"
+import { splitFirst } from "@/util"
 
 export type ChooserFolder = {
     corpora: CorpusTransformed[]

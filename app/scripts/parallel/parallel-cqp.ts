@@ -3,6 +3,7 @@ import { difference, groupBy, uniq } from "lodash"
 import settings from "@/settings"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"
 import { expandCqp } from "@/cqp_parser/cqp"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 export type ParallelQuery = {
     lang: string
@@ -11,9 +12,9 @@ export type ParallelQuery = {
 }
 
 export function getParallelCqp(queries: ParallelQuery[]) {
-    const corpusListing = settings.corpusListing as ParallelCorpusListing
+    const cl = corpusListing as ParallelCorpusListing
     const langs = queries.map((query) => query.lang)
-    const linkedCorpora = corpusListing.getLinksFromLangs(langs).flat(2)
+    const linkedCorpora = cl.getLinksFromLangs(langs).flat(2)
     const [head, ...tail] = queries
 
     const headCqp = expandCqp(head.cqp)
@@ -32,10 +33,10 @@ export function getParallelCqp(queries: ParallelQuery[]) {
 }
 
 export function getEnabledLangs(queries: ParallelQuery[], i?: number) {
-    const corpusListing = settings.corpusListing as ParallelCorpusListing
+    const cl = corpusListing as ParallelCorpusListing
 
     function getLinkedLangs(lang: string) {
-        const corpora = corpusListing.getLinksFromLangs([lang]).flat(2)
+        const corpora = cl.getLinksFromLangs([lang]).flat(2)
         return uniq(corpora.map((corpus) => corpus.lang))
     }
 

@@ -1,7 +1,7 @@
 /** @format */
 import { pick, uniq } from "lodash"
 import settings from "@/settings"
-import { CorpusListing } from "@/corpus_listing"
+import { CorpusListing } from "@/corpora/corpus_listing"
 import { getUrlHash, objectIntersection } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CorpusParallel } from "@/settings/config.types"
@@ -42,14 +42,14 @@ export class ParallelCorpusListing extends CorpusListing {
     }
 
     getCurrentAttributes(lang?: string): Record<string, Attribute> {
-        if (!lang) lang = settings.corpusListing.getReduceLang()
+        if (!lang) lang = this.getReduceLang()
 
         const corpora = this.selected.filter((item) => item.lang === lang)
         return corpora.reduce((attrs, corpus) => ({ ...attrs, ...corpus.attributes }), {} as Record<string, Attribute>)
     }
 
     getStructAttrs(lang?: string): Record<string, Attribute> {
-        if (!lang) lang = settings.corpusListing.getReduceLang()
+        if (!lang) lang = this.getReduceLang()
 
         const corpora = this.selected.filter((item) => item.lang === lang)
         const struct = corpora.reduce(

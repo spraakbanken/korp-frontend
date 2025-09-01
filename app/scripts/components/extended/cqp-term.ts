@@ -1,12 +1,13 @@
 /** @format */
 import angular, { IController, ITimeoutService } from "angular"
 import settings from "@/settings"
-import { html, valfilter } from "@/util"
+import { html } from "@/util"
+import { prefixAttr } from "@/settings"
 const minusImage = require("../../../img/minus.png")
 import "@/components/extended/cqp-value"
 import { Condition, OperatorKorp } from "@/cqp_parser/cqp.types"
-import { AttributeOption } from "@/corpus_listing"
-import { getTimeData } from "@/timedata"
+import { AttributeOption, corpusListing } from "@/corpora/corpus_listing"
+import { getTimeData } from "@/backend/timedata"
 import { StoreService } from "@/services/store"
 
 /**
@@ -26,7 +27,7 @@ type ExtendedCqpTermController = IController & {
     types: AttributeOption[]
     typeMapping: Record<string, AttributeOption>
     opts: [string, OperatorKorp][]
-    valfilter: typeof valfilter
+    prefixAttr: typeof prefixAttr
     localChange: (term: Partial<Condition>) => void
     setDefault: () => void
 }
@@ -41,7 +42,7 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 <div class="arg_selects {{$ctrl.term.type}}">
                     <select
                         class="arg_type"
-                        ng-options="$ctrl.valfilter(obj) as obj.label | locObj group by obj.group | loc for obj in $ctrl.types"
+                        ng-options="$ctrl.prefixAttr(obj) as obj.label | locObj group by obj.group | loc for obj in $ctrl.types"
                         ng-model="$ctrl.term.type"
                         ng-change="$ctrl.setDefault($ctrl.term)"
                     ></select>
@@ -76,7 +77,7 @@ angular.module("korpApp").component("extendedCqpTerm", {
         function ($timeout: ITimeoutService, store: StoreService) {
             const ctrl = this as ExtendedCqpTermController
 
-            ctrl.valfilter = valfilter
+            ctrl.prefixAttr = prefixAttr
 
             ctrl.$onInit = () => {
                 store.watch("corpus", () => updateAttributes())
@@ -93,20 +94,20 @@ angular.module("korpApp").component("extendedCqpTerm", {
             /** Update list of available attributes */
             async function updateAttributes() {
                 // TODO: respect the setting 'wordAttributeSelector' and similar
-                if (!settings.corpusListing.selected.length) return
+                if (!corpusListing.selected.length) return
 
                 // The date interval attribute is not available until time data is ready
                 if (ctrl.term.type == "date_interval") await getTimeData()
 
                 $timeout(() => {
                     // Get available attribute options
-                    ctrl.types = settings.corpusListing.getAttributeGroupsExtended(ctrl.parallellLang)
+                    ctrl.types = corpusListing.getAttributeGroupsExtended(ctrl.parallellLang)
 
                     // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
-                    ctrl.typeMapping = Object.fromEntries(ctrl.types.map((item) => [valfilter(item), item]))
+                    ctrl.typeMapping = Object.fromEntries(ctrl.types.map((item) => [prefixAttr(item), item]))
 
                     // Reset attribute if the selected one is no longer available
-                    if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].value
+                    if (!ctrl.typeMapping[ctrl.term.type]) ctrl.term.type = ctrl.types[0].name
 
                     ctrl.opts = getOpts()
 
@@ -124,10 +125,10 @@ angular.module("korpApp").component("extendedCqpTerm", {
                 }
 
                 // Clone to avoid modifying original
-                const ops = { ...(option.opts || settings["default_options"]) }
+                const ops = { ...(("opts" in option && option.opts) || settings["default_options"]) }
 
                 // For multi-value attributes, use the "contains" CQP operators for equality
-                if (option.type === "set") {
+                if ("type" in option && option.type == "set") {
                     if (ops.is == "=") ops.is = "contains"
                     if (ops.is_not == "!=") ops.is_not = "not contains"
                 }

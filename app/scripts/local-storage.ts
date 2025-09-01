@@ -1,7 +1,7 @@
 /** @format */
 
 import omit from "lodash/omit"
-import { SearchParams } from "./urlparams"
+import { SearchParams } from "@/urlparams"
 import { toJson } from "angular"
 
 /** Get object from local storage. */

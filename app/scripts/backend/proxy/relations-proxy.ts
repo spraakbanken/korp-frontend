@@ -8,6 +8,7 @@ import { invert, isEqual } from "lodash"
 import { Lemgram } from "@/lemgram"
 import { parse } from "@/cqp_parser/cqp"
 import { CqpQuery } from "@/cqp_parser/cqp.types"
+import { corpusListing } from "@/corpora/corpus_listing"
 
 /** A relation item modified for showing. */
 export type ShowableApiRelation = ApiRelation & {
@@ -67,7 +68,7 @@ export class RelationsProxy extends ProxyBase<"relations"> {
         return {
             type,
             word,
-            corpus: settings.corpusListing.stringifySelected(),
+            corpus: corpusListing.stringifySelected(),
             incremental: true,
             sort,
             max: 1000,
