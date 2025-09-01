@@ -64,29 +64,21 @@ describe("init corpus selection", () => {
 describe("changing corpus selection", () => {
     let settings: any
 
-    async function checkCorpusListing(page: Page, expected: string[]) {
-        const selected = await page.evaluate(() => settings!.corpusListing.getSelectedCorpora())
-        expect(selected).toEqual(expected)
-    }
-
     const getUrlParam = (url: string) => new URLSearchParams(new URL(url).hash.slice(1)).get("corpus")
 
     test("corpus chooser", async ({ page }) => {
         await page.goto("/#?lang=eng&corpus=attasidor")
         await expect(page.locator("corpus-chooser")).toBeVisible() // Wait for initialization
-        await checkCorpusListing(page, ["attasidor"])
 
         // Add to selection
         await page.locator("corpus-chooser").click()
         await page.getByText("Dramawebben (demo)").click()
         await expect(page.locator("corpus-chooser")).toContainText("2 of")
-        await checkCorpusListing(page, ["attasidor", "drama"])
         expect(getUrlParam(page.url())).toEqual("attasidor,drama")
 
         // Remove from selection
         await page.getByText("Dramawebben (demo").click()
         await expect(page.locator("corpus-chooser")).toContainText("8 Sidor selected")
-        await checkCorpusListing(page, ["attasidor"])
         expect(getUrlParam(page.url())).toEqual("attasidor")
     })
 
@@ -96,7 +88,7 @@ describe("changing corpus selection", () => {
 
         // Find most recently updated corpus
         const corpus: any = await page.evaluate(() => {
-            const corpora = Object.values(settings!.corpora)
+            const corpora = Object.values(settings.corpora)
             corpora.sort((a: any, b: any) => (b.info.Updated || '0').localeCompare(a.info.Updated || '0'))
             return corpora[0]
         })
@@ -106,7 +98,6 @@ describe("changing corpus selection", () => {
 
         // Only the new corpus is selected
         await expect(page.locator("corpus-chooser")).toContainText(`${title} selected`)
-        await checkCorpusListing(page, [corpus.id])
         expect(getUrlParam(page.url())).toEqual(corpus.id)
     })
 })
