@@ -1,16 +1,25 @@
 /** @format */
-
 import { Token } from "@/backend/types"
-import type { BratEntity, BratRelation, BratType, BratVisualizer } from "./deptree_deps"
+import { Visualizer } from "../lib/brat/client/src/visualizer.js"
+import "../lib/brat/style-vis.css"
+import "../lib/jquery.svg.js"
+import "../lib/jquery.svgdom.js"
+
+// These type definitions are very incomplete and may be inaccurate.
+type BratEntity = [string, string, [number, number][]]
+type BratRelation = [string, string, [string, string][]]
+type BratType = {
+    type: string
+    labels: string[]
+    color?: string
+    bgColor?: string
+    borderColor?: string
+    args?: { role: string; targets: any[] }[]
+}
 
 type HoverFunction = (data: Record<string, string>) => void
 
-export function drawBratTree(
-    Visualizer: BratVisualizer,
-    words: Token[],
-    to_div: string,
-    hover_fun: HoverFunction
-): void {
+export function drawBratTree(words: Token[], to_div: string, hover_fun: HoverFunction): void {
     const entity_types: BratType[] = []
     const relation_types: BratType[] = []
     const entities: BratEntity[] = []

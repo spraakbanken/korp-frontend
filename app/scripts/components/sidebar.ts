@@ -9,7 +9,7 @@ import { html, regescape, getConfigurable } from "@/util"
 import { safeApply } from "@/angular-util"
 import { loc, locAttribute, locObj } from "@/i18n"
 import "@/services/utils"
-import "@/components/deptree/deptree"
+import "@/components/deptree"
 import "@/components/sidebar-section"
 import "@/video-controller" // May be used by custom code
 import { RootScope } from "@/root-scope.types"

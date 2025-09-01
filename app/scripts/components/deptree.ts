@@ -1,10 +1,8 @@
 /** @format */
 import angular, { IController, IScope, ITimeoutService, ui } from "angular"
-import { head } from "lodash"
 import { html } from "@/util"
 import { locObj } from "@/i18n"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { drawBratTree } from "./deptree-util"
 import { Token } from "@/backend/types"
 import { LangString } from "@/i18n/types"
 
@@ -50,7 +48,7 @@ angular.module("korpApp").component("depTree", {
 
             $ctrl.$onInit = async () => {
                 // lazy laod the dependency tree code
-                const { default: Visualizer } = await import(/* webpackChunkName: "deptree" */ "./deptree_deps")
+                const { drawBratTree } = await import(/* webpackChunkName: "deptree" */ "@/deptree")
 
                 type ModalScope = IScope & {
                     clickX: () => void
@@ -69,8 +67,8 @@ angular.module("korpApp").component("depTree", {
                             }
 
                             $timeout(() => {
-                                drawBratTree(Visualizer, $ctrl.tokens, "magic_secret_id", (msg) => {
-                                    const [type, val] = head(Object.entries(msg))!
+                                drawBratTree($ctrl.tokens, "magic_secret_id", (msg) => {
+                                    const [type, val] = Object.entries(msg)[0]
                                     $scope.$apply((s: ModalScope) => {
                                         s.label = locObj($ctrl.corpus.attributes[type].label)
                                         s.value = $ctrl.corpus.attributes[type].translation![val]
