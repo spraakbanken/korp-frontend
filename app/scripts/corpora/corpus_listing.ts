@@ -6,6 +6,7 @@ import {
     isEmpty,
     maxBy,
     minBy,
+    partition,
     pick,
     pickBy,
     sortBy,
@@ -157,6 +158,13 @@ export class CorpusListing {
             ...this.getStructAttrs(this.getReduceLang()),
         }
         return pickBy(allAttrs, (attribute) => attribute["display_type"] !== "hidden")
+    }
+
+    /** Partition attributes by whether they should be used as structural for grouping or not. */
+    partitionAttrs(whitelist?: string[]): [string[], string[]] {
+        const attrs = this.getReduceAttrs()
+        const names = whitelist || Object.keys(attrs)
+        return partition(names, (name) => CorpusListing.isStruct(attrs[name]))
     }
 
     static isStruct = (attr?: Attribute): boolean => !!attr?.["is_struct_attr"] && attr?.["group_by"] != "group_by"

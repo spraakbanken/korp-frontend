@@ -19,10 +19,7 @@ export class StatsProxy extends ProxyBase<"count"> {
         const missingAttrs = attrs.filter((name) => !attributes[name] && name != "word")
         if (missingAttrs.length) throw new Error(`Trying to reduce by missing attribute ${missingAttrs}`)
 
-        // Struct attrs go in the `group_by_struct` param, except if they have `group_by: group_by`.
-        const isStruct = (name: string) =>
-            attributes[name]?.["is_struct_attr"] && attributes[name]["group_by"] != "group_by"
-        const [groupByStruct, groupBy] = partition(attrs, isStruct)
+        const [groupByStruct, groupBy] = corpusListing.partitionAttrs(attrs)
 
         let within = corpusListing.getWithinParam(defaultWithin)
         // Replace "ABC-aa|ABC-bb:link" with "ABC-aa:link"

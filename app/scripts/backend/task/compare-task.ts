@@ -3,7 +3,7 @@ import { SavedSearch } from "@/local-storage"
 import { prefixAttr } from "@/settings"
 import { corpusListing, CorpusListing } from "@/corpora/corpus_listing"
 import { korpRequest } from "../common"
-import { groupBy, range, sumBy, uniq, zip } from "lodash"
+import { groupBy, pick, range, sumBy, uniq, zip } from "lodash"
 import { Attribute } from "@/settings/config.types"
 import { ExampleTask } from "./example-task"
 import { TaskBase } from "./task-base"
@@ -43,14 +43,16 @@ export class CompareTask extends TaskBase<CompareResult> {
     constructor(public cmp1: SavedSearch, public cmp2: SavedSearch, reduce: string[]) {
         super()
         this.cl = corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
-        this.attributes = { ...this.cl.getCurrentAttributes(), ...this.cl.getStructAttrs() }
         this.reduce = reduce.map((item) => item.replace(/^_\./, ""))
+        this.attributes = pick(this.cl.getReduceAttrs(), this.reduce)
     }
 
     async send(): Promise<CompareResult> {
         // remove all corpora which do not include all the "reduce"-attributes
         const corpora1 = this.cmp1.corpora.filter((corpus) => this.cl.corpusHasAttrs(corpus, this.reduce))
         const corpora2 = this.cmp2.corpora.filter((corpus) => this.cl.corpusHasAttrs(corpus, this.reduce))
+
+        const [reduceStruct, reducePos] = this.cl.partitionAttrs(this.reduce)
 
         const split = this.reduce.filter((r) => this.attributes[r]?.type === "set").join(",")
 
@@ -60,7 +62,8 @@ export class CompareTask extends TaskBase<CompareResult> {
         const top = rankedReduce.map((item) => item + ":1").join(",")
 
         const params = {
-            group_by: this.reduce.join(","),
+            group_by: reducePos.join(),
+            group_by_struct: reduceStruct.join(),
             set1_corpus: corpora1.join(",").toUpperCase(),
             set1_cqp: this.cmp1.cqp,
             set2_corpus: corpora2.join(",").toUpperCase(),
@@ -165,6 +168,6 @@ export class CompareTask extends TaskBase<CompareResult> {
             return `[${cqpAnd.join(" & ")}]`
         })
 
-        return cqps.join(" ")
+        return `<match> ${cqps.join(" ")} []{0,} </match>`
     }
 }
