@@ -41,6 +41,7 @@
 - In extended search, the query is stored in URL only when searching, not dynamically while editing
 - Search history is broken in parallel mode, and is disabled for now
 - Removed old jStorage conversion
+- In the KWIC sidebar, labels are bold and values are indented
 
 ### Fixed
 
