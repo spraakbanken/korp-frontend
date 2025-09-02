@@ -6,7 +6,6 @@ import currentMode from "@/mode"
 import { getUrlHash, html, simpleModal } from "@/util"
 import korpLogo from "../img/korp.svg"
 import korpFail from "../img/korp_fail.svg"
-import { convertJstorage } from "@/local-storage"
 import { findAuthModule } from "@/auth/init"
 import { initAuth, setAuthModule } from "@/auth/auth"
 
@@ -57,8 +56,6 @@ function errorModal(message: any) {
 
 createSplashScreen()
 ;(async () => {
-    // TODO This was added in July 2024, remove after a few months?
-    convertJstorage()
     // Identify authentication module
     const authModule = findAuthModule()
     setAuthModule(authModule)

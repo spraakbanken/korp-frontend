@@ -40,6 +40,7 @@
 - Stats/trend CSV export uses central abs/rel switch, not its own select
 - In extended search, the query is stored in URL only when searching, not dynamically while editing
 - Search history is broken in parallel mode, and is disabled for now
+- Removed old jStorage conversion
 
 ### Fixed
 
