@@ -9,7 +9,7 @@ import { locObj } from "@/i18n"
 import "@/services/utils"
 import "./deptree"
 import "./sidebar-section"
-import "@/video-controller" // May be used by custom code
+import "@/kwic/video-controller" // May be used by custom code
 import { RootScope } from "@/root-scope.types"
 import { SelectWordEvent } from "@/statemachine/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"

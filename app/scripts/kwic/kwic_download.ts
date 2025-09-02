@@ -3,7 +3,7 @@ import { fill } from "lodash"
 import moment from "moment"
 import CSV from "comma-separated-values/csv"
 import { locObj } from "@/i18n"
-import { CorpusHeading, isCorpusHeading, isKwic, Row } from "@/kwic"
+import { CorpusHeading, isCorpusHeading, isKwic, Row } from "@/kwic/kwic"
 import { ApiKwic } from "@/backend/types"
 import { QueryParams } from "@/backend/types/query"
 

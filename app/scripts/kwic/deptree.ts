@@ -1,9 +1,9 @@
 /** @format */
 import { Token } from "@/backend/types"
-import { Visualizer } from "../lib/brat/client/src/visualizer.js"
-import "../lib/brat/style-vis.css"
-import "../lib/jquery.svg.js"
-import "../lib/jquery.svgdom.js"
+import { Visualizer } from "@/../lib/brat/client/src/visualizer.js"
+import "@/../lib/brat/style-vis.css"
+import "@/../lib/jquery.svg.js"
+import "@/../lib/jquery.svgdom.js"
 
 // These type definitions are very incomplete and may be inaccurate.
 type BratEntity = [string, string, [number, number][]]

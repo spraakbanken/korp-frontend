@@ -47,7 +47,7 @@ angular.module("korpApp").component("depTree", {
 
             $ctrl.$onInit = async () => {
                 // lazy laod the dependency tree code
-                const { drawBratTree } = await import(/* webpackChunkName: "deptree" */ "@/deptree")
+                const { drawBratTree } = await import(/* webpackChunkName: "deptree" */ "@/kwic/deptree")
 
                 type ModalScope = IScope & {
                     clickX: () => void

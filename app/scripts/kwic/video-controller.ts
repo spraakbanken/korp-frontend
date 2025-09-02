@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IScope, ui } from "angular"
-import "@/video-instance-controller"
+import "./video-instance-controller"
 
 type VideoControllerScope = IScope & {
     videos: { url: string; type: string }[]
@@ -21,7 +21,7 @@ angular.module("korpApp").controller("VideoCtrl", [
             let modalInstance
             modalInstance = $uibModal.open({
                 animation: false,
-                template: require("../markup/sidebar_video.html"),
+                template: require("@/../markup/sidebar_video.html"),
                 controller: "VideoInstanceCtrl",
                 size: "modal-lg",
                 windowClass: "video-modal-bootstrap",

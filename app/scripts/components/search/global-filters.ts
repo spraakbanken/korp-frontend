@@ -3,7 +3,7 @@ import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import "./global-filter"
 import { StoreService } from "@/services/store"
-import { FilterData, GlobalFilterManager } from "@/global-filter-manager"
+import { FilterData, GlobalFilterManager } from "@/search/global-filter-manager"
 import { corpusListing } from "@/corpora/corpus_listing"
 
 type GlobalFiltersScope = IScope & {
