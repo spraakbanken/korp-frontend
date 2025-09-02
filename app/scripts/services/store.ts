@@ -65,7 +65,7 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, {
             key: "mid_comp",
             // Deprecated param. Translate to prefix/suffix.
-            post_change: (mid_comp) => {
+            val_in: (mid_comp) => {
                 if (!mid_comp) return
                 rootScopeStore.prefix = true
                 rootScopeStore.suffix = true
