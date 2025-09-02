@@ -1,19 +1,17 @@
 /** @format */
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
-import { template } from "lodash"
 import "../../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
-import { getStringifier } from "@/stringify"
-import { html, regescape, getConfigurable } from "@/util"
+import { html, getConfigurable } from "@/util"
 import { safeApply } from "@/angular-util"
-import { loc, locAttribute, locObj } from "@/i18n"
+import { locObj } from "@/i18n"
 import "@/services/utils"
 import "./deptree"
 import "./sidebar-section"
 import "@/video-controller" // May be used by custom code
 import { RootScope } from "@/root-scope.types"
-import { CqpSearchEvent, SelectWordEvent } from "@/statemachine/types"
+import { SelectWordEvent } from "@/statemachine/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config.types"
 import { JQueryExtended } from "@/jquery.types"
@@ -21,6 +19,7 @@ import { Token } from "@/backend/types"
 import { TextTask } from "@/backend/task/text-task"
 import { corpusListing } from "@/corpora/corpus_listing"
 import deptreeImg from "@/../img/deptree.svg"
+import { sidebarDefaultComponent } from "./sidebar-default-component"
 
 export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
 export type SidebarComponent = {
@@ -303,110 +302,26 @@ angular.module("korpApp").component("sidebar", {
                         ? $(`<p><span>${locObj(attrs.label, $ctrl.lang)}</span>: </p>`)
                         : $("<p></p>")
 
-                if (attrs["sidebar_component"]) {
-                    const component = getConfigurable(sidebarComponents, attrs["sidebar_component"])!
-                    const { template, controller } = component!
-                    const scope = $rootScope.$new()
-                    const locals = { $scope: scope }
-                    Object.assign(scope, {
-                        type,
-                        key,
-                        value,
-                        attrs,
-                        wordData,
-                        sentenceData,
-                        tokens,
-                    })
-                    // @ts-ignore
-                    $controller(controller, locals)
-                    return output.append($compile(template)(scope))
-                }
+                const component =
+                    (attrs["sidebar_component"] && getConfigurable(sidebarComponents, attrs["sidebar_component"])) ||
+                    sidebarDefaultComponent
 
-                // If attrs["sidebar_info_url"], add an info symbol
-                // linking to the value of the property (URL)
-                const info_link = attrs["sidebar_info_url"]
-                    ? html`<a href="${attrs["sidebar_info_url"]}" target="_blank">
-                          <i class="fa-solid fa-info-circle"></i>
-                      </a>`
-                    : ""
+                const { template, controller } = component
+                const scope = $rootScope.$new()
+                const locals = { $scope: scope }
+                Object.assign(scope, {
+                    type,
+                    key,
+                    value,
+                    attrs,
+                    wordData,
+                    sentenceData,
+                    tokens,
+                })
 
-                output.data("attrs", attrs)
-                if (value === "|" || value === "" || value === null) {
-                    output.append(`<em style='color : grey'>${loc("empty")}</em>`)
-                    return output
-                }
-
-                if (attrs.type === "set") {
-                    // For sets, info link after attribute label
-                    output.append(info_link)
-                    const pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>'
-                    const ul = $("<ul>")
-                    // The value is either single, or a pipe-separated list
-                    const valueArray = (value?.split("|") || []).filter(Boolean)
-
-                    const lis: JQLite[] = []
-                    for (const x of valueArray) {
-                        let val = getStringifier(attrs.stringify)(x)
-
-                        if (attrs.translation != null) {
-                            val = locAttribute(attrs.translation, val, $ctrl.lang)
-                        }
-
-                        const inner = $(template(pattern)({ key: x, val }))
-
-                        // If `internal_search` is set, clicking on the value will trigger a search
-                        if (attrs["internal_search"]) {
-                            inner.addClass("link").on("click", function () {
-                                if (key == "lex") {
-                                    statemachine.send("SEARCH_LEMGRAM", { value: x })
-                                } else {
-                                    const cqp = `[${key} contains "${regescape(x)}"]`
-                                    statemachine.send("SEARCH_CQP", { cqp } as CqpSearchEvent)
-                                }
-                            })
-                        }
-
-                        // If `external_search` is set, clicking on the value will open the given url new tab
-                        const li = $("<li></li>").data("key", x).append(inner)
-                        if (attrs["external_search"]) {
-                            const url = template(attrs["external_search"])({ val: x })
-                            li.append($(`<a href='${url}' class='external_link' target='_blank'></a>`))
-                        }
-
-                        lis.push(li)
-                    }
-                    ul.append(lis)
-                    output.append(ul)
-
-                    return output
-                }
-
-                let str_value = value
-                if (attrs.stringify) {
-                    str_value = getStringifier(attrs.stringify)(value)
-                } else if (attrs.translation) {
-                    str_value = locAttribute(attrs.translation, value, $ctrl.lang)
-                }
-
-                if (attrs.type === "url") {
-                    output.append(
-                        `<a href='${str_value}' class='exturl sidebar_url' target='_blank'>${decodeURI(str_value)}</a>`
-                    )
-                } else if (attrs.pattern) {
-                    output.append(
-                        template(attrs.pattern)({
-                            key,
-                            val: str_value,
-                            pos_attrs: wordData,
-                            struct_attrs: sentenceData,
-                        })
-                    )
-                } else {
-                    output.append(`<span>${str_value || ""}</span>`)
-                }
-
-                // For non-sets, info link after the value
-                return output.append(info_link)
+                // @ts-ignore
+                $controller(controller, locals)
+                return output.append($compile(template)(scope))
             }
 
             /** Iteratively shorten displayed URL from the middle until it fits inside the container element */
@@ -416,7 +331,7 @@ angular.module("korpApp").component("sidebar", {
                     .css("white-space", "nowrap")
                     .each(function () {
                         // TODO This happens before sidebar is actually showing, so parent width is 0 the first time
-                        const totalWidth = $(this).parent().width() || 240
+                        const totalWidth = $(this).closest("div").width() || 240
                         // Drop the scheme part ("https://")
                         let text = $(this)
                             .text()
