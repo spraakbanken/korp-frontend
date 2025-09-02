@@ -30,7 +30,7 @@ require("./styles/textreader.css")
 require("components-jqueryui/ui/widgets/dialog.js") // Needed for popover
 require("components-jqueryui/ui/widget.js")
 
-require("jquerylocalize")
+require("./lib/jquery.localize")
 
 try {
     // modes-files are optional and have customizing code
