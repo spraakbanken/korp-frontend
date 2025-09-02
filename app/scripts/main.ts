@@ -7,8 +7,8 @@ import { getUrlHash, html, simpleModal } from "@/util"
 import korpLogo from "../img/korp.svg"
 import korpFail from "../img/korp_fail.svg"
 import { convertJstorage } from "@/local-storage"
-import { findAuthModule } from "@/components/auth/init"
-import { initAuth, setAuthModule } from "@/components/auth/auth"
+import { findAuthModule } from "@/auth/init"
+import { initAuth, setAuthModule } from "@/auth/auth"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")

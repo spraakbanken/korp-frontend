@@ -3,7 +3,7 @@ import angular, { IController } from "angular"
 import { isEqual, omitBy, pickBy } from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
-import { auth } from "@/components/auth/auth"
+import { auth } from "@/auth/auth"
 import { html } from "@/util"
 import { suffixedNumbers } from "@/i18n/util"
 import {

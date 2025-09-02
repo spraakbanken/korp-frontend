@@ -1,6 +1,6 @@
 /** @format */
 import { selectHttpMethod } from "@/util"
-import { auth } from "@/components/auth/auth"
+import { auth } from "@/auth/auth"
 import settings from "@/settings"
 import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response as KResponse } from "./types"
 import { omitBy, pickBy } from "lodash"

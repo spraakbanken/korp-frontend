@@ -5,7 +5,7 @@ import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
 import { html } from "@/util"
 import { collatorSort } from "@/i18n/util"
-import "@/components/checkbox-ternary"
+import "@/components/util/checkbox-ternary"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { StoreService } from "@/services/store"
 

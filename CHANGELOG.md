@@ -31,6 +31,8 @@
     - Import `{ auth }` instead of `* as authenticationProxy`
   - Moved `valfilter` in `@/util` to `prefixAttr` in `@/settings`
   - Moved locale-related functions from `@/util` to `@/i18n/util`
+- Moved non-component auth-related files out of `@/components` directory
+- Moved most component files into subdirectories
 - The `searches` service is removed in favor of the store:
   - Write to `store.activeSearch` to commit a new main search query, result tabs watch it
   - Search tabs watch `store.search` and `store.cqp` to restore a search from init/frontpage/history
