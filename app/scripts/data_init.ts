@@ -11,7 +11,7 @@ import { Labeled, LocLangMap, LocMap } from "@/i18n/types"
 import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "@/settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "@/settings/config-transformed.types"
 import { korpRequest } from "@/backend/common"
-import { getLocData } from "@/loc-data"
+import { getLocData } from "@/i18n/loc-data"
 import moment from "moment"
 
 type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_attributes">>

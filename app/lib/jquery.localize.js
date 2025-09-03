@@ -1,4 +1,4 @@
-const { getLocData } = require("@/loc-data");
+const { getLocData } = require("@/i18n/loc-data");
 const { default: settings } = require("@/settings");
 const { locationSearchGet } = require("@/angular-util");
 
