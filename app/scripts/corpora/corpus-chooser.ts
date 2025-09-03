@@ -193,13 +193,9 @@ export const updateLimitedAccess = (node: ChooserFolder, credentials: string[] =
  * Set selected to true for every corpora in corporaIds and false to the others
  * Respect credentials
  */
-export const filterCorporaOnCredentials = (
-    collection: CorpusTransformed[],
-    corporaIds: string[],
-    credentials: string[]
-): string[] => {
+export const filterCorporaOnCredentials = (corporaIds: string[], credentials: string[]): string[] => {
     const selection: string[] = []
-    for (const corpus of collection) {
+    for (const corpus of Object.values(settings.corpora)) {
         const shouldSelect =
             corporaIds.includes(corpus.id) &&
             (!corpus["limited_access"] || credentials.includes(corpus.id.toUpperCase()))
