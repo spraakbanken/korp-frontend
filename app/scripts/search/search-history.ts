@@ -1,6 +1,6 @@
 /** @format */
 import { pick } from "lodash"
-import { localStorageGet, localStorageSet } from "@/local-storage"
+import { localStorageGet, localStorageSet } from "@/services/local-storage"
 import { getSearchParamNames, HashParams, SearchParams } from "@/urlparams"
 import { paramsString, splitFirst, unregescape } from "@/util"
 

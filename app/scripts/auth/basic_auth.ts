@@ -1,6 +1,6 @@
 /** @format */
 import settings from "@/settings"
-import { Creds, localStorageGet, localStorageSet } from "@/local-storage"
+import { Creds, localStorageGet, localStorageSet } from "@/services/local-storage"
 import { loginBoxComponent } from "@/components/auth/basic_login_box"
 import { loginStatusComponent } from "@/components/auth/basic_login_status"
 import { AuthModule } from "./auth.types"

@@ -2,7 +2,7 @@
 import angular, { IController, IScope } from "angular"
 import { isEqual } from "lodash"
 import { html, splitFirst } from "@/util"
-import { matomoSend } from "@/matomo"
+import { matomoSend } from "@/services/matomo"
 import "./search-submit"
 import { StoreService } from "@/services/store"
 import { savedSearches } from "@/search/saved-searches"

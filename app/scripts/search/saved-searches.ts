@@ -1,5 +1,5 @@
 /** @format */
-import { localStorageGet, localStorageSet, SavedSearch } from "@/local-storage"
+import { localStorageGet, localStorageSet, SavedSearch } from "@/services/local-storage"
 import currentMode from "@/mode"
 import { corpusListing } from "@/corpora/corpus_listing"
 import { Observable } from "@/util"

@@ -1,7 +1,7 @@
 /** @format */
 import angular, { IScope } from "angular"
 import { html } from "@/util"
-import { type NewsItem, fetchNews, isEnabled } from "@/news-service"
+import { type NewsItem, fetchNews, isEnabled } from "@/services/news-service"
 
 angular.module("korpApp").component("newsdesk", {
     template: html`

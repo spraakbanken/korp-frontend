@@ -1,5 +1,5 @@
 /** @format */
-import { SavedSearch } from "@/local-storage"
+import { SavedSearch } from "@/services/local-storage"
 import { prefixAttr } from "@/settings"
 import { corpusListing, CorpusListing } from "@/corpora/corpus_listing"
 import { korpRequest } from "../common"

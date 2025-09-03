@@ -1,10 +1,10 @@
 /** @format */
 import angular, { IController, IQService, IScope } from "angular"
 import { html } from "@/util"
-import { getStringifier, Stringifier } from "@/stringify"
+import { getStringifier, Stringifier } from "@/services/stringify"
 import { locAttribute } from "@/i18n"
 import { RootScope } from "@/root-scope.types"
-import { SavedSearch } from "@/local-storage"
+import { SavedSearch } from "@/services/local-storage"
 import { Attribute } from "@/settings/config.types"
 import "@/components/util/korp-error"
 import "@/components/compare/loglike-meter"

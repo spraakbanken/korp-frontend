@@ -51,4 +51,4 @@ require("./lib/jquery.tooltip.pack.js")
 require("./scripts/main")
 require("./scripts/app")
 
-require("./scripts/matomo")
+require("./scripts/services/matomo")

@@ -7,7 +7,7 @@ import statemachine from "@/statemachine"
 import { StoreService } from "@/services/store"
 import { corpusListing } from "@/corpora/corpus_listing"
 import { relatedWordSearch } from "@/backend/lexicons"
-import { SwefnEntry } from "@/karp"
+import { SwefnEntry } from "@/services/karp"
 
 type RelatedWordsScope = IScope & {
     attribute: string
