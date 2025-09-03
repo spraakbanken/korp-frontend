@@ -1,7 +1,7 @@
 /** @format */
-import { IComponentOptions, IScope } from "angular"
+import { IController, IScope } from "angular"
 import { html, regescape } from "@/util"
-import { Attribute } from "@/settings/config.types"
+import { Attribute, MaybeConfigurable } from "@/settings/config.types"
 import { locAttribute } from "@/i18n"
 import { StoreService } from "@/services/store.types"
 import { getStringifier } from "@/services/stringify"
@@ -9,7 +9,22 @@ import { template } from "lodash"
 import statemachine from "@/statemachine"
 import { CqpSearchEvent } from "@/statemachine/types"
 import { Token } from "@/backend/types"
-import { SidebarComponent } from "./sidebar"
+
+/** A custom component for showing an attribute in the sidebar. */
+type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
+
+type SidebarComponent = {
+    template: string
+    controller: IController
+}
+
+// Load custom components.
+export const sidebarComponents: Record<string, SidebarComponentDefinition> = {}
+try {
+    Object.assign(sidebarComponents, require("custom/sidebar.js").default)
+} catch (error) {
+    console.log("No module for sidebar components available")
+}
 
 type SidebarDefaultComponentScope = IScope & {
     attrs: Attribute
@@ -25,7 +40,7 @@ type SidebarDefaultComponentScope = IScope & {
     wordData: Token
 }
 
-export const sidebarDefaultComponent: IComponentOptions & SidebarComponent = {
+export const sidebarDefaultComponent: SidebarComponent = {
     // Three types of output: empty, list or single value.
     // For a list, the info link comes above. For single value it comes last.
     template: html`<span>

@@ -13,27 +13,13 @@ import "@/kwic/video-controller" // May be used by custom code
 import { RootScope } from "@/root-scope.types"
 import { SelectWordEvent } from "@/statemachine/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { Attribute, CustomAttribute, MaybeConfigurable } from "@/settings/config.types"
+import { Attribute, CustomAttribute } from "@/settings/config.types"
 import { JQueryExtended } from "@/jquery.types"
 import { Token } from "@/backend/types"
 import { TextTask } from "@/backend/task/text-task"
 import { corpusListing } from "@/corpora/corpus_listing"
 import deptreeImg from "@/../img/deptree.svg"
-import { sidebarDefaultComponent } from "./sidebar-default-component"
-
-export type SidebarComponentDefinition = MaybeConfigurable<SidebarComponent>
-export type SidebarComponent = {
-    template: string
-    controller: IController
-}
-
-let sidebarComponents: Record<string, SidebarComponentDefinition> = {}
-
-try {
-    sidebarComponents = require("custom/sidebar.js").default
-} catch (error) {
-    console.log("No module for sidebar components available")
-}
+import { sidebarComponents, sidebarDefaultComponent } from "./sidebar-components"
 
 type SidebarController = IController & {
     // Bindings
