@@ -144,7 +144,7 @@ angular.module("korpApp").component("corpusChooser", {
             }
 
             // Sync when corpus selection is modified elsewhere.
-            store.watch("corpus", () => select(store.corpus))
+            store.watch("corpus", () => updateSelection(store.corpus))
 
             statemachine.listen("login", function () {
                 $ctrl.credentials = auth.getCredentials()
@@ -215,13 +215,19 @@ angular.module("korpApp").component("corpusChooser", {
                 }
             }
 
-            function select(corporaIds: string[]) {
+            /** Handle selection change from GUI. */
+            function select(ids: string[]) {
+                updateSelection(ids)
+                // Store new selection if it has actually changed
+                if (!isEqual(ids, store.corpus)) {
+                    store.corpus = [...ids]
+                }
+            }
+
+            /** Update selected state, respecting authorization. */
+            function updateSelection(ids: string[]): void {
                 // This modifies corpus.selected
-                const selection = filterCorporaOnCredentials(
-                    Object.values(settings.corpora),
-                    corporaIds,
-                    $ctrl.credentials
-                )
+                const selection = filterCorporaOnCredentials(Object.values(settings.corpora), ids, $ctrl.credentials)
 
                 // This uses corpus.selected
                 recalcFolderStatus($ctrl.root)
@@ -229,11 +235,6 @@ angular.module("korpApp").component("corpusChooser", {
                 // used when there is only one corpus selected to show name
                 if (selection.length == 1) {
                     $ctrl.firstCorpus = settings.corpora[selection[0]].title
-                }
-
-                // Store new selection if it has actually changed
-                if (!isEqual(selection, store.corpus)) {
-                    store.corpus = [...selection]
                 }
             }
 
