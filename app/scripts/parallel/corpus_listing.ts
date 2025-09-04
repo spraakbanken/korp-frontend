@@ -108,12 +108,10 @@ export class ParallelCorpusListing extends CorpusListing {
         return output
     }
 
+    /** Get the within and context queries */
     getAttributeQuery(attr: "context" | "within"): string {
-        // gets the within and context queries
-
         const struct = this.getLinksFromLangs(this.activeLangs)
-        const output: string[][] = []
-        $.each(struct, function (i, corps) {
+        const output: string[][] = struct.map((corps) => {
             const mainId = corps[0].id.toUpperCase()
             const mainIsPivot = !!corps[0].pivot
 
@@ -123,7 +121,7 @@ export class ParallelCorpusListing extends CorpusListing {
                 const a = mainIsPivot ? Object.keys(corp[attr])[0] : Object.keys(corps[0][attr])[0]
                 return mainId + "|" + corp.id.toUpperCase() + ":" + a
             })
-            return output.push(pair)
+            return pair
         })
 
         return output.join(",")

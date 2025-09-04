@@ -41,5 +41,9 @@ export function setDefaultConfigValues() {
 
 export const getDefaultWithin = () => Object.keys(settings["default_within"] || {})[0]
 
+/** An attribute's dataset options as an object */
+export const normalizeDataset = (dataset: NonNullable<Attribute["dataset"]>): Record<string, string> =>
+    Array.isArray(dataset) ? Object.fromEntries(dataset.map((k) => [k, k])) : dataset
+
 /** Get attribute name for use in CQP, prepended with `_.` if it is a structural attribute. */
 export const prefixAttr = (attr: Attribute): string => (attr["is_struct_attr"] ? `_.${attr.name}` : attr.name)

@@ -16,7 +16,7 @@ import {
     zipObject,
 } from "lodash"
 import moment, { type Moment } from "moment"
-import settings from "@/settings"
+import settings, { normalizeDataset } from "@/settings"
 import { locObj } from "@/i18n"
 import { Attribute } from "@/settings/config.types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
@@ -127,30 +127,19 @@ export class CorpusListing {
         })
         const rest = this._invalidateAttrs(attrs)
 
-        // TODO this code merges datasets from attributes with the same name and
-        // should be moved to the code for extended controller "datasetSelect"
-        const withDataset: [string, Attribute][] = Object.entries(rest).filter((item) => item[1].dataset)
-        $.each(withDataset, function (i, item) {
-            const key = item[0]
-            const val = item[1]
-            return $.each(attrs, function (j, origStruct) {
-                if (origStruct[key] && origStruct[key].dataset) {
-                    let ds = origStruct[key].dataset
-                    if (Array.isArray(ds)) {
-                        ds = zipObject(ds, ds)
-                    }
+        // Merge datasets from attributes with the same name across all selected corpora
+        for (const name in rest) {
+            if (rest[name].dataset) {
+                const sameNameDatasets = attrs
+                    .map((attrs2) => attrs2[name]?.dataset)
+                    .filter(Boolean)
+                    .map((d) => normalizeDataset(d!))
+                rest[name].dataset = Object.assign(normalizeDataset(rest[name].dataset!), ...sameNameDatasets)
+            }
+        }
 
-                    if (Array.isArray(val.dataset)) {
-                        val.dataset = zipObject(val.dataset, val.dataset)
-                    }
-                    return $.extend(val.dataset, ds)
-                }
-            })
-        })
-
-        return $.extend(rest, Object.fromEntries(withDataset))
+        return rest
     }
-    // End TODO
 
     getReduceAttrs(): Record<string, Attribute> {
         const allAttrs = {
@@ -179,28 +168,20 @@ export class CorpusListing {
     _invalidateAttrs(attrs: Record<string, Attribute>[]) {
         const union = objectUnion(attrs)
         const intersection = objectIntersection(attrs)
-        $.each(union, function (key, value) {
-            if (intersection[key] == null) {
-                value["disabled"] = true
-            } else {
-                return delete value["disabled"]
-            }
+
+        // Mark attributes as disabled if not common to all attribute sets.
+        Object.entries(union).forEach(([key, value]) => {
+            if (!intersection[key]) value["disabled"] = true
+            else delete value["disabled"]
         })
 
         return union
     }
 
-    // returns true if coprus has all attrs, else false
-    corpusHasAttrs(corpus: string, attrs: string[]): boolean {
-        for (let attr of attrs) {
-            if (
-                attr !== "word" &&
-                !(attr in $.extend({}, this.struct[corpus].attributes, this.struct[corpus]["struct_attributes"]))
-            ) {
-                return false
-            }
-        }
-        return true
+    /** Whether the given corpus has all given attributes. */
+    corpusHasAttrs(corpusId: string, attrs: string[]): boolean {
+        const corpus = this.struct[corpusId]
+        return attrs.every((attr) => attr == "word" || attr in corpus.attributes || attr in corpus["struct_attributes"])
     }
 
     stringifySelected(onlyMain?: boolean): string {
