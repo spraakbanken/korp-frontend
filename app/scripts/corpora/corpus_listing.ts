@@ -42,7 +42,11 @@ export class CorpusListing {
     struct: Record<string, CorpusTransformed>
     structAttributes: Record<string, Attribute> = {}
     commonAttributes: Record<string, Attribute> = {}
-    _wordGroup: AttributeOption
+    _wordGroup: AttributeOption = {
+        group: "word",
+        name: "word",
+        label: settings["word_label"],
+    }
 
     constructor(corpora: Record<string, CorpusTransformed>) {
         this.struct = corpora
@@ -317,20 +321,6 @@ export class CorpusListing {
         return this.struct[corpus].title
     }
 
-    /*
-     * Avoid triggering watches etc. by only creating this object once.
-     */
-    getWordGroup(): AttributeOption {
-        if (!this._wordGroup) {
-            this._wordGroup = {
-                group: "word",
-                name: "word",
-                label: settings["word_label"],
-            }
-        }
-        return this._wordGroup
-    }
-
     getWordAttributeGroups(setOperator: SetOperator, lang?: string): AttributeOption[] {
         const allAttrs =
             setOperator === "union" ? this.getCurrentAttributes(lang) : this.getCurrentAttributesIntersection()
@@ -371,10 +361,9 @@ export class CorpusListing {
     }
 
     getAttributeGroups(wordOp: SetOperator, structOp: SetOperator, lang?: string): AttributeOption[] {
-        const word = this.getWordGroup()
         const attrs = this.getWordAttributeGroups(wordOp, lang)
         const sentAttrs = this.getStructAttributeGroups(structOp, lang)
-        return [word, ...attrs, ...sentAttrs]
+        return [this._wordGroup, ...attrs, ...sentAttrs]
     }
 
     getAttributeGroupsExtended(lang?: string): AttributeOption[] {
