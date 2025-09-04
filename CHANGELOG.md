@@ -9,6 +9,7 @@
 - Login form help text
 - Experimental support for right-to-left (rtl) corpus text
 - Word picture works with any search mode as long as it is a single word or lemgram
+- Improved error illustration
 
 ### Changed
 
