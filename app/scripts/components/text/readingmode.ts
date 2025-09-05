@@ -1,6 +1,6 @@
 /** @format */
 import angular, { IController, IRootElementService } from "angular"
-import { ReaderToken, ReaderTokenContainer, TextReaderDataContainer } from "@/backend/task/text-task"
+import { ReaderToken, ReaderTokenContainer, TextReaderDataContainer } from "@/task/text-task"
 
 type StandardReadingModeController = IController & {
     data: TextReaderDataContainer

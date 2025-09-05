@@ -2,7 +2,7 @@
 import { SavedSearch } from "@/services/local-storage"
 import { prefixAttr } from "@/settings"
 import { corpusListing, CorpusListing } from "@/corpora/corpus_listing"
-import { korpRequest } from "../common"
+import { korpRequest } from "../backend/common"
 import { groupBy, pick, range, sumBy, uniq, zip } from "lodash"
 import { Attribute } from "@/settings/config.types"
 import { ExampleTask } from "./example-task"

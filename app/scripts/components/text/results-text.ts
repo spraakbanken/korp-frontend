@@ -4,7 +4,7 @@ import statemachine from "@/statemachine"
 import "@/components/text/readingmode"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { html, kebabize } from "@/util"
-import { ReaderToken, TextReaderData, TextReaderDataContainer, TextTask } from "@/backend/task/text-task"
+import { ReaderToken, TextReaderData, TextReaderDataContainer, TextTask } from "@/task/text-task"
 
 type ResultsTextController = IController & {
     active: boolean

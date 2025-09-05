@@ -17,9 +17,9 @@ import { StoreService } from "@/services/store"
 import { getGeoAttributes, MapAttributeOption } from "@/statistics/map"
 import { StatisticsGrid } from "@/statistics/statistics-grid"
 import { createStatisticsCsv, getCqp } from "@/statistics/statistics"
-import { ExampleTask } from "@/backend/task/example-task"
-import { MapTask } from "@/backend/task/map-task"
-import { TrendTask } from "@/backend/task/trend-task"
+import { ExampleTask } from "@/task/example-task"
+import { MapTask } from "@/task/map-task"
+import { TrendTask } from "@/task/trend-task"
 
 type StatisticsScope = IScope & {
     clipped: boolean

@@ -1,8 +1,8 @@
 /** @format */
 import { corpusListing } from "@/corpora/corpus_listing"
-import { korpRequest } from "../common"
+import { korpRequest } from "../backend/common"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { ApiKwic, Token } from "../types"
+import { ApiKwic, Token } from "../backend/types"
 import { omit } from "lodash"
 import { TaskBase } from "./task-base"
 

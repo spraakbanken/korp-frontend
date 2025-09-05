@@ -9,7 +9,7 @@ import { Attribute } from "@/settings/config.types"
 import "@/components/util/korp-error"
 import "@/components/compare/loglike-meter"
 import { StoreService } from "@/services/store"
-import { CompareItem, CompareResult, CompareTables, CompareTask } from "@/backend/task/compare-task"
+import { CompareItem, CompareResult, CompareTables, CompareTask } from "@/task/compare-task"
 
 type ResultsComparisonController = IController & {
     loading: boolean

@@ -5,8 +5,8 @@ import { ApiKwic } from "@/backend/types"
 import "@/components/util/korp-error"
 import "./kwic"
 import { StoreService } from "@/services/store"
-import { ExampleTask } from "@/backend/task/example-task"
-import { WordpicExampleTask } from "@/backend/task/wordpic-example-task"
+import { ExampleTask } from "@/task/example-task"
+import { WordpicExampleTask } from "@/task/wordpic-example-task"
 
 type ResultsExamplesController = IController & {
     isActive: boolean

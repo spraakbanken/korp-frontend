@@ -1,6 +1,6 @@
 /** @format */
-import { RelationsSentencesProxy } from "../proxy/relations-sentences-proxy"
-import { RelationsSentencesResponse } from "../types/relations-sentences"
+import { RelationsSentencesProxy } from "../backend/proxy/relations-sentences-proxy"
+import { RelationsSentencesResponse } from "../backend/types/relations-sentences"
 import { TaskBase } from "./task-base"
 
 export class WordpicExampleTask extends TaskBase<RelationsSentencesResponse> {

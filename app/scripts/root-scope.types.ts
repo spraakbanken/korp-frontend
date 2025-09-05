@@ -1,6 +1,6 @@
 /** @format */
 import { IRootScopeService } from "angular"
-import { TaskBase } from "@/backend/task/task-base"
+import { TaskBase } from "@/task/task-base"
 
 /**
  * Extends the Angular Root Scope interface with properties used by this app.

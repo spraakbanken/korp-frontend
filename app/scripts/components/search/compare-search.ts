@@ -7,7 +7,7 @@ import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/services/local-storage"
 import { AttributeOption, corpusListing } from "@/corpora/corpus_listing"
 import { savedSearches } from "@/search/saved-searches"
-import { CompareTask } from "@/backend/task/compare-task"
+import { CompareTask } from "@/task/compare-task"
 
 type CompareSearchController = IController & {
     prefixAttr: typeof prefixAttr

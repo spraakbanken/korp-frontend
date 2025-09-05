@@ -1,6 +1,6 @@
 /** @format */
-import { QueryResponse } from "../types/query"
-import { ExampleProxy } from "../proxy/example-proxy"
+import { QueryResponse } from "../backend/types/query"
+import { ExampleProxy } from "../backend/proxy/example-proxy"
 import { TaskBase } from "./task-base"
 
 export class ExampleTask extends TaskBase<QueryResponse> {

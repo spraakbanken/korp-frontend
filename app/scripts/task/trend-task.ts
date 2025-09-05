@@ -1,12 +1,12 @@
 /** @format */
 import { CorpusListing } from "@/corpora/corpus_listing"
-import { NumericString, ProgressHandler } from "../types"
+import { NumericString, ProgressHandler } from "../backend/types"
 import { GRANULARITIES, Level } from "@/trend-diagram/util"
 import { Moment } from "moment"
 import { padStart } from "lodash"
 import { expandCqp } from "@/cqp_parser/cqp"
-import { korpRequest } from "../common"
-import { CountTimeParams, CountTimeResponse } from "../types/count-time"
+import { korpRequest } from "../backend/common"
+import { CountTimeParams, CountTimeResponse } from "../backend/types/count-time"
 import { TaskBase } from "./task-base"
 
 export class TrendTask extends TaskBase<CountTimeResponse> {

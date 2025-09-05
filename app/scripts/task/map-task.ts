@@ -1,8 +1,8 @@
 /** @format */
 import { MarkerGroup, Point } from "@/statistics/map"
 import { corpusListing } from "@/corpora/corpus_listing"
-import { CountParams, StatsRow } from "../types/count"
-import { korpRequest } from "../common"
+import { CountParams, StatsRow } from "../backend/types/count"
+import { korpRequest } from "../backend/common"
 import { compact } from "lodash"
 import { TaskBase } from "./task-base"
 
