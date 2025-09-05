@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, ITimeoutService } from "angular"
 import settings from "@/settings"
 import { html } from "@/util"

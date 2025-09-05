@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope } from "angular"
 import { locAttribute } from "@/i18n"
 import { html } from "@/util"

@@ -24,11 +24,11 @@ mellan dessa olika lägen kan skilja något, och nedanstående beskrivning gäll
 
 ![Korpusväljaren i Korp](images/korpusval.png)
 
-Till höger om Korp-logotypen finns *korpusväljaren*. Det är med hjälp av den man väljer vilka material man är intresserad
+Till höger om Korp-logotypen finns _korpusväljaren_. Det är med hjälp av den man väljer vilka material man är intresserad
 av att söka i. Korpusarna ligger sorterade i kategorier, och man väljer eller väljer bort korpusar genom att kryssa i
 eller ur rutan framför varje korpusnamn.
 
-När man klickar på den blå info-ikonen till höger om ett korpusnamnet får man även fram information om den, bland annat 
+När man klickar på den blå info-ikonen till höger om ett korpusnamnet får man även fram information om den, bland annat
 dess storlek i antal token och antal meningar.
 
 Ovanför korpusarna finns det en tidslinje med staplar, som ger en överblick över materialets fördelning över tid.
@@ -37,18 +37,18 @@ om tid, och därför finns det längst till höger även en röd stapel, som rep
 
 ## Sökning
 
-Gränssnittet i Korp är uppdelat i två huvudsakliga delar: en övre del i vilken sökningar utförs, samt en nedre del där 
-sökresultaten presenteras. Sökdelen är i sin tur uppdelad i tre olika versioner: *Enkel*, *Utökad* och *Avancerad*, som
+Gränssnittet i Korp är uppdelat i två huvudsakliga delar: en övre del i vilken sökningar utförs, samt en nedre del där
+sökresultaten presenteras. Sökdelen är i sin tur uppdelad i tre olika versioner: _Enkel_, _Utökad_ och _Avancerad_, som
 var och en låter en utföra sökningar men med olika grad av komplexitet.
-Fliken *Enkel* är den simplaste, där endast enkla sökningar på ord eller fraser går att utföra, medan *Utökad* 
+Fliken _Enkel_ är den simplaste, där endast enkla sökningar på ord eller fraser går att utföra, medan _Utökad_
 innehåller verktyg för att bygga ihop mer komplicerade frågor.
-*Avancerad* ger en ytterligare möjligheter men kräver att man är insatt i det frågespråk som Korp använder (CQP).
+_Avancerad_ ger en ytterligare möjligheter men kräver att man är insatt i det frågespråk som Korp använder (CQP).
 
 ### Enkel sökning
 
 ![Enkel sökning på lemgram](images/lemgram.png)
 
-I en enkel sökning kan man söka på antingen ett ord, flera ord, eller ett *lemgram*. Ett lemgram är ett ords eller ett flerordsuttrycks samtliga böjningsformer, och gör det
+I en enkel sökning kan man söka på antingen ett ord, flera ord, eller ett _lemgram_. Ett lemgram är ett ords eller ett flerordsuttrycks samtliga böjningsformer, och gör det
 möjligt att i en och samma sökning söka efter både "katt", "katter", "katterna" och så vidare. Läs mer på [Vad är ett lemgram?](https://spraakbanken.gu.se/faq/vad-ar-ett-lemgram)
 
 För att göra en vanlig ordsökning skriver man ordet eller orden i sökfältet och trycker på Sök-knappen eller Enter-tangenten på tangentbordet. Om man i stället för
@@ -63,12 +63,12 @@ Under sökfältet finns ett antal kryssrutor med inställningsmöjligheter för 
 
 Vid sökning på fler än ett ord görs som standard en frassökning, vilket innebär att man enbart får träffar där sökorden
 förekommer i exakt den ordning man angivit, och direkt efter varandra.
-Genom att kryssa i rutan *i fri följd* söks det i stället efter meningar som innehåller samtliga
+Genom att kryssa i rutan _i fri följd_ söks det i stället efter meningar som innehåller samtliga
 sökord, i valfri ordning och inte nödvändigtvis intill varandra.
 
 **Förled och efterled**
 
-Kryssrutorna *förled* och *efterled* utökar ens sökning till att även inkludera ord där det sökta ordet
+Kryssrutorna _förled_ och _efterled_ utökar ens sökning till att även inkludera ord där det sökta ordet
 eller orden förekommer som del av ett annat ord.
 
 Vid vanlig ordsökning betyder detta helt enkelt att man söker på ord som innehåller den givna teckensekvensen i början eller i slutet.
@@ -77,7 +77,7 @@ Vid lemgramsökning används i stället en sammansättningsanalys som varje ord 
 
 **Skiftlägesoberoende sökning**
 
-Utöver kryssrutorna för förled och efterled så finns det även en kryssruta för *skiftlägesoberoende* sökning. Om denna är
+Utöver kryssrutorna för förled och efterled så finns det även en kryssruta för _skiftlägesoberoende_ sökning. Om denna är
 ikryssad innebär det att om man söker på till exempel "katt", så kommer man även att få träffar som "KATT" och "Katt". Det görs
 alltså ingen skillnad på stora och små bokstäver. Detta har ingen effekt vid en lemgramsökning, eftersom de alltid är skiftlägesoberoende.
 
@@ -88,7 +88,7 @@ Genom att klicka på dessa ord kan man utföra nya sökningar.
 
 ### Utökad sökning
 
-Utökad-fliken låter en bygga ihop mer avancerade sökuttryck. Varje grå "låda" motsvarar ett *token* (vilket är ungefär samma
+Utökad-fliken låter en bygga ihop mer avancerade sökuttryck. Varje grå "låda" motsvarar ett _token_ (vilket är ungefär samma
 sak som ett ord, men som även inkluderar t.ex. skiljetecken), och för varje token
 kan man uppge ett eller flera kriterier. För att lägga till ett till token använder man +-knappen till höger, och för att
 ta bort ett token använder man x-knappen i övre högra hörnet på varje token (endast synlig om mer än ett token finns). Man
@@ -102,46 +102,46 @@ lista, där man kan ändra från "är" till "är inte", om man vill skapa negati
 att här välja "börjar med", "slutar med", "innehåller", eller att man vill använda reguljära uttryck.
 
 I textfältet under skriver man sen in önskat värde för attributet. För vissa attribut finns det i stället för ett textfält
-en lista över värden man kan välja mellan, och för vissa speciella attribut (*lemgram* och *betydelse*) måste man välja ett värde
+en lista över värden man kan välja mellan, och för vissa speciella attribut (_lemgram_ och _betydelse_) måste man välja ett värde
 ur en lista som kommer upp efter att man har börjat skriva i textfältet.
 
 Till höger om varje textfält finns det en liten symbol: "Aa". Genom att klicka på den kan man stänga av eller sätta på
 skiftlägesberoende för just det fältet. Som standard är sökningen skiftlägesberoende, det vill säga att man gör skillnad på
 stora och små bokstäver. En sak att tänka på är att skiftlägesoberoende sökning går betydligt långsammare.
 
-Om man har valt "ord" men lämnar textfältet tomt, så motsvarar det *Vilket ord som helst*, vilket alltså matchar samtliga token.
+Om man har valt "ord" men lämnar textfältet tomt, så motsvarar det _Vilket ord som helst_, vilket alltså matchar samtliga token.
 
-För varje token är det möjligt att uppge flera kriterier, på formen *(A eller B eller C) och (E eller F) och ...*. Den ljusa
-rutan inom den grå representerar en grupp med *eller*-kriterier, och för att lägga till ett nytt trycker man på "eller" nere
-i högra hörnet. För att lägga till ett *och* samt en ny *eller*-grupp trycker man på plus-knappen i nedre vänstra hörnet.
+För varje token är det möjligt att uppge flera kriterier, på formen _(A eller B eller C) och (E eller F) och ..._. Den ljusa
+rutan inom den grå representerar en grupp med _eller_-kriterier, och för att lägga till ett nytt trycker man på "eller" nere
+i högra hörnet. För att lägga till ett _och_ samt en ny _eller_-grupp trycker man på plus-knappen i nedre vänstra hörnet.
 
 ![Upprepa token i utökad sökning](images/utokad-upprepa.png)
 
 **Upprepning, meningsbörjan och meningsslut**
 
 Längst ner i högra hörnet på varje token finns det en menyknapp. Klickar man på denna får man upp en liten meny
-med ytterligare kriterier. Det första av dessa, *Upprepa*, låter en ange att aktuellt token får upprepas ett visst antal gånger.
-Ett token med till exempel *Vilket ord som helst* och *Upprepa 1 till 3 gånger* tillåter en "lucka" i ens sökuttryck på minst ett och max tre token.
-De två andra kriterierna är *Meningsbörjan* och *Meningsslut*, som lägger till gränskriterier före eller efter tokenet.
+med ytterligare kriterier. Det första av dessa, _Upprepa_, låter en ange att aktuellt token får upprepas ett visst antal gånger.
+Ett token med till exempel _Vilket ord som helst_ och _Upprepa 1 till 3 gånger_ tillåter en "lucka" i ens sökuttryck på minst ett och max tre token.
+De två andra kriterierna är _Meningsbörjan_ och _Meningsslut_, som lägger till gränskriterier före eller efter tokenet.
 Tänk på att skiljetecken också räknas som token, vilket innebär att att sista tokenet i en mening oftast är en punkt och inte ett ord.
 
 **Sök över meningsgränser**
 
-Som standard utförs alla sökningar *inom* meningsgränserna, vilket betyder att man aldrig kommer att få en
+Som standard utförs alla sökningar _inom_ meningsgränserna, vilket betyder att man aldrig kommer att få en
 träff som sträcker sig utanför en mening. För vissa korpusar finns det dock möjlighet att i stället tillåta träffar som spänner
 över en större mängd text, till exempel ett stycke, vilket gör det möjligt att söka över meningsgränser.
 
 Alternativet för att aktivera detta hittar man precis till höger om Sök-knappen vid Utökad sökning. Om den eller de korpusar man har valt inte stöder
 utökad kontext, så kommer det här inte gå att välja något annat än "mening". Har man däremot valt minst en korpus som tillåter
 utökad kontext så kommer man kunna välja det i listan. Om bara en del av de valda korpusarna har detta stöd så kommer det stå
-något i stil med "upp till stycke". Detta innebär att sökningen kommer ske inom styckesgränsen *för de korpusar som stöder det*, och största
+något i stil med "upp till stycke". Detta innebär att sökningen kommer ske inom styckesgränsen _för de korpusar som stöder det_, och största
 möjliga kontext som är mindre än ett stycke, för de som inte stöder det, vilket i de flesta fall kommer vara en mening.
 
 **Parallellsökning**
 
 Vissa av korpusarna i Korp är så kallade parallellkorpusar, som består av två versioner av samma text som är länkade sinsemellan
 på meningsnivå. Oftast rör det sig om texter på två olika språk. Sökresultatet från en sådan korpus kommer bestå av
-*par* av meningar, en för varje version av texten. För att kunna utföra parallellsökningar måste man först växla till det
+_par_ av meningar, en för varje version av texten. För att kunna utföra parallellsökningar måste man först växla till det
 parallella läget i Korp, via länken "Parallella" högst upp på sidan.
 
 Parallellsökning går enbart att utföra med Utökad sökning. Detta fungerar till största del som en vanlig sökning,
@@ -151,19 +151,18 @@ lägger till en extra rad med token, i vilken man kan ange sökkriterier för de
 betyder att dina sökkriterier måste uppfyllas av båda språken i varje meningspar för att en träff ska hittas. Man kan till exempel
 med en svensk-engelsk översättningskorpus söka efter länkade par där den svenska delen måste innehålla ordet "älg", medan den engelska
 måste innehålla "elk". Man kan också genom att kryssa i rutan "Innehåller inte" säga att man bara vill ha de träffar där
-ordet "elk" *inte* förkommer i den engelska delen.
+ordet "elk" _inte_ förkommer i den engelska delen.
 
 ![Ordlänkning i parallella läget](images/ordlank.png)
 
-För vissa korpusar finns det utöver meningslänkning även *ordlänkning*. Genom att markera ett ord på ena språket kan man då se vilket
+För vissa korpusar finns det utöver meningslänkning även _ordlänkning_. Genom att markera ett ord på ena språket kan man då se vilket
 eller vilka ord i andra språket som detta ord motsvarar. Observera att ordlänkningen i regel är automatiskt utförd och därför inte är helt
 tillförlitlig.
-
 
 ### Avancerad sökning
 
 Oavsett om man använder Enkel eller Utökad sökning så omvandlas ens fråga till ett uttryck i frågespråket CQP Query Language. På fliken
-*Avancerad* kan man både se hur de skapade uttrycken för Enkel och Utökad ser ut, samt konstuera en egen sökfråga om man vill
+_Avancerad_ kan man både se hur de skapade uttrycken för Enkel och Utökad ser ut, samt konstuera en egen sökfråga om man vill
 göra något som är mer avancerat än vad som för närvarande är möjligt i en Utökad sökning.
 
 För att läsa mer om frågespråket, se:
@@ -173,12 +172,12 @@ För att läsa mer om frågespråket, se:
 
 ## Sökresultat
 
-Resultatvyn, som visas först efter att en sökning har utförts, är uppdelad i tre olika avdelningar: *KWIC*, *Statistik* och *Ordbild*.
+Resultatvyn, som visas först efter att en sökning har utförts, är uppdelad i tre olika avdelningar: _KWIC_, _Statistik_ och _Ordbild_.
 
 ### KWIC
 
 KWIC, som står för "keyword in context", visar det sökta ordet eller orden i sin kontext, vanligtvis en mening. Sökresultaten, om de är många, är
-uppdelade på ett antal sidor, och för att bläddra mellan sidorna använder man tangenterna *f* respektive *n* på tangentbordet.
+uppdelade på ett antal sidor, och för att bläddra mellan sidorna använder man tangenterna _f_ respektive _n_ på tangentbordet.
 
 Bland alternativen kan man välja antalet träffar per sida, samt sorteringsordning.
 Sorteringen kan ske antingen efter höger- eller vänsterkontext, på själva träffen i sig, eller slumpvis.
@@ -203,11 +202,11 @@ det är möjligt, och varje träffrad är radbruten för enklare läsning. I öv
 **Sidopanelen**
 
 Genom att klicka på token i KWICen kan man markera ord, och när ett ord har markerats visas till höger en sidopanel. Denna sidopanel
-innehåller både information om det markerade ordet (under rubriken *Ordattribut*), och eventuellt också den mening eller större text som ordet ingår i (under *Textattribut*).
+innehåller både information om det markerade ordet (under rubriken _Ordattribut_), och eventuellt också den mening eller större text som ordet ingår i (under _Textattribut_).
 Ordattributen är information som ordklass, grundform, sammansättningsanalys med mera, medan textattributen kan vara författare, utgivninsår och liknande.
 
 Vissa attribut är klickbara. Klickar man t.ex. på ett lemgram, så utförs en ny sökning på det lemgrammet. När man för musen över många klickbara attribut
-dyker det till höger upp en liten länk som i en ny webbläsarflik tar en till *Karp*, Språkbankens sökgränssnitt för lexikala resurser.
+dyker det till höger upp en liten länk som i en ny webbläsarflik tar en till _Karp_, Språkbankens sökgränssnitt för lexikala resurser.
 
 När ett ord är markerat markeras även dess syntaktiska huvud i samma mening, med en ljusröd bakgrund.
 
@@ -235,7 +234,7 @@ Om någon av korpusarna man har sökt i innehåller tidsinformation, är det mö
 och visar förändringen av dessa raders relativa frekvens över tid. Den relativa frekvensen i diagrammet visar antalet träffar per en miljon token för varje specifik tidsenhet.
 
 För att komma till trenddiagrammet väljer man först ut en eller flera rader från statistiken med hjälp av kryssrutorna längst till vänster i tabellen, och därefter klickar man
-på knappen *Visa trenddiagram*. En ny flik kommer då öppnas, innehållande ett linjediagram. Diagrammets horisonella axel visar tid, medan den vertikala axeln visar relativ frekvens.
+på knappen _Visa trenddiagram_. En ny flik kommer då öppnas, innehållande ett linjediagram. Diagrammets horisonella axel visar tid, medan den vertikala axeln visar relativ frekvens.
 Varje linje i diagrammet motsvarar en vald rad i statistiktabellen, och i teckenförklaringen längst till höger går det att kryssa i och ur vilka linjer man vill visa. Genom att
 klicka på en punkt på en linje, öppnas en ny flik med alla träffar för just den tidpunkten.
 
@@ -274,9 +273,9 @@ Genom att klicka på ett ord i tabellen kan man få fram en ny KWIC-flik med all
 
 Det är möjligt att göra en log-likelihood-jämförelse av resultatet från två sökningar. För att göra en sådan jämförelse behöver man först spara två sökningar.
 Detta gör man från valfri sökflik, genom att först skapa sitt sökuttryck, och sen klicka på pilen till höger om Sök-knappen. Detta låter en spara själva sökningen med ett valfritt namn,
-i stället för att utföra den. När man har två sökningar sparade kan man gå till fliken *Jämförelse*, som ligger till höger om de tre sökflikarna.
+i stället för att utföra den. När man har två sökningar sparade kan man gå till fliken _Jämförelse_, som ligger till höger om de tre sökflikarna.
 Här väljer man de två sökningar man vill jämföra, och därefter vilket attribut som jämförelsen ska utföras på. Ett exempel på en jämförelse är de två sökningarna
-*alla substantiv i romaner* och *alla substantiv i nyhetstexter*, med sammanställning på *grundform*. När denna jämförelse är klar presenteras två kolumner med grundformer:
+_alla substantiv i romaner_ och _alla substantiv i nyhetstexter_, med sammanställning på _grundform_. När denna jämförelse är klar presenteras två kolumner med grundformer:
 den första listar de grundformer som är mest utmärkande för sökning #1, och den andra listar grundformer utmärkande för sökning #2. Kolumnerna är sorterade med de mest
 urmärkande orden överst. Siffrorna till höger visar absolut frekvens.
 

@@ -1,4 +1,3 @@
-/** @format */
 import moment, { Moment } from "moment"
 import { findOptimalLevel, formatUnixDate, getEmptyIntervals, getSeriesData, Level, PALETTE, Series } from "./util"
 import { last as _last, groupBy, last, maxBy, minBy, sortedIndexOf, throttle } from "lodash"
@@ -27,7 +26,7 @@ export class TrendGraph {
         public zoom: Level,
         protected makeRequest: (from: Moment, to: Moment) => void,
         store: StoreService,
-        readonly showTotal = false
+        readonly showTotal = false,
     ) {
         const graph: Graph = new Rickshaw.Graph({
             element: $(".chart", el).empty().get(0),
@@ -66,7 +65,7 @@ export class TrendGraph {
                 let abs_y
                 const i = sortedIndexOf(
                     series.data.map((point) => point.x),
-                    x
+                    x,
                 )
                 try {
                     abs_y = series.abs_data[i].y
@@ -156,7 +155,7 @@ export class TrendGraph {
         data: CountTimeResponse,
         zoom: Level,
         cqp: string,
-        subqueries: [string, string][]
+        subqueries: [string, string][],
     ) {
         const createTotalSeries = (stats: GraphStats) => ({
             data: getSeriesData(stats.relative, zoom),

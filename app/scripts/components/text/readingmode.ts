@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IRootElementService } from "angular"
 import { ReaderToken, ReaderTokenContainer, TextReaderDataContainer } from "@/task/text-task"
 
@@ -25,7 +24,7 @@ angular.module("korpApp").component("standardReadingMode", {
                         doc.push(`<div>${standardInnerElem(token)}</div>`)
                     } else {
                         doc.push(
-                            `<span class="word" data-idx="${idx}">${token.attrs.head}${token.attrs.word}${token.attrs.tail}</span>`
+                            `<span class="word" data-idx="${idx}">${token.attrs.head}${token.attrs.word}${token.attrs.tail}</span>`,
                         )
                     }
                 }

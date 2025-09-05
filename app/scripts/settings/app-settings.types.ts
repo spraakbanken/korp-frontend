@@ -1,6 +1,5 @@
 /**
  * @file Typings for frontend settings as can be loaded from configuration directory.
- * @format
  */
 
 import { Labeled, LangString } from "@/i18n/types"

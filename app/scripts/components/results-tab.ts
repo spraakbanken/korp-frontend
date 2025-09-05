@@ -1,4 +1,3 @@
-/** @format */
 import angular from "angular"
 import { DynamicTabs, RootScope } from "@/root-scope.types"
 import { TabHashScope } from "@/directives/tab-hash"

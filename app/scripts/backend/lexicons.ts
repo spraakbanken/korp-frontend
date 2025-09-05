@@ -1,4 +1,3 @@
-/** @format */
 import { omit } from "lodash"
 import * as karp from "@/services/karp"
 import { korpRequest } from "./common"

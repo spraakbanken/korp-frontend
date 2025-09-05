@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController } from "angular"
 import "components-jqueryui/ui/widgets/sortable.js"
 import "angular-ui-sortable/src/sortable"

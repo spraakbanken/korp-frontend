@@ -1,4 +1,3 @@
-/** @format */
 import { corpusListing } from "@/corpora/corpus_listing"
 import { Factory } from "@/util"
 import { QueryParams, QueryResponse } from "../types/query"

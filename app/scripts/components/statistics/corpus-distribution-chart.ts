@@ -1,4 +1,3 @@
-/** @format */
 import angular, { type IController, type IScope } from "angular"
 import { Chart } from "chart.js"
 import { html } from "@/util"

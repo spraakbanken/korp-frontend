@@ -1,6 +1,5 @@
 /**
  * @file Typings for config as fetched from backend.
- * @format
  */
 
 import { OperatorKorp } from "@/cqp_parser/cqp.types"

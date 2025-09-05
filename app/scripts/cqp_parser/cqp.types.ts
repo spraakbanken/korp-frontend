@@ -1,4 +1,3 @@
-/** @format */
 export type CqpQuery = CqpToken[]
 
 export type CqpToken = {

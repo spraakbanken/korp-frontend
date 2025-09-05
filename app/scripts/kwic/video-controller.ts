@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IScope, ui } from "angular"
 import "./video-instance-controller"
 

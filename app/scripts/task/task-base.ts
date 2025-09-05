@@ -1,4 +1,3 @@
-/** @format */
 import Abortable from "../backend/abortable"
 
 /** Base class for tasks assigned to dynamic tabs. */

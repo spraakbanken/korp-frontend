@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService, ui } from "angular"
 import { html } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
@@ -81,7 +80,7 @@ angular.module("korpApp").component("depTree", {
 
                 modal.result.then(
                     () => $ctrl.onClose(),
-                    () => $ctrl.onClose()
+                    () => $ctrl.onClose(),
                 )
             }
         },

@@ -18,11 +18,11 @@ The material in Korp is divided into different modes. The default mode holds mat
 
 ![Corpus selector in Korp](images/korpusval.png)
 
-To the right of the Korp logo you can find the *corpus selector* which is used to choose the corpus or corpora you would
+To the right of the Korp logo you can find the _corpus selector_ which is used to choose the corpus or corpora you would
 like to search in. Some corpora are sorted into different categories. You can select a corpus or a category by ticking
-the check box in front of its name. 
+the check box in front of its name.
 
-To get more information about a corpus, click the blue info icon to the right. The information contains size in number 
+To get more information about a corpus, click the blue info icon to the right. The information contains size in number
 of tokens and sentences, and sometimes also other description.
 
 Above the list of corpora there is a time line with bars that will give you an idea on the distribution of the material
@@ -31,17 +31,16 @@ over time. The selected corpora are shown as blue bars and the remaining materia
 ## Searching in Korp
 
 The Korp interface is divided into two main sections: the upper section where the search parameters are defined and the
-lower section where the search result is shown. The search section has three different versions: *Simple*, *Extended* and
-*Advanced*, each of which allows for searches with different degrees of complexity.
-The *Simple* tab only allows for searches for words or phrases while *Extended* offers tools for building more complex
-queries. Usage of the *Advanced* tab requires some knowledge about the query language used within Korp (CQP).
-
+lower section where the search result is shown. The search section has three different versions: _Simple_, _Extended_ and
+_Advanced_, each of which allows for searches with different degrees of complexity.
+The _Simple_ tab only allows for searches for words or phrases while _Extended_ offers tools for building more complex
+queries. Usage of the _Advanced_ tab requires some knowledge about the query language used within Korp (CQP).
 
 ### Simple search
 
 ![Simple search on lemgram](images/lemgram.png)
 
-In a simple search one can choose to search for one or more words, or a *lemgram*. The latter includes all inflected
+In a simple search one can choose to search for one or more words, or a _lemgram_. The latter includes all inflected
 forms of a word or a multi word expression and thus makes it possible to search for e.g. "katt", "katter" och "katterna"
 (different inflections of the Swedish word "cat") in a single query.
 
@@ -58,19 +57,19 @@ Below the search field are a selection of check boxes, giving you a few options 
 **In free order**
 
 When searching for more than one word, the default search requires all words to occur in exactly the given order next to each
-other. By checking the *in free order* box, the search will instead find all sentences containing the search words, but the
+other. By checking the _in free order_ box, the search will instead find all sentences containing the search words, but the
 order does not matter, and they do not need to be next to each other.
 
 **Part of a word**
 
-The checkboxes *initial part* and *final part* extend the search to words that include the given word at
+The checkboxes _initial part_ and _final part_ extend the search to words that include the given word at
 the corresponding location.
 
 In the case of a lemgram search, a compound analysis is used to determine matches.
 
 **Case-insensitive search**
 
-There is also a check box for *case-insensitive* search. If it is ticked the result will include both upper-cased and
+There is also a check box for _case-insensitive_ search. If it is ticked the result will include both upper-cased and
 lower-cased words (i.e. searching for "katt" will also yield hits for "KATT" and "Katt"). This has however no effect on
 a lemgram search since lemgram searches are always case-insensitive.
 
@@ -81,7 +80,7 @@ related words. Clicking on any of the listed words will initiate a new search.
 
 ### Extended search
 
-The Extended tag allows you to build more complex queries. Each gray box represents one *token* (which usually is a word
+The Extended tag allows you to build more complex queries. Each gray box represents one _token_ (which usually is a word
 or punctuation) and different criteria can be specified for each token. Press the +-button on the right to add another
 token or the x-button in the upper right corner (it is not visible unless at least two tokens are specified) to remove
 it. It is possible to change the token order by dragging and dropping.
@@ -94,38 +93,38 @@ the right allows for negations by changing "is" to "is not". Some attributes eve
 "contains", "ends with" or you can use regular expressions.
 
 In the text field below the drop-down menus you can specify the value for your chosen attribute. Some attributes (e.g.
-part of speech) will provide you with their drop-down instead of a text field and in some special cases (*lemgram* and *sense*) you will need to pick a value from the list that pops up after writing in the text field.
+part of speech) will provide you with their drop-down instead of a text field and in some special cases (_lemgram_ and _sense_) you will need to pick a value from the list that pops up after writing in the text field.
 
-The small "Aa"-symbol to the right of the text field lets you switch on and off case-sensitivity  for each token. The
+The small "Aa"-symbol to the right of the text field lets you switch on and off case-sensitivity for each token. The
 default search is case-sensitive. Please note that case-insensitive searches are considerably slower.
 
 If you choose the attribute "word" and do not enter any value, you will be searching for any token.
 
 For each token it is possible to specify several criteria in the following fashion:
-*(A or B or C) and (E or F) and ...*. The brighter area inside the gray box represents a group with *or* criteria.
+_(A or B or C) and (E or F) and ..._. The brighter area inside the gray box represents a group with _or_ criteria.
 Press "or" in the bottom right corner to add another one.
-To add *and* including a new *or* group press on the +-button in the bottom left corner.
+To add _and_ including a new _or_ group press on the +-button in the bottom left corner.
 
 ![Repeat token in extended search](images/utokad-upprepa.png)
 
 **Repetition, sentence start and sentence end**
 
 In the bottom right corner of every token box you can find a menu button which provides further search criteria.
-The first one, *Repeat* lets you repeat the current token as many times as specified. By specifying a token with
-*Any word* and *Repeat 1 to 3 times* you can define a gap in your search query consisting of at least one and at max
+The first one, _Repeat_ lets you repeat the current token as many times as specified. By specifying a token with
+_Any word_ and _Repeat 1 to 3 times_ you can define a gap in your search query consisting of at least one and at max
 three tokens.
-The other two criteria in this menu are *Sentence start* and *Sentence end* which add boundary criteria before or after the token.
+The other two criteria in this menu are _Sentence start_ and _Sentence end_ which add boundary criteria before or after the token.
 Note that punctuation also counts as a token which means that the last token in a sentence most often is a full stop, not a word.
 
 **Search across sentence boundaries**
 
-By default, all searches are performed *within* sentence boundaries, meaning you'll never get a
+By default, all searches are performed _within_ sentence boundaries, meaning you'll never get a
 hit that extends beyond a sentence. For some corpora, however, it is possible to allow hits
 that span a larger amount of text, such as a paragraph, making it possible to search across sentence boundaries.
 
 The option to activate this can be found just to the right of the search button under Extended search. If the
 corpora you have chosen do not support extended context, only "sentence" can be chosen here. However, if at least one corpus that allows extended context is selected, you will be able to select an extended context in the list. If at least one of the
-selected corpora has this support, you will be able to select something like "up to paragraph". This means that the search will be performed within the paragraph limit *for the corpora that support it*, and within the largest
+selected corpora has this support, you will be able to select something like "up to paragraph". This means that the search will be performed within the paragraph limit _for the corpora that support it_, and within the largest
 possible context that is less than a paragraph for those that do not support it, which in most cases will be a sentence.
 
 **Parallel Search**
@@ -133,7 +132,7 @@ possible context that is less than a paragraph for those that do not support it,
 Some of the corpora in Korp are so-called parallel corpora, which consist of two versions of the same text that are linked
 at the sentence level.
 Most often, these are texts in two different languages. The search result from such a corpus
-consists of *pairs* of sentences, one for each version of the text.
+consists of _pairs_ of sentences, one for each version of the text.
 To be able to perform parallel searches, you must first
 switch to the parallel mode in Korp, via the "Parallel" link at the top of the page.
 Parallel search can only be performed with Extended search. This works mostly like a regular search,
@@ -148,17 +147,17 @@ For example,
 with a Swedish-English translation corpus, you can search for linked pairs where the Swedish part must contain the word "älg", while the English part
 must contain "elk".
 You can also tick the "Does not contain" box to specify that you only want hits where
-the word "elk" *does not** appear in the English part.
+the word "elk" \*does not\*\* appear in the English part.
 
 ![Word linking in parallel mode](images/ordlank.png)
 
-For some corpora, in addition to sentence linking, there is also *word linking*. By marking a word in one language, you can then see which word or words in the other language this word corresponds to. Please note that word linking is usually done automatically and is therefore not completely
+For some corpora, in addition to sentence linking, there is also _word linking_. By marking a word in one language, you can then see which word or words in the other language this word corresponds to. Please note that word linking is usually done automatically and is therefore not completely
 reliable.
 
 ### Advanced search
 
 Regardless of whether you use Simple or Extended search, your query is converted into an expression in the CQP query language. Under the tab
-*Advanced*, you can see the expressions for Simple and Extended search, as well as construct your own search query if you want to
+_Advanced_, you can see the expressions for Simple and Extended search, as well as construct your own search query if you want to
 do something more advanced than what is currently possible in an Extended Search.
 
 To read more about the query language, see:
@@ -168,12 +167,12 @@ To read more about the query language, see:
 
 ## Search results
 
-The results view, which appears only after a search has been performed, is divided into three different sections: *KWIC*, *Statistics*, and *Word picture*.
+The results view, which appears only after a search has been performed, is divided into three different sections: _KWIC_, _Statistics_, and _Word picture_.
 
 ### KWIC
 
 KWIC, which stands for "keyword in context", displays the searched word or words in their context, usually a sentence. The search results, if there are many, are
-divided into a number of pages, and to page back and forth between the pages you use the *f* and *n* keys on the keyboard.
+divided into a number of pages, and to page back and forth between the pages you use the _f_ and _n_ keys on the keyboard.
 
 You can choose the number of hits per page, as well as sorting order.
 Sorting can be done either by right or left context, on the hit itself, or randomly.
@@ -198,11 +197,11 @@ possible, and each hit line is wrapped for easier reading. Otherwise, the contex
 **Side Panel**
 
 By clicking on the token in the KWIC, words can be selected, and when a word has been selected, a side panel appears on the right hand side. This sidebar
-contains information about the selected word (under the heading *Word attributes*), and possibly also about the sentence or larger text that the word is part of (under *Text attributes*).
+contains information about the selected word (under the heading _Word attributes_), and possibly also about the sentence or larger text that the word is part of (under _Text attributes_).
 The word attributes are information such as part of speech, base form, compound analysis, and more, while the text attributes can be author, year of publication and the like.
 
 Some attributes are clickable. If you click e.g. on a lemgram, then a new search is performed on that lemgram. When hovering over many clickable attributes,
-a small link appears on the right which in a new browser tab takes one to *Karp*, Språkbankens's search interface for lexical resources.
+a small link appears on the right which in a new browser tab takes one to _Karp_, Språkbankens's search interface for lexical resources.
 
 When a word is highlighted, its syntactic head in the same sentence is also highlighted, with a pink background (when syntactic annotations are available).
 
@@ -230,7 +229,7 @@ If any of the corpora searched contain time information, it is possible to produ
 and shows their relative frequency over time. The relative frequency is calculated as the number of hits per million tokens for each specific unit of time.
 
 To get to the trend diagram, first select one or more rows from the statistics table using the checkboxes on the left, and then click
-the *Show Trend Diagram* button. A new tab will then open with the trend diagram. The horizontal axis of the diagram shows time, while the vertical axis shows relative frequency.
+the _Show Trend Diagram_ button. A new tab will then open with the trend diagram. The horizontal axis of the diagram shows time, while the vertical axis shows relative frequency.
 Each line in the diagram corresponds to a selected row in the statistics table, and in the legend on the right, you can toggle the rows you want to show. By
 clicking on a point on a line, a new tab opens with all hits for that particular point in time.
 
@@ -263,14 +262,13 @@ Thus it disfavors words that have a high co-occurrence merely by being common in
 
 Clicking a word in the table brings up a new drilldown KWIC tab with the selected word pair and relation.
 
-
 ## Comparisons
 
 It is possible to run a log-likelihood comparison of the results from two searches. To run such a comparison, you first need to save two searches.
 This is done from any search tab by first creating your search expression and then clicking on the arrow to the right of the search button. This allows you to save the search itself with a name of your choice,
-instead of executing it. When you have two searches saved, you can go to the *Comparison* tab, which is to the right of the three search tabs.
+instead of executing it. When you have two searches saved, you can go to the _Comparison_ tab, which is to the right of the three search tabs.
 Here you select the two searches you want to compare, and then which attribute the comparison should be performed on. An example of a comparison is the two searches
-*all nouns in novels* and *all nouns in news texts*, with grouping by *base form*. When this comparison is complete, two columns of base forms are presented:
+_all nouns in novels_ and _all nouns in news texts_, with grouping by _base form_. When this comparison is complete, two columns of base forms are presented:
 the first lists the base forms most distinctive for search #1, and the second lists base forms distinctive for search #2. The columns are sorted in descending order by distinctness. The numbers on the right show absolute frequency.
 
 ## Other user manuals

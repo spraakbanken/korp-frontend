@@ -1,4 +1,3 @@
-/** @format */
 import { corpusListing } from "@/corpora/corpus_listing"
 import { korpRequest } from "../backend/common"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
@@ -27,7 +26,10 @@ export type TextReaderData = Omit<ApiKwic, "tokens"> & ReaderTokenContainer
 export class TextTask extends TaskBase<TextReaderData> {
     corpus: CorpusTransformed
     textId: string
-    constructor(readonly corpusId: string, readonly sentenceData: Record<string, string>) {
+    constructor(
+        readonly corpusId: string,
+        readonly sentenceData: Record<string, string>,
+    ) {
         super()
         this.corpus = corpusListing.get(this.corpusId)
         this.textId = this.sentenceData["text__id"]

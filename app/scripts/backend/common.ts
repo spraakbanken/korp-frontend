@@ -1,4 +1,3 @@
-/** @format */
 import { buildUrl, toFormData } from "@/util"
 import { auth } from "@/auth/auth"
 import settings from "@/settings"
@@ -15,7 +14,7 @@ type RequestOptions<K extends keyof API> = {
 export async function korpRequest<K extends keyof API>(
     endpoint: K,
     params: API[K]["params"],
-    options: RequestOptions<K> = {}
+    options: RequestOptions<K> = {},
 ): Promise<API[K]["response"]> {
     // Skip params with `null` or `undefined`
     params = omitBy(params, (value) => value == null) as API[K]["params"]
@@ -68,7 +67,10 @@ async function readIncrementally(response: Response, handle: (content: string) =
 }
 
 export class KorpBackendError extends Error {
-    constructor(public readonly type: string, public readonly value: string) {
+    constructor(
+        public readonly type: string,
+        public readonly value: string,
+    ) {
         super(`${type}: ${value}`)
         this.name = "KorpBackendError"
     }

@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IScope } from "angular"
 import { shuffle } from "lodash"
 import statemachine from "@/statemachine"

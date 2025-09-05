@@ -1,4 +1,3 @@
-/** @format */
 import { IModule } from "angular"
 
 export type AuthModule = {

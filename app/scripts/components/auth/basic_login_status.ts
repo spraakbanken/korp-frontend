@@ -1,4 +1,3 @@
-/** @format */
 import { IComponentOptions, IController, IScope, ui } from "angular"
 import statemachine from "@/statemachine"
 import { auth } from "@/auth/auth"

@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController } from "angular"
 import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "@/corpora/corpus-chooser"
 import settings from "@/settings"

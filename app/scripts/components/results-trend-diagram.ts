@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IRootElementService, IScope, ITimeoutService } from "angular"
 import { throttle } from "lodash"
 import { Moment } from "moment"
@@ -132,7 +131,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             $scope: ResultsTrendDiagramScope,
             $timeout: ITimeoutService,
             $element: IRootElementService,
-            store: StoreService
+            store: StoreService,
         ) {
             const $ctrl = this as ResultsTrendDiagramController
             $ctrl.$result = $element.find(".graph_tab")
@@ -238,7 +237,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                         currentZoom,
                         makeRequest,
                         store,
-                        $ctrl.task.showTotal
+                        $ctrl.task.showTotal,
                     )
                 }
 
@@ -260,7 +259,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                             $ctrl.graph!.preview.render()
                             return $ctrl.graph!.graph.render()
                         }
-                    }, 200)
+                    }, 200),
                 )
             }
 
@@ -271,7 +270,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 const currentZoom = $ctrl.graph?.zoom || findOptimalLevel(from, to)
 
                 const reqPromise = $ctrl.task.send(currentZoom, from, to, (progress) =>
-                    $timeout(() => $ctrl.setProgress(true, progress.percent))
+                    $timeout(() => $ctrl.setProgress(true, progress.percent)),
                 )
 
                 try {

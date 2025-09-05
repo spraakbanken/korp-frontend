@@ -1,4 +1,3 @@
-/** @format */
 import settings from "korp_config"
 import { Settings } from "./settings.types"
 import { Attribute, MaybeConfigurable, MaybeWithOptions } from "./config.types"
@@ -48,7 +47,7 @@ export function setDefaultConfigValues() {
  */
 export function getConfigurable<T>(
     registry: Record<string, MaybeConfigurable<T>>,
-    definition: MaybeWithOptions
+    definition: MaybeWithOptions,
 ): T | undefined {
     const name = typeof definition === "string" ? definition : definition.name
     const widget = registry[name]

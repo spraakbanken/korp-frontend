@@ -1,4 +1,3 @@
-/** @format */
 import L from "leaflet"
 import { html } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"

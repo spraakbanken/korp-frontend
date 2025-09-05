@@ -1,4 +1,3 @@
-/** @format */
 import { IController, IScope } from "angular"
 import { html, regescape } from "@/util"
 import { Attribute, MaybeConfigurable } from "@/settings/config.types"

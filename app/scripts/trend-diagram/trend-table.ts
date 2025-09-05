@@ -1,4 +1,3 @@
-/** @format */
 import moment from "moment"
 import { FORMATS, Series } from "./util"
 import { escapeHtml } from "@/util"
@@ -30,7 +29,7 @@ export function renderTable(store: StoreService, el: HTMLElement, series: Series
             }
             const i = sortedIndexOf(
                 seriesRow.abs_data.map((point) => point.x),
-                item.x
+                item.x,
             )
             tableRow[timestamp] = [seriesRow.abs_data[i].y, item.y]
         }

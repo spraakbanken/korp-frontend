@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope } from "angular"
 import { isEqual } from "lodash"
 import { html, splitFirst } from "@/util"

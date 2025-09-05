@@ -1,4 +1,3 @@
-/** @format */
 import { selectTemplate, Widget, WidgetScope } from "./common"
 import { Configurable } from "@/settings/config.types"
 import { StoreService } from "@/services/store"
@@ -29,7 +28,7 @@ export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (option
                     $scope.attr.dataset,
                     $scope.attr.translation,
                     store.lang,
-                    options?.sort !== false
+                    options?.sort !== false,
                 )
                 $scope.model = $scope.model || $scope.options[0][0]
             }

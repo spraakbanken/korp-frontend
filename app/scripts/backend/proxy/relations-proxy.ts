@@ -1,4 +1,3 @@
-/** @format */
 import settings from "@/settings"
 import ProxyBase from "./proxy-base"
 import { unregescape } from "@/util"
@@ -89,13 +88,13 @@ export class RelationsProxy extends ProxyBase<"relations"> {
         /** Find a given relation in the wordpic config structure. */
         const inArray = function (
             rel: WordPictureDefItem,
-            orderList: (WordPictureDefItem | "_")[]
+            orderList: (WordPictureDefItem | "_")[],
         ): { i: number; type: "head" | "dep" } {
             const i = orderList.findIndex(
                 (item) =>
                     item != "_" &&
                     (item.field_reverse || false) === (rel.field_reverse || false) &&
-                    item.rel === rel.rel
+                    item.rel === rel.rel,
             )
             const type = rel.field_reverse ? "head" : "dep"
             return { i, type }
@@ -162,7 +161,7 @@ export class RelationsProxy extends ProxyBase<"relations"> {
                     } else {
                         return { table }
                     }
-                })
+                }),
             )
 
             res.push({

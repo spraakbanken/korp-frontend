@@ -1,4 +1,3 @@
-/** @format */
 import { pick, uniq } from "lodash"
 import settings from "@/settings"
 import { CorpusListing } from "@/corpora/corpus_listing"
@@ -55,7 +54,7 @@ export class ParallelCorpusListing extends CorpusListing {
         const corpora = this.selected.filter((item) => item.lang === lang)
         const struct = corpora.reduce(
             (attrs, corpus) => ({ ...attrs, ...corpus.struct_attributes }),
-            {} as Record<string, Attribute>
+            {} as Record<string, Attribute>,
         )
         Object.values(struct).forEach((attr) => (attr.is_struct_attr = true))
 
@@ -78,7 +77,7 @@ export class ParallelCorpusListing extends CorpusListing {
     getLinked(corp: CorpusTransformed<CorpusParallel>, only_selected?: boolean) {
         const target = only_selected ? this.selected : Object.values(this.struct)
         let output: CorpusTransformed<CorpusParallel>[] = target.filter((item) =>
-            (corp["linked_to"] || []).includes(item.id)
+            (corp["linked_to"] || []).includes(item.id),
         )
         return [corp].concat(output)
     }

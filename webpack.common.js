@@ -1,4 +1,3 @@
-/** @format */
 const webpack = require("webpack")
 const path = require("path")
 const Dotenv = require("dotenv")

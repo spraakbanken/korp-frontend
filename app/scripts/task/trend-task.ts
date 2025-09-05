@@ -1,4 +1,3 @@
-/** @format */
 import { CorpusListing } from "@/corpora/corpus_listing"
 import { NumericString, ProgressHandler } from "../backend/types"
 import { GRANULARITIES, Level } from "@/trend-diagram/util"
@@ -15,7 +14,7 @@ export class TrendTask extends TaskBase<CountTimeResponse> {
         readonly subqueries: [string, string][],
         readonly showTotal: boolean,
         readonly corpusListing: CorpusListing,
-        readonly defaultWithin?: string
+        readonly defaultWithin?: string,
     ) {
         super()
     }
@@ -28,7 +27,7 @@ export class TrendTask extends TaskBase<CountTimeResponse> {
         const padLength = String(this.subqueries.length).length
         // TODO: fix this for struct attrs
         const subcqps = Object.fromEntries(
-            this.subqueries.map(([cqp], i) => [`subcqp${padStart(String(i), padLength, "0")}`, cqp])
+            this.subqueries.map(([cqp], i) => [`subcqp${padStart(String(i), padLength, "0")}`, cqp]),
         )
 
         const params: CountTimeParams = {

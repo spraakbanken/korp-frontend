@@ -1,4 +1,3 @@
-/** @format */
 import angular from "angular"
 
 // <div click-cover="(boolean expression)">...</div>
@@ -20,7 +19,7 @@ angular.module("korpApp").directive("clickCover", () => ({
                     elem.css("pointer-events", "")
                     elem.css("position", pos).removeClass("covered")
                 }
-            }
+            },
         )
     },
 }))

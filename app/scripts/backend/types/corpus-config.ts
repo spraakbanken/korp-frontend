@@ -1,4 +1,3 @@
-/** @format */
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Information/paths/~1corpus_config/get */
 import { Config } from "@/settings/config.types"
 

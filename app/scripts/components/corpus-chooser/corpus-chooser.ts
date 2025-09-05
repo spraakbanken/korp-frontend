@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController } from "angular"
 import { isEqual, omitBy, pickBy } from "lodash"
 import statemachine from "@/statemachine"

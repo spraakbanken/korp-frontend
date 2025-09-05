@@ -1,4 +1,3 @@
-/** @format */
 /** A Korp response is either successful or has error info */
 export type Response<R> = ResponseBase & (R | ErrorResponse)
 

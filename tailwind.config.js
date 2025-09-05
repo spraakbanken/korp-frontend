@@ -1,4 +1,3 @@
-/** @format */
 // Read config dir
 let korpConfigDir = "app"
 try {

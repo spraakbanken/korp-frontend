@@ -1,4 +1,3 @@
-/** @format */
 import isObject from "lodash/isObject"
 import settings from "@/settings"
 import { getUrlHash } from "@/urlparams"

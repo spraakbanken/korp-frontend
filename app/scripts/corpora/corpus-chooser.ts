@@ -1,4 +1,3 @@
-/** @format */
 import settings from "@/settings"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Folder } from "@/settings/config.types"
@@ -120,7 +119,7 @@ export const getAllCorpora = (folder: ChooserFolder): string[] => {
 
 function getCorpora(
     folder: ChooserFolder,
-    corpusConstraint: (corpus: CorpusTransformed) => boolean = () => true
+    corpusConstraint: (corpus: CorpusTransformed) => boolean = () => true,
 ): string[] {
     const subIds: string[] = folder.subFolders.flatMap((folder) => getCorpora(folder, corpusConstraint))
     const hereIds = folder.corpora.filter(corpusConstraint).map((corpus) => corpus.id)

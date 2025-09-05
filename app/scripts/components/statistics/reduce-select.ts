@@ -1,4 +1,3 @@
-/** @format */
 import { isEqual, keyBy } from "lodash"
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"

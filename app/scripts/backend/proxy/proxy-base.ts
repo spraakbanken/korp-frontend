@@ -1,4 +1,3 @@
-/** @format */
 import { korpRequest } from "../common"
 import { API, ProgressHandler } from "../types"
 

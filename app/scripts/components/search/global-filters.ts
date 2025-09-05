@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import "./global-filter"
@@ -64,7 +63,7 @@ angular.module("korpApp").component("globalFilters", {
                         store.globalFilter = manager.getCqp()
                         // Update URL
                         store.global_filter = manager.getSelection()
-                    })
+                    }),
                 )
             }
 

@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IScope, ITimeoutService } from "angular"
 import { UtilsService } from "@/services/utils"
 import { LocationService } from "@/services/types"

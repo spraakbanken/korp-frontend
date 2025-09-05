@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService, ui } from "angular"
 import { remove } from "lodash"
 import korpLogo from "../../img/korp.svg"
@@ -143,7 +142,7 @@ angular.module("korpApp").component("appHeader", {
             $uibModal: ui.bootstrap.IModalService,
             $rootScope: RootScope,
             $timeout: ITimeoutService,
-            store: StoreService
+            store: StoreService,
         ) {
             const $ctrl = this as HeaderController
 

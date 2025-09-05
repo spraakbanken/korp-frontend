@@ -1,4 +1,3 @@
-/** @format */
 import { partition, pick } from "lodash"
 import settings from "@/settings"
 import { Factory } from "@/util"
@@ -47,7 +46,7 @@ export class StatsProxy extends ProxyBase<"count"> {
         cqp: string,
         attrs: string[],
         defaultWithin?: string,
-        ignoreCase?: boolean
+        ignoreCase?: boolean,
     ): Promise<CountsMerged> {
         const params = this.buildParams(cqp, attrs, defaultWithin, ignoreCase)
         // We know it's the merged type, not split, because we are not using `subcqp{N}` params.

@@ -1,4 +1,3 @@
-/** @format */
 import { MaybeConfigurable } from "@/settings/config.types"
 import merge from "lodash/merge"
 import { autocExtended } from "./autoc-extended"

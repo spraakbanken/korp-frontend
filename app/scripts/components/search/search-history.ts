@@ -1,4 +1,3 @@
-/** @format */
 import { loc } from "@/i18n"
 import { getSearchParamNames, SearchParams } from "@/urlparams"
 import { html } from "@/util"

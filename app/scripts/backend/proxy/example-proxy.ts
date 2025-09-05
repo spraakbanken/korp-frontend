@@ -1,9 +1,12 @@
-/** @format */
 import { QueryParams, QueryResponse } from "../types/query"
 import { QueryProxyBase } from "./query-proxy-base"
 
 export class ExampleProxy extends QueryProxyBase {
-    constructor(readonly corpusIds: string[], readonly cqps: string[], readonly defaultWithin?: string) {
+    constructor(
+        readonly corpusIds: string[],
+        readonly cqps: string[],
+        readonly defaultWithin?: string,
+    ) {
         super()
     }
 

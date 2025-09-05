@@ -1,4 +1,3 @@
-/** @format */
 import groupBy from "lodash/groupBy"
 import mapValues from "lodash/mapValues"
 import sumBy from "lodash/sumBy"

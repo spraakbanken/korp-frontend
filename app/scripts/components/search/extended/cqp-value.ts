@@ -1,4 +1,3 @@
-/** @format */
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
 import { AttributeOption } from "@/corpora/corpus_listing"
 import { Condition } from "@/cqp_parser/cqp.types"

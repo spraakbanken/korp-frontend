@@ -1,4 +1,3 @@
-/** @format */
 import { loc } from "@/i18n"
 import { numberToSuperscript } from "@/util"
 
@@ -16,7 +15,7 @@ export class Lemgram {
         readonly pos: string,
         readonly index: number,
         readonly morphology?: string,
-        readonly start?: number
+        readonly start?: number,
     ) {}
 
     /** Parse a lemgram id string to a Lemgram object, or `undefined` if invalid. */
@@ -30,7 +29,7 @@ export class Lemgram {
             pos.substring(0, 2),
             parseInt(index),
             morphology,
-            start ? parseInt(start) : undefined
+            start ? parseInt(start) : undefined,
         )
     }
 

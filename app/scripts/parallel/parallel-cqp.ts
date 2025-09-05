@@ -1,4 +1,3 @@
-/** @format */
 import { difference, groupBy, uniq } from "lodash"
 import settings from "@/settings"
 import { ParallelCorpusListing } from "@/parallel/corpus_listing"

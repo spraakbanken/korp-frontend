@@ -1,4 +1,3 @@
-/** @format */
 import { API } from "./api"
 import { Response } from "./common"
 

@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IScope } from "angular"
 import { HashParams } from "@/urlparams"
 import { LocationService } from "@/services/types"

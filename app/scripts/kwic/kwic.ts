@@ -1,4 +1,3 @@
-/** @format */
 import { ApiKwic } from "@/backend/types"
 import { LangString } from "@/i18n/types"
 import settings from "@/settings"
@@ -166,7 +165,7 @@ function findMatchSentence(hitContext: ApiKwic): [number?, number?] {
 export function calculateHitsPicture(
     corpusOrder: string[],
     corpusHits: Record<string, number>,
-    pageSize: number
+    pageSize: number,
 ): HitsPictureItem[] {
     const total = sum(Object.values(corpusHits))
     const items: HitsPictureItem[] = corpusOrder

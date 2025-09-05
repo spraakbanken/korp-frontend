@@ -58,6 +58,7 @@
 - Stray value when clearing simple search input
 - Prevent switching trend diagram form before done loading
 - Extended search query is propertly restored when activating a search history item
+- All files except `app/lib/` are now formatted by Prettier, removed `@format` comments
 
 ## [9.10.1] - 2025-07-02
 
@@ -160,7 +161,7 @@
 - Filter constraints are added to CQP when searching in advanced [#193](https://github.com/spraakbanken/korp-frontend/issues/193)
 - Remove language suffix in parallel corpus info link [#424](https://github.com/spraakbanken/korp-frontend/issues/424)
 - Focus newly created tab [#430](https://github.com/spraakbanken/korp-frontend/issues/430)
-- Translations for "pos_*" not found [#352](https://github.com/spraakbanken/korp-frontend/issues/352)
+- Translations for "pos\_\*" not found [#352](https://github.com/spraakbanken/korp-frontend/issues/352)
 
 ## [9.8.2] - 2025-01-27
 

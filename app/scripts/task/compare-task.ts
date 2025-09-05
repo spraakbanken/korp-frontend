@@ -1,4 +1,3 @@
-/** @format */
 import { SavedSearch } from "@/services/local-storage"
 import { prefixAttr } from "@/settings"
 import { corpusListing, CorpusListing } from "@/corpora/corpus_listing"
@@ -40,7 +39,11 @@ export class CompareTask extends TaskBase<CompareResult> {
     cl: CorpusListing
     reduce: string[]
 
-    constructor(public cmp1: SavedSearch, public cmp2: SavedSearch, reduce: string[]) {
+    constructor(
+        public cmp1: SavedSearch,
+        public cmp2: SavedSearch,
+        reduce: string[],
+    ) {
         super()
         this.cl = corpusListing.subsetFactory([...cmp1.corpora, ...cmp2.corpora])
         this.reduce = reduce.map((item) => item.replace(/^_\./, ""))
@@ -57,7 +60,7 @@ export class CompareTask extends TaskBase<CompareResult> {
         const split = this.reduce.filter((r) => this.attributes[r]?.type === "set").join(",")
 
         const rankedReduce = this.reduce.filter(
-            (item) => this.cl.getCurrentAttributes(this.cl.getReduceLang())[item]?.ranked
+            (item) => this.cl.getCurrentAttributes(this.cl.getReduceLang())[item]?.ranked,
         )
         const top = rankedReduce.map((item) => item + ":1").join(",")
 
@@ -127,7 +130,7 @@ export class CompareTask extends TaskBase<CompareResult> {
 
         // transform result from grouping on attribute to grouping on token place
         var tokens = range(0, tokenLength).map((tokenIdx) =>
-            this.reduce.map((reduceAttr, attrIdx) => uniq(splitTokens.map((res) => res[attrIdx][tokenIdx])))
+            this.reduce.map((reduceAttr, attrIdx) => uniq(splitTokens.map((res) => res[attrIdx][tokenIdx]))),
         )
 
         const cqps = tokens.map((token) => {

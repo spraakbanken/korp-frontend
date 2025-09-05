@@ -1,4 +1,3 @@
-/** @format */
 import { Granularity, Histogram } from "@/backend/types"
 import { loc } from "@/i18n"
 import CSV from "comma-separated-values/csv"
@@ -114,7 +113,7 @@ export function fillMissingDate(data: Point[], level: Level): Point[] {
 
     // Create a mapping from unix timestamps to counts
     const momentMapping: Record<number, number> = Object.fromEntries(
-        data.map((point) => [point.x.startOf(level).unix(), point.y])
+        data.map((point) => [point.x.startOf(level).unix(), point.y]),
     )
 
     // Step through the range and fill in missing timestamps
@@ -220,7 +219,7 @@ export function createTrendTableCsv(series: Series[], relative: boolean, csvType
         else {
             const i = sortedIndexOf(
                 row.abs_data.map((point) => point.x),
-                cell.x
+                cell.x,
             )
             return row.abs_data[i].y
         }

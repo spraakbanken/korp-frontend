@@ -1,4 +1,3 @@
-/** @format */
 import angular from "angular"
 import { html } from "@/util"
 import { StoreService } from "@/services/store"

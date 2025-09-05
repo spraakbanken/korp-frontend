@@ -1,4 +1,3 @@
-/** @format */
 import { Token } from "@/backend/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 

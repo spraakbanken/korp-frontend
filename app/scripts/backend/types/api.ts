@@ -1,4 +1,3 @@
-/** @format */
 import { AttrValuesParams, AttrValuesResponseDeep, AttrValuesResponseFlat } from "./attr-values"
 import { CorpusConfigParams, CorpusConfigResponse } from "./corpus-config"
 import { CorpusInfoParams, CorpusInfoResponse } from "./corpus-info"

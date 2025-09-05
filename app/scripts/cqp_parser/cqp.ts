@@ -1,4 +1,3 @@
-/** @format */
 import { cloneDeep, compact, maxBy, minBy, sortBy } from "lodash"
 import moment, { type Moment } from "moment"
 import settings from "@/settings"

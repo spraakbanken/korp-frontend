@@ -1,4 +1,3 @@
-/** @format */
 import { ApiKwic } from "./common"
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Concordance/paths/~1query/get */

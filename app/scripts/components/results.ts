@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IScope } from "angular"
 import { html } from "@/util"
 import { LocationService } from "@/services/types"

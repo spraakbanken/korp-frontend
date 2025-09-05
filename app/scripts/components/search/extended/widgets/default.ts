@@ -1,4 +1,3 @@
-/** @format */
 import { html } from "@/util"
 import { IController } from "angular"
 import { WidgetScope } from "./common"

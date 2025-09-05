@@ -1,4 +1,3 @@
-/** @format */
 import { isEmpty, keyBy, mapValues, omit, pick } from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
@@ -28,7 +27,7 @@ async function getInfoData(corpusIds: string[]): Promise<InfoData> {
     return fromKeys(corpusIds, (corpusId) => ({
         info: data.corpora[corpusId.toUpperCase()].info,
         private_struct_attributes: data.corpora[corpusId.toUpperCase()].attrs.s.filter(
-            (name) => name.indexOf("__") !== -1
+            (name) => name.indexOf("__") !== -1,
         ),
     }))
 }
@@ -66,7 +65,7 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
         }
 
         function transformAttributes2<T extends Attribute | CustomAttribute>(
-            attrsKey: keyof Config["attributes"]
+            attrsKey: keyof Config["attributes"],
         ): [Record<string, T>, string[]] {
             const names = corpus[attrsKey]
             const attrs = config.attributes[attrsKey] as Record<string, T>
@@ -204,7 +203,7 @@ export function getDatasetOptions(
     dataset: Attribute["dataset"],
     translation?: LocMap | LocLangMap,
     lang?: string,
-    sort?: boolean
+    sort?: boolean,
 ): [string, string][] {
     dataset ??= []
     const options: [string, string][] = Array.isArray(dataset)

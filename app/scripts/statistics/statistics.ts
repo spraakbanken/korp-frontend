@@ -1,4 +1,3 @@
-/** @format */
 import settings, { prefixAttr } from "@/settings"
 import { CountsMerged } from "@/backend/types/count"
 import { Dataset, isTotalRow, StatisticsWorkerMessage, StatisticsProcessed, SearchParams } from "./statistics.types"
@@ -25,7 +24,7 @@ export function processStatisticsResult(
     data: CountsMerged,
     reduceVals: string[],
     ignoreCase: boolean,
-    prevNonExpandedCQP: string
+    prevNonExpandedCQP: string,
 ): Promise<StatisticsProcessed> {
     const corpora = Object.keys(data.corpora)
     const cl = corpusListing.subsetFactory(corpora)
@@ -92,7 +91,7 @@ function reduceCqp(
     name: string,
     /** `values` is multiple if multiple result rows were grouped into one, e.g. ranked or MWE */
     values: string[],
-    ignoreCase: boolean
+    ignoreCase: boolean,
 ): string {
     // Note: undefined if name is `word`
     const attr = corpusListing.getReduceAttrs()[name]
@@ -155,7 +154,7 @@ export function createStatisticsCsv(
     corpora: CorpusTransformed[],
     relative: boolean,
     csvType: string,
-    lang?: string
+    lang?: string,
 ): string {
     const delimiter = csvType == "tsv" ? "\t" : ";"
     const frequencyIndex = relative ? 1 : 0

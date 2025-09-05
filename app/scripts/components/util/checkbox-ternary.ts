@@ -1,4 +1,3 @@
-/** @format */
 import angular, { type IComponentController } from "angular"
 import { html } from "@/util"
 

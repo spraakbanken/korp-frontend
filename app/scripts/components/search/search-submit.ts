@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IRootElementService, IScope } from "angular"
 import { html } from "@/util"
 

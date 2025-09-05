@@ -1,4 +1,3 @@
-/** @format */
 import angular, { ICompileService, IScope, ITimeoutService, ui } from "angular"
 import { transformSeconds } from "@/util"
 
@@ -34,7 +33,7 @@ angular.module("korpApp").controller("VideoInstanceCtrl", [
         startTime: number,
         endTime: number,
         fileName: string,
-        sentence: string
+        sentence: string,
     ) {
         $scope.fileName = fileName
         $scope.sentence = sentence

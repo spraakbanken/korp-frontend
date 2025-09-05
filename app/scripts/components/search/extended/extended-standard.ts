@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import { isEqual } from "lodash"
 import statemachine from "@/statemachine"
@@ -76,7 +75,7 @@ angular.module("korpApp").component("extendedStandard", {
             $location: LocationService,
             $scope: ExtendedStandardScope,
             $timeout: ITimeoutService,
-            store: StoreService
+            store: StoreService,
         ) {
             const ctrl = this as ExtendedStandardController
 

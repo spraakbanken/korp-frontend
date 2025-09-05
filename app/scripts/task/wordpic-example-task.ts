@@ -1,4 +1,3 @@
-/** @format */
 import { RelationsSentencesProxy } from "../backend/proxy/relations-sentences-proxy"
 import { RelationsSentencesResponse } from "../backend/types/relations-sentences"
 import { TaskBase } from "./task-base"

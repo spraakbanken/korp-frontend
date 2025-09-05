@@ -1,4 +1,3 @@
-/** @format */
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
 import "../../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
@@ -45,13 +44,13 @@ type SidebarController = IController & {
         corpus_attrs: Record<string, Attribute>,
         tokens: Token[],
         customAttrs: Record<string, CustomAttribute>,
-        customData: [string, HTMLElement][]
+        customData: [string, HTMLElement][],
     ) => JQLite
     renderCustomContent: (
         wordData: Token,
         sentenceData: Record<string, string>,
         corpus_attrs: Record<string, CustomAttribute> | undefined,
-        tokens: Token[]
+        tokens: Token[],
     ) => { pos: [string, HTMLElement][]; struct: [string, HTMLElement][] }
     renderItem: (
         type: string | null,
@@ -60,7 +59,7 @@ type SidebarController = IController & {
         attrs: Attribute,
         wordData: Token,
         sentenceData: Record<string, string>,
-        tokens: Token[]
+        tokens: Token[],
     ) => JQLite
     applyEllipse: () => void
 }
@@ -124,7 +123,7 @@ angular.module("korpApp").component("sidebar", {
             $controller: IControllerService,
             $element: JQLite,
             $rootScope: RootScope,
-            $scope: SidebarScope
+            $scope: SidebarScope,
         ) {
             let $ctrl = this as SidebarController
 
@@ -178,7 +177,7 @@ angular.module("korpApp").component("sidebar", {
                         wordData,
                         sentenceData,
                         corpusObj.custom_attributes,
-                        tokens
+                        tokens,
                     )
                     customContentPos.push(...pos)
                     customContentStruct.push(...struct)
@@ -193,7 +192,7 @@ angular.module("korpApp").component("sidebar", {
                         corpusObj.attributes,
                         tokens,
                         corpusObj.custom_attributes || {},
-                        customContentPos
+                        customContentPos,
                     )
                 }
 
@@ -206,7 +205,7 @@ angular.module("korpApp").component("sidebar", {
                         corpusObj.struct_attributes,
                         tokens,
                         corpusObj.custom_attributes || {},
-                        customContentStruct
+                        customContentStruct,
                     )
                 }
                 ;($element as JQueryExtended).localize()
@@ -220,7 +219,7 @@ angular.module("korpApp").component("sidebar", {
                 corpus_attrs,
                 tokens,
                 customAttrs,
-                customData
+                customData,
             ) => {
                 let pairs: [string, any][] = []
                 let sortingArr: string[] = []
@@ -234,7 +233,7 @@ angular.module("korpApp").component("sidebar", {
 
                 pairs = pairs.filter(([key]) => corpus_attrs[key])
                 pairs = pairs.filter(
-                    ([key]) => corpus_attrs[key]["display_type"] != "hidden" && !corpus_attrs[key]["hide_sidebar"]
+                    ([key]) => corpus_attrs[key]["display_type"] != "hidden" && !corpus_attrs[key]["hide_sidebar"],
                 )
                 pairs.sort((a, b) => sortingArr.indexOf(a[0]) - sortingArr.indexOf(b[0]))
 
@@ -252,7 +251,7 @@ angular.module("korpApp").component("sidebar", {
                             corpus_attrs[key],
                             wordData,
                             sentenceData,
-                            tokens
+                            tokens,
                         )
                         const el = item.get(0)
                         if (el) items.push(el)

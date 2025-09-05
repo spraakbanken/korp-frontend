@@ -1,4 +1,3 @@
-/** @format */
 import { intersection, merge, pick } from "lodash"
 import moment, { Moment } from "moment"
 

@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import { ApiKwic, Token } from "@/backend/types"
@@ -49,7 +48,7 @@ angular.module("korpApp").component("kwicWord", {
                         open_sentence: "_open_sentence" in word,
                     }
                 },
-                true
+                true,
             )
         },
     ],

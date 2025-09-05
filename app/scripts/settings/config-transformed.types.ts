@@ -1,6 +1,5 @@
 /**
  * @file Typings for config as transformed after being fetched from backend
- * @format
  */
 
 import { LangString } from "@/i18n/types"

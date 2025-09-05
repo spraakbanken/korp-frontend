@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import statsProxyFactory, { StatsProxy } from "@/backend/proxy/stats-proxy"

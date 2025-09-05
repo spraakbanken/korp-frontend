@@ -1,4 +1,3 @@
-/** @format */
 import { StoreService } from "@/services/store"
 import { AbsRelSeq } from "@/statistics/statistics.types"
 import { LangString } from "./types"

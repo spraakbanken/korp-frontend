@@ -1,5 +1,3 @@
-/** @format */
-
 export default abstract class Abortable {
     private abortController = new AbortController()
 

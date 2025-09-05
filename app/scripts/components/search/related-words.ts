@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IScope, ui } from "angular"
 import { html, regescape, splitFirst, unregescape } from "@/util"
 import { Saldo } from "@/saldo"
@@ -62,7 +61,7 @@ angular.module("korpApp").component("relatedWords", {
 
                 // Find what name for the sense attribute is used by currently selected corpora.
                 const attribute = ["sense", "saldo"].find((name) =>
-                    corpusListing.selected.some((corpus) => name in corpus.attributes)
+                    corpusListing.selected.some((corpus) => name in corpus.attributes),
                 )
                 if (!attribute) return
                 $scope.attribute = attribute

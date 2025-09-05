@@ -1,4 +1,3 @@
-/** @format */
 import { QueryResponse } from "../backend/types/query"
 import { ExampleProxy } from "../backend/proxy/example-proxy"
 import { TaskBase } from "./task-base"
@@ -10,7 +9,7 @@ export class ExampleTask extends TaskBase<QueryResponse> {
         readonly corpusIds: string[],
         readonly cqps: string[],
         defaultWithin?: string,
-        readonly isReadingInit = false
+        readonly isReadingInit = false,
     ) {
         super()
         this.proxy = new ExampleProxy(corpusIds, cqps, defaultWithin)

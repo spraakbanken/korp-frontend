@@ -1,4 +1,3 @@
-/** @format */
 import { assignWith, memoize, omit, pickBy, range } from "lodash"
 import settings from "@/settings"
 import { Histogram } from "./types"

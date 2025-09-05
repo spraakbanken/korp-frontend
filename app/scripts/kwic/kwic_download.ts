@@ -1,4 +1,3 @@
-/** @format */
 import { fill } from "lodash"
 import moment from "moment"
 import CSV from "comma-separated-values/csv"
@@ -40,7 +39,7 @@ function transformDataToAnnotations(data: AnnotationsRow[], searchInfo: string[]
     if (!firstTokensRow) return undefined
 
     const headers = Object.keys(firstTokensRow.tokens[0]).filter(
-        (val) => val.indexOf("_") !== 0 && val !== "structs" && val !== "$$hashKey" && val !== "position"
+        (val) => val.indexOf("_") !== 0 && val !== "structs" && val !== "$$hashKey" && val !== "position",
     )
 
     const columnCount = headers.length + 1
@@ -174,7 +173,7 @@ export function makeDownload(
     fileType: "csv" | "tsv",
     data: Row[],
     requestInfo: QueryParams,
-    totalHits: number
+    totalHits: number,
 ) {
     const table = transformData(dataType, data, requestInfo, totalHits)
     if (!table) throw new Error("Could not transform data to table")

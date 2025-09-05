@@ -1,4 +1,3 @@
-/** @format */
 import angular from "angular"
 import settings, { getDefaultWithin } from "@/settings"
 import { RootScope } from "@/root-scope.types"
@@ -113,7 +112,7 @@ angular.module("korpApp").factory("store", [
                 // Set new cqp_ params
                 Object.entries(cqpParallel).forEach(([lang, cqp]) => $location.search(`cqp_${lang}`, cqp))
             },
-            true
+            true,
         )
 
         const service: StoreBase = {

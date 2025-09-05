@@ -1,4 +1,3 @@
-/** @format */
 import angular, { ICompileService, IController, IScope } from "angular"
 import statemachine from "@/statemachine"
 import "@/components/text/readingmode"

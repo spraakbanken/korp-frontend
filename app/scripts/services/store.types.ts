@@ -1,4 +1,3 @@
-/** @format */
 import { QueryParamSort } from "@/backend/types/query"
 import { CqpQuery } from "@/cqp_parser/cqp.types"
 
@@ -15,7 +14,7 @@ export type StoreBase = {
     watch: <K extends keyof Store>(
         subject: K,
         listener: (newValue: Store[K], oldValue: Store[K]) => void,
-        deep?: boolean
+        deep?: boolean,
     ) => void
     watchGroup: (subjects: (keyof Store)[], listener: () => void) => void
 }

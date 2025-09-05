@@ -1,4 +1,3 @@
-/** @format */
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture */
 
 export type RelationsParams = {

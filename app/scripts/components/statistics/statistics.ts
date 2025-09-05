@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ui } from "angular"
 import { debounce, intersection } from "lodash"
 import settings from "@/settings"
@@ -219,7 +218,7 @@ angular.module("korpApp").component("statistics", {
             $rootScope: RootScope,
             $scope: StatisticsScope,
             $uibModal: ui.bootstrap.IModalService,
-            store: StoreService
+            store: StoreService,
         ) {
             const $ctrl = this as StatisticsController
 
@@ -234,7 +233,7 @@ angular.module("korpApp").component("statistics", {
                     debounce(() => {
                         grid?.resizeCanvas()
                         grid?.autosizeColumns()
-                    }, 100)
+                    }, 100),
                 )
             }
 
@@ -267,7 +266,7 @@ angular.module("korpApp").component("statistics", {
                         $ctrl.searchParams.reduceVals,
                         store,
                         showPieChart,
-                        onAttrValueClick
+                        onAttrValueClick,
                     )
 
                     const refreshHeaders = () =>
@@ -345,7 +344,7 @@ angular.module("korpApp").component("statistics", {
                 const corpora = Object.keys(row.count).filter((id) => row.count[id][0] > 0)
 
                 $rootScope.kwicTabs.push(
-                    new ExampleTask(corpora, [$ctrl.params.cqp, cqp2], $ctrl.params.default_within, store.reading_mode)
+                    new ExampleTask(corpora, [$ctrl.params.cqp, cqp2], $ctrl.params.default_within, store.reading_mode),
                 )
             }
 
@@ -358,8 +357,8 @@ angular.module("korpApp").component("statistics", {
                         subqueries,
                         showTotal,
                         cl,
-                        $ctrl.params.default_within
-                    )
+                        $ctrl.params.default_within,
+                    ),
                 )
             }
 
@@ -379,7 +378,7 @@ angular.module("korpApp").component("statistics", {
                 }
                 const { label, corpora } = selectedAttributes[0]
                 $rootScope.mapTabs.push(
-                    new MapTask(cqp, cqpExprs, label, corpora, $ctrl.params.default_within, $ctrl.mapRelative)
+                    new MapTask(cqp, cqpExprs, label, corpora, $ctrl.params.default_within, $ctrl.mapRelative),
                 )
             }
 
@@ -450,7 +449,7 @@ angular.module("korpApp").component("statistics", {
                     corpora,
                     store.statsRelative,
                     csvType,
-                    store.lang
+                    store.lang,
                 )
                 const mimeType = csvType == "tsv" ? "text/tab-separated-values" : "text/csv"
                 downloadFile(csv, `korp-statistics.${csvType}`, mimeType)

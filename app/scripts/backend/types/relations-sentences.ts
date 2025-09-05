@@ -1,4 +1,3 @@
-/** @format */
 import { QueryResponse } from "./query"
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture/paths/~1relations_sentences/get */

@@ -1,4 +1,3 @@
-/** @format */
 import angular, { type ui, type IComponentController, type IScope } from "angular"
 import { combineDateTime, html } from "@/util"
 import { type Moment } from "moment"
@@ -77,7 +76,7 @@ angular.module("korpApp").component("datetimePicker", {
             $scope.$watchGroup(["date", "time"], () => {
                 if (!$scope.date || !$scope.time) return
                 $scope.combined = combineDateTime($scope.date, $scope.time)
-                
+
                 // Report new values
                 $ctrl.update({ m: $scope.combined })
             })

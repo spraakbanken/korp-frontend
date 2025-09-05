@@ -1,4 +1,3 @@
-/** @format */
 import { IComponentOptions, IController, ITimeoutService } from "angular"
 import statemachine from "@/statemachine"
 import settings from "@/settings"

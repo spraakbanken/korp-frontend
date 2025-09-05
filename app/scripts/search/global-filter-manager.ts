@@ -1,4 +1,3 @@
-/** @format */
 import { isEqual, mapValues, pickBy } from "lodash"
 import { countAttrValues } from "@/backend/attr-values"
 import { RecursiveRecord } from "@/backend/types/attr-values"
@@ -109,7 +108,7 @@ export class GlobalFilterManager extends Observable {
     private collectAndSum(
         attrs: string[],
         elements: RecursiveRecord<number>,
-        parentSelected: boolean
+        parentSelected: boolean,
     ): [number, boolean] {
         const [attrInit, ...attrTail] = attrs
         const filter = this.filters[attrInit]

@@ -1,4 +1,3 @@
-/** @format */
 import $ from "jquery"
 import currentMode from "@/mode"
 import "@fontsource/source-sans-pro/400.css"

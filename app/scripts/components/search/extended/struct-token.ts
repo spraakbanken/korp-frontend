@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController } from "angular"
 import { corpusListing } from "@/corpora/corpus_listing"
 import { html } from "@/util"

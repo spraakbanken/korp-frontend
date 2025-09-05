@@ -1,5 +1,4 @@
 /**
- * @format
  * @see: https://developer.matomo.org/guides/tracking-javascript-guide
  */
 import settings from "@/settings"

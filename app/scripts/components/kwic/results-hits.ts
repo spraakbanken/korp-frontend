@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import kwicProxyFactory, { type KwicProxy } from "@/backend/proxy/kwic-proxy"
 import { ApiKwic } from "@/backend/types"
@@ -153,7 +152,7 @@ angular.module("korpApp").component("resultsHits", {
                                 renderResult(progressObj.data as QueryResponse)
                                 hasKwic = true
                             }
-                        })
+                        }),
                     )
                     .makeRequest($scope.cqp, isPaging)
                     .then((data) =>
@@ -166,7 +165,7 @@ angular.module("korpApp").component("resultsHits", {
                                 $scope.corpusHits = data.corpus_hits
                                 $scope.corpusOrder = data.corpus_order
                             }
-                        })
+                        }),
                     )
                     .catch((error) => {
                         // AbortError is expected if a new search is made before the previous one is finished

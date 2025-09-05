@@ -1,4 +1,3 @@
-/** @format */
 import { html, regescape, unregescape } from "@/util"
 import { Widget, WidgetScope } from "./common"
 import "@/components/search/autoc"

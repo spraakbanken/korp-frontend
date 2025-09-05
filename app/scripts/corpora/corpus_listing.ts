@@ -1,4 +1,3 @@
-/** @format */
 import {
     compact,
     get,
@@ -257,7 +256,7 @@ export class CorpusListing {
             pickBy(allWithins[0], (val, within) => {
                 // ignore withins that start with numbers, such as "5 sentence"
                 return !within.match(/^[0-9]/)
-            })
+            }),
         )
         if (isEmpty(withins)) {
             return { sentence: "sentence" }
@@ -372,7 +371,7 @@ export class CorpusListing {
 
     getAttributeGroupsCompare(lang?: string): AttributeOption[] {
         return this.getAttributeGroups("intersection", "intersection", lang).filter(
-            (attr) => !get(attr, "hide_compare")
+            (attr) => !get(attr, "hide_compare"),
         )
     }
 

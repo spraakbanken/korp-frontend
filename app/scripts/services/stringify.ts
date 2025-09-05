@@ -1,5 +1,3 @@
-/** @format */
-
 export type Stringifier = <T = any>(input: T) => string
 
 const stringifiers: Record<string, Stringifier> = {}

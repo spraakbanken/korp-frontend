@@ -1,4 +1,3 @@
-/** @format */
 import { QueryParamSort } from "@/backend/types/query"
 
 /** Supported parameters for the `?<key>=<value>` part of the URL. */

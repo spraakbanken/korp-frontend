@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController } from "angular"
 import settings from "@/settings"
 import { html } from "@/util"
@@ -174,9 +173,9 @@ angular.module("korpApp").component("wordPicture", {
                     const max = Math.max(
                         ...$ctrl.data.flatMap((word) =>
                             word.data.flatMap((table) =>
-                                table.flatMap((col) => (Array.isArray(col.table) ? col.table.length : 0))
-                            )
-                        )
+                                table.flatMap((col) => (Array.isArray(col.table) ? col.table.length : 0)),
+                            ),
+                        ),
                     )
                     // Include options up to the first that is higher than the longest column
                     const endIndex = LIMITS.findIndex((limit) => limit >= max)

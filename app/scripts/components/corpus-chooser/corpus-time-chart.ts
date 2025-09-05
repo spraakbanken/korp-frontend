@@ -1,4 +1,3 @@
-/** @format */
 import range from "lodash/range"
 import { Chart, ChartDataset } from "chart.js/auto"
 import { loc } from "@/i18n"

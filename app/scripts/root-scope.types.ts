@@ -1,4 +1,3 @@
-/** @format */
 import { IRootScopeService } from "angular"
 import { TaskBase } from "@/task/task-base"
 

@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import { html } from "@/util"
 import { ApiKwic } from "@/backend/types"
@@ -109,7 +108,7 @@ angular.module("korpApp").component("resultsExamples", {
                             $scope.hits = data.hits
                             $scope.hitsInProgress = data.hits
                             $scope.corpusHits = data.corpus_hits
-                        })
+                        }),
                     )
                     .catch((error) => {
                         // AbortError is expected if a new search is made before the previous one is finished

@@ -46,7 +46,7 @@
         "html-loader": "^4.0.0",
         "html-webpack-plugin": "^5.6.0",
         "postcss-loader": "^7.0.0",
-        "prettier": "^2.0.5",
+        "prettier": "^3.6.2",
         "sass": "~1.49.9",
         "sass-loader": "^13.0.0",
         "style-loader": "^3.0.0",
@@ -68,6 +68,6 @@
         "dev": "webpack-dev-server --config webpack.dev.js",
         "build": "ENVIRONMENT=production webpack --config webpack.prod.js",
         "build:labb": "ENVIRONMENT=staging webpack --config webpack.prod.js",
-        "format": "prettier . --write --ignore-path .gitignore"
+        "format": "prettier . --write --list-different"
     }
 }

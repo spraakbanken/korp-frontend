@@ -1,5 +1,3 @@
-/** @format */
-
 import { html } from "@/util"
 import { Widget, WidgetScope } from "./common"
 

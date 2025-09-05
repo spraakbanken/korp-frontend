@@ -1,4 +1,3 @@
-/** @format */
 import uniq from "lodash/uniq"
 import { getAttrValues } from "@/backend/attr-values"
 import { AttributeOption, corpusListing } from "@/corpora/corpus_listing"

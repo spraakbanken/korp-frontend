@@ -1,5 +1,3 @@
-/** @format */
-
 /** UI strings (or something else) by localization key. */
 export type LocMap<T = string> = {
     [key: string]: T

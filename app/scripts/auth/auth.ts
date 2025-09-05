@@ -1,4 +1,3 @@
-/** @format */
 import statemachine from "@/statemachine"
 import { AuthModule } from "./auth.types"
 

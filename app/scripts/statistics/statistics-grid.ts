@@ -1,4 +1,3 @@
-/** @format */
 import "slickgrid/slick.core"
 import "slickgrid/slick.grid"
 import "slickgrid/plugins/slick.checkboxselectcolumn"
@@ -23,7 +22,7 @@ export class StatisticsGrid extends Slick.Grid<Row> {
         attrs: string[],
         readonly store: StoreService,
         showPieChart: (row: Row) => void,
-        onAttrValueClick: (row: SingleRow) => void
+        onAttrValueClick: (row: SingleRow) => void,
     ) {
         const columns = createColumns(store, corpusIds, attrs)
 
@@ -152,7 +151,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
             formatter: (row, cell, value, columnDef) => formatFrequency(store, value[id]),
             minWidth,
             cssClass: "text-right",
-        })
+        }),
     )
 
     return columns

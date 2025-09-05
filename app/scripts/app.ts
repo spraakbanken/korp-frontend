@@ -1,4 +1,3 @@
-/** @format */
 import { isEmpty } from "lodash"
 import {
     ICacheObject,
@@ -80,7 +79,7 @@ korpApp.filter(
     "replaceEmpty",
     () =>
         <T>(input: T) =>
-            input === "" ? "–" : input
+            input === "" ? "–" : input,
 )
 
 auth.initAngular(korpApp)
@@ -133,7 +132,7 @@ korpApp.run([
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,
         $uibModal: ui.bootstrap.IModalService,
-        store: StoreService
+        store: StoreService,
     ) {
         const s = $rootScope
 
@@ -343,4 +342,4 @@ korpApp.filter("formatRelativeHits", [
     "store",
     (store) => (input: string, lang?: string) => formatRelativeHits(input, lang || store.lang),
 ])
-korpApp.filter("maxLength", () => (val: unknown) => String(val).length > 39 ? String(val).slice(0, 36) + "…" : val)
+korpApp.filter("maxLength", () => (val: unknown) => (String(val).length > 39 ? String(val).slice(0, 36) + "…" : val))

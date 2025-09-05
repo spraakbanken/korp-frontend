@@ -1,5 +1,3 @@
-/** @format */
-
 export type JQueryExtended<T = HTMLElement> = JQuery<T> & {
     // Defined in /app/lib/jquery.localize.js, a modified version of jquery-localize
     localize: () => JQueryExtended<T>

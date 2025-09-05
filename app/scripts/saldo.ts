@@ -1,4 +1,3 @@
-/** @format */
 import { numberToSuperscript } from "@/util"
 
 /**
@@ -9,7 +8,12 @@ import { numberToSuperscript } from "@/util"
 export class Saldo {
     static regexp = /(.*?)\.\.(\d\d?)(:\d+)?$/
 
-    constructor(readonly id: string, readonly form: string, readonly index: number, readonly start?: number) {}
+    constructor(
+        readonly id: string,
+        readonly form: string,
+        readonly index: number,
+        readonly start?: number,
+    ) {}
 
     /** Parse a SALDO id string to a Saldo object, or `undefined` if invalid. */
     static parse(id: string): Saldo | undefined {

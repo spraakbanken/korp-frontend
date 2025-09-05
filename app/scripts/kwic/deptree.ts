@@ -1,4 +1,3 @@
-/** @format */
 import { Token } from "@/backend/types"
 import { Visualizer } from "@/../lib/brat/client/src/visualizer.js"
 import "@/../lib/brat/style-vis.css"

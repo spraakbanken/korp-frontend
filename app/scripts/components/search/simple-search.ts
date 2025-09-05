@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import { isEqual } from "lodash"
 import statemachine from "@/statemachine"
@@ -120,7 +119,7 @@ angular.module("korpApp").component("simpleSearch", {
             $location: LocationService,
             $scope: SimpleSearchScope,
             $timeout: ITimeoutService,
-            store: StoreService
+            store: StoreService,
         ) {
             const ctrl = this as SimpleSearchController
             ctrl.disableLemgramAutocomplete = !settings.autocomplete
@@ -165,7 +164,7 @@ angular.module("korpApp").component("simpleSearch", {
                     $location.search("search_tab", null)
                     ctrl.onChange(event.value, false)
                     ctrl.updateSearch()
-                })
+                }),
             )
 
             ctrl.updateSearch = function () {

@@ -1,4 +1,3 @@
-/** @format */
 import moment, { Moment } from "moment"
 import { corpusListing } from "@/corpora/corpus_listing"
 import { html } from "@/util"

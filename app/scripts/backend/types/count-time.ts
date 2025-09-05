@@ -1,4 +1,3 @@
-/** @format */
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count_time/get */
 
 import { AbsRelTuple, Granularity, Histogram, NumericString } from "./common"

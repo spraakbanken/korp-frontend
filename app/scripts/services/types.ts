@@ -1,4 +1,3 @@
-/** @format */
 import { IControllerService, IHttpService, ui, ILocationService } from "angular"
 import { RootScope } from "@/root-scope.types"
 import { StoreService } from "./store.types"

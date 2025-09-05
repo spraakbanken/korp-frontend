@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import { RelationsProxy, RelationsEmptyError, TableDrawData, RelationsQuery } from "@/backend/proxy/relations-proxy"
 import { html } from "@/util"

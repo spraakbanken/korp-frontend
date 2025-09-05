@@ -1,4 +1,3 @@
-/** @format */
 import settings from "@/settings"
 import { AuthModule } from "./auth.types"
 

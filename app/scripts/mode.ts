@@ -1,5 +1,3 @@
-/** @format */
-
 import { getUrlParam } from "./urlparams"
 
 const currentMode = getUrlParam("mode") || "default"

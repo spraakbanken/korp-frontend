@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope } from "angular"
 import { downloadFile, html } from "@/util"
 

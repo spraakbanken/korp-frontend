@@ -1,4 +1,3 @@
-/** @format */
 import L from "leaflet"
 import keyBy from "lodash/keyBy"
 import {
@@ -29,7 +28,7 @@ export class StatisticsMap {
     constructor(
         container: HTMLElement,
         private mouseOver: (markerData: MarkerData[]) => void,
-        private mouseOut: () => void
+        private mouseOut: () => void,
     ) {
         this.map = L.map(container, {
             minZoom: 1,
@@ -86,7 +85,7 @@ export class StatisticsMap {
                     html`<div
                         class="cluster-geokorp-marker"
                         style="height:${(size / this.maxRel) * 45 + 5}px; background-color:${color}"
-                    ></div>`
+                    ></div>`,
             )
             return L.divIcon({
                 html: html`<div class="cluster-geokorp-marker-group">${elements.join("")}</div>`,
@@ -156,7 +155,7 @@ export class StatisticsMap {
             marker.markerData instanceof Array ? this.mouseOver(marker.markerData) : this.mouseOver([marker.markerData])
         })
         featureLayer.on("mouseout", () =>
-            this.selectedMarkers.length > 0 ? this.mouseOver(this.selectedMarkers) : this.mouseOut()
+            this.selectedMarkers.length > 0 ? this.mouseOver(this.selectedMarkers) : this.mouseOut(),
         )
         return featureLayer
     }
@@ -173,10 +172,10 @@ export class StatisticsMap {
             iconCreateFunction: this.createClusterIcon(clusterGroups, restColor),
         }) as MarkerClusterGroup
         markerCluster.on("clustermouseover", (e: { propagatedFrom: MarkerCluster }) =>
-            this.mouseOver(e.propagatedFrom.getAllChildMarkers().map((layer) => layer.markerData))
+            this.mouseOver(e.propagatedFrom.getAllChildMarkers().map((layer) => layer.markerData)),
         )
         markerCluster.on("clustermouseout", () =>
-            this.selectedMarkers.length > 0 ? this.mouseOver(this.selectedMarkers) : this.mouseOut()
+            this.selectedMarkers.length > 0 ? this.mouseOver(this.selectedMarkers) : this.mouseOut(),
         )
         markerCluster.on("clusterclick", (e: { propagatedFrom: MarkerCluster }) => {
             this.selectedMarkers = e.propagatedFrom.getAllChildMarkers().map((layer) => layer.markerData)
@@ -191,7 +190,7 @@ export class StatisticsMap {
         })
         markerCluster.on("mouseover", (e) => this.mouseOver([e.propagatedFrom.markerData]))
         markerCluster.on("mouseout", (e) =>
-            this.selectedMarkers.length > 0 ? this.mouseOver(this.selectedMarkers) : this.mouseOut()
+            this.selectedMarkers.length > 0 ? this.mouseOver(this.selectedMarkers) : this.mouseOut(),
         )
         markerCluster.on("animationend", (e) => this.updateMarkerSizes())
         return markerCluster
@@ -243,21 +242,24 @@ export class StatisticsMap {
      */
     mergeMarkers(markerLists: MarkerGroup[]): MergedMarker[] {
         this.maxRel = 0
-        const val = markerLists.reduce((memo, parent) => {
-            for (const child1 of Object.values(parent.markers)) {
-                const child: MarkerData = { ...child1, color: parent.color }
-                const latLng = child1.lat + "," + child1.lng
-                if (child.point.rel > this.maxRel) this.maxRel = child.point.rel
-                if (latLng in memo) memo[latLng].markerData.push(child)
-                else
-                    memo[latLng] = {
-                        markerData: [child],
-                        lat: child1.lat,
-                        lng: child1.lng,
-                    }
-            }
-            return memo
-        }, {} as Record<string, MergedMarker>)
+        const val = markerLists.reduce(
+            (memo, parent) => {
+                for (const child1 of Object.values(parent.markers)) {
+                    const child: MarkerData = { ...child1, color: parent.color }
+                    const latLng = child1.lat + "," + child1.lng
+                    if (child.point.rel > this.maxRel) this.maxRel = child.point.rel
+                    if (latLng in memo) memo[latLng].markerData.push(child)
+                    else
+                        memo[latLng] = {
+                            markerData: [child],
+                            lat: child1.lat,
+                            lng: child1.lng,
+                        }
+                }
+                return memo
+            },
+            {} as Record<string, MergedMarker>,
+        )
         return Object.values(val)
     }
 }

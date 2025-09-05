@@ -1,4 +1,3 @@
-/** @format */
 import { SearchParams } from "@/urlparams"
 import { toJson } from "angular"
 

@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IQService, IScope } from "angular"
 import { html } from "@/util"
 import { getStringifier, Stringifier } from "@/services/stringify"

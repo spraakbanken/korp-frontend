@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController } from "angular"
 import settings from "@/settings"
 import { html } from "@/util"

@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IScope } from "angular"
 import settings from "@/settings"
 import { html } from "@/util"

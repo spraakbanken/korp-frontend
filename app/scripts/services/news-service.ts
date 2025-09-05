@@ -1,4 +1,3 @@
-/** @format */
 import Yaml from "js-yaml"
 import settings from "@/settings"
 import moment from "moment"

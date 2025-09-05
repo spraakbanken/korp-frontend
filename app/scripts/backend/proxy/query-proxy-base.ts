@@ -1,4 +1,3 @@
-/** @format */
 import { getDefaultWithin } from "@/settings"
 import { corpusListing } from "@/corpora/corpus_listing"
 import { QueryParams, QueryResponse } from "../types/query"

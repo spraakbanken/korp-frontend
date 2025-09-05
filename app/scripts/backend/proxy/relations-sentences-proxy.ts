@@ -1,4 +1,3 @@
-/** @format */
 import { pageToRange } from "../common"
 import ProxyBase from "./proxy-base"
 import { RelationsSentencesResponse } from "../types/relations-sentences"

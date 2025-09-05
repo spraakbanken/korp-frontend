@@ -1,6 +1,4 @@
-/** @format*/
 import { CountsMerged } from "@/backend/types/count"
-import { LangString } from "@/i18n/types"
 
 export type StatisticsWorkerMessage = {
     type: "korpStatistics"

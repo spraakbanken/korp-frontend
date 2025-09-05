@@ -1,4 +1,3 @@
-/** @format */
 import memoize from "lodash/memoize"
 import { LangLocMap, LocMap } from "@/i18n/types"
 import settings from "@/settings"

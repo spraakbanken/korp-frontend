@@ -1,4 +1,3 @@
-/** @format */
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1lemgram_count/get */
 
 export type LemgramCountParams = {

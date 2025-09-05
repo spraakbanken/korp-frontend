@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import { compact, debounce } from "lodash"
 import statemachine from "@/statemachine"
@@ -764,7 +763,7 @@ export function setDownloadLinks(params: string, result_data: { kwic: Row[]; cor
     // Corpora in the query result
     const result_corpora = result_data.corpus_order.slice(
         get_corpus_num(0),
-        get_corpus_num(result_data.kwic.length - 1) + 1
+        get_corpus_num(result_data.kwic.length - 1) + 1,
     )
     // Settings of the corpora in the result, to be passed to the
     // download script

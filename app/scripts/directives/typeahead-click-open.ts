@@ -1,4 +1,3 @@
-/** @format */
 import angular, { ITimeoutService } from "angular"
 
 // Enable triggering the autocomplete dropdown by pressing the down arrow key.

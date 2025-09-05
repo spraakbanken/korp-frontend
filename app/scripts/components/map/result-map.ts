@@ -1,4 +1,3 @@
-/** @format */
 import angular, { ICompileService, IController, IRootElementService, IScope, ITimeoutService } from "angular"
 import { html } from "@/util"
 import { RootScope } from "@/root-scope.types"
@@ -53,7 +52,7 @@ angular.module("korpApp").component("resultMap", {
             $element: IRootElementService,
             $scope: ResultMapScope,
             $timeout: ITimeoutService,
-            $rootScope: RootScope
+            $rootScope: RootScope,
         ) {
             const $ctrl = this as ResultMapController
 

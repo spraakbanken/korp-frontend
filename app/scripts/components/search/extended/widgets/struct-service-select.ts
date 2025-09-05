@@ -1,4 +1,3 @@
-/** @format */
 import { selectController, selectTemplate, Widget } from "./common"
 
 /**

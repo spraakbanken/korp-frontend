@@ -1,4 +1,3 @@
-/** @format */
 import angular from "angular"
 import settings from "@/settings"
 import { RootScope } from "@/root-scope.types"

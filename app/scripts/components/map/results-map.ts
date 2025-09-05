@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
 import { html, regescape } from "@/util"
@@ -106,7 +105,7 @@ angular.module("korpApp").component("resultsMap", {
                             $ctrl.setProgress(false, 100)
                             $scope.error = error
                         })
-                    }
+                    },
                 )
             }
 

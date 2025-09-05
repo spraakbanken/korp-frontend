@@ -1,4 +1,3 @@
-/** @format */
 import { MarkerGroup, Point } from "@/statistics/map"
 import { corpusListing } from "@/corpora/corpus_listing"
 import { CountParams, StatsRow } from "../backend/types/count"
@@ -23,7 +22,7 @@ export class MapTask extends TaskBase<MapSeries[]> {
         readonly label: string,
         readonly corpora: string[],
         readonly within?: string,
-        readonly relative?: boolean
+        readonly relative?: boolean,
     ) {
         super()
     }
@@ -99,7 +98,7 @@ export class MapTask extends TaskBase<MapSeries[]> {
                             point,
                         }
                         return [id, marker]
-                    })
+                    }),
                 )
 
                 const group = {
@@ -109,7 +108,7 @@ export class MapTask extends TaskBase<MapSeries[]> {
                     markers,
                 }
                 return [series.label, group]
-            })
+            }),
         )
         return groups
     }
