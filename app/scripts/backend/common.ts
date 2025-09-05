@@ -1,5 +1,5 @@
 /** @format */
-import { selectHttpMethod } from "@/util"
+import { buildUrl, toFormData } from "@/util"
 import { auth } from "@/auth/auth"
 import settings from "@/settings"
 import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response as KResponse } from "./types"
@@ -42,6 +42,16 @@ export async function korpRequest<K extends keyof API>(
     }
 
     return data
+}
+
+/**
+ * Select GET or POST depending on url length.
+ */
+export function selectHttpMethod(url: string, params: Record<string, any>): { url: string; request: RequestInit } {
+    const urlFull = buildUrl(url, params)
+    return urlFull.length > settings.backendURLMaxLength
+        ? { url, request: { method: "POST", body: toFormData(params) } }
+        : { url: urlFull, request: {} }
 }
 
 /** Read and handle a HTTP response body as it comes in */

@@ -5,7 +5,8 @@ import { Condition } from "@/cqp_parser/cqp.types"
 import extendedComponents from "./widgets"
 import { Widget, WidgetScope } from "./widgets/common"
 import { defaultWidget } from "./widgets/default"
-import { getConfigurable, regescape, unregescape } from "@/util"
+import { regescape, unregescape } from "@/util"
+import { getConfigurable } from "@/settings"
 
 type ExtendedCqpValueController = IController & {
     change: (event: { term: Partial<Condition> }) => void

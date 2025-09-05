@@ -1,8 +1,5 @@
 /** @format */
-import { intersection, isFunction, merge, pick } from "lodash"
-import settings from "@/settings"
-import { HashParams, UrlParams } from "@/urlparams"
-import { MaybeWithOptions, MaybeConfigurable } from "@/settings/config.types"
+import { intersection, merge, pick } from "lodash"
 import moment, { Moment } from "moment"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
@@ -24,18 +21,6 @@ export function objectIntersection<T extends object>(objs: T[]): T {
 
 /** Merge a list of objects, like _.merge but return-typed */
 export const objectUnion = <T extends object>(objs: T[]): T => merge({}, ...objs) as T
-
-/** Get a parameter from the `?<key>=<value>` part of the URL. */
-export const getUrlParam = <K extends keyof UrlParams>(key: K) =>
-    new URLSearchParams(window.location.search).get(key) as UrlParams[K]
-
-/**
- * Get a parameter from the `#?<key>=<value>` part of the URL.
- * It is preferred to use the Angular `$location` service to read and modify this.
- * Use this only when outside Angular context.
- */
-export const getUrlHash = <K extends keyof HashParams>(key: K) =>
-    new URLSearchParams(window.location.hash.slice(2)).get(key) as HashParams[K]
 
 /**
  * Allows a given class to be overridden before instantiation.
@@ -96,25 +81,6 @@ export function toBase64(str: string) {
 }
 
 /**
- * Get an object from a registry with optional options.
- *
- * The definition is a name, or a name and options.
- * If the object is a function, the options are passed to it.
- */
-export function getConfigurable<T>(
-    registry: Record<string, MaybeConfigurable<T>>,
-    definition: MaybeWithOptions
-): T | undefined {
-    const name = typeof definition === "string" ? definition : definition.name
-    const widget = registry[name]
-    if (isFunction(widget)) {
-        const options = typeof definition == "object" ? definition.options : {}
-        return widget(options)
-    }
-    return widget
-}
-
-/**
  * Represent a number with superscript characters like "⁴²".
  * @param n A decimal number.
  * @returns A string of superscript numbers.
@@ -158,18 +124,8 @@ export const regescape = (s: string): string => s.replace(/[.|?|+|*||'|()^$\\]/g
 /** Unescape special characters in a regular expression – remove single backslashes and replace double with single. */
 export const unregescape = (s: string): string => s.replace(/\\\\|\\/g, (match) => (match === "\\\\" ? "\\" : ""))
 
-/**
- * Select GET or POST depending on url length.
- */
-export function selectHttpMethod(url: string, params: Record<string, any>): { url: string; request: RequestInit } {
-    const urlFull = buildUrl(url, params)
-    return urlFull.length > settings.backendURLMaxLength
-        ? { url, request: { method: "POST", body: toFormData(params) } }
-        : { url: urlFull, request: {} }
-}
-
 /** Convert object to FormData */
-function toFormData(obj: Record<string, any>): FormData {
+export function toFormData(obj: Record<string, any>): FormData {
     const formData = new FormData()
     Object.entries(obj).forEach(([key, value]) => formData.append(key, value))
     return formData

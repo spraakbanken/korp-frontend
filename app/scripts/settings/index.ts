@@ -1,7 +1,8 @@
 /** @format */
 import settings from "korp_config"
 import { Settings } from "./settings.types"
-import { Attribute } from "./config.types"
+import { Attribute, MaybeConfigurable, MaybeWithOptions } from "./config.types"
+import { isFunction } from "lodash"
 
 export default settings
 
@@ -37,6 +38,25 @@ export function setDefaultConfigValues() {
 
     // Set default values depending on other settings last
     settings["hits_per_page_default"] ??= settings.hits_per_page_values[0]
+}
+
+/**
+ * Get an object from a registry with optional options.
+ *
+ * The definition is a name, or a name and options.
+ * If the object is a function, the options are passed to it.
+ */
+export function getConfigurable<T>(
+    registry: Record<string, MaybeConfigurable<T>>,
+    definition: MaybeWithOptions
+): T | undefined {
+    const name = typeof definition === "string" ? definition : definition.name
+    const widget = registry[name]
+    if (isFunction(widget)) {
+        const options = typeof definition == "object" ? definition.options : {}
+        return widget(options)
+    }
+    return widget
 }
 
 export const getDefaultWithin = () => Object.keys(settings["default_within"] || {})[0]
