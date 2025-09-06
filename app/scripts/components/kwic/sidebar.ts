@@ -224,10 +224,10 @@ angular.module("korpApp").component("sidebar", {
                 let pairs: [string, any][] = []
                 let sortingArr: string[] = []
                 if (type === "struct") {
-                    pairs = Object.entries(sentenceData)
+                    pairs = Object.entries(sentenceData || {})
                     sortingArr = $ctrl.corpusObj["_struct_attributes_order"]
                 } else if (type === "pos") {
-                    pairs = Object.entries(wordData)
+                    pairs = Object.entries(wordData || {})
                     sortingArr = $ctrl.corpusObj["_attributes_order"]
                 }
 

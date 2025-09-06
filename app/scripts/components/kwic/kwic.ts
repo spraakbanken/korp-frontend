@@ -270,6 +270,7 @@ angular.module("korpApp").component("kwic", {
         "store",
         function ($element: JQLite, $scope: KwicScope, $timeout: ITimeoutService, store: StoreService) {
             let $ctrl = this as KwicController
+            $ctrl.parallelSelected = []
 
             $scope.dir = settings["dir"]
             $scope.sortOptions = {
