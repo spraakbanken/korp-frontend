@@ -1,10 +1,10 @@
-import { partition, pick } from "lodash"
+import { pick } from "lodash"
 import settings from "@/settings"
 import { Factory } from "@/util"
 import { CountParams, CountsMerged } from "../types/count"
 import ProxyBase from "./proxy-base"
 import { expandCqp } from "@/cqp_parser/cqp"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 
 export type StatsProxyInput = [string, string[], string | undefined, boolean | undefined]
 
@@ -13,14 +13,14 @@ export class StatsProxy extends ProxyBase<"count"> {
 
     protected buildParams(cqp: string, attrs: string[], defaultWithin?: string, ignoreCase?: boolean): CountParams {
         /** Configs of reduced attributes keyed by name, excluding "word" */
-        const attributes = pick(corpusListing.getReduceAttrs(), attrs)
+        const attributes = pick(corpusSelection.getReduceAttrs(), attrs)
 
         const missingAttrs = attrs.filter((name) => !attributes[name] && name != "word")
         if (missingAttrs.length) throw new Error(`Trying to reduce by missing attribute ${missingAttrs}`)
 
-        const [groupByStruct, groupBy] = corpusListing.partitionAttrs(attrs)
+        const [groupByStruct, groupBy] = corpusSelection.partitionAttrs(attrs)
 
-        let within = corpusListing.getWithinParam(defaultWithin)
+        let within = corpusSelection.getWithinParam(defaultWithin)
         // Replace "ABC-aa|ABC-bb:link" with "ABC-aa:link"
         if (settings.parallel) within = within?.replace(/\|.*?:/g, ":")
 
@@ -28,7 +28,7 @@ export class StatsProxy extends ProxyBase<"count"> {
             group_by: groupBy.join(),
             group_by_struct: groupByStruct.join(),
             cqp: expandCqp(cqp),
-            corpus: corpusListing.stringifySelected(true),
+            corpus: corpusSelection.stringify(true),
             end: settings["statistics_limit"] ? settings["statistics_limit"] - 1 : undefined,
             ignore_case: ignoreCase ? "word" : undefined,
             incremental: true,

@@ -192,7 +192,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 const timecqp = getTimeCqp(time, zoom, LEVELS.indexOf(zoom) < 3)
                 const decodedCQP = decodeURIComponent(cqp)
 
-                const corpusIds = $ctrl.task.corpusListing.getSelectedCorpora()
+                const corpusIds = $ctrl.task.corpusListing.getIds()
                 const cqps = [$ctrl.task.cqp, expandOperators(decodedCQP), timecqp]
                 $rootScope.kwicTabs.push(new ExampleTask(corpusIds, cqps, $ctrl.task.defaultWithin))
             }

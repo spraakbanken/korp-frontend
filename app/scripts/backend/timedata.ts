@@ -2,7 +2,7 @@ import { assignWith, memoize, omit, pickBy, range } from "lodash"
 import settings from "@/settings"
 import { Histogram } from "./types"
 import { korpRequest } from "./common"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
 
 /**
  * Time data, if available.
@@ -15,7 +15,7 @@ export let timeData: [[number, number][], number] | undefined
 export const getTimeData: () => Promise<[[number, number][], number] | undefined> = memoize(async () => {
     if (!settings.has_timespan) return undefined
 
-    const corpus = corpusListing.stringifyAll()
+    const corpus = corpusListing.stringify()
     if (!corpus) return undefined
 
     const data = await korpRequest("timespan", { granularity: "y", corpus })
@@ -76,7 +76,7 @@ function addToCorpora(dataByCorpus: Record<string, Histogram>) {
     }
 
     // Update list of common attributes
-    corpusListing.updateAttributes()
+    corpusSelection.updateAttributes()
 }
 
 /** Data size per year of all corpora. */
@@ -91,14 +91,14 @@ export const getSeries = () => Object.fromEntries(getTimeDataPairs()) as YearSer
 /** Get data size per year of selected corpora. */
 export function getSeriesSelected() {
     // `pickBy` removes zeroes.
-    const series = corpusListing.selected.map((corpus) => ("time" in corpus ? pickBy(corpus.time) : {}))
+    const series = corpusSelection.map((corpus) => ("time" in corpus ? pickBy(corpus.time) : {}))
     // Sum the counts by year for each corpora
     return assignWith<YearSeries>({}, ...series, (sum: number | undefined, value: number) => (sum || 0) + value)
 }
 
 /** Get data size of unknown year in selected corpora */
 export function getCountUndatedSelected() {
-    return corpusListing.selected.reduce((sum, corpus) => sum + (corpus["non_time"] || 0), 0)
+    return corpusSelection.corpora.reduce((sum, corpus) => sum + (corpus["non_time"] || 0), 0)
 }
 
 /** Get first and last year in all available corpora. */

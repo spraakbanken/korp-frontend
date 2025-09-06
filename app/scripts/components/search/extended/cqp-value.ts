@@ -1,5 +1,5 @@
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
-import { AttributeOption } from "@/corpora/corpus_listing"
+import { AttributeOption } from "@/corpora/corpus-set"
 import { Condition } from "@/cqp_parser/cqp.types"
 import extendedComponents from "./widgets"
 import { Widget, WidgetScope } from "./widgets/common"

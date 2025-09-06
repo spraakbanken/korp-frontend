@@ -5,7 +5,8 @@ import { prefixAttr } from "@/settings"
 import minusImage from "@/../img/minus.png"
 import "./cqp-value"
 import { Condition, OperatorKorp } from "@/cqp_parser/cqp.types"
-import { AttributeOption, corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
+import { AttributeOption } from "@/corpora/corpus-set"
 import { getTimeData } from "@/backend/timedata"
 import { StoreService } from "@/services/store"
 
@@ -93,14 +94,14 @@ angular.module("korpApp").component("extendedCqpTerm", {
             /** Update list of available attributes */
             async function updateAttributes() {
                 // TODO: respect the setting 'wordAttributeSelector' and similar
-                if (!corpusListing.selected.length) return
+                if (!corpusSelection.corpora.length) return
 
                 // The date interval attribute is not available until time data is ready
                 if (ctrl.term.type == "date_interval") await getTimeData()
 
                 $timeout(() => {
                     // Get available attribute options
-                    ctrl.types = corpusListing.getAttributeGroupsExtended(ctrl.parallellLang)
+                    ctrl.types = corpusSelection.getAttributeGroupsExtended(ctrl.parallellLang)
 
                     // Map attribute options by name. Prefix with `_.` for struct attrs for use in CQP.
                     ctrl.typeMapping = Object.fromEntries(ctrl.types.map((item) => [prefixAttr(item), item]))

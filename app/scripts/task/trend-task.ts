@@ -1,4 +1,4 @@
-import { CorpusListing } from "@/corpora/corpus_listing"
+import { CorpusSet } from "@/corpora/corpus-set"
 import { NumericString, ProgressHandler } from "../backend/types"
 import { GRANULARITIES, Level } from "@/trend-diagram/util"
 import { Moment } from "moment"
@@ -13,7 +13,7 @@ export class TrendTask extends TaskBase<CountTimeResponse> {
         readonly cqp: string,
         readonly subqueries: [string, string][],
         readonly showTotal: boolean,
-        readonly corpusListing: CorpusListing,
+        readonly corpusListing: CorpusSet,
         readonly defaultWithin?: string,
     ) {
         super()
@@ -33,7 +33,7 @@ export class TrendTask extends TaskBase<CountTimeResponse> {
         const params: CountTimeParams = {
             cqp: expandCqp(this.cqp),
             default_within: this.defaultWithin,
-            corpus: this.corpusListing.stringifySelected(),
+            corpus: this.corpusListing.stringify(),
             granularity: GRANULARITIES[zoom],
             from: formatDate(from),
             to: formatDate(to),

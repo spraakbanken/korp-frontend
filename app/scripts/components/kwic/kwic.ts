@@ -15,7 +15,7 @@ import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { JQueryExtended, JQueryStaticExtended } from "@/jquery.types"
 import { loc } from "@/i18n"
 import { calculateHitsPicture, HitsPictureItem, isKwic, isLinkedKwic, massageData, Row } from "@/kwic/kwic"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 
 type KwicController = IController & {
     // Bindings
@@ -319,8 +319,8 @@ angular.module("korpApp").component("kwic", {
                 }
 
                 if ("hitsInProgress" in changeObj) {
-                    const totalTokens = corpusListing
-                        .mapSelectedCorpora((corpus) => corpus.tokens || 0)
+                    const totalTokens = corpusSelection.corpora
+                        .map((corpus) => corpus.tokens || 0)
                         .reduce((sum, t) => sum + t, 0)
                     $scope.relativeFrequency =
                         $ctrl.hitsInProgress && totalTokens ? ($ctrl.hitsInProgress / totalTokens) * 1e6 : undefined

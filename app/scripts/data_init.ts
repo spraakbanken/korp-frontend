@@ -1,9 +1,10 @@
-import { isEmpty, keyBy, mapValues, omit, pick } from "lodash"
+import { keyBy, mapValues, omit, pick } from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
 import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
-import { corpusListing, CorpusListing, setCorpusListing } from "@/corpora/corpus_listing"
-import { ParallelCorpusListing } from "@/parallel/corpus_listing"
+import { corpusListing, setCorpusListing } from "@/corpora/corpus_listing"
+import { CorpusSet } from "@/corpora/corpus-set"
+import { CorpusSetParallel } from "@/parallel/corpus-set-parallel"
 import { fromKeys } from "@/util"
 import { locAttribute } from "@/i18n"
 import { Labeled, LocLangMap, LocMap } from "@/i18n/types"
@@ -115,10 +116,10 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
     }
 }
 
-/** Determine initial corpus selection and mark them selected in the CorpusListing. */
+/** Determine initial corpus selection. */
 function setInitialCorpora(): void {
     // if no preselectedCorpora is defined, use all of them
-    if (!(settings.preselected_corpora && settings.preselected_corpora.length)) {
+    if (!settings.preselected_corpora?.length) {
         // if all corpora in mode is limited_access, make them all preselected
         if (corpusListing.corpora.filter((corpus) => !corpus.limited_access).length == 0) {
             settings.preselected_corpora = corpusListing.corpora
@@ -173,21 +174,13 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     const configTransformed = transformConfig(config, infos)
     Object.assign(settings, configTransformed)
 
-    // only if the current mode is parallel, we load the special code required
-    if (config.parallel) {
-        require("./parallel/corpus_listing")
-    }
+    const corpora = Object.values(settings.corpora)
+    const corpusListing = settings.parallel
+        ? new CorpusSetParallel(corpora as CorpusTransformed<CorpusParallel>[])
+        : new CorpusSet(corpora)
+    setCorpusListing(corpusListing)
 
-    if (!settings.parallel) {
-        setCorpusListing(new CorpusListing(settings.corpora))
-    } else {
-        const corpora = settings.corpora as Record<string, CorpusTransformed<CorpusParallel>>
-        setCorpusListing(new ParallelCorpusListing(corpora))
-    }
-
-    if (!isEmpty(settings.corpora)) {
-        setInitialCorpora()
-    }
+    setInitialCorpora()
 }
 
 /** Find most recently updated corpora. */

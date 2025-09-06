@@ -92,7 +92,7 @@ type Comparer<T> = (a: T, b: T) => number
 
 /** Create SlickGrid column definitions for statistics data. */
 function createColumns(store: StoreService, corpora: string[], attrs: string[]): SlickgridColumn[] {
-    const cl = corpusListing.subsetFactory(corpora)
+    const cl = corpusListing.pick(corpora)
     const attributes = cl.getReduceAttrs()
     const labels = attrs.map((name) => (name == "word" ? settings["word_label"] : attributes[name]?.label))
 

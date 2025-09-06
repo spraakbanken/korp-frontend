@@ -5,7 +5,7 @@ import { getLemgrams, getSenses, LemgramCount } from "@/backend/lexicons"
 import "@/directives/typeahead-click-open"
 import { Lemgram } from "@/lemgram"
 import { Saldo } from "@/saldo"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 
 type AutocController = IController & {
     dir?: string
@@ -141,7 +141,7 @@ angular.module("korpApp").component("autoc", {
 
             function getMorphologies(): string[] {
                 if (ctrl.variant === "dalin") return ["dalinm"]
-                const morphologies = corpusListing.getMorphologies()
+                const morphologies = corpusSelection.getMorphologies()
                 return morphologies.length ? morphologies : ["saldom"]
             }
 
@@ -155,7 +155,7 @@ angular.module("korpApp").component("autoc", {
 
             ctrl.getLemgrams = async (input: string) => {
                 const morphologies = getMorphologies()
-                const corpora = corpusListing.getSelectedCorpora()
+                const corpora = corpusSelection.getIds()
                 const data = await getLemgrams(input, morphologies, corpora)
                 const output: LemgramOut[] = data.map((item) => {
                     if (ctrl.variant === "affix") item.count = -1

@@ -1,8 +1,8 @@
 import { difference, groupBy, uniq } from "lodash"
 import settings from "@/settings"
-import { ParallelCorpusListing } from "@/parallel/corpus_listing"
+import { CorpusSetParallel } from "@/parallel/corpus-set-parallel"
 import { expandCqp } from "@/cqp_parser/cqp"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 
 export type ParallelQuery = {
     lang: string
@@ -11,7 +11,7 @@ export type ParallelQuery = {
 }
 
 export function getParallelCqp(queries: ParallelQuery[]) {
-    const cl = corpusListing as ParallelCorpusListing
+    const cl = corpusSelection as CorpusSetParallel
     const langs = queries.map((query) => query.lang)
     const linkedCorpora = cl.getLinksFromLangs(langs).flat(2)
     const [head, ...tail] = queries
@@ -32,7 +32,7 @@ export function getParallelCqp(queries: ParallelQuery[]) {
 }
 
 export function getEnabledLangs(queries: ParallelQuery[], i?: number) {
-    const cl = corpusListing as ParallelCorpusListing
+    const cl = corpusSelection as CorpusSetParallel
 
     function getLinkedLangs(lang: string) {
         const corpora = cl.getLinksFromLangs([lang]).flat(2)

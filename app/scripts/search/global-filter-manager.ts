@@ -5,7 +5,7 @@ import { Condition } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
 import { Attribute } from "@/settings/config.types"
 import { Observable, regescape } from "@/util"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 
 export type FilterData = {
     attribute: Attribute
@@ -43,14 +43,14 @@ export class GlobalFilterManager extends Observable {
             }
         }
 
-        const corpusIds = corpusListing.getSelectedCorpora()
+        const corpusIds = corpusSelection.getIds()
 
         // Fetch token counts keyed in multiple dimensions by the values of attributes
         const multiAttrs = attrs.filter((attr) => attr.type === "set").map((attr) => attr.name)
         this.data = corpusIds.length && attrs.length ? await countAttrValues(corpusIds, attrNames, multiAttrs) : {}
 
         // Abort if corpus selection has changed since the request was made
-        if (!isEqual(corpusIds, corpusListing.getSelectedCorpora())) return
+        if (!isEqual(corpusIds, corpusSelection.getIds())) return
 
         this.updateOptions()
 

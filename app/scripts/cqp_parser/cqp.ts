@@ -1,9 +1,8 @@
-import { cloneDeep, compact, maxBy, minBy, sortBy } from "lodash"
-import moment, { type Moment } from "moment"
+import { cloneDeep, compact, sortBy } from "lodash"
 import settings from "@/settings"
 import { parse } from "./CQPParser.peggy"
 import type { Condition, CqpQuery, DateRange, Operator, OperatorKorp, Value } from "./cqp.types"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 
 /** Parse CQP string to syntax tree. */
 export { parse }
@@ -108,7 +107,7 @@ export function stringify(cqp_obj: CqpQuery, expanded_format?: boolean): string 
 
                 if (type === "word" && val === "") {
                     out = ""
-                } else if (corpusListing.isDateInterval(type)) {
+                } else if (corpusSelection.isDateInterval(type)) {
                     out = parseDateInterval(op, val as DateRange, expanded_format)
                 } else {
                     out = `${type} ${op} \"${val}\"`

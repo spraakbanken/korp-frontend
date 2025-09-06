@@ -23,7 +23,7 @@
   - Dropped the `RootScope` arg from `settings["initialization_checks"]` – use `getService()` if needed
   - Converted `compareSearches` service to non-AngularJS-dependent `savedSearches`
   - Converted `globalFilterService` service to non-AngularJS-dependent `GlobalFilterManager`
-  - In `CorpusListing`:
+  - In `CorpusListing`/`CorpusSet`:
     - Merged `getContextQueryString` and `getContextQueryStringFromCorpusId` as `getContextParams`
     - Split `getAttributeGroups`/`getStatsAttributeGroups` into `getAttributeGroups`, `getAttributeGroupsCompare`, `getAttributeGroupsExtended` and `getAttributeGroupsStatistics`
 - Changes to reduce circular dependencies, notably:
@@ -32,6 +32,9 @@
     - Import `{ auth }` instead of `* as authenticationProxy`
   - Moved `valfilter` in `@/util` to `prefixAttr` in `@/settings`
   - Moved locale-related functions from `@/util` to `@/i18n/util`
+- The `CorpusListing` class is renamed to `CorpusSet` no longer has a `selected` subset
+  - Use the global `corpusSelected` instead of `(settings.)corpusListing` if needed
+  - Instead of methods `mapSelectedCorpora()`, `subsetFactory()`, `getSelectedCorpora()`, `select()`, `getCurrentAttributes{Intersection}()` and `stringify{All,Selected}()`, use `map()`, `pick()`, `getIds()`, `pickFrom()`, `getAttributes{Intersection}()` and `stringify()`.
 - Moved many source files into new subdirectories
 - Moved non-component auth-related files out of `@/components` directory
 - The `searches` service is removed in favor of the store:

@@ -170,7 +170,7 @@ export function calculateHitsPicture(
     const total = sum(Object.values(corpusHits))
     const items: HitsPictureItem[] = corpusOrder
         .map((id) => ({
-            rtitle: corpusListing.getTitleObj(id.toLowerCase()),
+            rtitle: corpusListing.get(id).title,
             relative: corpusHits[id] / total,
             abs: corpusHits[id],
             page: -1, // this is properly set below

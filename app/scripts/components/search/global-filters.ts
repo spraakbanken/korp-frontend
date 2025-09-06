@@ -3,7 +3,7 @@ import { html } from "@/util"
 import "./global-filter"
 import { StoreService } from "@/services/store"
 import { FilterData, GlobalFilterManager } from "@/search/global-filter-manager"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 
 type GlobalFiltersScope = IScope & {
     filters: Record<string, FilterData>
@@ -45,9 +45,9 @@ angular.module("korpApp").component("globalFilters", {
             $ctrl.$onInit = () => {
                 /** Update available filters when changing corpus selection. */
                 store.watch("corpus", async () => {
-                    if (corpusListing.selected.length > 0) {
+                    if (corpusSelection.corpora.length > 0) {
                         // Load values for available attributes.
-                        const attrs = Object.values(corpusListing.getDefaultFilters())
+                        const attrs = Object.values(corpusSelection.getDefaultFilters())
                         $scope.show = attrs.length > 0
                         manager.update(attrs)
                     }

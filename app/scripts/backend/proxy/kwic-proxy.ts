@@ -1,4 +1,4 @@
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 import { Factory } from "@/util"
 import { QueryParams, QueryResponse } from "../types/query"
 import { StoreService } from "@/services/store"
@@ -10,7 +10,7 @@ export class KwicProxy extends QueryProxyBase {
     }
 
     protected buildParams(cqp: string, isPaging = false): QueryParams {
-        const corpusIds = corpusListing.getSelectedCorpora()
+        const corpusIds = corpusSelection.getIds()
         const options = {
             isPaging,
             isReading: this.store.reading_mode,

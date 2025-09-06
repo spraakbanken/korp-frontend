@@ -1,7 +1,7 @@
 import { isEqual, keyBy } from "lodash"
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
-import { AttributeOption } from "@/corpora/corpus_listing"
+import { AttributeOption } from "@/corpora/corpus-set"
 
 type ReduceSelectScope = IScope & {
     keyItems: Record<string, Item>

@@ -4,12 +4,10 @@ import { html } from "@/util"
 import { LocationService } from "@/services/types"
 import { matomoSend } from "@/services/matomo"
 import "./tokens"
-import { ParallelCorpusListing } from "@/parallel/corpus_listing"
+import { CorpusSetParallel } from "@/parallel/corpus-set-parallel"
 import { StoreService } from "@/services/store"
 import { getEnabledLangs, getParallelCqp, ParallelQuery } from "@/parallel/parallel-cqp"
-import { corpusListing as corpusListing_ } from "@/corpora/corpus_listing"
-
-const corpusListing = corpusListing_ as ParallelCorpusListing
+import { corpusSelection as corpusSelection_ } from "@/corpora/corpus_listing"
 
 type ExtendedParallelController = IController & {
     langs: ParallelQuery[]
@@ -71,6 +69,7 @@ angular.module("korpApp").component("extendedParallel", {
         "$timeout",
         "store",
         function ($location: LocationService, $timeout: ITimeoutService, store: StoreService) {
+            const corpusSelection = corpusSelection_ as CorpusSetParallel
             const newLang = (lang = settings.start_lang!, cqp = "[]") => ({ lang, cqp, negate: false })
 
             const ctrl = this as ExtendedParallelController
@@ -106,7 +105,7 @@ angular.module("korpApp").component("extendedParallel", {
 
             ctrl.onLangChange = function () {
                 const currentLangList = ctrl.langs.map((lang) => lang.lang)
-                corpusListing.setActiveLangs(currentLangList)
+                corpusSelection.setActiveLangs(currentLangList)
                 store.parallel_corpora = currentLangList
             }
 

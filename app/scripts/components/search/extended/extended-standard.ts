@@ -1,7 +1,7 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import { isEqual } from "lodash"
 import statemachine from "@/statemachine"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 import { expandOperators, mergeCqpExprs, parse, stringify, supportsInOrder } from "@/cqp_parser/cqp"
 import { html } from "@/util"
 import { LocationService } from "@/services/types"
@@ -84,7 +84,7 @@ angular.module("korpApp").component("extendedStandard", {
 
             store.watch("in_order", () => ($scope.freeOrder = !store.in_order))
             store.watch("corpus", () => {
-                ctrl.withins = corpusListing.getWithinKeys()
+                ctrl.withins = corpusSelection.getWithinKeys()
                 if (!ctrl.withins.includes(ctrl.within)) {
                     ctrl.within = ctrl.withins[0]
                 }

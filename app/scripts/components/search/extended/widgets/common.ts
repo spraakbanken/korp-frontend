@@ -3,7 +3,7 @@ import { html } from "@/util"
 import { IController, IScope } from "angular"
 import { Condition } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
-import { AttributeOption } from "@/corpora/corpus_listing"
+import { AttributeOption } from "@/corpora/corpus-set"
 import { loadOptions } from "@/search/extended-search"
 
 export type Widget = {

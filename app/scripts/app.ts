@@ -30,7 +30,7 @@ import { StoreService } from "@/services/store"
 import { JQueryExtended } from "@/jquery.types"
 import { LocLangMap } from "@/i18n/types"
 import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
 
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [
@@ -185,7 +185,7 @@ korpApp.run([
 
             const allowedIds = ids.filter((id) => !deniedCorpora.find((corpus) => corpus.id == id))
 
-            const allCorpusIds = corpusListing.corpora.map((corpus) => corpus.id)
+            const allCorpusIds = corpusListing.map((corpus) => corpus.id)
 
             if (settings.initialization_checks && (await settings.initialization_checks())) {
                 // custom initialization code called
@@ -246,12 +246,12 @@ korpApp.run([
             } else {
                 // Corpus selection OK
                 store.corpus = ids
-                corpusListing.select(store.corpus)
+                corpusSelection.pickFrom(corpusListing, store.corpus)
 
                 // Sync corpus selection from store to global corpus listing
                 store.watch("corpus", () => {
                     // In parallel mode, the select function may also add hidden corpora.
-                    corpusListing.select(store.corpus)
+                    corpusSelection.pickFrom(corpusListing, store.corpus)
                 })
             }
         }

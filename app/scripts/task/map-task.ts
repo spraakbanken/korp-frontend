@@ -28,7 +28,7 @@ export class MapTask extends TaskBase<MapSeries[]> {
     }
 
     async send(): Promise<MapSeries[]> {
-        const cl = corpusListing.subsetFactory(this.corpora)
+        const cl = corpusListing.pick(this.corpora)
         const within = cl.getWithinParam(this.within)
 
         const params: CountParams = {

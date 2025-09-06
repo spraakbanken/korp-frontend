@@ -1,6 +1,6 @@
 import { localStorageGet, localStorageSet, SavedSearch } from "@/services/local-storage"
 import currentMode from "@/mode"
-import { corpusListing } from "@/corpora/corpus_listing"
+import { corpusSelection } from "@/corpora/corpus_listing"
 import { Observable } from "@/util"
 
 type Key = "saved_searches" | `saved_searches_${string}`
@@ -12,7 +12,7 @@ class SavedSearchManager extends Observable {
     }
 
     push(name: string, cqp: string): void {
-        const corpora = corpusListing.getSelectedCorpora()
+        const corpora = corpusSelection.getIds()
         const searchObj = { label: name || cqp, cqp, corpora }
         localStorageSet(KEY, [...this.list(), searchObj])
         this.notify()

@@ -65,7 +65,7 @@ export type Folder = {
 
 export type Attribute = {
     dataset?: Record<string, string> | string[]
-    /** Handled by CorpusListing */
+    /** Handled by CorpusSet */
     disabled?: true
     display_type?: "hidden"
     escape?: boolean

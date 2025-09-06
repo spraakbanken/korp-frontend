@@ -10,7 +10,8 @@ import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams } from "@/statistics/statistics.types"
 import { CountParams } from "@/backend/types/count"
-import { AttributeOption, corpusListing } from "@/corpora/corpus_listing"
+import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
+import { AttributeOption } from "@/corpora/corpus-set"
 import { getTimeData } from "@/backend/timedata"
 import { StoreService } from "@/services/store"
 import { getGeoAttributes, MapAttributeOption } from "@/statistics/map"
@@ -255,14 +256,14 @@ angular.module("korpApp").component("statistics", {
 
             $ctrl.$onChanges = (changeObj) => {
                 if ("searchParams" in changeObj && $ctrl.searchParams) {
-                    cl = corpusListing.subsetFactory($ctrl.searchParams.corpora)
+                    cl = corpusListing.pick($ctrl.searchParams.corpora)
                 }
 
                 if ("data" in changeObj && $ctrl.data) {
                     grid = new StatisticsGrid(
                         $("#myGrid").get(0)!,
                         $ctrl.data,
-                        cl.corpora.map((corpus) => corpus.id.toUpperCase()),
+                        cl.map((corpus) => corpus.id.toUpperCase()),
                         $ctrl.searchParams.reduceVals,
                         store,
                         showPieChart,
@@ -292,8 +293,8 @@ angular.module("korpApp").component("statistics", {
 
             store.watch("corpus", () => {
                 // Update list of attributes
-                const reduceLang = corpusListing.getReduceLang()
-                $scope.statCurrentAttrs = corpusListing.getAttributeGroupsStatistics(reduceLang)
+                const reduceLang = corpusSelection.getReduceLang()
+                $scope.statCurrentAttrs = corpusSelection.getAttributeGroupsStatistics(reduceLang)
 
                 // Deselect removed attributes, fall back to word
                 const names = $scope.statCurrentAttrs.map((option) => option.name)

@@ -19,11 +19,11 @@ export abstract class QueryProxyBase extends ProxyBase<"query"> {
 
     protected buildParamsBase(corpusIds: string[], cqp: string, hpp: number, options: QueryParamOptions): QueryParams {
         if (!options.isPaging) this.queryData = undefined
-        const cl = corpusListing.subsetFactory(corpusIds)
+        const cl = corpusListing.pick(corpusIds)
         const defaultWithin = options.defaultWithin || getDefaultWithin()
 
         return {
-            corpus: cl.stringifySelected(),
+            corpus: cl.stringify(),
             cqp: expandCqp(cqp),
             default_within: defaultWithin,
             within: cl.getWithinParam(defaultWithin),

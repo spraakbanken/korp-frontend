@@ -5,7 +5,8 @@ import { fromKeys, regescape, splitFirst } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { loc, locAttribute, locObj } from "@/i18n"
 import CSV from "comma-separated-values/csv"
-import { corpusListing, CorpusListing } from "@/corpora/corpus_listing"
+import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
+import { CorpusSet } from "@/corpora/corpus-set"
 import { Lemgram } from "@/lemgram"
 import { Saldo } from "@/saldo"
 
@@ -27,7 +28,7 @@ export function processStatisticsResult(
     prevNonExpandedCQP: string,
 ): Promise<StatisticsProcessed> {
     const corpora = Object.keys(data.corpora)
-    const cl = corpusListing.subsetFactory(corpora)
+    const cl = corpusListing.pick(corpora)
 
     // Get stringifiers for formatting attribute values
     const stringifiers = fromKeys(reduceVals, (attr) => reduceStringify(attr, cl))
@@ -94,7 +95,7 @@ function reduceCqp(
     ignoreCase: boolean,
 ): string {
     // Note: undefined if name is `word`
-    const attr = corpusListing.getReduceAttrs()[name]
+    const attr = corpusSelection.getReduceAttrs()[name]
 
     // Use named CQP'ifier from custom config code. It must escape values as regex.
     if (attr?.stats_cqp) return customFunctions[attr.stats_cqp](values, ignoreCase)
@@ -124,7 +125,7 @@ function mergeRegex(values: string[]): string {
 }
 
 // Get the html (no linking) representation of the result for the statistics table
-function reduceStringify(name: string, cl?: CorpusListing): (values: string[]) => string {
+function reduceStringify(name: string, cl?: CorpusSet): (values: string[]) => string {
     cl ??= corpusListing
     const attr = cl.getReduceAttrs()[name]
 
