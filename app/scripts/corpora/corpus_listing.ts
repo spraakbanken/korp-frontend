@@ -268,7 +268,7 @@ export class CorpusListing {
         const show: string[] = ["sentence"]
         const show_struct: string[] = []
 
-        for (const corpus of corpusListing.selected) {
+        for (const corpus of this.selected) {
             show.push(...Object.keys(corpus.within).map((key) => key.split(" ").pop()!))
             show.push(...Object.keys(corpus.attributes))
 

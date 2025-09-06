@@ -155,33 +155,6 @@ export function expandCqp(cqp: string): string {
 }
 
 /**
- * Find first and last date in any date interval conditions.
- * @param obj Syntax tree
- * @returns `[from, to]` as Moment objects, or `undefined` if query has no intervals
- */
-export function getTimeInterval(obj: CqpQuery): [Moment, Moment] | undefined {
-    let froms: Moment[] = []
-    let tos: Moment[] = []
-    for (let token of obj) {
-        for (let or_block of token.and_block || []) {
-            for (let item of or_block) {
-                if (item.type === "date_interval") {
-                    froms.push(moment(`${item.val[0]}${item.val[2]}`, "YYYYMMDDhhmmss"))
-                    tos.push(moment(`${item.val[1]}${item.val[3]}`, "YYYYMMDDhhmmss"))
-                }
-            }
-        }
-    }
-
-    if (!froms.length) {
-        return
-    }
-    const from = minBy(froms, (m) => m.toDate())
-    const to = maxBy(tos, (m) => m.toDate())
-    return from && to ? [from, to] : undefined
-}
-
-/**
  * Sort the conditions in each token according to the `cqp_prio` setting.
  */
 export function prioSort(cqpObjs: CqpQuery) {
