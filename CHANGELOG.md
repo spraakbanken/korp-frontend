@@ -32,9 +32,9 @@
     - Import `{ auth }` instead of `* as authenticationProxy`
   - Moved `valfilter` in `@/util` to `prefixAttr` in `@/settings`
   - Moved locale-related functions from `@/util` to `@/i18n/util`
-- The `CorpusListing` class is renamed to `CorpusSet` no longer has a `selected` subset
+- The `CorpusListing` class is renamed to `CorpusSet` and no longer has a `selected` subset
   - Use the global `corpusSelected` instead of `(settings.)corpusListing` if needed
-  - Instead of methods `mapSelectedCorpora()`, `subsetFactory()`, `getSelectedCorpora()`, `select()`, `getCurrentAttributes{Intersection}()` and `stringify{All,Selected}()`, use `map()`, `pick()`, `getIds()`, `pickFrom()`, `getAttributes{Intersection}()` and `stringify()`.
+  - Instead of the methods `mapSelectedCorpora()`, `subsetFactory()`, `getSelectedCorpora()`, `select()`, `getCurrentAttributes{Intersection}()` and `stringify{All,Selected}()`, use `map()`, `pick()`, `getIds()`, `pickFrom()`, `getAttributes{Intersection}()` and `stringify()`.
 - Moved many source files into new subdirectories
 - Moved non-component auth-related files out of `@/components` directory
 - The `searches` service is removed in favor of the store:
