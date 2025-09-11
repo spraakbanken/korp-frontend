@@ -630,7 +630,10 @@ angular.module("korpApp").component("kwic", {
             }
 
             function selectUp() {
-                const $prevSentence = selectionManager.selected.closest(".sentence").prev(":not(.corpus_info)")
+                const $prevSentence = selectionManager.selected
+                    .closest(".sentence")
+                    .prevAll(":not(.corpus_info)")
+                    .first()
                 const searchwords = selectionManager.selected
                     .prevAll(".word")
                     .get()
@@ -639,7 +642,10 @@ angular.module("korpApp").component("kwic", {
             }
 
             function selectDown() {
-                const $nextSentence = selectionManager.selected.closest(".sentence").next(":not(.corpus_info)")
+                const $nextSentence = selectionManager.selected
+                    .closest(".sentence")
+                    .nextAll(":not(.corpus_info)")
+                    .first()
                 const $searchwords = selectionManager.selected.nextAll(".word").add($nextSentence.find(".word"))
                 return selectUpOrDown($nextSentence, $searchwords)
             }

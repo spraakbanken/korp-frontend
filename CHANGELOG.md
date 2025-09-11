@@ -55,6 +55,7 @@
 - Dependency tree: label missing on hover [#441](https://github.com/spraakbanken/korp-frontend/issues/441)
 - Protected corpora are deselected before logging in [#476](https://github.com/spraakbanken/korp-frontend/issues/476)
 - Context view in KWIC doesn't always highlight the sentence containing the keyword [#478](https://github.com/spraakbanken/korp-frontend/issues/478)
+- Can't navigate between KWIC rows with arrow keys when reaching hits from the next/previous corpus [#479](https://github.com/spraakbanken/korp-frontend/issues/479)
 - Prevent empty "Group by" selector when changing corpus
 - Prevent relative frequency "NaN" when loading first KWIC result
 - Related words heading link url
