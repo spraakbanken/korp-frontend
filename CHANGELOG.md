@@ -54,6 +54,7 @@
 - Map examples empty if query uses repetition [#475](https://github.com/spraakbanken/korp-frontend/issues/475)
 - Dependency tree: label missing on hover [#441](https://github.com/spraakbanken/korp-frontend/issues/441)
 - Protected corpora are deselected before logging in [#476](https://github.com/spraakbanken/korp-frontend/issues/476)
+- Context view in KWIC doesn't always highlight the sentence containing the keyword [#478](https://github.com/spraakbanken/korp-frontend/issues/478)
 - Prevent empty "Group by" selector when changing corpus
 - Prevent relative frequency "NaN" when loading first KWIC result
 - Related words heading link url

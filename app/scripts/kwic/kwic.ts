@@ -47,7 +47,7 @@ export function massageData(hitArray: ApiKwic[]): Row[] {
 
         const [matchSentenceStart, matchSentenceEnd] = findMatchSentence(hitContext)
         const isMatchSentence = (i: number) =>
-            matchSentenceStart && matchSentenceEnd && matchSentenceStart <= i && i <= matchSentenceEnd
+            matchSentenceStart != undefined && matchSentenceEnd && matchSentenceStart <= i && i <= matchSentenceEnd
 
         // When using `in_order=false`, there are multiple matches
         // Otherwise, cast single match to array for consistency
