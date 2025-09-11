@@ -1,14 +1,4 @@
-/** @format */
-
-import { ILocationService } from "angular"
-import { QueryParamSort } from "./backend/types/query"
-
-/** Extends the Angular Location service to assign types for supported URL hash params. */
-export type LocationService = Omit<ILocationService, "search"> & {
-    search(): HashParams
-    search(search: HashParams): LocationService
-    search<K extends keyof HashParams>(search: K, paramValue: HashParams[K] | any): LocationService
-}
+import { QueryParamSort } from "@/backend/types/query"
 
 /** Supported parameters for the `?<key>=<value>` part of the URL. */
 export type UrlParams = {
@@ -103,3 +93,15 @@ export const getSearchParamNames = (): SearchParamNames[] => [
     "suffix",
     "isCaseInsensitive",
 ]
+
+/** Get a parameter from the `?<key>=<value>` part of the URL. */
+export const getUrlParam = <K extends keyof UrlParams>(key: K) =>
+    new URLSearchParams(window.location.search).get(key) as UrlParams[K]
+
+/**
+ * Get a parameter from the `#?<key>=<value>` part of the URL.
+ * It is preferred to use the Angular `$location` service to read and modify this.
+ * Use this only when outside Angular context.
+ */
+export const getUrlHash = <K extends keyof HashParams>(key: K) =>
+    new URLSearchParams(window.location.hash.slice(2)).get(key) as HashParams[K]

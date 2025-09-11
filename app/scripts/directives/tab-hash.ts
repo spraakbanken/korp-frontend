@@ -1,8 +1,6 @@
-/** @format */
-import _ from "lodash"
 import angular, { IScope, ITimeoutService } from "angular"
 import { UtilsService } from "@/services/utils"
-import { LocationService } from "@/urlparams"
+import { LocationService } from "@/services/types"
 import "@/services/utils"
 
 type UiBootstrapTabsetScope = IScope & {

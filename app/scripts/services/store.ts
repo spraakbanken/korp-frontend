@@ -1,106 +1,13 @@
-/** @format */
 import angular from "angular"
-import settings from "@/settings"
+import settings, { getDefaultWithin } from "@/settings"
 import { RootScope } from "@/root-scope.types"
 import { UtilsService } from "@/services/utils"
-import { Attribute } from "@/settings/config.types"
-import { CqpQuery } from "@/cqp_parser/cqp.types"
-import { getLocData } from "@/loc-data"
-import { getAllCorporaInFolders } from "@/components/corpus-chooser/util"
-import { QueryParamSort } from "@/backend/types/query"
-import { HashParams, LocationService } from "@/urlparams"
-
-/**
- * @file The store service provides state management. It uses the Root Scope to store and watch properties.
- * It is wrapped in a Proxy to allow direct access to properties as well as the service methods.
- */
-
-export type Store = {
-    /** Last executed search query. */
-    activeSearch?: {
-        /** "word", "lemgram" or "cqp" */
-        type: string
-        val: string
-    }
-    /** Selected corpus ids in lowercase */
-    corpus: string[]
-    /** CQP query for Extended search, possibly with frontend-specific operators */
-    cqp: string
-    /** CQP query for each selected language in parallel mode; mapped to URL params `cqp_<lang>` */
-    cqpParallel: Record<string, string>
-    /** What modal to show */
-    display?: "about"
-    /** The current Extended search query as CQP */
-    extendedCqp?: string
-    /** CQP fragment built from selected filter values. */
-    globalFilter?: CqpQuery
-    /** Filter data by attribute name */
-    globalFilterData: Record<string, FilterData>
-    /** A simple attribute–values structure of selected filters. */
-    global_filter: Record<string, string[]>
-    /** Hits per page */
-    hpp: number
-    /** In simple search, match case-insensitive */
-    isCaseInsensitive: boolean
-    /** Whether tokens in current query should match in order; default is true */
-    in_order: boolean
-    /** UI language */
-    lang: string
-    /** In simple search, match anywhere in a word */
-    mid_comp: boolean
-    /** Page number of KWIC result */
-    page?: number
-    /** In parallel mode, what languages to build a query for */
-    parallel_corpora: string[]
-    /** In simple search, match beginning of word */
-    prefix: boolean
-    /** Randomized number used when sorting hits by random. Stored for reproducible urls. */
-    random_seed?: number
-    /** Whether to KWIC with more context */
-    reading_mode: boolean
-    /**
-     * Search query for Simple or Advanced search: `<mode>|<query>`
-     * where `mode` can be:
-     *   - "word", for simple word search
-     *   - "lemgram", when using autocomplete in Simple
-     *   - "cqp", for advanced mode (`query` is a CQP expression)
-     */
-    search?: `${string}|${string}` | "cqp"
-    /** The current Simple search query as CQP */
-    simpleCqp?: string
-    /** Search result order */
-    sort: QueryParamSort
-    /** Attributes on which to aggregate counts in statistics query */
-    stats_reduce: string
-    /** Attributes on which to aggregate counts, case-insensitively, in statistics query */
-    stats_reduce_insensitive: string
-    /** Whether frequency numbers should be shown as absolute or relative (per million tokens) */
-    statsRelative: boolean
-    /** In simple search, match end of word */
-    suffix: boolean
-    /** Chunk size to evaluate search query within, e.g. "sentence" or "paragraph" */
-    within?: string
-}
-
-export type FilterData = {
-    attribute: Attribute
-    /** Selected values */
-    value: string[]
-    /** Sorted list of options with counts */
-    options: [string, number][]
-}
-
-export type StoreBase = {
-    get: <K extends keyof Store>(key: K) => Store[K]
-    set: <K extends keyof Store>(key: K, value: Store[K]) => void
-    watch: <K extends keyof Store>(
-        subject: K,
-        listener: (newValue: Store[K], oldValue: Store[K]) => void,
-        deep?: boolean
-    ) => void
-}
-
-export type StoreService = StoreBase & Store
+import { getLocData } from "@/i18n/loc-data"
+import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
+import { HashParams } from "@/urlparams"
+import { LocationService } from "@/services/types"
+import { Store, StoreBase, StoreService } from "./store.types"
+export * from "./store.types"
 
 angular.module("korpApp").factory("store", [
     "$location",
@@ -112,23 +19,20 @@ angular.module("korpApp").factory("store", [
         // They can still be accessed as `$root.lang` etc in templates.
         const rootScopeStore = $rootScope as unknown as Store
 
-        const withinDefault = Object.keys(settings["default_within"] || {})[0]
-
         // Initialize
         rootScopeStore.corpus = []
         rootScopeStore.cqp = "[]"
         rootScopeStore.cqpParallel = {}
-        rootScopeStore.globalFilterData = {}
         rootScopeStore.global_filter = {}
         rootScopeStore.hpp = settings["hits_per_page_default"]
         rootScopeStore.in_order = true
         rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
         rootScopeStore.page = 0
-        rootScopeStore.parallel_corpora = []
+        rootScopeStore.parallel_corpora = settings.start_lang ? [settings.start_lang] : []
         rootScopeStore.sort = ""
         rootScopeStore.stats_reduce = "word"
         rootScopeStore.stats_reduce_insensitive = ""
-        rootScopeStore.within = withinDefault
+        rootScopeStore.within = getDefaultWithin()
 
         // Sync to url
         utils.setupHash($rootScope, {
@@ -160,7 +64,7 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, {
             key: "mid_comp",
             // Deprecated param. Translate to prefix/suffix.
-            post_change: (mid_comp) => {
+            val_in: (mid_comp) => {
                 if (!mid_comp) return
                 rootScopeStore.prefix = true
                 rootScopeStore.suffix = true
@@ -181,7 +85,7 @@ angular.module("korpApp").factory("store", [
         utils.setupHash($rootScope, { key: "stats_reduce", default: "word" })
         utils.setupHash($rootScope, { key: "stats_reduce_insensitive", default: "" })
         utils.setupHash($rootScope, { key: "suffix", val_out: (x) => !!x || undefined })
-        utils.setupHash($rootScope, { key: "within", default: withinDefault })
+        utils.setupHash($rootScope, { key: "within", default: getDefaultWithin() })
         // Await locale data before setting lang, otherwise the `loc` template filter will trigger too early.
         getLocData().then(() => {
             utils.setupHash($rootScope, {
@@ -208,13 +112,14 @@ angular.module("korpApp").factory("store", [
                 // Set new cqp_ params
                 Object.entries(cqpParallel).forEach(([lang, cqp]) => $location.search(`cqp_${lang}`, cqp))
             },
-            true
+            true,
         )
 
         const service: StoreBase = {
             get: (key) => rootScopeStore[key],
             set: (key, value) => (rootScopeStore[key] = value),
             watch: (subject, listener, deep) => $rootScope.$watch(subject, listener, deep),
+            watchGroup: (subject, listener) => $rootScope.$watchGroup(subject, listener),
         }
 
         const handler: ProxyHandler<StoreService> = {

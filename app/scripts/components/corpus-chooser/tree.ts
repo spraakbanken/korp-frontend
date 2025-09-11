@@ -1,10 +1,10 @@
-/** @format */
 import angular, { IController } from "angular"
-import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "./util"
+import { ChooserFolder, ChooserFolderSub, getAllCorpora } from "@/corpora/corpus-chooser"
 import settings from "@/settings"
 var collapsedImg = require("../../../img/collapsed.png")
-import { collatorSort, html } from "@/util"
-import "@/components/checkbox-ternary"
+import { html } from "@/util"
+import { collatorSort } from "@/i18n/util"
+import "@/components/util/checkbox-ternary"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { StoreService } from "@/services/store"
 
@@ -53,7 +53,7 @@ angular.module("korpApp").component("ccTree", {
                     </label>
                     <i
                         ng-click="$ctrl.showInfo($event, folder)"
-                        class="fa-solid text-xl fa-info-circle text-gray-700 rounded-full bg-white text-blue-500 mr-1 mt-1 h-fit"
+                        class="fa-solid text-xl fa-info-circle rounded-full bg-white text-blue-500 mr-1 mt-1 h-fit"
                     ></i>
                 </div>
                 <cc-tree
@@ -80,7 +80,7 @@ angular.module("korpApp").component("ccTree", {
                 <i
                     ng-click="$ctrl.showInfo($event, corpus)"
                     style="margin-top: 2px;"
-                    class="fa-solid text-xl fa-info-circle text-gray-700 rounded-full bg-white text-blue-500 mr-1 h-fit"
+                    class="fa-solid text-xl fa-info-circle rounded-full bg-white text-blue-500 mr-1 h-fit"
                 ></i>
             </div>
         </div>

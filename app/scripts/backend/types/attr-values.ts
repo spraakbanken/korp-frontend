@@ -1,4 +1,3 @@
-/** @format */
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Misc/paths/~1attr_values/get */
 
 export type AttrValuesParams = {

@@ -1,5 +1,4 @@
-/** @format */
-import _ from "lodash"
+import { isEmpty } from "lodash"
 import {
     ICacheObject,
     ICompileProvider,
@@ -9,26 +8,29 @@ import {
     IScope,
     ui,
 } from "angular"
-import korpApp from "./korp.module"
+import korpApp from "@/korp.module"
 import settings from "@/settings"
 import statemachine from "@/statemachine"
-import * as authenticationProxy from "@/components/auth/auth"
-import { getLocData } from "@/loc-data"
+import { auth } from "@/auth/auth"
+import { getLocData } from "@/i18n/loc-data"
 import { RootScope } from "@/root-scope.types"
-import { CorpusTransformed } from "./settings/config-transformed.types"
-import { BUILD_HASH, formatRelativeHits, getService, html } from "@/util"
+import { CorpusTransformed } from "@/settings/config-transformed.types"
+import { BUILD_HASH, html } from "@/util"
+import { formatRelativeHits } from "@/i18n/util"
+import { getService } from "@/angular-util"
+import { LocationService } from "@/services/types"
 import { loc, locObj } from "@/i18n"
 import "@/components/app-header"
-import "@/components/searchtabs"
-import "@/components/frontpage"
+import "@/components/frontpage/frontpage"
 import "@/components/results"
-import "@/components/korp-error"
+import "@/components/search/searchtabs"
+import "@/components/util/korp-error"
 import "@/services/store"
 import { StoreService } from "@/services/store"
-import { JQueryExtended } from "./jquery.types"
-import { LocationService } from "./urlparams"
+import { JQueryExtended } from "@/jquery.types"
 import { LocLangMap } from "@/i18n/types"
-import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
+import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
+import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
 
 // Catch unhandled exceptions within Angular, see https://docs.angularjs.org/api/ng/service/$exceptionHandler
 korpApp.factory("$exceptionHandler", [
@@ -77,10 +79,10 @@ korpApp.filter(
     "replaceEmpty",
     () =>
         <T>(input: T) =>
-            input === "" ? "–" : input
+            input === "" ? "–" : input,
 )
 
-authenticationProxy.initAngular(korpApp)
+auth.initAngular(korpApp)
 
 /**
  * angular-dynamic-locale updates translations in the builtin $locale service, which is used
@@ -130,7 +132,7 @@ korpApp.run([
         tmhDynamicLocale: tmh.tmh.IDynamicLocale,
         tmhDynamicLocaleCache: ICacheObject,
         $uibModal: ui.bootstrap.IModalService,
-        store: StoreService
+        store: StoreService,
     ) {
         const s = $rootScope
 
@@ -175,7 +177,7 @@ korpApp.run([
             // Resolve any folder ids to the contained corpus ids
             ids = ids.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
 
-            const hasAccess = (corpus: CorpusTransformed) => authenticationProxy.hasCredential(corpus.id.toUpperCase())
+            const hasAccess = (corpus: CorpusTransformed) => auth.hasCredential(corpus.id.toUpperCase())
 
             const deniedCorpora = ids
                 .map((id) => settings.corpora[id])
@@ -183,11 +185,11 @@ korpApp.run([
 
             const allowedIds = ids.filter((id) => !deniedCorpora.find((corpus) => corpus.id == id))
 
-            const allCorpusIds = settings.corpusListing.corpora.map((corpus) => corpus.id)
+            const allCorpusIds = corpusListing.map((corpus) => corpus.id)
 
-            if (settings.initialization_checks && (await settings.initialization_checks(s))) {
+            if (settings.initialization_checks && (await settings.initialization_checks())) {
                 // custom initialization code called
-            } else if (_.isEmpty(settings.corpora)) {
+            } else if (isEmpty(settings.corpora)) {
                 // no corpora
                 openErrorModal({
                     content: "<korp-error></korp-error>",
@@ -198,9 +200,9 @@ korpApp.run([
                 const loginNeededHTML = () =>
                     deniedCorpora.map((corpus) => `<span>${locObj(corpus.title)}</span>`).join(", ")
 
-                if (authenticationProxy.isLoggedIn()) {
+                if (auth.isLoggedIn()) {
                     // access partly or fully denied to selected corpora
-                    if (settings.corpusListing.corpora.length == deniedCorpora.length) {
+                    if (corpusListing.corpora.length == deniedCorpora.length) {
                         openErrorModal({
                             content: "{{'access_denied' | loc:$root.lang}}",
                             buttonText: "go_to_start",
@@ -244,11 +246,12 @@ korpApp.run([
             } else {
                 // Corpus selection OK
                 store.corpus = ids
+                corpusSelection.pickFrom(corpusListing, store.corpus)
 
                 // Sync corpus selection from store to global corpus listing
                 store.watch("corpus", () => {
                     // In parallel mode, the select function may also add hidden corpora.
-                    settings.corpusListing.select(store.corpus)
+                    corpusSelection.pickFrom(corpusListing, store.corpus)
                 })
             }
         }
@@ -269,7 +272,7 @@ korpApp.run([
             }
             const s = $rootScope.$new(true) as ModalScope
 
-            const useCustomButton = !_.isEmpty(buttonText)
+            const useCustomButton = !isEmpty(buttonText)
 
             const modal = $uibModal.open({
                 template: html` <div class="modal-body" ng-class="{'mt-10' : resolvable }">
@@ -339,4 +342,4 @@ korpApp.filter("formatRelativeHits", [
     "store",
     (store) => (input: string, lang?: string) => formatRelativeHits(input, lang || store.lang),
 ])
-korpApp.filter("maxLength", () => (val: unknown) => String(val).length > 39 ? String(val).slice(0, 36) + "…" : val)
+korpApp.filter("maxLength", () => (val: unknown) => (String(val).length > 39 ? String(val).slice(0, 36) + "…" : val))

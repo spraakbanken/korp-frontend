@@ -2,30 +2,30 @@
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-  -khtml-border-top-left-radius: 2px;
-  border-top-left-radius: 2px;
+    -khtml-border-top-left-radius: 2px;
+    border-top-left-radius: 2px;
 }
 
 .ui-corner-all,
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-  -khtml-border-top-right-radius: 2px;
-  border-top-right-radius: 2px;
+    -khtml-border-top-right-radius: 2px;
+    border-top-right-radius: 2px;
 }
 
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-  -khtml-border-bottom-left-radius: 2px;
-  border-bottom-left-radius: 2px;
+    -khtml-border-bottom-left-radius: 2px;
+    border-bottom-left-radius: 2px;
 }
 
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-  -khtml-border-bottom-right-radius: 2px;
-  border-bottom-right-radius: 2px;
+    -khtml-border-bottom-right-radius: 2px;
+    border-bottom-right-radius: 2px;
 }

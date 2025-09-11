@@ -3,45 +3,45 @@ name: Build
 on: [push]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: korp-frontend
+        defaults:
+            run:
+                working-directory: korp-frontend
 
-    strategy:
-      matrix:
-        # From lowest supported version up to the one pinned in .nvmrc
-        # The empty string enables the `node-version-file` option which reads from .nvmrc
-        node-version: [18, ""]
+        strategy:
+            matrix:
+                # From lowest supported version up to the one pinned in .nvmrc
+                # The empty string enables the `node-version-file` option which reads from .nvmrc
+                node-version: [20, 22, ""]
 
-    steps:
-      - name: Checkout main repo
-        uses: actions/checkout@v4
-        with:
-          path: korp-frontend
+        steps:
+            - name: Checkout main repo
+              uses: actions/checkout@v4
+              with:
+                  path: korp-frontend
 
-      - name: Checkout Språkbanken config repo
-        uses: actions/checkout@v4
-        with:
-          repository: spraakbanken/korp-frontend-sb
-          token: ${{ secrets.ACCESS_TOKEN }}
-          ref: ${{ github.ref == 'master' && 'master' || 'dev' }} # Choose dev or master matching the main repo.
-          path: korp-frontend-sb
+            - name: Checkout Språkbanken config repo
+              uses: actions/checkout@v4
+              with:
+                  repository: spraakbanken/korp-frontend-sb
+                  token: ${{ secrets.ACCESS_TOKEN }}
+                  ref: ${{ github.ref == 'master' && 'master' || 'dev' }} # Choose dev or master matching the main repo.
+                  path: korp-frontend-sb
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          node-version-file: korp-frontend/.nvmrc
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  node-version-file: korp-frontend/.nvmrc
 
-      - name: Install dependencies
-        run: yarn install
-      
-      - name: Link config
-        run: |
-          echo '{"configDir": "../korp-frontend-sb/app"}' > run_config.json
+            - name: Install dependencies
+              run: yarn install
 
-      - name: Build
-        run: yarn build
+            - name: Link config
+              run: |
+                  echo '{"configDir": "../korp-frontend-sb/app"}' > run_config.json
+
+            - name: Build
+              run: yarn build

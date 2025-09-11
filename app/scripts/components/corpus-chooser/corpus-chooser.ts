@@ -1,10 +1,10 @@
-/** @format */
 import angular, { IController } from "angular"
-import _ from "lodash"
+import { isEqual, omitBy, pickBy } from "lodash"
 import statemachine from "@/statemachine"
 import settings from "@/settings"
-import { getCredentials } from "@/components/auth/auth"
-import { html, suffixedNumbers } from "@/util"
+import { auth } from "@/auth/auth"
+import { html } from "@/util"
+import { suffixedNumbers } from "@/i18n/util"
 import {
     ChooserFolderRoot,
     ChooserFolderSub,
@@ -13,17 +13,16 @@ import {
     initCorpusStructure,
     recalcFolderStatus,
     updateLimitedAccess,
-} from "./util"
+} from "@/corpora/corpus-chooser"
 import "@/components/corpus-chooser/corpus-time-graph"
 import "@/components/corpus-chooser/info-box"
 import "@/components/corpus-chooser/tree"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { LangString } from "@/i18n/types"
-import { getTimeData } from "@/timedata"
+import { getTimeData } from "@/backend/timedata"
 import { StoreService } from "@/services/store"
 
 type CorpusChooserController = IController & {
-    credentials: string[]
     firstCorpus: LangString
     /** Traverse corpora and determine if each is available to the user */
     updateLimitedAccess: () => void
@@ -133,9 +132,8 @@ angular.module("korpApp").component("corpusChooser", {
             $ctrl.showChooser = false
 
             $ctrl.$onInit = () => {
-                $ctrl.credentials = getCredentials()
                 // remove the corpora with hide=true (linked corpora)
-                const ccCorpora = _.omitBy(settings.corpora, "hide")
+                const ccCorpora = omitBy(settings.corpora, "hide")
                 $ctrl.root = initCorpusStructure(ccCorpora)
                 $ctrl.totalCount = $ctrl.root.numberOfChildren
                 $ctrl.totalNumberOfTokens = $ctrl.root.tokens
@@ -143,20 +141,18 @@ angular.module("korpApp").component("corpusChooser", {
             }
 
             // Sync when corpus selection is modified elsewhere.
-            store.watch("corpus", () => select(store.corpus))
+            store.watch("corpus", () => updateSelection(store.corpus))
 
             statemachine.listen("login", function () {
-                $ctrl.credentials = getCredentials()
                 $ctrl.updateLimitedAccess()
             })
 
             statemachine.listen("logout", function () {
-                $ctrl.credentials = []
                 // Unselect restricted corpora
                 for (const corpus of Object.values(settings.corpora))
                     corpus.selected = corpus.selected && !corpus.limited_access
                 // Select those, or if none remain, fall back to default selection
-                const remaining = Object.keys(_.pickBy(settings.corpora, (corpus) => corpus.selected))
+                const remaining = Object.keys(pickBy(settings.corpora, (corpus) => corpus.selected))
                 const toSelect = remaining.length ? remaining : settings.preselected_corpora || []
                 // Apply selection
                 select(toSelect)
@@ -210,17 +206,23 @@ angular.module("korpApp").component("corpusChooser", {
 
             $ctrl.updateLimitedAccess = function () {
                 if ($ctrl.root) {
-                    updateLimitedAccess($ctrl.root, $ctrl.credentials)
+                    updateLimitedAccess($ctrl.root, auth.getCredentials())
                 }
             }
 
-            function select(corporaIds: string[]) {
+            /** Handle selection change from GUI. */
+            function select(ids: string[]) {
+                updateSelection(ids)
+                // Store new selection if it has actually changed
+                if (!isEqual(ids, store.corpus)) {
+                    store.corpus = [...ids]
+                }
+            }
+
+            /** Update selected state, respecting authorization. */
+            function updateSelection(ids: string[]): void {
                 // This modifies corpus.selected
-                const selection = filterCorporaOnCredentials(
-                    Object.values(settings.corpora),
-                    corporaIds,
-                    $ctrl.credentials
-                )
+                const selection = filterCorporaOnCredentials(ids, auth.getCredentials())
 
                 // This uses corpus.selected
                 recalcFolderStatus($ctrl.root)
@@ -228,11 +230,6 @@ angular.module("korpApp").component("corpusChooser", {
                 // used when there is only one corpus selected to show name
                 if (selection.length == 1) {
                     $ctrl.firstCorpus = settings.corpora[selection[0]].title
-                }
-
-                // Store new selection if it has actually changed
-                if (!_.isEqual(selection, store.corpus)) {
-                    store.corpus = [...selection]
                 }
             }
 

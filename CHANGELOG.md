@@ -2,6 +2,71 @@
 
 ## [Unreleased]
 
+## [9.11.0] – 2025-09-11
+
+### Added
+
+- Make "dependency tree" link more visible in the sidebar [#451](https://github.com/spraakbanken/korp-frontend/issues/451)
+- Use [peggy-loader](https://github.com/RocketChat/fuselage/tree/main/packages/peggy-loader) to compile CQP parser at build time
+- Login form help text
+- Experimental support for right-to-left (rtl) corpus text
+- Word picture works with any search mode as long as it is a single word or lemgram
+- Improved error illustration
+
+### Changed
+
+- A big effort to separate "core" code (types/interfaces and data processing) from "UI" code (components, other AngularJS usage). Notably:
+  - Moved data processing related to dynamic result tabs into corresponding classes: `CompareTask`, `ExampleTask`, `MapTask`, `TextTask`, `TrendTask`, `WordpicExampleTask`
+  - Added `ProxyBase` abstract class to streamline proxy classes
+    - Renamed `prevParams` to `params`
+    - Removed `prevUrl` and `prevCQP`
+  - Moved SALDO and lemgram parsing/prettifying from util to their own classes
+  - Moved AngularJS-specific utils from `@/util` to `@/angular-util`
+  - Dropped the `RootScope` arg from `settings["initialization_checks"]` – use `getService()` if needed
+  - Converted `compareSearches` service to non-AngularJS-dependent `savedSearches`
+  - Converted `globalFilterService` service to non-AngularJS-dependent `GlobalFilterManager`
+  - In `CorpusListing`/`CorpusSet`:
+    - Merged `getContextQueryString` and `getContextQueryStringFromCorpusId` as `getContextParams`
+    - Split `getAttributeGroups`/`getStatsAttributeGroups` into `getAttributeGroups`, `getAttributeGroupsCompare`, `getAttributeGroupsExtended` and `getAttributeGroupsStatistics`
+- Changes to reduce circular dependencies, notably:
+  - Removed `settings.corpusListing`; use `import { corpusListing } from "@/corpora/corpus_listing"` instead
+  - Auth modules are `AuthModule` objects, not just a group of functions
+    - Import `{ auth }` instead of `* as authenticationProxy`
+  - Moved `valfilter` in `@/util` to `prefixAttr` in `@/settings`
+  - Moved locale-related functions from `@/util` to `@/i18n/util`
+- The `CorpusListing` class is renamed to `CorpusSet` and no longer has a `selected` subset
+  - Use the global `corpusSelected` instead of `(settings.)corpusListing` if needed
+  - Instead of the methods `mapSelectedCorpora()`, `subsetFactory()`, `getSelectedCorpora()`, `select()`, `getCurrentAttributes{Intersection}()` and `stringify{All,Selected}()`, use `map()`, `pick()`, `getIds()`, `pickFrom()`, `getAttributes{Intersection}()` and `stringify()`.
+- Moved many source files into new subdirectories
+- Moved non-component auth-related files out of `@/components` directory
+- The `searches` service is removed in favor of the store:
+  - Write to `store.activeSearch` to commit a new main search query, result tabs watch it
+  - Search tabs watch `store.search` and `store.cqp` to restore a search from init/frontpage/history
+- The JSON button is a regular button, not an image, and downloads the stored, actual response instead of sending a new request
+- Stats/trend CSV export uses central abs/rel switch, not its own select
+- In extended search, the query is stored in URL only when searching, not dynamically while editing
+- Search history is broken in parallel mode, and is disabled for now
+- Removed old jStorage conversion
+- In the KWIC sidebar, labels are bold and values are indented
+
+### Fixed
+
+- Improve statistics download [#154](https://github.com/spraakbanken/korp-frontend/issues/154)
+- Statistics grid error if attribute value contains HTML [#472](https://github.com/spraakbanken/korp-frontend/issues/472)
+- Map examples empty if query uses repetition [#475](https://github.com/spraakbanken/korp-frontend/issues/475)
+- Dependency tree: label missing on hover [#441](https://github.com/spraakbanken/korp-frontend/issues/441)
+- Protected corpora are deselected before logging in [#476](https://github.com/spraakbanken/korp-frontend/issues/476)
+- Context view in KWIC doesn't always highlight the sentence containing the keyword [#478](https://github.com/spraakbanken/korp-frontend/issues/478)
+- Can't navigate between KWIC rows with arrow keys when reaching hits from the next/previous corpus [#479](https://github.com/spraakbanken/korp-frontend/issues/479)
+- Prevent empty "Group by" selector when changing corpus
+- Prevent relative frequency "NaN" when loading first KWIC result
+- Related words heading link url
+- Use `angular.toJson` in `localStorageGet` to avoid storing `$$hashKey` etc.
+- Stray value when clearing simple search input
+- Prevent switching trend diagram form before done loading
+- Extended search query is propertly restored when activating a search history item
+- All files except `app/lib/` are now formatted by Prettier, removed `@format` comments
+
 ## [9.10.1] - 2025-07-02
 
 ### Fixed
@@ -103,7 +168,7 @@
 - Filter constraints are added to CQP when searching in advanced [#193](https://github.com/spraakbanken/korp-frontend/issues/193)
 - Remove language suffix in parallel corpus info link [#424](https://github.com/spraakbanken/korp-frontend/issues/424)
 - Focus newly created tab [#430](https://github.com/spraakbanken/korp-frontend/issues/430)
-- Translations for "pos_*" not found [#352](https://github.com/spraakbanken/korp-frontend/issues/352)
+- Translations for "pos\_\*" not found [#352](https://github.com/spraakbanken/korp-frontend/issues/352)
 
 ## [9.8.2] - 2025-01-27
 
@@ -461,6 +526,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.11.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.0
 [9.10.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.1
 [9.10.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.0
 [9.9.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.9.1

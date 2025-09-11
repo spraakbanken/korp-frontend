@@ -1,4 +1,3 @@
-/** @format */
 import angular, { IAttributes, IScope } from "angular"
 
 type ScrollToStartAttrs<A extends string> = IAttributes & {

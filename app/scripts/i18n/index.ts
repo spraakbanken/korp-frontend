@@ -1,9 +1,14 @@
-/** @format */
 import isObject from "lodash/isObject"
 import settings from "@/settings"
-import { getService, getUrlHash } from "@/util"
-import type { LangString, LocLangMap, LocMap } from "@/i18n/types"
-import { locData } from "@/loc-data"
+import { getUrlHash } from "@/urlparams"
+import { getService } from "@/angular-util"
+import type { LangLocMap, LangString, LocLangMap, LocMap } from "@/i18n/types"
+
+let locData: LangLocMap | undefined
+
+export function setLocData(value: LangLocMap) {
+    locData = value
+}
 
 /** Get the current UI language. */
 export function getLang(): string {
@@ -23,12 +28,8 @@ export function getLang(): string {
  */
 export function loc(key: string, lang?: string) {
     lang = lang || getLang()
-    try {
-        return locData![lang][key]
-    } catch (e) {
-        console.warn(`No localization data for key ${key} in language ${lang}`)
-        return key
-    }
+    const out = locData?.[lang][key]
+    return out ?? key
 }
 
 /**

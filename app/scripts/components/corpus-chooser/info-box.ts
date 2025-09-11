@@ -1,12 +1,15 @@
-/** @format */
 import angular, { IController } from "angular"
-import _ from "lodash"
-import settings from "@/settings"
 import { html } from "@/util"
-import { locObj } from "@/i18n"
 import { LangString } from "@/i18n/types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { ChooserFolderSub } from "./util"
+import {
+    ChooserFolderSub,
+    CorpusLinkInfo,
+    CorpusSizeInfo,
+    getSizeInfo,
+    isFolder,
+    makeLink,
+} from "@/corpora/corpus-chooser"
 import { StoreService } from "@/services/store"
 
 type CcInfoBoxController = IController & {
@@ -15,9 +18,9 @@ type CcInfoBoxController = IController & {
     isFolder: boolean
     title: LangString
     description?: LangString
-    link?: { url: string; label: string }
+    link?: CorpusLinkInfo
     numberOfChildren: number
-    langStats: { lang?: string; tokens: number; sentences: number }[]
+    langStats: CorpusSizeInfo[]
     context: boolean
     limitedAccess: boolean
     lastUpdated?: string
@@ -71,9 +74,6 @@ angular.module("korpApp").component("ccInfoBox", {
         function (store: StoreService) {
             let $ctrl = this as CcInfoBoxController
 
-            const isFolder = (object: ChooserFolderSub | CorpusTransformed): object is ChooserFolderSub =>
-                "numberOfChildren" in object
-
             $ctrl.$onChanges = () => {
                 $ctrl.title = $ctrl.object.title
                 $ctrl.description = $ctrl.object.description
@@ -82,49 +82,19 @@ angular.module("korpApp").component("ccInfoBox", {
                 $ctrl.isCorpus = !$ctrl.isFolder
                 if (isFolder($ctrl.object)) $ctrl.numberOfChildren = $ctrl.object.numberOfChildren
 
-                $ctrl.langStats = []
+                $ctrl.limitedAccess = false
+                $ctrl.context = false
                 $ctrl.link = undefined
 
                 if (!isFolder($ctrl.object)) {
                     $ctrl.limitedAccess = $ctrl.object["limited_access"] || false
-                    $ctrl.context = _.keys($ctrl.object.context).length > 1
-
-                    if ($ctrl.object["linked_to"]) {
-                        for (const linkedCorpusId of $ctrl.object["linked_to"]) {
-                            const linkedCorpus = settings.corpora[linkedCorpusId]
-                            const sentences = parseInt(linkedCorpus.info.Sentences!) || 0
-                            const tokens = parseInt(linkedCorpus.info.Size!) || 0
-                            const lang = linkedCorpus.lang!
-                            $ctrl.langStats.push({ lang, tokens, sentences })
-                        }
-                    }
+                    $ctrl.context = Object.keys($ctrl.object.context).length > 1
+                    $ctrl.langStats = getSizeInfo($ctrl.object)
                     $ctrl.lastUpdated = $ctrl.object.info.Updated
-                    $ctrl.link = makeLink()
+                    $ctrl.link = makeLink($ctrl.object.id, store.lang)
                 } else {
-                    $ctrl.limitedAccess = false
-                    $ctrl.context = false
+                    $ctrl.langStats = [{ tokens: $ctrl.object.tokens!, sentences: $ctrl.object.sentences! }]
                 }
-
-                $ctrl.langStats.push({
-                    lang: !isFolder($ctrl.object) ? $ctrl.object.lang : undefined,
-                    tokens: $ctrl.object.tokens!,
-                    sentences: $ctrl.object.sentences!,
-                })
-            }
-
-            /** Create data for corpus link. */
-            function makeLink() {
-                if (!settings["corpus_info_link"]) return
-                const urlTemplate = locObj(settings["corpus_info_link"]["url_template"], store.lang)
-                const label = locObj(settings["corpus_info_link"]["label"], store.lang)
-                if (!urlTemplate || !label) {
-                    console.error(`Invalid setting "corpus_info_link"`, settings["corpus_info_link"])
-                    return
-                }
-                // Parallel corpora have an id like "<main_id>-<lang>"
-                const id = settings["parallel"] ? $ctrl.object.id.split("-")[0] : $ctrl.object.id
-                const url = urlTemplate.replace("%s", id)
-                return { url, label }
             }
         },
     ],

@@ -1,4 +1,3 @@
-/** @format */
 import memoize from "lodash/memoize"
 import { AttrValuesResponseDeep, AttrValuesResponseFlat, RecursiveRecord } from "./types/attr-values"
 import { korpRequest } from "./common"
@@ -8,7 +7,7 @@ export const countAttrValues: (
     corpora: string[],
     attrs: string[],
     /** Attributes whose values should be split by "|" */
-    split?: string[]
+    split?: string[],
 ) => Promise<RecursiveRecord<number>> = memoize(
     async (corpora, attrs, split = []) => {
         // Join attributes as a hierarchical path that shapes the response
@@ -23,7 +22,7 @@ export const countAttrValues: (
         return data.combined[attributePath]
     },
     // Memoize based on the values of all arguments
-    (...args) => JSON.stringify(args)
+    (...args) => JSON.stringify(args),
 )
 
 /** Find which unique values occur for a given attribute. */
@@ -31,7 +30,7 @@ export const getAttrValues: (
     corpora: string[],
     attr: string,
     /** Whether values should be split by "|" */
-    split?: boolean
+    split?: boolean,
 ) => Promise<string[]> = memoize(
     async (corpora, attr, split) => {
         const data = (await korpRequest("attr_values", {
@@ -43,5 +42,5 @@ export const getAttrValues: (
         return data.combined[attr]
     },
     // Memoize based on the values of all arguments
-    (...args) => JSON.stringify(args)
+    (...args) => JSON.stringify(args),
 )

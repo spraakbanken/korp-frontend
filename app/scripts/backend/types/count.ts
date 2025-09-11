@@ -1,4 +1,3 @@
-/** @format */
 import { AbsRelTuple } from "./common"
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count/get */
@@ -29,11 +28,21 @@ export type CountParams = {
 }
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Statistics/paths/~1count/get */
-export type CountResponse = {
-    corpora: {
-        [name: string]: StatsColumn | StatsColumn[]
-    }
-    combined: StatsColumn | StatsColumn[]
+export type CountResponse = CountsMerged | CountsSplit
+
+/** Statistics when `subcqp{N}` parameters are not used. */
+export type CountsMerged = CountResponseBase & {
+    combined: StatsColumn
+    corpora: Record<string, StatsColumn>
+}
+
+/** Statistics split by `subcqp{N}` parameters. */
+export type CountsSplit = CountResponseBase & {
+    combined: StatsColumn[]
+    corpora: Record<string, StatsColumn[]>
+}
+
+export type CountResponseBase = {
     /** Total number of different values */
     count: number
     /** Execution time in seconds */
@@ -43,6 +52,8 @@ export type CountResponse = {
 export type StatsColumn = {
     sums: AbsRelTuple
     rows: StatsRow[]
+    /** For a multi-series request, the `subcqp{N}` is copied to this property. */
+    cqp?: string
 }
 
 export type StatsRow = AbsRelTuple & {

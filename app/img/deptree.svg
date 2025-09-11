@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   id="svg149"
+   width="123.36082"
+   height="25.007765"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <!-- document: undefined/undefined -->
+  <defs
+     id="defs2">
+    <filter
+       id="Gaussian_Blur">
+      <fegaussianblur
+         in="SourceGraphic"
+         stddeviation="2" />
+    </filter>
+    <marker
+       id="drag_arrow"
+       refX="5"
+       refY="2.5"
+       markerWidth="5"
+       markerHeight="5"
+       orient="auto"
+       markerUnits="strokeWidth"
+       class="drag_fill"
+       viewBox="0 0 5 5"
+       preserveAspectRatio="xMidYMid">
+      <polyline
+         points="0,0 5,2.5 0,5 0.2,2.5"
+         id="polyline1" />
+    </marker>
+    <marker
+       id="arrow_triangle_5_000000"
+       refX="4"
+       refY="2.5"
+       markerWidth="5"
+       markerHeight="5"
+       orient="auto"
+       markerUnits="strokeWidth"
+       fill="#000000"
+       viewBox="0 0 5 5"
+       preserveAspectRatio="xMidYMid">
+      <polyline
+         points="0,0 5,2.5 0,5 0.4166666666666667,2.5"
+         id="polyline2" />
+    </marker>
+  </defs>
+  <g
+     class="glow"
+     id="g3"
+     transform="translate(-337.13167,-43.992236)" />
+  <g
+     id="g44"
+     transform="translate(-337.13167,41.007764)" />
+  <g
+     transform="translate(-50.13918,41.007764)"
+     id="g68"
+     style="fill:#d5f6ff;stroke:#55ddff">
+    <g
+       id="g66"
+       style="fill:#d5f6ff;stroke:#55ddff" />
+    <rect
+       x="156.5"
+       y="-29.5"
+       width="16.5"
+       height="13"
+       class="span_VB span_default"
+       fill="#e8fef4"
+       stroke="#11d57a"
+       rx="2"
+       ry="1"
+       data-span-id="T8"
+       data-fragment-id="0"
+       id="rect149"
+       style="fill:#d5f6ff;stroke:#55ddff" />
+  </g>
+  <g
+     transform="translate(1,41.007764)"
+     id="g71">
+    <g
+       id="g69" />
+    <g
+       class="span"
+       id="g70">
+      <rect
+         x="-0.5"
+         y="-29.5"
+         width="17.083332"
+         height="13"
+         class="span_SN span_default"
+         fill="#fdf4e8"
+         stroke="#d28113"
+         rx="2"
+         ry="1"
+         data-span-id="T9"
+         data-fragment-id="0"
+         id="rect69" />
+    </g>
+  </g>
+  <g
+     transform="translate(35.2925,41.007764)"
+     id="g74">
+    <g
+       id="g72" />
+    <g
+       class="span"
+       id="g73">
+      <rect
+         x="0.5"
+         y="-29.5"
+         width="17.65"
+         height="13"
+         class="span_PN span_default"
+         fill="#fdede8"
+         stroke="#d04015"
+         rx="2"
+         ry="1"
+         data-span-id="T10"
+         data-fragment-id="0"
+         id="rect72" />
+    </g>
+  </g>
+  <g
+     transform="translate(66.15166,41.007764)"
+     id="g77">
+    <g
+       id="g75" />
+    <g
+       class="span"
+       id="g76">
+      <rect
+         x="5.5"
+         y="-29.5"
+         width="16.5"
+         height="13"
+         class="span_VB span_default"
+         fill="#e8fef4"
+         stroke="#11d57a"
+         rx="2"
+         ry="1"
+         data-span-id="T11"
+         data-fragment-id="0"
+         id="rect75" />
+    </g>
+  </g>
+  <g
+     data-from="T11"
+     data-to="T10"
+     class=""
+     id="g120"
+     transform="translate(-337.13167,41.007764)"
+     style="stroke:#1a1a1a;fill:none">
+    <path
+       d="m 390.57417,-28.5 h 12.20916 c 2,0 4,1.833333 6,5.5"
+       marker-end="url(#arrow_triangle_5_000000)"
+       style="fill:none;stroke:#1a1a1a"
+       id="path119" />
+  </g>
+  <g
+     data-from="T9"
+     data-to="T11"
+     class=""
+     id="g130"
+     transform="translate(-337.13167,41.007764)"
+     style="stroke:#1a1a1a;fill:none">
+    <path
+       d="m 408.78333,-28.5 c -5,-8 -10,-12 -15,-12 h -8.875 -8.875 c -5,0 -16.31833,-0.666667 -21.31833,11"
+       marker-end="url(#arrow_triangle_5_000000)"
+       style="fill:none;stroke:#1a1a1a;marker-end:url(#arrow_triangle_5_000000)"
+       id="path130" />
+  </g>
+  <g
+     data-from="T11"
+     data-to="T10"
+     class=""
+     id="g150"
+     transform="translate(-295.03167,41.007764)">
+    <path
+       d="m 383.18333,-28.5 h 12.20916 c 2,0 4,1.833333 6,5.5"
+       marker-end="url(#arrow_triangle_5_000000)"
+       style="fill:none;stroke:#1a1a1a"
+       id="path149" />
+  </g>
+</svg>

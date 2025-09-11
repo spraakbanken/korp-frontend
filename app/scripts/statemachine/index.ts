@@ -1,4 +1,3 @@
-/** @format */
 import { interpret, createMachine } from "xstate"
 import { EventMap, EventName } from "./types"
 
@@ -115,7 +114,7 @@ const machine = createMachine(
             logged_out: () => broadcast("logout", null),
             login_needed: (context, event: any) => broadcast("login_needed", event),
         },
-    }
+    },
 )
 
 const service = interpret(machine)

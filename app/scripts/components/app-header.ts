@@ -1,14 +1,14 @@
-/** @format */
 import angular, { IController, IScope, ITimeoutService, ui } from "angular"
-import _ from "lodash"
+import { remove } from "lodash"
 import korpLogo from "../../img/korp.svg"
 import settings from "@/settings"
 import currentMode from "@/mode"
-import { addImgHash, collatorSort, html } from "@/util"
+import { addImgHash, html } from "@/util"
+import { collatorSort } from "@/i18n/util"
 import "@/services/utils"
 import "@/components/corpus-chooser/corpus-chooser"
-import "@/components/radio-list"
-import { matomoSend } from "@/matomo"
+import "@/components/util/radio-list"
+import { matomoSend } from "@/services/matomo"
 import { RootScope } from "@/root-scope.types"
 import { StoreService } from "@/services/store"
 import { Labeled } from "@/i18n/types"
@@ -142,7 +142,7 @@ angular.module("korpApp").component("appHeader", {
             $uibModal: ui.bootstrap.IModalService,
             $rootScope: RootScope,
             $timeout: ITimeoutService,
-            store: StoreService
+            store: StoreService,
         ) {
             const $ctrl = this as HeaderController
 
@@ -195,9 +195,9 @@ angular.module("korpApp").component("appHeader", {
 
             const N_VISIBLE = settings["visible_modes"]
 
-            $ctrl.modes = _.filter(settings["modes"])
+            $ctrl.modes = settings["modes"].filter(Boolean)
             if (process.env.ENVIRONMENT == "production") {
-                $ctrl.modes = _.filter(settings["modes"], (item) => !item.labOnly)
+                $ctrl.modes = settings["modes"].filter((item) => !item.labOnly)
             }
 
             // Split modes into visible and menu
@@ -205,7 +205,7 @@ angular.module("korpApp").component("appHeader", {
             $ctrl.menu = $ctrl.modes.slice(N_VISIBLE)
 
             // If current mode is in menu, promote it to visible
-            const modesInMenu = _.remove($ctrl.menu, (item) => item.mode == currentMode)
+            const modesInMenu = remove($ctrl.menu, (item) => item.mode == currentMode)
             $ctrl.visible.push(...modesInMenu)
 
             let hasLangChanged = false

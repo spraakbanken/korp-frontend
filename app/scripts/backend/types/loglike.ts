@@ -1,5 +1,3 @@
-/** @format */
-
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Misc/paths/~1loglike/get */
 export type LoglikeParams = {
     set1_corpus: string

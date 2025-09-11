@@ -1,6 +1,5 @@
-/** @format */
-import { selectHttpMethod } from "@/util"
-import { getAuthorizationHeader } from "@/components/auth/auth"
+import { buildUrl, toFormData } from "@/util"
+import { auth } from "@/auth/auth"
 import settings from "@/settings"
 import { API, ErrorMessage, ProgressHandler, ProgressReport, ProgressResponse, Response as KResponse } from "./types"
 import { omitBy, pickBy } from "lodash"
@@ -15,13 +14,13 @@ type RequestOptions<K extends keyof API> = {
 export async function korpRequest<K extends keyof API>(
     endpoint: K,
     params: API[K]["params"],
-    options: RequestOptions<K> = {}
+    options: RequestOptions<K> = {},
 ): Promise<API[K]["response"]> {
     // Skip params with `null` or `undefined`
     params = omitBy(params, (value) => value == null) as API[K]["params"]
     // Switch to POST if the URL would be to long
     const { url, request } = selectHttpMethod(settings.korp_backend_url + "/" + endpoint, params)
-    request.headers = { ...request.headers, ...getAuthorizationHeader() }
+    request.headers = { ...request.headers, ...auth.getAuthorizationHeader() }
     if (options.abortSignal) request.signal = options.abortSignal
 
     // Send request
@@ -44,6 +43,16 @@ export async function korpRequest<K extends keyof API>(
     return data
 }
 
+/**
+ * Select GET or POST depending on url length.
+ */
+export function selectHttpMethod(url: string, params: Record<string, any>): { url: string; request: RequestInit } {
+    const urlFull = buildUrl(url, params)
+    return urlFull.length > settings.backendURLMaxLength
+        ? { url, request: { method: "POST", body: toFormData(params) } }
+        : { url: urlFull, request: {} }
+}
+
 /** Read and handle a HTTP response body as it comes in */
 async function readIncrementally(response: Response, handle: (content: string) => void): Promise<string> {
     const reader = response.body!.getReader()
@@ -58,7 +67,10 @@ async function readIncrementally(response: Response, handle: (content: string) =
 }
 
 export class KorpBackendError extends Error {
-    constructor(public readonly type: string, public readonly value: string) {
+    constructor(
+        public readonly type: string,
+        public readonly value: string,
+    ) {
         super(`${type}: ${value}`)
         this.name = "KorpBackendError"
     }
@@ -104,3 +116,5 @@ export function parsePartialJson<T = any>(json: string): Partial<T> | undefined 
         return JSON.parse(json.replace(/,\s*$/, "}"))
     } catch {}
 }
+
+export const pageToRange = (page: number, size: number) => ({ start: page * size, end: page * size + size - 1 })

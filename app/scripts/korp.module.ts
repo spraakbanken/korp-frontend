@@ -1,4 +1,3 @@
-/** @format */
 import angular from "angular"
 import "angular-ui-bootstrap"
 import "angular-ui-sortable"

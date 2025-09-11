@@ -1,16 +1,18 @@
-/** @format */
-import _ from "lodash"
+import { keyBy, mapValues, omit, pick } from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import { getAllCorporaInFolders } from "./components/corpus-chooser/util"
-import { CorpusListing } from "./corpus_listing"
-import { ParallelCorpusListing } from "./parallel/corpus_listing"
+import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
+import { corpusListing, setCorpusListing } from "@/corpora/corpus_listing"
+import { CorpusSet } from "@/corpora/corpus-set"
+import { CorpusSetParallel } from "@/parallel/corpus-set-parallel"
 import { fromKeys } from "@/util"
-import { Labeled } from "./i18n/types"
-import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "./settings/config.types"
-import { ConfigTransformed, CorpusTransformed } from "./settings/config-transformed.types"
-import { korpRequest } from "./backend/common"
-import { getLocData } from "./loc-data"
+import { locAttribute } from "@/i18n"
+import { Labeled, LocLangMap, LocMap } from "@/i18n/types"
+import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "@/settings/config.types"
+import { ConfigTransformed, CorpusTransformed } from "@/settings/config-transformed.types"
+import { korpRequest } from "@/backend/common"
+import { getLocData } from "@/i18n/loc-data"
+import moment from "moment"
 
 type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_attributes">>
 
@@ -26,7 +28,7 @@ async function getInfoData(corpusIds: string[]): Promise<InfoData> {
     return fromKeys(corpusIds, (corpusId) => ({
         info: data.corpora[corpusId.toUpperCase()].info,
         private_struct_attributes: data.corpora[corpusId.toUpperCase()].attrs.s.filter(
-            (name) => name.indexOf("__") !== -1
+            (name) => name.indexOf("__") !== -1,
         ),
     }))
 }
@@ -53,8 +55,6 @@ async function getConfig(): Promise<Config> {
 /**
  * Transform the raw config fetched form backend, to a structure that frontend code can handle.
  *
- * TODO: Use the `Config` and `ConfigTransformed` types, not `any`.
- *
  * @see ./settings/README.md
  */
 function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
@@ -66,13 +66,13 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
         }
 
         function transformAttributes2<T extends Attribute | CustomAttribute>(
-            attrsKey: keyof Config["attributes"]
+            attrsKey: keyof Config["attributes"],
         ): [Record<string, T>, string[]] {
             const names = corpus[attrsKey]
             const attrs = config.attributes[attrsKey] as Record<string, T>
             if (!names || !attrs) return [{}, []]
-            const defs1 = _.pick(attrs, names)
-            const defs = _.keyBy(defs1, "name")
+            const defs1 = pick(attrs, names)
+            const defs = keyBy(defs1, "name")
             const order = names.map((name) => attrs[name].name)
             return [defs, order]
         }
@@ -82,7 +82,7 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
         const [custom_attributes, _custom_attributes_order] = transformAttributes2<CustomAttribute>("custom_attributes")
 
         return {
-            ..._.omit(corpus, "pos_attributes"),
+            ...omit(corpus, "pos_attributes"),
             attributes,
             struct_attributes,
             custom_attributes,
@@ -102,36 +102,35 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
         // sort the list so that sentence is before paragraph
         const sortingArr = ["sentence", "paragraph", "text", "1 sentence", "1 paragraph", "1 text"]
         list.sort((a, b) => sortingArr.indexOf(a.value) - sortingArr.indexOf(b.value))
-        return _.fromPairs(list.map((elem) => [elem.value, elem.value]))
+        return Object.fromEntries(list.map((elem) => [elem.value, elem.value]))
     }
 
     const modes = config.modes.map((mode) => ({ ...mode, selected: mode.mode == currentMode }))
 
     return {
         folders: {},
-        ..._.omit(config, "pos_attributes", "corpora"),
-        corpora: _.mapValues(config.corpora, transformCorpus),
+        ...omit(config, "pos_attributes", "corpora"),
+        corpora: mapValues(config.corpora, transformCorpus),
         modes,
         mode: modes.find((mode) => mode.selected)!,
     }
 }
 
-/** Determine initial corpus selection and mark them selected in the CorpusListing. */
+/** Determine initial corpus selection. */
 function setInitialCorpora(): void {
     // if no preselectedCorpora is defined, use all of them
-    if (!(settings.preselected_corpora && settings.preselected_corpora.length)) {
+    if (!settings.preselected_corpora?.length) {
         // if all corpora in mode is limited_access, make them all preselected
-        if (settings.corpusListing.corpora.filter((corpus) => !corpus.limited_access).length == 0) {
-            settings.preselected_corpora = _.map(
-                _.filter(settings.corpusListing.corpora, (corpus) => !corpus.hide),
-                "id"
-            )
+        if (corpusListing.corpora.filter((corpus) => !corpus.limited_access).length == 0) {
+            settings.preselected_corpora = corpusListing.corpora
+                .filter((corpus) => !corpus.hide)
+                .map((corpus) => corpus.id)
+
             // else filter out the ones with limited_access
         } else {
-            settings.preselected_corpora = _.map(
-                _.filter(settings.corpusListing.corpora, (corpus) => !(corpus.hide || corpus.limited_access)),
-                "id"
-            )
+            settings.preselected_corpora = corpusListing.corpora
+                .filter((corpus) => !(corpus.hide || corpus.limited_access))
+                .map((corpus) => corpus.id)
         }
     } else {
         let expandedCorpora: string[] = []
@@ -175,20 +174,33 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
     const configTransformed = transformConfig(config, infos)
     Object.assign(settings, configTransformed)
 
-    // only if the current mode is parallel, we load the special code required
-    if (config.parallel) {
-        require("./parallel/corpus_listing")
-    }
+    const corpora = Object.values(settings.corpora)
+    const corpusListing = settings.parallel
+        ? new CorpusSetParallel(corpora as CorpusTransformed<CorpusParallel>[])
+        : new CorpusSet(corpora)
+    setCorpusListing(corpusListing)
 
-    if (!settings.parallel) {
-        settings.corpusListing = new CorpusListing(settings.corpora)
-    } else {
-        settings.corpusListing = new ParallelCorpusListing(
-            settings.corpora as Record<string, CorpusTransformed<CorpusParallel>>
-        )
-    }
+    setInitialCorpora()
+}
 
-    if (!_.isEmpty(settings.corpora)) {
-        setInitialCorpora()
-    }
+/** Find most recently updated corpora. */
+export function getRecentCorpusUpdates(): CorpusTransformed[] {
+    const limitDate = moment().subtract(6, "months")
+    return corpusListing.corpora
+        .filter((corpus) => corpus.info.Updated && moment(corpus.info.Updated).isSameOrAfter(limitDate))
+        .sort((a, b) => b.info.Updated!.localeCompare(a.info.Updated!))
+}
+
+/** Get the dataset options of an attribute. */
+export function getDatasetOptions(
+    dataset: Attribute["dataset"],
+    translation?: LocMap | LocLangMap,
+    lang?: string,
+    sort?: boolean,
+): [string, string][] {
+    dataset ??= []
+    const options: [string, string][] = Array.isArray(dataset)
+        ? dataset.map((item) => [item, locAttribute(translation, item, lang)])
+        : Object.entries(dataset).map(([k, v]) => [k, locAttribute(translation, v, lang)])
+    return sort ? options.sort((a, b) => a[1].localeCompare(b[1], lang)) : options
 }

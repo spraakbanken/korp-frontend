@@ -117,10 +117,22 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@peggyjs/from-mem@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@peggyjs/from-mem/-/from-mem-2.0.1.tgz#b5eb397b55ed0f202caf0b92a340871a185c9803"
+  integrity sha512-5dAPJsLrb3KQahPb8kUqg9nGS2dKlMC4vCB3dMWoZIRqmPrNbBt6P6jidczFBoz+2EbFXBxXi0o9BUpEPHoD+g==
+  dependencies:
+    semver "7.7.2"
+
 "@polka/url@^1.0.0-next.20":
   version "1.0.0-next.21"
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
+
+"@rocket.chat/peggy-loader@^0.31.28":
+  version "0.31.28"
+  resolved "https://registry.yarnpkg.com/@rocket.chat/peggy-loader/-/peggy-loader-0.31.28.tgz#b5650aa17b910cb7f49b6506c4101451892a4b97"
+  integrity sha512-Kz9ZZh8PmafJiPe7OeAGQrakg+hTWmobnq7UdVBiLni9JPhcBfhDs3iV+3RYg2MhNoKNEhLZXmQmqouW3QYt1g==
 
 "@types/angular-dynamic-locale@^0.1.35":
   version "0.1.35"
@@ -239,9 +251,9 @@
     "@types/node" "*"
 
 "@types/jquery@*":
-  version "3.5.30"
-  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.30.tgz#888d584cbf844d3df56834b69925085038fd80f7"
-  integrity sha512-nbWKkkyb919DOUxjmRVk8vwtDb0/k8FKncmUKFi+NY+QXqWltooxTrswvz4LspQwxvLdvzBN1TImr6cw3aQx2A==
+  version "3.5.33"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.33.tgz#f42f40bac3edd84abdc9f6297d28e570fe463b35"
+  integrity sha512-SeyVJXlCZpEki5F0ghuYe+L+PprQta6nRZqhONt9F13dWBtR/ftoaIbdRQ7cis7womE+X2LKhsDdDtkkDhJS6g==
   dependencies:
     "@types/sizzle" "*"
 
@@ -341,9 +353,9 @@
     "@types/node" "*"
 
 "@types/sizzle@*":
-  version "2.3.8"
-  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.8.tgz#518609aefb797da19bf222feb199e8f653ff7627"
-  integrity sha512-0vWLNK2D5MT9dg0iOo8GlKguPAU02QjmZitPEsXRuJXU/OGIOt9vT9Fc26wtYuavLxtO45v9PGleoL9Z0k1LHg==
+  version "2.3.10"
+  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.10.tgz#277a542aff6776d8a9b15f2ac682a663e3e94bbd"
+  integrity sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww==
 
 "@types/slickgrid@^2.1.40":
   version "2.1.40"
@@ -924,6 +936,11 @@ comma-separated-values@3.6.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/comma-separated-values/-/comma-separated-values-3.6.4.tgz#c309ec7024f74b7ae19223372054242617e35bd2"
   integrity sha512-B0mjBHUfu4JqzYM5NurRTBl2QuNqQ9/O62EUfL4+bo2KN81fGsFOFOHbHn5SP65n3lmFPzGLkdg8wfuLKk9HOQ==
+
+commander@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-14.0.0.tgz#f244fc74a92343514e56229f16ef5c5e22ced5e9"
+  integrity sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==
 
 commander@^2.20.0:
   version "2.20.3"
@@ -1899,7 +1916,7 @@ jquery-ui-dist@>=1.12.x:
   dependencies:
     jquery ">=1.8.0 <4.0.0"
 
-jquery@3.6.3, "jquery@>=1.8.0 <4.0.0", jquery@>=3.0.0, jquery@>=3.1.x:
+jquery@3.6.3, "jquery@>=1.8.0 <4.0.0", jquery@>=3.1.x:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.3.tgz#23ed2ffed8a19e048814f13391a19afcdba160e6"
   integrity sha512-bZ5Sy3YzKo9Fyc8wH2iIQK4JImJ6R0GWI9kL1/k7Z91ZBNgkRXE6U0JfHIizZbort8ZunhSI3jw9I6253ahKfg==
@@ -2337,6 +2354,15 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
+peggy@^5.0.4:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/peggy/-/peggy-5.0.4.tgz#3e80c8e84147cc06b0b6bf9e11ed904f156214cf"
+  integrity sha512-NMRm2w2irCFbiOaejvcDEyn+DMUaGd8s4RT1ztj9Kr/kR367pziIvmjqJ0OFqcAg+LqT5tPGsW96MNT5gUNdUw==
+  dependencies:
+    "@peggyjs/from-mem" "2.0.1"
+    commander "^14.0.0"
+    source-map-generator "2.0.1"
+
 picocolors@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
@@ -2449,10 +2475,10 @@ postcss@^8.4.18, postcss@^8.4.19:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-prettier@^2.0.5:
-  version "2.8.3"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.3.tgz#ab697b1d3dd46fb4626fbe2f543afe0cc98d8632"
-  integrity sha512-tJ/oJ4amDihPoufT5sM0Z1SKEuKay8LfVAMlbbhnnkvt6BUserZylqo2PN+p9KeljLr0OHa2rXHU1T8reeoTrw==
+prettier@^3.6.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.6.2.tgz#ccda02a1003ebbb2bfda6f83a074978f608b9393"
+  integrity sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==
 
 pretty-error@^4.0.0:
   version "4.0.0"
@@ -2708,6 +2734,11 @@ selfsigned@^2.1.1:
   dependencies:
     node-forge "^1"
 
+semver@7.7.2:
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
+  integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
+
 semver@^7.3.4, semver@^7.3.8:
   version "7.3.8"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
@@ -2821,12 +2852,11 @@ slash@^4.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-4.0.0.tgz#2422372176c4c6c5addb5e2ada885af984b396a7"
   integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
 
-slickgrid@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-3.0.3.tgz#9b5637eb682dbd2380a6f444100b9656f59e4fb0"
-  integrity sha512-9NlWDTHftNs3+Ta62cF6rV9Vo4PBHCYuBVxb5yHxZ62CiuqtMvKusktEOt1O1RLC1J+lg5v4Qs7LccJ6T3CAJQ==
+slickgrid@^4:
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-4.1.7.tgz#743149e1cefcdb0cd6fba61e3fc7e31b3193dba8"
+  integrity sha512-dWaJjOlOdBXjQN/ivwzTGlF+Xx3ktKNK+CxejnsMXUybgUj32vqAjwezeTYkiDZDr5K0MMPMXvNysfIhjn79KA==
   dependencies:
-    jquery ">=3.0.0"
     sortablejs "^1.15.0"
 
 sockjs@^0.3.24:
@@ -2842,6 +2872,11 @@ sortablejs@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.15.0.tgz#53230b8aa3502bb77a29e2005808ffdb4a5f7e2a"
   integrity sha512-bv9qgVMjUMf89wAvM6AxVvS/4MX3sPeN0+agqShejLU5z5GX4C75ow1O2e5k4L6XItUyAK3gH6AxSbXrOM5e8w==
+
+source-map-generator@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/source-map-generator/-/source-map-generator-2.0.1.tgz#19d9b5b53ede067294d5d5f4328172ac06d05a2c"
+  integrity sha512-AtEu86XavXC2HD/bQVQoDbovnTRZE/0QMAAHn6RxALAoLOM3a47IG06TpsJK23BnCmjbTYNLwx2vUhgzRYgGMA==
 
 "source-map-js@>=0.6.2 <2.0.0", source-map-js@^1.0.2:
   version "1.0.2"

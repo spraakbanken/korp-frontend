@@ -1,10 +1,10 @@
-/** @format */
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture */
 
 export type RelationsParams = {
     corpus: string
     word: string
-    type?: string
+    /** Search type. Defaults to "word". */
+    type?: "word" | "lemgram"
     min?: number
     max?: number
     incremental?: boolean
@@ -12,7 +12,7 @@ export type RelationsParams = {
 }
 
 export type RelationsResponse = {
-    relations: ApiRelation[]
+    relations?: ApiRelation[]
     /** Execution time in seconds */
     time: number
 }

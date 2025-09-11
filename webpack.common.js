@@ -1,4 +1,3 @@
-/** @format */
 const webpack = require("webpack")
 const path = require("path")
 const Dotenv = require("dotenv")
@@ -20,7 +19,6 @@ module.exports = {
         extensions: [".ts", "..."],
         alias: {
             jquery: path.resolve(__dirname, "node_modules/jquery/src/jquery"),
-            jquerylocalize: path.resolve(__dirname, "app/lib/jquery.localize"),
             korp_config: path.resolve(korpConfigDir, "config.yml"),
             custom: path.resolve(korpConfigDir, "custom/"),
             modes: path.resolve(korpConfigDir, "modes/"),
@@ -100,6 +98,15 @@ module.exports = {
                 test: /\.ya?ml$/,
                 use: "yaml-loader",
             },
+            {
+                test: /\.peggy$/,
+                use: {
+                    loader: "@rocket.chat/peggy-loader",
+                    options: {
+                        format: "es",
+                    },
+                },
+            },
         ],
     },
     plugins: [
@@ -124,10 +131,6 @@ module.exports = {
                 },
                 {
                     from: "app/img/apple-touch-icon.png",
-                    to: "img",
-                },
-                {
-                    from: "app/img/json.png",
                     to: "img",
                 },
                 {
@@ -178,7 +181,7 @@ module.exports = {
     ],
     entry: {
         index: "./app/index.ts",
-        worker: "./app/scripts/statistics_worker.ts",
+        worker: "./app/scripts/statistics/statistics_worker.ts",
     },
     output: {
         filename: "[name].[contenthash].js",
