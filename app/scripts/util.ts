@@ -1,4 +1,4 @@
-import { intersection, merge, pick } from "lodash"
+import { intersection, isEqual, merge, pick, uniqWith } from "lodash"
 import moment, { Moment } from "moment"
 
 /** Use html`<div>html here</div>` to enable formatting template strings with Prettier. */
@@ -20,6 +20,9 @@ export function objectIntersection<T extends object>(objs: T[]): T {
 
 /** Merge a list of objects, like _.merge but return-typed */
 export const objectUnion = <T extends object>(objs: T[]): T => merge({}, ...objs) as T
+
+/** Reduce list to unique objects using deep equality for comparison. */
+export const uniqDeep = <T>(xs: T[]): T[] => uniqWith(xs, isEqual)
 
 /**
  * Allows a given class to be overridden before instantiation.

@@ -1,5 +1,6 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
-import { RelationsProxy, RelationsEmptyError, TableDrawData, RelationsQuery } from "@/backend/proxy/relations-proxy"
+import { RelationsProxy, RelationsEmptyError, RelationsQuery } from "@/backend/proxy/relations-proxy"
+import { WordPicture } from "@/word-picture"
 import { html } from "@/util"
 import { RelationsSort } from "@/backend/types/relations"
 import { loc } from "@/i18n"
@@ -17,7 +18,7 @@ type ResultsWordPictureController = IController & {
 
 type ResultsWordPictureScope = IScope & {
     activated: boolean
-    data?: TableDrawData[]
+    data?: WordPicture
     error?: string
     limit: string // Number as string to work with <select ng-model>
     limitOptions: number[]
@@ -37,7 +38,7 @@ angular.module("korpApp").component("resultsWordPicture", {
         <div ng-if="warning" class="korp-warning" role="status">{{warning}}</div>
         <korp-error ng-if="error" message="{{error}}"></korp-error>
 
-        <div ng-show="!error && data.length">
+        <div ng-show="!error && data">
             <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
                 <label>
                     <input ng-model="showWordClass" type="checkbox" />
@@ -95,15 +96,8 @@ angular.module("korpApp").component("resultsWordPicture", {
 
             $scope.$watch("data", () => {
                 if (!$scope.data) return
-                // Find length of longest column
-                const max = Math.max(
-                    ...$scope.data.flatMap((word) =>
-                        word.data.flatMap((table) =>
-                            table.map((col) => (Array.isArray(col.table) ? col.table.length : 0)),
-                        ),
-                    ),
-                )
                 // Include options up to the first that is higher than the longest column
+                const max = $scope.data.getMaxColumnLength()
                 const endIndex = LIMITS.findIndex((limit) => limit >= max)
                 $scope.limitOptions = LIMITS.slice(0, endIndex + 1)
                 // Clamp previously selected value
