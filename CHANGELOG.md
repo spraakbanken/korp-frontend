@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Missing translation for compounds option in extended search [#460](https://github.com/spraakbanken/korp-frontend/issues/460)
+
 ## [9.11.0] – 2025-09-11
 
 ### Added
