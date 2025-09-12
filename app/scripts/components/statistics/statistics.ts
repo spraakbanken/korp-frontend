@@ -8,7 +8,7 @@ import "./corpus-distribution-chart"
 import "./reduce-select"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
-import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams } from "@/statistics/statistics.types"
+import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow } from "@/statistics/statistics.types"
 import { CountParams } from "@/backend/types/count"
 import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
 import { AttributeOption } from "@/corpora/corpus-set"
@@ -266,7 +266,7 @@ angular.module("korpApp").component("statistics", {
                         $ctrl.searchParams.reduceVals,
                         store,
                         showPieChart,
-                        onAttrValueClick,
+                        createExamplesTask,
                     )
 
                     const refreshHeaders = () =>
@@ -326,30 +326,32 @@ angular.module("korpApp").component("statistics", {
 
             const updateSearch = debounce(() => $ctrl.onUpdateSearch(), UPDATE_DELAY)
 
-            function onAttrValueClick(row: Row) {
-                if (isTotalRow(row)) return
+            /** Trigger a KWIC subsearch */
+            function createExamplesTask(row: Row, corpusId?: string) {
+                const cqps = [$ctrl.params.cqp]
 
-                let cqp2 = null
+                // Add a subquery CQP matching a value row
+                if (!isTotalRow(row)) cqps.push(buildExampleCqp(row))
+
+                // Unless corpus is given, find which corpora had any hits (uppercase ids)
+                const corpora = corpusId ? [corpusId] : Object.keys(row.count).filter((id) => row.count[id][0] > 0)
+
+                const task = new ExampleTask(corpora, cqps, $ctrl.params.default_within, store.reading_mode)
+                $scope.$applyAsync(() => $rootScope.kwicTabs.push(task))
+            }
+
+            /** Create sub query for a given value row */
+            function buildExampleCqp(row: SingleRow) {
                 // isPhraseLevelDisjunction can be set in custom code for constructing cqp like: ([] | [])
                 if ("isPhraseLevelDisjunction" in row && row.isPhraseLevelDisjunction) {
                     // In this case the statsValues array is one level deeper
                     const statsValues = row.statsValues as unknown as Record<string, string[]>[][]
                     const tokens = statsValues.map((vals) => getCqp(vals, $ctrl.searchParams.ignoreCase))
-                    cqp2 = tokens.join(" | ")
-                } else {
-                    cqp2 = getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
+                    return tokens.join(" | ")
                 }
 
-                // Find which corpora had any hits (uppercase ids)
-                const corpora = Object.keys(row.count).filter((id) => row.count[id][0] > 0)
-
-                const task = new ExampleTask(
-                    corpora,
-                    [$ctrl.params.cqp, cqp2],
-                    $ctrl.params.default_within,
-                    store.reading_mode,
-                )
-                $scope.$applyAsync(() => $rootScope.kwicTabs.push(task))
+                // Normal case
+                return getCqp(row.statsValues, $ctrl.searchParams.ignoreCase)
             }
 
             $ctrl.onGraphClick = () => {

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Statistics: link cells to corpus-filtered search [#455](https://github.com/spraakbanken/korp-frontend/issues/455)
+
 ### Fixed
 
 - Missing translation for compounds option in extended search [#460](https://github.com/spraakbanken/korp-frontend/issues/460)

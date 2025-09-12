@@ -22,7 +22,7 @@ export class StatisticsGrid extends Slick.Grid<Row> {
         attrs: string[],
         readonly store: StoreService,
         showPieChart: (row: Row) => void,
-        onAttrValueClick: (row: SingleRow) => void,
+        onValueClick: (row: Row, corpusId?: string) => void,
     ) {
         const columns = createColumns(store, corpusIds, attrs)
 
@@ -65,7 +65,8 @@ export class StatisticsGrid extends Slick.Grid<Row> {
             const column = this.getColumns()[args.cell]
             const row = this.getDataItem(args.row)
             if (column.id == "pieChart") showPieChart(row)
-            else if (column.field == "hit_value" && !isTotalRow(row)) onAttrValueClick(row)
+            else if ((column.field == "hit_value" || column.field == "total") && isClickable(row)) onValueClick(row)
+            else if (column.field == "count" && isClickable(row, column.id)) onValueClick(row, column.id!)
         })
     }
 
@@ -113,7 +114,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
             formatter: (row, cell, value, columnDef, data: Row) => {
                 if (isTotalRow(data)) return "Σ"
                 const output = escapeHtml(data.formattedValue[reduceVal!]) || `<span class="opacity-50">&empty;</span>`
-                return `<div class="link" data-row="${data.rowId}" ${dir}>${output}</div>`
+                return `<div data-row="${data.rowId}" class="link" ${dir}>${output}</div>`
             },
             minWidth,
             cssClass: "parameter-column",
@@ -136,7 +137,10 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
         name: "stats_total",
         field: "total",
         sortable: true,
-        formatter: (row, cell, value) => formatFrequency(store, value),
+        formatter: (row, cell, value, columnDef, data: Row) => {
+            const out = formatFrequency(store, value)
+            return isClickable(data) ? `<div class="link">${out}</div>` : out
+        },
         minWidth,
         headerCssClass: "localized-header",
         cssClass: "total-column text-right",
@@ -148,7 +152,10 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
             translation: settings.corpora[id.toLowerCase()].title,
             field: "count",
             sortable: true,
-            formatter: (row, cell, value, columnDef) => formatFrequency(store, value[id]),
+            formatter: (row, cell, value, columnDef, data: Row) => {
+                const out = formatFrequency(store, value[id])
+                return isClickable(data, id) ? `<div class="link">${out}</div>` : out
+            },
             minWidth,
             cssClass: "text-right",
         }),
@@ -156,6 +163,9 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
 
     return columns
 }
+
+/** A frequency value can be clicked to find the occurrences. */
+const isClickable = (row: Row, corpusId?: string) => !isTotalRow(row) && (!corpusId || row.count[corpusId][0] > 0)
 
 type SlickgridColumn = Slick.Column<Dataset> & {
     translation?: LangString

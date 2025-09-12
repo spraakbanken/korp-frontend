@@ -114,8 +114,8 @@ img {
 /* visited link */
 /* mouse over link */
 
-.link {
-    // color: navy !important;
+/* Qualify with "body" to override .slick-cell pointer style */
+body .link {
     @apply text-indigo-700;
     cursor: pointer;
     &:hover {
