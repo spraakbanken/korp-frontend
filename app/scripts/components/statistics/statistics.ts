@@ -39,7 +39,6 @@ type StatisticsController = IController & {
     rowCount: number
     searchParams: SearchParams
     warning?: string
-    onStatsClick: (event: MouseEvent) => void
     onGraphClick: () => void
     onUpdateSearch: () => void
     mapToggleSelected: (index: number, event: Event) => void
@@ -76,7 +75,7 @@ angular.module("korpApp").component("statistics", {
             </label>
         </div>
 
-        <div ng-click="$ctrl.onStatsClick($event)" ng-show="!$ctrl.error">
+        <div ng-show="!$ctrl.error">
             <div ng-if="$ctrl.warning" class="korp-warning" role="status">{{$ctrl.warning | loc:$root.lang}}</div>
 
             <div ng-if="$ctrl.aborted && !$ctrl.loading" class="korp-warning" role="status">
@@ -344,9 +343,13 @@ angular.module("korpApp").component("statistics", {
                 // Find which corpora had any hits (uppercase ids)
                 const corpora = Object.keys(row.count).filter((id) => row.count[id][0] > 0)
 
-                $rootScope.kwicTabs.push(
-                    new ExampleTask(corpora, [$ctrl.params.cqp, cqp2], $ctrl.params.default_within, store.reading_mode),
+                const task = new ExampleTask(
+                    corpora,
+                    [$ctrl.params.cqp, cqp2],
+                    $ctrl.params.default_within,
+                    store.reading_mode,
                 )
+                $scope.$applyAsync(() => $rootScope.kwicTabs.push(task))
             }
 
             $ctrl.onGraphClick = () => {
