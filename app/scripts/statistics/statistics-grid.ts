@@ -8,10 +8,9 @@ import { Dataset, isTotalRow, Row, SingleRow } from "./statistics.types"
 import { StoreService } from "@/services/store"
 import settings from "@/settings"
 import { locObj } from "@/i18n"
-import { escapeHtml } from "@/util"
 import { formatFrequency } from "@/i18n/util"
 import { LangString } from "@/i18n/types"
-import { zip } from "lodash"
+import { escape, zip } from "lodash"
 import { corpusListing } from "@/corpora/corpus_listing"
 
 export class StatisticsGrid extends Slick.Grid<Row> {
@@ -115,7 +114,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
             sortable: true,
             formatter: (row, cell, value, columnDef, data: Row) => {
                 if (isTotalRow(data)) return "Σ"
-                const output = escapeHtml(data.formattedValue[reduceVal!]) || `<span class="opacity-50">&empty;</span>`
+                const output = escape(data.formattedValue[reduceVal!]) || `<span class="opacity-50">&empty;</span>`
                 return `<div data-row="${data.rowId}" class="link" ${dir}>${output}</div>`
             },
             minWidth,

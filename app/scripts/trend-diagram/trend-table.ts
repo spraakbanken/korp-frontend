@@ -1,8 +1,7 @@
 import moment from "moment"
 import { FORMATS, Series } from "./util"
-import { escapeHtml } from "@/util"
 import { formatFrequency } from "@/i18n/util"
-import { sortedIndexOf } from "lodash"
+import { escape, sortedIndexOf } from "lodash"
 import { AbsRelSeq } from "@/statistics/statistics.types"
 import { StoreService } from "@/services/store"
 
@@ -41,7 +40,7 @@ export function renderTable(store: StoreService, el: HTMLElement, series: Series
         {
             name: "Hit",
             field: "label",
-            formatter: (row, cell, value) => escapeHtml(value) || `<span class="opacity-50">&empty;</span>`,
+            formatter: (row, cell, value) => escape(value) || `<span class="opacity-50">&empty;</span>`,
         },
     ]
     for (const key of Object.keys(columnsMap).sort()) {

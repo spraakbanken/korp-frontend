@@ -2,8 +2,9 @@ import angular, { ICompileService, IController, IScope } from "angular"
 import statemachine from "@/statemachine"
 import "@/components/text/readingmode"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { html, kebabize } from "@/util"
+import { html } from "@/util"
 import { ReaderToken, TextReaderData, TextReaderDataContainer, TextTask } from "@/task/text-task"
+import { kebabCase } from "lodash"
 
 type ResultsTextController = IController & {
     active: boolean
@@ -62,7 +63,7 @@ angular.module("korpApp").component("resultsText", {
                     $ctrl.setProgress(false, 100)
                     const config = $ctrl.task.corpus.reading_mode
                     const componentName = typeof config == "object" ? config.component : "standardReadingMode"
-                    const componentTag = kebabize(componentName)
+                    const componentTag = kebabCase(componentName)
 
                     const template = html`<${componentTag} data="data" word-click="wordClick"></${componentTag}>`
                     $element.append($compile(template)($scope))
