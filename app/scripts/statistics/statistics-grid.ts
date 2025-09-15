@@ -61,6 +61,8 @@ export class StatisticsGrid extends Slick.Grid<Row> {
             this.render()
         })
 
+        this.setSortColumn("total", false)
+
         this.onClick.subscribe((e, args) => {
             const column = this.getColumns()[args.cell]
             const row = this.getDataItem(args.row)
@@ -137,6 +139,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
         name: "stats_total",
         field: "total",
         sortable: true,
+        defaultSortAsc: false,
         formatter: (row, cell, value, columnDef, data: Row) => {
             const out = formatFrequency(store, value)
             return isClickable(data) ? `<div class="link">${out}</div>` : out
@@ -152,6 +155,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
             translation: settings.corpora[id.toLowerCase()].title,
             field: "count",
             sortable: true,
+            defaultSortAsc: false,
             formatter: (row, cell, value, columnDef, data: Row) => {
                 const out = formatFrequency(store, value[id])
                 return isClickable(data, id) ? `<div class="link">${out}</div>` : out
