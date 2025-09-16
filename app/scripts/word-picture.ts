@@ -1,5 +1,5 @@
 import { compact, mapKeys } from "lodash"
-import { ApiRelation } from "./backend/types/relations"
+import { Relation } from "./backend/types/relations"
 import settings from "./settings"
 import { WordPictureDef, WordPictureDefItem } from "./settings/app-settings.types"
 import { uniqDeep } from "./util"
@@ -28,10 +28,10 @@ export type WordPictureTable = {
 export type WordPictureColumn = {
     config: WordPictureDefItem
     rel: string
-    rows: AlignedApiRelation[]
+    rows: MatchedRelation[]
 }
 
-export type AlignedApiRelation = ApiRelation & {
+export type MatchedRelation = Relation & {
     /** True if the search word matches `dep` instead of `head`. */
     reverse: boolean
     /** Copy of `head` or `dep`, whichever matches the search word. */
@@ -40,26 +40,36 @@ export type AlignedApiRelation = ApiRelation & {
     /** Copy of `head` or `dep`, whichever doesn't match the search word. */
     other: string
     otherpos: string
+    /** Copy of `depextra` if the search word matches `head` – a preposition or other string to show together with the related word */
+    prefix?: string
 }
 
 export class WordPicture {
     readonly tagset = settings["word_picture_tagset"] || {}
     readonly config = mapKeys(settings["word_picture_conf"] || {}, (_, long) => this.tagset[long].toUpperCase())
-    readonly items: AlignedApiRelation[]
+    readonly items: MatchedRelation[]
     readonly headings: WordPictureSectionHeading[]
     protected data: WordPictureData
 
     constructor(
         readonly query: string,
         readonly type: WordType,
-        itemsRaw: ApiRelation[],
+        itemsRaw: Relation[],
     ) {
-        const convertItem = (item: ApiRelation): AlignedApiRelation | undefined => {
-            const { head, headpos, dep, deppos } = item
+        const convertItem = (item: Relation): MatchedRelation | undefined => {
+            const { head, headpos, dep, deppos, depextra } = item
             // For ordinary word search, include multi-word items beginning with the searched word
             const getMatch = (word: string) => (type == "word" ? word.replace(/_.*/, "") : word)
             if (query == getMatch(head))
-                return { ...item, reverse: false, match: head, matchpos: headpos, other: dep, otherpos: deppos }
+                return {
+                    ...item,
+                    reverse: false,
+                    match: head,
+                    matchpos: headpos,
+                    other: dep,
+                    otherpos: deppos,
+                    prefix: depextra,
+                }
             if (query == getMatch(dep))
                 return { ...item, reverse: true, match: dep, matchpos: deppos, other: head, otherpos: headpos }
             console.warn("Unmatched relations item", item)
