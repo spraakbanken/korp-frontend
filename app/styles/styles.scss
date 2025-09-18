@@ -1462,6 +1462,14 @@ line.tick {
     background-color: #e6ebff;
 }
 
+/* For multiple attribute value columns, copy link hover color to siblings. */
+#myGrid .slick-row:has(.parameter-column:hover) .parameter-column {
+    .link {
+        color: indianred !important;
+    }
+}
+    
+
 #myGrid .total-column {
     background-color: #fff8f0;
 }
