@@ -9,6 +9,7 @@ import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
 import { CorpusSet } from "@/corpora/corpus-set"
 import { Lemgram } from "@/lemgram"
 import { Saldo } from "@/saldo"
+import { escape } from "lodash"
 
 type Stringifier = (tokens: string[], ignoreCase?: boolean) => string
 
@@ -132,7 +133,7 @@ function reduceStringify(name: string, cl?: CorpusSet): (values: string[]) => st
     // Use named stringifier from custom config code
     if (attr?.stats_stringify) return customFunctions[attr.stats_stringify]
 
-    const transforms: ((token: string) => string)[] = []
+    const transforms: ((token: string) => string)[] = [escape]
 
     if (attr?.ranked) transforms.push((token) => token.replace(/:.*/g, ""))
     if (attr?.translation) transforms.push((token) => locAttribute(attr.translation, token))
