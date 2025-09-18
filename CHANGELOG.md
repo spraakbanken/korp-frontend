@@ -9,6 +9,7 @@
 ### Fixed
 
 - Missing translation for compounds option in extended search [#460](https://github.com/spraakbanken/korp-frontend/issues/460)
+- Escape HTML in statistics table unless a stringifier function exists [#486](https://github.com/spraakbanken/korp-frontend/issues/486)
 
 ## [9.11.0] – 2025-09-11
 
