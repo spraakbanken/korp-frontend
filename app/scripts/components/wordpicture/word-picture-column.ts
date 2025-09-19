@@ -1,26 +1,26 @@
 import angular, { IController } from "angular"
 import { html } from "@/util"
-import { MatchedRelation, WordPictureColumn } from "@/word-picture"
+import { MatchedRelation, WordPicture } from "@/word-picture"
 import { Lemgram } from "@/lemgram"
 import { RelationsSort } from "@/backend/types/relations"
 import { RootScope } from "@/root-scope.types"
 import { WordpicExampleTask } from "@/task/wordpic-example-task"
 
 type WordPictureColumnController = IController & {
-    column: WordPictureColumn
+    cssClass: string
+    items: MatchedRelation[]
     limit: string
     showWordClass: boolean
     sort: RelationsSort
     // Locals
-    rows: MatchedRelation[]
     parseLemgram: (row: MatchedRelation) => { label: string; pos?: string; idx?: number }
     onClickExample: (row: MatchedRelation) => void
 }
 
 angular.module("korpApp").component("wordPictureColumn", {
     template: html`
-        <div class="lemgram_result float-left p-1" ng-class="$ctrl.column.config.css_class">
-            <table class="m-0 p-0">
+        <div class="lemgram_result float-left p-1" ng-class="$ctrl.cssClass">
+            <table class="m-0">
                 <tbody>
                     <tr ng-repeat="row in $ctrl.rows" ng-init="data = $ctrl.parseLemgram(row)">
                         <td class="px-1 text-right"><span class="enumerate"></span></td>
@@ -51,7 +51,8 @@ angular.module("korpApp").component("wordPictureColumn", {
         </div>
     `,
     bindings: {
-        column: "<",
+        cssClass: "<",
+        items: "<",
         limit: "<",
         showWordClass: "<",
         sort: "<",
@@ -63,7 +64,7 @@ angular.module("korpApp").component("wordPictureColumn", {
 
             $ctrl.$onChanges = (changes) => {
                 if (changes.limit?.currentValue) {
-                    $ctrl.rows = $ctrl.column.rows.slice(0, Number($ctrl.limit))
+                    $ctrl.rows = $ctrl.items.slice(0, Number($ctrl.limit))
                 }
             }
 

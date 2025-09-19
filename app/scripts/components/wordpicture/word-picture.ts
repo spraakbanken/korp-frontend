@@ -44,7 +44,8 @@ angular.module("korpApp").component("wordPicture", {
                     </div>
                     <word-picture-column
                         ng-repeat="column in table.columns"
-                        column="column"
+                        css-class="column.config.css_class"
+                        items="column.rows"
                         limit="$ctrl.limit"
                         show-word-class="$ctrl.showWordClass"
                         sort="$ctrl.sort"

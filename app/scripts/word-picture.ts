@@ -1,8 +1,7 @@
-import { compact, mapKeys } from "lodash"
+import { isEqual, once } from "lodash"
 import { Relation } from "./backend/types/relations"
-import settings from "./settings"
+import { getWordPictureConfig } from "./settings"
 import { WordPictureDef, WordPictureDefItem } from "./settings/app-settings.types"
-import { uniqDeep } from "./util"
 
 export type WordType = "word" | "lemgram"
 
@@ -46,11 +45,9 @@ export type MatchedRelation = Relation & {
 }
 
 export class WordPicture {
-    readonly tagset = settings["word_picture_tagset"] || {}
-    readonly config = mapKeys(settings["word_picture_conf"] || {}, (_, long) => this.tagset[long].toUpperCase())
-    readonly items: MatchedRelation[]
-    readonly headings: WordPictureSectionHeading[]
-    protected data: WordPictureData
+    readonly config = getWordPictureConfig()
+    readonly items: Record<string, MatchedRelation[]> = {}
+    readonly headings: WordPictureSectionHeading[] = []
 
     constructor(
         readonly query: string,
@@ -76,18 +73,21 @@ export class WordPicture {
             console.warn("Unmatched relations item", item)
         }
 
-        this.items = compact(itemsRaw.map(convertItem))
-
-        const headings = uniqDeep(this.items.map((item) => ({ word: item.match, pos: item.matchpos })))
-        this.headings = headings.filter((heading) => heading.pos in this.config)
+        for (const itemRaw of itemsRaw) {
+            const item = convertItem(itemRaw)
+            if (!item) continue
+            const { match, matchpos, rel, reverse } = item
+            // Store items by category
+            const id = this.getColumnId(matchpos, rel, reverse)
+            this.items[id] ??= []
+            this.items[id].push(item)
+            // Store distinct section headings
+            const heading = { word: match, pos: matchpos }
+            if (!this.headings.find((h) => isEqual(h, heading))) this.headings.push(heading)
+        }
     }
 
-    getData(): WordPictureData {
-        if (!this.data) this.data = this.buildData()
-        return this.data
-    }
-
-    protected buildData() {
+    getData: () => WordPictureData = once(() => {
         return this.headings.map((heading) => {
             const config = this.config[heading.pos]
             const tables: WordPictureTable[] = config.map((config, index) => {
@@ -98,29 +98,24 @@ export class WordPicture {
                 for (const col of config) {
                     if (col == "_") bin = columnsAfter
                     else {
-                        const column = this.getColumn(col, heading.pos)
-                        if (column.rows.length) bin.push(column)
+                        const id = this.getColumnId(heading.pos, col.rel, !!col.field_reverse)
+                        const rows = this.items[id]
+                        if (rows) bin.push({ config: col, rel: col.rel, rows })
                     }
                 }
                 const columns = [...columnsBefore, ...columnsAfter]
-                const max = Math.max(...columns.map((col) => col.rows.length))
+                const max = Math.max(0, ...columns.map((col) => col.rows.length))
                 return { config, index, columns, columnsBefore, columnsAfter, max }
             })
             const max = Math.max(...tables.map((table) => table.max))
             return { config, heading, tables, max }
         })
-    }
+    })
 
     getMaxColumnLength(): number {
         return Math.max(...this.getData().map((section) => section.max))
     }
 
-    /** Filter items matching a column config. */
-    getColumn(config: WordPictureDefItem, matchpos: string): WordPictureColumn {
-        const rel = this.tagset[config.rel].toUpperCase()
-        const rows = this.items.filter(
-            (item) => item.matchpos == matchpos && item.rel == rel && item.reverse == !!config.field_reverse,
-        )
-        return { config, rel, rows }
-    }
+    /** Get a string for the params that identify a word picture column */
+    getColumnId = (pos: string, rel: string, reverse: boolean) => `${pos}${reverse ? "+" : "-"}${rel}`
 }
