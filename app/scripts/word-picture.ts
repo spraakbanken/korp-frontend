@@ -20,6 +20,7 @@ export type WordPictureSectionHeading = { word: string; pos: string }
 export type WordPictureTable = {
     config: WordPictureDef
     index: number
+    columns: WordPictureColumn[]
     columnsBefore: WordPictureColumn[]
     columnsAfter: WordPictureColumn[]
     max: number
@@ -94,12 +95,16 @@ export class WordPicture {
                 const columnsBefore: WordPictureColumn[] = []
                 const columnsAfter: WordPictureColumn[] = []
                 let bin = columnsBefore
-                for (const column of config) {
-                    if (column == "_") bin = columnsAfter
-                    else bin.push(this.getColumn(column, heading.pos))
+                for (const col of config) {
+                    if (col == "_") bin = columnsAfter
+                    else {
+                        const column = this.getColumn(col, heading.pos)
+                        if (column.rows.length) bin.push(column)
+                    }
                 }
-                const max = Math.max(...[...columnsBefore, ...columnsAfter].map((col) => col.rows.length))
-                return { config, index, columnsBefore, columnsAfter, max }
+                const columns = [...columnsBefore, ...columnsAfter]
+                const max = Math.max(...columns.map((col) => col.rows.length))
+                return { config, index, columns, columnsBefore, columnsAfter, max }
             })
             const max = Math.max(...tables.map((table) => table.max))
             return { config, heading, tables, max }
