@@ -603,7 +603,7 @@ angular.module("korpApp").component("kwic", {
                     const next = getNextToken()
                     if (next) {
                         next.trigger("click")
-                        scrollToShowWord(next)
+                        next.get(0)?.scrollIntoView({ block: "nearest", inline: "nearest" })
                         // Return false to prevent default behavior
                         return false
                     }
@@ -674,28 +674,6 @@ angular.module("korpApp").component("kwic", {
                 })
 
                 return output
-            }
-
-            function scrollToShowWord(word: JQLite) {
-                if (!word.length) return
-                const offset = 200
-
-                if (word.offset()!.top + word.height()! > window.scrollY + $(window).height()!) {
-                    $("html, body")
-                        .stop(true, true)
-                        .animate({ scrollTop: window.scrollY + offset })
-                } else if (word.offset()!.top < window.scrollY) {
-                    $("html, body")
-                        .stop(true, true)
-                        .animate({ scrollTop: window.scrollY - offset })
-                }
-
-                const area = $element.find(".table_scrollarea")
-                if (word.offset()!.left + word.width()! > area.offset()!.left + area.width()!) {
-                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft()! + offset })
-                } else if (word.offset()!.left < area.offset()!.left) {
-                    area.stop(true, true).animate({ scrollLeft: area.scrollLeft()! - offset })
-                }
             }
         },
     ],
