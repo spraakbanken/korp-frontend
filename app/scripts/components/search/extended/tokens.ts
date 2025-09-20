@@ -6,7 +6,6 @@ import { html } from "@/util"
 import "./token"
 import "./struct-token"
 import "./add-box"
-import "@/directives/scroll-to-start"
 import { CqpQuery, CqpToken } from "@/cqp_parser/cqp.types"
 
 type ExtendedTokensController = IController & {
@@ -28,7 +27,7 @@ type ExtendedTokensController = IController & {
 angular.module("korpApp").component("extendedTokens", {
     template: html`
         <div id="query_table">
-            <div ui-sortable="{ items: '> .token', delay : 100 }" ng-model="$ctrl.data" scroll-to-start="scrollToStart">
+            <div ui-sortable="{ items: '> .token', delay : 100 }" ng-model="$ctrl.data">
                 <div class="token inline-block" ng-repeat="token in $ctrl.data track by $index">
                     <extended-token
                         ng-if="token.and_block"
@@ -105,14 +104,14 @@ angular.module("korpApp").component("extendedTokens", {
             ctrl.toggleStart = (idx) => () => ctrl.addStructToken(true, idx)
             ctrl.toggleEnd = (idx) => () => ctrl.addStructToken(false, idx + 1)
 
-            ctrl.scrollToStart = false
             ctrl.addStructToken = function (start = true, idx = -1) {
                 const token: CqpToken = { struct: undefined, start }
                 if (idx != -1) {
                     ctrl.data.splice(idx, 0, token)
                 } else if (start) {
-                    ctrl.scrollToStart = true
                     ctrl.data.unshift(token)
+                    // Scroll to start
+                    document.getElementById("query_table")?.scrollTo(0, 0)
                 } else {
                     ctrl.data.push(token)
                 }
