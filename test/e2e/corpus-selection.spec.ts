@@ -100,4 +100,15 @@ describe("changing corpus selection", () => {
         await expect(page.locator("corpus-chooser")).toContainText(`${title} selected`)
         expect(getUrlParam(page.url())).toEqual(corpus.id)
     })
+
+    test("select folder with protected corpora", async ({ page }) => {
+        await page.goto("/#?lang=eng&corpus=attasidor")
+        await expect(page.locator("corpus-chooser")).toBeVisible() // Wait for initialization
+
+        // Select a folder with protected and non-protected corpora
+        await page.locator("corpus-chooser").click()
+        await page.getByText("L2 Korp").click()
+        await expect(page.locator("corpus-chooser")).toContainText("4 of")
+        expect(getUrlParam(page.url())).toEqual("attasidor,coctaill-ae,coctaill-lt,coctaill")
+    })
 })
