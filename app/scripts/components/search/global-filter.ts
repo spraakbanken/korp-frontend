@@ -24,24 +24,26 @@ type GlobalFilterScope = IScope & {
 
 angular.module("korpApp").component("globalFilter", {
     template: html` <span uib-dropdown auto-close="outsideClick" on-toggle="dropdownToggle(open)">
-        <button uib-dropdown-toggle class="btn btn-sm btn-default mr-1 align-baseline">
+        <button uib-dropdown-toggle class="btn btn-sm btn-default mr-1 align-baseline max-w-[20em] truncate">
             <span ng-if="$ctrl.attrValue.length == 0">
                 <span>{{ "add_filter_value" | loc:$root.lang }}</span>
                 <span>{{filterLabel | locObj:$root.lang}}</span>
             </span>
             <span ng-if="$ctrl.attrValue.length != 0">
                 <span style="text-transform: capitalize">{{filterLabel | locObj:$root.lang}}:</span>
-                <span ng-repeat="selected in $ctrl.attrValue">{{translateAttribute(selected) | replaceEmpty }} </span>
+                <span ng-repeat="selected in $ctrl.attrValue"
+                    >{{translateAttribute(selected) | replaceEmpty }}{{ $last ? '' : ','}}
+                </span>
             </span>
         </button>
-        <div uib-dropdown-menu class="korp-uib-dropdown-menu p-0 mt-3 ml-2">
+        <div uib-dropdown-menu class="p-0 mt-2">
             <tab-preloader ng-if="!$ctrl.options.length" class="block text-center my-1"></tab-preloader>
             <ul class="p-0 m-0">
                 <!-- Selected values -->
                 <li
                     ng-repeat="value in $ctrl.options"
-                    ng-class="{'bg-blue-100': isSelected(value[0])}"
-                    class="attribute p-1"
+                    ng-class="{'bg-blue-50': isSelected(value[0])}"
+                    class="p-1 hover:bg-blue-100 cursor-pointer"
                     ng-click="toggleSelected(value[0], $event)"
                     ng-if="isSelectedList(value[0])"
                 >
@@ -53,8 +55,8 @@ angular.module("korpApp").component("globalFilter", {
                 <!-- Unselected values -->
                 <li
                     ng-repeat="value in $ctrl.options"
-                    ng-class="{'bg-blue-100': isSelected(value[0])}"
-                    class="attribute p-1"
+                    ng-class="{'bg-blue-50': isSelected(value[0])}"
+                    class="p-1 hover:bg-blue-100 cursor-pointer"
                     ng-click="toggleSelected(value[0], $event)"
                     ng-if="!isSelectedList(value[0]) && value[1] > 0"
                 >
@@ -66,7 +68,7 @@ angular.module("korpApp").component("globalFilter", {
                 <!-- Values with 0 hits, disabled -->
                 <li
                     ng-repeat="value in $ctrl.options"
-                    class="attribute disabled opacity-50 p-1"
+                    class="p-1 disabled opacity-50"
                     ng-if="!isSelectedList(value[0]) && value[1] == 0"
                 >
                     <span>{{translateAttribute(value[0]) | replaceEmpty }}</span>
