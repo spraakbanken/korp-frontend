@@ -140,7 +140,7 @@ function reduceStringify(name: string, cl?: CorpusSet): (values: string[]) => st
 
     if (["prefix", "suffix", "lex"].includes(name)) transforms.push((token) => Lemgram.parse(token)?.toHtml() || token)
     else if (name == "saldo" || name == "sense") transforms.push((token) => Saldo.parse(token)?.toHtml() || token)
-    else if (name == "lemma") transforms.push((lemma) => lemma.replace(/_/g, " "))
+    else if (name == "lemma") transforms.push((lemma) => lemma.replace(/_/g, " ").replace(/:\d+$/g, ""))
 
     // TODO This is specific to ASU corpus, move out to config
     if (name == "msd_orig") transforms.push((token) => ($("<span>").text(token) as any).outerHTML())
