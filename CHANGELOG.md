@@ -4,6 +4,7 @@
 
 ### Added
 
+- Add loading indicators to global filter selectors [#429](https://github.com/spraakbanken/korp-frontend/issues/429)
 - Corpus selector: expand partially selected folders by default [#431](https://github.com/spraakbanken/korp-frontend/issues/431)
 - Statistics: link cells to corpus-filtered search [#455](https://github.com/spraakbanken/korp-frontend/issues/455)
 

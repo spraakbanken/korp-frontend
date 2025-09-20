@@ -35,6 +35,7 @@ angular.module("korpApp").component("globalFilter", {
             </span>
         </button>
         <div uib-dropdown-menu class="korp-uib-dropdown-menu p-0 mt-3 ml-2">
+            <tab-preloader ng-if="!$ctrl.options.length" class="block text-center my-1"></tab-preloader>
             <ul class="p-0 m-0">
                 <!-- Selected values -->
                 <li
