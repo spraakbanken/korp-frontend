@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [9.11.1] – 2025-09-20
+
+### Fixed
+
+- Uncaught exception from aborted trend diagram request (when zooming) [#449](https://github.com/spraakbanken/korp-frontend/issues/449)
+- Protected corpora can be selected using "Select all" button or selecting folder [#483](https://github.com/spraakbanken/korp-frontend/issues/483)
+- Missing translation for compounds option in extended search [#460](https://github.com/spraakbanken/korp-frontend/issues/460)
+- Escape HTML in statistics table unless a stringifier function exists [#486](https://github.com/spraakbanken/korp-frontend/issues/486)
+- Auto scroll to match column broken for RTL [#481](https://github.com/spraakbanken/korp-frontend/issues/481)
+- Remove colon and number from lemma (baseform) values [#484](https://github.com/spraakbanken/korp-frontend/issues/484)
+
 ## [9.11.0] – 2025-09-11
 
 ### Added
@@ -526,6 +537,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.11.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.1
 [9.11.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.0
 [9.10.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.1
 [9.10.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.0

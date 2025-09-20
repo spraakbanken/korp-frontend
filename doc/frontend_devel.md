@@ -737,7 +737,10 @@ export const {
 ```
 
 Note that no changes in the attribute-configuration is needed here. Korp will pick up the functions automatically
-based on the name of the attribute. Will be used in sidebar, statistics, extended, etc.
+based on the name of the attribute. Will be used in sidebar and comparison results.
+
+Stringifier output is shown without escaping any HTML, so make sure to escape or filter the data unless you can trust it.
+If no stringifier is specified, any HTML in the value is escaped.
 
 ### Reading mode
 

@@ -33,11 +33,11 @@ angular.module("korpApp").component("wordPictureTable", {
         <div class="lemgram_table">
             <div class="lemgram_help">
                 <span ng-repeat="column in $ctrl.table.columnsBefore" ng-class="column.config.css_class">
-                    {{'rel_' + column.rel | loc:$root.lang}}
+                    {{(column.config.alt_label || 'rel_' + column.rel) | loc:$root.lang}}
                 </span>
                 <span><b>{{$ctrl.heading}}</b></span>
                 <span ng-repeat="column in $ctrl.table.columnsAfter" ng-class="column.config.css_class">
-                    {{'rel_' + column.rel | loc:$root.lang}}
+                    {{(column.config.alt_label || 'rel_' + column.rel) | loc:$root.lang}}
                 </span>
             </div>
             <word-picture-column

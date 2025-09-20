@@ -8,7 +8,6 @@ import { Dataset, isTotalRow, Row, SingleRow } from "./statistics.types"
 import { StoreService } from "@/services/store"
 import settings from "@/settings"
 import { locObj } from "@/i18n"
-import { escapeHtml } from "@/util"
 import { formatFrequency } from "@/i18n/util"
 import { LangString } from "@/i18n/types"
 import { zip } from "lodash"
@@ -112,7 +111,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
             sortable: true,
             formatter: (row, cell, value, columnDef, data: Row) => {
                 if (isTotalRow(data)) return "Σ"
-                const output = escapeHtml(data.formattedValue[reduceVal!]) || `<span class="opacity-50">&empty;</span>`
+                const output = data.formattedValue[reduceVal!] || `<span class="opacity-50">&empty;</span>`
                 return `<div class="link" data-row="${data.rowId}" ${dir}>${output}</div>`
             },
             minWidth,

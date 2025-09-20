@@ -421,6 +421,7 @@
     "not_compound_middle": "inte mellanled",
     "not_prefix": "börjar inte med",
     "not_suffix": "slutar inte med",
+    "compound_middle": "mellanled",
     "prefix": "börjar med",
     "suffix": "slutar med"
 }

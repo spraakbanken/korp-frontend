@@ -422,6 +422,7 @@
     "not_compound_middle": "not medial part",
     "not_prefix": "do not start with",
     "not_suffix": "do not end with",
+    "compound_middle": "medial part",
     "prefix": "starts with",
     "suffix": "ends with"
 }
