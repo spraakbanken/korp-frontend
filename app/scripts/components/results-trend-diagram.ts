@@ -264,6 +264,9 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             }
 
             async function makeRequest(from: Moment, to: Moment) {
+                // Abort any running request
+                if ($ctrl.loading) $ctrl.task.abort()
+
                 drawPreloader(from, to)
                 $ctrl.setProgress(true, 0)
                 $ctrl.error = undefined
@@ -284,8 +287,10 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                         }
                     })
                 } catch (error) {
+                    // AbortError is expected if a new search is made before the previous one is finished
+                    if (error.name == "AbortError") return
+                    console.error(error)
                     $timeout(() => {
-                        console.error(error)
                         $ctrl.error = error
                         $ctrl.setProgress(false, 0)
                     })
