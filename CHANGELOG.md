@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.11.1] – 2025-09-20
+
 ### Fixed
 
 - Uncaught exception from aborted trend diagram request (when zooming) [#449](https://github.com/spraakbanken/korp-frontend/issues/449)
@@ -535,6 +537,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.11.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.1
 [9.11.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.0
 [9.10.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.1
 [9.10.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.0
