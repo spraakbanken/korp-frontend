@@ -542,13 +542,7 @@ angular.module("korpApp").component("kwic", {
             }
 
             function centerScrollbar() {
-                const m = $element.find(".match:first")
-                if (!m.length) return
-
-                const area = $element.find(".table_scrollarea").scrollLeft(0)
-                const match = m.first().position().left + m.width()! / 2
-                const sidebarWidth = $("#sidebar").outerWidth() || 0
-                area.stop(true, true).scrollLeft(match - ($("body").innerWidth()! - sidebarWidth) / 2)
+                $element.find(".match").get(0)?.scrollIntoView({ inline: "center" })
             }
 
             /** Add offsets to align each linked sentence with its main one */
