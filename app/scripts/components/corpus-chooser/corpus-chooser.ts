@@ -212,15 +212,15 @@ angular.module("korpApp").component("corpusChooser", {
 
             /** Handle selection change from GUI. */
             function select(ids: string[]) {
-                updateSelection(ids)
+                const selected = updateSelection(ids)
                 // Store new selection if it has actually changed
-                if (!isEqual(ids, store.corpus)) {
-                    store.corpus = [...ids]
+                if (!isEqual(selected, store.corpus)) {
+                    store.corpus = [...selected]
                 }
             }
 
             /** Update selected state, respecting authorization. */
-            function updateSelection(ids: string[]): void {
+            function updateSelection(ids: string[]): string[] {
                 // This modifies corpus.selected
                 const selection = filterCorporaOnCredentials(ids, auth.getCredentials())
 
@@ -231,6 +231,8 @@ angular.module("korpApp").component("corpusChooser", {
                 if (selection.length == 1) {
                     $ctrl.firstCorpus = settings.corpora[selection[0]].title
                 }
+
+                return selection
             }
 
             $ctrl.onShowInfo = (node: ChooserFolderSub | CorpusTransformed) => {
