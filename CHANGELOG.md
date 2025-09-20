@@ -4,6 +4,7 @@
 
 ### Fixed
 
+- Uncaught exception from aborted trend diagram request (when zooming) [#449](https://github.com/spraakbanken/korp-frontend/issues/449)
 - Protected corpora can be selected using "Select all" button or selecting folder [#483](https://github.com/spraakbanken/korp-frontend/issues/483)
 - Missing translation for compounds option in extended search [#460](https://github.com/spraakbanken/korp-frontend/issues/460)
 - Escape HTML in statistics table unless a stringifier function exists [#486](https://github.com/spraakbanken/korp-frontend/issues/486)
