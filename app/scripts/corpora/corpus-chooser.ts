@@ -66,8 +66,6 @@ export const initCorpusStructure = (collection: Record<string, CorpusTransformed
                 sentences += summary.sentences
                 nCorpora += summary.ids.length
             }
-            const selected = getFolderSelectStatus({ subFolders, corpora })
-
             totalTokens += tokens
             totalSentences += sentences
 
@@ -80,7 +78,7 @@ export const initCorpusStructure = (collection: Record<string, CorpusTransformed
                 tokens,
                 sentences,
                 subFolders,
-                selected,
+                selected: "none", // Initial selection is handled in component
             } satisfies ChooserFolderSub
         })
         return {
@@ -206,7 +204,11 @@ export const filterCorporaOnCredentials = (corporaIds: string[], credentials: st
 
 export const recalcFolderStatus = (folder: ChooserFolder): void => {
     folder.subFolders.forEach(recalcFolderStatus)
-    if (isSub(folder)) folder.selected = getFolderSelectStatus(folder)
+    if (isSub(folder)) {
+        folder.selected = getFolderSelectStatus(folder)
+        // Show partially selected folders as open initially
+        if (folder.extended == undefined) folder.extended = folder.selected == "some"
+    }
 }
 
 function getFolderSelectStatus(folder: Pick<ChooserFolderSub, "subFolders" | "corpora">): "none" | "some" | "all" {
