@@ -347,6 +347,10 @@ angular.module("korpApp").component("kwic", {
                 if ("context" in changeObj) $scope.context = !!$ctrl.context
             }
 
+            $ctrl.$onDestroy = () => {
+                statemachine.send("DESELECT_WORD")
+            }
+
             $ctrl.onKwicClick = (event) => {
                 if (!event.target) return
                 const target = event.target as HTMLElement
