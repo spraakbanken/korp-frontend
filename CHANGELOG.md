@@ -8,6 +8,14 @@
 - Corpus selector: expand partially selected folders by default [#431](https://github.com/spraakbanken/korp-frontend/issues/431)
 - Statistics: link cells to corpus-filtered search [#455](https://github.com/spraakbanken/korp-frontend/issues/455)
 
+## [9.11.2] – 2025-09-24
+
+### Fixed
+
+- Scroll KWIC container, not whole window, to match column
+- Glitchy buttons for trend, map and JSON
+- Hide sidebar when closing examples tab
+
 ## [9.11.1] – 2025-09-20
 
 ### Fixed
@@ -543,6 +551,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.11.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.2
 [9.11.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.1
 [9.11.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.0
 [9.10.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.10.1
