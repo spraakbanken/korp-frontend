@@ -1204,10 +1204,6 @@ slider {
     }
 }
 
-#showBarPlot {
-    display: none;
-}
-
 .korp-warning {
     max-width: 500px;
     @extend .bs-callout;
@@ -1307,14 +1303,6 @@ slider {
     margin-left: 4px;
 }
 
-.graph_btn_icon {
-    svg {
-        margin-top: -6px;
-        margin-bottom: -6px;
-        margin-left: -8px;
-    }
-}
-
 .chart_container {
     position: relative;
     .preloader {
@@ -1344,14 +1332,6 @@ slider {
 }
 .graph_tab {
     min-height: 430px;
-}
-
-.stats_header {
-    margin-bottom: 1em;
-    > * {
-        display: inline-block;
-        vertical-align: top;
-    }
 }
 
 .rickshaw_graph {
@@ -1812,10 +1792,6 @@ line.tick {
 }
 
 .map-settings-container {
-    margin-left: 20px;
-    .caret {
-        margin-left: 10px;
-    }
     ul {
         margin: 0;
         padding: 2px;
