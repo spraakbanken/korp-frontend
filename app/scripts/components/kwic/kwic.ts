@@ -10,7 +10,7 @@ import { KwicWordScope } from "./kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
 import { StoreService } from "@/services/store"
-import { QueryParamSort } from "@/backend/types/query"
+import { QueryParamSort, QueryResponse } from "@/backend/types/query"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { JQueryExtended, JQueryStaticExtended } from "@/jquery.types"
 import { loc } from "@/i18n"
@@ -30,6 +30,7 @@ type KwicController = IController & {
     pageEvent: (page: number) => void
     hitsPerPage: number
     params: any
+    response?: QueryResponse
     corpusOrder: string[]
     /** Current page of results. */
     kwicInput: ApiKwic[]
@@ -218,6 +219,7 @@ angular.module("korpApp").component("kwic", {
                     </p>
                 </div>
             </div>
+
             <kwic-pager
                 ng-if="$ctrl.hits"
                 total-hits="$ctrl.hits"
@@ -225,7 +227,8 @@ angular.module("korpApp").component("kwic", {
                 page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-            <div ng-if="!$ctrl.loading">
+
+            <div ng-if="!$ctrl.loading" class="flex gap-4 justify-end">
                 <select id="download-links" ng-if="$ctrl._settings['enable_backend_kwic_download']"></select>
                 <select
                     id="frontendDownloadLinks"
@@ -242,6 +245,7 @@ angular.module("korpApp").component("kwic", {
                     target="_self"
                     style="display: none;"
                 ></a>
+                <json-button ng-if="$ctrl.response" endpoint="query" data="$ctrl.response"></json-button>
             </div>
         </div>
     `,
@@ -260,6 +264,7 @@ angular.module("korpApp").component("kwic", {
         corpusOrder: "<",
         kwicInput: "<",
         corpusHits: "<",
+        response: "<",
         showSearchOptions: "<",
         onUpdateSearch: "&",
     },
@@ -340,6 +345,10 @@ angular.module("korpApp").component("kwic", {
                 }
 
                 if ("context" in changeObj) $scope.context = !!$ctrl.context
+            }
+
+            $ctrl.$onDestroy = () => {
+                statemachine.send("DESELECT_WORD")
             }
 
             $ctrl.onKwicClick = (event) => {
@@ -541,8 +550,11 @@ angular.module("korpApp").component("kwic", {
                 $ctrl.parallelSelected = []
             }
 
+            /** Scroll KWIC container to center the match column. */
             function centerScrollbar() {
-                $element.find(".match").get(0)?.scrollIntoView({ inline: "center" })
+                // Type assertion needed because `container` is non-standard.
+                const options = { inline: "center", container: "nearest" } as ScrollIntoViewOptions
+                $element.find(".match").get(0)?.scrollIntoView(options)
             }
 
             /** Add offsets to align each linked sentence with its main one */

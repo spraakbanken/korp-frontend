@@ -3,7 +3,6 @@ import settings from "@/settings"
 import statsProxyFactory, { StatsProxy } from "@/backend/proxy/stats-proxy"
 import { Dataset, SearchParams } from "@/statistics/statistics.types"
 import { html } from "@/util"
-import "@/components/util/json_button"
 import "@/components/util/korp-error"
 import "./statistics"
 import { processStatisticsResult } from "@/statistics/statistics"
@@ -43,12 +42,12 @@ angular.module("korpApp").component("resultsStatistics", {
             loading="$ctrl.loading"
             on-update-search="onUpdateSearch()"
             params="proxy.params"
+            response="proxy.response"
             row-count="rowCount"
             search-params="searchParams"
             warning="warning"
         ></statistics>
         <korp-error ng-if="error" message="{{error}}"></korp-error>
-        <json-button ng-if="data && !loading && !warning" endpoint="count" data="proxy.response"></json-button>
     `,
     bindings: {
         isActive: "<",
@@ -98,7 +97,6 @@ angular.module("korpApp").component("resultsStatistics", {
 
             s.resetView = () => {
                 $("myGrid").empty()
-                $("#exportStatsSection").show()
                 $("#exportButton").attr({
                     download: null,
                     href: null,

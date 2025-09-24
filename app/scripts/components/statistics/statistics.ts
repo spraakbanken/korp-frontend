@@ -6,10 +6,11 @@ import { locObj } from "@/i18n"
 import { expandCqp } from "@/cqp_parser/cqp"
 import "./corpus-distribution-chart"
 import "./reduce-select"
+import "@/components/util/json_button"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams } from "@/statistics/statistics.types"
-import { CountParams } from "@/backend/types/count"
+import { CountParams, CountResponse } from "@/backend/types/count"
 import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
 import { AttributeOption } from "@/corpora/corpus-set"
 import { getTimeData } from "@/backend/timedata"
@@ -36,6 +37,7 @@ type StatisticsController = IController & {
     error: boolean
     loading: boolean
     params: CountParams
+    response: CountResponse
     rowCount: number
     searchParams: SearchParams
     warning?: string
@@ -84,37 +86,16 @@ angular.module("korpApp").component("statistics", {
             </div>
 
             <div ng-show="!$ctrl.warning && !$ctrl.aborted">
-                <div class="stats_header">
+                <div class="flex my-2 gap-4">
                     <button
-                        class="btn btn-sm btn-default show-graph-btn"
+                        class="btn btn-sm btn-default"
                         ng-click="$ctrl.onGraphClick()"
                         ng-disabled="$ctrl.loading || !$ctrl.graphEnabled"
                         uib-tooltip="{{'material_warn' | loc:$root.lang}}"
                         tooltip-placement="right"
                         tooltip-enable="!$ctrl.graphEnabled"
                     >
-                        <span class="graph_btn_icon">
-                            <svg
-                                height="24"
-                                version="1.1"
-                                width="33"
-                                xmlns="http://www.w3.org/2000/svg"
-                                style="overflow: hidden; position: relative"
-                            >
-                                <desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0)">
-                                    Created with Raphaël 2.1.0
-                                </desc>
-                                <defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0)"></defs>
-                                <path
-                                    fill="#666666"
-                                    stroke="none"
-                                    d="M3.625,25.062C3.086,24.947000000000003,2.74,24.416,2.855,23.875L2.855,23.875L6.51,6.584L8.777,15.843L10.7,10.655000000000001L14.280999999999999,14.396L18.163999999999998,1.293000000000001L21.098,13.027000000000001L23.058,11.518L28.329,23.258000000000003C28.555,23.762000000000004,28.329,24.353,27.824,24.579000000000004L27.824,24.579000000000004C27.319000000000003,24.806000000000004,26.728,24.579000000000004,26.502000000000002,24.075000000000003L26.502000000000002,24.075000000000003L22.272000000000002,14.647000000000002L19.898000000000003,16.473000000000003L18.002000000000002,8.877000000000002L15.219000000000003,18.270000000000003L11.465000000000003,14.346000000000004L8.386,22.66L6.654999999999999,15.577L4.811999999999999,24.288C4.710999999999999,24.76,4.297,25.082,3.8329999999999993,25.082L3.8329999999999993,25.082C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062Z"
-                                    transform="matrix(0.6,0,0,0.6,6.2499,5.275)"
-                                    stroke-width="1.6666666666666667"
-                                    style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0)"
-                                ></path>
-                            </svg>
-                        </span>
+                        <i class="fa-solid fa-chart-line mr-1"></i>
                         {{'show_diagram' | loc:$root.lang}}
                     </button>
                     <div
@@ -131,7 +112,9 @@ angular.module("korpApp").component("statistics", {
                             tooltip-placement="right"
                             tooltip-enable="!$ctrl.mapAttributes.length"
                         >
-                            {{'show_map' | loc:$root.lang}}<span class="caret"></span>
+                            <i class="fa-regular fa-map mr-1"></i>
+                            {{'show_map' | loc:$root.lang}}
+                            <span class="caret"></span>
                         </button>
                         <div uib-dropdown-menu>
                             <h3 class="map-settings-title">{{'select_attribute' | loc:$root.lang}}</h3>
@@ -173,7 +156,6 @@ angular.module("korpApp").component("statistics", {
                             {{'no_row_selected_map' | loc:$root.lang}}
                         </span>
                     </div>
-                    <div id="showBarPlot"></div>
                 </div>
                 <div ng-if="!$ctrl.loading" style="margin-bottom: 5px">
                     {{'total_rows' | loc:$root.lang}} {{$ctrl.data.length - 1 | prettyNumber:$root.lang}}
@@ -186,15 +168,17 @@ angular.module("korpApp").component("statistics", {
                     </span>
                 </div>
                 <div id="myGrid"></div>
-                <div id="exportStatsSection">
-                    <br /><br />
-                    <select id="kindOfFormat">
-                        <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
-                        <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
-                    </select>
-                    <a id="generateExportButton" ng-click="$ctrl.generateExport()">
-                        <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
-                    </a>
+                <div ng-show="$ctrl.data && !$ctrl.loading && !$ctrl.warning" class="mt-4 flex gap-4 justify-end">
+                    <div class="flex">
+                        <select id="kindOfFormat">
+                            <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
+                            <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
+                        </select>
+                        <a id="generateExportButton" ng-click="$ctrl.generateExport()">
+                            <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
+                        </a>
+                    </div>
+                    <json-button endpoint="count" data="$ctrl.response"></json-button>
                 </div>
             </div>
         </div>
@@ -206,6 +190,7 @@ angular.module("korpApp").component("statistics", {
         loading: "<",
         onUpdateSearch: "&",
         params: "<",
+        response: "<",
         rowCount: "<",
         searchParams: "<",
         warning: "<",

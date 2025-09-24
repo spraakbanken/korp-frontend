@@ -74,7 +74,13 @@ angular.module("korpApp").component("resultsWordPicture", {
             <p>{{'word_pic_result_description' | loc:$root.lang}}</p>
         </help-box>
 
-        <json-button ng-if="!warning && !error" endpoint="relations" data="proxy.response"></json-button>
+        <div class="mt-4 flex gap-4 justify-end">
+            <json-button
+                ng-if="!$ctrl.loading && data && !warning && !error"
+                endpoint="relations"
+                data="proxy.response"
+            ></json-button>
+        </div>
     `,
     bindings: {
         isActive: "<",
