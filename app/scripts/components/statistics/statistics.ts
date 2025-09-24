@@ -6,10 +6,11 @@ import { locObj } from "@/i18n"
 import { expandCqp } from "@/cqp_parser/cqp"
 import "./corpus-distribution-chart"
 import "./reduce-select"
+import "@/components/util/json_button"
 import { RootScope } from "@/root-scope.types"
 import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow } from "@/statistics/statistics.types"
-import { CountParams } from "@/backend/types/count"
+import { CountParams, CountResponse } from "@/backend/types/count"
 import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
 import { AttributeOption } from "@/corpora/corpus-set"
 import { getTimeData } from "@/backend/timedata"
@@ -36,6 +37,7 @@ type StatisticsController = IController & {
     error: boolean
     loading: boolean
     params: CountParams
+    response: CountResponse
     rowCount: number
     searchParams: SearchParams
     warning?: string
@@ -165,15 +167,17 @@ angular.module("korpApp").component("statistics", {
                     </span>
                 </div>
                 <div id="myGrid"></div>
-                <div id="exportStatsSection">
-                    <br /><br />
-                    <select id="kindOfFormat">
-                        <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
-                        <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
-                    </select>
-                    <a id="generateExportButton" ng-click="$ctrl.generateExport()">
-                        <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
-                    </a>
+                <div ng-show="$ctrl.data && !$ctrl.loading && !$ctrl.warning" class="mt-4 flex gap-4 justify-end">
+                    <div class="flex">
+                        <select id="kindOfFormat">
+                            <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
+                            <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
+                        </select>
+                        <a id="generateExportButton" ng-click="$ctrl.generateExport()">
+                            <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
+                        </a>
+                    </div>
+                    <json-button endpoint="count" data="$ctrl.response"></json-button>
                 </div>
             </div>
         </div>
@@ -185,6 +189,7 @@ angular.module("korpApp").component("statistics", {
         loading: "<",
         onUpdateSearch: "&",
         params: "<",
+        response: "<",
         rowCount: "<",
         searchParams: "<",
         warning: "<",

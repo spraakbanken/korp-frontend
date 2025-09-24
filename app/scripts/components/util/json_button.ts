@@ -12,7 +12,7 @@ type JsonButtonScope = IScope & {
 
 angular.module("korpApp").component("jsonButton", {
     template: html`
-        <button ng-click="openJson()" class="btn btn-default btn-sm float-right mx-2">
+        <button ng-click="openJson()" class="btn btn-default btn-sm">
             <i class="fa-solid fa-download mr-1"></i>
             JSON
         </button>

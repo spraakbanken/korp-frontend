@@ -56,10 +56,10 @@ angular.module("korpApp").component("resultsHits", {
                 hits-per-page="hitsPerPage"
                 params="proxy.params"
                 corpus-order="corpusOrder"
+                response="proxy.response"
                 show-search-options="true"
                 on-update-search="onUpdateSearch()"
             ></kwic>
-            <json-button endpoint="query" data="proxy.response"></json-button>
         </div>
     `,
     bindings: {
