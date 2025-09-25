@@ -553,7 +553,7 @@ angular.module("korpApp").component("kwic", {
             /** Scroll KWIC container to center the match column. */
             function centerScrollbar() {
                 // Type assertion needed because `container` is non-standard.
-                const options = { inline: "center", container: "nearest" } as ScrollIntoViewOptions
+                const options = { block: "nearest", inline: "center", container: "nearest" } as ScrollIntoViewOptions
                 $element.find(".match").get(0)?.scrollIntoView(options)
             }
 
