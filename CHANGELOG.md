@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Avoid scrolling whole page when scrolling to match column
+
 ## [9.11.3] – 2025-09-25
 
 ### Fixed

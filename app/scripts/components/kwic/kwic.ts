@@ -145,8 +145,8 @@ angular.module("korpApp").component("kwic", {
                 page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-            <div class="table_scrollarea" dir="{{ dir }}">
-                <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0">
+            <div class="table_scrollarea">
+                <table class="results_table kwic" ng-if="!$ctrl.useContext" cellspacing="0" dir="{{ dir }}">
                     <tr
                         class="sentence"
                         ng-repeat="sentence in $ctrl.kwic"
@@ -197,7 +197,7 @@ angular.module("korpApp").component("kwic", {
                         </td>
                     </tr>
                 </table>
-                <div class="results_table reading" ng-if="$ctrl.useContext">
+                <div class="results_table reading" ng-if="$ctrl.useContext" dir="{{ dir }}">
                     <p
                         class="sentence"
                         ng-repeat="sentence in $ctrl.kwic"
@@ -301,8 +301,8 @@ angular.module("korpApp").component("kwic", {
                     $ctrl.useContext = $ctrl.context || !store.in_order
                     if (!$ctrl.context) {
                         $timeout(() => {
+                            $element.find(".match .word").first().trigger("click")
                             centerScrollbar()
-                            $element.find(".match").children().first().click()
                         })
                     }
 
@@ -552,9 +552,16 @@ angular.module("korpApp").component("kwic", {
 
             /** Scroll KWIC container to center the match column. */
             function centerScrollbar() {
-                // Type assertion needed because `container` is non-standard.
-                const options = { block: "nearest", inline: "center", container: "nearest" } as ScrollIntoViewOptions
-                $element.find(".match").get(0)?.scrollIntoView(options)
+                const area = $element.get(0)?.querySelector(".table_scrollarea")
+                const match = area?.querySelector(".match")
+                if (!area || !match) return
+                const matchBox = match.getBoundingClientRect()
+                const areaBox = area.getBoundingClientRect()
+                const scrollLeft = area.scrollLeft + matchBox.left + matchBox.width / 2 - areaBox.width / 2
+                // After setting `.scrollLeft`, it corrects itself to a value within range,
+                // so this works also with RTL where `scrollLeft` is negative in some browsers.
+                area.scrollLeft = -1e10
+                area.scrollLeft += scrollLeft
             }
 
             /** Add offsets to align each linked sentence with its main one */
