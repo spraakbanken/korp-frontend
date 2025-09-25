@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [9.11.3] – 2025-09-25
+
+### Fixed
+
+- Scroll KWIC container less vertically in Firefox
+
 ## [9.11.2] – 2025-09-24
 
 ### Fixed
@@ -545,6 +551,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.11.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.3
 [9.11.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.2
 [9.11.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.1
 [9.11.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.0
