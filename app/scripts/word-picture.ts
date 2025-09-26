@@ -53,6 +53,7 @@ export class WordPicture {
     readonly config = getWordPictureConfig()
     readonly items: Record<string, MatchedRelation[]> = {}
     readonly headings: WordPictureSectionHeading[] = []
+    readonly segments: string[]
 
     constructor(
         readonly query: string,
@@ -92,6 +93,8 @@ export class WordPicture {
                 a.reverse == b.reverse
             )
         }
+
+        this.segments = Object.keys(itemsRaw)
 
         // Convert items data: assign head/dep to match, sort timespans under relations
         for (const segment in itemsRaw) {

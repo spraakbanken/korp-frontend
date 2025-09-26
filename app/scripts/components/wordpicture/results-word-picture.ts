@@ -28,6 +28,10 @@ type ResultsWordPictureScope = IScope & {
     sort: RelationsSort
     /** Model for the sort input. */
     sortLocal: RelationsSort
+    /** Whether data should be split by timespans */
+    split: boolean
+    /** Model for the split-by-time input. */
+    splitLocal: boolean
     warning?: string
 }
 
@@ -40,6 +44,10 @@ angular.module("korpApp").component("resultsWordPicture", {
 
         <div ng-show="!error && data">
             <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
+                <label>
+                    <input ng-model="splitLocal" type="checkbox" />
+                    {{'word_pic_split' | loc:$root.lang}}
+                </label>
                 <label>
                     <input ng-model="showWordClass" type="checkbox" />
                     {{'show_wordclass' | loc:$root.lang}}
@@ -108,11 +116,13 @@ angular.module("korpApp").component("resultsWordPicture", {
                 $scope.limitOptions = LIMITS.slice(0, endIndex + 1)
                 // Clamp previously selected value
                 if (Number($scope.limit) > LIMITS[endIndex]) $scope.limit = String(LIMITS[endIndex])
-                // Apply sort
+                // Apply inputs
                 $scope.sort = $scope.sortLocal
+                $scope.split = $scope.splitLocal
             })
 
             $scope.$watch("sortLocal", () => $scope.sortLocal && makeRequest())
+            $scope.$watch("splitLocal", () => $scope.splitLocal != undefined && makeRequest())
 
             store.watch("globalFilter", () => {
                 if (store.globalFilter) $scope.warning = loc("word_pic_global_filter", store.lang)
@@ -166,7 +176,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                 $scope.warning = undefined
                 $scope.proxy
                     .setProgressHandler((progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
-                    .makeRequest(query.type, query.word, $scope.sortLocal)
+                    .makeRequest(query.type, query.word, $scope.sortLocal, $scope.splitLocal)
                     .then((data) => $timeout(() => ($scope.data = data)))
                     .catch((error) => {
                         // AbortError is expected if a new search is made before the previous one is finished

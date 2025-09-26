@@ -65,8 +65,8 @@ angular.module("korpApp").component("wordPictureColumn", {
             const $ctrl = this as WordPictureColumnController
 
             $ctrl.$onChanges = (changes) => {
-                if (changes.limit?.currentValue) {
-                    $ctrl.rows = $ctrl.items.slice(0, Number($ctrl.limit))
+                if (changes.limit?.currentValue || changes.items?.currentValue) {
+                    $ctrl.rows = $ctrl.items.filter((item) => item.stats[$ctrl.segment]).slice(0, Number($ctrl.limit))
                 }
             }
 
