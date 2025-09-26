@@ -90,6 +90,7 @@
     "word_pic_description": "I ordbilden visas vilka ord som tenderar att förekomma i syntaktiska relationer med sökordet.",
     "word_pic_result_description": "Vilka relationer som visas beror på sökordets ordklass. Varje lista innehåller ord som i det valda korpusmaterialet står i den givna relationen med sökordet.",
     "word_pic_split": "Visa trender",
+    "word_pic_segment": "Segment",
     "word_pic_show_some": "Visa upp till",
     "word_pic_hits": "träffar",
 
