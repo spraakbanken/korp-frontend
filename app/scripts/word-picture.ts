@@ -1,4 +1,4 @@
-import { isEqual, once } from "lodash"
+import { isEqual, once, pick } from "lodash"
 import { Relation } from "./backend/types/relations"
 import { getWordPictureConfig } from "./settings"
 import { WordPictureDef, WordPictureDefItem } from "./settings/app-settings.types"
@@ -31,7 +31,9 @@ export type WordPictureColumn = {
     rows: MatchedRelation[]
 }
 
-export type MatchedRelation = Relation & {
+export type MatchedRelation = {
+    /** Syntactic relation, uppercase abbreviation */
+    rel: string
     /** True if the search word matches `dep` instead of `head`. */
     reverse: boolean
     /** Copy of `head` or `dep`, whichever matches the search word. */
@@ -42,7 +44,10 @@ export type MatchedRelation = Relation & {
     otherpos: string
     /** Copy of `depextra` if the search word matches `head` – a preposition or other string to show together with the related word */
     prefix?: string
+    stats: Record<string, RelationStat>
 }
+
+export type RelationStat = Pick<Relation, "freq" | "mi" | "source">
 
 export class WordPicture {
     readonly config = getWordPictureConfig()
@@ -52,15 +57,19 @@ export class WordPicture {
     constructor(
         readonly query: string,
         readonly type: WordType,
-        itemsRaw: Relation[],
+        itemsRaw: Record<string, Relation[]>,
     ) {
-        const convertItem = (item: Relation): MatchedRelation | undefined => {
+        const convertItem = (bin: string, item: Relation): MatchedRelation | undefined => {
             const { head, headpos, dep, deppos, depextra } = item
+            const base = {
+                rel: item.rel,
+                stats: { [bin]: pick(item, ["freq", "mi", "source"]) },
+            }
             // For ordinary word search, include multi-word items beginning with the searched word
             const getMatch = (word: string) => (type == "word" ? word.replace(/_.*/, "") : word)
             if (query == getMatch(head))
                 return {
-                    ...item,
+                    ...base,
                     reverse: false,
                     match: head,
                     matchpos: headpos,
@@ -69,21 +78,40 @@ export class WordPicture {
                     prefix: depextra,
                 }
             if (query == getMatch(dep))
-                return { ...item, reverse: true, match: dep, matchpos: deppos, other: head, otherpos: headpos }
+                return { ...base, reverse: true, match: dep, matchpos: deppos, other: head, otherpos: headpos }
             console.warn("Unmatched relations item", item)
         }
 
-        for (const itemRaw of itemsRaw) {
-            const item = convertItem(itemRaw)
-            if (!item) continue
-            const { match, matchpos, rel, reverse } = item
-            // Store items by category
-            const id = this.getColumnId(matchpos, rel, reverse)
-            this.items[id] ??= []
-            this.items[id].push(item)
-            // Store distinct section headings
-            const heading = { word: match, pos: matchpos }
-            if (!this.headings.find((h) => isEqual(h, heading))) this.headings.push(heading)
+        const isItemEqual = (a: MatchedRelation, b: MatchedRelation): boolean => {
+            // TODO Check correct?
+            return (
+                a.rel == b.rel &&
+                a.other == b.other &&
+                a.otherpos == b.otherpos &&
+                a.prefix == b.prefix &&
+                a.reverse == b.reverse
+            )
+        }
+
+        // Convert items data: assign head/dep to match, sort timespans under relations
+        for (const segment in itemsRaw) {
+            for (const itemRaw of itemsRaw[segment]) {
+                const item = convertItem(segment, itemRaw)
+                if (!item) continue
+                const { match, matchpos, rel, reverse } = item
+
+                // Store items by category
+                const id = this.getColumnId(matchpos, rel, reverse)
+                this.items[id] ??= []
+                const existing = this.items[id].find((item1) => isItemEqual(item1, item))
+                // Add item, or merge if an equivalent item was added from another segment
+                if (existing) existing.stats[segment] = item.stats[segment]
+                else this.items[id].push(item)
+
+                // Store distinct section headings
+                const heading = { word: match, pos: matchpos }
+                if (!this.headings.find((h) => isEqual(h, heading))) this.headings.push(heading)
+            }
         }
     }
 

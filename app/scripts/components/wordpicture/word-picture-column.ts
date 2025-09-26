@@ -10,6 +10,7 @@ type WordPictureColumnController = IController & {
     cssClass: string
     items: MatchedRelation[]
     limit: string
+    segment: string
     showWordClass: boolean
     sort: RelationsSort
     // Locals
@@ -33,17 +34,17 @@ angular.module("korpApp").component("wordPictureColumn", {
                         </td>
                         <td
                             ng-if="$ctrl.sort == 'freq'"
-                            title="{{'stat_lmi' | loc:$root.lang}}: {{row.mi | number:2}}"
+                            title="{{'stat_lmi' | loc:$root.lang}}: {{row.stats[$ctrl.segment].mi | number:2}}"
                             class="px-1 text-right"
                         >
-                            {{row.freq}}
+                            {{row.stats[$ctrl.segment].freq}}
                         </td>
                         <td
                             ng-if="$ctrl.sort == 'mi'"
-                            title="{{'stat_frequency' | loc:$root.lang}}: {{row.freq}}"
+                            title="{{'stat_frequency' | loc:$root.lang}}: {{row.stats[$ctrl.segment].freq}}"
                             class="px-1 text-right"
                         >
-                            {{row.mi | number:2}}
+                            {{row.stats[$ctrl.segment].mi | number:2}}
                         </td>
                     </tr>
                 </tbody>
@@ -54,6 +55,7 @@ angular.module("korpApp").component("wordPictureColumn", {
         cssClass: "<",
         items: "<",
         limit: "<",
+        segment: "<",
         showWordClass: "<",
         sort: "<",
     },
@@ -88,7 +90,7 @@ angular.module("korpApp").component("wordPictureColumn", {
             }
 
             $ctrl.onClickExample = function (row) {
-                $rootScope.kwicTabs.push(new WordpicExampleTask(row.source.join(",")))
+                $rootScope.kwicTabs.push(new WordpicExampleTask(row.stats[$ctrl.segment].source.join(",")))
             }
         },
     ],

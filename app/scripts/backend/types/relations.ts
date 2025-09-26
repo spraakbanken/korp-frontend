@@ -9,10 +9,13 @@ export type RelationsParams = {
     max?: number
     incremental?: boolean
     sort?: RelationsSort
+    /** Split items by time spans */
+    split_time?: boolean
 }
 
 export type RelationsResponse = {
-    relations?: Relation[]
+    /** Split by time spans if the `split_time` param is enabled */
+    relations?: Relation[] | Record<string, Relation[]>
     /** Execution time in seconds */
     time: number
 }
@@ -23,6 +26,7 @@ export type Relation = {
     dep: string
     depextra: string
     deppos: string
+    /** Absolute frequency */
     freq: number
     head: string
     headpos: string

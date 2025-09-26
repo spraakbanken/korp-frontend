@@ -36,23 +36,25 @@ export class RelationsProxy extends ProxyBase<"relations"> {
         }
     }
 
-    buildParams(type: WordType, word: string, sort: RelationsSort): RelationsParams {
+    buildParams(type: WordType, word: string, sort: RelationsSort, splitTime = false): RelationsParams {
         return {
             type,
             word,
             corpus: corpusSelection.stringify(),
             incremental: true,
             sort,
+            split_time: splitTime || undefined,
             max: 1000,
         }
     }
 
-    async makeRequest(type: WordType, word: string, sort: RelationsSort): Promise<WordPicture> {
+    async makeRequest(type: WordType, word: string, sort: RelationsSort, splitTime = false): Promise<WordPicture> {
         if (type == "lemgram") word = unregescape(word)
-        const params = this.buildParams(type, word, sort)
+        const params = this.buildParams(type, word, sort, splitTime)
         const data = await this.send(params)
         if (!data.relations) throw new RelationsEmptyError("No relation data in response")
-        const result = new WordPicture(word, type, data.relations)
+        const items = Array.isArray(data.relations) ? { all: data.relations } : data.relations
+        const result = new WordPicture(word, type, items)
         return result
     }
 }

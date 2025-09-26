@@ -47,6 +47,7 @@ angular.module("korpApp").component("wordPicture", {
                         css-class="column.config.css_class"
                         items="column.rows"
                         limit="$ctrl.limit"
+                        segment="'all'"
                         show-word-class="$ctrl.showWordClass"
                         sort="$ctrl.sort"
                     ></word-picture-column>
