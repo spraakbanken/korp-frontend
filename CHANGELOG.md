@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.11.4] – 2025-09-29
+
 ### Fixed
 
 - Avoid scrolling whole page when scrolling to match column
@@ -555,6 +557,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.11.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.4
 [9.11.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.3
 [9.11.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.2
 [9.11.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.1
