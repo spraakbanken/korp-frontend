@@ -2,6 +2,7 @@ import { isEqual, once, pick } from "lodash"
 import { Relation } from "./backend/types/relations"
 import { getWordPictureConfig } from "./settings"
 import { WordPictureDef, WordPictureDefItem } from "./settings/app-settings.types"
+import { fromKeys } from "./util"
 
 export type WordType = "word" | "lemgram"
 
@@ -44,7 +45,8 @@ export type MatchedRelation = {
     otherpos: string
     /** Copy of `depextra` if the search word matches `head` – a preposition or other string to show together with the related word */
     prefix?: string
-    stats: Record<string, RelationStat>
+    /** Measurements and sources for all segments */
+    stats: Record<string, RelationStat | null>
 }
 
 export type RelationStat = Pick<Relation, "freq" | "mi" | "source">
@@ -64,7 +66,10 @@ export class WordPicture {
             const { head, headpos, dep, deppos, depextra } = item
             const base = {
                 rel: item.rel,
-                stats: { [bin]: pick(item, ["freq", "mi", "source"]) },
+                // Copy item stats to this segment slot, fill rest of series with null.
+                stats: fromKeys(this.segments, (segment) =>
+                    segment == bin ? pick(item, ["freq", "mi", "source"]) : null,
+                ),
             }
             // For ordinary word search, include multi-word items beginning with the searched word
             const getMatch = (word: string) => (type == "word" ? word.replace(/_.*/, "") : word)
@@ -84,7 +89,6 @@ export class WordPicture {
         }
 
         const isItemEqual = (a: MatchedRelation, b: MatchedRelation): boolean => {
-            // TODO Check correct?
             return (
                 a.rel == b.rel &&
                 a.other == b.other &&
