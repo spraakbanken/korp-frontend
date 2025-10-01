@@ -8,6 +8,10 @@
 - Corpus selector: expand partially selected folders by default [#431](https://github.com/spraakbanken/korp-frontend/issues/431)
 - Statistics: link cells to corpus-filtered search [#455](https://github.com/spraakbanken/korp-frontend/issues/455)
 
+### Changed
+
+- Setting `preselected_corpora` to empty list used to select all, now it selects none. To select all, leave it unset.
+
 ## [9.11.4] – 2025-09-29
 
 ### Fixed

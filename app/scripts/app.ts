@@ -172,20 +172,22 @@ korpApp.run([
         let waitForLogin = false
 
         async function initializeCorpusSelection(ids: string[], skipLogin?: boolean): Promise<void> {
-            if (!ids || ids.length == 0) ids = settings["preselected_corpora"] || []
+            const isDenied = (corpus?: CorpusTransformed) =>
+                corpus?.limited_access && !auth.hasCredential(corpus.id.toUpperCase())
 
-            // Resolve any folder ids to the contained corpus ids
-            ids = ids.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
+            // If no id is given, use default
+            if (!ids || ids.length == 0) {
+                if (settings["preselected_corpora"]) ids = settings["preselected_corpora"]
+                else {
+                    // If the default setting is not given, fallback to selecting all non-protected corpora. If all are protected, select all.
+                    const nonhidden = corpusListing.corpora.filter((corpus) => !corpus.hide)
+                    const allowed = nonhidden.filter((corpus) => !isDenied(corpus))
+                    ids = (allowed.length ? allowed : nonhidden).map((corpus) => corpus.id)
+                }
+            }
 
-            const hasAccess = (corpus: CorpusTransformed) => auth.hasCredential(corpus.id.toUpperCase())
-
-            const deniedCorpora = ids
-                .map((id) => settings.corpora[id])
-                .filter((corpus) => corpus?.limited_access && !hasAccess(corpus))
-
+            const deniedCorpora = ids.map((id) => settings.corpora[id]).filter((corpus) => isDenied(corpus))
             const allowedIds = ids.filter((id) => !deniedCorpora.find((corpus) => corpus.id == id))
-
-            const allCorpusIds = corpusListing.map((corpus) => corpus.id)
 
             if (settings.initialization_checks && (await settings.initialization_checks())) {
                 // custom initialization code called
@@ -234,12 +236,12 @@ korpApp.run([
                     // Login dismissed, fall back to allowed corpora
                     initializeCorpusSelection(allowedIds)
                 }
-            } else if (!ids.every((r) => allCorpusIds.includes(r))) {
+            } else if (!ids.every((id) => id in settings.corpora)) {
                 // some corpora missing
                 openErrorModal({
                     content: `{{'corpus_not_available' | loc:$root.lang}}`,
                     onClose: () => {
-                        const validIds = ids.filter((corpusId) => allCorpusIds.includes(corpusId))
+                        const validIds = ids.filter((corpusId) => corpusId in settings.corpora)
                         initializeCorpusSelection(validIds)
                     },
                 })
