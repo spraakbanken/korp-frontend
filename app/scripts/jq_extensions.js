@@ -1,9 +1,5 @@
 import { loc } from "@/i18n"
 
-$.fn.outerHTML = function () {
-    return $(this).clone().wrap("<div></div>").parent().html()
-}
-
 $.fn.localeKey = function (key) {
     this.each(function () {
         $(this).attr("rel", `localize[${key}]`).html(loc(key))
