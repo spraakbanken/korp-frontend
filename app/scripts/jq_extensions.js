@@ -1,12 +1,3 @@
-import { loc } from "@/i18n"
-
-$.fn.localeKey = function (key) {
-    this.each(function () {
-        $(this).attr("rel", `localize[${key}]`).html(loc(key))
-    })
-    return this
-}
-
 /*
  * A file generation plugin modified from that by Martin Angelov:
  * http://tutorialzine.com/2011/05/generating-files-javascript-php/

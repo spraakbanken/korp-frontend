@@ -7,9 +7,8 @@ import "slickgrid/slick.grid.css"
 import { Dataset, isTotalRow, Row, SingleRow } from "./statistics.types"
 import { StoreService } from "@/services/store"
 import settings from "@/settings"
-import { locObj } from "@/i18n"
+import { loc, locObj } from "@/i18n"
 import { formatFrequency } from "@/i18n/util"
-import { LangString } from "@/i18n/types"
 import { zip } from "lodash"
 import { corpusListing } from "@/corpora/corpus_listing"
 
@@ -74,7 +73,7 @@ export class StatisticsGrid extends Slick.Grid<Row> {
     refreshColumns() {
         const columns = this.getColumns() as SlickgridColumn[]
         columns.forEach((column) => {
-            if (column.translation) column.name = locObj(column.translation, this.store.lang)
+            if (column.getName) column.name = column.getName(this.store.lang)
         })
         this.setColumns(columns)
     }
@@ -109,7 +108,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
         if (reduceVal == null || reduceValLabel == null) break
         columns.push({
             id: reduceVal,
-            translation: reduceValLabel,
+            getName: (lang) => locObj(reduceValLabel!, lang),
             field: "hit_value",
             sortable: true,
             formatter: (row, cell, value, columnDef, data: Row) => {
@@ -135,7 +134,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
 
     columns.push({
         id: "total",
-        name: "stats_total",
+        getName: (lang) => loc("stats_total", lang),
         field: "total",
         sortable: true,
         defaultSortAsc: false,
@@ -151,7 +150,7 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
     corpora.forEach((id) =>
         columns.push({
             id,
-            translation: settings.corpora[id.toLowerCase()].title,
+            getName: (lang) => locObj(settings.corpora[id.toLowerCase()].title, lang),
             field: "count",
             sortable: true,
             defaultSortAsc: false,
@@ -168,5 +167,5 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
 }
 
 type SlickgridColumn = Slick.Column<Dataset> & {
-    translation?: LangString
+    getName?: (lang: string) => string
 }

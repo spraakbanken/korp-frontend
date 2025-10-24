@@ -254,16 +254,6 @@ angular.module("korpApp").component("statistics", {
                         createExamplesTask,
                     )
 
-                    const refreshHeaders = () =>
-                        $(".localized-header .slick-column-name")
-                            .not("[rel^=localize]")
-                            .each(function () {
-                                ;($(this) as JQueryExtended).localeKey($(this).text())
-                            })
-
-                    grid.onHeaderCellRendered.subscribe((e, args) => refreshHeaders())
-
-                    refreshHeaders()
                     $(window).trigger("resize")
 
                     updateGraphBtnState()
