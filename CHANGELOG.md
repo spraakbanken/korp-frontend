@@ -12,6 +12,10 @@
 
 - Setting `preselected_corpora` to empty list used to select all, now it selects none. To select all, leave it unset.
 
+### Fixed
+
+- Error when downloading example KWIC [#491](https://github.com/spraakbanken/korp-frontend/issues/491)
+
 ## [9.11.4] – 2025-09-29
 
 ### Fixed

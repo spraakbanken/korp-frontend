@@ -22,7 +22,9 @@ function createFile(dataType: string, fileType: string, content: string) {
     return [filename, blobURL]
 }
 
-function createSearchInfo(requestInfo: QueryParams, totalHits: number) {
+function createSearchInfo(requestInfo: Record<string, unknown>, totalHits: number) {
+    // TODO Include cqpN if stats example
+    // TODO Adjust for wordpic example
     return [
         `## CQP query: ${requestInfo.cqp}`,
         `## context: ${requestInfo.default_context}`,
@@ -148,7 +150,12 @@ function transformDataToKWIC(data: Row[], searchInfo: string[]) {
     return res
 }
 
-function transformData(dataType: "annotations" | "kwic", data: Row[], requestInfo: QueryParams, totalHits: number) {
+function transformData(
+    dataType: "annotations" | "kwic",
+    data: Row[],
+    requestInfo: Record<string, unknown>,
+    totalHits: number,
+) {
     const searchInfo = createSearchInfo(requestInfo, totalHits)
     if (dataType === "annotations") {
         return transformDataToAnnotations(data as AnnotationsRow[], searchInfo)
@@ -172,7 +179,7 @@ export function makeDownload(
     dataType: "annotations" | "kwic",
     fileType: "csv" | "tsv",
     data: Row[],
-    requestInfo: QueryParams,
+    requestInfo: Record<string, unknown>,
     totalHits: number,
 ) {
     const table = transformData(dataType, data, requestInfo, totalHits)
