@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.12.0] – 2025-10-29
+
 ### Added
 
 - Add loading indicators to global filter selectors [#429](https://github.com/spraakbanken/korp-frontend/issues/429)
