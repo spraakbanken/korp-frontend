@@ -576,6 +576,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.12.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.12.0
 [9.11.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.4
 [9.11.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.3
 [9.11.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.2
