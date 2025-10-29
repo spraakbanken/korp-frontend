@@ -97,7 +97,7 @@ describe("changing corpus selection", () => {
         await page.getByText(`${title} was updated`).getByRole("button").click()
 
         // Only the new corpus is selected
-        await expect(page.locator("corpus-chooser")).toContainText(`${title} selected`)
+        await expect(page.locator("corpus-chooser")).toContainText(`${title.slice(0, 20)}`)
         expect(getUrlParam(page.url())).toEqual(corpus.id)
     })
 

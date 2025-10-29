@@ -37,17 +37,17 @@ describe("abort", () => {
 
         // Make a search
         await page.goto("./#?lang=eng&corpus=vivill")
-        await page.getByRole("textbox").fill("miljö")
+        await page.getByRole("textbox").fill("trafikslag")
         await page.getByRole("button", { name: "Search" }).click()
 
         // Start a new search
-        await page.getByRole("textbox").fill("hund")
+        await page.getByRole("textbox").fill("lagtext")
         await page.getByRole("button", { name: "Search" }).click()
 
         // Check that the first search was aborted
         expect(abortedCounter.abortedCount).toBe(1)
-        await expect(page.getByRole("table")).not.toContainText("miljö")
-        await expect(page.getByRole("table")).toContainText("hund")
+        await expect(page.getByRole("table")).not.toContainText("trafikslag")
+        await expect(page.getByRole("table")).toContainText("lagtext")
     })
 
     test("when paging quickly", async ({ page }) => {
