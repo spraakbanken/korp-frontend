@@ -10,12 +10,13 @@ import { KwicWordScope } from "./kwic-word"
 import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
 import { StoreService } from "@/services/store"
-import { QueryParamSort, QueryResponse } from "@/backend/types/query"
+import { QueryParams, QueryParamSort, QueryResponse } from "@/backend/types/query"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { JQueryExtended, JQueryStaticExtended } from "@/jquery.types"
 import { loc } from "@/i18n"
 import { calculateHitsPicture, HitsPictureItem, isKwic, isLinkedKwic, massageData, Row } from "@/kwic/kwic"
 import { corpusSelection } from "@/corpora/corpus_listing"
+import { RelationsSentencesParams } from "@/backend/types/relations-sentences"
 
 type KwicController = IController & {
     // Bindings
@@ -29,7 +30,7 @@ type KwicController = IController & {
     page: number
     pageEvent: (page: number) => void
     hitsPerPage: number
-    params: any
+    params: QueryParams | RelationsSentencesParams
     response?: QueryResponse
     corpusOrder: string[]
     /** Current page of results. */
@@ -735,7 +736,7 @@ class SelectionManager {
 // Add download links for other formats, defined in
 // settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
 // 2014-02-26/04-30)
-export function setDownloadLinks(params: string, result_data: { kwic: Row[]; corpus_order: string[] }): void {
+export function setDownloadLinks(params: any, result_data: { kwic: Row[]; corpus_order: string[] }): void {
     // If some of the required parameters are null, return without
     // adding the download links.
     if (!(params != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
