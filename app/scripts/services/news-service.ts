@@ -8,7 +8,8 @@ export function isEnabled(): boolean {
 }
 
 export async function fetchNews(): Promise<NewsItem[]> {
-    const response = await fetch(settings.news_url!)
+    if (!settings.news_url) return []
+    const response = await fetch(settings.news_url)
     const feedYaml: string = await response.text()
 
     const itemsRaw = Yaml.load(feedYaml) as NewsItemRaw[]
@@ -45,4 +46,5 @@ export type NewsItem = {
     created: string
     title: LangString
     body: LangString
+    tags?: string[]
 }

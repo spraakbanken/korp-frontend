@@ -1854,8 +1854,14 @@ line.tick {
 
 #preload {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     height: 100vh;
+}
+
+.maintenance-news {
+    width: 40em;
 }
 
 // reading mode

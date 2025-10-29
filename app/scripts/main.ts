@@ -8,6 +8,7 @@ import korpLogo from "../img/korp.svg"
 import korpFail from "../img/korp_fail.svg"
 import { findAuthModule } from "@/auth/init"
 import { initAuth, setAuthModule } from "@/auth/auth"
+import { createMaintenanceNewsElement } from "./services/maintenance-news"
 
 const createSplashScreen = () => {
     const splash = document.getElementById("preload")
@@ -16,6 +17,17 @@ const createSplashScreen = () => {
         return
     }
     splash.innerHTML = html`<img class="animate-pulse" height="300" width="300" src="${korpLogo}" />`
+
+    // Add maintenance news if loading is slow.
+    const newsTimeout = 5000
+    setTimeout(async () => {
+        const splash = document.getElementById("preload")
+        // Abort if app has continued loading
+        if (!splash) return
+        const html = await createMaintenanceNewsElement()
+        const element = $(html).get(0)
+        if (element) splash.append(element)
+    }, newsTimeout)
 }
 
 function initApp() {
