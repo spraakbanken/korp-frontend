@@ -64,14 +64,6 @@ export function combineDateTime(date: Date, time: Date): Moment {
     return m
 }
 
-/** FooBar -> foo-bar */
-export const kebabize = (str: string): string =>
-    [...str].map((x, i) => (x == x.toUpperCase() ? (i ? "-" : "") + x.toLowerCase() : x)).join("")
-
-/** Replace HTML special chars */
-export const escapeHtml = (str: string): string =>
-    str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-
 /** Unicode-tolerant Base64 encoding, copied from https://stackoverflow.com/a/43271130 */
 export function toBase64(str: string) {
     const binary: string[] = []

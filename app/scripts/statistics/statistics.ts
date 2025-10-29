@@ -142,9 +142,6 @@ function reduceStringify(name: string, cl?: CorpusSet): (values: string[]) => st
     else if (name == "saldo" || name == "sense") transforms.push((token) => Saldo.parse(token)?.toHtml() || token)
     else if (name == "lemma") transforms.push((lemma) => lemma.replace(/_/g, " ").replace(/:\d+$/g, ""))
 
-    // TODO This is specific to ASU corpus, move out to config
-    if (name == "msd_orig") transforms.push((token) => ($("<span>").text(token) as any).outerHTML())
-
     const transform = (value: string) => transforms.reduce((acc, f) => f(acc), value)
     // Join with spaces and then squash redundant and surrounding space.
     return (values) => values.map(transform).join(" ").trim().replace(/\s+/g, " ")

@@ -2,6 +2,7 @@ import settings from "korp_config"
 import { Settings } from "./settings.types"
 import { Attribute, MaybeConfigurable, MaybeWithOptions } from "./config.types"
 import { isFunction } from "lodash"
+import { WordPictureDef } from "./app-settings.types"
 
 export default settings
 
@@ -59,6 +60,22 @@ export function getConfigurable<T>(
 }
 
 export const getDefaultWithin = () => Object.keys(settings["default_within"] || {})[0]
+
+/** Convert Word picture config to use abbreviations for POS and relation, to match the data. */
+export function getWordPictureConfig(): Record<string, WordPictureDef[]> {
+    // The tagset maps long labels to lower-case short codes
+    const labelToCode = (label: string) => settings["word_picture_tagset"]?.[label]?.toUpperCase()
+    return Object.fromEntries(
+        Object.entries(settings["word_picture_conf"] || {}).map(([posLong, section]) => [
+            // Convert the conf object's long POS keys
+            labelToCode(posLong),
+            // Convert each column's `rel` long relation label
+            section.map((table) =>
+                table.map((column) => (column == "_" ? column : { ...column, rel: labelToCode(column.rel) })),
+            ),
+        ]),
+    )
+}
 
 /** An attribute's dataset options as an object */
 export const normalizeDataset = (dataset: NonNullable<Attribute["dataset"]>): Record<string, string> =>

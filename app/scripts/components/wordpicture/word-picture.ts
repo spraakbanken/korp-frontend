@@ -2,7 +2,7 @@ import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import { WordPicture } from "@/word-picture"
 import { RelationsSort } from "@/backend/types/relations"
-import "./word-picture-table"
+import "./word-picture-column"
 import { Lemgram } from "@/lemgram"
 
 type WordPictureController = IController & {
@@ -32,17 +32,25 @@ angular.module("korpApp").component("wordPicture", {
                     </span>
                 </h2>
 
-                <word-picture-table
-                    ng-repeat="table in section.tables"
-                    ng-if="table.max"
-                    heading="fromLemgram(section.heading.word)"
-                    limit="$ctrl.limit"
-                    parent-index="$index"
-                    table="table"
-                    show-word-class="$ctrl.showWordClass"
-                    sort="$ctrl.sort"
-                >
-                </word-picture-table>
+                <div ng-repeat="table in section.tables" ng-if="table.max" class="lemgram_table">
+                    <div class="lemgram_help">
+                        <span ng-repeat="column in table.columnsBefore" ng-class="column.config.css_class">
+                            {{(column.config.alt_label || 'rel_' + column.config.rel) | loc:$root.lang}}
+                        </span>
+                        <span><b>{{fromLemgram(section.heading.word)}}</b></span>
+                        <span ng-repeat="column in table.columnsAfter" ng-class="column.config.css_class">
+                            {{(column.config.alt_label || 'rel_' + column.config.rel) | loc:$root.lang}}
+                        </span>
+                    </div>
+                    <word-picture-column
+                        ng-repeat="column in table.columns"
+                        css-class="column.config.css_class"
+                        items="column.rows"
+                        limit="$ctrl.limit"
+                        show-word-class="$ctrl.showWordClass"
+                        sort="$ctrl.sort"
+                    ></word-picture-column>
+                </div>
             </section>
         </div>
     `,

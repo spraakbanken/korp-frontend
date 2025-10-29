@@ -1,7 +1,6 @@
 import { keyBy, mapValues, omit, pick } from "lodash"
 import settings, { setDefaultConfigValues } from "@/settings"
 import currentMode from "@/mode"
-import { getAllCorporaInFolders } from "@/corpora/corpus-chooser"
 import { corpusListing, setCorpusListing } from "@/corpora/corpus_listing"
 import { CorpusSet } from "@/corpora/corpus-set"
 import { CorpusSetParallel } from "@/parallel/corpus-set-parallel"
@@ -13,6 +12,7 @@ import { ConfigTransformed, CorpusTransformed } from "@/settings/config-transfor
 import { korpRequest } from "@/backend/common"
 import { getLocData } from "@/i18n/loc-data"
 import moment from "moment"
+import { getAllCorporaInFolders } from "./corpora/corpus-chooser"
 
 type InfoData = Record<string, Pick<CorpusTransformed, "info" | "private_struct_attributes">>
 
@@ -107,39 +107,19 @@ function transformConfig(config: Config, infos: InfoData): ConfigTransformed {
 
     const modes = config.modes.map((mode) => ({ ...mode, selected: mode.mode == currentMode }))
 
+    // Resolve folder names in the default corpus selection.
+    // Compat added in October 2025: from now on this setting doesn't need to prepend folder names with "__"
+    const preselectedCorpora = config.preselected_corpora?.flatMap((id) =>
+        getAllCorporaInFolders(config.folders || {}, id.replace(/^__/, "")),
+    )
+
     return {
         folders: {},
         ...omit(config, "pos_attributes", "corpora"),
         corpora: mapValues(config.corpora, transformCorpus),
         modes,
         mode: modes.find((mode) => mode.selected)!,
-    }
-}
-
-/** Determine initial corpus selection. */
-function setInitialCorpora(): void {
-    // if no preselectedCorpora is defined, use all of them
-    if (!settings.preselected_corpora?.length) {
-        // if all corpora in mode is limited_access, make them all preselected
-        if (corpusListing.corpora.filter((corpus) => !corpus.limited_access).length == 0) {
-            settings.preselected_corpora = corpusListing.corpora
-                .filter((corpus) => !corpus.hide)
-                .map((corpus) => corpus.id)
-
-            // else filter out the ones with limited_access
-        } else {
-            settings.preselected_corpora = corpusListing.corpora
-                .filter((corpus) => !(corpus.hide || corpus.limited_access))
-                .map((corpus) => corpus.id)
-        }
-    } else {
-        let expandedCorpora: string[] = []
-        for (let preItem of settings.preselected_corpora) {
-            preItem = preItem.replace(/^__/g, "")
-            expandedCorpora.push(...getAllCorporaInFolders(settings.folders, preItem))
-        }
-        // folders expanded, save
-        settings.preselected_corpora = expandedCorpora
+        preselected_corpora: preselectedCorpora,
     }
 }
 
@@ -179,8 +159,6 @@ export async function fetchInitialData(authDef: Promise<boolean>) {
         ? new CorpusSetParallel(corpora as CorpusTransformed<CorpusParallel>[])
         : new CorpusSet(corpora)
     setCorpusListing(corpusListing)
-
-    setInitialCorpora()
 }
 
 /** Find most recently updated corpora. */

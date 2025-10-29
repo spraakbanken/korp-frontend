@@ -12,14 +12,14 @@ export type RelationsParams = {
 }
 
 export type RelationsResponse = {
-    relations?: ApiRelation[]
+    relations?: Relation[]
     /** Execution time in seconds */
     time: number
 }
 
 export type RelationsSort = "freq" | "mi"
 
-export type ApiRelation = {
+export type Relation = {
     dep: string
     depextra: string
     deppos: string

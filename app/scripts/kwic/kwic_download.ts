@@ -5,15 +5,20 @@ import { locObj } from "@/i18n"
 import { CorpusHeading, isCorpusHeading, isKwic, Row } from "@/kwic/kwic"
 import { ApiKwic } from "@/backend/types"
 import { QueryParams } from "@/backend/types/query"
+import { RelationsSentencesParams } from "@/backend/types/relations-sentences"
 
 // The annotations option is not available for parallel
 type AnnotationsRow = ApiKwic | CorpusHeading
 
 type TableRow = (string | number)[]
 
+type KwicParams = QueryParams | RelationsSentencesParams
+
 const emptyRow = (length: number) => fill(new Array(length), "")
 
 const padRows = (data: string[], length: number) => data.map((value) => [value, ...emptyRow(length - 1)])
+
+const isQueryParams = (params: KwicParams): params is QueryParams => "cqp" in params
 
 function createFile(dataType: string, fileType: string, content: string) {
     const date = moment().format("YYYYMMDD_HHmmss")
@@ -22,16 +27,20 @@ function createFile(dataType: string, fileType: string, content: string) {
     return [filename, blobURL]
 }
 
-function createSearchInfo(requestInfo: QueryParams, totalHits: number) {
-    return [
-        `## CQP query: ${requestInfo.cqp}`,
-        `## context: ${requestInfo.default_context}`,
-        `## within: ${requestInfo.default_within}`,
-        `## sorting: ${requestInfo.sort || "none"}`,
-        `## start: ${requestInfo.start}`,
-        `## end: ${requestInfo.end}`,
-        `## Total hits: ${totalHits}`,
-    ]
+function* createSearchInfo(requestInfo: KwicParams, totalHits: number) {
+    if (isQueryParams(requestInfo)) {
+        yield `## CQP query: ${requestInfo.cqp}`
+        if (requestInfo.cqp2) yield `## CQP query 2: ${requestInfo.cqp2}`
+        if (requestInfo.cqp3) yield `## CQP query 3: ${requestInfo.cqp3}`
+        yield `## context: ${requestInfo.default_context}`
+        yield `## within: ${requestInfo.default_within}`
+        yield `## sorting: ${requestInfo.sort || "none"}`
+    } else {
+        yield `## CQP query: N/A`
+    }
+    yield `## start: ${requestInfo.start}`
+    yield `## end: ${requestInfo.end}`
+    yield `## Total hits: ${totalHits}`
 }
 
 function transformDataToAnnotations(data: AnnotationsRow[], searchInfo: string[]) {
@@ -148,8 +157,8 @@ function transformDataToKWIC(data: Row[], searchInfo: string[]) {
     return res
 }
 
-function transformData(dataType: "annotations" | "kwic", data: Row[], requestInfo: QueryParams, totalHits: number) {
-    const searchInfo = createSearchInfo(requestInfo, totalHits)
+function transformData(dataType: "annotations" | "kwic", data: Row[], requestInfo: KwicParams, totalHits: number) {
+    const searchInfo = [...createSearchInfo(requestInfo, totalHits)]
     if (dataType === "annotations") {
         return transformDataToAnnotations(data as AnnotationsRow[], searchInfo)
     }
@@ -172,7 +181,7 @@ export function makeDownload(
     dataType: "annotations" | "kwic",
     fileType: "csv" | "tsv",
     data: Row[],
-    requestInfo: QueryParams,
+    requestInfo: KwicParams,
     totalHits: number,
 ) {
     const table = transformData(dataType, data, requestInfo, totalHits)

@@ -1,29 +1,10 @@
 import ProxyBase from "./proxy-base"
 import { unregescape } from "@/util"
-import { ApiRelation, RelationsParams, RelationsSort } from "../types/relations"
+import { RelationsParams, RelationsSort } from "../types/relations"
 import { parse } from "@/cqp_parser/cqp"
 import { CqpQuery } from "@/cqp_parser/cqp.types"
 import { corpusSelection } from "@/corpora/corpus_listing"
 import { WordPicture, WordType } from "@/word-picture"
-
-/** A relation item modified for showing. */
-export type ShowableApiRelation = ApiRelation & {
-    /** Direction of relation */
-    show_rel: "head" | "dep"
-}
-
-export type TableData = {
-    table: ApiRelation[] | { word: string }
-    rel?: string
-    show_rel?: string
-}
-
-export type TableDrawData = {
-    token: string
-    wordClass: string
-    wordClassShort: string
-    data: TableData[][]
-}
 
 export type RelationsQuery = {
     type: WordType

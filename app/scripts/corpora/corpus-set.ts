@@ -60,7 +60,7 @@ export class CorpusSet {
         return ""
     }
 
-    /** Corpus ids in uppercase */
+    /** Lowercase corpus ids */
     getIds() {
         return this.map((corpus) => corpus.id)
     }

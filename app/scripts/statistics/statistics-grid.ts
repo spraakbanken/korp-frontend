@@ -7,9 +7,8 @@ import "slickgrid/slick.grid.css"
 import { Dataset, isTotalRow, Row, SingleRow } from "./statistics.types"
 import { StoreService } from "@/services/store"
 import settings from "@/settings"
-import { locObj } from "@/i18n"
+import { loc, locObj } from "@/i18n"
 import { formatFrequency } from "@/i18n/util"
-import { LangString } from "@/i18n/types"
 import { zip } from "lodash"
 import { corpusListing } from "@/corpora/corpus_listing"
 
@@ -21,7 +20,7 @@ export class StatisticsGrid extends Slick.Grid<Row> {
         attrs: string[],
         readonly store: StoreService,
         showPieChart: (row: Row) => void,
-        onAttrValueClick: (row: SingleRow) => void,
+        onValueClick: (row: Row, corpusId?: string) => void,
     ) {
         const columns = createColumns(store, corpusIds, attrs)
 
@@ -60,18 +59,21 @@ export class StatisticsGrid extends Slick.Grid<Row> {
             this.render()
         })
 
+        this.setSortColumn("total", false)
+
         this.onClick.subscribe((e, args) => {
             const column = this.getColumns()[args.cell]
             const row = this.getDataItem(args.row)
             if (column.id == "pieChart") showPieChart(row)
-            else if (column.field == "hit_value" && !isTotalRow(row)) onAttrValueClick(row)
+            else if ((column.field == "hit_value" && !isTotalRow(row)) || column.field == "total") onValueClick(row)
+            else if (column.field == "count") onValueClick(row, column.id!)
         })
     }
 
     refreshColumns() {
         const columns = this.getColumns() as SlickgridColumn[]
         columns.forEach((column) => {
-            if (column.translation) column.name = locObj(column.translation, this.store.lang)
+            if (column.getName) column.name = column.getName(this.store.lang)
         })
         this.setColumns(columns)
     }
@@ -106,13 +108,13 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
         if (reduceVal == null || reduceValLabel == null) break
         columns.push({
             id: reduceVal,
-            translation: reduceValLabel,
+            getName: (lang) => locObj(reduceValLabel!, lang),
             field: "hit_value",
             sortable: true,
             formatter: (row, cell, value, columnDef, data: Row) => {
                 if (isTotalRow(data)) return "Σ"
                 const output = data.formattedValue[reduceVal!] || `<span class="opacity-50">&empty;</span>`
-                return `<div class="link" data-row="${data.rowId}" ${dir}>${output}</div>`
+                return `<div data-row="${data.rowId}" class="link" ${dir}>${output}</div>`
             },
             minWidth,
             cssClass: "parameter-column",
@@ -132,10 +134,14 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
 
     columns.push({
         id: "total",
-        name: "stats_total",
+        getName: (lang) => loc("stats_total", lang),
         field: "total",
         sortable: true,
-        formatter: (row, cell, value) => formatFrequency(store, value),
+        defaultSortAsc: false,
+        formatter: (row, cell, value, columnDef, data: Row) => {
+            const out = formatFrequency(store, value)
+            return `<div class="link">${out}</div>`
+        },
         minWidth,
         headerCssClass: "localized-header",
         cssClass: "total-column text-right",
@@ -144,10 +150,14 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
     corpora.forEach((id) =>
         columns.push({
             id,
-            translation: settings.corpora[id.toLowerCase()].title,
+            getName: (lang) => locObj(settings.corpora[id.toLowerCase()].title, lang),
             field: "count",
             sortable: true,
-            formatter: (row, cell, value, columnDef) => formatFrequency(store, value[id]),
+            defaultSortAsc: false,
+            formatter: (row, cell, value, columnDef, data: Row) => {
+                const out = formatFrequency(store, value[id])
+                return `<div class="link">${out}</div>`
+            },
             minWidth,
             cssClass: "text-right",
         }),
@@ -157,5 +167,5 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
 }
 
 type SlickgridColumn = Slick.Column<Dataset> & {
-    translation?: LangString
+    getName?: (lang: string) => string
 }

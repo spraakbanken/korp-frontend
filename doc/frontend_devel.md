@@ -16,8 +16,13 @@ The easiest way to try the frontend locally is to:
 - Run `yarn start`
 
 `yarn start` uses [Webpack DevServer](https://webpack.js). It builds the code and starts
-a web server locally, by default on port `9111`. When the configuration is changed, the server automatically
+a web server locally, by default on `korpdev.spraakbanken.gu.se:9111` but you can override host/port in `.env.local`. When source files are changed, the server automatically
 rebuilds everything. This makes testing your setup really easy.
+
+Note:
+
+- If you get TypeScript errors after moving/removing/renaming files, restart the dev server
+- Changes in translation files do not trigger rebuild, see [#435](https://github.com/spraakbanken/korp-frontend/issues/435)
 
 ## Building
 

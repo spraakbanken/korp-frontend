@@ -114,8 +114,8 @@ img {
 /* visited link */
 /* mouse over link */
 
-.link {
-    // color: navy !important;
+/* Qualify with "body" to override .slick-cell pointer style */
+body .link {
     @apply text-indigo-700;
     cursor: pointer;
     &:hover {
@@ -1431,6 +1431,14 @@ line.tick {
     background-color: #e6ebff;
 }
 
+/* For multiple attribute value columns, copy link hover color to siblings. */
+#myGrid .slick-row:has(.parameter-column:hover) .parameter-column {
+    .link {
+        color: indianred !important;
+    }
+}
+    
+
 #myGrid .total-column {
     background-color: #fff8f0;
 }
@@ -1840,20 +1848,20 @@ line.tick {
     }
 }
 
-.korp-uib-dropdown-menu .attribute:not(.disabled):hover {
-    background-color: #428bca;
-    color: white;
-    cursor: pointer;
-}
-
 .input-error {
     outline: red 2px solid;
 }
 
 #preload {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     height: 100vh;
+}
+
+.maintenance-news {
+    width: 40em;
 }
 
 // reading mode

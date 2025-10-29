@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+## [9.12.0] – 2025-10-29
+
+### Added
+
+- Add loading indicators to global filter selectors [#429](https://github.com/spraakbanken/korp-frontend/issues/429)
+- Corpus selector: expand partially selected folders by default [#431](https://github.com/spraakbanken/korp-frontend/issues/431)
+- Show downtime announcements if backend is down [#436](https://github.com/spraakbanken/korp-frontend/issues/436)
+- Statistics: link cells to corpus-filtered search [#455](https://github.com/spraakbanken/korp-frontend/issues/455)
+- More accurate headers in KWIC CSV download
+
+### Changed
+
+- Setting `preselected_corpora` to empty list used to select all, now it selects none. To select all, leave it unset.
+
+### Fixed
+
+- Error when switching corpus after searching by a corpus-specific attribute [#490](https://github.com/spraakbanken/korp-frontend/issues/490)
+- Error when downloading example KWIC [#491](https://github.com/spraakbanken/korp-frontend/issues/491)
+
 ## [9.11.4] – 2025-09-29
 
 ### Fixed
