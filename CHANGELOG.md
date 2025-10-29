@@ -14,6 +14,7 @@
 
 ### Fixed
 
+- Error when switching corpus after searching by a corpus-specific attribute [#490](https://github.com/spraakbanken/korp-frontend/issues/490)
 - Error when downloading example KWIC [#491](https://github.com/spraakbanken/korp-frontend/issues/491)
 
 ## [9.11.4] – 2025-09-29

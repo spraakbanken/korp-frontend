@@ -58,14 +58,15 @@ angular.module("korpApp").component("extendedCqpValue", {
                 const write = (val: string) => (shouldUseRegexp() ? val : regescape(val))
                 const read = (val: string) => (shouldUseRegexp() ? val : unregescape(val))
                 // Set initial input value
-                childScope.input = read(childScope.model as string)
+                childScope.input = read((childScope.model as string) || "")
                 // Sync from input to model, escaping special characters if needed
-                childScope.$watch("input", () => (childScope.model = write(childScope.input)))
-                childScope.$watch("orObj.op", () => (childScope.model = write(childScope.input)))
+                childScope.$watch("input", () => (childScope.model = write(childScope.input || "")))
+                childScope.$watch("orObj.op", () => (childScope.model = write(childScope.input || "")))
 
                 const locals = { $scope: childScope }
                 const { template, controller } = getWidget()
 
+                // TODO Are we always creating a new component instance here? What happens to the old ones?
                 // @ts-ignore
                 $controller(controller, locals)
                 const tmplElem = $compile(template)(childScope)

@@ -5,6 +5,7 @@ import { Condition } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
 import { AttributeOption } from "@/corpora/corpus-set"
 import { loadOptions } from "@/search/extended-search"
+import { isEqual } from "lodash"
 
 export type Widget = {
     template: string
@@ -38,9 +39,9 @@ export const selectController = (autocomplete: boolean): IController => [
     "$scope",
     "store",
     function ($scope: SelectWidgetScope, store: StoreService) {
-        store.watch("corpus", (selected) => {
+        store.watch("corpus", (selected, old) => {
             // TODO Destroy if new corpus selection doesn't support the attribute?
-            if (selected.length > 0) {
+            if (selected.length > 0 && !isEqual(selected, old)) {
                 reloadValues()
             }
         })
@@ -53,7 +54,7 @@ export const selectController = (autocomplete: boolean): IController => [
                 $scope.loading = false
                 $scope.options = options
                 // Reset old selection if that option has been removed.
-                if (!autocomplete && !currentInputExists) {
+                if (!autocomplete && !currentInputExists && $scope.options.length) {
                     $scope.input = $scope.options[0][0]
                 }
             })
