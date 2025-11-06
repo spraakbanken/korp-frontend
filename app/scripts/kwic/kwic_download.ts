@@ -58,7 +58,7 @@ function transformDataToAnnotations(data: AnnotationsRow[], searchInfo: string[]
     for (const row of data) {
         if (isKwic(row)) {
             const textAttributes: string[] = []
-            for (let attrName in row.structs) {
+            for (const attrName in row.structs) {
                 const attrValue = row.structs[attrName]
                 textAttributes.push(attrName + ': "' + attrValue + '"')
             }
@@ -125,7 +125,7 @@ function transformDataToKWIC(data: Row[], searchInfo: string[]) {
                 }
             }
             for (const attrName of structHeaders) {
-                if (attrName in row.structs) {
+                if (row.structs && attrName in row.structs) {
                     structs.push(row.structs[attrName])
                 } else {
                     structs.push("")

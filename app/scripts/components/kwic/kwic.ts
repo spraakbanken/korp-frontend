@@ -454,7 +454,7 @@ angular.module("korpApp").component("kwic", {
 
                 if ($ctrl.active) {
                     statemachine.send("SELECT_WORD", {
-                        sentenceData: scope.sentence.structs,
+                        sentenceData: scope.sentence.structs || {},
                         wordData: scope.word,
                         corpus: scope.sentence.corpus.toLowerCase(),
                         tokens: scope.sentence.tokens,
