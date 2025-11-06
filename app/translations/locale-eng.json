@@ -341,6 +341,10 @@
     "statstable_gen_export": "Generate export",
     "statstable_download": "Download",
 
+    "csv_comma": "Comma-separated values (CSV)",
+    "csv_semi": "Semicolon-separated values (CSV)",
+    "csv_tab": "Tab-separated values (TSV)",
+
     "util_decimalseparator": ".",
     "util_numbergroupseparator": ",",
 
