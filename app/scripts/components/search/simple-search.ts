@@ -14,6 +14,7 @@ import "./global-filters"
 import { Condition, CqpQuery } from "@/cqp_parser/cqp.types"
 import { StoreService } from "@/services/store"
 import { savedSearches } from "@/search/saved-searches"
+import { buildSimpleLemgramCqp, buildSimpleWordCqp } from "@/search/simple-search"
 
 type SimpleSearchController = IController & {
     input: string
@@ -185,29 +186,12 @@ angular.module("korpApp").component("simpleSearch", {
             }
 
             ctrl.getCQP = function () {
-                const query: CqpQuery = []
+                let query: CqpQuery = []
                 const currentText = (ctrl.currentText || "").trim()
 
-                if (currentText) {
-                    currentText.split(/\s+/).forEach((word) => {
-                        let value = regescape(word)
-                        if ($scope.prefix) value = `${value}.*`
-                        if ($scope.suffix) value = `.*${value}`
-                        const condition = createCondition(value)
-                        if (ctrl.isCaseInsensitive) condition.flags = { c: true }
-                        query.push({ and_block: [[condition]] })
-                    })
-                } else if (ctrl.lemgram) {
-                    const conditions: Condition[] = [{ type: "lex", op: "contains", val: ctrl.lemgram }]
-                    // The complemgram attribute is a set of strings like: <part1>+<part2>+<...>:<probability>
-                    if ($scope.prefix) {
-                        conditions.push({ type: "complemgram", op: "contains", val: `${ctrl.lemgram}\\+.*` })
-                    }
-                    if ($scope.suffix) {
-                        conditions.push({ type: "complemgram", op: "contains", val: `.*\\+${ctrl.lemgram}:.*` })
-                    }
-                    query.push({ and_block: [conditions] })
-                }
+                if (currentText)
+                    query = buildSimpleWordCqp(currentText, $scope.prefix, $scope.suffix, ctrl.isCaseInsensitive)
+                else if (ctrl.lemgram) query = buildSimpleLemgramCqp(ctrl.lemgram, $scope.prefix, $scope.suffix)
 
                 if (store.globalFilter) mergeCqpExprs(query, store.globalFilter)
                 return stringify(query)
