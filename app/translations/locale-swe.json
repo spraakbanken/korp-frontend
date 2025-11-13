@@ -48,7 +48,7 @@
     "warning_header": "Vänligen uppmärksamma",
     "warning_body": "Relationerna mellan orden är ett resultat av automatisk parsning. ",
     "fail_text": "Ett fel har uppstått.",
-    "fail_alt": "Silhuett av en kollapsad korp",
+    "fail_alt": "En tecknad korp som ligger på rygg med kryssögon",
     "fail_contact": "Om du har frågor eller vill rapportera en bugg, kontakta gärna sb-info@svenska.gu.se.",
     "corpus": "Korpus",
     "search_for": "Sök efter ",
@@ -154,8 +154,6 @@
     "starts": "börjar",
     "ends": "slutar",
 
-    "none_selected": "&lt;ej vald&gt;",
-
     "any": "vilket ord som helst",
     "all": "alla",
     "one_of": "någon av",
@@ -212,7 +210,6 @@
     "within_text": "upp till text",
     "within_5 sentence": "5 meningar",
     "within_warn": "vissa valda korpusar stödjer inte utökad kontext",
-    "asterix": "*",
     "appearance_context": "förekomst",
     "word_context": "träff",
     "left_context": "vänsterkontext",
@@ -399,7 +396,7 @@
     "access_partly_denied": "Du har inte tillgång till vissa korpusar som du har valt",
     "access_partly_denied_continue": "För att kunna fortsätta tas korpusarna bort ur sökningen.",
     "access_denied": "Du har inte tillgång till någon korpus i det här läget.",
-    "corpus_not_available": "Vissa valda korpusar är inte tillgänliga, och har tagits bort från urvalet.",
+    "corpus_not_available": "Vissa valda korpusar är inte tillgängliga, och har tagits bort från urvalet.",
     "go_to_start": "Gå till startsidan",
 
     "stats_not_in_order_warn": "Statistiken stödjer för närvarande inte sökalternativet \"i fri följd\".",

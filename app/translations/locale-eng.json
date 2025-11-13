@@ -48,7 +48,7 @@
     "warning_header": "Please note",
     "warning_body": "The dependency relations illustrated herein are the result of automated parsing.",
     "fail_text": "An error has occurred.",
-    "fail_alt": "Silhouette of a knocked-out raven",
+    "fail_alt": "A cartoon raven lying on its back with crosses for eyes",
     "fail_contact": "If you have questions, or you want to report a bug, please contact sb-info@svenska.gu.se.",
     "corpus": "Corpus",
     "search_for": "Search for ",
@@ -153,8 +153,6 @@
     "starts": "starts",
     "ends": "ends",
 
-    "none_selected": "&lt;none selected&gt;",
-
     "any": "any word",
     "all": "all",
     "one_of": "any",
@@ -211,7 +209,6 @@
     "within_text": "up to text",
     "within_5 sentence": "5 sentences",
     "within_warn": "not all selected corpora support extended context",
-    "asterix": "*",
     "appearance_context": "not sorted",
     "word_context": "matched word(s)",
     "left_context": "left context",
