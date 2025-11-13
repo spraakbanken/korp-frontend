@@ -43,8 +43,8 @@ angular.module("korpApp").component("autoc", {
             <script type="text/ng-template" id="lemgramautocomplete.html">
                 <a class="!flex items-baseline cursor-pointer" ng-class="{'autocomplete-item-disabled' : match.model.count == 0, '!text-gray-500' : (match.model.variant != 'dalin' && match.model.count == 0)}">
                     <span>
-                        <span ng-if="match.model.parts.morphology" class="label lemgram-namespace">{{match.model.parts.morphology | loc}}</span>
                         <span ng-bind-html="match.model.parts.toHtml() | trust"></span>
+                        <span ng-if="match.model.parts.morphology" class="label text-inherit">{{match.model.parts.morphology | loc}}</span>
                         <span ng-if="match.model.desc" style="color:gray;margin-left:6px" ng-bind-html="match.model.desc.toHtml() | trust"></span>
                     </span>
                     <span ng-if="match.model.count > 0" class="ml-auto pl-1 text-sm">
