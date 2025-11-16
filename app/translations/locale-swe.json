@@ -306,6 +306,10 @@
     "statstable_export": "Exportera",
     "statstable_gen_export": "Generera export",
 
+    "csv_comma": "Kommaseparerade värden (CSV)",
+    "csv_semi": "Semikolonseparerade värden (CSV)",
+    "csv_tab": "Tabbseparerade värden (TSV)",
+
     "util_decimalseparator": ",",
 
     "chapter": "kapitel",

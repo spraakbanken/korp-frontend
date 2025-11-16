@@ -2,7 +2,11 @@
 
 ## [Unreleased]
 
-## Fixed
+### Added
+
+- Download Word Picture results as CSV [#200](https://github.com/spraakbanken/korp-frontend/issues/200)
+
+### Fixed
 
 - KWIC download sometimes fails because row.structs is optional [#492](https://github.com/spraakbanken/korp-frontend/issues/492)
 - Moved morphology labels in the lemgram autocomplete
