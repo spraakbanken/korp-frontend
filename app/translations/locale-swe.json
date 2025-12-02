@@ -78,7 +78,7 @@
     "import_chain": "Sparv",
     "show_deptree": "Visa dependensträd",
     "dep_tree": "Dependensträd",
-    "download": "Ladda ner som",
+    "download": "Ladda ner som…",
     "toggle_select": "välj",
     "modal_close": "Stäng",
 
@@ -301,10 +301,6 @@
     "statstable_absfigures": "Absoluta frekvenser",
     "statstable_relfigures": "Relativa frekvenser",
     "statstable_distribution": "Träffar per korpus",
-    "statstable_exp_csv": "CSV (semikolonseparerade värden)",
-    "statstable_exp_tsv": "TSV (tabseparerade värden)",
-    "statstable_export": "Exportera",
-    "statstable_gen_export": "Generera export",
 
     "csv_comma": "Kommaseparerade värden (CSV)",
     "csv_semi": "Semikolonseparerade värden (CSV)",

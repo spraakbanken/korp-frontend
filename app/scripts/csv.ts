@@ -10,7 +10,7 @@ export const CSV_TYPES = {
 }
 
 /** Create a CSV file and trigger a download */
-export function downloadCsvFile(name: string, rows: Iterable<string[]>, type: CsvType) {
+export function downloadCsvFile(name: string, rows: Iterable<(string | number)[]>, type: CsvType) {
     const { delimiter, ext, mime } = CSV_TYPES[type]
     const csv = CSV.encode([...rows], { delimiter })
     downloadFile(csv, `korp-${name}.${ext}`, mime)

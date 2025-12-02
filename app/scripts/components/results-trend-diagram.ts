@@ -2,8 +2,8 @@ import angular, { IController, IRootElementService, IScope, ITimeoutService } fr
 import { throttle } from "lodash"
 import { Moment } from "moment"
 import { expandOperators } from "@/cqp_parser/cqp"
-import { downloadFile, html } from "@/util"
-import { getTimeCqp, LEVELS, Level, findOptimalLevel, Series, createTrendTableCsv } from "@/trend-diagram/util"
+import { html } from "@/util"
+import { getTimeCqp, LEVELS, Level, findOptimalLevel, createTrendTableCsv } from "@/trend-diagram/util"
 import "@/components/util/korp-error"
 import { RootScope } from "@/root-scope.types"
 import { CountTimeResponse } from "@/backend/types/count-time"
@@ -12,6 +12,7 @@ import { ExampleTask } from "@/task/example-task"
 import { TrendTask } from "@/task/trend-task"
 import { TrendGraph } from "@/trend-diagram/graph"
 import { renderTable } from "@/trend-diagram/trend-table"
+import { CsvType, downloadCsvFile } from "@/csv"
 
 type ResultsTrendDiagramController = IController & {
     loading: boolean
@@ -25,8 +26,7 @@ type ResultsTrendDiagramController = IController & {
 }
 
 type ResultsTrendDiagramScope = IScope & {
-    downloadCsvType: "csv" | "tsv"
-    download: () => void
+    downloadOption: CsvType | ""
     isGraph: boolean
     isInitDone: boolean
     mode: "line" | "bar" | "table"
@@ -78,13 +78,11 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 </div>
 
                 <div ng-show="mode == 'table'" class="flex flex-wrap items-baseline gap-4">
-                    <select ng-model="downloadCsvType">
-                        <option value="tsv">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
-                        <option value="csv">{{'statstable_exp_csv' | loc:$root.lang}}</option>
+                    <select ng-model="downloadOption">
+                        <option value="">{{ "download" | loc:$root.lang }}</option>
+                        <option value="comma">{{ "csv_comma" | loc:$root.lang }}</option>
+                        <option value="tab">{{ "csv_tab" | loc:$root.lang }}</option>
                     </select>
-                    <button class="btn btn-default btn-sm" ng-click="download()">
-                        {{'statstable_export' | loc:$root.lang}}
-                    </button>
                 </div>
             </div>
 
@@ -138,7 +136,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         ) {
             const $ctrl = this as ResultsTrendDiagramController
             $ctrl.$result = $element.find(".graph_tab")
-            $scope.downloadCsvType = "tsv"
+            $scope.downloadOption = ""
             $scope.isGraph = true
             $scope.mode = "line"
 
@@ -200,11 +198,17 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $rootScope.kwicTabs.push(new ExampleTask(corpusIds, cqps, $ctrl.task.defaultWithin))
             }
 
-            $scope.download = function () {
-                const csv = createTrendTableCsv($ctrl.graph!.series, store.statsRelative, $scope.downloadCsvType)
-                const mimeType = $scope.downloadCsvType == "tsv" ? "text/tab-separated-values" : "text/csv"
-                downloadFile(csv, `korp-trend-table.${$scope.downloadCsvType}`, mimeType)
-            }
+            // Create and download CSV file when the download selector is used
+            $scope.$watch("downloadOption", () => {
+                // Skip if empty (at init or if the label option is selected)
+                if (!$scope.downloadOption) return
+
+                const rows = createTrendTableCsv($ctrl.graph!.series, store.statsRelative)
+                downloadCsvFile("trend-table", rows, $scope.downloadOption)
+
+                // Reset to the label option
+                $scope.downloadOption = ""
+            })
 
             function drawPreloader(from: Moment, to: Moment): void {
                 const left = $ctrl.graph ? $ctrl.graph.graph.x(from.unix()) : 0

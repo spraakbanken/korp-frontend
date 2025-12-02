@@ -78,7 +78,7 @@
     "import_chain": "Sparv",
     "show_deptree": "Show Dependency Tree",
     "dep_tree": "Dependency Tree",
-    "download": "Download as",
+    "download": "Download as…",
     "toggle_select": "select",
     "modal_close": "Close",
 
@@ -302,10 +302,6 @@
     "statstable_absfigures": "Absolute frequencies",
     "statstable_relfigures": "Relative frequencies",
     "statstable_distribution": "Hits per corpus",
-    "statstable_exp_csv": "CSV (semicolon separated values)",
-    "statstable_exp_tsv": "TSV (tab separated values)",
-    "statstable_export": "Export",
-    "statstable_gen_export": "Generate export",
 
     "csv_comma": "Comma-separated values (CSV)",
     "csv_semi": "Semicolon-separated values (CSV)",

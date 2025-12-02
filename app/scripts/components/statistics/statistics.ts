@@ -1,14 +1,13 @@
 import angular, { IController, IScope, ui } from "angular"
 import { debounce, intersection } from "lodash"
 import settings from "@/settings"
-import { downloadFile, html } from "@/util"
+import { html } from "@/util"
 import { locObj } from "@/i18n"
 import { expandCqp } from "@/cqp_parser/cqp"
 import "./corpus-distribution-chart"
 import "./reduce-select"
 import "@/components/util/json_button"
 import { RootScope } from "@/root-scope.types"
-import { JQueryExtended } from "@/jquery.types"
 import { AbsRelSeq, Dataset, isTotalRow, Row, SearchParams, SingleRow } from "@/statistics/statistics.types"
 import { CountParams, CountResponse } from "@/backend/types/count"
 import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
@@ -21,9 +20,11 @@ import { createStatisticsCsv, getCqp } from "@/statistics/statistics"
 import { ExampleTask } from "@/task/example-task"
 import { MapTask } from "@/task/map-task"
 import { TrendTask } from "@/task/trend-task"
+import { CsvType, downloadCsvFile } from "@/csv"
 
 type StatisticsScope = IScope & {
     clipped: boolean
+    downloadOption: CsvType | ""
     reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
     statCurrentAttrs: AttributeOption[]
     statSelectedAttrs: string[]
@@ -44,7 +45,6 @@ type StatisticsController = IController & {
     onGraphClick: () => void
     onUpdateSearch: () => void
     mapToggleSelected: (index: number, event: Event) => void
-    generateExport: () => void
     showMap: () => void
     mapEnabled: boolean
     mapAttributes: MapAttributeOption[]
@@ -80,13 +80,11 @@ angular.module("korpApp").component("statistics", {
 
             <div class="flex flex-wrap items-baseline gap-4">
                 <div ng-show="$ctrl.data && !$ctrl.loading && !$ctrl.warning" class="flex items-baseline">
-                    <select id="kindOfFormat">
-                        <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
-                        <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
+                    <select ng-model="downloadOption">
+                        <option value="">{{ "download" | loc:$root.lang }}</option>
+                        <option value="comma">{{ "csv_comma" | loc:$root.lang }}</option>
+                        <option value="tab">{{ "csv_tab" | loc:$root.lang }}</option>
                     </select>
-                    <a id="generateExportButton" ng-click="$ctrl.generateExport()" class="ml-1">
-                        <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
-                    </a>
                 </div>
 
                 <json-button
@@ -219,6 +217,7 @@ angular.module("korpApp").component("statistics", {
             $ctrl.mapRelative = true
             let grid: StatisticsGrid
             let cl = corpusListing
+            $scope.downloadOption = ""
 
             $ctrl.$onInit = () => {
                 $(window).on(
@@ -428,21 +427,20 @@ angular.module("korpApp").component("statistics", {
                 })
             }
 
-            $ctrl.generateExport = () => {
-                const csvType: string = $("#kindOfFormat option:selected").val()
+            // Create and download CSV file when the download selector is used
+            $scope.$watch("downloadOption", () => {
+                // Skip if empty (at init or if the label option is selected)
+                if (!$scope.downloadOption) return
+
+                const csvType = $scope.downloadOption
                 const { reduceVals } = $ctrl.searchParams
                 const corpora = cl.corpora
-                const csv = createStatisticsCsv(
-                    $ctrl.data,
-                    reduceVals,
-                    corpora,
-                    store.statsRelative,
-                    csvType,
-                    store.lang,
-                )
-                const mimeType = csvType == "tsv" ? "text/tab-separated-values" : "text/csv"
-                downloadFile(csv, `korp-statistics.${csvType}`, mimeType)
-            }
+                const rows = createStatisticsCsv($ctrl.data, reduceVals, corpora, store.statsRelative, store.lang)
+                downloadCsvFile("statistics", rows, csvType)
+
+                // Reset to the label option
+                $scope.downloadOption = ""
+            })
         },
     ],
 })
