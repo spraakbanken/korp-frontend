@@ -21,8 +21,8 @@ export async function fetchNews(): Promise<NewsItem[]> {
         .filter((item) => !item.expires || formatDate(item.expires) >= currentDate)
         // Stringify dates.
         .map((item) => ({ ...item, created: formatDate(item.created) }))
-        // Hide old items.
-        .filter((item) => item.created >= oneYearAgo)
+        // Hide future items and old items.
+        .filter((item) => item.created >= oneYearAgo && item.created <= currentDate)
 
     // Sort newest first
     return items.sort((a, b) => b.created.localeCompare(a.created))

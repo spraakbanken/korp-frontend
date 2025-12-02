@@ -7,6 +7,7 @@
 - KWIC download sometimes fails because row.structs is optional [#492](https://github.com/spraakbanken/korp-frontend/issues/492)
 - Moved morphology labels in the lemgram autocomplete
 - Sort attributes alphabetically in Extended search
+- Hide future news items
 
 ## [9.12.0] – 2025-10-29
 
