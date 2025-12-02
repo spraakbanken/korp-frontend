@@ -76,30 +76,58 @@ const UPDATE_DELAY = 500
 
 angular.module("korpApp").component("kwic", {
     template: html`
-        <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
-            <label>
-                <input type="checkbox" ng-model="context" ng-value="false" ng-change="updateContext()" />
-                {{'show_context' | loc:$root.lang}}
-                <i
-                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                    uib-tooltip="{{'show_context_help' | loc:$root.lang}}"
-                ></i>
-            </label>
-            <div ng-show="$ctrl.showSearchOptions">
+        <div class="bg-gray-100 mb-4 p-2 flex flex-wrap items-baseline justify-between gap-4">
+            <div class="flex flex-wrap items-baseline gap-4">
                 <label>
-                    {{ "hits_per_page" | loc:$root.lang }}:
-                    <select ng-change="updateHpp()" ng-model="hpp" ng-options="x for x in hppOptions"></select>
+                    <input type="checkbox" ng-model="context" ng-value="false" ng-change="updateContext()" />
+                    {{'show_context' | loc:$root.lang}}
+                    <i
+                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                        uib-tooltip="{{'show_context_help' | loc:$root.lang}}"
+                    ></i>
                 </label>
+                <div ng-show="$ctrl.showSearchOptions">
+                    <label>
+                        {{ "hits_per_page" | loc:$root.lang }}:
+                        <select ng-change="updateHpp()" ng-model="hpp" ng-options="x for x in hppOptions"></select>
+                    </label>
+                </div>
+                <div ng-show="$ctrl.showSearchOptions">
+                    <label>
+                        {{ "sort_default" | loc:$root.lang }}:
+                        <select
+                            ng-change="updateSort()"
+                            ng-model="sort"
+                            ng-options="k as v | loc:$root.lang for (k, v) in sortOptions"
+                        ></select>
+                    </label>
+                </div>
             </div>
-            <div ng-show="$ctrl.showSearchOptions">
-                <label>
-                    {{ "sort_default" | loc:$root.lang }}:
-                    <select
-                        ng-change="updateSort()"
-                        ng-model="sort"
-                        ng-options="k as v | loc:$root.lang for (k, v) in sortOptions"
-                    ></select>
-                </label>
+
+            <div class="flex flex-wrap items-baseline gap-4">
+                <select
+                    id="download-links"
+                    ng-if="!$ctrl.loading && $ctrl._settings['enable_backend_kwic_download']"
+                ></select>
+                <select
+                    id="frontendDownloadLinks"
+                    ng-if="!$ctrl.loading && $ctrl._settings['enable_frontend_kwic_download']"
+                    ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hits)"
+                    ng-model="$ctrl.download.selected"
+                    ng-options="item.value as item.label | loc:$root.lang disable when item.disabled for item in $ctrl.download.options"
+                ></select>
+                <a
+                    class="kwicDownloadLink hidden"
+                    ng-if="$ctrl._settings['enable_frontend_kwic_download']"
+                    href="{{$ctrl.download.blobName}}"
+                    download="{{$ctrl.download.fileName}}"
+                    target="_self"
+                ></a>
+                <json-button
+                    ng-if="!$ctrl.loading && $ctrl.response"
+                    endpoint="query"
+                    data="$ctrl.response"
+                ></json-button>
             </div>
         </div>
 
@@ -228,26 +256,6 @@ angular.module("korpApp").component("kwic", {
                 page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-
-            <div ng-if="!$ctrl.loading" class="flex gap-4 justify-end">
-                <select id="download-links" ng-if="$ctrl._settings['enable_backend_kwic_download']"></select>
-                <select
-                    id="frontendDownloadLinks"
-                    ng-if="$ctrl._settings['enable_frontend_kwic_download']"
-                    ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hits)"
-                    ng-model="$ctrl.download.selected"
-                    ng-options="item.value as item.label | loc:$root.lang disable when item.disabled for item in $ctrl.download.options"
-                ></select>
-                <a
-                    class="kwicDownloadLink"
-                    ng-if="$ctrl._settings['enable_frontend_kwic_download']"
-                    href="{{$ctrl.download.blobName}}"
-                    download="{{$ctrl.download.fileName}}"
-                    target="_self"
-                    style="display: none;"
-                ></a>
-                <json-button ng-if="$ctrl.response" endpoint="query" data="$ctrl.response"></json-button>
-            </div>
         </div>
     `,
     bindings: {

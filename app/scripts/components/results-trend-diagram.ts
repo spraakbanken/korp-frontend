@@ -39,41 +39,53 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         <korp-error ng-if="$ctrl.error" message="{{$ctrl.error}}"></korp-error>
 
         <div class="graph_tab" ng-show="!$ctrl.error">
-            <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
-                <div class="btn-group form_switch">
-                    <button
-                        class="btn btn-default btn-sm"
-                        ng-model="mode"
-                        uib-btn-radio="'line'"
-                        ng-disabled="!isInitDone"
-                    >
-                        {{'line' | loc:$root.lang}}
-                    </button>
-                    <button
-                        class="btn btn-default btn-sm"
-                        ng-model="mode"
-                        uib-btn-radio="'bar'"
-                        ng-disabled="!isInitDone"
-                    >
-                        {{'bar' | loc:$root.lang}}
-                    </button>
-                    <button
-                        class="btn btn-default btn-sm"
-                        ng-model="mode"
-                        uib-btn-radio="'table'"
-                        ng-disabled="!isInitDone"
-                    >
-                        {{'table' | loc:$root.lang}}
+            <div class="bg-gray-100 mb-4 p-2 flex flex-wrap items-baseline justify-between gap-4">
+                <div class="flex flex-wrap items-baseline gap-4">
+                    <div class="btn-group form_switch">
+                        <button
+                            class="btn btn-default btn-sm"
+                            ng-model="mode"
+                            uib-btn-radio="'line'"
+                            ng-disabled="!isInitDone"
+                        >
+                            {{'line' | loc:$root.lang}}
+                        </button>
+                        <button
+                            class="btn btn-default btn-sm"
+                            ng-model="mode"
+                            uib-btn-radio="'bar'"
+                            ng-disabled="!isInitDone"
+                        >
+                            {{'bar' | loc:$root.lang}}
+                        </button>
+                        <button
+                            class="btn btn-default btn-sm"
+                            ng-model="mode"
+                            uib-btn-radio="'table'"
+                            ng-disabled="!isInitDone"
+                        >
+                            {{'table' | loc:$root.lang}}
+                        </button>
+                    </div>
+                    <label ng-show="mode == 'table'">
+                        <input type="checkbox" ng-model="statsRelative" />
+                        {{"num_results_relative" | loc:$root.lang}}
+                        <i
+                            class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                            uib-tooltip="{{'relative_help' | loc:$root.lang}}"
+                        ></i>
+                    </label>
+                </div>
+
+                <div ng-show="mode == 'table'" class="flex flex-wrap items-baseline gap-4">
+                    <select ng-model="downloadCsvType">
+                        <option value="tsv">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
+                        <option value="csv">{{'statstable_exp_csv' | loc:$root.lang}}</option>
+                    </select>
+                    <button class="btn btn-default btn-sm" ng-click="download()">
+                        {{'statstable_export' | loc:$root.lang}}
                     </button>
                 </div>
-                <label ng-show="mode == 'table'">
-                    <input type="checkbox" ng-model="statsRelative" />
-                    {{"num_results_relative" | loc:$root.lang}}
-                    <i
-                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                        uib-tooltip="{{'relative_help' | loc:$root.lang}}"
-                    ></i>
-                </label>
             </div>
 
             <div ng-if="nontime">
@@ -104,15 +116,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             <div class="preview" ng-show="isGraph"></div>
 
             <div class="time_table mt-4 w-full" ng-show="mode == 'table'"></div>
-            <div ng-show="mode == 'table'">
-                <select ng-model="downloadCsvType">
-                    <option value="tsv">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
-                    <option value="csv">{{'statstable_exp_csv' | loc:$root.lang}}</option>
-                </select>
-                <button class="btn btn-default btn-sm" ng-click="download()">
-                    {{'statstable_export' | loc:$root.lang}}
-                </button>
-            </div>
         </div>
     `,
     bindings: {

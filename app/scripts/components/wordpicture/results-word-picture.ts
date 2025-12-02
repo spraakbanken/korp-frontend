@@ -41,30 +41,46 @@ angular.module("korpApp").component("resultsWordPicture", {
         <korp-error ng-if="error" message="{{error}}"></korp-error>
 
         <div ng-show="!error && data">
-            <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
-                <label>
-                    <input ng-model="showWordClass" type="checkbox" />
-                    {{'show_wordclass' | loc:$root.lang}}
-                </label>
-                <select ng-model="limit">
-                    <option ng-repeat="option in limitOptions" value="{{option}}">
-                        {{'word_pic_show_some' | loc:$root.lang}} {{option}} {{'word_pic_hits' | loc:$root.lang}}
-                    </option>
-                </select>
-                <div class="flex flex-wrap gap-2">
-                    {{'sort_by' | loc:$root.lang}}:
+            <div class="bg-gray-100 mb-4 p-2 flex flex-wrap items-baseline justify-between gap-4">
+                <div class="flex flex-wrap items-baseline gap-4">
                     <label>
-                        <input type="radio" value="mi" ng-model="sortLocal" />
-                        {{'stat_lmi' | loc:$root.lang}}
-                        <i
-                            class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                            uib-tooltip="{{'stat_lmi_help' | loc:$root.lang}}"
-                        ></i>
+                        <input ng-model="showWordClass" type="checkbox" />
+                        {{'show_wordclass' | loc:$root.lang}}
                     </label>
-                    <label>
-                        <input type="radio" value="freq" ng-model="sortLocal" />
-                        {{'stat_frequency' | loc:$root.lang}}
-                    </label>
+                    <select ng-model="limit">
+                        <option ng-repeat="option in limitOptions" value="{{option}}">
+                            {{'word_pic_show_some' | loc:$root.lang}} {{option}} {{'word_pic_hits' | loc:$root.lang}}
+                        </option>
+                    </select>
+                    <div class="flex flex-wrap gap-2">
+                        {{'sort_by' | loc:$root.lang}}:
+                        <label>
+                            <input type="radio" value="mi" ng-model="sortLocal" />
+                            {{'stat_lmi' | loc:$root.lang}}
+                            <i
+                                class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                                uib-tooltip="{{'stat_lmi_help' | loc:$root.lang}}"
+                            ></i>
+                        </label>
+                        <label>
+                            <input type="radio" value="freq" ng-model="sortLocal" />
+                            {{'stat_frequency' | loc:$root.lang}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-baseline gap-4">
+                    <select ng-show="!$ctrl.loading && data && !warning && !error" ng-model="downloadOption">
+                        <option value="">{{ "download" | loc:$root.lang }}</option>
+                        <option value="comma">{{ "csv_comma" | loc:$root.lang }}</option>
+                        <option value="tab">{{ "csv_tab" | loc:$root.lang }}</option>
+                    </select>
+
+                    <json-button
+                        ng-if="!$ctrl.loading && data && !warning && !error"
+                        endpoint="relations"
+                        data="proxy.response"
+                    ></json-button>
                 </div>
             </div>
 
@@ -75,20 +91,6 @@ angular.module("korpApp").component("resultsWordPicture", {
             <p>{{'word_pic_description' | loc:$root.lang}}</p>
             <p>{{'word_pic_result_description' | loc:$root.lang}}</p>
         </help-box>
-
-        <div class="mt-4 flex gap-4 justify-end">
-            <select ng-show="!$ctrl.loading && data && !warning && !error" ng-model="downloadOption">
-                <option value="">{{ "download" | loc:$root.lang }}</option>
-                <option value="comma">{{ "csv_comma" | loc:$root.lang }}</option>
-                <option value="tab">{{ "csv_tab" | loc:$root.lang }}</option>
-            </select>
-
-            <json-button
-                ng-if="!$ctrl.loading && data && !warning && !error"
-                endpoint="relations"
-                data="proxy.response"
-            ></json-button>
-        </div>
     `,
     bindings: {
         isActive: "<",

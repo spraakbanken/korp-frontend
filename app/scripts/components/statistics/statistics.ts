@@ -57,24 +57,44 @@ const UPDATE_DELAY = 500
 
 angular.module("korpApp").component("statistics", {
     template: html`
-        <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
-            <div class="flex items-center gap-1">
-                <label for="reduce-select">{{ "reduce_text" | loc:$root.lang }}:</label>
-                <reduce-select
-                    items="statCurrentAttrs"
-                    selected="statSelectedAttrs"
-                    insensitive="statInsensitiveAttrs"
-                    on-change="reduceOnChange"
-                ></reduce-select>
+        <div class="bg-gray-100 mb-4 p-2 flex flex-wrap items-baseline justify-between gap-4">
+            <div class="flex flex-wrap items-baseline gap-4">
+                <div class="flex items-center gap-1">
+                    <label for="reduce-select">{{ "reduce_text" | loc:$root.lang }}:</label>
+                    <reduce-select
+                        items="statCurrentAttrs"
+                        selected="statSelectedAttrs"
+                        insensitive="statInsensitiveAttrs"
+                        on-change="reduceOnChange"
+                    ></reduce-select>
+                </div>
+                <label>
+                    <input type="checkbox" ng-model="statsRelative" />
+                    {{"num_results_relative" | loc:$root.lang}}
+                    <i
+                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                        uib-tooltip="{{'relative_help' | loc:$root.lang}}"
+                    ></i>
+                </label>
             </div>
-            <label>
-                <input type="checkbox" ng-model="statsRelative" />
-                {{"num_results_relative" | loc:$root.lang}}
-                <i
-                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                    uib-tooltip="{{'relative_help' | loc:$root.lang}}"
-                ></i>
-            </label>
+
+            <div class="flex flex-wrap items-baseline gap-4">
+                <div ng-show="$ctrl.data && !$ctrl.loading && !$ctrl.warning" class="flex items-baseline">
+                    <select id="kindOfFormat">
+                        <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
+                        <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
+                    </select>
+                    <a id="generateExportButton" ng-click="$ctrl.generateExport()" class="ml-1">
+                        <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
+                    </a>
+                </div>
+
+                <json-button
+                    ng-if="$ctrl.data && !$ctrl.loading && !$ctrl.warning"
+                    endpoint="count"
+                    data="$ctrl.response"
+                ></json-button>
+            </div>
         </div>
 
         <div ng-show="!$ctrl.error">
@@ -167,18 +187,6 @@ angular.module("korpApp").component("statistics", {
                     </span>
                 </div>
                 <div id="myGrid"></div>
-                <div ng-show="$ctrl.data && !$ctrl.loading && !$ctrl.warning" class="mt-4 flex gap-4 justify-end">
-                    <div class="flex">
-                        <select id="kindOfFormat">
-                            <option value="csv">{{ 'statstable_exp_csv' | loc:$root.lang }}</option>
-                            <option value="tsv">{{ 'statstable_exp_tsv' | loc:$root.lang }}</option>
-                        </select>
-                        <a id="generateExportButton" ng-click="$ctrl.generateExport()">
-                            <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:$root.lang}}</button>
-                        </a>
-                    </div>
-                    <json-button endpoint="count" data="$ctrl.response"></json-button>
-                </div>
             </div>
         </div>
     `,
