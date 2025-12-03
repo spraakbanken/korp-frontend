@@ -6,6 +6,10 @@
 
 - Download Word Picture results as CSV [#200](https://github.com/spraakbanken/korp-frontend/issues/200)
 
+### Changed
+
+- Removed broken code for backend-based KWIC download
+
 ### Fixed
 
 - Streamlined export controls [#154](https://github.com/spraakbanken/korp-frontend/issues/154)

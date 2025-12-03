@@ -142,7 +142,6 @@ The first few settings are needed at initialization time, and thus must be speci
 
 - **default_language** - String. The default interface language. Default: `"eng"`
 - **description** - String. Any HTML content to show on frontpage until search is made.
-- **enable_backend_kwic_download** - Boolean. Backend download, depends on backend download functionality.
 - **enable_frontend_kwic_download** - Boolean. Frontend download. Gives CSV created by same data as available in the KWIC.
 - **frontpage** - Object. Settings for what to show under the search form until a search is made.
   - **corpus_updates** - Boolean. Enables a listing of most recently updated corpora.
