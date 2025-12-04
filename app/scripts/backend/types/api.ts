@@ -8,6 +8,7 @@ import { LoglikeParams, LoglikeResponse } from "./loglike"
 import { QueryParams, QueryResponse } from "./query"
 import { RelationsParams, RelationsResponse } from "./relations"
 import { RelationsSentencesParams, RelationsSentencesResponse } from "./relations-sentences"
+import { RelationsTimeParams, RelationsTimeResponse } from "./relations-time"
 import { TimespanParams, TimespanResponse } from "./timespan"
 
 /** Maps a Korp backend endpoint name to the expected parameters and response */
@@ -52,6 +53,10 @@ export type API = {
     relations_sentences: {
         params: RelationsSentencesParams
         response: RelationsSentencesResponse
+    }
+    relations_time: {
+        params: RelationsTimeParams
+        response: RelationsTimeResponse
     }
     timespan: {
         params: TimespanParams
