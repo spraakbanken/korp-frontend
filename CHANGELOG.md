@@ -14,6 +14,7 @@
 
 - Streamlined export controls [#154](https://github.com/spraakbanken/korp-frontend/issues/154)
 - KWIC download sometimes fails because row.structs is optional [#492](https://github.com/spraakbanken/korp-frontend/issues/492)
+- Word picture error for unconfigured POS [#497](https://github.com/spraakbanken/korp-frontend/issues/497)
 - Moved morphology labels in the lemgram autocomplete
 - Sort attributes alphabetically in Extended search
 - Hide future news items

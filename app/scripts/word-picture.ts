@@ -77,6 +77,8 @@ export class WordPicture {
             const item = convertItem(itemRaw)
             if (!item) continue
             const { match, matchpos, rel, reverse } = item
+            // Skip relations that are not configured
+            if (!this.config[matchpos]) continue
             // Store items by category
             const id = this.getColumnId(matchpos, rel, reverse)
             this.items[id] ??= []
