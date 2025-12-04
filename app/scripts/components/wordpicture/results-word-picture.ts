@@ -10,6 +10,8 @@ import "@/components/util/korp-error"
 import "@/components/wordpicture/word-picture"
 import { StoreService } from "@/services/store"
 import { CsvType, downloadCsvFile } from "@/csv"
+import { ProgressHandler } from "@/backend/types"
+import { RelationsTimeProxy } from "@/backend/proxy/relations-time-proxy"
 
 type ResultsWordPictureController = IController & {
     isActive: boolean
@@ -19,12 +21,13 @@ type ResultsWordPictureController = IController & {
 
 type ResultsWordPictureScope = IScope & {
     activated: boolean
-    data?: WordPicture
+    data?: { range: string; data: WordPicture }[]
     downloadOption: CsvType | ""
     error?: string
     limit: string // Number as string to work with <select ng-model>
     limitOptions: number[]
     proxy: RelationsProxy
+    proxyTime: RelationsTimeProxy
     showWordClass: boolean
     /** Sort param for the relations request. */
     sort: RelationsSort
@@ -92,7 +95,10 @@ angular.module("korpApp").component("resultsWordPicture", {
                 </div>
             </div>
 
-            <word-picture data="data" limit="limit" show-word-class="showWordClass" sort="sort"></word-picture>
+            <div ng-repeat="period in data">
+                <h3 ng-if="period.range != 'all'">{{ period.range }}<h3>
+                <word-picture data="period.data" limit="limit" show-word-class="showWordClass" sort="sort"></word-picture>
+            </div>
         </div>
 
         <help-box>
@@ -116,13 +122,19 @@ angular.module("korpApp").component("resultsWordPicture", {
             $scope.limit = String(LIMITS[0])
             $scope.limitOptions = [...LIMITS]
             $scope.proxy = new RelationsProxy()
+            $scope.proxyTime = new RelationsTimeProxy()
             $scope.sort = "mi"
             $scope.sortLocal = "mi"
+
+            const progressHandler: ProgressHandler = (progressObj) =>
+                $timeout(() => $ctrl.setProgress(true, progressObj.percent))
+            $scope.proxy.setProgressHandler(progressHandler)
+            $scope.proxyTime.setProgressHandler(progressHandler)
 
             $scope.$watch("data", () => {
                 if (!$scope.data) return
                 // Include options up to the first that is higher than the longest column
-                const max = $scope.data.getMaxColumnLength()
+                const max = Math.max(...$scope.data.map((period) => period.data.getMaxColumnLength()))
                 const endIndex = LIMITS.findIndex((limit) => limit >= max)
                 $scope.limitOptions = LIMITS.slice(0, endIndex + 1)
                 // Clamp previously selected value
@@ -166,7 +178,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                 $scope.warning = warning
             }
 
-            function makeRequest() {
+            async function makeRequest() {
                 if (!$scope.activated) return resetView()
 
                 if (store.globalFilter) return resetView(loc("word_pic_global_filter", store.lang))
@@ -185,26 +197,35 @@ angular.module("korpApp").component("resultsWordPicture", {
 
                 $ctrl.setProgress(true, 0)
                 $scope.warning = undefined
-                $scope.proxy
-                    .setProgressHandler((progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
-                    .makeRequest(query.type, query.word, $scope.sortLocal, $scope.splitLocal)
-                    .then((data) => $timeout(() => ($scope.data = data)))
-                    .catch((error) => {
-                        // AbortError is expected if a new search is made before the previous one is finished
-                        if (error.name == "AbortError") return
 
-                        if (error instanceof RelationsEmptyError) {
-                            resetView(loc("no_stats_results", store.lang))
-                            return
-                        }
+                try {
+                    if ($scope.splitLocal) {
+                        const data = await $scope.proxyTime.makeRequest(query.type, query.word, $scope.sortLocal)
+                        const periods = Object.entries(data)
+                            .map(([range, data]) => ({ range, data }))
+                            .sort((a, b) => a.range.localeCompare(b.range))
+                        $timeout(() => ($scope.data = periods))
+                    } else {
+                        const data = await $scope.proxy.makeRequest(query.type, query.word, $scope.sortLocal)
+                        $timeout(() => ($scope.data = [{ range: "all", data }]))
+                    }
+                } catch (error) {
+                    // AbortError is expected if a new search is made before the previous one is finished
+                    if (error.name == "AbortError") return
 
-                        console.error(error)
-                        $timeout(() => {
-                            $scope.error = error
-                            $ctrl.setProgress(false, 0)
-                        })
+                    if (error instanceof RelationsEmptyError) {
+                        resetView(loc("no_stats_results", store.lang))
+                        return
+                    }
+
+                    console.error(error)
+                    $timeout(() => {
+                        $scope.error = error
+                        $ctrl.setProgress(false, 0)
                     })
-                    .finally(() => $timeout(() => $ctrl.setProgress(false, 0)))
+                } finally {
+                    $timeout(() => $ctrl.setProgress(false, 0))
+                }
             }
 
             // Create and download CSV file when the download selector is used
@@ -213,7 +234,8 @@ angular.module("korpApp").component("resultsWordPicture", {
                 if (!$scope.downloadOption) return
 
                 if (!$scope.data) throw new Error("Word picture data missing")
-                const rows = $scope.data.generateCsv()
+                // TODO Add period ranges?
+                const rows = $scope.data.flatMap((period) => [...period.data.generateCsv()])
                 downloadCsvFile("word-picture", rows, $scope.downloadOption)
 
                 // Reset to the label option
