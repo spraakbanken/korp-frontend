@@ -1,6 +1,6 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import { RelationsProxy, RelationsEmptyError, RelationsQuery } from "@/backend/proxy/relations-proxy"
-import { MatchedRelation, WordPicture } from "@/word-picture"
+import { csvPrepend, MatchedRelation, WordPicture } from "@/word-picture"
 import { html } from "@/util"
 import { RelationsSort } from "@/backend/types/relations"
 import { loc } from "@/i18n"
@@ -253,8 +253,19 @@ angular.module("korpApp").component("resultsWordPicture", {
                 if (!$scope.downloadOption) return
 
                 if (!$scope.data) throw new Error("Word picture data missing")
-                // TODO Add period ranges?
-                const rows = $scope.data.flatMap((period) => [...period.data.generateCsv()])
+
+                // Assemble data from all periods
+                let rows = []
+                for (const period of $scope.data) {
+                    let periodRows = [...period.data.generateCsv()]
+                    if ($scope.split) {
+                        periodRows = [...csvPrepend(periodRows, "period", period.range)]
+                    }
+                    // Strip header except for the first set of rows
+                    if (rows.length) periodRows.shift()
+                    rows.push(...periodRows)
+                }
+
                 downloadCsvFile("word-picture", rows, $scope.downloadOption)
 
                 // Reset to the label option

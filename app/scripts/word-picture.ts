@@ -136,3 +136,18 @@ export class WordPicture {
         }
     }
 }
+
+/** Add a leftmost column with a single value to a table */
+export function* csvPrepend<T extends string | number, V extends string | number>(
+    rows: Iterable<T[]>,
+    columnName: T,
+    value: V,
+): Generator<(T | V)[]> {
+    let isHeader = true
+    for (const row of rows) {
+        if (isHeader) {
+            yield [columnName, ...row]
+            isHeader = false
+        } else yield [value, ...row]
+    }
+}
