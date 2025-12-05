@@ -120,34 +120,30 @@ export class WordPicture {
     }
 
     /** Get a string for the params that identify a word picture column */
-    getColumnId = (pos: string, rel: string, reverse: boolean) => `${pos}${reverse ? "+" : "-"}${rel}`;
+    getColumnId = (pos: string, rel: string, reverse: boolean) => `${pos}${reverse ? "+" : "-"}${rel}`
 
     /** Create listing of full data, suitable for CSV export. */
-    *generateCsv(): Generator<string[]> {
+    generateCsv(): (string | number)[][] {
         const fields: (keyof MatchedRelation)[] = ["head", "headpos", "dep", "deppos", "rel", "depextra", "freq", "mi"]
+
         // Header row
-        yield fields
+        let rows: (string | number)[][] = [fields]
 
         // Data rows
         for (const key of Object.keys(this.items)) {
             for (const relation of this.items[key]) {
-                yield fields.map((field) => String(relation[field] || ""))
+                rows.push(fields.map((field) => String(relation[field] || "")))
             }
         }
+        return rows
     }
 }
 
-/** Add a leftmost column with a single value to a table */
-export function* csvPrepend<T extends string | number, V extends string | number>(
-    rows: Iterable<T[]>,
-    columnName: T,
-    value: V,
-): Generator<(T | V)[]> {
-    let isHeader = true
+/** Add a leftmost column with a single value to a table, in-place */
+export function csvPrepend<T>(rows: T[][], columnName: T, value: T): void {
+    let isFirst = true
     for (const row of rows) {
-        if (isHeader) {
-            yield [columnName, ...row]
-            isHeader = false
-        } else yield [value, ...row]
+        row.unshift(isFirst ? columnName : value)
+        isFirst = false
     }
 }

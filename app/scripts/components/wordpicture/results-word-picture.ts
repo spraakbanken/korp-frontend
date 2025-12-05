@@ -257,10 +257,9 @@ angular.module("korpApp").component("resultsWordPicture", {
                 // Assemble data from all periods
                 let rows = []
                 for (const period of $scope.data) {
-                    let periodRows = [...period.data.generateCsv()]
-                    if ($scope.split) {
-                        periodRows = [...csvPrepend(periodRows, "period", period.range)]
-                    }
+                    let periodRows = period.data.generateCsv()
+                    if ($scope.split) csvPrepend(periodRows, "period", period.range)
+
                     // Strip header except for the first set of rows
                     if (rows.length) periodRows.shift()
                     rows.push(...periodRows)
