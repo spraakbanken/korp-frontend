@@ -1,6 +1,6 @@
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
-import { WordPicture } from "@/word-picture"
+import { MatchedRelation, WordPicture } from "@/word-picture"
 import { RelationsSort } from "@/backend/types/relations"
 import "./word-picture-column"
 import { Lemgram } from "@/lemgram"
@@ -8,6 +8,7 @@ import { Lemgram } from "@/lemgram"
 type WordPictureController = IController & {
     data: WordPicture
     limit: number
+    onClickExample: (args: { relation: MatchedRelation }) => void
     showWordClass: boolean
     sort: RelationsSort
 }
@@ -47,6 +48,7 @@ angular.module("korpApp").component("wordPicture", {
                         css-class="column.config.css_class"
                         items="column.rows"
                         limit="$ctrl.limit"
+                        on-click-example="$ctrl.onClickExample({relation})"
                         segment="$ctrl.data.segments[0]"
                         show-word-class="$ctrl.showWordClass"
                         sort="$ctrl.sort"
@@ -58,6 +60,7 @@ angular.module("korpApp").component("wordPicture", {
     bindings: {
         data: "<",
         limit: "<",
+        onClickExample: "&",
         showWordClass: "<",
         sort: "<",
     },

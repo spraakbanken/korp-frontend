@@ -58,6 +58,10 @@ export type API = {
         params: RelationsTimeParams
         response: RelationsTimeResponse
     }
+    relations_time_sentences: {
+        params: RelationsSentencesParams
+        response: RelationsSentencesResponse
+    }
     timespan: {
         params: TimespanParams
         response: TimespanResponse

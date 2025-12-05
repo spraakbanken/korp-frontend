@@ -1,6 +1,6 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import { RelationsProxy, RelationsEmptyError, RelationsQuery } from "@/backend/proxy/relations-proxy"
-import { WordPicture } from "@/word-picture"
+import { MatchedRelation, WordPicture } from "@/word-picture"
 import { html } from "@/util"
 import { RelationsSort } from "@/backend/types/relations"
 import { loc } from "@/i18n"
@@ -12,6 +12,8 @@ import { StoreService } from "@/services/store"
 import { CsvType, downloadCsvFile } from "@/csv"
 import { ProgressHandler } from "@/backend/types"
 import { RelationsTimeProxy } from "@/backend/proxy/relations-time-proxy"
+import { WordpicExampleTask } from "@/task/wordpic-example-task"
+import { RootScope } from "@/root-scope.types"
 
 type ResultsWordPictureController = IController & {
     isActive: boolean
@@ -26,6 +28,7 @@ type ResultsWordPictureScope = IScope & {
     error?: string
     limit: string // Number as string to work with <select ng-model>
     limitOptions: number[]
+    onClickExample: (relation: MatchedRelation) => void
     proxy: RelationsProxy
     proxyTime: RelationsTimeProxy
     showWordClass: boolean
@@ -96,8 +99,14 @@ angular.module("korpApp").component("resultsWordPicture", {
             </div>
 
             <div ng-repeat="period in data">
-                <h3 ng-if="period.range != 'all'">{{ period.range }}<h3>
-                <word-picture data="period.data" limit="limit" show-word-class="showWordClass" sort="sort"></word-picture>
+                <h3 ng-if="period.range != 'all'">{{ period.range }}</h3>
+                <word-picture
+                    data="period.data"
+                    limit="limit"
+                    on-click-example="onClickExample(relation)"
+                    show-word-class="showWordClass"
+                    sort="sort"
+                ></word-picture>
             </div>
         </div>
 
@@ -112,10 +121,16 @@ angular.module("korpApp").component("resultsWordPicture", {
         setProgress: "<",
     },
     controller: [
+        "$rootScope",
         "$scope",
         "$timeout",
         "store",
-        function ($scope: ResultsWordPictureScope, $timeout: ITimeoutService, store: StoreService) {
+        function (
+            $rootScope: RootScope,
+            $scope: ResultsWordPictureScope,
+            $timeout: ITimeoutService,
+            store: StoreService,
+        ) {
             const $ctrl = this as ResultsWordPictureController
             $scope.activated = false
             $scope.downloadOption = ""
@@ -226,6 +241,10 @@ angular.module("korpApp").component("resultsWordPicture", {
                 } finally {
                     $timeout(() => $ctrl.setProgress(false, 0))
                 }
+            }
+
+            $scope.onClickExample = function (relation) {
+                $rootScope.kwicTabs.push(new WordpicExampleTask(relation.source.join(","), $scope.split))
             }
 
             // Create and download CSV file when the download selector is used

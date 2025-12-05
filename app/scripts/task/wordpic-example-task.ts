@@ -1,13 +1,18 @@
+import { RelationsTimeSentencesProxy } from "@/backend/proxy/relations-time-sentences-proxy"
 import { RelationsSentencesProxy } from "../backend/proxy/relations-sentences-proxy"
 import { RelationsSentencesResponse } from "../backend/types/relations-sentences"
 import { TaskBase } from "./task-base"
 
 export class WordpicExampleTask extends TaskBase<RelationsSentencesResponse> {
     readonly isReadingInit = false // Context param is not supported by /relations_sentences
-    readonly proxy = new RelationsSentencesProxy()
+    readonly proxy: RelationsSentencesProxy | RelationsTimeSentencesProxy
 
-    constructor(readonly source: string) {
+    constructor(
+        readonly source: string,
+        readonly isTime = false,
+    ) {
         super()
+        this.proxy = isTime ? new RelationsTimeSentencesProxy() : new RelationsSentencesProxy()
     }
 
     abort(): void {
