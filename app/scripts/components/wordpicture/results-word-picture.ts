@@ -56,12 +56,12 @@ angular.module("korpApp").component("resultsWordPicture", {
                         <label>
                             {{'sort_by' | loc:$root.lang}}:
                             <select ng-model="sortLocal">
-                                <option value="mi">{{'stat_lmi' | loc:$root.lang}}</option>
-                                <option value="freq">{{'stat_frequency' | loc:$root.lang}}</option>
+                                <option value="mi">{{'stat_mi' | loc:$root.lang}}</option>
+                                <option value="freq">{{'stat_freq' | loc:$root.lang}}</option>
                             </select>
                             <i
                                 class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                uib-tooltip="{{'stat_lmi' | loc:$root.lang}}: {{'stat_lmi_help' | loc:$root.lang}}"
+                                uib-tooltip="{{'stat_mi' | loc:$root.lang}}: {{'stat_mi_help' | loc:$root.lang}}"
                             ></i>
                         </label>
                     </div>

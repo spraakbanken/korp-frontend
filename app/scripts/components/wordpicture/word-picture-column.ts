@@ -33,14 +33,14 @@ angular.module("korpApp").component("wordPictureColumn", {
                         </td>
                         <td
                             ng-if="$ctrl.sort == 'freq'"
-                            title="{{'stat_lmi' | loc:$root.lang}}: {{row.mi | number:2}}"
+                            title="{{'stat_mi' | loc:$root.lang}}: {{row.mi | number:2}}"
                             class="px-1 text-right"
                         >
                             {{row.freq}}
                         </td>
                         <td
                             ng-if="$ctrl.sort == 'mi'"
-                            title="{{'stat_frequency' | loc:$root.lang}}: {{row.freq}}"
+                            title="{{'stat_freq' | loc:$root.lang}}: {{row.freq}}"
                             class="px-1 text-right"
                         >
                             {{row.mi | number:2}}
