@@ -103,9 +103,11 @@
     "word_pic_hits": "hits",
 
     "sort_by": "Calculate and order by",
-    "stat_frequency": "absolute frequency",
-    "stat_lmi": "LMI",
-    "stat_lmi_help": "Lexicographer's Mutual Information, an adaptation of the Mutual Information association measure prioritizing typical items over infrequent ones",
+    "stat_freq": "absolute frequency",
+    "stat_freq_relative": "relative frequency",
+    "stat_mi": "LMI",
+    "stat_rmi": "relative LMI",
+    "stat_mi_help": "Lexicographer's Mutual Information, an adaptation of the Mutual Information association measure prioritizing typical items over infrequent ones",
 
     "search_aborted": "The search was aborted",
 

@@ -124,7 +124,18 @@ export class WordPicture {
 
     /** Create listing of full data, suitable for CSV export. */
     generateCsv(): (string | number)[][] {
-        const fields: (keyof MatchedRelation)[] = ["head", "headpos", "dep", "deppos", "rel", "depextra", "freq", "mi"]
+        const fields: (keyof MatchedRelation)[] = [
+            "head",
+            "headpos",
+            "dep",
+            "deppos",
+            "rel",
+            "depextra",
+            "freq",
+            "freq_relative",
+            "mi",
+            "rmi",
+        ]
 
         // Header row
         let rows: (string | number)[][] = [fields]

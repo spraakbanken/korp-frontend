@@ -67,18 +67,19 @@ angular.module("korpApp").component("resultsWordPicture", {
                         </option>
                     </select>
                     <div class="flex flex-wrap gap-2">
-                        {{'sort_by' | loc:$root.lang}}:
                         <label>
-                            <input type="radio" value="mi" ng-model="sortLocal" />
-                            {{'stat_lmi' | loc:$root.lang}}
+                            {{'sort_by' | loc:$root.lang}}:
+                            <select ng-model="sortLocal">
+                                <option value="freq">{{'stat_freq' | loc:$root.lang}}</option>
+                                <option value="freq_relative">{{'stat_freq_relative' | loc:$root.lang}}</option>
+                                <option value="mi">{{'stat_mi' | loc:$root.lang}}</option>
+                                <option value="rmi">{{'stat_rmi' | loc:$root.lang}}</option>
+                            </select>
                             <i
+                                ng-show="sortLocal == 'mi' || sortLocal == 'rmi'"
                                 class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                uib-tooltip="{{'stat_lmi_help' | loc:$root.lang}}"
+                                uib-tooltip="{{'stat_mi_help' | loc:$root.lang}}"
                             ></i>
-                        </label>
-                        <label>
-                            <input type="radio" value="freq" ng-model="sortLocal" />
-                            {{'stat_frequency' | loc:$root.lang}}
                         </label>
                     </div>
                 </div>

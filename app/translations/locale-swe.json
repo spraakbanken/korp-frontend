@@ -94,9 +94,11 @@
     "word_pic_hits": "träffar",
 
     "sort_by": "Beräkna och sortera på",
-    "stat_frequency": "absolut frekvens",
-    "stat_lmi": "LMI",
-    "stat_lmi_help": "Lexicographer's Mutual Information, en anpassning av associationsmåttet \"Mutual Information\" som prioriterar upp det typiska framför det ovanliga",
+    "stat_freq": "absolut frekvens",
+    "stat_freq_relative": "relativ frekvens",
+    "stat_mi": "LMI",
+    "stat_rmi": "relativ LMI",
+    "stat_mi_help": "Lexicographer's Mutual Information, en anpassning av associationsmåttet \"Mutual Information\" som prioriterar upp det typiska framför det ovanliga",
 
     "show_map": "Visa karta",
     "map_no_data": "Valt material saknar geografisk data.",

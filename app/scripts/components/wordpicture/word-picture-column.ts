@@ -3,6 +3,8 @@ import { html } from "@/util"
 import { MatchedRelation } from "@/word-picture"
 import { Lemgram } from "@/lemgram"
 import { RelationsSort } from "@/backend/types/relations"
+import { StoreService } from "@/services/store.types"
+import { loc } from "@/i18n"
 
 type WordPictureColumnController = IController & {
     cssClass: string
@@ -12,6 +14,10 @@ type WordPictureColumnController = IController & {
     showWordClass: boolean
     sort: RelationsSort
     // Locals
+    /** Format the numbers for all stats of a row (freq etc). */
+    getStats: (row: MatchedRelation) => Record<RelationsSort, string>
+    /** Get the row stats as a string with HTML linebreaks */
+    getStatsTooltip: (row: MatchedRelation) => string
     parseLemgram: (row: MatchedRelation) => { label: string; pos?: string; idx?: number }
 }
 
@@ -32,19 +38,8 @@ angular.module("korpApp").component("wordPictureColumn", {
                             </span>
                             <span ng-if="!data.label" class="opacity-50">&empty;</span>
                         </td>
-                        <td
-                            ng-if="$ctrl.sort == 'freq'"
-                            title="{{'stat_lmi' | loc:$root.lang}}: {{row.mi | number:2}}"
-                            class="px-1 text-right"
-                        >
-                            {{row.freq}}
-                        </td>
-                        <td
-                            ng-if="$ctrl.sort == 'mi'"
-                            title="{{'stat_frequency' | loc:$root.lang}}: {{row.freq}}"
-                            class="px-1 text-right"
-                        >
-                            {{row.mi | number:2}}
+                        <td uib-tooltip-html="$ctrl.getStatsTooltip(row) | trust" class="px-1 text-right">
+                            {{$ctrl.getStats(row)[$ctrl.sort]}}
                         </td>
                     </tr>
                 </tbody>
@@ -60,13 +55,28 @@ angular.module("korpApp").component("wordPictureColumn", {
         sort: "<",
     },
     controller: [
-        function () {
+        "store",
+        function (store: StoreService) {
             const $ctrl = this as WordPictureColumnController
 
             $ctrl.$onChanges = (changes) => {
                 if (changes.limit?.currentValue || changes.items?.currentValue) {
                     $ctrl.rows = $ctrl.items.slice(0, Number($ctrl.limit))
                 }
+            }
+
+            $ctrl.getStats = (row) => ({
+                freq: String(row.freq),
+                freq_relative: formatNumber(row.freq_relative),
+                mi: formatNumber(row.mi),
+                rmi: formatNumber(row.rmi),
+            })
+
+            $ctrl.getStatsTooltip = (row) => {
+                const stats = $ctrl.getStats(row)
+                return Object.keys(stats)
+                    .map((key: RelationsSort) => `${loc(`stat_${key}`, store.lang)}: ${stats[key]}`)
+                    .join("<br />")
             }
 
             $ctrl.parseLemgram = function (row) {
@@ -87,6 +97,10 @@ angular.module("korpApp").component("wordPictureColumn", {
                     pos: row.otherpos.toLowerCase(),
                 }
             }
+
+            /** Format a number with two digits. */
+            const formatNumber = (number: Number): string =>
+                number.toLocaleString(store.lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         },
     ],
 })
