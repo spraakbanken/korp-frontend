@@ -94,7 +94,9 @@
 
     "sort_by": "Beräkna och sortera på",
     "stat_freq": "absolut frekvens",
+    "stat_freq_relative": "relativ frekvens",
     "stat_mi": "LMI",
+    "stat_rmi": "relativ LMI",
     "stat_mi_help": "Lexicographer's Mutual Information, en anpassning av associationsmåttet \"Mutual Information\" som prioriterar upp det typiska framför det ovanliga",
 
     "show_map": "Visa karta",
