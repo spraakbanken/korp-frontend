@@ -37,11 +37,13 @@ type ResultsWordPictureScope = IScope & {
     /** Model for the sort input. */
     sortLocal: RelationsSort
     /** Whether data should be split by timespans */
-    split: boolean
+    split: PeriodOption | false
     /** Model for the split-by-time input. */
-    splitLocal: boolean
+    splitLocal: PeriodOption | false
     warning?: string
 }
+
+type PeriodOption = { size: number; order: "asc" | "desc" }
 
 const LIMITS: readonly number[] = [15, 50, 100, 500, 1000]
 
@@ -54,8 +56,28 @@ angular.module("korpApp").component("resultsWordPicture", {
             <div class="bg-gray-100 mb-4 p-2 flex flex-wrap items-baseline justify-between gap-4">
                 <div class="flex flex-wrap items-baseline gap-4">
                     <label>
-                        <input ng-model="splitLocal" type="checkbox" />
-                        {{'word_pic_split' | loc:$root.lang}}
+                        {{'word_pic_split' | loc:$root.lang}}:
+                        <select ng-model="splitLocal">
+                            <option ng-value="false">{{'word_pic_split_none' | loc:$root.lang}}</option>
+                            <option ng-value="{size: 1, order: 'desc'}">
+                                1 {{'word_pic_split_option_desc' | loc:$root.lang}}
+                            </option>
+                            <option ng-value="{size: 1, order: 'asc'}">
+                                1 {{'word_pic_split_option_asc' | loc:$root.lang}}
+                            </option>
+                            <option ng-value="{size: 5, order: 'desc'}">
+                                5 {{'word_pic_split_option_desc' | loc:$root.lang}}
+                            </option>
+                            <option ng-value="{size: 5, order: 'asc'}">
+                                5 {{'word_pic_split_option_asc' | loc:$root.lang}}
+                            </option>
+                            <option ng-value="{size: 10, order: 'desc'}">
+                                10 {{'word_pic_split_option_desc' | loc:$root.lang}}
+                            </option>
+                            <option ng-value="{size: 10, order: 'asc'}">
+                                10 {{'word_pic_split_option_asc' | loc:$root.lang}}
+                            </option>
+                        </select>
                     </label>
                     <label>
                         <input ng-model="showWordClass" type="checkbox" />
@@ -141,6 +163,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             $scope.proxyTime = new RelationsTimeProxy()
             $scope.sort = "mi"
             $scope.sortLocal = "mi"
+            $scope.splitLocal = false
 
             const progressHandler: ProgressHandler = (progressObj) =>
                 $timeout(() => $ctrl.setProgress(true, progressObj.percent))
@@ -216,10 +239,16 @@ angular.module("korpApp").component("resultsWordPicture", {
 
                 try {
                     if ($scope.splitLocal) {
-                        const data = await $scope.proxyTime.makeRequest(query.type, query.word, $scope.sortLocal)
+                        const data = await $scope.proxyTime.makeRequest(
+                            query.type,
+                            query.word,
+                            $scope.sortLocal,
+                            $scope.splitLocal.size,
+                        )
                         const periods = Object.entries(data)
                             .map(([range, data]) => ({ range, data }))
                             .sort((a, b) => a.range.localeCompare(b.range))
+                        if ($scope.splitLocal.order == "desc") periods.reverse()
                         $timeout(() => ($scope.data = periods))
                     } else {
                         const data = await $scope.proxy.makeRequest(query.type, query.word, $scope.sortLocal)
@@ -245,7 +274,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             }
 
             $scope.onClickExample = function (relation) {
-                $rootScope.kwicTabs.push(new WordpicExampleTask(relation.source.join(","), $scope.split))
+                $rootScope.kwicTabs.push(new WordpicExampleTask(relation.source.join(","), !!$scope.split))
             }
 
             // Create and download CSV file when the download selector is used
