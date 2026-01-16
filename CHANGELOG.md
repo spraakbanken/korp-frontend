@@ -19,6 +19,7 @@
 - Moved morphology labels in the lemgram autocomplete
 - Sort attributes alphabetically in Extended search
 - Hide future news items
+- Accept missing tag labels in dependency attributes (pos, deprel) in dep tree visualization
 
 ## [9.12.0] – 2025-10-29
 
