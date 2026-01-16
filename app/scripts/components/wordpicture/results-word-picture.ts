@@ -81,15 +81,13 @@ angular.module("korpApp").component("resultsWordPicture", {
                             </option>
                         </select>
                     </label>
-                    <label>
-                        <input ng-model="showWordClass" type="checkbox" />
-                        {{'show_wordclass' | loc:$root.lang}}
-                    </label>
+
                     <select ng-model="limit">
                         <option ng-repeat="option in limitOptions" value="{{option}}">
                             {{'word_pic_show_some' | loc:$root.lang}} {{option}} {{'word_pic_hits' | loc:$root.lang}}
                         </option>
                     </select>
+
                     <div class="flex flex-wrap gap-2">
                         <label>
                             {{'sort_by' | loc:$root.lang}}:
@@ -106,6 +104,11 @@ angular.module("korpApp").component("resultsWordPicture", {
                             ></i>
                         </label>
                     </div>
+
+                    <label>
+                        <input ng-model="showWordClass" type="checkbox" />
+                        {{'show_wordclass' | loc:$root.lang}}
+                    </label>
                 </div>
 
                 <div class="flex flex-wrap items-baseline gap-4">
