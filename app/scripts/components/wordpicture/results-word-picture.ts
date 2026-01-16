@@ -29,6 +29,8 @@ type ResultsWordPictureScope = IScope & {
     limit: string // Number as string to work with <select ng-model>
     limitOptions: number[]
     onClickExample: (relation: MatchedRelation) => void
+    /** The value needs to be an object in order to work with ng-model within ng-repeat */
+    periodSelected?: { value: string }
     proxy: RelationsProxy
     proxyTime: RelationsTimeProxy
     showWordClass: boolean
@@ -121,15 +123,40 @@ angular.module("korpApp").component("resultsWordPicture", {
                 </div>
             </div>
 
+            <div ng-show="data && split" class="my-4 flex flex-wrap items-baseline gap-2">
+                <span>{{'word_pic_period_select_label' | loc:$root.lang}}:</span>
+                <div class="btn-group flex-wrap gap-y-1">
+                    <button
+                        type="button"
+                        class="btn btn-default btn-sm"
+                        ng-model="periodSelected.value"
+                        uib-btn-radio="''"
+                    >
+                        {{'all' | loc:$root.lang}}
+                    </button>
+                    <button
+                        ng-repeat="period in data"
+                        type="button"
+                        class="btn btn-default btn-sm"
+                        ng-model="periodSelected.value"
+                        uib-btn-radio="period.range"
+                    >
+                        {{period.range}}
+                    </button>
+                </div>
+            </div>
+
             <div ng-repeat="period in data">
-                <h3 ng-if="period.range != 'all'">{{ period.range }}</h3>
-                <word-picture
-                    data="period.data"
-                    limit="limit"
-                    on-click-example="onClickExample(relation)"
-                    show-word-class="showWordClass"
-                    sort="sort"
-                ></word-picture>
+                <div ng-show="!split || !periodSelected.value || periodSelected.value == period.range">
+                    <h3 ng-if="period.range != 'all'">{{ period.range }}</h3>
+                    <word-picture
+                        data="period.data"
+                        limit="limit"
+                        on-click-example="onClickExample(relation)"
+                        show-word-class="showWordClass"
+                        sort="sort"
+                    ></word-picture>
+                </div>
             </div>
         </div>
 
@@ -159,6 +186,7 @@ angular.module("korpApp").component("resultsWordPicture", {
             $scope.downloadOption = ""
             $scope.limit = String(LIMITS[0])
             $scope.limitOptions = [...LIMITS]
+            $scope.periodSelected = { value: "" }
             $scope.proxy = new RelationsProxy()
             $scope.proxyTime = new RelationsTimeProxy()
             $scope.sort = "mi"

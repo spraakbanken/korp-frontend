@@ -89,6 +89,7 @@
     "word_pic_global_filter": "Ordbild kan inte kombineras med filter. Töm filter för att fortsätta.",
     "word_pic_description": "I ordbilden visas vilka ord som tenderar att förekomma i syntaktiska relationer med sökordet.",
     "word_pic_result_description": "Vilka relationer som visas beror på sökordets ordklass. Varje lista innehåller ord som i det valda korpusmaterialet står i den givna relationen med sökordet.",
+    "word_pic_period_select_label": "Visa period",
     "word_pic_split": "Tidsindelning",
     "word_pic_split_none": "Allt i samma",
     "word_pic_split_option_asc": "år, äldst först",

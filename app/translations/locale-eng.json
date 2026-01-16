@@ -98,6 +98,7 @@
     "word_pic_global_filter": "The word picture cannot be combined with global filters. Please clear the filters to continue.",
     "word_pic_description": "The Word picture shows words that tend to co-occur in syntactic relations with the search word.",
     "word_pic_result_description": "The part of speech of the search word determines what relations to show. Each list collects words that occur in the selected corpora and in the given relation to the search word.",
+    "word_pic_period_select_label": "Show period",
     "word_pic_split": "Time grouping",
     "word_pic_split_none": "All in one",
     "word_pic_split_option_asc": "year, old first",
