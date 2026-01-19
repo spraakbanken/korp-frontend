@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.13.0] – 2026-01-19
+
 ### Added
 
 - Download Word Picture results as CSV [#200](https://github.com/spraakbanken/korp-frontend/issues/200)
@@ -596,6 +598,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.13.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.13.0
 [9.12.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.12.0
 [9.11.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.4
 [9.11.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.3
