@@ -20,6 +20,7 @@ angular.module("korpApp").component("depTree", {
                 </div>
                 <div class="modal-body">
                     <div ng-if="label">{{label | locObj:$root.lang}}: {{value | locObj:$root.lang}}</div>
+                    <div ng-if="!label">&nbsp;</div>
                     <div id="magic_secret_id"></div>
                 </div>
             </script>
@@ -68,8 +69,9 @@ angular.module("korpApp").component("depTree", {
                                 drawBratTree($ctrl.tokens, "magic_secret_id", (msg) => {
                                     const [type, val] = Object.entries(msg)[0]
                                     $scope.$apply((s: ModalScope) => {
-                                        s.label = $ctrl.corpus.attributes[type].label
-                                        s.value = $ctrl.corpus.attributes[type].translation![val]
+                                        const attribute = $ctrl.corpus.attributes[type]
+                                        s.label = attribute.label || type
+                                        s.value = attribute.translation?.[val] || attribute.label || val
                                     })
                                 })
                             }, 0)

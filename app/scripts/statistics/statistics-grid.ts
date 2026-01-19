@@ -1,9 +1,4 @@
-import "slickgrid/slick.core"
-import "slickgrid/slick.grid"
-import "slickgrid/plugins/slick.checkboxselectcolumn"
-import "slickgrid/plugins/slick.rowselectionmodel"
-import "slickgrid/slick.interactions.js"
-import "slickgrid/slick.grid.css"
+import { Column, SingleColumnSort, SlickCheckboxSelectColumn, SlickGrid, SlickRowSelectionModel } from "slickgrid"
 import { Dataset, isTotalRow, Row, SingleRow } from "./statistics.types"
 import { StoreService } from "@/services/store"
 import settings from "@/settings"
@@ -11,8 +6,9 @@ import { loc, locObj } from "@/i18n"
 import { formatFrequency } from "@/i18n/util"
 import { zip } from "lodash"
 import { corpusListing } from "@/corpora/corpus_listing"
+import "slickgrid/dist/styles/css/slick.grid.css"
 
-export class StatisticsGrid extends Slick.Grid<Row> {
+export class StatisticsGrid extends SlickGrid<Row> {
     constructor(
         el: HTMLElement,
         data: Dataset,
@@ -24,25 +20,23 @@ export class StatisticsGrid extends Slick.Grid<Row> {
     ) {
         const columns = createColumns(store, corpusIds, attrs)
 
-        // @ts-ignore CheckboxSelectColumn type is missing?
-        const checkboxSelector = new Slick.CheckboxSelectColumn({ cssClass: "slick-cell-checkboxsel" })
-        columns.splice(0, 0, checkboxSelector.getColumnDefinition())
+        const checkboxSelector = new SlickCheckboxSelectColumn()
+        columns.splice(0, 0, checkboxSelector.getColumnDefinition() as SlickgridColumn)
 
-        super(el, data, columns, {
+        super(el, data, columns as Column<Row>[], {
             enableCellNavigation: false,
             enableColumnReorder: false,
             forceFitColumns: false,
         })
 
-        // @ts-ignore RowSelectionModel type is missing?
-        this.setSelectionModel(new Slick.RowSelectionModel({ selectActiveRow: false }))
+        this.setSelectionModel(new SlickRowSelectionModel({ selectActiveRow: false }))
         this.registerPlugin(checkboxSelector)
         this.setSelectedRows([0])
         this.autosizeColumns()
         this.refreshColumns()
 
-        this.onSort.subscribe((e, args) => {
-            const { sortCol, sortAsc } = args
+        this.onSort.subscribe((e, sort: SingleColumnSort) => {
+            const { sortCol, sortAsc } = sort
 
             if (!(sortCol?.field && sortCol.id)) return
             const sorter = getSorter(sortCol.field, sortCol.id, store.lang)
@@ -62,11 +56,11 @@ export class StatisticsGrid extends Slick.Grid<Row> {
         this.setSortColumn("total", false)
 
         this.onClick.subscribe((e, args) => {
-            const column = this.getColumns()[args.cell]
+            const column = this.getColumns()[args.cell] as SlickgridColumn
             const row = this.getDataItem(args.row)
             if (column.id == "pieChart") showPieChart(row)
             else if ((column.field == "hit_value" && !isTotalRow(row)) || column.field == "total") onValueClick(row)
-            else if (column.field == "count") onValueClick(row, column.id!)
+            else if (column.field == "count") onValueClick(row, column.id)
         })
     }
 
@@ -75,11 +69,11 @@ export class StatisticsGrid extends Slick.Grid<Row> {
         columns.forEach((column) => {
             if (column.getName) column.name = column.getName(this.store.lang)
         })
-        this.setColumns(columns)
+        this.setColumns(columns as Column<Row>[])
     }
 }
 
-function getSorter(type: string, col: string, lang: string): Comparer<SingleRow> {
+function getSorter(type: string, col: string | number, lang: string): Comparer<SingleRow> {
     const sorters: Record<string, Comparer<SingleRow>> = {
         hit_value: (a, b) => a.formattedValue[col].localeCompare(b.formattedValue[col], lang),
         total: (a, b) => a.total[0] - b.total[0],
@@ -166,6 +160,11 @@ function createColumns(store: StoreService, corpora: string[], attrs: string[]):
     return columns
 }
 
-type SlickgridColumn = Slick.Column<Dataset> & {
+/* Slick column enhanced with custom stuff */
+type SlickgridColumn = Omit<Column<Row>, "field" | "id"> & {
+    // The original `Column` type expects `field` to match a key/path of the data type, but we use it more loosely.
+    field: string
+    // In the original type, `id` can also be `number`, but we only have corpus ids, stringified attribute values and a few keywords.
+    id: string
     getName?: (lang: string) => string
 }

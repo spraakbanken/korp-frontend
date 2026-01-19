@@ -142,7 +142,6 @@ The first few settings are needed at initialization time, and thus must be speci
 
 - **default_language** - String. The default interface language. Default: `"eng"`
 - **description** - String. Any HTML content to show on frontpage until search is made.
-- **enable_backend_kwic_download** - Boolean. Backend download, depends on backend download functionality.
 - **enable_frontend_kwic_download** - Boolean. Frontend download. Gives CSV created by same data as available in the KWIC.
 - **frontpage** - Object. Settings for what to show under the search form until a search is made.
   - **corpus_updates** - Boolean. Enables a listing of most recently updated corpora.
@@ -532,7 +531,7 @@ located in `custom/` and support the functions used in `components/auth.js`.
 
 ## Attribute settings
 
-Corpora and their attrbutes are configured in the backend, but most of the
+Corpora and their attributes are configured in the backend, but most of the
 available settings are frontend related. These are the available configuration
 parameters for attributes.
 
@@ -568,6 +567,7 @@ parameters for attributes.
   the label should be shown in the attribute lists of the extended search or statistics.
 - **stats_cqp**: See [Rendering attribute values in the statistics view](#rendering-attribute-values-in-the-statistics-view).
 - **stats_stringify**: See [Rendering attribute values in the statistics view](#rendering-attribute-values-in-the-statistics-view).
+- **stringify**: `string`. The key of a function in `<configDir>/custom/stringify.js`, used to render values in the sidebar and comparison results.
 - **translation**: An object containing translations of possible values of the attribute, in this format:
   ```yaml
   ROOT:
@@ -728,7 +728,7 @@ If you need to merge rows or otherwise alter the table structure, implement and 
 
 ### Stringify functions
 
-Add all custom pretty-printing to `custom/stringify.js`. Example file:
+To customize value rendering in the sidebar and comparison results, register stringifier functions in `<configDir>/custom/stringify.js`. Example file:
 
 ```js
 import { Lemgram } from "@/lemgram"
@@ -741,8 +741,7 @@ export const {
 }
 ```
 
-Note that no changes in the attribute-configuration is needed here. Korp will pick up the functions automatically
-based on the name of the attribute. Will be used in sidebar and comparison results.
+Then use the stringifier key in the `stringifier` property of the attribute config (see _Attribute settings_).
 
 Stringifier output is shown without escaping any HTML, so make sure to escape or filter the data unless you can trust it.
 If no stringifier is specified, any HTML in the value is escaped.

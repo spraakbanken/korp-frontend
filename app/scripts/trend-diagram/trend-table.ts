@@ -4,6 +4,7 @@ import { formatFrequency } from "@/i18n/util"
 import { escape, sortedIndexOf } from "lodash"
 import { AbsRelSeq } from "@/statistics/statistics.types"
 import { StoreService } from "@/services/store"
+import { Column, SlickGrid } from "slickgrid"
 
 export type TableRow = {
     label: string
@@ -12,13 +13,14 @@ export type TableRow = {
 
 export function renderTable(store: StoreService, el: HTMLElement, series: Series[]) {
     const rows: TableRow[] = []
-    const columnsMap: Record<string, Slick.Column<any>> = {}
+    const columnsMap: Record<string, Column<any>> = {}
     for (const seriesRow of series) {
         const tableRow: TableRow = { label: seriesRow.name }
         for (const item of seriesRow.data) {
             const stampformat = FORMATS[item.zoom]
             const timestamp = moment(item.x * 1000).format(stampformat) as `${number}${string}` // this needs to be fixed for other resolutions
             columnsMap[timestamp] = {
+                id: timestamp,
                 name: timestamp,
                 field: timestamp,
                 formatter(row, cell, value, columnDef, dataContext) {
@@ -36,8 +38,9 @@ export function renderTable(store: StoreService, el: HTMLElement, series: Series
     }
 
     // Sort columns
-    const columns: Slick.Column<any>[] = [
+    const columns: Column<any>[] = [
         {
+            id: "Hit",
             name: "Hit",
             field: "label",
             formatter: (row, cell, value) => escape(value) || `<span class="opacity-50">&empty;</span>`,
@@ -47,7 +50,7 @@ export function renderTable(store: StoreService, el: HTMLElement, series: Series
         columns.push(columnsMap[key])
     }
 
-    const grid = new Slick.Grid(el, rows, columns, {
+    const grid = new SlickGrid(el, rows, columns, {
         autoHeight: true,
         enableCellNavigation: false,
         enableColumnReorder: false,

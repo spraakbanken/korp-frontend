@@ -5,6 +5,7 @@ import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { html } from "@/util"
 import { ReaderToken, TextReaderData, TextReaderDataContainer, TextTask } from "@/task/text-task"
 import { kebabCase } from "lodash"
+import { SelectWordEvent } from "@/statemachine/types"
 
 type ResultsTextController = IController & {
     active: boolean
@@ -74,12 +75,12 @@ angular.module("korpApp").component("resultsText", {
 
             $scope.wordClick = (token) => {
                 statemachine.send("SELECT_WORD", {
-                    sentenceData: $scope.data.document.structs,
+                    sentenceData: $scope.data.document.structs || {},
                     wordData: token.attrs,
                     corpus: $scope.data.corpus,
                     tokens: "currentSentence" in token ? token.currentSentence : undefined,
                     inReadingMode: true,
-                })
+                } as SelectWordEvent)
                 $scope.selectedToken = token
             }
         },

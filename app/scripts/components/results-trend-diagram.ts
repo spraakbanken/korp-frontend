@@ -2,8 +2,8 @@ import angular, { IController, IRootElementService, IScope, ITimeoutService } fr
 import { throttle } from "lodash"
 import { Moment } from "moment"
 import { expandOperators } from "@/cqp_parser/cqp"
-import { downloadFile, html } from "@/util"
-import { getTimeCqp, LEVELS, Level, findOptimalLevel, Series, createTrendTableCsv } from "@/trend-diagram/util"
+import { html } from "@/util"
+import { getTimeCqp, LEVELS, Level, findOptimalLevel, createTrendTableCsv } from "@/trend-diagram/util"
 import "@/components/util/korp-error"
 import { RootScope } from "@/root-scope.types"
 import { CountTimeResponse } from "@/backend/types/count-time"
@@ -12,21 +12,22 @@ import { ExampleTask } from "@/task/example-task"
 import { TrendTask } from "@/task/trend-task"
 import { TrendGraph } from "@/trend-diagram/graph"
 import { renderTable } from "@/trend-diagram/trend-table"
+import { CsvType, downloadCsvFile } from "@/csv"
+import { SlickGrid } from "slickgrid"
 
 type ResultsTrendDiagramController = IController & {
     loading: boolean
     setProgress: (loading: boolean, progress: number) => void
     task: TrendTask
     graph?: TrendGraph
-    time_grid: Slick.Grid<any>
+    time_grid: SlickGrid<any>
     hasEmptyIntervals?: boolean
     $result: JQLite
     error?: string
 }
 
 type ResultsTrendDiagramScope = IScope & {
-    downloadCsvType: "csv" | "tsv"
-    download: () => void
+    downloadOption: CsvType | ""
     isGraph: boolean
     isInitDone: boolean
     mode: "line" | "bar" | "table"
@@ -39,41 +40,51 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         <korp-error ng-if="$ctrl.error" message="{{$ctrl.error}}"></korp-error>
 
         <div class="graph_tab" ng-show="!$ctrl.error">
-            <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
-                <div class="btn-group form_switch">
-                    <button
-                        class="btn btn-default btn-sm"
-                        ng-model="mode"
-                        uib-btn-radio="'line'"
-                        ng-disabled="!isInitDone"
-                    >
-                        {{'line' | loc:$root.lang}}
-                    </button>
-                    <button
-                        class="btn btn-default btn-sm"
-                        ng-model="mode"
-                        uib-btn-radio="'bar'"
-                        ng-disabled="!isInitDone"
-                    >
-                        {{'bar' | loc:$root.lang}}
-                    </button>
-                    <button
-                        class="btn btn-default btn-sm"
-                        ng-model="mode"
-                        uib-btn-radio="'table'"
-                        ng-disabled="!isInitDone"
-                    >
-                        {{'table' | loc:$root.lang}}
-                    </button>
+            <div class="bg-gray-100 mb-4 p-2 flex flex-wrap items-baseline justify-between gap-4">
+                <div class="flex flex-wrap items-baseline gap-4">
+                    <div class="btn-group form_switch">
+                        <button
+                            class="btn btn-default btn-sm"
+                            ng-model="mode"
+                            uib-btn-radio="'line'"
+                            ng-disabled="!isInitDone"
+                        >
+                            {{'line' | loc:$root.lang}}
+                        </button>
+                        <button
+                            class="btn btn-default btn-sm"
+                            ng-model="mode"
+                            uib-btn-radio="'bar'"
+                            ng-disabled="!isInitDone"
+                        >
+                            {{'bar' | loc:$root.lang}}
+                        </button>
+                        <button
+                            class="btn btn-default btn-sm"
+                            ng-model="mode"
+                            uib-btn-radio="'table'"
+                            ng-disabled="!isInitDone"
+                        >
+                            {{'table' | loc:$root.lang}}
+                        </button>
+                    </div>
+                    <label ng-show="mode == 'table'">
+                        <input type="checkbox" ng-model="statsRelative" />
+                        {{"num_results_relative" | loc:$root.lang}}
+                        <i
+                            class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                            uib-tooltip="{{'relative_help' | loc:$root.lang}}"
+                        ></i>
+                    </label>
                 </div>
-                <label ng-show="mode == 'table'">
-                    <input type="checkbox" ng-model="statsRelative" />
-                    {{"num_results_relative" | loc:$root.lang}}
-                    <i
-                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                        uib-tooltip="{{'relative_help' | loc:$root.lang}}"
-                    ></i>
-                </label>
+
+                <div ng-show="mode == 'table'" class="flex flex-wrap items-baseline gap-4">
+                    <select ng-model="downloadOption">
+                        <option value="">{{ "download" | loc:$root.lang }}</option>
+                        <option value="comma">{{ "csv_comma" | loc:$root.lang }}</option>
+                        <option value="tab">{{ "csv_tab" | loc:$root.lang }}</option>
+                    </select>
+                </div>
             </div>
 
             <div ng-if="nontime">
@@ -104,15 +115,6 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             <div class="preview" ng-show="isGraph"></div>
 
             <div class="time_table mt-4 w-full" ng-show="mode == 'table'"></div>
-            <div ng-show="mode == 'table'">
-                <select ng-model="downloadCsvType">
-                    <option value="tsv">{{'statstable_exp_tsv' | loc:$root.lang}}</option>
-                    <option value="csv">{{'statstable_exp_csv' | loc:$root.lang}}</option>
-                </select>
-                <button class="btn btn-default btn-sm" ng-click="download()">
-                    {{'statstable_export' | loc:$root.lang}}
-                </button>
-            </div>
         </div>
     `,
     bindings: {
@@ -135,7 +137,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
         ) {
             const $ctrl = this as ResultsTrendDiagramController
             $ctrl.$result = $element.find(".graph_tab")
-            $scope.downloadCsvType = "tsv"
+            $scope.downloadOption = ""
             $scope.isGraph = true
             $scope.mode = "line"
 
@@ -197,11 +199,17 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 $rootScope.kwicTabs.push(new ExampleTask(corpusIds, cqps, $ctrl.task.defaultWithin))
             }
 
-            $scope.download = function () {
-                const csv = createTrendTableCsv($ctrl.graph!.series, store.statsRelative, $scope.downloadCsvType)
-                const mimeType = $scope.downloadCsvType == "tsv" ? "text/tab-separated-values" : "text/csv"
-                downloadFile(csv, `korp-trend-table.${$scope.downloadCsvType}`, mimeType)
-            }
+            // Create and download CSV file when the download selector is used
+            $scope.$watch("downloadOption", () => {
+                // Skip if empty (at init or if the label option is selected)
+                if (!$scope.downloadOption) return
+
+                const rows = createTrendTableCsv($ctrl.graph!.series, store.statsRelative)
+                downloadCsvFile("trend-table", rows, $scope.downloadOption)
+
+                // Reset to the label option
+                $scope.downloadOption = ""
+            })
 
             function drawPreloader(from: Moment, to: Moment): void {
                 const left = $ctrl.graph ? $ctrl.graph.graph.x(from.unix()) : 0

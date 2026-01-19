@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+## [9.13.0] – 2026-01-19
+
+### Added
+
+- Download Word Picture results as CSV [#200](https://github.com/spraakbanken/korp-frontend/issues/200)
+
+### Changed
+
+- Removed broken code for backend-based KWIC download
+- Upgrade to SlickGrid 5.x
+
+### Fixed
+
+- Streamlined export controls [#154](https://github.com/spraakbanken/korp-frontend/issues/154)
+- KWIC download sometimes fails because row.structs is optional [#492](https://github.com/spraakbanken/korp-frontend/issues/492)
+- Word picture error for unconfigured POS [#497](https://github.com/spraakbanken/korp-frontend/issues/497)
+- Missing or incorrect documentation for attribute setting stringify [#498](https://github.com/spraakbanken/korp-frontend/issues/498)
+- Moved morphology labels in the lemgram autocomplete
+- Sort attributes alphabetically in Extended search
+- Hide future news items
+- Accept missing tag labels in dependency attributes (pos, deprel) in dep tree visualization
+
 ## [9.12.0] – 2025-10-29
 
 ### Added
@@ -576,6 +598,8 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.13.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.13.0
+[9.12.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.12.0
 [9.11.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.4
 [9.11.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.3
 [9.11.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.2

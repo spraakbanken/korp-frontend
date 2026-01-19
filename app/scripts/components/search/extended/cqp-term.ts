@@ -81,6 +81,7 @@ angular.module("korpApp").component("extendedCqpTerm", {
 
             ctrl.$onInit = () => {
                 store.watch("corpus", () => updateAttributes())
+                store.watch("lang", () => updateAttributes())
                 store.watch("parallel_corpora", () => updateAttributes())
                 // React on the date interval attribute becoming available
                 getTimeData().then(() => updateAttributes())

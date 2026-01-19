@@ -11,9 +11,6 @@ import { SelectWordEvent } from "@/statemachine/types"
 import { ApiKwic, Token } from "@/backend/types"
 import { StoreService } from "@/services/store"
 import { QueryParams, QueryParamSort, QueryResponse } from "@/backend/types/query"
-import { CorpusTransformed } from "@/settings/config-transformed.types"
-import { JQueryExtended, JQueryStaticExtended } from "@/jquery.types"
-import { loc } from "@/i18n"
 import { calculateHitsPicture, HitsPictureItem, isKwic, isLinkedKwic, massageData, Row } from "@/kwic/kwic"
 import { corpusSelection } from "@/corpora/corpus_listing"
 import { RelationsSentencesParams } from "@/backend/types/relations-sentences"
@@ -76,30 +73,54 @@ const UPDATE_DELAY = 500
 
 angular.module("korpApp").component("kwic", {
     template: html`
-        <div class="flex flex-wrap items-baseline mb-4 gap-4 bg-gray-100 p-2">
-            <label>
-                <input type="checkbox" ng-model="context" ng-value="false" ng-change="updateContext()" />
-                {{'show_context' | loc:$root.lang}}
-                <i
-                    class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                    uib-tooltip="{{'show_context_help' | loc:$root.lang}}"
-                ></i>
-            </label>
-            <div ng-show="$ctrl.showSearchOptions">
+        <div class="bg-gray-100 mb-4 p-2 flex flex-wrap items-baseline justify-between gap-4">
+            <div class="flex flex-wrap items-baseline gap-4">
                 <label>
-                    {{ "hits_per_page" | loc:$root.lang }}:
-                    <select ng-change="updateHpp()" ng-model="hpp" ng-options="x for x in hppOptions"></select>
+                    <input type="checkbox" ng-model="context" ng-value="false" ng-change="updateContext()" />
+                    {{'show_context' | loc:$root.lang}}
+                    <i
+                        class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                        uib-tooltip="{{'show_context_help' | loc:$root.lang}}"
+                    ></i>
                 </label>
+                <div ng-show="$ctrl.showSearchOptions">
+                    <label>
+                        {{ "hits_per_page" | loc:$root.lang }}:
+                        <select ng-change="updateHpp()" ng-model="hpp" ng-options="x for x in hppOptions"></select>
+                    </label>
+                </div>
+                <div ng-show="$ctrl.showSearchOptions">
+                    <label>
+                        {{ "sort_default" | loc:$root.lang }}:
+                        <select
+                            ng-change="updateSort()"
+                            ng-model="sort"
+                            ng-options="k as v | loc:$root.lang for (k, v) in sortOptions"
+                        ></select>
+                    </label>
+                </div>
             </div>
-            <div ng-show="$ctrl.showSearchOptions">
-                <label>
-                    {{ "sort_default" | loc:$root.lang }}:
-                    <select
-                        ng-change="updateSort()"
-                        ng-model="sort"
-                        ng-options="k as v | loc:$root.lang for (k, v) in sortOptions"
-                    ></select>
-                </label>
+
+            <div class="flex flex-wrap items-baseline gap-4">
+                <select
+                    id="frontendDownloadLinks"
+                    ng-if="!$ctrl.loading && $ctrl._settings['enable_frontend_kwic_download']"
+                    ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hits)"
+                    ng-model="$ctrl.download.selected"
+                    ng-options="item.value as item.label | loc:$root.lang disable when item.disabled for item in $ctrl.download.options"
+                ></select>
+                <a
+                    class="kwicDownloadLink hidden"
+                    ng-if="$ctrl._settings['enable_frontend_kwic_download']"
+                    href="{{$ctrl.download.blobName}}"
+                    download="{{$ctrl.download.fileName}}"
+                    target="_self"
+                ></a>
+                <json-button
+                    ng-if="!$ctrl.loading && $ctrl.response"
+                    endpoint="query"
+                    data="$ctrl.response"
+                ></json-button>
             </div>
         </div>
 
@@ -228,26 +249,6 @@ angular.module("korpApp").component("kwic", {
                 page-change="$ctrl.pageEvent(page)"
                 hits-per-page="$ctrl.hitsPerPage"
             ></kwic-pager>
-
-            <div ng-if="!$ctrl.loading" class="flex gap-4 justify-end">
-                <select id="download-links" ng-if="$ctrl._settings['enable_backend_kwic_download']"></select>
-                <select
-                    id="frontendDownloadLinks"
-                    ng-if="$ctrl._settings['enable_frontend_kwic_download']"
-                    ng-change="$ctrl.download.init($ctrl.download.selected, $ctrl.hits)"
-                    ng-model="$ctrl.download.selected"
-                    ng-options="item.value as item.label | loc:$root.lang disable when item.disabled for item in $ctrl.download.options"
-                ></select>
-                <a
-                    class="kwicDownloadLink"
-                    ng-if="$ctrl._settings['enable_frontend_kwic_download']"
-                    href="{{$ctrl.download.blobName}}"
-                    download="{{$ctrl.download.fileName}}"
-                    target="_self"
-                    style="display: none;"
-                ></a>
-                <json-button ng-if="$ctrl.response" endpoint="query" data="$ctrl.response"></json-button>
-            </div>
         </div>
     `,
     bindings: {
@@ -304,13 +305,6 @@ angular.module("korpApp").component("kwic", {
                         $timeout(() => {
                             $element.find(".match .word").first().trigger("click")
                             centerScrollbar()
-                        })
-                    }
-
-                    if (settings["enable_backend_kwic_download"] && $ctrl.params) {
-                        setDownloadLinks($ctrl.params, {
-                            kwic: $ctrl.kwic,
-                            corpus_order: $ctrl.corpusOrder,
                         })
                     }
 
@@ -454,7 +448,7 @@ angular.module("korpApp").component("kwic", {
 
                 if ($ctrl.active) {
                     statemachine.send("SELECT_WORD", {
-                        sentenceData: scope.sentence.structs,
+                        sentenceData: scope.sentence.structs || {},
                         wordData: scope.word,
                         corpus: scope.sentence.corpus.toLowerCase(),
                         tokens: scope.sentence.tokens,
@@ -731,104 +725,4 @@ class SelectionManager {
     hasSelected(): boolean {
         return this.selected.length > 0
     }
-}
-
-// Add download links for other formats, defined in
-// settings["download_formats"] (Jyrki Niemi <jyrki.niemi@helsinki.fi>
-// 2014-02-26/04-30)
-export function setDownloadLinks(params: any, result_data: { kwic: Row[]; corpus_order: string[] }): void {
-    // If some of the required parameters are null, return without
-    // adding the download links.
-    if (!(params != null && result_data != null && result_data.corpus_order != null && result_data.kwic != null)) {
-        console.log("failed to do setDownloadLinks")
-        return
-    }
-
-    if (result_data.kwic.length == 0) {
-        $("#download-links").hide()
-        return
-    }
-
-    $("#download-links").show()
-
-    // Get the number (index) of the corpus of the query result hit
-    // number hit_num in the corpus order information of the query
-    // result.
-    const get_corpus_num = (hit_num: number) =>
-        result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus.toUpperCase())
-
-    console.log("setDownloadLinks data:", result_data)
-    $("#download-links").empty()
-    // Corpora in the query result
-    const result_corpora = result_data.corpus_order.slice(
-        get_corpus_num(0),
-        get_corpus_num(result_data.kwic.length - 1) + 1,
-    )
-    // Settings of the corpora in the result, to be passed to the
-    // download script
-    const result_corpora_settings: Record<string, CorpusTransformed> = {}
-    let i = 0
-    while (i < result_corpora.length) {
-        const corpus_ids = result_corpora[i].toLowerCase().split("|")
-        let j = 0
-        while (j < corpus_ids.length) {
-            const corpus_id = corpus_ids[j]
-            result_corpora_settings[corpus_id] = settings.corpora[corpus_id]
-            j++
-        }
-        i++
-    }
-    $("#download-links").append("<option value='init' rel='localize[download_kwic]'></option>")
-    i = 0
-    while (i < settings.download_formats.length) {
-        const format = settings.download_formats[i]
-        // NOTE: Using attribute rel="localize[...]" to localize the
-        // title attribute requires a small change to
-        // lib/jquery.localize.js. Without that, we could use
-        // `loc`, but it would not change the
-        // localizations immediately when switching languages but only
-        // after reloading the page.
-        // # title = loc('formatdescr_' + format)
-        const option = $(`\
-<option
-    value="${format}"
-    title="${loc(`formatdescr_${format}`)}"
-    class="download_link">${format.toUpperCase()}</option>\
-`)
-
-        const query_params = JSON.stringify(Object.fromEntries(new URLSearchParams(params)))
-
-        const download_params = {
-            query_params,
-            format,
-            korp_url: window.location.href,
-            korp_server_url: settings.korp_backend_url,
-            corpus_config: JSON.stringify(result_corpora_settings),
-            corpus_config_info_keys: ["metadata", "licence", "homepage", "compiler"].join(","),
-            urn_resolver: settings.urnResolver,
-        }
-        if ("download_format_params" in settings) {
-            if ("*" in settings.download_format_params) {
-                $.extend(download_params, settings.download_format_params["*"])
-            }
-            if (format in settings.download_format_params) {
-                $.extend(download_params, settings.download_format_params[format])
-            }
-        }
-        option.appendTo("#download-links").data("params", download_params)
-        i++
-    }
-    $("#download-links").off("change")
-    ;($("#download-links") as JQueryExtended)
-        .localize()
-        .click(false)
-        .change(function () {
-            const params = $(":selected", this).data("params")
-            if (!params) {
-                return
-            }
-            ;($ as JQueryStaticExtended).generateFile(settings.download_cgi_script!, params)
-            const self = $(this)
-            return setTimeout(() => self.val("init"), 1000)
-        })
 }

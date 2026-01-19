@@ -20,7 +20,7 @@ type WordPictureScope = IScope & {
 
 angular.module("korpApp").component("wordPicture", {
     template: html`
-        <div class="content_target flex flex-wrap gap-4 items-start">
+        <div class="flex flex-wrap gap-4 items-start">
             <section class="radialBkg p-2 border border-gray-400" ng-repeat="section in $ctrl.data.getData()">
                 <h2 class="text-xl mb-4">
                     <span

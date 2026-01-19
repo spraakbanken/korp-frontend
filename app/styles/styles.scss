@@ -1287,7 +1287,8 @@ slider {
     }
 }
 
-.slick-viewport .slick-cell-checkboxsel input {
+.slick-viewport input[type=checkbox] {
+    // Match the header cell padding
     margin-left: 6px;
 }
 
@@ -1437,7 +1438,6 @@ line.tick {
         color: indianred !important;
     }
 }
-    
 
 #myGrid .total-column {
     background-color: #fff8f0;
@@ -1657,10 +1657,6 @@ line.tick {
 }
 
 /* ----------- Autocompletion ----------- */
-
-.lemgram-namespace {
-    color: #777777;
-}
 
 .autoc-spinner {
     margin-left: -20px;

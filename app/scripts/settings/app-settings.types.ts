@@ -26,10 +26,7 @@ export type AppSettings = {
     default_reading_context: string
     default_within?: Record<string, string>
     description?: string
-    download_cgi_script?: string
     download_formats: string[]
-    download_format_params: Record<string, Record<string, string | number>>
-    enable_backend_kwic_download?: boolean
     enable_frontend_kwic_download?: boolean
     frontpage?: {
         corpus_updates?: boolean
@@ -68,7 +65,6 @@ export type AppSettings = {
     statistics_case_insensitive_default?: boolean
     statistics_limit?: number
     statistics_postprocess?: (processed: StatisticsProcessed) => StatisticsProcessed
-    urnResolver?: string
     visible_modes: number
     word_label: Record<string, string>
     word_picture?: boolean

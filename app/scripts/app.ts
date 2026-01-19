@@ -172,6 +172,9 @@ korpApp.run([
         let waitForLogin = false
 
         async function initializeCorpusSelection(ids: string[], skipLogin?: boolean): Promise<void> {
+            // Resolve any folder ids to the contained corpus ids
+            ids = ids.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
+
             const isDenied = (corpus?: CorpusTransformed) =>
                 corpus?.limited_access && !auth.hasCredential(corpus.id.toUpperCase())
 

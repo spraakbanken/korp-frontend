@@ -15,7 +15,7 @@ import {
 } from "lodash"
 import moment, { type Moment } from "moment"
 import settings, { normalizeDataset } from "@/settings"
-import { locObj } from "@/i18n"
+import { getLang, locObj } from "@/i18n"
 import { Attribute } from "@/settings/config.types"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { objectIntersection, objectUnion } from "@/util"
@@ -321,15 +321,14 @@ export class CorpusSet {
             }
         }
 
-        sentAttrs = sortBy(sentAttrs, (item) => locObj(item.label))
-
         return sentAttrs
     }
 
     getAttributeGroups(wordOp: SetOperator, structOp: SetOperator, lang?: string): AttributeOption[] {
         const attrs = this.getWordAttributeGroups(wordOp, lang)
         const sentAttrs = this.getStructAttributeGroups(structOp, lang)
-        return [this._wordGroup, ...attrs, ...sentAttrs]
+        const comparator = (a: Attribute, b: Attribute) => locObj(a.label).localeCompare(locObj(b.label), getLang())
+        return [this._wordGroup, ...attrs.sort(comparator), ...sentAttrs.sort(comparator)]
     }
 
     getAttributeGroupsExtended(lang?: string): AttributeOption[] {

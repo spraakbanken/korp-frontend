@@ -4,7 +4,6 @@ import { Dataset, isTotalRow, StatisticsWorkerMessage, StatisticsProcessed, Sear
 import { fromKeys, regescape, splitFirst } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { loc, locAttribute, locObj } from "@/i18n"
-import CSV from "comma-separated-values/csv"
 import { corpusListing, corpusSelection } from "@/corpora/corpus_listing"
 import { CorpusSet } from "@/corpora/corpus-set"
 import { Lemgram } from "@/lemgram"
@@ -152,10 +151,8 @@ export function createStatisticsCsv(
     attrs: string[],
     corpora: CorpusTransformed[],
     relative: boolean,
-    csvType: string,
     lang?: string,
-): string {
-    const delimiter = csvType == "tsv" ? "\t" : ";"
+): (string | number)[][] {
     const frequencyIndex = relative ? 1 : 0
     const corpusTitles = corpora.map((corpus) => locObj(corpus.title, lang))
     const header = [...attrs, loc("stats_total", lang), ...corpusTitles]
@@ -168,5 +165,5 @@ export function createStatisticsCsv(
         return [...attrValues, row.total[frequencyIndex], ...frequencies]
     })
 
-    return CSV.encode(output, { header, delimiter })
+    return [header, ...output]
 }

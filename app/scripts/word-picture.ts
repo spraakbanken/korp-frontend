@@ -77,6 +77,8 @@ export class WordPicture {
             const item = convertItem(itemRaw)
             if (!item) continue
             const { match, matchpos, rel, reverse } = item
+            // Skip relations that are not configured
+            if (!this.config[matchpos]) continue
             // Store items by category
             const id = this.getColumnId(matchpos, rel, reverse)
             this.items[id] ??= []
@@ -117,5 +119,19 @@ export class WordPicture {
     }
 
     /** Get a string for the params that identify a word picture column */
-    getColumnId = (pos: string, rel: string, reverse: boolean) => `${pos}${reverse ? "+" : "-"}${rel}`
+    getColumnId = (pos: string, rel: string, reverse: boolean) => `${pos}${reverse ? "+" : "-"}${rel}`;
+
+    /** Create listing of full data, suitable for CSV export. */
+    *generateCsv(): Generator<string[]> {
+        const fields: (keyof MatchedRelation)[] = ["head", "headpos", "dep", "deppos", "rel", "depextra", "freq", "mi"]
+        // Header row
+        yield fields
+
+        // Data rows
+        for (const key of Object.keys(this.items)) {
+            for (const relation of this.items[key]) {
+                yield fields.map((field) => String(relation[field] || ""))
+            }
+        }
+    }
 }

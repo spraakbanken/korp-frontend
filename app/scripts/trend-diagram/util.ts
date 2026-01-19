@@ -1,6 +1,5 @@
 import { Granularity, Histogram } from "@/backend/types"
 import { loc } from "@/i18n"
-import CSV from "comma-separated-values/csv"
 import { maxBy, minBy, range, sortedIndexOf } from "lodash"
 import moment, { Moment } from "moment"
 
@@ -207,7 +206,7 @@ export function formatUnixDate(zoom: Level, time: number) {
     return m.format(FORMATS[zoom])
 }
 
-export function createTrendTableCsv(series: Series[], relative: boolean, csvType: string): string {
+export function createTrendTableCsv(series: Series[], relative: boolean): (string | number)[][] {
     // Create header row
     const formatHeader = (cell: SeriesPoint): string => moment(cell.x * 1000).format(FORMATS[cell.zoom])
     const dateHeaders = series[0].data.map(formatHeader)
@@ -226,7 +225,5 @@ export function createTrendTableCsv(series: Series[], relative: boolean, csvType
     }
     const data = series.map((row) => [row.name, ...row.data.map((cell) => formatCell(row, cell))])
 
-    // Output CSV
-    const delimiter = csvType == "tsv" ? "\t" : ";"
-    return CSV.encode(data, { header, delimiter })
+    return [header, ...data]
 }

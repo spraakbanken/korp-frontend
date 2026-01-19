@@ -357,13 +357,6 @@
   resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.10.tgz#277a542aff6776d8a9b15f2ac682a663e3e94bbd"
   integrity sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww==
 
-"@types/slickgrid@^2.1.40":
-  version "2.1.40"
-  resolved "https://registry.yarnpkg.com/@types/slickgrid/-/slickgrid-2.1.40.tgz#07f8aa7d3745aa5d0f64cc666bb877562c8eaa59"
-  integrity sha512-+HWaipRr4bw0cy4eS8PCWxo+Fi66aL+mh36unRLAWtatAvMnxpldTKfpe9T7zdNtgN+rq+/faux3JzFR1mj/dg==
-  dependencies:
-    "@types/jquery" "*"
-
 "@types/sockjs@^0.3.33":
   version "0.3.33"
   resolved "https://registry.yarnpkg.com/@types/sockjs/-/sockjs-0.3.33.tgz#570d3a0b99ac995360e3136fd6045113b1bd236f"
@@ -2852,12 +2845,12 @@ slash@^4.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-4.0.0.tgz#2422372176c4c6c5addb5e2ada885af984b396a7"
   integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
 
-slickgrid@^4:
-  version "4.1.7"
-  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-4.1.7.tgz#743149e1cefcdb0cd6fba61e3fc7e31b3193dba8"
-  integrity sha512-dWaJjOlOdBXjQN/ivwzTGlF+Xx3ktKNK+CxejnsMXUybgUj32vqAjwezeTYkiDZDr5K0MMPMXvNysfIhjn79KA==
+slickgrid@^5:
+  version "5.18.0"
+  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-5.18.0.tgz#3e294672fa383bcade9373245e736c31700738c4"
+  integrity sha512-TehUhBRm6SvMtg0QI3V4nBQkV0J0pPuR8iCv+GoQ4fHqJYsQAIBEy/MUzKY01BYNuHnu3lEwzrtVTJYVqW+4UA==
   dependencies:
-    sortablejs "^1.15.0"
+    sortablejs "^1.15.6"
 
 sockjs@^0.3.24:
   version "0.3.24"
@@ -2868,10 +2861,10 @@ sockjs@^0.3.24:
     uuid "^8.3.2"
     websocket-driver "^0.7.4"
 
-sortablejs@^1.15.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.15.0.tgz#53230b8aa3502bb77a29e2005808ffdb4a5f7e2a"
-  integrity sha512-bv9qgVMjUMf89wAvM6AxVvS/4MX3sPeN0+agqShejLU5z5GX4C75ow1O2e5k4L6XItUyAK3gH6AxSbXrOM5e8w==
+sortablejs@^1.15.6:
+  version "1.15.6"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.15.6.tgz#ff93699493f5b8ab8d828f933227b4988df1d393"
+  integrity sha512-aNfiuwMEpfBM/CN6LY0ibyhxPfPbyFeBTYJKCvzkJ2GkUpazIt3H+QIPAMHwqQ7tMKaHz1Qj+rJJCqljnf4p3A==
 
 source-map-generator@2.0.1:
   version "2.0.1"
