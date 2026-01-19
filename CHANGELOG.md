@@ -9,6 +9,7 @@
 ### Changed
 
 - Removed broken code for backend-based KWIC download
+- Upgrade to SlickGrid 5.x
 
 ### Fixed
 

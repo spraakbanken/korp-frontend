@@ -13,13 +13,14 @@ import { TrendTask } from "@/task/trend-task"
 import { TrendGraph } from "@/trend-diagram/graph"
 import { renderTable } from "@/trend-diagram/trend-table"
 import { CsvType, downloadCsvFile } from "@/csv"
+import { SlickGrid } from "slickgrid"
 
 type ResultsTrendDiagramController = IController & {
     loading: boolean
     setProgress: (loading: boolean, progress: number) => void
     task: TrendTask
     graph?: TrendGraph
-    time_grid: Slick.Grid<any>
+    time_grid: SlickGrid<any>
     hasEmptyIntervals?: boolean
     $result: JQLite
     error?: string

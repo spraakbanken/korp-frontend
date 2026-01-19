@@ -373,7 +373,7 @@ angular.module("korpApp").component("statistics", {
             /** Create KWIC sub queries for selected table rows, as a list of `[cqp, label]` pairs. */
             function getSubqueries(): [string, string][] {
                 const rowIds = grid.getSelectedRows().sort()
-                const rows = rowIds.map(grid.getDataItem)
+                const rows = rowIds.map((i) => grid.getDataItem(i))
                 const pairs: [string, string][] = []
                 for (const row of rows) {
                     if (isTotalRow(row)) continue
