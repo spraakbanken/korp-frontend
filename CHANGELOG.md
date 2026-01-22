@@ -5,6 +5,7 @@
 ### Added
 
 - Configurable attribute names for dependency tree [#499](https://github.com/spraakbanken/korp-frontend/issues/499)
+- Disable the dependency tree [#286](https://github.com/spraakbanken/korp-frontend/issues/286)
 
 ### Fixed
 

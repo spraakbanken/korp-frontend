@@ -148,8 +148,9 @@ angular.module("korpApp").component("sidebar", {
             }
 
             $scope.hasDeptree = () => {
-                // Check if current corpus has deptree attributes
                 if (!$ctrl.corpusObj) return false
+                if ($ctrl.corpusObj.deptree?.hidden) return false
+                // Check if current corpus has deptree attributes
                 const mapping = getDeptreeAttrMapping($ctrl.corpusObj)
                 return !!$ctrl.corpusObj.attributes[mapping.rel]
             }

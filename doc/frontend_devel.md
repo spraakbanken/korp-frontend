@@ -295,6 +295,13 @@ deptree:
     rel: udeprel
 ```
 
+The button shows automatically if the attributes are present. To prevent this:
+
+```yaml
+deptree:
+  hidden: true
+```
+
 ## Extended components
 
 The frontend features a number of components that can be used for the attributes in extended search. For example, dropdowns with

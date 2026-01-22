@@ -117,6 +117,7 @@ export type DeptreeConfig = {
         /** Attribute name for the syntactic relation (default: "deprel") */
         rel?: string
     }
+    hidden?: boolean
 }
 
 /** A value that names some object and possibly supplies options for that object. */
