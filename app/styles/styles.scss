@@ -1687,7 +1687,7 @@ line.tick {
     }
 }
 .reduce-dropdown-menu {
-    width: 100%;
+    min-width: 100%;
     max-height: 400px;
     .selected {
         background: rgb(242, 247, 255);

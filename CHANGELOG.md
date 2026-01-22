@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- "Group by" dropdown expands to fit content
+
 ## [9.13.0] – 2026-01-19
 
 ### Added
