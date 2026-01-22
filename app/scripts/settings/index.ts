@@ -1,8 +1,9 @@
 import settings from "korp_config"
 import { Settings } from "./settings.types"
-import { Attribute, MaybeConfigurable, MaybeWithOptions } from "./config.types"
+import { Attribute, DeptreeConfig, MaybeConfigurable, MaybeWithOptions } from "./config.types"
 import { isFunction } from "lodash"
 import { WordPictureDef } from "./app-settings.types"
+import { CorpusTransformed } from "./config-transformed.types"
 
 export default settings
 
@@ -60,6 +61,17 @@ export function getConfigurable<T>(
 }
 
 export const getDefaultWithin = () => Object.keys(settings["default_within"] || {})[0]
+
+/** Identify deptree attribute names */
+export function getDeptreeAttrMapping(corpus: CorpusTransformed): Record<string, string> {
+    const defaultMapping = {
+        ref: "ref",
+        pos: "pos",
+        head: "dephead",
+        rel: "deprel",
+    }
+    return { ...defaultMapping, ...corpus.deptree?.attrs }
+}
 
 /** Convert Word picture config to use abbreviations for POS and relation, to match the data. */
 export function getWordPictureConfig(): Record<string, WordPictureDef[]> {

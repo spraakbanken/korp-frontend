@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Configurable attribute names for dependency tree [#499](https://github.com/spraakbanken/korp-frontend/issues/499)
+
 ### Fixed
 
 - "Group by" dropdown expands to fit content

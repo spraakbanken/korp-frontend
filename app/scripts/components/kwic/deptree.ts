@@ -3,6 +3,7 @@ import { html } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Token } from "@/backend/types"
 import { LangString } from "@/i18n/types"
+import { getDeptreeAttrMapping } from "@/settings"
 
 type DeptreeController = IController & {
     tokens: Token[]
@@ -61,20 +62,23 @@ angular.module("korpApp").component("depTree", {
                         "$scope",
                         "$timeout",
                         ($scope: ModalScope, $timeout: ITimeoutService) => {
+                            const attrMapping = getDeptreeAttrMapping($ctrl.corpus)
+
                             $scope.clickX = () => {
                                 modal.close()
                             }
 
+                            // Wait for target div to be present
                             $timeout(() => {
-                                drawBratTree($ctrl.tokens, "magic_secret_id", (msg) => {
+                                drawBratTree($ctrl.tokens, "magic_secret_id", attrMapping, (msg) => {
                                     const [type, val] = Object.entries(msg)[0]
                                     $scope.$apply((s: ModalScope) => {
                                         const attribute = $ctrl.corpus.attributes[type]
                                         s.label = attribute.label || type
-                                        s.value = attribute.translation?.[val] || attribute.label || val
+                                        s.value = attribute.translation?.[val] || val
                                     })
                                 })
-                            }, 0)
+                            })
                         },
                     ],
                     size: "lg",

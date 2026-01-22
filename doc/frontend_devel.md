@@ -282,6 +282,19 @@ current word. By default, all the attributes listed under `pos_attributes`, `str
 The order of the attributes arrays determine the order in the sidebar. Custom attributes are
 added to the end of their respective category.
 
+### Dependency tree visualization
+
+If a corpus has dependency annotations, the sidebar can show a tree visualization of the sentence. A decorated button triggers a modal with the tree diagram.
+
+Dependency annotations are identified as four attributes, by default `ref`, `pos`, `dephead` and `deprel`. The names can be overridden in corpus config:
+
+```yaml
+deptree:
+  attrs: # This corpus has upos and udeprel instead
+    pos: upos
+    rel: udeprel
+```
+
 ## Extended components
 
 The frontend features a number of components that can be used for the attributes in extended search. For example, dropdowns with
