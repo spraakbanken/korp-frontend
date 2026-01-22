@@ -10,6 +10,7 @@
 ### Fixed
 
 - "Group by" dropdown expands to fit content
+- Correct value in singleValue search widget
 
 ## [9.13.0] – 2026-01-19
 
