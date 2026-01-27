@@ -4,7 +4,7 @@ import { html } from "@/util"
 import { prefixAttr } from "@/settings"
 import { RootScope } from "@/root-scope.types"
 import { SavedSearch } from "@/services/local-storage"
-import { corpusSelection } from "@/corpora/corpus_listing"
+import { corpusListing } from "@/corpora/corpus_listing"
 import { AttributeOption } from "@/corpora/corpus-set"
 import { savedSearches } from "@/search/saved-searches"
 import { CompareTask } from "@/task/compare-task"
@@ -83,7 +83,7 @@ angular.module("korpApp").component("compareSearch", {
 
             $ctrl.updateAttributes = () => {
                 if ($ctrl.cmp1 && $ctrl.cmp2) {
-                    const listing = corpusSelection.pick([...$ctrl.cmp1.corpora, ...$ctrl.cmp2.corpora])
+                    const listing = corpusListing.pick([...$ctrl.cmp1.corpora, ...$ctrl.cmp2.corpora])
                     $ctrl.currentAttrs = listing.getAttributeGroupsCompare()
                 }
             }

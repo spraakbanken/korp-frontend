@@ -9,6 +9,7 @@
 
 ### Fixed
 
+- Attribute selector in Compare tab broken [#501](https://github.com/spraakbanken/korp-frontend/issues/501)
 - "Group by" dropdown expands to fit content
 - Correct value in singleValue search widget
 
