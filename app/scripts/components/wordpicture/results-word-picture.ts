@@ -26,6 +26,8 @@ type ResultsWordPictureScope = IScope & {
     data?: PeriodWordPicture[]
     downloadOption: CsvType | ""
     error?: string
+    /** Find the data of the period before a given one */
+    getPrevPeriodData: (period: string) => PeriodWordPicture | undefined
     limit: string // Number as string to work with <select ng-model>
     limitOptions: number[]
     onClickExample: (relation: MatchedRelation) => void
@@ -157,6 +159,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                         data="period.data"
                         limit="limit"
                         on-click-example="onClickExample(relation)"
+                        prev-period-data="getPrevPeriodData(period.range)"
                         show-word-class="showWordClass"
                         sort="sort"
                     ></word-picture>
@@ -302,6 +305,14 @@ angular.module("korpApp").component("resultsWordPicture", {
                 } finally {
                     $timeout(() => $ctrl.setProgress(false, 0))
                 }
+            }
+
+            $scope.getPrevPeriodData = (periodRange: string) => {
+                if (!$scope.data) return undefined
+                const index = $scope.data.findIndex((period) => period.range == periodRange)
+                const asc = $scope.split && $scope.split.order == "asc"
+                // Unless sorting ascending (oldest first), the previous period is the next in the array
+                return $scope.data[index + (asc ? -1 : 1)]
             }
 
             $scope.onClickExample = function (relation) {

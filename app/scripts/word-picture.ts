@@ -48,7 +48,6 @@ export class WordPicture {
     readonly config = getWordPictureConfig()
     readonly items: Record<string, MatchedRelation[]> = {}
     readonly headings: WordPictureSectionHeading[] = []
-    readonly segments: string[]
 
     constructor(
         readonly query: string,

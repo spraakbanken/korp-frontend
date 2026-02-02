@@ -4,11 +4,13 @@ import { MatchedRelation, WordPicture } from "@/word-picture"
 import { RelationsSort } from "@/backend/types/relations"
 import "./word-picture-column"
 import { Lemgram } from "@/lemgram"
+import { isEqual } from "lodash"
 
 type WordPictureController = IController & {
     data: WordPicture
     limit: number
     onClickExample: (args: { relation: MatchedRelation }) => void
+    prevPeriodData?: { range: string; data: WordPicture }
     showWordClass: boolean
     sort: RelationsSort
 }
@@ -17,6 +19,11 @@ type WordPictureScope = IScope & {
     fromLemgram: (word: string) => string
     isLemgram: (word: string) => boolean
     lemgramToHtml: (word: string) => string
+    getPrevPeriodItems: (
+        heading: { word: string; pos: string },
+        tableIndex: number,
+        rel: string,
+    ) => MatchedRelation[] | undefined
 }
 
 angular.module("korpApp").component("wordPicture", {
@@ -49,7 +56,7 @@ angular.module("korpApp").component("wordPicture", {
                         items="column.rows"
                         limit="$ctrl.limit"
                         on-click-example="$ctrl.onClickExample({relation})"
-                        segment="$ctrl.data.segments[0]"
+                        prev-period-items="getPrevPeriodItems(section.heading, table.index, column.rel)"
                         show-word-class="$ctrl.showWordClass"
                         sort="$ctrl.sort"
                     ></word-picture-column>
@@ -61,6 +68,7 @@ angular.module("korpApp").component("wordPicture", {
         data: "<",
         limit: "<",
         onClickExample: "&",
+        prevPeriodData: "<",
         showWordClass: "<",
         sort: "<",
     },
@@ -72,6 +80,21 @@ angular.module("korpApp").component("wordPicture", {
             $scope.fromLemgram = (word) => Lemgram.parse(word)?.form || word
             $scope.isLemgram = (id) => !!Lemgram.parse(id)
             $scope.lemgramToHtml = (id) => Lemgram.parse(id)!.toHtml()
+
+            $scope.getPrevPeriodItems = (
+                heading: { word: string; pos: string },
+                tableIndex: number,
+                rel: string,
+            ): MatchedRelation[] | undefined => {
+                if (!$ctrl.prevPeriodData) return undefined
+                const prevData = $ctrl.prevPeriodData.data
+                const section = prevData.getData().find((s) => isEqual(s.heading, heading))
+                if (!section) return undefined
+                const table = section.tables[tableIndex]
+                if (!table) return undefined
+                const column = table.columns.find((c) => c.rel === rel)
+                return column?.rows
+            }
         },
     ],
 })

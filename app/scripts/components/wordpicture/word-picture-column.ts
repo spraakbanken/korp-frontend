@@ -8,9 +8,11 @@ import { loc } from "@/i18n"
 
 type WordPictureColumnController = IController & {
     cssClass: string
+    getTrendMarker: (item: MatchedRelation) => string | undefined
     items: MatchedRelation[]
     limit: string
     onClickExample: (args: { relation: MatchedRelation }) => void
+    prevPeriodItems?: MatchedRelation[]
     showWordClass: boolean
     sort: RelationsSort
     // Locals
@@ -41,6 +43,7 @@ angular.module("korpApp").component("wordPictureColumn", {
                         <td uib-tooltip-html="$ctrl.getStatsTooltip(row) | trust" class="px-1 text-right">
                             {{$ctrl.getStats(row)[$ctrl.sort]}}
                         </td>
+                        <td class="px-1 cursor-pointer">{{ $ctrl.getTrendMarker(row) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -51,6 +54,7 @@ angular.module("korpApp").component("wordPictureColumn", {
         items: "<",
         limit: "<",
         onClickExample: "&",
+        prevPeriodItems: "<",
         showWordClass: "<",
         sort: "<",
     },
@@ -102,6 +106,25 @@ angular.module("korpApp").component("wordPictureColumn", {
             /** Format a number with two digits. */
             const formatNumber = (number: Number): string =>
                 number.toLocaleString(store.lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
+            $ctrl.getTrendMarker = function (item: MatchedRelation): string | undefined {
+                const prevItem = getPrevPeriodItem(item)
+                if (!prevItem) return undefined
+                const delta = item[$ctrl.sort] - prevItem[$ctrl.sort]
+                if (delta > 0) return "↗"
+                if (delta < 0) return "↘"
+                return undefined
+            }
+
+            /** Find equivalent item in the previous period */
+            function getPrevPeriodItem(item: MatchedRelation): MatchedRelation | undefined {
+                return $ctrl.prevPeriodItems?.find(
+                    (prevItem) =>
+                        prevItem.other == item.other &&
+                        prevItem.otherpos == item.otherpos &&
+                        prevItem.prefix == item.prefix,
+                )
+            }
         },
     ],
 })
