@@ -13,6 +13,10 @@ type WordPictureColumnController = IController & {
     limit: string
     onClickExample: (args: { relation: MatchedRelation }) => void
     prevPeriodItems?: MatchedRelation[]
+    /** Sorted and limited items */
+    rows: MatchedRelation[]
+    /** Rows present in the previous period but not in the current */
+    rowsLost: MatchedRelation[]
     showWordClass: boolean
     sort: RelationsSort
     // Locals
@@ -45,6 +49,21 @@ angular.module("korpApp").component("wordPictureColumn", {
                         </td>
                         <td class="px-1 cursor-pointer">{{ $ctrl.getTrendMarker(row) }}</td>
                     </tr>
+                    <tr ng-repeat="row in $ctrl.rowsLost" ng-init="data = $ctrl.parseLemgram(row)" class="opacity-50">
+                        <td class="px-1 text-right"><span class="enumerate"></span></td>
+                        <td
+                            ng-click="$ctrl.onClickExample({relation: row})"
+                            class="px-1 pr-2 cursor-pointer hover:underline"
+                        >
+                            <span ng-if="data.label">
+                                {{ data.label }}<sup ng-if="data.idx > 1">{{data.idx}}</sup>
+                                <span ng-if="$ctrl.showWordClass && data.pos"> ({{data.pos | loc:$root.lang}}) </span>
+                            </span>
+                            <span ng-if="!data.label" class="opacity-50">&empty;</span>
+                        </td>
+                        <td />
+                        <td class="px-1 cursor-pointer">⤰</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -67,6 +86,12 @@ angular.module("korpApp").component("wordPictureColumn", {
                 if (changes.limit?.currentValue || changes.items?.currentValue || changes.sort?.currentValue) {
                     // Sort and limit items
                     $ctrl.rows = $ctrl.items.sort((a, b) => b[$ctrl.sort] - a[$ctrl.sort]).slice(0, Number($ctrl.limit))
+                    // Find rows from previous period that are missing now
+                    const rowsLost =
+                        $ctrl.prevPeriodItems?.filter(
+                            (prevItem) => !$ctrl.rows.some((currentItem) => isRelationEqual(currentItem, prevItem)),
+                        ) || []
+                    $ctrl.rowsLost = rowsLost.slice(0, Number($ctrl.limit) - $ctrl.rows.length)
                 }
             }
 
@@ -119,13 +144,11 @@ angular.module("korpApp").component("wordPictureColumn", {
 
             /** Find equivalent item in the previous period */
             function getPrevPeriodItem(item: MatchedRelation): MatchedRelation | undefined {
-                return $ctrl.prevPeriodItems?.find(
-                    (prevItem) =>
-                        prevItem.other == item.other &&
-                        prevItem.otherpos == item.otherpos &&
-                        prevItem.prefix == item.prefix,
-                )
+                return $ctrl.prevPeriodItems?.find((prevItem) => isRelationEqual(prevItem, item))
             }
+
+            const isRelationEqual = (a: MatchedRelation, b: MatchedRelation): boolean =>
+                a.other == b.other && a.otherpos == b.otherpos && a.prefix == b.prefix
         },
     ],
 })
