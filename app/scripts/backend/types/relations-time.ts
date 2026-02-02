@@ -2,6 +2,7 @@ import { Relation, RelationsParams } from "./relations"
 
 /** @see https://ws.spraakbanken.gu.se/docs/korp#tag/Word-Picture/paths/~1relations_time/get */
 export type RelationsTimeParams = RelationsParams & {
+    period_align?: "oldest"
     period_size?: number
 }
 

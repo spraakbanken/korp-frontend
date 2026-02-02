@@ -275,6 +275,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                             query.word,
                             $scope.sortLocal,
                             $scope.splitLocal.size,
+                            $scope.splitLocal.order == "asc",
                         )
                         const periods = Object.entries(data)
                             .map(([range, data]) => ({ range, data }))
