@@ -11,7 +11,7 @@ import "@/components/wordpicture/word-picture"
 import { StoreService } from "@/services/store"
 import { CsvType, downloadCsvFile } from "@/csv"
 import { ProgressHandler } from "@/backend/types"
-import { RelationsTimeProxy } from "@/backend/proxy/relations-time-proxy"
+import { PeriodWordPicture, RelationsTimeProxy } from "@/backend/proxy/relations-time-proxy"
 import { WordpicExampleTask } from "@/task/wordpic-example-task"
 import { RootScope } from "@/root-scope.types"
 
@@ -23,7 +23,7 @@ type ResultsWordPictureController = IController & {
 
 type ResultsWordPictureScope = IScope & {
     activated: boolean
-    data?: { range: string; data: WordPicture }[]
+    data?: PeriodWordPicture[]
     downloadOption: CsvType | ""
     error?: string
     limit: string // Number as string to work with <select ng-model>
@@ -280,11 +280,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                             $scope.splitLocal.size,
                             $scope.splitLocal.order == "asc",
                         )
-                        const periods = Object.entries(data)
-                            .map(([range, data]) => ({ range, data }))
-                            .sort((a, b) => parseInt(a.range) - parseInt(b.range))
-                        if ($scope.splitLocal.order == "desc") periods.reverse()
-                        $timeout(() => ($scope.data = periods))
+                        $timeout(() => ($scope.data = data))
                     } else {
                         const data = await $scope.proxy.makeRequest(query.type, query.word, $scope.sortLocal)
                         $timeout(() => ($scope.data = [{ range: "all", data }]))
