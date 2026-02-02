@@ -8,7 +8,7 @@ import { loc } from "@/i18n"
 
 type WordPictureColumnController = IController & {
     cssClass: string
-    getTrendMarker: (item: MatchedRelation) => string | undefined
+    getTrendMarker: (item: MatchedRelation) => string
     items: MatchedRelation[]
     limit: string
     onClickExample: (args: { relation: MatchedRelation }) => void
@@ -107,13 +107,14 @@ angular.module("korpApp").component("wordPictureColumn", {
             const formatNumber = (number: Number): string =>
                 number.toLocaleString(store.lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
-            $ctrl.getTrendMarker = function (item: MatchedRelation): string | undefined {
+            $ctrl.getTrendMarker = function (item: MatchedRelation): string {
+                if (!$ctrl.prevPeriodItems) return ""
                 const prevItem = getPrevPeriodItem(item)
-                if (!prevItem) return undefined
+                if (!prevItem) return "✴" // New item
                 const delta = item[$ctrl.sort] - prevItem[$ctrl.sort]
                 if (delta > 0) return "↗"
                 if (delta < 0) return "↘"
-                return undefined
+                return "" // No change
             }
 
             /** Find equivalent item in the previous period */
