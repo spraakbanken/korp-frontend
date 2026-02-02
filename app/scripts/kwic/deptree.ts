@@ -18,7 +18,12 @@ type BratType = {
 
 type HoverFunction = (data: Record<string, string>) => void
 
-export function drawBratTree(words: Token[], to_div: string, hover_fun: HoverFunction): void {
+export function drawBratTree(
+    words: Token[],
+    to_div: string,
+    attrMap: Record<string, string>,
+    hover_fun: HoverFunction,
+): void {
     const entity_types: BratType[] = []
     const relation_types: BratType[] = []
     const entities: BratEntity[] = []
@@ -27,10 +32,10 @@ export function drawBratTree(words: Token[], to_div: string, hover_fun: HoverFun
     const added_rel: string[] = []
 
     const add_word = function (word: Token, start: number, stop: number) {
-        const pos: string = word.pos
-        const ref: string = word.ref
-        const dephead: string = word.dephead
-        const deprel: string = word.deprel
+        const pos: string = word[attrMap.pos]
+        const ref: string = word[attrMap.ref]
+        const dephead: string = word[attrMap.head]
+        const deprel: string = word[attrMap.rel]
         if (!added_pos.includes(pos)) {
             added_pos.push(pos)
             entity_types.push(makeEntityFromPos(pos))
@@ -41,7 +46,7 @@ export function drawBratTree(words: Token[], to_div: string, hover_fun: HoverFun
         }
         const entity: BratEntity = ["T" + ref, pos, [[start, stop]]]
         entities.push(entity)
-        if (isNumber(dephead)) {
+        if (Number(dephead)) {
             const relation: BratRelation = [
                 "R" + ref,
                 deprel,
@@ -145,5 +150,3 @@ function makeRelationFromRel(r: string): BratType {
         ],
     }
 }
-
-const isNumber = (n: string) => !isNaN(Number(n))

@@ -1,5 +1,6 @@
 import { html } from "@/util"
 import { Widget, WidgetScope } from "./common"
+import { ITimeoutService } from "angular"
 
 type SingleValueScope = WidgetScope & {
     dataset: Record<string, string>
@@ -12,8 +13,11 @@ export const singleValue: Widget = {
     template: html`<input type="hidden" />`,
     controller: [
         "$scope",
-        function ($scope: SingleValueScope) {
-            $scope.model = $scope.attr.dataset ? Object.values($scope.attr.dataset)[0] : "-"
+        "$timeout",
+        function ($scope: SingleValueScope, $timeout: ITimeoutService) {
+            $timeout(() => {
+                $scope.model = $scope.attr.dataset ? Object.values($scope.attr.dataset)[0] : "-"
+            })
         },
     ],
 }

@@ -33,6 +33,7 @@ export type Corpus = {
     /** Attributes to use in global filters */
     attribute_filters: string[]
     context: Labeled[]
+    deptree?: DeptreeConfig
     description: LangString
     hide?: boolean
     id: string
@@ -103,6 +104,20 @@ export type CustomAttribute = {
     name: string
     pattern?: string
     sidebar_component?: MaybeWithOptions
+}
+
+export type DeptreeConfig = {
+    attrs?: {
+        /** Attribute name for the token position (default: "ref") */
+        ref?: string
+        /** Attribute name for the part of speech (default: "pos") */
+        pos?: string
+        /** Attribute name for the head token position (default: "dephead") */
+        head?: string
+        /** Attribute name for the syntactic relation (default: "deprel") */
+        rel?: string
+    }
+    hidden?: boolean
 }
 
 /** A value that names some object and possibly supplies options for that object. */

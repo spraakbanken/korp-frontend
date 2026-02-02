@@ -191,7 +191,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                     return
                 }
 
-                const timecqp = getTimeCqp(time, zoom, LEVELS.indexOf(zoom) < 3)
+                const timecqp = getTimeCqp(time, zoom)
                 const decodedCQP = decodeURIComponent(cqp)
 
                 const corpusIds = $ctrl.task.corpusListing.getIds()

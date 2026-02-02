@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [9.14.0] – 2026-02-02
+
+### Added
+
+- Configurable attribute names for dependency tree [#499](https://github.com/spraakbanken/korp-frontend/issues/499)
+- Disable the dependency tree [#286](https://github.com/spraakbanken/korp-frontend/issues/286)
+
+### Fixed
+
+- Attribute selector in Compare tab broken [#501](https://github.com/spraakbanken/korp-frontend/issues/501)
+- "Group by" dropdown expands to fit content
+- Correct value in singleValue search widget
+
 ## [9.13.0] – 2026-01-19
 
 ### Added
@@ -598,6 +611,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.14.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.0
 [9.13.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.13.0
 [9.12.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.12.0
 [9.11.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.11.4

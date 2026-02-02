@@ -163,7 +163,7 @@ export function getEmptyIntervals(data: SeriesPoint[]): SeriesPoint[][] {
     return intervals
 }
 
-export function getTimeCqp(timeUnix: number, zoom: Level, coarseGranularity?: boolean) {
+export function getTimeCqp(timeUnix: number, zoom: Level) {
     let timecqp: string
     const m = moment(timeUnix * 1000)
 
@@ -175,7 +175,7 @@ export function getTimeCqp(timeUnix: number, zoom: Level, coarseGranularity?: bo
      * Or have *both* from date/time and to date/time *outside* the interval
      */
 
-    if (coarseGranularity) {
+    if (LEVELS.indexOf(zoom) < 3) {
         // year, month, day
         const dateInside = `(int(_.text_datefrom) >= ${datefrom} & int(_.text_dateto) <= ${dateto})`
         const dateOutside = `(int(_.text_datefrom) <= ${datefrom} & int(_.text_dateto) >= ${dateto})`

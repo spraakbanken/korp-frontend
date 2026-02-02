@@ -1,7 +1,7 @@
 import angular, { ICompileService, IController, IControllerService, IScope } from "angular"
 import "../../../styles/sidebar.scss"
 import statemachine from "@/statemachine"
-import settings from "@/settings"
+import settings, { getDeptreeAttrMapping } from "@/settings"
 import { html } from "@/util"
 import { getConfigurable } from "@/settings"
 import { safeApply } from "@/angular-util"
@@ -65,6 +65,7 @@ type SidebarController = IController & {
 }
 
 type SidebarScope = IScope & {
+    hasDeptree: () => boolean
     posData: JQLite | null
     structData: JQLite | null
 }
@@ -91,11 +92,7 @@ angular.module("korpApp").component("sidebar", {
                 <div id="selected_word"></div>
             </sidebar-section>
 
-            <button
-                ng-show="$ctrl.corpusObj.attributes.deprel"
-                ng-click="$ctrl.openDepTree()"
-                class="btn btn-link text-center w-full"
-            >
+            <button ng-show="hasDeptree()" ng-click="$ctrl.openDepTree()" class="btn btn-link text-center w-full">
                 <img src="${deptreeImg}" class="block mx-auto" />
                 {{'show_deptree' | loc:$root.lang}}
             </button>
@@ -148,6 +145,14 @@ angular.module("korpApp").component("sidebar", {
                         $ctrl.updateContent($ctrl.data)
                     }
                 }
+            }
+
+            $scope.hasDeptree = () => {
+                if (!$ctrl.corpusObj) return false
+                if ($ctrl.corpusObj.deptree?.hidden) return false
+                // Check if current corpus has deptree attributes
+                const mapping = getDeptreeAttrMapping($ctrl.corpusObj)
+                return !!$ctrl.corpusObj.attributes[mapping.rel]
             }
 
             $ctrl.openDepTree = () => {
