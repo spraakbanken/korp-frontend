@@ -29,8 +29,9 @@ type ResultsWordPictureScope = IScope & {
     limit: string // Number as string to work with <select ng-model>
     limitOptions: number[]
     onClickExample: (relation: MatchedRelation) => void
+    onPeriodSelectKeydown: (event: KeyboardEvent) => void
     /** The value needs to be an object in order to work with ng-model within ng-repeat */
-    periodSelected?: { value: string }
+    periodSelected: { value: string }
     proxy: RelationsProxy
     proxyTime: RelationsTimeProxy
     showWordClass: boolean
@@ -128,7 +129,7 @@ angular.module("korpApp").component("resultsWordPicture", {
 
             <div ng-show="data && split" class="my-4 flex flex-wrap items-baseline gap-2">
                 <span>{{'word_pic_period_select_label' | loc:$root.lang}}:</span>
-                <div class="btn-group flex-wrap gap-y-1">
+                <div class="btn-group flex-wrap gap-y-1" ng-keydown="onPeriodSelectKeydown($event)">
                     <button
                         type="button"
                         class="btn btn-default btn-sm"
@@ -212,6 +213,8 @@ angular.module("korpApp").component("resultsWordPicture", {
                 // Apply inputs
                 $scope.sort = $scope.sortLocal
                 $scope.split = $scope.splitLocal
+                // Reset selected period
+                $scope.periodSelected.value = ""
             })
 
             $scope.$watch("sortLocal", () => $scope.sortLocal && makeRequest())
@@ -279,7 +282,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                         )
                         const periods = Object.entries(data)
                             .map(([range, data]) => ({ range, data }))
-                            .sort((a, b) => a.range.localeCompare(b.range))
+                            .sort((a, b) => parseInt(a.range) - parseInt(b.range))
                         if ($scope.splitLocal.order == "desc") periods.reverse()
                         $timeout(() => ($scope.data = periods))
                     } else {
@@ -332,6 +335,18 @@ angular.module("korpApp").component("resultsWordPicture", {
                 // Reset to the label option
                 $scope.downloadOption = ""
             })
+
+            // Handle left/right key in the period selector button bar
+            $scope.onPeriodSelectKeydown = (event) => {
+                if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
+                    const button = event.target as HTMLElement
+                    const $newButton = event.key == "ArrowLeft" ? $(button).prev("button") : $(button).next("button")
+                    if ($newButton.length > 0) {
+                        event.preventDefault()
+                        setTimeout(() => $newButton.trigger("focus").trigger("click"))
+                    }
+                }
+            }
         },
     ],
 })
