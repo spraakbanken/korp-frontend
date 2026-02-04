@@ -70,12 +70,11 @@ angular.module("korpApp").component("depTree", {
 
                             // Wait for target div to be present
                             $timeout(() => {
-                                drawBratTree($ctrl.tokens, "magic_secret_id", attrMapping, (msg) => {
-                                    const [type, val] = Object.entries(msg)[0]
-                                    $scope.$apply((s: ModalScope) => {
-                                        const attribute = $ctrl.corpus.attributes[type]
-                                        s.label = attribute.label || type
-                                        s.value = attribute.translation?.[val] || val
+                                drawBratTree($ctrl.tokens, "magic_secret_id", attrMapping, (attrName, value) => {
+                                    const attribute = $ctrl.corpus.attributes[attrName]
+                                    $scope.$apply(() => {
+                                        $scope.label = attribute.label || attrName
+                                        $scope.value = attribute.translation?.[value] || value
                                     })
                                 })
                             })
