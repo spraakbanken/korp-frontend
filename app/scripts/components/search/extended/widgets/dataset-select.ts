@@ -24,12 +24,7 @@ export const datasetSelect: Configurable<Widget, DatasetSelectOptions> = (option
         "store",
         function ($scope: DatasetSelectScope, store: StoreService) {
             function initialize() {
-                $scope.options = getDatasetOptions(
-                    $scope.attr.dataset,
-                    $scope.attr.translation,
-                    store.lang,
-                    options?.sort !== false,
-                )
+                $scope.options = getDatasetOptions($scope.attr, store.lang, options?.sort !== false)
                 $scope.model = $scope.model || $scope.options[0][0]
             }
             initialize()

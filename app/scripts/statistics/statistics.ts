@@ -135,7 +135,7 @@ function reduceStringify(name: string, cl?: CorpusSet): (values: string[]) => st
     const transforms: ((token: string) => string)[] = [escape]
 
     if (attr?.ranked) transforms.push((token) => token.replace(/:.*/g, ""))
-    if (attr?.translation) transforms.push((token) => locAttribute(attr.translation, token))
+    transforms.push((token) => locAttribute(attr, token))
 
     if (["prefix", "suffix", "lex"].includes(name)) transforms.push((token) => Lemgram.parse(token)?.toHtml() || token)
     else if (name == "saldo" || name == "sense") transforms.push((token) => Saldo.parse(token)?.toHtml() || token)

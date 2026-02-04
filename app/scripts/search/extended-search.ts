@@ -19,6 +19,6 @@ export async function loadOptions(attr: AttributeOption, lang: string): Promise<
     const data = await getAttrValues(corpora, name, split)
 
     return uniq(data)
-        .map((item) => (item === "" ? ["", loc("empty", lang)] : [item, locAttribute(attr.translation, item, lang)]))
+        .map((item) => (item === "" ? ["", loc("empty", lang)] : [item, locAttribute(attr, item, lang)]))
         .sort((a, b) => a[1].localeCompare(b[1], lang))
 }

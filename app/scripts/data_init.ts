@@ -6,7 +6,7 @@ import { CorpusSet } from "@/corpora/corpus-set"
 import { CorpusSetParallel } from "@/parallel/corpus-set-parallel"
 import { fromKeys } from "@/util"
 import { locAttribute } from "@/i18n"
-import { Labeled, LocLangMap, LocMap } from "@/i18n/types"
+import { Labeled } from "@/i18n/types"
 import { Attribute, Config, Corpus, CorpusParallel, CustomAttribute } from "@/settings/config.types"
 import { ConfigTransformed, CorpusTransformed } from "@/settings/config-transformed.types"
 import { korpRequest } from "@/backend/common"
@@ -170,15 +170,10 @@ export function getRecentCorpusUpdates(): CorpusTransformed[] {
 }
 
 /** Get the dataset options of an attribute. */
-export function getDatasetOptions(
-    dataset: Attribute["dataset"],
-    translation?: LocMap | LocLangMap,
-    lang?: string,
-    sort?: boolean,
-): [string, string][] {
-    dataset ??= []
+export function getDatasetOptions(attribute: Attribute, lang?: string, sort?: boolean): [string, string][] {
+    const dataset = attribute.dataset ?? []
     const options: [string, string][] = Array.isArray(dataset)
-        ? dataset.map((item) => [item, locAttribute(translation, item, lang)])
-        : Object.entries(dataset).map(([k, v]) => [k, locAttribute(translation, v, lang)])
+        ? dataset.map((item) => [item, locAttribute(attribute, item, lang)])
+        : Object.entries(dataset).map(([k, v]) => [k, locAttribute(attribute, v, lang)])
     return sort ? options.sort((a, b) => a[1].localeCompare(b[1], lang)) : options
 }
