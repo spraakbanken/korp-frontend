@@ -116,7 +116,7 @@ angular.module("korpApp").component("globalFilter", {
 
             $scope.isSelectedList = (value: string) => $scope.selected.includes(value)
 
-            $scope.translateAttribute = (value: string) => locAttribute($ctrl.attrDef.translation, value, store.lang)
+            $scope.translateAttribute = (value: string) => locAttribute($ctrl.attrDef, value, store.lang)
         },
     ],
 })

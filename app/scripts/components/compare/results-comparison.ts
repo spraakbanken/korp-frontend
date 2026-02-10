@@ -94,7 +94,7 @@ angular.module("korpApp").component("resultsComparison", {
             $scope.stringify = (value) => {
                 const attr = $scope.attributes[$ctrl.task.reduce[0]]
                 if (attr?.stringify) return getStringifier(attr.stringify)(value)
-                if (attr?.translation) return locAttribute(attr.translation, String(value), store.lang)
+                if (attr?.translation) return locAttribute(attr, String(value), store.lang)
                 return String(value)
             }
         },

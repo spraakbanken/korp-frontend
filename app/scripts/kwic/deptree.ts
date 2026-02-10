@@ -1,3 +1,4 @@
+import { DeptreeAttrMap } from "@/settings/config.types"
 import { Token } from "@/backend/types"
 import { Visualizer } from "@/../lib/brat/client/src/visualizer.js"
 import "@/../lib/brat/style-vis.css"
@@ -16,14 +17,9 @@ type BratType = {
     args?: { role: string; targets: any[] }[]
 }
 
-type HoverFunction = (data: Record<string, string>) => void
+type HoverFunction = (attrName: string, value: string) => void
 
-export function drawBratTree(
-    words: Token[],
-    to_div: string,
-    attrMap: Record<string, string>,
-    hover_fun: HoverFunction,
-): void {
+export function drawBratTree(words: Token[], to_div: string, attrMap: DeptreeAttrMap, hover_fun: HoverFunction): void {
     const entity_types: BratType[] = []
     const relation_types: BratType[] = []
     const entities: BratEntity[] = []
@@ -89,18 +85,21 @@ export function drawBratTree(
 
     const div = $("#" + to_div)
 
+    // Attach hover handlers to relation arcs
     div.find("g.arcs")
         .children()
         .each(function () {
             const g = $(this)
-            const deprel = g.find("text").data("arc-role")
-            g.hover(() => hover_fun({ deprel }))
+            const rel = g.find("text").data("arc-role")
+            g.hover(() => hover_fun(attrMap.rel, rel))
         })
+
+    // Attach hover handlers to part-of-speech markers
     div.find("g.span text").each(function () {
         const pos = $(this).text()
         $(this)
             .parent()
-            .hover(() => hover_fun({ pos }))
+            .hover(() => hover_fun(attrMap.pos, pos))
     })
 }
 

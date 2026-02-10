@@ -88,7 +88,7 @@ export const sidebarDefaultComponent: SidebarComponent = {
             /** Render a single value using attribute options. */
             $scope.renderValue = (value: string, key = $scope.key) => {
                 if ($scope.attrs.stringify) value = getStringifier($scope.attrs.stringify)(value)
-                if ($scope.attrs.translation) value = locAttribute($scope.attrs.translation, value, store.lang)
+                if ($scope.attrs.translation) value = locAttribute($scope.attrs, value, store.lang)
                 if ($scope.attrs.pattern)
                     value = template($scope.attrs.pattern)({
                         key,

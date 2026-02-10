@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [9.14.1] – 2026-02-10
+
+### Fixed
+
+- Dependency tree attribute translation
+
 ## [9.14.0] – 2026-02-02
 
 ### Added
@@ -611,6 +617,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.14.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.1
 [9.14.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.0
 [9.13.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.13.0
 [9.12.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.12.0
