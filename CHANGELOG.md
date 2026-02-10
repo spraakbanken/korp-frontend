@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.14.2] – 2026-02-10
+
 ### Fixed
 
 - `locAttribute` handle missing attribute argument
@@ -621,6 +623,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.14.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.2
 [9.14.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.1
 [9.14.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.0
 [9.13.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.13.0
