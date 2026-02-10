@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `locAttribute` handle missing attribute argument
+
 ## [9.14.1] – 2026-02-10
 
 ### Fixed
