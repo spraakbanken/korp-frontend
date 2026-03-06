@@ -26,10 +26,12 @@ export class CorpusSetParallel extends CorpusSet {
 
     pickFrom(source: CorpusSetParallel, ids: string[]): void {
         // Include linked corpora, except if linked from pivot corpus
-        const corpora = ids.flatMap((id) => {
-            const corpus = source.get(id)
-            return corpus.pivot ? corpus : source.getLinked(corpus)
-        })
+        const corpora = ids
+            .flatMap((id) => id.split("|"))
+            .flatMap((id) => {
+                const corpus = source.get(id)
+                return corpus.pivot ? corpus : source.getLinked(corpus)
+            })
         const idsAll = corpora.map((corpus) => corpus.id)
         super.pickFrom(source, idsAll)
     }
