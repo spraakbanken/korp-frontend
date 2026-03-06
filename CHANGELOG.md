@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Comparison help text
+
 ### Fixed
 
 - random_seed is lost when changing page [#504](https://github.com/spraakbanken/korp-frontend/issues/504)

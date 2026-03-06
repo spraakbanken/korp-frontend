@@ -8,6 +8,7 @@ import { corpusListing } from "@/corpora/corpus_listing"
 import { AttributeOption } from "@/corpora/corpus-set"
 import { savedSearches } from "@/search/saved-searches"
 import { CompareTask } from "@/task/compare-task"
+import "@/components/util/help-box"
 
 type CompareSearchController = IController & {
     prefixAttr: typeof prefixAttr
@@ -56,6 +57,11 @@ angular.module("korpApp").component("compareSearch", {
                     {{'compare_vb' | loc:$root.lang}}
                 </button>
             </div>
+
+            <help-box>
+                <p>{{'compare_help_description' | loc:$root.lang}}</p>
+                <p>{{'compare_help_search' | loc:$root.lang}}</p>
+            </help-box>
         </div>
     `,
     controller: [
