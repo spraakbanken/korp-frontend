@@ -9,6 +9,7 @@
 ### Fixed
 
 - random_seed is lost when changing page [#504](https://github.com/spraakbanken/korp-frontend/issues/504)
+- Wrong parallel corpora used for query [#505](https://github.com/spraakbanken/korp-frontend/issues/505)
 
 ## [9.14.2] – 2026-02-10
 

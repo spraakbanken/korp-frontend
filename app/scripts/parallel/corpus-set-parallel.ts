@@ -25,10 +25,13 @@ export class CorpusSetParallel extends CorpusSet {
     }
 
     pickFrom(source: CorpusSetParallel, ids: string[]): void {
-        // Include hidden linked corpora
-        const corpora = ids.flatMap((id) => source.getLinked(source.get(id)))
-        ids = corpora.map((corpus) => corpus.id)
-        super.pickFrom(source, ids)
+        // Include linked corpora, except if linked from pivot corpus
+        const corpora = ids.flatMap((id) => {
+            const corpus = source.get(id)
+            return corpus.pivot ? corpus : source.getLinked(corpus)
+        })
+        const idsAll = corpora.map((corpus) => corpus.id)
+        super.pickFrom(source, idsAll)
     }
 
     setActiveLangs(langlist: string[]): void {
@@ -135,21 +138,19 @@ export class CorpusSetParallel extends CorpusSet {
     }
 
     stringify(onlyMain?: boolean): string {
-        let struct = this.getLinksFromLangs(this.activeLangs)
-        if (onlyMain) {
-            struct = struct.map((pair) => {
-                return pair.filter((item) => {
-                    return item.lang === this.activeLangs[0]
-                })
-            })
+        const lists = this.getLinksFromLangs(this.activeLangs)
 
-            return struct
-                .flat()
-                .map((corpus) => corpus.id.toUpperCase())
-                .join()
+        if (onlyMain) {
+            // Select corpora in the first search language
+            const corpora = lists.flat().filter((item) => item.lang === this.activeLangs[0])
+            return corpora.map((corpus) => corpus.id.toUpperCase()).join()
         }
 
-        return struct.map(([a, b]) => `${a.id}|${b.id}`.toUpperCase()).join()
+        // Format pairs like X-SV|X-DA,X-SV|X-EN...
+        return lists
+            .flatMap(([main, ...others]) => others.map((other) => `${main.id}|${other.id}`))
+            .join()
+            .toUpperCase()
     }
 
     get(corpusID: string): CorpusTransformed<CorpusParallel> {
