@@ -6,6 +6,10 @@
 
 - Comparison help text
 
+### Changed
+
+- Remove the corpus config `pivot` flag [#506](https://github.com/spraakbanken/korp-frontend/issues/506)
+
 ### Fixed
 
 - random_seed is lost when changing page [#504](https://github.com/spraakbanken/korp-frontend/issues/504)

@@ -30,7 +30,8 @@ export class CorpusSetParallel extends CorpusSet {
             .flatMap((id) => id.split("|"))
             .flatMap((id) => {
                 const corpus = source.get(id)
-                return corpus.pivot ? corpus : source.getLinked(corpus)
+                const isPivot = corpus.linked_to.length > 1
+                return isPivot ? corpus : source.getLinked(corpus)
             })
         const idsAll = corpora.map((corpus) => corpus.id)
         super.pickFrom(source, idsAll)
@@ -113,16 +114,14 @@ export class CorpusSetParallel extends CorpusSet {
     getAttributeQuery(attr: "context" | "within"): string {
         const struct = this.getLinksFromLangs(this.activeLangs)
         const output: string[][] = struct.map((corps) => {
-            const mainId = corps[0].id.toUpperCase()
-            const mainIsPivot = !!corps[0].pivot
-
-            const other = corps.slice(1)
-
-            const pair = other.map(function (corp) {
-                const a = mainIsPivot ? Object.keys(corp[attr])[0] : Object.keys(corps[0][attr])[0]
-                return mainId + "|" + corp.id.toUpperCase() + ":" + a
+            const [main, ...others] = corps
+            const isPivot = main.linked_to.length > 1
+            return others.map(function (other) {
+                // For pivot corpus, use the linked corpus config instead
+                const corpus = isPivot ? other : main
+                const value = Object.keys(corpus[attr])[0]
+                return `${main.id}|${other.id}`.toUpperCase() + ":" + value
             })
-            return pair
         })
 
         return output.join(",")
