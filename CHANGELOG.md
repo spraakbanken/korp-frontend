@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [9.14.3] – 2026-03-09
+
 ### Added
 
 - Comparison help text
@@ -638,6 +640,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.14.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.3
 [9.14.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.2
 [9.14.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.1
 [9.14.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.0
