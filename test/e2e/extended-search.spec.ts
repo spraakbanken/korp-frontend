@@ -5,15 +5,15 @@ import { describe } from "node:test"
 describe("extended search", () => {
     test("extended search with results", async ({ page }) => {
         await page.goto("./#?lang=eng&corpus=attasidor&search_tab=1")
-        await page.selectOption(".arg_type", "Swedish FrameNet")
+        await page.selectOption(".arg_type", "Thematic keywords (Swedish FrameNet)")
         await page.getByRole("textbox").fill("Animals")
 
         await page.getByRole("button", { name: "Search" }).click()
-        await expect(page.getByRole("table")).toContainText("björn")
+        await expect(page.getByRole("table")).toContainText("djur")
 
         // Search is stored in URL
         await page.reload()
-        await expect(page.getByRole("table")).toContainText("björn")
+        await expect(page.getByRole("table")).toContainText("djur")
     })
 
     const lemgramAttrs = ["lemgram", "compounds"]

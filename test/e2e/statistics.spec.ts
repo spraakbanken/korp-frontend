@@ -10,7 +10,7 @@ describe("statistics", () => {
 
         // Open statistics and check result
         await page.getByRole("link", { name: "Statistics" }).click()
-        await expect(page.getByText("Number of rows: 8")).toBeVisible()
+        await expect(page.getByText("Number of rows: 10")).toBeVisible()
 
         // Select a row, check the sum column
         const row = page.locator(".slick-row").filter({ hasText: "katter" }).first()
@@ -19,7 +19,7 @@ describe("statistics", () => {
 
         // Reload and check result
         await page.reload()
-        await expect(page.getByText("Number of rows: 8")).toBeVisible()
+        await expect(page.getByText("Number of rows: 10")).toBeVisible()
     })
 
     test("example", async ({ page }) => {
@@ -59,7 +59,7 @@ describe("statistics", () => {
 
     test("group by", async ({ page }) => {
         await page.goto("/#?lang=eng&corpus=attasidor,da&search=lemgram|katt\.\.nn\.1&result_tab=2")
-        await expect(page.getByText("Number of rows: 8")).toBeVisible()
+        await expect(page.getByText("Number of rows: 10")).toBeVisible()
 
         // Modify selection of attributes to group the statistics by
         await page.getByLabel("Group by:").click()
@@ -70,16 +70,16 @@ describe("statistics", () => {
 
         // Result should reload
         // There are a few more rows
-        await expect(page.getByText("Number of rows: 11")).toBeVisible()
+        await expect(page.getByText("Number of rows: 14")).toBeVisible()
 
         // Reload and check result
         await page.reload()
-        await expect(page.getByText("Number of rows: 11")).toBeVisible()
+        await expect(page.getByText("Number of rows: 14")).toBeVisible()
     })
 
     test("case-insensitive word", async ({ page }) => {
         await page.goto("/#?lang=eng&corpus=attasidor,da&search=lemgram|katt\.\.nn\.1&result_tab=2")
-        await expect(page.getByText("Number of rows: 8")).toBeVisible()
+        await expect(page.getByText("Number of rows: 10")).toBeVisible()
 
         // Set case-insensitive
         await page.getByLabel("Group by:").click()
@@ -88,11 +88,11 @@ describe("statistics", () => {
 
         // Result should reload
         // There should be fewer rows
-        await expect(page.getByText("Number of rows: 5")).toBeVisible()
+        await expect(page.getByText("Number of rows: 7")).toBeVisible()
 
         // Reload and check result
         await page.reload()
-        await expect(page.getByText("Number of rows: 5")).toBeVisible()
+        await expect(page.getByText("Number of rows: 7")).toBeVisible()
 
         // Open example search, check results
         const row = page.locator(".slick-row").filter({ hasText: "katter" }).first()

@@ -60,6 +60,6 @@ describe("simple search", () => {
         await page.goto("./#?lang=eng&corpus=attasidor&search=word|katt&mid_comp")
         await expect(page.getByLabel("initial part")).toBeChecked()
         await expect(page.getByLabel("final part")).toBeChecked()
-        await expect(page.getByRole("table")).toContainText("bensinskatten")
+        await expect(page.getByRole("table")).toContainText("skatten")
     })
 })

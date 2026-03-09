@@ -108,7 +108,7 @@ describe("changing corpus selection", () => {
         // Select a folder with protected and non-protected corpora
         await page.locator("corpus-chooser").click()
         await page.getByText("L2 Korp").click()
-        await expect(page.locator("corpus-chooser")).toContainText("4 of")
-        expect(getUrlParam(page.url())).toEqual("attasidor,coctaill-ae,coctaill-lt,coctaill")
+        await expect(page.locator("corpus-chooser")).toContainText("6 of")
+        expect(getUrlParam(page.url())).toEqual("attasidor,coctaill-ae,coctaill-lt,coctaill,ud217_swedish-swell-target,ud217_swedish-swell")
     })
 })

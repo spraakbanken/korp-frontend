@@ -7,10 +7,10 @@ describe("advanced search", () => {
         await page.goto("./#?lang=eng&corpus=attasidor&search_tab=2")
         await page.getByRole("textbox").fill('[swefn contains "Animals"]')
         await page.getByRole("button", { name: "Search" }).click()
-        await expect(page.getByRole("table")).toContainText("björn")
+        await expect(page.getByRole("table")).toContainText("djur")
 
         // Search is stored in URL
         await page.reload()
-        await expect(page.getByRole("table")).toContainText("björn")
+        await expect(page.getByRole("table")).toContainText("djur")
     })
 })

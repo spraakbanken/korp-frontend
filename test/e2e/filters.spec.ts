@@ -35,7 +35,7 @@ describe("filters", () => {
         await page.getByRole("button", { name: "Party: Centerpartiet" }).click()
 
         // Make a search
-        await page.selectOption(".arg_type", "Swedish FrameNet")
+        await page.selectOption(".arg_type", "Thematic keywords (Swedish FrameNet)")
         await page.getByRole("textbox").fill("Animals")
         await page.getByRole("button", { name: "Search" }).click()
 
