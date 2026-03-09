@@ -105,6 +105,8 @@ angular.module("korpApp").component("extendedParallel", {
 
             ctrl.onLangChange = function () {
                 const currentLangList = ctrl.langs.map((lang) => lang.lang)
+                // Empty corpus selection results in empty language list, abort
+                if (!currentLangList[0]) return
                 corpusSelection.setActiveLangs(currentLangList)
                 store.parallel_corpora = currentLangList
             }
