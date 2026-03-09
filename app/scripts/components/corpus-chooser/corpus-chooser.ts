@@ -150,7 +150,7 @@ angular.module("korpApp").component("corpusChooser", {
             statemachine.listen("logout", function () {
                 // Unselect restricted corpora
                 for (const corpus of Object.values(settings.corpora))
-                    corpus.selected = corpus.selected && !corpus.limited_access
+                    corpus.selected = corpus.selected && !corpus.protected
                 // Select those, or if none remain, fall back to default selection
                 const remaining = Object.keys(pickBy(settings.corpora, (corpus) => corpus.selected))
                 const toSelect = remaining.length ? remaining : settings.preselected_corpora || []

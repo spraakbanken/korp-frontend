@@ -9,6 +9,7 @@
 ### Changed
 
 - Remove the corpus config `pivot` flag [#506](https://github.com/spraakbanken/korp-frontend/issues/506)
+- Use corpus info, not corpus config, to check if a corpus is protected [#507](https://github.com/spraakbanken/korp-frontend/issues/507)
 
 ### Fixed
 
