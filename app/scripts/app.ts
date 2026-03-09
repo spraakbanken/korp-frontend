@@ -176,7 +176,7 @@ korpApp.run([
             ids = ids.flatMap((id) => getAllCorporaInFolders(settings.folders, id))
 
             const isDenied = (corpus?: CorpusTransformed) =>
-                corpus?.limited_access && !auth.hasCredential(corpus.id.toUpperCase())
+                corpus?.protected && !auth.hasCredential(corpus.id.toUpperCase())
 
             // If no id is given, use default
             if (!ids || ids.length == 0) {

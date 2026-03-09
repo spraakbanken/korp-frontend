@@ -13,18 +13,17 @@ export function getSearchHistory(appPath: string = APP_PATH): SearchParams[] {
 
 /** Get, modify and store search history, if the search is unique */
 export function addToSearchHistory(params: Partial<HashParams>, appPath: string = APP_PATH): void {
-    const searchesAll = localStorageGet("searches") || {}
-    addNewSearch(searchesAll, appPath, params)
-    localStorageSet("searches", searchesAll)
-}
-
-/** Extract search-related params and add the object to the list in-place, if not already present. */
-function addNewSearch(searches: Record<string, SearchParams[]>, appPath: string, params: Partial<HashParams>): void {
+    const searches = localStorageGet("searches") || {}
+    // Create the list for this app if it doesn't exist yet
     searches[appPath] ??= []
+    // Get search-related params
     const searchParams = pick(params, getSearchParamNames())
     // Add to start of list, unless already in list
     const isNew = searches[appPath].every((item) => paramsString(item) != paramsString(searchParams))
-    if (isNew) searches[appPath].unshift(searchParams)
+    if (isNew) {
+        searches[appPath].unshift(searchParams)
+        localStorageSet("searches", searches)
+    }
 }
 
 export function clearSearchHistory(): void {

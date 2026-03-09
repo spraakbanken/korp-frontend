@@ -87,7 +87,7 @@ angular.module("korpApp").component("ccInfoBox", {
                 $ctrl.link = undefined
 
                 if (!isFolder($ctrl.object)) {
-                    $ctrl.limitedAccess = $ctrl.object["limited_access"] || false
+                    $ctrl.limitedAccess = $ctrl.object.protected || false
                     $ctrl.context = Object.keys($ctrl.object.context).length > 1
                     $ctrl.langStats = getSizeInfo($ctrl.object)
                     $ctrl.lastUpdated = $ctrl.object.info.Updated

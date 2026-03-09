@@ -246,7 +246,8 @@
     "compare_save_header": "Spara för jämförelse",
     "compare_name": "Namn",
     "compare_save": "Spara",
-
+    "compare_help_description": "Jämförelsefunktionen ställer två sökfrågor mot varandra och rankar vilka värden som utmärker sig i respektive sökresultat. Rankningen sker utifrån en log-likelihood-beräkning.",
+    "compare_help_search": "Förbered genom att formulera varje sökfråga i en av sökflikarna och trycka på pilen vid sökknappen för att spara den. Öppna sedan jämförelsefliken, välj de två sökningarna och välj vilket attribut vars värden ska jämföras.",
     "compare_distinctive": "Utmärkande för",
 
     "msd_long": "Morfosyntaktisk beskrivning",

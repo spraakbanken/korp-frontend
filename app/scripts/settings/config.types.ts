@@ -41,7 +41,6 @@ export type Corpus = {
     lang?: string
     limited_access?: boolean
     linked_to?: string[]
-    pivot?: boolean
     pos_attributes: string[]
     struct_attributes: string[]
     custom_attributes?: string[]

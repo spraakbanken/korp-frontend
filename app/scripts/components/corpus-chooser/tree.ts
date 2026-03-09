@@ -76,7 +76,7 @@ angular.module("korpApp").component("ccTree", {
                 <i ng-if="!corpus.userHasAccess" class="fa-solid fa-lock m-1"></i>
 
                 <label class="px-1 flex-1"> {{ corpus.title | locObj:$root.lang }} </label>
-                <i ng-if="corpus['limited_access'] && corpus.userHasAccess" class="fa-solid fa-unlock mx-1 my-1"></i>
+                <i ng-if="corpus.protected && corpus.userHasAccess" class="fa-solid fa-unlock mx-1 my-1"></i>
                 <i
                     ng-click="$ctrl.showInfo($event, corpus)"
                     style="margin-top: 2px;"

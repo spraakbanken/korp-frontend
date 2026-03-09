@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+## [9.14.3] – 2026-03-09
+
+### Added
+
+- Comparison help text
+
+### Changed
+
+- Remove the corpus config `pivot` flag [#506](https://github.com/spraakbanken/korp-frontend/issues/506)
+- Use corpus info, not corpus config, to check if a corpus is protected [#507](https://github.com/spraakbanken/korp-frontend/issues/507)
+
+### Fixed
+
+- random_seed is lost when changing page [#504](https://github.com/spraakbanken/korp-frontend/issues/504)
+- Wrong parallel corpora used for query [#505](https://github.com/spraakbanken/korp-frontend/issues/505)
+- Statistics in parallel mode
+
 ## [9.14.2] – 2026-02-10
 
 ### Fixed
@@ -623,6 +640,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.14.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.3
 [9.14.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.2
 [9.14.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.1
 [9.14.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.0

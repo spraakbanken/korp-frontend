@@ -26,7 +26,6 @@ type ResultsHitsScope = IScope & {
     /** Number of search hits, may change while search is in progress. */
     hitsInProgress?: number
     hitsPerPage: number
-    initialSearch?: boolean
     kwic?: ApiKwic[]
     onUpdateSearch: () => void
     page?: number
@@ -74,7 +73,6 @@ angular.module("korpApp").component("resultsHits", {
         function ($scope: ResultsHitsScope, $timeout: ITimeoutService, store: StoreService) {
             const $ctrl = this as ResultsHitsController
 
-            $scope.initialSearch = true
             $scope.proxy = kwicProxyFactory.create(store)
             $scope.isReading = store.reading_mode || false
 
@@ -93,11 +91,19 @@ angular.module("korpApp").component("resultsHits", {
                 // only set this on the initial search, not when paging
                 $scope.hitsPerPage = store.hpp
 
-                // reset seed when doing a search, but not for the first request
-                if (!$scope.initialSearch) {
-                    store.random_seed = undefined
+                // Prepare random seed
+                // Page changes and changes to the context option do not go through this function, so they leave the seed unchanged
+                if (store.sort == "random") {
+                    // On the initial search, do nothing, use the unchanged seed from the URL/store
+                    // On subsequent searches, generate a new seed
+                    if ($scope.kwic) {
+                        store.random_seed = Math.ceil(Math.random() * 10000000)
+                    }
                 }
-                $scope.initialSearch = false
+                // Unset seed if sorting is not random
+                else store.random_seed = undefined
+                // Record that the K
+
                 makeRequest(false)
             }
 
@@ -133,11 +139,6 @@ angular.module("korpApp").component("resultsHits", {
                 $scope.aborted = false
                 $scope.error = undefined
                 let hasKwic = false
-
-                // Randomize new seed if new search
-                if (store.sort == "random" && !store.random_seed && !isPaging) {
-                    store.random_seed = Math.ceil(Math.random() * 10000000)
-                } else store.random_seed = undefined
 
                 $scope.proxy
                     .setProgressHandler((progressObj) =>
