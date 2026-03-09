@@ -257,7 +257,8 @@
     "compare_save_header": "Save for comparison",
     "compare_name": "Name",
     "compare_save": "Save",
-
+    "compare_help_description": "Compare two search queries against each other to rank which values stand out in each search result. The ranking is based on a log-likelihood calculation.",
+    "compare_help_search": "Prepare by formulating each search query in one of the search tabs and pressing the arrow next to the search button to save it. Then open the Compare tab, select the two searches, and choose an attribute to compare.",
     "compare_distinctive": "Prominent in",
 
     "msd_long": "Morphosyntactic description",

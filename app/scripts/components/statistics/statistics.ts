@@ -254,7 +254,7 @@ angular.module("korpApp").component("statistics", {
                     grid = new StatisticsGrid(
                         $("#myGrid").get(0)!,
                         $ctrl.data,
-                        cl.map((corpus) => corpus.id.toUpperCase()),
+                        cl.stringify(true).split(","),
                         $ctrl.searchParams.reduceVals,
                         store,
                         showPieChart,
@@ -316,9 +316,14 @@ angular.module("korpApp").component("statistics", {
                 if (!isTotalRow(row)) cqps.push(buildExampleCqp(row))
 
                 // Unless corpus is given, find which corpora had any hits (uppercase ids)
-                const corpora = corpusId ? [corpusId] : Object.keys(row.count).filter((id) => row.count[id][0] > 0)
+                const corpusIdsWithHits = corpusId
+                    ? [corpusId]
+                    : Object.keys(row.count).filter((id) => row.count[id][0] > 0)
+                const corpusIds = $ctrl.searchParams.originalCorpora
+                    .split(",")
+                    .filter((linkId) => corpusIdsWithHits.includes(linkId.split("|").shift()!))
 
-                const task = new ExampleTask(corpora, cqps, $ctrl.params.default_within, store.reading_mode)
+                const task = new ExampleTask(corpusIds, cqps, $ctrl.params.default_within, store.reading_mode)
                 $scope.$applyAsync(() => $rootScope.kwicTabs.push(task))
             }
 

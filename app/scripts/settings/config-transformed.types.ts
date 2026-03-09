@@ -16,7 +16,7 @@ export type ConfigTransformed = Omit<Config, "attributes" | "corpora" | "label">
 
 export type CorpusTransformed<T extends Corpus = Corpus> = Omit<
     T,
-    "pos_attributes" | "struct_attributes" | "custom_attributes" | "within" | "context"
+    "pos_attributes" | "struct_attributes" | "custom_attributes" | "within" | "context" | "limited_access"
 > & {
     attributes: Record<string, Attribute>
     struct_attributes: Record<string, Attribute>
@@ -28,6 +28,7 @@ export type CorpusTransformed<T extends Corpus = Corpus> = Omit<
     within: Record<string, string>
     context: Record<string, string>
     info: CorpusInfoInfo
+    protected?: boolean
     common_attributes?: Record<string, true>
     time?: Record<number, number>
     non_time?: number
