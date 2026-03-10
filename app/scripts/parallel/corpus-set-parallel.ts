@@ -4,20 +4,19 @@ import { objectIntersection } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CorpusParallel } from "@/settings/config.types"
 
-export class CorpusSetParallel extends CorpusSet {
-    corpora: CorpusTransformed<CorpusParallel>[]
-    /** Languages being queried */
-    activeLangs: string[] = []
+type PCorpus = CorpusTransformed<CorpusParallel>
 
-    constructor(corpora: CorpusTransformed<CorpusParallel>[] = []) {
-        super(corpora)
-    }
+export class CorpusSetParallel extends CorpusSet {
+    corpora: PCorpus[]
+
+    /** Languages being queried, main language first */
+    protected langs: string[] = []
 
     pick(ids: string[]): CorpusSetParallel {
         ids = ids.map((id) => id.toLowerCase())
         const cl = new CorpusSetParallel()
         cl.pickFrom(this, ids)
-        cl.setActiveLangs(this.activeLangs)
+        cl.setLangs(this.langs)
         return cl
     }
 
@@ -34,19 +33,23 @@ export class CorpusSetParallel extends CorpusSet {
         super.pickFrom(source, idsAll)
     }
 
-    setActiveLangs(langlist: string[]): void {
-        this.activeLangs = langlist
+    setLangs(langs: string[]): void {
+        this.langs = langs
+    }
+
+    getCorporaWithLang(lang: string): PCorpus[] {
+        return this.corpora.filter((item) => item.lang === lang)
     }
 
     getAttributes(lang?: string): Record<string, Attribute> {
-        lang ??= this.activeLangs[0]
-        const corpora = this.corpora.filter((item) => item.lang === lang)
+        lang ??= this.langs[0]
+        const corpora = this.getCorporaWithLang(lang)
         return corpora.reduce((attrs, corpus) => ({ ...attrs, ...corpus.attributes }), {} as Record<string, Attribute>)
     }
 
     getStructAttrs(lang?: string): Record<string, Attribute> {
-        lang ??= this.activeLangs[0]
-        const corpora = this.corpora.filter((item) => item.lang === lang)
+        lang ??= this.langs[0]
+        const corpora = this.getCorporaWithLang(lang)
         const struct = corpora.reduce(
             (attrs, corpus) => ({ ...attrs, ...corpus.struct_attributes }),
             {} as Record<string, Attribute>,
@@ -57,8 +60,8 @@ export class CorpusSetParallel extends CorpusSet {
     }
 
     getStructAttrsIntersection(lang?: string): Record<string, Attribute> {
-        lang ??= this.activeLangs[0]
-        const corpora = this.corpora.filter((item) => item.lang === lang)
+        lang ??= this.langs[0]
+        const corpora = this.getCorporaWithLang(lang)
         const attrs = corpora.map(function (corpus) {
             for (let key in corpus["struct_attributes"]) {
                 const value = corpus["struct_attributes"][key]
@@ -70,32 +73,34 @@ export class CorpusSetParallel extends CorpusSet {
         return objectIntersection(attrs)
     }
 
-    getLinked(corp: CorpusTransformed<CorpusParallel>) {
-        const output: CorpusTransformed<CorpusParallel>[] = this.corpora.filter((item) =>
-            (corp["linked_to"] || []).includes(item.id),
-        )
-        return [corp].concat(output)
+    /** Get a list with the given corpus and its linked corpora */
+    getLinked(corp: PCorpus) {
+        const ids = corp["linked_to"] || []
+        const linked = this.corpora.filter((item) => ids.includes(item.id))
+        return [corp, ...linked]
     }
 
-    getEnabledByLang(lang: string): CorpusTransformed<CorpusParallel>[][] {
-        const corps = this.corpora.filter((item) => item["lang"] === lang)
+    /** Get lists of corpora of the given language and the linked corpora of each */
+    getEnabledByLang(lang: string): PCorpus[][] {
+        const corps = this.getCorporaWithLang(lang)
         return corps.map((item) => this.getLinked(item))
     }
 
-    getLinksFromLangs(langs: string[] = this.activeLangs): CorpusTransformed<CorpusParallel>[][] {
+    /** Get corpora of the first given language, and corpora that are linked from those _and_ use any of the other given languages */
+    getLinksFromLangs(langs: string[] = this.langs): PCorpus[][] {
         if (langs.length === 1) {
             return this.getEnabledByLang(langs[0])
         }
-        // get the languages that are enabled given a list of active languages
-        const main = this.corpora.filter((corp) => corp.lang === langs[0])
+        /** Corpora of the first given language */
+        const mains = this.getCorporaWithLang(langs[0])
 
-        let output: CorpusTransformed<CorpusParallel>[][] = []
-        for (var lang of langs.slice(1)) {
-            const other = this.corpora.filter((corp) => corp.lang === lang)
+        let output: PCorpus[][] = []
+        for (const lang of langs.slice(1)) {
+            const others = this.getCorporaWithLang(lang)
 
-            for (var cps of other) {
-                const linked = main.filter((mainCorpus) => mainCorpus["linked_to"].includes(cps.id))
-                output.push(...linked.map((item) => [item, cps]))
+            for (var other of others) {
+                const linked = mains.filter((main) => main["linked_to"].includes(other.id))
+                output.push(...linked.map((item) => [item, other]))
             }
         }
 
@@ -135,7 +140,7 @@ export class CorpusSetParallel extends CorpusSet {
 
         if (onlyMain) {
             // Select corpora in the first search language
-            const corpora = lists.flat().filter((item) => item.lang === this.activeLangs[0])
+            const corpora = lists.flat().filter((item) => item.lang === this.langs[0])
             return corpora.map((corpus) => corpus.id.toUpperCase()).join()
         }
 
@@ -146,8 +151,8 @@ export class CorpusSetParallel extends CorpusSet {
             .toUpperCase()
     }
 
-    get(corpusID: string): CorpusTransformed<CorpusParallel> {
+    get(corpusID: string): PCorpus {
         // Remove first part if on the form "<a>|<b>"
-        return super.get(corpusID.replace(/.*\|/, "")) as CorpusTransformed<CorpusParallel>
+        return super.get(corpusID.replace(/.*\|/, "")) as PCorpus
     }
 }

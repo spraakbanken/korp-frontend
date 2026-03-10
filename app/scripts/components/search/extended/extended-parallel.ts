@@ -80,8 +80,8 @@ angular.module("korpApp").component("extendedParallel", {
             store.watch("cqpParallel", () => {
                 // Make corpus listings aware of current query languages
                 const langs = Object.keys(store.cqpParallel)
-                corpusListing.setActiveLangs(langs)
-                corpusSelection.setActiveLangs(langs)
+                corpusListing.setLangs(langs)
+                corpusSelection.setLangs(langs)
             })
 
             // Restore search when set via URL
