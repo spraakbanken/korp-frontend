@@ -55,11 +55,6 @@ export class CorpusSet {
         return cl
     }
 
-    // only applicable for parallel corpora
-    getReduceLang(): string {
-        return ""
-    }
-
     /** Lowercase corpus ids */
     getIds() {
         return this.map((corpus) => corpus.id)
@@ -128,10 +123,7 @@ export class CorpusSet {
     }
 
     getReduceAttrs(): Record<string, Attribute> {
-        const allAttrs = {
-            ...this.getAttributes(this.getReduceLang()),
-            ...this.getStructAttrs(this.getReduceLang()),
-        }
+        const allAttrs = { ...this.getAttributes(), ...this.getStructAttrs() }
         return pickBy(allAttrs, (attribute) => attribute["display_type"] !== "hidden")
     }
 
@@ -335,16 +327,14 @@ export class CorpusSet {
         return this.getAttributeGroups("union", "union", lang).filter((attr) => !get(attr, "hide_extended"))
     }
 
-    getAttributeGroupsCompare(lang?: string): AttributeOption[] {
-        return this.getAttributeGroups("intersection", "intersection", lang).filter(
-            (attr) => !get(attr, "hide_compare"),
-        )
+    getAttributeGroupsCompare(): AttributeOption[] {
+        return this.getAttributeGroups("intersection", "intersection").filter((attr) => !get(attr, "hide_compare"))
     }
 
-    getAttributeGroupsStatistics(lang?: string): AttributeOption[] {
+    getAttributeGroupsStatistics(): AttributeOption[] {
         const wordOp = settings["reduce_word_attribute_selector"] || "union"
         const structOp = settings["reduce_struct_attribute_selector"] || "union"
-        return this.getAttributeGroups(wordOp, structOp, lang).filter((attr) => !get(attr, "hide_statistics"))
+        return this.getAttributeGroups(wordOp, structOp).filter((attr) => !get(attr, "hide_statistics"))
     }
 
     /** Get list of morphology ids used by the corpora. */

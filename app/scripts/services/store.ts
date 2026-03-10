@@ -28,7 +28,6 @@ angular.module("korpApp").factory("store", [
         rootScopeStore.in_order = true
         rootScopeStore.isCaseInsensitive = !!settings["input_case_insensitive_default"]
         rootScopeStore.page = 0
-        rootScopeStore.parallel_corpora = settings.start_lang ? [settings.start_lang] : []
         rootScopeStore.sort = ""
         rootScopeStore.stats_reduce = "word"
         rootScopeStore.stats_reduce_insensitive = ""
@@ -72,11 +71,6 @@ angular.module("korpApp").factory("store", [
             },
         })
         utils.setupHash($rootScope, { key: "page", val_in: Number })
-        utils.setupHash($rootScope, {
-            key: "parallel_corpora",
-            val_in: (str) => (str ? str.split(",") : []),
-            val_out: (arr) => arr.join(",") || null,
-        })
         utils.setupHash($rootScope, { key: "prefix", val_out: (x) => !!x || undefined })
         utils.setupHash($rootScope, { key: "random_seed", val_in: Number })
         utils.setupHash($rootScope, { key: "reading_mode", val_out: (x) => !!x || undefined })

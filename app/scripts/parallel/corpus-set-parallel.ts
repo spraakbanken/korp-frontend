@@ -1,26 +1,23 @@
 import settings from "@/settings"
 import { CorpusSet } from "@/corpora/corpus-set"
 import { objectIntersection } from "@/util"
-import { getUrlHash } from "@/urlparams"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CorpusParallel } from "@/settings/config.types"
 
 export class CorpusSetParallel extends CorpusSet {
     corpora: CorpusTransformed<CorpusParallel>[]
-    activeLangs: string[]
+    /** Languages being queried */
+    activeLangs: string[] = []
 
     constructor(corpora: CorpusTransformed<CorpusParallel>[] = []) {
         super(corpora)
-
-        // Cannot use Angular helpers (`locationSearchGet`) here, it's not initialized yet.
-        const activeLangs = getUrlHash("parallel_corpora") || ""
-        this.setActiveLangs(activeLangs.split(","))
     }
 
     pick(ids: string[]): CorpusSetParallel {
         ids = ids.map((id) => id.toLowerCase())
         const cl = new CorpusSetParallel()
         cl.pickFrom(this, ids)
+        cl.setActiveLangs(this.activeLangs)
         return cl
     }
 
@@ -41,20 +38,14 @@ export class CorpusSetParallel extends CorpusSet {
         this.activeLangs = langlist
     }
 
-    getReduceLang(): string {
-        return this.activeLangs[0]
-    }
-
     getAttributes(lang?: string): Record<string, Attribute> {
-        if (!lang) lang = this.getReduceLang()
-
+        lang ??= this.activeLangs[0]
         const corpora = this.corpora.filter((item) => item.lang === lang)
         return corpora.reduce((attrs, corpus) => ({ ...attrs, ...corpus.attributes }), {} as Record<string, Attribute>)
     }
 
     getStructAttrs(lang?: string): Record<string, Attribute> {
-        if (!lang) lang = this.getReduceLang()
-
+        lang ??= this.activeLangs[0]
         const corpora = this.corpora.filter((item) => item.lang === lang)
         const struct = corpora.reduce(
             (attrs, corpus) => ({ ...attrs, ...corpus.struct_attributes }),
@@ -65,7 +56,8 @@ export class CorpusSetParallel extends CorpusSet {
         return struct
     }
 
-    getStructAttrsIntersection(lang: string): Record<string, Attribute> {
+    getStructAttrsIntersection(lang?: string): Record<string, Attribute> {
+        lang ??= this.activeLangs[0]
         const corpora = this.corpora.filter((item) => item.lang === lang)
         const attrs = corpora.map(function (corpus) {
             for (let key in corpus["struct_attributes"]) {
@@ -90,15 +82,15 @@ export class CorpusSetParallel extends CorpusSet {
         return corps.map((item) => this.getLinked(item))
     }
 
-    getLinksFromLangs(activeLangs: string[]): CorpusTransformed<CorpusParallel>[][] {
-        if (activeLangs.length === 1) {
-            return this.getEnabledByLang(activeLangs[0])
+    getLinksFromLangs(langs: string[] = this.activeLangs): CorpusTransformed<CorpusParallel>[][] {
+        if (langs.length === 1) {
+            return this.getEnabledByLang(langs[0])
         }
         // get the languages that are enabled given a list of active languages
-        const main = this.corpora.filter((corp) => corp.lang === activeLangs[0])
+        const main = this.corpora.filter((corp) => corp.lang === langs[0])
 
         let output: CorpusTransformed<CorpusParallel>[][] = []
-        for (var lang of activeLangs.slice(1)) {
+        for (var lang of langs.slice(1)) {
             const other = this.corpora.filter((corp) => corp.lang === lang)
 
             for (var cps of other) {
@@ -112,7 +104,7 @@ export class CorpusSetParallel extends CorpusSet {
 
     /** Get the within and context queries */
     getAttributeQuery(attr: "context" | "within"): string {
-        const struct = this.getLinksFromLangs(this.activeLangs)
+        const struct = this.getLinksFromLangs()
         const output: string[][] = struct.map((corps) => {
             const [main, ...others] = corps
             const isPivot = main.linked_to.length > 1
@@ -139,7 +131,7 @@ export class CorpusSetParallel extends CorpusSet {
     }
 
     stringify(onlyMain?: boolean): string {
-        const lists = this.getLinksFromLangs(this.activeLangs)
+        const lists = this.getLinksFromLangs()
 
         if (onlyMain) {
             // Select corpora in the first search language

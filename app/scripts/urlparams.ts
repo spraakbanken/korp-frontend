@@ -30,7 +30,6 @@ export type HashParams = {
     mid_comp?: true
     /** Current page number of the search result */
     page?: string
-    parallel_corpora?: string
     /** In simple search, match beginning of word */
     prefix?: true
     random_seed?: `${number}`
@@ -68,7 +67,6 @@ export type SearchParamNames = Extract<
     | "cqp"
     | "global_filter"
     | "in_order"
-    | "parallel_corpora"
     | "search"
     | "search_tab"
     | "within"
@@ -84,7 +82,6 @@ export const getSearchParamNames = (): SearchParamNames[] => [
     "cqp",
     "global_filter",
     "in_order",
-    "parallel_corpora",
     "search",
     "search_tab",
     "within",
