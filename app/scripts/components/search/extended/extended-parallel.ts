@@ -8,6 +8,7 @@ import { CorpusSetParallel } from "@/parallel/corpus-set-parallel"
 import { StoreService } from "@/services/store"
 import { getEnabledLangs, getParallelCqp, ParallelQuery } from "@/parallel/parallel-cqp"
 import { corpusListing as corpusListing_, corpusSelection as corpusSelection_ } from "@/corpora/corpus_listing"
+import { isEqual } from "lodash"
 
 type ExtendedParallelController = IController & {
     langs: ParallelQuery[]
@@ -120,12 +121,15 @@ angular.module("korpApp").component("extendedParallel", {
                 $location.replace()
                 store.search = `cqp|${store.extendedCqp}`
                 store.page = 0
-                commitSearch()
+                commitSearch(true)
             }
 
-            function commitSearch() {
-                matomoSend("trackEvent", "Search", "Submit search", "Extended")
-                store.activeSearch = { cqp: store.extendedCqp! }
+            function commitSearch(force = false) {
+                const newSearch = { cqp: store.extendedCqp! }
+                if (force || !isEqual(store.activeSearch, newSearch)) {
+                    matomoSend("trackEvent", "Search", "Submit search", "Extended")
+                    store.activeSearch = newSearch
+                }
             }
 
             ctrl.keydown = function ($event: KeyboardEvent) {
