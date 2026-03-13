@@ -28,12 +28,12 @@ type WordPictureColumnController = IController & {
     // Locals
     /** Processed items */
     rows: Row[]
-    rowsLost: RelationBase[]
     /** Format the numbers for all stats of a row (freq etc). */
     formatStats: (stats: RelationStats) => Record<RelationsSort, string>
     /** Get the row stats as a string with HTML linebreaks */
     getStatsTooltip: (stats: RelationStats) => string
-    getTrendMarker: (item: Row) => string
+    getTrendMarker: (row: Row) => string
+    getTrendMarkerTooltip: (row: Row) => string
     parseLemgram: (row: Row) => { label: string; pos?: string; idx?: number }
 }
 
@@ -66,16 +66,12 @@ angular.module("korpApp").component("wordPictureColumn", {
                             {{$ctrl.formatStats(row.currentStats)[$ctrl.sort]}}
                         </td>
                         <td ng-if="!row.currentStats" />
-                        <td class="px-1 cursor-default">{{ $ctrl.getTrendMarker(row) }}</td>
+                        <td class="px-1 cursor-default" uib-tooltip-html="$ctrl.getTrendMarkerTooltip(row) | trust">
+                            {{ $ctrl.getTrendMarker(row) }}
+                        </td>
                     </tr>
                 </tbody>
             </table>
-            <div ng-if="$ctrl.rowsLost.length" class="opacity-75">
-                <strong>Lost:</strong>
-                <span ng-repeat="row in $ctrl.rowsLost">
-                    {{$ctrl.parseLemgram(row).label}}<span ng-if="!$last">,</span>
-                </span>
-            </div>
         </div>
     `,
     bindings: {
@@ -105,13 +101,6 @@ angular.module("korpApp").component("wordPictureColumn", {
                     $ctrl.rows = sortBy(rows, (row) => row.currentStats?.[$ctrl.sort] ?? -Infinity)
                         .reverse()
                         .slice(0, Number($ctrl.limit))
-
-                    // Find rows from previous period that are missing now
-                    const rowsLost =
-                        $ctrl.prevPeriodItems?.filter(
-                            (prevItem) => !$ctrl.rows.some((currentItem) => isRelationEqual(currentItem, prevItem)),
-                        ) || []
-                    $ctrl.rowsLost = rowsLost.slice(0, Number($ctrl.limit) - $ctrl.rows.length)
                 }
             }
 
@@ -152,13 +141,19 @@ angular.module("korpApp").component("wordPictureColumn", {
             const formatNumber = (number: Number): string =>
                 number.toLocaleString(store.lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
-            $ctrl.getTrendMarker = function (row: Row): string {
+            $ctrl.getTrendMarker = (row: Row): string => {
                 if (!$ctrl.prevPeriodItems) return "" // No previous period data
-                if (!row.prevStats) return "✴" // New item
+                if (!row.prevStats) return "" // New item
                 const delta = row.currentStats[$ctrl.sort] - row.prevStats[$ctrl.sort]
                 if (delta > 0) return "↗"
                 if (delta < 0) return "↘"
-                return "" // No change
+                return "=" // No change
+            }
+
+            $ctrl.getTrendMarkerTooltip = (row: Row): string => {
+                if (!row.prevStats) return ""
+                const stat = loc(`stat_${$ctrl.sort}`)
+                return `${stat} ${loc(`word_pic_stat_prev`)}: ${$ctrl.formatStats(row.prevStats)[$ctrl.sort]}`
             }
 
             /** Find equivalent item in the previous period */
