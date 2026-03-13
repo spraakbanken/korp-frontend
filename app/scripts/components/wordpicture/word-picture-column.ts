@@ -11,7 +11,7 @@ type RelationBase = Omit<MatchedRelation, RelationsSort>
 type RelationStats = Pick<MatchedRelation, RelationsSort>
 
 type Row = RelationBase & {
-    currentStats?: RelationStats
+    currentStats: RelationStats
     prevStats?: RelationStats
 }
 
@@ -28,6 +28,7 @@ type WordPictureColumnController = IController & {
     // Locals
     /** Processed items */
     rows: Row[]
+    rowsLost: RelationBase[]
     /** Format the numbers for all stats of a row (freq etc). */
     formatStats: (stats: RelationStats) => Record<RelationsSort, string>
     /** Get the row stats as a string with HTML linebreaks */
@@ -69,6 +70,12 @@ angular.module("korpApp").component("wordPictureColumn", {
                     </tr>
                 </tbody>
             </table>
+            <div ng-if="$ctrl.rowsLost.length" class="opacity-75">
+                <strong>Lost:</strong>
+                <span ng-repeat="row in $ctrl.rowsLost">
+                    {{$ctrl.parseLemgram(row).label}}<span ng-if="!$last">,</span>
+                </span>
+            </div>
         </div>
     `,
     bindings: {
@@ -93,10 +100,6 @@ angular.module("korpApp").component("wordPictureColumn", {
                         currentStats: { ...item },
                         prevStats: getPrevPeriodItem(item),
                     }))
-                    for (const item of $ctrl.prevPeriodItems || []) {
-                        if (!rows.some((current) => isRelationEqual(current, item)))
-                            rows.push({ ...item, prevStats: { ...item } })
-                    }
 
                     // Sort and limit items
                     $ctrl.rows = sortBy(rows, (row) => row.currentStats?.[$ctrl.sort] ?? -Infinity)
@@ -152,7 +155,6 @@ angular.module("korpApp").component("wordPictureColumn", {
             $ctrl.getTrendMarker = function (row: Row): string {
                 if (!$ctrl.prevPeriodItems) return "" // No previous period data
                 if (!row.prevStats) return "✴" // New item
-                if (!row.currentStats) return "−" // Lost item
                 const delta = row.currentStats[$ctrl.sort] - row.prevStats[$ctrl.sort]
                 if (delta > 0) return "↗"
                 if (delta < 0) return "↘"
