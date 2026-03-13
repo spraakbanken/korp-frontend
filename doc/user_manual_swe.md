@@ -256,16 +256,21 @@ Efter att du gjort ditt val och klickat på "Visa karta"-knappen kommer en ny ka
 
 För att kunna skapa en ordbild behöver sökfrågan vara exakt ett ord eller lemgram. I utökad och avancerad sökning innebär det ett enda token med ett enda villkor på attributet _ord_ eller _lemgram_.
 
-Här visas det sökta ordet tillsammans med ord som det har
-olika syntaktiska relationer till i materialet, grupperat efter relation. För ett verb visas till exempel de subjekt och objekt som är särskilt utmärkande för just det
-verbet, och för ett substantiv visas utmärkande attribut, och verb som substantivet är subjekt och objekt till.
+Här visas det sökta ordet tillsammans med ord som det har olika syntaktiska relationer till i materialet, grupperat efter relation.
+För ett verb visas till exempel de subjekt och objekt som är särskilt utmärkande för just det verbet.
+För ett substantiv visas utmärkande attribut, och verb som substantivet är subjekt eller objekt till.
 
 ![Ordbilden i Korp](images/ordbild.png)
 
 Intill varje relaterat ord finns ett mått på sambandet till sökordet inom det valda materialet.
-Du kan välja att visa och sortera på absolut frekvens (antal) eller Lexicographer's Mutual Information (LMI).
+Du kan välja att visa och sortera på frekvens (antal) eller Lexicographer's Mutual Information (LMI).
 LMI är ett värde som mäter frekvensen av ett givet ordpar i förhållande till frekvenserna av varje ord i paret.
 På så vis reduceras ord som samförekommer ofta bara för att de är vanliga i allmänhet, såsom "vara" och "ha".
+Använd de relativa alternativen för att skala värdena efter storleken på valt material.
+
+Vissa korpusar stödjer alternativet _Tidsindelning_, där datan är indelad i tidsperioder och en ordbild visas för varje period.
+Du kan välja att visa alla perioder i en lista eller en i taget.
+I det tidsindelade läget har ordlistningarna förändringsmarkörer (uppåt- och nedåtpilar) som visar om mätvärdet för en ordrelation gick upp eller ner sedan föregående tidsperiod.
 
 Genom att klicka på ett ord i tabellen kan man få fram en ny KWIC-flik med alla de meningar i vilka vald relation förekommer.
 

@@ -250,15 +250,21 @@ After you have made your choice and clicked on the "Show map" button, a new map 
 
 To generate a word picture, the search query must contain a single word or lemgram. In extended and advanced search, that means a single token with a single condition on the _word_ or _lemgram_ attribute.
 
-Here, the searched word is displayed together with words that it has
-syntactic relations to in the material, grouped by relation. For a verb, for example, the subjects and objects that are particularly characteristic of that particular verb are displayed, and for a noun, characteristic modifiers are shown, as well as verbs of which the noun is subject and object.
+Here, the searched word is displayed together with words that it has syntactic relations to in the material, grouped by relation.
+For a verb, for example, the subjects and objects that are particularly characteristic of that particular verb are displayed.
+For a noun, characteristic modifiers are shown, as well as verbs of which the noun is subject or object.
 
 ![Word picture in Korp](images/ordbild.png)
 
 Next to each related word is a measure of its association to the search word within the selected material.
-You can choose to measure and sort by absolute frequency (count) or Lexicographer's Mutual Information (LMI).
+You can choose to measure and sort by frequency (count) or Lexicographer's Mutual Information (LMI).
 The LMI measures the frequency of a certain word pair in relation to the frequencies of each single word.
 Thus it disfavors words that have a high co-occurrence merely by being common in general, such as "be" and "have".
+Use the relative options to scale the values by the size of the selected material.
+
+Some corpora support the _Time grouping_ option, where the data is split into time periods and a word picture is shown for each period.
+You can choose to view a list of all periods or one at a time.
+In the time-split view, the word listings also have change markers (arrows up and down) that show if the measured value for a related word went up or down since the previous time period.
 
 Clicking a word in the table brings up a new drilldown KWIC tab with the selected word pair and relation.
 

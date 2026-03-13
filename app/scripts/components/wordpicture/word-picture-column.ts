@@ -32,8 +32,8 @@ type WordPictureColumnController = IController & {
     formatStats: (stats: RelationStats) => Record<RelationsSort, string>
     /** Get the row stats as a string with HTML linebreaks */
     getStatsTooltip: (stats: RelationStats) => string
-    getTrendMarker: (row: Row) => string
-    getTrendMarkerTooltip: (row: Row) => string
+    getChangeMarker: (row: Row) => string
+    getChangeMarkerTooltip: (row: Row) => string
     parseLemgram: (row: Row) => { label: string; pos?: string; idx?: number }
 }
 
@@ -66,8 +66,8 @@ angular.module("korpApp").component("wordPictureColumn", {
                             {{$ctrl.formatStats(row.currentStats)[$ctrl.sort]}}
                         </td>
                         <td ng-if="!row.currentStats" />
-                        <td class="px-1 cursor-default" uib-tooltip-html="$ctrl.getTrendMarkerTooltip(row) | trust">
-                            {{ $ctrl.getTrendMarker(row) }}
+                        <td class="px-1 cursor-default" uib-tooltip-html="$ctrl.getChangeMarkerTooltip(row) | trust">
+                            {{ $ctrl.getChangeMarker(row) }}
                         </td>
                     </tr>
                 </tbody>
@@ -141,7 +141,7 @@ angular.module("korpApp").component("wordPictureColumn", {
             const formatNumber = (number: Number): string =>
                 number.toLocaleString(store.lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
-            $ctrl.getTrendMarker = (row: Row): string => {
+            $ctrl.getChangeMarker = (row: Row): string => {
                 if (!$ctrl.prevPeriodItems) return "" // No previous period data
                 if (!row.prevStats) return "" // New item
                 const delta = row.currentStats[$ctrl.sort] - row.prevStats[$ctrl.sort]
@@ -150,7 +150,7 @@ angular.module("korpApp").component("wordPictureColumn", {
                 return "=" // No change
             }
 
-            $ctrl.getTrendMarkerTooltip = (row: Row): string => {
+            $ctrl.getChangeMarkerTooltip = (row: Row): string => {
                 if (!row.prevStats) return ""
                 const stat = loc(`stat_${$ctrl.sort}`)
                 return `${stat} ${loc(`word_pic_stat_prev`)}: ${$ctrl.formatStats(row.prevStats)[$ctrl.sort]}`
