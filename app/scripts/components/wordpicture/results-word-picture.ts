@@ -85,6 +85,11 @@ angular.module("korpApp").component("resultsWordPicture", {
                                 10 {{'word_pic_split_option_asc' | loc:$root.lang}}
                             </option>
                         </select>
+                        <i
+                            ng-show="sortLocal == 'mi' || sortLocal == 'rmi'"
+                            class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
+                            uib-tooltip="{{'word_pic_split_help' | loc:$root.lang}}"
+                        ></i>
                     </label>
 
                     <select ng-model="limit">
@@ -151,7 +156,7 @@ angular.module("korpApp").component("resultsWordPicture", {
                         ng-model="periodSelected.value"
                         uib-btn-radio="''"
                     >
-                        {{'all' | loc:$root.lang}}
+                        {{'all_cap' | loc:$root.lang}}
                     </button>
                     <button
                         ng-repeat="period in data"
