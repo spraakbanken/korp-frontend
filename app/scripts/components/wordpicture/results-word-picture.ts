@@ -236,7 +236,17 @@ angular.module("korpApp").component("resultsWordPicture", {
             })
 
             $scope.$watch("sortLocal", () => $scope.sortLocal && makeRequest())
-            $scope.$watch("splitLocal", () => $scope.splitLocal != undefined && makeRequest())
+
+            $scope.$watch("splitLocal", () => {
+                if ($scope.splitLocal == undefined) return
+                // Switch to relative stats
+                if ($scope.splitLocal) {
+                    if ($scope.sortLocal == "freq") $scope.sortLocal = "freq_relative"
+                    if ($scope.sortLocal == "mi") $scope.sortLocal = "rmi"
+                }
+                // Load data using new params
+                makeRequest()
+            })
 
             store.watch("globalFilter", () => {
                 if (store.globalFilter) $scope.warning = loc("word_pic_global_filter", store.lang)
