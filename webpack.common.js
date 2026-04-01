@@ -148,10 +148,6 @@ module.exports = {
                     to: "translations/[name].[fullhash][ext]",
                 },
                 {
-                    from: "app/markup/msdtags.html",
-                    to: "markup",
-                },
-                {
                     from: "app/translations/locale-*.json",
                     to: "translations/[name].[fullhash][ext]",
                 },
