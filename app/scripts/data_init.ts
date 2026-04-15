@@ -34,13 +34,6 @@ async function getInfoData(corpusIds: string[]): Promise<InfoData> {
 }
 
 async function getConfig(): Promise<Config> {
-    // Load static corpus config if it exists.
-    try {
-        const corpusConfig = require(`modes/${currentMode}_corpus_config.json`) as Config
-        console.log(`Using static corpus config`)
-        return corpusConfig
-    } catch {}
-
     // The corpora to include are normally given by the mode config, but allow defining it elsewhere (used by Mink)
     const corpusIds = settings.get_corpus_ids ? await settings.get_corpus_ids() : undefined
 

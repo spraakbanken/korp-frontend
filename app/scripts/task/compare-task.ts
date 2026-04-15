@@ -60,7 +60,7 @@ export class CompareTask extends TaskBase<CompareResult> {
 
         const split = this.reduce.filter((r) => this.attributes[r]?.type === "set").join(",")
 
-        const rankedReduce = this.reduce.filter((item) => this.cl.getAttributes(this.cl.getReduceLang())[item]?.ranked)
+        const rankedReduce = this.reduce.filter((item) => this.cl.getAttributes()[item]?.ranked)
         const top = rankedReduce.map((item) => item + ":1").join(",")
 
         const params = {

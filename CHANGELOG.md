@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Statistics example query gives no hits if some attribute value is empty [#500](https://github.com/spraakbanken/korp-frontend/issues/500)
+
 ## [9.14.3] – 2026-03-09
 
 ### Added
