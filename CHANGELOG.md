@@ -5,6 +5,7 @@
 ### Fixed
 
 - Statistics example query gives no hits if some attribute value is empty [#500](https://github.com/spraakbanken/korp-frontend/issues/500), [#512](https://github.com/spraakbanken/korp-frontend/issues/512)
+- `within` must be a simple structural element when used with free order queries [#511](https://github.com/spraakbanken/korp-frontend/issues/511)
 
 ## [9.14.3] – 2026-03-09
 
