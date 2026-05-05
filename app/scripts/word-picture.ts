@@ -90,7 +90,7 @@ export class WordPicture {
     }
 
     getData: () => WordPictureData = once(() => {
-        return this.headings.map((heading) => {
+        const data: WordPictureData = this.headings.map((heading) => {
             const config = this.config[heading.pos]
             const tables: WordPictureTable[] = config.map((config, index) => {
                 // Split data columns into before and after the "_" placeholder in the config
@@ -112,10 +112,12 @@ export class WordPicture {
             const max = Math.max(...tables.map((table) => table.max))
             return { config, heading, tables, max }
         })
+        // Remove sections with no rows (in case there is data that has no matching config)
+        return data.filter((section) => section.max > 0)
     })
 
     getMaxColumnLength(): number {
-        return Math.max(...this.getData().map((section) => section.max))
+        return Math.max(0, ...this.getData().map((section) => section.max))
     }
 
     /** Get a string for the params that identify a word picture column */
