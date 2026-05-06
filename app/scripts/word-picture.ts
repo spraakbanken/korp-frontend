@@ -56,9 +56,7 @@ export class WordPicture {
     ) {
         const convertItem = (item: Relation): MatchedRelation | undefined => {
             const { head, headpos, dep, deppos, depextra } = item
-            // For ordinary word search, include multi-word items beginning with the searched word
-            const getMatch = (word: string) => (type == "word" ? word.replace(/_.*/, "") : word)
-            if (query == getMatch(head))
+            if (query == head)
                 return {
                     ...item,
                     reverse: false,
@@ -68,7 +66,7 @@ export class WordPicture {
                     otherpos: deppos,
                     prefix: depextra,
                 }
-            if (query == getMatch(dep))
+            if (query == dep)
                 return { ...item, reverse: true, match: dep, matchpos: deppos, other: head, otherpos: headpos }
             console.warn("Unmatched relations item", item)
         }
