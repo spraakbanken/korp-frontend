@@ -52,8 +52,6 @@ export type Store = {
     mid_comp: boolean
     /** Page number of KWIC result */
     page?: number
-    /** In parallel mode, what languages to build a query for */
-    parallel_corpora: string[]
     /** In simple search, match beginning of word */
     prefix: boolean
     /** Randomized number used when sorting hits by random. Stored for reproducible urls. */

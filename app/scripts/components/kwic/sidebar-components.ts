@@ -51,7 +51,7 @@ export const sidebarDefaultComponent: SidebarComponent = {
             </a>
 
             <ul>
-                <li ng-repeat="item in valueArray">
+                <li ng-repeat="item in valueArray track by $index + item">
                     <span ng-if="!attrs['internal_search']" ng-bind-html="renderValue(item) | trust"></span>
                     <span
                         ng-if="attrs['internal_search']"

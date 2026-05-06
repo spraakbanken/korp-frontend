@@ -17,7 +17,11 @@ export function findAuthModule(): AuthModule {
     }
 
     // must be a custom auth module
-    return require("custom/" + name).default
+    try {
+        return require("custom/" + name).default
+    } catch {
+        throw new Error(`Could not load custom auth module ${name}`)
+    }
 }
 
 const dummyAuth: AuthModule = {

@@ -274,8 +274,7 @@ angular.module("korpApp").component("statistics", {
 
             store.watch("corpus", () => {
                 // Update list of attributes
-                const reduceLang = corpusSelection.getReduceLang()
-                $scope.statCurrentAttrs = corpusSelection.getAttributeGroupsStatistics(reduceLang)
+                $scope.statCurrentAttrs = corpusSelection.getAttributeGroupsStatistics()
 
                 // Deselect removed attributes, fall back to word
                 const names = $scope.statCurrentAttrs.map((option) => option.name)
