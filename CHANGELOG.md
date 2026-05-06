@@ -8,6 +8,7 @@
 - Inconsistent Word Picture results depending on sort param [#503](https://github.com/spraakbanken/korp-frontend/issues/503)
 - Word picture: show as empty if none of the results is supported [#510](https://github.com/spraakbanken/korp-frontend/issues/510)
 - `within` must be a simple structural element when used with free order queries [#511](https://github.com/spraakbanken/korp-frontend/issues/511)
+- Error in sidebar when a set attribute has duplicate elements [#515](https://github.com/spraakbanken/korp-frontend/issues/515)
 
 ## [9.14.3] – 2026-03-09
 
