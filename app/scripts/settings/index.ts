@@ -16,7 +16,7 @@ declare global {
 if (process.env.ENVIRONMENT != "production") window.settings = settings
 
 /**
- * function to set default values if parameters have been left out of config.js
+ * function to set default values if parameters have been left out of config.yml
  */
 export function setDefaultConfigValues() {
     settings["hits_per_page_values"] ??= [25, 50, 75, 100]

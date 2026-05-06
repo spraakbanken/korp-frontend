@@ -53,6 +53,8 @@ export class RelationsProxy extends ProxyBase<"relations"> {
         const data = await this.send(params)
         if (!data.relations) throw new RelationsEmptyError("No relation data in response")
         const result = new WordPicture(word, type, data.relations)
+        // If there is only data with no matching config, it cannot be shown, so treat it as empty
+        if (!result.getData().length) throw new RelationsEmptyError("No configured relations found")
         return result
     }
 }

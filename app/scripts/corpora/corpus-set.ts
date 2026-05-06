@@ -1,18 +1,4 @@
-import {
-    compact,
-    get,
-    intersection,
-    isEmpty,
-    maxBy,
-    minBy,
-    partition,
-    pick,
-    pickBy,
-    sortBy,
-    sum,
-    union,
-    uniq,
-} from "lodash"
+import { compact, get, intersection, isEmpty, maxBy, minBy, partition, pick, pickBy, sum, union, uniq } from "lodash"
 import moment, { type Moment } from "moment"
 import settings, { normalizeDataset } from "@/settings"
 import { getLang, locObj } from "@/i18n"
@@ -31,11 +17,6 @@ export class CorpusSet {
     corpora: CorpusTransformed[]
     structAttributes: Record<string, Attribute> = {}
     commonAttributes: Record<string, Attribute> = {}
-    _wordGroup: AttributeOption = {
-        group: "word",
-        name: "word",
-        label: settings["word_label"],
-    }
 
     constructor(corpora: CorpusTransformed[] = []) {
         this.corpora = corpora
@@ -53,11 +34,6 @@ export class CorpusSet {
         const cl = new CorpusSet()
         cl.pickFrom(this, ids)
         return cl
-    }
-
-    // only applicable for parallel corpora
-    getReduceLang(): string {
-        return ""
     }
 
     /** Lowercase corpus ids */
@@ -83,7 +59,6 @@ export class CorpusSet {
 
     getAttributesIntersection() {
         const attrs = this.map((corpus) => corpus.attributes)
-
         return objectIntersection(attrs)
     }
 
@@ -128,10 +103,7 @@ export class CorpusSet {
     }
 
     getReduceAttrs(): Record<string, Attribute> {
-        const allAttrs = {
-            ...this.getAttributes(this.getReduceLang()),
-            ...this.getStructAttrs(this.getReduceLang()),
-        }
+        const allAttrs = { ...this.getAttributes(), ...this.getStructAttrs() }
         return pickBy(allAttrs, (attribute) => attribute["display_type"] !== "hidden")
     }
 
@@ -325,26 +297,25 @@ export class CorpusSet {
     }
 
     getAttributeGroups(wordOp: SetOperator, structOp: SetOperator, lang?: string): AttributeOption[] {
+        const wordOption: AttributeOption = { group: "word", name: "word", label: settings["word_label"] }
         const attrs = this.getWordAttributeGroups(wordOp, lang)
         const sentAttrs = this.getStructAttributeGroups(structOp, lang)
         const comparator = (a: Attribute, b: Attribute) => locObj(a.label).localeCompare(locObj(b.label), getLang())
-        return [this._wordGroup, ...attrs.sort(comparator), ...sentAttrs.sort(comparator)]
+        return [wordOption, ...attrs.sort(comparator), ...sentAttrs.sort(comparator)]
     }
 
     getAttributeGroupsExtended(lang?: string): AttributeOption[] {
         return this.getAttributeGroups("union", "union", lang).filter((attr) => !get(attr, "hide_extended"))
     }
 
-    getAttributeGroupsCompare(lang?: string): AttributeOption[] {
-        return this.getAttributeGroups("intersection", "intersection", lang).filter(
-            (attr) => !get(attr, "hide_compare"),
-        )
+    getAttributeGroupsCompare(): AttributeOption[] {
+        return this.getAttributeGroups("intersection", "intersection").filter((attr) => !get(attr, "hide_compare"))
     }
 
-    getAttributeGroupsStatistics(lang?: string): AttributeOption[] {
+    getAttributeGroupsStatistics(): AttributeOption[] {
         const wordOp = settings["reduce_word_attribute_selector"] || "union"
         const structOp = settings["reduce_struct_attribute_selector"] || "union"
-        return this.getAttributeGroups(wordOp, structOp, lang).filter((attr) => !get(attr, "hide_statistics"))
+        return this.getAttributeGroups(wordOp, structOp).filter((attr) => !get(attr, "hide_statistics"))
     }
 
     /** Get list of morphology ids used by the corpora. */
@@ -364,10 +335,8 @@ export class CorpusSet {
     }
 
     isDateInterval(type: string): boolean {
-        if (!type) {
-            return false
-        }
-        const attribute = type.split("_.").slice(-1)[0]
+        if (!type) return false
+        const attribute = type.replace("_.", "")
         return (
             this.commonAttributes[attribute]?.["extended_component"] == "dateInterval" ||
             this.structAttributes[attribute]?.["extended_component"] == "dateInterval"

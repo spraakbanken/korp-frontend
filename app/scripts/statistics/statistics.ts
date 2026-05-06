@@ -102,8 +102,9 @@ function reduceCqp(
 
     const cqpName = attr ? prefixAttr(attr) : name
 
-    // Empty value: require number of values to be 0
-    if (values[0] == "") return `ambiguity(${cqpName}) = 0`
+    // Empty value: for multi-value attr, match tokens with 0 values.
+    // For structs, use negative container test. For other attrs, compare to empty string. The statistics data doesn't distinguish these.
+    if (values[0] == "") return attr?.type == "set" ? `ambiguity(${cqpName}) = 0` : `(!${cqpName} | ${cqpName} = "")`
 
     // Escape values for use in CQP regex
     values = values.map(regescape)

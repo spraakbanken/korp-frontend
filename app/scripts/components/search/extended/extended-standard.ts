@@ -16,7 +16,6 @@ type ExtendedStandardController = IController & {
     cqp: string
     repeatError: boolean
     orderError: boolean
-    within: string
     withins: string[]
     onSearch: () => void
     onSearchSave: (name: string) => void
@@ -29,6 +28,7 @@ type ExtendedStandardController = IController & {
 
 type ExtendedStandardScope = IScope & {
     freeOrder: boolean
+    within: string
 }
 
 angular.module("korpApp").component("extendedStandard", {
@@ -61,7 +61,7 @@ angular.module("korpApp").component("extendedStandard", {
             <span>{{'within' | loc:$root.lang}}</span>
             <select
                 class="within_select"
-                ng-model="$ctrl.within"
+                ng-model="within"
                 ng-options="item as ('within_' + item | loc:$root.lang) for item in $ctrl.withins"
             ></select>
         </div>
@@ -85,16 +85,15 @@ angular.module("korpApp").component("extendedStandard", {
             store.watch("in_order", () => ($scope.freeOrder = !store.in_order))
             store.watch("corpus", () => {
                 ctrl.withins = corpusSelection.getWithinKeys()
-                if (!ctrl.withins.includes(ctrl.within)) {
-                    ctrl.within = ctrl.withins[0]
+                if (!ctrl.withins.includes($scope.within)) {
+                    $scope.within = ctrl.withins[0]
                 }
             })
             store.watch("globalFilter", () => updateExtendedCQP())
-            store.watch("within", () => (ctrl.within = store.within || ctrl.withins[0]))
+            store.watch("within", () => ($scope.within = store.within || ctrl.withins[0]))
 
-            $scope.$watch("freeOrder", () => {
-                ctrl.validateFreeOrder()
-            })
+            $scope.$watch("freeOrder", () => ctrl.validateFreeOrder())
+            $scope.$watch("within", () => ctrl.validateFreeOrder())
 
             statemachine.listen("cqp_search", (event) => {
                 $timeout(() => {
@@ -116,7 +115,7 @@ angular.module("korpApp").component("extendedStandard", {
             function triggerSearch(force = false) {
                 store.page = 0
                 store.in_order = !$scope.freeOrder
-                store.within = ctrl.within
+                store.within = $scope.within
                 store.search = "cqp"
                 store.cqp = ctrl.cqp
 
@@ -156,9 +155,12 @@ angular.module("korpApp").component("extendedStandard", {
             ctrl.validateFreeOrder = () => {
                 try {
                     const cqpObjs = parse(ctrl.cqp || "[]")
+                    /** Whether current `within` is multiple, e.g. "5 sentences" */
+                    const withinMultiple = (parseInt($scope.within) || 1) > 1
+                    const freeOrderCompatible = !withinMultiple && supportsInOrder(cqpObjs)
                     // If query doesn't support free word order, and the "free order" checkbox is checked,
                     // then show explanation and let user resolve the conflict
-                    ctrl.orderError = !supportsInOrder(cqpObjs) && $scope.freeOrder
+                    ctrl.orderError = !freeOrderCompatible && $scope.freeOrder
                 } catch (e) {
                     console.error("Failed to parse CQP", ctrl.cqp)
                     ctrl.orderError = false

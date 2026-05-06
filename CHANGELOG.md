@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [9.14.4] – 2026-05-06
+
+### Fixed
+
+- Statistics example query gives no hits if some attribute value is empty [#500](https://github.com/spraakbanken/korp-frontend/issues/500), [#512](https://github.com/spraakbanken/korp-frontend/issues/512)
+- Inconsistent Word Picture results depending on sort param [#503](https://github.com/spraakbanken/korp-frontend/issues/503)
+- Word picture: show as empty if none of the results is supported [#510](https://github.com/spraakbanken/korp-frontend/issues/510)
+- `within` must be a simple structural element when used with free order queries [#511](https://github.com/spraakbanken/korp-frontend/issues/511)
+- Error in sidebar when a set attribute has duplicate elements [#515](https://github.com/spraakbanken/korp-frontend/issues/515)
+
 ## [9.14.3] – 2026-03-09
 
 ### Added
@@ -640,6 +650,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.14.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.4
 [9.14.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.3
 [9.14.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.2
 [9.14.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.1
