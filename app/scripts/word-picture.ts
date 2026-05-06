@@ -56,9 +56,7 @@ export class WordPicture {
     ) {
         const convertItem = (item: Relation): MatchedRelation | undefined => {
             const { head, headpos, dep, deppos, depextra } = item
-            // For ordinary word search, include multi-word items beginning with the searched word
-            const getMatch = (word: string) => (type == "word" ? word.replace(/_.*/, "") : word)
-            if (query == getMatch(head))
+            if (query == head)
                 return {
                     ...item,
                     reverse: false,
@@ -68,7 +66,7 @@ export class WordPicture {
                     otherpos: deppos,
                     prefix: depextra,
                 }
-            if (query == getMatch(dep))
+            if (query == dep)
                 return { ...item, reverse: true, match: dep, matchpos: deppos, other: head, otherpos: headpos }
             console.warn("Unmatched relations item", item)
         }
@@ -90,7 +88,7 @@ export class WordPicture {
     }
 
     getData: () => WordPictureData = once(() => {
-        return this.headings.map((heading) => {
+        const data: WordPictureData = this.headings.map((heading) => {
             const config = this.config[heading.pos]
             const tables: WordPictureTable[] = config.map((config, index) => {
                 // Split data columns into before and after the "_" placeholder in the config
@@ -112,10 +110,12 @@ export class WordPicture {
             const max = Math.max(...tables.map((table) => table.max))
             return { config, heading, tables, max }
         })
+        // Remove sections with no rows (in case there is data that has no matching config)
+        return data.filter((section) => section.max > 0)
     })
 
     getMaxColumnLength(): number {
-        return Math.max(...this.getData().map((section) => section.max))
+        return Math.max(0, ...this.getData().map((section) => section.max))
     }
 
     /** Get a string for the params that identify a word picture column */

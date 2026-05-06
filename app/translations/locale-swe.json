@@ -350,7 +350,7 @@
     "add_filter_value": "Lägg till",
 
     "repeat_error": "Fel: Det går inte att upprepa från 0 på alla token.",
-    "order_error": "Fel: Alternativet \"i fri följd\" fungerar bara om sökfrågan har flera tokens samt inga repetitioner, gränser eller tomma token.",
+    "order_error": "Fel: Alternativet \"i fri följd\" fungerar bara om sökfrågan har flera tokens, inga repetitioner, gränser eller tomma token samt ett enskilt element i \"inom\".",
     "order_help": "Alternativet \"i fri följd\" är kompatibelt med sökfrågor som har flera tokens samt inga repetitioner, gränser eller tomma token.",
 
     "choose_value": "Välj ett värde",
