@@ -350,6 +350,10 @@
     "go_to_start": "Go to start page",
 
     "stats_not_in_order_warn": "Statistics currently do not support the \"in free order\" search option.",
+    "stats_no_supported_corpora": "None of the selected corpora support all of the chosen attributes.",
+    "stats_unsupported_attr_help": "This attribute is not supported in the following corpora:",
+    "stats_unsupported_attr": "of chosen material does not support the attribute(s)",
+    "stats_unsupported_attr_excluded": "and therefore is not included in the result.",
 
     "read_in_korp": "Read this text in Korp",
     "add_token": "Add token",

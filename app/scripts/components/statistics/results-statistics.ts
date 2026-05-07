@@ -1,13 +1,12 @@
 import angular, { IController, IScope, ITimeoutService } from "angular"
 import settings from "@/settings"
-import statsProxyFactory, { StatsProxy } from "@/backend/proxy/stats-proxy"
+import statsProxyFactory, { NoSupportedCorporaError, StatsProxy } from "@/backend/proxy/stats-proxy"
 import { Dataset, SearchParams } from "@/statistics/statistics.types"
 import { html } from "@/util"
 import "@/components/util/korp-error"
 import "./statistics"
 import { processStatisticsResult } from "@/statistics/statistics"
 import { StoreService } from "@/services/store"
-import { corpusSelection } from "@/corpora/corpus_listing"
 
 type ResultsStatisticsController = IController & {
     isActive: boolean
@@ -45,6 +44,8 @@ angular.module("korpApp").component("resultsStatistics", {
             response="proxy.response"
             row-count="rowCount"
             search-params="searchParams"
+            unsupported-ratio="proxy.unsupportedRatio"
+            unsupported-attributes="proxy.unsupportedAttributes"
             warning="warning"
         ></statistics>
         <korp-error ng-if="error" message="{{error}}"></korp-error>
@@ -130,15 +131,19 @@ angular.module("korpApp").component("resultsStatistics", {
 
                 const attrs = (store.stats_reduce || "word").split(",")
                 const ignoreCase = !!store.stats_reduce_insensitive
-                // this is needed so that the statistics view will know what the original LINKED corpora was in parallel
-                const corpora: string = corpusSelection.stringify(false)
 
                 $ctrl.setProgress(true, 0)
                 s.proxy
                     .setProgressHandler((progressObj) => $timeout(() => $ctrl.setProgress(true, progressObj.percent)))
                     .makeRequest(cqp, attrs, store.within, ignoreCase)
                     .then(async (data) => {
-                        const { rows, params } = await processStatisticsResult(corpora, data, attrs, ignoreCase, cqp)
+                        const { rows, params } = await processStatisticsResult(
+                            s.proxy.originalCorpora,
+                            data,
+                            attrs,
+                            ignoreCase,
+                            cqp,
+                        )
                         $timeout(() => {
                             $ctrl.setProgress(false, 0)
                             s.data = rows
@@ -151,8 +156,13 @@ angular.module("korpApp").component("resultsStatistics", {
                     .catch((error) => {
                         // AbortError is expected if a new search is made before the previous one is finished
                         if (error.name == "AbortError") return
+                        // Expected error
+                        if (error instanceof NoSupportedCorporaError) {
+                            s.warning = "stats_no_supported_corpora"
+                            return
+                        }
+                        // Unknown error
                         console.error(error)
-                        // TODO Show error
                         $timeout(() => {
                             s.resetView()
                             s.error = error

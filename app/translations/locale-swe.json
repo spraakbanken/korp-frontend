@@ -349,6 +349,10 @@
     "go_to_start": "Gå till startsidan",
 
     "stats_not_in_order_warn": "Statistiken stödjer för närvarande inte sökalternativet \"i fri följd\".",
+    "stats_no_supported_corpora": "Inga av de valda korpusarna stödjer alla valda attribut.",
+    "stats_unsupported_attr_help": "Detta attribut stöds inte i följande korpusar:",
+    "stats_unsupported_attr": "av det valda materialet saknar attribut",
+    "stats_unsupported_attr_excluded": "och ingår därför inte i sammanställningen.",
 
     "read_in_korp": "Läs i Korp",
     "add_token": "Lägg till token",

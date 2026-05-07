@@ -347,4 +347,9 @@ korpApp.filter("formatRelativeHits", [
     "store",
     (store) => (input: string, lang?: string) => formatRelativeHits(input, lang || store.lang),
 ])
-korpApp.filter("maxLength", () => (val: unknown) => (String(val).length > 39 ? String(val).slice(0, 36) + "…" : val))
+korpApp.filter(
+    "maxLength",
+    () =>
+        (val: unknown, max = 36) =>
+            String(val).length > max + 3 ? String(val).slice(0, max) + "…" : val,
+)

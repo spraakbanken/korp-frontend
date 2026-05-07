@@ -44,6 +44,14 @@ export function formatFrequency(store: StoreService, absrel: AbsRelSeq) {
     return store.statsRelative ? formatRelativeHits(relative, store.lang) : absolute.toLocaleString(store.lang)
 }
 
+/** Format a number as a percentage, including % sign */
+export const percentage = (value: unknown) =>
+    Number(value).toLocaleString(getLang(), {
+        style: "percent",
+        minimumSignificantDigits: 1,
+        maximumSignificantDigits: 2,
+    })
+
 /**
  * Sort elements alphabetically by a given attribute.
  * @param elems A list of objects.
