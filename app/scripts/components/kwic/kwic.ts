@@ -319,9 +319,7 @@ angular.module("korpApp").component("kwic", {
                 }
 
                 if ("hitsInProgress" in changeObj) {
-                    const totalTokens = corpusSelection.corpora
-                        .map((corpus) => corpus.tokens || 0)
-                        .reduce((sum, t) => sum + t, 0)
+                    const totalTokens = corpusSelection.getTokenCount()
                     $scope.relativeFrequency =
                         $ctrl.hitsInProgress && totalTokens ? ($ctrl.hitsInProgress / totalTokens) * 1e6 : undefined
                 }

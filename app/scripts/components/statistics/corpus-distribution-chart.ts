@@ -30,7 +30,7 @@ angular.module("korpApp").component("corpusDistributionChart", {
                     label: loc("statstable_absfigures", store.lang),
                 },
             ]
-            $scope.mode = "relative"
+            $scope.mode = store.statsRelative ? "relative" : "absolute"
             let chart: Chart<"pie">
 
             const getValues = () => $ctrl.row.map((corpus) => corpus.values[$scope.mode == "relative" ? 1 : 0])

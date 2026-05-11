@@ -14,6 +14,7 @@ import { TrendGraph } from "@/trend-diagram/graph"
 import { renderTable } from "@/trend-diagram/trend-table"
 import { CsvType, downloadCsvFile } from "@/csv"
 import { SlickGrid } from "slickgrid"
+import { percentage } from "@/i18n/util"
 
 type ResultsTrendDiagramController = IController & {
     loading: boolean
@@ -33,6 +34,7 @@ type ResultsTrendDiagramScope = IScope & {
     mode: "line" | "bar" | "table"
     nontime: number
     statsRelative: boolean
+    percentage: (value: unknown) => string
 }
 
 angular.module("korpApp").component("resultsTrendDiagram", {
@@ -88,8 +90,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             </div>
 
             <div ng-if="nontime">
-                {{ 'non_time_before' | loc:$root.lang }} {{ nontime | number:2 }}% {{ 'non_time_after' | loc:$root.lang
-                }}
+                {{'non_time_before' | loc:$root.lang}} {{percentage(nontime)}} {{'non_time_after' | loc:$root.lang}}
             </div>
 
             <div class="legend" ng-show="isGraph && !$ctrl.loading">
@@ -147,7 +148,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 const [from, to] = interval
                 makeRequest(from, to)
 
-                $scope.nontime = $ctrl.task.corpusListing.getUndatedRatio() * 100
+                $scope.nontime = $ctrl.task.corpusListing.getUndatedRatio()
             }
 
             $ctrl.$onChanges = (changes) => {
@@ -180,6 +181,8 @@ angular.module("korpApp").component("resultsTrendDiagram", {
             })
 
             $scope.$watch("statsRelative", () => (store.statsRelative = $scope.statsRelative))
+
+            $scope.percentage = percentage
 
             $ctrl.graphClickHandler = () => {
                 const target = $(".chart", $ctrl.$result)

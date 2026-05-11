@@ -63,26 +63,26 @@ angular.module("korpApp").component("simpleSearch", {
                         <div class="flex flex-col gap-1">
                             <label>
                                 <input type="checkbox" ng-model="prefix" />
-                                {{'prefix_chk' | loc:$root.lang}}
+                                {{'prefix' | loc:$root.lang}}
                                 <i
                                     class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                    uib-tooltip="{{'prefix_chk_help' | loc:$root.lang}}"
+                                    uib-tooltip="{{'prefix_help' | loc:$root.lang}}"
                                 ></i>
                             </label>
                             <label>
                                 <input type="checkbox" ng-model="midfix" ng-change="onMidfixChange()" />
-                                {{'midfix_chk' | loc:$root.lang}}
+                                {{'midfix' | loc:$root.lang}}
                                 <i
                                     class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                    uib-tooltip="{{'midfix_chk_help' | loc:$root.lang}}"
+                                    uib-tooltip="{{'midfix_help' | loc:$root.lang}}"
                                 ></i>
                             </label>
                             <label>
                                 <input type="checkbox" ng-model="suffix" />
-                                {{'suffix_chk' | loc:$root.lang}}
+                                {{'suffix' | loc:$root.lang}}
                                 <i
                                     class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
-                                    uib-tooltip="{{'suffix_chk_help' | loc:$root.lang}}"
+                                    uib-tooltip="{{'suffix_help' | loc:$root.lang}}"
                                 ></i>
                             </label>
                         </div>
