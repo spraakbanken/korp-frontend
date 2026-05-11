@@ -148,7 +148,7 @@ angular.module("korpApp").component("resultsTrendDiagram", {
                 const [from, to] = interval
                 makeRequest(from, to)
 
-                $scope.nontime = $ctrl.task.corpusListing.getUndatedRatio() * 100
+                $scope.nontime = $ctrl.task.corpusListing.getUndatedRatio()
             }
 
             $ctrl.$onChanges = (changes) => {
