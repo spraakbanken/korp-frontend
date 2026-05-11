@@ -10,6 +10,7 @@
 ### Fixed
 
 - HTML-escaped attribute values in trend diagram table
+- Reuse relative/absolute choice from statistics table in distribution pie chart
 
 ## [9.14.4] – 2026-05-06
 
