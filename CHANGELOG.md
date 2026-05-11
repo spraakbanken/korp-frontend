@@ -5,6 +5,7 @@
 ### Added
 
 - Show all attributes in grouping dropdown [#513](https://github.com/spraakbanken/korp-frontend/issues/513)
+- Show corpus name in tooltip of statistics table column heading
 
 ### Fixed
 
