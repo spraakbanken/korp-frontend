@@ -359,12 +359,9 @@
 
     "free_order_chk": "fri följd",
     "free_order_chk_help": "Sökorden får förekomma i obestämd ordning, och inte nödvändigtvis i följd.",
-    "prefix_chk": "förled",
-    "prefix_chk_help": "Tillåt ord som börjar med sökorden.",
-    "midfix_chk": "mellanled",
-    "midfix_chk_help": "Tillåt ord som innehåller sökorden.",
-    "suffix_chk": "efterled",
-    "suffix_chk_help": "Tillåt ord som slutar med sökorden.",
+    "prefix_help": "Tillåt ord som börjar med sökorden.",
+    "midfix_help": "Tillåt ord som innehåller sökorden.",
+    "suffix_help": "Tillåt ord som slutar med sökorden.",
     "text_tab_header": "Läsläge",
 
     "not_compound_middle": "inte mellanled",
@@ -372,5 +369,6 @@
     "not_suffix": "slutar inte med",
     "compound_middle": "mellanled",
     "prefix": "börjar med",
+    "midfix": "innehåller",
     "suffix": "slutar med"
 }
