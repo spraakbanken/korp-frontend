@@ -9,6 +9,7 @@
 
 ### Fixed
 
+- Name attributes listed under both word and text attributes [#220](https://github.com/spraakbanken/korp-frontend/issues/220)
 - Change to "starts with", "contains", "ends with" [#516](https://github.com/spraakbanken/korp-frontend/issues/516)
 - HTML-escaped attribute values in trend diagram table
 - Reuse relative/absolute choice from statistics table in distribution pie chart

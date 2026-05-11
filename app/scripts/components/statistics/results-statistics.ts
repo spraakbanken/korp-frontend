@@ -158,6 +158,7 @@ angular.module("korpApp").component("resultsStatistics", {
                         if (error.name == "AbortError") return
                         // Expected error
                         if (error instanceof NoSupportedCorporaError) {
+                            s.resetView()
                             s.warning = "stats_no_supported_corpora"
                             return
                         }
