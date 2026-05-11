@@ -6,6 +6,10 @@
 
 - Show all attributes in grouping dropdown [#513](https://github.com/spraakbanken/korp-frontend/issues/513)
 
+### Fixed
+
+- HTML-escaped attribute values in trend diagram table
+
 ## [9.14.4] – 2026-05-06
 
 ### Fixed

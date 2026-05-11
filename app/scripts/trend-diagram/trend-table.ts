@@ -1,7 +1,7 @@
 import moment from "moment"
 import { FORMATS, Series } from "./util"
 import { formatFrequency } from "@/i18n/util"
-import { escape, sortedIndexOf } from "lodash"
+import { sortedIndexOf } from "lodash"
 import { AbsRelSeq } from "@/statistics/statistics.types"
 import { StoreService } from "@/services/store"
 import { Column, SlickGrid } from "slickgrid"
@@ -43,7 +43,7 @@ export function renderTable(store: StoreService, el: HTMLElement, series: Series
             id: "Hit",
             name: "Hit",
             field: "label",
-            formatter: (row, cell, value) => escape(value) || `<span class="opacity-50">&empty;</span>`,
+            formatter: (row, cell, value) => value || `<span class="opacity-50">&empty;</span>`,
         },
     ]
     for (const key of Object.keys(columnsMap).sort()) {
