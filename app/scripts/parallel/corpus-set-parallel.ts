@@ -1,5 +1,5 @@
 import settings from "@/settings"
-import { CorpusSet } from "@/corpora/corpus-set"
+import { AttributeOption, CorpusSet } from "@/corpora/corpus-set"
 import { objectIntersection } from "@/util"
 import { CorpusTransformed } from "@/settings/config-transformed.types"
 import { Attribute, CorpusParallel } from "@/settings/config.types"
@@ -158,5 +158,11 @@ export class CorpusSetParallel extends CorpusSet {
     get(corpusID: string): PCorpus {
         // Remove first part if on the form "<a>|<b>"
         return super.get(corpusID.replace(/.*\|/, "")) as PCorpus
+    }
+
+    getUnsupportedCorpora(options: AttributeOption[]): CorpusSetParallel {
+        const unsupported = options.flatMap((option) => option.unsupported)
+        const linked = unsupported.flatMap((id) => this.getLinked(this.get(id)).map((corpus) => corpus.id))
+        return this.pick([...unsupported, ...linked])
     }
 }

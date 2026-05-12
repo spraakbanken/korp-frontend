@@ -318,6 +318,12 @@ export class CorpusSet {
         return this.getAttributeGroups(wordOp, structOp).filter((attr) => !get(attr, "hide_statistics"))
     }
 
+    /** Get corpora that do not support all selected attributes. */
+    getUnsupportedCorpora(options: AttributeOption[]): CorpusSet {
+        const unsupported = options.flatMap((option) => option.unsupported)
+        return this.pick(unsupported)
+    }
+
     /** Get list of morphology ids used by the corpora. */
     getMorphologies(): string[] {
         const morphologies = this.map((corpus) => (corpus.morphology || "").split("|")).flat()

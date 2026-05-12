@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Statistics result in parallel when grouping by partially supported attribute
+
 ## [9.15.0] – 2026-05-12
 
 ### Added
