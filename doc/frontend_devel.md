@@ -171,7 +171,7 @@ The first few settings are needed at initialization time, and thus must be speci
         site: 2
     ```
 - **news_url** - See [News widget](#news-widget)
-- **reduce_word_attribute_selector** - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora _word_ attributes or only the attributes common to selected corpora. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
+- **reduce_word_attribute_selector** - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora _word_ attributes or only the attributes common to selected corpora.
 - **reduce_struct_attribute_selector** - Same as **reduce_word_attribute_selector**, but for structural attributes.
 - **statistics** - Boolean. Enable statistics search. Default: `true`
 - **statistics_case_insensitive_default** - Boolean. Decides if the "Group by" option should be case-insensitive by default.
