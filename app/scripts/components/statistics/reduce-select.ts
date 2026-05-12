@@ -2,11 +2,15 @@ import { isEqual, keyBy } from "lodash"
 import angular, { IController, IScope } from "angular"
 import { html } from "@/util"
 import { AttributeOption } from "@/corpora/corpus-set"
+import { corpusListing } from "@/corpora/corpus_listing"
+import { locObj } from "@/i18n"
+import { StoreService } from "@/services/store.types"
 
 type ReduceSelectScope = IScope & {
     keyItems: Record<string, Item>
     hasWordAttrs: boolean
     hasStructAttrs: boolean
+    getCorpusTitles: (ids: string[]) => string
     onDropdownToggle: (open: boolean) => void
     toggleSelected: (value: string, event: MouseEvent) => void
     toggleWordInsensitive: (event: MouseEvent) => void
@@ -50,7 +54,7 @@ angular.module("korpApp").component("reduceSelect", {
                     role="option"
                 >
                     <input type="checkbox" class="reduce-check" ng-checked="keyItems['word'].selected" />
-                    <span class="reduce-label">{{keyItems['word'].label | locObj:$root.lang }}</span>
+                    <span class="grow">{{keyItems['word'].label | locObj:$root.lang }}</span>
                     <button
                         ng-class="keyItems['word'].insensitive ? 'selected':''"
                         class="insensitive-toggle"
@@ -68,7 +72,12 @@ angular.module("korpApp").component("reduceSelect", {
                     role="option"
                 >
                     <input type="checkbox" class="reduce-check" ng-checked="item.selected" />
-                    <span class="reduce-label">{{item.label | locObj:$root.lang }}</span>
+                    <span class="grow"> {{item.label | locObj:$root.lang }} </span>
+                    <i
+                        ng-if="item.unsupported.length"
+                        class="fa-regular fa-sm fa-ban opacity-50"
+                        uib-tooltip="{{'stats_unsupported_attr_help' | loc:$root.lang}} {{getCorpusTitles(item.unsupported) | maxLength:200}}"
+                    ></i>
                 </li>
                 <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:$root.lang}}</b>
                 <li
@@ -79,7 +88,12 @@ angular.module("korpApp").component("reduceSelect", {
                     role="option"
                 >
                     <input type="checkbox" class="reduce-check" ng-checked="item.selected" />
-                    <span class="reduce-label">{{item.label | locObj:$root.lang }}</span>
+                    <span class="grow"> {{item.label | locObj:$root.lang }} </span>
+                    <i
+                        ng-if="item.unsupported.length"
+                        class="fa-regular fa-sm fa-ban opacity-50  table-cell align-middle mb-0.5"
+                        uib-tooltip="{{'stats_unsupported_attr_help' | loc:$root.lang}} {{getCorpusTitles(item.unsupported) | maxLength:200}}"
+                    ></i>
                 </li>
             </ul>
         </div>
@@ -92,7 +106,8 @@ angular.module("korpApp").component("reduceSelect", {
     },
     controller: [
         "$scope",
-        function (scope: ReduceSelectScope) {
+        "store",
+        function (scope: ReduceSelectScope, store: StoreService) {
             const $ctrl = this as ReduceSelectController
 
             $ctrl.$onChanges = (changes) => {
@@ -141,6 +156,8 @@ angular.module("korpApp").component("reduceSelect", {
                     scope.keyItems["word"].insensitive = false
                 }
             }
+
+            scope.getCorpusTitles = (ids) => ids.map((id) => locObj(corpusListing.get(id).title, store.lang)).join(", ")
 
             scope.toggleSelected = function (value, event) {
                 event.stopPropagation()

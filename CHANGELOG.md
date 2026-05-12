@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+## [9.15.0] – 2026-05-12
+
+### Added
+
+- Show all attributes in grouping dropdown [#513](https://github.com/spraakbanken/korp-frontend/issues/513)
+- Show corpus name in tooltip of statistics table column heading
+
+### Fixed
+
+- Name attributes listed under both word and text attributes [#220](https://github.com/spraakbanken/korp-frontend/issues/220)
+- Change to "starts with", "contains", "ends with" [#516](https://github.com/spraakbanken/korp-frontend/issues/516)
+- Strip rank suffixes in extended search autocomplete [#518](https://github.com/spraakbanken/korp-frontend/issues/518)
+- HTML-escaped attribute values in trend diagram table
+- Reuse relative/absolute choice from statistics table in distribution pie chart
+
 ## [9.14.4] – 2026-05-06
 
 ### Fixed
@@ -650,6 +665,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.15.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.15.0
 [9.14.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.4
 [9.14.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.3
 [9.14.2]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.2

@@ -35,8 +35,8 @@ export class StatisticsGrid extends SlickGrid<Row> {
         this.autosizeColumns()
         this.refreshColumns()
 
-        this.onSort.subscribe((e, sort: SingleColumnSort) => {
-            const { sortCol, sortAsc } = sort
+        this.onSort.subscribe((e, sort) => {
+            const { sortCol, sortAsc } = sort as SingleColumnSort
 
             if (!(sortCol?.field && sortCol.id)) return
             const sorter = getSorter(sortCol.field, sortCol.id, store.lang)
@@ -67,7 +67,8 @@ export class StatisticsGrid extends SlickGrid<Row> {
     refreshColumns() {
         const columns = this.getColumns() as SlickgridColumn[]
         columns.forEach((column) => {
-            if (column.getName) column.name = column.getName(this.store.lang)
+            // Repeat name in tooltip in case columns are too narrow
+            if (column.getName) column.name = column.toolTip = column.getName(this.store.lang)
         })
         this.setColumns(columns as Column<Row>[])
     }

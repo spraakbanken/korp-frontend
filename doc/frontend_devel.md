@@ -171,7 +171,7 @@ The first few settings are needed at initialization time, and thus must be speci
         site: 2
     ```
 - **news_url** - See [News widget](#news-widget)
-- **reduce_word_attribute_selector** - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora _word_ attributes or only the attributes common to selected corpora. **Warning:** if set to `"union"`, the statistics call will fail if user selects an attribute that is not supported by a selected corpus.
+- **reduce_word_attribute_selector** - String, `union` / `intersection`. For the "compile based on" configuration in statistics, show all selected corpora _word_ attributes or only the attributes common to selected corpora.
 - **reduce_struct_attribute_selector** - Same as **reduce_word_attribute_selector**, but for structural attributes.
 - **statistics** - Boolean. Enable statistics search. Default: `true`
 - **statistics_case_insensitive_default** - Boolean. Decides if the "Group by" option should be case-insensitive by default.
@@ -570,9 +570,9 @@ parameters for attributes.
 - **hide_compare**: `boolean`. Default: `false`. Should it be possible to compare searches using this attribute?
 - **internal_search**: `boolean`. Should the value be displayed as a link to a new Korp search? Only works for sets.
   Searches for CQP-expression: `[<attrName> contains "<regescape(attrValue)>"]`
-- **is_struct_attr**: `boolean`. If `true` the attribute will be treated as a structural attribute in every sense except
-  it will be included in the `show` query parameter instead of `show_struct` for KWIC requests. Useful for structural
-  attributes that extend to smaller portions of the text than the selected context, such as name tagging.
+- **is_struct_attr**: `boolean`.
+  If `true`, the attribute will appear as a word-level attribute, but be used with the backend as a structural attribute.
+  Useful for structural attributes that extend to smaller portions of the text than the selected context, such as name tagging.
 - **opts**: this represents the auxiliary select box where you can modify the input value.
   See [Operators](#operators) section for format and more information.
 - **order**: Order of attribute in the sidebar. Attributes with a lower `order`-value will be placed above attributes

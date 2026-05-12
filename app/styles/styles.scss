@@ -1694,6 +1694,7 @@ line.tick {
     }
     .attribute {
         display: flex;
+        align-items: center;
         overflow-x: hidden;
         white-space: nowrap;
         cursor: pointer;
@@ -1705,9 +1706,6 @@ line.tick {
     .reduce-check {
         margin: 0px;
         margin-right: 4px;
-    }
-    .reduce-label {
-        flex-grow: 1;
     }
     ul {
         margin: 0;

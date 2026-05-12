@@ -349,18 +349,19 @@
     "go_to_start": "Gå till startsidan",
 
     "stats_not_in_order_warn": "Statistiken stödjer för närvarande inte sökalternativet \"i fri följd\".",
+    "stats_no_supported_corpora": "Inga av de valda korpusarna stödjer alla valda attribut.",
+    "stats_unsupported_attr_help": "Detta attribut stöds inte i följande korpusar:",
+    "stats_unsupported_attr": "av det valda materialet saknar attribut",
+    "stats_unsupported_attr_excluded": "och ingår därför inte i sammanställningen.",
 
     "read_in_korp": "Läs i Korp",
     "add_token": "Lägg till token",
 
     "free_order_chk": "fri följd",
     "free_order_chk_help": "Sökorden får förekomma i obestämd ordning, och inte nödvändigtvis i följd.",
-    "prefix_chk": "förled",
-    "prefix_chk_help": "Tillåt ord som börjar med sökorden.",
-    "midfix_chk": "mellanled",
-    "midfix_chk_help": "Tillåt ord som innehåller sökorden.",
-    "suffix_chk": "efterled",
-    "suffix_chk_help": "Tillåt ord som slutar med sökorden.",
+    "prefix_help": "Tillåt ord som börjar med sökorden.",
+    "midfix_help": "Tillåt ord som innehåller sökorden.",
+    "suffix_help": "Tillåt ord som slutar med sökorden.",
     "text_tab_header": "Läsläge",
 
     "not_compound_middle": "inte mellanled",
@@ -368,5 +369,6 @@
     "not_suffix": "slutar inte med",
     "compound_middle": "mellanled",
     "prefix": "börjar med",
+    "midfix": "innehåller",
     "suffix": "slutar med"
 }

@@ -8,6 +8,8 @@ import { objectIntersection, objectUnion } from "@/util"
 
 export type AttributeOption = Attribute & {
     group: "word" | "word_attr" | "sentence_attr"
+    /** Corpora that do not support this attribute */
+    unsupported: string[]
 }
 
 /** How to join attribute lists of different corpora */
@@ -51,10 +53,19 @@ export class CorpusSet {
         return this.corpora.map(f)
     }
 
+    /** In normal mode: get all corpora; in parallel mode: get corpora of main language */
+    getMainCorpora(): CorpusTransformed[] {
+        return this.corpora
+    }
+
+    getTokenCount(): number {
+        return sum(this.map((corpus) => parseInt(corpus.info.Size || "0")))
+    }
+
     getAttributes(lang?: string) {
         // lang not used here, only in parallel mode
         const attrs = this.map((corpus) => corpus.attributes)
-        return this._invalidateAttrs(attrs)
+        return objectUnion(attrs)
     }
 
     getAttributesIntersection() {
@@ -82,11 +93,9 @@ export class CorpusSet {
         const attrs = this.map(function (corpus) {
             // Set the is_struct_attr flag for all struct attributes
             Object.values(corpus["struct_attributes"]).forEach((attr) => (attr["is_struct_attr"] = true))
-            // if a position attribute is declared as structural, include here
-            const posAttrs = pickBy(corpus.attributes, (val, key) => val["is_struct_attr"])
-            return { ...posAttrs, ...corpus["struct_attributes"] }
+            return { ...corpus["struct_attributes"] }
         })
-        const rest = this._invalidateAttrs(attrs)
+        const rest = objectUnion(attrs)
 
         // Merge datasets from attributes with the same name across all corpora
         for (const name in rest) {
@@ -121,19 +130,6 @@ export class CorpusSet {
         // Collect filters common to all corpora
         const attrs = intersection(...this.map((corpus) => corpus["attribute_filters"] || []))
         return pick(this.structAttributes, ...attrs)
-    }
-
-    _invalidateAttrs(attrs: Record<string, Attribute>[]) {
-        const union = objectUnion(attrs)
-        const intersection = objectIntersection(attrs)
-
-        // Mark attributes as disabled if not common to all attribute sets.
-        Object.entries(union).forEach(([key, value]) => {
-            if (!intersection[key]) value["disabled"] = true
-            else delete value["disabled"]
-        })
-
-        return union
     }
 
     /** Whether the given corpus has all given attributes. */
@@ -264,19 +260,16 @@ export class CorpusSet {
         const allAttrs = setOperator === "union" ? this.getAttributes(lang) : this.getAttributesIntersection()
 
         const attrs: AttributeOption[] = []
-        for (let key in allAttrs) {
-            const obj = allAttrs[key]
-            if (obj["display_type"] !== "hidden") {
-                attrs.push({ group: "word_attr", ...obj })
+        for (const attr of Object.values(allAttrs)) {
+            if (attr["display_type"] !== "hidden") {
+                const unsupported = this.getMainCorpora()
+                    .filter((corpus) => !corpus.attributes[attr.name])
+                    .map((corpus) => corpus.id)
+                attrs.push({ group: "word_attr", ...attr, unsupported })
             }
         }
 
         return attrs
-    }
-
-    getWordAttribute(attribute: string, lang?: string): Attribute {
-        const attributes = this.getAttributes(lang)
-        return attributes[attribute]
     }
 
     getStructAttributeGroups(setOperator: SetOperator, lang?: string): AttributeOption[] {
@@ -286,10 +279,12 @@ export class CorpusSet {
 
         let sentAttrs: AttributeOption[] = []
         const object = { ...common, ...allAttrs }
-        for (let key in object) {
-            const obj = object[key]
-            if (obj["display_type"] !== "hidden") {
-                sentAttrs.push({ group: "sentence_attr", ...obj })
+        for (const attr of Object.values(object)) {
+            if (attr["display_type"] !== "hidden") {
+                const unsupported = this.getMainCorpora()
+                    .filter((corpus) => !corpus.struct_attributes[attr.name])
+                    .map((corpus) => corpus.id)
+                sentAttrs.push({ group: "sentence_attr", ...attr, unsupported })
             }
         }
 
@@ -297,7 +292,12 @@ export class CorpusSet {
     }
 
     getAttributeGroups(wordOp: SetOperator, structOp: SetOperator, lang?: string): AttributeOption[] {
-        const wordOption: AttributeOption = { group: "word", name: "word", label: settings["word_label"] }
+        const wordOption: AttributeOption = {
+            group: "word",
+            name: "word",
+            label: settings["word_label"],
+            unsupported: [],
+        }
         const attrs = this.getWordAttributeGroups(wordOp, lang)
         const sentAttrs = this.getStructAttributeGroups(structOp, lang)
         const comparator = (a: Attribute, b: Attribute) => locObj(a.label).localeCompare(locObj(b.label), getLang())

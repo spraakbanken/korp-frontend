@@ -21,11 +21,14 @@ import { ExampleTask } from "@/task/example-task"
 import { MapTask } from "@/task/map-task"
 import { TrendTask } from "@/task/trend-task"
 import { CsvType, downloadCsvFile } from "@/csv"
+import { percentage } from "@/i18n/util"
 
 type StatisticsScope = IScope & {
     clipped: boolean
     downloadOption: CsvType | ""
+    percentage: (value: number) => string
     reduceOnChange: (data: { selected: string[]; insensitive: string[] }) => void
+    unsupportedAttributes: string
     statCurrentAttrs: AttributeOption[]
     statSelectedAttrs: string[]
     statInsensitiveAttrs: string[]
@@ -41,6 +44,8 @@ type StatisticsController = IController & {
     response: CountResponse
     rowCount: number
     searchParams: SearchParams
+    unsupportedRatio: number
+    unsupportedAttributes: AttributeOption[]
     warning?: string
     onGraphClick: () => void
     onUpdateSearch: () => void
@@ -174,8 +179,15 @@ angular.module("korpApp").component("statistics", {
                         </span>
                     </div>
                 </div>
-                <div ng-if="!$ctrl.loading" style="margin-bottom: 5px">
+                <div ng-if="!$ctrl.loading" class="my-2 flex flex-wrap items-baseline gap-x-4">
                     {{'total_rows' | loc:$root.lang}} {{$ctrl.data.length - 1 | prettyNumber:$root.lang}}
+
+                    <span ng-if="unsupportedAttributes">
+                        {{ percentage($ctrl.unsupportedRatio) }} {{ "stats_unsupported_attr" | loc:$root.lang }}
+                        <em>{{ unsupportedAttributes }}</em>
+                        {{ "stats_unsupported_attr_excluded" | loc:$root.lang }}
+                    </span>
+
                     <span ng-if="clipped">
                         {{'stats_clipped' | loc:$root.lang}}
                         <i
@@ -198,6 +210,8 @@ angular.module("korpApp").component("statistics", {
         response: "<",
         rowCount: "<",
         searchParams: "<",
+        unsupportedRatio: "<",
+        unsupportedAttributes: "<",
         warning: "<",
     },
     controller: [
@@ -267,6 +281,12 @@ angular.module("korpApp").component("statistics", {
                     $ctrl.mapAttributes = getGeoAttributes(cl.corpora)
                 }
 
+                if ("unsupportedAttributes" in changeObj) {
+                    $scope.unsupportedAttributes = $ctrl.unsupportedAttributes
+                        .map((attr) => locObj(attr.label, store.lang))
+                        .join(", ")
+                }
+
                 if ("rowCount" in changeObj && $ctrl.rowCount) {
                     $scope.clipped = !!settings["statistics_limit"] && $ctrl.rowCount >= settings["statistics_limit"]
                 }
@@ -285,6 +305,8 @@ angular.module("korpApp").component("statistics", {
                 const insensitiveAttrs = store.stats_reduce_insensitive
                 $scope.statInsensitiveAttrs = insensitiveAttrs ? insensitiveAttrs.split(",") : []
             })
+
+            $scope.percentage = percentage
 
             $scope.reduceOnChange = ({ selected, insensitive }) => {
                 if (selected) $scope.statSelectedAttrs = selected
