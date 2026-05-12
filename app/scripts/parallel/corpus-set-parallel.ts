@@ -37,6 +37,10 @@ export class CorpusSetParallel extends CorpusSet {
         this.langs = langs
     }
 
+    getMainCorpora(): PCorpus[] {
+        return this.getCorporaWithLang(this.langs[0])
+    }
+
     getCorporaWithLang(lang: string): PCorpus[] {
         return this.corpora.filter((item) => item.lang === lang)
     }
