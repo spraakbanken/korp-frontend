@@ -86,7 +86,6 @@ angular.module("korpApp").component("resultsWordPicture", {
                             </option>
                         </select>
                         <i
-                            ng-show="sortLocal == 'mi' || sortLocal == 'rmi'"
                             class="fa fa-info-circle text-gray-400 table-cell align-middle mb-0.5"
                             uib-tooltip="{{'word_pic_split_help' | loc:$root.lang}}"
                         ></i>
