@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [9.15.1] – 2026-09-04
+
+### Fixed
+
+- Statistics result in parallel when grouping by partially supported attribute
+
 ## [9.15.0] – 2026-05-12
 
 ### Added
@@ -665,6 +671,7 @@
 - Lots of bug fixes for the sidebar
 
 [unreleased]: https://github.com/spraakbanken/korp-frontend/compare/master...dev
+[9.15.1]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.15.1
 [9.15.0]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.15.0
 [9.14.4]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.4
 [9.14.3]: https://github.com/spraakbanken/korp-frontend/releases/tag/v9.14.3

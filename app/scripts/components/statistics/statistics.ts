@@ -292,7 +292,7 @@ angular.module("korpApp").component("statistics", {
                 }
             }
 
-            store.watch("corpus", () => {
+            function updateAttributes() {
                 // Update list of attributes
                 $scope.statCurrentAttrs = corpusSelection.getAttributeGroupsStatistics()
 
@@ -304,7 +304,10 @@ angular.module("korpApp").component("statistics", {
 
                 const insensitiveAttrs = store.stats_reduce_insensitive
                 $scope.statInsensitiveAttrs = insensitiveAttrs ? insensitiveAttrs.split(",") : []
-            })
+            }
+
+            store.watch("corpus", updateAttributes)
+            store.watch("cqpParallel", updateAttributes)
 
             $scope.percentage = percentage
 

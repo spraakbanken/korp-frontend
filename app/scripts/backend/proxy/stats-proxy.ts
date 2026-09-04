@@ -28,16 +28,16 @@ export class StatsProxy extends ProxyBase<"count"> {
         if (missingAttrs.length) throw new Error(`Trying to reduce by missing attribute ${missingAttrs}`)
 
         // Calculate size of selected corpora that do not support all attributes
-        const unsupportedCorpora = [...new Set(options.flatMap((option) => option.unsupported))]
-        this.unsupportedRatio = unsupportedCorpora.length
-            ? corpusSelection.pick(unsupportedCorpora).getTokenCount() / corpusSelection.getTokenCount()
+        const unsupportedCorpora = corpusSelection.getUnsupportedCorpora(options)
+        this.unsupportedRatio = unsupportedCorpora.corpora.length
+            ? unsupportedCorpora.getTokenCount() / corpusSelection.getTokenCount()
             : 0
 
         // Get names of not-fully-supported attributes
         this.unsupportedAttributes = options.filter((option) => option.unsupported.length)
 
         // Use only corpora that support all attributes
-        const supportedCorpora = corpusSelection.getIds().filter((id) => !unsupportedCorpora.includes(id))
+        const supportedCorpora = corpusSelection.getIds().filter((id) => !unsupportedCorpora.getIds().includes(id))
         if (!supportedCorpora.length) throw new NoSupportedCorporaError()
         const corpora = corpusSelection.pick(supportedCorpora)
 
