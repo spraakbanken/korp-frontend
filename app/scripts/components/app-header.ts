@@ -83,11 +83,8 @@ angular.module("korpApp").component("appHeader", {
                                     {{'docs' | loc:$root.lang}}
                                 </a>
                             </li>
-                            <li id="korplink">
+                            <li>
                                 <a href="/korp"> {{'korp' | loc:$root.lang}} </a>
-                            </li>
-                            <li id="korplablink">
-                                <a href="/korplabb"> {{'korp_lab' | loc:$root.lang}} </a>
                             </li>
                             <li>
                                 <a href="https://spraakbanken.gu.se/sparv" target="_blank">
@@ -124,7 +121,15 @@ angular.module("korpApp").component("appHeader", {
                 </div>
 
                 <div class="grow min-[1150px]:hidden"></div>
-                <corpus-chooser></corpus-chooser>
+
+                <div>
+                    <div class="korp-warning">
+                        {{'version_old' | loc:$root.lang}}
+                        <a href="/korp" target="_blank">{{'version_goto_new' | loc:$root.lang}}</a>
+                    </div>
+                    <corpus-chooser></corpus-chooser>
+                </div>
+
                 ${chooserRightLogoHtml}
                 <div class="grow hidden min-[1150px]:block"></div>
 
