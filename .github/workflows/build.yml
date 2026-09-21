@@ -22,14 +22,6 @@ jobs:
               with:
                   path: korp-frontend
 
-            - name: Checkout Språkbanken config repo
-              uses: actions/checkout@v4
-              with:
-                  repository: spraakbanken/korp-frontend-sb
-                  token: ${{ secrets.ACCESS_TOKEN }}
-                  ref: ${{ github.ref == 'master' && 'master' || 'dev' }} # Choose dev or master matching the main repo.
-                  path: korp-frontend-sb
-
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v4
               with:
@@ -39,9 +31,20 @@ jobs:
             - name: Install dependencies
               run: yarn install
 
+            - name: Build without custom code
+              run: yarn build
+
+            - name: Checkout Språkbanken config repo
+              uses: actions/checkout@v4
+              with:
+                  repository: spraakbanken/korp-frontend-sb
+                  token: ${{ secrets.ACCESS_TOKEN }}
+                  ref: ${{ github.ref == 'master' && 'master' || 'dev' }} # Choose dev or master matching the main repo.
+                  path: korp-frontend-sb
+
             - name: Link config
               run: |
                   echo '{"configDir": "../korp-frontend-sb/app"}' > run_config.json
 
-            - name: Build
+            - name: Build with custom code
               run: yarn build
