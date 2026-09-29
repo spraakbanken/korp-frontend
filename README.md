@@ -1,3 +1,8 @@
+# korp-frontend
+
+> [!IMPORTANT]
+> This repository is deprecated. Development of the Korp frontend continues in https://github.com/spraakbanken/korp-vue
+
 This repo contains the frontend for [Korp](https://spraakbanken.gu.se/korp), Språkbanken's word research platform using the IMS Open Corpus Workbench (CWB).
 Korp is a great tool for searching and visualising natural language corpus data.
 
